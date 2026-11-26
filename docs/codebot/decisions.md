@@ -61,6 +61,13 @@ a decision here fills a gap in the PRD or selects one of several possible design
   do nothing. Thus an upstream change that adds or moves a tracking call still merges, and nothing is
   sent. A test proves that the functions make no network request and no file write.
 
+- **D18. Visible name.** The owner decided on 2026-11-26 that the visible product name is
+  "OpenBot Code" (app name, window title, menus, about screen, installer names, i18n text). Internal
+  identifiers stay `codebot`: package names, app ID `app.codebot.desktop`, scheme, code names and
+  data folders. The display rename is one pass after the work packages merge, so build agents keep
+  writing "CodeBot" until then. `check:branding` must then allow the exact visible name and still
+  fail on upstream server references.
+
 ## Work packages
 
 | Package | Scope |
