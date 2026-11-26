@@ -9,7 +9,7 @@ export const messages = defineMessages("error.explorer", {
   "error.explorer.notDirectory": "This path is not a folder.",
   "error.explorer.exists": "A file or folder with the name {name} is in this folder already.",
   "error.explorer.unknownAgent": "The agent of this file tree does not exist.",
-  "error.explorer.gitTimeout": "Git did not answer in time.",
+  "error.explorer.gitTimeout": "A Git command took too long and was stopped.",
   "error.explorer.gitFailed": "Git reported an error: {detail}",
   "error.explorer.serverUnsupported": "This server cannot show files. Update the server.",
   "error.explorer.clientUnsupported": "This CodeBot version cannot show the files of a server.",

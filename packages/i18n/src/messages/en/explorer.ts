@@ -7,7 +7,6 @@ export const messages = defineMessages("explorer", {
   "explorer.pane.views": "Explorer views",
   "explorer.pane.close": "Close the explorer",
   "explorer.pane.backToList": "Back to the list",
-  "explorer.pane.resize": "Resize the explorer",
   "explorer.tree.label": "File tree",
   "explorer.tree.title": "Files",
   "explorer.tree.newFile": "New file",
