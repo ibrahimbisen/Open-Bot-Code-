@@ -1,19 +1,19 @@
 # CodeBot Remote
 
 This directory holds our own control plane for WebRTC connections. The Remote API relays SDP and ICE.
-Team files, chats, commands and video never pass through the Remote API or Cloudflare. The exceptions
+Team files, chats, commands and video never pass through the Remote API or the account service. The exceptions
 are the CodeBot Slack app, the CodeBot Discord bot and the CodeBot Telegram bot: see
 [Slack requests](#slack-requests), [Discord](#discord) and [Telegram updates](#telegram-updates).
 
 ## Flow
 
-1. The app signs the user in through the Cloudflare API.
-2. Cloudflare D1 checks membership and creates a logical session.
-3. Cloudflare signs a short ES256 ticket. The ticket names the host, the user, the role, the protocol version and `authEpoch`.
+1. The app signs the user in through the account service, which uses Nextcloud as the identity provider.
+2. The account service database checks membership and creates a logical session.
+3. The account service signs a short ES256 ticket. The ticket names the host, the user, the role, the protocol version and `authEpoch`.
 4. The client and the host open `WSS /v1/signal`. Signal validates the ticket locally through JWKS.
 5. Signal relays SDP and ICE and issues a `resume token` along with time-limited coturn credentials.
 6. Chromium sets up WebRTC. The Team API uses the `rpc`, `events` and `files` channels.
-7. ICE picks either a direct `p2p` path or `relay` through this coturn. Cloudflare is never on the data path.
+7. ICE picks either a direct `p2p` path or `relay` through this coturn. The account service is never on the data path.
 
 Signal has no database. It stores no tokens, SDP, ICE, file names or message contents. Room and presence
 data exist only in process memory. The one exception is the queue of a hosted server that sleeps (see
@@ -25,17 +25,17 @@ A normal reconnect validates that token locally. After a Signal restart the cach
 reconnect for a given token makes one signed request to the control plane. The same request is needed once
 the token has expired. The control plane checks the session, the membership and `authEpoch`. Signal then
 issues a new token. Subsequent reconnects are local again. There are no heartbeats and no periodic refresh
-through Cloudflare.
+through the account service.
 
-Ending a session and changing access both write a revocation event to a durable D1 outbox. The Worker tries
+Ending a session and changing access both write a revocation event to a durable outbox in the account database. The account service tries
 to deliver it to Signal immediately. If Signal is unreachable, the Worker retries the delivery from cron. An
-ordinary reconnect still does not ask Cloudflare. Ended and expired sessions are removed after the 10-minute
+ordinary reconnect still does not ask the account service. Ended and expired sessions are removed after the 10-minute
 validation window.
 
 ## Slack requests
 
 The CodeBot Slack app sends the events and button presses of every workspace to one request URL,
-`https://signal.openbot.run/v1/slack/events`. Signal checks Slack's signature with the app's signing
+`https://signal.example.com/v1/slack/events`. Signal checks Slack's signature with the app's signing
 secret, answers Slack's `url_verification` challenge, and reads only the app ID (`api_app_id`), the
 workspace ID, and the event's type, channel type, thread and bot ID (to know whether it addresses
 CodeBot, not its text). `SLACK_SIGNING_SECRET` is a comma-separated list of `<app ID>:<signing secret>`,
@@ -57,7 +57,7 @@ must be in the ticket JWKS that Signal loads (`REMOTE_TICKET_PUBLIC_JWKS` on the
 ## GitHub events
 
 The CodeBot GitHub App sends the events of every installation to one webhook URL,
-`https://signal.openbot.run/v1/github/events`. Signal checks GitHub's `X-Hub-Signature-256` with the
+`https://signal.example.com/v1/github/events`. Signal checks GitHub's `X-Hub-Signature-256` with the
 App's webhook secret (`GITHUB_WEBHOOK_SECRET`, at least 32 bytes), and reads only the event name, the
 delivery ID, the installation ID and the repository ID. Then it passes the exact body to the `ingress`
 socket of every host whose GitHub route names the repository, at the same time. It answers 202 when a
@@ -173,15 +173,15 @@ service before Signal.
 
 - Linux with Docker Engine and Docker Compose.
 - A static public IPv4 address.
-- `signal.openbot.run` and `turn.openbot.run` records in DNS only mode.
+- `signal.example.com` and `turn.example.com` records (use your own names) that point to this machine.
 - Open ports TCP 443, TCP/UDP 3478, TCP 5349 and UDP 16384-65535 (the coturn relay range). With
   ufw: `ufw allow 16384:65535/udp comment 'CodeBot TURN relay UDP'`. coturn uses host networking,
   so ufw applies to it. Without this rule, the firewall drops the first packets that a peer sends to
   a relay address, and relay connections become slow or fail.
-- A Cloudflare token scoped to DNS edit for the `openbot.run` zone.
+- A DNS provider that the ACME client supports, with an API token that can edit the zone of your domain. The default is the Cloudflare DNS challenge; the CodeBot services themselves use no Cloudflare product.
 
-The `signal.openbot.run` and `turn.openbot.run` records must be in **DNS only** mode. Do not enable the
-Cloudflare proxy for them. `api.openbot.run` stays a Cloudflare Worker.
+Do not put a proxy that cannot carry WebSocket and UDP in front of `signal.example.com` and `turn.example.com`.
+The account service runs on your home server: see [the account service guide](../docs/codebot/account-service.md).
 
 If you already run a reverse proxy on port `443`, set `REMOTE_SIGNAL_BIND_ADDRESS=127.0.0.1`,
 `REMOTE_SIGNAL_PUBLIC_PORT=8081`, `REMOTE_SIGNAL_PORT=8081` and `REMOTE_TLS_DISABLED=true`. The reverse proxy
@@ -200,7 +200,7 @@ events {
 }
 ```
 
-The configuration in `nginx/signal.openbot.run.conf` uses the certificate from the ACME volume. Install
+The configuration in `nginx/signal.example.conf` uses the certificate from the ACME volume. Install
 `codebot-remote-nginx-reload.path` and `codebot-remote-nginx-reload.service` into `/etc/systemd/system/` as
 well. The unit reloads Nginx after the certificate is renewed:
 
@@ -210,20 +210,12 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now codebot-remote-nginx-reload.path
 ```
 
-Production secrets are stored in the tracked `.env.production` file as encrypted Dotenvx values.
-They use the same key pair as `apps/auth-api/.env.production`: `DOTENV_PRIVATE_KEY_PRODUCTION` in the
-root `.env.keys`. Do not make a new key pair. On the server, the ignored `remote/.env.keys` holds only a
-copy of that key. On a development computer, decrypt with `-fk .env.keys`. Do not pass the encrypted
-file straight to `docker compose --env-file`, because Compose will not decrypt the values.
-The `remote:*` scripts run Compose through Dotenvx and decrypt the values only in process memory.
-The `--overload` option keeps empty host environment variables from overriding the decrypted values.
-The scripts use `remote/bin/dotenvx`. The wrapper picks the pinned Node from the application runtime if the
-system Node is too old.
+Put the secrets in `remote/.env.self-hosted`. Git ignores this file name. Copy `remote/.env.example` and fill every
+value. Make each secret with `openssl rand -base64 48`. The `remote:*` scripts pass the file to Docker Compose.
 
 Validate the environment and start the services:
 
 ```sh
-bun run remote:env:validate
 bun run remote:up
 bun run remote:check
 ```
@@ -236,10 +228,10 @@ acknowledged offset once the service is back.
 ## Two Signal machines
 
 Two Signal machines can run at the same time. Each machine has its own name, and one more name, the
-entry (`signal.openbot.run`), goes to one of them. Set these on each machine:
+entry (`signal.example.com`), goes to one of them. Set these on each machine:
 
 - `SIGNAL_ID`: the name of this machine in the `signal` ticket claim, `^[a-z0-9-]{1,32}$`.
-- `SIGNAL_ENTRY_HOST`: the entry name, for example `signal.openbot.run`.
+- `SIGNAL_ENTRY_HOST`: the entry name, for example `signal.example.com`.
 - `SIGNAL_PUBLIC_IPV4`: the public IPv4 address of this machine.
 
 Set `SIGNAL_ENTRY_HOST` and `SIGNAL_PUBLIC_IPV4` together, or Signal does not start. Without them, the
@@ -293,11 +285,7 @@ allocations of one relay: 16384-65535 gives 49,152 ports, and `total-quota` (40,
 A browser allocates for each network interface and for each TURN URL (UDP, TCP and TLS), on both
 peers, also when the connection does not use the relay. Production had about 4 allocations for each
 peer connection. When the relay is full, coturn refuses each new allocation with 486, and every
-connection that needs a relay fails. The `signal_capacity` analytics event shows the allocations of
-each relay every 5 minutes.
-
-Production uses `turn2.openbot.run` on the second Signal machine as the second relay; see
-[the deployment procedure](../docs/remote-session-deployment.md#second-signal-machine).
+connection that needs a relay fails. `/metrics` shows the allocations of each relay.
 
 Current hosts advertise `multiplex: true` and support independent device sessions at the same time.
 Reconnecting one session replaces only that session's Signal socket. Disconnecting or revoking one device
@@ -314,11 +302,6 @@ on the Signal server: a desktop environment does not change it.
 This also applies when the old client socket waits for its host to reconnect. Token signing finishes
 before Signal admits the new socket, so concurrent reconnects do not hold extra account slots.
 
-Production deployments keep `/opt/codebot/remote/.env.production`. A value in that file overrides
-the default, even when a release changes the repository's environment file. Check the running
-container's effective limit after a configuration change and Signal restart.
+Check the effective limit of the running container after a configuration change and a Signal restart.
 
-See [the issue #325 deployment procedure](../docs/remote-session-deployment.md) for the production evidence,
-a Signal-only update, rollback commands, and the required desktop/mobile checks.
-
-To run Signal with your own account service, see [Self-hosted remote access](../docs/self-hosting.md).
+To run Signal with the account service, see [the account service guide](../docs/codebot/account-service.md).
