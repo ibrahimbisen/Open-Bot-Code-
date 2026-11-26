@@ -1,15 +1,19 @@
 import { execFile } from "node:child_process";
+import { cpus, freemem } from "node:os";
 import { promisify } from "node:util";
 import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import type { Logger } from "@codebot/logging";
 import type { Browser, CDPSession, Page } from "playwright-core";
 import { cpuMetrics, type MetricValues, parseFootprint, processMetrics } from "./bench-stats";
-import { collectDescendants, PROCESS_TABLE_PS_ARGS, type ProcessTableRow, parseProcessTable } from "./cpu-sampling";
+import type { ProcessTableRow } from "./cpu-sampling";
 import type { InspectorClient } from "./inspector-client";
 import { readPageMemory } from "./memory-profile";
 import { describeTarget } from "./page-url";
+import { readProcessTree } from "./process-table";
 
 const run = promisify(execFile);
+const BYTES_PER_KB = 1_024;
+const BYTES_PER_MB = 1_024 * 1_024;
 
 export interface ResourceSamplerOptions {
   browser: () => Browser | null;
@@ -26,12 +30,14 @@ export interface ResourceSample {
   values: MetricValues;
 }
 
-async function readProcessTree(rootPid: number): Promise<ProcessTableRow[]> {
-  const { stdout } = await run("ps", PROCESS_TABLE_PS_ARGS, { maxBuffer: 16 * 1_024 * 1_024 });
-  return collectDescendants(parseProcessTable(stdout), rootPid);
+function privateBytes(rows: ProcessTableRow[]): Map<number, number> {
+  const footprints = new Map<number, number>();
+  for (const row of rows) if (row.privateKb !== undefined) footprints.set(row.pid, row.privateKb * BYTES_PER_KB);
+  return footprints;
 }
 
 async function readFootprints(rows: ProcessTableRow[]): Promise<Map<number, number>> {
+  if (process.platform === "win32") return privateBytes(rows);
   if (process.platform !== "darwin" || rows.length === 0) return new Map();
   try {
     const { stdout } = await run(
@@ -44,6 +50,34 @@ async function readFootprints(rows: ProcessTableRow[]): Promise<Map<number, numb
     const stdout = error instanceof Error && "stdout" in error && typeof error.stdout === "string" ? error.stdout : "";
     return parseFootprint(stdout);
   }
+}
+
+interface HostCpuTimes {
+  busyMs: number;
+  totalMs: number;
+  cores: number;
+}
+
+function readHostCpuTimes(): HostCpuTimes {
+  const cores = cpus();
+  let busyMs = 0;
+  let totalMs = 0;
+  for (const { times } of cores) {
+    const all = times.user + times.nice + times.sys + times.idle + times.irq;
+    totalMs += all;
+    busyMs += all - times.idle;
+  }
+  return { busyMs, totalMs, cores: cores.length };
+}
+
+function hostMetrics(previous: HostCpuTimes | null, current: HostCpuTimes): MetricValues {
+  const values: MetricValues = { "host.mem.free": Math.round(freemem() / BYTES_PER_MB) };
+  const elapsedMs = previous ? current.totalMs - previous.totalMs : 0;
+  if (previous && elapsedMs > 0) {
+    const busyCores = ((current.busyMs - previous.busyMs) / elapsedMs) * current.cores;
+    values["host.cpu"] = Math.round(busyCores * 1_000) / 10;
+  }
+  return values;
 }
 
 const READ_PROCESS_KINDS = "globalThis.__codebotPerfProbes?.processKinds() ?? null";
@@ -80,12 +114,14 @@ export class ResourceSampler {
   readonly #samples: ResourceSample[] = [];
   #previousRows: ProcessTableRow[] | null = null;
   #previousAt = 0;
+  #previousHost: HostCpuTimes | null = null;
   #appKinds = new Map<number, string>();
   #kindsTick = -KIND_REFRESH_TICKS;
   #tick = 0;
   #timer: ReturnType<typeof setTimeout> | null = null;
   #running: Promise<void> | null = null;
   #stopped = false;
+  #failure: Error | null = null;
 
   constructor(options: ResourceSamplerOptions) {
     this.#options = options;
@@ -137,6 +173,9 @@ export class ResourceSampler {
     }
     this.#previousRows = rows;
     this.#previousAt = atMs;
+    const host = readHostCpuTimes();
+    Object.assign(values, hostMetrics(this.#previousHost, host));
+    this.#previousHost = host;
     if (withHeaps) Object.assign(values, await this.readHeaps());
     return { atMs, values };
   }
@@ -155,9 +194,14 @@ export class ResourceSampler {
     const loop = async (): Promise<void> => {
       if (this.#stopped) return;
       const started = Date.now();
-      const sample = await this.#sample(this.#tick % heapEvery === 0);
+      try {
+        this.#samples.push(await this.#sample(this.#tick % heapEvery === 0));
+      } catch (error) {
+        this.#failure = error instanceof Error ? error : new Error(String(error));
+        this.#stopped = true;
+        return;
+      }
       this.#tick += 1;
-      this.#samples.push(sample);
       if (this.#stopped) return;
       this.#timer = setTimeout(
         () => {
@@ -173,6 +217,9 @@ export class ResourceSampler {
     this.#stopped = true;
     if (this.#timer) clearTimeout(this.#timer);
     await this.#running;
+    const failure = this.#failure;
+    this.#failure = null;
+    if (failure) throw new Error(`The process tree could not be sampled: ${failure.message}`, { cause: failure });
     return [...this.#samples];
   }
 
@@ -190,11 +237,14 @@ export class ResourceSampler {
       });
     }
     const before = await readProcessTree(rootPid);
+    const hostBefore = readHostCpuTimes();
     const startedAt = Date.now();
     await new Promise((resolve) => setTimeout(resolve, waitMs));
     const after = await readProcessTree(rootPid);
+    const host = hostMetrics(hostBefore, readHostCpuTimes());
     const appKinds = await readAppProcessKinds(this.#options.inspector());
     return {
+      ...host,
       ...processMetrics(after, await readFootprints(after)),
       ...cpuMetrics(before, after, Date.now() - startedAt, appKinds),
       ...(await this.readHeaps()),

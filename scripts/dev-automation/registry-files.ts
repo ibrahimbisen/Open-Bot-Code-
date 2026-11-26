@@ -82,6 +82,8 @@ function assertWindowsOwnerOnlyDirectory(directory: string): void {
   }
 }
 
+const checkedWindowsDirectories = new Set<string>();
+
 export function assertRegistryDirectoryOwnership(directory: string): void {
   const stats = lstatSync(directory);
   if (process.platform === "win32") {
@@ -91,7 +93,9 @@ export function assertRegistryDirectoryOwnership(directory: string): void {
           "Remove it and start `bun run dev` again.",
       );
     }
+    if (checkedWindowsDirectories.has(directory)) return;
     assertWindowsOwnerOnlyDirectory(directory);
+    checkedWindowsDirectories.add(directory);
     return;
   }
   assertOwnerOnlyDirectory(directory, {

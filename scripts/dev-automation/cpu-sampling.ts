@@ -33,6 +33,7 @@ export interface ProcessTableRow {
   rssKb: number;
   cpuSeconds: number;
   command: string;
+  privateKb?: number;
 }
 
 const PROCESS_TIME_PATTERN = /^(?:(\d+)-)?(\d+):(\d{1,2})(?::(\d{1,2}))?(?:\.(\d+))?$/;
@@ -58,10 +59,39 @@ export function parseProcessTime(raw: string): number | null {
 const CHROMIUM_TYPE_SWITCH = /--type=(\S+)/;
 const UTILITY_SUB_TYPE_SWITCH = /--utility-sub-type=(\S+)/;
 const BUNDLE_EXECUTABLE = /\.app\/contents\/macos\//;
+const WINDOWS_COMMAND_WORD = /(?:[^\s"]+|"[^"]*"?)+/gu;
+const WINDOWS_PROGRAM_SUFFIX = /\.(?:exe|com|cmd|bat)$/u;
+const WINDOWS_SCRIPT_SUFFIX = /\.(?:[cm]?js|exe|com|cmd|bat)$/u;
+const WINDOWS_SHELL_TARGET = /\s\/[ck]\s+"*([^"]+?\.(?:exe|com|cmd|bat))(?=["\s]|$)/iu;
 
-export function classifyChromiumProcess(command: string): ChromiumProcessType {
+function commandWords(command: string, platform: NodeJS.Platform): string[] {
+  if (platform !== "win32") return command.trim().split(/\s+/);
+  return [...command.matchAll(WINDOWS_COMMAND_WORD)].map((word) => word[0].replaceAll('"', "").replaceAll("\\", "/"));
+}
+
+function baseName(path: string): string {
+  return path.slice(path.lastIndexOf("/") + 1).toLowerCase();
+}
+
+function programName(path: string, platform: NodeJS.Platform): string {
+  return platform === "win32" ? baseName(path).replace(WINDOWS_PROGRAM_SUFFIX, "") : baseName(path);
+}
+
+function scriptName(path: string, platform: NodeJS.Platform): string {
+  return platform === "win32" ? baseName(path).replace(WINDOWS_SCRIPT_SUFFIX, "") : baseName(path);
+}
+
+function windowsShellTargetName(command: string): string {
+  const target = WINDOWS_SHELL_TARGET.exec(command)?.[1] ?? "";
+  return programName(target.replaceAll("\\", "/"), "win32");
+}
+
+export function classifyChromiumProcess(
+  command: string,
+  platform: NodeJS.Platform = process.platform,
+): ChromiumProcessType {
   const type = CHROMIUM_TYPE_SWITCH.exec(command)?.[1];
-  if (type === undefined) return isElectronExecutable(command) ? "main" : "other";
+  if (type === undefined) return isElectronExecutable(command, platform) ? "main" : "other";
   if (type === "renderer") return "renderer";
   if (type === "gpu-process") return "gpu";
   if (type === "crashpad-handler") return "crashpad";
@@ -72,8 +102,9 @@ export function classifyChromiumProcess(command: string): ChromiumProcessType {
   return "other";
 }
 
-function isElectronExecutable(command: string): boolean {
-  const executable = command.trim().split(/\s+/)[0]?.toLowerCase() ?? "";
+function isElectronExecutable(command: string, platform: NodeJS.Platform): boolean {
+  const word = commandWords(command, platform)[0]?.toLowerCase() ?? "";
+  const executable = platform === "win32" ? word.replace(WINDOWS_PROGRAM_SUFFIX, "") : word;
   if (BUNDLE_EXECUTABLE.test(executable)) return true;
   return executable.endsWith("/electron") || executable === "electron";
 }
@@ -120,8 +151,15 @@ export function collectDescendants(rows: ProcessTableRow[], rootPid: number): Pr
   return collected;
 }
 
-export function snapshotProcesses(rows: ProcessTableRow[]): ProcessSnapshot[] {
-  return rows.map((row) => ({ pid: row.pid, type: classifyChromiumProcess(row.command), cpuSeconds: row.cpuSeconds }));
+export function snapshotProcesses(
+  rows: ProcessTableRow[],
+  platform: NodeJS.Platform = process.platform,
+): ProcessSnapshot[] {
+  return rows.map((row) => ({
+    pid: row.pid,
+    type: classifyChromiumProcess(row.command, platform),
+    cpuSeconds: row.cpuSeconds,
+  }));
 }
 
 interface ProcessCpuSeconds {
@@ -215,19 +253,34 @@ const DEV_TOOLING =
   /(?:^|[/\s])(?:vite|electron-vite|esbuild|workerd|wrangler|dotenvx)(?:\s|$)|dev-services\.ts|bun --watch/;
 
 const SCRIPT_RUNNERS: ReadonlySet<string> = new Set(["node", "bun"]);
+const WINDOWS_SHELL = "cmd";
 
-function baseName(path: string): string {
-  return path.slice(path.lastIndexOf("/") + 1).toLowerCase();
+function isDevTooling(command: string, platform: NodeJS.Platform): boolean {
+  if (platform !== "win32") return DEV_TOOLING.test(command);
+  const words = commandWords(command, platform).map((word) => word.toLowerCase().replace(WINDOWS_SCRIPT_SUFFIX, ""));
+  return DEV_TOOLING.test(words.join(" "));
 }
 
-export function classifyMemoryProcess(command: string): MemoryProcessKind {
-  const [executable = "", script = ""] = command.trim().split(/\s+/);
-  const name = baseName(executable);
+export function classifyMemoryProcess(
+  command: string,
+  platform: NodeJS.Platform = process.platform,
+): MemoryProcessKind {
+  const [executable = "", script = ""] = commandWords(command, platform);
+  const name = programName(executable, platform);
   if (PROVIDER_EXECUTABLES.has(name)) return "provider";
-  if (SCRIPT_RUNNERS.has(name) && PROVIDER_EXECUTABLES.has(baseName(script))) return "provider";
-  const chromium = classifyChromiumProcess(command);
+  if (SCRIPT_RUNNERS.has(name) && PROVIDER_EXECUTABLES.has(scriptName(script, platform))) return "provider";
+  if (platform === "win32" && name === WINDOWS_SHELL && PROVIDER_EXECUTABLES.has(windowsShellTargetName(command))) {
+    return "provider";
+  }
+  const chromium = classifyChromiumProcess(command, platform);
   if (chromium !== "other") return chromium;
-  return DEV_TOOLING.test(command) ? "dev-tooling" : "other";
+  return isDevTooling(command, platform) ? "dev-tooling" : "other";
+}
+
+function processName(command: string, platform: NodeJS.Platform): string {
+  const executable = commandWords(command, platform)[0] ?? "";
+  if (platform === "win32") return programName(executable, platform);
+  return executable.slice(executable.lastIndexOf("/") + 1);
 }
 
 export interface MemoryProcess {
@@ -253,13 +306,17 @@ export interface MemoryReport {
 
 const MEMORY_KINDS: readonly MemoryProcessKind[] = [...REPORTED_TYPES, "provider", "dev-tooling"];
 
-export function summarizeMemory(rows: ProcessTableRow[], label: string): MemoryReport {
+export function summarizeMemory(
+  rows: ProcessTableRow[],
+  label: string,
+  platform: NodeJS.Platform = process.platform,
+): MemoryReport {
   const byPid = new Map(rows.map((row) => [row.pid, row]));
   const kinds = new Map<number, MemoryProcessKind>();
   const kindOf = (row: ProcessTableRow): MemoryProcessKind => {
     const known = kinds.get(row.pid);
     if (known) return known;
-    const own = classifyMemoryProcess(row.command);
+    const own = classifyMemoryProcess(row.command, platform);
     const parent = byPid.get(row.ppid);
     const kind =
       own !== "provider" && parent && parent.pid !== row.pid && kindOf(parent) === "provider" ? "provider" : own;
@@ -267,15 +324,12 @@ export function summarizeMemory(rows: ProcessTableRow[], label: string): MemoryR
     return kind;
   };
   const processes = rows
-    .map((row) => {
-      const executable = row.command.trim().split(/\s+/)[0] ?? "";
-      return {
-        pid: row.pid,
-        kind: kindOf(row),
-        rssMb: round(row.rssKb / 1_024),
-        name: executable.slice(executable.lastIndexOf("/") + 1),
-      };
-    })
+    .map((row) => ({
+      pid: row.pid,
+      kind: kindOf(row),
+      rssMb: round(row.rssKb / 1_024),
+      name: processName(row.command, platform),
+    }))
     .sort((left, right) => right.rssMb - left.rssMb);
   const buckets = MEMORY_KINDS.map((kind) => {
     const members = processes.filter((process) => process.kind === kind);

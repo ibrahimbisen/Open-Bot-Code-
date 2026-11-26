@@ -1,21 +1,15 @@
-import { execFile } from "node:child_process";
-import { promisify } from "node:util";
 import type { Logger } from "@codebot/logging";
 import type { Browser, CDPSession, Page } from "playwright-core";
 import {
   type ChromiumProcessType,
   type CpuReport,
   type CpuSample,
-  collectDescendants,
-  PROCESS_TABLE_PS_ARGS,
   type ProcessSnapshot,
-  parseProcessTable,
   snapshotProcesses,
   summarize,
 } from "./cpu-sampling";
 import { describeTarget } from "./page-url";
-
-const run = promisify(execFile);
+import { readProcessTree } from "./process-table";
 
 export interface PageMetrics {
   target: string;
@@ -64,8 +58,7 @@ async function sampleOverCdp(session: CDPSession): Promise<ProcessSnapshot[]> {
 }
 
 async function sampleOverPs(rootPid: number): Promise<ProcessSnapshot[]> {
-  const { stdout } = await run("ps", PROCESS_TABLE_PS_ARGS, { maxBuffer: 16 * 1_024 * 1_024 });
-  return snapshotProcesses(collectDescendants(parseProcessTable(stdout), rootPid));
+  return snapshotProcesses(await readProcessTree(rootPid));
 }
 
 const METRIC_NAMES = [

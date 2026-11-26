@@ -37,6 +37,7 @@ const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", ".."
 const BENCH_ROOT = join(PROJECT_ROOT, ".codebot-build", "dev-automation", "bench");
 const READY_TIMEOUT_MS = 90_000;
 const CENTRAL_AUTH_FILE = "codebot-central-auth-v1.bin";
+const CHROMIUM_STATE_FILE = "Local State";
 
 const INSTANCE_ID = developmentInstanceIdForWorktree(`${PROJECT_ROOT}#bench`);
 
@@ -57,14 +58,27 @@ function benchProfilePath(): { appDataRoot: string; profile: string } {
   return { appDataRoot, profile };
 }
 
+async function readWindowsSessionKey(profile: string): Promise<string | null> {
+  if (process.platform !== "win32") return null;
+  try {
+    const state = JSON.parse(await readFile(join(profile, CHROMIUM_STATE_FILE), "utf8"));
+    if (!isDynamicRecord(state) || !isDynamicRecord(state.os_crypt)) return null;
+    return JSON.stringify({ os_crypt: state.os_crypt });
+  } catch {
+    return null;
+  }
+}
+
 async function prepareProfile(plan: SeedPlan): Promise<void> {
   const { profile } = benchProfilePath();
   const authPath = join(profile, CENTRAL_AUTH_FILE);
   const session = await readFile(authPath).catch(() => null);
+  const sessionKey = session ? await readWindowsSessionKey(profile) : null;
   await replaceProfile(plan);
   if (!session) return;
   await mkdir(profile, { recursive: true, mode: 0o700 });
   await writeFile(authPath, session, { mode: 0o600 });
+  if (sessionKey !== null) await writeFile(join(profile, CHROMIUM_STATE_FILE), sessionKey, { mode: 0o600 });
 }
 
 async function replaceProfile(plan: SeedPlan): Promise<void> {
@@ -252,7 +266,6 @@ async function runOnce(
   const scenarioEnvironment = scenario.prepare
     ? await scenario.prepare(join(BENCH_ROOT, "scenarios", `${label}-${scenario.id}`))
     : {};
-  const spawnedAt = Date.now();
   const app = await launchBenchApp({
     projectRoot: PROJECT_ROOT,
     instanceId: INSTANCE_ID,
@@ -279,7 +292,7 @@ async function runOnce(
     const connected = await connect(app);
     browser = connected.browser;
     page = connected.page;
-    const readyMs = Date.now() - spawnedAt;
+    const readyMs = Date.now() - app.spawnedAt;
     const pageErrors: string[] = [];
     page.on("console", (message) => {
       if (message.type() === "error") pageErrors.push(message.text());
@@ -374,7 +387,7 @@ async function runOnce(
       );
     throw error;
   } finally {
-    await sampler.stop();
+    await sampler.stop().catch(() => undefined);
     inspector?.close();
     await browser?.close().catch(() => undefined);
     await app.stop();
