@@ -35,6 +35,7 @@ import {
 const logger = createCodeBotLogger("slash-commands");
 const CLAUDE_ENGINE = "claude";
 const CUSTOM_LISTING_TIMEOUT_MS = 5_000;
+const PENDING_REPORT_LIMIT = 50;
 const NO_CUSTOM_COMMANDS: ClaudeCustomListing = { custom: [], naming: { projectPlugin: false, userPlugin: false } };
 
 export class SlashCommandsFailed extends Schema.TaggedError<SlashCommandsFailed>()("SlashCommandsFailed", {
@@ -80,6 +81,7 @@ export class SlashCommands {
   readonly #probed = new Set<string>();
   #probing = false;
   #queued: string | null = null;
+  readonly #pending = new Map<string, { client: AgentClient; notification: AppServerNotification }>();
 
   constructor(private readonly options: SlashCommandsOptions) {}
 
@@ -147,7 +149,17 @@ export class SlashCommands {
     const report = decodeSlashCommandSessionReport(notification.params);
     const chat = report ? this.options.chatOfThread(report.threadId) : null;
     const agent = chat ? this.options.agent(chat.agentId) : undefined;
-    if (!report || !chat || !agent || agent.provider !== client.provider) return true;
+    if (!report) return true;
+    if (!chat || !agent) {
+      this.#pending.delete(report.threadId);
+      this.#pending.set(report.threadId, { client, notification });
+      for (const oldest of this.#pending.keys()) {
+        if (this.#pending.size <= PENDING_REPORT_LIMIT) break;
+        this.#pending.delete(oldest);
+      }
+      return true;
+    }
+    if (agent.provider !== client.provider) return true;
     const engine = sessionSettingsIdentity(agent);
     const changed = this.options.catalog.setLive(chatKey(chat), {
       engine,
@@ -159,6 +171,13 @@ export class SlashCommands {
     if (changed) this.options.changed(chat);
     this.options.fork(this.#keepSaved(engine, report));
     return true;
+  }
+
+  threadBound(externalThreadId: string): void {
+    const pending = this.#pending.get(externalThreadId);
+    if (!pending) return;
+    this.#pending.delete(externalThreadId);
+    this.handleNotification(pending.client, pending.notification);
   }
 
   forgetChat(chat: SlashCommandChat): void {

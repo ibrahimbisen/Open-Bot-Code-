@@ -370,6 +370,12 @@ import {
   decodeSubmissions,
 } from "./skills-decoding";
 import {
+  decodeResumableSessionList,
+  decodeResumeSessionResult,
+  decodeSlashCommandList,
+  decodeSlashCommandsChanged,
+} from "./slash-command-decoding";
+import {
   decodeDirectConversation,
   decodeDirectConversationPage,
   decodeDirectMessage,
@@ -910,6 +916,12 @@ const codebotApi: CodeBotDesktopApi = {
   }),
   macAutomation: bridgeGroup(IPC_ENDPOINTS.macAutomation, {
     request: decodeMacAutomationResults,
+  }),
+  slashCommands: bridgeGroup(IPC_ENDPOINTS.slashCommands, {
+    list: decodeSlashCommandList,
+    listSessions: decodeResumableSessionList,
+    resumeSession: decodeResumeSessionResult,
+    changed: decodeSlashCommandsChanged,
   }),
   backgroundProcesses: bridgeGroup(IPC_ENDPOINTS.backgroundProcesses, {
     list: decodeBackgroundProcesses,

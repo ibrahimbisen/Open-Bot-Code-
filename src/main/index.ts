@@ -124,6 +124,7 @@ import { routineIpcHandlers } from "./ipc/routine-handlers";
 import { routineResultIpcHandlers } from "./ipc/routine-result-handlers";
 import { sharedTableIpcHandlers } from "./ipc/shared-table-handlers";
 import { skillIpcHandlers } from "./ipc/skill-handlers";
+import { slashCommandIpcHandlers } from "./ipc/slash-command-handlers";
 import { storageIpcHandlers } from "./ipc/storage-handlers";
 import { teamIpcHandlers } from "./ipc/team-handlers";
 import { updateIpcHandlers } from "./ipc/update-handlers";
@@ -546,6 +547,7 @@ const {
   forwardBitwardenConnectorStatus,
   forwardPasswordManagerStatus,
   forwardVaultState,
+  forwardSlashCommandsChanged,
   forwardHostStatus,
   forwardRemoteDesktopSessions,
   forwardServers,
@@ -941,6 +943,7 @@ function registerIpcHandlers({
     ...onePasswordConnectorIpcHandlers({ onePasswordConnector, remoteServers }),
     ...bitwardenConnectorIpcHandlers({ bitwardenConnector, remoteServers }),
     ...passwordManagersIpcHandlers({ passwordManagers, remoteServers, openExternal: openLink }),
+    ...slashCommandIpcHandlers({ service }),
     ...vaultIpcHandlers({ vault, getMainWindow: getDialogParent, translate: language.translate, remoteServers }),
     ...billingIpcHandlers({ billing }),
     ...referralIpcHandlers({ referral }),
@@ -1655,6 +1658,7 @@ if (!hasSingleInstanceLock) {
       service.on("workflowRun", (end) => built.analytics.handleWorkflowRun(end));
       service.on("creditMedia", (report) => built.analytics.handleCreditMedia(report));
       service.on("liveVoice", forwardVoiceLiveEvent);
+      service.on("slashCommandsChanged", forwardSlashCommandsChanged);
       built.browser.onSiteVisited((visit) => built.analytics.handleSiteVisit(visit));
       sidebarLayout.on("changed", (layout) => forwardAgentEvent("local", { type: "sidebar-layout-changed", layout }));
       built.sidebarPins.subscribe((key) => {

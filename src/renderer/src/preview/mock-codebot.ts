@@ -270,6 +270,7 @@ import { createMockRoutineFeed } from "./mock-routine-feed";
 import { type MockRoutineResultsOptions, mockRoutineResults } from "./mock-routine-results";
 import { applySidebarLayoutAction } from "./mock-sidebar-layout";
 import { createMockSkills, type MockSkillsOptions } from "./mock-skills";
+import { createMockSlashCommands } from "./mock-slash-commands";
 import { createMockStorage } from "./mock-storage";
 import { clone, type Listener, type MockRuntime, matchesQuery } from "./mock-support";
 import { createMockTeam, type MockTeamOptions } from "./mock-team";
@@ -1481,6 +1482,13 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     macAutomation: {
       request: async (targets) => targets.map((target) => ({ target, status: "granted" })),
     },
+    slashCommands: createMockSlashCommands({
+      resume: (agentId, title) => {
+        const task = createTask(agentId, title);
+        emitTasks(agentId);
+        return task;
+      },
+    }),
     backgroundProcesses: {
       list: async () => clone(backgroundProcesses),
       stop: async (id) => {

@@ -136,6 +136,7 @@ import type {
   ProviderHistoryRequest,
   ReadProviderHistory,
 } from "./provider-history";
+import { decodeAcpAvailableCommands, SLASH_COMMANDS_UPDATED_METHOD } from "./slash-commands/slash-command-rows";
 import { TimeoutError } from "./with-timeout";
 
 const logger = createCodeBotLogger("acp-client");
@@ -3422,6 +3423,18 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
       background.push(notification.update);
       return;
     }
+    if (notification.update.sessionUpdate === "available_commands_update")
+      this.emit("notification", {
+        method: SLASH_COMMANDS_UPDATED_METHOD,
+        params: {
+          threadId: notification.sessionId,
+          engineVersion: null,
+          commands: decodeAcpAvailableCommands(notification.update.availableCommands),
+          flags: false,
+          plugins: [],
+          hostPlugins: { project: false, user: false },
+        },
+      });
     const thread = this.#threads.get(notification.sessionId);
     if (!thread) return;
     const update = notification.update;

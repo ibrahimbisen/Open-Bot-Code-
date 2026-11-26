@@ -591,6 +591,14 @@ import type {
   UninstallSkillInput,
 } from "./ipc-skills";
 import type {
+  ResumableSessionList,
+  ResumeSessionInput,
+  ResumeSessionResult,
+  SlashCommandChatInput,
+  SlashCommandList,
+  SlashCommandsChanged,
+} from "./ipc-slash-commands";
+import type {
   ClearStorageInput,
   DeleteStoredFileInput,
   GetStorageUsageInput,
@@ -992,6 +1000,12 @@ export const IPC_ENDPOINTS = {
   backgroundProcesses: {
     list: scopedQuery<BackgroundProcess[] | null, "required">()("background-processes:list"),
     stop: scopedRequest<string, void, "required">()("background-processes:stop"),
+  },
+  slashCommands: {
+    list: request<SlashCommandChatInput, SlashCommandList>()("slash-commands:list"),
+    listSessions: request<string, ResumableSessionList>()("slash-commands:list-sessions"),
+    resumeSession: request<ResumeSessionInput, ResumeSessionResult>()("slash-commands:resume-session"),
+    changed: event<SlashCommandsChanged>()("slash-commands:changed"),
   },
   skills: {
     localList: request<undefined, MarketplaceSkillDetail[]>()("skills:local-list"),
@@ -2129,6 +2143,7 @@ export const IPC_GROUP_PATHS = {
   macAutomation: "macAutomation",
   backgroundProcesses: "backgroundProcesses",
   skills: "skills",
+  slashCommands: "slashCommands",
   customProviders: "customProviders",
   providerDetection: "providerDetection",
   customAgents: "customAgents",

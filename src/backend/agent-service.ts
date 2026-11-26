@@ -104,6 +104,9 @@ import type {
   RespondToApprovalInput,
   RespondToBrowserTakeoverInput,
   RespondToPromptInput,
+  ResumableSessionList,
+  ResumeSessionInput,
+  ResumeSessionResult,
   Routine,
   RoutineRun,
   RunQueuedMessageAsTaskInput,
@@ -124,6 +127,9 @@ import type {
   SidebarLayoutSnapshot,
   SidebarSection,
   SignOutMcpServerInput,
+  SlashCommandChatInput,
+  SlashCommandList,
+  SlashCommandsChanged,
   StartAgentTaskInput,
   SteerQueuedMessageInput,
   TestChannelRoutineInput,
@@ -391,6 +397,9 @@ import { RoutineRecords } from "./routine-records";
 import type { ImportedRoutineRun, RoutineHoldWindow } from "./routine-store";
 import { type RoutineDueSource, RoutineTimer } from "./routine-timer";
 import type { SidebarLayoutStore } from "./sidebar-layout-store";
+import { ClaudeSessionResume } from "./slash-commands/claude-session-resume";
+import { SLASH_COMMAND_CATALOG_FILE, SlashCommandCatalog } from "./slash-commands/slash-command-catalog";
+import { SlashCommands, type SlashCommandsFailed } from "./slash-commands/slash-commands";
 import { shortenDiagnostic } from "./stderr-diagnostics";
 import { extractJsonObject } from "./structured-output";
 import type { UserBrowsingLog } from "./user-browsing-log";
@@ -436,6 +445,7 @@ interface AgentServiceEvents {
   workflowRun: [end: WorkflowRunEnd];
   creditMedia: [report: CreditMediaReport];
   liveVoice: [event: VoiceLiveEvent, memberId: string | null];
+  slashCommandsChanged: [change: SlashCommandsChanged];
 }
 
 export interface AgentServiceOptions {
@@ -572,6 +582,8 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly channels: ChannelService;
   readonly messaging: MessagingThreads;
   readonly #profileSave: ProfileSave;
+  readonly #slashCommands: SlashCommands;
+  readonly #claudeResume: ClaudeSessionResume;
   readonly #profileClients = new ProfileClients();
   readonly #warmGenerations = new WarmGenerations({
     ownerFor: (provider) => this.#providers.currentClient(provider),
@@ -964,6 +976,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
               if (threadId && notification.method === "turn/started") this.#codexIdleSessions.busy(threadId, client);
               else if (threadId) this.#codexIdleSessions.idle(threadId, client);
             }
+            if (this.#slashCommands.handleNotification(client, notification)) return;
             if (notification.method === "codebot/sessionSettings/updated") {
               const threadId = getString(notification.params, "threadId");
               const agentId = threadId ? this.#conversation.agentForThread(threadId) : undefined;
@@ -1925,6 +1938,29 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
           return true;
         },
       },
+    });
+    this.#slashCommands = new SlashCommands({
+      catalog: new SlashCommandCatalog(join(store.database.userDataPath, SLASH_COMMAND_CATALOG_FILE)),
+      agent: (agentId) => this.#store.get(agentId),
+      hasTask: (agentId, taskId) => this.#tasks.has(agentId, taskId),
+      chatOfThread: (externalThreadId) => this.#slashCommandChat(externalThreadId),
+      clientOfAgent: (agent) => this.#providers.clientForAgent(agent),
+      claudeClient: () => this.#providers.currentClient("claude"),
+      changed: (change) => this.emit("slashCommandsChanged", change),
+      fork: (work) => {
+        Effect.runFork(work.pipe(Effect.forkIn(this.#scope, { startImmediately: true })));
+      },
+    });
+    this.#conversation.threadBound = (externalThreadId) => this.#slashCommands.threadBound(externalThreadId);
+    this.#claudeResume = new ClaudeSessionResume({
+      database: store.database,
+      agent: (agentId) => this.#store.get(agentId),
+      client: (agent) => this.#providers.clientForAgent(agent),
+      tasks: (agentId) => this.#tasks.snapshot(agentId).tasks,
+      createTask: (agentId, title) => this.#tasks.create(agentId, title, "user"),
+      closeTask: (task) => this.#tasks.delete(task),
+      publicTask: (task) => this.#tasks.publicTask(task),
+      changed: (agentId) => this.#tasks.changed(agentId),
     });
     this.#sessionSettings = new SessionSettings({
       store,
@@ -3851,6 +3887,28 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     const agent = this.#store.setMarketplaceSource(agentId, source);
     this.#emit({ type: "agents-changed", agents: this.listAgents() });
     return agent;
+  }
+
+  #slashCommandChat(externalThreadId: string): { agentId: string; taskId: string | null } | null {
+    const agentId = this.#conversation.agentForThread(externalThreadId);
+    const agent = agentId === undefined ? undefined : this.#store.get(agentId);
+    if (!agent) return null;
+    const threadId = this.#conversation.publicThreadId(agent.id, externalThreadId);
+    if (threadId === agent.threadId) return { agentId: agent.id, taskId: null };
+    const task = this.#tasks.snapshot(agent.id).tasks.find((candidate) => candidate.threadId === threadId);
+    return task ? { agentId: agent.id, taskId: task.id } : null;
+  }
+
+  listSlashCommands(input: SlashCommandChatInput): Effect.Effect<SlashCommandList, SlashCommandsFailed> {
+    return this.#slashCommands.list(input);
+  }
+
+  listResumableSessions(agentId: string): Effect.Effect<ResumableSessionList, SlashCommandsFailed> {
+    return this.#claudeResume.list(agentId);
+  }
+
+  resumeAgentSession(input: ResumeSessionInput): Effect.Effect<ResumeSessionResult, SlashCommandsFailed> {
+    return this.#claudeResume.resume(input.agentId, input.sessionId);
   }
 
   readAgentSessionSettings(agentId: string): Effect.Effect<AgentSessionSettings, AgentLifecycleFailed> {
@@ -7781,7 +7839,10 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     if (event.type === "turn-started") this.#steerAfterTurnStart(event.agentId, event.threadId);
     if (this.channels?.event(event) || this.messaging?.event(event, this.#scope) || this.#tasks?.event(event)) return;
     this.emit("event", event, memberId);
-    if (event.type === "status") this.#providerStatusChanged(event.status);
+    if (event.type === "status") {
+      this.#providerStatusChanged(event.status);
+      this.#slashCommands?.providerStatus(event.status);
+    }
   }
 
   readonly #forgetExecutionThread = Effect.fn("AgentService.forgetExecutionThread")(function* (

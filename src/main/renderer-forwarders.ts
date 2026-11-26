@@ -607,6 +607,10 @@ export function createRendererForwarders({
     for (const window of appWindows()) sendToRenderer(window, IPC_ENDPOINTS.passwordManagers.changed, status);
   }
 
+  function forwardSlashCommandsChanged(change: import("@codebot/contracts/ipc").SlashCommandsChanged): void {
+    for (const window of appWindows()) sendToRenderer(window, IPC_ENDPOINTS.slashCommands.changed, change);
+  }
+
   function forwardVaultState(state: import("@codebot/contracts/ipc").VaultState): void {
     for (const window of appWindows()) sendToRenderer(window, IPC_ENDPOINTS.vault.changed, state);
   }
@@ -702,6 +706,7 @@ export function createRendererForwarders({
     forwardBitwardenConnectorStatus,
     forwardPasswordManagerStatus,
     forwardVaultState,
+    forwardSlashCommandsChanged,
     forwardHostStatus,
     forwardRemoteDesktopSessions,
     forwardServers,
