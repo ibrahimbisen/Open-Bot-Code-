@@ -68,7 +68,9 @@ import { DISK_RESTORE_WAIT_MS, diskRestoring, providerCheckTimeoutMs } from "../
 import { causeHelpers } from "../effect-boundary";
 import { isPythonKimiCli, type SignInRegion } from "../kimi-region";
 import { readKimiUsage } from "../kimi-usage";
+import { ensureProjectContainer } from "../lock/container";
 import { lockEnforced } from "../lock/lock-level";
+import { lockRefusalMessage, providerLock } from "../lock/lock-runtime";
 import { McpHandoffLog } from "./../mcp-handoff-log";
 import { grokMcpServerName, providerMcpServerName } from "./../mcp-provider-shapes";
 import { customProvidersOn, openCodeSignInMessage } from "./../opencode-config";
@@ -2619,6 +2621,11 @@ export class ProviderRuntime implements ProviderPort {
     if (provider === "acp" && this.#removingCustomRuntime)
       return yield* new ProviderOperationFailed({ cause: new Error(sourceText("error.provider.registryRemoveBusy")) });
     yield* checkAgentFolders(agent);
+    const lock = providerLock(agent, provider, this.#hooks.sharedRoot());
+    if (lock?.strategy.kind === "refuse")
+      return yield* new ProviderOperationFailed({
+        cause: new Error(lockRefusalMessage(lock.strategy.reason, provider, lock.lock.level)),
+      });
     const own = this.#ownProcessFor(agent);
     const current = this.#confined.get(agent.id);
     const key = own ? this.#confinedKey(provider, own) : null;
@@ -2628,6 +2635,15 @@ export class ProviderRuntime implements ProviderPort {
     }
     if (current) yield* this.#stopConfined(agent.id, current);
     if (!own || !key) return yield* providerStep(() => this.requireReadyClient(provider));
+    const container = own.confinement?.container;
+    if (container)
+      yield* Effect.tryPromise({
+        try: () => ensureProjectContainer(container),
+        catch: (cause) =>
+          new ProviderOperationFailed({
+            cause: new Error(sourceText("error.lock.containerFailed", { reason: String(cause) })),
+          }),
+      });
     const completion = Deferred.makeUnsafe<AgentClient, ProviderOperationFailed>();
     this.#confinedStarts.set(agent.id, completion);
     const exit = yield* Effect.exit(this.#startConfined(agent.id, provider, own, key));
@@ -2648,6 +2664,7 @@ export class ProviderRuntime implements ProviderPort {
     const provider = providerForAgent(agent);
     const confined =
       lockEnforced(agent) && agentProviderDescriptor(provider).workspaceEnforcement === "confined-process";
+    const lock = confined ? providerLock(agent, provider, this.#hooks.sharedRoot()) : null;
     const account = this.#providerAccounts?.account(provider, agent.providerAccountId) ?? null;
     if (!confined && !account) return null;
     return {
@@ -2656,6 +2673,15 @@ export class ProviderRuntime implements ProviderPort {
             confinement: {
               writableRoots: workspaceWritableRoots(agent, this.#hooks.sharedRoot()),
               excludedFolders: workspaceExcludedFolders(agent),
+              ...(lock
+                ? {
+                    lockLevel: lock.lock.level,
+                    readableFolders: lock.lock.readOnlyFolders,
+                    ...(lock.container
+                      ? { container: lock.container, environmentNames: Object.keys(process.env) }
+                      : {}),
+                  }
+                : {}),
             },
           }
         : {}),
@@ -2671,6 +2697,8 @@ export class ProviderRuntime implements ProviderPort {
       this.#activations.get(provider) ?? 0,
       own.confinement?.writableRoots ?? null,
       own.confinement?.excludedFolders ?? null,
+      own.confinement?.lockLevel ?? null,
+      own.confinement?.container?.name ?? null,
       own.account?.id ?? null,
     ]);
   }

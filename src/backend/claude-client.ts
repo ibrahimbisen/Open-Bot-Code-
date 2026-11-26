@@ -120,7 +120,16 @@ import { skillFolderNames } from "./home-skills";
 import { IdleThreadPool } from "./idle-thread-pool";
 import { type ClaudeLockPlan, type ClaudeShellGate, claudeLockPlan, isClaudeShellTool } from "./lock/claude-lock";
 import { claudeSandboxState } from "./lock/claude-sandbox-probe";
+import {
+  type ContainerPlan,
+  containerExecTarget,
+  containerPlan,
+  containerPolicy,
+  ensureProjectContainer,
+  findContainerTool,
+} from "./lock/container";
 import { type FolderLock, readFolderLock } from "./lock/folder-lock";
+import { lockStrategy } from "./lock/lock-strategy";
 import { MCP_STDIO_PROBE_TIMEOUT_MS } from "./mcp-probe";
 import {
   agentMcpServers,
@@ -1685,6 +1694,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       ...(claudeTakesPromptSnapshotFlag(this.#cli.version) ? { "system-prompt-snapshot": "off" } : {}),
       ...(mcpConfigFile ? { "mcp-config": mcpConfigFile } : {}),
     };
+    const lockContainer = lockPlan?.container ?? null;
     const stderr = new ClaudeStderrTail();
     const claudeQuery = yield* providerSync(() =>
       this.#createQuery({
@@ -1692,7 +1702,12 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         options: {
           cwd: config.cwd,
           ...this.#sdkLaunch,
-          ...this.#claudeProcessSpawner(stderr),
+          ...(lockContainer
+            ? {
+                spawnClaudeCodeProcess: (spawnOptions: SpawnOptions) =>
+                  spawnClaudeInContainer(spawnOptions, stderr, lockContainer),
+              }
+            : this.#claudeProcessSpawner(stderr)),
           ...(config.model ? { model: this.#sdkModel(config.model) } : {}),
           ...(appliedEffort ? { effort: appliedEffort } : {}),
           ...(resume ? { resume: threadId } : { sessionId: threadId, title: CLAUDE_SESSION_TITLE }),
@@ -3233,22 +3248,57 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     environment: NodeJS.ProcessEnv,
     plugins: readonly SdkPluginConfig[],
   ): Effect.fn.Return<ClaudeLockPlan, ProviderClientOperationError> {
+    const policy = containerPolicy();
+    const tool = policy === "never" ? null : findContainerTool();
     const state = yield* providerCall(() =>
-      claudeSandboxState({
-        key: `${this.#cli.executable} ${this.#cli.version}`,
-        createQuery: this.#createQuery,
-        launch: { ...this.#sdkLaunch, ...this.#claudeProcessSpawner(new ClaudeStderrTail()) },
-        env: environment,
-      }),
+      policy === "always" && lock.level === "strict"
+        ? Promise.resolve({ available: false as const, reason: "container" })
+        : claudeSandboxState({
+            key: `${this.#cli.executable} ${this.#cli.version}`,
+            createQuery: this.#createQuery,
+            launch: { ...this.#sdkLaunch, ...this.#claudeProcessSpawner(new ClaudeStderrTail()) },
+            env: environment,
+          }),
     );
-    if (!state.available && lock.level === "strict")
+    const strategy = lockStrategy({
+      level: lock.level,
+      enforcement: "tool-sandbox",
+      platform: process.platform,
+      bubblewrap: false,
+      seatbelt: false,
+      containerTool: tool !== null,
+      containerPolicy: policy,
+      claudeSandbox: state.available,
+    });
+    if (strategy.kind === "refuse")
       return yield* providerFailure(
-        new Error(sourceText("error.lock.claudeStrictNoSandbox", { reason: state.reason })),
+        new Error(
+          strategy.reason === "container-missing"
+            ? sourceText("error.lock.containerMissing", {})
+            : sourceText("error.lock.claudeStrictNoSandbox", { reason: state.available ? "" : state.reason }),
+        ),
+      );
+    const container =
+      strategy.kind === "container" && tool
+        ? containerPlan({
+            tool,
+            projectId: lock.projectId ?? cwd,
+            writableFolders: [...lock.allowedFolders, configDirectory],
+            readOnlyFolders: [...lock.readOnlyFolders, dirname(this.#cli.executable)],
+            workdir: cwd,
+          })
+        : null;
+    if (container)
+      yield* providerCall(() => ensureProjectContainer(container)).pipe(
+        Effect.catch((error) =>
+          providerFailure(new Error(sourceText("error.lock.containerFailed", { reason: String(error.cause) }))),
+        ),
       );
     return claudeLockPlan(lock, {
       cwd,
       configDirectory,
-      shell: state.available ? "sandbox" : "ask",
+      container,
+      shell: container ? "container" : state.available ? "sandbox" : "ask",
       engineFolder: dirname(this.#cli.executable),
       skillFolders: [join(configDirectory, "skills"), ...plugins.map((plugin) => plugin.path)],
     });
@@ -3500,6 +3550,24 @@ function spawnClaudeProcessGroup(
 ): SpawnedProcess {
   const child = spawn(command, args, { cwd, env, stdio: ["pipe", "pipe", "pipe"], detached: true });
   endProcessGroupOnExit(child);
+  child.stderr.on("data", (chunk: Buffer) => stderr.push(chunk));
+  child.stderr.on("error", () => {});
+  const abort = () => child.kill();
+  const release = () => signal.removeEventListener("abort", abort);
+  signal.addEventListener("abort", abort, { once: true });
+  child.once("exit", release);
+  child.once("error", release);
+  if (signal.aborted) abort();
+  return child;
+}
+
+function spawnClaudeInContainer(
+  { command, args, cwd, env, signal }: SpawnOptions,
+  stderr: ClaudeStderrTail,
+  plan: ContainerPlan,
+): SpawnedProcess {
+  const target = containerExecTarget(plan, { command, args, windowsVerbatimArguments: false }, cwd, Object.keys(env));
+  const child = spawn(target.command, target.args, { env, stdio: ["pipe", "pipe", "pipe"], windowsHide: true });
   child.stderr.on("data", (chunk: Buffer) => stderr.push(chunk));
   child.stderr.on("error", () => {});
   const abort = () => child.kill();

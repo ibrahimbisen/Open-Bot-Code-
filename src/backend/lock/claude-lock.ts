@@ -13,6 +13,7 @@ import {
 } from "../claude-workspace-sandbox";
 import { runCauseEffect } from "../effect-boundary";
 import { isPathInside } from "../path-containment";
+import type { ContainerPlan } from "./container";
 import type { FolderLock } from "./folder-lock";
 import { personalFolders, strictHiddenFolders } from "./personal-folders";
 
@@ -36,6 +37,7 @@ export interface ClaudeLockPlan {
   readonly context: ClaudeLockContext;
   readonly sandbox: NonNullable<Settings["sandbox"]> | null;
   readonly hooks: NonNullable<Options["hooks"]>;
+  readonly container: ContainerPlan | null;
 }
 
 export interface ClaudeLockPlanInput {
@@ -44,6 +46,7 @@ export interface ClaudeLockPlanInput {
   readonly shell: ClaudeShellGate;
   readonly engineFolder: string | null;
   readonly skillFolders: readonly string[];
+  readonly container?: ContainerPlan | null;
 }
 
 const ALLOW: ClaudeLockVerdict = { kind: "allow" };
@@ -74,6 +77,7 @@ export function claudeLockPlan(lock: FolderLock, input: ClaudeLockPlanInput): Cl
     context,
     sandbox: input.shell === "sandbox" ? claudeLockSandbox(lock, input) : null,
     hooks: claudeLockHooks(context),
+    container: input.container ?? null,
   };
 }
 

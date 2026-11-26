@@ -5,6 +5,7 @@ import type { AgentSummary } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { lockEnforced } from "../lock/lock-level";
 import { isPathInside } from "../path-containment";
+import { agentProjectContext } from "../projects/project-context";
 
 type SandboxedAgent = Pick<AgentSummary, "id" | "access" | "additionalFolders" | "provider" | "workspacePath">;
 
@@ -56,10 +57,14 @@ export function existingAgentFolders(agent: FolderAgent): string[] {
 }
 
 export function workspaceWritableRoots(
-  agent: Pick<AgentSummary, "id" | "additionalFolders" | "workspacePath">,
+  agent: Pick<AgentSummary, "id" | "access" | "additionalFolders" | "workspacePath">,
   sharedRoot: string,
 ) {
-  return [agent.workspacePath, sharedRoot, ...existingAgentFolders(agent)];
+  return [
+    agent.workspacePath,
+    ...(agentProjectContext(agent.id) && lockEnforced(agent) ? [] : [sharedRoot]),
+    ...existingAgentFolders(agent),
+  ];
 }
 
 export function workspaceExcludedFolders(agent: Pick<AgentSummary, "id" | "access" | "excludedFolders">): string[] {
