@@ -28,6 +28,8 @@ const OTHER_RUNTIME_FLAG = "--process-table-only";
 const BYTES_PER_KB = 1_024;
 const BYTES_PER_MB = 1_024 * 1_024;
 const WORKER_MARKER = "bench-harness-worker";
+const WORKER_FILE = `${WORKER_MARKER}.cjs`;
+const TEMPORARY_PREFIX = process.platform === "win32" ? "codebot bench harness e2e " : "codebot-bench-harness-e2e-";
 const GRANDCHILD_MARKER = "bench-harness-grandchild";
 const WORKER_HELD_BYTES = 96 * BYTES_PER_MB;
 const WORKER_BURN_SECONDS = 1.5;
@@ -112,8 +114,10 @@ interface Worker {
   nextState: () => Promise<WorkerState>;
 }
 
-function startWorker(): Worker {
-  const child = spawn(process.execPath, ["-e", WORKER_SOURCE, WORKER_MARKER], {
+async function startWorker(directory: string): Promise<Worker> {
+  const file = join(directory, WORKER_FILE);
+  await writeFile(file, WORKER_SOURCE);
+  const child = spawn(process.execPath, [file], {
     stdio: ["pipe", "pipe", "inherit"],
     detached: process.platform !== "win32",
   });
@@ -240,7 +244,8 @@ async function checkSampleCost(): Promise<void> {
 }
 
 async function checkProcessTable(): Promise<void> {
-  const worker = startWorker();
+  const directory = await mkdtemp(join(tmpdir(), TEMPORARY_PREFIX));
+  const worker = await startWorker(directory);
   const workerPid = worker.child.pid ?? 0;
   let grandchild = 0;
   try {
@@ -262,6 +267,7 @@ async function checkProcessTable(): Promise<void> {
     await checkSampleCost();
   } finally {
     await stopWorker(worker, grandchild);
+    await rm(directory, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
   }
 }
 
@@ -544,7 +550,7 @@ async function readVersion(executable: string): Promise<string> {
 }
 
 async function checkFakeCodex(): Promise<void> {
-  const directory = await mkdtemp(join(tmpdir(), "codebot bench harness e2e "));
+  const directory = await mkdtemp(join(tmpdir(), TEMPORARY_PREFIX));
   const codex = await writeFakeCodex(join(directory, "fake-codex"), { deltaMs: 5, deltas: 6 });
   const executable = codex.environment.CODEBOT_CODEX_PATH ?? "";
   try {

@@ -179,6 +179,8 @@ const ANIMATION_FRAME_REQUESTS = `new Promise((resolve) => {
   }, 1000);
 })`;
 
+const WINDOW_VISIBLE = `document.visibilityState === "visible" ? 1 : 0`;
+
 async function writeCpuProfile(browser: Browser, page: Page, path: string): Promise<void> {
   const session = await page.context().newCDPSession(page);
   try {
@@ -346,6 +348,7 @@ async function runOnce(
       "time.actMs": actMs,
       "errors.page": pageErrors.length,
       "frames.requestsPerSecond": await appWindow.evaluate<number>(ANIMATION_FRAME_REQUESTS),
+      "window.visible": await appWindow.evaluate<number>(WINDOW_VISIBLE),
     };
     for (const error of pageErrors.slice(0, 3)) logger.warn(`page error: ${error.split("\n", 1)[0]}`);
     const base = join(BENCH_ROOT, "snapshots", `${label}-${scenario.id}`);
