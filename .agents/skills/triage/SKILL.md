@@ -160,9 +160,8 @@ Write, in one line each:
   form (label `invalid`) is not a decision. When an earlier decision
   exists, quote it. When a maintainer already asked for this change, say
   so in the recommendation; the user decides how much it counts.
-- **Usage** (optional): when the need depends on a feature that exists,
-  the `openpanel` skill can show how many users use that feature. When
-  you do not check usage, mark **Reach** as not confirmed.
+- **Usage** (optional): CodeBot collects no usage data. Mark **Reach** as
+  not confirmed.
 - **Cost**: the surfaces to change, new settings or screens, new
   dependencies, migrations, Team API or IPC contract changes, and new
   provider-specific code. When the reporter offers a PR, read its diff

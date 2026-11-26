@@ -220,6 +220,7 @@
     "knip:check": "knip",
     "check:staged": "biome check --write --staged --files-ignore-unknown=true --no-errors-on-unmatched",
     "test": "bun run test:desktop && bun run test:api",
+    "test:no-telemetry": "bun scripts/no-telemetry-e2e.ts",
     "test:desktop": "vitest run",
     "test:changed": "git merge-base origin/main HEAD > /dev/null && vitest run --changed origin/main --maxWorkers=1",
     "test:related": "vitest related --run --maxWorkers=1",

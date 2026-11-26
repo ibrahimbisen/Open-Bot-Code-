@@ -145,12 +145,6 @@ The `Provider live E2E` workflow is not a pull request check either. It runs onl
 starts it; the release-upgrade-safety skill starts it before a release. On the Mac mini runner, it sends one real message to Codex, Claude and Gemini through the desktop app
 (`bun run test:provider-live`). See [Live provider test](provider-live-e2e.md).
 
-The `Release regression report` workflow is not a pull request check either. Once a day, it compares
-the two newest releases from production analytics and posts the result to a private Discord channel
-when a status changed, on Monday, or on a manual run. It runs only on `main`, with the secrets of the
-`analytics` environment, and its log shows no data. A regression does not fail the run; only a broken
-run fails. See the `openpanel` skill.
-
 `check:api` ends with `api:build:check`, which is the preview build of the Worker, so the API job
 uploads that build as the `cloudflare-preview` artifact. The job has no secrets. After the CI run completes, the trusted
 [cloudflare-preview.yml](../.github/workflows/cloudflare-preview.yml) workflow runs its `main`

@@ -470,7 +470,7 @@ servers, their webhooks and the cron continue.
    recovery → Retries), set "If all retries for a payment fail" to cancel the subscription or to
    mark it unpaid. Both stop the server.
 5. **OpenPanel.** In the production project, make a server client. Its ID and secret send the
-   billing and server events in [ANALYTICS.md](../ANALYTICS.md). Only production gets them.
+   billing and server events. Only production gets them.
 6. **Secrets.** The `Deploy Cloudflare production` job in `.github/workflows/ci.yml` sends these
    from the `cloudflare-production` GitHub Environment. It refuses a set with only some values and a
    Stripe key that is not live. OpenPanel credentials are required before any remote change.
@@ -500,7 +500,7 @@ use (a focus ping is use only for 30 minutes after the last user action or a new
 The OpenPanel **Revenue and Customers** dashboard shows purchases and checkout outcomes.
 Revenue comes from verified `invoice.paid` events. It includes collected tax and discounts,
 before refunds and fees. Refunds and lost disputes are separate `billing_action` events with
-`amount_usd` (see [ANALYTICS.md](../ANALYTICS.md)); subtract them for net revenue. Amounts use USD cents. EUR and PLN amounts use the latest available
+`amount_usd`; subtract them for net revenue. Amounts use USD cents. EUR and PLN amounts use the latest available
 ECB rate on or before the payment date in UTC; a refund or a dispute uses the rate of its own date, so a
 full refund can leave a small USD difference. The original currency and amount stay on the event.
 
@@ -1929,7 +1929,7 @@ bootstrap turns off the password, and the script refuses a list without such a k
 
 The OpenPanel dashboard "Server pool" (project `codebot`) shows the pool. Each 5 minutes, the
 production Worker sends one `hosted_pool_snapshot` event for each location and product and one with
-`location = all` (see `ANALYTICS.md`). The test Worker has no OpenPanel keys and sends none. Each
+`location = all`. The test Worker has no OpenPanel keys and sends none. Each
 report is a bar with the largest value of the snapshots in the last 30 minutes. Two local patches of
 the OpenPanel dashboard make this work: a bar with the `max` metric reads the value of each minute,
 and a tile with its own 30-minute range keeps it when the dashboard date picker has a longer range.
