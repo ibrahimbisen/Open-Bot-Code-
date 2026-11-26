@@ -145,8 +145,8 @@ function summarize(options: Options): { markdown: string; passed: boolean } {
   ];
   let passed = true;
   for (const scenario of options.scenarios) {
-    const before = readReport(join(options.out, "baseline", `baseline-$scenario.json`));
-    const after = readReport(join(options.out, "codebot", `${options.label}-${scenario}.json`));
+    const before = readReport(join(options.out, "baseline", `baseline-${scenario}.json`));
+    const after = readReport(join(options.out, options.label, `${options.label}-${scenario}.json`));
     for (const stat of ["mean", "settled"] as const) {
       const baselineValue = before ? medianOf(before, scenario, "mem.total", stat) : undefined;
       const codebotValue = after ? medianOf(after, scenario, "mem.total", stat) : undefined;
@@ -170,7 +170,7 @@ function summarize(options: Options): { markdown: string; passed: boolean } {
 function main(): void {
   const options = parseOptions(process.argv.slice(2));
   const baselineDirectory = join(options.out, "baseline");
-  const codebotDirectory = join(options.out, "codebot");
+  const codebotDirectory = join(options.out, options.label);
   mkdirSync(options.out, { recursive: true });
   let failed = false;
   for (const scenario of options.scenarios) {
