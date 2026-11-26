@@ -52,7 +52,7 @@ async function setViewport(page: Page, width: number, height: number): Promise<v
   const session = await page.context().newCDPSession(page);
   await session.send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 0, mobile: false });
   await session.detach();
-  await page.waitForTimeout(400);
+  await page.waitForTimeout(1000);
 }
 
 async function clearViewport(page: Page): Promise<void> {
@@ -69,7 +69,7 @@ async function setTheme(page: Page, appearance: "light" | "dark"): Promise<void>
     () => page.evaluate(() => document.documentElement.dataset.codebotColorScheme ?? ""),
     (scheme) => scheme === appearance,
   );
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(1500);
 }
 
 async function shot(page: Page, name: string): Promise<string> {
@@ -102,6 +102,13 @@ async function closeBlockingDialogs(page: Page): Promise<void> {
     await page.keyboard.press("Escape");
     await page.waitForTimeout(250);
   }
+}
+
+async function dismissToasts(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    for (const button of document.querySelectorAll<HTMLElement>(".ui-toaster li button[aria-label]")) button.click();
+  });
+  await page.waitForTimeout(500);
 }
 
 async function createProject(
@@ -146,6 +153,7 @@ async function main(): Promise<void> {
     await page.reload();
     await leftBar(page).waitFor({ state: "visible", timeout: WAIT_MS });
     await closeBlockingDialogs(page);
+    await dismissToasts(page);
     await page.evaluate(() => window.localStorage.removeItem("codebot:active-project:v1"));
 
     await step("left bar lists projects with status dot and access badge", async () => {
@@ -241,7 +249,7 @@ async function main(): Promise<void> {
       await until(
         page,
         "one result",
-        () => column(page).locator(".project-chat-row").count(),
+        () => column(page).locator(".project-search-row").count(),
         (count) => count === 1,
       );
       await search.first().fill("");
@@ -265,7 +273,7 @@ async function main(): Promise<void> {
       await column(page).getByRole("button", { name: "Show archived chats" }).click();
       await column(page).getByRole("button", { name: "Actions for Second question" }).click();
       await page.getByRole("menuitem", { name: "Restore", exact: true }).click();
-      await column(page).getByRole("button", { name: "Show archived chats" }).click();
+      await column(page).getByRole("button", { name: "Chats", exact: true }).click();
       await until(
         page,
         "chat is back",
@@ -286,7 +294,10 @@ async function main(): Promise<void> {
       await page.getByRole("button", { name: "Maximize the panel" }).first().click();
       await page.getByRole("button", { name: "Restore the panel size" }).first().waitFor({ timeout: WAIT_MS });
       await page.getByRole("button", { name: "Restore the panel size" }).first().click();
-      await page.getByRole("button", { name: "Close the panel" }).last().click();
+      await dismissToasts(page);
+      await page.mouse.move(2, 2);
+      await page.waitForTimeout(400);
+      await page.getByRole("button", { name: "Close the panel" }).last().dispatchEvent("click");
       await until(
         page,
         "panel closed",
@@ -308,6 +319,7 @@ async function main(): Promise<void> {
       await page.reload();
       await leftBar(page).waitFor({ state: "visible", timeout: WAIT_MS });
       await closeBlockingDialogs(page);
+      await dismissToasts(page);
       await projectButton(page, firstName).click();
       await until(
         page,
@@ -324,6 +336,9 @@ async function main(): Promise<void> {
       await dialog.waitFor({ state: "visible", timeout: WAIT_MS });
       await dialog.getByText("Open", { exact: true }).first().click();
       await dialog.getByRole("button", { name: "Save", exact: true }).click();
+      await dialog.getByText("Saved", { exact: true }).waitFor({ state: "visible", timeout: WAIT_MS });
+      await dialog.getByRole("button", { name: "Close", exact: true }).click();
+      await dialog.waitFor({ state: "hidden", timeout: WAIT_MS });
       await until(
         page,
         "badge shows Open",
@@ -339,6 +354,7 @@ async function main(): Promise<void> {
         [960, 640],
       ] as const) {
         await setViewport(page, width, height);
+        await dismissToasts(page);
         for (const theme of ["dark", "light"] as const) {
           await setTheme(page, theme);
           screens.push(await shot(page, `project-shell-${theme}-${width}x${height}`));

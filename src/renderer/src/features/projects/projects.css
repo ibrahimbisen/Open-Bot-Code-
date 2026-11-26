@@ -869,6 +869,10 @@
   color: var(--codebot-text-primary);
 }
 
+.project-dialog > * {
+  flex-shrink: 0;
+}
+
 .project-settings-dialog {
   width: min(640px, 100%);
 }
