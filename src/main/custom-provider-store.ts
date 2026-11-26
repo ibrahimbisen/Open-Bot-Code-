@@ -7,6 +7,7 @@ import type {
   CustomProviderModel,
   CustomProviderReasoningEffort,
   CustomProviderSummary,
+  LocalModelServerSettings,
   SaveCustomProviderInput,
   UpdateCustomProviderInput,
 } from "@codebot/contracts/ipc";
@@ -17,6 +18,7 @@ import {
   isCustomProviderInputs,
   isCustomProviderMaxOutput,
   isCustomProviderModelEfforts,
+  isLocalModelServerSettings,
   sameCustomProviderOrigin,
 } from "@codebot/contracts/ipc";
 import { sourceText } from "@codebot/i18n/source";
@@ -55,6 +57,7 @@ const entrySchema = z.object({
   models: z.array(modelSchema),
   secret: z.string().nullish(),
   harness: z.enum(CUSTOM_PROVIDER_HARNESSES).optional().catch(undefined),
+  machine: z.custom<LocalModelServerSettings>(isLocalModelServerSettings).optional().catch(undefined),
 });
 
 const fileSchema = z.object({ version: z.literal(1), providers: z.array(entrySchema) });
@@ -71,6 +74,15 @@ interface ProviderSecret {
 interface Entry {
   readonly stored: StoredEntry;
   readonly secret: ProviderSecret | null;
+}
+
+export interface LocalModelServerEntry {
+  readonly id: string;
+  readonly name: string;
+  readonly baseUrl: string;
+  readonly apiKey: string | null;
+  readonly headers: readonly CustomProviderHeader[];
+  readonly settings: LocalModelServerSettings;
 }
 
 const READ_ONLY_MESSAGE = sourceText("error.provider.endpointsReadOnly");
@@ -139,6 +151,31 @@ export class CustomProviderStore {
     }));
   }
 
+  localServers(): readonly LocalModelServerEntry[] {
+    return this.#entries.map(({ stored, secret }) => ({
+      id: stored.id,
+      name: stored.name,
+      baseUrl: stored.baseUrl,
+      apiKey: secret?.apiKey ?? null,
+      headers: secret?.headers ?? [],
+      settings: { ...stored.machine },
+    }));
+  }
+
+  setLocalServerSettings(
+    id: string,
+    settings: LocalModelServerSettings,
+  ): Effect.Effect<CustomProviderSummary[], CustomProviderFailure> {
+    return this.#mutate(() => {
+      const index = this.#entries.findIndex((entry) => entry.stored.id === id);
+      const current = this.#entries[index];
+      if (!current) throw new Error(NOT_SAVED_MESSAGE);
+      const { machine: _machine, ...stored } = current.stored;
+      const next: Entry = { stored: { ...stored, ...storedMachine(settings) }, secret: current.secret };
+      return this.#entries.map((entry, position) => (position === index ? next : entry));
+    });
+  }
+
   save(input: SaveCustomProviderInput): Effect.Effect<CustomProviderSummary[], CustomProviderFailure> {
     return this.#mutate(() => {
       if (this.#entries.some((entry) => entry.stored.id === input.id)) throw new Error(DUPLICATE_MESSAGE);
@@ -182,6 +219,7 @@ export class CustomProviderStore {
           models: input.models.map(copyModel),
           secret: sealed,
           ...storedHarness(input.harness ?? current.stored.harness),
+          ...storedMachine(current.stored.machine),
         },
         secret,
       };
@@ -277,6 +315,16 @@ function harnessOf(stored: StoredEntry): CustomProviderHarness {
 
 function storedHarness(harness: CustomProviderHarness | undefined): { harness?: CustomProviderHarness } {
   return harness && harness !== DEFAULT_CUSTOM_PROVIDER_HARNESS ? { harness } : {};
+}
+
+function storedMachine(settings: LocalModelServerSettings | undefined): { machine?: LocalModelServerSettings } {
+  const gpuStatusUrl = settings?.gpuStatusUrl?.trim();
+  const machine: LocalModelServerSettings = {
+    ...(settings?.monitored === undefined ? {} : { monitored: settings.monitored }),
+    ...(gpuStatusUrl ? { gpuStatusUrl } : {}),
+    ...(gpuStatusUrl && settings?.gpuStatusUsesKey ? { gpuStatusUsesKey: true } : {}),
+  };
+  return Object.keys(machine).length > 0 ? { machine } : {};
 }
 
 function copyModel(model: z.infer<typeof modelSchema>): CustomProviderModel {

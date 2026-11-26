@@ -1,20 +1,24 @@
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
+  DefaultModelServerId,
   DetectedAcpAgent,
   DetectedModelServer,
   DiscoverModelsInput,
   DiscoverModelsResult,
+  LocalModelServerKind,
   ProviderDetectionSettings,
 } from "@codebot/contracts/ipc";
 import {
   customProviderEndpointKey,
   DEFAULT_MODEL_SERVERS,
   isNewCustomProviderId,
+  LOCAL_MODEL_SERVER_PRODUCT_NAMES,
   sameCustomProviderOrigin,
 } from "@codebot/contracts/ipc";
 import { Context, Effect, Exit, Fiber, Layer, ManagedRuntime, Scope } from "effect";
 import { scanAcpAgents } from "../backend/acp-agent-scan";
 import type { CustomProviderConfig } from "../backend/opencode-config";
+import { recognizeServerKind } from "./local-model-servers/server-measure";
 import { ModelServerProbe, type ProbeError } from "./model-server-probe";
 import type { ModelReleaseCatalog } from "./model-visibility";
 
@@ -25,6 +29,7 @@ interface KnownServer {
   id: string;
   name: string;
   baseUrl: string;
+  defaultId?: DefaultModelServerId;
 }
 
 export interface ProviderDetectionDependencies {
@@ -32,13 +37,14 @@ export interface ProviderDetectionDependencies {
   customProviders: { configs(): readonly CustomProviderConfig[] };
   customAgents: { configs(): readonly { id: string }[] };
   probe?: Context.Service.Shape<typeof ModelServerProbe>["probe"];
+  recognize?: (baseUrl: string) => Effect.Effect<LocalModelServerKind | null>;
   catalog?: ModelReleaseCatalog;
   scanAgents?: typeof scanAcpAgents;
 }
 
 export type ProviderDetection = Context.Service.Shape<typeof ProviderDiscovery>;
 
-function suggestServerId(base: string, taken: ReadonlySet<string>): string {
+export function suggestServerId(base: string, taken: ReadonlySet<string>): string {
   const limit = INPUT_LIMITS.identifier - 4;
   const stem =
     base
@@ -54,6 +60,14 @@ function suggestServerId(base: string, taken: ReadonlySet<string>): string {
   }
 }
 
+const DEFAULT_MODEL_SERVER_IDS = ["ollama", "lmstudio", "vllm"] as const satisfies readonly DefaultModelServerId[];
+
+function defaultServerName(target: KnownServer, kind: LocalModelServerKind | null): string {
+  const product = kind ? LOCAL_MODEL_SERVER_PRODUCT_NAMES[kind] : undefined;
+  if (product) return product;
+  return target.defaultId === "vllm" ? new URL(target.baseUrl).host : target.name;
+}
+
 function scanTargets(addresses: readonly string[]): KnownServer[] {
   const targets: KnownServer[] = [];
   const keys = new Set<string>();
@@ -63,7 +77,7 @@ function scanTargets(addresses: readonly string[]): KnownServer[] {
     keys.add(key);
     targets.push(server);
   };
-  for (const [id, server] of Object.entries(DEFAULT_MODEL_SERVERS)) add({ id, ...server });
+  for (const id of DEFAULT_MODEL_SERVER_IDS) add({ id, ...DEFAULT_MODEL_SERVERS[id], defaultId: id });
   for (const address of addresses) {
     const baseUrl = address.trim();
     if (!baseUrl) continue;
@@ -98,6 +112,12 @@ class ProviderDiscovery extends Context.Service<
         const injectedProbe = dependencies.probe;
         const injectedScanAgents = dependencies.scanAgents;
         const probe = injectedProbe ?? modelProbe.probe;
+        const recognize =
+          dependencies.recognize ?? ((baseUrl: string) => recognizeServerKind(baseUrl, SCAN_TIMEOUT_MS));
+        const nameOf = (target: KnownServer) =>
+          target.defaultId === undefined
+            ? Effect.succeed(target.name)
+            : recognize(target.baseUrl).pipe(Effect.map((kind) => defaultServerName(target, kind)));
         const scan = Effect.fn("ProviderDiscovery.scanModelServers")(function* () {
           if (modelScan) return yield* Fiber.join(modelScan);
           const fiber = yield* Effect.forkIn(
@@ -109,7 +129,7 @@ class ProviderDiscovery extends Context.Service<
                 targets,
                 (target) =>
                   probe({ baseUrl: target.baseUrl, apiKey: null, headers: [] }, SCAN_TIMEOUT_MS).pipe(
-                    Effect.map((models) => ({ target, models })),
+                    Effect.flatMap((models) => Effect.map(nameOf(target), (name) => ({ target, models, name }))),
                     Effect.catch(() => Effect.succeed(null)),
                   ),
                 { concurrency: "unbounded" },
@@ -120,7 +140,7 @@ class ProviderDiscovery extends Context.Service<
                 if (!result) continue;
                 const id = suggestServerId(result.target.id, taken);
                 taken.add(id);
-                found.push({ id, name: result.target.name, baseUrl: result.target.baseUrl, models: result.models });
+                found.push({ id, name: result.name, baseUrl: result.target.baseUrl, models: result.models });
               }
               return found;
             }),

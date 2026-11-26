@@ -136,7 +136,7 @@ const readLimited = Effect.fn("ModelServerProbe.readLimited")(function* (respons
   return body.toString("utf8");
 });
 
-function parseModelList(entries: readonly unknown[]): DetectedModel[] {
+export function parseModelList(entries: readonly unknown[]): DetectedModel[] {
   const seen = new Set<string>();
   const models: DetectedModel[] = [];
   for (const entry of entries) {
