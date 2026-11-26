@@ -1,10 +1,13 @@
 import { mkdirSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { runApiEffect } from "../server/effect-runtime";
 import { AccountConfigError, type AccountEnvironment, parseEnvironmentFile, readAccountConfig } from "./config";
 import { methodNotAllowed, notFound, Router } from "./http/router";
 import { requestSourceIp } from "./http/source-ip";
 import { createAccountLogger, type Logger, routeConsoleToLogger } from "./logging";
+import { registerAccountRoutes } from "./routes/account";
 import { registerHealthRoutes } from "./routes/health";
+import { registerLoginRoutes } from "./routes/login";
 import { BackgroundTasks } from "./runtime/background";
 import { FileBucket } from "./runtime/file-bucket";
 import { acquireInstanceLock, InstanceLockError } from "./runtime/instance-lock";
@@ -13,8 +16,12 @@ import { Scheduler } from "./runtime/scheduler";
 import { openSqliteDatabase, sqliteD1 } from "./runtime/sqlite-d1";
 import { type AccountServices, createAccountServices } from "./services";
 
-const UPSTREAM_MIGRATIONS = resolve(import.meta.dirname, "../../migrations");
+const MIGRATION_CHAINS = [
+  { name: "upstream", directory: resolve(import.meta.dirname, "../../migrations") },
+  { name: "codebot", directory: resolve(import.meta.dirname, "../../migrations-codebot") },
+];
 const DATABASE_FILE = "account.sqlite";
+const LOGIN_PRUNE_INTERVAL_MS = 10 * 60_000;
 const MAXIMUM_REQUEST_BYTES = 8 * 1024 * 1024;
 const STOP_REQUEST_LIMIT_MS = 10_000;
 const STOP_BACKGROUND_LIMIT_MS = 10_000;
@@ -42,7 +49,7 @@ export async function startAccountService(
   const sqlite = openSqliteDatabase(join(config.dataDir, DATABASE_FILE));
   const database = sqliteD1(sqlite);
   try {
-    const migration = migrateDatabase(sqlite, [{ name: "upstream", directory: UPSTREAM_MIGRATIONS }]);
+    const migration = migrateDatabase(sqlite, MIGRATION_CHAINS);
     logger.info("The database schema is current.", {
       applied: migration.applied.length,
       total: migration.total,
@@ -67,6 +74,13 @@ export async function startAccountService(
   });
   const router = new Router();
   registerHealthRoutes(router, services);
+  registerLoginRoutes(router, services, services.login);
+  registerAccountRoutes(router, services);
+  scheduler.add({
+    name: "login-prune",
+    intervalMs: LOGIN_PRUNE_INTERVAL_MS,
+    run: () => runApiEffect(services.login.prune()),
+  });
 
   const server = Bun.serve({
     hostname: config.listenHost,

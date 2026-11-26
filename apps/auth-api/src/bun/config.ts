@@ -11,7 +11,13 @@ export type LoginProviderConfig =
       userinfoEndpoint: string | null;
       jwksUri: string | null;
     }
-  | { kind: "nextcloud-oauth2"; nextcloudUrl: string };
+  | {
+      kind: "nextcloud-oauth2";
+      nextcloudUrl: string;
+      authorizationEndpoint: string | null;
+      tokenEndpoint: string | null;
+      userinfoEndpoint: string | null;
+    };
 
 export interface AccountConfig {
   publicUrl: string;
@@ -34,6 +40,7 @@ export interface AccountConfig {
     clientId: string;
     clientSecret: string;
     scopes: string;
+    flowSeconds: number;
     revalidateSeconds: number;
     revalidateGraceSeconds: number;
   };
@@ -187,24 +194,22 @@ export function readAccountConfig(environment: AccountEnvironment): AccountConfi
   const providerUrl = (name: string): string | null => serviceUrl(name, read(name), ["https:"]);
   const issuerUrl = providerUrl("OIDC_ISSUER_URL");
   const nextcloudUrl = providerUrl("NEXTCLOUD_URL");
-  const overrides = {
+  const endpoints = {
     authorizationEndpoint: providerUrl("OIDC_AUTHORIZATION_ENDPOINT"),
     tokenEndpoint: providerUrl("OIDC_TOKEN_ENDPOINT"),
     userinfoEndpoint: providerUrl("OIDC_USERINFO_ENDPOINT"),
-    jwksUri: providerUrl("OIDC_JWKS_URI"),
   };
-  let provider: LoginProviderConfig = { kind: "nextcloud-oauth2", nextcloudUrl: "" };
+  const jwksUri = providerUrl("OIDC_JWKS_URI");
+  let provider: LoginProviderConfig = { kind: "nextcloud-oauth2", nextcloudUrl: "", ...endpoints };
   if (read("OIDC_ISSUER_URL") && read("NEXTCLOUD_URL")) {
     problems.push("Set OIDC_ISSUER_URL or NEXTCLOUD_URL, not both. Each one selects a different login provider.");
   } else if (!read("OIDC_ISSUER_URL") && !read("NEXTCLOUD_URL")) {
     problems.push("OIDC_ISSUER_URL or NEXTCLOUD_URL is required. It selects the login provider.");
   } else if (issuerUrl) {
-    provider = { kind: "oidc", issuerUrl: withoutTrailingSlash(issuerUrl), ...overrides };
+    provider = { kind: "oidc", issuerUrl: withoutTrailingSlash(issuerUrl), ...endpoints, jwksUri };
   } else if (nextcloudUrl) {
-    if (Object.values(overrides).some((value) => value !== null)) {
-      problems.push("The OIDC endpoint variables apply only with OIDC_ISSUER_URL.");
-    }
-    provider = { kind: "nextcloud-oauth2", nextcloudUrl: withoutTrailingSlash(nextcloudUrl) };
+    if (jwksUri) problems.push("OIDC_JWKS_URI applies only with OIDC_ISSUER_URL.");
+    provider = { kind: "nextcloud-oauth2", nextcloudUrl: withoutTrailingSlash(nextcloudUrl), ...endpoints };
   }
   const scopes = read("OIDC_SCOPES") ?? "openid profile email";
   if (!SCOPE_PATTERN.test(scopes)) problems.push("OIDC_SCOPES must be scope names with one space between them.");
@@ -231,6 +236,7 @@ export function readAccountConfig(environment: AccountEnvironment): AccountConfi
       clientId: required("OIDC_CLIENT_ID"),
       clientSecret: required("OIDC_CLIENT_SECRET"),
       scopes,
+      flowSeconds: integer("ACCOUNT_LOGIN_FLOW_SECONDS", 600, 1, 3_600),
       revalidateSeconds: integer("ACCOUNT_REVALIDATE_SECONDS", 300, 1, 86_400),
       revalidateGraceSeconds: integer("ACCOUNT_REVALIDATE_GRACE_SECONDS", 86_400, 0, 365 * 86_400),
     },

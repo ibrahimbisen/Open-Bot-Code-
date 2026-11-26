@@ -1,8 +1,19 @@
-import { RemoteControlPlane } from "../server/remote-control-plane";
+import { Effect } from "effect";
+import { AuthService } from "../server/auth-service";
+import { D1AuthRepository } from "../server/d1-auth-repository";
+import {
+  deliverPendingRemoteAuthEvents,
+  notifyAccountProfileChanged,
+  RemoteControlPlane,
+} from "../server/remote-control-plane";
 import type { WorkerBindings } from "../server/types";
 import type { AccountConfig } from "./config";
 import { createErrorResponder, type ErrorResponder } from "./http/responses";
 import type { Logger } from "./logging";
+import { IdentityStore } from "./login/identity-store";
+import { LoginService } from "./login/login-service";
+import { IdentityProvider } from "./login/provider";
+import { SecretBox } from "./login/secret-box";
 import type { BackgroundTasks } from "./runtime/background";
 import type { SqliteD1Database } from "./runtime/sqlite-d1";
 
@@ -33,11 +44,12 @@ export interface AccountServices {
   bindings: AccountBindings;
   background: BackgroundTasks;
   respondToError: ErrorResponder;
+  auth: AuthService;
   remote: RemoteControlPlane;
-}
-
-function optional(value: string | null): { value: string } | null {
-  return value === null ? null : { value };
+  provider: IdentityProvider;
+  identities: IdentityStore;
+  login: LoginService;
+  flushAuthEvents: () => void;
 }
 
 export function accountBindings(config: AccountConfig, database: D1Database, avatars: R2Bucket): AccountBindings {
@@ -49,8 +61,7 @@ export function accountBindings(config: AccountConfig, database: D1Database, ava
     REMOTE_TICKET_KEY_ID: config.ticket.keyId,
   };
   const assign = (name: Exclude<keyof AccountBindings, "DB" | "AVATARS">, value: string | null) => {
-    const present = optional(value);
-    if (present) bindings[name] = present.value;
+    if (value !== null) bindings[name] = value;
   };
   assign("REMOTE_SIGNAL_URL", config.signal.url);
   assign("REMOTE_SIGNAL_HOMES", config.signal.homes);
@@ -73,14 +84,33 @@ export function createAccountServices(input: {
   avatars: R2Bucket;
   background: BackgroundTasks;
 }): AccountServices {
-  const bindings = accountBindings(input.config, input.database, input.avatars);
+  const { config, logger, database, background } = input;
+  const bindings = accountBindings(config, database, input.avatars);
+  const flushAuthEvents = () =>
+    background.schedule(
+      deliverPendingRemoteAuthEvents(bindings, Date.now()).pipe(
+        Effect.catch(() => Effect.sync(() => logger.warn("Auth events were not delivered. The service tries again."))),
+      ),
+    );
+  const provider = new IdentityProvider(config.login);
+  const identities = new IdentityStore(database, new SecretBox(config.secretKey));
   return {
-    config: input.config,
-    logger: input.logger,
-    database: input.database,
+    config,
+    logger,
+    database,
     bindings,
-    background: input.background,
-    respondToError: createErrorResponder(input.logger),
-    remote: new RemoteControlPlane(bindings, { schedule: input.background.schedule }),
+    background,
+    respondToError: createErrorResponder(logger),
+    auth: new AuthService({
+      repository: new D1AuthRepository(database),
+      delivery: null,
+      flushSessionRevocations: () => Effect.sync(flushAuthEvents),
+      profileChanged: (userId) => notifyAccountProfileChanged(bindings, userId, background.schedule),
+    }),
+    remote: new RemoteControlPlane(bindings, { schedule: background.schedule }),
+    provider,
+    identities,
+    login: new LoginService({ database, provider, identities, config, logger, sessionsRevoked: flushAuthEvents }),
+    flushAuthEvents,
   };
 }
