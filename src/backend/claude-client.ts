@@ -18,6 +18,7 @@ import {
   type PermissionResult,
   query,
   type SDKUserMessage,
+  type SdkPluginConfig,
   type SessionMessage,
   type Settings,
   type SpawnedProcess,
@@ -117,6 +118,9 @@ import {
 import { runCauseEffect } from "./effect-boundary";
 import { skillFolderNames } from "./home-skills";
 import { IdleThreadPool } from "./idle-thread-pool";
+import { type ClaudeLockPlan, type ClaudeShellGate, claudeLockPlan, isClaudeShellTool } from "./lock/claude-lock";
+import { claudeSandboxState } from "./lock/claude-sandbox-probe";
+import { type FolderLock, readFolderLock } from "./lock/folder-lock";
 import { MCP_STDIO_PROBE_TIMEOUT_MS } from "./mcp-probe";
 import {
   agentMcpServers,
@@ -362,6 +366,7 @@ interface ThreadConfig {
   workspaceOnly: boolean;
   excludedFolders: string[];
   excludedInstructionFiles: string[];
+  folderLock: FolderLock | null;
   agentId: string | null;
 }
 
@@ -1503,10 +1508,13 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     this.#decideApiKey();
     const input = new AsyncMessageQueue();
     const appliedEffort = this.#resolveEffort(config.model, config.effort);
+    let lockShell: ClaudeShellGate = "sandbox";
     const canUseTool: CanUseTool = (toolName, toolInput, options) =>
       runCauseEffect(
         Effect.gen({ self: this }, function* () {
           if (config.profileGeneration) return { behavior: "deny", message: "Profile generation has no tools." };
+          if (config.folderLock && lockShell === "ask" && isClaudeShellTool(toolName))
+            return yield* this.#requestCommandApprovalEffect(threadId, toolInput, options.toolUseID ?? randomUUID());
           if (config.workspaceOnly) {
             const excluded = yield* claudeWriteInExcluded(toolName, toolInput, config.cwd, config.excludedFolders);
             if (excluded) return { behavior: "deny", message: claudeExcludedWriteMessage(excluded) };
@@ -1636,9 +1644,16 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         ? { env: { ...codeBotSettings.env, ...nodeOptionsSettings.env } }
         : {}),
     };
-    const sandbox = config.workspaceOnly
-      ? claudeWorkspaceSandbox(config.additionalDirectories, config.excludedFolders)
-      : null;
+    const lockPlan =
+      config.folderLock && !config.profileGeneration
+        ? yield* this.#lockPlan(config.folderLock, config.cwd, configDirectory, cliEnvironment, plugins)
+        : null;
+    if (lockPlan) lockShell = lockPlan.context.shell;
+    const sandbox = lockPlan
+      ? lockPlan.sandbox
+      : config.workspaceOnly
+        ? claudeWorkspaceSandbox(config.additionalDirectories, config.excludedFolders)
+        : null;
     const settingsFile =
       Object.keys(signInSettings).length > 0
         ? stateDirectory
@@ -1705,7 +1720,9 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
           ...(sandbox && !settingsFile ? { sandbox } : {}),
           ...(config.workspaceOnly
             ? {
-                hooks: claudeWorkspaceHooks(config.cwd, config.additionalDirectories, config.excludedFolders),
+                hooks: lockPlan
+                  ? lockPlan.hooks
+                  : claudeWorkspaceHooks(config.cwd, config.additionalDirectories, config.excludedFolders),
                 managedSettings: CLAUDE_WORKSPACE_MANAGED_SETTINGS,
               }
             : {}),
@@ -3188,6 +3205,55 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     return { behavior: "deny", message: "The user did not allow this write outside the workspace." };
   });
 
+  readonly #requestCommandApprovalEffect = Effect.fn("ClaudeAgentClient.requestCommandApproval")(function* (
+    this: ClaudeAgentClient,
+    threadId: string,
+    toolInput: DynamicRecord,
+    toolUseId: string,
+  ): Effect.fn.Return<PermissionResult, ProviderClientOperationError> {
+    const result = yield* this.#awaitPerson(
+      threadId,
+      this.#serverRequests.call("item/commandExecution/requestApproval", {
+        threadId,
+        turnId: this.#threads.get(threadId)?.activeTurn?.id ?? randomUUID(),
+        itemId: toolUseId,
+        command: isString(toolInput.command) ? toolInput.command : null,
+        reason: sourceText("error.lock.commandAsk", {}),
+      }),
+    ).pipe(toProviderClientOperationError);
+    if (isRecord(result) && result.decision === "accept") return { behavior: "allow", updatedInput: toolInput };
+    return { behavior: "deny", message: "The user did not allow this command." };
+  });
+
+  readonly #lockPlan = Effect.fn("ClaudeAgentClient.lockPlan")(function* (
+    this: ClaudeAgentClient,
+    lock: FolderLock,
+    cwd: string,
+    configDirectory: string,
+    environment: NodeJS.ProcessEnv,
+    plugins: readonly SdkPluginConfig[],
+  ): Effect.fn.Return<ClaudeLockPlan, ProviderClientOperationError> {
+    const state = yield* providerCall(() =>
+      claudeSandboxState({
+        key: `${this.#cli.executable} ${this.#cli.version}`,
+        createQuery: this.#createQuery,
+        launch: { ...this.#sdkLaunch, ...this.#claudeProcessSpawner(new ClaudeStderrTail()) },
+        env: environment,
+      }),
+    );
+    if (!state.available && lock.level === "strict")
+      return yield* providerFailure(
+        new Error(sourceText("error.lock.claudeStrictNoSandbox", { reason: state.reason })),
+      );
+    return claudeLockPlan(lock, {
+      cwd,
+      configDirectory,
+      shell: state.available ? "sandbox" : "ask",
+      engineFolder: dirname(this.#cli.executable),
+      skillFolders: [join(configDirectory, "skills"), ...plugins.map((plugin) => plugin.path)],
+    });
+  });
+
   #requireThread(threadId: string): ThreadRuntime {
     const runtime = this.#threads.get(threadId);
     if (!runtime) throw new Error(`Unknown Claude thread: ${threadId}`);
@@ -3609,6 +3675,7 @@ function readThreadConfig(params: unknown): ThreadConfig {
       isRecord(params) && Array.isArray(params.excludedInstructionFiles)
         ? params.excludedInstructionFiles.filter((value): value is string => isString(value))
         : [],
+    folderLock: readFolderLock(params),
     agentId: mcpAgentParam(params),
   };
 }

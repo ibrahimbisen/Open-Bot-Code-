@@ -57,6 +57,10 @@ const PATTERN_LEAVES_BASE = /(?:^|[\\/{,])\.\.(?=[\\/},]|$)|(?:^|[{,])(?:~|[\\/]
 const OUTSIDE_RULE =
   "Work only inside the project folders. If the task needs something outside them, stop and ask the user.";
 
+export function isClaudeShellTool(toolName: string): boolean {
+  return SHELL_TOOLS.has(toolName);
+}
+
 export function claudeLockPlan(lock: FolderLock, input: ClaudeLockPlanInput): ClaudeLockPlan {
   const context: ClaudeLockContext = {
     lock,

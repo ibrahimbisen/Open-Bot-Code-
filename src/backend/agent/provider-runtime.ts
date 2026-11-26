@@ -37,7 +37,6 @@ import {
   isCustomProviderHarness,
   isKeyOnlyProvider,
   usageQuotaForModel,
-  workspaceAccessEnforced,
 } from "@codebot/contracts/ipc";
 import { matchingSourceKeys, sourceText } from "@codebot/i18n/source";
 import { createCodeBotLogger, redactText } from "@codebot/logging";
@@ -69,6 +68,7 @@ import { DISK_RESTORE_WAIT_MS, diskRestoring, providerCheckTimeoutMs } from "../
 import { causeHelpers } from "../effect-boundary";
 import { isPythonKimiCli, type SignInRegion } from "../kimi-region";
 import { readKimiUsage } from "../kimi-usage";
+import { lockEnforced } from "../lock/lock-level";
 import { McpHandoffLog } from "./../mcp-handoff-log";
 import { grokMcpServerName, providerMcpServerName } from "./../mcp-provider-shapes";
 import { customProvidersOn, openCodeSignInMessage } from "./../opencode-config";
@@ -2647,7 +2647,7 @@ export class ProviderRuntime implements ProviderPort {
   #ownProcessFor(agent: AgentSummary): OwnProcess | null {
     const provider = providerForAgent(agent);
     const confined =
-      workspaceAccessEnforced(agent) && agentProviderDescriptor(provider).workspaceEnforcement === "confined-process";
+      lockEnforced(agent) && agentProviderDescriptor(provider).workspaceEnforcement === "confined-process";
     const account = this.#providerAccounts?.account(provider, agent.providerAccountId) ?? null;
     if (!confined && !account) return null;
     return {

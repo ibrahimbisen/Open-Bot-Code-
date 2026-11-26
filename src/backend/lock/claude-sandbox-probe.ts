@@ -85,7 +85,7 @@ async function runProbe(probe: ClaudeSandboxProbe): Promise<ClaudeSandboxState> 
       return null;
     })();
     const ready = (started.initializationResult?.() ?? new Promise<never>(() => {})).then(
-      (): ClaudeSandboxState => ({ available: true }),
+      () => ({ available: true as const }),
       () => null,
     );
     const timedOut = new Promise<"timeout">((resolve) => {

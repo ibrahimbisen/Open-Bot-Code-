@@ -188,7 +188,6 @@ import {
   type WorkflowMediaProviders,
   type WorkflowMediaSpecs,
   workflowCatalogSource,
-  workspaceAccessEnforced,
 } from "@codebot/contracts/ipc";
 import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { AGENT_THREAD_READS_LIMIT } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
@@ -364,6 +363,7 @@ import { reportOriginalFailure } from "./effect-boundary";
 import type { HostMemory } from "./host-memory";
 import type { SignInRegion } from "./kimi-region";
 import type { LinkWallet } from "./link-wallet";
+import { lockEnforced } from "./lock/lock-level";
 import { type MailboxStore, MESSAGING_LANE } from "./mailbox-store";
 import { toMcpOperationError } from "./mcp-effects";
 import type { McpSignInAddressOutcome, McpSignInOpener } from "./mcp-oauth-provider";
@@ -1264,7 +1264,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       ...(approvalAutomation === undefined ? {} : { approvalAutomation }),
       workspaceSandboxed: (agentId) => {
         const agent = store.get(agentId);
-        return agent !== undefined && workspaceAccessEnforced(agent);
+        return agent !== undefined && lockEnforced(agent);
       },
       confinedWritesAllowed: (agentId, paths) => {
         const agent = store.get(agentId);
@@ -4329,8 +4329,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     }
     if (previous?.pendingRuntime && !agent.pendingRuntime) this.#drain.scheduleDrain(agent.id);
     if (profileChanged) this.#conversation.unloadAgentThreads(agent.id);
-    if (previous && workspaceAccessEnforced(previous) && !workspaceAccessEnforced(agent))
-      this.#attention.answerGrantedRequests();
+    if (previous && lockEnforced(previous) && !lockEnforced(agent)) this.#attention.answerGrantedRequests();
     this.#emit({ type: "agents-changed", agents: this.listAgents() });
     if (
       providerChanged ||
@@ -4484,7 +4483,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
           (choice) =>
             !sameAgentModelChoice(choice, current) &&
             this.#modelChoiceReady(choice) &&
-            !(workspaceAccessEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
+            !(lockEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
         )
         .map(usageLimitOf),
     );
@@ -4619,7 +4618,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       (choice) =>
         !sameAgentModelChoice(choice, current) &&
         this.#usageLimitReady(choice) &&
-        !(workspaceAccessEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
+        !(lockEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
     );
   }
 
@@ -7915,5 +7914,5 @@ function failureMessages(error: unknown): string[] {
 }
 
 function localWorkspaceAccess(agent: AgentSummary): { allowOutside: boolean; allowedRoots: readonly string[] } {
-  return { allowOutside: !workspaceAccessEnforced(agent), allowedRoots: effectiveAgentFolders(agent) };
+  return { allowOutside: !lockEnforced(agent), allowedRoots: effectiveAgentFolders(agent) };
 }

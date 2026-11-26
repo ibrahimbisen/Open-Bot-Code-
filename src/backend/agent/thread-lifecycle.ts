@@ -15,7 +15,6 @@ import {
   GITHUB_CONNECTOR_MCP_SERVER_ID,
   type McpServerConfig,
   type ResponseStyle,
-  workspaceAccessEnforced,
 } from "@codebot/contracts/ipc";
 import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { sourceText } from "@codebot/i18n/source";
@@ -26,6 +25,8 @@ import type { AgentStore } from "../agent-store";
 import type { ProviderSession } from "../database/provider-sessions";
 import { causeHelpers } from "../effect-boundary";
 import { type HomeSkill, listHomeSkills, skillFolderNames, userSkillFolderNames } from "../home-skills";
+import { agentFolderLock, type FolderLock, folderLockParam } from "../lock/folder-lock";
+import { agentLockLevel, lockEnforced } from "../lock/lock-level";
 import type { MailboxStore } from "../mailbox-store";
 import type { McpOperationError } from "../mcp-effects";
 import {
@@ -950,7 +951,7 @@ export class ThreadLifecycle {
             agent.name,
             agent.title,
             agent.description,
-            ...(workspaceAccessEnforced(agent) ? ["workspace"] : []),
+            ...(lockEnforced(agent) ? [`lock-${agentLockLevel(agent)}`] : []),
             ...(folders.length ? [["folders", ...folders]] : []),
             ...(excluded.length ? [["excluded", ...excluded]] : []),
             ...(agentAutomationAllowed(agent, this.#store.agentDefaults()) ? ["automation"] : []),
@@ -1007,6 +1008,7 @@ export class ThreadLifecycle {
       this.#sectionTeammates(agent.id),
       this.#passwordVaultConnected(),
       file && [file.fileName, file.text, file.truncated],
+      agentFolderLock(agent, this.#store.sharedRoot),
     ]);
   }).bind(this);
 
@@ -1043,14 +1045,18 @@ export class ThreadLifecycle {
     return agentMcpServers(this.#mcpServers(agent.id), agentComputerUseEnabled(agent));
   }
 
-  #workspaceOnlyParam(agent: AgentSummary, client: AgentClient): { workspaceOnly?: true; excludedFolders?: string[] } {
-    if (
-      agentProviderDescriptor(client.provider).workspaceEnforcement !== "tool-sandbox" ||
-      !workspaceAccessEnforced(agent)
-    )
+  #workspaceOnlyParam(
+    agent: AgentSummary,
+    client: AgentClient,
+  ): { workspaceOnly?: true; excludedFolders?: string[]; folderLock?: FolderLock } {
+    if (agentProviderDescriptor(client.provider).workspaceEnforcement !== "tool-sandbox" || !lockEnforced(agent))
       return {};
     const excluded = workspaceExcludedFolders(agent);
-    return { workspaceOnly: true, ...(excluded.length ? { excludedFolders: excluded } : {}) };
+    return {
+      workspaceOnly: true,
+      ...(excluded.length ? { excludedFolders: excluded } : {}),
+      ...folderLockParam(agent, this.#store.sharedRoot),
+    };
   }
 
   #computerUseParam(agent: AgentSummary, client: AgentClient): { computerUse?: false } {
@@ -1257,7 +1263,7 @@ export class ThreadLifecycle {
     agent: AgentSummary,
     client: AgentClient,
   ) {
-    const enforced = workspaceAccessEnforced(agent);
+    const enforced = lockEnforced(agent);
     const read =
       client.provider === "claude" && enforced
         ? []
