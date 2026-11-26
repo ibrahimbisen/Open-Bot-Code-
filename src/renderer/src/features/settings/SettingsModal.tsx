@@ -57,6 +57,7 @@ import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { useI18n } from "../../i18n-context";
 import { ComputerUseSetup } from "../computer-use/ComputerUseSetup";
 import type { CodexLiveAccess } from "../speech/codex-live-access";
+import { UpdateServerSetting } from "../updates/UpdateServerSetting";
 import type { LiveVoiceAccountChoice } from "./LiveVoiceAccountRow";
 import { licenseContactUs, trackLicenseEvent } from "./license-analytics";
 import { createNotificationLevelsStore } from "./notification-levels-store";
@@ -469,6 +470,7 @@ export function SettingsModal(props: SettingsModalProps) {
             value={props.value}
             onUpdateSetting={updateSetting}
             selectMount={modalElement}
+            serverSetting={<UpdateServerSetting />}
           />
         </Tabs.Content>
       </SettingsDialogShell>

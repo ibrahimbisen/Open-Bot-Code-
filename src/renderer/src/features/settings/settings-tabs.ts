@@ -255,9 +255,10 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
     group: "settings.sections.group.thisComputer",
     rows: [
       { titleKey: "settings.updates.track.title", descriptionKey: "settings.updates.track.description" },
+      { titleKey: "appUpdate.server.title", descriptionKey: "appUpdate.server.description" },
       { titleKey: "settings.updates.idleRestart.title" },
       { titleKey: "settings.updates.autoDownload.title", descriptionKey: "settings.updates.autoDownload.description" },
-      { titleKey: "settings.updates.autoInstall.title", descriptionKey: "settings.updates.autoInstall.description" },
+      { titleKey: "appUpdate.autoRestart.title", descriptionKey: "appUpdate.autoRestart.description" },
       { titleKey: "settings.updates.allowRemote.title", descriptionKey: "settings.updates.allowRemote.description" },
       { titleKey: "settings.updates.managed.title", descriptionKey: "settings.updates.managed.description" },
     ],

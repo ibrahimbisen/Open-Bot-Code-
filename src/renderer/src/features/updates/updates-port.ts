@@ -1,6 +1,7 @@
 import type { CodeBotDesktopApi, IdleRestartTarget, UpdateStatus } from "@codebot/contracts/ipc";
 
 export interface UpdatesPort {
+  appUpdate: Pick<CodeBotDesktopApi["appUpdate"], "getFeed" | "setFeedUrl">;
   update: Pick<
     CodeBotDesktopApi["update"],
     | "check"
