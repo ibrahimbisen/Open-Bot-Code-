@@ -22,7 +22,6 @@ export const messages = defineMessages("slash", {
   "slash.effort.description": "How much {name} thinks before it answers.",
   "slash.effort.unsupported": "The model of this agent has no thinking levels.",
   "slash.effort.failed": "The thinking level did not change.",
-  "slash.current": "Current",
   "slash.resume.title": "Resume a chat",
   "slash.resume.description":
     "Chats that the engine saved for the folder of {name}. A resumed chat opens as a new chat.",
@@ -33,6 +32,5 @@ export const messages = defineMessages("slash", {
   "slash.resume.untitled": "Chat without a title",
   "slash.resume.branch": "Branch {name}",
   "slash.resume.updated": "Updated {time}",
-  "slash.resume.resuming": "Resuming…",
   "slash.resume.openFailed": "The chat did not open.",
 });

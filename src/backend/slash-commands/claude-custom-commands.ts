@@ -66,7 +66,7 @@ function unquoted(value: string): string {
 }
 
 function rawValue(block: string, key: string): string {
-  const escaped = key.replace(/[-/\\^$*+?.()|[\]{}]/gu, "\\$&");
+  const escaped = key.replace(/[/\\^$*+?.()|[\]{}]/gu, "\\$&");
   const line = new RegExp(`^${escaped}[ \\t]*:[ \\t]*(.*)$`, "mu").exec(block)?.[1];
   return line === undefined ? "" : unquoted(line);
 }

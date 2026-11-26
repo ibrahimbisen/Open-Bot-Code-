@@ -461,6 +461,8 @@
     "test:remote-protocol": "bun remote/scripts/protocol-e2e.ts",
     "test:ipc-input": "bun scripts/ipc-input-e2e.ts",
     "test:automation-cli": "bun scripts/automation-cli-e2e.ts",
+    "test:slash-commands": "bun scripts/slash-commands-e2e.ts",
+    "test:slash-commands-ui": "bun scripts/slash-commands-ui-e2e.ts --allow-mutations",
     "test:team-api-routes": "bun --preload ./scripts/team-api-routes-e2e-electron.mjs scripts/team-api-routes-e2e.ts",
     "test:crm-team-api": "bun scripts/crm-team-api-e2e.ts",
     "test:team-legacy-clients": "bun scripts/team-api-legacy-clients-e2e.ts",

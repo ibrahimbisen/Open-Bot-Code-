@@ -5,5 +5,4 @@ export const messages = defineMessages("error.slash", {
   "error.slash.resumeEngineOff": "The engine is not running. Start it and try again.",
   "error.slash.sessionNotFound": "This saved chat is gone. Update the list and choose another one.",
   "error.slash.sessionInUse": "A chat in CodeBot already uses this saved chat.",
-  "error.slash.resumeFailed": "CodeBot could not open this saved chat.",
 });
