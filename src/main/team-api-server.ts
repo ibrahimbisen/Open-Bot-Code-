@@ -264,7 +264,7 @@ import { MODEL_STEERING_CAPABILITY } from "@codebot/contracts/team-protocol/mode
 import { MODEL_VISIBILITY_KEPT_CAPABILITY } from "@codebot/contracts/team-protocol/model-visibility-kept-v1";
 import { type OptionalTeamEvent, optionalTeamEvent } from "@codebot/contracts/team-protocol/optional-events";
 import { OWNER_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/owner-transfer-v1";
-import { PROJECTS_V1_CAPABILITY } from "@codebot/contracts/team-protocol/projects-v1";
+import { PROJECTS_V1_CAPABILITY, type ProjectsWireEvent } from "@codebot/contracts/team-protocol/projects-v1";
 import {
   TEAM_PROMPT_DETAIL_CAPABILITY,
   withPromptQuestionDetails,
@@ -351,6 +351,7 @@ import { runCauseEffect } from "../backend/effect-boundary";
 import { McpServerError } from "../backend/mcp-server-store";
 import { perfCount } from "../backend/perf-probe-hooks";
 import { canConfineProcesses } from "../backend/process-confinement";
+import type { ProjectServiceEvent } from "../backend/projects/project-operations";
 import { StoredStateFailure } from "../backend/stored-state-effects";
 import type { TeamChatStore } from "../backend/team-chat-store";
 import { agentAccessLevel } from "./agent-access-store";
@@ -649,6 +650,7 @@ export class TeamApiServer {
   readonly #liveVoiceSessions = new TeamLiveVoiceSessions();
   #stopNotificationLevelsListener: (() => void) | null = null;
   #stopSidebarPinsListener: (() => void) | null = null;
+  #stopProjectsListener: (() => void) | null = null;
   #localTypingAgentId: string | null = null;
   readonly #reportedUnrepresentableAgents = new Set<string>();
   readonly #representableAgents = new Map<string, Map<string, { json: string; representable: boolean }>>();
@@ -756,6 +758,8 @@ export class TeamApiServer {
       this.#options.agentNotificationLevels?.subscribe((memberId) => this.#sendNotificationLevels(memberId)) ?? null;
     this.#stopSidebarPinsListener =
       this.#options.sidebarPins?.subscribe((memberId) => this.#sendSidebarPins(memberId)) ?? null;
+    this.#stopProjectsListener =
+      this.#options.projects?.subscribe((event) => this.#sendProjectEvent(projectsWireFrom(event))) ?? null;
     this.#heartbeat = setInterval(() => {
       for (const [client, connection] of this.#eventClients) {
         if (!this.#options.store.authenticate(connection.token)) {
@@ -785,6 +789,8 @@ export class TeamApiServer {
     this.#stopClientBrowserListener = null;
     this.#stopNotificationLevelsListener?.();
     this.#stopNotificationLevelsListener = null;
+    this.#stopProjectsListener?.();
+    this.#stopProjectsListener = null;
     this.#stopSidebarPinsListener?.();
     this.#stopSidebarPinsListener = null;
     yield* Scope.close(this.#legacyConversationScope, Exit.void);
@@ -992,6 +998,19 @@ export class TeamApiServer {
       const member = this.#connectionMember(connection);
       const hidden = this.hiddenAgentIds(eventProtocol(connection.capabilities), connection.capabilities, member);
       client.send(JSON.stringify({ type: "agent-notification-levels-changed", ...levels.snapshot(memberId, hidden) }));
+    }
+  }
+
+  #sendProjectEvent(event: ProjectsWireEvent): void {
+    const payload = JSON.stringify(event);
+    for (const [client, connection] of this.#eventClients) {
+      if (
+        !connection.capabilities.has(PROJECTS_V1_CAPABILITY) ||
+        client.readyState !== webSockets.WebSocket.OPEN ||
+        !canAdministerServer(this.#connectionMember(connection).role)
+      )
+        continue;
+      client.send(payload);
     }
   }
 
@@ -3204,6 +3223,12 @@ function eventEncodingKey(capabilities: ReadonlySet<string>, options: { preserve
 
 function isLegacyConversationClient(connection: EventClientState): boolean {
   return connection.includeConversationEvents && !connection.capabilities.has("agent-runtime-snapshots");
+}
+
+function projectsWireFrom(event: ProjectServiceEvent): ProjectsWireEvent {
+  if (event.type === "projects-changed") return event;
+  if (event.type === "chats-changed") return { ...event, type: "project-chats-changed" };
+  return { type: "project-activity-changed", activity: event.activity };
 }
 
 function optionalEventAgentId(event: OptionalTeamEvent): string | null {

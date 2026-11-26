@@ -102,6 +102,7 @@ import { INSTANCE_TRANSFER_CHUNKS_ROUTES } from "@codebot/contracts/team-protoco
 import { INSTANCE_TRANSFER_ROUTES } from "@codebot/contracts/team-protocol/instance-transfer-v1";
 import type { LiveVoiceEvent } from "@codebot/contracts/team-protocol/live-voice-v1";
 import type { MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
+import type { ProjectsWireEvent } from "@codebot/contracts/team-protocol/projects-v1";
 import { PROVIDER_MODEL_SOURCE_CAPABILITY } from "@codebot/contracts/team-protocol/provider-model-source-v1";
 import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
 import {
@@ -215,6 +216,7 @@ interface RemoteServerEvents {
   directTyping: [serverId: string, event: DirectTypingRealtimeEvent];
   machineAlert: [serverId: string, event: MachineAlertEvent];
   liveVoice: [serverId: string, event: LiveVoiceEvent];
+  projectEvent: [serverId: string, event: ProjectsWireEvent];
   attachmentDownload: [progress: AttachmentDownloadProgress];
   attachmentImportProgress: [progress: AttachmentImportProgress];
 }
@@ -458,6 +460,7 @@ export class RemoteServerManager extends EventEmitter<RemoteServerEvents> {
       onHostAppearance: (serverId, event) => this.#applyHostAppearance(serverId, event),
       onMachineAlert: (serverId, event) => this.emit("machineAlert", serverId, event),
       onLiveVoice: (serverId, event) => this.emit("liveVoice", serverId, event),
+      onProjectEvent: (serverId, event) => this.emit("projectEvent", serverId, event),
       onOffline: (serverId) => this.#presence.markOffline(serverId),
       onChanged: () => this.#emitChanged(),
     });

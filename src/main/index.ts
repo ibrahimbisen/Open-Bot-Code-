@@ -558,6 +558,7 @@ const {
   forwardInstanceTransferUploadProgress,
   forwardOwnerTransfersChanged,
   forwardProjectEvent,
+  forwardRemoteProjectEvent,
 } = createRendererForwarders({
   getMainWindow: () => windowHolder.current,
   getChatWindows: () => windows.getChatWindows(),
@@ -1617,6 +1618,7 @@ if (!hasSingleInstanceLock) {
       service.on("event", (event) => trace.observeAgentEvent(event));
       service.on("event", (event) => forwardAgentEvent("local", event));
       built.projects.subscribe((event) => forwardProjectEvent("local", event));
+      built.remoteServers.on("projectEvent", (serverId, event) => forwardRemoteProjectEvent(serverId, event));
       let webhookAgentIds = new Set(service.listAgents().map((agent) => agent.id));
       const onRoutineEvent = (event: AgentEvent): void => {
         switch (event.type) {

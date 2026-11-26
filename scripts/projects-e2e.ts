@@ -28,7 +28,10 @@ import {
   PROJECTS_V1_CAPABILITY,
   PROJECTS_V1_CODECS,
   PROJECTS_V1_ROUTES,
+  type ProjectsWireEvent,
+  projectsWireEvent,
 } from "@codebot/contracts/team-protocol/projects-v1";
+import { TEAM_PROTOCOL_V1_WEBSOCKET } from "@codebot/contracts/team-protocol/v1";
 import { TEAM_ABSENT_CAPABILITIES_HEADER, TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
 import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
@@ -926,10 +929,41 @@ try {
 
     const remoteFolder = await makeRepo("remote-main");
     const remoteExtra = await makeRepo("remote-extra");
+    const eventSocket = new WebSocket(`ws://127.0.0.1:${port}${TEAM_API_ROUTES.events}`, [
+      TEAM_PROTOCOL_V1_WEBSOCKET,
+      `codebot-token.${ownerToken}`,
+    ]);
+    await new Promise<void>((resolveOpen, reject) => {
+      eventSocket.addEventListener("open", () => resolveOpen(), { once: true });
+      eventSocket.addEventListener("error", () => reject(new Error("The event socket did not open.")), { once: true });
+    });
+    const wireEvents: ProjectsWireEvent[] = [];
+    eventSocket.addEventListener("message", (message) => {
+      const decoded = projectsWireEvent(JSON.parse(String(message.data)));
+      if (decoded) wireEvents.push(decoded);
+    });
+    const scoped = new Promise<void>((resolveScope) => {
+      eventSocket.addEventListener("message", function onScope(message) {
+        if (JSON.parse(String(message.data))?.type !== "runtime-snapshot") return;
+        eventSocket.removeEventListener("message", onScope);
+        resolveScope();
+      });
+    });
+    eventSocket.send(
+      JSON.stringify({
+        type: "agent-event-scope",
+        includeConversations: false,
+        capabilities: ["agent-runtime-snapshots", PROJECTS_V1_CAPABILITY],
+      }),
+    );
+    await scoped;
     const createdRemote = await ok(
       PROJECTS_V1_ROUTES.create,
       { name: "Remote project", mainFolder: remoteFolder, agents: [{ name: "Rem", role: "Any" }] },
       isProjectDetail,
+    );
+    await until("the event socket gets a projects event", () =>
+      wireEvents.some((event) => event.type === "projects-changed" && event.projectId === createdRemote.project.id),
     );
     const listedRemote = await ok(PROJECTS_V1_ROUTES.list, undefined, isProjectSummaryList);
     const gotRemote = await ok(PROJECTS_V1_ROUTES.get, createdRemote.project.id, isProjectDetail);
@@ -1022,6 +1056,56 @@ try {
       bad.status === 400 && JSON.stringify(bad.body).includes(sourceText("error.project.notFound")),
       bad.body,
     );
+    await until(
+      "the event socket gets chat and activity events",
+      () =>
+        wireEvents.some((event) => event.type === "project-chats-changed") &&
+        wireEvents.some((event) => event.type === "project-activity-changed"),
+    );
+    pass(
+      "Over the Team API the host sends project, chat and activity events that the client decoder accepts",
+      wireEvents.some((event) => event.type === "projects-changed") &&
+        wireEvents.some((event) => event.type === "project-chats-changed") &&
+        wireEvents.some((event) => event.type === "project-activity-changed"),
+      wireEvents.map((event) => event.type),
+    );
+    eventSocket.close();
+    const memoryText = "The release owner of this project is Grace.";
+    const memory = agents.createMemory({ agentId: remoteChat.agentId, text: memoryText });
+    agents.setMemoryInclusion({
+      agentId: remoteChat.agentId,
+      changes: [
+        {
+          memoryId: memory.id,
+          inclusion: "essential",
+          expectedRevision:
+            agents.getMemorySelection(remoteChat.agentId).selections.find((entry) => entry.memoryId === memory.id)
+              ?.revision ?? 0,
+        },
+      ],
+    });
+    const entriesBefore = fakeEntries().length;
+    const startsBefore = fakeEntries().filter((entry) => entry.method === "thread/start").length;
+    const memoryChat = await run(
+      projects.startChat(
+        { projectId: createdRemote.project.id, agentId: remoteChat.agentId, text: "Who owns releases?" },
+        sender,
+      ),
+    );
+    await until(
+      "the memory chat starts a provider session and ends",
+      () =>
+        fakeEntries().filter((entry) => entry.method === "thread/start").length > startsBefore &&
+        chatOf(memoryChat.agentId, memoryChat.taskId).state === "idle",
+    );
+    const newStarts = fakeEntries()
+      .filter((entry) => entry.method === "thread/start")
+      .slice(startsBefore);
+    pass(
+      "The memory of a project agent reaches the prompt of a new chat of the project",
+      JSON.stringify(fakeEntries().slice(entriesBefore)).includes("Grace"),
+      newStarts.length,
+    );
     const archivedProject = await ok(PROJECTS_V1_ROUTES.archive, createdRemote.project.id, isProjectSummary);
     const restoredProject = await ok(PROJECTS_V1_ROUTES.restore, createdRemote.project.id, isProjectSummary);
     const deleted = await wire(PROJECTS_V1_ROUTES.delete, ownerToken, createdRemote.project.id);
@@ -1031,6 +1115,7 @@ try {
         restoredProject.archivedAt === null &&
         deleted.status === 200 &&
         projects.find(createdRemote.project.id) === null,
+      [archivedProject.archivedAt, restoredProject.archivedAt, deleted.status, deleted.body],
     );
   } finally {
     await Effect.runPromise(server.stop()).catch(() => undefined);

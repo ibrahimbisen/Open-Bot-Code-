@@ -1,3 +1,12 @@
+import {
+  isProjectActivityChangedEvent,
+  isProjectChatsChangedEvent,
+  isProjectsChangedEvent,
+  type ProjectActivity,
+  type ProjectChat,
+  type ProjectSummary,
+} from "../ipc-projects";
+import { isDynamicRecord } from "../runtime-values";
 import { type AdminDecoder, adminRoute, fields, type OptionalRouteCodec } from "./admin-wire";
 import type { TeamProtocolV2Json } from "./webrtc-framing";
 
@@ -51,3 +60,26 @@ const request = fields({}, { input: payload });
 export const PROJECTS_V1_CODECS: ReadonlyMap<string, OptionalRouteCodec> = new Map(
   Object.values(PROJECTS_V1_ROUTES).map((path) => [path, adminRoute(request, payload)]),
 );
+
+/** Events of the projects feature on the Team API event socket. They go to admin members whose client has `projects-v1`. */
+export type ProjectsWireEvent =
+  | { type: "projects-changed"; projectId: string | null; projects: ProjectSummary[] }
+  | { type: "project-chats-changed"; projectId: string; chats: ProjectChat[]; removedTaskIds: string[] }
+  | { type: "project-activity-changed"; activity: ProjectActivity[] };
+
+export function projectsWireEvent(value: unknown): ProjectsWireEvent | null {
+  if (!isDynamicRecord(value)) return null;
+  const withServer = { ...value, serverId: "remote" };
+  if (value.type === "projects-changed" && isProjectsChangedEvent(withServer))
+    return { type: "projects-changed", projectId: withServer.projectId, projects: withServer.projects };
+  if (value.type === "project-chats-changed" && isProjectChatsChangedEvent(withServer))
+    return {
+      type: "project-chats-changed",
+      projectId: withServer.projectId,
+      chats: withServer.chats,
+      removedTaskIds: withServer.removedTaskIds,
+    };
+  if (value.type === "project-activity-changed" && isProjectActivityChangedEvent(withServer))
+    return { type: "project-activity-changed", activity: withServer.activity };
+  return null;
+}

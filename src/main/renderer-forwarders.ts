@@ -28,6 +28,7 @@ import {
   TEAM_CHANNEL_ATTENTION_CAPABILITY,
 } from "@codebot/contracts/team-protocol/current";
 import type { MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
+import type { ProjectsWireEvent } from "@codebot/contracts/team-protocol/projects-v1";
 import type { AppFormat, AppTranslate } from "@codebot/i18n";
 import { redactText } from "@codebot/logging";
 import {
@@ -694,6 +695,14 @@ export function createRendererForwarders({
     }
   }
 
+  function forwardRemoteProjectEvent(serverId: string, event: ProjectsWireEvent): void {
+    // The host sends the same data under wire names; the renderer gets the same IPC events as for a local server.
+    if (event.type === "project-chats-changed") forwardProjectEvent(serverId, { ...event, type: "chats-changed" });
+    else if (event.type === "project-activity-changed")
+      forwardProjectEvent(serverId, { type: "activity-changed", activity: event.activity });
+    else forwardProjectEvent(serverId, event);
+  }
+
   function forwardOwnerTransfersChanged(): void {
     const window = getMainWindow();
     if (!window || window.isDestroyed()) return;
@@ -733,6 +742,7 @@ export function createRendererForwarders({
     forwardInstanceTransferUploadProgress,
     forwardOwnerTransfersChanged,
     forwardProjectEvent,
+    forwardRemoteProjectEvent,
   };
 }
 
