@@ -42,7 +42,14 @@ PRD item IDs that you own, a worktree and a branch.
 
 - Work only in your worktree and on your branch. Do not touch other worktrees or the `main` branch.
 - Run `bun install --frozen-lockfile` once in a new worktree (about 3 minutes).
-- Commit often. Write commit messages in Simplified Technical English. End each message with:
+- **Commit at least every 30 to 45 minutes of work, also when the work is not complete.** A usage
+  limit can stop you at any time; uncommitted work can be lost. An incomplete commit is correct on
+  your branch when its message starts with `WIP:` and the tree still type-checks for the files that
+  you changed.
+- Keep a checklist in `TASKS.md` at the root of your worktree (git ignores it): the steps of your
+  package, which are done, what you do now, and what you found. Update it before each commit. If you
+  are started again, read `TASKS.md` and `git log` first and continue from there.
+- Write commit messages in Simplified Technical English. End each message with:
   ```
   Co-Authored-By: Claude <noreply@anthropic.com>
   Claude-Session: https://claude.ai/code/session_01AEe9xCzbDZDdjjgf2o9XVz

@@ -12,7 +12,7 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 
 | ID | Requirement | W | Status | Proof |
 | --- | --- | --- | --- | --- |
-| 1.1 | Fork of OpenBot | W00 | todo | |
+| 1.1 | Fork of OpenBot | W00 | done | `git log`: `main` starts from upstream `100c60e89` (tag `openbot-baseline`); the download was the same tree |
 | 1.2 | Desktop app for macOS, Windows, Linux | all | todo | |
 | 1.3 | Internal use only, no sale | W19 | todo | |
 | 1.4 | Many projects at once, short replies, clean screen, agents stay in folder | all | info | |
@@ -35,11 +35,11 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 
 | ID | Requirement | W | Status | Proof |
 | --- | --- | --- | --- | --- |
-| 3.1 | Fork latest OpenBot main | W00 | todo | |
-| 3.2 | Product name CodeBot in all user-facing text | W00 | todo | |
-| 3.3 | CodeBot bundle ID and app ID, side-by-side install | W00 | todo | |
-| 3.4 | Data folder ~/CodeBot, userData CodeBot | W00 | todo | |
-| 3.5 | Keep copyright notice, LICENSE, NOTICE | W00 | todo | |
+| 3.1 | Fork latest OpenBot main | W00 | done | Upstream `main` HEAD on 2026-11-25 was `100c60e89`; `git status` of the copied download against it showed no difference |
+| 3.2 | Product name CodeBot in all user-facing text | W00 | in progress | Mechanical rename `3377172d0` (73,264 replacements, 154 paths). Open: icons and logo, and the lines that `bun run check:branding` lists |
+| 3.3 | CodeBot bundle ID and app ID, side-by-side install | W00 | in progress | `electron-builder.yml`: `appId: app.codebot.desktop`, scheme `codebot`. Open: install test of a packaged build |
+| 3.4 | Data folder ~/CodeBot, userData CodeBot | W00 | in progress | Rename `3377172d0` (`src/backend/agent-store.ts`, `src/main/index.ts`). Open: a run that shows the folders |
+| 3.5 | Keep copyright notice, LICENSE, NOTICE | W00 | done | `git diff openbot-baseline main -- LICENSE NOTICE` is empty; `electron-builder.yml` keeps the copyright line |
 | 3.6 | Remove analytics and telemetry | W02 | todo | |
 | 3.7 | Remove calls to OpenBot cloud services | W02, W03, W04 | todo | |
 
@@ -263,3 +263,24 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | 20.10 | New version on the home server updates all clients | todo | |
 | 20.11 | All themes look correct in every screenshot | todo | |
 | 20.12 | No calls to OpenBot servers; billing is gone | todo | |
+
+## Progress log
+
+Newest entry first. Each entry says what is merged in `main`, what runs, and where unfinished work is.
+
+### 2026-11-26
+
+- `main` = `ce1b138cc`: mechanical rename, fork tools (`scripts/codebot/`), these documents, empty text
+  areas for the new features, the project contract seed.
+- Checks on Windows for the renamed tree (logs in `_tools/checks/rename-r0/`, outside the repository):
+  build, `check:ui`, lint, all `typecheck:*`, `verify:preload`, `i18n:check`, `check:assets`,
+  `check:doc-links`, `types:ratchet` and `test:browser` pass. `knip:check`, `check:agent-context` and 9
+  tests of `test:desktop` fail; unmodified upstream fails in the same way on Windows (package W20).
+- `bun run check:branding --report`: 1,457 upstream name lines are left in 431 files. Packages W02a,
+  W02b, W03, W04, W06 and W18 remove them.
+- Baseline RAM and CPU: not measured yet. `dev:bench` and `dev:memory` do not run on Windows in
+  upstream (they call POSIX `ps`); package W01 corrects the harness first.
+- Work in progress, one worktree and branch for each package under `_wt/`: `w01-measure`,
+  `w20-wintests`, `w02a-analytics`, `w02b-cloud`, `w03-account-service`, `w06-updates`,
+  `w07-projects-engine`, `w08-slash`, `w11-explorer`, `w12-shell`. A usage limit stopped all build
+  agents soon after their start; only `w20-wintests` had uncommitted changes. All were started again.

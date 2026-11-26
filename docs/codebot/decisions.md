@@ -56,6 +56,11 @@ a decision here fills a gap in the PRD or selects one of several possible design
 - **D16. Tests.** New tests are E2E scripts under `scripts/`, as the upstream rules require. They run
   on Windows, macOS and Linux. Vitest files are only for migrations and the trust boundary.
 
+- **D17. Analytics call sites.** The analytics and telemetry engine is removed: no collection, no
+  storage, no upload, no consent screens. The call sites in feature code stay and call functions that
+  do nothing. Thus an upstream change that adds or moves a tracking call still merges, and nothing is
+  sent. A test proves that the functions make no network request and no file write.
+
 ## Work packages
 
 | Package | Scope |
