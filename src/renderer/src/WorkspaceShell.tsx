@@ -26,6 +26,9 @@ import { WorkspaceDirectConversation } from "./features/conversation/WorkspaceDi
 import { useCustomAgentUsagePolling } from "./features/custom-agents/custom-agent-usage-polling";
 import { serverHasStorage } from "./features/files/storage-usage";
 import { WorkspaceServerOnboarding } from "./features/onboarding/WorkspaceServerOnboarding";
+import { ProjectsLeftBar } from "./features/projects/ProjectsLeftBar";
+import { ProjectsWorkspace } from "./features/projects/ProjectsWorkspace";
+import { useProjects } from "./features/projects/projects-context";
 import { useRemoteDesktop } from "./features/remote-desktop/remote-desktop-context";
 import { createRoutineTimezonePrompt, desktopRoutineZoneTargets } from "./features/schedule/routine-timezone-prompt";
 import { createHostedUpsellOffline } from "./features/servers/hosted-server-upsell-controller";
@@ -62,6 +65,7 @@ export function WorkspaceShell(props: {
 }) {
   const platform = usePlatform();
   const chatWindow = platform.chatWindow !== null;
+  const projectShell = !chatWindow;
   const { sourceText, t, errorMessage } = useText();
   const scope = useServerScope();
   const settings = useSettings();
@@ -86,8 +90,8 @@ export function WorkspaceShell(props: {
   const { remoteDesktopWorkspaceVisible } = useRemoteDesktop();
   const agentDockPlacement = useAgentDockPlacement();
   const windowAgentDock = () => agentDockPlacement() === "window" && activeServer() !== undefined;
-  const { agentSetupOpen, serverOnboardingOpen, activeAgent, agentList, agentListSettled, openAgentSetup } =
-    useAgents();
+  const { agentSetupOpen, serverOnboardingOpen, activeAgent, agentList, agentListSettled } = useAgents();
+  const projects = projectShell ? useProjects() : undefined;
   const { conversations, retryConversation } = useConversation();
   const activeConversation = () => conversations[activeAgent()?.id ?? ""];
   const { activeDirectMember } = useDirectMessages();
@@ -332,8 +336,7 @@ export function WorkspaceShell(props: {
     useWorkspaceShortcuts({
       newAgent: () => {
         if (!activeServer() || platform.landingPreview) return false;
-        channels.close();
-        openAgentSetup();
+        projects?.newChat();
         return true;
       },
       toggleSidebar: () => {
@@ -354,15 +357,25 @@ export function WorkspaceShell(props: {
     <ConnectorsProvider>
       <WindowBackdrop />
       <div class="app-window">
-        <WorkspacePageRail hidden={chatWindow || remoteDesktopWorkspaceVisible()} />
+        <Show when={!projectShell}>
+          <WorkspacePageRail hidden={chatWindow || remoteDesktopWorkspaceVisible()} />
+        </Show>
         <WorkspaceFrame
-          class={chatWindow ? "app-frame-chat-window" : windowAgentDock() ? "app-frame-agent-dock" : undefined}
+          class={
+            chatWindow
+              ? "app-frame-chat-window"
+              : projectShell
+                ? "app-frame-projects"
+                : windowAgentDock()
+                  ? "app-frame-agent-dock"
+                  : undefined
+          }
           compact={layout.leftPanelCompact()}
           initialLoading={!serversLoaded() || !scope.connection.synced}
           connection={
             <>
               <Show when={connectionShown() && !fullWindowLoading()}>{connectionNotice()}</Show>
-              <Show when={scope.loaded() && agentChatOpen() && !serverOnboardingOpen()}>
+              <Show when={!projectShell && scope.loaded() && agentChatOpen() && !serverOnboardingOpen()}>
                 <ConversationLoadNotice
                   name={activeAgent()?.name ?? ""}
                   loading={!activeConversation()?.loaded && activeConversation()?.loading === true}
@@ -392,7 +405,9 @@ export function WorkspaceShell(props: {
             <Show when={!chatWindow}>
               <WorkspaceServerRail />
               <Show when={!fullScreenServer()}>
-                <WorkspaceSidebar peopleEnabled={activePeopleEnabled()} />
+                <Show when={projectShell} fallback={<WorkspaceSidebar peopleEnabled={activePeopleEnabled()} />}>
+                  <ProjectsLeftBar />
+                </Show>
               </Show>
             </Show>
           }
@@ -407,7 +422,10 @@ export function WorkspaceShell(props: {
             </>
           }
         >
-          <Show when={middlePane() === "tasks" && tasksSupported() ? usage.state.serverId : null}>
+          <Show when={projectShell && !serverOnboardingOpen()}>
+            <ProjectsWorkspace />
+          </Show>
+          <Show when={!projectShell && middlePane() === "tasks" && tasksSupported() ? usage.state.serverId : null}>
             {(serverId) => (
               <TasksPanel
                 serverId={serverId()}
@@ -416,19 +434,22 @@ export function WorkspaceShell(props: {
               />
             )}
           </Show>
-          <Show when={serverOnboardingOpen() && middlePane() !== "tasks"}>
+          <Show when={serverOnboardingOpen() && (projectShell || middlePane() !== "tasks")}>
             <WorkspaceServerOnboarding />
           </Show>
-          <Show when={middlePane() === "agent-setup" && !serverOnboardingOpen()}>
+          <Show when={!projectShell && middlePane() === "agent-setup" && !serverOnboardingOpen()}>
             <WorkspaceAgentSetup />
           </Show>
-          <Show when={activePeopleEnabled() && middlePane() === "direct" && activeDirectMember()?.id} keyed>
+          <Show
+            when={!projectShell && activePeopleEnabled() && middlePane() === "direct" && activeDirectMember()?.id}
+            keyed
+          >
             <Show when={activeDirectMember()}>{(member) => <WorkspaceDirectConversation member={member()} />}</Show>
           </Show>
-          <Show when={agentChatOpen() && !chatHeld()}>
+          <Show when={!projectShell && agentChatOpen() && !chatHeld()}>
             <WorkspaceConversation account={props.account} />
           </Show>
-          <Show when={middlePane() === "channel"}>
+          <Show when={!projectShell && middlePane() === "channel"}>
             <WorkspaceChannelConversation account={props.account} />
           </Show>
         </WorkspaceFrame>

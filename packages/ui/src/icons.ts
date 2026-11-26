@@ -50,6 +50,7 @@ export { default as ClipboardPaste } from "lucide-solid/icons/clipboard-paste";
 export { default as Clock3 } from "lucide-solid/icons/clock-3";
 export { default as Cloud } from "lucide-solid/icons/cloud";
 export { default as Code } from "lucide-solid/icons/code";
+export { default as Columns2 } from "lucide-solid/icons/columns-2";
 export { default as Command } from "lucide-solid/icons/command";
 export { default as Copy } from "lucide-solid/icons/copy";
 export { default as CopyPlus } from "lucide-solid/icons/copy-plus";
