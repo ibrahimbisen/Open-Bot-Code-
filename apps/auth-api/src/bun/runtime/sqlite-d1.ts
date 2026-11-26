@@ -24,7 +24,7 @@ export interface SqliteD1Database extends D1Database {
 export function openSqliteDatabase(filePath: string): Database {
   const sqlite = new Database(filePath, { create: true });
   sqlite.exec("PRAGMA journal_mode = WAL");
-  sqlite.exec("PRAGMA synchronous = NORMAL");
+  sqlite.exec("PRAGMA synchronous = FULL");
   sqlite.exec("PRAGMA foreign_keys = ON");
   sqlite.exec("PRAGMA busy_timeout = 5000");
   return sqlite;

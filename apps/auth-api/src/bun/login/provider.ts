@@ -50,7 +50,7 @@ interface ProviderEndpoints {
   basicAuth: boolean;
 }
 
-interface TokenAnswer {
+export interface ProviderTokens {
   accessToken: string;
   refreshToken: string | null;
   idToken: string | null;
@@ -135,11 +135,10 @@ export class IdentityProvider {
     return { identity, refreshToken: tokens.refreshToken };
   });
 
-  readonly refresh = Effect.fn("IdentityProvider.refresh")(function* (
+  readonly refreshGrant = Effect.fn("IdentityProvider.refreshGrant")(function* (
     this: IdentityProvider,
     refreshToken: string,
-    expectedSubject: string,
-  ): Effect.fn.Return<{ identity: ProviderIdentity; refreshToken: string }, ProviderRejected | ProviderUnavailable> {
+  ): Effect.fn.Return<ProviderTokens, ProviderRejected | ProviderUnavailable> {
     const endpoints = yield* this.#resolveEndpoints();
     const answer = yield* this.#tokenRequest(
       endpoints,
@@ -154,22 +153,33 @@ export class IdentityProvider {
       if (revoked) return yield* new ProviderRejected({ reason: "grant_revoked" });
       return yield* unavailable("refresh", `status ${answer.status}${code ? ` ${code.slice(0, 40)}` : ""}`);
     }
-    const tokens = yield* this.#tokens(answer.body, "provider_rejected").pipe(
+    return yield* this.#tokens(answer.body, "provider_rejected").pipe(
       Effect.mapError(() => unavailable("refresh", "The token answer has no access token.")),
     );
+  });
+
+  readonly identify = Effect.fn("IdentityProvider.identify")(function* (
+    this: IdentityProvider,
+    tokens: ProviderTokens,
+    expectedSubject: string,
+  ): Effect.fn.Return<ProviderIdentity, ProviderRejected | ProviderUnavailable> {
+    const endpoints = yield* this.#resolveEndpoints();
+    if (this.kind === "oidc" && !endpoints.userinfoEndpoint) {
+      return { issuer: endpoints.issuer, subject: expectedSubject, username: null, name: null };
+    }
     const identity = yield* this.#readIdentity(endpoints, tokens, null).pipe(
       Effect.mapError((error) =>
         error instanceof ProviderLoginRefused ? unavailable("identity", "The provider gave no user.") : error,
       ),
     );
     if (identity.subject !== expectedSubject) return yield* new ProviderRejected({ reason: "subject_changed" });
-    return { identity, refreshToken: tokens.refreshToken ?? refreshToken };
+    return identity;
   });
 
   readonly #tokens = Effect.fn("IdentityProvider.tokens")(function* (
     body: DynamicRecord,
     code: ProviderLoginRefused["code"],
-  ): Effect.fn.Return<TokenAnswer, ProviderLoginRefused> {
+  ): Effect.fn.Return<ProviderTokens, ProviderLoginRefused> {
     const accessToken = textOrNull(body.access_token);
     if (!accessToken) return yield* new ProviderLoginRefused({ code });
     return {
@@ -183,7 +193,7 @@ export class IdentityProvider {
   readonly #readIdentity = Effect.fn("IdentityProvider.readIdentity")(function* (
     this: IdentityProvider,
     endpoints: ProviderEndpoints,
-    tokens: TokenAnswer,
+    tokens: ProviderTokens,
     claims: DynamicRecord | null,
   ): Effect.fn.Return<ProviderIdentity, ProviderFailure> {
     if (this.kind === "nextcloud-oauth2") return yield* this.#nextcloudUser(endpoints, tokens);
@@ -218,7 +228,7 @@ export class IdentityProvider {
   readonly #nextcloudUser = Effect.fn("IdentityProvider.nextcloudUser")(function* (
     this: IdentityProvider,
     endpoints: ProviderEndpoints,
-    tokens: TokenAnswer,
+    tokens: ProviderTokens,
   ): Effect.fn.Return<ProviderIdentity, ProviderFailure> {
     if (!endpoints.userinfoEndpoint) return yield* unavailable("user", "No user endpoint is set.");
     const answer = yield* this.#getJson("user", endpoints.userinfoEndpoint, tokens.accessToken, {

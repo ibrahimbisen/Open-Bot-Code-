@@ -61,3 +61,9 @@ CREATE TABLE account_device_logins (
 
 CREATE INDEX account_device_logins_expires_at ON account_device_logins(expires_at);
 CREATE INDEX account_device_logins_user ON account_device_logins(user_id);
+
+CREATE TABLE account_service_state (
+  name TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at INTEGER NOT NULL
+);

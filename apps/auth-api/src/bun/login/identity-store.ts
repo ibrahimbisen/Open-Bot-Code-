@@ -147,6 +147,56 @@ export class IdentityStore {
     return yield* new IdentityStoreError({});
   });
 
+  readonly storeRefreshToken = Effect.fn("IdentityStore.storeRefreshToken")(function* (
+    this: IdentityStore,
+    identity: Pick<IdentityRecord, "issuer" | "subject">,
+    refreshToken: string,
+    now: number,
+  ) {
+    const ciphertext = yield* this.#box
+      .seal(refreshToken, tokenContext(identity.issuer, identity.subject))
+      .pipe(Effect.mapError(() => new IdentityStoreError({})));
+    const stored = yield* storeCall(() =>
+      this.#database
+        .prepare(
+          `UPDATE account_identities SET refresh_token_ciphertext = ?, updated_at = ?
+           WHERE issuer = ? AND subject = ? AND status = 'active'`,
+        )
+        .bind(ciphertext, now, identity.issuer, identity.subject)
+        .run(),
+    );
+    if (stored.meta.changes !== 1) return yield* new IdentityStoreError({});
+  });
+
+  readonly recordConfirmed = Effect.fn("IdentityStore.recordConfirmed")(function* (
+    this: IdentityStore,
+    identity: Pick<IdentityRecord, "issuer" | "subject">,
+    now: number,
+  ) {
+    yield* storeCall(() =>
+      this.#database
+        .prepare(
+          `UPDATE account_identities SET checked_at = ?, attempted_at = ?, updated_at = ?
+           WHERE issuer = ? AND subject = ? AND status = 'active'`,
+        )
+        .bind(now, now, now, identity.issuer, identity.subject)
+        .run(),
+    );
+  });
+
+  readonly recordAttempt = Effect.fn("IdentityStore.recordAttempt")(function* (
+    this: IdentityStore,
+    identity: Pick<IdentityRecord, "issuer" | "subject">,
+    now: number,
+  ) {
+    yield* storeCall(() =>
+      this.#database
+        .prepare("UPDATE account_identities SET attempted_at = ? WHERE issuer = ? AND subject = ?")
+        .bind(now, identity.issuer, identity.subject)
+        .run(),
+    );
+  });
+
   readonly #activate = Effect.fn("IdentityStore.activate")(function* (
     this: IdentityStore,
     identity: ProviderIdentity,
