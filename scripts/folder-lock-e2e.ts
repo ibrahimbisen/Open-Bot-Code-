@@ -150,7 +150,7 @@ function threadParams(extraParams: DynamicRecord = {}): DynamicRecord {
 const forward = (path: string): string => path.replaceAll("\\", "/");
 const blocked = (track: string, name: string): boolean => {
   const result = api.toolResult(track, name);
-  return result !== undefined && result.isError;
+  return result?.isError === true;
 };
 const allowed = (track: string, name: string): boolean => {
   const result = api.toolResult(track, name);

@@ -149,7 +149,7 @@ await runCauseEffect(checkAgentFolders(agent));
 let client: ClaudeAgentClient | null = null;
 try {
   const tool = findContainerTool();
-  check("the container tool is found on PATH", tool !== null && tool.startsWith(bin), String(tool));
+  check("the container tool is found on PATH", tool?.startsWith(bin) === true, String(tool));
   const plan = containerPlan({
     tool: tool ?? "docker",
     projectId: "project-container",
