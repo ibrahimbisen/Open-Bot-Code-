@@ -147,6 +147,7 @@ export class ProjectService implements ProjectOperations {
   readonly #lastChats = new Map<string, string>();
   #lastActivity = "[]";
   #attention = new Set<string>();
+  readonly #settling = new Set<string>();
   #started = false;
   readonly #onEvent = (event: AgentEvent) => this.#handleEvent(event);
   readonly #onRead = (agentId: string, taskId: string, unreadCount: number) =>
@@ -908,6 +909,22 @@ export class ProjectService implements ProjectOperations {
     const project = this.#projectOfAgent(chat.agentId);
     if (project) this.#emitChat(project, chat.threadId);
     this.#emitActivity();
+    this.#settle(chat.agentId);
+  }
+
+  #settle(agentId: string): void {
+    if (this.#settling.has(agentId)) return;
+    this.#settling.add(agentId);
+    setImmediate(() => {
+      this.#settling.delete(agentId);
+      if (!this.#started) return;
+      try {
+        this.#attention = this.#options.agents.attentionThreadIds();
+        this.#tasksChanged({ agentId, tasks: this.#options.agents.listTasks(agentId).tasks });
+      } catch (error) {
+        logger.warn("Could not settle the project chats of an agent.", toLogValue(error));
+      }
+    });
   }
 
   #handleRead(agentId: string, taskId: string, unreadCount: number): void {
