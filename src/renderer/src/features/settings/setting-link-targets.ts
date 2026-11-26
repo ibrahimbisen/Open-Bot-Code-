@@ -1,4 +1,4 @@
-import type { AppInfo, SettingLinkId } from "@codebot/contracts/ipc";
+import type { AdvancedFeatureSettings, AppInfo, SettingLinkId } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import type { AgentSettingLinkId } from "@codebot/ui/features/conversation/agent-setting-links";
 import { type SettingsTab, settingsTabShown } from "./settings-tabs";
@@ -63,7 +63,11 @@ export function appSettingLinkTarget(
 }
 
 export function appSettingRowOpener(
-  surface: () => { platform: AppInfo["platform"] | undefined; chatWindow: boolean },
+  surface: () => {
+    platform: AppInfo["platform"] | undefined;
+    chatWindow: boolean;
+    advanced: AdvancedFeatureSettings | undefined;
+  },
   openRow: (tab: SettingsTab, row: AppTextKey) => void,
 ): (settingId: AppSettingLinkId) => (() => void) | undefined {
   return (settingId) => {

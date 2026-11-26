@@ -4,6 +4,7 @@ import { type ParentProps, Show, untrack } from "solid-js";
 import { AnsweredPromptsProvider } from "./answered-prompts";
 import { AppBootstrap } from "./app-bootstrap";
 import { AuthProvider } from "./features/account/account-context";
+import { AdvancedFeaturesProvider } from "./features/advanced/advanced-features-context";
 import { AgentTasksProvider } from "./features/agent-tasks/agent-tasks-context";
 import { AgentThreadsProvider } from "./features/agent-threads/agent-threads-context";
 import { AgentActionsProvider } from "./features/agents/agent-actions";
@@ -81,30 +82,32 @@ export function AppProviders(props: ParentProps<AppProps>): JSX.Element {
                       <CustomAgentsProvider>
                         <ProviderDetectionProvider>
                           <ServersProvider>
-                            <DynamicIslandProvider>
-                              <ServerSettingsProvider>
-                                <RemoteDesktopProvider>
-                                  <ServerSwitchProvider>
-                                    <AnsweredPromptsProvider>
-                                      <UiErrorsProvider>
-                                        <UsageProvider>
-                                          <WindowPageProvider>
-                                            <AgentReadTrackingProvider>
-                                              <Show when={!props.chatWindow}>
-                                                <AppBootstrap />
-                                              </Show>
-                                              <ServerScopeBoundary stableConversation={stableConversation}>
-                                                {props.children}
-                                              </ServerScopeBoundary>
-                                            </AgentReadTrackingProvider>
-                                          </WindowPageProvider>
-                                        </UsageProvider>
-                                      </UiErrorsProvider>
-                                    </AnsweredPromptsProvider>
-                                  </ServerSwitchProvider>
-                                </RemoteDesktopProvider>
-                              </ServerSettingsProvider>
-                            </DynamicIslandProvider>
+                            <AdvancedFeaturesProvider>
+                              <DynamicIslandProvider>
+                                <ServerSettingsProvider>
+                                  <RemoteDesktopProvider>
+                                    <ServerSwitchProvider>
+                                      <AnsweredPromptsProvider>
+                                        <UiErrorsProvider>
+                                          <UsageProvider>
+                                            <WindowPageProvider>
+                                              <AgentReadTrackingProvider>
+                                                <Show when={!props.chatWindow}>
+                                                  <AppBootstrap />
+                                                </Show>
+                                                <ServerScopeBoundary stableConversation={stableConversation}>
+                                                  {props.children}
+                                                </ServerScopeBoundary>
+                                              </AgentReadTrackingProvider>
+                                            </WindowPageProvider>
+                                          </UsageProvider>
+                                        </UiErrorsProvider>
+                                      </AnsweredPromptsProvider>
+                                    </ServerSwitchProvider>
+                                  </RemoteDesktopProvider>
+                                </ServerSettingsProvider>
+                              </DynamicIslandProvider>
+                            </AdvancedFeaturesProvider>
                           </ServersProvider>
                         </ProviderDetectionProvider>
                       </CustomAgentsProvider>

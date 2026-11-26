@@ -11,6 +11,7 @@ import { appPort } from "../../app-port";
 import { useLayout } from "../../layout";
 import { WorkflowsPage } from "../../lazy-views";
 import { usePlatform } from "../../platform";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useCustomAgents } from "../custom-agents/custom-agents-context";
 import { serverHasStorage } from "../files/storage-usage";
 import { createCreditAgentsRail } from "../servers/credit-agents-rail";
@@ -36,6 +37,7 @@ import { useWindowPage } from "./window-page-context";
 export function WorkspacePageRail(props: { hidden: boolean }) {
   const text = useText();
   const windowPage = useWindowPage();
+  const advanced = useAdvancedFeatures();
   const { openAppSettings, setSkillsMarketplaceOpen, setPendingPluginSlug, setPendingPluginConnect } = useSettings();
   const usage = useUsage();
   const updates = useUpdates();
@@ -126,7 +128,7 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
       onAgents={() => windowPage.showAgents()}
       onWorkflows={() => windowPage.openWorkflows(null)}
       onPreloadWorkflows={() => void WorkflowsPage.preload()}
-      onSchedule={windowPage.openSchedule}
+      onSchedule={advanced.enabled("routines") ? windowPage.openSchedule : undefined}
       onTasks={tasksAvailable() ? windowPage.openTasks : undefined}
       onUsage={windowPage.openUsage}
       onLibrary={serverHasStorage(activeServer()) ? windowPage.openLibrary : undefined}
@@ -145,10 +147,14 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
       onCreditAskChange={creditAgents.changeAsk()}
       hiddenItems={layout.railHidden()}
       onHiddenChange={layout.setRailHidden}
-      onMarketplace={() => {
-        windowPage.leavePricing();
-        setSkillsMarketplaceOpen(true);
-      }}
+      onMarketplace={
+        advanced.enabled("marketplace")
+          ? () => {
+              windowPage.leavePricing();
+              setSkillsMarketplaceOpen(true);
+            }
+          : undefined
+      }
       onSettings={(button) => (updateNotice() ? openAppSettings(button, "updates") : windowPage.openSettings(button))}
       settingsNotice={updateNotice()}
       logo={logo()}

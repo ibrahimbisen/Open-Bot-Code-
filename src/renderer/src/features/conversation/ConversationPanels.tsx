@@ -37,6 +37,7 @@ import {
   saveSidePanelWidth,
 } from "../../components/side-panel-width";
 import { deviceQuoteShortcut } from "../../send-shortcut-preference";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { type AgentTemplatePublishCalls, agentTemplatesPort } from "../agent-templates/agent-templates-port";
 import { createPublishAgent } from "../agent-templates/PublishAgent";
 import { desktopBrowserProfileCalls } from "../browser/browser-profiles-port";
@@ -180,6 +181,7 @@ function VoiceConversation(paneProps: VoicePillPresence & { kind: VoiceConversat
 
 export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLButtonElement) => void) | undefined }) {
   const controller = useConversationController();
+  const advanced = useAdvancedFeatures();
   const bubbleStyle = useChatBubbleStyle();
   const {
     agentReady,
@@ -812,7 +814,9 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
               skillsMarketplaceOpen={props.skillsMarketplaceOpen}
               workspaceCovered={props.workspaceCovered}
               onAddFromMarketplace={
-                serverCanAdminister(props.server, "skills-admin-v1") ? props.onOpenMarketplace : undefined
+                advanced.enabled("marketplace") && serverCanAdminister(props.server, "skills-admin-v1")
+                  ? props.onOpenMarketplace
+                  : undefined
               }
               skillsMode={agentSkillsMode(props.server, props.runtime)}
               skillsServerId={props.server?.id}
@@ -825,7 +829,10 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
               }
               autoApprove={props.agentAutoApproves}
               onUpdatePermissions={props.onUpdateAgentPermissions}
-              computerUseEditable={props.server?.kind === "local" || props.remoteComputerUseLoaded === true}
+              computerUseEditable={
+                advanced.enabled("computerUse") &&
+                (props.server?.kind === "local" || props.remoteComputerUseLoaded === true)
+              }
               automationEditable={
                 props.server?.kind === "local" ||
                 (serverCanAdminister(props.server, "agent-host-settings-v1") && agent().allowAutomation !== undefined)

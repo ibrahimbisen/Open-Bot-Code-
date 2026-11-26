@@ -18,6 +18,7 @@ import { DirectConversation } from "../../lazy-views";
 import { useNavigation } from "../../navigation";
 import { usePlatform } from "../../platform";
 import { useTurns } from "../../turns";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useAgentTasks } from "../agent-tasks/agent-tasks-context";
 import { useAgentThreads } from "../agent-threads/agent-threads-context";
 import type { ThreadWaits } from "../agent-threads/conversation-threads";
@@ -51,6 +52,7 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
   const layout = useLayout();
   const platform = usePlatform();
   const channels = useChannels();
+  const advanced = useAdvancedFeatures();
   const windowPage = useWindowPage();
   const serverScope = useServerScope();
   const { activeServer, activeServerId, activeServerSupportsCapability } = useServers();
@@ -157,11 +159,15 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
 
   const channelsListed = () => channels.supported();
   const sidebarChannels = () =>
-    !channels.state.listed && (!serverScope.loaded() || channels.supported()) && serverScope.frameChannels().length > 0
-      ? serverScope.frameChannels()
-      : channelsListed()
-        ? channels.state.channels
-        : [];
+    !advanced.enabled("channels")
+      ? []
+      : !channels.state.listed &&
+          (!serverScope.loaded() || channels.supported()) &&
+          serverScope.frameChannels().length > 0
+        ? serverScope.frameChannels()
+        : channelsListed()
+          ? channels.state.channels
+          : [];
   const visibleChannels = createMemo(() => sidebarChannels().filter((channel) => !channel.archived));
 
   const { agentStates: sidebarAgentStates, agentMoods } = createAgentActivity();
@@ -348,6 +354,7 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
           </>
         }
         onOpenMarketplace={() => setSkillsMarketplaceOpen(true)}
+        marketplaceSupported={advanced.enabled("marketplace")}
         agentsConnecting={agentListConnecting()}
         emptyAction={
           agentList().length === 0 && agentListSettled()

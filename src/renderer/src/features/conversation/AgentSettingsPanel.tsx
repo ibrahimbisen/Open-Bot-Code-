@@ -37,6 +37,7 @@ import { actionToast } from "../../action-toast";
 import { createSidePanelWidth, readSidePanelWidth, saveSidePanelWidth } from "../../components/side-panel-width";
 import type { SkillCatalogCalls } from "../../skills-port";
 import { agentSkillCalls, skillsPort } from "../../skills-port";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import type { BrowserProfileCalls } from "../browser/browser-profiles-port";
 import { createBrowserProfilesStore } from "../browser/stores/browser-profiles-store";
 import { type AgentFilesOptions, AgentFilesSettings } from "../files/AgentFilesSettings";
@@ -132,6 +133,7 @@ function profilesWithProxies(
 
 export default function AgentSettingsPanel(props: AgentSettingsPanelProps) {
   const { t, errorMessage } = useText();
+  const advanced = useAdvancedFeatures();
   const sessionSettings = createMemo((): AgentSessionSettingsApi | undefined => {
     if (!props.sessionSettingsEditable) return undefined;
     if (props.remoteClient) return props.adminCalls?.sessionSettings;
@@ -214,7 +216,8 @@ export default function AgentSettingsPanel(props: AgentSettingsPanelProps) {
     agentMemoriesPort(props.agent.id, props.agent.name, props.memoryLimit ?? null, props.memoriesApi),
   );
   const memoriesShown = () => !props.remoteClient || props.memoriesApi !== undefined;
-  const routinesShown = () => !props.remoteClient || props.routines !== undefined;
+  const routinesShown = () => advanced.enabled("routines") && (!props.remoteClient || props.routines !== undefined);
+  const appsShown = () => advanced.enabled("marketplace") && props.onOpenApps !== undefined;
   const legacyRoutinesPort = createMemo(() =>
     agentRoutinesPort(
       props.agent.id,
@@ -575,7 +578,7 @@ export default function AgentSettingsPanel(props: AgentSettingsPanelProps) {
               </Show>
             </SettingsLinkGroup>
           </Show>
-          <Show when={routinesShown() || props.onOpenUsage || props.onOpenApps || props.onPublish}>
+          <Show when={routinesShown() || props.onOpenUsage || appsShown() || props.onPublish}>
             <SettingsLinkGroup inset title={t("agentSettings.groups.does")}>
               <Show when={routinesShown()}>
                 <SettingsLinkRow
@@ -596,7 +599,7 @@ export default function AgentSettingsPanel(props: AgentSettingsPanelProps) {
                   onClick={(trigger) => props.onOpenUsage?.(trigger)}
                 />
               </Show>
-              <Show when={props.onOpenApps}>
+              <Show when={appsShown()}>
                 <SettingsLinkRow
                   icon={<Blocks aria-hidden="true" />}
                   label={t("agentSettings.links.apps")}
