@@ -115,6 +115,7 @@ import { notificationIpcHandlers } from "./ipc/notification-handlers";
 import { onePasswordConnectorIpcHandlers } from "./ipc/onepassword-connector-handlers";
 import { passwordManagersIpcHandlers } from "./ipc/password-managers-handlers";
 import { pluginIpcHandlers } from "./ipc/plugin-handlers";
+import { projectIpcHandlers } from "./ipc/project-handlers";
 import { providerAdminIpcHandlers } from "./ipc/provider-admin-handlers";
 import { providerDetectionIpcHandlers } from "./ipc/provider-detection-handlers";
 import { providerIpcHandlers } from "./ipc/provider-handlers";
@@ -556,6 +557,7 @@ const {
   forwardAttachmentImportProgress,
   forwardInstanceTransferUploadProgress,
   forwardOwnerTransfersChanged,
+  forwardProjectEvent,
 } = createRendererForwarders({
   getMainWindow: () => windowHolder.current,
   getChatWindows: () => windows.getChatWindows(),
@@ -833,6 +835,7 @@ function registerIpcHandlers({
   workflows,
   workflowGitHub,
   crm,
+  projects,
   routineResults,
 }: ApplicationServices): void {
   const getDialogParent = () => windows.getChatWindows().find((window) => window.isFocused()) ?? windowHolder.current;
@@ -1021,6 +1024,13 @@ function registerIpcHandlers({
       translate: language.translate,
     }),
     ...crmIpcHandlers({ crm, remoteServers }),
+    ...projectIpcHandlers({
+      projects,
+      remoteServers,
+      sender: () => host.conversationSender(),
+      getMainWindow: getDialogParent,
+      translate: language.translate,
+    }),
     ...routineResultIpcHandlers({ routineResults, remoteServers }),
     ...channelMemoryIpcHandlers({ service, remoteServers }),
     ...channelRoutineIpcHandlers({ service, remoteServers }),
@@ -1606,6 +1616,7 @@ if (!hasSingleInstanceLock) {
       });
       service.on("event", (event) => trace.observeAgentEvent(event));
       service.on("event", (event) => forwardAgentEvent("local", event));
+      built.projects.subscribe((event) => forwardProjectEvent("local", event));
       let webhookAgentIds = new Set(service.listAgents().map((agent) => agent.id));
       const onRoutineEvent = (event: AgentEvent): void => {
         switch (event.type) {

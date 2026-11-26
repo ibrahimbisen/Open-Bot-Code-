@@ -246,6 +246,7 @@ export interface AgentSummary {
   pendingRuntime?: AgentPendingRuntime;
   pinnedAccountId?: string;
   hiddenAt?: string;
+  projectId?: string;
   threadId: string | null;
   workspacePath: string;
   preview: string;
@@ -305,6 +306,7 @@ function hasAgentSummaryFields(value: DynamicRecord): boolean {
     (value.pendingRuntime === undefined || isAgentPendingRuntime(value.pendingRuntime)) &&
     (value.pinnedAccountId === undefined || isProviderAccountId(value.pinnedAccountId)) &&
     (value.hiddenAt === undefined || isHiddenAt(value.hiddenAt)) &&
+    (value.projectId === undefined || isIdentifier(value.projectId)) &&
     (value.threadId === null || isIdentifier(value.threadId)) &&
     isBoundedString(value.workspacePath, INPUT_LIMITS.path) &&
     isBoundedString(value.preview, INPUT_LIMITS.messageText) &&

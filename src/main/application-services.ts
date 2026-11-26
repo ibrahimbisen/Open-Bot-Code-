@@ -110,6 +110,8 @@ import { WhatsAppRuntime } from "../backend/messaging/whatsapp/whatsapp-runtime"
 import { PASSWORD_MANAGER_BRANDS } from "../backend/password-vault";
 import { passwordVaultRouter } from "../backend/password-vault-router";
 import { perfTime } from "../backend/perf-probe-hooks";
+import type { ProjectOperations } from "../backend/projects/project-operations";
+import { pendingProjectOperations } from "../backend/projects/project-operations-pending";
 import { sweepProviderTemp } from "../backend/provider-temp";
 import { routineFlowRoutines } from "../backend/routine-flows/routine-flow-routines";
 import { RoutineFlowStore } from "../backend/routine-flows/routine-flow-store";
@@ -633,6 +635,7 @@ const TEARDOWN_ORDER = {
   routineFlows: 103,
   workflows: 103.5,
   crm: 103.75,
+  projects: 103.8,
   routineFeed: 104,
   mcpOAuthRedirect: 105,
   onePasswordConnector: 106,
@@ -691,6 +694,7 @@ export interface ApplicationServices {
   workflowFiles: WorkflowFileExporter;
   workflowGitHub: WorkflowGitHubDirectory;
   crm: CrmHandle;
+  projects: ProjectOperations;
   routineResults: RoutineResultsHandle;
   providerRuntimes: ProviderRuntimeManager;
   providerCredentials: ProviderCredentialStore;
@@ -2654,6 +2658,7 @@ export async function createApplicationServices({
     crmHandle = null;
     return Effect.runPromise(crm.close());
   });
+  const projects = pendingProjectOperations();
   const routineResultRuntime = await Effect.runPromise(
     createRoutineResults({
       store: new RoutineResultStore(store.database),
@@ -4486,6 +4491,7 @@ export async function createApplicationServices({
     workflowFiles,
     workflowGitHub,
     crm,
+    projects,
     routineResults: routineResultRuntime,
     providerRuntimes,
     providerCredentials,

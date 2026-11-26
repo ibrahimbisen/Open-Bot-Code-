@@ -51,6 +51,7 @@ import { BrowserWindow, Notification } from "electron";
 import { isNoUpdateAnswer } from "../backend/agent/routine-quiet-runs";
 import type { AgentService } from "../backend/agent-service";
 import { runCauseEffect } from "../backend/effect-boundary";
+import type { ProjectServiceEvent } from "../backend/projects/project-operations";
 import type { WorkflowNotice } from "../backend/workflows/workflows";
 import type { HostAnalytics } from "./analytics";
 import {
@@ -674,6 +675,25 @@ export function createRendererForwarders({
     for (const target of appWindows()) sendToRenderer(target, IPC_ENDPOINTS.instanceTransfer.uploadProgress, progress);
   }
 
+  function forwardProjectEvent(serverId: string, event: ProjectServiceEvent): void {
+    for (const target of appWindows()) {
+      if (event.type === "projects-changed")
+        sendToRenderer(target, IPC_ENDPOINTS.projects.changed, {
+          serverId,
+          projectId: event.projectId,
+          projects: event.projects,
+        });
+      else if (event.type === "chats-changed")
+        sendToRenderer(target, IPC_ENDPOINTS.projects.chatsChanged, {
+          serverId,
+          projectId: event.projectId,
+          chats: event.chats,
+          removedTaskIds: event.removedTaskIds,
+        });
+      else sendToRenderer(target, IPC_ENDPOINTS.projects.activityChanged, { serverId, activity: event.activity });
+    }
+  }
+
   function forwardOwnerTransfersChanged(): void {
     const window = getMainWindow();
     if (!window || window.isDestroyed()) return;
@@ -712,6 +732,7 @@ export function createRendererForwarders({
     forwardAttachmentImportProgress,
     forwardInstanceTransferUploadProgress,
     forwardOwnerTransfersChanged,
+    forwardProjectEvent,
   };
 }
 
