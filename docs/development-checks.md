@@ -218,7 +218,12 @@ needs it.
 dependencies, unresolved imports and unlisted binaries in every workspace. It takes about 6 seconds. `knip.config.ts` names the entry
 points that knip cannot find by itself: the Metro shims and stylesheet, and every command in
 `scripts/`. Its electron-vite and wrangler plugins find the electron-vite inputs, the modules that
-the renderer HTML pages load, and the Worker entries. Each ignore entry states its reason.
+the renderer HTML pages load, and the Worker entries. On Windows, the electron-vite plugin of knip
+6.42.1 does not find the modules of the HTML pages: it reads the folder of a page with
+`path.posix.dirname`, which gives `.` for a path with backslashes. For this reason `knip.config.ts`
+reads the `<script src>` of each `src/renderer/*.html` file and gives these modules to the plugin as
+its entries, so the result is the same on Windows, macOS and Linux. An HTML file in `src/renderer`
+is thus a page for knip: delete the file when you remove a page. Each ignore entry states its reason.
 Stylesheets go through a small compiler so that `@import "<package>"` counts as a use. The frozen
 Team API protocol files (`packages/contracts/src/team-protocol/v*.ts` and `*-v*.ts`) are exempt
 from the export checks: a released codec keeps its full API. When knip names an unused export,
