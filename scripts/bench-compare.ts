@@ -23,6 +23,7 @@ interface Options {
   runs: number;
   label: string;
   rebaseline: boolean;
+  summaryOnly: boolean;
   only: "both" | "baseline" | "codebot";
 }
 
@@ -49,6 +50,7 @@ function usage(): never {
       "  --label=<name>       label prefix for the CodeBot reports (default codebot)",
       "  --rebaseline         measure the baseline again even when its report is in <out>/baseline",
       "  --only=baseline|codebot",
+      "  --summary-only       measure nothing; write summary.md from the reports already in <out>",
       "Start it from a shell where the profile is redirected (cb_sandbox <name> in Git Bash).",
     ].join("\n") + "\n",
   );
@@ -76,6 +78,7 @@ function parseOptions(argv: string[]): Options {
     runs,
     label: values.get("label") ?? "codebot",
     rebaseline: values.has("rebaseline"),
+    summaryOnly: values.has("summary-only"),
     only,
   };
 }
@@ -173,7 +176,7 @@ function main(): void {
   const codebotDirectory = join(options.out, options.label);
   mkdirSync(options.out, { recursive: true });
   let failed = false;
-  for (const scenario of options.scenarios) {
+  for (const scenario of options.summaryOnly ? [] : options.scenarios) {
     const baselineLabel = `baseline-${scenario}`;
     const saved = join(baselineDirectory, `${baselineLabel}.json`);
     if (options.only !== "codebot" && (options.rebaseline || !existsSync(saved))) {

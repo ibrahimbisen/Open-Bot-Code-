@@ -68,11 +68,25 @@ function stopStarted(child: ChildProcess, logger: Logger): Promise<void> {
   });
 }
 
+const API_START_ATTEMPTS = 3;
+
+/** The first start after a build can stop on slow caches; a second start works. */
 export async function ensureBenchAuthApi(
   projectRoot: string,
   logDirectory: string,
   logger: Logger,
 ): Promise<BenchAuthApi> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await startBenchAuthApi(projectRoot, logDirectory, logger);
+    } catch (error) {
+      if (attempt >= API_START_ATTEMPTS) throw error;
+      logger.warn(`Auth API start ${attempt} failed (${error instanceof Error ? error.message : error}); trying again`);
+    }
+  }
+}
+
+async function startBenchAuthApi(projectRoot: string, logDirectory: string, logger: Logger): Promise<BenchAuthApi> {
   const running = worktreeApiPort(projectRoot);
   if (running !== null && (await isLive(running))) {
     logger.info(`using this worktree's Auth API on :${running}`);

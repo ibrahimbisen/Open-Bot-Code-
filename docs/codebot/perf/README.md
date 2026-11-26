@@ -18,7 +18,7 @@ bun run bench:compare -- --baseline=<root>/_baseline
 ```
 
 Options: `--scenarios=a,b`, `--runs=3`, `--label=codebot`, `--rebaseline` (measure the baseline again),
-`--only=baseline|codebot`, `--out=<dir>`. Without `--out` the reports go to `_measure` next to the
+`--only=baseline|codebot`, `--summary-only` (write `summary.md` from existing reports), `--out=<dir>`. Without `--out` the reports go to `_measure` next to the
 worktree folders, else `.codebot-build/bench-compare`. The command starts the Auth API itself, runs the
 scenarios one after the other (never in parallel), writes `summary.md` and exits with 1 when a scenario
 is more than 15% over the baseline. Default scenarios: s1-cold-empty, s2-idle-visible,
@@ -61,8 +61,20 @@ streams end. A 15% limit on the median of 3 runs is therefore the least that can
 scenario fails, run it again with `--runs=5` before changing code. CPU values are only comparable
 for the same host load (see `host.cpu`).
 
-## CodeBot results
+## CodeBot results (r0, before other packages merge)
 
-`_measure/codebot-r0/` holds the first CodeBot runs (before other packages merge) with `.compare.md`
-files against the baseline; `_measure/summary.md` is the verdict table. The final comparison runs after
-the merge with the command above.
+`_measure/codebot-r0/` holds the CodeBot runs with `.compare.md` files; `_measure/summary.md` is the verdict.
+Median `mem.total` in MB, 3 runs each. All scenarios pass the 15% limit (largest growth +6.1%).
+
+| Scenario | Mean base / CodeBot | Change | Settled base / CodeBot | Change |
+| --- | ---: | ---: | ---: | ---: |
+| s1-cold-empty | 1618 / 1666 | +3.0% | 749 / 745 | -0.5% |
+| s2-idle-visible | 1149 / 1208 | +5.1% | 906 / 920 | +1.5% |
+| s2-idle-visible-100 | 1412 / 1494 | +5.8% | 980 / 996 | +1.6% |
+| s3-scaled-small | 1852 / 1719 | -7.2% | 1809 / 1697 | -6.2% |
+| s14-agents-20 | 2127 / 2257 | +6.1% | 1926 / 1992 | +3.4% |
+| s15-stream-5 | 1876 / 1826 | -2.6% | 1814 / 1841 | +1.5% |
+| s14-agents-100 | 2353 / 2432 | +3.4% | 2121 / 2219 | +4.7% |
+
+s14-agents-100 baseline: peak 2726 MB, settled 2121 MB. The final comparison runs after the merge
+with the command above.
