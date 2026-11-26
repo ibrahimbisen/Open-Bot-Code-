@@ -16,5 +16,4 @@ export const messages = defineMessages("error.lock", {
   "error.lock.codexStrictNeedsSandbox":
     "Strict needs the Codex sandbox, which Codex cannot start on this computer. Choose Normal or Open in the project settings, or choose another provider.",
   "error.lock.commandAsk": "The OS sandbox is not available for this agent, so this command needs your approval.",
-  "error.lock.writeOutside": "{path} is outside the project folders. The folder lock blocked this write.",
 });

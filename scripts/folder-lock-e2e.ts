@@ -10,6 +10,7 @@ import { resolveClaudeCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { agentFolderLock, folderLockParam } from "../src/backend/lock/folder-lock";
 import { agentLockLevel } from "../src/backend/lock/lock-level";
+import { lockInstructions } from "../src/backend/lock/lock-prompt";
 import { setAgentProjectContextSource } from "../src/backend/projects/project-context";
 import { type AppServerNotification, getRecord, getString } from "../src/backend/protocol";
 import { type FakeStep, startEgressGuard, startFakeAnthropicApi } from "./provider-fakes/fake-anthropic-api";
@@ -138,7 +139,7 @@ function threadParams(extraParams: DynamicRecord = {}): DynamicRecord {
     model: MODEL,
     cwd: project,
     runtimeWorkspaceRoots: [project, shared, extra],
-    developerInstructions: "",
+    developerInstructions: lockInstructions(agent, [extra]).join(" "),
     persistSession: true,
     ...(level === "open" ? {} : { workspaceOnly: true }),
     ...folderLockParam(agent, shared),
@@ -180,6 +181,12 @@ async function lockedTurn(lockLevel: "normal" | "strict", client: ClaudeAgentCli
     { text: "done" },
   ];
   const outcome = await turn(client, thread, track, steps);
+  const prompt = api.systemPrompt(track) ?? "";
+  check(
+    `${lockLevel}: the prompt rule names the project folders`,
+    prompt.includes(`folder lock (${lockLevel})`) && prompt.includes(project) && prompt.includes(extra),
+    prompt.slice(0, 80),
+  );
   check(`${lockLevel}: turn completes`, outcome.status === "completed", JSON.stringify(outcome));
   const message = (name: string) => api.toolResult(track, name)?.text.slice(0, 160) ?? "no result";
   for (const name of [
