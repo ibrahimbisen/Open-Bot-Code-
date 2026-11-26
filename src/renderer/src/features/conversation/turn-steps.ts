@@ -3,6 +3,7 @@ import type { AgentMessage } from "@codebot/ui/data";
 import type { AgentStep, AgentStepsFacts } from "@codebot/ui/features/conversation/AgentSteps";
 import { silentAgentAnswer } from "@codebot/ui/features/conversation/new-message-tally";
 import type { TraceSpan } from "@codebot/ui/features/conversation/TraceWaterfall";
+import { type TurnActivityCounts, turnActivityCounts } from "@codebot/ui/features/conversation/turn-summary";
 import { createMemo } from "solid-js";
 import type { TurnStepLines } from "./turn-step-lines";
 
@@ -19,6 +20,7 @@ function sameSteps(left: readonly AgentStep[], right: readonly AgentStep[]): boo
       if (other?.id !== step.id || other.kind !== step.kind) return false;
       if (step.kind === "memory" && other.kind === "memory" && other.change.action !== step.change.action) return false;
       if (step.kind === "progress" && other.kind === "progress" && other.error !== step.error) return false;
+      if (step.kind === "progress" && other.kind === "progress" && other.detailId !== step.detailId) return false;
       return stepText(other) === stepText(step);
     })
   );
@@ -215,15 +217,35 @@ export function createTurnSteps(deps: {
       timed.push({ step: { id, kind: "thinking", text }, at });
     }
     const lines = deps.lines()?.[turnId] ?? [];
+    const tools = (sources().traces.get(turnId)?.steps ?? []).filter((step) => step.kind === "tool");
     for (const line of lines) {
-      timed.push({ step: { id: line.id, kind: "progress", text: line.text, error: line.error }, at: line.at });
+      const match = tools.findIndex((tool) => tool.text === line.text);
+      const tool = match === -1 ? undefined : tools.splice(match, 1)[0];
+      timed.push({
+        step: {
+          id: line.id,
+          kind: "progress",
+          text: line.text,
+          error: line.error,
+          ...(tool ? { detailId: tool.id, activity: tool.activity, targets: tool.targets } : {}),
+        },
+        at: line.at,
+      });
     }
     if (lines.length === 0) {
       for (const step of sources().traces.get(turnId)?.steps ?? []) {
         const at = Date.parse(step.startedAt);
         if (step.kind !== "tool" || !step.text?.trim() || !Number.isFinite(at)) continue;
         timed.push({
-          step: { id: `${turnId}:trace:${step.id}`, kind: "progress", text: step.text, error: step.error },
+          step: {
+            id: `${turnId}:trace:${step.id}`,
+            kind: "progress",
+            text: step.text,
+            error: step.error,
+            detailId: step.id,
+            activity: step.activity,
+            targets: step.targets,
+          },
           at,
         });
       }
@@ -296,6 +318,16 @@ export function createTurnSteps(deps: {
       const turnId = messageId === undefined ? undefined : turnOfAnswer().get(messageId);
       const steps = stepsOf(turnId);
       return steps.length > 0 ? steps : undefined;
+    },
+    turnIdAbove(messageId: string | undefined): string | undefined {
+      return messageId === undefined ? undefined : turnOfAnswer().get(messageId);
+    },
+    activityAbove(messageId: string | undefined): TurnActivityCounts | undefined {
+      const turnId = messageId === undefined ? undefined : turnOfAnswer().get(messageId);
+      const steps = turnId === undefined ? undefined : sources().traces.get(turnId)?.steps;
+      if (!steps) return undefined;
+      const counts = turnActivityCounts(steps.filter((step) => step.kind === "tool"));
+      return Object.keys(counts).length > 0 ? counts : undefined;
     },
     factsAbove(messageId: string | undefined): AgentStepsFacts | undefined {
       const turnId = messageId === undefined ? undefined : turnOfAnswer().get(messageId);

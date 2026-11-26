@@ -33,6 +33,7 @@ import { useMessageBackdropAction } from "./message-backdrop";
 import { narrationRows, naturalThreadRows } from "./narration-rows";
 import { useNearPaymentApproval } from "./near-payment-approval";
 import { useThreadSettingLinkCard } from "./SettingLinkChatCard";
+import { stepDetailsLoader } from "./step-details-loader";
 import { withQuestionContext } from "./stores/scroll-store";
 import { createTurnSteps } from "./turn-steps";
 import { createTurnStreamHold } from "./turn-stream-hold";
@@ -329,6 +330,15 @@ export function ConversationThread() {
             newerMessages={current().threads.newerMessages}
             stepsAbove={turnSteps.stepsAbove}
             factsAbove={turnSteps.factsAbove}
+            activityAbove={turnSteps.activityAbove}
+            loadDetailsAbove={(messageId) =>
+              stepDetailsLoader({
+                agentId: props.agent?.id,
+                turnId: turnSteps.turnIdAbove(messageId),
+                server: props.server,
+                hosted: props.runtime !== undefined,
+              })
+            }
             traceAbove={turnTrace}
             activeSteps={turnSteps.activeSteps()}
             backgroundWorkSince={threadBackgroundWorkSince(current().threads.open?.id)}
