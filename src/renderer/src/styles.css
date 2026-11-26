@@ -71,6 +71,7 @@
 @import "@codebot/ui/features/window/page-rail.css";
 @import "./features/window/window.css";
 @import "./features/files/library.css";
+@import "./features/explorer/explorer.css";
 @import "./features/crm/crm-page.css";
 @import "@codebot/ui/features/settings/opencode-key-dialog.css";
 @import "./features/settings/settings-mobile-connect.css";

@@ -13,6 +13,7 @@ import {
   Folder,
   Globe2,
   Group,
+  ListTree,
   LoaderCircle,
   Maximize2,
   MessageCircleQuestionMark,
@@ -75,6 +76,7 @@ function fileValue(key: string): string {
 const SIDE_PANEL_PANES = {
   browser: { label: "conversation.sidePanel.pane.browser", icon: () => <ComputerIcon /> },
   files: { label: "conversation.sidePanel.pane.files", icon: () => <Folder aria-hidden="true" /> },
+  explorer: { label: "explorer.pane.title", icon: () => <ListTree aria-hidden="true" /> },
   threads: { label: "conversation.sidePanel.pane.threads", icon: () => <MessagesSquare aria-hidden="true" /> },
   settings: { label: "conversation.sidePanel.pane.settings", icon: () => <Settings aria-hidden="true" /> },
   question: {

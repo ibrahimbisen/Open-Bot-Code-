@@ -30,7 +30,7 @@ function isView(value: string): value is ExplorerView {
   return value === "files" || value === "changes" || value === "git";
 }
 
-export function ExplorerPane(props: ExplorerPaneProps): JSX.Element {
+export default function ExplorerPane(props: ExplorerPaneProps): JSX.Element {
   const { t } = useText();
   const [view, setView] = createSignal<ExplorerView>("files");
   const [content, setContent] = createSignal<ExplorerContent | null>(null);
