@@ -1,6 +1,6 @@
 // @vitest-environment node
 
-import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { CHAT_VISUAL_PAGE_LIMIT } from "@codebot/contracts/chat-visual";
@@ -96,19 +96,37 @@ describe("workspace HTML preview pages", () => {
       root = undefined;
     });
 
+    async function linkFile(target: string, path: string): Promise<void> {
+      try {
+        await symlink(target, path, "file");
+      } catch (error) {
+        const withoutSymlinkPrivilege =
+          process.platform === "win32" && error instanceof Error && "code" in error && error.code === "EPERM";
+        if (!withoutSymlinkPrivilege) throw error;
+      }
+    }
+
+    async function linkFolder(target: string, path: string): Promise<void> {
+      await symlink(target, path, "junction");
+    }
+
     async function reviewFolder() {
       root = await realpath(await mkdtemp(join(tmpdir(), "codebot-preview-")));
       const folder = join(root, "review");
       await mkdir(join(folder, "images"), { recursive: true });
       await mkdir(join(folder, ".state"));
+      await mkdir(join(root, "outside"));
       await writeFile(join(folder, "images", "01 \u5ba1.png"), "png");
       await writeFile(join(folder, "style.css"), "img{width:1px}");
       await writeFile(join(folder, ".hidden.png"), "hidden");
       await writeFile(join(folder, ".state", "token.png"), "token");
       await writeFile(join(folder, "config.js"), "const key = 'secret';");
       await writeFile(join(root, "outside.png"), "outside");
-      await symlink(join(root, "outside.png"), join(folder, "escape.png"));
-      await symlink(join(folder, ".state", "token.png"), join(folder, "alias.png"));
+      await writeFile(join(root, "outside", "inside.png"), "outside");
+      await linkFile(join(root, "outside.png"), join(folder, "escape.png"));
+      await linkFile(join(folder, ".state", "token.png"), join(folder, "alias.png"));
+      await linkFolder(join(root, "outside"), join(folder, "escape"));
+      await linkFolder(join(folder, ".state"), join(folder, "alias"));
       return folder;
     }
 
@@ -128,7 +146,10 @@ describe("workspace HTML preview pages", () => {
 
     it("refuses paths outside the folder, hidden files, links that leave the folder and other file types", async () => {
       const pages = new FilePreviewPages();
-      const address = pages.add("text/html", html, pages.generation, await reviewFolder()) ?? "";
+      const folder = await reviewFolder();
+      expect(await readFile(join(folder, "escape", "inside.png"), "utf8")).toBe("outside");
+      expect(await readFile(join(folder, "alias", "token.png"), "utf8")).toBe("token");
+      const address = pages.add("text/html", html, pages.generation, folder) ?? "";
       for (const path of [
         "../outside.png",
         "%2e%2e/outside.png",
@@ -136,6 +157,8 @@ describe("workspace HTML preview pages", () => {
         "images%5c..%5c..%5coutside.png",
         "escape.png",
         "alias.png",
+        "escape/inside.png",
+        "alias/token.png",
         ".hidden.png",
         ".state/token.png",
         "config.js",
