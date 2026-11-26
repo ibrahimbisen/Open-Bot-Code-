@@ -18,6 +18,12 @@ Result values: `pass`, `fail` (with the exact reason), `not run yet`, `not run` 
 | `bun run knip:check` | fail, not a Windows problem | The 18 unused files, 9 unused exports and 1 unused type that only Windows reported are gone: see [knip corrections](#knip-corrections). One finding stays: `src/backend/projects/project-context.ts` is an unused file. Commit `ce1b138cc` on `main` added it and no module imports it yet, so each platform reports it. With that file moved away, knip exits with code 0 on Windows. The 7 configuration hints are not errors. |
 | `bun run check:agent-context` | pass | `instructions.claude` 16939 and `instructions.codex` 17144 bytes, the same as the baseline. See [Agent context correction](#agent-context-correction). |
 
+| `bun run typecheck:node`, `typecheck:renderer` | pass | |
+| `bun run check:ui` | pass | |
+| `bun run i18n:check` | pass | The info line about English key order is not an error. |
+| `bun run lint` (Biome) | pass | No errors; warnings only. The changed files also pass `biome check`. |
+| `bun run build`, `bun run verify:preload` | pass | |
+
 ## Vitest corrections
 
 Before W20, 9 tests in 4 files failed on Windows, also on unmodified upstream.
@@ -98,4 +104,19 @@ First run on Windows (2026-11-26). The final results come at the end of this wor
 
 ## Other offline suites
 
-Not run yet.
+Run on Windows on 2026-11-26, one at a time, in a sandbox profile. Logs: `.codebot-build/w20/s5-*.log`.
+
+| Suite | Result on Windows | Notes |
+| --- | --- | --- |
+| `test:api` | pass | 89 tests. |
+| `test:automation-cli` | pass | |
+| `test:team-api-routes` | pass | The scripts now close files before they remove their folder, and the folder browser keeps the root of a drive (`C:\`). |
+| `test:team-legacy-clients` | pass | |
+| `test:team-protocol-v10` | pass | |
+| `test:signal` | pass | 43 checks. |
+| `test:browser` | fail, environment | Two runs stopped at "Current display surface not available for capture" (no presented frame). A third run passed that step and stopped at "Recorder produced an empty video": the recorder captures the window of the page with `getDisplayMedia`, and in this session (no visible, unlocked desktop) the window gives no frames. Not changed: the cause is the display of this computer, not the code. Run it again on a computer with an active desktop. |
+| `test:workspace-only` (10.8) | not run | `scripts/filesystem-smoke.ts --workspace-only` now builds PowerShell commands on Windows and skips the providers that Workspace only cannot confine on this platform. It needs a provider that is signed in (codex or claude CLI). The sandbox profile has none, and the run must not spend model tokens. On this computer it stops with "ChatGPT is not downloaded". |
+| `test:pi-mcp-workspace-only` | not applicable | The script stops by design: Workspace only for Pi runs on macOS only. |
+| `test:claude:login-path`, `test:custom-agents:login-path` | not applicable | Windows has no login shell. The scripts say so and exit 1. |
+
+The converted Claude stand-in scripts (15) and the 13 provider fake suites pass; see their tables.
