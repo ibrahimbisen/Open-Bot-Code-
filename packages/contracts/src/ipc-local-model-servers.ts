@@ -373,3 +373,7 @@ export function localModelServerGpuSummary(gpus: readonly LocalModelServerGpu[] 
     memoryTotalBytes: memory.length > 0 ? memory.reduce((sum, gpu) => sum + (gpu.memoryTotalBytes ?? 0), 0) : null,
   };
 }
+
+export function isLocalModelServerMachine(status: Pick<LocalModelServerStatus, "settings" | "baseUrl">): boolean {
+  return status.settings.monitored !== undefined || isLocalNetworkAddress(status.baseUrl);
+}

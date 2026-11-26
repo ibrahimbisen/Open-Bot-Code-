@@ -100,6 +100,7 @@
 @import "@codebot/ui/features/browser/browser-profiles.css";
 @import "@codebot/ui/features/vault/vault.css";
 @import "@codebot/ui/features/agents/agent-template.css";
+@import "@codebot/ui/features/status-bar/status-bar.css";
 @import "@codebot/ui/features/agents/agent-delete-undo-toast.css";
 @import "@codebot/ui/features/github-star/github-star-toast.css";
 @import "@codebot/ui/features/social-follow/social-follow-toast.css";

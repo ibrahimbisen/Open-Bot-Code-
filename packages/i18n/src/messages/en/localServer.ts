@@ -1,3 +1,60 @@
 import { defineMessages } from "../../message";
 
-export const messages = defineMessages("localServer", {});
+export const messages = defineMessages("localServer", {
+  "localServer.settings.title": "Local servers",
+  "localServer.settings.description":
+    "Model machines on your network, such as a DGX Spark. Each machine is a separate entry.",
+  "localServer.settings.add": "Add machine",
+  "localServer.settings.empty":
+    "No local machine yet. Add the address of a model server to use it in a project or a chat.",
+  "localServer.settings.edit": "Edit {name}",
+  "localServer.settings.remove": "Remove {name}",
+  "localServer.settings.refresh": "Check now",
+  "localServer.settings.statusOff": "Status off",
+  "localServer.settings.models": { one: "{count} model", other: "{count} models" },
+  "localServer.scan.title": "Find a machine",
+  "localServer.scan.description":
+    "Enter a host name or an IP address. CodeBot looks for Ollama, LM Studio and vLLM on their usual ports.",
+  "localServer.scan.host": "Host or address",
+  "localServer.scan.placeholder": "spark-1.local",
+  "localServer.scan.action": "Scan",
+  "localServer.scan.scanning": "Scanning",
+  "localServer.scan.none": "No model server found on this host.",
+  "localServer.scan.needsKey": "Needs an API key",
+  "localServer.scan.add": "Add {name}",
+  "localServer.dialog.addTitle": "Add a local machine",
+  "localServer.dialog.editTitle": "Edit {name}",
+  "localServer.dialog.description":
+    "CodeBot reads the model list and the status from the OpenAI-compatible address of the machine.",
+  "localServer.field.name": "Name",
+  "localServer.field.namePlaceholder": "DGX Spark 1",
+  "localServer.field.baseUrl": "Server address",
+  "localServer.field.baseUrlPlaceholder": "http://192.168.1.41:8000/v1",
+  "localServer.field.apiKey": "API key (optional)",
+  "localServer.field.apiKeyKept": "Saved. Leave empty to keep it.",
+  "localServer.field.gpuUrl": "GPU status address (optional)",
+  "localServer.field.gpuUrlPlaceholder": "http://192.168.1.41:9101/gpu",
+  "localServer.field.gpuUrlHelp":
+    "A JSON, nvidia-smi exporter or DCGM exporter address that shows GPU load and memory.",
+  "localServer.field.gpuUsesKey": "Send the API key to the GPU status address",
+  "localServer.field.gpuUsesKeyHelp": "Only for an address with the same origin as the server address.",
+  "localServer.field.monitored": "Show the status of this machine",
+  "localServer.field.monitoredHelp": "CodeBot checks the machine now and then and shows it in the status bar.",
+  "localServer.error.nameRequired": "Enter a name.",
+  "localServer.error.gpuUrlInvalid": "Enter an http or https address with no user name and no password.",
+  "localServer.error.gpuKeyOtherOrigin": "The GPU status address must have the same origin as the server address.",
+  "localServer.test.action": "Test",
+  "localServer.test.testing": "Testing",
+  "localServer.test.online": "Online. {models} found.",
+  "localServer.test.onlineKind": "{kind} is online. {models} found.",
+  "localServer.test.gpuFound": "GPU status read: {count}",
+  "localServer.test.gpuCount": { one: "{count} GPU", other: "{count} GPUs" },
+  "localServer.test.offline": "Offline. {error}",
+  "localServer.test.gpuFailed": "GPU status failed: {error}",
+  "localServer.dialog.saving": "Saving",
+  "localServer.dialog.saveFailed": "CodeBot could not save this machine.",
+  "localServer.remove.title": "Remove {name}?",
+  "localServer.remove.description":
+    "CodeBot stops using this machine. Projects and chats that use its models need another model.",
+  "localServer.remove.failed": "CodeBot could not remove this machine.",
+});
