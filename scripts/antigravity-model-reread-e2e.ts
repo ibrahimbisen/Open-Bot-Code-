@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { Effect } from "effect";
@@ -8,6 +8,8 @@ import type { AgentClient } from "../src/backend/agent-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-model-reread-e2e");
 const BEFORE = ["gemini-4-carbon", "gemini-4-argon"];
@@ -33,7 +35,7 @@ interface Report {
 
 const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-model-reread-e2e-"));
 process.env.GEMINI_HOME = join(root, "gemini");
-const executable = join(root, "agy", "bin", "antigravity");
+const executable = standInPath(join(root, "agy", "bin", "antigravity"));
 const log = join(root, "agent.jsonl");
 const control = join(root, "control.json");
 const report: Report = { passed: false };
@@ -95,7 +97,7 @@ try {
   await stopClients(clients).catch(() => undefined);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   if (!report.passed) process.exitCode = 1;
 }

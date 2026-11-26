@@ -6,6 +6,8 @@ import type { AgentClient } from "../src/backend/agent-client";
 import type { AgentCliInfo } from "../src/backend/cli";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-model-set-e2e");
 const MEDIUM = "gpt-5.6-sol[context=272k,reasoning=medium,fast=false]";
@@ -38,7 +40,7 @@ try {
   const log = join(root, "sets.jsonl");
   const failFlag = join(root, "fail-next-set");
   const reorderFlag = join(root, "reorder-sets");
-  const executable = join(root, "cursor", "cursor-agent");
+  const executable = standInPath(join(root, "cursor", "cursor-agent"));
   await installFakeAgent(executable, "cursor-model-set", {
     FAKE_LOG: log,
     FAKE_FAIL_NEXT_SET: failFlag,
@@ -137,6 +139,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

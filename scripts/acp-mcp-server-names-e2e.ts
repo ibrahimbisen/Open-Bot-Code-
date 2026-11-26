@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { McpServerConfig } from "@codebot/contracts/ipc";
@@ -9,6 +9,8 @@ import type { McpServerDrop } from "../src/backend/mcp-provider-shapes";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, xorCipher } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-mcp-server-names-e2e");
 
@@ -45,7 +47,7 @@ function server(id: string, name: string): McpServerConfig {
 }
 
 try {
-  const executable = join(root, "bin", "fake-acp-agent");
+  const executable = standInPath(join(root, "bin", "fake-acp-agent"));
   const workspace = join(root, "workspace");
   const log = join(root, "requests.jsonl");
   await mkdir(workspace);
@@ -120,7 +122,7 @@ try {
   report.passed = true;
 } finally {
   await stopClients(clients);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

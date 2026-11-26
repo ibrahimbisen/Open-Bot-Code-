@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
@@ -16,6 +16,8 @@ import { type AgentClient, ProviderSessionBusyError } from "../src/backend/agent
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { AppServerNotification } from "../src/backend/protocol";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-turn-stall-e2e");
 const STALL_MS = 1_500;
@@ -89,7 +91,7 @@ async function open(
   turnStallMs: number | null = STALL_MS,
   argv: readonly string[] = ["acp"],
 ): Promise<AgentClient> {
-  const executable = join(root, provider, "bin", provider);
+  const executable = standInPath(join(root, provider, "bin", provider));
   await installFakeAgent(executable, "stall", {
     FAKE_LOG: log,
     FAKE_TOOL_MS: String(TOOL_MS),
@@ -112,7 +114,7 @@ async function open(
 }
 
 async function openStrict(name: string, env: Readonly<Record<string, string>>): Promise<AgentClient> {
-  const executable = join(root, name, "bin", "strict-agent");
+  const executable = standInPath(join(root, name, "bin", "strict-agent"));
   await installFakeAgent(executable, "strict-session", { FAKE_LOG: join(root, `${name}.jsonl`), ...env });
   const client = new AcpAgentClient({ executable, version: "", source: "system" }, 20_000, {
     provider: "acp",
@@ -579,7 +581,7 @@ try {
   throw error;
 } finally {
   await stopClients(clients);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

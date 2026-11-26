@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS, type AgentSummary, defaultProviderModel } from "@codebot/contracts/ipc";
@@ -19,19 +19,22 @@ import {
 } from "../src/backend/protocol";
 import { providerFailure, providerSync, requiredString } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-foreign-session-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-foreign-session-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const spawnLog = join(root, "claude-spawns.jsonl");
-const claudeExecutable = join(root, "claude");
-const opencodeExecutable = join(root, "opencode");
+const claudeExecutable = standInPath(join(root, "claude"));
+const opencodeExecutable = standInPath(join(root, "opencode"));
 const CLAUDE_MODEL = defaultProviderModel("claude");
 const OPENCODE_MODEL = "opencode/big-pickle";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CODEBOT_OPENCODE_PATH = opencodeExecutable;
 mkdirSync(home, { recursive: true });
@@ -43,8 +46,7 @@ const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
-const STAND_IN_CLAUDE = `#!${process.execPath}
-const fs = require("node:fs");
+const STAND_IN_CLAUDE = `const fs = require("node:fs");
 const { randomUUID } = require("node:crypto");
 const args = process.argv.slice(2);
 if (args.includes("--version")) {
@@ -295,8 +297,8 @@ async function settle<T>(label: string, read: () => T | null | undefined | false
   return waitFor(label, read, timeoutMs).catch(() => null);
 }
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
-await writeFile(opencodeExecutable, "#!/bin/sh\necho 1.14.0\n", { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
+await writeStandInScript(opencodeExecutable, 'process.stdout.write("1.14.0\\n");\n');
 const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
@@ -443,7 +445,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   for (const entry of checks) process.stdout.write(`${entry.passed ? "PASS" : "FAIL"} ${entry.name}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);
   process.stdout.write(`Report: ${join(OUT, "report.json")}\n`);

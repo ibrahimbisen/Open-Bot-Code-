@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
@@ -12,6 +12,8 @@ import type { ClaudeCliInfo } from "../src/backend/cli";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-stale-turn-stop-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-stale-stop-"));
@@ -19,11 +21,12 @@ const userData = join(root, "user-data");
 const home = join(root, "home");
 const claudeConfig = join(home, ".claude");
 const projectsDir = join(claudeConfig, "projects", "stand-in");
-const claudeExecutable = join(root, "claude");
+const claudeExecutable = standInPath(join(root, "claude"));
 const CLAUDE_MODEL = defaultProviderModel("claude");
 const QUEUED_MESSAGE = "Message that waits behind the stale turn.";
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = claudeConfig;
 mkdirSync(projectsDir, { recursive: true });
@@ -35,8 +38,7 @@ const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
-const STAND_IN_CLAUDE = `#!${process.execPath}
-const fs = require("node:fs");
+const STAND_IN_CLAUDE = `const fs = require("node:fs");
 const { join } = require("node:path");
 const { randomUUID } = require("node:crypto");
 const args = process.argv.slice(2);
@@ -215,7 +217,7 @@ const report: {
   error?: string;
 } = { passed: false };
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
 const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
@@ -276,7 +278,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);
 }

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
@@ -8,6 +8,8 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import { type AppServerNotification, getString } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-stream-closed-e2e");
 const QUOTED_ANSWER = "Cursor said: Error: RetriableError: WritableIterable is closed";
@@ -34,7 +36,7 @@ const clients: AgentClient[] = [];
 try {
   const workspace = join(root, "workspace");
   await mkdir(workspace);
-  const executable = join(root, "cursor", "cursor-agent");
+  const executable = standInPath(join(root, "cursor", "cursor-agent"));
   await installFakeAgent(executable, "cursor-stream-closed");
   const cli: AgentCliInfo = { executable, version: "2026.10.22-27dcf5f", source: "managed" };
   const client = requireProviderDriver("cursor").createClient(cli, 10_000, NO_PROVIDER_CREDENTIALS);
@@ -94,6 +96,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

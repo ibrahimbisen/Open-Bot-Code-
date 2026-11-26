@@ -9,6 +9,8 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-downgraded-session-e2e");
 
@@ -41,7 +43,7 @@ async function resumeFailure(client: AgentClient, threadId: string, cwd: string)
 }
 
 try {
-  const executable = join(root, "opencode", "bin", "opencode");
+  const executable = standInPath(join(root, "opencode", "bin", "opencode"));
   const workspace = join(root, "workspace");
   await mkdir(workspace);
   await installFakeAgent(executable, "opencode-downgraded-session");
@@ -87,6 +89,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

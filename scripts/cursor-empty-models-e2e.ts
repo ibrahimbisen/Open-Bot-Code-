@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
@@ -10,6 +10,8 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import { decodeModelListResponse } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-empty-models-e2e");
 
@@ -30,7 +32,7 @@ const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 
 async function startCursor(name: string, emptySessions: number): Promise<StartResult> {
-  const executable = join(root, name, "cursor-agent");
+  const executable = standInPath(join(root, name, "cursor-agent"));
   const sessionLog = join(root, name, "sessions.log");
   await installFakeAgent(executable, "cursor-empty-models", {
     FAKE_CURSOR_EMPTY_SESSIONS: String(emptySessions),
@@ -72,6 +74,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { CUSTOM_AGENT_DEFAULT_MODEL, isAgentModel } from "@codebot/contracts/ipc";
@@ -12,6 +12,8 @@ import { decodeModelListResponse } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, xorCipher } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-acp-agent-e2e");
 const SECRET = "sk-e2e-agent-secret";
@@ -64,7 +66,7 @@ async function reply(client: AgentClient, thread: string, model: string, text: s
 }
 
 try {
-  const executable = join(root, "bin", "fake-acp-agent");
+  const executable = standInPath(join(root, "bin", "fake-acp-agent"));
   const workspace = join(root, "workspace");
   const alphaLog = join(root, "alpha.jsonl");
   const betaLog = join(root, "beta.jsonl");
@@ -271,7 +273,7 @@ try {
   report.passed = true;
 } finally {
   await stopClients(clients);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

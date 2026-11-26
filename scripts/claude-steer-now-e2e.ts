@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -13,6 +13,8 @@ import type { ClaudeCliInfo } from "../src/backend/cli";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const HELD_TAKEOVER = process.argv.includes("--held=takeover");
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-steer-now-e2e");
@@ -24,7 +26,7 @@ const claudeConfig = join(home, ".claude");
 const projectsDir = join(claudeConfig, "projects", "stand-in");
 const holdMarker = join(root, "holding");
 const priorityLog = join(root, "priorities.jsonl");
-const claudeExecutable = join(root, "claude");
+const claudeExecutable = standInPath(join(root, "claude"));
 const CLAUDE_MODEL = defaultProviderModel("claude");
 const WORKING_TEXT = "Starting the long command.";
 const STEERED_ANSWER = "Answer of the steered message.";
@@ -50,6 +52,7 @@ function recordHeldTool(notification: AppServerNotification): void {
 }
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = claudeConfig;
 mkdirSync(projectsDir, { recursive: true });
@@ -61,8 +64,7 @@ const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
-const STAND_IN_CLAUDE = `#!${process.execPath}
-const fs = require("node:fs");
+const STAND_IN_CLAUDE = `const fs = require("node:fs");
 const { join } = require("node:path");
 const { randomUUID } = require("node:crypto");
 const args = process.argv.slice(2);
@@ -345,7 +347,7 @@ function startService() {
   return { store, agents, turns, shown, deliveries, idle, stop };
 }
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
 const service = startService();
 try {
   await runCauseEffect(service.agents.initialize());
@@ -436,7 +438,7 @@ try {
   await service.stop();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(REPORT, `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${REPORT}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);
 }

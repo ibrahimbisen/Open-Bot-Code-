@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -9,6 +9,8 @@ import { decodeModelListResponse } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, stopClients, xorCipher } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-acp-slow-start-e2e");
 const READ_LIMIT_MS = 1_000;
@@ -55,7 +57,7 @@ async function sessionOpens(log: string): Promise<number> {
 }
 
 try {
-  const executable = join(root, "bin", "fake-acp-agent");
+  const executable = standInPath(join(root, "bin", "fake-acp-agent"));
   const log = join(root, "slow.jsonl");
   await installFakeAgent(executable, "custom-acp");
   const store = new CustomAgentStore({ path: join(root, "custom-agents.json"), cipher: xorCipher });
@@ -130,7 +132,7 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

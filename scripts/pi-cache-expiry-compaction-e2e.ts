@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { PromptCacheTtl } from "@codebot/contracts/ipc";
@@ -7,6 +7,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AppServerNotification, getRecord, getString } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-cache-expiry-compaction-e2e");
 const HOUR_MS = 60 * 60_000;
@@ -52,7 +54,7 @@ function waitForUsage(client: AgentClient, thread: string): Promise<number> {
 async function runCase(ttl: PromptCacheTtl, compact: boolean): Promise<void> {
   const dir = join(root, ttl);
   const log = join(dir, "agent.jsonl");
-  const executable = join(dir, "bin", "pi");
+  const executable = standInPath(join(dir, "bin", "pi"));
   await installFakeAgent(executable, "pi-cache", { FAKE_LOG: log, FAKE_DIR: dir });
   const client = requireProviderDriver("deepseek").createClient(
     { executable, version: "1.6.0", source: "managed" },
@@ -97,7 +99,7 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   if (!report.passed) process.exitCode = 1;
 }

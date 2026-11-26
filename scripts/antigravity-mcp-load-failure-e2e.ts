@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { McpServerConfig } from "@codebot/contracts/ipc";
@@ -14,6 +14,8 @@ import type { McpServerDrop } from "../src/backend/mcp-provider-shapes";
 import { getRecord, getString } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-mcp-load-failure-e2e");
 
@@ -70,7 +72,7 @@ function httpServer(id: string, name: string, url: string): McpServerConfig {
 }
 
 try {
-  const executable = join(root, "agy", "bin", "antigravity");
+  const executable = standInPath(join(root, "agy", "bin", "antigravity"));
   const workspace = join(root, "workspace");
   const release = join(root, "release");
   const log = join(root, "requests.jsonl");
@@ -160,7 +162,7 @@ try {
     "The failed prompt is sent once more, and only once.",
   );
 
-  const stdoutFirst = join(root, "agy-stdout-first", "bin", "antigravity");
+  const stdoutFirst = standInPath(join(root, "agy-stdout-first", "bin", "antigravity"));
   await installFakeAgent(stdoutFirst, "antigravity-mcp-load-failure", {
     FAKE_LOG: join(root, "stdout-first.jsonl"),
     FAKE_STDOUT_FIRST: "1",
@@ -190,7 +192,7 @@ try {
   await mkdir(join(ownWorkspace, ".agents"), { recursive: true });
   await writeFile(join(ownWorkspace, ".agents", "mcp_config.json"), JSON.stringify({ mcpServers: { notes: {} } }));
   const ownLog = join(root, "own.jsonl");
-  const ownExecutable = join(root, "agy-own", "bin", "antigravity");
+  const ownExecutable = standInPath(join(root, "agy-own", "bin", "antigravity"));
   await installFakeAgent(ownExecutable, "antigravity-mcp-load-failure", { FAKE_LOG: ownLog, FAKE_RELEASE: release });
   const own = requireProviderDriver("antigravity").createClient(
     { executable: ownExecutable, version: "1.5.4", source: "managed" },
@@ -218,7 +220,7 @@ try {
   }
   assert.ok(!ownNames?.includes("docs") && !ownNames?.includes("notes"), "No server has a name from the CLI's files.");
   const refusedLog = join(root, "refused.jsonl");
-  const refusedExecutable = join(root, "agy-refused", "bin", "antigravity");
+  const refusedExecutable = standInPath(join(root, "agy-refused", "bin", "antigravity"));
   await installFakeAgent(refusedExecutable, "antigravity-refused-tool", { FAKE_LOG: refusedLog });
   const refusedDrops: McpServerDrop[] = [];
   const refusedClient = requireProviderDriver("antigravity").createClient(
@@ -333,7 +335,7 @@ try {
   );
 
   const googleLog = join(root, "google.jsonl");
-  const googleExecutable = join(root, "agy-google", "bin", "antigravity");
+  const googleExecutable = standInPath(join(root, "agy-google", "bin", "antigravity"));
   await installFakeAgent(googleExecutable, "antigravity-refused-tool", { FAKE_LOG: googleLog });
   const googleDrops: McpServerDrop[] = [];
   const googleClient = requireProviderDriver("antigravity").createClient(
@@ -502,7 +504,7 @@ try {
 
   const listCauses = new Map<string, string | null>();
   const listAgent = async (name: string, env: Record<string, string>) => {
-    const executable = join(root, `agy-list-${name}`, "bin", "antigravity");
+    const executable = standInPath(join(root, `agy-list-${name}`, "bin", "antigravity"));
     const workspace = join(root, `list-${name}`);
     await mkdir(workspace, { recursive: true });
     await installFakeAgent(executable, "antigravity-mcp-list", { FAKE_LOG: join(root, `list-${name}.jsonl`), ...env });
@@ -576,7 +578,7 @@ try {
   process.exitCode = 1;
 } finally {
   await stopClients(clients);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);

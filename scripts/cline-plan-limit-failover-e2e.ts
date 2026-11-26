@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
@@ -8,12 +8,14 @@ import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { CLINE_RECOMMENDED_MODELS_URL } from "../src/backend/cline-free-models";
 import { installFakeAgent } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/cline-plan-limit-failover-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-cline-plan-limit-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
-const executable = join(root, "cline", "bin", "cline");
+const executable = standInPath(join(root, "cline", "bin", "cline"));
 const logPath = join(root, "cline.jsonl");
 const SPENT_FAILOVER = "cline-pass/glm-5.3";
 const SPENT_WAIT = "cline-pass/kimi-k3";
@@ -239,7 +241,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);
 }

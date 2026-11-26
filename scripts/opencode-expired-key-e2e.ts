@@ -10,6 +10,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { CustomProviderConfig } from "../src/backend/opencode-config";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-expired-key-e2e");
 
@@ -62,7 +64,7 @@ function open(cli: AgentCliInfo): AgentClient {
 }
 
 try {
-  const executable = join(root, "opencode", "bin", "opencode");
+  const executable = standInPath(join(root, "opencode", "bin", "opencode"));
   const workspace = join(root, "workspace");
   await mkdir(workspace);
   await installFakeAgent(executable, "opencode-expired-key");
@@ -264,6 +266,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

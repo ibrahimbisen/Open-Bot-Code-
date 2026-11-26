@@ -51,9 +51,50 @@ from Linux, so the check measured 512 bytes more on Windows, and it would measur
 product text does not change. The fixture of `scripts/agent-context-budget.ts` sets it to `linux`. The
 baseline did not change. The text that only Windows or macOS gets is not in the counts, as before in CI.
 
+## Stand-in programs
+
+A provider E2E script gives CodeBot a stand-in program in place of a provider CLI. Before W20, each
+stand-in was a POSIX script with a `#!` line, which Windows cannot start. Two modules now hold the
+cross-platform parts:
+
+- `scripts/stand-in-program.ts`
+  - `standInPath(path)` gives the path that the script gives to CodeBot: `path` on macOS and Linux,
+    `path.cmd` on Windows.
+  - `writeStandInScript(path, source)` writes a CommonJS program. POSIX: one file with `#!<runtime>`
+    and mode 755, as before. Windows: `<name>.stand-in.cjs` and a `.cmd` wrapper that starts it with
+    the same runtime (Bun).
+  - `writeStandInLauncher(path, module, env)` starts a module file with environment values.
+    POSIX: the same `#!/bin/sh` file as before. Windows: a `.cmd` wrapper, and the values in
+    `<name>.stand-in-env.cjs`, which the runtime loads with `-r`. Thus a value can have quotes, `%`
+    or `&`. `scripts/provider-fakes/host.ts` (`installFakeAgent`) uses it.
+  - The wrapper has `@chcp 65001>nul` when a path in it is not ASCII, so a user name such as
+    `Jörg` works.
+- `scripts/test-folder.ts`
+  - `removeTestFolder(path)` removes the temporary folder of a script. On Windows a file that is
+    open cannot be removed, and two things keep files open after a test: Bun 1.4.2 keeps the files
+    of a closed `node:sqlite` database open while a prepared statement object is alive, and the
+    stand-in behind a `.cmd` wrapper ends a moment after `taskkill`. When the folder is in use, a
+    small detached process removes it after the script exits. POSIX: one `rm` call, as before.
+
 ## Provider fakes E2E
 
-Not run yet.
+First run on Windows (2026-11-26). The final results come at the end of this work package.
+
+| Suite | Result on Windows | Notes |
+| --- | --- | --- |
+| `test:custom-agents` | pass | |
+| `test:custom-agents:login-path` | not applicable | The suite checks that CodeBot starts an agent with the `PATH` of the login shell. Windows has no login shell. |
+| `test:acp-directories` | pass | |
+| `test:acp-flavors` | pass | |
+| `test:acp-turn-stall` | pass | |
+| `test:agent-database-host-start` | pass | The script now waits for the host processes to end before it removes its folder. |
+| `test:acp-mcp-names` | pass | |
+| `test:provider-conformance` | pass | |
+| `test:provider-transcript-replay` | pass | |
+| `test:opencode-expired-key` | pass | |
+| `test:opencode-downgraded-session` | pass | |
+| `test:cline-free-models` | pass | |
+| `test:cline-plan-limit-failover` | pass | |
 
 ## Other offline suites
 
