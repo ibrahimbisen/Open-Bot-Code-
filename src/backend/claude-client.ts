@@ -96,7 +96,6 @@ import {
   claudeHomeSkillPlugin,
   claudeWorkspaceHooks,
   claudeWorkspaceSandbox,
-  claudeWorkspaceSkillPlugin,
   claudeWriteInExcluded,
   claudeWriteOutsideRoots,
 } from "./claude-workspace-sandbox";
@@ -163,6 +162,31 @@ import {
 } from "./provider-client-effects";
 import type { ReadProviderHistory } from "./provider-history";
 import { endProcessGroupOnExit, PROVIDER_PROCESS_GROUP } from "./provider-process-group";
+import {
+  CLAUDE_PROJECT_PLUGIN,
+  CLAUDE_USER_PLUGIN,
+  claudeCommandPlugin,
+} from "./slash-commands/claude-command-plugins";
+import {
+  CLAUDE_COMMAND_PROBE_TIMEOUT_MS,
+  type ClaudeCommandProbeResult,
+  claudeCommandProbeFolder,
+  claudeCommandProbeOptions,
+  claudeCommandProbeResult,
+  claudeCustomListing,
+} from "./slash-commands/claude-command-probe";
+import { type ClaudeSessionAliases, claudeSessionAliases } from "./slash-commands/claude-session-aliases";
+import {
+  type ClaudeHostPlugins,
+  type ClaudeSessionCommands,
+  claudeSessionReport,
+  foldClaudeCommandList,
+  foldClaudeInitialization,
+  foldClaudeInitMessage,
+  newClaudeSessionCommands,
+} from "./slash-commands/claude-session-commands";
+import { CLAUDE_SESSIONS_LIST_METHOD, listClaudeSessions } from "./slash-commands/claude-sessions";
+import { SLASH_COMMANDS_CUSTOM_METHOD, SLASH_COMMANDS_PROBE_METHOD } from "./slash-commands/slash-command-rows";
 
 const execFileAsync = promisify(execFile);
 const CLAUDE_EFFORTS = ["low", "medium", "high", "xhigh", "max"] as const;
@@ -442,6 +466,8 @@ interface ThreadRuntime {
   mcpConfigFile: string | null;
   settingsFile: string | null;
   stderr: ClaudeStderrTail;
+  slashCommands: ClaudeSessionCommands;
+  hostPlugins: ClaudeHostPlugins;
 }
 
 const CLAUDE_FAST_SERVICE_TIER = "fast";
@@ -588,6 +614,8 @@ interface ClaudeStreamMessage {
   no_response?: unknown;
   fast_mode_disabled_reason?: unknown;
   mcp_servers?: unknown;
+  commands?: unknown;
+  new_conversation_id?: unknown;
 }
 
 interface ClaudeQuery extends AsyncIterable<ClaudeStreamMessage> {
@@ -595,6 +623,7 @@ interface ClaudeQuery extends AsyncIterable<ClaudeStreamMessage> {
   supportedModels(): Promise<ModelInfo[]>;
   getContextUsage?(options: { detail: "summary" }): Promise<unknown>;
   initializationResult?(): Promise<unknown>;
+  supportedCommands?(): Promise<unknown>;
   mcpServerStatus?(): Promise<unknown>;
   setModel(model?: string): Promise<void>;
   setPermissionMode(mode: PermissionMode): Promise<void>;
@@ -680,6 +709,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
   readonly contextCompaction = CLAUDE_CONTEXT_COMPACTION;
   readonly compactsOnDemand = true;
   readonly #cacheTtls = new Map<string, number>();
+  readonly #sessionAliases: ClaudeSessionAliases;
   readonly turnContext = true;
   readonly userInputNote = true;
   readonly imageInput = (): boolean => true;
@@ -751,6 +781,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     this.#mcpToolRuntimes = mcpToolRuntimes;
     this.#mcpEndpoint = mcpEndpoint;
     this.#stateDirectory = stateDirectory;
+    this.#sessionAliases = claudeSessionAliases(stateDirectory);
     this.#agentEnvironment = agentEnvironment;
     this.#fallbackApiKey = fallbackApiKey;
     this.#userSetup = userSetup;
@@ -1122,6 +1153,30 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       }
       case "plugin/list":
         return yield* providerSync(() => decoder({ marketplaces: [] }));
+      case SLASH_COMMANDS_PROBE_METHOD: {
+        const response = yield* this.#probeCommandsEffect();
+        return yield* providerSync(() => decoder(response));
+      }
+      case SLASH_COMMANDS_CUSTOM_METHOD: {
+        const cwd = yield* providerSync(() => requiredString(params, "cwd"));
+        const response = yield* claudeCustomListing({
+          cwd,
+          configDirectory: this.#configDirectory(),
+          workspaceOnly: isRecord(params) && params.workspaceOnly === true,
+          userSetup: this.#userSetup(),
+          plugins: this.#stateDirectory !== undefined,
+        }).pipe(toProviderClientOperationError);
+        return yield* providerSync(() => decoder(response));
+      }
+      case CLAUDE_SESSIONS_LIST_METHOD: {
+        const cwd = yield* providerSync(() => requiredString(params, "cwd"));
+        const response = yield* listClaudeSessions({
+          cwd,
+          configDirectory: this.#configDirectory(),
+          limit: isRecord(params) && typeof params.limit === "number" ? params.limit : 50,
+        });
+        return yield* providerSync(() => decoder(response));
+      }
       case "thread/start": {
         const threadId = randomUUID();
         yield* this.#startThread(threadId, readThreadConfig(params), false);
@@ -1316,6 +1371,67 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       ),
     );
   }, Effect.scoped);
+
+  readonly #probeCommandsEffect = Effect.fn("ClaudeAgentClient.probeCommands")(function* (
+    this: ClaudeAgentClient,
+  ): Effect.fn.Return<ClaudeCommandProbeResult, ProviderClientOperationError, Scope.Scope> {
+    const folder = yield* claudeCommandProbeFolder;
+    const options = claudeCommandProbeOptions(yield* this.#probeOptionsEffect(), folder);
+    const input = new AsyncMessageQueue();
+    const claudeQuery = yield* providerSync(() => this.#createQuery({ prompt: input, options }));
+    return yield* Effect.gen(function* () {
+      const read = providerCall(async () => {
+        const initialization = await claudeQuery.initializationResult?.();
+        const commands = initialization === undefined ? await claudeQuery.supportedCommands?.() : undefined;
+        return claudeCommandProbeResult(initialization, commands);
+      });
+      return yield* read.pipe(
+        Effect.timeoutOrElse({
+          duration: CLAUDE_COMMAND_PROBE_TIMEOUT_MS,
+          orElse: () => Effect.fail(providerFailure(new RequestTimeoutError("Claude", SLASH_COMMANDS_PROBE_METHOD))),
+        }),
+      );
+    }).pipe(
+      Effect.ensuring(
+        Effect.sync(() => {
+          input.close();
+          claudeQuery.close();
+        }),
+      ),
+    );
+  }, Effect.scoped);
+
+  #publishSlashCommands(runtime: ThreadRuntime): void {
+    const report = claudeSessionReport(runtime.slashCommands, runtime.id, runtime.hostPlugins);
+    if (report) this.emit("notification", report);
+  }
+
+  readonly #readSessionCommands = Effect.fn("ClaudeAgentClient.readSessionCommands")(function* (
+    this: ClaudeAgentClient,
+    runtime: ThreadRuntime,
+  ) {
+    const initialization = runtime.query.initializationResult?.();
+    if (!initialization) return;
+    const response = yield* providerCall(() => initialization).pipe(
+      Effect.timeout(CLAUDE_COMMAND_PROBE_TIMEOUT_MS),
+      Effect.option,
+    );
+    if (Option.isNone(response)) return;
+    foldClaudeInitialization(runtime.slashCommands, response.value);
+    this.#publishSlashCommands(runtime);
+  });
+
+  readonly #refetchSessionCommands = Effect.fn("ClaudeAgentClient.refetchSessionCommands")(function* (
+    this: ClaudeAgentClient,
+    runtime: ThreadRuntime,
+  ) {
+    const supported = runtime.query.supportedCommands?.();
+    if (!supported) return;
+    const commands = yield* providerCall(() => supported).pipe(Effect.timeout("10 seconds"), Effect.option);
+    if (Option.isNone(commands)) return;
+    foldClaudeCommandList(runtime.slashCommands, commands.value);
+    this.#publishSlashCommands(runtime);
+  });
 
   readonly #readUsageEffect = Effect.fn("ClaudeAgentClient.readUsage")(function* (
     this: ClaudeAgentClient,
@@ -1552,12 +1668,13 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     const handoff = usable ? claudeMcpServers(usable, CLAUDE_MCP_USER_AGENT) : null;
     const stateDirectory = this.#stateDirectory;
     const userSetup = !config.profileGeneration && this.#userSetup();
+    const configDirectory = this.#configDirectory();
     const skillPlugin =
-      config.workspaceOnly && stateDirectory
-        ? yield* claudeWorkspaceSkillPlugin(stateDirectory, config.cwd).pipe(
+      config.workspaceOnly && stateDirectory && !config.profileGeneration
+        ? yield* claudeCommandPlugin(stateDirectory, CLAUDE_PROJECT_PLUGIN, join(config.cwd, ".claude")).pipe(
             Effect.catch((error) =>
               Effect.sync(() => {
-                queryLogger.warn("Claude starts without the skills in the workspace .claude/skills.", {
+                queryLogger.warn("Claude starts without the commands and skills in the workspace .claude folder.", {
                   error: error.cause,
                 });
                 return null;
@@ -1565,7 +1682,20 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
             ),
           )
         : null;
-    const configDirectory = this.#configDirectory();
+    const userCommandPlugin =
+      !userSetup && stateDirectory && !config.profileGeneration
+        ? yield* claudeCommandPlugin(stateDirectory, CLAUDE_USER_PLUGIN, configDirectory).pipe(
+            Effect.catch((error) =>
+              Effect.sync(() => {
+                queryLogger.warn("Claude starts without the commands and skills in the user .claude folder.", {
+                  error: error.cause,
+                });
+                return null;
+              }),
+            ),
+          )
+        : null;
+    const hostPlugins: ClaudeHostPlugins = { project: skillPlugin !== null, user: userCommandPlugin !== null };
     yield* clearClaudeNeedsAuthMarks(
       configDirectory,
       usable?.flatMap((server) => (server.url ? [server.config.name] : [])) ?? [],
@@ -1585,7 +1715,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
             ),
           )
         : null;
-    const plugins = [skillPlugin, homeSkillPlugin].filter((plugin) => plugin !== null);
+    const plugins = [skillPlugin, userCommandPlugin, homeSkillPlugin].filter((plugin) => plugin !== null);
     const launchPath = yield* cliLaunchPath(this.#cli.executable, this.#cli.source);
     const codeBotServers = handoff ? this.#createCodeBotServers(threadId, config.channelTools) : {};
     const nodeOptions = this.#agentEnvironment?.().NODE_OPTIONS;
@@ -1680,7 +1810,9 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
           ...this.#claudeProcessSpawner(stderr),
           ...(config.model ? { model: this.#sdkModel(config.model) } : {}),
           ...(appliedEffort ? { effort: appliedEffort } : {}),
-          ...(resume ? { resume: threadId } : { sessionId: threadId, title: CLAUDE_SESSION_TITLE }),
+          ...(resume
+            ? { resume: this.#sessionAliases.sessionOf(threadId) }
+            : { sessionId: threadId, title: CLAUDE_SESSION_TITLE }),
           systemPrompt: config.profileGeneration
             ? config.developerInstructions
             : { type: "preset", preset: "claude_code", append: config.developerInstructions },
@@ -1762,8 +1894,11 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       mcpConfigFile,
       settingsFile,
       stderr,
+      slashCommands: newClaudeSessionCommands(),
+      hostPlugins,
     };
     runtime.consume = yield* Effect.forkIn(this.#consume(runtime), this.#scope, { startImmediately: true });
+    if (!config.profileGeneration) yield* Effect.forkIn(this.#readSessionCommands(runtime), this.#scope);
     const initialization = mcpConfigFile ? claudeQuery.initializationResult?.() : undefined;
     if (initialization)
       yield* Effect.forkIn(
@@ -2144,7 +2279,21 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       const cacheTtl = message.parent_tool_use_id ? null : claudeCacheWriteTtlMs(message.message);
       if (cacheTtl !== null) this.#cacheTtls.set(runtime.id, cacheTtl);
     }
-    if (message.type === "system" && message.subtype === "init") yield* this.#reportFailedMcpServers(runtime, message);
+    if (message.type === "system" && message.subtype === "init") {
+      yield* this.#reportFailedMcpServers(runtime, message);
+      const folded = foldClaudeInitMessage(runtime.slashCommands, message);
+      this.#publishSlashCommands(runtime);
+      if (folded.refetch) yield* Effect.forkIn(this.#refetchSessionCommands(runtime), this.#scope);
+    }
+    if (message.type === "system" && message.subtype === "commands_changed") {
+      foldClaudeCommandList(runtime.slashCommands, message.commands);
+      this.#publishSlashCommands(runtime);
+      return;
+    }
+    if (message.type === "conversation_reset" && isString(message.new_conversation_id)) {
+      yield* this.#sessionAliases.set(runtime.id, message.new_conversation_id);
+      return;
+    }
     if (message.type === "system" && message.subtype === "status") {
       const status =
         message.status === "compacting"

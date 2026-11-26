@@ -1044,7 +1044,7 @@ function parseRecord(line: string): ParsedRecord | null {
   }
 }
 
-function sanitizeProjectPath(path: string): string {
+export function sanitizeProjectPath(path: string): string {
   return path.replace(/[^a-zA-Z0-9]/g, "-");
 }
 
