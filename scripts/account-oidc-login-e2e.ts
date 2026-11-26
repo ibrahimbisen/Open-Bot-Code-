@@ -600,6 +600,7 @@ async function restartKeepsSessions(stack: Stack, sessionToken: string): Promise
   const service = await startAccountService({
     port,
     dataDir: stack.service.dataDir,
+    keys: stack.service.keys,
     provider: mode === "oidc" ? { issuerUrl: mock.origin } : { nextcloudUrl: mock.origin },
     clientId: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
