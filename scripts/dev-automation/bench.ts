@@ -426,7 +426,9 @@ function selectScenarios(selector: string): Scenario[] {
   if (selector === "all") return SCENARIOS;
   const wanted = selector.split(",").map((part) => part.trim());
   const selected = SCENARIOS.filter((scenario) =>
-    wanted.some((name) => scenario.id === name || scenario.id.startsWith(`${name}-`)),
+    wanted.some((name) =>
+      SCENARIOS.some((one) => one.id === name) ? scenario.id === name : scenario.id.startsWith(`${name}-`),
+    ),
   );
   if (selected.length === 0) {
     throw new Error(`No scenario matches "${selector}". Known: ${SCENARIOS.map((one) => one.id).join(", ")}.`);
