@@ -122,7 +122,9 @@ export function FilePanel(props: FilePanelProps): JSX.Element {
   });
 
   const dirty = createMemo(() => state.file?.text != null && state.draft !== state.saved);
-  createEffect(dirty, (value) => props.onDirtyChange?.(value));
+  createEffect(dirty, (value) => {
+    props.onDirtyChange?.(value);
+  });
   const editable = () => state.file?.text != null && !state.file.text.readOnly;
   const previewable = () => kind() !== null && state.file?.text != null;
 

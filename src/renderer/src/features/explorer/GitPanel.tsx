@@ -417,7 +417,7 @@ export function GitPanel(props: GitPanelProps): JSX.Element {
                               <span class="explorer-git-dot" aria-hidden="true">
                                 ·
                               </span>
-                              {format.date(commit().authoredAt * 1000, { dateStyle: "medium" })}
+                              {format.date(commit().authoredAt, { dateStyle: "medium" })}
                             </span>
                             <Show when={commit().refs.length > 0}>
                               <span class="explorer-git-refs">

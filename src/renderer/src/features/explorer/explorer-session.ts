@@ -9,7 +9,7 @@ import {
   type ExplorerSeparator,
   explorerScopeKey,
 } from "@codebot/contracts/ipc";
-import { createStore } from "solid-js";
+import { createStore, flush } from "solid-js";
 import { type ExplorerPort, explorerPort } from "./explorer-port";
 
 const EXPANDED_STORAGE_PREFIX = "codebot:explorer-expanded:";
@@ -208,6 +208,7 @@ function createSession(serverId: string, scope: ExplorerScope, port: ExplorerPor
           }
         }
       });
+      flush();
       await Promise.all(expandedPaths().map((path) => loadDirectory(path, true)));
       syncWatch();
       refreshGit();
