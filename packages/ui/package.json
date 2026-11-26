@@ -62,6 +62,7 @@
     "./components/SwapLabel": "./src/components/SwapLabel.tsx",
     "./components/TypingDots": "./src/components/TypingDots.tsx",
     "./components/createBoundedDragPreview": "./src/components/createBoundedDragPreview.ts",
+    "./components/createListVirtualizer": "./src/components/createListVirtualizer.ts",
     "./components/createScrollFades": "./src/components/createScrollFades.ts",
     "./components/ScrollEdges": "./src/components/ScrollEdges.tsx",
     "./components/createVerticalDragPreview": "./src/components/createVerticalDragPreview.ts",
