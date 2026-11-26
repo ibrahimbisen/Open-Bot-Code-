@@ -1,19 +1,19 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { readTeamHostCompatibility, TEAM_WEB_CLIENT_PROTOCOL } from "@openbot/contracts/team-protocol/current";
-import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { readTeamHostCompatibility, TEAM_WEB_CLIENT_PROTOCOL } from "@codebot/contracts/team-protocol/current";
+import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
 import {
   decodeVoiceTranscription,
   VOICE_TRANSCRIPTION_ROUTES,
-} from "@openbot/contracts/team-protocol/voice-transcription-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { bytesToBase64 } from "@openbot/team-client/base64";
-import { verifyEd25519Base64Url } from "@openbot/team-client/ed25519";
+} from "@codebot/contracts/team-protocol/voice-transcription-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { bytesToBase64 } from "@codebot/team-client/base64";
+import { verifyEd25519Base64Url } from "@codebot/team-client/ed25519";
 import {
   RemoteDirectoryError,
   RemoteTeamDirectoryClient,
   type RemoteTeamHost,
-} from "@openbot/team-client/remote-directory";
+} from "@codebot/team-client/remote-directory";
 import {
   createRemoteTeamPeer,
   type RemoteFileUpload,
@@ -22,9 +22,9 @@ import {
   type RemoteTeamConnectionUpdate,
   type RemoteTeamEvent,
   type RemoteTeamPeerActions,
-} from "@openbot/team-client/remote-peer";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/remote-peer";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 import { ACCOUNT_API_URL } from "./account";
 import type { HostFile } from "./attachment-media";
 import { type ExtensionSession, hostKeys, readHostProtocols, saveHostProtocol } from "./extension-storage";

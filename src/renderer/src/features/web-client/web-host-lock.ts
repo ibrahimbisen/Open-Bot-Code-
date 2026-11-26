@@ -1,5 +1,5 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { currentText } from "@openbot/ui/text";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { currentText } from "@codebot/ui/text";
 
 export class WebHostOtherTabError extends Error {
   constructor() {
@@ -20,7 +20,7 @@ export async function acquireWebHostLock(
   const lockOptions: LockOptions = options.wait ? { signal: options.wait } : { ifAvailable: true };
   return new Promise((resolve, reject) => {
     void navigator.locks
-      .request(`openbot.web.host:${accountId}:${hostId}`, lockOptions, async (lock) => {
+      .request(`codebot.web.host:${accountId}:${hostId}`, lockOptions, async (lock) => {
         if (!lock) {
           reject(new WebHostOtherTabError());
           return;
@@ -66,7 +66,7 @@ export function decodeWebHostTabMessage(value: unknown): WebHostTabMessage | nul
 }
 
 export function openWebHostChannel(accountId: string): BroadcastChannel | null {
-  return typeof BroadcastChannel === "function" ? new BroadcastChannel(`openbot.web.hosts:${accountId}`) : null;
+  return typeof BroadcastChannel === "function" ? new BroadcastChannel(`codebot.web.hosts:${accountId}`) : null;
 }
 
 export async function acquireOpenedWebHostLock(

@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   CustomProviderHarness,
   CustomProviderHeader,
@@ -7,7 +7,7 @@ import type {
   DeleteCustomProviderInput,
   SaveCustomProviderInput,
   UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   CUSTOM_PROVIDER_LIMITS,
   composedCustomModelId,
@@ -20,9 +20,9 @@ import {
   isCustomProviderMaxOutput,
   isCustomProviderModelEfforts,
   isNewCustomProviderId,
-} from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { isObject, requireString } from "./validation";
 
 function parseProviderId(value: unknown): string {

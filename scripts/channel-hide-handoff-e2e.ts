@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentSummary, ChannelPage, ChannelTask } from "@openbot/contracts/ipc";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentSummary, ChannelPage, ChannelTask } from "@codebot/contracts/ipc";
 import { argument, ChannelClient, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
 interface Report {
@@ -26,7 +26,7 @@ try {
   assert.ok(lead && b && c);
 
   const isHidden = async (agentId: string) =>
-    (await page.evaluate(() => window.openbot.agent.listHiddenAgents())).agents.some(
+    (await page.evaluate(() => window.codebot.agent.listHiddenAgents())).agents.some(
       (agent) => agent.agentId === agentId,
     );
 
@@ -70,7 +70,7 @@ try {
   hidden.delete(b.id);
 
   const providerId = argument("provider");
-  const models = await page.evaluate(() => window.openbot.agent.listModels());
+  const models = await page.evaluate(() => window.codebot.agent.listModels());
   const target = models
     .flatMap((model) => (isAgentProvider(model.provider) ? [{ ...model, provider: model.provider }] : []))
     .find((model) => (providerId ? model.provider === providerId : model.provider !== c.provider));

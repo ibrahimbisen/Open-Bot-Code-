@@ -7,8 +7,8 @@ import { isNewerRelease } from "../packages/contracts/src/release-version";
 import { isNewerRelease as isNewerMacHostRelease } from "./host-manager-macos";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REPORT = join(root, ".openbot-build", "release-version-comparator-e2e.json");
-const HOSTED_UPDATE = join(root, "scripts", "hosting", "openbot-hosted-update");
+const REPORT = join(root, ".codebot-build", "release-version-comparator-e2e.json");
+const HOSTED_UPDATE = join(root, "scripts", "hosting", "codebot-hosted-update");
 const STABLE = /^\d+\.\d+\.\d+$/u;
 
 const casesSchema = z.object({

@@ -2,8 +2,8 @@ import {
   APP_MINIMUM_VERSION_PATH,
   isBelowMinimumVersion,
   parseAppMinimumVersion,
-} from "@openbot/contracts/app-minimum-version";
-import type { UpdateStatus } from "@openbot/contracts/ipc";
+} from "@codebot/contracts/app-minimum-version";
+import type { UpdateStatus } from "@codebot/contracts/ipc";
 import { Effect, Exit, Result, Schema, Scope } from "effect";
 
 const INITIAL_DELAY_MS = 15_000;
@@ -85,8 +85,8 @@ export class RequiredUpdate {
     this.#required = minimumVersion;
     this.#options.log(
       minimumVersion
-        ? `OpenBot ${this.#options.currentVersion} is below the minimum version ${minimumVersion}.`
-        : "OpenBot is at or above the minimum version.",
+        ? `CodeBot ${this.#options.currentVersion} is below the minimum version ${minimumVersion}.`
+        : "CodeBot is at or above the minimum version.",
     );
     this.#options.updater.setRequiredVersion(minimumVersion);
     this.#options.setRequired(minimumVersion !== null);

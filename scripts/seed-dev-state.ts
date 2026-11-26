@@ -4,10 +4,10 @@ import { lstat, mkdir, mkdtemp, readFile, readlink, rename, rm, writeFile } from
 import { homedir } from "node:os";
 import { dirname, join, parse, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { serializeAttachmentReference } from "@openbot/contracts/attachment-references";
-import { serializeChatTagReference } from "@openbot/contracts/chat-tag-references";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import { DEVELOPMENT_CLAUDE_DEFAULT, DEVELOPMENT_FREE_DEFAULT } from "@openbot/contracts/development-defaults";
+import { serializeAttachmentReference } from "@codebot/contracts/attachment-references";
+import { serializeChatTagReference } from "@codebot/contracts/chat-tag-references";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import { DEVELOPMENT_CLAUDE_DEFAULT, DEVELOPMENT_FREE_DEFAULT } from "@codebot/contracts/development-defaults";
 import type {
   AgentModelId,
   AgentProviderId,
@@ -18,9 +18,9 @@ import type {
   ChannelTask,
   ConversationMessage,
   Routine,
-} from "@openbot/contracts/ipc";
-import { channelRoutingConversationEventItemType } from "@openbot/contracts/ipc";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { channelRoutingConversationEventItemType } from "@codebot/contracts/ipc";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { strToU8, zipSync } from "fflate";
 import { z } from "zod";
 import { agentNamesById, displayMessageReferences } from "../src/backend/agent/delivery-content";
@@ -31,10 +31,10 @@ import { ChannelMemoryStore } from "../src/backend/channel-memory-store";
 import { ChannelRoutineStore } from "../src/backend/channel-routine-store";
 import { ChannelStore } from "../src/backend/channel-store";
 import { resolveClaudeCli } from "../src/backend/cli";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { isMissingFileError } from "../src/backend/file-errors";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { TeamChatStore } from "../src/backend/team-chat-store";
 import { developmentUserDataName, readDevelopmentInstanceId } from "../src/main/development-profile";
 import { ProviderRuntimeManager, providerRuntimeRoot } from "../src/main/provider-runtime-manager";
@@ -44,13 +44,13 @@ import { resolveDevelopmentAppDataRoot } from "./development-state-paths";
 import { readScriptArguments } from "./script-arguments";
 import { NO_SCALE, parseSeedScale, type SeedScale, seedScale } from "./seed-dev-scale";
 
-export const DEVELOPMENT_SEED_MANIFEST_FILE = "openbot-dev-seed-v1.json";
+export const DEVELOPMENT_SEED_MANIFEST_FILE = "codebot-dev-seed-v1.json";
 
-const logger = createOpenBotLogger("seed-dev-state");
+const logger = createCodeBotLogger("seed-dev-state");
 
-const TEAM_FILE = "openbot-team-server-v2.json";
-const LEGACY_TEAM_FILE = "openbot-team-server-v1.json";
-const SETUP_FILE = "openbot-setup-v2.json";
+const TEAM_FILE = "codebot-team-server-v2.json";
+const LEGACY_TEAM_FILE = "codebot-team-server-v1.json";
+const SETUP_FILE = "codebot-setup-v2.json";
 const SEED_VERSION = 1;
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
@@ -91,10 +91,10 @@ function managedClaudeExecutable(appDataRoot: string): string | null {
 
 const GENERATED_DIRECTORY_PATTERN =
   /^generated\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/iu;
-const SHOWCASE_IMAGE_PATH = resolve(process.cwd(), "src", "renderer", "src", "assets", "openbot-logo-dev.png");
+const SHOWCASE_IMAGE_PATH = resolve(process.cwd(), "src", "renderer", "src", "assets", "codebot-logo-dev.png");
 
 function previewPdf(): string {
-  const stream = "BT /F1 18 Tf 24 150 Td (OpenBot file preview) Tj ET";
+  const stream = "BT /F1 18 Tf 24 150 Td (CodeBot file preview) Tj ET";
   const objects = [
     "<< /Type /Catalog /Pages 2 0 R >>",
     "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
@@ -245,7 +245,7 @@ export async function seedDevelopmentState(options: DevelopmentSeedOptions = {})
   );
   assertSafeAppDataRoot(appDataRoot);
   const targetProfile = resolve(appDataRoot, developmentUserDataName("app", options.instanceId ?? null));
-  if (dirname(targetProfile) !== appDataRoot) throw new Error(`Unsafe OpenBot dev profile path: ${targetProfile}`);
+  if (dirname(targetProfile) !== appDataRoot) throw new Error(`Unsafe CodeBot dev profile path: ${targetProfile}`);
 
   const profileActive = await isDevelopmentProfileActive(targetProfile);
   const agentModel = options.agentModel ?? (await seededAgentModel(appDataRoot));
@@ -265,16 +265,16 @@ export async function seedDevelopmentState(options: DevelopmentSeedOptions = {})
   if (options.dryRun) return summary;
   if (options.ifMissing && (await pathExists(targetProfile))) return summary;
   if (profileActive) {
-    throw new Error("Quit the OpenBot dev app before you seed its local state.");
+    throw new Error("Quit the CodeBot dev app before you seed its local state.");
   }
 
   await mkdir(appDataRoot, { recursive: true, mode: 0o700 });
-  const stagingProfile = await mkdtemp(join(appDataRoot, ".openbot-dev-seed-"));
+  const stagingProfile = await mkdtemp(join(appDataRoot, ".codebot-dev-seed-"));
   const newTransferDirectories: string[] = [];
   try {
     await buildSeedProfile(stagingProfile, homeDirectory, newTransferDirectories, agentModel, scale);
     if (await isDevelopmentProfileActive(targetProfile)) {
-      throw new Error("Quit the OpenBot dev app before you seed its local state.");
+      throw new Error("Quit the CodeBot dev app before you seed its local state.");
     }
     if (options.ifMissing && (await pathExists(targetProfile))) {
       await cleanupStagedSeed(stagingProfile, homeDirectory, newTransferDirectories);
@@ -338,7 +338,7 @@ async function buildSeedProfile(
   agentModel: SeededAgentModel,
   scale: SeedScale,
 ): Promise<void> {
-  const agentStore = new AgentStore(profilePath, homeDirectory, new OpenBotDatabase(profilePath));
+  const agentStore = new AgentStore(profilePath, homeDirectory, new CodeBotDatabase(profilePath));
   await runCauseEffect(agentStore.initialize());
   const mailbox = new MailboxStore(profilePath, agentStore.sharedRoot, agentStore.database);
   await runCauseEffect(mailbox.initialize());
@@ -389,7 +389,7 @@ function seedMemories(agentStore: AgentStore): void {
     },
     {
       agentId: "chief",
-      text: "The current priority is a traceable OpenBot launch plan.",
+      text: "The current priority is a traceable CodeBot launch plan.",
       origin: "automatic" as const,
       sourceTurnId: "dev-seed-turn-chief-plan",
     },
@@ -427,7 +427,7 @@ function seedMemories(agentStore: AgentStore): void {
   }
 }
 
-const SEED_WEBHOOK_SECRET_PLACEHOLDER = Buffer.from("openbot-dev-seed: regenerate this secret").toString("base64");
+const SEED_WEBHOOK_SECRET_PLACEHOLDER = Buffer.from("codebot-dev-seed: regenerate this secret").toString("base64");
 
 async function seedRoutines(agentStore: AgentStore, mailbox: MailboxStore, clock: SeedClock): Promise<void> {
   const routines = new AgentRoutineStore(agentStore.database);
@@ -750,7 +750,7 @@ async function seedAttachments(
       bytes: bytes(`${JSON.stringify({ sources: 8, verified: 7, needsReview: 1 }, null, 2)}\n`),
     }),
     image: await store(launch, {
-      name: "openbot-launch-concept.png",
+      name: "codebot-launch-concept.png",
       mimeType: "image/png",
       sourcePath: SHOWCASE_IMAGE_PATH,
     }),
@@ -857,7 +857,7 @@ async function seedConversations(
             `| Evidence | ${mention("research")} | In review |`,
             `| Release | ${mention("launch")} | Ready |`,
             "",
-            "Next: review the [OpenBot documentation](https://openbot.run/docs), then run:",
+            "Next: review the [CodeBot documentation](https://openbot.run/docs), then run:",
             "",
             "```bash",
             "bun run check",
@@ -884,7 +884,7 @@ async function seedConversations(
         itemType: "image_generation",
         attachments: [attachments.image],
         imageGeneration: {
-          prompt: "A calm OpenBot launch command center at blue hour",
+          prompt: "A calm CodeBot launch command center at blue hour",
           resolution: "1024 × 1024",
           aspectRatio: "square",
         },
@@ -1152,7 +1152,7 @@ async function seedLaunchRoom(
     {
       ...store.create(channelId, {
         name: "Launch room",
-        title: "Ship OpenBot 1.0",
+        title: "Ship CodeBot 1.0",
         instructions:
           "Keep every decision traceable. Name the owner and the evidence in each result, and leave an unverified claim out.",
         members: [{ agentId: "chief" }, { agentId: "research" }, { agentId: "builder" }, { agentId: "launch" }],
@@ -1171,7 +1171,7 @@ async function seedLaunchRoom(
       mimeType: "text/markdown",
       bytes: bytes(
         [
-          "# OpenBot 1.0 release note (draft)",
+          "# CodeBot 1.0 release note (draft)",
           "",
           "## What is new",
           "- Channels: several agents share one chat and one task list.",
@@ -1225,7 +1225,7 @@ async function seedLaunchRoom(
   const taskStandup = "channel-launch-task-standup";
   const taskRollback = "channel-launch-task-rollback";
   const releaseNoteText =
-    "Draft the release note for OpenBot 1.0. Keep the evidence with every claim and name an owner for each section.";
+    "Draft the release note for CodeBot 1.0. Keep the evidence with every claim and name an owner for each section.";
   const evidenceText = "Verify the two performance claims in the draft and name a primary source for each.";
   const rollbackText = `Add the rollback owner to the release note. ${mentionAgent(agents, "builder")} should confirm the steps.`;
   const message = (input: SeedChannelMessage): ChannelMessage => channelMessage(channelId, clock, input);
@@ -1507,15 +1507,15 @@ async function seedTeam(profilePath: string, agentStore: AgentStore, clock: Seed
   const team = new TeamStore(join(profilePath, TEAM_FILE), join(profilePath, LEGACY_TEAM_FILE));
   await runCauseEffect(team.initialize());
   const owner = {
-    id: "openbot-dev-owner",
-    email: "openbot-dev-host@example.com",
+    id: "codebot-dev-owner",
+    email: "codebot-dev-host@example.com",
     name: "Dev Owner",
     avatarUrl: null,
   };
-  const teamIdentity = await runCauseEffect(team.configureWithAccount("OpenBot Dev Team", owner));
+  const teamIdentity = await runCauseEffect(team.configureWithAccount("CodeBot Dev Team", owner));
   const joined = [];
   for (const member of [
-    { id: "openbot-dev-alice", email: "alice@example.com", name: "Alice Chen", role: "admin" as const },
+    { id: "codebot-dev-alice", email: "alice@example.com", name: "Alice Chen", role: "admin" as const },
   ]) {
     const invite = await runCauseEffect(team.createInvite(member.role, member.email));
     joined.push(
@@ -1553,7 +1553,7 @@ async function seedTeam(profilePath: string, agentStore: AgentStore, clock: Seed
 }
 
 async function replaceDevelopmentProfile(target: string, staging: string, homeDirectory: string): Promise<void> {
-  const backup = resolve(dirname(target), `.openbot-dev-backup-${randomUUID()}`);
+  const backup = resolve(dirname(target), `.codebot-dev-backup-${randomUUID()}`);
   const targetExists = await pathExists(target);
   if (targetExists) await rename(target, backup);
   try {
@@ -1600,7 +1600,7 @@ async function readSeedTransferDirectories(profilePath: string): Promise<string[
 }
 
 async function removeTransferDirectories(homeDirectory: string, directories: string[]): Promise<string[]> {
-  const root = resolve(homeDirectory, "OpenBot", "Shared", "Transfers");
+  const root = resolve(homeDirectory, "CodeBot", "Shared", "Transfers");
   const generatedRoot = resolve(root, "generated");
   const removed: string[] = [];
   for (const relativePath of directories) {
@@ -1710,9 +1710,9 @@ async function main(): Promise<void> {
     dryRun,
     ifMissing: parsed.values["if-missing"] ?? false,
     scale: parsed.values.scale === undefined ? undefined : parseSeedScale(parsed.values.scale),
-    instanceId: readDevelopmentInstanceId(process.env.OPENBOT_DEV_INSTANCE_ID),
+    instanceId: readDevelopmentInstanceId(process.env.CODEBOT_DEV_INSTANCE_ID),
   });
-  logger.info(dryRun ? "OpenBot development seed dry run:" : "OpenBot development state seeded:");
+  logger.info(dryRun ? "CodeBot development seed dry run:" : "CodeBot development state seeded:");
   logger.info(`- profile: ${summary.targetProfile}`);
   logger.info(`- profile active: ${summary.profileActive ? "yes" : "no"}`);
   logger.info(`- agent model: ${summary.agentModel}`);

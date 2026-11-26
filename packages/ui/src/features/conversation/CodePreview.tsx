@@ -1,6 +1,6 @@
-import { type ChatPreviewKind, chatHtmlPreviewDocument } from "@openbot/contracts/chat-preview";
-import { Button, Dialog, Maximize2, SlidingTabs } from "@openbot/ui";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { type ChatPreviewKind, chatHtmlPreviewDocument } from "@codebot/contracts/chat-preview";
+import { Button, Dialog, Maximize2, SlidingTabs } from "@codebot/ui";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, Match, onSettled, Show, Switch } from "solid-js";
 import { ScrollEdges } from "../../components/ScrollEdges";

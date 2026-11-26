@@ -1,8 +1,8 @@
 import {
   WHATSAPP_WORKING_MESSAGE_CAPABILITY,
   WHATSAPP_WORKING_MESSAGE_ROUTES,
-} from "@openbot/contracts/team-protocol/whatsapp-working-message-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/whatsapp-working-message-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { parseSetWhatsAppWorkingMessageInput } from "../ipc/messaging-inputs";
 import type { TeamApiConnectors } from "./dependencies";

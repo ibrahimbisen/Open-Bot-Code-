@@ -8,7 +8,7 @@ export const TEAM_USAGE_TERTIARY_CAPABILITY = "usage-tertiary-v1";
 
 export function isUsageRoute(method: string, path: string): boolean {
   return (
-    (method === "GET" && new URL(path, "http://openbot.invalid").pathname === TEAM_API_ROUTES.agents.usage) ||
+    (method === "GET" && new URL(path, "http://codebot.invalid").pathname === TEAM_API_ROUTES.agents.usage) ||
     scopedUsageRoute(method, path)
   );
 }

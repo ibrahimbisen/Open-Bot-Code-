@@ -1,6 +1,6 @@
-import type { AvatarColorChoice, AvatarColorPresetId } from "@openbot/brand/bloub-avatar";
-import type { AvatarHue } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import type { AvatarColorChoice, AvatarColorPresetId } from "@codebot/brand/bloub-avatar";
+import type { AvatarHue } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 
 export const AVATAR_HUE_LABEL = {
   0: "agent.color.red",

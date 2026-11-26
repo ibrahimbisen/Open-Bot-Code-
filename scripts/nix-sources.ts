@@ -16,10 +16,10 @@ const root = resolve(import.meta.dir, "..");
 const sourcesPath = resolve(root, "nix/sources.json");
 
 const assetNames: Record<string, (version: string) => string> = {
-  "x86_64-linux": (version) => `OpenBot-${version}-x86_64.AppImage`,
-  "aarch64-linux": (version) => `OpenBot-${version}-arm64.AppImage`,
-  "x86_64-darwin": (version) => `OpenBot-${version}-x64.zip`,
-  "aarch64-darwin": (version) => `OpenBot-${version}-arm64.zip`,
+  "x86_64-linux": (version) => `CodeBot-${version}-x86_64.AppImage`,
+  "aarch64-linux": (version) => `CodeBot-${version}-arm64.AppImage`,
+  "x86_64-darwin": (version) => `CodeBot-${version}-x64.zip`,
+  "aarch64-darwin": (version) => `CodeBot-${version}-arm64.zip`,
 };
 
 function parseChecksums(text: string): Map<string, string> {
@@ -56,4 +56,4 @@ for (const [system, assetName] of Object.entries(assetNames)) {
 
 const sources: NixSources = { version, assets };
 await writeFile(sourcesPath, `${JSON.stringify(sources, null, 2)}\n`);
-process.stdout.write(`nix/sources.json names OpenBot ${version}.\n`);
+process.stdout.write(`nix/sources.json names CodeBot ${version}.\n`);

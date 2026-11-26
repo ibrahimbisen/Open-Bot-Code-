@@ -1,5 +1,5 @@
-import { OPENBOT_CONTROL_PLANE_ORIGIN } from "@openbot/contracts/invite-links";
-import { parseMobileConnectUrl } from "@openbot/contracts/mobile-connect";
+import { CODEBOT_CONTROL_PLANE_ORIGIN } from "@codebot/contracts/invite-links";
+import { parseMobileConnectUrl } from "@codebot/contracts/mobile-connect";
 import { Redirect, router, Stack, useLocalSearchParams } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 import { openBrowserAsync } from "expo-web-browser";
@@ -115,7 +115,7 @@ function IncomingLinkContent({ request }: { request?: string }) {
   }
 
   const pairingService = link.kind === "pairing" && !session ? parseMobileConnectUrl(link.url)?.apiUrl : undefined;
-  const accountService = pairingService && pairingService !== OPENBOT_CONTROL_PLANE_ORIGIN ? pairingService : null;
+  const accountService = pairingService && pairingService !== CODEBOT_CONTROL_PLANE_ORIGIN ? pairingService : null;
 
   return (
     <View

@@ -1,4 +1,4 @@
-import { CONVERSATION_TRACE_TEXT_LIMIT } from "@openbot/contracts/ipc";
+import { CONVERSATION_TRACE_TEXT_LIMIT } from "@codebot/contracts/ipc";
 import { describe, expect, it } from "vitest";
 import { redactMcpValues } from "../mcp-redaction";
 import type { ThreadItem } from "../protocol";
@@ -45,7 +45,7 @@ describe("toolFailureText", () => {
 describe("toolResultText", () => {
   it("masks a secret in the result of a finished tool", () => {
     const text = toolResultText(
-      item({ type: "toolCall", name: "mcp__openbot__create_routine", status: "completed", output: `saved ${secret}` }),
+      item({ type: "toolCall", name: "mcp__codebot__create_routine", status: "completed", output: `saved ${secret}` }),
       redact,
     );
     expect(text).toBe("saved •••");

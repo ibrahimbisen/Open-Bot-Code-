@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { argument, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
 const NAME = "composer-thread-search-e2e";
-const OUT = resolve(import.meta.dirname, `../.openbot-build/${NAME}`);
+const OUT = resolve(import.meta.dirname, `../.codebot-build/${NAME}`);
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
@@ -69,7 +69,7 @@ function pickerSections(): Promise<string[]> {
 }
 
 const agent = await page.evaluate(async (id) => {
-  const agents = await window.openbot.agent.listAgents();
+  const agents = await window.codebot.agent.listAgents();
   const found = id ? agents.find((candidate) => candidate.id === id) : agents[0];
   if (!found) throw new Error(id ? `Unknown agent: ${id}` : "The profile has no agent.");
   return { id: found.id, name: found.name };
@@ -79,7 +79,7 @@ const word = `zephyr${crypto.randomUUID().replace(/-/g, "").slice(0, 6)}`;
 report.word = word;
 
 async function startThread(title: string): Promise<void> {
-  const task = await page.evaluate((input) => window.openbot.agent.startTask(input), {
+  const task = await page.evaluate((input) => window.codebot.agent.startTask(input), {
     agentId: agent.id,
     text: `${SHORT_PROMPT} The code word is ${word}.`,
   });
@@ -87,10 +87,10 @@ async function startThread(title: string): Promise<void> {
   await waitFor(
     page,
     `the first turn of ${title}`,
-    () => page.evaluate((id) => window.openbot.agent.listTasks(id), agent.id),
+    () => page.evaluate((id) => window.codebot.agent.listTasks(id), agent.id),
     (snapshot) => snapshot.tasks.find((candidate) => candidate.id === task.id)?.state !== "running",
   );
-  await page.evaluate((input) => window.openbot.agent.renameTask(input), {
+  await page.evaluate((input) => window.codebot.agent.renameTask(input), {
     agentId: agent.id,
     taskId: task.id,
     title,
@@ -152,10 +152,10 @@ try {
     .catch(() => undefined);
   for (const thread of report.threads) {
     await page
-      .evaluate((input) => window.openbot.agent.stopTask(input), { agentId: agent.id, taskId: thread.id })
+      .evaluate((input) => window.codebot.agent.stopTask(input), { agentId: agent.id, taskId: thread.id })
       .catch(() => undefined);
     await page
-      .evaluate((input) => window.openbot.agent.deleteTask(input), { agentId: agent.id, taskId: thread.id })
+      .evaluate((input) => window.codebot.agent.deleteTask(input), { agentId: agent.id, taskId: thread.id })
       .catch(() => undefined);
   }
   writeReport(NAME, report);

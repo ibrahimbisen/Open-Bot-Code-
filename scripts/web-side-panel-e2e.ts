@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { type Browser, chromium, type Locator, type Page } from "playwright-core";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/web-side-panel-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/web-side-panel-e2e");
 const STORIES = { web: "web-workspace--connected", desktop: "app--playground" } as const;
 type Client = keyof typeof STORIES;
 const DESKTOP_WIDTHS = [1280, 1024];

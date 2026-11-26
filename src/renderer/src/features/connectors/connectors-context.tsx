@@ -1,9 +1,9 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { BITWARDEN_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/bitwarden-connector-v1";
-import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/onepassword-connector-v1";
-import { PASSWORD_MANAGERS_CAPABILITY } from "@openbot/contracts/team-protocol/password-managers-v1";
-import { WHATSAPP_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-connector-v1";
-import { resolveCreationModel } from "@openbot/ui/features/agents/agent-creation-model";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { BITWARDEN_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/bitwarden-connector-v1";
+import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/onepassword-connector-v1";
+import { PASSWORD_MANAGERS_CAPABILITY } from "@codebot/contracts/team-protocol/password-managers-v1";
+import { WHATSAPP_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-connector-v1";
+import { resolveCreationModel } from "@codebot/ui/features/agents/agent-creation-model";
 import { createMemo } from "solid-js";
 import { createSimpleContext } from "../../simple-context";
 import { useAgents } from "../agents/agents-context";

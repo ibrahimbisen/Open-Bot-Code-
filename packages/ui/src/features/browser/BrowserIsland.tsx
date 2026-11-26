@@ -1,13 +1,13 @@
-import type { BrowserDockIsland, LocalBrowserSecretResponse } from "@openbot/contracts/ipc";
-import { Button, LoaderCircle, MousePointer2, X } from "@openbot/ui";
-import { QuestionPromptBubble } from "@openbot/ui/components/QuestionPromptBubble";
-import type { ComposerAgent } from "@openbot/ui/data";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { BrowserSecretCard, type BrowserSecretVault } from "@openbot/ui/features/conversation/BrowserSecretCard";
-import { ApprovalCard } from "@openbot/ui/features/conversation/ConversationPrompts";
-import { RichMessageText } from "@openbot/ui/features/conversation/RichMessageText";
-import type { SendShortcut } from "@openbot/ui/features/conversation/send-shortcut";
-import { useText } from "@openbot/ui/text";
+import type { BrowserDockIsland, LocalBrowserSecretResponse } from "@codebot/contracts/ipc";
+import { Button, LoaderCircle, MousePointer2, X } from "@codebot/ui";
+import { QuestionPromptBubble } from "@codebot/ui/components/QuestionPromptBubble";
+import type { ComposerAgent } from "@codebot/ui/data";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { BrowserSecretCard, type BrowserSecretVault } from "@codebot/ui/features/conversation/BrowserSecretCard";
+import { ApprovalCard } from "@codebot/ui/features/conversation/ConversationPrompts";
+import { RichMessageText } from "@codebot/ui/features/conversation/RichMessageText";
+import type { SendShortcut } from "@codebot/ui/features/conversation/send-shortcut";
+import { useText } from "@codebot/ui/text";
 import { Match, Show, Switch } from "solid-js";
 import type { MediaApprovalControls } from "../conversation/MediaApprovalCard";
 

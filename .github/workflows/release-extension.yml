@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           version="$(jq -r .version apps/browser-extension/dist/manifest.json)"
-          name="openbot-extension-${version}.zip"
+          name="codebot-extension-${version}.zip"
           (cd apps/browser-extension/dist && zip -r -X "$RUNNER_TEMP/$name" .)
           unzip -l "$RUNNER_TEMP/$name"
           echo "path=$RUNNER_TEMP/$name" >> "$GITHUB_OUTPUT"

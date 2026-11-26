@@ -35,7 +35,7 @@ export function ShareExtensionSync({
   agents,
 }: ShareExtensionSyncProps): null {
   const { t } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const locked = useAppLock((state) => state.status !== "ready" || appLockEnabled(state.config));
   const [saved] = useState(() => readShareExtensionAgents(apiUrl, userId) ?? []);
   const offered = useRef(new Set(saved.map((agent) => shareConversationId(agent.serverId, agent.id))));

@@ -113,7 +113,7 @@ export function decodeTeamProtocolV1CurrentHttpResponse(
 }
 
 function isInstalledSkillsRoute(method: string, path: string): boolean {
-  return method === "GET" && /^\/v1\/agents\/[^/]+\/skills$/u.test(new URL(path, "http://openbot.invalid").pathname);
+  return method === "GET" && /^\/v1\/agents\/[^/]+\/skills$/u.test(new URL(path, "http://codebot.invalid").pathname);
 }
 
 function toWireAgentKeysForRequestPath(path: string, value: TeamProtocolV1JsonValue): TeamProtocolV1JsonValue {

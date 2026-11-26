@@ -1,8 +1,8 @@
 import { version } from "../../../../package.json";
-import channelScreenshot from "../content/guides/media/openbot-101/a-channel.webp";
-import { OPENBOT_SITE_URL, openBotSoftwareApplication } from "./site-metadata";
+import channelScreenshot from "../content/guides/media/codebot-101/a-channel.webp";
+import { CODEBOT_SITE_URL, codeBotSoftwareApplication } from "./site-metadata";
 
-export const OPENBOT_SOFTWARE_APPLICATION = openBotSoftwareApplication({
+export const CODEBOT_SOFTWARE_APPLICATION = codeBotSoftwareApplication({
   version,
-  screenshot: new URL(channelScreenshot, OPENBOT_SITE_URL).toString(),
+  screenshot: new URL(channelScreenshot, CODEBOT_SITE_URL).toString(),
 });

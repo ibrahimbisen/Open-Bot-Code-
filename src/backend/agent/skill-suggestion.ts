@@ -5,7 +5,7 @@ import {
   type SkillSuggestionTarget,
   skillConversationEvent,
   skillSuggestionTarget,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { chatTranscript, promptJson } from "./side-question";
 
 const WORK_STEP_LIMIT = 80;
@@ -154,7 +154,7 @@ function skillSuggestionNote(target: SkillSuggestionTarget, question: string, ch
     question,
     "--- end suggestion ---",
     ...chat,
-    `If the user's message below agrees, ${save} Write it from this chat and follow openbot-skill-creator:`,
+    `If the user's message below agrees, ${save} Write it from this chat and follow codebot-skill-creator:`,
     "- Write the procedure first: the steps in their order, with the commands, tools and decision points that worked. Attach each pitfall to its step, as a rule with one clause of why.",
     "- Keep the rules general: no dates, PR or issue numbers, or quotes of the user, and no failed attempts as a method.",
     "- Do not repeat what the workspace instructions or the tool descriptions already say.",

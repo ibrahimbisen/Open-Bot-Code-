@@ -8,7 +8,7 @@ export function AIAgentWorkflow() {
         <Link to="/guides/$slug" params={{ slug: "what-are-ai-agents" }}>
           AI agent
         </Link>{" "}
-        workflow is the sequence that takes a request to a result you can use. For a first workflow in OpenBot, pick one
+        workflow is the sequence that takes a request to a result you can use. For a first workflow in CodeBot, pick one
         task and define what you want to receive. A short, sourced release brief is a good example.
       </p>
 
@@ -67,17 +67,17 @@ export function AIAgentWorkflow() {
       <h2>4. Keep what you will need next time</h2>
 
       <p>
-        Save the reviewed brief with the release version or date. For the next update, you can ask the same OpenBot
+        Save the reviewed brief with the release version or date. For the next update, you can ask the same CodeBot
         agent to read it for the format and check the new release notes for the facts.
       </p>
 
       <p>A previous brief is a useful template. Check its claims again before reusing them in a new version.</p>
 
-      <h2>When to move the task into OpenBot Workflows</h2>
+      <h2>When to move the task into CodeBot Workflows</h2>
 
       <p>
         Start by running the task from chat. Once the steps are clear and you need to repeat them, you can build a
-        workflow on OpenBot’s Workflows page. A workflow can include agent steps and an approval step that waits for
+        workflow on CodeBot’s Workflows page. A workflow can include agent steps and an approval step that waits for
         you.
       </p>
 

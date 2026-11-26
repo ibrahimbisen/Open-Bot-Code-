@@ -1,4 +1,4 @@
-import { leadingAddress } from "@openbot/contracts/chat-tag-references";
+import { leadingAddress } from "@codebot/contracts/chat-tag-references";
 import type {
   AgentEvent,
   Channel,
@@ -21,16 +21,16 @@ import type {
   TestChannelRoutineInput,
   UpdateChannelMemoryInput,
   UpdateChannelRoutineInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   CONTEXT_RESET_ITEM_TYPE,
   channelRoutingConversationEventItemType,
   isContextResetMarker,
   withBrowserMember,
-} from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import { sourceText } from "@openbot/i18n/source";
-import { avatarImageDataUrl } from "@openbot/ui/avatar-image";
+} from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import { sourceText } from "@codebot/i18n/source";
+import { avatarImageDataUrl } from "@codebot/ui/avatar-image";
 
 function storedPicture(channel: Channel | undefined): Pick<Channel, "icon" | "imageUrl"> {
   return {

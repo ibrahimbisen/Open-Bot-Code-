@@ -13,7 +13,7 @@ function promptText(request: AcpRequest): string {
   return (request.params.prompt ?? [])
     .map((block) => block.text ?? "")
     .join("")
-    .replace(/^[\s\S]*<\/openbot-developer-instructions>/u, "")
+    .replace(/^[\s\S]*<\/codebot-developer-instructions>/u, "")
     .trim();
 }
 
@@ -93,7 +93,7 @@ serveFakeAcpAgent({
         rawInput: { CommandLine: "ffprobe -" },
       });
       peer.say(sessionId, "The report is ready.");
-    } else if (text.includes("<openbot_background_wake>") && finishedCommand(sessionId)) {
+    } else if (text.includes("<codebot_background_wake>") && finishedCommand(sessionId)) {
       peer.update(sessionId, { sessionUpdate: "tool_call_update", toolCallId: COMMAND, status: "completed" });
       peer.say(sessionId, "The command finished.");
     } else if (text.endsWith("status") && session?.commandAt) {

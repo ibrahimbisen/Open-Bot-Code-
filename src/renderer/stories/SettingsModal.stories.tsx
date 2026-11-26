@@ -4,10 +4,10 @@ import type {
   MobileConnectedDevice,
   ServerSummary,
   UpdateStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { Button, Toaster, toast } from "@openbot/ui";
-import { DEFAULT_GENERAL_SETTINGS, type GeneralSettingsValue } from "@openbot/ui/features/settings/app-settings";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { Button, Toaster, toast } from "@codebot/ui";
+import { DEFAULT_GENERAL_SETTINGS, type GeneralSettingsValue } from "@codebot/ui/features/settings/app-settings";
 import { createSignal, onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -19,7 +19,7 @@ import { PlatformProvider } from "../src/platform";
 import { STORY_AGENTS, STORY_SERVERS } from "../src/preview/fixtures";
 import { createMockBilling } from "../src/preview/mock-billing";
 import type { MockVoiceOptions } from "../src/preview/mock-voice";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 import { SettingsPageStory } from "./settings-page-story";
 import { previewStorySoundSettings } from "./sound-feedback-fixture";
 
@@ -32,7 +32,7 @@ const storyGeneralSettings: GeneralSettingsValue = {
   quitGuard: "working",
 };
 
-const storyAppInfo = { name: "OpenBot", version: "0.2.1", platform: "darwin", variant: "dev" } as const;
+const storyAppInfo = { name: "CodeBot", version: "0.2.1", platform: "darwin", variant: "dev" } as const;
 const storyAccount: CentralAuthUser = {
   id: "user-1",
   email: "person@example.com",
@@ -98,14 +98,14 @@ function SettingsModalStory(props: {
   codexLiveAccess?: CodexLiveAccess;
   agentDock?: boolean;
 }) {
-  const previousApi = window.openbot;
+  const previousApi = window.codebot;
   const billingApi = createMockBilling();
-  const mock = createMockOpenBot(props.voice);
-  window.openbot = mock.api;
+  const mock = createMockCodeBot(props.voice);
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
     toast.dismiss();
-    if (window.openbot === mock.api) window.openbot = previousApi;
+    if (window.codebot === mock.api) window.codebot = previousApi;
   });
   const hostedServersApi = {
     ...mock.api.hostedServers,
@@ -180,7 +180,7 @@ function SettingsModalStory(props: {
     }, 6_000);
     return {
       qrData:
-        "openbot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=storybook-mobile-ticket_1234567890abcdef",
+        "codebot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=storybook-mobile-ticket_1234567890abcdef",
       expiresAt: Date.now() + 120_000,
     };
   }
@@ -279,7 +279,7 @@ const meta = {
     onSetChatColor: fn(async () => undefined),
     onCreateMobileConnect: fn(async () => ({
       qrData:
-        "openbot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=storybook-mobile-ticket_1234567890abcdef",
+        "codebot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=storybook-mobile-ticket_1234567890abcdef",
       expiresAt: Date.now() + 120_000,
     })),
   },

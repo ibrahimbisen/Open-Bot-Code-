@@ -1,4 +1,4 @@
-import { isAvatarMimeType } from "@openbot/contracts/avatar-images";
+import { isAvatarMimeType } from "@codebot/contracts/avatar-images";
 import {
   CHANNEL_CHATS_CAPABILITY,
   CHANNEL_DELETE_CAPABILITY,
@@ -18,24 +18,24 @@ import {
   mergeChannelTasks,
   type RespondToPromptInput,
   type UpdateChannelRoutineInput,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   CHANNEL_COMPACT_AVAILABILITY_CAPABILITY,
   CHANNEL_COMPACT_AVAILABILITY_ROUTE,
   decodeChannelCompactAvailability,
-} from "@openbot/contracts/team-protocol/channel-compact-availability-v1";
+} from "@codebot/contracts/team-protocol/channel-compact-availability-v1";
 import {
   CHANNEL_PICTURE_CAPABILITY,
   CHANNEL_PICTURE_ROUTES,
-} from "@openbot/contracts/team-protocol/channel-picture-v1";
-import { CHANNEL_ROUTES } from "@openbot/contracts/team-protocol/channels-v1";
-import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@openbot/contracts/team-protocol/chat-history-v1";
-import { ROUTINES_ONCE_CAPABILITY } from "@openbot/contracts/team-protocol/routines-once-v1";
-import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { sourceText } from "@openbot/i18n/source";
-import type { RemoteFileUpload } from "@openbot/team-client/remote-peer";
+} from "@codebot/contracts/team-protocol/channel-picture-v1";
+import { CHANNEL_ROUTES } from "@codebot/contracts/team-protocol/channels-v1";
+import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@codebot/contracts/team-protocol/chat-history-v1";
+import { ROUTINES_ONCE_CAPABILITY } from "@codebot/contracts/team-protocol/routines-once-v1";
+import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { sourceText } from "@codebot/i18n/source";
+import type { RemoteFileUpload } from "@codebot/team-client/remote-peer";
 import {
   createOnceChannelRoutine,
   isOnceSchedule,
@@ -43,7 +43,7 @@ import {
   type RoutinesOncePost,
   requireReleasedScheduleOn,
   updateChannelRoutineOnce,
-} from "@openbot/team-client/routines-once";
+} from "@codebot/team-client/routines-once";
 import { replaceEqualDeep } from "@tanstack/react-query";
 import { answeredPromptResolution } from "../../chat/model/question-prompt";
 import { saveChannelImage, savedChannelImage } from "../../workspace/model/agent-avatar-cache";

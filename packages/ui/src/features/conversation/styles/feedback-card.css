@@ -1,43 +1,43 @@
 .feedback-offer {
   align-items: center;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   text-align: center;
 }
 
 .feedback-offer-emoji {
-  font-size: var(--openbot-text-display);
+  font-size: var(--codebot-text-display);
   line-height: 1;
-  animation: feedback-offer-wiggle 900ms var(--openbot-ease-out) 200ms both;
+  animation: feedback-offer-wiggle 900ms var(--codebot-ease-out) 200ms both;
 }
 
 .feedback-offer-headline {
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-xl);
-  font-weight: var(--openbot-weight-semibold);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-xl);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .feedback-offer-quote {
   display: grid;
   width: 100%;
   box-sizing: border-box;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   margin: 0;
-  border-inline-start: 3px solid var(--openbot-border);
-  color: var(--openbot-text-secondary);
-  padding-inline-start: var(--openbot-space-3);
+  border-inline-start: 3px solid var(--codebot-border);
+  color: var(--codebot-text-secondary);
+  padding-inline-start: var(--codebot-space-3);
   text-align: start;
 }
 
 .feedback-offer-quote strong {
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .feedback-offer-quote p {
   margin: 0;
-  font-size: var(--openbot-text-lg);
-  line-height: var(--openbot-leading-lg);
+  font-size: var(--codebot-text-lg);
+  line-height: var(--codebot-leading-lg);
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
@@ -46,7 +46,7 @@
   display: flex;
   width: 100%;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .feedback-offer-actions > :last-child {
@@ -54,22 +54,22 @@
 }
 
 .feedback-sent {
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
 }
 
 .feedback-sent > * {
-  animation: feedback-sent-in 320ms var(--openbot-ease-out) 80ms both;
+  animation: feedback-sent-in 320ms var(--codebot-ease-out) 80ms both;
 }
 
 .feedback-sent-badge {
-  animation: feedback-sent-pop 420ms var(--openbot-ease-out) 260ms both;
+  animation: feedback-sent-pop 420ms var(--codebot-ease-out) 260ms both;
 }
 
 .feedback-sent-body {
   margin: 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-lg);
-  line-height: var(--openbot-leading-lg);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-lg);
+  line-height: var(--codebot-leading-lg);
 }
 
 .feedback-sent-footer {
@@ -77,41 +77,41 @@
   min-width: 0;
   align-items: center;
   justify-content: space-between;
-  gap: var(--openbot-space-3);
-  border-top: 1px solid var(--openbot-border);
-  padding-top: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
+  border-top: 1px solid var(--codebot-border);
+  padding-top: var(--codebot-space-3);
 }
 
 .feedback-sent-actions {
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   margin-inline-start: auto;
 }
 
 .feedback-sent-actions > .feedback-sent-change {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .feedback-sent-actions > .feedback-sent-change:hover {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .feedback-sent-note {
   margin: 0;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .feedback-sent-panel {
   display: grid;
   min-width: 0;
-  gap: var(--openbot-space-2);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-lg);
-  background: var(--openbot-bg-surface-raised);
-  padding: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-lg);
+  background: var(--codebot-bg-surface-raised);
+  padding: var(--codebot-space-2);
 }
 
 .feedback-sent-panel > .feedback-sent-choice.ui-button {
@@ -121,66 +121,66 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   justify-content: start;
-  gap: var(--openbot-space-3);
-  padding: var(--openbot-space-2) var(--openbot-space-3);
+  gap: var(--codebot-space-3);
+  padding: var(--codebot-space-2) var(--codebot-space-3);
   text-align: start;
   white-space: normal;
 }
 
 .feedback-sent-choice svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
-  color: var(--openbot-text-muted);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
+  color: var(--codebot-text-muted);
 }
 
 .feedback-sent-choice-text {
   display: grid;
   min-width: 0;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .feedback-sent-choice-title {
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-lg);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-lg);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .feedback-sent-choice-hint {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-regular);
-  line-height: var(--openbot-leading-lg);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-regular);
+  line-height: var(--codebot-leading-lg);
 }
 
 .feedback-sent-confirm {
   display: grid;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-1);
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-1);
 }
 
 .feedback-sent-confirm p {
   margin: 0;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-lg);
-  line-height: var(--openbot-leading-lg);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-lg);
+  line-height: var(--codebot-leading-lg);
 }
 
 .feedback-sent-confirm .feedback-sent-error {
-  color: var(--openbot-danger-text);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-danger-text);
+  font-size: var(--codebot-text-sm);
 }
 
 .feedback-sent-confirm-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .feedback-sent-title {
   min-width: 0;
   overflow: hidden;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

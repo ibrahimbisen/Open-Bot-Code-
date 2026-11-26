@@ -7,13 +7,13 @@ import { DatabaseSync } from "node:sqlite";
 import { collectProviderUsage } from "../src/backend/agent/usage-collection";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolvePiCli } from "../src/backend/cli";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { type AppServerNotification, getString, isRecord } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-usage-cost-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-usage-cost-e2e");
 const PROVIDER = "cost-e2e";
 const RATES = { input: 2, output: 10, cacheRead: 0.5, cacheWrite: 0 };
 
@@ -42,7 +42,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, usageNotices: [], cases: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-usage-cost-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-usage-cost-e2e-"));
 const clients: AgentClient[] = [];
 let next: Sent = { input: 0, cached: 0, output: 0 };
 
@@ -131,7 +131,7 @@ try {
   const workspace = join(root, "workspace");
   await mkdir(workspace, { recursive: true });
 
-  const database = new OpenBotDatabase(join(root, "profile"));
+  const database = new CodeBotDatabase(join(root, "profile"));
   await runCauseEffect(database.initialize());
   const reader = new DatabaseSync(database.path);
   const cli = await runCauseEffect(resolvePiCli({ bundledExecutable: process.env.PI_CLI }));
@@ -149,7 +149,7 @@ try {
     const session = sessions.get(getString(notification.params, "threadId") ?? "");
     if (!session) return;
     let params = notification.params;
-    if (notification.method === "openbot/usage") {
+    if (notification.method === "codebot/usage") {
       report.usageNotices.push(params);
       if (session.dropCost && isRecord(params)) {
         const { cost: _cost, ...rest } = params;

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { CUSTOM_AGENT_DEFAULT_MODEL, isAgentModel } from "@openbot/contracts/ipc";
+import { CUSTOM_AGENT_DEFAULT_MODEL, isAgentModel } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { checkAcpAgent } from "../src/backend/acp-agent-check";
 import { isMissingProviderSessionError } from "../src/backend/agent/thread-items";
@@ -13,7 +13,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/custom-acp-agent-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-acp-agent-e2e");
 const SECRET = "sk-e2e-agent-secret";
 const ROUTED_THREAD = (agent: string) => new RegExp(`^${agent}:[0-9a-f]{12}:s-\\d+$`);
 
@@ -40,7 +40,7 @@ interface Report {
   delete?: { refused: string };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-custom-agent-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-custom-agent-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 

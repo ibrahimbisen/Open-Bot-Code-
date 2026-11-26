@@ -1,11 +1,11 @@
-import type { CentralAuthState } from "@openbot/contracts/ipc";
+import type { CentralAuthState } from "@codebot/contracts/ipc";
 import {
   CLIENT_BROWSER_CAPABILITY,
   type ClientBrowserPresence,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
-import { sourceText } from "@openbot/i18n";
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
+import { sourceText } from "@codebot/i18n";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
+import { useText } from "@codebot/ui/text";
 import { createSignal, createStore, Match, onSettled, Show, Switch } from "solid-js";
 import { AgentSettingsScreen } from "./AgentSettingsScreen";
 import {

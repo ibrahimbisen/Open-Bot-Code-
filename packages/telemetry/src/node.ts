@@ -1,6 +1,6 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { type ReportStorage, telemetryIO } from "./queue";
 
 export function fileReportStorage(path: string): ReportStorage {

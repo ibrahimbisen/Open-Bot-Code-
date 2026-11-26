@@ -1,11 +1,11 @@
-import type { AvatarMood } from "@openbot/brand/bloub-avatar-motion";
-import { type BillingDetails, isWithdrawalConsumer } from "@openbot/contracts/billing-details";
+import type { AvatarMood } from "@codebot/brand/bloub-avatar-motion";
+import { type BillingDetails, isWithdrawalConsumer } from "@codebot/contracts/billing-details";
 import type {
   CustomServerCheckoutRequest,
   CustomServerCheckoutResult,
   CustomServerPlan,
-} from "@openbot/contracts/custom-server-plans";
-import type { AgentStepActivity, AvatarHue, ServerSummary } from "@openbot/contracts/ipc";
+} from "@codebot/contracts/custom-server-plans";
+import type { AgentStepActivity, AvatarHue, ServerSummary } from "@codebot/contracts/ipc";
 import {
   Alert,
   AlertContent,
@@ -21,7 +21,7 @@ import {
   LifeBuoy,
   MemoryStick,
   RefreshCw,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createEffect, createSignal, createUniqueId, For, Match, onCleanup, onSettled, Show, Switch } from "solid-js";
 import { useText } from "../../text";
 import { AgentAvatar } from "../agents/AgentAvatar";

@@ -7,7 +7,7 @@ import {
   isAgentDockDisplayInfoList,
   isAgentDockOffset,
   isAgentDockPresentation,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export function decodeAgentDockPresentation(value: unknown): AgentDockPresentation | null {
   if (value === null) return null;

@@ -1,4 +1,4 @@
-import { APP_LOGO_CORNER, APP_LOGO_EYE_POINTS, APP_LOGO_SIZE } from "@openbot/brand/app-logo-shape";
+import { APP_LOGO_CORNER, APP_LOGO_EYE_POINTS, APP_LOGO_SIZE } from "@codebot/brand/app-logo-shape";
 import { getShaderColorFromString, meshGradientFragmentShader, ShaderMount } from "@paper-design/shaders";
 import type { ContentImageJob, ContentImageLockup, ContentImageMark } from "./content-images";
 import { RIVAL_MARK_SHAPES, type RivalMarkName } from "./src/components/compare/rival-mark-shapes";
@@ -6,7 +6,7 @@ import { articleGradient, articleGradientUniforms } from "./src/lib/article-grad
 
 declare global {
   interface Window {
-    openBotContentImage?: { render: (job: ContentImageJob) => Promise<string> };
+    codeBotContentImage?: { render: (job: ContentImageJob) => Promise<string> };
   }
 }
 
@@ -17,7 +17,7 @@ const LOGO_BACKGROUND = "#d6adf2";
 const LOGO_EYE = "#040007";
 const FONT_FAMILY = '"Inter Variable", Inter, system-ui, sans-serif';
 
-window.openBotContentImage = { render: renderContentImage };
+window.codeBotContentImage = { render: renderContentImage };
 
 const WEBP_QUALITY = 0.9;
 
@@ -127,14 +127,14 @@ function drawLockup(context: CanvasRenderingContext2D, job: ContentImageJob, loc
   const logoTop = y + padY;
   const left = x + padX + (column - logoSize) / 2;
   const right = x + padX + column + vsMargin * 2 + vsWidth + (column - logoSize) / 2;
-  drawMark(context, lockup.left?.mark ?? "openbot", left, logoTop, logoSize);
+  drawMark(context, lockup.left?.mark ?? "codebot", left, logoTop, logoSize);
   drawMark(context, lockup.rivalMark, right, logoTop, logoSize);
 
   context.font = `500 ${nameSize}px ${FONT_FAMILY}`;
   context.fillStyle = "rgba(255, 255, 255, 0.86)";
   context.textAlign = "center";
   const nameBaseline = logoTop + logoSize + nameGap + nameSize * 0.9;
-  context.fillText(lockup.left?.name ?? "OpenBot", left + logoSize / 2, nameBaseline);
+  context.fillText(lockup.left?.name ?? "CodeBot", left + logoSize / 2, nameBaseline);
   context.fillText(lockup.rivalName, right + logoSize / 2, nameBaseline);
 
   const center = x + padX + column + vsMargin + vsWidth / 2;
@@ -209,11 +209,11 @@ function drawPlate(
 }
 
 function drawMark(context: CanvasRenderingContext2D, mark: ContentImageMark, x: number, y: number, size: number): void {
-  if (mark === "openbot") drawOpenBotMark(context, x, y, size);
+  if (mark === "codebot") drawCodeBotMark(context, x, y, size);
   else drawRivalMark(context, mark, x, y, size);
 }
 
-function drawOpenBotMark(context: CanvasRenderingContext2D, x: number, y: number, size: number): void {
+function drawCodeBotMark(context: CanvasRenderingContext2D, x: number, y: number, size: number): void {
   context.save();
   context.translate(x, y);
   context.scale(size / APP_LOGO_SIZE, size / APP_LOGO_SIZE);

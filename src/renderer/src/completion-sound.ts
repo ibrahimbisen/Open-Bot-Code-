@@ -1,10 +1,10 @@
-import type { AgentEvent, ClientAgentSummary } from "@openbot/contracts/ipc";
-import { teammateTurnCompleted } from "@openbot/team-client/agent-notifications";
-import { TASK_SOUND_CHOICES, type TaskSoundChoice } from "@openbot/ui/features/settings/app-settings";
+import type { AgentEvent, ClientAgentSummary } from "@codebot/contracts/ipc";
+import { teammateTurnCompleted } from "@codebot/team-client/agent-notifications";
+import { TASK_SOUND_CHOICES, type TaskSoundChoice } from "@codebot/ui/features/settings/app-settings";
 import { play, unlock } from "cuelume";
 
-const TASK_SOUND_STORAGE_KEY = "openbot:task-sound";
-const COMPLETION_SOUND_STORAGE_KEY = "openbot:completion-sound-enabled";
+const TASK_SOUND_STORAGE_KEY = "codebot:task-sound";
+const COMPLETION_SOUND_STORAGE_KEY = "codebot:completion-sound-enabled";
 const COMPLETION_SOUND_DURATION_SECONDS = 0.22;
 
 let completionAudioContext: AudioContext | undefined;

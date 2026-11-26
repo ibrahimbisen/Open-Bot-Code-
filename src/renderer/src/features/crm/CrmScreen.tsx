@@ -1,6 +1,6 @@
-import { CrmView } from "@openbot/ui/features/crm/CrmView";
-import type { CrmAgent } from "@openbot/ui/features/crm/crm-model";
-import type { CrmConnectorsRequest } from "@openbot/ui/features/crm/crm-state";
+import { CrmView } from "@codebot/ui/features/crm/CrmView";
+import type { CrmAgent } from "@codebot/ui/features/crm/crm-model";
+import type { CrmConnectorsRequest } from "@codebot/ui/features/crm/crm-state";
 import { createCrmController } from "./crm-controller";
 import type { CrmHost } from "./crm-port";
 

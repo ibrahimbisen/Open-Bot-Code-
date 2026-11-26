@@ -1,5 +1,5 @@
-import type { AvatarMood } from "@openbot/brand/bloub-avatar-motion";
-import type { AgentEvent, TeamRealtimeEvent } from "@openbot/contracts/ipc";
+import type { AvatarMood } from "@codebot/brand/bloub-avatar-motion";
+import type { AgentEvent, TeamRealtimeEvent } from "@codebot/contracts/ipc";
 
 export type MobileAgentWaitReason = "question" | "approval" | "takeover";
 

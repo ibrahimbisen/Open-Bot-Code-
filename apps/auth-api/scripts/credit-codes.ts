@@ -3,8 +3,8 @@ import { existsSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { creditsFromTenths, creditTenths, formatCreditCode } from "@openbot/contracts/credits";
-import { type DynamicRecord, isDynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
+import { creditsFromTenths, creditTenths, formatCreditCode } from "@codebot/contracts/credits";
+import { type DynamicRecord, isDynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
 import { CREDIT_CODE_CAMPAIGN_PATTERN, creditCodeHash, generateCreditCode } from "../src/server/credit-codes";
 
 const AUTH_API_ROOT = resolve(import.meta.dirname, "..");
@@ -149,7 +149,7 @@ function sql(value: string | number | null): string {
 }
 
 function wranglerArgs(options: Options): string[] {
-  const database = options.target === "test" ? "openbot-auth-test" : "openbot-auth";
+  const database = options.target === "test" ? "codebot-auth-test" : "codebot-auth";
   const mode = options.target === "local" ? ["--local"] : ["--remote"];
   const environment = options.target === "test" ? ["--env", "test"] : [];
   const persist = options.persistTo ? ["--persist-to", options.persistTo] : [];
@@ -179,7 +179,7 @@ async function query(options: Options, statement: string): Promise<DynamicRecord
 }
 
 async function execute(options: Options, statements: string[]): Promise<void> {
-  const directory = await mkdtemp(join(tmpdir(), "openbot-credit-codes-"));
+  const directory = await mkdtemp(join(tmpdir(), "codebot-credit-codes-"));
   try {
     const file = join(directory, "change.sql");
     await writeFile(file, `${statements.join("\n")}\n`, { mode: 0o600 });

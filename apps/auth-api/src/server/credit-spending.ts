@@ -1,7 +1,7 @@
-import { CREDIT_MEDIA_KINDS } from "@openbot/contracts/credit-media";
-import { creditsFromTenths, creditTenths } from "@openbot/contracts/credits";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { CREDIT_MEDIA_KINDS } from "@codebot/contracts/credit-media";
+import { creditsFromTenths, creditTenths } from "@codebot/contracts/credits";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Exit } from "effect";
 import { type AccountAnalytics, type CreditActionEvent, NO_ACCOUNT_ANALYTICS } from "./account-analytics";
 import { BillingError, type BillingOperationError, billingCall } from "./billing-errors";

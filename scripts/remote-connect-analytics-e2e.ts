@@ -1,13 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { REMOTE_TICKET_AUDIENCE, type RemoteTicketClaims } from "@openbot/contracts/signal-protocol/ticket";
-import { createOpenBotLogger } from "@openbot/logging";
-import { ANALYTICS_GENERATIONS } from "@openbot/telemetry";
+import { REMOTE_TICKET_AUDIENCE, type RemoteTicketClaims } from "@codebot/contracts/signal-protocol/ticket";
+import { createCodeBotLogger } from "@codebot/logging";
+import { ANALYTICS_GENERATIONS } from "@codebot/telemetry";
 import { HostAnalytics, type HostOpenPanelClient } from "../src/main/analytics";
 import { REMOTE_CONNECT_PHASES, RemoteConnectTrace } from "../src/main/remote-connect-trace";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "remote-connect-analytics-e2e");
+const OUT = join(ROOT, ".codebot-build", "remote-connect-analytics-e2e");
 const HOST = "host-7f3a-marker";
 const OTHER_HOST = "host-91c2-marker";
 const LAST_HOST = "host-55d0-marker";
@@ -207,7 +207,7 @@ try {
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify({ passed, checks }, null, 2)}\n`);
 }
-const logger = createOpenBotLogger("remote-connect-analytics-e2e");
+const logger = createCodeBotLogger("remote-connect-analytics-e2e");
 for (const item of checks) {
   if (item.passed) logger.info(`ok ${item.name}`);
   else logger.error(`FAIL ${item.name}`);

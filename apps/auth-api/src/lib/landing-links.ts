@@ -2,20 +2,20 @@ import type { FooterColumnId, FooterTextId } from "./site-text";
 
 export const EXTERNAL_LINK_REL = "noopener noreferrer";
 
-export const OPENBOT_DOWNLOAD_LINKS = {
+export const CODEBOT_DOWNLOAD_LINKS = {
   macos: "/download/macos/latest",
   windows: "/download/windows/latest",
   linux: "/download/linux/latest",
 } as const;
 
-export const OPENBOT_ALTERNATE_DOWNLOAD_LINKS = {
+export const CODEBOT_ALTERNATE_DOWNLOAD_LINKS = {
   macos: "/download/macos/latest?arch=x64",
   linux: "/download/linux/latest?arch=arm64",
 } as const;
 
-export const OPENBOT_ANDROID_APK_LINK = "/download/android/latest";
+export const CODEBOT_ANDROID_APK_LINK = "/download/android/latest";
 
-export const OPENBOT_DOWNLOAD_PAGE_LINKS = {
+export const CODEBOT_DOWNLOAD_PAGE_LINKS = {
   hub: "/download",
   macos: "/download/macos",
   windows: "/download/windows",
@@ -24,7 +24,7 @@ export const OPENBOT_DOWNLOAD_PAGE_LINKS = {
   android: "/download/android",
 } as const;
 
-export const OPENBOT_LINKS = {
+export const CODEBOT_LINKS = {
   contact: "/contact",
   x: "https://x.com/OpenBot_",
   threads: "https://www.threads.com/@openbot.run",
@@ -108,8 +108,8 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
       { label: { text: "pricing" }, external: false, to: "/pricing" },
       { label: { text: "contact" }, external: false, to: "/contact" },
       { label: { text: "brand" }, external: false, to: "/brand" },
-      { label: { text: "sourceCode" }, external: true, href: OPENBOT_LINKS.repository },
-      { label: { text: "license" }, external: true, href: OPENBOT_LINKS.license },
+      { label: { text: "sourceCode" }, external: true, href: CODEBOT_LINKS.repository },
+      { label: { text: "license" }, external: true, href: CODEBOT_LINKS.license },
       { label: { text: "privacy" }, external: false, to: "/privacy-policy" },
       { label: { text: "terms" }, external: false, to: "/terms" },
       { label: { text: "commercialLicense" }, external: false, to: "/commercial-license" },
@@ -120,15 +120,15 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
   {
     id: "resources",
     links: [
-      { label: { text: "documentation" }, external: true, href: OPENBOT_LINKS.documentation },
-      { label: { text: "troubleshooting" }, external: true, href: OPENBOT_LINKS.troubleshooting },
-      { label: { text: "status" }, external: true, href: OPENBOT_LINKS.status },
-      { label: { text: "selfHosted" }, external: true, href: OPENBOT_LINKS.selfHostedServer },
-      { label: { text: "architecture" }, external: true, href: OPENBOT_LINKS.architecture },
-      { label: { text: "contributing" }, external: true, href: OPENBOT_LINKS.contributing },
-      { label: "Codex", external: true, href: OPENBOT_LINKS.codex },
-      { label: "Claude Code", external: true, href: OPENBOT_LINKS.claude },
-      { label: "Discord", external: true, href: OPENBOT_LINKS.discord },
+      { label: { text: "documentation" }, external: true, href: CODEBOT_LINKS.documentation },
+      { label: { text: "troubleshooting" }, external: true, href: CODEBOT_LINKS.troubleshooting },
+      { label: { text: "status" }, external: true, href: CODEBOT_LINKS.status },
+      { label: { text: "selfHosted" }, external: true, href: CODEBOT_LINKS.selfHostedServer },
+      { label: { text: "architecture" }, external: true, href: CODEBOT_LINKS.architecture },
+      { label: { text: "contributing" }, external: true, href: CODEBOT_LINKS.contributing },
+      { label: "Codex", external: true, href: CODEBOT_LINKS.codex },
+      { label: "Claude Code", external: true, href: CODEBOT_LINKS.claude },
+      { label: "Discord", external: true, href: CODEBOT_LINKS.discord },
     ],
   },
   {
@@ -148,17 +148,17 @@ export const FOOTER_COLUMNS: readonly FooterColumn[] = [
   {
     id: "compare",
     links: [
-      { label: "OpenBot vs Grok Bot", external: false, to: "/compare/$slug", slug: "grok-bot" },
-      { label: "OpenBot vs Hermes Agent", external: false, to: "/compare/$slug", slug: "hermes-agent" },
-      { label: "OpenBot vs Muse", external: false, to: "/compare/$slug", slug: "muse" },
-      { label: "OpenBot vs OpenClaw", external: false, to: "/compare/$slug", slug: "openclaw" },
-      { label: "OpenBot vs Claude Cowork", external: false, to: "/compare/$slug", slug: "claude-cowork" },
-      { label: "OpenBot vs ChatGPT dots", external: false, to: "/compare/$slug", slug: "chatgpt-dots" },
-      { label: "OpenBot vs Manus", external: false, to: "/compare/$slug", slug: "manus" },
-      { label: "OpenBot vs Devin", external: false, to: "/compare/$slug", slug: "devin" },
-      { label: "OpenBot vs Paperclip", external: false, to: "/compare/$slug", slug: "paperclip" },
-      { label: "OpenBot vs Viktor", external: false, to: "/compare/$slug", slug: "viktor" },
-      { label: "OpenBot vs Instinct", external: false, to: "/compare/$slug", slug: "instinct" },
+      { label: "CodeBot vs Grok Bot", external: false, to: "/compare/$slug", slug: "grok-bot" },
+      { label: "CodeBot vs Hermes Agent", external: false, to: "/compare/$slug", slug: "hermes-agent" },
+      { label: "CodeBot vs Muse", external: false, to: "/compare/$slug", slug: "muse" },
+      { label: "CodeBot vs OpenClaw", external: false, to: "/compare/$slug", slug: "openclaw" },
+      { label: "CodeBot vs Claude Cowork", external: false, to: "/compare/$slug", slug: "claude-cowork" },
+      { label: "CodeBot vs ChatGPT dots", external: false, to: "/compare/$slug", slug: "chatgpt-dots" },
+      { label: "CodeBot vs Manus", external: false, to: "/compare/$slug", slug: "manus" },
+      { label: "CodeBot vs Devin", external: false, to: "/compare/$slug", slug: "devin" },
+      { label: "CodeBot vs Paperclip", external: false, to: "/compare/$slug", slug: "paperclip" },
+      { label: "CodeBot vs Viktor", external: false, to: "/compare/$slug", slug: "viktor" },
+      { label: "CodeBot vs Instinct", external: false, to: "/compare/$slug", slug: "instinct" },
       { label: { text: "bestApps" }, external: false, to: "/compare/$slug", slug: "best-ai-agent-apps" },
       { label: { text: "allComparisons" }, external: false, to: "/compare" },
     ],

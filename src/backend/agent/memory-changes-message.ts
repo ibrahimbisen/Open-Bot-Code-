@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   CONVERSATION_MEMORY_CHANGE_LIMIT,
   CONVERSATION_MEMORY_CHANGES_ITEM_TYPE,
@@ -6,8 +6,8 @@ import {
   type ConversationMemoryChangeAction,
   type ConversationMessage,
   countConversationMemoryChanges,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 
 export function memoryChangesMessage(
   turnId: string,

@@ -1,6 +1,6 @@
-import type { AgentMessage } from "@openbot/ui/data";
-import { currentText } from "@openbot/ui/text";
-import { errorReference } from "@openbot/user-errors";
+import type { AgentMessage } from "@codebot/ui/data";
+import { currentText } from "@codebot/ui/text";
+import { errorReference } from "@codebot/user-errors";
 import { createSignal } from "solid-js";
 import { formatMessageTime } from "./app-message-projection";
 import { agentConversationKey } from "./features/conversation/conversation-keys";

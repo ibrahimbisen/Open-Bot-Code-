@@ -25,7 +25,7 @@ export {
 } from "./provider-aware-codec";
 
 export const TEAM_PROTOCOL_V4Base = 4;
-export const TEAM_PROTOCOL_V4Base_WEBSOCKET = "openbot-team-v4";
+export const TEAM_PROTOCOL_V4Base_WEBSOCKET = "codebot-team-v4";
 
 const codec = createProviderAwareCodec({
   providers: ["codex", "claude", "grok", "opencode"],

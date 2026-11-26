@@ -1,5 +1,5 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { CONNECTORS, type ConnectorId } from "@openbot/ui/features/connectors/connectors";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { CONNECTORS, type ConnectorId } from "@codebot/ui/features/connectors/connectors";
 import { remoteAdminServer } from "../servers/server-capabilities";
 
 export type ConnectorAccess = "available" | "local-only" | "hidden";

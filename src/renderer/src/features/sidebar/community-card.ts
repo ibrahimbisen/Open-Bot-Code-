@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-const COMMUNITY_CARD_DISMISSED_STORAGE_KEY = "openbot:community-card-dismissed";
+const COMMUNITY_CARD_DISMISSED_STORAGE_KEY = "codebot:community-card-dismissed";
 
 function readDismissed(): boolean {
   try {

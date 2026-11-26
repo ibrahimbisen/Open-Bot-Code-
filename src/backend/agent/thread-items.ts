@@ -1,17 +1,17 @@
 import { RequestError } from "@agentclientprotocol/sdk";
-import { isKeyOnlyProvider } from "@openbot/contracts/agent-providers";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { isKeyOnlyProvider } from "@codebot/contracts/agent-providers";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentStepActivity,
   agentProviderName,
   COMPUTER_USE_MCP_SERVER_NAME,
   CONVERSATION_TRACE_TEXT_LIMIT,
   DEFAULT_PROVIDER_ACCOUNT_ID,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
-import { classifyFailure } from "@openbot/telemetry";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
+import { classifyFailure } from "@codebot/telemetry";
 import {
   type AgentProvider,
   MissingClaudeSessionError,
@@ -19,7 +19,7 @@ import {
   RequestTimeoutError,
 } from "../agent-client";
 import { AppServerError } from "../app-server-client";
-import { OPENBOT_BROWSER_NAMESPACE } from "../browser-tools";
+import { CODEBOT_BROWSER_NAMESPACE } from "../browser-tools";
 import {
   bridgedToolName,
   type DynamicToolCallParams,
@@ -428,7 +428,7 @@ function acpBridgedTool(item: ThreadItem) {
   const title = ACP_MCP_TITLE.exec(getString(item, "name") ?? "")?.[1];
   const named = server && tool ? `${server}_${tool}` : title;
   if (!named) return undefined;
-  if (named === "openbot_tool_call") {
+  if (named === "codebot_tool_call") {
     const input = server && tool ? getRecord(args, "Arguments") : args;
     const called = getString(input, "name") ?? getString(input, "tool");
     return called ? BUILTIN_TOOL_CATALOG.find((entry) => entry.name === qualifiedToolName(called)) : undefined;
@@ -445,23 +445,23 @@ function bridgedTool(item: ThreadItem) {
 
 const TOOL_RESULT_PROGRESS = sourceText("status.agent.toolResultReviewing");
 
-export function openBotTool(item: ThreadItem): string | null {
+export function codeBotTool(item: ThreadItem): string | null {
   const bridged = bridgedToolName(item);
-  if (bridged) return bridged.startsWith("openbot.") ? bridged.slice("openbot.".length) : null;
+  if (bridged) return bridged.startsWith("codebot.") ? bridged.slice("codebot.".length) : null;
   const acp = acpBridgedTool(item);
-  if (acp) return acp.namespace === "openbot" ? acp.tool : null;
-  if (item.type === "toolCall") return /^mcp__openbot__(.+)$/u.exec(getString(item, "name") ?? "")?.[1] ?? null;
-  if (item.type === "mcpToolCall" && getString(item, "server") !== "openbot") return null;
+  if (acp) return acp.namespace === "codebot" ? acp.tool : null;
+  if (item.type === "toolCall") return /^mcp__codebot__(.+)$/u.exec(getString(item, "name") ?? "")?.[1] ?? null;
+  if (item.type === "mcpToolCall" && getString(item, "server") !== "codebot") return null;
   return item.type === "dynamicToolCall" || item.type === "mcpToolCall" ? getString(item, "tool") : null;
 }
 
 function browserTool(item: ThreadItem): string | null {
   const bridged = bridgedTool(item);
-  if (bridged) return bridged.namespace === OPENBOT_BROWSER_NAMESPACE ? bridged.tool : null;
+  if (bridged) return bridged.namespace === CODEBOT_BROWSER_NAMESPACE ? bridged.tool : null;
   if (item.type === "toolCall") {
-    return /^mcp__openbot_browser__(.+)$/u.exec(getString(item, "name") ?? "")?.[1] ?? null;
+    return /^mcp__codebot_browser__(.+)$/u.exec(getString(item, "name") ?? "")?.[1] ?? null;
   }
-  if (item.type !== "dynamicToolCall" || getString(item, "namespace") !== OPENBOT_BROWSER_NAMESPACE) return null;
+  if (item.type !== "dynamicToolCall" || getString(item, "namespace") !== CODEBOT_BROWSER_NAMESPACE) return null;
   return getString(item, "tool");
 }
 
@@ -506,7 +506,7 @@ function messageRecipients(item: ThreadItem): string[] {
 
 export function toolTraceDetail(item: ThreadItem): { command: string | null; recipientAgentIds: string[] | null } {
   const command = getString(item, "command");
-  const recipients = openBotTool(item) === "send_message" ? messageRecipients(item) : [];
+  const recipients = codeBotTool(item) === "send_message" ? messageRecipients(item) : [];
   return { command, recipientAgentIds: recipients.length > 0 ? recipients : null };
 }
 
@@ -602,20 +602,20 @@ export function toolProgressText(item: ThreadItem, completed: boolean): string |
   if (getString(item, "server") === COMPUTER_USE_MCP_SERVER_NAME || descriptor.includes(COMPUTER_USE_MCP_SERVER_NAME)) {
     return sourceText(completed ? "status.computerUse.progressDeciding" : "status.computerUse.progressActing");
   }
-  const openBot = openBotTool(item);
-  if (openBot === "search_memories" || openBot === "list_memories") {
+  const codeBot = codeBotTool(item);
+  if (codeBot === "search_memories" || codeBot === "list_memories") {
     return completed ? null : sourceText("status.agent.memoriesSearching");
   }
-  if (openBot === "history_search" || openBot === "history_read") {
+  if (codeBot === "history_search" || codeBot === "history_read") {
     return completed ? null : sourceText("status.agent.chatsSearching");
   }
-  if (openBot === "remember" || openBot === "forget_memory" || openBot === "set_memory_inclusion") {
+  if (codeBot === "remember" || codeBot === "forget_memory" || codeBot === "set_memory_inclusion") {
     return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.memoriesUpdating");
   }
-  if (openBot === "set_backdrop") return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.backdropSetting");
-  if (openBot === "read_local_skill") return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.skillReading");
-  if (openBot === "send_feedback") return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.feedbackSending");
-  if (openBot === "withdraw_feedback")
+  if (codeBot === "set_backdrop") return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.backdropSetting");
+  if (codeBot === "read_local_skill") return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.skillReading");
+  if (codeBot === "send_feedback") return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.feedbackSending");
+  if (codeBot === "withdraw_feedback")
     return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.feedbackWithdrawing");
   const skill = getString(item, "name") === "Skill" ? getString(item, "skill") : null;
   if (skill) return completed ? TOOL_RESULT_PROGRESS : sourceText("status.agent.skillUsing", { name: skill });
@@ -666,7 +666,7 @@ const TOOL_USAGE_ACTIVITIES: Readonly<Record<ToolUsageKind, AgentStepActivity>> 
   other: "working",
 };
 
-const READING_OPENBOT_TOOLS = new Set([
+const READING_CODEBOT_TOOLS = new Set([
   "search_memories",
   "list_memories",
   "read_local_skill",
@@ -678,10 +678,10 @@ export function toolActivity(item: ThreadItem, completed: boolean): AgentStepAct
   if (!isToolItem(item)) return null;
   if (completed) return "reviewing";
   if (browserTool(item) !== null) return "browsing";
-  const openBot = openBotTool(item);
-  if (openBot === "send_message") return "delegating";
-  if (openBot === "web_search") return "searching";
-  if (READING_OPENBOT_TOOLS.has(openBot ?? "")) return "reading";
+  const codeBot = codeBotTool(item);
+  if (codeBot === "send_message") return "delegating";
+  if (codeBot === "web_search") return "searching";
+  if (READING_CODEBOT_TOOLS.has(codeBot ?? "")) return "reading";
   return TOOL_USAGE_ACTIVITIES[toolUsage(item)?.kind ?? "other"];
 }
 

@@ -3,13 +3,13 @@ import {
   APP_LOGO_EYE_HEX,
   type AppLogoColor,
   DEFAULT_APP_LOGO_COLOR,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { createSignal, onSettled } from "solid-js";
 import { appPort } from "./app-port";
 
 function applyLogoColor(color: AppLogoColor): void {
-  document.documentElement.style.setProperty("--openbot-logo-production", APP_LOGO_COLOR_HEX[color]);
-  document.documentElement.style.setProperty("--openbot-logo-production-eye", APP_LOGO_EYE_HEX[color]);
+  document.documentElement.style.setProperty("--codebot-logo-production", APP_LOGO_COLOR_HEX[color]);
+  document.documentElement.style.setProperty("--codebot-logo-production-eye", APP_LOGO_EYE_HEX[color]);
 }
 
 export function syncLogoColor(): () => void {
@@ -31,8 +31,8 @@ export function syncLogoColor(): () => void {
   return () => {
     active = false;
     unsubscribe();
-    document.documentElement.style.removeProperty("--openbot-logo-production");
-    document.documentElement.style.removeProperty("--openbot-logo-production-eye");
+    document.documentElement.style.removeProperty("--codebot-logo-production");
+    document.documentElement.style.removeProperty("--codebot-logo-production-eye");
   };
 }
 

@@ -1,3 +1,3 @@
-declare module "openbot-original-react-native" {
+declare module "codebot-original-react-native" {
   export * from "react-native";
 }

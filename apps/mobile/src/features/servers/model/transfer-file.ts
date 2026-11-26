@@ -1,6 +1,6 @@
-import { sourceText } from "@openbot/i18n/source";
-import { bytesToBase64 } from "@openbot/team-client/base64";
-import type { RemoteFileUpload } from "@openbot/team-client/remote-peer";
+import { sourceText } from "@codebot/i18n/source";
+import { bytesToBase64 } from "@codebot/team-client/base64";
+import type { RemoteFileUpload } from "@codebot/team-client/remote-peer";
 import * as DocumentPicker from "expo-document-picker";
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
@@ -59,7 +59,7 @@ export async function pickZipUpload(maxBytes: number, tooLarge: string): Promise
 }
 
 export function keepTransferFile(download: RemoteFileUpload): { uri: string; release: () => void } {
-  const file = new File(Paths.cache, `${Date.now()}-openbot-transfer.zip`);
+  const file = new File(Paths.cache, `${Date.now()}-codebot-transfer.zip`);
   file.writeSync(download.base64, { encoding: "base64" });
   return {
     uri: file.uri,

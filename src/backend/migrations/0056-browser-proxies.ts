@@ -1,15 +1,15 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v56 and the separate new-database schema. IF NOT EXISTS, because this text is
 // both the migration and the tail of the latest schema.
 //
 // A browser proxy is a saved proxy server that named browser profiles can use, or the computer of
-// one member (`kind = 'computer'`), which sends the traffic through the connection of the OpenBot
+// one member (`kind = 'computer'`), which sends the traffic through the connection of the CodeBot
 // desktop app of that member while the member shares it. An address proxy has a scheme, a host and a
 // port; the host is its label. A computer proxy has only the membership id of the member
 // (`member_id`), and each member has at most one. The password is encrypted with the OS secret storage (`safeStorage`) before
 // it is written; it is never read back to the renderer or a remote member. A profile without a row in
-// `browser_profile_proxies` uses the proxy settings of the computer that runs OpenBot. A delete of a
+// `browser_profile_proxies` uses the proxy settings of the computer that runs CodeBot. A delete of a
 // proxy or of a profile deletes its rows here, so the profiles of a deleted proxy go back to those
 // settings. Configuration, written directly.
 export const BROWSER_PROXY_SCHEMA_SQL = `
@@ -39,7 +39,7 @@ export const BROWSER_PROXY_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS browser_profile_proxies_proxy ON browser_profile_proxies(proxy_id);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 56,
   name: "browser-proxies",
   // Only creates tables, so no foreign-key pause and no vacuum. No profile has a proxy yet, so every

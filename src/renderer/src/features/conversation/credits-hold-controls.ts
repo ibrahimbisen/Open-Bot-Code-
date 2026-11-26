@@ -1,6 +1,6 @@
-import type { AgentApproval, CreditsHold, CreditsHoldAction } from "@openbot/contracts/ipc";
-import type { CreditsHoldAgent, CreditsHoldControls } from "@openbot/ui/features/conversation/CreditsHoldCard";
-import type { CreditsMenu } from "@openbot/ui/features/credits/credits-store";
+import type { AgentApproval, CreditsHold, CreditsHoldAction } from "@codebot/contracts/ipc";
+import type { CreditsHoldAgent, CreditsHoldControls } from "@codebot/ui/features/conversation/CreditsHoldCard";
+import type { CreditsMenu } from "@codebot/ui/features/credits/credits-store";
 import { adoptCreditAsksMuted, adoptMediaApprovalCredits } from "../servers/media-approval-credits-store";
 
 interface CreditsHoldSource {

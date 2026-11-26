@@ -2,10 +2,10 @@ import type { DatabaseSync } from "node:sqlite";
 
 export function withTransaction<T>(db: DatabaseSync, work: () => T): T {
   const nested = db.isTransaction;
-  db.exec(nested ? "SAVEPOINT openbot_savepoint" : "BEGIN IMMEDIATE");
+  db.exec(nested ? "SAVEPOINT codebot_savepoint" : "BEGIN IMMEDIATE");
   try {
     const result = work();
-    db.exec(nested ? "RELEASE openbot_savepoint" : "COMMIT");
+    db.exec(nested ? "RELEASE codebot_savepoint" : "COMMIT");
     return result;
   } catch (error) {
     rollback(db, nested);
@@ -27,5 +27,5 @@ export async function withTransactionAsync<T>(db: DatabaseSync, work: () => Prom
 
 function rollback(db: DatabaseSync, nested: boolean): void {
   if (!db.isTransaction) return;
-  db.exec(nested ? "ROLLBACK TO openbot_savepoint; RELEASE openbot_savepoint" : "ROLLBACK");
+  db.exec(nested ? "ROLLBACK TO codebot_savepoint; RELEASE codebot_savepoint" : "ROLLBACK");
 }

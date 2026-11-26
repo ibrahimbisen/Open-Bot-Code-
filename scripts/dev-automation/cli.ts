@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
 import { readScriptArguments } from "../script-arguments";
 import {
   assertMutationAllowed,
@@ -36,10 +36,10 @@ import {
   waitForRole,
 } from "./tools";
 
-const logger = createOpenBotLogger("dev-automation", (line) => process.stderr.write(`${line}\n`), "debug");
+const logger = createCodeBotLogger("dev-automation", (line) => process.stderr.write(`${line}\n`), "debug");
 
 const DEFAULT_TIMEOUT_MS = 10_000;
-const SCREENSHOT_ROOT = join(process.cwd(), ".openbot-build", "dev-automation");
+const SCREENSHOT_ROOT = join(process.cwd(), ".codebot-build", "dev-automation");
 const CPU_ROOT = join(SCREENSHOT_ROOT, "cpu");
 const MEMORY_ROOT = join(SCREENSHOT_ROOT, "memory");
 const DEFAULT_CPU_DURATION_MS = 60_000;
@@ -155,7 +155,7 @@ interface AutomationTarget {
 function resolveTarget(flags: Flags, records: DevInstanceRecord[], service: DevInstanceService): AutomationTarget {
   const explicitPort = resolveAutomationPort(
     flagValue(flags, "port") ?? undefined,
-    process.env.OPENBOT_DEV_REMOTE_DEBUGGING_PORT,
+    process.env.CODEBOT_DEV_REMOTE_DEBUGGING_PORT,
   );
   const requestedInstance = flagValue(flags, "instance");
   if (requestedInstance !== null && flagValue(flags, "port") !== null) {

@@ -3,8 +3,8 @@ import {
   LICENSE_MAX_USERS,
   type LicenseOrder,
   licenseOrderFor,
-} from "@openbot/contracts/license";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/license";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertActions,
@@ -29,9 +29,9 @@ import {
   Text,
   TriangleAlert,
   X,
-} from "@openbot/ui";
-import { motionDuration, prefersReducedMotion } from "@openbot/ui/utils";
-import type { UserErrorDetails } from "@openbot/user-errors";
+} from "@codebot/ui";
+import { motionDuration, prefersReducedMotion } from "@codebot/ui/utils";
+import type { UserErrorDetails } from "@codebot/user-errors";
 import {
   createEffect,
   createMemo,

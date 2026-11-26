@@ -1,5 +1,5 @@
-import type { AccountSession, CentralAuthUser, ClientAgentSummary, HostAnalytics } from "@openbot/contracts/ipc";
-import { type ProfileStats, profileStats } from "@openbot/team-client/profile-stats";
+import type { AccountSession, CentralAuthUser, ClientAgentSummary, HostAnalytics } from "@codebot/contracts/ipc";
+import { type ProfileStats, profileStats } from "@codebot/team-client/profile-stats";
 import {
   Badge,
   Button,
@@ -16,7 +16,7 @@ import {
   Text,
   Upload,
   UserAvatar,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import { useText } from "../../text";
 import { ProfileActivity, type ProfileActivityPhase } from "./ProfileActivity";

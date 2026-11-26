@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { DatabaseSync, type SQLOutputValue } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import { CRM_TABLES_AFTER_MIGRATION } from "./crm/crm-schema";
 import { THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION } from "./migrations/0065-thread-event-compaction";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -29,7 +29,7 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
@@ -94,7 +94,7 @@ describe("messaging pings migration", () => {
       seed(db, version);
       if (version < 58) migrateUpTo(db, 58);
       const before = contents(db);
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(contents(db)).toEqual({ ...withNoMemorySite(before), ...PING_TABLES });
       expectHealthy(db);
     },
@@ -106,13 +106,13 @@ describe("messaging pings migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=59
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 59 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 59 failed");
     expect(contents(db)).toEqual(before);
     expect(pingObjects(db)).toEqual([]);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=59").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual({ ...withNoMemorySite(before), ...PING_TABLES });
     expect(pingObjects(db)).toEqual([
       { type: "table", name: "projection_messaging_pings" },
@@ -126,9 +126,9 @@ describe("messaging pings migration", () => {
     seed(db, 58);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version=70; DELETE FROM schema_migrations WHERE version=20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(pingObjects(db)).toEqual([]);
   });
@@ -136,7 +136,7 @@ describe("messaging pings migration", () => {
   it("refuses a ping of an unknown connection, and keeps one row for a person pinged twice", () => {
     const db = databaseAt(58);
     seed(db, 58);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(() => insertPing(db, "missing", "Which logo?")).toThrow("FOREIGN KEY constraint failed");
     insertPing(db, "slack-1", "Which logo?");
     insertPing(db, "slack-1", "Which logo, A or B?");

@@ -1,8 +1,8 @@
-import type { BrowserLocation, BrowserPermissionAnswer } from "@openbot/contracts/ipc";
+import type { BrowserLocation, BrowserPermissionAnswer } from "@codebot/contracts/ipc";
 import {
   type BrowserPermissionRequestState,
   browserPermissionSite,
-} from "@openbot/contracts/team-protocol/browser-permissions-v1";
+} from "@codebot/contracts/team-protocol/browser-permissions-v1";
 import { useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { readCurrentLocation } from "@/features/chat/model/location-request";

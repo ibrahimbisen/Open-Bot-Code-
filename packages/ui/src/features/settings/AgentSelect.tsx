@@ -1,4 +1,4 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@openbot/ui";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@codebot/ui";
 import { createSignal } from "solid-js";
 import { useText } from "../../text";
 

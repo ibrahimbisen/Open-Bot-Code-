@@ -1,9 +1,9 @@
-import { VOICE_AUDIO_LIMITS } from "@openbot/contracts/ipc";
+import { VOICE_AUDIO_LIMITS } from "@codebot/contracts/ipc";
 import {
   VOICE_TRANSCRIPTION_CAPABILITY,
   VOICE_TRANSCRIPTION_ROUTES,
-} from "@openbot/contracts/team-protocol/voice-transcription-v1";
-import { isFixedSourceText, sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/voice-transcription-v1";
+import { isFixedSourceText, sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { parseVoiceTranscription } from "../ipc/voice-inputs";
 import type { TeamApiVoiceTranscription } from "./dependencies";

@@ -7,7 +7,7 @@ import {
   type ConversationPlanStepStatus,
   type ConversationTraceStep,
   isReasoningEffort,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Schema } from "effect";
 import { withBackgroundEffort } from "../src/backend/agent/background-model";
 import {
@@ -26,7 +26,7 @@ import { type AppServerNotification, getArray, getRecord, getString, isRecord } 
 import { extractJsonObject } from "../src/backend/structured-output";
 import { observedQuery } from "./claude-agent-harness";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/finish-check-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/finish-check-bench");
 const TIMEOUT_MS = 120_000;
 
 type Label = "continue" | "stop";
@@ -289,7 +289,7 @@ const CASES: Case[] = [
       "Find out why the app starts slowly and tell me the top causes. Do not change code.",
       [
         tool("bun run profile:start"),
-        tool("cat .openbot-build/profile/start.json | head -100"),
+        tool("cat .codebot-build/profile/start.json | head -100"),
         tool("rg -n 'await import' src/main"),
       ],
       "Top causes from the start profile: 1) the plugin scan reads 400 manifests before the window shows (1.1 s); 2) the database migration check runs twice (0.4 s); 3) the font cache is rebuilt each start (0.3 s). I did not change code, as you asked.",

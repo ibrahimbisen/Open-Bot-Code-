@@ -65,7 +65,7 @@ function StageCaption({
           type="h2"
           align="center"
           accessibilityRole="header"
-          className="tracking-openbot-tight"
+          className="tracking-codebot-tight"
           style={{ color: textColor }}
         >
           {caption.title}

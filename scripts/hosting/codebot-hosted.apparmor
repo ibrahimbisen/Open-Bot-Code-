@@ -1,0 +1,7 @@
+abi <abi/4.0>,
+include <tunables/global>
+
+profile codebot-hosted /opt/CodeBot/app/codebot flags=(unconfined) {
+  userns,
+  network,
+}

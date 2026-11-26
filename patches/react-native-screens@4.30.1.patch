@@ -273,7 +273,7 @@ index 12f2272070030a771ca521140d99a3cfc854bf5f..ba9cd9a0b0aa7eecf34768fb8e76b835
  - (NSArray<UIView *> *)reactSubviews
  {
 -  return _reactSubviews;
-+  // OpenBot patch: return a copy. A shadow state update in a loop over these subviews can commit at once
++  // CodeBot patch: return a copy. A shadow state update in a loop over these subviews can commit at once
 +  // (`unstable_Immediate`) and mount or unmount a header subview, which changes `_reactSubviews`. The loop
 +  // then throws "Collection was mutated while being enumerated" and the app stops.
 +  return [_reactSubviews copy];

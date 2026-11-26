@@ -1,4 +1,4 @@
-import { browserSignInCookieFitsHost } from "@openbot/contracts/team-protocol/browser-sign-in-v1";
+import { browserSignInCookieFitsHost } from "@codebot/contracts/team-protocol/browser-sign-in-v1";
 import { getDomain } from "tldts";
 
 const SIGN_IN_WORD =

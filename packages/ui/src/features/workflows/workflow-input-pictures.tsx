@@ -1,5 +1,5 @@
-import type { AppTextKey } from "@openbot/i18n";
-import { Image } from "@openbot/ui";
+import type { AppTextKey } from "@codebot/i18n";
+import { Image } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import { resultValue, useBoard, type WfnBoard } from "./workflow-board";

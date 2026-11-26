@@ -23,10 +23,11 @@ import {
   workflowGraphFormat,
   workflowGraphProblem,
   workflowUnknownFields,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Schema } from "effect";
+import type { CodeBotDatabase } from "../codebot-database";
 import {
   checkedColumn,
   databaseRow,
@@ -35,7 +36,6 @@ import {
   requiredNumberColumn,
   requiredStringColumn,
 } from "../database/database-rows";
-import type { OpenBotDatabase } from "../openbot-database";
 import { nodeTimezone } from "./workflow-graph";
 import { workflowTransaction } from "./workflow-transaction";
 
@@ -67,13 +67,13 @@ export interface DueWorkflowTrigger {
 }
 
 export interface WorkflowStoreOptions {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   createId?: () => string;
   nextDueAt?: (schedule: RoutineSchedule, timezone: string | null, now: Date) => string | null;
 }
 
 export class WorkflowStore {
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
   readonly #createId: () => string;
   readonly #nextDueAt: (schedule: RoutineSchedule, timezone: string | null, now: Date) => string | null;
 

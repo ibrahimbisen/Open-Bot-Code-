@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { zipSync } from "fflate";
 import { CentralAuthManager } from "../src/main/central-auth-manager";
@@ -52,7 +52,7 @@ async function reviseFrom(context: Context, expectedRevision: number, sourcePath
 const report: Array<{ name: string; passed: boolean; result?: Record<string, string | null>; error?: string }> = [];
 
 async function scenario(name: string, run: (context: Context) => Promise<Record<string, string | null>>) {
-  const root = await mkdtemp(join(tmpdir(), "openbot-skill-7072-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-skill-7072-"));
   try {
     const workspace = join(root, "workspace");
     await mkdir(join(workspace, "source"), { recursive: true });
@@ -290,6 +290,6 @@ await scenario("N An own skill with the same name and other files stays and name
   return { install, kept: kept === ownText ? "unchanged" : "changed" };
 });
 
-await mkdir(".openbot-build", { recursive: true });
-await writeFile(".openbot-build/skill-install-local-changes-e2e.json", `${JSON.stringify(report, null, 2)}\n`);
+await mkdir(".codebot-build", { recursive: true });
+await writeFile(".codebot-build/skill-install-local-changes-e2e.json", `${JSON.stringify(report, null, 2)}\n`);
 if (report.some((entry) => !entry.passed)) process.exitCode = 1;

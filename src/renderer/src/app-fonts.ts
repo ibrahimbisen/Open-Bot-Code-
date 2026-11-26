@@ -1,4 +1,4 @@
-import type { AppAppearancePreference, AppFontFamily } from "@openbot/contracts/app-appearance";
+import type { AppAppearancePreference, AppFontFamily } from "@codebot/contracts/app-appearance";
 import { type Accessor, createSignal, onSettled } from "solid-js";
 import { appPort } from "./app-port";
 
@@ -7,8 +7,8 @@ function quotedFontFamily(font: AppFontFamily): string {
 }
 
 const FONT_PROPERTIES = [
-  { property: "--openbot-font-sans", fallback: "var(--openbot-font-sans-default)", field: "interfaceFont" },
-  { property: "--openbot-font-mono", fallback: "var(--openbot-font-mono-default)", field: "codeFont" },
+  { property: "--codebot-font-sans", fallback: "var(--codebot-font-sans-default)", field: "interfaceFont" },
+  { property: "--codebot-font-mono", fallback: "var(--codebot-font-mono-default)", field: "codeFont" },
 ] as const;
 
 export function applyAppFonts(preference: Pick<AppAppearancePreference, "interfaceFont" | "codeFont">): void {

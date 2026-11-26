@@ -4,12 +4,12 @@ import {
   parseReadMediaApprovalInput,
   parseRespondToCreditsHoldInput,
   parseRespondToMediaApprovalInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   MEDIA_APPROVAL_CHOICE_CAPABILITY,
   MEDIA_APPROVAL_CHOICE_ROUTES,
-} from "@openbot/contracts/team-protocol/media-approval-choice-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/media-approval-choice-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { ForbiddenAttentionAnswer, InactiveAttentionRequest } from "../../backend/agent/inactive-attention-request";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { CreditAsksControl } from "../media-approval-credits-preference-store";

@@ -1,12 +1,12 @@
-import { VAULT_API_KEY_LIMIT, type VaultItemKind, type VaultSaveInput } from "@openbot/contracts/ipc";
+import { VAULT_API_KEY_LIMIT, type VaultItemKind, type VaultSaveInput } from "@codebot/contracts/ipc";
 import {
   UI_API_KEY_SCOPE_FIELD_ID,
   type UiBlockStatus,
   type UiBlockValue,
   type UiVaultSavedItem,
-} from "@openbot/contracts/ui-blocks";
-import type { AppTextKey } from "@openbot/i18n";
-import { Button, CreditCard, Field, KeyRound, NativeSelect, UserRound } from "@openbot/ui";
+} from "@codebot/contracts/ui-blocks";
+import type { AppTextKey } from "@codebot/i18n";
+import { Button, CreditCard, Field, KeyRound, NativeSelect, UserRound } from "@codebot/ui";
 import { createSignal, createUniqueId, For, Match, onCleanup, Show, Switch, untrack } from "solid-js";
 import { useText } from "../../text";
 import { UiBlockCard } from "../conversation/ui-blocks/UiBlockCard";

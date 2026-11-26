@@ -5,7 +5,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AgentModelOption, LEGACY_AGENT_REASONING_EFFORTS } from "@openbot/contracts/ipc";
+import { type AgentModelOption, LEGACY_AGENT_REASONING_EFFORTS } from "@codebot/contracts/ipc";
 import {
   createTeamProtocolV2Request,
   decodeTeamProtocolSupportV9,
@@ -18,7 +18,7 @@ import {
   TEAM_PROTOCOL_V1_CAPABILITIES,
   TEAM_PROTOCOL_VERSION_HEADER,
   teamProtocolV2AuthenticationTranscript,
-} from "@openbot/contracts/team-protocol";
+} from "@codebot/contracts/team-protocol";
 import {
   expandTeamCapabilitiesV10,
   TEAM_PROTOCOL_V10_BASELINE_CAPABILITIES,
@@ -27,32 +27,32 @@ import {
   teamCapabilityHeaders,
   teamCapabilityLists,
   teamWebRtcClientProtocol,
-} from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/current";
 import {
   TEAM_REASONING_EFFORTS,
   TEAM_REASONING_EFFORTS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/reasoning-efforts-v1";
-import { TEAM_LONG_CAPABILITY_LISTS_CAPABILITY, TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
+} from "@codebot/contracts/team-protocol/reasoning-efforts-v1";
+import { TEAM_LONG_CAPABILITY_LISTS_CAPABILITY, TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
 import {
   decodeTeamProtocolSupportV10,
   TEAM_ABSENT_CAPABILITIES_HEADER,
   TEAM_CAPABILITY_BASELINE_CAPABILITY,
   TEAM_PROTOCOL_V10,
-} from "@openbot/contracts/team-protocol/v10";
-import { decodeTeamProtocolV10WebRtcHttpResponse } from "@openbot/contracts/team-protocol/v10-webrtc-adapter";
+} from "@codebot/contracts/team-protocol/v10";
+import { decodeTeamProtocolV10WebRtcHttpResponse } from "@codebot/contracts/team-protocol/v10-webrtc-adapter";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamWebRtcChannel } from "../src/main/team-webrtc-bridge";
 import { readWebHostCompatibility } from "../src/renderer/src/features/web-client/web-host-compatibility";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/team-protocol-v10-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/team-protocol-v10-e2e");
 const FIXTURES = resolve(import.meta.dirname, "../packages/contracts/src/team-protocol/fixtures");
 const HOST_VERSION = "0.0.0-e2e";
 const CLIENT_VERSION = "0.74.0";
@@ -286,14 +286,14 @@ function startProtocol9Host(): Promise<{ server: Server; port: number; protocols
   });
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-team-protocol-v10-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-team-protocol-v10-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
 const access = new AgentAccessStore(join(userData, AGENT_ACCESS_FILE));
 let agents: AgentService | null = null;
 let server: InstanceType<typeof TeamApiServer> | null = null;

@@ -1,5 +1,5 @@
-import type { HostUpdateStatus, UpdateRestartMode } from "@openbot/contracts/ipc";
-import { toast } from "@openbot/ui";
+import type { HostUpdateStatus, UpdateRestartMode } from "@codebot/contracts/ipc";
+import { toast } from "@codebot/ui";
 import {
   type ServerUpdateBusy,
   ServerUpdateDialog,
@@ -7,9 +7,9 @@ import {
   type ServerUpdateFailure,
   type ServerUpdateStage,
   type ServerUpdateView,
-} from "@openbot/ui/features/servers/ServerUpdateDialog";
-import { restartReasonKey } from "@openbot/ui/features/updates/restart-reasons";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/servers/ServerUpdateDialog";
+import { restartReasonKey } from "@codebot/ui/features/updates/restart-reasons";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createRoot, createSignal, createStore, onSettled, untrack } from "solid-js";
 import type { HostRestartView } from "../updates/host-restart-toast";
 import type { HostUpdateCalls } from "./ServerUpdatePanel";

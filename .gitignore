@@ -35,8 +35,8 @@ Shared/
 !apps/mobile/src/shared/
 !apps/mobile/src/shared/**
 index-*.css
-.openbot-browser-test/
-.openbot-build/
+.codebot-browser-test/
+.codebot-build/
 /scripts/provider-live/.e2e/
 /apps/auth-api/src/vendor/laser-flow/
 .worktrees/
@@ -58,4 +58,4 @@ keys
 *firebase-adminsdk*.json
 /TASKS.md
 
-.openbot/
+.codebot/

@@ -1,4 +1,4 @@
-import type { MobileTextKey, MobileTranslate } from "@openbot/i18n/mobile";
+import type { MobileTextKey, MobileTranslate } from "@codebot/i18n/mobile";
 import { Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
 import type { LucideIcon } from "lucide-react-native";
@@ -51,7 +51,7 @@ export function agentListStateLabel(
 
 export function AgentWaitBadge({ reason, size = 20 }: { reason: MobileAgentWaitReason; size?: number }) {
   const [background] = useThemeColor(["background"]);
-  const [warning] = useCSSVariable(["--openbot-warning"]);
+  const [warning] = useCSSVariable(["--codebot-warning"]);
   const Icon = WAIT_ICON[reason];
   const reportHole = useAvatarHole();
   return (
@@ -78,7 +78,7 @@ export function AgentWaitBadge({ reason, size = 20 }: { reason: MobileAgentWaitR
 
 export function AgentWaitChip({ reason }: { reason: MobileAgentWaitReason }) {
   const { t } = useText();
-  const [warningSoft, warning] = useCSSVariable(["--openbot-warning-soft", "--openbot-warning"]);
+  const [warningSoft, warning] = useCSSVariable(["--codebot-warning-soft", "--codebot-warning"]);
   const Icon = WAIT_ICON[reason];
   return (
     <View
@@ -100,7 +100,7 @@ export function AgentWaitChip({ reason }: { reason: MobileAgentWaitReason }) {
 export function AgentWaitingGroupHeader({ count }: { count: number }) {
   const { t, format } = useText();
   const [background] = useThemeColor(["background"]);
-  const [warning] = useCSSVariable(["--openbot-warning"]);
+  const [warning] = useCSSVariable(["--codebot-warning"]);
   return (
     <View
       accessible

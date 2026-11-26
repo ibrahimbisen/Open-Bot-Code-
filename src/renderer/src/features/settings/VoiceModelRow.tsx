@@ -5,8 +5,8 @@ import {
   type VoiceKeyProvider,
   type VoiceModelInfo,
   type VoiceModelStatus,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Button,
   Download,
@@ -26,8 +26,8 @@ import {
   SelectValue,
   TOAST_DURATION,
   toast,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createRoot, createStore, getOwner, onCleanup, runWithOwner, Show, untrack } from "solid-js";
 

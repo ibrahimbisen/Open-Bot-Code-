@@ -1,6 +1,6 @@
-import { HostedServerUpsellDialog } from "@openbot/ui/features/servers/HostedServerUpsellDialog";
-import { HostedServerUpsellNotice } from "@openbot/ui/features/servers/HostedServerUpsellNotice";
-import { ServerConnectionNotice } from "@openbot/ui/features/servers/ServerConnectionNotice";
+import { HostedServerUpsellDialog } from "@codebot/ui/features/servers/HostedServerUpsellDialog";
+import { HostedServerUpsellNotice } from "@codebot/ui/features/servers/HostedServerUpsellNotice";
+import { ServerConnectionNotice } from "@codebot/ui/features/servers/ServerConnectionNotice";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

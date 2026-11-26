@@ -1,5 +1,5 @@
 import type { IncomingMessage } from "node:http";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_WELCOME_ITEM_TYPE,
   type AgentAccessLevel,
@@ -29,9 +29,9 @@ import {
   SETTING_LINK_ITEM_TYPE_PREFIX,
   type TeamMemberSummary,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { teamProtocolCapabilityLimit } from "@openbot/contracts/team-protocol/capability-limits";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { teamProtocolCapabilityLimit } from "@codebot/contracts/team-protocol/capability-limits";
 import {
   CHANNEL_BROWSER_CAPABILITY,
   CHANNEL_ISOLATION_CAPABILITY,
@@ -40,26 +40,26 @@ import {
   isTeamCurrentCapability,
   supportsTeamSemanticTags,
   TEAM_AGENT_CREATE_MODEL_CAPABILITY,
-} from "@openbot/contracts/team-protocol/current";
-import { teamHttpCodec } from "@openbot/contracts/team-protocol/http-codecs";
-import { PROVIDER_MANY_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-many-accounts-v1";
-import { ROUTINE_QUIET_ANSWERS_CAPABILITY } from "@openbot/contracts/team-protocol/routine-quiet-answers-v1";
-import { SETTING_LINK_MARKERS_CAPABILITY } from "@openbot/contracts/team-protocol/setting-link-markers-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
+} from "@codebot/contracts/team-protocol/current";
+import { teamHttpCodec } from "@codebot/contracts/team-protocol/http-codecs";
+import { PROVIDER_MANY_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-many-accounts-v1";
+import { ROUTINE_QUIET_ANSWERS_CAPABILITY } from "@codebot/contracts/team-protocol/routine-quiet-answers-v1";
+import { SETTING_LINK_MARKERS_CAPABILITY } from "@codebot/contracts/team-protocol/setting-link-markers-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
 import {
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V1,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol/v1";
-import { TEAM_PROTOCOL_V2_MAX_JSON_FRAME_BYTES } from "@openbot/contracts/team-protocol/v2";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
+} from "@codebot/contracts/team-protocol/v1";
+import { TEAM_PROTOCOL_V2_MAX_JSON_FRAME_BYTES } from "@codebot/contracts/team-protocol/v2";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
 import {
   readTeamCapabilitiesV10,
   TEAM_ABSENT_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V10,
   type TeamCapabilitiesV10,
-} from "@openbot/contracts/team-protocol/v10";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
 import { readBodyWithin } from "../http-body";
 import { HttpError } from "./http-error";
 import type { TeamApiRequestContext } from "./request-context";

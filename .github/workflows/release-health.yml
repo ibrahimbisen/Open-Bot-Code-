@@ -129,4 +129,4 @@ jobs:
           if [ -S "$dir/control" ]; then
             ssh -q -F /dev/null -S "$dir/control" -O exit tunnel || true
           fi
-          rm -rf "$RUNNER_TEMP/release-health-ssh" .openbot-build/release-health
+          rm -rf "$RUNNER_TEMP/release-health-ssh" .codebot-build/release-health

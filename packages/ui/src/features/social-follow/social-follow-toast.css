@@ -7,19 +7,19 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  column-gap: var(--openbot-space-3);
-  padding: var(--openbot-space-4);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-surface-raised);
-  box-shadow: 0 0 0 1px var(--openbot-border);
-  color: var(--openbot-text-primary);
-  font-family: var(--openbot-font-sans);
+  column-gap: var(--codebot-space-3);
+  padding: var(--codebot-space-4);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-surface-raised);
+  box-shadow: 0 0 0 1px var(--codebot-border);
+  color: var(--codebot-text-primary);
+  font-family: var(--codebot-font-sans);
 }
 
 .social-follow-toast-plush {
   position: relative;
   display: inline-flex;
-  animation: social-follow-plush-hop 560ms var(--openbot-ease-out) 120ms both;
+  animation: social-follow-plush-hop 560ms var(--codebot-ease-out) 120ms both;
 }
 
 .social-follow-plush {
@@ -27,8 +27,8 @@
   display: inline-flex;
   flex: none;
   transition:
-    rotate var(--openbot-duration-normal) var(--openbot-ease-out),
-    translate var(--openbot-duration-normal) var(--openbot-ease-out);
+    rotate var(--codebot-duration-normal) var(--codebot-ease-out),
+    translate var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 .social-follow-toast-plush[data-face="wide"] .social-follow-plush {
@@ -37,51 +37,51 @@
 }
 
 .social-follow-toast-plush[data-face="happy"] .social-follow-plush {
-  animation: social-follow-plush-bounce 520ms var(--openbot-ease-out);
+  animation: social-follow-plush-bounce 520ms var(--codebot-ease-out);
 }
 
 .social-follow-toast-main {
   display: grid;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   min-width: 0;
 }
 
 .social-follow-toast-copy {
   display: grid;
-  gap: var(--openbot-space-0-5);
-  padding-inline-end: var(--openbot-space-1);
+  gap: var(--codebot-space-0-5);
+  padding-inline-end: var(--codebot-space-1);
 }
 
 .social-follow-toast-copy strong {
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
-  font-weight: var(--openbot-weight-semibold);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
+  font-weight: var(--codebot-weight-semibold);
   text-wrap: balance;
 }
 
 .social-follow-toast-copy p {
   margin: 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   text-wrap: pretty;
 }
 
 .social-follow-toast-copy[data-thanks] {
-  animation: social-follow-rise var(--openbot-duration-overlay) var(--openbot-ease-out) both;
+  animation: social-follow-rise var(--codebot-duration-overlay) var(--codebot-ease-out) both;
 }
 
 .social-follow-networks {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .social-follow-networks li {
-  animation: social-follow-rise var(--openbot-duration-overlay) var(--openbot-ease-out) both;
+  animation: social-follow-rise var(--codebot-duration-overlay) var(--codebot-ease-out) both;
 }
 
 .social-follow-networks li:nth-child(1) {
@@ -115,23 +115,23 @@
 .social-follow-toast .social-follow-toast-follow {
   justify-content: flex-start;
   margin-inline-end: 0;
-  animation: social-follow-rise var(--openbot-duration-overlay) var(--openbot-ease-out) 120ms both;
+  animation: social-follow-rise var(--codebot-duration-overlay) var(--codebot-ease-out) 120ms both;
 }
 
 .social-follow-toast .social-follow-network {
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-control);
-  color: var(--openbot-text-secondary);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-control);
+  color: var(--codebot-text-secondary);
   transition:
-    background var(--openbot-duration-fast) var(--openbot-ease-out),
-    color var(--openbot-duration-fast) var(--openbot-ease-out),
-    translate var(--openbot-duration-normal) var(--openbot-ease-out),
-    scale var(--openbot-duration-fast) var(--openbot-ease-out);
+    background var(--codebot-duration-fast) var(--codebot-ease-out),
+    color var(--codebot-duration-fast) var(--codebot-ease-out),
+    translate var(--codebot-duration-normal) var(--codebot-ease-out),
+    scale var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .social-follow-toast .social-follow-network:hover {
-  background: var(--openbot-bg-control-hover);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-bg-control-hover);
+  color: var(--codebot-text-primary);
   translate: 0 -2px;
 }
 
@@ -140,8 +140,8 @@
 }
 
 .social-follow-mark {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: none;
 }
 
@@ -156,11 +156,11 @@
   fill: currentColor;
   top: 0;
   left: 50%;
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
-  color: var(--openbot-beam-pink);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
+  color: var(--codebot-beam-pink);
   opacity: 0;
-  animation: social-follow-heart 1100ms var(--openbot-ease-out) forwards;
+  animation: social-follow-heart 1100ms var(--codebot-ease-out) forwards;
 }
 
 .social-follow-heart[data-index="0"] {
@@ -170,8 +170,8 @@
 
 .social-follow-heart[data-index="1"] {
   --social-follow-heart-x: 2px;
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
 }
 
 .social-follow-heart[data-index="2"] {

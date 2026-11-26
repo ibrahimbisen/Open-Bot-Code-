@@ -3,8 +3,8 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { chromium } from "playwright-core";
 import { z } from "zod";
@@ -15,13 +15,13 @@ import { SunshineMoonlightRuntime } from "../src/main/sunshine-moonlight-runtime
 
 declare global {
   interface Window {
-    openbotNoPictureE2eReport?: (data: unknown) => void;
+    codebotNoPictureE2eReport?: (data: unknown) => void;
   }
 }
 
-const logger = createOpenBotLogger("remote-desktop-no-picture-e2e");
+const logger = createCodeBotLogger("remote-desktop-no-picture-e2e");
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/remote-desktop-no-picture-e2e");
+const OUT = resolve(ROOT, ".codebot-build/remote-desktop-no-picture-e2e");
 const option = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const browserExecutable = option("browser-executable");
 const MARKER = "sunshine-software-encoder";
@@ -38,10 +38,10 @@ window.RTCPeerConnection = class {
   connectionState = "connected";
   async getStats() { return new Map([["video", { type: "inbound-rtp", kind: "video", framesDecoded: 0 }]]); }
 };
-</script></head><body><script>addEventListener("load", () => { window.openbotE2ePeer = new RTCPeerConnection(); });</script></body></html>`;
+</script></head><body><script>addEventListener("load", () => { window.codebotE2ePeer = new RTCPeerConnection(); });</script></body></html>`;
 
 const viewerReportSchema = z.object({
-  source: z.literal("openbot-moonlight"),
+  source: z.literal("codebot-moonlight"),
   type: z.literal("viewer-state"),
   state: z.string(),
   message: z.string().optional(),
@@ -63,7 +63,7 @@ function createRuntime(platform: "win32" | "linux", stateDirectory: string) {
     paths: UNUSED_PATHS,
     stateDirectory,
     platform,
-    credentials: { username: "openbot-e2e", password: "openbot-local-e2e-only" },
+    credentials: { username: "codebot-e2e", password: "codebot-local-e2e-only" },
     getDisplays: () => [DISPLAY],
     getIceServers: () => Effect.succeed([]),
     allocateSunshineBasePort: () => Effect.succeed(47_990),
@@ -86,20 +86,20 @@ async function startHost(platform: "win32" | "linux", sessionCount: number) {
     response.end();
   });
   const moonlightPort = await listen(moonlight);
-  const stateDirectory = await mkdtemp(join(tmpdir(), `openbot-no-picture-e2e-${platform}-`));
+  const stateDirectory = await mkdtemp(join(tmpdir(), `codebot-no-picture-e2e-${platform}-`));
   const runtime = createRuntime(platform, stateDirectory);
   const gateway = new RemoteScreenGateway({
     platform,
     unattended: false,
     runtimePaths: UNUSED_PATHS,
     runtimeStateDirectory: stateDirectory,
-    getRuntimeCredentials: () => Effect.succeed({ username: "openbot-e2e", password: "openbot-local-e2e-only" }),
+    getRuntimeCredentials: () => Effect.succeed({ username: "codebot-e2e", password: "codebot-local-e2e-only" }),
     getDisplays: () => [DISPLAY],
     getIceServers: () => Effect.succeed([]),
     createRuntime: () => ({
       start: () =>
         Effect.succeed({
-          authHeader: "x-openbot-e2e",
+          authHeader: "x-codebot-e2e",
           baseUrl: `http://127.0.0.1:${moonlightPort}`,
           hostId: 1,
           hostIds: [1, 2, 3, 4],
@@ -163,13 +163,13 @@ async function watchUntilError(viewerUrl: string): Promise<ViewerReport> {
   const page = await browser.newPage();
   try {
     const errorReport = new Promise<ViewerReport>((resolveReport) => {
-      void page.exposeBinding("openbotNoPictureE2eReport", (_source, data: unknown) => {
+      void page.exposeBinding("codebotNoPictureE2eReport", (_source, data: unknown) => {
         const report = viewerReportSchema.safeParse(data);
         if (report.success && report.data.state === "error") resolveReport(report.data);
       });
     });
     await page.addInitScript(() => {
-      addEventListener("message", (event) => window.openbotNoPictureE2eReport?.(event.data));
+      addEventListener("message", (event) => window.codebotNoPictureE2eReport?.(event.data));
     });
     const hostHandledError = page.waitForResponse(
       (response) =>

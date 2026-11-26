@@ -1,4 +1,4 @@
-import type { AppAppearancePreference, ChatBackgroundColor } from "@openbot/contracts/app-appearance";
+import type { AppAppearancePreference, ChatBackgroundColor } from "@codebot/contracts/app-appearance";
 
 type Scheme = "light" | "dark";
 type ChatBackgroundPreference = Pick<AppAppearancePreference, "chatBackgroundLight" | "chatBackgroundDark">;
@@ -17,10 +17,10 @@ function render(): void {
   const root = document.documentElement;
   for (const scheme of SCHEMES) {
     const color = colorOf(scheme);
-    const property = `--openbot-chat-background-${scheme}`;
+    const property = `--codebot-chat-background-${scheme}`;
     if (color === null) root.style.removeProperty(property);
     else root.style.setProperty(property, color);
-    root.toggleAttribute(`data-openbot-chat-background-${scheme}`, color !== null);
+    root.toggleAttribute(`data-codebot-chat-background-${scheme}`, color !== null);
   }
 }
 

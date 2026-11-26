@@ -3,11 +3,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/held-teammate-answer-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/held-teammate-answer-e2e");
 const FAST_TEAMMATE = "teammate-fast";
 const STUCK_TEAMMATE = "teammate-stuck";
 
@@ -128,9 +128,9 @@ async function checkReleasedAfterTurnThatEndedBeforeAnswer(mailbox: MailboxStore
   report.checks.push("Later turn ended before the answer: the answer starts at once");
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-held-teammate-answer-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-held-teammate-answer-"));
 const path = join(root, "profile");
-const database = new OpenBotDatabase(path);
+const database = new CodeBotDatabase(path);
 try {
   const mailbox = new MailboxStore(path, join(root, "shared"), database);
   await runCauseEffect(mailbox.initialize());

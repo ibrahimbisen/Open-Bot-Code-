@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import type { AgentClient } from "../src/backend/agent-client";
 import type { AgentCliInfo } from "../src/backend/cli";
 import { type AppServerNotification, getString } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cursor-stream-closed-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-stream-closed-e2e");
 const QUOTED_ANSWER = "Cursor said: Error: RetriableError: WritableIterable is closed";
 const INTERNAL_FAILURE = "Error: RetriableError: [internal] The agent loop failed.";
 
@@ -27,7 +27,7 @@ interface Report {
   internal?: TurnResult;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-cursor-stream-closed-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-cursor-stream-closed-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 

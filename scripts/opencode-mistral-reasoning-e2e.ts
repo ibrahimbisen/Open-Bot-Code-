@@ -5,7 +5,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { composedCustomModelId } from "@openbot/contracts/ipc";
+import { composedCustomModelId } from "@codebot/contracts/ipc";
 import {
   CUSTOM_ENDPOINT_SILENCE_MS,
   type CustomProviderConfig,
@@ -13,9 +13,9 @@ import {
 } from "../src/backend/opencode-config";
 import { getArray, getString, isRecord } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-mistral-reasoning-e2e");
-const binaryArgument = process.argv[2] ?? process.env.OPENBOT_OPENCODE_PATH;
-if (!binaryArgument) throw new Error("Give the OpenCode binary as the first argument or in OPENBOT_OPENCODE_PATH.");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-mistral-reasoning-e2e");
+const binaryArgument = process.argv[2] ?? process.env.CODEBOT_OPENCODE_PATH;
+if (!binaryArgument) throw new Error("Give the OpenCode binary as the first argument or in CODEBOT_OPENCODE_PATH.");
 const binary: string = binaryArgument;
 
 const ENDPOINT = "mistral-direct";
@@ -28,7 +28,7 @@ const OTHER_ENDPOINT = "lab";
 const OTHER_MODEL = "lab-model";
 const REPLY = "e2e reply";
 const VENDOR_MODEL = "@cf/openai/gpt-oss-120b";
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-mistral-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-mistral-"));
 
 interface CapturedRequest {
   readonly status: number;

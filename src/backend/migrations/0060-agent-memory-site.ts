@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 60 ties an agent memory to a site: the host name of the pages it is about, such as
@@ -21,7 +21,7 @@ function addAgentMemorySite(db: DatabaseSync): void {
   db.exec(V60_AGENT_MEMORY_SITE_INDEX_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 60,
   name: "agent-memory-site",
   // Adds one nullable column and a partial index: no rebuild, so no foreign-key pause and no vacuum.

@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
-import { SIDEBAR_PEOPLE_SECTION_ID, SIDEBAR_UNASSIGNED_SECTION_ID } from "@openbot/contracts/ipc";
+import { SIDEBAR_PEOPLE_SECTION_ID, SIDEBAR_UNASSIGNED_SECTION_ID } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { MemoryReviewCursors } from "../src/backend/agent/memory-review-cursors";
 import { readBrowserState } from "../src/backend/browser-state";
@@ -12,7 +12,7 @@ import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import { UserBrowsingLog } from "../src/backend/user-browsing-log";
 import { versionedJsonFallbackPath } from "../src/backend/versioned-json-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/versioned-json-stores-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/versioned-json-stores-e2e");
 const FUTURE_VERSION = 99;
 
 interface OpenStore {
@@ -287,7 +287,7 @@ async function browserCase(root: string): Promise<StoreReport> {
   return report;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-versioned-json-stores-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-versioned-json-stores-e2e-"));
 const report: { passed: boolean; stores: StoreReport[]; failure?: string } = { passed: false, stores: [] };
 try {
   await mkdir(OUT, { recursive: true });

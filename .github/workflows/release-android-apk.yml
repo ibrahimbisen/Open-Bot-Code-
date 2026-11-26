@@ -72,7 +72,7 @@ jobs:
       - name: Install Fastlane
         shell: bash
         run: |
-          echo "APK_PATH=$RUNNER_TEMP/openbot-play.apk" >> "$GITHUB_ENV"
+          echo "APK_PATH=$RUNNER_TEMP/codebot-play.apk" >> "$GITHUB_ENV"
           gem install fastlane --version 2.240.1 --no-document
           fastlane --version
 

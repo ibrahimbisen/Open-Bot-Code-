@@ -32,20 +32,20 @@ import type {
   UpdateAgentInput,
   UpdateCustomProviderInput,
   WorkspaceDirectory,
-} from "@openbot/contracts/ipc";
-import type { ConversationUiBlock } from "@openbot/contracts/ui-blocks";
-import type { AgentMessage, AgentProfile, ComposerThreadMessageMatch } from "@openbot/ui/data";
-import type { BrowserViewRuntime } from "@openbot/ui/features/browser/BrowserLiveView";
-import type { ChannelWorker } from "@openbot/ui/features/channels/ChannelActivityIndicator";
-import type { AwaitingReplyItem } from "@openbot/ui/features/conversation/AwaitingReplies";
-import type { UsageLimitAskCardProps } from "@openbot/ui/features/conversation/BackupModels";
-import type { ChatMessageAuthor } from "@openbot/ui/features/conversation/ChatMessageRow";
-import type { UnloadedHistory } from "@openbot/ui/features/conversation/ChatScrollRail";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
-import type { SidePanelPane } from "@openbot/ui/features/conversation/SidePanel";
-import type { AgentThreadOlderMessages } from "@openbot/ui/features/conversation/threads/AgentThreadView";
-import type { ThreadHeaderProps, ThreadItem } from "@openbot/ui/features/conversation/threads/thread-types";
-import type { SidebarAgentWait } from "@openbot/ui/features/sidebar/sidebar-agent-states";
+} from "@codebot/contracts/ipc";
+import type { ConversationUiBlock } from "@codebot/contracts/ui-blocks";
+import type { AgentMessage, AgentProfile, ComposerThreadMessageMatch } from "@codebot/ui/data";
+import type { BrowserViewRuntime } from "@codebot/ui/features/browser/BrowserLiveView";
+import type { ChannelWorker } from "@codebot/ui/features/channels/ChannelActivityIndicator";
+import type { AwaitingReplyItem } from "@codebot/ui/features/conversation/AwaitingReplies";
+import type { UsageLimitAskCardProps } from "@codebot/ui/features/conversation/BackupModels";
+import type { ChatMessageAuthor } from "@codebot/ui/features/conversation/ChatMessageRow";
+import type { UnloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
+import type { SidePanelPane } from "@codebot/ui/features/conversation/SidePanel";
+import type { AgentThreadOlderMessages } from "@codebot/ui/features/conversation/threads/AgentThreadView";
+import type { ThreadHeaderProps, ThreadItem } from "@codebot/ui/features/conversation/threads/thread-types";
+import type { SidebarAgentWait } from "@codebot/ui/features/sidebar/sidebar-agent-states";
 import type { JSX } from "@solidjs/web";
 import type { ConnectorRegistry } from "../connectors/connector-registry";
 import type { AppSettingLinkId } from "../settings/setting-link-targets";
@@ -118,7 +118,7 @@ export interface ConversationProps {
   mcpSignedIn?: ((mcpServerId: string) => boolean) | undefined;
   refreshMcpSignIns?: (() => void) | undefined;
   serverInstall?: ServerInstallWatch | undefined;
-  platform?: import("@openbot/contracts/ipc").AppInfo["platform"] | undefined;
+  platform?: import("@codebot/contracts/ipc").AppInfo["platform"] | undefined;
 
   agentStatus: AgentStatus;
   agentsConnecting?: boolean | undefined;
@@ -301,10 +301,10 @@ export type RightPanelMode =
 export type { SidePanelPane };
 
 export interface ConversationMessagePins {
-  list: (agentId: string) => Promise<import("@openbot/contracts/ipc").PinnedMessagesSnapshot>;
+  list: (agentId: string) => Promise<import("@codebot/contracts/ipc").PinnedMessagesSnapshot>;
   set: (
-    input: import("@openbot/contracts/ipc").SetMessagePinnedInput,
-  ) => Promise<import("@openbot/contracts/ipc").PinnedMessagesSnapshot>;
+    input: import("@codebot/contracts/ipc").SetMessagePinnedInput,
+  ) => Promise<import("@codebot/contracts/ipc").PinnedMessagesSnapshot>;
   subscribe: (agentId: string, changed: () => void) => () => void;
 }
 

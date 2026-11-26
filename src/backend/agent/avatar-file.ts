@@ -1,7 +1,7 @@
 import { open } from "node:fs/promises";
 import { resolve } from "node:path";
-import { AVATAR_MIME_TYPES, type AvatarMimeType, isValidAvatarImage } from "@openbot/contracts/avatar-images";
-import { AVATAR_IMAGE_LIMITS } from "@openbot/contracts/input-limits";
+import { AVATAR_MIME_TYPES, type AvatarMimeType, isValidAvatarImage } from "@codebot/contracts/avatar-images";
+import { AVATAR_IMAGE_LIMITS } from "@codebot/contracts/input-limits";
 import { Effect, Schema, Stream } from "effect";
 import { causeHelpers } from "../effect-boundary";
 
@@ -13,10 +13,10 @@ class AvatarFileFailed extends Schema.TaggedError<AvatarFileFailed>()("AvatarFil
 }) {}
 
 const DAMAGED_ERROR =
-  "The image file is damaged or incomplete, so OpenBot cannot show it. Make a new PNG, JPEG, or WebP copy with your available tools, then retry with its path.";
+  "The image file is damaged or incomplete, so CodeBot cannot show it. Make a new PNG, JPEG, or WebP copy with your available tools, then retry with its path.";
 
 const GIF_ERROR =
-  "OpenBot stores pictures as PNG, JPEG, or WebP, not GIF. To keep the animation, make an animated WebP copy up to 512 KB with your available tools, then retry with its path. If you cannot, tell the user that the picture will be still, and that Upload image in the app's picture editor keeps a GIF animated.";
+  "CodeBot stores pictures as PNG, JPEG, or WebP, not GIF. To keep the animation, make an animated WebP copy up to 512 KB with your available tools, then retry with its path. If you cannot, tell the user that the picture will be still, and that Upload image in the app's picture editor keeps a GIF animated.";
 
 const { io: avatarIo } = causeHelpers(AvatarFileFailed);
 
@@ -52,7 +52,7 @@ const readSource = Effect.fn("AvatarFile.readSource")((path: string) =>
       Effect.mapError(
         () =>
           new AvatarFileFailed({
-            cause: new Error("OpenBot could not open the avatar file. Use an existing local image path."),
+            cause: new Error("CodeBot could not open the avatar file. Use an existing local image path."),
           }),
       ),
     ),

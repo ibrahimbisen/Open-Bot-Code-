@@ -9,14 +9,14 @@ import {
   machineAlertLevel,
   machineMetricRatio,
   type TeamMemberSummary,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { MACHINE_ALERT_EVENT, type MachineAlertEvent } from "@openbot/contracts/team-protocol/machine-resources-v1";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { MACHINE_ALERT_EVENT, type MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
 import { Effect, Result, Semaphore } from "effect";
 import { isMissingFileError } from "../backend/file-errors";
 import { type PreferenceFileFailure, readPreferenceFile, writePreferenceFile } from "./preference-file";
 
-export const MACHINE_ALERTS_PREFERENCE_FILE = "openbot-machine-alerts-v1.json";
+export const MACHINE_ALERTS_PREFERENCE_FILE = "codebot-machine-alerts-v1.json";
 
 const CHECK_INTERVAL_MS = 60_000;
 const REPEAT_MS = 24 * 60 * 60_000;

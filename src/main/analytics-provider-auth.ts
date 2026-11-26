@@ -1,5 +1,5 @@
-import { type AgentSummary, DEFAULT_PROVIDER_ACCOUNT_ID, isFreeOpencodeModel } from "@openbot/contracts/ipc";
-import { CLAUDE_API_KEY_ACCOUNT_ID } from "@openbot/contracts/team-protocol/claude-api-key-v1";
+import { type AgentSummary, DEFAULT_PROVIDER_ACCOUNT_ID, isFreeOpencodeModel } from "@codebot/contracts/ipc";
+import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
 import { CLAUDE_API_KEY_ACCOUNT_TYPE } from "../backend/protocol";
 
 export const PROVIDER_AUTH_KINDS = ["subscription", "api_key", "free", "custom", "unknown"] as const;

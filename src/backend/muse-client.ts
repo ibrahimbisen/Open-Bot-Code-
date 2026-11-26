@@ -1,16 +1,16 @@
 import { EventEmitter } from "node:events";
 import { readFile, realpath } from "node:fs/promises";
 import { toNamespacedPath } from "node:path";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import {
   type Connection,
   type SendUserTurnOptions,
   type SpawnedMspConnection,
   spawnMspConnection,
 } from "@muse-code/sdk";
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
 import { Effect, Exit, Fiber, Option, Schema, Scope } from "effect";
 import { shownFailureDetail } from "./acp-flavor";
 import { secretElicitationField } from "./agent/prompts";
@@ -389,7 +389,7 @@ export class MuseAgentClient extends EventEmitter<ClientEvents> implements Agent
   ): Effect.fn.Return<SpawnedMspConnection, ProviderClientOperationError> {
     const host = yield* providerCall(() =>
       handshake.initialize({
-        clientInfo: { name: "openbot", version: "1" },
+        clientInfo: { name: "codebot", version: "1" },
         capabilities: { requestedCapabilities: ["sessionMcp"] },
       }),
     ).pipe(
@@ -882,7 +882,7 @@ export class MuseAgentClient extends EventEmitter<ClientEvents> implements Agent
     }
     if (method === "session/tokenUsage") {
       const usage = yield* this.#decode(MuseUsage, params);
-      this.#emit("openbot/usage", {
+      this.#emit("codebot/usage", {
         threadId: thread.id,
         turnId: usage.turnId,
         usage: {

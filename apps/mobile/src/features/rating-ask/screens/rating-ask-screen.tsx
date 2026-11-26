@@ -238,7 +238,7 @@ export function RatingAskScreen() {
             }}
           >
             <Animated.View entering={rowEntering(0, reduced)}>
-              <Typography.Heading type="h3" accessibilityRole="header" className="tracking-openbot-tight">
+              <Typography.Heading type="h3" accessibilityRole="header" className="tracking-codebot-tight">
                 {thanks === "feedback"
                   ? t("mobile.app.rate.feedbackThanks")
                   : thanks

@@ -12,8 +12,8 @@ import {
   MP4_ATTACHMENT_EXTENSIONS,
   SVG_ATTACHMENT_EXTENSIONS,
   supportedAttachmentExtensions,
-} from "@openbot/contracts/attachment-files";
-import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/attachment-files";
+import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type DownloadAttachmentsInput,
   decodeWorkspaceDirectory,
@@ -22,8 +22,8 @@ import {
   LOCAL_SERVER_ID,
   type OpenAttachmentInput,
   type OpenStoredFileInput,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_ANY_FILE_ATTACHMENTS_CAPABILITY,
   TEAM_EML_ATTACHMENTS_CAPABILITY,
@@ -31,14 +31,14 @@ import {
   TEAM_MP4_ATTACHMENTS_CAPABILITY,
   TEAM_SVG_ATTACHMENTS_CAPABILITY,
   TEAM_ZIP_ATTACHMENTS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/current";
 import {
   WORKSPACE_DIRECTORY_CAPABILITY,
   WORKSPACE_DIRECTORY_ROUTES,
-} from "@openbot/contracts/team-protocol/workspace-directory-v1";
-import type { AppTranslate } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/workspace-directory-v1";
+import type { AppTranslate } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Schema } from "effect";
 import { app, type BrowserWindow, dialog, type OpenDialogOptions, shell } from "electron";
 import { type Zippable, zip } from "fflate";
@@ -71,7 +71,7 @@ import { type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";
 import { routeToServer } from "./route-to-server";
 import { scopedHandler } from "./scoped-handler";
 
-const logger = createOpenBotLogger("attachments");
+const logger = createCodeBotLogger("attachments");
 
 export interface AttachmentIpcDependencies {
   service: Pick<

@@ -3,7 +3,7 @@ import { rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { Effect, Option, Schema } from "effect";
 
-export const RUN_MARKER_FILE = "openbot-run-marker-v1.json";
+export const RUN_MARKER_FILE = "codebot-run-marker-v1.json";
 const RUN_HEARTBEAT_MS = 60_000;
 const MAX_CRASH_DUMPS = 10;
 const CRASH_DUMP_DEPTH = 3;

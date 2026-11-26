@@ -3,17 +3,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { WORKFLOW_MEDIA_MODELS, type WorkflowGraph, type WorkflowStep } from "@openbot/contracts/ipc";
+import { WORKFLOW_MEDIA_MODELS, type WorkflowGraph, type WorkflowStep } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { type StoredWorkflowStep, WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-step-settings-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-step-settings-e2e");
 const WAIT_MS = 5_000;
 const PHOTO = "0123456789abcdef0123456789abcdef";
 const PICTURE = "fedcba9876543210fedcba9876543210";
@@ -62,12 +62,12 @@ function graph(prompt: string): WorkflowGraph {
   };
 }
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-step-settings-"));
-let database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-step-settings-"));
+let database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   await Effect.runPromise(database.initialize());
   const workflows = await Effect.runPromise(
     createWorkflows({

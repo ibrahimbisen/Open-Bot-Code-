@@ -1,5 +1,5 @@
-import { isManagedRuntimeProvider, type ManagedProviderId } from "@openbot/contracts/agent-providers";
-import type { AgentProviderStatus, AgentStatus } from "@openbot/contracts/ipc";
+import { isManagedRuntimeProvider, type ManagedProviderId } from "@codebot/contracts/agent-providers";
+import type { AgentProviderStatus, AgentStatus } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { CodexCliError, resolveClaudeCli, resolveCodexCli } from "../backend/cli";
 import type { ProviderRuntimeManager } from "./provider-runtime-manager";

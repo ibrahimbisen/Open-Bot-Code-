@@ -3,10 +3,10 @@ import {
   type BrowserDesktopApi,
   type BrowserLiveViewDialog,
   type BrowserLiveViewInput,
-} from "@openbot/contracts/ipc";
-import { AlertDialog, Button, ErrorReference, Globe2, toast } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
-import { errorReference } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { AlertDialog, Button, ErrorReference, Globe2, toast } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
+import { errorReference } from "@codebot/user-errors";
 import { createEffect, createSignal, createStore, onCleanup, Show } from "solid-js";
 
 const ALT = 1;

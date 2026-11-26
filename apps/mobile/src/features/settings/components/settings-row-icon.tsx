@@ -2,9 +2,9 @@ import type { LucideIcon } from "lucide-react-native";
 import { useCSSVariable } from "uniwind";
 
 const TONE_COLORS = {
-  muted: "--openbot-text-grouped-secondary",
-  accent: "--openbot-accent",
-  danger: "--openbot-danger-text",
+  muted: "--codebot-text-grouped-secondary",
+  accent: "--codebot-accent",
+  danger: "--codebot-danger-text",
 } as const;
 
 export function RowIcon({ icon: Icon, tone = "muted" }: { icon: LucideIcon; tone?: keyof typeof TONE_COLORS }) {

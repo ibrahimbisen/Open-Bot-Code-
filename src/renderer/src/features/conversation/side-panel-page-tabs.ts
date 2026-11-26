@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-const PAGE_TABS_STORAGE_KEY = "openbot:side-panel-page-tabs";
+const PAGE_TABS_STORAGE_KEY = "codebot:side-panel-page-tabs";
 
 function readPageTabsShown(): boolean {
   try {

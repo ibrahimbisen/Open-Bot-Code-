@@ -5,8 +5,8 @@ import {
   type McpServerConfig,
   RESERVED_MCP_SERVER_NAMES,
   type Routine,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { isMissingFileError } from "../backend/file-errors";
 import type { AnalyticsInventoryDayStore } from "./analytics";
@@ -34,8 +34,8 @@ export function analyticsInventoryDayStore(path: string): AnalyticsInventoryDayS
   };
 }
 
-const CURATED_SKILL_PREFIX = "openbot-curated-skill-";
-const CURATED_AGENT_PREFIX = "openbot-curated-agent-";
+const CURATED_SKILL_PREFIX = "codebot-curated-skill-";
+const CURATED_AGENT_PREFIX = "codebot-curated-agent-";
 const BUILTIN_SERVER_NAMES = new Set<string>([...RESERVED_MCP_SERVER_NAMES, COMPUTER_USE_MCP_SERVER_NAME]);
 
 export interface AnalyticsInventorySources {

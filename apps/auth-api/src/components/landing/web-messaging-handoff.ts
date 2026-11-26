@@ -4,7 +4,7 @@ import {
   WEB_MESSAGING_INSTALL_CHANNEL,
   type WebMessagingInstallPlatform,
   webMessagingInstallKey,
-} from "@openbot/contracts/web-messaging-install";
+} from "@codebot/contracts/web-messaging-install";
 
 const RECEIPT_TIMEOUT_MS = 3_000;
 

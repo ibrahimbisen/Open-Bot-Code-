@@ -1,9 +1,9 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface TeamPort {
-  servers: Pick<OpenBotDesktopApi["servers"], "onPresence" | "setTyping">;
+  servers: Pick<CodeBotDesktopApi["servers"], "onPresence" | "setTyping">;
 }
 
 export function teamPort(): TeamPort {
-  return window.openbot;
+  return window.codebot;
 }

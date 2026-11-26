@@ -1,4 +1,4 @@
-import type { TeamPresenceSnapshot } from "@openbot/contracts/ipc";
+import type { TeamPresenceSnapshot } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { RemoteWorkflowError } from "./remote-service-effects";
 

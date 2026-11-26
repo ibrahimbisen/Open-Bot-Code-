@@ -3,7 +3,7 @@ import {
   type NearWalletDesktopApi,
   type NearWalletStatus,
   NO_NEAR_WALLET,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 const MOCK_SIGNATURE_MS = 2_000;
 

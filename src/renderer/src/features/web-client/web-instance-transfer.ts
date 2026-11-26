@@ -3,10 +3,10 @@ import {
   INSTANCE_TRANSFER_LIMITS,
   type InstanceTransferUploadProgress,
   resolveRemoteInstanceTransferResult,
-} from "@openbot/contracts/ipc";
-import { INSTANCE_TRANSFER_REMOTE_BYTES } from "@openbot/contracts/team-protocol/instance-transfer-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { base64ToBytes } from "@openbot/team-client/base64";
+} from "@codebot/contracts/ipc";
+import { INSTANCE_TRANSFER_REMOTE_BYTES } from "@codebot/contracts/team-protocol/instance-transfer-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { base64ToBytes } from "@codebot/team-client/base64";
 import {
   applyInstanceTransfer,
   applyInstanceTransferFullCopy,
@@ -20,8 +20,8 @@ import {
   stageInstanceTransfer,
   stageInstanceTransferInParts,
   type TeamApiRequest,
-} from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 import { Effect } from "effect";
 import type { ServerTransferCalls } from "../servers/server-transfer-store";
 import { readBase64 } from "./web-agent-import";
@@ -50,7 +50,7 @@ export function createWebInstanceTransferCalls(options: {
       const file = await runTeamEffect(
         downloadInstanceTransfer(options.download(serverId), input).pipe(Effect.mapError((error) => error.cause)),
       );
-      const fileName = `openbot-transfer-${new Date().toISOString().slice(0, 10)}.zip`;
+      const fileName = `codebot-transfer-${new Date().toISOString().slice(0, 10)}.zip`;
       options.saveFile({ name: fileName, base64: file.base64 });
       return { saved: true, fileName, warnings: [] };
     },
@@ -128,7 +128,7 @@ async function exportInParts(
         throw new Error(currentText().t("error.import.transferPartInvalid"));
       parts.push(new Blob([bytes]));
     }
-    const fileName = `openbot-transfer-${new Date().toISOString().slice(0, 10)}.zip`;
+    const fileName = `codebot-transfer-${new Date().toISOString().slice(0, 10)}.zip`;
     options.saveFile({ name: fileName, blob: new Blob(parts, { type: "application/zip" }) });
     return { saved: true, fileName, warnings: file.warnings };
   } finally {

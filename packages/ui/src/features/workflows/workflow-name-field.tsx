@@ -5,9 +5,9 @@ import {
   type WorkflowAnswerSource,
   type WorkflowAnswerType,
   type WorkflowNodeKind,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey, AppTranslate } from "@openbot/i18n";
-import { Braces, IconButton, Listbox, Popover } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey, AppTranslate } from "@codebot/i18n";
+import { Braces, IconButton, Listbox, Popover } from "@codebot/ui";
 import { createEffect, createMemo, createSignal, createUniqueId, Show, untrack } from "solid-js";
 import { referenceChipClasses } from "../../reference-chip";
 import { useText } from "../../text";

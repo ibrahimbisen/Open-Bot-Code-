@@ -6,7 +6,7 @@ import {
   avatarFileExtension,
   isAvatarMimeType,
   isValidAvatarImage,
-} from "@openbot/contracts/avatar-images";
+} from "@codebot/contracts/avatar-images";
 import { Effect, Semaphore } from "effect";
 
 const REMOTE_PICTURES_PER_SERVER = 400;

@@ -4,17 +4,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { ChannelOperationError } from "../src/backend/channel-effects";
 import { ChannelImages } from "../src/backend/channel-images";
 import { ChannelService } from "../src/backend/channel-service";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-routing-timeout-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-routing-timeout-e2e");
 const PERSON = { id: "member-e2e", name: "Owner" };
 const WAIT_MS = 5_000;
 
@@ -49,8 +49,8 @@ const lead = agent("agent-lead", "Lead");
 const writer = agent("agent-writer", "Writer");
 const agents = [lead, writer];
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-channel-routing-timeout-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-channel-routing-timeout-"));
+const database = new CodeBotDatabase(directory);
 let channels: ChannelService | null = null;
 
 async function until<T>(read: () => T | undefined, what: string): Promise<T> {

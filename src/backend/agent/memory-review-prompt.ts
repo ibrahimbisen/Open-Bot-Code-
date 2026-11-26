@@ -1,11 +1,11 @@
-import { AGENT_MEMORY_CONTEXT_BUDGET_BYTES } from "@openbot/contracts/agent-memory-context";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { AGENT_MEMORY_CONTEXT_BUDGET_BYTES } from "@codebot/contracts/agent-memory-context";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentSummary,
   type ConversationMessage,
   isLocalLibrarySkill,
   SKILL_DESCRIPTION_MAX_LENGTH,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Schema } from "effect";
 import type { UserBrowsingStep } from "../user-browsing-log";
 import type { MemoryReviewBase } from "./agent-memories";

@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
-import { BROWSER_PROXY_SCHEMES, type BrowserProxyScheme } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import { BROWSER_PROXY_SCHEMES, type BrowserProxyScheme } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import type { CodeBotDatabase } from "../codebot-database";
 import {
   checkedColumn,
   databaseRows,
@@ -8,7 +9,6 @@ import {
   requiredNumberColumn,
   requiredStringColumn,
 } from "../database/database-rows";
-import type { OpenBotDatabase } from "../openbot-database";
 
 export interface BrowserProxyAddressRecord {
   kind: "address";
@@ -49,9 +49,9 @@ export interface BrowserProxyRow {
 }
 
 export class BrowserProxyStore {
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
 
-  constructor(database: OpenBotDatabase) {
+  constructor(database: CodeBotDatabase) {
     this.#database = database;
   }
 

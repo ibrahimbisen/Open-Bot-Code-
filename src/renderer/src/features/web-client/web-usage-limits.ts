@@ -1,12 +1,12 @@
-import { type AgentModelChoice, sameAgentModelChoice } from "@openbot/contracts/ipc";
-import { guardedDecoder } from "@openbot/contracts/ipc-decoding";
+import { type AgentModelChoice, sameAgentModelChoice } from "@codebot/contracts/ipc";
+import { guardedDecoder } from "@codebot/contracts/ipc-decoding";
 import {
   AGENT_USAGE_LIMIT_CAPABILITY,
   AGENT_USAGE_LIMIT_ROUTES,
   type AgentUsageLimits,
   isAgentUsageLimits,
-} from "@openbot/contracts/team-protocol/agent-usage-limit-v1";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/contracts/team-protocol/agent-usage-limit-v1";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { createSignal, onCleanup } from "solid-js";
 import type { WebWorkspace } from "./web-client-context";
 

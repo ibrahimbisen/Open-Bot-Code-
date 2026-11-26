@@ -6,7 +6,7 @@ import type { AgentClient } from "../src/backend/agent-client";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-idle-release-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-idle-release-e2e");
 
 interface LogEntry {
   event: "start" | "switch_session" | "prompt" | "exit";
@@ -22,7 +22,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-idle-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-idle-e2e-"));
 const log = join(root, "agent.jsonl");
 const report: Report = { passed: false, steps: [] };
 const clients: AgentClient[] = [];

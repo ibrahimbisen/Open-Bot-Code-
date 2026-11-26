@@ -1,6 +1,6 @@
-import type { ClientAgentSummary } from "@openbot/contracts/ipc";
-import { markdownImageNames, markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import { cleanAgentMessageText } from "@openbot/team-client/agent-message-text";
+import type { ClientAgentSummary } from "@codebot/contracts/ipc";
+import { markdownImageNames, markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import { cleanAgentMessageText } from "@codebot/team-client/agent-message-text";
 import type { AgentProfile } from "../../data";
 import { currentText } from "../../text";
 

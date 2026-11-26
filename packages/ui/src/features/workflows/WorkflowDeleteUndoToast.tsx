@@ -1,4 +1,4 @@
-import { Button, Progress, toast, Workflow } from "@openbot/ui";
+import { Button, Progress, toast, Workflow } from "@codebot/ui";
 import { currentText } from "../../text";
 import { startUndoCountdown, type UndoCountdown } from "../agents/AgentDeleteUndoToast";
 

@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { DatabaseSync, type SQLOutputValue } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import { CRM_TABLES_AFTER_MIGRATION } from "./crm/crm-schema";
 import { THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION } from "./migrations/0065-thread-event-compaction";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -30,7 +30,7 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
@@ -96,7 +96,7 @@ describe("agent memory site migration", () => {
       seed(db);
       if (source < 59) migrateUpTo(db, 59);
       const before = contents(db);
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(contents(db)).toEqual({ ...withNoSite(before), ...LATER_TABLES });
       expect(columns(db)).toContain("site");
       expect(
@@ -118,14 +118,14 @@ describe("agent memory site migration", () => {
     const columnsBefore = columns(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=60
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 60 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 60 failed");
     expect(contents(db)).toEqual(before);
     expect(columns(db)).toEqual(columnsBefore);
     expect(siteIndex(db)).toEqual([]);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=60").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual({ ...withNoSite(before), ...LATER_TABLES });
     expectHealthy(db);
   });
@@ -135,7 +135,7 @@ describe("agent memory site migration", () => {
     seed(db);
     db.exec("ALTER TABLE projection_agent_memories ADD COLUMN site TEXT");
     db.exec("UPDATE projection_agent_memories SET site='github.com' WHERE memory_id='memory-1'");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(columns(db).filter((name) => name === "site")).toEqual(["site"]);
     expect(db.prepare("SELECT memory_id, site FROM projection_agent_memories ORDER BY memory_id").all()).toEqual([
       { memory_id: "memory-1", site: "github.com" },
@@ -150,9 +150,9 @@ describe("agent memory site migration", () => {
     const before = contents(db);
     const columnsBefore = columns(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version=70; DELETE FROM schema_migrations WHERE version=57");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 57");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 57");
     expect(contents(db)).toEqual(before);
     expect(columns(db)).toEqual(columnsBefore);
     expect(siteIndex(db)).toEqual([]);
@@ -161,20 +161,20 @@ describe("agent memory site migration", () => {
   it("refuses to open a version 60 database in an older application", () => {
     const db = databaseAt(59);
     seed(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     const after = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     expect(contents(db)).toEqual(after);
   });
 
   it("rejects a site that the app cannot read, in an upgraded and in a new database", () => {
     const upgraded = databaseAt(59);
     seed(upgraded);
-    migrateOpenBotDatabase(upgraded);
+    migrateCodeBotDatabase(upgraded);
     const created = new DatabaseSync(":memory:");
     databases.push(created);
-    migrateOpenBotDatabase(created);
+    migrateCodeBotDatabase(created);
     seed(created);
     for (const db of [upgraded, created]) {
       db.exec("UPDATE projection_agent_memories SET site='github.com' WHERE memory_id='memory-1'");

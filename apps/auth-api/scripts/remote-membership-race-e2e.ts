@@ -9,7 +9,7 @@ import { RemoteControlPlane } from "../src/server/remote-control-plane";
 
 const run = promisify(execFile);
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "remote-membership-race-e2e");
+const OUT = join(ROOT, ".codebot-build", "remote-membership-race-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const WRANGLER = join(ROOT, "node_modules", ".bin", process.platform === "win32" ? "wrangler.cmd" : "wrangler");
 const HOUR = 60 * 60 * 1000;
@@ -73,7 +73,7 @@ await writeFile(
     d1_databases: [
       {
         binding: "DB",
-        database_name: "openbot-auth",
+        database_name: "codebot-auth",
         database_id: "remote-membership-race-e2e",
         migrations_dir: MIGRATIONS,
       },
@@ -81,7 +81,7 @@ await writeFile(
   }),
 );
 const env = { ...process.env, CI: "1", WRANGLER_SEND_METRICS: "false" };
-await run(WRANGLER, ["d1", "migrations", "apply", "openbot-auth", "--local", "--persist-to", state, "-c", config], {
+await run(WRANGLER, ["d1", "migrations", "apply", "codebot-auth", "--local", "--persist-to", state, "-c", config], {
   cwd: work,
   env,
 });

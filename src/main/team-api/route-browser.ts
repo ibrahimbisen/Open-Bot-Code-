@@ -1,47 +1,47 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type BrowserControlState,
   browserHttpSignInPrompts,
   canAdministerServer,
   type TeamRole,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isBoolean } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isBoolean } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   BROWSER_HTTP_SIGN_IN_CAPABILITY,
   BROWSER_HTTP_SIGN_IN_ROUTES,
   decodeBrowserHttpSignInAnswer,
-} from "@openbot/contracts/team-protocol/browser-http-sign-in-v1";
+} from "@codebot/contracts/team-protocol/browser-http-sign-in-v1";
 import {
   BROWSER_PAGE_STATE_CAPABILITY,
   BROWSER_PAGE_STATE_ROUTES,
-} from "@openbot/contracts/team-protocol/browser-page-state-v1";
+} from "@codebot/contracts/team-protocol/browser-page-state-v1";
 import {
   BROWSER_PERMISSIONS_CAPABILITY,
   BROWSER_PERMISSIONS_ROUTES,
   browserPermissionRequests,
   decodeBrowserPermissionAnswer,
-} from "@openbot/contracts/team-protocol/browser-permissions-v1";
+} from "@codebot/contracts/team-protocol/browser-permissions-v1";
 import {
   BROWSER_SIGN_IN_STORAGE_CAPABILITY,
   BROWSER_SIGN_IN_STORAGE_ROUTES,
   decodeBrowserSignInStorageImport,
-} from "@openbot/contracts/team-protocol/browser-sign-in-storage-v1";
+} from "@codebot/contracts/team-protocol/browser-sign-in-storage-v1";
 import {
   BROWSER_SIGN_IN_CAPABILITY,
   BROWSER_SIGN_IN_ROUTES,
   decodeBrowserSignInImport,
-} from "@openbot/contracts/team-protocol/browser-sign-in-v1";
+} from "@codebot/contracts/team-protocol/browser-sign-in-v1";
 import {
   BROWSER_TEACH_CAPABILITY,
   BROWSER_TEACH_MAX_STEPS,
   BROWSER_TEACH_ROUTES,
-} from "@openbot/contracts/team-protocol/browser-teach-v1";
+} from "@codebot/contracts/team-protocol/browser-teach-v1";
 import {
   BROWSER_USER_CONTROL_CAPABILITY,
   BROWSER_USER_CONTROL_ROUTES,
-} from "@openbot/contracts/team-protocol/browser-user-control-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/browser-user-control-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { TeamApiBrowser, TeamApiBrowserView } from "./dependencies";
 import { HttpError } from "./http-error";

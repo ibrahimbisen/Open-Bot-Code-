@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v59 and the separate new-database schema. IF NOT EXISTS throughout.
 //
@@ -19,7 +19,7 @@ export const MESSAGING_PINGS_SCHEMA_SQL = `
   );
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 59,
   name: "messaging-pings",
   // Only creates a table, so no foreign-key pause and no vacuum. No post was recorded as a ping

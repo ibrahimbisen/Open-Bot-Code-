@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   containsSecret,
-  createOpenBotLogger,
+  createCodeBotLogger,
   type LogValue,
   redactPostText,
   redactSecrets,
@@ -559,13 +559,13 @@ describe("toLogValue", () => {
 
   it("serializes bigints instead of throwing in JSON.stringify", () => {
     const lines: string[] = [];
-    const logger = createOpenBotLogger("automation", (line) => lines.push(line));
+    const logger = createCodeBotLogger("automation", (line) => lines.push(line));
     expect(() => logger.info("count", 10n)).not.toThrow();
     expect(lines[0]).toContain("10n");
   });
   it("keeps error details while redacting secrets when logged", () => {
     const lines: string[] = [];
-    const logger = createOpenBotLogger("automation", (line) => lines.push(line));
+    const logger = createCodeBotLogger("automation", (line) => lines.push(line));
     logger.error("provider failed", toLogValue(new Error("failed with Bearer abcdef123456")));
     expect(lines).toHaveLength(1);
     expect(lines[0]).toContain("provider failed");
@@ -614,10 +614,10 @@ describe("resolveLogLevel", () => {
   });
 });
 
-describe("createOpenBotLogger", () => {
+describe("createCodeBotLogger", () => {
   it("prefixes lines and redacts secrets before they reach the sink", () => {
     const lines: string[] = [];
-    const logger = createOpenBotLogger("automation", (line) => lines.push(line));
+    const logger = createCodeBotLogger("automation", (line) => lines.push(line));
     logger.info("hello", { token: "abcdef123456" });
     expect(lines).toHaveLength(1);
     expect(lines[0]).toContain("[automation]");
@@ -627,7 +627,7 @@ describe("createOpenBotLogger", () => {
 
   it("drops calls below the configured level", () => {
     const lines: string[] = [];
-    const logger = createOpenBotLogger("automation", (line) => lines.push(line), "warn");
+    const logger = createCodeBotLogger("automation", (line) => lines.push(line), "warn");
     logger.debug("noisy");
     logger.info("routine");
     logger.warn("careful");
@@ -637,16 +637,16 @@ describe("createOpenBotLogger", () => {
 
   it("keeps every level when asked for trace and none when silenced", () => {
     const traced: string[] = [];
-    createOpenBotLogger("automation", (line) => traced.push(line), "trace").trace("deep");
+    createCodeBotLogger("automation", (line) => traced.push(line), "trace").trace("deep");
     expect(traced).toHaveLength(1);
     const silenced: string[] = [];
-    createOpenBotLogger("automation", (line) => silenced.push(line), "silent").error("boom");
+    createCodeBotLogger("automation", (line) => silenced.push(line), "silent").error("boom");
     expect(silenced).toHaveLength(0);
   });
 
   it("routes warnings through the error sink when no sink is given", () => {
     const error = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
-    createOpenBotLogger("automation").warn("careful");
+    createCodeBotLogger("automation").warn("careful");
     expect(error).toHaveBeenCalledOnce();
   });
 });

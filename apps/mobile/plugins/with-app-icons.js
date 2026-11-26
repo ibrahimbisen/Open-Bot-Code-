@@ -121,7 +121,7 @@ const withIosAppIcons = (config) => {
   });
 };
 
-const drawableName = (id) => `openbot_app_icon_${id}`;
+const drawableName = (id) => `codebot_app_icon_${id}`;
 
 function androidDrawables({ id, hex }) {
   const name = drawableName(id);

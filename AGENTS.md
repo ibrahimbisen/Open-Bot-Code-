@@ -25,7 +25,7 @@ and state which default you set aside. Do not argue by citing this file.
 
 ## Non-negotiable
 
-- **Migrations are irreversible.** No backup of `openbot.db` is made before an upgrade. Preserve all
+- **Migrations are irreversible.** No backup of `codebot.db` is made before an upgrade. Preserve all
   user data and support every shipped source schema. Never assume a backup exists.
 - **Team API support window.** Hosts and clients support the releases of the last 2 months (60 days);
   mobile has at least 2 months. Do not change the meaning of a wire protocol that a release in the
@@ -48,7 +48,7 @@ adding a module or moving ownership between workspaces.
 ## Product constraints
 
 - Workspaces, conversations, attachments, browser data, and team data stay on the computer that
-  runs OpenBot. Providers, visited pages, and plugins can use the network. Exception: a signed-in
+  runs CodeBot. Providers, visited pages, and plugins can use the network. Exception: a signed-in
   phone keeps an encrypted, read-only copy of the agents, sections, recent chats, channels and drawer
   values of its servers (`apps/mobile/src/features/workspace/model/workspace-cache.ts`). The copy stays
   on that phone, the host stays the source of truth, and sign-out, session expiry and server removal delete it.
@@ -62,8 +62,8 @@ adding a module or moving ownership between workspaces.
 - Cloudflare holds accounts, avatars, host configuration, memberships, invitations, and logical
   sessions; it does not hold chats, files, or commands. It also holds the signed JavaScript bundles
   of mobile over-the-air updates (`apps/mobile-updates`), which are public code and have no user data.
-  Exception: a workflow step with an OpenBot credits model sends its prompt and input pictures through
-  the account service (`/v1/media/*`) and the private media gateway Worker (`openbot-media-gateway`,
+  Exception: a workflow step with an CodeBot credits model sends its prompt and input pictures through
+  the account service (`/v1/media/*`) and the private media gateway Worker (`codebot-media-gateway`,
   service binding `MEDIA_GATEWAY`) to the media generation processor, and the result file comes back
   the same way. Both pass them through in transit only: they do not store or log them, and the
   account service keeps only the credit hold record. The processor adapters, routes, upstream model
@@ -80,7 +80,7 @@ adding a module or moving ownership between workspaces.
 
 ## Joined servers
 
-Many users run OpenBot only on a joined server: a VPS, a hosted server, or another member's computer.
+Many users run CodeBot only on a joined server: a VPS, a hosted server, or another member's computer.
 A feature for agents, chats, channels, routines or server settings must work there as it does on
 this computer. Make it local only when it needs this computer itself: its files and folders, its
 windows, its OS dialogs or its native notifications.
@@ -129,13 +129,13 @@ windows, its OS dialogs or its native notifications.
 
 ## Shared UI
 
-`packages/ui` (`@openbot/ui`) owns shared SolidJS controls and feature components used by
+`packages/ui` (`@codebot/ui`) owns shared SolidJS controls and feature components used by
 desktop, public web, and Storybook. Reuse these components before adding UI. Import primitives
-from `@openbot/ui` and feature components from explicit subpaths such as
-`@openbot/ui/features/sidebar/Sidebar`. Do not copy them back into an app.
+from `@codebot/ui` and feature components from explicit subpaths such as
+`@codebot/ui/features/sidebar/Sidebar`. Do not copy them back into an app.
 
 Keep shared components independent of application contexts, desktop storage, host connections,
-and `window.openbot`. Pass data and actions through typed props. Platform adapters and the main
+and `window.codebot`. Pass data and actions through typed props. Platform adapters and the main
 conversation controller stay in the renderer. Component extraction must preserve the existing
 UI, styles, and behavior unless the user requests a design change. Native mobile shares brand
 tokens and contracts; it does not render SolidJS DOM components.
@@ -171,7 +171,7 @@ commit message, the PR description or `docs/`.
 Only these remain, because a tool reads them: license headers, shebangs, `/// <reference>`,
 `@vitest-environment`, `@ts-expect-error`, `biome-ignore`, `#__PURE__`, `# shellcheck`,
 `# syntax=`, JSDoc types in plain `.js` files, file headers that a generator writes, the
-`// scope:` line of each GritQL rule, the `// flag` markers of lint fixtures, and the `# openbot-boat-pre-stop:` marker. Comments that are data
+`// scope:` line of each GritQL rule, the `// flag` markers of lint fixtures, and the `# codebot-boat-pre-stop:` marker. Comments that are data
 in a string stay too, such as a sample file or a task for a model.
 
 These files keep their comments: vendored code, fixtures, released schemas, released migrations
@@ -180,7 +180,7 @@ These files keep their comments: vendored code, fixtures, released schemas, rele
 
 ## Interface text
 
-Text that a user reads comes from `@openbot/i18n` catalog keys, on desktop, web and mobile. Do not
+Text that a user reads comes from `@codebot/i18n` catalog keys, on desktop, web and mobile. Do not
 write a literal. Errors that the main process, backend or team client send use `sourceText(key)`.
 Read [docs/i18n.md](docs/i18n.md) before adding a key or a language.
 
@@ -226,7 +226,7 @@ State which surfaces a change touches. Check all affected consumers and reverse 
 - Joined servers: the desktop with a joined server, the web client (`openbot.run/app`), and mobile.
   See [Joined servers](#joined-servers).
 - IPC contracts (`packages/contracts`) and their preview implementation
-  (`src/renderer/src/preview/mock-openbot.ts`).
+  (`src/renderer/src/preview/mock-codebot.ts`).
 - Reverse actions: snooze/unsnooze, pause/resume, revoke/reconnect, mute/unmute.
 - Migrations, which also build each new database.
 - Documentation: `README.md` commands, `docs/architecture/`, and `PRIVACY.md` when outbound data
@@ -243,7 +243,7 @@ State which surfaces a change touches. Check all affected consumers and reverse 
 - Use the development loader. It reads the development key from the shell; without the key,
   local development must work with generated defaults. Commands that need external secrets must
   stop before remote changes when those secrets are missing. An invalid key must fail safely.
-- Keep generated identity and saved local overrides in ignored `.openbot/dev-state.json`.
+- Keep generated identity and saved local overrides in ignored `.codebot/dev-state.json`.
   New manual overrides use shell variables. Do not add `.env.local` or `.env.generated`.
 - `.env.keys` stores decryption keys, not service settings. Keep it ignored. Preserve existing
   production key handling and CI/GitHub secrets unless the developer requests a change.
@@ -251,7 +251,7 @@ State which surfaces a change touches. Check all affected consumers and reverse 
   `DOTENV_PRIVATE_KEY_DEV`. Every encrypted env file, `remote/.env.production` included, uses one of
   them. Never make a new key pair. Pass `-fk` with the root `.env.keys` so Dotenvx does not make one.
 - For direct Cloudflare changes, `apps/auth-api/.env.production` holds `CLOUDFLARE_API_TOKEN`
-  (write access to all resources in the OpenBot account) and `CLOUDFLARE_ACCOUNT_ID`. Load them
+  (write access to all resources in the CodeBot account) and `CLOUDFLARE_ACCOUNT_ID`. Load them
   with `bunx dotenvx run -f apps/auth-api/.env.production -fk <root>/.env.keys -- <command>`. A worktree
   has no `.env.keys`; use the one in the main checkout. Never print the token: do not use
   `dotenvx get` or `echo`. Ask before a change that deletes data or affects production users.
@@ -265,14 +265,14 @@ State which surfaces a change touches. Check all affected consumers and reverse 
   (an `agent-api` partner key for the production Agent API, `https://api.agentsonintents.com`; the
   demo API refuses it) and `NEAR_TEST_WALLET_OWNER_KEY` (the P-256 key of the passkey that owns the
   test wallets). Load them the same way as `INCEPTION_API_KEY`, and never print them. The partner key
-  holds no funds; each wallet holds its own. The test funds stay in the wallet "OpenBot mainnet test
-  wallet" (`NEAR_TEST_WALLET_ACCOUNT`). Send test payments to "OpenBot mainnet test recipient"
+  holds no funds; each wallet holds its own. The test funds stay in the wallet "CodeBot mainnet test
+  wallet" (`NEAR_TEST_WALLET_ACCOUNT`). Send test payments to "CodeBot mainnet test recipient"
   (`NEAR_TEST_RECIPIENT_ACCOUNT`); move them back after the test. Both wallets have the test key as
   owner and need its vote for each payment. It is a shared test wallet: each person or agent with the
   dev key controls its funds. Keep only a few dollars in it.
   `bun run smoke:near-wallet-live` drives the real wallet service against production on the test
   wallet: it signs a grant with the owner key, changes the budget, freezes and unfreezes the wallet,
-  and keeps its encrypted state in `.openbot-build/near-wallet-live/`. It moves no funds. Wait 5
+  and keeps its encrypted state in `.codebot-build/near-wallet-live/`. It moves no funds. Wait 5
   minutes between two runs: the Agent API refuses a second rule change sooner. The Agent API has no
   testnet: ask before any call that moves funds.
 - For development and manual tests, the team has one test Google account. `apps/auth-api/.env.dev`
@@ -281,8 +281,8 @@ State which surfaces a change touches. Check all affected consumers and reverse 
   personal or production account. Load it the same way as `INCEPTION_API_KEY`, and never print it.
   Its X account uses the same email and password. A Google sign-in from a new browser gets a phone
   check that only the developer can do. To skip it, load the saved session into a new browser
-  context (Playwright `storageState`) from `~/.config/openbot/test-google-account.storage.json` on
-  the developer's Mac. For the OpenBot browser, open a tab over CDP and set the same cookies with
+  context (Playwright `storageState`) from `~/.config/codebot/test-google-account.storage.json` on
+  the developer's Mac. For the CodeBot browser, open a tab over CDP and set the same cookies with
   `Network.setCookies` on that tab: agents share that session. If that session has expired, ask the
   developer to do the phone check, then save the session again.
 
@@ -316,7 +316,7 @@ in each store. Tests use the `pool-test-<NN>` machines.
   when it cannot confirm a PID's identity; resolve the process, then `bun run dev:forget`. Dead
   records do not reserve ports.
 - Reuse a running dev instance. `bun run dev` opens a profile tied to this worktree; `--shared`
-  opens the shared `OpenBot Dev` profile. Use the ports the stack reports rather than a fixed port.
+  opens the shared `CodeBot Dev` profile. Use the ports the stack reports rather than a fixed port.
 
 See [README.md — Commands](README.md#commands) for the flags these commands take, and
 [docs/architecture/change-rules.md](docs/architecture/change-rules.md#change-rules) for why the registry works this way, when a dev command
@@ -325,7 +325,7 @@ does not behave as expected.
 ## Terms
 
 - **bot** is not for new product code. Released names stay: Team API v1-v3 `bot`/`botId`,
-  `bots.json`, `legacy-import:bots:v1`, and `~/OpenBot/Bots` path prefixes.
+  `bots.json`, `legacy-import:bots:v1`, and `~/CodeBot/Bots` path prefixes.
 - **teammate** and **group** are prompt and UI words, never types.
 
 Use [docs/glossary.md](docs/glossary.md) when naming a new type, table, IPC channel or product
@@ -364,7 +364,7 @@ risks since the last release.
 - Use E2E tests only. Do not add unit tests. An E2E test is a script under `scripts/` (such as
   `scripts/*-e2e.ts` or `scripts/*-smoke.ts`) that drives the real app, process or service. At the
   end, it writes a verifiable and repeatable artifact, such as a JSON report or a screenshot under
-  `.openbot-build/`.
+  `.codebot-build/`.
 - Vitest files are permitted only for these protected areas:
   - Database migrations: data-preservation fixtures for every affected released schema, plus the
     failure and rollback cases that [src/backend/AGENTS.md](src/backend/AGENTS.md) lists. A

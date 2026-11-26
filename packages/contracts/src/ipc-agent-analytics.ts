@@ -34,7 +34,7 @@ export interface AnalyticsModel extends AnalyticsTotals {
   model: string;
   share: number;
 }
-export const WORKFLOWS_USAGE_ID = "openbot:workflows";
+export const WORKFLOWS_USAGE_ID = "codebot:workflows";
 
 export interface AnalyticsAgent extends AnalyticsTotals {
   agentId: string;

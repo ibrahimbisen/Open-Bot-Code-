@@ -4,10 +4,10 @@ import {
   type AgentSessionSettingsSnapshot,
   type AgentSessionSettingValue,
   isReasoningEffort,
-} from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Exit, Fiber, Schedule, type Scope, Semaphore } from "effect";
 import type { AcpConnection } from "./acp-connection";
 import { type AgentProvider, ProviderModelNotOfferedError, ProviderSettingsConflictError } from "./agent-client";
@@ -20,7 +20,7 @@ import {
 } from "./provider-client-effects";
 import { TimeoutError } from "./with-timeout";
 
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 const MODEL_REASONING_PROBE_BUDGET_MS = 5_000;
 
 const MODEL_REASONING_PROBE_TIMEOUT_MS = 1_000;

@@ -1,4 +1,4 @@
-const ReactNative = require("openbot-original-react-native");
+const ReactNative = require("codebot-original-react-native");
 const { Text, TextInput } = require("./scaled-text");
 
 module.exports = new Proxy(

@@ -3,10 +3,10 @@ import type {
   AttachmentSummary,
   FileAction,
   OpenAttachmentInput,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import type { AttachmentDownloadState, AttachmentDownloads } from "@openbot/ui/features/conversation/AttachmentCards";
-import { normalizeMessage } from "@openbot/user-errors/reference";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import type { AttachmentDownloadState, AttachmentDownloads } from "@codebot/ui/features/conversation/AttachmentCards";
+import { normalizeMessage } from "@codebot/user-errors/reference";
 import { createStore, onCleanup } from "solid-js";
 
 export interface AttachmentDownloadCalls {

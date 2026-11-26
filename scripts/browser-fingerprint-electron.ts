@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { app, BrowserWindow, screen, type WebContents, webContents } from "electron";
 import { z } from "zod";
@@ -29,7 +29,7 @@ const chromeSchema = z.object({
   native: z.string(),
   constructs: z.boolean(),
 });
-const framesSchema = z.object({ sync: z.string(), syncLoadTimes: z.string(), loaded: z.string(), openbot: z.string() });
+const framesSchema = z.object({ sync: z.string(), syncLoadTimes: z.string(), loaded: z.string(), codebot: z.string() });
 const pageEventSchema = z.object({
   type: z.string(),
   target: z.string(),
@@ -137,7 +137,7 @@ async function main(): Promise<void> {
     const call = async (tool: string, args: DynamicToolCallParams["arguments"]): Promise<DynamicToolResult> => {
       const result = await Effect.runPromise(
         host.handleDynamicTool({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool,
           arguments: args,
           ownerAgentId: "fixture-agent",
@@ -321,7 +321,7 @@ async function main(): Promise<void> {
 
       const failed = await Effect.runPromise(
         host.handleDynamicTool({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "evaluate",
           arguments: { tabId, expression: "(() => { throw new Error('page failure') })()" },
           ownerAgentId: "fixture-agent",
@@ -374,7 +374,7 @@ async function main(): Promise<void> {
             };
             document.body.appendChild(frame);
           });
-          return { sync, syncLoadTimes, loaded, openbot: typeof window.openbot + typeof window.require };
+          return { sync, syncLoadTimes, loaded, codebot: typeof window.codebot + typeof window.require };
         })()`,
         framesSchema,
       );
@@ -383,8 +383,8 @@ async function main(): Promise<void> {
       assert.equal(frames.syncLoadTimes, "function");
       assert.equal(frames.loaded, "function", "The preload did not run in a loaded frame.");
       recordCase("frame-window-chrome-matches-chrome");
-      assert.equal(frames.openbot, "undefinedundefined", "The tab page can reach window.openbot or require.");
-      recordCase("page-has-no-openbot-bridge");
+      assert.equal(frames.codebot, "undefinedundefined", "The tab page can reach window.codebot or require.");
+      recordCase("page-has-no-codebot-bridge");
 
       const crossFrame = await page(
         contents,

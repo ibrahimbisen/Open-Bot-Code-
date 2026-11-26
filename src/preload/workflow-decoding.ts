@@ -19,8 +19,8 @@ import {
   isWorkflowVersion,
   isWorkflowWebhookSecret,
   type WorkflowFoldersSnapshot,
-} from "@openbot/contracts/ipc";
-import { guardedDecoder, guardedListDecoder } from "@openbot/contracts/ipc-decoding";
+} from "@codebot/contracts/ipc";
+import { guardedDecoder, guardedListDecoder } from "@codebot/contracts/ipc-decoding";
 
 export const decodeWorkflowSummaries = guardedListDecoder(isWorkflowSummary, "workflow list response");
 export const decodeWorkflowSummary = guardedDecoder(isWorkflowSummary, "workflow summary response");

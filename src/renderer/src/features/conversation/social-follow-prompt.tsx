@@ -1,15 +1,15 @@
-import type { SentMessageStats } from "@openbot/contracts/ipc";
-import { dialogOpen, toast } from "@openbot/ui";
-import { type SocialFollowStep, SocialFollowToast } from "@openbot/ui/features/social-follow/SocialFollowToast";
-import type { SocialNetwork, SocialNetworkId } from "@openbot/ui/features/social-follow/social-networks";
-import { currentText } from "@openbot/ui/text";
+import type { SentMessageStats } from "@codebot/contracts/ipc";
+import { dialogOpen, toast } from "@codebot/ui";
+import { type SocialFollowStep, SocialFollowToast } from "@codebot/ui/features/social-follow/SocialFollowToast";
+import type { SocialNetwork, SocialNetworkId } from "@codebot/ui/features/social-follow/social-networks";
+import { currentText } from "@codebot/ui/text";
 import { Option, Schema } from "effect";
 import { createSignal } from "solid-js";
 import { appPort } from "../../app-port";
 import { writeClipboardText } from "../../clipboard";
 import { githubStarPromptShownThisSession } from "./github-star-prompt";
 
-const STORAGE_KEY = "openbot:social-follow-prompt";
+const STORAGE_KEY = "codebot:social-follow-prompt";
 const TOAST_ID = "social-follow-prompt";
 const DAY_MS = 24 * 60 * 60 * 1000;
 

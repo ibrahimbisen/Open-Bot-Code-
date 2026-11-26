@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   RoutineFields,
   RoutineLimitPolicy,
@@ -10,7 +10,7 @@ import type {
   RoutineRunSource,
   RoutineRunStatus,
   RoutineSchedule,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   isRoutinePausedByRun,
   isRoutineSchedule,
@@ -19,10 +19,10 @@ import {
   ROUTINE_MISSED_POLICIES,
   ROUTINE_RUN_PLACES,
   ROUTINE_RUN_SOURCES,
-} from "@openbot/contracts/ipc";
-import type { EventFilter, EventJsonValue, EventRoutineOwner } from "@openbot/contracts/ipc-events";
-import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import type { EventFilter, EventJsonValue, EventRoutineOwner } from "@codebot/contracts/ipc-events";
+import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import {
   nextRoutineOccurrence,
   nextValidRoutineOccurrence,
@@ -31,7 +31,8 @@ import {
   routineOnceInstant,
   validateRoutineSchedule,
   validateStoredRoutineSchedule,
-} from "@openbot/team-client/routine-schedule";
+} from "@codebot/team-client/routine-schedule";
+import type { CodeBotDatabase } from "./codebot-database";
 import {
   databaseRow,
   databaseRows,
@@ -40,7 +41,6 @@ import {
   requiredStringColumn,
 } from "./database/database-rows";
 import { cachedStatement } from "./database/statement-cache";
-import type { OpenBotDatabase } from "./openbot-database";
 import { hasWebhookReceipt, insertWebhookReceipt, revokeRoutineWebhooks } from "./webhook-route-store";
 import { parseEventFilters, validateWebhookTrigger, webhookMismatch, webhookRunInstruction } from "./webhook-trigger";
 
@@ -166,7 +166,7 @@ export interface RoutineHoldWindow {
 
 export class RoutineStore {
   constructor(
-    protected readonly database: OpenBotDatabase,
+    protected readonly database: CodeBotDatabase,
     protected readonly tables: RoutineTables,
   ) {}
 
@@ -1064,7 +1064,7 @@ export class RoutineStore {
   }
 
   #insertRun(
-    db: OpenBotDatabase["connection"],
+    db: CodeBotDatabase["connection"],
     runId: string,
     routine: RunSource,
     triggerId: string | null,
@@ -1194,7 +1194,7 @@ export class RoutineStore {
     return { runIn };
   }
 
-  #writeRunIn(db: OpenBotDatabase["connection"], routineId: string, runIn: RoutineRunPlace): void {
+  #writeRunIn(db: CodeBotDatabase["connection"], routineId: string, runIn: RoutineRunPlace): void {
     if (!this.tables.runInColumn) return;
     db.prepare(`UPDATE ${this.tables.routineTable} SET run_in = ? WHERE routine_id = ?`).run(runIn, routineId);
   }
@@ -1288,7 +1288,7 @@ export class RoutineStore {
   #mutateRun(
     runId: string,
     eventType: string,
-    mutate: (db: OpenBotDatabase["connection"], sequence: number, now: string) => void,
+    mutate: (db: CodeBotDatabase["connection"], sequence: number, now: string) => void,
   ): OwnedRoutineRun {
     const current = this.#requireRun(runId);
     return this.database.dispatch(
@@ -1302,7 +1302,7 @@ export class RoutineStore {
   }
 
   #insertTrigger(
-    db: OpenBotDatabase["connection"],
+    db: CodeBotDatabase["connection"],
     routineId: string,
     timezone: string,
     schedule: RoutineSchedule,

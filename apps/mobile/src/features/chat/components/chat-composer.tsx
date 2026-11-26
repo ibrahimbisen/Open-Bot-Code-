@@ -1,4 +1,4 @@
-import { rankAgentMentions } from "@openbot/contracts/agent-mention-rank";
+import { rankAgentMentions } from "@codebot/contracts/agent-mention-rank";
 import { GlassView } from "expo-glass-effect";
 import { router, useIsFocused } from "expo-router";
 import type { NativeStackNavigationProp } from "expo-router/native-stack";
@@ -582,7 +582,7 @@ export const ChatComposer = memo(function ChatComposer({
   const busy = preparing;
   const attachmentsBlocked = disabled || preparing;
   const leadingBlocked = attachmentsBlocked;
-  const [warningColor, dangerColor] = useCSSVariable(["--openbot-warning", "--openbot-danger"]);
+  const [warningColor, dangerColor] = useCSSVariable(["--codebot-warning", "--codebot-danger"]);
   const contextAlert =
     contextMeter && !contextMeter.compacting && (contextMeter.level === "warning" || contextMeter.level === "danger")
       ? contextMeter

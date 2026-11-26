@@ -11,11 +11,11 @@ const hot = import.meta.hot;
 if (hot) {
   const apply = (next: DevWorktree) => {
     setWorktree(next);
-    document.documentElement.style.setProperty("--openbot-logo-dev", next.color);
+    document.documentElement.style.setProperty("--codebot-logo-dev", next.color);
   };
-  hot.on("openbot:dev-worktree", apply);
-  hot.send("openbot:dev-worktree-request");
-  hot.dispose(() => hot.off("openbot:dev-worktree", apply));
+  hot.on("codebot:dev-worktree", apply);
+  hot.send("codebot:dev-worktree-request");
+  hot.dispose(() => hot.off("codebot:dev-worktree", apply));
 }
 
 export const devWorktree = worktree;

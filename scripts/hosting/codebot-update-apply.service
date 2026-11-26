@@ -1,0 +1,12 @@
+[Unit]
+Description=Apply a staged CodeBot update
+Before=codebot.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/CodeBot/hosted/codebot-hosted-update boot
+TimeoutStartSec=15min
+
+[Install]
+WantedBy=multi-user.target

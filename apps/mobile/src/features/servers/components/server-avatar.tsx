@@ -1,4 +1,4 @@
-import { avatarHeadColor } from "@openbot/brand/bloub-avatar";
+import { avatarHeadColor } from "@codebot/brand/bloub-avatar";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
@@ -67,10 +67,10 @@ export function ServerAvatar({
   const logo = logoUri === undefined ? (saved.data ?? null) : logoUri;
   const [failedUri, setFailedUri] = useState<string | null>(null);
   const logoFailed = logo === failedUri;
-  const success = String(useCSSVariable("--openbot-success"));
-  const warning = String(useCSSVariable("--openbot-warning"));
-  const danger = String(useCSSVariable("--openbot-danger"));
-  const offline = String(useCSSVariable("--openbot-text-dim"));
+  const success = String(useCSSVariable("--codebot-success"));
+  const warning = String(useCSSVariable("--codebot-warning"));
+  const danger = String(useCSSVariable("--codebot-danger"));
+  const offline = String(useCSSVariable("--codebot-text-dim"));
   const online = showsOnline(server);
   const dot = online
     ? success

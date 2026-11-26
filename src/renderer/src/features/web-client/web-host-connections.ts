@@ -6,24 +6,24 @@ import {
   type ServerNotificationLevel,
   type SetAgentNotificationLevelInput,
   type TeamRealtimeEvent,
-} from "@openbot/contracts/ipc";
-import { guardedListDecoder } from "@openbot/contracts/ipc-decoding";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { SERVER_SAFE_MODE_CAPABILITY } from "@openbot/contracts/team-protocol/server-safe-mode-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { agentEventCanNotify } from "@openbot/team-client/agent-notifications";
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
-import type { createRemoteTeamPeer, RemoteTeamPeerActions } from "@openbot/team-client/remote-peer";
-import { createRemoteConnectionRecovery } from "@openbot/team-client/remote-recovery";
+} from "@codebot/contracts/ipc";
+import { guardedListDecoder } from "@codebot/contracts/ipc-decoding";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { SERVER_SAFE_MODE_CAPABILITY } from "@codebot/contracts/team-protocol/server-safe-mode-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { agentEventCanNotify } from "@codebot/team-client/agent-notifications";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
+import type { createRemoteTeamPeer, RemoteTeamPeerActions } from "@codebot/team-client/remote-peer";
+import { createRemoteConnectionRecovery } from "@codebot/team-client/remote-recovery";
 import {
   listAgentNotificationLevels,
   setAgentNotificationLevel,
   setOwnServerNotificationLevel,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
-import { referenceFrom } from "@openbot/user-errors";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
+import { referenceFrom } from "@codebot/user-errors";
 import { Effect } from "effect";
 import { readWebHostCompatibility } from "./web-host-compatibility";
 import {

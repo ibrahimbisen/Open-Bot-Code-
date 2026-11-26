@@ -14,29 +14,29 @@ import {
   type ProviderRuntimeStatus,
   type SaveCustomProviderInput,
   savedCustomModelId,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   type ProviderConnection,
   ProviderPicker,
   type ProviderPickerOption,
-} from "@openbot/ui/components/ProviderPicker";
-import { freeModelsReady, servesCustomProvider } from "@openbot/ui/components/provider-row";
+} from "@codebot/ui/components/ProviderPicker";
+import { freeModelsReady, servesCustomProvider } from "@codebot/ui/components/provider-row";
 import {
   CustomProviderDialog,
   type CustomProviderHarnessChoice,
-} from "@openbot/ui/features/custom-providers/CustomProviderDialog";
-import { CustomProviderListDialog } from "@openbot/ui/features/custom-providers/CustomProviderListDialog";
-import { DetectedProviders } from "@openbot/ui/features/custom-providers/DetectedProviders";
-import type { DetectedProviderApi, ProviderDetection } from "@openbot/ui/features/custom-providers/detected-providers";
+} from "@codebot/ui/features/custom-providers/CustomProviderDialog";
+import { CustomProviderListDialog } from "@codebot/ui/features/custom-providers/CustomProviderListDialog";
+import { DetectedProviders } from "@codebot/ui/features/custom-providers/DetectedProviders";
+import type { DetectedProviderApi, ProviderDetection } from "@codebot/ui/features/custom-providers/detected-providers";
 import {
   isKeyDialogProvider,
   type KeyDialogProvider,
   OpenCodeKeyDialog,
   type ProviderKeyApi,
-} from "@openbot/ui/features/settings/OpenCodeKeyDialog";
-import { useText } from "@openbot/ui/text";
-import { errorReference, type UserErrorDetails } from "@openbot/user-errors";
+} from "@codebot/ui/features/settings/OpenCodeKeyDialog";
+import { useText } from "@codebot/ui/text";
+import { errorReference, type UserErrorDetails } from "@codebot/user-errors";
 import { createEffect, createMemo, createSignal, onCleanup, Show, untrack } from "solid-js";
 import { ProviderSignInDialogs } from "../../components/ProviderSignInDialogs";
 import type { ProviderConnectionApi } from "../../components/provider-connection-api";
@@ -77,7 +77,7 @@ export interface SetupProviderChoice {
   customModel: () => AgentModelId | null;
 }
 
-const INCLUDED_DESCRIPTION = "Included with OpenBot";
+const INCLUDED_DESCRIPTION = "Included with CodeBot";
 
 const SETUP_PROVIDERS: Array<{ id: AgentProviderId; name: string; description: string | null }> =
   AGENT_PROVIDER_DESCRIPTORS.filter((descriptor) => descriptor.id !== "acp").map((descriptor) => ({

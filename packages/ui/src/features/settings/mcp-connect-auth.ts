@@ -1,11 +1,11 @@
-import type { McpServerConfig } from "@openbot/contracts/ipc";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
 import {
   isListingUrl,
   type McpAuthValues,
   type McpConnectFlow,
   mcpFlowFields,
-} from "@openbot/contracts/mcp-connect-flows";
-import type { AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/mcp-connect-flows";
+import type { AppTranslate } from "@codebot/i18n";
 
 export function mcpFlowError(
   config: McpServerConfig,

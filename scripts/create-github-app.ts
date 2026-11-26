@@ -4,10 +4,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger, registerSecretValue, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, registerSecretValue, toLogValue } from "@codebot/logging";
 import { z } from "zod";
 
-const logger = createOpenBotLogger("create-github-app");
+const logger = createCodeBotLogger("create-github-app");
 const WAIT_MS = 30 * 60_000;
 const MANIFEST_PATH = resolve(import.meta.dirname, "github-app/manifest.json");
 
@@ -45,7 +45,7 @@ function page(response: ServerResponse, status: number, body: string): void {
     "Cache-Control": "no-store",
     "Referrer-Policy": "no-referrer",
   });
-  response.end(`<!doctype html><meta charset="utf-8"><title>OpenBot GitHub App</title>${body}`);
+  response.end(`<!doctype html><meta charset="utf-8"><title>CodeBot GitHub App</title>${body}`);
 }
 
 async function convert(code: string): Promise<Conversion> {
@@ -62,7 +62,7 @@ async function convert(code: string): Promise<Conversion> {
 }
 
 async function saveSecrets(conversion: Conversion): Promise<string> {
-  const directory = join(homedir(), ".config", "openbot");
+  const directory = join(homedir(), ".config", "codebot");
   await mkdir(directory, { recursive: true, mode: 0o700 });
   const secrets = {
     id: conversion.id,
@@ -122,7 +122,7 @@ async function main(): Promise<void> {
           200,
           `<form id="manifest" method="post" action="${escapeHtml(`${target}?state=${state}`)}">` +
             `<input type="hidden" name="manifest" value="${escapeHtml(body)}">` +
-            `<p>Sending the OpenBot manifest to GitHub…</p><button type="submit">Continue to GitHub</button></form>` +
+            `<p>Sending the CodeBot manifest to GitHub…</p><button type="submit">Continue to GitHub</button></form>` +
             `<script>document.getElementById("manifest").submit()</script>`,
         );
       }
@@ -170,7 +170,7 @@ async function main(): Promise<void> {
     process.exitCode = 1;
     return;
   }
-  logger.info(`The secrets are in ${secretsPath} (mode 0600). OpenBot does not use them.`);
+  logger.info(`The secrets are in ${secretsPath} (mode 0600). CodeBot does not use them.`);
   logger.info("Do these steps in the app settings. A manifest cannot do them:");
   logger.info("  1. General > Identifying and authorizing users: select Enable Device Flow.");
   logger.info("  2. Optional features: opt out of User-to-server token expiration.");

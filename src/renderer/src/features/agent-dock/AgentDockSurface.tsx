@@ -1,4 +1,4 @@
-import { chatVisualItemType } from "@openbot/contracts/chat-visual";
+import { chatVisualItemType } from "@codebot/contracts/chat-visual";
 import type {
   AgentApproval,
   AgentDockAction,
@@ -8,9 +8,9 @@ import type {
   AgentDockPresentation,
   AgentDockSeatRef as AgentDockSeatContract,
   AgentRuntimeApproval,
-} from "@openbot/contracts/ipc";
-import { AGENT_DOCK_LIMITS, LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
+} from "@codebot/contracts/ipc";
+import { AGENT_DOCK_LIMITS, LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
 import {
   AgentDock,
   type AgentDockChatAnswers,
@@ -21,9 +21,9 @@ import {
   type AgentDockChannel as AgentDockUiChannel,
   agentDockBody,
   agentDockSeatKey,
-} from "@openbot/ui/features/agent-dock/AgentDock";
-import { DRAFT_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/agent-dock/AgentDock";
+import { DRAFT_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, onSettled, Show } from "solid-js";
 import { currentDevicePlatform } from "../../send-shortcut-preference";
 import { windowExtent, windowShape } from "../../window-shape";

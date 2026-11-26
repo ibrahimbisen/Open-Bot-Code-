@@ -1,5 +1,5 @@
-import { Button, CreditCard, Download, Globe2, KeyRound, LogIn } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { Button, CreditCard, Download, Globe2, KeyRound, LogIn } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, For, Match, onSettled, Show, Switch } from "solid-js";
 import { track } from "./analytics";
 import {

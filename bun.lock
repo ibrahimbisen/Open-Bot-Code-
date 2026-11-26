@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "openbot",
+      "name": "codebot",
       "dependencies": {
         "@1password/sdk": "0.5.0",
         "@agentclientprotocol/sdk": "1.9.0",
@@ -52,15 +52,15 @@
         "@electron/fuses": "1.8.0",
         "@fontsource-variable/inter": "catalog:",
         "@kobalte/core": "catalog:",
-        "@openbot/brand": "workspace:*",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
-        "@openbot/logging": "workspace:*",
-        "@openbot/team-client": "workspace:*",
-        "@openbot/telemetry": "workspace:*",
-        "@openbot/ui": "workspace:*",
-        "@openbot/user-errors": "workspace:*",
-        "@openbot/whatsapp": "workspace:*",
+        "@codebot/brand": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
+        "@codebot/logging": "workspace:*",
+        "@codebot/team-client": "workspace:*",
+        "@codebot/telemetry": "workspace:*",
+        "@codebot/ui": "workspace:*",
+        "@codebot/user-errors": "workspace:*",
+        "@codebot/whatsapp": "workspace:*",
         "@paper-design/shaders": "catalog:",
         "@solidjs/testing-library": "catalog:",
         "@solidjs/vite-plugin": "catalog:",
@@ -97,14 +97,14 @@
       },
     },
     "apps/auth-api": {
-      "name": "@openbot/auth-api",
+      "name": "@codebot/auth-api",
       "version": "0.0.0",
       "dependencies": {
         "@fontsource-variable/inter": "catalog:",
         "@kobalte/core": "catalog:",
-        "@openbot/brand": "workspace:*",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/ui": "workspace:*",
+        "@codebot/brand": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/ui": "workspace:*",
         "@openpanel/web": "catalog:",
         "@paper-design/shaders": "catalog:",
         "@solidjs/signals": "catalog:",
@@ -134,16 +134,16 @@
       },
     },
     "apps/browser-extension": {
-      "name": "@openbot/browser-extension",
+      "name": "@codebot/browser-extension",
       "version": "0.0.0",
       "dependencies": {
         "@fontsource-variable/inter": "catalog:",
-        "@openbot/brand": "workspace:*",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
-        "@openbot/team-client": "workspace:*",
-        "@openbot/telemetry": "workspace:*",
-        "@openbot/ui": "workspace:*",
+        "@codebot/brand": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
+        "@codebot/team-client": "workspace:*",
+        "@codebot/telemetry": "workspace:*",
+        "@codebot/ui": "workspace:*",
         "@solidjs/signals": "catalog:",
         "@solidjs/web": "catalog:",
         "solid-js": "2.0.3",
@@ -156,7 +156,7 @@
       },
     },
     "apps/mobile": {
-      "name": "@openbot/mobile",
+      "name": "@codebot/mobile",
       "version": "1.4.14",
       "dependencies": {
         "@config-plugins/react-native-webrtc": "15.0.2",
@@ -165,13 +165,13 @@
         "@legendapp/list": "3.7.2",
         "@noble/hashes": "catalog:",
         "@norbert_bodziony/bloub": "catalog:",
-        "@openbot/brand": "workspace:*",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
-        "@openbot/logging": "workspace:*",
-        "@openbot/team-client": "workspace:*",
-        "@openbot/telemetry": "workspace:*",
-        "@openbot/user-errors": "workspace:*",
+        "@codebot/brand": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
+        "@codebot/logging": "workspace:*",
+        "@codebot/team-client": "workspace:*",
+        "@codebot/telemetry": "workspace:*",
+        "@codebot/user-errors": "workspace:*",
         "@openpanel/react-native": "1.4.4",
         "@react-native-masked-view/masked-view": "0.3.2",
         "@shopify/react-native-skia": "2.14.0",
@@ -254,7 +254,7 @@
       },
     },
     "apps/mobile-updates": {
-      "name": "@openbot/mobile-updates",
+      "name": "@codebot/mobile-updates",
       "version": "0.0.0",
       "dependencies": {
         "effect": "catalog:",
@@ -266,10 +266,10 @@
       },
     },
     "apps/site-router": {
-      "name": "@openbot/site-router",
+      "name": "@codebot/site-router",
       "version": "0.0.0",
       "dependencies": {
-        "@openbot/contracts": "workspace:*",
+        "@codebot/contracts": "workspace:*",
         "effect": "catalog:",
       },
       "devDependencies": {
@@ -279,12 +279,12 @@
       },
     },
     "apps/status": {
-      "name": "@openbot/status",
+      "name": "@codebot/status",
       "version": "0.0.0",
       "dependencies": {
         "@fontsource-variable/inter": "catalog:",
-        "@openbot/brand": "workspace:*",
-        "@openbot/logging": "workspace:*",
+        "@codebot/brand": "workspace:*",
+        "@codebot/logging": "workspace:*",
         "@solidjs/web": "catalog:",
         "effect": "catalog:",
         "lucide-solid": "catalog:",
@@ -298,11 +298,11 @@
       },
     },
     "packages/brand": {
-      "name": "@openbot/brand",
+      "name": "@codebot/brand",
       "version": "0.0.0",
       "dependencies": {
         "@norbert_bodziony/bloub": "catalog:",
-        "@openbot/contracts": "workspace:*",
+        "@codebot/contracts": "workspace:*",
       },
       "devDependencies": {
         "typescript": "catalog:",
@@ -313,7 +313,7 @@
       },
     },
     "packages/contracts": {
-      "name": "@openbot/contracts",
+      "name": "@codebot/contracts",
       "version": "0.0.0",
       "dependencies": {
         "emoji-regex": "10.6.0",
@@ -325,10 +325,10 @@
       },
     },
     "packages/i18n": {
-      "name": "@openbot/i18n",
+      "name": "@codebot/i18n",
       "version": "0.0.0",
       "dependencies": {
-        "@openbot/contracts": "workspace:*",
+        "@codebot/contracts": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "catalog:",
@@ -336,7 +336,7 @@
       },
     },
     "packages/logging": {
-      "name": "@openbot/logging",
+      "name": "@codebot/logging",
       "version": "0.0.0",
       "dependencies": {
         "ts-log": "3.0.3",
@@ -347,14 +347,14 @@
       },
     },
     "packages/team-client": {
-      "name": "@openbot/team-client",
+      "name": "@codebot/team-client",
       "version": "0.0.0",
       "dependencies": {
         "@noble/ed25519": "3.2.0",
         "@noble/hashes": "catalog:",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
-        "@openbot/user-errors": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
+        "@codebot/user-errors": "workspace:*",
         "effect": "catalog:",
       },
       "devDependencies": {
@@ -362,10 +362,10 @@
       },
     },
     "packages/telemetry": {
-      "name": "@openbot/telemetry",
+      "name": "@codebot/telemetry",
       "version": "0.0.0",
       "dependencies": {
-        "@openbot/contracts": "workspace:*",
+        "@codebot/contracts": "workspace:*",
         "effect": "catalog:",
       },
       "devDependencies": {
@@ -374,17 +374,17 @@
       },
     },
     "packages/ui": {
-      "name": "@openbot/ui",
+      "name": "@codebot/ui",
       "version": "0.0.0",
       "dependencies": {
         "@kobalte/core": "catalog:",
         "@norbert_bodziony/bloub": "catalog:",
-        "@openbot/brand": "workspace:*",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
-        "@openbot/team-client": "workspace:*",
-        "@openbot/telemetry": "workspace:*",
-        "@openbot/user-errors": "workspace:*",
+        "@codebot/brand": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
+        "@codebot/team-client": "workspace:*",
+        "@codebot/telemetry": "workspace:*",
+        "@codebot/user-errors": "workspace:*",
         "@speed-highlight/core": "catalog:",
         "@tanstack/virtual-core": "catalog:",
         "class-variance-authority": "catalog:",
@@ -404,12 +404,12 @@
       },
     },
     "packages/user-errors": {
-      "name": "@openbot/user-errors",
+      "name": "@codebot/user-errors",
       "version": "0.0.0",
       "dependencies": {
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
-        "@openbot/logging": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
+        "@codebot/logging": "workspace:*",
       },
       "devDependencies": {
         "@types/node": "catalog:",
@@ -417,7 +417,7 @@
       },
     },
     "packages/whatsapp": {
-      "name": "@openbot/whatsapp",
+      "name": "@codebot/whatsapp",
       "version": "0.0.0",
       "dependencies": {
         "@cacheable/node-cache": "catalog:",
@@ -441,13 +441,13 @@
       },
     },
     "remote/api": {
-      "name": "@openbot/remote-api",
+      "name": "@codebot/remote-api",
       "version": "0.0.0",
       "dependencies": {
         "@discordjs/rest": "2.6.3",
         "@discordjs/ws": "2.0.4",
-        "@openbot/contracts": "workspace:*",
-        "@openbot/i18n": "workspace:*",
+        "@codebot/contracts": "workspace:*",
+        "@codebot/i18n": "workspace:*",
         "discord-api-types": "0.38.57",
         "effect": "catalog:",
         "elysia": "1.4.30",
@@ -1223,37 +1223,37 @@
 
     "@oozcitak/util": ["@oozcitak/util@10.0.0", "", {}, "sha512-hAX0pT/73190NLqBPPWSdBVGtbY6VOhWYK3qqHqtXQ1gK7kS2yz4+ivsN07hpJ6I3aeMtKP6J6npsEKOAzuTLA=="],
 
-    "@openbot/auth-api": ["@openbot/auth-api@workspace:apps/auth-api"],
+    "@codebot/auth-api": ["@codebot/auth-api@workspace:apps/auth-api"],
 
-    "@openbot/brand": ["@openbot/brand@workspace:packages/brand"],
+    "@codebot/brand": ["@codebot/brand@workspace:packages/brand"],
 
-    "@openbot/browser-extension": ["@openbot/browser-extension@workspace:apps/browser-extension"],
+    "@codebot/browser-extension": ["@codebot/browser-extension@workspace:apps/browser-extension"],
 
-    "@openbot/contracts": ["@openbot/contracts@workspace:packages/contracts"],
+    "@codebot/contracts": ["@codebot/contracts@workspace:packages/contracts"],
 
-    "@openbot/i18n": ["@openbot/i18n@workspace:packages/i18n"],
+    "@codebot/i18n": ["@codebot/i18n@workspace:packages/i18n"],
 
-    "@openbot/logging": ["@openbot/logging@workspace:packages/logging"],
+    "@codebot/logging": ["@codebot/logging@workspace:packages/logging"],
 
-    "@openbot/mobile": ["@openbot/mobile@workspace:apps/mobile"],
+    "@codebot/mobile": ["@codebot/mobile@workspace:apps/mobile"],
 
-    "@openbot/mobile-updates": ["@openbot/mobile-updates@workspace:apps/mobile-updates"],
+    "@codebot/mobile-updates": ["@codebot/mobile-updates@workspace:apps/mobile-updates"],
 
-    "@openbot/remote-api": ["@openbot/remote-api@workspace:remote/api"],
+    "@codebot/remote-api": ["@codebot/remote-api@workspace:remote/api"],
 
-    "@openbot/site-router": ["@openbot/site-router@workspace:apps/site-router"],
+    "@codebot/site-router": ["@codebot/site-router@workspace:apps/site-router"],
 
-    "@openbot/status": ["@openbot/status@workspace:apps/status"],
+    "@codebot/status": ["@codebot/status@workspace:apps/status"],
 
-    "@openbot/team-client": ["@openbot/team-client@workspace:packages/team-client"],
+    "@codebot/team-client": ["@codebot/team-client@workspace:packages/team-client"],
 
-    "@openbot/telemetry": ["@openbot/telemetry@workspace:packages/telemetry"],
+    "@codebot/telemetry": ["@codebot/telemetry@workspace:packages/telemetry"],
 
-    "@openbot/ui": ["@openbot/ui@workspace:packages/ui"],
+    "@codebot/ui": ["@codebot/ui@workspace:packages/ui"],
 
-    "@openbot/user-errors": ["@openbot/user-errors@workspace:packages/user-errors"],
+    "@codebot/user-errors": ["@codebot/user-errors@workspace:packages/user-errors"],
 
-    "@openbot/whatsapp": ["@openbot/whatsapp@workspace:packages/whatsapp"],
+    "@codebot/whatsapp": ["@codebot/whatsapp@workspace:packages/whatsapp"],
 
     "@openpanel/react-native": ["@openpanel/react-native@1.4.4", "", { "dependencies": { "@openpanel/sdk": "1.3.4" }, "peerDependencies": { "expo-application": "5 - 7 || 55", "expo-constants": "14 - 18 || 55", "react-native": "*" } }, "sha512-GH3cp8BvBDTDJ0I+86CwMoL1ecGaahOJnnFi7zUj4vxzwDjhx1z3v/HPQzaSpP7yk11wGMLVO3yBjKcCA6oavQ=="],
 

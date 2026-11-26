@@ -1,5 +1,5 @@
-import type { HostSignalHomeSettings } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { HostSignalHomeSettings } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import { useMobileWorkspace, useMobileWorkspaceActions } from "@/features/workspace/context/mobile-workspace-context";

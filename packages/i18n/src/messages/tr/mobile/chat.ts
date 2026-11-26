@@ -4,7 +4,7 @@ import type { messages as source } from "../../en/mobile/chat";
 export const messages = {
   "mobile.chat.dictation.microphoneOffTitle": "Mikrofon erişimi kapalı",
   "mobile.chat.dictation.microphoneOffMessage":
-    "Bir mesajı sesle yazdırmak için Ayarlar'dan OpenBot'un mikrofon ve konuşma tanımayı kullanmasına izin verin.",
+    "Bir mesajı sesle yazdırmak için Ayarlar'dan CodeBot'un mikrofon ve konuşma tanımayı kullanmasına izin verin.",
   "mobile.chat.dictation.stopped": "Dikte durduruldu",
   "mobile.chat.dictation.tryAgain": "Tekrar deneyin.",
   "mobile.chat.dictation.unavailable": "Dikte kullanılamıyor",
@@ -149,7 +149,7 @@ export const messages = {
   "mobile.chat.attachment.openFailed": "Ek açılamadı",
   "mobile.chat.attachment.photosNeedUpdate": "Fotoğrafları kaydetmek uygulamanın en son sürümünü gerektirir.",
   "mobile.chat.attachment.photosPermission":
-    "Bu görseli kaydetmek için Ayarlar'da OpenBot'un fotoğraf eklemesine izin verin.",
+    "Bu görseli kaydetmek için Ayarlar'da CodeBot'un fotoğraf eklemesine izin verin.",
   "mobile.chat.attachment.imageUnavailable": "Görsel kullanılamıyor. Tekrar deneyin.",
   "mobile.chat.attachment.saveImageFailed": "Görsel kaydedilemedi",
   "mobile.chat.attachment.copyImageFailed": "Görsel kopyalanamadı",
@@ -182,9 +182,9 @@ export const messages = {
   "mobile.chat.attachment.unsupported":
     "{name}: görsel, MP3 ses, MOV veya MP4 video, ZIP arşivleri, PDF, Office belgeleri, EML, metin, Markdown, veri veya kaynak dosyaları seçin.",
   "mobile.chat.attachment.hostRejectsType":
-    "{name}: ana makine {type} dosyalarını kabul etmiyor. Bunları eklemek için oradaki OpenBot'u güncelleyin.",
+    "{name}: ana makine {type} dosyalarını kabul etmiyor. Bunları eklemek için oradaki CodeBot'u güncelleyin.",
   "mobile.chat.attachment.hostRejects":
-    "{name}: ana makine bu dosyaları kabul etmiyor. Bunları eklemek için oradaki OpenBot'u güncelleyin.",
+    "{name}: ana makine bu dosyaları kabul etmiyor. Bunları eklemek için oradaki CodeBot'u güncelleyin.",
   "mobile.chat.attachment.nameTooLong": "Daha kısa ada sahip bir dosya seçin.",
   "mobile.chat.attachment.damaged": "Ek bozuk. Tekrar seçin.",
   "mobile.chat.attachment.tooLarge": "{name} {limit}'tan daha büyük.",
@@ -234,13 +234,13 @@ export const messages = {
   "mobile.chat.liveVoice.networkNeeded": "ElevenLabs için ağ bağlantısı gerekir.",
   "mobile.chat.liveVoice.voiceServerFailed": "Ses sunucunuz yanıtı okuyamadı. Ayarlar > Ses bölümünden kontrol edin.",
   "mobile.chat.liveVoice.gptUnsupported":
-    "Bu sunucu GPT Live Voice'u desteklemiyor. Onu çalıştıran bilgisayarda OpenBot'u güncelleyin.",
+    "Bu sunucu GPT Live Voice'u desteklemiyor. Onu çalıştıran bilgisayarda CodeBot'u güncelleyin.",
   "mobile.chat.liveVoice.gptFailed": "GPT Live Voice başlatılamadı. Yeniden denemek için mikrofonun sesini açın.",
   "mobile.chat.liveVoice.gptEnded": "GPT Live Voice durdu. Yeniden başlatmak için mikrofonun sesini açın.",
   "mobile.chat.liveVoice.gptFailedTitle": "GPT Live Voice başlatılamadı",
   "mobile.chat.liveVoice.gptEndedTitle": "GPT Live Voice durdu",
   "mobile.chat.liveVoice.gptMicrophoneOff":
-    "Ayarlar'da OpenBot'un mikrofonu kullanmasına izin verin. Sonra yeniden denemek için mikrofonun sesini açın.",
+    "Ayarlar'da CodeBot'un mikrofonu kullanmasına izin verin. Sonra yeniden denemek için mikrofonun sesini açın.",
   "mobile.chat.composer.addAttachment": "Ek ekle",
   "mobile.chat.composer.ask": "{name} ajanına sor",
   "mobile.chat.composer.stopFailed": "Ajan durdurulamadı. Zaten bitmiş olabilir.",
@@ -270,7 +270,7 @@ export const messages = {
   "mobile.chat.sideQuestion.deleteBody": "Soruları ve yanıtları yalnızca bu telefonda. Geri getiremezsin.",
   "mobile.chat.sideQuestion.notFound": "Bu ajan artık sunucuda değil.",
   "mobile.chat.sideQuestion.unsupported":
-    "Bu ana bilgisayar yan soruları yanıtlayamıyor. Ana bilgisayardaki OpenBot'u güncelle.",
+    "Bu ana bilgisayar yan soruları yanıtlayamıyor. Ana bilgisayardaki CodeBot'u güncelle.",
   "mobile.chat.pins.title": "Sabitlenen mesajlar",
   "mobile.chat.pins.emptyTitle": "Sabitlenen mesaj yok",
   "mobile.chat.pins.emptyBody": "Bir mesaja dokunup basılı tutun ve burada tutmak için Sabitle'ye dokunun.",
@@ -279,7 +279,7 @@ export const messages = {
   "mobile.chat.pins.unpin": "Sabitlemeyi kaldır",
   "mobile.chat.pins.failed": "Sabitleme değişmedi.",
   "mobile.chat.pins.loadFailed": "Sabitlenen mesajlar yüklenemedi.",
-  "mobile.chat.pins.unsupported": "Bu ana bilgisayar mesaj sabitleyemiyor. Ana bilgisayarda OpenBot'u güncelleyin.",
+  "mobile.chat.pins.unsupported": "Bu ana bilgisayar mesaj sabitleyemiyor. Ana bilgisayarda CodeBot'u güncelleyin.",
   "mobile.chat.pins.mainChat": "Ana sohbet",
   "mobile.chat.pins.thread": "Yan ileti dizisi",
   "mobile.chat.pins.pinnedBy": "Sabitleyen: {name}",
@@ -371,7 +371,7 @@ export const messages = {
   "mobile.chat.imageGallery.saved": "Fotoğraflar'a kaydedildi",
   "mobile.chat.imageGallery.shareAll": "Tümünü paylaş",
   "mobile.chat.imageGallery.photosPermission":
-    "Bu görselleri kaydetmek için Ayarlar'da OpenBot'un fotoğraf eklemesine izin ver.",
+    "Bu görselleri kaydetmek için Ayarlar'da CodeBot'un fotoğraf eklemesine izin ver.",
   "mobile.chat.imageGallery.saveFailed": "Görseller kaydedilemedi",
   "mobile.chat.imageGallery.shareFailed": "Görseller paylaşılamadı",
   "mobile.chat.imageGallery.shareNeedsUpdate": "Birden çok görseli paylaşmak uygulamanın en son sürümünü gerektirir.",
@@ -381,7 +381,7 @@ export const messages = {
   "mobile.chat.video.loading": "{name} yükleniyor",
   "mobile.chat.video.share": "{name} adlı videoyu paylaş",
   "mobile.chat.video.save": "{name} adlı videoyu Fotoğraflar'a kaydet",
-  "mobile.chat.video.photosPermission": "Bu videoyu kaydetmek için Ayarlar'da OpenBot'un fotoğraf eklemesine izin ver.",
+  "mobile.chat.video.photosPermission": "Bu videoyu kaydetmek için Ayarlar'da CodeBot'un fotoğraf eklemesine izin ver.",
   "mobile.chat.video.saveFailed": "Video kaydedilemedi",
   "mobile.chat.audio.play": "{name} oynat",
   "mobile.chat.audio.pause": "{name} duraklat",
@@ -396,28 +396,28 @@ export const messages = {
   "mobile.chat.browserSecret.ended": "Bu oturum açma isteği sona erdi. Ajandan tekrar denemesini isteyin.",
   "mobile.chat.browserSecret.oneTimeCode": "Tek kullanımlık kod",
   "mobile.chat.browserSecret.takeoverTitle": "Tarayıcı devralma",
-  "mobile.chat.browserSecret.takeoverBody": "Bu adımı OpenBot çalıştıran bilgisayardaki tarayıcıda tamamlayın.",
+  "mobile.chat.browserSecret.takeoverBody": "Bu adımı CodeBot çalıştıran bilgisayardaki tarayıcıda tamamlayın.",
   "mobile.chat.browserSecret.signInBlockedTitle": "Bilgisayarınızda oturum açın",
   "mobile.chat.browserSecret.signInBlockedBody":
-    "Bu site sunucudan oturum açmayı kabul etmiyor. Bu sohbeti bilgisayarınızdaki OpenBot masaüstü uygulamasında açın ve orada oturum açın.",
+    "Bu site sunucudan oturum açmayı kabul etmiyor. Bu sohbeti bilgisayarınızdaki CodeBot masaüstü uygulamasında açın ve orada oturum açın.",
   "mobile.chat.browserSecret.takeoverReload":
-    "OpenBot parolayı veya kodu girmeyi tamamlayamadı. Eksik olanı sayfaya girin. Ardından “Bitirdim” seçeneğini seçmeden önce sayfayı yeniden yükleyin.",
+    "CodeBot parolayı veya kodu girmeyi tamamlayamadı. Eksik olanı sayfaya girin. Ardından “Bitirdim” seçeneğini seçmeden önce sayfayı yeniden yükleyin.",
   "mobile.chat.browserSecret.takeoverFailed": "İstek tamamlanamadı.",
   "mobile.chat.browserSecret.done": "Bitirdim",
   "mobile.chat.browserSecret.submitOnce": "{origin} adresine bir kez gönderin. Bu değer sohbete eklenmez.",
   "mobile.chat.browserSecret.submitFailed": "İstek tamamlanamadı. Bağlantıyı kontrol edip tekrar deneyin.",
   "mobile.chat.browserSecret.vaultSkip.agentScript":
-    "Ajan bu sayfada bir betik çalıştırdığı için OpenBot kayıtlı oturum bilgilerinizi kullanmadı. Kullanmak için ajandan sayfayı yeniden yüklemesini ve tekrar denemesini isteyin.",
+    "Ajan bu sayfada bir betik çalıştırdığı için CodeBot kayıtlı oturum bilgilerinizi kullanmadı. Kullanmak için ajandan sayfayı yeniden yüklemesini ve tekrar denemesini isteyin.",
   "mobile.chat.browserSecret.vaultSkip.fieldKind":
-    "Ajan sayfada yanlış alanı seçtiği için OpenBot kayıtlı oturum bilgilerinizi kullanmadı.",
+    "Ajan sayfada yanlış alanı seçtiği için CodeBot kayıtlı oturum bilgilerinizi kullanmadı.",
   "mobile.chat.browserSecret.vaultSkip.loginChoice":
-    "Ajan bu site için kayıtlı oturum bilgilerinden birini seçmediği için OpenBot kayıtlı bir oturum bilgisi kullanmadı. Ajana hangi hesabı kullanacağını söyleyin.",
+    "Ajan bu site için kayıtlı oturum bilgilerinden birini seçmediği için CodeBot kayıtlı bir oturum bilgisi kullanmadı. Ajana hangi hesabı kullanacağını söyleyin.",
   "mobile.chat.browserSecret.vaultSkip.noPassword":
-    "Kayıtlı oturum bilgilerinizde bu site için şifre olmadığı için OpenBot bunları kullanmadı.",
+    "Kayıtlı oturum bilgilerinizde bu site için şifre olmadığı için CodeBot bunları kullanmadı.",
   "mobile.chat.browserSecret.vaultSkip.noAuthenticatorKey":
-    "Kayıtlı oturum bilgilerinizde kimlik doğrulayıcı anahtarı olmadığı için OpenBot bunları kullanmadı.",
+    "Kayıtlı oturum bilgilerinizde kimlik doğrulayıcı anahtarı olmadığı için CodeBot bunları kullanmadı.",
   "mobile.chat.browserSecret.vaultSkip.vaultUnreadable":
-    "Şifre yöneticiniz okunamadığı için OpenBot kayıtlı bir oturum bilgisi kullanmadı.",
+    "Şifre yöneticiniz okunamadığı için CodeBot kayıtlı bir oturum bilgisi kullanmadı.",
   "mobile.chat.browserSecret.submit": "Gönder",
   "mobile.chat.browserSecret.takeOver": "Devral",
   "mobile.chat.starter.title": "İlk önce ne üzerinde çalışalım?",
@@ -486,14 +486,14 @@ export const messages = {
   "mobile.chat.approval.effect.permissions":
     "“İzin ver”, {name} ajanına {server} üzerinde bu izinleri verir. “Reddet” mevcut izinleri korur.",
   "mobile.chat.approval.partial":
-    "{server}, bu isteğin yalnızca başını telefona gönderiyor. İzin vermek için {server} üzerindeki OpenBot'u güncelleyin veya bu sohbeti OpenBot masaüstü uygulamasında açın. Burada reddedebilirsiniz.",
+    "{server}, bu isteğin yalnızca başını telefona gönderiyor. İzin vermek için {server} üzerindeki CodeBot'u güncelleyin veya bu sohbeti CodeBot masaüstü uygulamasında açın. Burada reddedebilirsiniz.",
   "mobile.chat.approval.loading": "Tam istek yükleniyor…",
   "mobile.chat.approval.loadFailed": "Tam istek yüklenemedi. Burada reddedebilirsiniz.",
   "mobile.chat.approval.retry": "Tekrar dene",
   "mobile.chat.approval.report.bugHeadline": "Bir hata mı buldun? Hadi düzeltelim.",
   "mobile.chat.approval.report.ideaHeadline": "Bir fikrin mi var? Hadi hayata geçirelim.",
   "mobile.chat.approval.report.dontSend": "Şimdi değil",
-  "mobile.chat.approval.report.send": "OpenBot ekibine gönder",
+  "mobile.chat.approval.report.send": "CodeBot ekibine gönder",
   "mobile.chat.approval.report.phoneAdds": "Bu telefon rapora şunları ekler:",
   "mobile.chat.approval.allow": "İzin ver",
   "mobile.chat.approval.deny": "Reddet",
@@ -584,7 +584,7 @@ export const messages = {
   "mobile.chat.queue.sendNowNeedsTurn": "Şimdi göndermek için çalışan bir tur gereklidir.",
   "mobile.chat.queue.stillHoldingTitle": "Mesaj hâlâ tutuluyor",
   "mobile.chat.queue.stillHoldingMessage":
-    "OpenBot bu mesajı serbest bırakamadı, bu nedenle ajan bunu beklemeye devam ediyor. Telefon yeniden bağlandıktan sonra tekrar deneyin.",
+    "CodeBot bu mesajı serbest bırakamadı, bu nedenle ajan bunu beklemeye devam ediyor. Telefon yeniden bağlandıktan sonra tekrar deneyin.",
   "mobile.chat.queue.keepEditing": "Düzenlemeye devam et",
   "mobile.chat.queue.leaveAnyway": "Yine de ayrıl",
   "mobile.chat.queue.discardTitle": "Değişiklikler atılsın mı?",
@@ -594,7 +594,7 @@ export const messages = {
   "mobile.chat.queue.alreadyReceivedKept":
     "Ajan bu mesajı zaten aldı, bu yüzden değiştirilemez. Bu ekranı kapattığınızda metniniz mesaj kutusuna gider.",
   "mobile.chat.queue.holding": "Mesaj sizin için tutuluyor…",
-  "mobile.chat.queue.holdFailed": "OpenBot bu mesajı düzenleme için tutamadı.",
+  "mobile.chat.queue.holdFailed": "CodeBot bu mesajı düzenleme için tutamadı.",
   "mobile.chat.queue.messageLabel": "Mesaj",
   "mobile.chat.queue.messagePlaceholder": "Mesaj metni",
   "mobile.chat.queue.save": "Kuyruktaki mesajı kaydet",
@@ -629,15 +629,15 @@ export const messages = {
   "mobile.chat.threads.renameSave": "Kaydet",
   "mobile.chat.threads.name": "Mesaj dizisi adı",
   "mobile.chat.threads.renameUnavailable":
-    "Bu diziyi şimdi yeniden adlandıramazsınız. Sunucuya bağlanın veya ana bilgisayardaki OpenBot'u güncelleyin.",
+    "Bu diziyi şimdi yeniden adlandıramazsınız. Sunucuya bağlanın veya ana bilgisayardaki CodeBot'u güncelleyin.",
   "mobile.chat.threads.delete.action": "Sil",
   "mobile.chat.threads.delete.title": "Bu dizi silinsin mi?",
   "mobile.chat.threads.delete.body":
-    "OpenBot diziyi, mesajlarını ve dosyalarını kalıcı olarak siler. Ana sohbet değişmez.",
+    "CodeBot diziyi, mesajlarını ve dosyalarını kalıcı olarak siler. Ana sohbet değişmez.",
   "mobile.chat.threads.filesUnsupported":
-    "Bu ana bilgisayar bir dizide dosya alamaz. Ana bilgisayardaki OpenBot'u güncelleyin.",
+    "Bu ana bilgisayar bir dizide dosya alamaz. Ana bilgisayardaki CodeBot'u güncelleyin.",
   "mobile.chat.threads.unsupported":
-    "Bu ana bilgisayar dizileri yeniden adlandıramaz veya silemez. Ana bilgisayardaki OpenBot'u güncelleyin.",
+    "Bu ana bilgisayar dizileri yeniden adlandıramaz veya silemez. Ana bilgisayardaki CodeBot'u güncelleyin.",
   "mobile.chat.threads.error.rename": "Dizi yeniden adlandırılamadı.",
   "mobile.chat.threads.error.delete": "Dizi silinemedi.",
   "mobile.chat.channelWork.working": "{channel} kanalında çalışıyor",
@@ -685,6 +685,6 @@ export const messages = {
   "mobile.chat.locationRequest.declined": "Paylaşılmadı",
   "mobile.chat.locationRequest.unavailable": "Telefonun konumunu bulamadı. Tekrar dene.",
   "mobile.chat.locationRequest.deniedTitle": "Konum erişimi kapalı",
-  "mobile.chat.locationRequest.denied": "Konumunu paylaşmak için Ayarlar’da OpenBot’un konumu kullanmasına izin ver.",
+  "mobile.chat.locationRequest.denied": "Konumunu paylaşmak için Ayarlar’da CodeBot’un konumu kullanmasına izin ver.",
   "mobile.chat.locationRequest.openSettings": "Ayarlar’ı aç",
 } as const satisfies PartialTranslation<typeof source>;

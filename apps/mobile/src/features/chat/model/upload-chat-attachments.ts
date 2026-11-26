@@ -1,4 +1,4 @@
-import type { RemoteFileUpload } from "@openbot/team-client/remote-peer";
+import type { RemoteFileUpload } from "@codebot/team-client/remote-peer";
 import type { ChatMessage } from "./chat-messages";
 
 export class ChatUploadCancelledError extends Error {

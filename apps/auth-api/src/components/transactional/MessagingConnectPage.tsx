@@ -1,9 +1,9 @@
-import { AppLogo } from "@openbot/brand";
+import { AppLogo } from "@codebot/brand";
 import {
   WEB_MESSAGING_INSTALL_KEY_PREFIX,
   type WebMessagingInstallPlatform,
-} from "@openbot/contracts/web-messaging-install";
-import { DiscordMark, SlackMark } from "@openbot/ui/features/settings/brand-marks";
+} from "@codebot/contracts/web-messaging-install";
+import { DiscordMark, SlackMark } from "@codebot/ui/features/settings/brand-marks";
 import type { JSX } from "@solidjs/web";
 import { createSignal, onSettled, Show } from "solid-js";
 import { handOffToWebClient } from "../landing/web-messaging-handoff";
@@ -64,7 +64,7 @@ const MESSAGING_PROVIDERS: Record<WebMessagingInstallPlatform, MessagingProvider
   },
 };
 
-const APP_URL = "openbot://";
+const APP_URL = "codebot://";
 const WEB_CLIENT_URL = "/app";
 
 function failureKind(provider: MessagingProvider, code: string): FailureKind {
@@ -74,12 +74,12 @@ function failureKind(provider: MessagingProvider, code: string): FailureKind {
 function deepLink(provider: MessagingProvider, fragment: URLSearchParams): string | null {
   const nonce = fragment.get("nonce");
   const grant = fragment.get("grant");
-  return nonce && grant ? `openbot://${provider.deepLinkHost}?${new URLSearchParams({ nonce, grant })}` : null;
+  return nonce && grant ? `codebot://${provider.deepLinkHost}?${new URLSearchParams({ nonce, grant })}` : null;
 }
 
 function openLinkScript(actionsId: string, platform: WebMessagingInstallPlatform, provider: MessagingProvider): string {
   const id = JSON.stringify(actionsId);
-  const host = JSON.stringify(`openbot://${provider.deepLinkHost}?`);
+  const host = JSON.stringify(`codebot://${provider.deepLinkHost}?`);
   const prefix = JSON.stringify(WEB_MESSAGING_INSTALL_KEY_PREFIX);
   return `(()=>{const f=new URLSearchParams(location.hash.slice(1)),n=f.get("nonce"),g=f.get("grant"),e=document.getElementById(${id}),a=e&&e.querySelector("a");if(!a||!n||!g)return;try{const m=JSON.parse(localStorage.getItem(${prefix}+n));if(m&&m.platform===${JSON.stringify(platform)}&&m.expiresAt>Date.now())return}catch{}a.href=${host}+new URLSearchParams({nonce:n,grant:g});e.hidden=false})()`;
 }

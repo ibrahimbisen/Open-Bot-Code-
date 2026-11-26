@@ -8,21 +8,21 @@ import {
   type VaultSaveInput,
   type VaultSecretRequest,
   type VaultState,
-} from "@openbot/contracts/ipc";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/ipc";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
 import {
   VAULT_IMPORT_CAPABILITY,
   VAULT_IMPORT_CSV_LIMIT,
   VAULT_IMPORT_ROUTES,
-} from "@openbot/contracts/team-protocol/vault-import-v1";
-import { VAULT_CAPABILITY, VAULT_ROUTES } from "@openbot/contracts/team-protocol/vault-v1";
-import { VAULT_V2_CAPABILITY, VAULT_V2_ROUTES } from "@openbot/contracts/team-protocol/vault-v2";
-import { VAULT_V3_CAPABILITY, VAULT_V3_ROUTES } from "@openbot/contracts/team-protocol/vault-v3";
-import { VAULT_V4_CAPABILITY, VAULT_V4_ROUTES } from "@openbot/contracts/team-protocol/vault-v4";
-import { twoStepKeySecret } from "@openbot/contracts/two-step-code";
-import type { AppTranslate } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
-import { registerSecretValue, registerSecretValues } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/vault-import-v1";
+import { VAULT_CAPABILITY, VAULT_ROUTES } from "@codebot/contracts/team-protocol/vault-v1";
+import { VAULT_V2_CAPABILITY, VAULT_V2_ROUTES } from "@codebot/contracts/team-protocol/vault-v2";
+import { VAULT_V3_CAPABILITY, VAULT_V3_ROUTES } from "@codebot/contracts/team-protocol/vault-v3";
+import { VAULT_V4_CAPABILITY, VAULT_V4_ROUTES } from "@codebot/contracts/team-protocol/vault-v4";
+import { twoStepKeySecret } from "@codebot/contracts/two-step-code";
+import type { AppTranslate } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
+import { registerSecretValue, registerSecretValues } from "@codebot/logging";
 import type { Effect } from "effect";
 import { type BrowserWindow, clipboard, dialog, type OpenDialogOptions } from "electron";
 import { runCauseEffect } from "../../backend/effect-boundary";

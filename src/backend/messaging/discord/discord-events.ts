@@ -3,7 +3,7 @@ import {
   type DiscordInboundAttachment,
   type DiscordInboundInteraction,
   type DiscordInboundMessage,
-} from "@openbot/contracts/signal-protocol/discord-api";
+} from "@codebot/contracts/signal-protocol/discord-api";
 import type { InboundAction, InboundFile, InboundMessage } from "../messaging-types";
 
 const DISCORD_BUTTON_ACTIONS = ["accept", "decline", "stop"] as const;

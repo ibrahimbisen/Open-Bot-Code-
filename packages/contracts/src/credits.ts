@@ -547,13 +547,13 @@ export function creditEstimates(): CreditEstimate[] {
   });
 }
 
-export const CREDIT_PRODUCT_ID = "openbot_credits";
+export const CREDIT_PRODUCT_ID = "codebot_credits";
 export const CREDIT_METADATA_KIND = "credits";
 export const CREDIT_METADATA = {
-  kind: "openbot_kind",
-  userId: "openbot_user_id",
-  serverId: "openbot_server_id",
-  credits: "openbot_credits",
+  kind: "codebot_kind",
+  userId: "codebot_user_id",
+  serverId: "codebot_server_id",
+  credits: "codebot_credits",
 } as const;
 
 const CURRENCY_RATIO: Readonly<Record<BillingCurrency, number>> = { eur: 1, usd: 1, pln: 4.5, brl: 7 };
@@ -576,7 +576,7 @@ export function creditTier(stop: Pick<CreditStop, "index">): CreditTier {
 }
 
 export function creditLookupKey(stop: Pick<CreditStop, "eurMinor">): string {
-  return `openbot_credits_price_${stop.eurMinor}`;
+  return `codebot_credits_price_${stop.eurMinor}`;
 }
 
 export const CREDIT_LOOKUP_KEYS: readonly string[] = CREDIT_PRICE_STEPS.map(creditLookupKey);
@@ -778,7 +778,7 @@ export function parseCreditCheckoutUrl(value: unknown): string | null {
 
 export type CreditActivityKind = "generation" | "purchase" | "move" | "free" | "expired" | "refund";
 export type CreditActivityStatus = "running" | "failed" | "canceled";
-export type CreditActivityActor = "you" | "member" | "openbot";
+export type CreditActivityActor = "you" | "member" | "codebot";
 
 export interface CreditActivityEntry {
   id: string;
@@ -810,7 +810,7 @@ const CREDIT_ACTIVITY_KINDS: readonly CreditActivityKind[] = [
   "refund",
 ];
 const CREDIT_ACTIVITY_STATUSES: readonly CreditActivityStatus[] = ["running", "failed", "canceled"];
-const CREDIT_ACTIVITY_ACTORS: readonly CreditActivityActor[] = ["you", "member", "openbot"];
+const CREDIT_ACTIVITY_ACTORS: readonly CreditActivityActor[] = ["you", "member", "codebot"];
 const MAX_ACTIVITY_TEXT_LENGTH = 200;
 
 function isActivityText(value: unknown): value is string {

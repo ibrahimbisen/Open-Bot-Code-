@@ -8,7 +8,7 @@ import { isProfileFrame, isProfileStack, type MainLoopProfileSummary } from "../
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "main-loop-profile-e2e");
+const OUT = join(ROOT, ".codebot-build", "main-loop-profile-e2e");
 const TRIGGER = process.argv.includes("--trigger");
 const TIMEOUT_MS = TRIGGER ? 8 * 60_000 : 60_000;
 const BLOCKER = "blockMainLoopForTest app:main-loop-profile-electron.mjs:";
@@ -21,7 +21,7 @@ const electronPath = join(
 );
 
 await mkdir(OUT, { recursive: true });
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-main-loop-profile-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-main-loop-profile-")));
 const bundle = join(root, "main-loop-profile-electron.mjs");
 const userData = join(root, "user-data");
 const resultFile = join(root, "result.json");

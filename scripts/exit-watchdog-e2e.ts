@@ -5,11 +5,11 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "exit-watchdog-e2e");
+const OUT = join(ROOT, ".codebot-build", "exit-watchdog-e2e");
 const STATE_TIMEOUT_MS = 30_000;
 const STUCK_EXIT_LIMIT_MS = 15_000;
 const CLEAN_EXIT_LIMIT_MS = 5_000;
@@ -37,7 +37,7 @@ if (process.platform === "win32") {
   process.stdout.write("SKIP: the exit watchdog does not run on Windows\n");
   process.exit(0);
 }
-const root = await mkdtemp(join(tmpdir(), "openbot-exit-watchdog-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-exit-watchdog-"));
 const bundle = join(root, "exit-watchdog-electron.mjs");
 const fifo = join(root, "approval.fifo");
 const children = new Set<ChildProcess>();

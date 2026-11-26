@@ -1,4 +1,4 @@
-import { ArrowDownWideNarrow, Check, ChevronRight, ContextMenu } from "@openbot/ui";
+import { ArrowDownWideNarrow, Check, ChevronRight, ContextMenu } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import { useSidebarScope } from "./sidebar-scope";

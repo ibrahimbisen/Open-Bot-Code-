@@ -1,4 +1,4 @@
-import { BrowserLocationCard } from "@openbot/ui/features/conversation/ConversationPrompts";
+import { BrowserLocationCard } from "@codebot/ui/features/conversation/ConversationPrompts";
 import { For } from "solid-js";
 import { useConversationViewScope } from "./conversation-scope";
 

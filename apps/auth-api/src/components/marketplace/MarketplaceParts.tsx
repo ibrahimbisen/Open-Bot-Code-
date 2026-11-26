@@ -1,8 +1,8 @@
-import type { MarketplaceAgentSummary, MarketplaceSkillSummary } from "@openbot/contracts/ipc";
-import { createMarketplaceShareUrl, type MarketplaceListingLink } from "@openbot/contracts/marketplace-links";
-import type { TranslatedLocale } from "@openbot/i18n";
-import { ShieldCheck } from "@openbot/ui/icons";
-import { TextProvider, useText } from "@openbot/ui/text";
+import type { MarketplaceAgentSummary, MarketplaceSkillSummary } from "@codebot/contracts/ipc";
+import { createMarketplaceShareUrl, type MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
+import type { TranslatedLocale } from "@codebot/i18n";
+import { ShieldCheck } from "@codebot/ui/icons";
+import { TextProvider, useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { Link } from "@tanstack/solid-router";
 import { createSignal, Loading, lazy, Match, onSettled, Show, Switch } from "solid-js";
@@ -11,7 +11,7 @@ import { LandingIcon } from "../landing/LandingIcon";
 import { SiteHeader } from "../landing/SiteHeader";
 
 const AgentAvatar = lazy(() =>
-  import("@openbot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
+  import("@codebot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
 );
 
 export function MarketplaceFrame(props: { lang: string; locale: TranslatedLocale; children: JSX.Element }) {

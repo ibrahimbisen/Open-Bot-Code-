@@ -1,8 +1,8 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
+import type { ServerSummary } from "@codebot/contracts/ipc";
 import type {
   RoutineCalendarCreate,
   RoutineCalendarNewRoutine,
-} from "@openbot/ui/features/conversation/RoutineCalendarCreateCard";
+} from "@codebot/ui/features/conversation/RoutineCalendarCreateCard";
 import { desktopAnalytics } from "../../analytics";
 import type { ConversationRuntime } from "../conversation/conversation-runtime";
 import { trackRoutineAction } from "../conversation/routine-analytics";
@@ -17,7 +17,7 @@ import { hostedUpsellRoutineCreated } from "../servers/hosted-server-upsell-cont
 import { serverRoleCanAdminister, serverSupportsCapability } from "../servers/server-capabilities";
 
 function desktopAgentRoutinesApi(serverId: string): AgentRoutinesApi {
-  const agent = window.openbot.agent;
+  const agent = window.codebot.agent;
   return {
     listRoutines: (agentId) => agent.listRoutines(agentId, serverId),
     listRoutineRuns: (input) => agent.listRoutineRuns(input, serverId),

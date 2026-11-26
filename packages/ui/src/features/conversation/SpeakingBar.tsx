@@ -1,9 +1,9 @@
-import { Button } from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { StopIcon } from "@openbot/ui/features/conversation/ConversationIcons";
-import { VoiceWaveform } from "@openbot/ui/features/conversation/VoiceRecordingMorph";
-import { useText } from "@openbot/ui/text";
+import { Button } from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { StopIcon } from "@codebot/ui/features/conversation/ConversationIcons";
+import { VoiceWaveform } from "@codebot/ui/features/conversation/VoiceRecordingMorph";
+import { useText } from "@codebot/ui/text";
 
 export interface SpeakingBarProps {
   agent: AgentProfile;

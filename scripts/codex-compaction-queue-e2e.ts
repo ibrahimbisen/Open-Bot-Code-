@@ -3,13 +3,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { getString, isRecord } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-compaction-queue-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-compaction-queue-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-compaction-queue-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-compaction-queue-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const logPath = join(root, "protocol.jsonl");
@@ -20,9 +20,9 @@ const COMPACTION_TIMEOUT_MS = 1_000;
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
-process.env.OPENBOT_FAKE_CODEX_LOG = logPath;
-process.env.OPENBOT_FAKE_CODEX_CONTROL = controlPath;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_FAKE_CODEX_LOG = logPath;
+process.env.CODEBOT_FAKE_CODEX_CONTROL = controlPath;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -30,7 +30,7 @@ const { USAGE_CHANGE_DELAY_MS } = await import("../src/backend/agent/context-com
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { StoredStateFailure } = await import("../src/backend/stored-state-effects");
 
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -39,8 +39,8 @@ if (process.argv.includes("--version")) {
   process.stdout.write("codex-cli 0.160.1\\n");
   process.exit(0);
 }
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify(entry) + "\\n");
-const control = () => JSON.parse(fs.readFileSync(process.env.OPENBOT_FAKE_CODEX_CONTROL, "utf8"));
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify(entry) + "\\n");
+const control = () => JSON.parse(fs.readFileSync(process.env.CODEBOT_FAKE_CODEX_CONTROL, "utf8"));
 const memorySaved = ${JSON.stringify(memorySaved)};
 const config = { config: { mcp_servers: {} }, layers: [{ name: { type: "user", file: "/fake/.codex/config.toml", profile: null }, version: "1", config: { mcp_servers: {} } }] };
 let buffer = "";
@@ -262,7 +262,7 @@ async function waitFor<T>(label: string, read: () => T | null | undefined | fals
 }
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -573,7 +573,7 @@ try {
   };
   Object.assign(report, { failedCompactions });
   assert.equal(failedCompactions.turns, 4, "failed compactions: not every message ran");
-  assert.equal(failedCompactions.compactStarts, 2, "failed compactions: OpenBot did not stop after 2 failures");
+  assert.equal(failedCompactions.compactStarts, 2, "failed compactions: CodeBot did not stop after 2 failures");
   assert.equal(failedCompactions.failedEnds, 2, "failed compactions: the compactions did not fail");
   assert.equal(failedCompactions.stoppedNotices, 1, "failed compactions: one notice");
 
@@ -620,7 +620,7 @@ try {
   };
   Object.assign(report, { ineffectiveCompactions });
   assert.equal(ineffectiveCompactions.turns, 4, "ineffective compactions: not every message ran");
-  assert.equal(ineffectiveCompactions.compactStarts, 2, "ineffective compactions: OpenBot did not stop after 2");
+  assert.equal(ineffectiveCompactions.compactStarts, 2, "ineffective compactions: CodeBot did not stop after 2");
   assert.equal(ineffectiveCompactions.notices, 1, "ineffective compactions: one notice");
 
   await writeFile(controlPath, JSON.stringify({ compactionMs: 200, ignoreInterrupt: false, usageOnStop: true }));

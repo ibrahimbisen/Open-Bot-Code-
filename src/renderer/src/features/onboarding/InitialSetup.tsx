@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_PROVIDERS,
   type AgentModelId,
@@ -8,10 +8,10 @@ import {
   type DesktopPlatform,
   type InvitePreview,
   type JoinServerInput,
-} from "@openbot/contracts/ipc";
-import { Button, Dialog, ErrorReference, Textarea } from "@openbot/ui";
-import { InvitePreviewCard } from "@openbot/ui/features/servers/JoinServerDialog";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { Button, Dialog, ErrorReference, Textarea } from "@codebot/ui";
+import { InvitePreviewCard } from "@codebot/ui/features/servers/JoinServerDialog";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, onSettled, Show, untrack } from "solid-js";
 import { ComputerUseSetup } from "../computer-use/ComputerUseSetup";
 import {

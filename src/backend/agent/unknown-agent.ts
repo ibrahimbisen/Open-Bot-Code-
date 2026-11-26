@@ -1,6 +1,6 @@
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { isGeneratedAgentId, isUuidV4 } from "@openbot/contracts/validation";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { isGeneratedAgentId, isUuidV4 } from "@codebot/contracts/validation";
+import { sourceText } from "@codebot/i18n/source";
 
 const NEAR_ID_EDITS = 2;
 

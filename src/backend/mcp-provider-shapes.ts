@@ -9,9 +9,9 @@ import {
   isReservedMcpServerName,
   type McpServerConfig,
   type McpTransport,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Option, Schema } from "effect";
 import { agentLaunchPath, isExecutable, isWindowsRunnable, windowsPathExtensions } from "./cli";
 import { causeHelpers } from "./effect-boundary";
@@ -121,7 +121,7 @@ export function computerUseParam(params: unknown): boolean {
 }
 
 export function mcpAgentParam(params: unknown): string | null {
-  return isDynamicRecord(params) && typeof params.openbotAgentId === "string" ? params.openbotAgentId : null;
+  return isDynamicRecord(params) && typeof params.codebotAgentId === "string" ? params.codebotAgentId : null;
 }
 
 export const usableMcpServers = Effect.fnUntraced(function* (
@@ -352,7 +352,7 @@ export function acpMcpServerName(
 ): string {
   const name = form(providerMcpServerName(config.name));
   if (config.id === COMPUTER_USE_MCP_SERVER_ID || !own.includes(name)) return name;
-  const renamed = form(`openbot_${name}`);
+  const renamed = form(`codebot_${name}`);
   return own.includes(renamed) || isReservedMcpServerName(renamed) ? name : renamed;
 }
 
@@ -433,7 +433,7 @@ export type CodexMcpServer =
     }
   | { url: string; http_headers: Record<string, string> };
 
-export const CODEX_PLACEHOLDER_COMMAND = "openbot-mcp";
+export const CODEX_PLACEHOLDER_COMMAND = "codebot-mcp";
 export const CODEX_PLACEHOLDER_URL = "http://127.0.0.1:1";
 
 export type CodexOwnTransports = Readonly<Record<string, McpTransport>>;
@@ -484,7 +484,7 @@ export function providerMcpServerName(name: string): string {
 export function codexMcpServerKey(config: McpServerConfig, own: CodexOwnTransports = {}): string {
   const name = providerMcpServerName(config.name);
   if (config.id === COMPUTER_USE_MCP_SERVER_ID) return name;
-  const renamed = `openbot_${name}`;
+  const renamed = `codebot_${name}`;
   const renamedTaken = Object.hasOwn(own, renamed) || isReservedMcpServerName(renamed);
   return renamedTaken && (!Object.hasOwn(own, name) || own[name] === config.transport) ? name : renamed;
 }

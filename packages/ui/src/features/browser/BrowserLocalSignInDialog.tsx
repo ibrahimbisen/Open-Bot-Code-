@@ -1,5 +1,5 @@
-import { Button, ConfirmDialog, LogIn } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { Button, ConfirmDialog, LogIn } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { Show } from "solid-js";
 
 export interface BrowserLocalSignInDialogProps {

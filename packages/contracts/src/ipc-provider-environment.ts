@@ -16,7 +16,7 @@ export const PROVIDER_ENVIRONMENT_LIMITS = { variables: 32, name: 128, value: 8_
 
 export const PROVIDER_ENVIRONMENT_NAME_PATTERN = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
-const COMMON_RESERVED = ["PATH", "HOME", "NODE_OPTIONS", "OPENBOT_AGENT_PROCESS"] as const;
+const COMMON_RESERVED = ["PATH", "HOME", "NODE_OPTIONS", "CODEBOT_AGENT_PROCESS"] as const;
 export const PROVIDER_ENVIRONMENT_RESERVED_NAMES: Readonly<Record<ProviderEnvironmentProvider, readonly string[]>> = {
   claude: [...COMMON_RESERVED, "CLAUDE_CONFIG_DIR"],
   codex: [...COMMON_RESERVED, "CODEX_HOME"],

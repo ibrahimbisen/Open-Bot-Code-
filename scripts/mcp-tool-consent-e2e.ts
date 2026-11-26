@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join, resolve } from "node:path";
-import type { AgentEvent, AgentPromptQuestion, ConversationSnapshot } from "@openbot/contracts/ipc";
+import type { AgentEvent, AgentPromptQuestion, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { AttentionRegistry } from "../src/backend/agent/attention-registry";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
@@ -18,7 +18,7 @@ import {
 } from "../src/backend/protocol";
 import { ApprovalAutomation } from "../src/main/approval-automation-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-tool-consent-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-tool-consent-e2e");
 const DECISION = "mcp-elicitation-decision";
 const NL = String.fromCharCode(10);
 
@@ -278,7 +278,7 @@ class Rig {
       this.#client.request(
         "initialize",
         {
-          clientInfo: { name: "openbot_e2e", title: "OpenBot E2E", version: "0.0.0" },
+          clientInfo: { name: "codebot_e2e", title: "CodeBot E2E", version: "0.0.0" },
           capabilities: { experimentalApi: true, mcpServerOpenaiFormElicitation: true },
         },
         decodeRecordResponse,

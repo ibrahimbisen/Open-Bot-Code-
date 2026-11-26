@@ -1,13 +1,13 @@
-import type { GitHubConnectorStatus, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { CodeBotDesktopApi, GitHubConnectorStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 
 export type GitHubConnectorPort = Pick<
-  OpenBotDesktopApi["githubConnector"],
+  CodeBotDesktopApi["githubConnector"],
   "status" | "connect" | "cancel" | "disconnect" | "repositories" | "openVerification" | "openInstall" | "onChanged"
 >;
 
 export function githubConnectorPort(): GitHubConnectorPort {
-  return window.openbot.githubConnector;
+  return window.codebot.githubConnector;
 }
 
 const HOST_POLL_MS = 2_000;
@@ -48,11 +48,11 @@ export function polledGitHubConnectorPort(actions: Omit<GitHubConnectorPort, "on
 
 export function hostGitHubConnectorPort(serverId: () => string | undefined): GitHubConnectorPort {
   const call =
-    <T>(method: (api: OpenBotDesktopApi["githubConnector"], serverId: string) => Promise<T>) =>
+    <T>(method: (api: CodeBotDesktopApi["githubConnector"], serverId: string) => Promise<T>) =>
     () => {
       const id = serverId();
       if (!id) return Promise.reject(new Error(sourceText("error.team.connectorsUnsupported")));
-      return method(window.openbot.githubConnector, id);
+      return method(window.codebot.githubConnector, id);
     };
   return polledGitHubConnectorPort({
     status: call((api, id) => api.hostStatus(id)),

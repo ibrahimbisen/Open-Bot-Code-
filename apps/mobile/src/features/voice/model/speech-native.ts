@@ -30,4 +30,4 @@ declare class SpeechModule extends NativeModule<SpeechEvents> {
   setCallAudio?(active: boolean): void;
 }
 
-export const speechNative = requireOptionalNativeModule<SpeechModule>("OpenBotSpeech");
+export const speechNative = requireOptionalNativeModule<SpeechModule>("CodeBotSpeech");

@@ -1,6 +1,6 @@
-import type { MacAutomationTarget, McpServerConfig, McpTransport, SkillCategory } from "@openbot/contracts/ipc";
-import { mcpAccountFragment, withoutMcpAccountFragment } from "@openbot/contracts/mcp-accounts";
-import { isListingUrl, type McpAuth, mcpFlowFields } from "@openbot/contracts/mcp-connect-flows";
+import type { MacAutomationTarget, McpServerConfig, McpTransport, SkillCategory } from "@codebot/contracts/ipc";
+import { mcpAccountFragment, withoutMcpAccountFragment } from "@codebot/contracts/mcp-accounts";
+import { isListingUrl, type McpAuth, mcpFlowFields } from "@codebot/contracts/mcp-connect-flows";
 
 export interface MarketplacePluginPrompt {
   id: string;

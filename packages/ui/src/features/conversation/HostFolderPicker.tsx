@@ -1,5 +1,5 @@
-import { type AgentFolderBrowse, agentFolderName, typedHostFolder } from "@openbot/contracts/ipc";
-import { ArrowUp, Button, Dialog, Folder, HardDrive, IconButton, Input, X } from "@openbot/ui";
+import { type AgentFolderBrowse, agentFolderName, typedHostFolder } from "@codebot/contracts/ipc";
+import { ArrowUp, Button, Dialog, Folder, HardDrive, IconButton, Input, X } from "@codebot/ui";
 import { createEffect, createSignal, For, Show } from "solid-js";
 import { useText } from "../../text";
 

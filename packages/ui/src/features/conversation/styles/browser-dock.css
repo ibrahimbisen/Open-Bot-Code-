@@ -12,19 +12,19 @@
   width: 100%;
   height: 100%;
   background: transparent;
-  color: var(--openbot-text-primary);
-  font-family: var(--openbot-font-sans);
+  color: var(--codebot-text-primary);
+  font-family: var(--codebot-font-sans);
 }
 
 .browser-dock {
   position: absolute;
-  bottom: var(--openbot-space-4);
+  bottom: var(--codebot-space-4);
   left: 50%;
   display: flex;
-  width: min(640px, calc(100% - 2 * var(--openbot-space-6)));
+  width: min(640px, calc(100% - 2 * var(--codebot-space-6)));
   flex-direction: column;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   isolation: isolate;
   translate: -50% 0;
 }
@@ -32,20 +32,20 @@
 .browser-dock-glass {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-0-5);
-  border: 1px solid var(--openbot-glass-border);
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-glass);
-  box-shadow: var(--openbot-shadow-raised);
+  gap: var(--codebot-space-0-5);
+  border: 1px solid var(--codebot-glass-border);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-glass);
+  box-shadow: var(--codebot-shadow-raised);
   backdrop-filter: blur(16px);
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .browser-dock-composer svg,
 .browser-dock-tab svg,
 .browser-dock-island-activity svg {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
 }
 
 .browser-dock-island {
@@ -61,12 +61,12 @@
 
 .browser-dock-island:is([data-mode="reply"], [data-mode="secret"], [data-mode="prompt"], [data-mode="approval"]) {
   width: 100%;
-  border-radius: var(--openbot-radius-lg);
+  border-radius: var(--codebot-radius-lg);
 }
 
 .browser-dock-island:is([data-mode="secret"], [data-mode="prompt"], [data-mode="approval"]) {
-  border-radius: var(--openbot-radius-xl);
-  background: color-mix(in srgb, var(--openbot-bg-glass), var(--openbot-bg-control) 60%);
+  border-radius: var(--codebot-radius-xl);
+  background: color-mix(in srgb, var(--codebot-bg-glass), var(--codebot-bg-control) 60%);
   backdrop-filter: blur(32px) saturate(1.4);
 }
 
@@ -91,10 +91,10 @@
 .browser-dock-island-card {
   display: grid;
   max-height: 420px;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   overflow: auto;
-  padding: var(--openbot-space-3);
-  color: var(--openbot-text-primary);
+  padding: var(--codebot-space-3);
+  color: var(--codebot-text-primary);
 }
 
 .browser-dock-island-card :is(.question-prompt-bubble, .ui-bubble-content, .approval-card) {
@@ -110,10 +110,10 @@
 .browser-dock-island-activity {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-1-5);
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-2) var(--openbot-space-1);
-  font-size: var(--openbot-text-sm);
+  gap: var(--codebot-space-1-5);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-2) var(--codebot-space-1);
+  font-size: var(--codebot-text-sm);
   white-space: nowrap;
 }
 
@@ -129,10 +129,10 @@
 }
 
 .browser-dock-spin {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
   flex: none;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   animation: ui-spin 1s linear infinite;
 }
 
@@ -141,7 +141,7 @@
   min-width: 0;
   overflow: hidden;
   align-items: center;
-  gap: var(--openbot-space-1-5);
+  gap: var(--codebot-space-1-5);
 }
 
 .browser-dock-status > span {
@@ -152,28 +152,28 @@
 .browser-dock-handoff {
   flex: none;
   margin-inline-start: auto;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .browser-dock-island-reply {
   display: grid;
-  gap: var(--openbot-space-1-5);
-  padding-block: var(--openbot-space-2) var(--openbot-space-3);
-  padding-inline: var(--openbot-space-3) var(--openbot-space-2);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-md);
+  gap: var(--codebot-space-1-5);
+  padding-block: var(--codebot-space-2) var(--codebot-space-3);
+  padding-inline: var(--codebot-space-3) var(--codebot-space-2);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-md);
 }
 
 .browser-dock-reply-header {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  gap: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
 }
 
 .browser-dock-reply-header > strong {
-  font-weight: var(--openbot-weight-medium);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .browser-dock-reply-close {
@@ -182,9 +182,9 @@
 
 .browser-dock-reply-body {
   max-height: 160px;
-  padding-inline-end: var(--openbot-space-1);
+  padding-inline-end: var(--codebot-space-1);
   overflow: auto;
-  line-height: var(--openbot-leading-lg);
+  line-height: var(--codebot-leading-lg);
 }
 
 .browser-dock-reply-actions {
@@ -199,9 +199,9 @@
 }
 
 .agent-queue-panel[data-variant="floating"] {
-  margin-inline: var(--openbot-space-6);
-  border-color: var(--openbot-glass-border);
-  background: var(--openbot-bg-glass);
+  margin-inline: var(--codebot-space-6);
+  border-color: var(--codebot-glass-border);
+  background: var(--codebot-bg-glass);
   backdrop-filter: blur(16px);
   animation: none;
 }
@@ -216,9 +216,9 @@
   z-index: 2;
   box-sizing: border-box;
   width: 100%;
-  gap: var(--openbot-space-2);
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-2) var(--openbot-space-1);
+  gap: var(--codebot-space-2);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-2) var(--codebot-space-1);
 }
 
 .browser-dock-avatar {
@@ -235,7 +235,7 @@
 }
 
 .browser-dock-hide {
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .browser-dock .browser-dock-tab {
@@ -252,7 +252,7 @@
 }
 
 .browser-dock .browser-dock-tab:has(> .browser-dock-tab-open:focus-visible) {
-  box-shadow: var(--openbot-focus-ring);
+  box-shadow: var(--codebot-focus-ring);
 }
 
 .browser-dock .browser-dock-tab-open {
@@ -260,16 +260,16 @@
   flex: 0 1 auto;
   height: auto;
   justify-content: flex-start;
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-2) var(--openbot-space-3);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-2) var(--codebot-space-3);
   border: 0;
   border-radius: inherit;
   background: transparent;
   box-shadow: none;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
   font-weight: inherit;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   line-height: 1;
   white-space: nowrap;
 }
@@ -279,13 +279,13 @@
 }
 
 .browser-dock .browser-dock-tab-open:not(:last-child) {
-  padding-inline-end: var(--openbot-space-2);
+  padding-inline-end: var(--codebot-space-2);
 }
 
 .browser-dock .browser-dock-tab-done {
   flex: none;
-  border-radius: var(--openbot-radius-pill);
-  margin-inline-end: var(--openbot-space-1);
+  border-radius: var(--codebot-radius-pill);
+  margin-inline-end: var(--codebot-space-1);
 }
 
 .browser-dock:is([data-tucked], [data-phase="showing"]) > :not(.browser-dock-tab, .browser-dock-tuck-glass) {
@@ -307,9 +307,9 @@
 .browser-dock-tab-avatar[data-working]::after {
   position: absolute;
   border: 1.5px solid transparent;
-  border-radius: var(--openbot-radius-pill);
-  border-top-color: var(--openbot-accent);
-  border-right-color: var(--openbot-accent);
+  border-radius: var(--codebot-radius-pill);
+  border-top-color: var(--codebot-accent);
+  border-right-color: var(--codebot-accent);
   animation: ui-spin 900ms linear infinite;
   content: "";
   inset: 3px -1px;
@@ -321,8 +321,8 @@
   right: -2px;
   width: 7px;
   height: 7px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-accent);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-accent);
   content: "";
 }
 
@@ -334,8 +334,8 @@
 
 .browser-dock .browser-dock-tab .browser-dock-tab-chevron {
   flex: none;
-  color: var(--openbot-text-secondary);
-  transition: translate var(--openbot-duration-normal) var(--openbot-ease-out);
+  color: var(--codebot-text-secondary);
+  transition: translate var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 .browser-dock-tab-open:hover .browser-dock-tab-chevron {
@@ -344,11 +344,11 @@
 
 .browser-dock-tuck-glass {
   z-index: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .browser-dock:is([data-tucked], [data-phase="showing"]) {
-  width: var(--browser-dock-open-width, min(640px, calc(100% - 2 * var(--openbot-space-6))));
+  width: var(--browser-dock-open-width, min(640px, calc(100% - 2 * var(--codebot-space-6))));
   pointer-events: none;
 }
 
@@ -359,7 +359,7 @@
 .browser-dock-editor {
   min-width: 0;
   flex: 1;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .agent-queue-panel[data-variant="floating"] .agent-queue-item[data-arriving] .agent-queue-message {
@@ -371,9 +371,9 @@
   z-index: 1;
   box-sizing: border-box;
   overflow: hidden;
-  border: 1px solid var(--openbot-glass-border);
-  background: var(--openbot-bg-glass);
-  box-shadow: var(--openbot-shadow-raised);
+  border: 1px solid var(--codebot-glass-border);
+  background: var(--codebot-bg-glass);
+  box-shadow: var(--codebot-shadow-raised);
   backdrop-filter: blur(16px);
   pointer-events: none;
 }
@@ -396,7 +396,7 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   pointer-events: none;
   text-overflow: ellipsis;
   transform-origin: left center;
@@ -405,30 +405,30 @@
 }
 
 .agent-queue-panel[data-variant="floating"] .agent-queue-actions {
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .agent-queue-panel[data-variant="floating"] :is(.agent-queue-steer, .agent-queue-icon-button) {
   box-sizing: border-box;
   height: 24px;
-  border: 1px solid var(--openbot-glass-border);
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-glass-surface);
-  box-shadow: inset 0 1px 0 var(--openbot-glass-highlight);
+  border: 1px solid var(--codebot-glass-border);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-glass-surface);
+  box-shadow: inset 0 1px 0 var(--codebot-glass-highlight);
   backdrop-filter: blur(8px);
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   transition:
-    background var(--openbot-duration-hover) ease,
-    border-color var(--openbot-duration-hover) ease,
-    box-shadow var(--openbot-duration-hover) ease,
-    color var(--openbot-duration-hover) ease,
-    opacity var(--openbot-duration-hover) ease;
+    background var(--codebot-duration-hover) ease,
+    border-color var(--codebot-duration-hover) ease,
+    box-shadow var(--codebot-duration-hover) ease,
+    color var(--codebot-duration-hover) ease,
+    opacity var(--codebot-duration-hover) ease;
 }
 
 .agent-queue-panel[data-variant="floating"] .agent-queue-steer {
   padding-block: 0;
-  padding-inline: var(--openbot-space-1-5) var(--openbot-space-2);
-  font-size: var(--openbot-text-sm);
+  padding-inline: var(--codebot-space-1-5) var(--codebot-space-2);
+  font-size: var(--codebot-text-sm);
 }
 
 .agent-queue-panel[data-variant="floating"] .agent-queue-icon-button {
@@ -442,20 +442,20 @@
 
 .agent-queue-panel[data-variant="floating"]
   :is(.agent-queue-steer, .agent-queue-icon-button):is(:hover:not(:disabled), :focus-visible) {
-  background: var(--openbot-glass-surface-hover);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-glass-surface-hover);
+  color: var(--codebot-text-primary);
 }
 
 .agent-queue-panel[data-variant="floating"]
   .agent-queue-icon-button.agent-queue-delete:is(:hover:not(:disabled), :focus-visible) {
-  background: var(--openbot-danger-soft);
-  color: var(--openbot-danger);
+  background: var(--codebot-danger-soft);
+  color: var(--codebot-danger);
 }
 
 .agent-queue-panel[data-variant="floating"] :is(.agent-queue-steer, .agent-queue-icon-button):focus-visible {
   box-shadow:
-    inset 0 1px 0 var(--openbot-glass-highlight),
-    0 0 0 2px var(--openbot-border-focus);
+    inset 0 1px 0 var(--codebot-glass-highlight),
+    0 0 0 2px var(--codebot-border-focus);
 }
 
 @media (hover: hover) {
@@ -466,7 +466,7 @@
     background: transparent;
     box-shadow: none;
     backdrop-filter: none;
-    color: var(--openbot-text-muted);
+    color: var(--codebot-text-muted);
   }
 }
 

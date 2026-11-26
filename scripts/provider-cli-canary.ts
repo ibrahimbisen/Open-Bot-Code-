@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { MANAGED_RUNTIME_PROVIDERS, type ManagedProviderId } from "@openbot/contracts/ipc";
+import { MANAGED_RUNTIME_PROVIDERS, type ManagedProviderId } from "@codebot/contracts/ipc";
 import { Effect, Option, Schema } from "effect";
 import lockValue from "../native-runtime.lock.json";
 import { isMissingProviderSessionError } from "../src/backend/agent/thread-items";
@@ -23,7 +23,7 @@ import {
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-cli-canary");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-cli-canary");
 const REQUEST_TIMEOUT_MS = 120_000;
 const TARGETS: readonly RuntimeTarget[] = ["darwin-arm64", "darwin-x64", "linux-x64", "linux-arm64", "win32-x64"];
 
@@ -77,7 +77,7 @@ function requestedProviders(): ManagedProviderId[] {
   return known.filter((provider) => names.includes(provider));
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-cli-canary-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-cli-canary-"));
 const report: Report = { passed: false, releases: {}, results: [], failure: null, notCovered: NOT_COVERED };
 const clients: AgentClient[] = [];
 
@@ -259,7 +259,7 @@ async function canary(manager: ProviderRuntimeManager, provider: ManagedProvider
   const resumed = await runTurn(client, thread, { model, text: "Reply with the single word: ok" });
   assert.equal(resumed.status, "completed", `${provider} ${version}: a turn on the restored session completes.`);
 
-  const gone = thread.replace(/[^:]+$/u, "ses_openbotcanarymissing");
+  const gone = thread.replace(/[^:]+$/u, "ses_codebotcanarymissing");
   const missingSession = await runCauseEffect(
     client.request("thread/resume", { threadId: gone, cwd: workspace, model }, (value) => value),
   ).then(

@@ -1,4 +1,4 @@
-import { feedbackApproval } from "@openbot/team-client/feedback-approval";
+import { feedbackApproval } from "@codebot/team-client/feedback-approval";
 import { Button, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
 import Folder from "lucide-react-native/icons/folder";
@@ -68,7 +68,7 @@ export function ChatApprovalCard({
   const { t, errorMessage, sourceText } = useText();
   const card = useChatCardSurface();
   const [foreground, muted] = useThemeColor(["foreground", "muted"]);
-  const [warningText] = useCSSVariable(["--openbot-warning-text"]);
+  const [warningText] = useCSSVariable(["--codebot-warning-text"]);
   const [pending, setPending] = useState<ApprovalDecision | null>(null);
   const [failed, setFailed] = useState<string | null>(null);
   const [wholeFailed, setWholeFailed] = useState(false);

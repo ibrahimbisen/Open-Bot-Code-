@@ -1,4 +1,4 @@
-import { AGENT_PROVIDERS, type AgentProviderId } from "@openbot/contracts/agent-providers";
+import { AGENT_PROVIDERS, type AgentProviderId } from "@codebot/contracts/agent-providers";
 import { Schema } from "effect";
 
 const PROCESS_GROUPS = [

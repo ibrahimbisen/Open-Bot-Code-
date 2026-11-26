@@ -1,5 +1,5 @@
-import { AppLogo } from "@openbot/brand";
-import type { AppTextKey } from "@openbot/i18n";
+import { AppLogo } from "@codebot/brand";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertActions,
@@ -25,7 +25,7 @@ import {
   Text,
   TriangleAlert,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, For, Show } from "solid-js";
 import type { AgentProfile } from "../../data";

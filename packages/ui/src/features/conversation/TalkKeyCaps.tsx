@@ -1,5 +1,5 @@
-import { ArrowBigUp, ChevronUp, Command, CornerDownLeft, Kbd, Option } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { ArrowBigUp, ChevronUp, Command, CornerDownLeft, Kbd, Option } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { For } from "solid-js";
 import { type TalkKeyBinding, type TalkKeySymbol, talkKeyParts } from "./talk-key";

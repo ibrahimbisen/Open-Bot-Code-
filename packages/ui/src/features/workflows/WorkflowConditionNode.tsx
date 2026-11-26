@@ -1,5 +1,5 @@
-import { AGENT_REASONING_EFFORTS, type AgentModelId, type AgentReasoningEffort } from "@openbot/contracts/ipc";
-import { Button, CircleCheck, Play, Split, Textarea } from "@openbot/ui";
+import { AGENT_REASONING_EFFORTS, type AgentModelId, type AgentReasoningEffort } from "@codebot/contracts/ipc";
+import { Button, CircleCheck, Play, Split, Textarea } from "@codebot/ui";
 import { createMemo, For, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { AnswerAction, AnswerProblems, useAnswerText } from "./workflow-answer-parts";

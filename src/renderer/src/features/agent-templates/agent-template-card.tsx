@@ -1,6 +1,6 @@
-import { AppLogo } from "@openbot/brand";
-import { AGENT_TEMPLATE_CARD, type AgentTemplatePreview } from "@openbot/contracts/ipc";
-import { avatarHeadColor, createStaticAvatarSvg } from "@openbot/ui/bloub-avatar";
+import { AppLogo } from "@codebot/brand";
+import { AGENT_TEMPLATE_CARD, type AgentTemplatePreview } from "@codebot/contracts/ipc";
+import { avatarHeadColor, createStaticAvatarSvg } from "@codebot/ui/bloub-avatar";
 import { render } from "@solidjs/web";
 import { flush } from "solid-js";
 import { loadImage, loadSvg, withAlpha } from "../../avatar-canvas";
@@ -48,12 +48,12 @@ function themeColors(): ThemeColors {
     return value;
   };
   return {
-    canvas: token("--openbot-bg-native-canvas"),
-    primary: token("--openbot-text-primary"),
-    secondary: token("--openbot-text-secondary"),
-    muted: token("--openbot-text-muted"),
-    logo: token("--openbot-logo-production"),
-    logoEye: token("--openbot-logo-production-eye"),
+    canvas: token("--codebot-bg-native-canvas"),
+    primary: token("--codebot-text-primary"),
+    secondary: token("--codebot-text-secondary"),
+    muted: token("--codebot-text-muted"),
+    logo: token("--codebot-logo-production"),
+    logoEye: token("--codebot-logo-production-eye"),
   };
 }
 
@@ -113,7 +113,7 @@ async function drawColumn(
   await drawLogo(context, x, 92, 44, colors);
   context.fillStyle = colors.primary;
   context.font = `600 28px ${FONT}`;
-  context.fillText("OpenBot", x + 58, 124);
+  context.fillText("CodeBot", x + 58, 124);
 
   let y = 154;
   context.font = `700 60px ${FONT}`;
@@ -140,7 +140,7 @@ async function drawColumn(
     y += lineHeight;
   }
 
-  const label = "Add to OpenBot";
+  const label = "Add to CodeBot";
   context.font = `600 24px ${FONT}`;
   const pillWidth = context.measureText(label).width + 64;
   context.fillStyle = colors.primary;

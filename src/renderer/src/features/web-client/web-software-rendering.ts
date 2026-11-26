@@ -1,4 +1,4 @@
-import { isString } from "@openbot/contracts/runtime-values";
+import { isString } from "@codebot/contracts/runtime-values";
 import { setDrawsOnCpu } from "../../motion-preference";
 
 const CPU_RENDERERS = /swiftshader|llvmpipe|softpipe|lavapipe|basic render driver/i;

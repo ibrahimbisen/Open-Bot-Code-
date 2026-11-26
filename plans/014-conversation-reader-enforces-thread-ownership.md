@@ -58,7 +58,7 @@ Update `readConversation`, `readTurnConversation`, `readConversationPage` base r
 
 ### Step 2: Add a regression scenario
 
-Create a real database E2E scenario with two agents and one thread per agent. Call each affected read with agent A plus agent B's thread ID and assert that messages and references are empty. Call the matching pairs and assert that the original messages remain available. Write the report under `.openbot-build/` like other E2E scripts.
+Create a real database E2E scenario with two agents and one thread per agent. Call each affected read with agent A plus agent B's thread ID and assert that messages and references are empty. Call the matching pairs and assert that the original messages remain available. Write the report under `.codebot-build/` like other E2E scripts.
 
 **Verify**: `bun run test:related -- src/backend/database/conversation-queries.ts` → all tests pass and the mismatch case is covered.
 

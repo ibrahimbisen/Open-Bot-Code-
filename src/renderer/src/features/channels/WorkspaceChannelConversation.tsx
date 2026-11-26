@@ -1,4 +1,4 @@
-import type { AgentStatus, BrowserTakeoverRequest, CentralAuthUser } from "@openbot/contracts/ipc";
+import type { AgentStatus, BrowserTakeoverRequest, CentralAuthUser } from "@codebot/contracts/ipc";
 import { createMemo, Show } from "solid-js";
 import { useNavigation } from "../../navigation";
 import { usePlatform } from "../../platform";
@@ -128,7 +128,7 @@ function DesktopChannelConversation(props: { channelId: string; account: () => C
   trackUsageLimitShown(usageLimitAsk);
   const shownAgentStatus = (): AgentStatus =>
     scope.loaded() ? agentStatus() : { ...agentStatus(), phase: "starting" };
-  const responseStyle = createServerResponseStyle(activeServer, window.openbot.hostAdmin);
+  const responseStyle = createServerResponseStyle(activeServer, window.codebot.hostAdmin);
   return (
     <Conversation
       channel={view.source}
@@ -163,7 +163,7 @@ function DesktopChannelConversation(props: { channelId: string; account: () => C
       currentUserChatColor={props.account().chatColor}
       isOwnSender={isOwnSender}
       browserEnabled={!platform.landingPreview && activeServerSupportsCapability("browser-control")}
-      openLinksInBrowser={generalSettings().externalLinkTarget.kind === "openbot"}
+      openLinksInBrowser={generalSettings().externalLinkTarget.kind === "codebot"}
       remoteDesktopSessionActive={Boolean(activeRemoteDesktopSession())}
       remoteDesktopVisible={remoteDesktopWorkspaceVisible()}
       remoteDesktopEnabled={!platform.landingPreview && activeServerSupportsCapability("remote-desktop")}

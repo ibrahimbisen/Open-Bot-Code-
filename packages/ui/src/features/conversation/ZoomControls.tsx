@@ -1,4 +1,4 @@
-import { Button, Minus, Plus } from "@openbot/ui";
+import { Button, Minus, Plus } from "@codebot/ui";
 import { useText } from "../../text";
 
 export interface Camera {

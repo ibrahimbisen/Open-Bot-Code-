@@ -3,13 +3,13 @@ import type {
   DynamicIslandAction,
   DynamicIslandPreference,
   DynamicIslandPresentation,
-} from "@openbot/contracts/ipc";
-import { DEFAULT_DYNAMIC_ISLAND_PREFERENCE, IDLE_DYNAMIC_ISLAND_PRESENTATION } from "@openbot/contracts/ipc";
-import { presentationPriority } from "@openbot/team-client/dynamic-island-presentation";
-import type { DynamicIslandNotchSize, DynamicIslandStateChangeReason, DynamicIslandViewState } from "@openbot/ui";
-import { OpenBotDynamicIsland } from "@openbot/ui/features/dynamic-island/OpenBotDynamicIsland";
-import { useText } from "@openbot/ui/text";
-import { errorReference, type UserErrorDetails } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { DEFAULT_DYNAMIC_ISLAND_PREFERENCE, IDLE_DYNAMIC_ISLAND_PRESENTATION } from "@codebot/contracts/ipc";
+import { presentationPriority } from "@codebot/team-client/dynamic-island-presentation";
+import type { DynamicIslandNotchSize, DynamicIslandStateChangeReason, DynamicIslandViewState } from "@codebot/ui";
+import { CodeBotDynamicIsland } from "@codebot/ui/features/dynamic-island/CodeBotDynamicIsland";
+import { useText } from "@codebot/ui/text";
+import { errorReference, type UserErrorDetails } from "@codebot/user-errors";
 import { createEffect, createSignal, onSettled, Show } from "solid-js";
 import { currentDevicePlatform } from "../../send-shortcut-preference";
 import { windowShape } from "../../window-shape";
@@ -310,7 +310,7 @@ export function DynamicIslandSurface() {
           onFocusOut={leaveFocusInteraction}
           onPointerDown={(event) => void requestKeyboard(event)}
         >
-          <OpenBotDynamicIsland
+          <CodeBotDynamicIsland
             presentation={presentation()}
             state={viewState()}
             displayMode={displayMode}

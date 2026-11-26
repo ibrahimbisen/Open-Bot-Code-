@@ -1,7 +1,7 @@
-import type { XReplyPayload } from "@openbot/contracts/browser-extension-x";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { formatLocale, loadLocale, resolveLocale } from "@openbot/i18n";
-import { currentText, TextProvider } from "@openbot/ui/text";
+import type { XReplyPayload } from "@codebot/contracts/browser-extension-x";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { formatLocale, loadLocale, resolveLocale } from "@codebot/i18n";
+import { currentText, TextProvider } from "@codebot/ui/text";
 import { render } from "@solidjs/web";
 import { type ClientBrowserLink, createClientBrowserLink } from "./client-browser-link";
 import { BROWSER_HOLD_MESSAGE } from "./client-browser-messages";

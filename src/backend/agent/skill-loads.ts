@@ -1,7 +1,7 @@
 import { stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { isAbsolute, join } from "node:path";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
 import { Effect, Option, Schema } from "effect";
 import { homeSkillRoot } from "../home-skills";
 import { getRecord, getString, isRecord } from "../protocol";
@@ -13,7 +13,7 @@ export interface SkillLoad {
 
 const SKILL_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/u;
 const PLUGIN_SKILL_NAME = /^(?=.{1,128}$)[A-Za-z0-9][A-Za-z0-9._-]*:[A-Za-z0-9][A-Za-z0-9._-]*$/u;
-const OPENBOT_SKILL_PLUGINS = /^(?:openbot|agents):/u;
+const CODEBOT_SKILL_PLUGINS = /^(?:codebot|agents):/u;
 const SKILL_PATH = /^(?:.*[\\/])?skills[\\/]([^\\/]+)[\\/]SKILL\.md$/u;
 const SKILL_FILE_IN_COMMAND =
   /(?<![^\s'"`;|&<>()=])(?:[^\s'"`;|&<>()]*[\\/])?skills[\\/]([^\\/\s'"`;|&<>()]+)[\\/]SKILL\.md(?![\w.])/gu;
@@ -28,7 +28,7 @@ export function skillLoads(item: unknown, filePaths: readonly unknown[]): SkillL
   if (status === "failed" || status === "declined") return [];
   const name = item.type === "toolCall" ? getString(item, "name") : null;
   if (name === "Skill") {
-    const skill = (getString(item, "skill") ?? "").replace(OPENBOT_SKILL_PLUGINS, "");
+    const skill = (getString(item, "skill") ?? "").replace(CODEBOT_SKILL_PLUGINS, "");
     return SKILL_NAME.test(skill) || PLUGIN_SKILL_NAME.test(skill) ? [{ skill, path: null }] : [];
   }
   const loads = new Map<string, SkillLoad>();

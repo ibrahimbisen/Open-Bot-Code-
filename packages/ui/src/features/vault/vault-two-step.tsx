@@ -1,11 +1,11 @@
-import type { VaultTwoStepCodes } from "@openbot/contracts/ipc";
+import type { VaultTwoStepCodes } from "@codebot/contracts/ipc";
 import {
   groupedTwoStepCode,
   parseTwoStepKey,
   TWO_STEP_KEY_LIMIT,
   twoStepCode,
   twoStepRemainingMs,
-} from "@openbot/contracts/two-step-code";
+} from "@codebot/contracts/two-step-code";
 import {
   Button,
   Copy,
@@ -23,7 +23,7 @@ import {
   RadialProgress,
   ShieldCheck,
   Text,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createMemo, createSignal, onSettled, Show } from "solid-js";
 import { useText } from "../../text";
 

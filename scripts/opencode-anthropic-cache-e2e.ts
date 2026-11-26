@@ -7,13 +7,13 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { openCodeConfigEnv } from "../src/backend/opencode-config";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-anthropic-cache-e2e");
-const binaryArgument = process.argv[2] ?? process.env.OPENBOT_OPENCODE_PATH;
-if (!binaryArgument) throw new Error("Give the OpenCode binary as the first argument or in OPENBOT_OPENCODE_PATH.");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-anthropic-cache-e2e");
+const binaryArgument = process.argv[2] ?? process.env.CODEBOT_OPENCODE_PATH;
+if (!binaryArgument) throw new Error("Give the OpenCode binary as the first argument or in CODEBOT_OPENCODE_PATH.");
 const binary: string = binaryArgument;
 
 const MODEL = "claude-sonnet-5-5";
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-anthropic-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-anthropic-"));
 
 interface CapturedRequest {
   readonly path: string;

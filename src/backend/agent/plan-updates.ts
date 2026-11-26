@@ -3,8 +3,8 @@ import {
   type ConversationPlanStep,
   type ConversationPlanStepStatus,
   clampConversationPlan,
-} from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
 import { isRecord } from "../protocol";
 
 export const PLAN_UPDATED_METHOD = "turn/plan/updated";

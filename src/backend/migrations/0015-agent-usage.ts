@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // IF NOT EXISTS throughout, because this text is both migration 15 and the tail of the latest
 // schema. A database built from the latest schema and then replayed forward - which is how a
@@ -39,7 +39,7 @@ export const ANALYTICS_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS agent_usage_activity_date ON agent_usage_activity(agent_id, occurred_at);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 15,
   name: "agent-usage",
   up: (db) => db.exec(ANALYTICS_SCHEMA_SQL),

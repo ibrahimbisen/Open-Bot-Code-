@@ -16,10 +16,10 @@ import {
   type McpServerConfig,
   type ResponseStyle,
   workspaceAccessEnforced,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Deferred, Effect, Result, Schema, Semaphore } from "effect";
 import { type AgentClient, type AgentProvider, ProviderStoppedError } from "../agent-client";
 import type { AgentStore } from "../agent-store";
@@ -98,7 +98,7 @@ import {
   workspaceWritableRoots,
 } from "./workspace-sandbox";
 
-const logger = createOpenBotLogger("thread-lifecycle");
+const logger = createCodeBotLogger("thread-lifecycle");
 
 const CODEX_MCP_ADAPTER_VERSION = 10;
 
@@ -109,7 +109,7 @@ const RUNTIME_RELOADED_ON_RESUME: ReadonlySet<AgentProvider> = new Set(["claude"
 export type RuntimeRefreshTiming = "now" | "after-background-work";
 
 type CodexToolApprovals = Array<[string, DynamicRecord]>;
-const SESSION_NAME_PREFIX = "OpenBot · ";
+const SESSION_NAME_PREFIX = "CodeBot · ";
 
 interface InstructionsFileInPrompt {
   fileName: PromptInstructionsFile["fileName"];
@@ -669,7 +669,7 @@ export class ThreadLifecycle {
         instructionsFile,
         yield* this.#workspaceSkills(agent, client),
       ),
-      serviceName: "openbot",
+      serviceName: "codebot",
       dynamicTools: visibleDynamicTools(client.provider),
     };
     return { agent, mcpServers, toolRuntimes, own, environment, proxy, instructionsFile, params };
@@ -1057,8 +1057,8 @@ export class ThreadLifecycle {
     return client.provider === "codex" || agentComputerUseEnabled(agent) ? {} : { computerUse: false };
   }
 
-  #mcpAgentParam(agent: AgentSummary, client: AgentClient): { openbotAgentId?: string } {
-    return client.provider === "codex" ? {} : { openbotAgentId: agent.id };
+  #mcpAgentParam(agent: AgentSummary, client: AgentClient): { codebotAgentId?: string } {
+    return client.provider === "codex" ? {} : { codebotAgentId: agent.id };
   }
 
   #channelToolsParam(client: AgentClient, publicThreadId: string): { channelTools?: true } {
@@ -1202,7 +1202,7 @@ export class ThreadLifecycle {
           ? codexDeferredMcpServers(mcpServers).map((config) => config.name)
           : client.provider === "opencode"
             ? openCodeMcpServers(mcpServers).map((config) => config.name)
-            : // Antigravity 1.5 leaves the tools over its schema budget out (#7427). OpenBot runs the
+            : // Antigravity 1.5 leaves the tools over its schema budget out (#7427). CodeBot runs the
               client.provider === "antigravity"
               ? mcpServers
                   .filter((config) => mcpFallbackRunsServer(config, agent))

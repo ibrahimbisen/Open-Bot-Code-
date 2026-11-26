@@ -1,4 +1,4 @@
-import type { AgentApproval } from "@openbot/contracts/ipc";
+import type { AgentApproval } from "@codebot/contracts/ipc";
 import { createEffect } from "solid-js";
 import { createNearWalletStore } from "../vault/stores/near-wallet-store";
 import { NearPaymentCard } from "./conversation-cards";

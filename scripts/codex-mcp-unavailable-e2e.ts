@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { MCP_PROVIDER_FAILURE_TEXT, mcpProviderFailureKind } from "../src/backend/agent/provider-diagnostics";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolveCodexCli } from "../src/backend/cli";
@@ -12,7 +12,7 @@ import { getString } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-mcp-unavailable-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-mcp-unavailable-e2e");
 const NL = String.fromCharCode(10);
 const STATUS_TIMEOUT_MS = 90_000;
 
@@ -32,7 +32,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, mcpRequests: 0, cases: [] };
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-codex-mcp-unavailable-e2e-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-codex-mcp-unavailable-e2e-")));
 const clients: AgentClient[] = [];
 const saved = { ...process.env };
 
@@ -91,7 +91,7 @@ try {
     client.request(
       "initialize",
       {
-        clientInfo: { name: "openbot_e2e", title: "OpenBot E2E", version: "0.0.0" },
+        clientInfo: { name: "codebot_e2e", title: "CodeBot E2E", version: "0.0.0" },
         capabilities: { experimentalApi: true },
       },
       (value) => value,

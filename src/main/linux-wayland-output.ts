@@ -4,16 +4,16 @@ import { rm, writeFile } from "node:fs/promises";
 import { createConnection } from "node:net";
 import { endianness } from "node:os";
 import { isAbsolute, join } from "node:path";
-import type { AboveAppsSupport } from "@openbot/contracts/ipc";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { AboveAppsSupport } from "@codebot/contracts/ipc";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Option, Schema } from "effect";
 import { app } from "electron";
 import { relaunchApp } from "./linux-appimage-relaunch";
 import { x11CompositorRunning } from "./linux-x11-activation";
 
-const logger = createOpenBotLogger("main");
+const logger = createCodeBotLogger("main");
 
-const RESTART_MARKER = "OPENBOT_XWAYLAND_RESTART";
+const RESTART_MARKER = "CODEBOT_XWAYLAND_RESTART";
 export type XWaylandRestartReason = "monitor" | "above-apps" | "software-rendering";
 export type AboveAppsFeature = "agent-dock" | "dynamic-island";
 const ABOVE_APPS_XWAYLAND_FILES: Record<AboveAppsFeature, string> = {
@@ -197,7 +197,7 @@ export const setAboveAppsXWayland = Effect.fn("setAboveAppsXWayland")(function* 
     try: () => writeFile(file, ""),
     catch: (cause) => new AboveAppsXWaylandFailure({ cause }),
   });
-  logger.info(`The ${feature} shows above other apps, so OpenBot starts again on XWayland.`);
+  logger.info(`The ${feature} shows above other apps, so CodeBot starts again on XWayland.`);
   relaunchApp(app, process.argv.slice(1));
   app.quit();
 });
@@ -212,7 +212,7 @@ export const restartOnXWaylandForAboveApps = Effect.fn("restartOnXWaylandForAbov
     Effect.as(true),
     Effect.catch((error) =>
       Effect.sync(() => {
-        logger.warn("Could not start OpenBot on XWayland for the windows above other apps:", toLogValue(error.cause));
+        logger.warn("Could not start CodeBot on XWayland for the windows above other apps:", toLogValue(error.cause));
         return false;
       }),
     ),
@@ -229,7 +229,7 @@ export const restartOnXWaylandForSoftwareRendering = Effect.fn("restartOnXWaylan
     Effect.as(true),
     Effect.catch((error) =>
       Effect.sync(() => {
-        logger.warn("Could not start OpenBot on XWayland for software rendering:", toLogValue(error.cause));
+        logger.warn("Could not start CodeBot on XWayland for software rendering:", toLogValue(error.cause));
         return false;
       }),
     ),
@@ -253,14 +253,14 @@ export const restartOnXWaylandWithoutMonitor = Effect.fn("restartOnXWaylandWitho
   );
   if (Option.isNone(globals) || globals.value.has("wl_output")) return false;
   if (!environment.DISPLAY) {
-    logger.warn("The Wayland session has no monitor and no XWayland. OpenBot starts when a monitor is on.");
+    logger.warn("The Wayland session has no monitor and no XWayland. CodeBot starts when a monitor is on.");
     return false;
   }
   return yield* startOnX11(environment, "monitor").pipe(
     Effect.as(true),
     Effect.catch((error) =>
       Effect.sync(() => {
-        logger.warn("Could not start OpenBot on XWayland:", toLogValue(error.cause));
+        logger.warn("Could not start CodeBot on XWayland:", toLogValue(error.cause));
         return false;
       }),
     ),

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
 import type { AgentClient } from "../src/backend/agent-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { McpServerDrop } from "../src/backend/mcp-provider-shapes";
@@ -10,7 +10,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-mcp-server-names-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-mcp-server-names-e2e");
 
 interface SessionRequest {
   method: string;
@@ -24,7 +24,7 @@ interface Report {
   reply?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-mcp-names-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-mcp-names-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 
@@ -68,7 +68,7 @@ try {
   const servers = [
     server("spaced", "My Server"),
     server("underscored", "My_Server"),
-    server("bridge-like", "openbot browser"),
+    server("bridge-like", "codebot browser"),
     server("computer-use-like", "computer use"),
     server("computer-use", "computer_use"),
     server("home", "Home Assistant"),
@@ -110,7 +110,7 @@ try {
     drops.map((drop) => [drop.name, drop.reason]),
     [
       ["My Server", "name_conflict"],
-      ["openbot browser", "name_conflict"],
+      ["codebot browser", "name_conflict"],
       ["computer use", "name_conflict"],
       ["Home.Assistant", "name_conflict"],
     ],

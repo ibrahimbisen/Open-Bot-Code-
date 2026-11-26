@@ -37,7 +37,7 @@ export function StorageRing({
   caption: string;
   label: string;
 }) {
-  const background = String(useCSSVariable("--openbot-bg-grouped"));
+  const background = String(useCSSVariable("--codebot-bg-grouped"));
   const reducedMotion = useReducedMotion();
   const progress = useSharedValue(reducedMotion ? 1 : 0);
   useEffect(() => {

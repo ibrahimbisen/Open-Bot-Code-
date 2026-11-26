@@ -4,7 +4,7 @@ import { mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createInterface } from "node:readline";
-import type { AgentProviderId } from "@openbot/contracts/ipc";
+import type { AgentProviderId } from "@codebot/contracts/ipc";
 import { steerNoteFor } from "../src/backend/agent/queue-controls";
 import { resolveClaudeCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -14,8 +14,8 @@ import { observedQuery, startClaudeAgent } from "./claude-agent-harness";
 type Provider = Extract<AgentProviderId, "claude" | "codex">;
 type Event = { at: number; kind: "tool" | "text"; detail: string };
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/steer-framing-bench");
-const RUNTIMES = join(homedir(), "Library/Application Support/OpenBot/provider-runtimes");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/steer-framing-bench");
+const RUNTIMES = join(homedir(), "Library/Application Support/CodeBot/provider-runtimes");
 const CLAUDE_BIN = process.env.STEER_BENCH_CLAUDE ?? join(RUNTIMES, "claude/darwin-arm64/2.1.330/bin/claude");
 const CODEX_BIN = process.env.STEER_BENCH_CODEX ?? join(RUNTIMES, "codex/darwin-arm64/0.171.0/bin/codex");
 const STEPS = 8;
@@ -96,7 +96,7 @@ async function runClaude(dir: string, events: Event[], steered: { at: number }):
     agent.client.on("notification", (notification) => {
       if (notification.method !== "turn/completed" || getString(notification.params, "threadId") !== threadId) return;
       const status = getString(getRecord(notification.params, "turn"), "status") ?? "unknown";
-      events.push({ at: Date.now(), kind: "text", detail: `[openbot turn ${status}]` });
+      events.push({ at: Date.now(), kind: "text", detail: `[codebot turn ${status}]` });
       finish(status);
     });
     const turnId = await runCauseEffect(
@@ -181,7 +181,7 @@ async function runCodex(dir: string, events: Event[], steered: { at: number }): 
   const client = codexClient(child);
   try {
     await client.request("initialize", {
-      clientInfo: { name: "openbot", title: "OpenBot", version: "0.1.0" },
+      clientInfo: { name: "codebot", title: "CodeBot", version: "0.1.0" },
       capabilities: { experimentalApi: true },
     });
     client.notify("initialized");

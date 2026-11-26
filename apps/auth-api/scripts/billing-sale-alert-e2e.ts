@@ -9,7 +9,7 @@ import type { StripeEvent } from "../src/server/stripe-client";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "billing-sale-alert-e2e");
+const OUT = join(ROOT, ".codebot-build", "billing-sale-alert-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const ALERT_URL = "https://alerts.example/webhook";
 const NOW = Date.UTC(2026, 10, 15, 12);

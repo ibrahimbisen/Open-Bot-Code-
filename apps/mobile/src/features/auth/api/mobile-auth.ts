@@ -1,19 +1,19 @@
-import { type AvatarMimeType, isValidAvatarImage } from "@openbot/contracts/avatar-images";
-import { companySignInErrorKey, MOBILE_COMPANY_SIGN_IN_RETURN } from "@openbot/contracts/company-sign-in";
-import { AVATAR_IMAGE_LIMITS } from "@openbot/contracts/input-limits";
-import { OPENBOT_CONTROL_PLANE_ORIGIN } from "@openbot/contracts/invite-links";
-import type { CentralAuthUser } from "@openbot/contracts/ipc";
+import { type AvatarMimeType, isValidAvatarImage } from "@codebot/contracts/avatar-images";
+import { companySignInErrorKey, MOBILE_COMPANY_SIGN_IN_RETURN } from "@codebot/contracts/company-sign-in";
+import { AVATAR_IMAGE_LIMITS } from "@codebot/contracts/input-limits";
+import { CODEBOT_CONTROL_PLANE_ORIGIN } from "@codebot/contracts/invite-links";
+import type { CentralAuthUser } from "@codebot/contracts/ipc";
 import {
   isMobileConnectDevelopmentHost,
   isMobileConnectHostBinding,
   type MobileConnectHostBinding,
   parseMobileConnectUrl,
   validateMobileConnectHostBinding,
-} from "@openbot/contracts/mobile-connect";
-import { type DynamicRecord, isBoolean, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { normalizeEmailAddress, normalizeOneTimeCode, validateProfileName } from "@openbot/contracts/validation";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
-import { bytesToBase64Url } from "@openbot/team-client/base64";
+} from "@codebot/contracts/mobile-connect";
+import { type DynamicRecord, isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { normalizeEmailAddress, normalizeOneTimeCode, validateProfileName } from "@codebot/contracts/validation";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
+import { bytesToBase64Url } from "@codebot/team-client/base64";
 import * as Crypto from "expo-crypto";
 import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
@@ -25,9 +25,9 @@ import * as LockedKeychain from "../../../shared/lib/locked-keychain";
 import { fetch } from "../../support/model/logged-fetch";
 import { companySignInReturnParams } from "../model/company-sign-in-return";
 
-const MOBILE_SESSION_KEY = "openbot.mobile.session.v1";
-const MOBILE_REVOCATIONS_KEY = "openbot.mobile.pending-revocations.v1";
-const MOBILE_DEVICE_ID_KEY = "openbot.mobile.device-id.v1";
+const MOBILE_SESSION_KEY = "codebot.mobile.session.v1";
+const MOBILE_REVOCATIONS_KEY = "codebot.mobile.pending-revocations.v1";
+const MOBILE_DEVICE_ID_KEY = "codebot.mobile.device-id.v1";
 const MOBILE_AUTH_REQUEST_TIMEOUT_MS = 10_000;
 const MOBILE_EMAIL_CODE_REQUEST_TIMEOUT_MS = 35_000;
 const MOBILE_COMPANY_START_TIMEOUT_MS = 20_000;
@@ -116,8 +116,8 @@ async function redeemMobileConnectSession(value: string): Promise<MobileSession>
 }
 
 function mobileAccountApiUrl(): string {
-  const override = process.env.EXPO_PUBLIC_OPENBOT_API_URL;
-  return (override && __DEV__ && normalizeAccountApiUrl(override)) || OPENBOT_CONTROL_PLANE_ORIGIN;
+  const override = process.env.EXPO_PUBLIC_CODEBOT_API_URL;
+  return (override && __DEV__ && normalizeAccountApiUrl(override)) || CODEBOT_CONTROL_PLANE_ORIGIN;
 }
 
 export interface MobileEmailChallenge {
@@ -775,7 +775,7 @@ function decodeStoredMobileCredential(value: unknown): MobileCredential {
 
 function normalizeAccountApiUrl(value: string): string | null {
   return (
-    parseMobileConnectUrl(`openbot://mobile-connect?api=${encodeURIComponent(value)}&ticket=${"x".repeat(32)}`)
+    parseMobileConnectUrl(`codebot://mobile-connect?api=${encodeURIComponent(value)}&ticket=${"x".repeat(32)}`)
       ?.apiUrl ?? null
   );
 }

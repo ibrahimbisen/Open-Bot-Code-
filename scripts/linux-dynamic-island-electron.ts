@@ -8,7 +8,7 @@ import {
   type DynamicIslandAction,
   IPC_ENDPOINTS,
   isDynamicIslandPresentation,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect, Schema } from "effect";
 import { app, BrowserWindow, ipcMain, screen } from "electron";
 import { DynamicIslandWindowController } from "../src/main/dynamic-island-window";
@@ -155,7 +155,7 @@ async function start(): Promise<void> {
   );
   mainWindow.showInactive();
   controller = new DynamicIslandWindowController({
-    windowKind: aboveAppsWindowKind(process.env.OPENBOT_E2E_SERVER === "1"),
+    windowKind: aboveAppsWindowKind(process.env.CODEBOT_E2E_SERVER === "1"),
     preferencePath: join(app.getPath("userData"), "dynamic-island-preference.json"),
     defaultPreference: DEFAULT_DYNAMIC_ISLAND_PREFERENCE,
     createWindow: (bounds, display) => {

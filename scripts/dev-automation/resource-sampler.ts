@@ -1,7 +1,7 @@
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import type { Logger } from "@openbot/logging";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import type { Logger } from "@codebot/logging";
 import type { Browser, CDPSession, Page } from "playwright-core";
 import { cpuMetrics, type MetricValues, parseFootprint, processMetrics } from "./bench-stats";
 import { collectDescendants, PROCESS_TABLE_PS_ARGS, type ProcessTableRow, parseProcessTable } from "./cpu-sampling";
@@ -46,7 +46,7 @@ async function readFootprints(rows: ProcessTableRow[]): Promise<Map<number, numb
   }
 }
 
-const READ_PROCESS_KINDS = "globalThis.__openbotPerfProbes?.processKinds() ?? null";
+const READ_PROCESS_KINDS = "globalThis.__codebotPerfProbes?.processKinds() ?? null";
 const KIND_REFRESH_TICKS = 10;
 
 export async function readAppProcessKinds(inspector: InspectorClient | null): Promise<Map<number, string>> {

@@ -4,7 +4,7 @@ import {
   type IpcEndpoints,
   type RequestEndpoint,
   type Untyped,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { IpcMainInvokeEvent } from "electron";
 import {
   type AuthorizeSender,

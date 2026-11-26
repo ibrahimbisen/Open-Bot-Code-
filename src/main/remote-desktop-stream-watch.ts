@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 
 const STALL_MS = 20_000;
 const FIRST_FRAME_MS = 60_000;
@@ -11,9 +11,9 @@ export function remoteDesktopStreamWatchScript(serverId: string, switchesEncoder
   const tooSlow = sourceText("error.remote.streamTooSlow");
   const noPictureText = sourceText("error.remote.noPictureSwitchEncoder");
   return `{
-const QUALITY_KEY = ${JSON.stringify(`openbot-remote-quality:${serverId}`)};
+const QUALITY_KEY = ${JSON.stringify(`codebot-remote-quality:${serverId}`)};
 const sessionId = /\\/sessions\\/([A-Za-z0-9-]+)\\/moonlight(?:\\/|$)/.exec(location.pathname)?.[1];
-const phone = "__openbotRemote" in window;
+const phone = "__codebotRemote" in window;
 let lowered = false;
 if (!phone) {
   try {
@@ -38,7 +38,7 @@ window.fetch = (input, init) => {
   return nativeFetch(input, init);
 };
 const report = (state, message, noPicture) => {
-  const payload = { source: "openbot-moonlight", type: "viewer-state", sessionId, state, ...(message ? { message } : {}), ...(noPicture ? { noPicture: true } : {}) };
+  const payload = { source: "codebot-moonlight", type: "viewer-state", sessionId, state, ...(message ? { message } : {}), ...(noPicture ? { noPicture: true } : {}) };
   window.parent.postMessage(payload, "*");
   nativeFetch("../viewer-state", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).catch(() => {});
 };

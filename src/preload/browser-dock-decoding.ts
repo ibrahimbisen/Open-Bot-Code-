@@ -3,7 +3,7 @@ import {
   type BrowserDockPresentation,
   isBrowserDockAction,
   isBrowserDockPresentation,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export function decodeBrowserDockPresentation(value: unknown): BrowserDockPresentation | null {
   if (value === null) return null;

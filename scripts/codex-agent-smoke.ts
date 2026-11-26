@@ -2,17 +2,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { CODEX_UNFIT_SKILLS } from "../src/backend/agent/codex-prompt-settings";
 import { resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { getRecord, getString, isRecord } from "../src/backend/protocol";
 import {
   answerCatalogTool,
+  codebotConfig,
   listsSkill,
   makeCodexHome,
   makeGitWorkspace,
-  openbotConfig,
   promptContents,
   removeRun,
   startCodexAgent,
@@ -21,10 +21,10 @@ import {
 
 const argument = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
 const MODEL = argument("model") ?? "gpt-6-luna";
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-agent-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-agent-smoke");
 const ECHO_TOOL = "smoke_echo";
 const ECHO_TEXT = "smoke-echo-7341";
-const BROWSER_NAMESPACE = "openbot_browser";
+const BROWSER_NAMESPACE = "codebot_browser";
 const TAB_TITLE = "Smoke tab 5512";
 const DIRECT_BROWSER_TOOLS = ["open", "list_tabs", "run_script"];
 
@@ -54,14 +54,14 @@ const TURNS: Array<{ step: string; prompt: string; expect: string[] }> = [
   {
     step: "deferred tool",
     prompt:
-      `Use the OpenBot tool_search tool to find the \`${ECHO_TOOL}\` tool, then run it once with tool_call. ` +
+      `Use the CodeBot tool_search tool to find the \`${ECHO_TOOL}\` tool, then run it once with tool_call. ` +
       "Reply with the text it returns.",
     expect: ["dynamicToolCall:tool_search", "dynamicToolCall:tool_call"],
   },
   {
     step: "browser tool",
     prompt:
-      "List the tabs of the OpenBot browser with its list_tabs tool. Do not open a page. " +
+      "List the tabs of the CodeBot browser with its list_tabs tool. Do not open a page. " +
       "Reply with the title of the first tab.",
     expect: ["dynamicToolCall:list_tabs"],
   },
@@ -121,10 +121,10 @@ async function answerTool(params: DynamicRecord): Promise<{ text: string; succes
       success: true,
     };
   if (call.tool === "tool_call" && named) return { text: ECHO_TEXT, success: true };
-  return answerCatalogTool(call, () => Promise.reject(new Error("A Codex agent has no openbot.web_search.")));
+  return answerCatalogTool(call, () => Promise.reject(new Error("A Codex agent has no codebot.web_search.")));
 }
 
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-codex-smoke-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-codex-smoke-")));
 const workspace = join(root, "ws");
 const git = await makeGitWorkspace(workspace);
 const home = await makeCodexHome(join(root, "home"));
@@ -169,7 +169,7 @@ const prompt: {
   skillCreatorListed: false,
 };
 try {
-  thread = await agent.startThread(workspace, MODEL, openbotConfig(agent.read));
+  thread = await agent.startThread(workspace, MODEL, codebotConfig(agent.read));
   for (const turn of TURNS) {
     current = { step: turn.step, items: [], reply: "", expectMissing: [], requests: 0, input: 0 };
     try {
@@ -191,7 +191,7 @@ try {
   const contents = await promptContents(thread.path);
   prompt.requestPluginInstall = contents.tools.includes("request_plugin_install");
   prompt.webRun = contents.tools.includes("web__run");
-  prompt.catalogWebSearch = contents.tools.includes("openbot.web_search");
+  prompt.catalogWebSearch = contents.tools.includes("codebot.web_search");
   prompt.toolNames = [...new Set(Array.from(contents.tools.matchAll(/"name":"([^"]+)"/g), (match) => match[1] ?? ""))];
   const declared: Array<{ name?: string; tools?: Array<{ name?: string }> }> = JSON.parse(contents.tools);
   const browserNamespace = declared.find((tool) => tool.name === BROWSER_NAMESPACE);
@@ -222,7 +222,7 @@ const failures = [
   ...(commitMessage === "Add hello" ? [] : [`commit: last message is ${JSON.stringify(commitMessage)}`]),
   ...(prompt.requestPluginInstall ? ["the prompt declares request_plugin_install"] : []),
   ...(prompt.webRun ? [] : ["the prompt declares no web__run"]),
-  ...(prompt.catalogWebSearch ? ["the OpenBot catalog names openbot.web_search"] : []),
+  ...(prompt.catalogWebSearch ? ["the CodeBot catalog names codebot.web_search"] : []),
   ...prompt.unfitSkills.map((skill) => `the prompt lists ${skill}`),
   ...(prompt.skillCreatorListed ? [] : ["the prompt does not list skill-creator"]),
 ];

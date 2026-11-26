@@ -6,18 +6,18 @@ import { connect, type Socket } from "node:net";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { Readable } from "node:stream";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { CuaDriverActionTap } from "../src/main/cua-driver-action-tap";
 import { parseAnswerLine } from "../src/main/cua-driver-structured-text";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build/cua-driver-foreground-input-e2e");
+const OUT = join(ROOT, ".codebot-build/cua-driver-foreground-input-e2e");
 const DRIVER =
-  process.env.OPENBOT_CUA_DRIVER_PATH ?? join(ROOT, "build/cua-driver", process.platform, process.arch, "cua-driver");
+  process.env.CODEBOT_CUA_DRIVER_PATH ?? join(ROOT, "build/cua-driver", process.platform, process.arch, "cua-driver");
 const ELECTRON = join(ROOT, "node_modules/electron/dist/electron");
 const WINDOW_MANAGER = join(ROOT, "scripts/cua-driver-foreground-input-e2e-wm.py");
-const WINDOW_TITLE = "OpenBot foreground input e2e";
+const WINDOW_TITLE = "CodeBot foreground input e2e";
 const DEADLINE_MS = 20_000;
 
 const PROBE_MAIN = `
@@ -146,7 +146,7 @@ async function main(): Promise<void> {
   assert.equal(process.platform, "linux", "This check runs on Linux only.");
   assert.ok(existsSync(DRIVER), `Install the driver first with bun run prepare:cua-driver (${DRIVER}).`);
   mkdirSync(OUT, { recursive: true });
-  const work = await mkdtemp(join(tmpdir(), "openbot-foreground-e2e-"));
+  const work = await mkdtemp(join(tmpdir(), "codebot-foreground-e2e-"));
   const children: ChildProcess[] = [];
   const tap = new CuaDriverActionTap(Date.now, undefined, null, true);
   const report: Report = {

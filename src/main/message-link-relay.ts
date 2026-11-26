@@ -3,19 +3,19 @@ import {
   type McpSignInRelayPage,
   type McpTestResult,
   relayableSignInLink,
-  withOpenBotSource,
-} from "@openbot/contracts/ipc";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import { SIGN_IN_RELAY_CAPABILITY, SIGN_IN_RELAY_ROUTES } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+  withCodeBotSource,
+} from "@codebot/contracts/ipc";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import { SIGN_IN_RELAY_CAPABILITY, SIGN_IN_RELAY_ROUTES } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Cause, Effect, Fiber } from "effect";
 import type { ResponseDecoder } from "./remote-host-decoding";
 import type { RemoteRequestInit } from "./remote-server-client";
 import { RemoteWorkflowError, remoteCall, remoteDecode } from "./remote-service-effects";
 import { type SignInRelayClient, signInRelayRemote } from "./sign-in-relay-client";
 
-const logger = createOpenBotLogger("message-link-relay");
+const logger = createCodeBotLogger("message-link-relay");
 
 export function openHttpLink(url: string, openExternal: (url: string) => Promise<void>): Promise<void> {
   const parsed = new URL(url);
@@ -25,7 +25,7 @@ export function openHttpLink(url: string, openExternal: (url: string) => Promise
 }
 
 export function openMessageLink(url: string, openExternal: (url: string) => Promise<void>): Promise<void> {
-  return openHttpLink(url, (address) => openExternal(withOpenBotSource(address)));
+  return openHttpLink(url, (address) => openExternal(withCodeBotSource(address)));
 }
 
 export interface MessageLinkRelayDependencies {

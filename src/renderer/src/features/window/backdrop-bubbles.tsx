@@ -1,5 +1,5 @@
-import type { ChatBackdropBubbles } from "@openbot/contracts/chat-visual";
-import { BackdropBubbles } from "@openbot/ui/features/conversation/BackdropBubbles";
+import type { ChatBackdropBubbles } from "@codebot/contracts/chat-visual";
+import { BackdropBubbles } from "@codebot/ui/features/conversation/BackdropBubbles";
 import type { JSX } from "@solidjs/web";
 import { createSignal } from "solid-js";
 

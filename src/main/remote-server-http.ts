@@ -1,17 +1,17 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { type TeamCurrentCapability, teamCapabilityHeaders } from "@openbot/contracts/team-protocol/current";
-import { teamHttpCodec } from "@openbot/contracts/team-protocol/http-codecs";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { type TeamCurrentCapability, teamCapabilityHeaders } from "@codebot/contracts/team-protocol/current";
+import { teamHttpCodec } from "@codebot/contracts/team-protocol/http-codecs";
 import {
   addPromptQuestionDetails,
   TEAM_PROMPT_DETAIL_CAPABILITY,
-} from "@openbot/contracts/team-protocol/prompt-detail-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
-import { addSkillSuggestionNames, SKILL_LEARNING_CAPABILITY } from "@openbot/contracts/team-protocol/skill-learning-v1";
-import { TEAM_APP_VERSION_HEADER, TEAM_PROTOCOL_VERSION_HEADER } from "@openbot/contracts/team-protocol/v1";
-import { decodeTeamProtocolV1CurrentHttpResponse } from "@openbot/contracts/team-protocol/v1-adapter";
-import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { sourceText } from "@openbot/i18n/source";
-import { startRemoteRequest } from "@openbot/team-client/sync-profile";
+} from "@codebot/contracts/team-protocol/prompt-detail-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
+import { addSkillSuggestionNames, SKILL_LEARNING_CAPABILITY } from "@codebot/contracts/team-protocol/skill-learning-v1";
+import { TEAM_APP_VERSION_HEADER, TEAM_PROTOCOL_VERSION_HEADER } from "@codebot/contracts/team-protocol/v1";
+import { decodeTeamProtocolV1CurrentHttpResponse } from "@codebot/contracts/team-protocol/v1-adapter";
+import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { sourceText } from "@codebot/i18n/source";
+import { startRemoteRequest } from "@codebot/team-client/sync-profile";
 import { Effect, Result, Schema } from "effect";
 import type { ResponseDecoder } from "./remote-host-decoding";
 import { RemoteProtocolError, RemoteRequestError } from "./remote-server-errors";

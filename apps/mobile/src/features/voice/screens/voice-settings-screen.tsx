@@ -1,6 +1,6 @@
-import { type CodexLiveVoice, cloudSpeechModel, SPEECH_SPEEDS, type SpeechVoice } from "@openbot/contracts/ipc";
-import { shortVoiceServerModel, voiceServerHost } from "@openbot/contracts/voice-server";
-import type { MobileTextKey, MobileTranslate } from "@openbot/i18n/mobile";
+import { type CodexLiveVoice, cloudSpeechModel, SPEECH_SPEEDS, type SpeechVoice } from "@codebot/contracts/ipc";
+import { shortVoiceServerModel, voiceServerHost } from "@codebot/contracts/voice-server";
+import type { MobileTextKey, MobileTranslate } from "@codebot/i18n/mobile";
 import { isRunningInExpoGo } from "expo";
 import { router } from "expo-router";
 import { Button, Typography } from "heroui-native";
@@ -104,7 +104,7 @@ export function ChoiceRow({
   label: string;
   onPress: () => void;
 }) {
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   return (
     <SettingsRow
       checked={checked}

@@ -1,10 +1,10 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { create } from "zustand";
 import { accountScope } from "@/shared/lib/account-scope";
 import type { RecentAgent } from "./quick-action-items";
 
 export function recentAgentsKey(apiUrl: string, userId: string): string {
-  return `openbot.recent-agents.v1.${accountScope(apiUrl, userId)}`;
+  return `codebot.recent-agents.v1.${accountScope(apiUrl, userId)}`;
 }
 
 export function decodeRecentAgents(stored: string | null): RecentAgent[] {

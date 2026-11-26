@@ -2,9 +2,9 @@
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr);
   align-items: center;
-  column-gap: var(--openbot-space-3);
-  row-gap: var(--openbot-space-3);
-  padding: var(--openbot-space-4);
+  column-gap: var(--codebot-space-3);
+  row-gap: var(--codebot-space-3);
+  padding: var(--codebot-space-4);
 }
 
 .credits-hold-card > .ui-block-content > .ui-block-header {
@@ -38,13 +38,13 @@
 }
 
 .credits-hold-dont-ask {
-  margin-inline: calc(var(--openbot-space-4) * -1) auto;
+  margin-inline: calc(var(--codebot-space-4) * -1) auto;
 }
 
 .credits-hold-amount {
   display: inline;
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-semibold);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .credits-hold-amount > .credit-icon {

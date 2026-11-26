@@ -8,7 +8,7 @@ import { getString, isRecord } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-thought-interleave-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-thought-interleave-e2e");
 
 interface CompletedItem {
   phase: string | null;
@@ -20,7 +20,7 @@ interface Report {
   turns: Record<string, CompletedItem[]>;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-thought-interleave-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-thought-interleave-e2e-"));
 const report: Report = { passed: false, turns: {} };
 const clients: AgentClient[] = [];
 

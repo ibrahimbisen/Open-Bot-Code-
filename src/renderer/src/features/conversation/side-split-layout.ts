@@ -1,10 +1,10 @@
-import { isDynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
 import { createSignal } from "solid-js";
 
 export const SIDE_SPLIT_MIN = 120;
 export const SIDE_MAIN_GROUP_MIN = 160;
 
-const SIDE_SPLIT_LAYOUT_STORAGE_KEY = "openbot:side-split-layout";
+const SIDE_SPLIT_LAYOUT_STORAGE_KEY = "codebot:side-split-layout";
 
 interface SideSplitLayout {
   areas: Readonly<Record<string, number>>;

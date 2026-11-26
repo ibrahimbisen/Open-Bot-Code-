@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import type { AgentTask, AgentTasksSnapshot, ConversationSearchPage } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import type { AgentTask, AgentTasksSnapshot, ConversationSearchPage } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { argument, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-threads-routing-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-threads-routing-e2e");
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
@@ -49,7 +49,7 @@ const tab = (title: string) =>
     .getByRole("tab", { name: new RegExp(`^${literal(title)}`) });
 
 function listTasks(): Promise<AgentTasksSnapshot> {
-  return page.evaluate((id) => window.openbot.agent.listTasks(id), agentId);
+  return page.evaluate((id) => window.codebot.agent.listTasks(id), agentId);
 }
 
 async function readTask(): Promise<AgentTask | undefined> {
@@ -58,13 +58,13 @@ async function readTask(): Promise<AgentTask | undefined> {
 
 function search(includeSideThreads: boolean): Promise<ConversationSearchPage> {
   return page.evaluate(
-    (input) => window.openbot.agent.searchConversationMessages(input),
+    (input) => window.codebot.agent.searchConversationMessages(input),
     includeSideThreads ? { query: word, agentId, includeSideThreads } : { query: word, agentId },
   );
 }
 
 const agent = await page.evaluate(async (id) => {
-  const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === id);
+  const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === id);
   if (!found) throw new Error(`Unknown agent: ${id}`);
   return { name: found.name };
 }, agentId);
@@ -73,7 +73,7 @@ try {
   await page.bringToFront();
 
   const task = await page.evaluate(
-    (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+    (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
     { agentId, text: `Reply with the single word ready. Do not use tools. Reference ${word}.` },
   );
   taskId = task.id;
@@ -130,7 +130,7 @@ try {
   assert.ok(tabSelected, "The search result does not select the thread's tab.");
   await page.screenshot({ path: resolve(OUT, "3-search-opened-thread.png") });
 
-  await page.evaluate((input) => window.openbot.agent.closeTask(input), { agentId, taskId: task.id });
+  await page.evaluate((input) => window.codebot.agent.closeTask(input), { agentId, taskId: task.id });
   await waitFor(page, "the archive", readTask, (archived) => archived?.state === "closed");
   report.archived = { withSideThreads: (await search(true)).results.length };
   assert.equal(report.archived.withSideThreads, 0, "The search finds an archived thread.");
@@ -139,7 +139,7 @@ try {
   if (taskId) {
     const id = taskId;
     await page
-      .evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId: id })
+      .evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId: id })
       .catch(() => undefined);
   }
   writeReport("agent-threads-routing-e2e", report);

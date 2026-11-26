@@ -1,25 +1,25 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { loopbackCallback } from "@openbot/contracts/ipc";
+import { loopbackCallback } from "@codebot/contracts/ipc";
 import {
   legacyTeamCapabilities,
   teamCapabilitiesForProtocol,
   teamCapabilitiesVisibleToProtocol,
-} from "@openbot/contracts/team-protocol/current";
-import { optionalRouteCodec } from "@openbot/contracts/team-protocol/optional-routes";
+} from "@codebot/contracts/team-protocol/current";
+import { optionalRouteCodec } from "@codebot/contracts/team-protocol/optional-routes";
 import {
   PROVIDER_SIGN_IN_RELAY_V2_CAPABILITY,
   PROVIDER_SIGN_IN_RELAY_V2_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-sign-in-relay-v2";
-import { providerSignInRelay } from "@openbot/contracts/team-protocol/provider-sign-in-relays";
-import { SIGN_IN_RELAY_CAPABILITY, SIGN_IN_RELAY_ROUTES } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/provider-sign-in-relay-v2";
+import { providerSignInRelay } from "@codebot/contracts/team-protocol/provider-sign-in-relays";
+import { SIGN_IN_RELAY_CAPABILITY, SIGN_IN_RELAY_ROUTES } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { startAcpAuthentication } from "../src/backend/acp-sign-in";
 import { SignInRelayHost } from "../src/main/sign-in-relay-host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/devin-sign-in-relay-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/devin-sign-in-relay-e2e");
 const MEMBER = "member-1";
 
 const FAKE_AGENT = `
@@ -161,7 +161,7 @@ try {
 
   const devin = await signIn("Devin page, relayed callback", fake, "https://app.devin.ai");
   report.cases.push(devin);
-  assert.equal(devin.pageOrigin, "https://app.devin.ai", "OpenBot gets the page, not a browser on the host.");
+  assert.equal(devin.pageOrigin, "https://app.devin.ai", "CodeBot gets the page, not a browser on the host.");
   assert.equal(devin.callback?.path, "/callback", "The page returns to the CLI's loopback listener.");
   assert.equal(devin.callback?.state, "devin-state", "The relay knows the state of the page.");
   assert.equal(devin.replayed, true, "The host replays the client's callback to the CLI.");
@@ -169,7 +169,7 @@ try {
 
   const other = await signIn("Page of another site", fake, "https://devin.example");
   report.cases.push(other);
-  assert.equal(other.pageOrigin, null, "OpenBot does not pass on a page of another site.");
+  assert.equal(other.pageOrigin, null, "CodeBot does not pass on a page of another site.");
   assert.equal(other.error, sourceText("error.provider.acpSignInFailed"), "The sign-in fails with a plain text.");
   report.passed = true;
 } finally {

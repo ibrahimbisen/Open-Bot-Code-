@@ -4,11 +4,11 @@ import { EventEmitter } from "node:events";
 import { access, open, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join, resolve } from "node:path";
-import { agentProviderName, type KeyOnlyProviderId } from "@openbot/contracts/agent-providers";
-import { type DynamicRecord, isBoolean, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, type LogValue, redactSecrets, redactText } from "@openbot/logging";
-import { type CauseCode, classifyFailure, httpStatusCause, structuredCause } from "@openbot/telemetry";
+import { agentProviderName, type KeyOnlyProviderId } from "@codebot/contracts/agent-providers";
+import { type DynamicRecord, isBoolean, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, type LogValue, redactSecrets, redactText } from "@codebot/logging";
+import { type CauseCode, classifyFailure, httpStatusCause, structuredCause } from "@codebot/telemetry";
 import { Cause, Effect, Exit, Option, Schema, Scope, Semaphore } from "effect";
 import { CONTEXT_COMPACTION_THRESHOLD } from "./agent/context-compaction";
 import { withoutTurnContext } from "./agent/developer-instructions";
@@ -78,7 +78,7 @@ import type {
 } from "./provider-history";
 import { stopProcessTree } from "./windows-process-tree";
 
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 
 const extensionModels = new Set<string>();
 
@@ -1025,7 +1025,7 @@ export class PiAgentClient extends EventEmitter<ClientEvents> implements AgentCl
 
   #notify(method: string, thread: PiThread, params: DynamicRecord): void {
     const safe =
-      method === "openbot/usage" ||
+      method === "codebot/usage" ||
       method === "thread/tokenUsage/updated" ||
       method === "turn/started" ||
       method === "turn/completed"
@@ -1176,7 +1176,7 @@ export class PiAgentClient extends EventEmitter<ClientEvents> implements AgentCl
         }));
       }),
       Effect.map(({ tokens, cost }) =>
-        this.#notify("openbot/usage", thread, {
+        this.#notify("codebot/usage", thread, {
           usage: {
             inputTokens: tokens.input + tokens.cacheRead + tokens.cacheWrite,
             outputTokens: tokens.output,

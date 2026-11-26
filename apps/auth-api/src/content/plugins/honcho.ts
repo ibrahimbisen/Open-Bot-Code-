@@ -23,7 +23,7 @@ export const HONCHO_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the Honcho plugin need an API key?",
       answer:
-        "No. Select Connect and sign in with your Honcho account in the browser. To use a key, select Use an API key instead, and type a key from app.honcho.dev. Hosted keys start with hch-. OpenBot sends the key in the Authorization header and keeps it in encrypted storage.",
+        "No. Select Connect and sign in with your Honcho account in the browser. To use a key, select Use an API key instead, and type a key from app.honcho.dev. Hosted keys start with hch-. CodeBot sends the key in the Authorization header and keeps it in encrypted storage.",
     },
     {
       question: "Which workspace does the agent use?",
@@ -31,9 +31,9 @@ export const HONCHO_PLUGIN_GUIDE: PluginGuide = {
         "Each Honcho tool that works on a workspace takes a workspace_id. The agent names the workspace on each call, and it can use list_workspaces to find it. To keep one workspace, tell the agent its name, for example in its instructions.",
     },
     {
-      question: "How is Honcho different from the memory of an OpenBot agent?",
+      question: "How is Honcho different from the memory of an CodeBot agent?",
       answer:
-        "Each OpenBot agent has its own memory, which stays on the computer that runs OpenBot. Honcho is a memory that other AI tools you connect to the same account can share. Your OpenBot workspaces, conversations and files stay on the computer that runs OpenBot. Only the messages and questions that an agent sends to Honcho tools go to Honcho.",
+        "Each CodeBot agent has its own memory, which stays on the computer that runs CodeBot. Honcho is a memory that other AI tools you connect to the same account can share. Your CodeBot workspaces, conversations and files stay on the computer that runs CodeBot. Only the messages and questions that an agent sends to Honcho tools go to Honcho.",
     },
     {
       question: "Can I run Honcho on my own computer?",

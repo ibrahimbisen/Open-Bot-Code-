@@ -9,7 +9,7 @@ import {
   Spinner,
   Volume2,
   VolumeX,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createStore, onCleanup, Show } from "solid-js";
 import { useText } from "../../text";

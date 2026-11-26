@@ -1,5 +1,5 @@
-import { type CacheExpiryCompactionSetting, DEFAULT_CACHE_EXPIRY_COMPACTION } from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { type CacheExpiryCompactionSetting, DEFAULT_CACHE_EXPIRY_COMPACTION } from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { PreferenceStore } from "./preference-file";
 

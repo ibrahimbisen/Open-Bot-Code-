@@ -39,7 +39,7 @@ export default {
         executable: "bun",
         args: [join(PROJECT_ROOT, "scripts/provider-live/start-app.ts"), provider, "{port}"],
         cwd: PROJECT_ROOT,
-        inheritEnv: ["USER", "LOGNAME", "SHELL", "LANG", "LC_*", "XDG_*", "OPENBOT_*"],
+        inheritEnv: ["USER", "LOGNAME", "SHELL", "LANG", "LC_*", "XDG_*", "CODEBOT_*"],
         startupTimeout: 120_000,
         log: `.e2e/${provider}-app.log`,
       },

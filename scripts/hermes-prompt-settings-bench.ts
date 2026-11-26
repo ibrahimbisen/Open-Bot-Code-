@@ -24,7 +24,7 @@ import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/p
 import { median } from "./dev-automation/bench-stats";
 import { runTurn, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/hermes-prompt-settings-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/hermes-prompt-settings-bench");
 const DEFAULT_MODEL = "nous:meituan/longcat-2.5:free";
 const REPLY_PROMPT = "Reply with the single word OK. Do not use any tool.";
 const TASK_PROMPT =
@@ -35,21 +35,21 @@ const TURN_TIMEOUT_MS = 240_000;
 
 interface Variant {
   name: string;
-  openbotSettings: boolean;
+  codebotSettings: boolean;
   userAgent?: HermesAgentSettings;
 }
 
 const REFERENCE_TOOLSETS = ["web", "code_execution", "delegation", "memory", "skills"] as const;
 
 const VARIANTS: Variant[] = [
-  { name: "current", openbotSettings: true },
-  { name: "without-openbot-settings", openbotSettings: false },
-  { name: "coding-context-focus", openbotSettings: false, userAgent: { coding_context: "focus" } },
-  { name: "browser-off", openbotSettings: false, userAgent: { disabled_toolsets: ["browser"] } },
-  { name: "user-keys-win", openbotSettings: true, userAgent: { coding_context: "auto", disabled_toolsets: [] } },
+  { name: "current", codebotSettings: true },
+  { name: "without-codebot-settings", codebotSettings: false },
+  { name: "coding-context-focus", codebotSettings: false, userAgent: { coding_context: "focus" } },
+  { name: "browser-off", codebotSettings: false, userAgent: { disabled_toolsets: ["browser"] } },
+  { name: "user-keys-win", codebotSettings: true, userAgent: { coding_context: "auto", disabled_toolsets: [] } },
   ...REFERENCE_TOOLSETS.map((toolset) => ({
     name: `without-${toolset.replaceAll("_", "-")}`,
-    openbotSettings: true,
+    codebotSettings: true,
     userAgent: { disabled_toolsets: ["browser", toolset] },
   })),
 ];
@@ -185,7 +185,7 @@ async function measureTurn(
   if (!thread) throw new Error("thread/start answers no thread id.");
   let usage: unknown = null;
   const onUsage = (notification: { method: string; params?: unknown }) => {
-    if (notification.method === "openbot/usage" && getString(notification.params, "threadId") === thread)
+    if (notification.method === "codebot/usage" && getString(notification.params, "threadId") === thread)
       usage = isRecord(notification.params) ? notification.params.usage : null;
   };
   client.on("notification", onUsage);
@@ -232,13 +232,13 @@ if (variants.length !== (names?.length ?? VARIANTS.length))
 const root = userHermesRoot();
 const profiles = join(root, "profiles");
 const profilesExisted = existsSync(profiles);
-const profile = `openbot-bench-${randomBytes(4).toString("hex")}`;
+const profile = `codebot-bench-${randomBytes(4).toString("hex")}`;
 const home = join(profiles, profile);
 const launchersBefore = launchers(root);
 
 const driver = requireProviderDriver("hermes");
 const cli = await runCauseEffect(driver.resolveCli());
-const scratch = mkdtempSync(join(tmpdir(), "openbot-hermes-bench-"));
+const scratch = mkdtempSync(join(tmpdir(), "codebot-hermes-bench-"));
 const [provider, ...modelName] = model.split(":");
 interface VariantReport {
   name: string;
@@ -251,7 +251,7 @@ const report = {
   hermesVersion: cli.version,
   model,
   runs,
-  openbotSettings: HERMES_AGENT_SETTINGS,
+  codebotSettings: HERMES_AGENT_SETTINGS,
   variants: variantReports,
 };
 
@@ -309,7 +309,7 @@ try {
     );
     const client = driver.createClient(cli, 120_000, {
       ...NO_PROVIDER_CREDENTIALS,
-      ...(variant.openbotSettings ? { providerStateDirectory: join(scratch, "provider-state") } : {}),
+      ...(variant.codebotSettings ? { providerStateDirectory: join(scratch, "provider-state") } : {}),
     });
     const diagnostics: string[] = [];
     client.on("diagnostic", (message: string) => {

@@ -72,7 +72,7 @@ try {
     ],
     {
       ...environment,
-      OPENBOT_AUTH_API_URL: `http://127.0.0.1:${port}`,
+      CODEBOT_AUTH_API_URL: `http://127.0.0.1:${port}`,
       E2E_TELEMETRY_DISABLED: "1",
       ...(bench ? { [BENCH_ENV]: "1" } : {}),
     },

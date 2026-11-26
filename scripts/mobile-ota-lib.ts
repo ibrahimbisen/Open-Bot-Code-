@@ -156,7 +156,7 @@ function buildManifest(input: {
     launchAsset: manifestAsset(input.update.launch, input.assetBaseUrl),
     assets: input.update.assets.map((asset) => manifestAsset(asset, input.assetBaseUrl)),
     metadata: {},
-    extra: { expoClient: input.expoClient, openbot: { commit: input.commit, message: input.message } },
+    extra: { expoClient: input.expoClient, codebot: { commit: input.commit, message: input.message } },
   });
 }
 
@@ -488,7 +488,7 @@ export async function probeManifest(
   if (!part) throw new Error(`The update server sent no manifest and no directive for ${scopeName(scope)}.`);
   if (part.name === "directive") return { kind: "embedded" };
   const manifest = manifestFields(part.body);
-  const extra = isObject(manifest.extra) && isObject(manifest.extra.openbot) ? manifest.extra.openbot : null;
+  const extra = isObject(manifest.extra) && isObject(manifest.extra.codebot) ? manifest.extra.codebot : null;
   return { kind: "update", id: manifest.id, commit: typeof extra?.commit === "string" ? extra.commit : null };
 }
 

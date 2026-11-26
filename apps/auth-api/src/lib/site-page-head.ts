@@ -1,5 +1,5 @@
 import { SITE_OPEN_GRAPH_LOCALES } from "./site-locale";
-import { OPENBOT_X_HANDLE, type PageSocialImage, pageSocialImageMeta } from "./site-metadata";
+import { CODEBOT_X_HANDLE, type PageSocialImage, pageSocialImageMeta } from "./site-metadata";
 import { type EnglishPagePath, pagePaths, SITE_LOCALES, type SiteLocale, siteHreflang } from "./site-paths";
 
 export interface SitePageHead {
@@ -20,14 +20,14 @@ export function sitePageHead(siteUrl: string, head: SitePageHead) {
       { title: head.title },
       { name: "description", content: head.description },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "OpenBot" },
+      { property: "og:site_name", content: "CodeBot" },
       { property: "og:locale", content: SITE_OPEN_GRAPH_LOCALES[head.locale] },
       { property: "og:url", content: url },
       { property: "og:title", content: head.title },
       { property: "og:description", content: head.description },
       ...image.openGraph,
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: OPENBOT_X_HANDLE },
+      { name: "twitter:site", content: CODEBOT_X_HANDLE },
       { name: "twitter:title", content: head.title },
       { name: "twitter:description", content: head.description },
       ...image.twitter,

@@ -1,4 +1,4 @@
-import type { ChannelMessage } from "@openbot/contracts/ipc";
+import type { ChannelMessage } from "@codebot/contracts/ipc";
 
 export interface ChannelPageMerge {
   messages: ChannelMessage[];

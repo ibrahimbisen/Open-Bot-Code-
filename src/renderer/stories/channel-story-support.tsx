@@ -1,9 +1,9 @@
-import { Button } from "@openbot/ui";
-import type { AgentMessage } from "@openbot/ui/data";
-import type { ChannelWorker } from "@openbot/ui/features/channels/ChannelActivityIndicator";
-import { ChannelAvatar } from "@openbot/ui/features/channels/ChannelAvatar";
-import { ChannelStoppedTasks } from "@openbot/ui/features/channels/ChannelStoppedTasks";
-import type { AwaitingReplyItem } from "@openbot/ui/features/conversation/AwaitingReplies";
+import { Button } from "@codebot/ui";
+import type { AgentMessage } from "@codebot/ui/data";
+import type { ChannelWorker } from "@codebot/ui/features/channels/ChannelActivityIndicator";
+import { ChannelAvatar } from "@codebot/ui/features/channels/ChannelAvatar";
+import { ChannelStoppedTasks } from "@codebot/ui/features/channels/ChannelStoppedTasks";
+import type { AwaitingReplyItem } from "@codebot/ui/features/conversation/AwaitingReplies";
 import { fn } from "storybook/test";
 import type { ConversationChannelSource } from "../src/features/conversation/conversation-types";
 import { StoryConversation } from "./conversation-story-support";

@@ -6,8 +6,8 @@ import {
   type VoiceServerModels,
   type VoiceServerProbeField,
   type VoiceServerRoutes,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import {
   decodeVoiceServerWav,
   encodeVoiceServerWav,
@@ -17,8 +17,8 @@ import {
   voiceServerHost,
   voiceServerModelLists,
   voiceServerVoiceNames,
-} from "@openbot/contracts/voice-server";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/voice-server";
+import { sourceText } from "@codebot/i18n/source";
 import { fetch } from "expo/fetch";
 import * as Crypto from "expo-crypto";
 import { File, Paths } from "expo-file-system";
@@ -33,8 +33,8 @@ const LIST_BODY_LIMIT = 1024 * 1024;
 const SPEECH_BODY_LIMIT = 32 * 1024 * 1024;
 const VOICE_SERVER_CAPTURE_RATE = 16_000;
 
-const SERVER_KEY = "openbot.mobile.voice-server.v1";
-const API_KEY_KEY = "openbot.mobile.voice-server-key.v1";
+const SERVER_KEY = "codebot.mobile.voice-server.v1";
+const API_KEY_KEY = "codebot.mobile.voice-server-key.v1";
 
 export interface VoiceServer {
   address: string;

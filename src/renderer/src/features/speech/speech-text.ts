@@ -1,4 +1,4 @@
-import { SPEECH_LIMITS } from "@openbot/contracts/ipc";
+import { SPEECH_LIMITS } from "@codebot/contracts/ipc";
 
 const FIRST_PART_MINIMUM = 40;
 const FIRST_PART_LENGTH = 80;

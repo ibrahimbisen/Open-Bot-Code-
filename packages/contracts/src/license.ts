@@ -24,33 +24,33 @@ export const LICENSE_PLANS: readonly LicensePlan[] = LICENSE_TIERS.flatMap((tier
   BILLING_INTERVALS.flatMap((interval) => [false, true].map((bundle) => ({ tier, interval, bundle }))),
 );
 
-export const LICENSE_LOOKUP_KEY = "openbot_license_month";
+export const LICENSE_LOOKUP_KEY = "codebot_license_month";
 
 export function licenseLookupKey(plan: LicensePlan): string {
   const bundle = plan.bundle ? "bundle_" : "";
   return plan.tier === "team"
-    ? `openbot_license_${bundle}${plan.interval}`
-    : `openbot_license_starter_${bundle}${plan.interval}`;
+    ? `codebot_license_${bundle}${plan.interval}`
+    : `codebot_license_starter_${bundle}${plan.interval}`;
 }
 
 export const LICENSE_LOOKUP_KEYS: readonly string[] = LICENSE_PLANS.map(licenseLookupKey);
-export const LICENSE_PRODUCT_ID = "openbot_license";
+export const LICENSE_PRODUCT_ID = "codebot_license";
 export const LICENSE_METADATA = {
-  kind: "openbot_kind",
-  paidUsers: "openbot_paid_users",
-  paidPeriodEnd: "openbot_paid_period_end",
-  tier: "openbot_license_tier",
-  interval: "openbot_license_interval",
-  bundle: "openbot_license_bundle",
-  orderSubscription: "openbot_order_subscription",
+  kind: "codebot_kind",
+  paidUsers: "codebot_paid_users",
+  paidPeriodEnd: "codebot_paid_period_end",
+  tier: "codebot_license_tier",
+  interval: "codebot_license_interval",
+  bundle: "codebot_license_bundle",
+  orderSubscription: "codebot_order_subscription",
 } as const;
 export const LICENSE_METADATA_KIND = "license";
 
 export const ORDER_METADATA = {
-  licenseTier: "openbot_order_license_tier",
-  licenseUsers: "openbot_order_license_users",
-  licenseInterval: "openbot_order_license_interval",
-  licenseTrialEnd: "openbot_order_license_trial_end",
+  licenseTier: "codebot_order_license_tier",
+  licenseUsers: "codebot_order_license_users",
+  licenseInterval: "codebot_order_license_interval",
+  licenseTrialEnd: "codebot_order_license_trial_end",
 } as const;
 
 export const LICENSE_INCLUDED_USERS = 2;

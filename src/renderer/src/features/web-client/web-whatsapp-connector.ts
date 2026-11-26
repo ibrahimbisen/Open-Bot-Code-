@@ -1,8 +1,8 @@
-import { withWhatsAppReadOnly, withWhatsAppStatusReactions, withWhatsAppWorkingMessages } from "@openbot/contracts/ipc";
-import { WHATSAPP_READ_ONLY_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-read-only-v1";
-import { WHATSAPP_STATUS_REACTIONS_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-status-reactions-v1";
-import { WHATSAPP_WORKING_MESSAGE_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-working-message-v1";
-import { runTeamEffect } from "@openbot/team-client";
+import { withWhatsAppReadOnly, withWhatsAppStatusReactions, withWhatsAppWorkingMessages } from "@codebot/contracts/ipc";
+import { WHATSAPP_READ_ONLY_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-read-only-v1";
+import { WHATSAPP_STATUS_REACTIONS_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-status-reactions-v1";
+import { WHATSAPP_WORKING_MESSAGE_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-working-message-v1";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   type TeamAdminRequestError,
   whatsappConnectorAddOrchestrator,
@@ -24,8 +24,8 @@ import {
   whatsappConnectorStartLink,
   whatsappConnectorStatusReactions,
   whatsappConnectorWorkingMessages,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 import type { HostWhatsAppApi } from "../connectors/whatsapp-connector";
 

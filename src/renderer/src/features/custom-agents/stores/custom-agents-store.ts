@@ -5,8 +5,8 @@ import type {
   CustomAgentUsage,
   CustomProviderRestart,
   SaveCustomAgentInput,
-} from "@openbot/contracts/ipc";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { currentText } from "@codebot/ui/text";
 import { createStore } from "solid-js";
 import type { CustomAgentsEndpointApi } from "../custom-agents-port";
 

@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
-import type { ServerNotificationLevel, TeamRole } from "@openbot/contracts/ipc";
-import { LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
-import type { ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import { sourceText } from "@openbot/i18n/source";
+import type { ServerNotificationLevel, TeamRole } from "@codebot/contracts/ipc";
+import { LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
+import type { ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Semaphore } from "effect";
 import {
   isEmptyStoredFile,

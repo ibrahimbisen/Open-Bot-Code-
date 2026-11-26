@@ -1,10 +1,10 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { Effect } from "effect";
 import { z } from "zod";
 import { AGENT_DATABASE_LIMITS } from "../agent-data/agent-database-protocol";
 import { checkAgentParameters } from "../agent-data/agent-database-rules";
 import type { AgentDatabaseQueryResult, AgentTables } from "../agent-data/agent-tables";
-import { openBotToolFailure, openBotToolResult } from "./routine-tools";
+import { codeBotToolFailure, codeBotToolResult } from "./routine-tools";
 import { ToolOperationFailed, toolStep } from "./tool-operation";
 
 const sql = z.string().min(1).max(AGENT_DATABASE_LIMITS.maxSqlLength);
@@ -17,7 +17,7 @@ export const DATA_TOOL_DEFINITIONS = [
   {
     name: "list_tables",
     description:
-      "List the tables in the shared database with their CREATE statements, row counts, and the agent that created each one. Every OpenBot agent reads and writes the same tables. Call this first, so you add to a table that already holds this kind of record instead of making a near-duplicate.",
+      "List the tables in the shared database with their CREATE statements, row counts, and the agent that created each one. Every CodeBot agent reads and writes the same tables. Call this first, so you add to a table that already holds this kind of record instead of making a near-duplicate.",
     shape: {},
   },
   {
@@ -46,34 +46,34 @@ export const handleDataTool = Effect.fn("DataTools.handle")(function* (
   tables: AgentTables | null,
 ) {
   if (!DATA_TOOL_DEFINITIONS.some((definition) => definition.name === tool)) return null;
-  if (!tables) return openBotToolFailure("Shared data is unavailable.");
+  if (!tables) return codeBotToolFailure("Shared data is unavailable.");
 
   switch (tool) {
     case "list_tables": {
       const listed = yield* tables.list().pipe(Effect.mapError((cause) => new ToolOperationFailed({ cause })));
-      return listed.ok ? openBotToolResult({ tables: listed.value }) : openBotToolFailure(listed.message);
+      return listed.ok ? codeBotToolResult({ tables: listed.value }) : codeBotToolFailure(listed.message);
     }
     case "delete_table": {
       const input = yield* toolStep(() => tableNameSchema.parse(args));
       const removed = yield* tables
         .remove(agentId, input.name)
         .pipe(Effect.mapError((cause) => new ToolOperationFailed({ cause })));
-      return removed.ok ? openBotToolResult({ deleted: removed.value }) : openBotToolFailure(removed.message);
+      return removed.ok ? codeBotToolResult({ deleted: removed.value }) : codeBotToolFailure(removed.message);
     }
     default: {
       const statement = yield* toolStep(() => dataStatementSchema.parse(args));
       const parameters = checkAgentParameters(statement.params, statement.sql);
-      if (!parameters.ok) return openBotToolFailure(parameters.message);
+      if (!parameters.ok) return codeBotToolFailure(parameters.message);
       if (tool === "execute_data") {
         const written = yield* tables
           .execute(agentId, statement.sql, parameters.value)
           .pipe(Effect.mapError((cause) => new ToolOperationFailed({ cause })));
-        return written.ok ? openBotToolResult(written.value) : openBotToolFailure(written.message);
+        return written.ok ? codeBotToolResult(written.value) : codeBotToolFailure(written.message);
       }
       const rows = yield* tables
         .query(statement.sql, parameters.value)
         .pipe(Effect.mapError((cause) => new ToolOperationFailed({ cause })));
-      return rows.ok ? openBotToolResult(readResult(rows.value)) : openBotToolFailure(rows.message);
+      return rows.ok ? codeBotToolResult(readResult(rows.value)) : codeBotToolFailure(rows.message);
     }
   }
 });

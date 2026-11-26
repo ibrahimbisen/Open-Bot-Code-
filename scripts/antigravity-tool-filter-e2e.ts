@@ -8,7 +8,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { readJsonl, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-tool-filter-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-tool-filter-e2e");
 const NL = String.fromCharCode(10);
 const DISABLED = ["schedule", "run_workflow"];
 
@@ -61,7 +61,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, cases: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-filter-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-filter-e2e-"));
 const clients: AgentClient[] = [];
 process.env.GEMINI_HOME = join(root, "gemini");
 

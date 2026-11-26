@@ -19,9 +19,9 @@ export function FlowConnector({ grow = false }: { grow?: boolean }) {
 export function FlowAddButton({ onPress }: { onPress: () => void }) {
   const { t } = useText();
   const [muted, control, controlActive] = useCSSVariable([
-    "--openbot-text-grouped-secondary",
-    "--openbot-bg-control",
-    "--openbot-bg-control-active",
+    "--codebot-text-grouped-secondary",
+    "--codebot-bg-control",
+    "--codebot-bg-control-active",
   ]);
   return (
     <View className="flex-row items-center">

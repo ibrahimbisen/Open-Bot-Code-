@@ -1,5 +1,5 @@
-import { decodeHostKeyHandover, type HostKeyHandover } from "@openbot/contracts/host-key-handover";
-import { isString } from "@openbot/contracts/runtime-values";
+import { decodeHostKeyHandover, type HostKeyHandover } from "@codebot/contracts/host-key-handover";
+import { isString } from "@codebot/contracts/runtime-values";
 import { createFileRoute } from "@tanstack/solid-router";
 import { Effect } from "effect";
 import { runApiResponse } from "../../../../../server/effect-runtime";

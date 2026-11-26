@@ -4,7 +4,7 @@ import {
   CHANNEL_FOLDER_LIMIT,
   type ChannelFolderChange,
   type ChannelFolderList,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, Typography } from "heroui-native";

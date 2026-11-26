@@ -3,7 +3,7 @@ import type {
   LibraryFolderContext,
   LibraryFoldersSnapshot,
   StoredFileWorkflow,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentLibraryFolders, LibraryFileStamp } from "../backend/agent/library-folder-tools";
 import type { LibraryFoldersStore } from "../backend/library-folders-store";

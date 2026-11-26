@@ -1,8 +1,8 @@
-import type { NotificationSound } from "@openbot/contracts/notification-relay";
+import type { NotificationSound } from "@codebot/contracts/notification-relay";
 import type { NotificationPermission } from "@/features/settings/model/push-notifications";
 import type { OutsideTarget } from "@/features/workspace/model/outside-target";
 
-export const SOUND_PREVIEW_KEY = "openbotSoundPreview";
+export const SOUND_PREVIEW_KEY = "codebotSoundPreview";
 
 export interface PushNotificationsNative {
   permission(asked?: (answer: NotificationPermission) => void): Promise<NotificationPermission>;

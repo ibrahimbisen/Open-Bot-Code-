@@ -1,15 +1,15 @@
 import { readdir, realpath, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, dirname, isAbsolute, join, normalize, relative, resolve, sep } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentSummary,
   WORKSPACE_DIRECTORY_LIMIT,
   type WorkspaceDirectory,
   type WorkspaceDirectoryEntry,
-} from "@openbot/contracts/ipc";
-import { legacyAgentId } from "@openbot/contracts/validation";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { legacyAgentId } from "@codebot/contracts/validation";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { type AttachmentOperationError, attachmentCall, attachmentFailure } from "./attachment-effects";
 import { isRecord } from "./protocol";
@@ -33,7 +33,7 @@ function withoutSlashBeforeDrive(path: string): string {
 export function sharedPathFromInput(sharedRoot: string, written: string): string {
   const inputPath = withoutSlashBeforeDrive(written);
   const normalized = inputPath.replaceAll("\\", "/");
-  for (const prefix of ["~/OpenBot/Shared/", "OpenBot/Shared/", "Shared/"]) {
+  for (const prefix of ["~/CodeBot/Shared/", "CodeBot/Shared/", "Shared/"]) {
     if (normalized.startsWith(prefix)) return join(sharedRoot, normalized.slice(prefix.length));
   }
   return isAbsolute(inputPath) ? inputPath : join(sharedRoot, normalized);
@@ -44,10 +44,10 @@ export function workspacePathFromInput(workspaceRoot: string, agentId: string, i
   const normalized = decoded.replaceAll("\\", "/");
   const legacyId = legacyAgentId(agentId);
   for (const prefix of [
-    `~/OpenBot/Agents/${agentId}/`,
-    `OpenBot/Agents/${agentId}/`,
-    `~/OpenBot/Bots/${legacyId}/`,
-    `OpenBot/Bots/${legacyId}/`,
+    `~/CodeBot/Agents/${agentId}/`,
+    `CodeBot/Agents/${agentId}/`,
+    `~/CodeBot/Bots/${legacyId}/`,
+    `CodeBot/Bots/${legacyId}/`,
   ]) {
     if (normalized.startsWith(prefix)) return join(workspaceRoot, normalized.slice(prefix.length));
   }

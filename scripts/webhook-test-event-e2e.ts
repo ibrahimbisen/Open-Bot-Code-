@@ -1,21 +1,21 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import type { EventRoutineOwner, SaveEventRoutineInput } from "@openbot/contracts/ipc-events";
-import { WEBHOOK_TESTS_CAPABILITY } from "@openbot/contracts/team-protocol/webhook-tests-v1";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import type { EventRoutineOwner, SaveEventRoutineInput } from "@codebot/contracts/ipc-events";
+import { WEBHOOK_TESTS_CAPABILITY } from "@codebot/contracts/team-protocol/webhook-tests-v1";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { type DevInstanceRecord, readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/webhook-test-event-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/webhook-test-event-e2e");
 
 interface Check {
   name: string;
@@ -39,7 +39,7 @@ function worktreeInstance(service: DevInstanceRecord["service"]): DevInstanceRec
   return record;
 }
 
-const logger = createOpenBotLogger("webhook-test-event-e2e");
+const logger = createCodeBotLogger("webhook-test-event-e2e");
 const checks: Check[] = [];
 const check = (name: string, passed: boolean, detail: unknown = null) => checks.push({ name, passed, detail });
 
@@ -47,7 +47,7 @@ function refusal(page: Page, id: string, owner: EventRoutineOwner, serverId: str
   return page.evaluate(
     async ([routineId, routineOwner, server]) => {
       try {
-        await window.openbot.events.sendTestEvent({ id: routineId, owner: routineOwner }, server);
+        await window.codebot.events.sendTestEvent({ id: routineId, owner: routineOwner }, server);
         return null;
       } catch (error) {
         return error instanceof Error ? error.message : String(error);
@@ -58,7 +58,7 @@ function refusal(page: Page, id: string, owner: EventRoutineOwner, serverId: str
 }
 
 async function runChecks(page: Page, serverId: string, label: string): Promise<void> {
-  const agents = await page.evaluate((id) => window.openbot.agent.listAgents(id), serverId);
+  const agents = await page.evaluate((id) => window.codebot.agent.listAgents(id), serverId);
   const agent = agents[0];
   assert.ok(agent, `The ${label} host has no agent. Add one on the host first.`);
   const owner = { kind: "agent", id: agent.id } as const;
@@ -72,11 +72,11 @@ async function runChecks(page: Page, serverId: string, label: string): Promise<v
   } satisfies SaveEventRoutineInput;
   const created: string[] = [];
   const save = (input: SaveEventRoutineInput) =>
-    page.evaluate(async ([value, id]) => window.openbot.events.saveRoutine(value, id), [input, serverId] as const);
+    page.evaluate(async ([value, id]) => window.codebot.events.saveRoutine(value, id), [input, serverId] as const);
   const send = (id: string) =>
     page.evaluate(
       async ([routineId, routineOwner, server]) =>
-        window.openbot.events.sendTestEvent({ id: routineId, owner: routineOwner }, server),
+        window.codebot.events.sendTestEvent({ id: routineId, owner: routineOwner }, server),
       [id, owner, serverId] as const,
     );
   try {
@@ -104,10 +104,10 @@ async function runChecks(page: Page, serverId: string, label: string): Promise<v
 
     const activity = await page.evaluate(
       ([routineId, routineOwner, server]) =>
-        window.openbot.events.listActivity({ owner: routineOwner, routineId }, server),
+        window.codebot.events.listActivity({ owner: routineOwner, routineId }, server),
       [saved.routine.id, owner, serverId] as const,
     );
-    const tests = activity.filter((receipt) => receipt.deliveryId.startsWith("openbot-test-"));
+    const tests = activity.filter((receipt) => receipt.deliveryId.startsWith("codebot-test-"));
     check(
       `${label}: the activity has both test receipts`,
       tests.length === 2 &&
@@ -125,7 +125,7 @@ async function runChecks(page: Page, serverId: string, label: string): Promise<v
       await page
         .evaluate(
           ([routineId, routineOwner, server]) =>
-            window.openbot.events.deleteRoutine({ id: routineId, owner: routineOwner }, server),
+            window.codebot.events.deleteRoutine({ id: routineId, owner: routineOwner }, server),
           [id, owner, serverId] as const,
         )
         .catch((error: unknown) => logger.error("Could not delete an E2E routine.", { error }));
@@ -141,7 +141,7 @@ try {
     ownerPid: host.pid,
   });
   try {
-    const servers = await hostSession.page.evaluate(() => window.openbot.servers.list());
+    const servers = await hostSession.page.evaluate(() => window.codebot.servers.list());
     const local = servers.find((item) => item.kind === "local");
     assert.ok(local, "The host app has no local server.");
     await runChecks(hostSession.page, local.id, "local IPC");
@@ -155,7 +155,7 @@ try {
     ownerPid: client.pid,
   });
   try {
-    const servers = await clientSession.page.evaluate(() => window.openbot.servers.list());
+    const servers = await clientSession.page.evaluate(() => window.codebot.servers.list());
     const remote = servers.find(
       (item) => item.kind === "remote" && item.compatibility?.capabilities.includes(WEBHOOK_TESTS_CAPABILITY) === true,
     );

@@ -3,19 +3,19 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { WorkflowGraph, WorkflowRunDetail } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { WorkflowGraph, WorkflowRunDetail } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-agent-step-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-agent-step-e2e");
 const WAIT_MS = 5_000;
 const STEP_NAME = "Research competitors";
 
@@ -105,8 +105,8 @@ const assetsGraph = (agentId: string, fileIds: readonly string[]): WorkflowGraph
   strokes: [],
 });
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-agent-step-"));
-let database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-agent-step-"));
+let database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {
@@ -235,7 +235,7 @@ try {
   const writerDelivery = report.handoffs.find((handoff) => handoff.agentId === "agent-writer")?.deliveryId;
   assert.ok(runs.setRunStatus(writer.runId, "stopping", null));
   await close();
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   ({ workflows } = await open());
   const cut = await runCauseEffect(workflows.run(writer.runId));
   check(

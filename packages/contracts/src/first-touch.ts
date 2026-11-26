@@ -36,7 +36,7 @@ export type FirstTouchSourcePlatform = (typeof FIRST_TOUCH_SOURCE_PLATFORMS)[num
 
 export const FIRST_TOUCH_CAMPAIGN_FIELDS = ["utmSource", "utmMedium", "utmCampaign", "utmContent", "utmTerm"] as const;
 
-export const FIRST_TOUCH_STORAGE_KEY = "openbot.first-touch.v1";
+export const FIRST_TOUCH_STORAGE_KEY = "codebot.first-touch.v1";
 export const FIRST_TOUCH_MAX_AGE_DAYS = 90;
 
 export const FIRST_TOUCH_CAMPAIGN_VALUE = /^[a-z0-9][a-z0-9._-]{0,63}$/u;

@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 /** Webhook triggers and received deliveries for routines. */
 export const WEBHOOK_SCHEMA_SQL = `
@@ -45,7 +45,7 @@ export const WEBHOOK_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS webhook_receipts_received ON projection_webhook_receipts(received_at);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 30,
   name: "routine-webhooks",
   // Only creates tables, so no foreign-key pause and no vacuum. Existing routines and runs stay as they are.

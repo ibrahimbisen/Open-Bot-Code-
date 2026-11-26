@@ -4,7 +4,7 @@ import type {
   MarketplaceAgentSkill,
   MarketplaceAgentSummary,
   MarketplaceSkillSummary,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 function skillIcon(symbol: string, background: string): string {
   return `data:image/svg+xml,${encodeURIComponent(
@@ -19,7 +19,7 @@ export const PROTOTYPE_SKILLS: MarketplaceSkillSummary[] = [
     name: "Release notes",
     description: "Turns a range of commits into a changelog a reader outside the team can follow.",
     category: "documents",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 4,
     installs: 0,
     featured: true,
@@ -75,7 +75,7 @@ export const PROTOTYPE_SKILLS: MarketplaceSkillSummary[] = [
     name: "Source check",
     description: "Follows every citation in a draft and flags the ones that do not say what is claimed.",
     category: "research",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 3,
     installs: 0,
     featured: false,
@@ -106,7 +106,7 @@ export const PROTOTYPE_AGENTS: MarketplaceAgentSummary[] = [
     name: "Release Manager",
     title: "Ships the release",
     description: "Cuts the tag, writes the notes, and watches the rollout until it is green.",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 6,
     installs: 0,
     featured: true,
@@ -268,7 +268,7 @@ export const PROTOTYPE_AGENTS: MarketplaceAgentSummary[] = [
     name: "Contract Reader",
     title: "Finds the clause that matters",
     description: "Reads a long agreement and reports the dates, the duties, and the ways out.",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 3,
     installs: 0,
     featured: true,
@@ -497,5 +497,5 @@ export const PROTOTYPE_AGENT_DETAILS: Record<string, MarketplaceAgentDetail> = O
 );
 
 export function isVerifiedAgent(agent: MarketplaceAgentSummary): boolean {
-  return agent.creatorName === "OpenBot";
+  return agent.creatorName === "CodeBot";
 }

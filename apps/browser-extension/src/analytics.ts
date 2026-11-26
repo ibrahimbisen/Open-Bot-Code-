@@ -1,14 +1,14 @@
-import { isBoolean, isDynamicRecord, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { normalizeEmailAddress } from "@openbot/contracts/validation";
-import { analyticsOnByDefault, currentAnalyticsInstallId, newAnalyticsInstallId } from "@openbot/telemetry";
+import { isBoolean, isDynamicRecord, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { normalizeEmailAddress } from "@codebot/contracts/validation";
+import { analyticsOnByDefault, currentAnalyticsInstallId, newAnalyticsInstallId } from "@codebot/telemetry";
 import { ASK_CHOICES, ASK_KINDS, type AskChoice, type AskKind } from "./client-browser-messages";
 import { type ExtensionSession, readSession, saveSession } from "./extension-storage";
 
 const EXTENSION_ANALYTICS_GENERATION = 1;
-const ANALYTICS_URL = import.meta.env.VITE_OPENBOT_ANALYTICS_URL;
+const ANALYTICS_URL = import.meta.env.VITE_CODEBOT_ANALYTICS_URL;
 const OPENPANEL_CLIENT_ID = "6c989975-87ef-4f0c-857e-ab449a65b5c2";
-const CHOICE_KEY = "openbot.analytics.v1";
-const INSTALL_ID_KEY = "openbot.analytics-install.v1";
+const CHOICE_KEY = "codebot.analytics.v1";
+const INSTALL_ID_KEY = "codebot.analytics-install.v1";
 const VERSION_PATTERN = /^\d{1,4}\.\d{1,4}\.\d{1,4}$/u;
 
 type Result = "succeeded" | "failed";

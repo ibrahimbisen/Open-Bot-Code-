@@ -5,12 +5,12 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { createServer, type IncomingMessage, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { exportJWK } from "jose";
 
-const logger = createOpenBotLogger("signal-capacity-report-smoke");
+const logger = createCodeBotLogger("signal-capacity-report-smoke");
 const root = resolve(import.meta.dirname, "..");
-const outputDirectory = resolve(root, ".openbot-build/signal-capacity-report");
+const outputDirectory = resolve(root, ".codebot-build/signal-capacity-report");
 const reporterPath = resolve(root, "remote/api/src/capacity-report.ts");
 const metricsToken = randomBytes(24).toString("hex");
 const clientSecret = `sec_${randomBytes(16).toString("hex")}`;
@@ -41,7 +41,7 @@ const devicePage = (received: number, sent: number) =>
     `  eth0: ${received} 2000 0 0 0 0 0 0 ${sent} 1500 0 0 0 0 0 0`,
     `docker0: ${received * 2} 500 0 0 0 0 0 0 ${sent * 2} 400 0 0 0 0 0 0`,
   ].join("\n");
-const networkDirectory = mkdtempSync(join(tmpdir(), "openbot-capacity-network-"));
+const networkDirectory = mkdtempSync(join(tmpdir(), "codebot-capacity-network-"));
 const networkRoutePath = join(networkDirectory, "route");
 const networkDevicePath = join(networkDirectory, "dev");
 writeFileSync(networkRoutePath, ROUTE_PAGE);
@@ -170,12 +170,12 @@ const signalMetricsUrl = `http://127.0.0.1:${healthPort}/metrics`;
 
 const sockets: WebSocket[] = [];
 try {
-  await waitForMetrics(signalMetricsUrl, signal, (page) => page.includes("openbot_remote_signal_sockets 0"));
+  await waitForMetrics(signalMetricsUrl, signal, (page) => page.includes("codebot_remote_signal_sockets 0"));
   for (let index = 0; index < OPEN_SOCKETS; index += 1) {
     sockets.push(new WebSocket(`ws://127.0.0.1:${signalPort}/v1/signal`));
   }
   await waitForMetrics(signalMetricsUrl, signal, (page) =>
-    page.includes(`openbot_remote_signal_sockets ${OPEN_SOCKETS}`),
+    page.includes(`codebot_remote_signal_sockets ${OPEN_SOCKETS}`),
   );
 
   const reporterEnvironment = {
@@ -219,9 +219,9 @@ try {
   const json = { "content-type": "application/json" };
   const signed = {
     ...json,
-    "x-openbot-timestamp": String(Math.floor(Date.now() / 1000)),
-    "x-openbot-delivery-id": "smoke-delivery-1",
-    "x-openbot-signature": `sha256=${"0".repeat(64)}`,
+    "x-codebot-timestamp": String(Math.floor(Date.now() / 1000)),
+    "x-codebot-delivery-id": "smoke-delivery-1",
+    "x-codebot-signature": `sha256=${"0".repeat(64)}`,
   };
   const webhookStatuses = [
     await webhookRequest("a".repeat(129), json),

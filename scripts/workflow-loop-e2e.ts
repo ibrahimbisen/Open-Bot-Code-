@@ -3,17 +3,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type WorkflowGraph, type WorkflowStep, workflowLoopEdges } from "@openbot/contracts/ipc";
+import { type WorkflowGraph, type WorkflowStep, workflowLoopEdges } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-loop-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-loop-e2e");
 const WAIT_MS = 5_000;
 
 interface Report {
@@ -70,8 +70,8 @@ const RESEARCH: WorkflowGraph = {
   strokes: [],
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-loop-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-loop-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {

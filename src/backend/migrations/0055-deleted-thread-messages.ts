@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v55 and the separate new-database schema. IF NOT EXISTS throughout.
 //
@@ -16,7 +16,7 @@ export const DELETED_THREAD_MESSAGES_SCHEMA_SQL = `
   );
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 55,
   name: "deleted-thread-messages",
   // Only creates a table, so no foreign-key pause and no vacuum. No message was deleted before it,

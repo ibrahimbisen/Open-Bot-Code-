@@ -1,13 +1,13 @@
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { COMPUTER_USE_MCP_SERVER_NAME } from "@openbot/contracts/ipc";
+import { COMPUTER_USE_MCP_SERVER_NAME } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
+import { CODEBOT_DYNAMIC_TOOLS } from "./codebot-tools";
 import type { LocalMcpSession } from "./local-mcp-bridge";
 import type { ClaudeMcpServer } from "./mcp-provider-shapes";
 import { isInheritedProfileValue } from "./mcp-redaction";
 import { type StdioMcpRelay, startStdioMcpRelay } from "./mcp-stdio-relay";
-import { OPENBOT_DYNAMIC_TOOLS } from "./openbot-tools";
 import { COMPUTER_USE_GUIDE_URI, piMcpServerName } from "./pi-mcp-names";
 import { providerCall } from "./provider-client-effects";
 
@@ -21,11 +21,11 @@ const EXTENSION = String.raw`export default function (pi) {
     if (!/^@?skill:\/\//iu.test(path)) return undefined;
     return { block: true, reason: path.replace(/^@/u, "") + ${JSON.stringify(piSkillReadNote())} };
   });
-  const slot = Symbol.for("openbot.pi.mcpServers");
-  globalThis[slot] ??= JSON.parse(process.env.OPENBOT_PI_MCP_SERVERS || "[]");
-  delete process.env.OPENBOT_PI_MCP_SERVERS;
+  const slot = Symbol.for("codebot.pi.mcpServers");
+  globalThis[slot] ??= JSON.parse(process.env.CODEBOT_PI_MCP_SERVERS || "[]");
+  delete process.env.CODEBOT_PI_MCP_SERVERS;
   for (const server of globalThis[slot]) pi.registerMcpServer(server.name, server.config);
-  const workspace = Symbol.for("openbot.pi.workspace");
+  const workspace = Symbol.for("codebot.pi.workspace");
   pi.on("project_trust", (event) => {
     globalThis[workspace] ??= event.cwd;
     return { trusted: event.cwd === globalThis[workspace] ? "yes" : "undecided" };
@@ -45,11 +45,11 @@ const EXTENSION = String.raw`export default function (pi) {
 }
 `;
 
-const PI_SEARCH_ONLY_OPENBOT_TOOLS = ["request_api_key", "suggest_marketplace_app", "show_setting"] as const;
+const PI_SEARCH_ONLY_CODEBOT_TOOLS = ["request_api_key", "suggest_marketplace_app", "show_setting"] as const;
 
 function piToolSearchNote(): string {
-  const openbot = `mcp__${piMcpServerName("local", OPENBOT_DYNAMIC_TOOLS.name)}`;
-  return `This search loads only the tools of the servers in <mcp_servers>. It never finds OpenBot or browser tools: find them with ${openbot}__tool_search, and run them with ${openbot}__tool_call.`;
+  const codebot = `mcp__${piMcpServerName("local", CODEBOT_DYNAMIC_TOOLS.name)}`;
+  return `This search loads only the tools of the servers in <mcp_servers>. It never finds CodeBot or browser tools: find them with ${codebot}__tool_search, and run them with ${codebot}__tool_call.`;
 }
 
 function piSkillReadNote(): string {
@@ -101,7 +101,7 @@ export const createPiMcpExtension = Effect.fn("PiMcp.createExtension")(function*
 ) {
   const root = directory ?? tmpdir();
   yield* providerCall(() => mkdir(root, { recursive: true, mode: 0o700 }));
-  const folder = yield* providerCall(() => mkdtemp(join(root, "openbot-pi-")));
+  const folder = yield* providerCall(() => mkdtemp(join(root, "codebot-pi-")));
   const path = join(folder, "mcp.mjs");
   const environment: Record<string, string> = {};
   const secrets: string[] = [];
@@ -110,7 +110,7 @@ export const createPiMcpExtension = Effect.fn("PiMcp.createExtension")(function*
     Object.fromEntries(
       Object.entries(pairs).map(([key, value]) => {
         if (value === "") return [key, ""];
-        const variable = `OPENBOT_PI_MCP_VALUE_${count++}`;
+        const variable = `CODEBOT_PI_MCP_VALUE_${count++}`;
         if (!isInheritedProfileValue(key, value)) secrets.push(value);
         environment[variable] = value;
         return [key, `\${${variable}}`];
@@ -155,12 +155,12 @@ export const createPiMcpExtension = Effect.fn("PiMcp.createExtension")(function*
       url: server.url,
       headers: values(Object.fromEntries(server.headers.map(({ name, value }) => [name, value]))),
       exposure: "direct",
-      ...(server.name === OPENBOT_DYNAMIC_TOOLS.name
-        ? { toolExposure: Object.fromEntries(PI_SEARCH_ONLY_OPENBOT_TOOLS.map((tool) => [tool, "hidden"])) }
+      ...(server.name === CODEBOT_DYNAMIC_TOOLS.name
+        ? { toolExposure: Object.fromEntries(PI_SEARCH_ONLY_CODEBOT_TOOLS.map((tool) => [tool, "hidden"])) }
         : {}),
     },
   }));
-  environment.OPENBOT_PI_MCP_SERVERS = JSON.stringify([...entries, ...bridge]);
+  environment.CODEBOT_PI_MCP_SERVERS = JSON.stringify([...entries, ...bridge]);
   yield* providerCall(() => writeFile(path, EXTENSION, { mode: 0o600 })).pipe(
     Effect.onError(() =>
       Effect.andThen(

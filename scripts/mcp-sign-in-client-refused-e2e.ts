@@ -2,15 +2,15 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import { resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { z } from "zod";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { McpOAuth, type McpOAuthRecord } from "../src/backend/mcp-oauth-provider";
 import { inspectMcpServer, testMcpServer } from "../src/backend/mcp-probe";
 
-const out = resolve(import.meta.dirname, "../.openbot-build/mcp-sign-in-client-refused-e2e");
+const out = resolve(import.meta.dirname, "../.codebot-build/mcp-sign-in-client-refused-e2e");
 const ACCESS_TOKEN = "e2e-access-token";
 const CLIENT_SECRET = "e2e-client-secret";
 
@@ -66,7 +66,7 @@ const REGISTRATION_REFUSALS = {
     error: "invalid_client",
     error_description: "The client is not registered. Contact support if you need to register a new client.",
   },
-  omnisend: { error: "invalid_client_metadata", error_description: "unknown application: OpenBot" },
+  omnisend: { error: "invalid_client_metadata", error_description: "unknown application: CodeBot" },
   tessie: {
     error: "invalid_client_metadata",
     error_description: "No dynamic client registration template matched this request.",
@@ -611,7 +611,7 @@ async function main(): Promise<void> {
     ];
     const loopback = "http://127.0.0.1:28417/mcp-auth";
     const localhost = "http://localhost:28417/mcp-auth";
-    const deepLink = "openbot://mcp-auth";
+    const deepLink = "codebot://mcp-auth";
     const pages = (entry: Case) =>
       entry.redirects.filter((line) => line.startsWith("page ")).map((line) => line.slice("page ".length));
     const relayed = await runCase("relay-with-deep-link", ["none"], 3, { relayDeepLink: deepLink });

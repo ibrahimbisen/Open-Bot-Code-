@@ -1,7 +1,7 @@
-import type { BrowserBounds } from "@openbot/contracts/ipc";
+import type { BrowserBounds } from "@codebot/contracts/ipc";
 
-export const BROWSER_PIP_STORAGE_KEY = "openbot:browser-pip-native-bounds";
-export const BROWSER_WINDOW_STORAGE_KEY = "openbot:browser-window-bounds";
+export const BROWSER_PIP_STORAGE_KEY = "codebot:browser-pip-native-bounds";
+export const BROWSER_WINDOW_STORAGE_KEY = "codebot:browser-window-bounds";
 
 export function readStoredBounds(key: string): BrowserBounds | null {
   const values = (window.localStorage.getItem(key) ?? "").split(",").map((value) => Number.parseFloat(value));

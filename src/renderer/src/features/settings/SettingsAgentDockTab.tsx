@@ -3,8 +3,8 @@ import {
   type AgentDockDisplay,
   type AgentDockDisplayInfo,
   type AgentDockEdge,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Item,
   ItemActions,
@@ -22,9 +22,9 @@ import {
   SliderField,
   Switch,
   SwitchField,
-} from "@openbot/ui";
-import type { ComposerAgent } from "@openbot/ui/data";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
+} from "@codebot/ui";
+import type { ComposerAgent } from "@codebot/ui/data";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, createUniqueId, For, onSettled, Show } from "solid-js";
 import { useI18n } from "../../i18n-context";

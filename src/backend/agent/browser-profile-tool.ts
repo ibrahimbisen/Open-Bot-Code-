@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentBrowserProfile,
   type AgentSummary,
@@ -7,18 +7,18 @@ import {
   BROWSER_PROFILE_NAME_MAX,
   sameAgentBrowserProfile,
   type UpdateAgentBrowserProfileInput,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { DynamicToolCallParams } from "../protocol";
 import type { ToolApprovalDecision } from "./attention-registry";
 import { profileToolErrorMessage } from "./profile-tools";
-import { type OpenBotToolResponse, openBotToolFailure, openBotToolResult } from "./routine-tools";
+import { type CodeBotToolResponse, codeBotToolFailure, codeBotToolResult } from "./routine-tools";
 import { ToolOperationFailed, toToolOperationFailed } from "./tool-operation";
 
-const logger = createOpenBotLogger("browser-profile-tool");
+const logger = createCodeBotLogger("browser-profile-tool");
 
 export interface AgentBrowserProfiles {
   list(): { readonly profiles: readonly { readonly id: string; readonly name: string }[] };
@@ -98,16 +98,16 @@ export const handleSetBrowserProfileTool = Effect.fn("SetBrowserProfileTool.hand
   function* (
     params: DynamicToolCallParams,
     options: SetBrowserProfileToolOptions,
-  ): Effect.fn.Return<OpenBotToolResponse, ToolOperationFailed> {
+  ): Effect.fn.Return<CodeBotToolResponse, ToolOperationFailed> {
     const { agentIds, profile, name } = setBrowserProfileToolSchema.parse(params.arguments, { reportInput: true });
     if ((profile === "named") !== (name !== undefined))
-      return openBotToolFailure("Pass name with profile named, and only then.");
+      return codeBotToolFailure("Pass name with profile named, and only then.");
     const profiles = options.profiles;
-    if (!profiles) return openBotToolFailure("This OpenBot has no browser profiles.");
+    if (!profiles) return codeBotToolFailure("This CodeBot has no browser profiles.");
     if (!options.requestedByPerson)
-      return openBotToolFailure(
+      return codeBotToolFailure(
         options.requestersCanAdminister
-          ? "Only a person's message, in your OpenBot chat or a thread they opened, can change a browser profile. Tell the user that they can change it in the agent's settings, Advanced, Browser profile."
+          ? "Only a person's message, in your CodeBot chat or a thread they opened, can change a browser profile. Tell the user that they can change it in the agent's settings, Advanced, Browser profile."
           : "A server member who is not an owner or admin sent this request. Only an owner or admin can change a browser profile or its proxy, and a member does not see the Browser profile setting. Tell the user to ask an owner or admin of the server to change it.",
       );
     const agents = options.listAgents();
@@ -120,7 +120,7 @@ export const handleSetBrowserProfileTool = Effect.fn("SetBrowserProfileTool.hand
     const target: Target =
       name === undefined ? { kind: profile === "own" ? "own" : "shared" } : namedTarget(name, named);
     if (target.kind === "new" && named.length >= BROWSER_PROFILE_LIMIT)
-      return openBotToolFailure(sourceText("error.backend.browserProfileLimit", { limit: BROWSER_PROFILE_LIMIT }));
+      return codeBotToolFailure(sourceText("error.backend.browserProfileLimit", { limit: BROWSER_PROFILE_LIMIT }));
     const wanted = (agent: AgentSummary): boolean => {
       const current = agentBrowserProfile(agent);
       if (target.kind === "new") return true;
@@ -134,16 +134,16 @@ export const handleSetBrowserProfileTool = Effect.fn("SetBrowserProfileTool.hand
     const unchanged = targets
       .filter((agent) => !moving.includes(agent))
       .map((agent) => ({ agentId: agent.id, ok: true as const, unchanged: true as const }));
-    if (moving.length === 0) return openBotToolResult({ status: "unchanged", results: unchanged });
+    if (moving.length === 0) return codeBotToolResult({ status: "unchanged", results: unchanged });
 
     const decision = yield* options.approve(approvalReason(target, moving.map((agent) => agent.name).join(", ")));
     if (decision === "cancel")
-      return openBotToolResult({
+      return codeBotToolResult({
         status: "cancelled",
         next: "Nobody answered the card, so no browser profile changed.",
       });
     if (decision !== "accept")
-      return openBotToolResult({
+      return codeBotToolResult({
         status: "declined",
         next: "The user selected Deny, so no browser profile changed. Do not change it another way, and do not ask again for this request.",
       });
@@ -169,7 +169,7 @@ export const handleSetBrowserProfileTool = Effect.fn("SetBrowserProfileTool.hand
       ),
     );
     const moved = results.filter((result) => result.ok).length;
-    return openBotToolResult({
+    return codeBotToolResult({
       status: "changed",
       ...(target.kind === "new" ? { created: true } : {}),
       moved,

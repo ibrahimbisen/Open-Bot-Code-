@@ -4,16 +4,16 @@ import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentSummary, ConversationMessage } from "@openbot/contracts/ipc";
+import type { AgentSummary, ConversationMessage } from "@codebot/contracts/ipc";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { withTransaction } from "../src/backend/database/sqlite-transaction";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
 const NAME = "large-chat-save-e2e";
-const OUT = resolve(import.meta.dirname, `../.openbot-build/${NAME}`);
+const OUT = resolve(import.meta.dirname, `../.codebot-build/${NAME}`);
 const TARGET_EVENTS = Number(process.env.LARGE_CHAT_EVENTS ?? 300_000);
 const AGENT_ID = "large-chat-agent";
-const THREAD_ID = `openbot-thread-${AGENT_ID}`;
+const THREAD_ID = `codebot-thread-${AGENT_ID}`;
 const FILLER = "The team checked the release plan, the open questions, and the next steps for each owner. ".repeat(3);
 const print = (line: string) => process.stdout.write(`${line}\n`);
 
@@ -64,14 +64,14 @@ function message(index: number, start: number, status: ConversationMessage["stat
   };
 }
 
-function storedOrdinal(database: OpenBotDatabase, messageId: string): number {
+function storedOrdinal(database: CodeBotDatabase, messageId: string): number {
   const row = database.connection
     .prepare("SELECT ordinal FROM projection_thread_messages WHERE thread_id = ? AND message_id = ?")
     .get(THREAD_ID, messageId);
   return Number(row?.ordinal);
 }
 
-function seed(database: OpenBotDatabase): { messages: number; events: number } {
+function seed(database: CodeBotDatabase): { messages: number; events: number } {
   const start = Date.now() - (TARGET_EVENTS + 1_000) * 1_000;
   let events = 0;
   let index = 0;
@@ -104,9 +104,9 @@ function seed(database: OpenBotDatabase): { messages: number; events: number } {
   return { messages: index, events };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-large-chat-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-large-chat-"));
 const timings: Timing[] = [];
-let database: OpenBotDatabase | undefined;
+let database: CodeBotDatabase | undefined;
 try {
   mkdirSync(OUT, { recursive: true });
   const userData = join(root, "user-data");
@@ -116,7 +116,7 @@ try {
     cpSync(cachedSeed, userData, { recursive: true });
     print(`Reused the seeded chat in ${cachedSeed}.`);
   } else {
-    const seeding = new OpenBotDatabase(userData);
+    const seeding = new CodeBotDatabase(userData);
     database = seeding;
     await runCauseEffect(seeding.initialize());
     seeding.replaceAgents("large-chat:agent", [agentSummary()], "agent.created");
@@ -130,12 +130,12 @@ try {
     database = undefined;
     if (process.argv.includes("--reuse-seed")) {
       cpSync(userData, cachedSeed, { recursive: true });
-      rmSync(join(cachedSeed, "openbot.db-wal"), { force: true });
-      rmSync(join(cachedSeed, "openbot.db-shm"), { force: true });
+      rmSync(join(cachedSeed, "codebot.db-wal"), { force: true });
+      rmSync(join(cachedSeed, "codebot.db-shm"), { force: true });
     }
   }
 
-  const opened = new OpenBotDatabase(userData);
+  const opened = new CodeBotDatabase(userData);
   database = opened;
   const openStarted = performance.now();
   await runCauseEffect(opened.initialize());

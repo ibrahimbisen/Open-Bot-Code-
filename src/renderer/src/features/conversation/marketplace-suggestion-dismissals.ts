@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import { z } from "zod";
 
-const MARKETPLACE_SUGGESTION_DISMISSALS_KEY = "openbot:marketplace-suggestion-dismissals:v1";
+const MARKETPLACE_SUGGESTION_DISMISSALS_KEY = "codebot:marketplace-suggestion-dismissals:v1";
 const MAX_DISMISSALS = 200;
 
 type DismissalStorage = Pick<Storage, "getItem" | "setItem">;

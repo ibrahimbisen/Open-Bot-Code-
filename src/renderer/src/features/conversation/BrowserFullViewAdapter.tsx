@@ -1,7 +1,7 @@
-import BrowserFullView from "@openbot/ui/features/browser/BrowserFullView";
-import BrowserLocalSignInDialog from "@openbot/ui/features/browser/BrowserLocalSignInDialog";
-import type { BrowserPageMenu } from "@openbot/ui/features/browser/browser-page-cover";
-import { useText } from "@openbot/ui/text";
+import BrowserFullView from "@codebot/ui/features/browser/BrowserFullView";
+import BrowserLocalSignInDialog from "@codebot/ui/features/browser/BrowserLocalSignInDialog";
+import type { BrowserPageMenu } from "@codebot/ui/features/browser/browser-page-cover";
+import { useText } from "@codebot/ui/text";
 import { createMemo, onCleanup, Show } from "solid-js";
 import { browserSessionHistory, canReopenBrowserTab } from "../browser/browser-tab-session";
 import { serverSupportsCapability } from "../servers/server-capabilities";

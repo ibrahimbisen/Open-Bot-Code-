@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 
 export function toolCallIdempotencyKey(params: { threadId: string; turnId: string; callId: string }): string {
   const key = `${params.threadId}:${params.turnId}:${params.callId}`;

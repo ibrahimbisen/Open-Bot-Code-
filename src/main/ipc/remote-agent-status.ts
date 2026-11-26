@@ -1,10 +1,10 @@
-import { type AgentStatus, decodeProviderModelSources, withModelSources } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
+import { type AgentStatus, decodeProviderModelSources, withModelSources } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
 import {
   PROVIDER_MODEL_SOURCE_CAPABILITY,
   PROVIDER_MODEL_SOURCE_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-model-source-v1";
+} from "@codebot/contracts/team-protocol/provider-model-source-v1";
 import { Effect } from "effect";
 import { decodeAgentStatusFromHost } from "../remote-agent-decoding";
 import type { ResponseDecoder } from "../remote-host-decoding";

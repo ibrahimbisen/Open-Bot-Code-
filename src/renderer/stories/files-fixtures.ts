@@ -1,4 +1,4 @@
-import type { AttachmentKind, AttachmentPreviewKind, RemovableRuntimes } from "@openbot/contracts/ipc";
+import type { AttachmentKind, AttachmentPreviewKind, RemovableRuntimes } from "@codebot/contracts/ipc";
 import type {
   AgentStorageRow,
   ConversationStorageRow,
@@ -6,7 +6,7 @@ import type {
   StoredFileRow,
   StoredFileSource,
   StoredFileStatus,
-} from "@openbot/ui/features/files/files-view";
+} from "@codebot/ui/features/files/files-view";
 import { requireFixture, STORY_AGENTS } from "./fixtures";
 
 export const FILES_NOW = new Date("2026-09-23T15:00:00");

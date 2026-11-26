@@ -1,12 +1,12 @@
-import { AppLogo } from "@openbot/brand";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AppVariant, CentralAuthIssue, CentralAuthState } from "@openbot/contracts/ipc";
-import { referralCodeFromInput } from "@openbot/contracts/referral";
-import { normalizeEmailAddress, normalizeOneTimeCode } from "@openbot/contracts/validation";
-import type { TranslatedLocale } from "@openbot/i18n";
-import { appLanguageOption } from "@openbot/i18n/languages";
-import { ArrowLeft, Button, Confetti, ErrorReference, Globe2, Input, Lock, RefreshCw } from "@openbot/ui";
-import { errorReference, type UserErrorDetails } from "@openbot/user-errors";
+import { AppLogo } from "@codebot/brand";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AppVariant, CentralAuthIssue, CentralAuthState } from "@codebot/contracts/ipc";
+import { referralCodeFromInput } from "@codebot/contracts/referral";
+import { normalizeEmailAddress, normalizeOneTimeCode } from "@codebot/contracts/validation";
+import type { TranslatedLocale } from "@codebot/i18n";
+import { appLanguageOption } from "@codebot/i18n/languages";
+import { ArrowLeft, Button, Confetti, ErrorReference, Globe2, Input, Lock, RefreshCw } from "@codebot/ui";
+import { errorReference, type UserErrorDetails } from "@codebot/user-errors";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js";
 import { useText } from "../../text";
@@ -47,7 +47,7 @@ const UNCERTAIN_EMAIL_DELIVERY_ISSUES = new Set([
   "email_delivery_unknown",
 ]);
 
-const PRODUCT_NAME = "OpenBot";
+const PRODUCT_NAME = "CodeBot";
 const EMAIL_PLACEHOLDER = "you@example.com";
 const EMAIL_MARKER = "\u0000";
 

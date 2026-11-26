@@ -4,6 +4,9 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer, request as httpRequest, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -15,11 +18,9 @@ import {
   McpError,
   ToolListChangedNotificationSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
 import { Effect } from "effect";
 import { McpGateway } from "../src/backend/agent/mcp-gateway";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { toMcpOperationError } from "../src/backend/mcp-effects";
 import {
@@ -38,10 +39,9 @@ import {
 } from "../src/backend/mcp-provider-shapes";
 import { McpServerStore } from "../src/backend/mcp-server-store";
 import { AddressLookupError, isPublicAddress } from "../src/backend/network-address";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-oauth-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-oauth-e2e");
 const REDIRECT_URL = "http://127.0.0.1:28417/mcp-auth";
 const DEADLINE_MS = 10_000;
 
@@ -234,7 +234,7 @@ async function main() {
         throw new Error("A silent path opened the browser.");
       },
       redirectUrl: REDIRECT_URL,
-      logger: createOpenBotLogger("mcp-oauth", (line) => {
+      logger: createCodeBotLogger("mcp-oauth", (line) => {
         logLines.push(line);
         onLog();
       }),
@@ -586,8 +586,8 @@ async function proxyCases(auth: Awaited<ReturnType<typeof startAuthorizationServ
   auth.setTokenMode("rotate");
   auth.setRevokeStatus(200);
   const resource = await startResourceServer(auth.base);
-  const root = await mkdtemp(join(tmpdir(), "openbot-mcp-oauth-proxy-"));
-  const database = new OpenBotDatabase(root);
+  const root = await mkdtemp(join(tmpdir(), "codebot-mcp-oauth-proxy-"));
+  const database = new CodeBotDatabase(root);
   const clients: Client[] = [];
   const gateways: McpGateway[] = [];
   try {
@@ -619,7 +619,7 @@ async function proxyCases(auth: Awaited<ReturnType<typeof startAuthorizationServ
         throw new Error("A proxy path opened the browser.");
       },
       redirectUrl: REDIRECT_URL,
-      logger: createOpenBotLogger("mcp-oauth", (line) => logLines.push(line)),
+      logger: createCodeBotLogger("mcp-oauth", (line) => logLines.push(line)),
     });
     const saved: { value: McpOAuthProxySettings | null } = { value: null };
     const settings = {
@@ -644,7 +644,7 @@ async function proxyCases(auth: Awaited<ReturnType<typeof startAuthorizationServ
         },
         agents: () => agents,
         computerUseMcpServer: () => null,
-        logger: createOpenBotLogger("agent-service", (line) => logLines.push(line)),
+        logger: createCodeBotLogger("agent-service", (line) => logLines.push(line)),
         hooks: { emitError: () => undefined, refreshAllAgentRuntimes: () => Effect.void },
       });
       gateways.push(gateway);
@@ -711,13 +711,13 @@ async function proxyCases(auth: Awaited<ReturnType<typeof startAuthorizationServ
     assert.ok(upstream.every((hit) => hit.authorization === "Bearer access-on-file" && hit.rowKey === "row-secret"));
     const echo = { text: "through", upstreamToken: "access-on-file", rowHeaderUpstream: true };
 
-    const openbotClient = (title: string) => ({
-      name: "openbot",
+    const codebotClient = (title: string) => ({
+      name: "codebot",
       title,
       version: "9.9.9-e2e",
       websiteUrl: "https://openbot.run",
     });
-    assert.deepEqual(resource.clients.at(-1), openbotClient("OpenBot"));
+    assert.deepEqual(resource.clients.at(-1), codebotClient("CodeBot"));
     assert.ok(upstream.every((hit) => !/bot/iu.test(hit.userAgent ?? "")));
     const titleOf = async (route: { url: string; bearer: string }) => {
       const before = resource.clients.length;
@@ -725,29 +725,29 @@ async function proxyCases(auth: Awaited<ReturnType<typeof startAuthorizationServ
       assert.equal(textOf(await named.callTool({ name: "echo", arguments: { text: "named" } })), "named");
       assert.equal(resource.clients.length, before + 1);
       const info = resource.clients.at(-1);
-      assert.deepEqual(info, openbotClient(info?.title ?? ""));
+      assert.deepEqual(info, codebotClient(info?.title ?? ""));
       return info?.title;
     };
     const researchRoute = await endpointOf(gateway, direct, "agent-research");
     assert.notEqual(researchRoute.url, directRoute.url);
-    assert.equal(await titleOf(researchRoute), "Research Bot (OpenBot)");
-    assert.equal(await titleOf(chiefRoute), "Ops Bot (OpenBot)");
+    assert.equal(await titleOf(researchRoute), "Research Bot (CodeBot)");
+    assert.equal(await titleOf(chiefRoute), "Ops Bot (CodeBot)");
     const research = agents[0];
     assert.ok(research);
     research.name = "Renamed Bot";
-    assert.equal(await titleOf(researchRoute), "Renamed Bot (OpenBot)");
-    assert.equal(await titleOf(await endpointOf(gateway, direct, "removed-agent")), "OpenBot");
+    assert.equal(await titleOf(researchRoute), "Renamed Bot (CodeBot)");
+    assert.equal(await titleOf(await endpointOf(gateway, direct, "removed-agent")), "CodeBot");
     const hitsBeforeCross = resource.hits.length;
     assert.equal(await rawPost(researchRoute.url, { authorization: `Bearer ${directRoute.bearer}` }), 403);
     assert.equal(await rawPost(directRoute.url, { authorization: `Bearer ${researchRoute.bearer}` }), 403);
     assert.equal(await rawPost(chiefRoute.url, { authorization: `Bearer ${researchRoute.bearer}` }), 403);
     assert.equal(resource.hits.length, hitsBeforeCross, "A request with another route's bearer reached the server.");
     const clientIdentity = {
-      withoutAgent: "OpenBot",
-      agent: "Research Bot (OpenBot)",
-      controlCharacters: "Ops Bot (OpenBot)",
-      renamed: "Renamed Bot (OpenBot)",
-      unknownAgent: "OpenBot",
+      withoutAgent: "CodeBot",
+      agent: "Research Bot (CodeBot)",
+      controlCharacters: "Ops Bot (CodeBot)",
+      renamed: "Renamed Bot (CodeBot)",
+      unknownAgent: "CodeBot",
       userAgentWithoutBot: true,
       crossAgentBearers: 403,
     };

@@ -8,20 +8,20 @@ import {
   assertSupportedAttachmentName,
   isOpenableAttachmentName,
   isSupportedAttachmentNameFor,
-} from "@openbot/contracts/attachment-files";
+} from "@codebot/contracts/attachment-files";
 import {
   legacyTeamCapabilities,
   TEAM_ANY_FILE_ATTACHMENTS_CAPABILITY,
   TEAM_CURRENT_CAPABILITIES,
   TEAM_PROTOCOL_V9_ONLY_CAPABILITIES,
   teamCapabilitiesForProtocol,
-} from "@openbot/contracts/team-protocol/current";
-import { TEAM_PROTOCOL_V9_CAPABILITY_LIMIT } from "@openbot/contracts/team-protocol/v9";
+} from "@codebot/contracts/team-protocol/current";
+import { TEAM_PROTOCOL_V9_CAPABILITY_LIMIT } from "@codebot/contracts/team-protocol/v9";
 import { Effect } from "effect";
 import { AttachmentFiles } from "../src/backend/attachment-files";
 
 const workspace = dirname(dirname(import.meta.filename));
-const artifactPath = join(workspace, ".openbot-build", "any-file-attachment-e2e", "report.json");
+const artifactPath = join(workspace, ".codebot-build", "any-file-attachment-e2e", "report.json");
 
 function digest(bytes: Uint8Array): string {
   return createHash("sha256").update(bytes).digest("hex");
@@ -43,7 +43,7 @@ const heif = ftyp("mif1", "mif1", "heic");
 const avif = ftyp("avif", "mif1", "miaf");
 
 async function run() {
-  const root = await mkdtemp(join(tmpdir(), "openbot-any-file-attachment-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-any-file-attachment-"));
   try {
     const sharedRoot = join(root, "shared");
     const files = new AttachmentFiles({ userDataPath: join(root, "user-data"), sharedRoot });

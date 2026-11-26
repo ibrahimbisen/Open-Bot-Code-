@@ -1,4 +1,4 @@
-import type { AgentSummary, QuitGuard } from "@openbot/contracts/ipc";
+import type { AgentSummary, QuitGuard } from "@codebot/contracts/ipc";
 import type { BrowserWindow, Input } from "electron";
 
 const HOLD_MS = 1_200;

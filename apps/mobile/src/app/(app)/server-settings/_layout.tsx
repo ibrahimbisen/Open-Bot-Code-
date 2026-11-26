@@ -8,7 +8,7 @@ export const unstable_settings = { anchor: "index" };
 
 export default function ServerSettingsLayout() {
   const { t } = useText();
-  const background = String(useCSSVariable("--openbot-bg-sheet"));
+  const background = String(useCSSVariable("--codebot-bg-sheet"));
   return (
     <Stack screenListeners={sheetBackHaptics} screenOptions={sheetStackOptions(background)}>
       <Stack.Screen name="index" options={{ title: t("mobile.server.route.settings") }} />

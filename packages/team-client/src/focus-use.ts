@@ -1,4 +1,4 @@
-import { FOCUS_USE_INTERVAL_MS } from "@openbot/contracts/team-protocol/focus-use-v1";
+import { FOCUS_USE_INTERVAL_MS } from "@codebot/contracts/team-protocol/focus-use-v1";
 
 export function createFocusUsePing(send: (serverId: string) => void, now = Date.now) {
   let target: string | null = null;

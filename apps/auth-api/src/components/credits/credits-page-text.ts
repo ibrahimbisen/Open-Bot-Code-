@@ -1,4 +1,4 @@
-import type { AppTranslate } from "@openbot/i18n";
+import type { AppTranslate } from "@codebot/i18n";
 
 export const CREDITS_QUERY_SLOT = "{query}";
 export const CREDITS_AMOUNT_SLOT = "{credits}";

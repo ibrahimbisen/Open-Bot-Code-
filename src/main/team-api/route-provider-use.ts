@@ -1,11 +1,11 @@
-import type { AgentStatus } from "@openbot/contracts/ipc";
+import type { AgentStatus } from "@codebot/contracts/ipc";
 import {
   PROVIDER_USE_CAPABILITY,
   PROVIDER_USE_LIMIT,
   PROVIDER_USE_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-use-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/provider-use-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { parseProviderUseInput } from "../ipc/provider-handlers";
 import type { TeamApiAdmin } from "./dependencies";

@@ -1,20 +1,20 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { AgentDefaults, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { type AppTextKey, resolveLocale, translateFor } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { AgentDefaults, CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { type AppTextKey, resolveLocale, translateFor } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/settings-agent-defaults");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/settings-agent-defaults");
 const RESPONSE_DEADLINE_MS = 2_000;
 
 const SETTINGS = [
@@ -26,7 +26,7 @@ const SETTINGS = [
 
 const portArgument = process.argv.find((argument) => argument.startsWith("--port="));
 const port = Number(portArgument?.slice("--port=".length));
-assert.ok(Number.isInteger(port), "Name the app with --port=<OPENBOT_DEV_REMOTE_DEBUGGING_PORT>.");
+assert.ok(Number.isInteger(port), "Name the app with --port=<CODEBOT_DEV_REMOTE_DEBUGGING_PORT>.");
 const instance = readDevInstanceRecords().find((record) => record.remoteDebuggingPort === port);
 assert.ok(instance, `No dev app of the registry uses the debugging port ${port}.`);
 assertMutationAllowed({
@@ -35,7 +35,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("settings-agent-defaults-e2e");
+const logger = createCodeBotLogger("settings-agent-defaults-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -102,12 +102,12 @@ function backToList() {
 }
 
 function savedDefaults(): Promise<AgentDefaults> {
-  return page.evaluate(() => window.openbot.getAgentDefaults());
+  return page.evaluate(() => window.codebot.getAgentDefaults());
 }
 
 async function savedOn(key: (typeof SETTINGS)[number]["key"]): Promise<boolean> {
   if (key === "busyMessageMode")
-    return (await page.evaluate(() => window.openbot.getBusyMessageModePreference())).mode === "steer";
+    return (await page.evaluate(() => window.codebot.getBusyMessageModePreference())).mode === "steer";
   return (await savedDefaults())[key];
 }
 
@@ -115,8 +115,8 @@ async function waitForSaved(key: (typeof SETTINGS)[number]["key"], expected: boo
   await page.waitForFunction(
     async ([name, value]) => {
       if (name === "busyMessageMode")
-        return ((await window.openbot.getBusyMessageModePreference()).mode === "steer") === value;
-      return (await window.openbot.getAgentDefaults())[name] === value;
+        return ((await window.codebot.getBusyMessageModePreference()).mode === "steer") === value;
+      return (await window.codebot.getAgentDefaults())[name] === value;
     },
     [key, expected] as const,
   );
@@ -132,7 +132,7 @@ async function chooseOtherOption(trigger: ReturnType<Page["getByRole"]>): Promis
 }
 
 mkdirSync(OUT, { recursive: true });
-const activeServer = (await page.evaluate(() => window.openbot.servers.list())).find((server) => server.active);
+const activeServer = (await page.evaluate(() => window.codebot.servers.list())).find((server) => server.active);
 assert.equal(activeServer?.kind, "local", "Select this computer in the server list, then run the script again.");
 const originalDefaults = await savedDefaults();
 const originalSteer = await savedOn("busyMessageMode");
@@ -164,7 +164,7 @@ try {
       const before = (await savedDefaults()).automationRunsPerHour;
       const label = await chooseOtherOption(limit);
       await page.waitForFunction(
-        async (previous) => (await window.openbot.getAgentDefaults()).automationRunsPerHour !== previous,
+        async (previous) => (await window.codebot.getAgentDefaults()).automationRunsPerHour !== previous,
         before,
       );
       steps.push({ setting: setting.key, action: `limit ${label}`, responseMs: await rendererAnswers() });
@@ -179,7 +179,7 @@ try {
       const before = (await savedDefaults()).planStartAfterMs;
       const label = await chooseOtherOption(planStart);
       await page.waitForFunction(
-        async (previous) => (await window.openbot.getAgentDefaults()).planStartAfterMs !== previous,
+        async (previous) => (await window.codebot.getAgentDefaults()).planStartAfterMs !== previous,
         before,
       );
       steps.push({ setting: setting.key, action: `plan start ${label}`, responseMs: await rendererAnswers() });
@@ -192,7 +192,7 @@ try {
   for (const next of [!commitStart, commitStart]) {
     await commitSwitch.click({ force: true });
     await page.waitForFunction(
-      async (value) => (await window.openbot.getAgentDefaults()).commitCoAuthor === value,
+      async (value) => (await window.codebot.getAgentDefaults()).commitCoAuthor === value,
       next,
     );
     assert.equal(await commitSwitch.isChecked(), next, "The commit co-author switch does not show the saved value.");
@@ -206,7 +206,7 @@ try {
 } finally {
   await page.evaluate(
     ([defaults, steer]) =>
-      window.openbot.agent.updateAgentDefaultsOverview(
+      window.codebot.agent.updateAgentDefaultsOverview(
         { ...defaults, busyMessageMode: steer ? "steer" : "queue" },
         "local",
       ),

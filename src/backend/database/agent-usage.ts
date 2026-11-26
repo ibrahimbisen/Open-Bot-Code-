@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
-import { KEY_ONLY_PROVIDERS } from "@openbot/contracts/agent-providers";
+import { KEY_ONLY_PROVIDERS } from "@codebot/contracts/agent-providers";
 import {
   type AgentAnalytics,
   type AgentAnalyticsInput,
@@ -10,7 +10,7 @@ import {
   type HostAnalyticsInput,
   parseAgentAnalyticsInput,
   type UsageTokens,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { estimateUsageCost } from "../agent/usage-pricing";
 import type { DatabaseCore } from "./database-core";
 import { databaseRow, databaseRows, requiredStringColumn } from "./database-rows";

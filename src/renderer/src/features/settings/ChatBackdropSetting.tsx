@@ -1,6 +1,6 @@
-import { customBackdropChoice, customBackdropId } from "@openbot/ui/features/conversation/chat-backdrop";
-import { ChatBackdropSelect } from "@openbot/ui/features/settings/ChatBackdropSelect";
-import { useText } from "@openbot/ui/text";
+import { customBackdropChoice, customBackdropId } from "@codebot/ui/features/conversation/chat-backdrop";
+import { ChatBackdropSelect } from "@codebot/ui/features/settings/ChatBackdropSelect";
+import { useText } from "@codebot/ui/text";
 import { createSignal } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { setChatBackdrop, useChatBackdrop } from "../../chat-backdrop-preference";

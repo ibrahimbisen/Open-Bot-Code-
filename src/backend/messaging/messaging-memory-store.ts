@@ -1,8 +1,8 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { MemoryEntry } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { MemoryEntry } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import type { CodeBotDatabase } from "../codebot-database";
 import { MemoryStore, type MemoryTables } from "../memory-store";
-import type { OpenBotDatabase } from "../openbot-database";
 
 const MESSAGING_MEMORY_TABLES: MemoryTables = {
   table: "projection_messaging_memories",
@@ -14,7 +14,7 @@ const MESSAGING_MEMORY_TABLES: MemoryTables = {
 };
 
 export class MessagingMemoryStore extends MemoryStore {
-  constructor(database: OpenBotDatabase) {
+  constructor(database: CodeBotDatabase) {
     super(database, MESSAGING_MEMORY_TABLES);
   }
 

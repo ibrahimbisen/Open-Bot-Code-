@@ -9,14 +9,14 @@ import {
   X_PAGE_RULES_ROUTE,
   type XPageRules,
   xPageRulesHash,
-} from "@openbot/contracts/browser-extension-x";
-import type { AgentTasksSnapshot, ConversationSnapshot } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+} from "@codebot/contracts/browser-extension-x";
+import type { AgentTasksSnapshot, ConversationSnapshot } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { chromium, type Page } from "playwright-core";
 import { argument, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
 const NAME = "browser-extension-e2e";
-const OUT = resolve(import.meta.dirname, `../.openbot-build/${NAME}`);
+const OUT = resolve(import.meta.dirname, `../.codebot-build/${NAME}`);
 const EXTENSION = resolve(import.meta.dirname, "../apps/browser-extension");
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 30_000;
@@ -26,7 +26,7 @@ const authApi = argument("auth-api")?.replace(/\/$/, "");
 assert.ok(agentArgument, "Pass --agent=<agent id> of a host agent whose provider is signed in.");
 assert.ok(authApi, "Pass --auth-api=<url> from the dev stack log.");
 const agentId: string = agentArgument;
-const email = argument("email") ?? "openbot-dev-host@example.com";
+const email = argument("email") ?? "codebot-dev-host@example.com";
 const browserExecutable = argument("browser-executable");
 const run = crypto.randomUUID().slice(0, 6);
 const chatText = `Reply with the single word ready. Do not use tools. Extension ${run}.`;
@@ -38,7 +38,7 @@ const folderName = `Extension folder ${run}`;
 const channelName = `Extension channel ${run}`;
 const newAgentName = `Extension agent ${run}`;
 const shareButton = `Mark clicked ${run}`;
-const shareText = `Use openbot_browser: call list_tabs, then snapshot the Chrome tab titled "Shared tab ${run}" (its id starts with "chrome:"), then click the button labelled "${shareButton}". Reply with the single word done. Extension tabs ${run}.`;
+const shareText = `Use codebot_browser: call list_tabs, then snapshot the Chrome tab titled "Shared tab ${run}" (its id starts with "chrome:"), then click the button labelled "${shareButton}". Reply with the single word done. Extension tabs ${run}.`;
 const SHARE_FIXTURE = `<!doctype html><html><head><meta charset="utf-8"><title>Shared tab ${run}</title></head><body>
 <h1>Shared tab ${run}</h1>
 <button type="button" id="mark">${shareButton}</button>
@@ -160,7 +160,7 @@ const captureServer = Bun.serve({
     return new Response(null, { status: 202, headers: cors });
   },
 });
-const ANALYTICS_CHOICE_KEY = "openbot.analytics.v1";
+const ANALYTICS_CHOICE_KEY = "codebot.analytics.v1";
 async function capturedEvent(test: (event: CapturedEvent) => boolean, label: string): Promise<CapturedEvent> {
   const deadline = Date.now() + UI_WAIT_MS;
   for (;;) {
@@ -210,7 +210,7 @@ interface Report {
   sharedTabs?: {
     onWithoutSwitch: boolean;
     ungroupedBeforeUse: boolean;
-    inOpenBotGroup: boolean;
+    inCodeBotGroup: boolean;
     presenceAccepted: boolean;
     askShown: boolean;
     buttonClicked: boolean;
@@ -240,9 +240,9 @@ const build = spawnSync("bun", ["run", "build", "--", "--mode", "development"], 
   cwd: EXTENSION,
   env: {
     ...process.env,
-    VITE_OPENBOT_API_URL: authApi,
-    VITE_OPENBOT_X_RULES_URL: `${xBase}/x-rules`,
-    OPENBOT_ANALYTICS_CAPTURE_URL: `http://127.0.0.1:${captureServer.port}`,
+    VITE_CODEBOT_API_URL: authApi,
+    VITE_CODEBOT_X_RULES_URL: `${xBase}/x-rules`,
+    CODEBOT_ANALYTICS_CAPTURE_URL: `http://127.0.0.1:${captureServer.port}`,
   },
   stdio: "inherit",
 });
@@ -251,7 +251,7 @@ const dist = resolve(EXTENSION, "dist");
 const speech = resolve(OUT, "speech.wav");
 const said = spawnSync("say", ["-o", speech, "--data-format=LEI16@16000", spokenText], { stdio: "inherit" });
 assert.equal(said.status, 0, "macOS `say` could not write the speech file.");
-const profile = mkdtempSync(resolve(tmpdir(), "openbot-extension-e2e-"));
+const profile = mkdtempSync(resolve(tmpdir(), "codebot-extension-e2e-"));
 const launchOptions = {
   ...(browserExecutable ? { executablePath: browserExecutable } : { channel: "chromium" }),
   viewport: { width: 360, height: 720 },
@@ -323,25 +323,25 @@ async function removeMade(): Promise<boolean> {
   made.folderId = null;
   made.channelId = null;
   made.agentId = null;
-  if (value.channelId) await host.page.evaluate((id) => window.openbot.agent.deleteChannel(id), value.channelId);
+  if (value.channelId) await host.page.evaluate((id) => window.codebot.agent.deleteChannel(id), value.channelId);
   if (value.agentId) {
     const agentId = value.agentId;
     await host.page.evaluate(async (id) => {
-      const turnId = (await window.openbot.agent.readConversation(id)).activeTurnId;
-      if (turnId) await window.openbot.agent.interrupt({ agentId: id, turnId });
+      const turnId = (await window.codebot.agent.readConversation(id)).activeTurnId;
+      if (turnId) await window.codebot.agent.interrupt({ agentId: id, turnId });
     }, agentId);
     await waitFor(
       host.page,
       "the new agent is idle",
       (): Promise<ConversationSnapshot> =>
-        host.page.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+        host.page.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
       (snapshot) => snapshot.activeTurnId === null,
     );
-    await host.page.evaluate((id) => window.openbot.agent.deleteAgent(id), value.agentId);
+    await host.page.evaluate((id) => window.codebot.agent.deleteAgent(id), value.agentId);
   }
   if (value.folderId)
     await host.page.evaluate(
-      (sectionId) => window.openbot.agent.mutateSidebarLayout({ type: "delete", sectionId }),
+      (sectionId) => window.codebot.agent.mutateSidebarLayout({ type: "delete", sectionId }),
       value.folderId,
     );
   return true;
@@ -352,7 +352,7 @@ try {
   report.extensionId = extensionId;
   await capturedEvent((event) => event.name === "extension_installed", "extension_installed");
   const agentName = await host.page.evaluate(async (id) => {
-    const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === id);
+    const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === id);
     if (!found) throw new Error(`Unknown agent: ${id}`);
     return found.name;
   }, agentId);
@@ -371,7 +371,7 @@ try {
   const refused = await web.evaluate(async () => {
     const response = await fetch("/api/browser/extension/code", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "X-OpenBot-Browser": "1" },
+      headers: { "Content-Type": "application/json", "X-CodeBot-Browser": "1" },
       body: JSON.stringify({ extensionId: "not-an-extension", clientChallenge: "A".repeat(43) }),
     });
     const body = await response.json();
@@ -422,7 +422,7 @@ try {
   await agentButton.waitFor({ timeout: UI_WAIT_MS });
   report.signIn = { invalidExtensionRefused: true, cancelShown: true, homeShowsServer: true, homeShowsAgent: true };
   await worker.evaluate(`(async () => {
-    const session = (await chrome.storage.local.get("openbot.session.v1"))["openbot.session.v1"];
+    const session = (await chrome.storage.local.get("codebot.session.v1"))["codebot.session.v1"];
     const response = await fetch(${JSON.stringify(`${authApi}/v1/me/analytics`)}, {
       method: "PUT",
       headers: { authorization: "Bearer " + session.token, "content-type": "application/json" },
@@ -430,7 +430,7 @@ try {
     });
     if (!response.ok) throw new Error("The account did not save the analytics answer: " + response.status);
     await chrome.storage.local.set({
-      "openbot.session.v1": { ...session, user: { ...session.user, analyticsEnabled: true } },
+      "codebot.session.v1": { ...session, user: { ...session.user, analyticsEnabled: true } },
       "${ANALYTICS_CHOICE_KEY}": { enabled: true, at: Date.now(), accountId: session.user.id },
     });
   })()`);
@@ -444,7 +444,7 @@ try {
   const hostChat = await waitFor(
     host.page,
     "the host has the extension message and its answer",
-    (): Promise<ConversationSnapshot> => host.page.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+    (): Promise<ConversationSnapshot> => host.page.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
     (snapshot) => {
       const index = snapshot.messages.findIndex((message) => message.text.includes(chatText));
       return (
@@ -464,7 +464,7 @@ try {
 
   const agentTitle = () =>
     host.page.evaluate(
-      async (id) => (await window.openbot.agent.listAgents()).find((entry) => entry.id === id)?.title ?? "",
+      async (id) => (await window.codebot.agent.listAgents()).find((entry) => entry.id === id)?.title ?? "",
       agentId,
     );
   const oldTitle = await agentTitle();
@@ -490,7 +490,7 @@ try {
   assert.ok(settingsShowName, "The settings panel does not show the agent's name.");
 
   const before = new Set(
-    (await host.page.evaluate((id) => window.openbot.agent.listTasks(id), agentId)).tasks.map((entry) => entry.id),
+    (await host.page.evaluate((id) => window.codebot.agent.listTasks(id), agentId)).tasks.map((entry) => entry.id),
   );
   await page.getByRole("button", { name: english("extension.chat.threadsMenu", { name: agentName }) }).click();
   await page.getByRole("menuitem", { name: english("extension.chat.newThread") }).click();
@@ -499,7 +499,7 @@ try {
   const tasks = await waitFor(
     host.page,
     "the host lists the extension thread",
-    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.openbot.agent.listTasks(id), agentId),
+    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.codebot.agent.listTasks(id), agentId),
     (snapshot) => snapshot.tasks.some((task) => !before.has(task.id)),
     90_000,
   );
@@ -509,7 +509,7 @@ try {
   await waitFor(
     host.page,
     "the thread has the message",
-    (): Promise<ConversationSnapshot> => host.page.evaluate((value) => window.openbot.agent.readTask(value), taskInput),
+    (): Promise<ConversationSnapshot> => host.page.evaluate((value) => window.codebot.agent.readTask(value), taskInput),
     (snapshot) => snapshot.messages.some((message) => message.text.includes(threadText)),
   );
   const header = page.getByRole("button", { name: english("extension.chat.threadsMenu", { name: agentName }) });
@@ -549,7 +549,7 @@ try {
   const layout = await waitFor(
     host.page,
     "the host has the folder",
-    () => host.page.evaluate(() => window.openbot.agent.getSidebarLayout()),
+    () => host.page.evaluate(() => window.codebot.agent.getSidebarLayout()),
     (value) => value.sections.some((section) => section.name === folderName),
   );
   made.folderId = layout.sections.find((section) => section.name === folderName)?.id ?? null;
@@ -566,7 +566,7 @@ try {
   const channels = await waitFor(
     host.page,
     "the host has the channel",
-    () => host.page.evaluate(() => window.openbot.agent.listChannels()),
+    () => host.page.evaluate(() => window.codebot.agent.listChannels()),
     (value) => value.some((channel) => channel.name === channelName),
   );
   const channel = channels.find((entry) => entry.name === channelName);
@@ -578,7 +578,7 @@ try {
   const channelPage = await waitFor(
     host.page,
     "the channel has the message and an answer",
-    () => host.page.evaluate((channelId) => window.openbot.agent.readChannel({ channelId }), channel.id),
+    () => host.page.evaluate((channelId) => window.codebot.agent.readChannel({ channelId }), channel.id),
     (value) => {
       const index = value.messages.findIndex((entry) => entry.message.text.includes(channelText));
       return (
@@ -610,7 +610,7 @@ try {
     host.page,
     "the host has the new agent",
     async () =>
-      (await host.page.evaluate(() => window.openbot.agent.listAgents())).find((entry) => entry.name === newAgentName),
+      (await host.page.evaluate(() => window.codebot.agent.listAgents())).find((entry) => entry.name === newAgentName),
     (value) => value !== undefined,
   );
   made.agentId = newAgent?.id ?? null;
@@ -638,8 +638,8 @@ try {
   const shareUrl = `${xBase}/share-fixture/`;
   await shareFixture.goto(shareUrl);
   await page.bringToFront();
-  const presenceKey = "openbot.client-browser.presence.v1";
-  const sitesKey = "openbot.client-browser.sites.v1";
+  const presenceKey = "codebot.client-browser.presence.v1";
+  const sitesKey = "codebot.client-browser.sites.v1";
   const readStored = (key: string) =>
     page.evaluate<string>(
       `chrome.storage.local.get("${key}").then((items) => JSON.stringify(items["${key}"] ?? null))`,
@@ -668,14 +668,14 @@ try {
   await shot(page, "6b-approval-card");
   await always.click();
   await shareFixture.waitForFunction(() => document.body.dataset.clicked !== undefined, null, { timeout: 180_000 });
-  const group = await waitFor(host.page, "the page is in the OpenBot group", fixtureGroup, (value) => value !== "null");
-  const inOpenBotGroup = JSON.parse(group).title === "OpenBot";
+  const group = await waitFor(host.page, "the page is in the CodeBot group", fixtureGroup, (value) => value !== "null");
+  const inCodeBotGroup = JSON.parse(group).title === "CodeBot";
   const site = new URL(xBase).origin;
   const siteStored = JSON.parse(await readStored(sitesKey))?.[site] === "always";
   await waitFor(
     host.page,
     "the agent ended the shared tabs turn",
-    (): Promise<ConversationSnapshot> => host.page.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+    (): Promise<ConversationSnapshot> => host.page.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
     (snapshot) =>
       snapshot.activeTurnId === null && snapshot.messages.some((message) => message.text.includes(shareText)),
   );
@@ -695,7 +695,7 @@ try {
   report.sharedTabs = {
     onWithoutSwitch,
     ungroupedBeforeUse,
-    inOpenBotGroup,
+    inCodeBotGroup,
     presenceAccepted: true,
     askShown: true,
     buttonClicked: true,
@@ -703,8 +703,8 @@ try {
     siteRevoked,
   };
   assert.ok(onWithoutSwitch, "Sharing is not on by default.");
-  assert.ok(ungroupedBeforeUse, "The page joined the OpenBot group before an agent used it.");
-  assert.ok(inOpenBotGroup, "The page that the agent used is not in the OpenBot group.");
+  assert.ok(ungroupedBeforeUse, "The page joined the CodeBot group before an agent used it.");
+  assert.ok(inCodeBotGroup, "The page that the agent used is not in the CodeBot group.");
   assert.ok(siteStored, "Always for this site did not store the site.");
   assert.ok(siteRevoked, "Remove did not forget the site.");
   await shareFixture.close();
@@ -721,7 +721,7 @@ try {
   const xAgent = () =>
     host.page.evaluate(
       async (listingId) =>
-        (await window.openbot.agent.listAgents()).find((entry) => entry.marketplaceSource?.listingId === listingId)
+        (await window.codebot.agent.listAgents()).find((entry) => entry.marketplaceSource?.listingId === listingId)
           ?.id ?? null,
       X_AGENT_LISTING_ID,
     );
@@ -744,10 +744,10 @@ try {
       (open) => open,
     );
     const ready = await page.evaluate<boolean>(
-      'chrome.runtime.sendMessage({ kind: "openbot-x-offscreen", action: "status" }).then((value) => value?.ready === true)',
+      'chrome.runtime.sendMessage({ kind: "codebot-x-offscreen", action: "status" }).then((value) => value?.ready === true)',
     );
     await xPage.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
-    unchangedWithoutAgent = ready !== true && (await reply.getAttribute("data-openbot-x")) === null;
+    unchangedWithoutAgent = ready !== true && (await reply.getAttribute("data-codebot-x")) === null;
     await shot(xPage, "6-x-without-agent");
     assert.ok(unchangedWithoutAgent, "The reply button changed with no X agent on the host.");
     const seeded = spawnSync("bun", ["run", "marketplace:seed:local"], {
@@ -757,22 +757,22 @@ try {
     assert.equal(seeded.status, 0, "The local Marketplace seed failed.");
     await host.page.evaluate(
       (listingId) =>
-        window.openbot.marketplaceAgents.install({ listingId, timezone: "UTC", receiptId: crypto.randomUUID() }),
+        window.codebot.marketplaceAgents.install({ listingId, timezone: "UTC", receiptId: crypto.randomUUID() }),
       X_AGENT_LISTING_ID,
     );
   }
   const xAgentId = await xAgent();
   assert.ok(xAgentId, "The X agent is not on the host.");
   const tasksBefore = new Set(
-    (await host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
+    (await host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
   );
   await writeReply();
   await xPage
-    .locator('[data-testid="replyComposerSubmit"][data-openbot-x="armed"]')
+    .locator('[data-testid="replyComposerSubmit"][data-codebot-x="armed"]')
     .waitFor({ timeout: 60_000 })
     .catch(async (error: unknown) => {
       const known = await page.evaluate<string>(
-        'Promise.all([chrome.runtime.sendMessage({ kind: "openbot-x-offscreen", action: "status" }), chrome.storage.local.get("openbot.x-rules.v1")]).then((value) => JSON.stringify(value))',
+        'Promise.all([chrome.runtime.sendMessage({ kind: "codebot-x-offscreen", action: "status" }), chrome.storage.local.get("codebot.x-rules.v1")]).then((value) => JSON.stringify(value))',
       );
       throw new Error(`The reply button did not change. The extension knew: ${known}`, { cause: error });
     });
@@ -788,7 +788,7 @@ try {
   const xTasks = await waitFor(
     host.page,
     "The X agent has a new thread",
-    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId),
+    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId),
     (snapshot) => snapshot.tasks.some((entry) => !tasksBefore.has(entry.id)),
   );
   const xTask = xTasks.tasks.find((entry) => !tasksBefore.has(entry.id));
@@ -797,7 +797,7 @@ try {
     host.page,
     "the X agent thread has the post",
     (): Promise<ConversationSnapshot> =>
-      host.page.evaluate((value) => window.openbot.agent.readTask(value), { agentId: xAgentId, taskId: xTask.id }),
+      host.page.evaluate((value) => window.codebot.agent.readTask(value), { agentId: xAgentId, taskId: xTask.id }),
     (snapshot) => snapshot.messages.some((entry) => entry.author === "user" && entry.text.includes(xQuestion)),
   );
   const sent = xThread.messages.find((entry) => entry.author === "user" && entry.text.includes(xQuestion));
@@ -811,7 +811,7 @@ try {
     !sent.text.includes("@OpenBot_");
   const otherReplyLeftOut = !sent.text.includes("Carol thinks");
   const postedAtOnce = posted.text.includes(xQuestion) && posted.at - clickedAt < 5_000;
-  const outboxKey = "openbot.x-outbox.v1";
+  const outboxKey = "codebot.x-outbox.v1";
   const outbox = () =>
     page.evaluate<number>(
       `chrome.storage.local.get("${outboxKey}").then((items) => (items["${outboxKey}"] ?? []).length)`,
@@ -834,12 +834,12 @@ try {
 
   const redesignQuestion = `Is the redesign claim true? ${run}`;
   const redesignTasksBefore = new Set(
-    (await host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
+    (await host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
   );
   await xPage.goto(`${xBase}${X_REDESIGN_PATH}`);
   await xPage.locator("textarea").click();
   await xPage.keyboard.type(`@OpenBot_ ${redesignQuestion}`);
-  const redesignReply = xPage.locator('button.bg-btn-primary[data-openbot-x="armed"]');
+  const redesignReply = xPage.locator('button.bg-btn-primary[data-codebot-x="armed"]');
   await redesignReply.waitFor({ timeout: 60_000 });
   await shot(xPage, "8a-x-redesign-armed");
   await redesignReply.click();
@@ -848,7 +848,7 @@ try {
   const redesignTasks = await waitFor(
     host.page,
     "The X agent has a thread for the redesigned page",
-    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId),
+    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId),
     (snapshot) => snapshot.tasks.some((entry) => !redesignTasksBefore.has(entry.id)),
   );
   const redesignTask = redesignTasks.tasks.find((entry) => !redesignTasksBefore.has(entry.id));
@@ -857,7 +857,7 @@ try {
     host.page,
     "the redesigned page thread has the post",
     (): Promise<ConversationSnapshot> =>
-      host.page.evaluate((value) => window.openbot.agent.readTask(value), {
+      host.page.evaluate((value) => window.codebot.agent.readTask(value), {
         agentId: xAgentId,
         taskId: redesignTask.id,
       }),
@@ -929,14 +929,14 @@ try {
   await waitingLine.waitFor({ timeout: UI_WAIT_MS });
   await shot(page, "9-x-waiting");
   const queuedBefore = new Set(
-    (await host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
+    (await host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
   );
   await page.getByRole("button", { name: english("extension.x.sendNow") }).click();
   await waitingLine.waitFor({ state: "hidden", timeout: 60_000 });
   const queuedTasks = await waitFor(
     host.page,
     "The X agent has a thread for the queued post",
-    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId),
+    (): Promise<AgentTasksSnapshot> => host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId),
     (snapshot) => snapshot.tasks.some((entry) => !queuedBefore.has(entry.id)),
   );
   const queuedTask = queuedTasks.tasks.find((entry) => !queuedBefore.has(entry.id));
@@ -945,7 +945,7 @@ try {
     host.page,
     "the queued thread has the post",
     (): Promise<ConversationSnapshot> =>
-      host.page.evaluate((value) => window.openbot.agent.readTask(value), { agentId: xAgentId, taskId: queuedTask.id }),
+      host.page.evaluate((value) => window.codebot.agent.readTask(value), { agentId: xAgentId, taskId: queuedTask.id }),
     (snapshot) => snapshot.messages.some((entry) => entry.author === "user" && entry.text.includes(queuedText)),
   );
   report.xQueue = { waitingShown: true, sentByRetry: true, queueEmpty: (await outbox()) === 0 };
@@ -954,7 +954,7 @@ try {
 
   await toHome(page);
   const accountId = await page.evaluate<string>(
-    `chrome.storage.local.get("openbot.session.v1").then((items) => items["openbot.session.v1"].user.id)`,
+    `chrome.storage.local.get("codebot.session.v1").then((items) => items["codebot.session.v1"].user.id)`,
   );
   await serverTitle.click();
   await page.getByRole("menuitem", { name: english("extension.home.settings") }).click();
@@ -1000,12 +1000,12 @@ try {
   };
   await page.evaluate(`chrome.storage.local.set({ "${outboxKey}": [${JSON.stringify(restartPost)}] })`);
   const restartBefore = new Set(
-    (await host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
+    (await host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId)).tasks.map((entry) => entry.id),
   );
   await context.close();
   context = await chromium.launchPersistentContext(profile, launchOptions);
   const listXTasks = (): Promise<AgentTasksSnapshot> =>
-    host.page.evaluate((id) => window.openbot.agent.listTasks(id), xAgentId);
+    host.page.evaluate((id) => window.codebot.agent.listTasks(id), xAgentId);
   const restartArrived = (snapshot: AgentTasksSnapshot) => snapshot.tasks.some((entry) => !restartBefore.has(entry.id));
   let deliveredBy: "start" | "panel" = "start";
   let restartTasks = await waitFor(
@@ -1043,7 +1043,7 @@ try {
     host.page,
     "the thread after the restart has the post",
     (): Promise<ConversationSnapshot> =>
-      host.page.evaluate((value) => window.openbot.agent.readTask(value), {
+      host.page.evaluate((value) => window.codebot.agent.readTask(value), {
         agentId: xAgentId,
         taskId: restartTask.id,
       }),

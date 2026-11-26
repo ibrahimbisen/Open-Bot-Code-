@@ -1,4 +1,4 @@
-import type { AgentProviderId, ProviderRuntimeStatus } from "@openbot/contracts/ipc";
+import type { AgentProviderId, ProviderRuntimeStatus } from "@codebot/contracts/ipc";
 import { currentText, type TextValue } from "../../text";
 
 type UpdateText = Pick<TextValue, "t" | "errorMessage">;

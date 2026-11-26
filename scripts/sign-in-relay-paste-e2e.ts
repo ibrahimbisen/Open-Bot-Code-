@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { McpTestResult, SignInRelayStatus } from "@openbot/contracts/ipc";
-import { sourceText, translateFor } from "@openbot/i18n";
+import type { McpTestResult, SignInRelayStatus } from "@codebot/contracts/ipc";
+import { sourceText, translateFor } from "@codebot/i18n";
 import { Deferred, Effect } from "effect";
 import { SignInRelayClient, type SignInRelayRemote } from "../src/main/sign-in-relay-client";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/sign-in-relay-paste-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/sign-in-relay-paste-e2e");
 
 const KEY = "server-1:codex";
 const STATE = "relay-state";

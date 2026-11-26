@@ -1,6 +1,6 @@
+import { bloubAvatarProfile } from "@codebot/brand/bloub-avatar";
+import type { AvatarColor, AvatarHue } from "@codebot/contracts/ipc";
 import { BloubBot } from "@norbert_bodziony/bloub";
-import { bloubAvatarProfile } from "@openbot/brand/bloub-avatar";
-import type { AvatarColor, AvatarHue } from "@openbot/contracts/ipc";
 import { render } from "@solidjs/web";
 import { flush } from "solid-js";
 
@@ -23,14 +23,14 @@ export {
   isAvatarColorChoice,
   SUPPORTED_AVATAR_SILHOUETTES,
   type SupportedAvatarSilhouetteId,
-} from "@openbot/brand/bloub-avatar";
+} from "@codebot/brand/bloub-avatar";
 export {
   type AvatarMood,
   avatarMoodIsBusy,
   avatarMoodPresentation,
   SHAPE_SAFE_STATES,
   type ShapeSafeStateId,
-} from "@openbot/brand/bloub-avatar-motion";
+} from "@codebot/brand/bloub-avatar-motion";
 
 export function createStaticAvatarSvg(
   seed: string,

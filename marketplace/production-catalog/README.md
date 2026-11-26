@@ -1,6 +1,6 @@
-# OpenBot team launch catalog
+# CodeBot team launch catalog
 
-Version v7 contains 41 Skills and 29 Agents. The `pstack` Skill installs 58 skills `pstack-<name>` with it. Four Skills and four Agents are featured on first publication. All entries show the public OpenBot logo as their creator badge, use the publisher **OpenBot**, and start with zero installs. An Agent's `routines` in `catalog.json` use the Marketplace routine shape, and the build checks them as the account service does. The schedules use the installer's timezone.
+Version v7 contains 41 Skills and 29 Agents. The `pstack` Skill installs 58 skills `pstack-<name>` with it. Four Skills and four Agents are featured on first publication. All entries show the public CodeBot logo as their creator badge, use the publisher **CodeBot**, and start with zero installs. An Agent's `routines` in `catalog.json` use the Marketplace routine shape, and the build checks them as the account service does. The schedules use the installer's timezone.
 
 Each Agent has one job and a named result, in its title. Its instructions name two input paths (a tool such as the browser, an installed plugin or the repository; else pasted or uploaded material), one approval gate, the evidence each claim needs, a fixed rubric for judgment work, and the adjacent work that belongs to another Agent. Agents with a routine install it active. A routine first reads its saved setup. With no setup, the first run sends one short setup request and later runs stay quiet; a run with nothing new calls `routine_no_update` and sends no message. The two healthchecks of Dr. Eggbot and of dr eggbot v2 still install paused. State that an Agent keeps, such as a saved site address or a care log, goes in a shared data table named for what it holds, on the user's computer.
 
@@ -14,7 +14,7 @@ bun run marketplace:seed:local
 bun run dev --isolated
 ```
 
-Reuse the dev app if it is already running. Open Marketplace and search **OpenBot** in Skills or Agents. Local seeding adds approved catalog records to this worktree's local account database and bundles to its local preview bucket. It does not reset the Electron profile, erase other listings, or create local Agents. Install an Agent from Marketplace to use it.
+Reuse the dev app if it is already running. Open Marketplace and search **CodeBot** in Skills or Agents. Local seeding adds approved catalog records to this worktree's local account database and bundles to its local preview bucket. It does not reset the Electron profile, erase other listings, or create local Agents. Install an Agent from Marketplace to use it.
 
 ## Prepare and publish
 
@@ -58,7 +58,7 @@ Do not use the separate `skills:seed`, `agents:seed`, or `dev:seed` demo scripts
 | Security Reviewer | `application-security-reviewer` | coding | Security risks ranked by impact, each with code evidence and a fix | `secure-code-guidance`, `repository-threat-model` | — |
 | QA Tester | `qa-tester` | coding | Pass or fail for a release, with screenshots and repro steps | `acceptance-check`, `bug-triage` | weekdays 09:00 |
 | PR Shepherd | `pr-shepherd` | coding | Open pull requests kept moving to green; you only decide what to merge | `pr-follow-up`, `change-review` | weekdays 10:00; weekdays 15:00 |
-| Skill Smith | `skill-smith` | automation | An API or a repeated task turned into a tested OpenBot skill | `api-skill-builder` | — |
+| Skill Smith | `skill-smith` | automation | An API or a repeated task turned into a tested CodeBot skill | `api-skill-builder` | — |
 | Scope Writer ★ | `project-partner` | productivity | A dated scope with what is in, what is out and how done is measured; work waits for your approval | `project-plan`, `decision-quality-check` | — |
 | Prototype Builder | `prototype-builder` | design | A clickable prototype of your idea, with click-path screenshots and a short video; published only when you say | `prototype-build`, `distinctive-frontend-design` | — |
 | Launch Coordinator ★ | `launch-coordinator` | productivity | Release notes from merged work and a launch checklist with owners and checks, kept as a draft | `launch-notes`, `project-plan` | — |
@@ -91,47 +91,47 @@ Do not use the separate `skills:seed`, `agents:seed`, or `dev:seed` demo scripts
 | [distinctive-frontend-design](skills/distinctive-frontend-design/SKILL.md) | design | anthropic |
 | [internal-communications](skills/internal-communications/SKILL.md) | documents | anthropic |
 | [decision-quality-check](skills/decision-quality-check/SKILL.md) | productivity | anthropic |
-| [change-review ★](skills/change-review/SKILL.md) | coding | openbot |
-| [bug-triage](skills/bug-triage/SKILL.md) | coding | openbot |
-| [interface-critique](skills/interface-critique/SKILL.md) | design | openbot |
-| [evidence-brief ★](skills/evidence-brief/SKILL.md) | research | openbot |
-| [competitor-comparison](skills/competitor-comparison/SKILL.md) | research | openbot |
-| [launch-notes ★](skills/launch-notes/SKILL.md) | documents | openbot |
-| [meeting-actions ★](skills/meeting-actions/SKILL.md) | productivity | openbot |
-| [project-plan](skills/project-plan/SKILL.md) | productivity | openbot |
-| [support-reply](skills/support-reply/SKILL.md) | documents | openbot |
-| [account-brief](skills/account-brief/SKILL.md) | research | openbot |
-| [outreach-draft](skills/outreach-draft/SKILL.md) | documents | openbot |
-| [campaign-analysis](skills/campaign-analysis/SKILL.md) | data-analytics | openbot |
-| [data-quality-review](skills/data-quality-review/SKILL.md) | data-analytics | openbot |
-| [workflow-playbook](skills/workflow-playbook/SKILL.md) | automation | openbot |
-| [hiring-scorecard](skills/hiring-scorecard/SKILL.md) | other | openbot |
-| [acceptance-check](skills/acceptance-check/SKILL.md) | coding | openbot |
-| [pr-follow-up](skills/pr-follow-up/SKILL.md) | coding | openbot |
-| [api-skill-builder](skills/api-skill-builder/SKILL.md) | automation | openbot |
-| [prototype-build](skills/prototype-build/SKILL.md) | design | openbot |
-| [alt-text](skills/alt-text/SKILL.md) | design | openbot |
-| [accessibility-audit](skills/accessibility-audit/SKILL.md) | design | openbot |
-| [build-spec](skills/build-spec/SKILL.md) | design | openbot |
-| [voice-edit](skills/voice-edit/SKILL.md) | documents | openbot |
-| [search-content-brief](skills/search-content-brief/SKILL.md) | documents | openbot |
-| [call-scorecard](skills/call-scorecard/SKILL.md) | other | openbot |
-| [daily-brief](skills/daily-brief/SKILL.md) | productivity | openbot |
-| [spend-audit](skills/spend-audit/SKILL.md) | data-analytics | openbot |
-| [request-scoring](skills/request-scoring/SKILL.md) | automation | openbot |
-| [care-log](skills/care-log/SKILL.md) | other | openbot |
-| [recurring-charges](skills/recurring-charges/SKILL.md) | other | openbot |
-| [agent-designer](skills/agent-designer/SKILL.md) | automation | openbot |
-| [eggbot-getting-started](skills/eggbot-getting-started/SKILL.md) | automation | openbot |
-| [routine-healthcheck](skills/routine-healthcheck/SKILL.md) | automation | openbot |
-| [agent-chat-healthcheck](skills/agent-chat-healthcheck/SKILL.md) | automation | openbot |
-| [working-with-teammate-agents](skills/working-with-teammate-agents/SKILL.md) | automation | openbot |
+| [change-review ★](skills/change-review/SKILL.md) | coding | codebot |
+| [bug-triage](skills/bug-triage/SKILL.md) | coding | codebot |
+| [interface-critique](skills/interface-critique/SKILL.md) | design | codebot |
+| [evidence-brief ★](skills/evidence-brief/SKILL.md) | research | codebot |
+| [competitor-comparison](skills/competitor-comparison/SKILL.md) | research | codebot |
+| [launch-notes ★](skills/launch-notes/SKILL.md) | documents | codebot |
+| [meeting-actions ★](skills/meeting-actions/SKILL.md) | productivity | codebot |
+| [project-plan](skills/project-plan/SKILL.md) | productivity | codebot |
+| [support-reply](skills/support-reply/SKILL.md) | documents | codebot |
+| [account-brief](skills/account-brief/SKILL.md) | research | codebot |
+| [outreach-draft](skills/outreach-draft/SKILL.md) | documents | codebot |
+| [campaign-analysis](skills/campaign-analysis/SKILL.md) | data-analytics | codebot |
+| [data-quality-review](skills/data-quality-review/SKILL.md) | data-analytics | codebot |
+| [workflow-playbook](skills/workflow-playbook/SKILL.md) | automation | codebot |
+| [hiring-scorecard](skills/hiring-scorecard/SKILL.md) | other | codebot |
+| [acceptance-check](skills/acceptance-check/SKILL.md) | coding | codebot |
+| [pr-follow-up](skills/pr-follow-up/SKILL.md) | coding | codebot |
+| [api-skill-builder](skills/api-skill-builder/SKILL.md) | automation | codebot |
+| [prototype-build](skills/prototype-build/SKILL.md) | design | codebot |
+| [alt-text](skills/alt-text/SKILL.md) | design | codebot |
+| [accessibility-audit](skills/accessibility-audit/SKILL.md) | design | codebot |
+| [build-spec](skills/build-spec/SKILL.md) | design | codebot |
+| [voice-edit](skills/voice-edit/SKILL.md) | documents | codebot |
+| [search-content-brief](skills/search-content-brief/SKILL.md) | documents | codebot |
+| [call-scorecard](skills/call-scorecard/SKILL.md) | other | codebot |
+| [daily-brief](skills/daily-brief/SKILL.md) | productivity | codebot |
+| [spend-audit](skills/spend-audit/SKILL.md) | data-analytics | codebot |
+| [request-scoring](skills/request-scoring/SKILL.md) | automation | codebot |
+| [care-log](skills/care-log/SKILL.md) | other | codebot |
+| [recurring-charges](skills/recurring-charges/SKILL.md) | other | codebot |
+| [agent-designer](skills/agent-designer/SKILL.md) | automation | codebot |
+| [eggbot-getting-started](skills/eggbot-getting-started/SKILL.md) | automation | codebot |
+| [routine-healthcheck](skills/routine-healthcheck/SKILL.md) | automation | codebot |
+| [agent-chat-healthcheck](skills/agent-chat-healthcheck/SKILL.md) | automation | codebot |
+| [working-with-teammate-agents](skills/working-with-teammate-agents/SKILL.md) | automation | codebot |
 | `pstack`, with the 58 skills `pstack-<name>` of [bundles/pstack/skills](bundles/pstack/skills) | coding | cursor |
 
 ★ Featured on first publication. Existing Featured settings are preserved on reruns.
 
 ## Attribution
 
-The 35 original OpenBot team Skills use the repository PolyForm Noncommercial 1.0.0 license. The five existing adapted Skills retain their pinned OpenAI or Anthropic source attribution and Apache-2.0 license. Each generated bundle contains the applicable LICENSE.txt and NOTICE.txt; the build also produces UPSTREAM_NOTICES.md.
+The 35 original CodeBot team Skills use the repository PolyForm Noncommercial 1.0.0 license. The five existing adapted Skills retain their pinned OpenAI or Anthropic source attribution and Apache-2.0 license. Each generated bundle contains the applicable LICENSE.txt and NOTICE.txt; the build also produces UPSTREAM_NOTICES.md.
 
-`bundles/pstack/` is an unchanged copy of the `skills/` and `agents/` of the pstack plugin by Lauren Tan from the pinned `cursor/plugins` commit, under the MIT License, without `skills/statechart/scripts/test/`. The app and the account service refuse a skill archive with more than 200 files, and that test suite alone has 377. It is a pack in `catalog.json`: the build publishes it as the one Skill `pstack`. Its archive holds an index `SKILL.md`, the `LICENSE`, a `NOTICE.md`, and each folder of `skills/` as `skills/pstack-<folder>/`. The app installs each of those as a skill folder of its own, beside `pstack`, under one lock entry: one download and one install receipt. In Markdown, the build renames links, `/<name>` commands and `<name>` mentions of other pstack skills to `pstack-<name>`, removes `disable-model-invocation` so `$pstack-<name>` works with every provider, copies `agents/` into each skill that names a subagent, and adds a closing `pstack in OpenBot` section. Links to files that no skill installs go to the pinned commit. To update it, copy the new upstream `skills/` and `agents/`, remove `skills/statechart/scripts/test/`, update the pinned commit in `catalog.json` and `NOTICE.md`, and increase `catalogVersion`.
+`bundles/pstack/` is an unchanged copy of the `skills/` and `agents/` of the pstack plugin by Lauren Tan from the pinned `cursor/plugins` commit, under the MIT License, without `skills/statechart/scripts/test/`. The app and the account service refuse a skill archive with more than 200 files, and that test suite alone has 377. It is a pack in `catalog.json`: the build publishes it as the one Skill `pstack`. Its archive holds an index `SKILL.md`, the `LICENSE`, a `NOTICE.md`, and each folder of `skills/` as `skills/pstack-<folder>/`. The app installs each of those as a skill folder of its own, beside `pstack`, under one lock entry: one download and one install receipt. In Markdown, the build renames links, `/<name>` commands and `<name>` mentions of other pstack skills to `pstack-<name>`, removes `disable-model-invocation` so `$pstack-<name>` works with every provider, copies `agents/` into each skill that names a subagent, and adds a closing `pstack in CodeBot` section. Links to files that no skill installs go to the pinned commit. To update it, copy the new upstream `skills/` and `agents/`, remove `skills/statechart/scripts/test/`, update the pinned commit in `catalog.json` and `NOTICE.md`, and increase `catalogVersion`.

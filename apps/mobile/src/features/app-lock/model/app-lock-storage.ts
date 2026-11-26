@@ -7,11 +7,11 @@ import { z } from "zod";
 import { nativeDerivePin } from "@/features/app-lock/model/app-lock-native";
 import * as LockedKeychain from "@/shared/lib/locked-keychain";
 
-const CONFIG_KEY = "openbot.mobile.app-lock.v1";
-const PIN_KEY = "openbot.mobile.app-lock.pin.v1";
-const ATTEMPTS_KEY = "openbot.mobile.app-lock.attempts.v1";
+const CONFIG_KEY = "codebot.mobile.app-lock.v1";
+const PIN_KEY = "codebot.mobile.app-lock.pin.v1";
+const ATTEMPTS_KEY = "codebot.mobile.app-lock.attempts.v1";
 const SECRET_OPTIONS: SecureStore.SecureStoreOptions = {
-  keychainService: "openbot.app-lock",
+  keychainService: "codebot.app-lock",
   keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
 };
 

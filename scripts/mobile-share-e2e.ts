@@ -3,14 +3,14 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writ
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { promisify } from "node:util";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { bootedSimulatorIds, hasMobileRuntime } from "./dev-mobile";
 
-const BUNDLE_ID = "run.openbot.mobile";
-const APP_GROUP = "group.run.openbot.mobile";
+const BUNDLE_ID = "run.codebot.mobile";
+const APP_GROUP = "group.run.codebot.mobile";
 const PAYLOAD_KEY = "expo-sharing";
-const SHARE_LINK = "openbot://expo-sharing";
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mobile-share-e2e");
+const SHARE_LINK = "codebot://expo-sharing";
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mobile-share-e2e");
 const RUNTIME_TIMEOUT_MS = 5 * 60_000;
 const TAKE_TIMEOUT_MS = 2 * 60_000;
 const POLL_INTERVAL_MS = 500;
@@ -19,7 +19,7 @@ const PDF =
   "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj " +
   "3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 72 72]>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n";
 
-const logger = createOpenBotLogger("mobile-share-e2e");
+const logger = createCodeBotLogger("mobile-share-e2e");
 const run = promisify(execFile);
 
 interface SharePayload {
@@ -72,8 +72,8 @@ async function selectSimulator(): Promise<string> {
     } catch {}
   }
   const [udid, ...extra] = withApp;
-  if (!udid) throw new Error("No booted simulator has OpenBot installed. Run `bun run dev:mobile` first.");
-  if (extra.length > 0) throw new Error(`Several booted simulators have OpenBot. Pass --simulator=<udid>.`);
+  if (!udid) throw new Error("No booted simulator has CodeBot installed. Run `bun run dev:mobile` first.");
+  if (extra.length > 0) throw new Error(`Several booted simulators have CodeBot. Pass --simulator=<udid>.`);
   return udid;
 }
 
@@ -110,7 +110,7 @@ function findReceived(cacheRoot: string, name: string): string | null {
 }
 
 async function makeFixtures(): Promise<{ png: string; heic: string; pdf: string; folder: string }> {
-  const folder = mkdtempSync(join(tmpdir(), "openbot-share-e2e-"));
+  const folder = mkdtempSync(join(tmpdir(), "codebot-share-e2e-"));
   const tiny = join(folder, "tiny.png");
   writeFileSync(tiny, Buffer.from(PNG_1PX, "base64"));
   const png = join(folder, "share-e2e.png");
@@ -135,7 +135,7 @@ async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
 
   const cases: ShareCase[] = [
-    { name: "text", coldStart: false, text: [{ type: "text", value: "OpenBot share E2E text" }] },
+    { name: "text", coldStart: false, text: [{ type: "text", value: "CodeBot share E2E text" }] },
     { name: "link", coldStart: false, text: [{ type: "url", value: "https://openbot.run/" }] },
     {
       name: "image",
@@ -176,7 +176,7 @@ async function main(): Promise<void> {
     {
       name: "cold-start",
       coldStart: true,
-      text: [{ type: "text", value: "OpenBot share E2E cold start" }],
+      text: [{ type: "text", value: "CodeBot share E2E cold start" }],
       file: {
         source: fixtures.png,
         name: "share-e2e-cold.png",

@@ -1,4 +1,4 @@
-import { BILLING_CURRENCIES, type BillingCurrency } from "@openbot/contracts/billing";
+import { BILLING_CURRENCIES, type BillingCurrency } from "@codebot/contracts/billing";
 import {
   CREDIT_LOOKUP_KEYS,
   CREDIT_METADATA,
@@ -15,9 +15,9 @@ import {
   creditStop,
   creditsFromTenths,
   creditTenths,
-} from "@openbot/contracts/credits";
-import { isDynamicRecord, isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credits";
+import { isDynamicRecord, isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Option, Schema } from "effect";
 import { type AccountAnalytics, NO_ACCOUNT_ANALYTICS } from "./account-analytics";
 import {

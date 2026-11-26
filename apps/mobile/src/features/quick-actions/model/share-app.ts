@@ -4,7 +4,7 @@ import { isIOS } from "@/shared/lib/platform";
 
 const DOWNLOAD_URL = "https://openbot.run/download";
 
-export function shareOpenBot(): void {
+export function shareCodeBot(): void {
   Share.share(isIOS ? { url: DOWNLOAD_URL } : { message: DOWNLOAD_URL }).catch((error: unknown) => {
     supportLog.add("warn", "app", `Share sheet not opened: ${supportLogValue(error)}`);
   });

@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { existsSync } from "node:fs";
 import { isIP } from "node:net";
 import { basename, extname, join } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentBrowserProfile,
   BrowserBounds,
@@ -25,22 +25,22 @@ import type {
   BrowserTeachStep,
   BrowserViewTarget,
   BrowserVisibilityInput,
-} from "@openbot/contracts/ipc";
-import { isNumber, isString } from "@openbot/contracts/runtime-values";
-import type { BrowserSignInStorage } from "@openbot/contracts/team-protocol/browser-sign-in-storage-v1";
+} from "@codebot/contracts/ipc";
+import { isNumber, isString } from "@codebot/contracts/runtime-values";
+import type { BrowserSignInStorage } from "@codebot/contracts/team-protocol/browser-sign-in-storage-v1";
 import {
   type BrowserSignInCookie,
   browserSignInCookieFitsHost,
-} from "@openbot/contracts/team-protocol/browser-sign-in-v1";
+} from "@codebot/contracts/team-protocol/browser-sign-in-v1";
 import {
   BROWSER_VIEW_CONTEXT_MENU_URL_MAX_LENGTH,
   type BrowserViewContextMenu,
   type BrowserViewCursor,
   type BrowserViewDialog,
   type BrowserViewViewport,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText, toLogValue } from "@codebot/logging";
 import { Deferred, Effect, Exit, Fiber, Option, Result, Scope, Semaphore } from "effect";
 import {
   type AuthenticationResponseDetails,
@@ -365,7 +365,7 @@ interface BrowserConsoleMessageDetails {
   sourceId: string;
 }
 
-const logger = createOpenBotLogger("browser-host");
+const logger = createCodeBotLogger("browser-host");
 const BROWSER_WEB_PREFERENCES = {
   sandbox: true,
   contextIsolation: true,
@@ -382,7 +382,7 @@ const USES_BACKGROUND_WINDOW =
   process.platform === "darwin" || process.platform === "win32" || process.platform === "linux";
 
 const SHOWS_VIEWS_IN_BACKGROUND = process.platform === "linux";
-const PAGE_ALERT_ACCEPTED = "The page showed an alert. OpenBot pressed OK so the app stays usable. Alert text: ";
+const PAGE_ALERT_ACCEPTED = "The page showed an alert. CodeBot pressed OK so the app stays usable. Alert text: ";
 
 function createBackgroundWindow(): BaseWindow {
   const window = new BaseWindow({
@@ -667,7 +667,7 @@ export class BrowserHost {
     this.#downloadsRoot = downloadsRoot;
     this.#statePath = statePath;
     this.#stateWritePath = statePath;
-    this.#session = session.fromPartition("persist:openbot-browser", { cache: true });
+    this.#session = session.fromPartition("persist:codebot-browser", { cache: true });
     this.#recorder = new BrowserRecorder(
       downloadsRoot,
       (tabId, recording) => {
@@ -1044,7 +1044,7 @@ export class BrowserHost {
     this: BrowserHost,
     url: string,
   ): Effect.fn.Return<BrowserTab, BrowserOperationError> {
-    const privateSession = session.fromPartition(`openbot-private-${randomUUID()}`, { cache: false });
+    const privateSession = session.fromPartition(`codebot-private-${randomUUID()}`, { cache: false });
     this.#configureSession(privateSession);
     return yield* this.#open(url, null, null, false, true, null, privateSession);
   }).bind(this);
@@ -1937,7 +1937,7 @@ export class BrowserHost {
       throw new Error(`${action} is unavailable while the page shows a filled card. Use snapshots until it navigates.`);
     if (tab.secretShown)
       throw new Error(
-        `${action} is unavailable while the page can show a password or code that OpenBot typed. Use snapshots until it navigates.`,
+        `${action} is unavailable while the page can show a password or code that CodeBot typed. Use snapshots until it navigates.`,
       );
   }
 
@@ -5078,7 +5078,7 @@ function boundedCaptureDataUrl(image: NativeImage): string {
   const size = image.getSize();
   if (size.width <= 0 || size.height <= 0)
     throw new Error(
-      "Browser screenshot is empty: the page drew no image. This can happen while the OpenBot window is minimized or hidden. If it is, ask the person to open the OpenBot window, then try again.",
+      "Browser screenshot is empty: the page drew no image. This can happen while the CodeBot window is minimized or hidden. If it is, ask the person to open the CodeBot window, then try again.",
     );
   const area = size.width * size.height;
   const scale = Math.sqrt(MAX_ENCODED_CAPTURE_PIXELS / area);

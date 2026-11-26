@@ -63,7 +63,7 @@ continue without the user.
 
 Before you write UI, list the parts that already exist:
 
-- OpenBot components in `src/shared/components/` and
+- CodeBot components in `src/shared/components/` and
   `src/features/*/components/`.
 - HeroUI Native components (`heroui-native`) and `Typography`.
 - Native chrome: Expo Router `Stack`, `Stack.Toolbar`, `Stack.SearchBar`,
@@ -302,7 +302,7 @@ Run these checks one at a time:
      (normally Loading, Empty and Error);
    - each variant in dark appearance, in Ready.
 
-   Save them in `.openbot-build/prototypes/<feature>/` (git ignores it), for
+   Save them in `.codebot-build/prototypes/<feature>/` (git ignores it), for
    example `a-ready.png`, `a-error.png`, `a-ready-dark.png`.
 5. For each variant with animation: start the animation, press
    **Block JS 2 s**, and take two screenshots during the block. The

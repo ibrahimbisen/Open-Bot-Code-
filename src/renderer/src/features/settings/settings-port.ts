@@ -1,40 +1,40 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface SettingsPort {
-  getAgentDefaults: OpenBotDesktopApi["getAgentDefaults"];
-  getAgentMemoryLimitPreference: OpenBotDesktopApi["getAgentMemoryLimitPreference"];
-  getAnalyticsPreference: OpenBotDesktopApi["getAnalyticsPreference"];
-  getAppBehaviorPreference: OpenBotDesktopApi["getAppBehaviorPreference"];
-  getApprovalAutomation: OpenBotDesktopApi["getApprovalAutomation"];
-  getBusyMessageModePreference: OpenBotDesktopApi["getBusyMessageModePreference"];
-  getExternalLinkPreference: OpenBotDesktopApi["getExternalLinkPreference"];
-  listExternalLinkBrowsers: OpenBotDesktopApi["listExternalLinkBrowsers"];
-  chooseExternalLinkApp: OpenBotDesktopApi["chooseExternalLinkApp"];
-  onExternalLinkFallback: OpenBotDesktopApi["onExternalLinkFallback"];
-  getRemoteNetworkRoute: OpenBotDesktopApi["getRemoteNetworkRoute"];
-  getRemoteSessionReusePreference: OpenBotDesktopApi["getRemoteSessionReusePreference"];
-  onAgentMemoryLimitPreference: OpenBotDesktopApi["onAgentMemoryLimitPreference"];
-  onAnalyticsPreference: OpenBotDesktopApi["onAnalyticsPreference"];
-  onApprovalAutomation: OpenBotDesktopApi["onApprovalAutomation"];
-  onOpenSettings: OpenBotDesktopApi["onOpenSettings"];
-  onOpenUpdateSettings: OpenBotDesktopApi["onOpenUpdateSettings"];
-  setAnalyticsPreference: OpenBotDesktopApi["setAnalyticsPreference"];
-  setAppBehaviorPreference: OpenBotDesktopApi["setAppBehaviorPreference"];
-  setExternalLinkPreference: OpenBotDesktopApi["setExternalLinkPreference"];
-  setRemoteNetworkRoute: OpenBotDesktopApi["setRemoteNetworkRoute"];
-  setRemoteSessionReusePreference: OpenBotDesktopApi["setRemoteSessionReusePreference"];
+  getAgentDefaults: CodeBotDesktopApi["getAgentDefaults"];
+  getAgentMemoryLimitPreference: CodeBotDesktopApi["getAgentMemoryLimitPreference"];
+  getAnalyticsPreference: CodeBotDesktopApi["getAnalyticsPreference"];
+  getAppBehaviorPreference: CodeBotDesktopApi["getAppBehaviorPreference"];
+  getApprovalAutomation: CodeBotDesktopApi["getApprovalAutomation"];
+  getBusyMessageModePreference: CodeBotDesktopApi["getBusyMessageModePreference"];
+  getExternalLinkPreference: CodeBotDesktopApi["getExternalLinkPreference"];
+  listExternalLinkBrowsers: CodeBotDesktopApi["listExternalLinkBrowsers"];
+  chooseExternalLinkApp: CodeBotDesktopApi["chooseExternalLinkApp"];
+  onExternalLinkFallback: CodeBotDesktopApi["onExternalLinkFallback"];
+  getRemoteNetworkRoute: CodeBotDesktopApi["getRemoteNetworkRoute"];
+  getRemoteSessionReusePreference: CodeBotDesktopApi["getRemoteSessionReusePreference"];
+  onAgentMemoryLimitPreference: CodeBotDesktopApi["onAgentMemoryLimitPreference"];
+  onAnalyticsPreference: CodeBotDesktopApi["onAnalyticsPreference"];
+  onApprovalAutomation: CodeBotDesktopApi["onApprovalAutomation"];
+  onOpenSettings: CodeBotDesktopApi["onOpenSettings"];
+  onOpenUpdateSettings: CodeBotDesktopApi["onOpenUpdateSettings"];
+  setAnalyticsPreference: CodeBotDesktopApi["setAnalyticsPreference"];
+  setAppBehaviorPreference: CodeBotDesktopApi["setAppBehaviorPreference"];
+  setExternalLinkPreference: CodeBotDesktopApi["setExternalLinkPreference"];
+  setRemoteNetworkRoute: CodeBotDesktopApi["setRemoteNetworkRoute"];
+  setRemoteSessionReusePreference: CodeBotDesktopApi["setRemoteSessionReusePreference"];
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     "listAgents" | "updateAgent" | "listAgentNotificationLevels" | "setAgentNotificationLevel" | "onScopedEvent"
   >;
   dynamicIsland: Pick<
-    OpenBotDesktopApi["dynamicIsland"],
+    CodeBotDesktopApi["dynamicIsland"],
     "getBuiltInDisplayGeometry" | "getPreference" | "onPreference" | "setPreference" | "setXWayland"
   >;
-  notifications: Pick<OpenBotDesktopApi["notifications"], "getPreference" | "openSettings" | "setPreference" | "test">;
-  update: Pick<OpenBotDesktopApi["update"], "getPreference" | "onPreference" | "setPreference">;
+  notifications: Pick<CodeBotDesktopApi["notifications"], "getPreference" | "openSettings" | "setPreference" | "test">;
+  update: Pick<CodeBotDesktopApi["update"], "getPreference" | "onPreference" | "setPreference">;
 }
 
 export function settingsPort(): SettingsPort {
-  return window.openbot;
+  return window.codebot;
 }

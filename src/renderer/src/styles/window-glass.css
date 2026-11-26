@@ -1,56 +1,56 @@
-:root[data-openbot-window-glass] {
-  --window-glass-frame: color-mix(in srgb, var(--openbot-bg-frame) 20%, transparent);
-  --window-glass-card: color-mix(in srgb, var(--openbot-bg-canvas) 30%, transparent);
+:root[data-codebot-window-glass] {
+  --window-glass-frame: color-mix(in srgb, var(--codebot-bg-frame) 20%, transparent);
+  --window-glass-card: color-mix(in srgb, var(--codebot-bg-canvas) 30%, transparent);
 
-  --window-glass-canvas: color-mix(in srgb, var(--openbot-bg-canvas) 25%, transparent);
-  --window-glass-sidebar: color-mix(in srgb, var(--openbot-bg-sidebar) 25%, transparent);
-  --window-glass-frame-fill: color-mix(in srgb, var(--openbot-bg-frame) 30%, transparent);
-  --window-glass-sheet: color-mix(in srgb, var(--openbot-bg-sheet) 35%, transparent);
-  --window-glass-sheet-inset: color-mix(in srgb, var(--openbot-bg-sheet-inset) 25%, transparent);
-  --window-glass-grouped: color-mix(in srgb, var(--openbot-bg-grouped) 35%, transparent);
-  --window-glass-surface: color-mix(in srgb, var(--openbot-bg-surface) 35%, transparent);
-  --window-glass-surface-raised: color-mix(in srgb, var(--openbot-bg-surface-raised) 40%, transparent);
-  --window-glass-control: color-mix(in srgb, var(--openbot-bg-control) 35%, transparent);
-  --window-glass-control-hover: color-mix(in srgb, var(--openbot-bg-control-hover) 45%, transparent);
-  --window-glass-control-active: color-mix(in srgb, var(--openbot-bg-control-active) 55%, transparent);
-  --window-glass-tabs-bar: color-mix(in srgb, var(--openbot-tabs-bar-bg) 35%, transparent);
-  --window-glass-tabs-pill: color-mix(in srgb, var(--openbot-tabs-pill-bg) 45%, transparent);
+  --window-glass-canvas: color-mix(in srgb, var(--codebot-bg-canvas) 25%, transparent);
+  --window-glass-sidebar: color-mix(in srgb, var(--codebot-bg-sidebar) 25%, transparent);
+  --window-glass-frame-fill: color-mix(in srgb, var(--codebot-bg-frame) 30%, transparent);
+  --window-glass-sheet: color-mix(in srgb, var(--codebot-bg-sheet) 35%, transparent);
+  --window-glass-sheet-inset: color-mix(in srgb, var(--codebot-bg-sheet-inset) 25%, transparent);
+  --window-glass-grouped: color-mix(in srgb, var(--codebot-bg-grouped) 35%, transparent);
+  --window-glass-surface: color-mix(in srgb, var(--codebot-bg-surface) 35%, transparent);
+  --window-glass-surface-raised: color-mix(in srgb, var(--codebot-bg-surface-raised) 40%, transparent);
+  --window-glass-control: color-mix(in srgb, var(--codebot-bg-control) 35%, transparent);
+  --window-glass-control-hover: color-mix(in srgb, var(--codebot-bg-control-hover) 45%, transparent);
+  --window-glass-control-active: color-mix(in srgb, var(--codebot-bg-control-active) 55%, transparent);
+  --window-glass-tabs-bar: color-mix(in srgb, var(--codebot-tabs-bar-bg) 35%, transparent);
+  --window-glass-tabs-pill: color-mix(in srgb, var(--codebot-tabs-pill-bg) 45%, transparent);
 
-  --window-solid-canvas: var(--openbot-bg-canvas);
-  --window-solid-sidebar: var(--openbot-bg-sidebar);
-  --window-solid-frame: var(--openbot-bg-frame);
-  --window-solid-sheet: var(--openbot-bg-sheet);
-  --window-solid-sheet-inset: var(--openbot-bg-sheet-inset);
-  --window-solid-grouped: var(--openbot-bg-grouped);
-  --window-solid-surface: var(--openbot-bg-surface);
-  --window-solid-surface-raised: var(--openbot-bg-surface-raised);
-  --window-solid-control: var(--openbot-bg-control);
-  --window-solid-control-hover: var(--openbot-bg-control-hover);
-  --window-solid-control-active: var(--openbot-bg-control-active);
-  --window-solid-tabs-bar: var(--openbot-tabs-bar-bg);
-  --window-solid-tabs-pill: var(--openbot-tabs-pill-bg);
+  --window-solid-canvas: var(--codebot-bg-canvas);
+  --window-solid-sidebar: var(--codebot-bg-sidebar);
+  --window-solid-frame: var(--codebot-bg-frame);
+  --window-solid-sheet: var(--codebot-bg-sheet);
+  --window-solid-sheet-inset: var(--codebot-bg-sheet-inset);
+  --window-solid-grouped: var(--codebot-bg-grouped);
+  --window-solid-surface: var(--codebot-bg-surface);
+  --window-solid-surface-raised: var(--codebot-bg-surface-raised);
+  --window-solid-control: var(--codebot-bg-control);
+  --window-solid-control-hover: var(--codebot-bg-control-hover);
+  --window-solid-control-active: var(--codebot-bg-control-active);
+  --window-solid-tabs-bar: var(--codebot-tabs-bar-bg);
+  --window-solid-tabs-pill: var(--codebot-tabs-pill-bg);
 }
 
-:root[data-openbot-window-glass] .app-window {
-  --openbot-bg-canvas: var(--window-glass-canvas);
-  --openbot-bg-sidebar: var(--window-glass-sidebar);
-  --openbot-bg-frame: var(--window-glass-frame-fill);
-  --openbot-bg-sheet: var(--window-glass-sheet);
-  --openbot-bg-sheet-inset: var(--window-glass-sheet-inset);
-  --openbot-bg-grouped: var(--window-glass-grouped);
-  --openbot-bg-surface: var(--window-glass-surface);
-  --openbot-bg-surface-raised: var(--window-glass-surface-raised);
-  --openbot-bg-control: var(--window-glass-control);
-  --openbot-bg-control-hover: var(--window-glass-control-hover);
-  --openbot-bg-control-active: var(--window-glass-control-active);
-  --openbot-tabs-bar-bg: var(--window-glass-tabs-bar);
-  --openbot-tabs-pill-bg: var(--window-glass-tabs-pill);
-  --openbot-queue-surface: var(--openbot-bg-surface);
-  --background: var(--openbot-bg-canvas);
-  --surface: var(--openbot-bg-surface);
+:root[data-codebot-window-glass] .app-window {
+  --codebot-bg-canvas: var(--window-glass-canvas);
+  --codebot-bg-sidebar: var(--window-glass-sidebar);
+  --codebot-bg-frame: var(--window-glass-frame-fill);
+  --codebot-bg-sheet: var(--window-glass-sheet);
+  --codebot-bg-sheet-inset: var(--window-glass-sheet-inset);
+  --codebot-bg-grouped: var(--window-glass-grouped);
+  --codebot-bg-surface: var(--window-glass-surface);
+  --codebot-bg-surface-raised: var(--window-glass-surface-raised);
+  --codebot-bg-control: var(--window-glass-control);
+  --codebot-bg-control-hover: var(--window-glass-control-hover);
+  --codebot-bg-control-active: var(--window-glass-control-active);
+  --codebot-tabs-bar-bg: var(--window-glass-tabs-bar);
+  --codebot-tabs-pill-bg: var(--window-glass-tabs-pill);
+  --codebot-queue-surface: var(--codebot-bg-surface);
+  --background: var(--codebot-bg-canvas);
+  --surface: var(--codebot-bg-surface);
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   :is(
     [data-popper-positioner],
@@ -85,61 +85,61 @@
     .sidebar-section-drag-preview,
     .crm-drawer
   ) {
-  --openbot-bg-canvas: var(--window-solid-canvas);
-  --openbot-bg-sidebar: var(--window-solid-sidebar);
-  --openbot-bg-frame: var(--window-solid-frame);
-  --openbot-bg-sheet: var(--window-solid-sheet);
-  --openbot-bg-sheet-inset: var(--window-solid-sheet-inset);
-  --openbot-bg-grouped: var(--window-solid-grouped);
-  --openbot-bg-surface: var(--window-solid-surface);
-  --openbot-bg-surface-raised: var(--window-solid-surface-raised);
-  --openbot-bg-control: var(--window-solid-control);
-  --openbot-bg-control-hover: var(--window-solid-control-hover);
-  --openbot-bg-control-active: var(--window-solid-control-active);
-  --openbot-tabs-bar-bg: var(--window-solid-tabs-bar);
-  --openbot-tabs-pill-bg: var(--window-solid-tabs-pill);
-  --openbot-queue-surface: var(--openbot-bg-surface);
-  --background: var(--openbot-bg-canvas);
-  --surface: var(--openbot-bg-surface);
+  --codebot-bg-canvas: var(--window-solid-canvas);
+  --codebot-bg-sidebar: var(--window-solid-sidebar);
+  --codebot-bg-frame: var(--window-solid-frame);
+  --codebot-bg-sheet: var(--window-solid-sheet);
+  --codebot-bg-sheet-inset: var(--window-solid-sheet-inset);
+  --codebot-bg-grouped: var(--window-solid-grouped);
+  --codebot-bg-surface: var(--window-solid-surface);
+  --codebot-bg-surface-raised: var(--window-solid-surface-raised);
+  --codebot-bg-control: var(--window-solid-control);
+  --codebot-bg-control-hover: var(--window-solid-control-hover);
+  --codebot-bg-control-active: var(--window-solid-control-active);
+  --codebot-tabs-bar-bg: var(--window-solid-tabs-bar);
+  --codebot-tabs-pill-bg: var(--window-solid-tabs-pill);
+  --codebot-queue-surface: var(--codebot-bg-surface);
+  --background: var(--codebot-bg-canvas);
+  --surface: var(--codebot-bg-surface);
 }
 
-:root[data-openbot-window-glass] .app-window .crm-sheet-scroll[data-fade-top] .crm-sheet thead :is(th, td),
-:root[data-openbot-window-glass] .app-window .crm-sheet-scroll[data-fade-bottom] .crm-sheet tfoot td,
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass] .app-window .crm-sheet-scroll[data-fade-top] .crm-sheet thead :is(th, td),
+:root[data-codebot-window-glass] .app-window .crm-sheet-scroll[data-fade-bottom] .crm-sheet tfoot td,
+:root[data-codebot-window-glass]
   .app-window
   .crm-sheet-scroll[data-fade-left]
   .crm-sheet
   :is(.crm-sheet-index, :is(th, td):nth-child(2)),
-:root[data-openbot-window-glass] .app-window .crm-sheet-scroll[data-fade-right] .crm-sheet .crm-sheet-action {
+:root[data-codebot-window-glass] .app-window .crm-sheet-scroll[data-fade-right] .crm-sheet .crm-sheet-action {
   --crm-sheet-bg: var(--window-solid-canvas);
 }
 
-:root[data-openbot-window-glass] .app-window :is(.agent-row-agent-status, .ui-bubble-reactions) {
-  --openbot-bg-surface: var(--window-solid-surface);
+:root[data-codebot-window-glass] .app-window :is(.agent-row-agent-status, .ui-bubble-reactions) {
+  --codebot-bg-surface: var(--window-solid-surface);
 }
 
-:root[data-openbot-window-glass] body {
+:root[data-codebot-window-glass] body {
   background: transparent;
 }
 
-:root[data-openbot-window-glass] .app-window {
+:root[data-codebot-window-glass] .app-window {
   --window-frame: var(--window-glass-frame);
 }
 
 @media (max-width: 720px) {
-  :root[data-openbot-window-glass] .app-window > .app-frame-edge {
+  :root[data-codebot-window-glass] .app-window > .app-frame-edge {
     background: var(--window-glass-card);
   }
 }
 
 @media (min-width: 721px) {
-  :root[data-openbot-window-glass] .app-window > .app-frame-edge,
-  :root[data-openbot-window-glass] .app-window > .app-frame-edge > .server-rail {
+  :root[data-codebot-window-glass] .app-window > .app-frame-edge,
+  :root[data-codebot-window-glass] .app-window > .app-frame-edge > .server-rail {
     background: transparent;
   }
 
-  :root[data-openbot-window-glass] .app-window > .app-frame-edge::before,
-  :root[data-openbot-window-glass]
+  :root[data-codebot-window-glass] .app-window > .app-frame-edge::before,
+  :root[data-codebot-window-glass]
     .app-window
     > .app-frame-edge
     .side-panel-maximized
@@ -148,9 +148,9 @@
   }
 }
 
-:root[data-openbot-window-glass] .app-window > .app-frame-edge > .sidebar,
-:root[data-openbot-window-glass] .app-window > .app-frame-edge :is(.channel-empty, .channel-title),
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass] .app-window > .app-frame-edge > .sidebar,
+:root[data-codebot-window-glass] .app-window > .app-frame-edge :is(.channel-empty, .channel-title),
+:root[data-codebot-window-glass]
   .app-window
   > .app-frame-edge
   > .sidebar
@@ -159,14 +159,14 @@
   --agent-avatar-outline: transparent;
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   > .app-frame-edge
   > .sidebar
   .agent-row:not(:hover, .agent-row-active)
   .channel-avatar-cluster
   .agent-avatar:has(> .bloub-avatar-svg image),
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   > .app-frame-edge
   > .sidebar
@@ -177,7 +177,7 @@
   filter: none;
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   > .app-frame-edge
   :is(.channel-empty, .channel-title)
@@ -187,25 +187,25 @@
   margin-inline-start: 0;
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   :is(.schedule-pane, .agent-usage, .tasks-page, .workflows-notice, .settings-page-content .agent-files-view) {
   background: transparent;
 }
 
-:root[data-openbot-window-glass] .app-window .tasks-page-composer.composer-wrap {
+:root[data-codebot-window-glass] .app-window .tasks-page-composer.composer-wrap {
   background: var(--window-glass-card);
 }
 
-:root[data-openbot-window-glass] .app-window .settings-page-content .settings-modal-scroll-frame::before {
+:root[data-codebot-window-glass] .app-window .settings-page-content .settings-modal-scroll-frame::before {
   background: linear-gradient(to bottom, var(--window-glass-card) 28%, transparent 100%);
 }
 
-:root[data-openbot-window-glass] .app-window .settings-page-content .settings-modal-scroll-frame::after {
+:root[data-codebot-window-glass] .app-window .settings-page-content .settings-modal-scroll-frame::after {
   background: linear-gradient(to top, var(--window-glass-card) 28%, transparent 100%);
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   :is(
     .sidebar-folder > header,
@@ -215,49 +215,49 @@
     .trace-row[data-parent],
     .trace-axis-row
   ) {
-  backdrop-filter: blur(var(--openbot-space-4));
+  backdrop-filter: blur(var(--codebot-space-4));
 }
 
-:root[data-openbot-window-glass] .app-window .composer-stack {
+:root[data-codebot-window-glass] .app-window .composer-stack {
   clip-path: inset(0 0 var(--composer-stack-overlap) 0);
 }
 
-:root[data-openbot-window-glass] .app-window .wfn-stage {
+:root[data-codebot-window-glass] .app-window .wfn-stage {
   --wfn-glass: color-mix(in srgb, var(--window-solid-surface-raised) 75%, transparent);
   --wfn-card: var(--window-solid-canvas);
   --wfn-field: var(--window-solid-surface-raised);
-  --wfn-port: color-mix(in srgb, var(--openbot-text-primary) 10%, var(--window-solid-canvas));
+  --wfn-port: color-mix(in srgb, var(--codebot-text-primary) 10%, var(--window-solid-canvas));
 }
 
-:root[data-openbot-window-glass][data-openbot-color-scheme="light"] .app-window .wfn-stage {
+:root[data-codebot-window-glass][data-codebot-color-scheme="light"] .app-window .wfn-stage {
   --wfn-card: var(--window-solid-surface);
   --wfn-field: var(--window-solid-control-hover);
 }
 
-:root[data-openbot-window-glass] .app-window .ui-bubble.message-bubble-colored > .ui-bubble-content {
-  --openbot-bg-canvas: var(--window-glass-canvas);
-  --openbot-bg-sidebar: var(--window-glass-sidebar);
-  --openbot-bg-surface: var(--window-glass-surface);
-  --openbot-bg-surface-raised: var(--window-glass-surface-raised);
-  --openbot-bg-control: var(--window-glass-control);
-  --openbot-bg-control-hover: var(--window-glass-control-hover);
-  --openbot-bg-control-active: var(--window-glass-control-active);
+:root[data-codebot-window-glass] .app-window .ui-bubble.message-bubble-colored > .ui-bubble-content {
+  --codebot-bg-canvas: var(--window-glass-canvas);
+  --codebot-bg-sidebar: var(--window-glass-sidebar);
+  --codebot-bg-surface: var(--window-glass-surface);
+  --codebot-bg-surface-raised: var(--window-glass-surface-raised);
+  --codebot-bg-control: var(--window-glass-control);
+  --codebot-bg-control-hover: var(--window-glass-control-hover);
+  --codebot-bg-control-active: var(--window-glass-control-active);
 }
 
-:root[data-openbot-window-glass] .app-window .ui-bubble.message-bubble-member > .ui-bubble-content {
+:root[data-codebot-window-glass] .app-window .ui-bubble.message-bubble-member > .ui-bubble-content {
   background: color-mix(
     in srgb,
-    color-mix(in srgb, var(--message-author-color, var(--openbot-accent)) 22%, var(--window-solid-surface-raised)) 40%,
+    color-mix(in srgb, var(--message-author-color, var(--codebot-accent)) 22%, var(--window-solid-surface-raised)) 40%,
     transparent
   );
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   .message-entry-agent
   .ui-bubble-variant-muted.message-bubble-colored
   > .ui-bubble-content,
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   .agent-dock-bubble.ui-bubble-variant-muted.message-bubble-colored
   > .ui-bubble-content {
@@ -268,7 +268,7 @@
   );
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   .message-entry-user
   .ui-bubble.message-bubble-colored
@@ -281,27 +281,27 @@
   );
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   .message-entry-user
   .ui-bubble.message-bubble-colored.message-bubble-solid
   > .ui-bubble-content {
   --message-solid-surface: color-mix(
     in srgb,
-    color-mix(in srgb, var(--openbot-text-primary) var(--message-surface-lift), var(--message-chat-color)) 45%,
+    color-mix(in srgb, var(--codebot-text-primary) var(--message-surface-lift), var(--message-chat-color)) 45%,
     transparent
   );
-  --openbot-bg-canvas: var(--message-solid-surface);
-  --openbot-bg-sidebar: var(--message-solid-surface);
-  --openbot-bg-surface: var(--message-solid-surface);
-  --openbot-bg-surface-raised: var(--message-solid-surface);
-  --openbot-bg-control: var(--message-solid-surface);
-  --openbot-bg-control-hover: var(--message-solid-surface);
-  --openbot-bg-control-active: var(--message-solid-surface);
+  --codebot-bg-canvas: var(--message-solid-surface);
+  --codebot-bg-sidebar: var(--message-solid-surface);
+  --codebot-bg-surface: var(--message-solid-surface);
+  --codebot-bg-surface-raised: var(--message-solid-surface);
+  --codebot-bg-control: var(--message-solid-surface);
+  --codebot-bg-control-hover: var(--message-solid-surface);
+  --codebot-bg-control-active: var(--message-solid-surface);
   background: color-mix(in srgb, var(--message-chat-color) var(--message-glass-solid-opacity, 55%), transparent);
 }
 
-:root[data-openbot-window-glass][data-openbot-color-scheme="light"]
+:root[data-codebot-window-glass][data-codebot-color-scheme="light"]
   .app-window
   .message-entry-user
   .ui-bubble.message-bubble-colored.message-bubble-solid
@@ -309,7 +309,7 @@
   --message-glass-solid-opacity: 80%;
 }
 
-:root[data-openbot-window-glass]
+:root[data-codebot-window-glass]
   .app-window
   .message-entry-user
   .ui-bubble.message-bubble-colored.message-bubble-solid.message-bubble-solid-dark-text

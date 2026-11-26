@@ -1,7 +1,7 @@
 import { createHostGrantKeyPair, type HostGrantKind, openHostGrant, sealHostGrant } from "./host-grant";
 import { isDynamicRecord, isString } from "./runtime-values";
 
-const KIND: HostGrantKind = { version: 1, info: "openbot-discord-guild-grant-v1" };
+const KIND: HostGrantKind = { version: 1, info: "codebot-discord-guild-grant-v1" };
 
 export interface DiscordGuildGrant {
   guildId: string;

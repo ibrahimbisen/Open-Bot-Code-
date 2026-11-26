@@ -1,7 +1,7 @@
-import { TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { PROVIDER_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-accounts-v1";
-import { resolveCreationModel } from "@openbot/ui/features/agents/agent-creation-model";
-import { FIRST_AGENT_SUGGESTIONS, FirstAgentSetup } from "@openbot/ui/features/agents/FirstAgentSetup";
+import { TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { PROVIDER_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-accounts-v1";
+import { resolveCreationModel } from "@codebot/ui/features/agents/agent-creation-model";
+import { FIRST_AGENT_SUGGESTIONS, FirstAgentSetup } from "@codebot/ui/features/agents/FirstAgentSetup";
 import { createEffect, createMemo } from "solid-js";
 import { useProviders } from "../../providers";
 import { useAuth } from "../account/account-context";

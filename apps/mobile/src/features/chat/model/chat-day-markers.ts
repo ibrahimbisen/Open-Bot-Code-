@@ -1,4 +1,4 @@
-import type { AppFormat, MobileTranslate } from "@openbot/i18n/mobile";
+import type { AppFormat, MobileTranslate } from "@codebot/i18n/mobile";
 import { messageDay, startOfDay } from "./message-time";
 
 const DAY_MS = 86_400_000;

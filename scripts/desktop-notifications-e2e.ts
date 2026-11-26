@@ -10,21 +10,21 @@ import {
   LOCAL_SERVER_ID,
   type ServerNotificationLevel,
   type ServerSummary,
-} from "@openbot/contracts/ipc";
-import { PUSH_NOTIFICATION_THREADS_CAPABILITY } from "@openbot/contracts/team-protocol/push-notification-threads-v1";
-import { createFormat, translateFor } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { PUSH_NOTIFICATION_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/push-notification-threads-v1";
+import { createFormat, translateFor } from "@codebot/i18n";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { NotificationRelayRequest } from "../src/main/push-notifications";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/desktop-notifications-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/desktop-notifications-e2e");
 const APP_VERSION = "0.0.0-e2e";
 const STEP_DEADLINE_MS = 30_000;
 const OWNER_ID = "owner";
@@ -159,7 +159,7 @@ async function step<T>(name: string, run: () => Promise<T>): Promise<T> {
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-desktop-notifications-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-desktop-notifications-"));
 const userData = join(root, "user-data");
 const unused = () => Effect.die(new Error("Not used by this check."));
 const agentBrowser: AgentBrowserHost = {
@@ -188,7 +188,7 @@ const cipher = {
 };
 const centralAccount = { createTeamAuthTicket: unused, getEmail: () => "e2e@example.invalid" };
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, join(root, "home"), database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));

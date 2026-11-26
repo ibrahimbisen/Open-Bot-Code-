@@ -1,4 +1,4 @@
-import type { ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
+import type { ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
 import { createEffect, createSignal, Show } from "solid-js";
 import { ServerPlushLogo } from "../../server-plush-logo";
 

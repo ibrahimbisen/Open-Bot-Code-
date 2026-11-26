@@ -1,4 +1,4 @@
-import { parseCustomServerPlan } from "@openbot/contracts/custom-server-plans";
+import { parseCustomServerPlan } from "@codebot/contracts/custom-server-plans";
 import {
   type DirectConversationPage,
   type DirectConversationReadState,
@@ -30,7 +30,7 @@ import {
   type TeamPresenceSnapshot,
   type TeamRole,
   type TeamSessionSummary,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   decodeList,
   decodeRecord,
@@ -40,9 +40,9 @@ import {
   requiredBoolean,
   requiredNumber,
   requiredString,
-} from "@openbot/contracts/ipc-decoding";
-import { type DynamicRecord, isBoolean, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { type ServerAppearance, serverAppearanceOrNull } from "@openbot/contracts/team-protocol/host-appearance-v1";
+} from "@codebot/contracts/ipc-decoding";
+import { type DynamicRecord, isBoolean, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { type ServerAppearance, serverAppearanceOrNull } from "@codebot/contracts/team-protocol/host-appearance-v1";
 
 const HOST_PHASES = ["unconfigured", "idle", "starting", "online", "stopping", "error"] as const;
 const TEAM_ROLES = ["owner", "admin", "member"] as const;
@@ -507,7 +507,7 @@ function decodeHostedStart(value: unknown): HostedServerStart | null {
   if (value === null) return null;
   const start = decodeRecord(value, "hosted start");
   const { step } = start;
-  if (step !== "machine" && step !== "restore" && step !== "openbot" && step !== "provider_limit")
+  if (step !== "machine" && step !== "restore" && step !== "codebot" && step !== "provider_limit")
     throw new Error("Invalid hostedStart.");
   return { step, startedAt: requiredNumber(start, "startedAt") };
 }

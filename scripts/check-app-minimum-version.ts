@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { APP_SURFACES, type AppSurface } from "@openbot/contracts/app-minimum-version";
-import { createOpenBotLogger } from "@openbot/logging";
+import { APP_SURFACES, type AppSurface } from "@codebot/contracts/app-minimum-version";
+import { createCodeBotLogger } from "@codebot/logging";
 import { type ChangelogPlatform, type ChangelogRelease, parseChangelog } from "../apps/auth-api/src/lib/changelog";
 import { APP_MINIMUM_VERSIONS } from "../apps/auth-api/src/server/app-minimum-version";
 
@@ -40,7 +40,7 @@ if (import.meta.main) {
     desktop: parseChangelog(read("CHANGELOG.md")),
     mobile: parseChangelog(read("apps/mobile/CHANGELOG.md"), { stores: true }),
   };
-  const logger = createOpenBotLogger("check-app-minimum-version");
+  const logger = createCodeBotLogger("check-app-minimum-version");
   const problems = appMinimumVersionProblems(APP_MINIMUM_VERSIONS, releases, new Date().toISOString().slice(0, 10));
   for (const problem of problems) logger.error(problem);
   if (problems.length > 0) process.exit(1);

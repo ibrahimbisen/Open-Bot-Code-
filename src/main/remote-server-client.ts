@@ -1,6 +1,6 @@
 import { randomBytes, verify } from "node:crypto";
-import type { RemoteDesktopCapabilities, ServerCompatibility } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import type { RemoteDesktopCapabilities, ServerCompatibility } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   decodeTeamProtocolSupportExpanded,
   isAgentCreateRoute,
@@ -10,21 +10,21 @@ import {
   type TeamCurrentCapability,
   teamCapabilitiesForProtocol,
   teamCapabilityHeaders,
-} from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/current";
 import {
   decodeServerSafeModeReason,
   SERVER_SAFE_MODE_CAPABILITY,
   SERVER_SAFE_MODE_ROUTES,
-} from "@openbot/contracts/team-protocol/server-safe-mode-v1";
+} from "@codebot/contracts/team-protocol/server-safe-mode-v1";
 import {
   highestCommonTeamProtocol,
   TEAM_APP_VERSION_HEADER,
   TEAM_PROTOCOL_VERSION_HEADER,
   teamProtocolUpdateDirection,
-} from "@openbot/contracts/team-protocol/v1";
-import type { TeamProtocolSupportV9 } from "@openbot/contracts/team-protocol/v9";
-import { hasTeamProtocolV10Lists, TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/v1";
+import type { TeamProtocolSupportV9 } from "@codebot/contracts/team-protocol/v9";
+import { hasTeamProtocolV10Lists, TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Option, Result } from "effect";
 import { decodeRemoteDesktopCapabilities } from "./remote-device-decoding";
 import type { ResponseDecoder } from "./remote-host-decoding";

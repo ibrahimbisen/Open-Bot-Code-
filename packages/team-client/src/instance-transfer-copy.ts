@@ -1,6 +1,6 @@
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 
-export const INSTANCE_TRANSFER_MANIFEST = "openbot-transfer.json";
+export const INSTANCE_TRANSFER_MANIFEST = "codebot-transfer.json";
 const MANIFEST_MAX_BYTES = 64 * 1024 * 1024;
 const LIBRARY_PREFIX = "library/";
 

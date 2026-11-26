@@ -1,12 +1,12 @@
-import { CHANNEL_CHATS_CAPABILITY, canAdministerServer } from "@openbot/contracts/ipc";
+import { CHANNEL_CHATS_CAPABILITY, canAdministerServer } from "@codebot/contracts/ipc";
 import {
   CHANNEL_COMPACT_AVAILABILITY_CAPABILITY,
   CHANNEL_COMPACT_AVAILABILITY_ROUTE,
-} from "@openbot/contracts/team-protocol/channel-compact-availability-v1";
-import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@openbot/contracts/team-protocol/chat-history-v1";
-import { ContextCompactRefusedError } from "@openbot/contracts/team-protocol/context-compact-v1";
-import { ContextResetBusyError } from "@openbot/contracts/team-protocol/context-reset-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/channel-compact-availability-v1";
+import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@codebot/contracts/team-protocol/chat-history-v1";
+import { ContextCompactRefusedError } from "@codebot/contracts/team-protocol/context-compact-v1";
+import { ContextResetBusyError } from "@codebot/contracts/team-protocol/context-reset-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { ChannelService } from "../../backend/channel-service";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { TeamApiAgents } from "./dependencies";

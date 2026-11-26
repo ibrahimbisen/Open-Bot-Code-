@@ -54,14 +54,14 @@ describe("renderer permissions", () => {
     expect(
       canRequestRendererPermission(
         "geolocation",
-        { requestingUrl: "openbot-visual://file/attachment-1", isMainFrame: false },
+        { requestingUrl: "codebot-visual://file/attachment-1", isMainFrame: false },
         developmentUrl,
       ),
     ).toBe(false);
   });
 
   it("refuses a frame inside the trusted window, such as a visual reply", () => {
-    const visualFrame = { requestingUrl: "openbot-visual://file/attachment-1", isMainFrame: false };
+    const visualFrame = { requestingUrl: "codebot-visual://file/attachment-1", isMainFrame: false };
     expect(canRequestRendererPermission("clipboard-sanitized-write", visualFrame, developmentUrl)).toBe(false);
     expect(
       canRequestRendererPermission(

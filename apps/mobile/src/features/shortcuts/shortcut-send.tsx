@@ -1,4 +1,4 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { useEffect } from "react";
 import { useMobileWorkspaceReader } from "@/features/workspace/context/workspace-store";
 import { ConnectionUnavailableError } from "@/features/workspace/model/connection-waits";

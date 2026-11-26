@@ -1,6 +1,6 @@
-import type { OwnerTransfer } from "@openbot/contracts/owner-transfer";
-import { normalizeEmailAddress } from "@openbot/contracts/validation";
-import { runTeamEffect } from "@openbot/team-client";
+import type { OwnerTransfer } from "@codebot/contracts/owner-transfer";
+import { normalizeEmailAddress } from "@codebot/contracts/validation";
+import { runTeamEffect } from "@codebot/team-client";
 import { useQuery } from "@tanstack/react-query";
 import { useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";

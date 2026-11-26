@@ -11,8 +11,8 @@ import {
   type ProviderAccountPool,
   type ProviderAccountStatus,
   type ProviderApiKeyStatus,
-} from "@openbot/contracts/ipc";
-import { CLAUDE_API_KEY_ACCOUNT_ID } from "@openbot/contracts/team-protocol/claude-api-key-v1";
+} from "@codebot/contracts/ipc";
+import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Chip, Typography } from "heroui-native";
 import type { LucideIcon } from "lucide-react-native";

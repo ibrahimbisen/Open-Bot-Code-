@@ -32,7 +32,7 @@ function PinnedMessageItem({
   const { t } = useText();
   const swipeable = useRef<SwipeableMethods>(null);
   const [danger, dangerForeground, accent] = useThemeColor(["danger", "danger-foreground", "accent"]);
-  const grouped = String(useCSSVariable("--openbot-bg-grouped"));
+  const grouped = String(useCSSVariable("--codebot-bg-grouped"));
   const meta = [row.chat, row.pinnedBy ? t("mobile.chat.pins.pinnedBy", { name: row.pinnedBy }) : null]
     .filter((part) => part !== null)
     .join(" · ");
@@ -113,7 +113,7 @@ export function PinnedMessagesScreen() {
   const viewTaskId = params.taskId || null;
   const pins = useMessagePins(serverId, agentId);
   const rows = usePinnedMessageRows(serverId, agentId, pins.pins, viewTaskId);
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
 
   const open = ({ pin }: PinnedMessageRow) => {
     if (pin.taskId === null) {

@@ -1,7 +1,7 @@
-import type { BrowserTabProfile } from "@openbot/contracts/ipc";
-import { Button, buttonVariants, ChevronDown, ContextMenu, DropdownMenu, Tabs, X } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
-import { clamp, motionDuration, prefersReducedMotion } from "@openbot/ui/utils";
+import type { BrowserTabProfile } from "@codebot/contracts/ipc";
+import { Button, buttonVariants, ChevronDown, ContextMenu, DropdownMenu, Tabs, X } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
+import { clamp, motionDuration, prefersReducedMotion } from "@codebot/ui/utils";
 import { createEffect, createSignal, For, flush, onSettled, Show } from "solid-js";
 import { createTabRow } from "../../components/createTabRow";
 import { browserProfileColor } from "./BrowserProfileColor";
@@ -31,8 +31,8 @@ function tabProfileColor(profile: BrowserTabProfile | undefined): string | undef
 
 function motionTiming(): KeyframeAnimationOptions {
   return {
-    duration: motionDuration("--openbot-duration-normal", 160),
-    easing: getComputedStyle(document.documentElement).getPropertyValue("--openbot-ease-out").trim() || "ease-out",
+    duration: motionDuration("--codebot-duration-normal", 160),
+    easing: getComputedStyle(document.documentElement).getPropertyValue("--codebot-ease-out").trim() || "ease-out",
   };
 }
 

@@ -7,8 +7,8 @@ import {
   type BrowserViewDialog,
   decodeBrowserViewHostMessage,
   encodeBrowserViewInput,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import {
   app,
@@ -129,7 +129,7 @@ async function main(): Promise<void> {
     ): Promise<DynamicToolResult> =>
       Effect.runPromise(
         host.handleDynamicTool({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool,
           arguments: args,
           ownerAgentId: "fixture-agent",
@@ -409,7 +409,7 @@ async function main(): Promise<void> {
         const session = gateway.createSession({ memberId: VIEW_MEMBER, teamSessionId: "fixture-session", tabId });
         const socket = new WebSocket(
           `ws://127.0.0.1:${viewAddress.port}${session.streamPath}?${BROWSER_VIEW_DIALOG_QUERY}=1`,
-          [`openbot-token.${VIEW_TOKEN}`],
+          [`codebot-token.${VIEW_TOKEN}`],
         );
         socket.binaryType = "arraybuffer";
         const dialogs: Array<BrowserViewDialog | null> = [];

@@ -1,7 +1,7 @@
-import type { VaultItemKind, VaultSaveInput } from "@openbot/contracts/ipc";
-import { cardBrand, vaultExpiryText } from "@openbot/contracts/ipc";
-import { UI_API_KEY_SCOPE_FIELD_ID, type UiBlockStatus, type UiVaultSavedItem } from "@openbot/contracts/ui-blocks";
-import { VaultRequestCard } from "@openbot/ui/features/vault/VaultRequestCard";
+import type { VaultItemKind, VaultSaveInput } from "@codebot/contracts/ipc";
+import { cardBrand, vaultExpiryText } from "@codebot/contracts/ipc";
+import { UI_API_KEY_SCOPE_FIELD_ID, type UiBlockStatus, type UiVaultSavedItem } from "@codebot/contracts/ui-blocks";
+import { VaultRequestCard } from "@codebot/ui/features/vault/VaultRequestCard";
 import { createSignal } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

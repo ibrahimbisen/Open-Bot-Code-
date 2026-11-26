@@ -13,7 +13,7 @@ COPY packages/user-errors/package.json ./packages/user-errors/package.json
 COPY packages/team-client/package.json ./packages/team-client/package.json
 COPY packages/whatsapp/package.json ./packages/whatsapp/package.json
 COPY remote/api/package.json ./remote/api/package.json
-RUN bun install --production --ignore-scripts --frozen-lockfile --filter @openbot/remote-api
+RUN bun install --production --ignore-scripts --frozen-lockfile --filter @codebot/remote-api
 
 FROM oven/bun:1.4.2-alpine
 WORKDIR /app
@@ -27,6 +27,6 @@ USER bun
 WORKDIR /app/remote/api
 EXPOSE 8443
 HEALTHCHECK --interval=15s --timeout=3s --retries=3 CMD bun -e 'const r=await fetch("http://127.0.0.1:8080/health/ready");process.exit(r.ok?0:1)'
-ARG OPENBOT_SOURCE_COMMIT=unknown
-ENV OPENBOT_SOURCE_COMMIT=$OPENBOT_SOURCE_COMMIT
+ARG CODEBOT_SOURCE_COMMIT=unknown
+ENV CODEBOT_SOURCE_COMMIT=$CODEBOT_SOURCE_COMMIT
 ENTRYPOINT ["bun", "src/index.ts"]

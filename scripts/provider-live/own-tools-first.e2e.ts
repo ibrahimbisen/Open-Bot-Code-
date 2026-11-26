@@ -1,20 +1,20 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { type Browser, test } from "@e2e-dev/web";
 import {
   CONVERSATION_PLAN_ITEM_TYPE,
   CONVERSATION_SUBAGENTS_ITEM_TYPE,
   MARKETPLACE_SUGGESTION_ITEM_TYPE_PREFIX,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { type Browser, test } from "@e2e-dev/web";
 import { expect } from "e2e";
 import { WebSocket } from "ws";
 import { readyProvider, waitFor } from "./live-agent";
 import { BENCH_TAG, DEBUGGING_PORT_FILE, type LiveProvider, PROJECT_ROOT, profilePath, RENDERER_HOST } from "./targets";
 
-const OUT = join(PROJECT_ROOT, ".openbot-build", "provider-live-bench");
-const GOOGLE_SESSION = join(homedir(), ".config", "openbot", "test-google-account.storage.json");
+const OUT = join(PROJECT_ROOT, ".codebot-build", "provider-live-bench");
+const GOOGLE_SESSION = join(homedir(), ".config", "codebot", "test-google-account.storage.json");
 const INBOX = "https://mail.google.com/mail/u/0/#inbox";
 const POLL_MS = 1_000;
 const TURN_MS = 360_000;
@@ -35,7 +35,7 @@ interface TurnRecord {
 
 async function readSteps(browser: Browser, agentId: string) {
   const read = await browser.evaluate(async (id) => {
-    const conversation = await window.openbot.agent.readConversation(id);
+    const conversation = await window.codebot.agent.readConversation(id);
     return {
       revision: conversation.revision,
       activeTurnId: conversation.activeTurnId,
@@ -61,7 +61,7 @@ async function runTask(
   const agentId = await browser.evaluate(
     async (create) =>
       (
-        await window.openbot.agent.createAgent({
+        await window.codebot.agent.createAgent({
           name: `Bench ${create.provider}`,
           description: "Personal assistant.",
           avatarSeed: `bench-${create.provider}`,
@@ -89,7 +89,7 @@ async function runTask(
       if (read.activeTurnId === null && (started || answered)) return { steps: read.steps, stopped: false };
       const quiet = Date.now() - lastChange > QUIET_MS;
       if (read.activeTurnId !== null && (quiet || Date.now() > deadline)) {
-        await browser.evaluate((stop) => window.openbot.agent.interrupt(stop).then(() => null), {
+        await browser.evaluate((stop) => window.codebot.agent.interrupt(stop).then(() => null), {
           agentId,
           turnId: read.activeTurnId,
         });
@@ -100,7 +100,7 @@ async function runTask(
     }
   } finally {
     await browser
-      .evaluate((id) => window.openbot.agent.deleteAgent(id).then(() => null), agentId)
+      .evaluate((id) => window.codebot.agent.deleteAgent(id).then(() => null), agentId)
       .catch(() => undefined);
   }
 }
@@ -226,7 +226,7 @@ async function signInToGmail(browser: Browser, provider: LiveProvider): Promise<
     },
   );
   const tabId = await browser.evaluate(
-    async (url) => (await window.openbot.browser.open({ url, focus: false })).id,
+    async (url) => (await window.codebot.browser.open({ url, focus: false })).id,
     INBOX,
   );
   try {
@@ -260,7 +260,7 @@ async function signInToGmail(browser: Browser, provider: LiveProvider): Promise<
       return read.subject;
     });
   } finally {
-    await browser.evaluate((id) => window.openbot.browser.close(id).then(() => null), tabId);
+    await browser.evaluate((id) => window.codebot.browser.close(id).then(() => null), tabId);
   }
 }
 

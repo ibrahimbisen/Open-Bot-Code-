@@ -1,12 +1,12 @@
 import { chmod, lstat, open, realpath } from "node:fs/promises";
 import { join } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_INSTRUCTION_FILE_NAMES,
   AGENT_INSTRUCTIONS_READ_LIMIT,
   type AgentInstructionFileName,
   type AgentInstructionsFile,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect, Option, Schema } from "effect";
 import { writeFileAtomically } from "../atomic-json-file";
 import { isMissingFileError } from "../file-errors";

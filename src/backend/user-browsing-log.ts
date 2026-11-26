@@ -1,10 +1,10 @@
 import { rm } from "node:fs/promises";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Schema, Semaphore } from "effect";
 import { writeJsonFileAtomically } from "./atomic-json-file";
 import { readVersionedJsonFile, type VersionedJsonFormat } from "./versioned-json-store";
 
-const logger = createOpenBotLogger("user-browsing");
+const logger = createCodeBotLogger("user-browsing");
 
 export const USER_BROWSING_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
 const STEPS_PER_AGENT = 80;

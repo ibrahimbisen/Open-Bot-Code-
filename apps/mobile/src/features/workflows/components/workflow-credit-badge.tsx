@@ -8,7 +8,7 @@ import { typeScale } from "@/shared/lib/type-scale";
 
 export function CreditBadge({ credits, short }: NodeCredits) {
   const { t, format } = useText();
-  const danger = String(useCSSVariable("--openbot-danger-text"));
+  const danger = String(useCSSVariable("--codebot-danger-text"));
   const label = t("mobile.workflow.media.credits", { count: credits, amount: format.number(credits) });
   return (
     <View

@@ -1,5 +1,5 @@
-import { IconButton, PanelRight, X } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { IconButton, PanelRight, X } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { render } from "@solidjs/web";
 import { createSignal } from "solid-js";
 import "../../styles.css";

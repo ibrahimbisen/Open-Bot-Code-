@@ -1,0 +1,8 @@
+[Unit]
+Description=Update CodeBot instance %i
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/codebot-docker/instances/codebot-instance update-request %i
+TimeoutStartSec=45min

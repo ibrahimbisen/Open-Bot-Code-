@@ -1,11 +1,11 @@
 import {
+  type CodeBotDesktopApi,
   disconnectedPasswordManager,
-  type OpenBotDesktopApi,
   type PasswordManagerId,
   type PasswordManagerStatus,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
-type PasswordManagersApi = OpenBotDesktopApi["passwordManagers"];
+type PasswordManagersApi = CodeBotDesktopApi["passwordManagers"];
 
 const MOCK_SIGN_IN_MS = 2_500;
 const MOCK_SETUP_MS = 1_500;
@@ -17,7 +17,7 @@ function connected(manager: PasswordManagerId): PasswordManagerStatus {
   return {
     ...disconnectedPasswordManager(manager, ["browser", "key"]),
     state: "connected",
-    vaultNames: ["Shared with OpenBot"],
+    vaultNames: ["Shared with CodeBot"],
     loginCount: 12,
     expiresAt: Date.now() + MOCK_KEY_DAYS * 24 * 60 * 60 * 1_000,
   };

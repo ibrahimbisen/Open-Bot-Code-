@@ -1,4 +1,4 @@
-import type { PasswordManagerConnectMethod, PasswordManagerId, PasswordManagerStatus } from "@openbot/contracts/ipc";
+import type { PasswordManagerConnectMethod, PasswordManagerId, PasswordManagerStatus } from "@codebot/contracts/ipc";
 import { type Effect, Schema } from "effect";
 import type { PasswordVault } from "../../backend/password-vault";
 

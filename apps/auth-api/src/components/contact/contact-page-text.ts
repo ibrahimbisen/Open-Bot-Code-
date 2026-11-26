@@ -1,4 +1,4 @@
-import type { AppTranslate } from "@openbot/i18n";
+import type { AppTranslate } from "@codebot/i18n";
 import { slot } from "../../lib/text-slots";
 
 function aroundEmail(text: string) {

@@ -1,6 +1,6 @@
-import type { LibraryFolder, StoredFileWorkflowFolder } from "@openbot/contracts/ipc";
-import { Button, ChevronRight, Folder, Waypoints } from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
+import type { LibraryFolder, StoredFileWorkflowFolder } from "@codebot/contracts/ipc";
+import { Button, ChevronRight, Folder, Waypoints } from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
 import { AgentAvatar } from "../agents/AgentAvatar";

@@ -9,10 +9,10 @@ import {
   VOICE_STREAM_LIMITS,
   type VoiceModelId,
   type VoiceModelStatus,
-} from "@openbot/contracts/ipc";
-import type { VoicePhase, VoiceTalkMode } from "@openbot/ui/features/conversation/VoicePill";
-import { currentText } from "@openbot/ui/text";
-import { encodePcm16, recordingToSamples, recordingToWav } from "@openbot/ui/voice-recording";
+} from "@codebot/contracts/ipc";
+import type { VoicePhase, VoiceTalkMode } from "@codebot/ui/features/conversation/VoicePill";
+import { currentText } from "@codebot/ui/text";
+import { encodePcm16, recordingToSamples, recordingToWav } from "@codebot/ui/voice-recording";
 import { createEffect, createStore, onCleanup } from "solid-js";
 import { desktopAnalytics } from "../../../analytics";
 import { holdSpeech, releaseSpeech, SPEECH_LEVEL_COUNT, speechReading } from "../../speech/speech-playback";

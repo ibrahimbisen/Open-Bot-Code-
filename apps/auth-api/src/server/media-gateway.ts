@@ -2,11 +2,11 @@ import type {
   CreditMediaGenerationKind,
   CreditMediaInputRole,
   CreditMediaJobStatus,
-} from "@openbot/contracts/credit-media";
-import { type DynamicRecord, isDynamicRecord, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/credit-media";
+import { type DynamicRecord, isDynamicRecord, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 
-const GATEWAY_ORIGIN = "https://openbot-media-gateway.internal";
+const GATEWAY_ORIGIN = "https://codebot-media-gateway.internal";
 const REQUEST_TIMEOUT_MS = 30_000;
 const OUTPUT_TIMEOUT_MS = 150_000;
 const DEFAULT_POLL_SECONDS = 5;

@@ -1,4 +1,4 @@
-import type { MobileFeatureConfig, MobileLatestVersions } from "@openbot/contracts/mobile-features";
+import type { MobileFeatureConfig, MobileLatestVersions } from "@codebot/contracts/mobile-features";
 
 export const MOBILE_FEATURE_CONFIG: MobileFeatureConfig = {
   cloudServers: {

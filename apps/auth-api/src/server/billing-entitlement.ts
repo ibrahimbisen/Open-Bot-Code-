@@ -8,8 +8,8 @@ import {
   type BillingSubscriptionStatus,
   LEGACY_MEMBER_LIMITS,
   memberLimitForPlan,
-} from "@openbot/contracts/billing";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/billing";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { OPEN_STATUSES_SQL } from "./billing-errors";
 
 const ENTITLED_STATUSES: readonly BillingSubscriptionStatus[] = ["active", "trialing", "past_due"];

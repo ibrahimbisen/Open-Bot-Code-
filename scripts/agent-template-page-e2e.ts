@@ -4,17 +4,17 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { resolve } from "node:path";
 import { promisify } from "node:util";
-import { isAgentTemplateSnapshot } from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isAgentTemplateSnapshot } from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { chromium } from "playwright-core";
 import { resolvePackageBin } from "./package-bin";
 
-const logger = createOpenBotLogger("agent-template-page-e2e");
+const logger = createCodeBotLogger("agent-template-page-e2e");
 const run = promisify(execFile);
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SITE = resolve(ROOT, "apps/auth-api");
-const OUT = resolve(ROOT, ".openbot-build/agent-template-page-e2e");
+const OUT = resolve(ROOT, ".codebot-build/agent-template-page-e2e");
 const option = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const browserExecutable = option("browser-executable");
 
@@ -47,7 +47,7 @@ mkdirSync(OUT, { recursive: true });
 const sql = (value: string) => `'${value.replaceAll("'", "''")}'`;
 const wrangler = resolvePackageBin(ROOT, "wrangler");
 const d1 = (...args: string[]) =>
-  run(wrangler, ["d1", ...args, "openbot-auth", "--local"], { cwd: SITE, env: { ...process.env, CI: "1" } });
+  run(wrangler, ["d1", ...args, "codebot-auth", "--local"], { cwd: SITE, env: { ...process.env, CI: "1" } });
 const removeRows = `DELETE FROM agent_templates WHERE id = ${sql(TEMPLATE_ID)}; DELETE FROM users WHERE id = ${sql(USER_ID)};`;
 
 const freePort = () =>

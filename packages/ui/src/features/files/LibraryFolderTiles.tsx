@@ -1,7 +1,7 @@
-import type { LibraryFolder } from "@openbot/contracts/ipc";
-import { Button, buttonVariants, DropdownMenu, Ellipsis, FolderPlus, Pencil, Trash2 } from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
-import { useText } from "@openbot/ui/text";
+import type { LibraryFolder } from "@codebot/contracts/ipc";
+import { Button, buttonVariants, DropdownMenu, Ellipsis, FolderPlus, Pencil, Trash2 } from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
 import { AgentAvatar } from "../agents/AgentAvatar";

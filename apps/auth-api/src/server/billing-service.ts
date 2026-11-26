@@ -24,19 +24,19 @@ import {
   storageTierGb,
   storageTierLookupKey,
   storageTierOf,
-} from "@openbot/contracts/billing";
-import type { BillingDetails, BillingDetailsRequest } from "@openbot/contracts/billing-details";
+} from "@codebot/contracts/billing";
+import type { BillingDetails, BillingDetailsRequest } from "@codebot/contracts/billing-details";
 import {
   CUSTOM_SERVER_METADATA_KIND,
   CUSTOM_SERVER_PAID_STATUSES,
   type CustomServerPlan,
-} from "@openbot/contracts/custom-server-plans";
+} from "@codebot/contracts/custom-server-plans";
 import type {
   HostedServerCatalog,
   HostedServerCatalogPlan,
   HostedServerEntryPoint,
   HostedServerPlanPrices,
-} from "@openbot/contracts/hosted-servers";
+} from "@codebot/contracts/hosted-servers";
 import {
   LICENSE_METADATA,
   LICENSE_METADATA_KIND,
@@ -44,10 +44,10 @@ import {
   licensePeriodAmount,
   ORDER_METADATA,
   parseLicenseOrder,
-} from "@openbot/contracts/license";
-import type { ReferralMoney } from "@openbot/contracts/referral";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/license";
+import type { ReferralMoney } from "@codebot/contracts/referral";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Exit, Layer } from "effect";
 import { SOLD_OUT_PLANS } from "../lib/pricing-page";
 import {
@@ -122,7 +122,7 @@ import {
 import { ViesClient } from "./vies-client";
 
 const WEBHOOK_EVENT_RETENTION_MS = 7 * 24 * 60 * 60_000;
-const WELCOME_EMAIL_CLAIM_PREFIX = "openbot_welcome_email:";
+const WELCOME_EMAIL_CLAIM_PREFIX = "codebot_welcome_email:";
 const SERVER_ID_PATTERN = /^[A-Za-z0-9:_-]{1,128}$/u;
 const DISPUTE_DELETES_SERVER_MS = 30 * 24 * 60 * 60 * 1000;
 const LAPSED_PLAN_GRACE_MS = 24 * 60 * 60 * 1000;
@@ -396,7 +396,7 @@ export class BillingService {
       const created = yield* this.#stripeCall(() =>
         dependencies.stripe.createCustomer(
           { userId: user.id, email: user.email },
-          existing ? `openbot-customer-${user.id}-after-${existing}` : `openbot-customer-${user.id}`,
+          existing ? `codebot-customer-${user.id}-after-${existing}` : `codebot-customer-${user.id}`,
         ),
       );
       const now = dependencies.now();
@@ -601,7 +601,7 @@ export class BillingService {
         dependencies.stripe.createCheckoutSession({
           customerId,
           inlinePrice: {
-            productName: `OpenBot ${request.plan.name}`,
+            productName: `CodeBot ${request.plan.name}`,
             amount: request.plan.amount,
             interval: request.plan.interval,
           },
@@ -973,7 +973,7 @@ export class BillingService {
       const storageItem = subscriptionStorageItem(current);
       const window = Math.floor(dependencies.now() / STORAGE_PURCHASE_WINDOW_MS);
       const paymentMethod = subscriptionPaymentMethodId(current) ?? "default";
-      const idempotencyKey = `openbot-storage-${current.id}-${storageItem?.price.id ?? "none"}-${paymentMethod}-${window}`;
+      const idempotencyKey = `codebot-storage-${current.id}-${storageItem?.price.id ?? "none"}-${paymentMethod}-${window}`;
       yield* stripeRequest(() =>
         dependencies.stripe.setStorageItem(
           { subscriptionId: current.id, itemId: storageItem?.id ?? null, priceId: price.id },
@@ -1184,7 +1184,7 @@ export class BillingService {
     const key = price ? planLookupKey(price) : null;
     const currency = subscription.currency.toLowerCase();
     if (!key || !isBillingCurrency(currency) || !isOneOf(BILLING_SUBSCRIPTION_STATUSES, subscription.status)) {
-      console.warn("billing: subscription is not an OpenBot plan", { subscriptionId });
+      console.warn("billing: subscription is not an CodeBot plan", { subscriptionId });
       return null;
     }
     const ownerId = yield* this.#subscriptionOwner(subscription, customerId);
@@ -1460,7 +1460,7 @@ export class BillingService {
         )
       : null;
     if (!user) {
-      console.warn("billing: subscription names no OpenBot account", { subscriptionId: subscription.id });
+      console.warn("billing: subscription names no CodeBot account", { subscriptionId: subscription.id });
       return null;
     }
     const now = dependencies.now();
@@ -1548,7 +1548,7 @@ function planLookupKey(price: {
 }): { plan: BillingPlanId; interval: BillingInterval } | null {
   return (
     parseBillingLookupKey(price.lookup_key) ??
-    parseBillingLookupKey(`openbot_${price.metadata.openbot_plan}_${price.metadata.openbot_interval}`)
+    parseBillingLookupKey(`codebot_${price.metadata.codebot_plan}_${price.metadata.codebot_interval}`)
   );
 }
 

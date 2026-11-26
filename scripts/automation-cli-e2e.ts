@@ -9,15 +9,15 @@ import {
   type QueueDelivery,
   type QueuedMessageReceipt,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { ContextResetBusyError } from "@openbot/contracts/team-protocol/context-reset-v1";
-import { registerSecretValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { ContextResetBusyError } from "@codebot/contracts/team-protocol/context-reset-v1";
+import { registerSecretValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { AgentSettingsRefused } from "../src/backend/agent/agent-settings-refused";
 import { AutomationServer, type UpdatedAgent } from "../src/main/automation-server";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/automation-cli-e2e");
-const CLI = resolve(import.meta.dirname, "../resources/cli/openbot-cli.mjs");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/automation-cli-e2e");
+const CLI = resolve(import.meta.dirname, "../resources/cli/codebot-cli.mjs");
 
 interface Check {
   name: string;
@@ -86,7 +86,7 @@ function deliveryState(
   return { ...base, status: "completed", error: null };
 }
 
-const root = mkdtempSync(join(tmpdir(), "openbot-cli-e2e-"));
+const root = mkdtempSync(join(tmpdir(), "codebot-cli-e2e-"));
 const options: ConstructorParameters<typeof AutomationServer>[0] = {
   root,
   listAgents: () => agents,
@@ -138,7 +138,7 @@ const options: ConstructorParameters<typeof AutomationServer>[0] = {
               },
             ]
           : [],
-      browserTakeovers: waiting ? [{ requestId: "takeover-1", requiresOpenBot: true }] : [],
+      browserTakeovers: waiting ? [{ requestId: "takeover-1", requiresCodeBot: true }] : [],
     };
   },
   respondToLocalAttention: () => Effect.void,
@@ -184,7 +184,7 @@ interface Run {
 function cli(args: string[], stdin?: string): Promise<Run> {
   return new Promise((done, fail) => {
     const child = spawn("node", [CLI, ...args], {
-      env: { ...process.env, OPENBOT_AUTOMATION_DIR: root },
+      env: { ...process.env, CODEBOT_AUTOMATION_DIR: root },
       stdio: ["pipe", "pipe", "pipe"],
     });
     let stdout = "";
@@ -276,7 +276,7 @@ try {
   await check("a wrong command line exits 2", ["run", "Ada"], 2, (run) => run.stderr.includes("Usage:"));
   const oldUrl = readFileSync(join(root, "url"), "utf8");
   await check(
-    "run --wait continues after OpenBot restarts",
+    "run --wait continues after CodeBot restarts",
     ["run", "Ada", "restart", "--wait", "--json"],
     0,
     (run) => {
@@ -364,7 +364,7 @@ try {
   });
   busy = false;
   await Effect.runPromise(server.stop());
-  await check("a stopped app exits 5", ["list"], 5, (run) => run.stderr.includes("OpenBot is not running"));
+  await check("a stopped app exits 5", ["list"], 5, (run) => run.stderr.includes("CodeBot is not running"));
   await check("a wrong command line exits 2 also when the app is stopped", ["agent", "foo", "Ada"], 2, (run) =>
     run.stderr.includes("Usage:"),
   );

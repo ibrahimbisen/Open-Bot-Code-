@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer, type Server as HttpServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AgentMemory, type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@openbot/contracts/ipc";
+import { type AgentMemory, type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import {
   developerInstructions,
@@ -17,14 +17,14 @@ import { resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { decodeRecordResponse, getRecord, getString } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-turn-context-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-turn-context-e2e");
 const NL = String.fromCharCode(10);
 const DEADLINE_MS = 60_000;
-const MEMORY_FULL = "<openbot_saved_memories>";
-const MEMORY_UPDATE = "<openbot_saved_memories_update>";
-const TEAMMATES = "<openbot_section_teammates>";
-const SAVED_LOGINS = "<openbot_saved_logins>";
-const LOGIN_RULE = "before request_takeover for a signed-out site, call openbot_browser.list_logins";
+const MEMORY_FULL = "<codebot_saved_memories>";
+const MEMORY_UPDATE = "<codebot_saved_memories_update>";
+const TEAMMATES = "<codebot_section_teammates>";
+const SAVED_LOGINS = "<codebot_saved_logins>";
+const LOGIN_RULE = "before request_takeover for a signed-out site, call codebot_browser.list_logins";
 const CHANGED_MARKER = "MARKER-CHANGED-MEMORY";
 
 interface ResponsesRequest {
@@ -245,7 +245,7 @@ class Session {
     await runCauseEffect(
       this.client.request(
         "initialize",
-        { clientInfo: { name: "openbot_e2e", title: "OpenBot E2E", version: "0.0.0" }, capabilities: {} },
+        { clientInfo: { name: "codebot_e2e", title: "CodeBot E2E", version: "0.0.0" }, capabilities: {} },
         decodeRecordResponse,
       ),
     );
@@ -364,7 +364,7 @@ await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 const cli = await runCauseEffect(resolveCodexCli());
 const model = await startFakeModel();
-const root = await mkdtemp(join(tmpdir(), "openbot-codex-turn-context-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-codex-turn-context-e2e-"));
 const report: {
   passed: boolean;
   codexVersion: string;
@@ -417,7 +417,7 @@ try {
     report.historyUserTexts = await session.historyUserTexts();
     await session.restartClient();
     await session.resume(instructionParams(CHANGED_MEMORIES, true, true));
-    await session.turn("turn 5, after an OpenBot restart", "One more thing.");
+    await session.turn("turn 5, after an CodeBot restart", "One more thing.");
     report.after = session.steps;
   }
 
@@ -451,9 +451,9 @@ try {
     a4.estimatedCachedTokens >= Math.floor((a3.promptBytes - 2) / 4),
     "The app-server restart lost the prefix.",
   );
-  assert.equal(a5.fullMemoryBlocks, 2, "An OpenBot restart sent no full memory block, or more than one.");
-  assert.equal(a5.teammateBlocks, 2, "An OpenBot restart sent no section-mates block, or more than one.");
-  assert.equal(a5.savedLoginBlocks, 2, "An OpenBot restart sent no saved-logins block, or more than one.");
+  assert.equal(a5.fullMemoryBlocks, 2, "An CodeBot restart sent no full memory block, or more than one.");
+  assert.equal(a5.teammateBlocks, 2, "An CodeBot restart sent no section-mates block, or more than one.");
+  assert.equal(a5.savedLoginBlocks, 2, "An CodeBot restart sent no saved-logins block, or more than one.");
   assert.equal(a5.newSession, false);
   const history = report.historyUserTexts ?? [];
   assert.ok(history.length >= 4, "The history import read no user messages.");

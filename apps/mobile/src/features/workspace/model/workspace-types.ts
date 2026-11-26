@@ -1,4 +1,4 @@
-import type { AttachmentSupport } from "@openbot/contracts/attachment-files";
+import type { AttachmentSupport } from "@codebot/contracts/attachment-files";
 import type {
   AddAgentFolderInput,
   AddedAgent,
@@ -204,7 +204,7 @@ import type {
   WorkflowVersion,
   WorkflowVersionInput,
   WorkflowWebhookSecret,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type {
   AgentWebhookSecret,
   EventActivity,
@@ -215,19 +215,19 @@ import type {
   SaveEventRoutineInput,
   SaveEventRoutineResult,
   WebhookSecret,
-} from "@openbot/contracts/ipc-events";
-import type { ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import type { LiveVoiceSessionResponse, LiveVoiceStartRequest } from "@openbot/contracts/team-protocol/live-voice-v1";
-import type { QueueEditRequest } from "@openbot/contracts/team-protocol/queue-edit-v1";
-import type { RemoteConnectionFailure, RemoteRecoveryStatus, RemoteTeamDirectoryClient } from "@openbot/team-client";
-import type { PlanLimits } from "@openbot/team-client/plan-limits";
-import type { RemoteDownloadWatch, RemoteFileUpload, RemoteLargeDownload } from "@openbot/team-client/remote-peer";
+} from "@codebot/contracts/ipc-events";
+import type { ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import type { LiveVoiceSessionResponse, LiveVoiceStartRequest } from "@codebot/contracts/team-protocol/live-voice-v1";
+import type { QueueEditRequest } from "@codebot/contracts/team-protocol/queue-edit-v1";
+import type { RemoteConnectionFailure, RemoteRecoveryStatus, RemoteTeamDirectoryClient } from "@codebot/team-client";
+import type { PlanLimits } from "@codebot/team-client/plan-limits";
+import type { RemoteDownloadWatch, RemoteFileUpload, RemoteLargeDownload } from "@codebot/team-client/remote-peer";
 import type {
   HostLocalServer,
   HostLocalServerList,
   MessagingConnectorPage,
-} from "@openbot/team-client/team-admin-requests";
-import type { AgentExportParts } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-admin-requests";
+import type { AgentExportParts } from "@codebot/team-client/team-api-requests";
 import type { NewAgentInput } from "@/features/agents/model/agent-initial-message";
 import type { MobileBrowserTab } from "@/features/browser/model/browser-tabs";
 import type { BrowserViewBridgeEvent, RemoteBrowserViewSession } from "@/features/browser/model/browser-view-bridge";

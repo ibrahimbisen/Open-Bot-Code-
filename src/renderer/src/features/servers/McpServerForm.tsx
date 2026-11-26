@@ -10,9 +10,9 @@ import {
   SlidingTabs,
   Text,
   Trash2,
-} from "@openbot/ui";
-import { McpSignInLinkCopy } from "@openbot/ui/features/settings/McpSignInDialog";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { McpSignInLinkCopy } from "@codebot/ui/features/settings/McpSignInDialog";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createStore, For, onCleanup, Show, untrack } from "solid-js";
 import { McpRelaySignIn } from "./McpRelaySignIn";

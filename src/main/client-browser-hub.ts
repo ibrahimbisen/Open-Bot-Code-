@@ -11,7 +11,7 @@ import {
   type ClientBrowserResult,
   type ClientTab,
   clientBrowserCommandEvent,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
 import { Effect } from "effect";
 import { type ClientBrowser, ClientBrowserFailed, type SharedChrome } from "../backend/agent/client-browser-tools";
 

@@ -4,12 +4,12 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-verification-link-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-verification-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-verification-link-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-verification-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const install = join(root, "antigravity");
@@ -41,7 +41,7 @@ const STOPPED_MESSAGE = "Gemini stopped because of an error.";
 
 process.env.HOME = home;
 process.env.GEMINI_HOME = join(home, ".gemini");
-process.env.OPENBOT_ANTIGRAVITY_PATH = fakeAgy;
+process.env.CODEBOT_ANTIGRAVITY_PATH = fakeAgy;
 
 const FAKE_AGY = `#!/usr/bin/env node
 const NL = String.fromCharCode(10);
@@ -145,13 +145,13 @@ const codeAssist = createServer((request, response) => {
 await new Promise<void>((done) => codeAssist.listen(0, "127.0.0.1", done));
 const address = codeAssist.address();
 assert.ok(address && typeof address === "object");
-process.env.OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${address.port}/v1internal`;
+process.env.CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${address.port}/v1internal`;
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const unused = () => Effect.die(new Error("Not used by this check."));
 const browser: AgentBrowserHost = {
@@ -198,7 +198,7 @@ await writeFile(
   }),
   { mode: 0o600 },
 );
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

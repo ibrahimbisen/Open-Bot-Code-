@@ -1,12 +1,12 @@
 import type {
-  OpenBotDesktopApi,
+  CodeBotDesktopApi,
   PasswordManagerConnectInput,
   PasswordManagerId,
   PasswordManagerStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 
-type DesktopPasswordManagers = OpenBotDesktopApi["passwordManagers"];
+type DesktopPasswordManagers = CodeBotDesktopApi["passwordManagers"];
 
 export type PasswordManagerPort = Pick<
   DesktopPasswordManagers,
@@ -14,7 +14,7 @@ export type PasswordManagerPort = Pick<
 >;
 
 export function passwordManagerPort(): PasswordManagerPort {
-  const api = () => window.openbot.passwordManagers;
+  const api = () => window.codebot.passwordManagers;
   return {
     list: () => api().list(),
     connect: (input) => api().connect(input),
@@ -99,7 +99,7 @@ export function hostPasswordManagerPort(serverId: () => string | undefined): Pas
     if (!id) throw new Error(sourceText("error.team.connectorsUnsupported"));
     return id;
   };
-  const api = () => window.openbot.passwordManagers;
+  const api = () => window.codebot.passwordManagers;
   return polledPasswordManagerPort({
     list: async () => api().hostList(server()),
     connect: async (input) => api().hostConnect(input, server()),

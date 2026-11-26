@@ -2,13 +2,13 @@ import {
   type SignalClientMessage,
   type SignalServerMessage,
   SLACK_DELIVERY_RESPONSE_BYTES_LIMIT,
-} from "@openbot/contracts/signal-protocol/messages";
+} from "@codebot/contracts/signal-protocol/messages";
 import {
   TELEGRAM_BOT_ID_PATTERN,
   TELEGRAM_TEXT_LIMIT,
   type TelegramCallMethod,
   type TelegramCallParams,
-} from "@openbot/contracts/signal-protocol/telegram-route";
+} from "@codebot/contracts/signal-protocol/telegram-route";
 import { z } from "zod";
 
 export type {
@@ -19,19 +19,19 @@ export type {
   SlackDeliveryKind,
   SlackDeliveryStatus,
   WebhookDeliveryStatus,
-} from "@openbot/contracts/signal-protocol/messages";
+} from "@codebot/contracts/signal-protocol/messages";
 export {
   SIGNAL_CLIENT_RECONNECT_GRACE_MS,
   SIGNAL_DEFAULT_RECONNECT_GRACE_MS,
   SIGNAL_MESSAGE_BYTES_LIMIT,
   SIGNAL_TURN_CREDENTIAL_TTL_SECONDS,
   SLACK_DELIVERY_BODY_BYTES_LIMIT,
-} from "@openbot/contracts/signal-protocol/messages";
-export type { RemoteTicketClaims } from "@openbot/contracts/signal-protocol/ticket";
+} from "@codebot/contracts/signal-protocol/messages";
+export type { RemoteTicketClaims } from "@codebot/contracts/signal-protocol/ticket";
 export {
   REMOTE_TICKET_AUDIENCE,
   REMOTE_TICKET_PROTOCOL_VERSION,
-} from "@openbot/contracts/signal-protocol/ticket";
+} from "@codebot/contracts/signal-protocol/ticket";
 
 const identifierSchema = z
   .string()

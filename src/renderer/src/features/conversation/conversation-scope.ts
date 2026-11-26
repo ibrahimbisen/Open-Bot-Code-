@@ -1,12 +1,12 @@
-import { isKnownAgentProvider, providerDisplayName } from "@openbot/contracts/agent-providers";
+import { isKnownAgentProvider, providerDisplayName } from "@codebot/contracts/agent-providers";
 import {
   type FileQuoteTarget,
   fileQuoteId,
   fileQuoteTarget,
   limitedQuoteText,
   serializeChatTagReference,
-} from "@openbot/contracts/chat-tag-references";
-import { isNarrationItemId } from "@openbot/contracts/conversation-narration";
+} from "@codebot/contracts/chat-tag-references";
+import { isNarrationItemId } from "@codebot/contracts/conversation-narration";
 import {
   AUTOMATIC_VOICE_LANGUAGE,
   customProviderOfModel,
@@ -14,20 +14,20 @@ import {
   type McpSignInRelayPage,
   relayableSignInLink,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { AGENT_FAST_MODE_CAPABILITY } from "@openbot/contracts/team-protocol/agent-fast-mode-v1";
-import { AGENT_SPEED_CAPABILITY } from "@openbot/contracts/team-protocol/agent-speed-v1";
-import { dialogShown, toast } from "@openbot/ui";
-import type { QuestionPromptComposerAnswer } from "@openbot/ui/components/QuestionPromptBubble";
-import type { AgentMessage } from "@openbot/ui/data";
-import { awaitingReplyEnded } from "@openbot/ui/features/conversation/AwaitingReplies";
-import type { QuoteRequest } from "@openbot/ui/features/conversation/ComposerEditor";
-import type { AgentThreadVoice } from "@openbot/ui/features/conversation/threads/AgentThreadView";
-import { MAIN_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
-import { currentText } from "@openbot/ui/text";
-import { prefersReducedMotion, usesTouchLayout } from "@openbot/ui/utils";
-import { appendVoiceTranscript } from "@openbot/ui/voice-recording";
-import { errorReference } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { AGENT_FAST_MODE_CAPABILITY } from "@codebot/contracts/team-protocol/agent-fast-mode-v1";
+import { AGENT_SPEED_CAPABILITY } from "@codebot/contracts/team-protocol/agent-speed-v1";
+import { dialogShown, toast } from "@codebot/ui";
+import type { QuestionPromptComposerAnswer } from "@codebot/ui/components/QuestionPromptBubble";
+import type { AgentMessage } from "@codebot/ui/data";
+import { awaitingReplyEnded } from "@codebot/ui/features/conversation/AwaitingReplies";
+import type { QuoteRequest } from "@codebot/ui/features/conversation/ComposerEditor";
+import type { AgentThreadVoice } from "@codebot/ui/features/conversation/threads/AgentThreadView";
+import { MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
+import { currentText } from "@codebot/ui/text";
+import { prefersReducedMotion, usesTouchLayout } from "@codebot/ui/utils";
+import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
+import { errorReference } from "@codebot/user-errors";
 import type { VirtualItem } from "@tanstack/virtual-core";
 import {
   createContext,

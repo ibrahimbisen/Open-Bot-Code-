@@ -3,30 +3,30 @@ import {
   type BillingInterval,
   type BillingPlanId,
   isOpenBillingStatus,
-} from "@openbot/contracts/billing";
-import { type BillingDetails, isWithdrawalConsumer } from "@openbot/contracts/billing-details";
+} from "@codebot/contracts/billing";
+import { type BillingDetails, isWithdrawalConsumer } from "@codebot/contracts/billing-details";
 import type {
   HostedServerCatalog,
   HostedServerCatalogPlan,
   HostedServerEntryPoint,
   HostedServerList,
   HostedServerSummary,
-} from "@openbot/contracts/hosted-servers";
-import type { HostedServersDesktopApi, LicenseDesktopApi, ServerSummary } from "@openbot/contracts/ipc";
-import type { LicenseOrder, LicenseState, PricingOrder } from "@openbot/contracts/license";
-import { classifyFailure } from "@openbot/telemetry";
+} from "@codebot/contracts/hosted-servers";
+import type { HostedServersDesktopApi, LicenseDesktopApi, ServerSummary } from "@codebot/contracts/ipc";
+import type { LicenseOrder, LicenseState, PricingOrder } from "@codebot/contracts/license";
+import { classifyFailure } from "@codebot/telemetry";
 import {
   type BillingDetailsCalls,
   type BillingDetailsDraft,
   billingDetailsDraft,
   saveBillingDetails,
-} from "@openbot/ui/features/billing/BillingDetailsFields";
+} from "@codebot/ui/features/billing/BillingDetailsFields";
 import type {
   CreatedHostedServer,
   CreateHostedServerInput,
   HostedServerSetupStatus,
-} from "@openbot/ui/features/servers/AddServerDialog";
-import type { OrderConsent } from "@openbot/ui/features/servers/HostedPricingPage";
+} from "@codebot/ui/features/servers/AddServerDialog";
+import type { OrderConsent } from "@codebot/ui/features/servers/HostedPricingPage";
 import {
   guessHostedCurrency,
   HOSTED_BILLING_CURRENCY,
@@ -35,9 +35,9 @@ import {
   type HostedServerPlan,
   hostedCurrencies,
   hostedServerPlansFromCatalog,
-} from "@openbot/ui/features/servers/HostedServerPricing";
-import { currentText, useText } from "@openbot/ui/text";
-import type { UserErrorDetails } from "@openbot/user-errors";
+} from "@codebot/ui/features/servers/HostedServerPricing";
+import { currentText, useText } from "@codebot/ui/text";
+import type { UserErrorDetails } from "@codebot/user-errors";
 import { Portal } from "@solidjs/web";
 import { createEffect, createSignal, createStore, Loading, onSettled, type ParentProps, Show, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";

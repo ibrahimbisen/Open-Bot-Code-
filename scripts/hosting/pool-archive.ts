@@ -3,10 +3,10 @@ import { z } from "zod";
 
 export const B2_HOST = "s3.eu-central-003.backblazeb2.com";
 const B2_REGION = "eu-central-003";
-export const B2_BUCKET = "openbot-pool-archive-eu";
+export const B2_BUCKET = "codebot-pool-archive-eu";
 export const ARCHIVE_REGION = "eu";
 export const PART_BYTES = 100 * 1024 * 1024;
-export const SERVER_BYTES = `du -sb --one-file-system /home/user /srv/openbot-hosted | awk '{ total += $1 } END { print total }'`;
+export const SERVER_BYTES = `du -sb --one-file-system /home/user /srv/codebot-hosted | awk '{ total += $1 } END { print total }'`;
 export const UPLOAD_URL_SECONDS = 6 * 60 * 60;
 const BECH32_CHARSET = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
 const BECH32_GENERATOR = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
@@ -27,7 +27,7 @@ export interface UploadedPart {
 export const archiveScript = (machineHosting: string) => `
 set -euo pipefail
 recipient=$1 part_bytes=$2
-dir=$(mktemp -d /var/tmp/openbot-archive.XXXXXX)
+dir=$(mktemp -d /var/tmp/codebot-archive.XXXXXX)
 trap 'rm -rf "$dir"' EXIT
 cat >"$dir/urls"
 cat >"$dir/part.sh" <<'PART'

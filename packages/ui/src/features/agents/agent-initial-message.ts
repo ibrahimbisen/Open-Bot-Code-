@@ -1,5 +1,5 @@
-import { agentWelcomeMessage } from "@openbot/contracts/agent-welcome";
-import { appLanguageOption } from "@openbot/i18n/languages";
+import { agentWelcomeMessage } from "@codebot/contracts/agent-welcome";
+import { appLanguageOption } from "@codebot/i18n/languages";
 import { currentText } from "../../text";
 import type { FirstAgentDraft } from "./FirstAgentSetup";
 

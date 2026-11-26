@@ -47,7 +47,7 @@ const OTHER_CUE_MARKERS = [
   "data-cuelume-navigate",
 ] as const;
 
-type OpenBotButtonProps = VariantProps<typeof buttonVariants> & {
+type CodeBotButtonProps = VariantProps<typeof buttonVariants> & {
   class?: JSX.HTMLAttributes<HTMLElement>["class"];
   children?: JSX.Element;
   loading?: boolean | undefined;
@@ -56,7 +56,7 @@ type OpenBotButtonProps = VariantProps<typeof buttonVariants> & {
 } & { [Marker in (typeof OTHER_CUE_MARKERS)[number]]?: string | undefined };
 
 export type ButtonProps<T extends ValidComponent = "button"> = PolymorphicProps<T, ButtonRootProps<T>> &
-  OpenBotButtonProps &
+  CodeBotButtonProps &
   Partial<Pick<ComponentProps<T>, "class">>;
 
 const quietVariants = new Set<string>(["outline", "secondary", "ghost", "destructive-ghost", "link"]);

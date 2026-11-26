@@ -3,7 +3,7 @@ import {
   type HostVoiceModelChange,
   type LocalVoiceModelInfo,
   VOICE_MODELS,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import { useMobileWorkspace, useMobileWorkspaceActions } from "@/features/workspace/context/mobile-workspace-context";

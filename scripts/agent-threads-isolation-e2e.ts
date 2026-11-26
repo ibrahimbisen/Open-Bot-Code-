@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentTask, ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentTask, ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { argument, connectChannelE2e, LONG_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
 const agentArgument = argument("agent");
@@ -61,7 +61,7 @@ const lane = (label: Lane["label"]): Lane => {
     word,
     routineName: `Isolation ${label} ${run}`,
     memory: `The isolation code word of ${label} is ${word}.`,
-    file: `openbot-isolation-${label}-${run}.txt`,
+    file: `codebot-isolation-${label}-${run}.txt`,
     taskId: null,
   };
 };
@@ -82,16 +82,16 @@ const prompt = (entry: Lane) =>
 const bridge = {
   agent: () =>
     page.evaluate(async (id) => {
-      const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === id);
+      const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === id);
       if (!found) throw new Error(`Unknown agent: ${id}`);
       return { name: found.name, provider: found.provider, workspacePath: found.workspacePath };
     }, agentId),
-  tasks: () => page.evaluate((id) => window.openbot.agent.listTasks(id).then((snapshot) => snapshot.tasks), agentId),
-  main: (): Promise<ConversationSnapshot> => page.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+  tasks: () => page.evaluate((id) => window.codebot.agent.listTasks(id).then((snapshot) => snapshot.tasks), agentId),
+  main: (): Promise<ConversationSnapshot> => page.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
   side: (taskId: string): Promise<ConversationSnapshot> =>
-    page.evaluate((input) => window.openbot.agent.readTask(input), { agentId, taskId }),
-  memories: () => page.evaluate((id) => window.openbot.agent.listMemories(id), agentId),
-  routines: () => page.evaluate((id) => window.openbot.agent.listRoutines(id), agentId),
+    page.evaluate((input) => window.codebot.agent.readTask(input), { agentId, taskId }),
+  memories: () => page.evaluate((id) => window.codebot.agent.listMemories(id), agentId),
+  routines: () => page.evaluate((id) => window.codebot.agent.listRoutines(id), agentId),
 };
 
 const conversationOf = (entry: Lane) => (entry.taskId ? bridge.side(entry.taskId) : bridge.main());
@@ -132,9 +132,9 @@ try {
   const started = await page.evaluate(
     ({ id, mainText, aText, bText }) =>
       Promise.all([
-        window.openbot.agent.sendMessage({ agentId: id, text: mainText, clientMessageId: crypto.randomUUID() }),
-        window.openbot.agent.startTask({ agentId: id, text: aText, clientMessageId: crypto.randomUUID() }),
-        window.openbot.agent.startTask({ agentId: id, text: bText, clientMessageId: crypto.randomUUID() }),
+        window.codebot.agent.sendMessage({ agentId: id, text: mainText, clientMessageId: crypto.randomUUID() }),
+        window.codebot.agent.startTask({ agentId: id, text: aText, clientMessageId: crypto.randomUUID() }),
+        window.codebot.agent.startTask({ agentId: id, text: bText, clientMessageId: crypto.randomUUID() }),
       ]).then(([, a, b]) => [a.id, b.id]),
     { id: agentId, mainText: prompt(main), aText: prompt(sideA), bText: prompt(sideB) },
   );
@@ -191,7 +191,7 @@ try {
 
   const runningId = sideA.taskId;
   assert.ok(runningId);
-  await page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+  await page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
     agentId,
     taskId: runningId,
     text: LONG_PROMPT,
@@ -201,7 +201,7 @@ try {
   );
   const clearError = await page.evaluate(
     (id) =>
-      window.openbot.agent.clearContext(id).then(
+      window.codebot.agent.clearContext(id).then(
         () => "",
         (error: unknown) => (error instanceof Error ? error.message : String(error)),
       ),
@@ -213,7 +213,7 @@ try {
     error: clearError,
   };
   assert.ok(report.clearContextWhileSideRuns.cleared, `Clear context works while a side thread runs: ${clearError}`);
-  await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId: runningId });
+  await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId: runningId });
   await waitFor(page, "side A stops", bridge.tasks, (tasks) =>
     tasks.some((task) => task.id === runningId && task.state !== "running"),
   );
@@ -225,8 +225,8 @@ try {
   const race = await page.evaluate(
     ({ id, taskId, text }) =>
       Promise.allSettled([
-        window.openbot.agent.deleteTask({ agentId: id, taskId }),
-        window.openbot.agent.sendMessage({ agentId: id, taskId, text, clientMessageId: crypto.randomUUID() }),
+        window.codebot.agent.deleteTask({ agentId: id, taskId }),
+        window.codebot.agent.sendMessage({ agentId: id, taskId, text, clientMessageId: crypto.randomUUID() }),
       ]).then(([deleted, sent]) => ({
         deleted: deleted.status === "fulfilled" ? "" : String(deleted.reason),
         sent: sent.status === "fulfilled" ? "sent" : String(sent.reason),
@@ -234,11 +234,11 @@ try {
     { id: agentId, taskId: raceId, text: raceText },
   );
   if (race.deleted !== "") {
-    await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId: raceId });
+    await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId: raceId });
     await waitFor(page, "side B stops", bridge.tasks, (tasks) =>
       tasks.every((task) => task.id !== raceId || task.state !== "running"),
     );
-    await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId: raceId });
+    await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId: raceId });
   }
   const afterDelete = await waitFor(page, "side B is gone", bridge.tasks, (tasks: AgentTask[]) =>
     tasks.every((task) => task.id !== raceId),
@@ -256,17 +256,17 @@ try {
 } finally {
   for (const routineId of createdRoutineIds) {
     await page
-      .evaluate((input) => window.openbot.agent.deleteRoutine(input), { agentId, routineId })
+      .evaluate((input) => window.codebot.agent.deleteRoutine(input), { agentId, routineId })
       .catch(() => undefined);
   }
   for (const memoryId of createdMemoryIds) {
     await page
-      .evaluate((input) => window.openbot.agent.deleteMemory(input), { agentId, memoryId })
+      .evaluate((input) => window.codebot.agent.deleteMemory(input), { agentId, memoryId })
       .catch(() => undefined);
   }
   for (const taskId of startedTaskIds) {
-    await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
-    await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId }).catch(() => undefined);
   }
   if (workspacePath) for (const entry of lanes) rmSync(join(workspacePath, entry.file), { force: true });
   writeReport("agent-threads-isolation-e2e", report);

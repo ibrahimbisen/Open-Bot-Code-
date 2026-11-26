@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 import { deleteOrphanReceipts } from "./0008-baseline";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // A page read wrote its mailbox messages again on each read when only their key order differed from
 // the rows (#2224), so a thread can hold thousands of identical `conversation.mailbox-reconciled`
@@ -38,7 +38,7 @@ function deleteRepeatedMailboxReconciliations(db: DatabaseSync): void {
   deleteOrphanReceipts(db);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 39,
   name: "repeated-mailbox-reconciliations",
   // Deletes many large rows, so the file gets smaller only after a vacuum.

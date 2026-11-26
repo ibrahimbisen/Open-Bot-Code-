@@ -10,22 +10,22 @@ import type {
   AgentSummary,
   ConversationPage,
   ConversationSnapshot,
-} from "@openbot/contracts/ipc";
-import type { LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import type { LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   encodeLiveActivityBytes,
   LIVE_ACTIVITY_SECRET_BYTES,
   liveActivityKeys,
-} from "@openbot/team-client/live-activity-seal";
-import { pushNotificationKeys } from "@openbot/team-client/push-notification-seal";
+} from "@codebot/team-client/live-activity-seal";
+import { pushNotificationKeys } from "@codebot/team-client/push-notification-seal";
 import { Effect } from "effect";
 import { openSealedLiveActivity } from "../apps/mobile/src/features/live-activity/model/live-activity-open";
 import { LiveActivityPushService } from "../src/main/live-activity-push";
 import { type NotificationRelayRequest, PushNotificationService } from "../src/main/push-notifications";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/notification-summary-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/notification-summary-e2e");
 const STEP_DEADLINE_MS = 10_000;
 const MEMBER = "fixture-member";
 const ANDROID = "android-session";
@@ -36,7 +36,7 @@ const ROUTINE_THREAD = "fixture-routine-thread";
 const ROUTINE_ANSWER = "The nightly report is ready. Two builds failed on Linux.";
 const SECRET_COMMAND =
   "curl -H 'Authorization: Bearer sk-live-4f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c' https://api.example.com";
-const logger = createOpenBotLogger("notification-summary-e2e");
+const logger = createCodeBotLogger("notification-summary-e2e");
 
 const REPLIES = [
   {
@@ -44,7 +44,7 @@ const REPLIES = [
     text: [
       "## Summary",
       "",
-      "I revised the onboarding skill with `openbot.revise_skill`. It now asks for the team size first. Then it proposes three plans and waits for a choice.",
+      "I revised the onboarding skill with `codebot.revise_skill`. It now asks for the team size first. Then it proposes three plans and waits for a choice.",
       "",
       "```ts",
       "const plan = pickPlan(team);",
@@ -297,7 +297,7 @@ async function step(name: string, run: () => Promise<unknown>): Promise<void> {
 
 function assertReadable(text: string): void {
   assert.ok(!text.includes("[redacted"), "A redaction mark shows.");
-  assert.ok(!/openbot\.\w+_\w+/u.test(text), "A tool name shows.");
+  assert.ok(!/codebot\.\w+_\w+/u.test(text), "A tool name shows.");
   assert.ok(!/In-Reply-To|References:/u.test(text), "A mail header shows.");
   assert.ok(!text.includes("```") && !text.includes("##"), "Markdown blocks show.");
 }

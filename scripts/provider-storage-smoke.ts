@@ -2,14 +2,14 @@ import { randomUUID } from "node:crypto";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { AgentSummary, ConversationMessage } from "@openbot/contracts/ipc";
+import type { AgentSummary, ConversationMessage } from "@codebot/contracts/ipc";
 import type { AgentClient, AgentProvider } from "../src/backend/agent-client";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
 import { ClaudeAgentClient } from "../src/backend/claude-client";
 import { type GrokCliInfo, resolveClaudeCli, resolveCodexCli, resolveGrokCli } from "../src/backend/cli";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { GrokAgentClient } from "../src/backend/grok-client";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import {
   decodeAccountReadResult,
   decodeModelListResponse,
@@ -20,11 +20,11 @@ import {
   getString,
 } from "../src/backend/protocol";
 
-const EXPECTED = "OPENBOT_SQLITE_SMOKE_OK";
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-storage-smoke-"));
+const EXPECTED = "CODEBOT_SQLITE_SMOKE_OK";
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-storage-smoke-"));
 
 try {
-  const database = new OpenBotDatabase(join(root, "user-data"));
+  const database = new CodeBotDatabase(join(root, "user-data"));
   await runCauseEffect(database.initialize());
   const grokOnly = process.argv.includes("--grok-only");
   if (!grokOnly) {
@@ -44,7 +44,7 @@ try {
   await rm(root, { recursive: true, force: true });
 }
 
-async function runOptionalGrok(database: OpenBotDatabase): Promise<boolean> {
+async function runOptionalGrok(database: CodeBotDatabase): Promise<boolean> {
   let cli: GrokCliInfo;
   try {
     cli = await runCauseEffect(resolveGrokCli());
@@ -74,13 +74,13 @@ async function runOptionalGrok(database: OpenBotDatabase): Promise<boolean> {
 }
 
 async function runProvider(
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   provider: AgentProvider,
   client: AgentClient,
   model: AgentSummary["model"],
 ): Promise<void> {
   const agentId = `smoke-${provider}`;
-  const threadId = `openbot-thread-${agentId}`;
+  const threadId = `codebot-thread-${agentId}`;
   const workspace = join(root, "workspace", provider);
   await mkdir(workspace, { recursive: true, mode: 0o700 });
   const agent: AgentSummary = {
@@ -150,7 +150,7 @@ async function runProvider(
       client.request(
         "initialize",
         {
-          clientInfo: { name: "openbot-storage-smoke", version: "1.0.0" },
+          clientInfo: { name: "codebot-storage-smoke", version: "1.0.0" },
           capabilities: { experimentalApi: true },
         },
         decodeRecordResponse,

@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { chromium, type Locator, type Page } from "playwright-core";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/reply-quote-markdown-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/reply-quote-markdown-e2e");
 const storybook = process.argv.find((arg) => arg.startsWith("--storybook="))?.slice("--storybook=".length);
 const browserExecutable = process.argv
   .find((arg) => arg.startsWith("--browser-executable="))

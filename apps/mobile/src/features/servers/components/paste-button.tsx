@@ -6,7 +6,7 @@ import { useText } from "@/shared/lib/text";
 
 export function PasteButton({ disabled, onPaste }: { disabled: boolean; onPaste: (value: string) => void }) {
   const { t } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   return (
     <Pressable
       accessibilityRole="button"

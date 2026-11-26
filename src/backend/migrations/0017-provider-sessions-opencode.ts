@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord, isString } from "./runtime-values";
 
 const V17_PROVIDER_SESSIONS_CHECK_SQL = `provider TEXT NOT NULL CHECK(provider IN ('codex', 'claude', 'grok', 'opencode')),`;
@@ -58,7 +58,7 @@ export function rebuildProviderSessions(db: DatabaseSync, providerColumnSql: str
   `);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 17,
   name: "provider-sessions-opencode",
   // `projection_turns.provider_session_id` is a child reference with ON DELETE SET NULL. Dropping the

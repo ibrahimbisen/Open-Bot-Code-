@@ -1,5 +1,5 @@
-import { type AvatarHue, type ChannelIcon, type ChannelIconName, isAvatarHue } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import { type AvatarHue, type ChannelIcon, type ChannelIconName, isAvatarHue } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   BookOpen,
   Brain,
@@ -21,7 +21,7 @@ import {
   Store,
   Workflow,
   Zap,
-} from "@openbot/ui";
+} from "@codebot/ui";
 
 export const CHANNEL_ICONS = {
   megaphone: { component: Megaphone, label: "channel.picture.icon.megaphone" },

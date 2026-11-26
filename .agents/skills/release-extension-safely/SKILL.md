@@ -1,6 +1,6 @@
 ---
 name: release-extension-safely
-description: Audit a pending OpenBot Chrome extension release for hazards before the zip goes to the Chrome Web Store, then build the zip with the Release browser extension workflow. Use when asked to release, publish, upload or submit the browser extension, to make the Chrome Web Store zip, or to check whether an extension change is safe to ship.
+description: Audit a pending CodeBot Chrome extension release for hazards before the zip goes to the Chrome Web Store, then build the zip with the Release browser extension workflow. Use when asked to release, publish, upload or submit the browser extension, to make the Chrome Web Store zip, or to check whether an extension change is safe to ship.
 ---
 
 # Release the extension safely
@@ -72,7 +72,7 @@ git diff --name-status v<last>..v<new> -- apps/browser-extension packages/contra
 Then find what the extension imports from outside these paths, and add it:
 
 ```bash
-git grep --no-color -h -o -E "from \"(@openbot/[a-z0-9-]+|\.\./\.\./[^\"]+)" -- apps/browser-extension | sort -u
+git grep --no-color -h -o -E "from \"(@codebot/[a-z0-9-]+|\.\./\.\./[^\"]+)" -- apps/browser-extension | sort -u
 ```
 
 Route each changed file to a gate, or dismiss it with a reason that you can state. `packages/ui`
@@ -102,7 +102,7 @@ Always triggered.
   find apps/browser-extension/dist -name '*.map' | wc -l
   ```
 
-  Stop if `name` is `OpenBot (Dev)`, if any URL has `localhost` or `127.0.0.1`, or if a `.map` file
+  Stop if `name` is `CodeBot (Dev)`, if any URL has `localhost` or `127.0.0.1`, or if a `.map` file
   exists. Switch back to the original branch when you are done.
 
 ### B. Permissions and match patterns
@@ -138,7 +138,7 @@ The loop alone must list files: `extension-storage.ts` and `client-browser-messa
 An empty list means a wrong tag or a broken pattern. Stop and fix the command.
 
 - A renamed or removed key, or a `.v1` → `.v2` change, needs a read of the old key in the new
-  version, or a written reason that the loss is acceptable. Else **stop**. `openbot.session.v1`
+  version, or a written reason that the loss is acceptable. Else **stop**. `codebot.session.v1`
   loss signs every user out.
 - A decoder (`decode*`, `isDynamicRecord` checks) that now refuses a shape that `v<last>` wrote is a
   **stop**. Find the old writer in `v<last>` and compare.
@@ -189,7 +189,7 @@ Always triggered. The fakes do not prove that the zip works in Chrome.
 
 Run `bun scripts/browser-extension-e2e.ts --agent=<agent id> --auth-api=<url>` against this
 worktree's `bun run dev` stack (the `smoke` skill starts it). It writes its report under
-`.openbot-build/`. Then load `apps/browser-extension/dist` from the production build with
+`.codebot-build/`. Then load `apps/browser-extension/dist` from the production build with
 **Load unpacked** in a Chrome profile of its own, and check that the side panel opens and shows the
 sign-in screen. A failure that the range causes is a **stop**. A dev stack that does not start is
 **needs a human**.
@@ -203,7 +203,7 @@ gh workflow run release-extension.yml --ref v<new>
 gh run list --workflow release-extension.yml --event workflow_dispatch --limit 1 \
   --json databaseId,headSha,headBranch,status,conclusion,url
 gh run watch <databaseId> --exit-status
-gh run download <databaseId> --dir .openbot-build/release-extension-v<new>
+gh run download <databaseId> --dir .codebot-build/release-extension-v<new>
 ```
 
 - `headSha` must be the commit of `v<new>` (`git rev-list -n1 v<new>`).

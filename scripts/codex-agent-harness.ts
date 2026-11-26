@@ -3,8 +3,8 @@ import { readFileSync } from "node:fs";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import type { AgentProviderId } from "@openbot/contracts/agent-providers";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import type { AgentProviderId } from "@codebot/contracts/agent-providers";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { readCodexMcpConfig } from "../src/backend/agent/codex-mcp-config";
 import { codexPromptSettings } from "../src/backend/agent/codex-prompt-settings";
 import { generateTextWithoutTools } from "../src/backend/agent/profile-generation";
@@ -12,9 +12,9 @@ import { CODEX_FEATURES_CONFIG } from "../src/backend/agent/thread-lifecycle";
 import { discoverTools, resolveDeferredTool, visibleDynamicTools } from "../src/backend/agent/tool-catalog";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
 import type { CodexCliInfo } from "../src/backend/cli";
+import { webSearchToolSchema } from "../src/backend/codebot-tools";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { codexDisabledServers, toMcpShapeFailed } from "../src/backend/mcp-provider-shapes";
-import { webSearchToolSchema } from "../src/backend/openbot-tools";
 import {
   type DynamicToolCallParams,
   decodeRecordResponse,
@@ -68,7 +68,7 @@ export async function makeGitWorkspace(workspace: string): Promise<(...args: str
   await writeFile(join(workspace, "count.txt"), "42\n");
   const git = (...args: string[]) => execFileSync("git", args, { cwd: workspace, encoding: "utf8" });
   git("init", "-q", "-b", "main");
-  git("config", "user.name", "OpenBot Bench");
+  git("config", "user.name", "CodeBot Bench");
   git("config", "user.email", "bench@example.invalid");
   git("config", "commit.gpgsign", "false");
   git("add", ".");
@@ -76,7 +76,7 @@ export async function makeGitWorkspace(workspace: string): Promise<(...args: str
   return git;
 }
 
-export function openbotConfig(read: DynamicRecord | null, promptSettings = true) {
+export function codebotConfig(read: DynamicRecord | null, promptSettings = true) {
   return {
     tools: { update_plan: { enabled: true }, experimental_request_user_input: { enabled: false } },
     ...CODEX_FEATURES_CONFIG,
@@ -145,7 +145,7 @@ export async function startCodexAgent(
   const request = (method: string, params: unknown) =>
     runCauseEffect(client.request(method, params, decodeRecordResponse));
   await request("initialize", {
-    clientInfo: { name: "openbot", title: "OpenBot", version: "0.0.0" },
+    clientInfo: { name: "codebot", title: "CodeBot", version: "0.0.0" },
     capabilities: { experimentalApi: true },
   });
   client.notify("initialized");
@@ -165,7 +165,7 @@ export async function startCodexAgent(
         approvalPolicy: "on-request",
         sandbox: "danger-full-access",
         developerInstructions: DEVELOPER_INSTRUCTIONS,
-        serviceName: "openbot",
+        serviceName: "codebot",
         dynamicTools: visibleDynamicTools(catalog),
       });
       const thread = getRecord(started, "thread");
@@ -270,7 +270,7 @@ export function toolCallParams(params: DynamicRecord): DynamicToolCallParams {
     threadId: getString(params, "threadId") ?? "",
     turnId: getString(params, "turnId") ?? "",
     callId: getString(params, "callId") ?? "",
-    namespace: "openbot",
+    namespace: "codebot",
     tool: getString(params, "tool") ?? "",
     arguments: params.arguments,
   };

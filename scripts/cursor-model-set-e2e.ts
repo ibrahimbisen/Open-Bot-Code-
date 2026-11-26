@@ -7,7 +7,7 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cursor-model-set-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-model-set-e2e");
 const MEDIUM = "gpt-5.6-sol[context=272k,reasoning=medium,fast=false]";
 const HIGH = "gpt-5.6-sol[context=272k,reasoning=high,fast=false]";
 
@@ -28,7 +28,7 @@ interface Report {
   steps: Step[];
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-cursor-model-set-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-cursor-model-set-e2e-"));
 const report: Report = { passed: false, steps: [] };
 const clients: AgentClient[] = [];
 

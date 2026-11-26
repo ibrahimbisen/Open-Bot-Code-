@@ -1,8 +1,8 @@
-import type { UpdateStatus } from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import { toast } from "@openbot/ui";
-import { restartReasonKey } from "@openbot/ui/features/updates/restart-reasons";
-import { currentText } from "@openbot/ui/text";
+import type { UpdateStatus } from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import { toast } from "@codebot/ui";
+import { restartReasonKey } from "@codebot/ui/features/updates/restart-reasons";
+import { currentText } from "@codebot/ui/text";
 import { type Accessor, createEffect, onCleanup } from "solid-js";
 
 const TOAST_ID = "idle-app-restart";

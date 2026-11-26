@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { type DynamicRecord, isDynamicRecord, isString } from "./runtime-values";
 
 export const AGENT_MEMORY_SELECTION_SCHEMA_SQL = `
@@ -27,7 +27,7 @@ export const AGENT_MEMORY_SELECTION_SCHEMA_SQL = `
 `;
 
 // Frozen copies of `databaseRows`, `requiredStringColumn` and the memory budget and format of
-// `@openbot/contracts/agent-memory-context`, as this migration shipped them.
+// `@codebot/contracts/agent-memory-context`, as this migration shipped them.
 const AGENT_MEMORY_CONTEXT_BUDGET_BYTES = 8192;
 
 interface SelectedMemory {
@@ -94,7 +94,7 @@ function migrateAgentMemorySelection(db: DatabaseSync): void {
   }
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 32,
   name: "agent-memory-selection",
   up: migrateAgentMemorySelection,

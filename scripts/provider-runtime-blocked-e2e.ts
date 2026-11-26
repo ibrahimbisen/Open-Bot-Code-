@@ -3,13 +3,13 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, stat, utimes, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
-import type { ProviderRuntimeSnapshot } from "@openbot/contracts/ipc";
+import type { ProviderRuntimeSnapshot } from "@codebot/contracts/ipc";
 import lockValue from "../native-runtime.lock.json";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { ProviderRuntimeManager } from "../src/main/provider-runtime-manager";
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-runtime-blocked-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-runtime-blocked-e2e");
 const WAIT_MS = 15_000;
 const BLOCKED_VERSION = "2.3.2";
 const BLOCKLIST_URL = "https://raw.githubusercontent.com/nightly-labs/openbot/main/provider-runtime-blocklist.json";
@@ -33,7 +33,7 @@ interface Report {
   userCli?: Scenario;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-runtime-blocked-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-runtime-blocked-e2e-"));
 const report: Report = { passed: false };
 const baseLock = parseAgentRuntimeLock(lockValue);
 const pinnedVersion = baseLock.opencode.version;
@@ -80,7 +80,7 @@ async function writeCopy(versionRoot: string, version: string, executable: strin
     target,
     files: { [`bin/${executable}`]: sha256(text), LICENSE: sha256(LICENSE) },
   };
-  await writeFile(join(versionRoot, "openbot-install.json"), `${JSON.stringify(record)}\n`);
+  await writeFile(join(versionRoot, "codebot-install.json"), `${JSON.stringify(record)}\n`);
 }
 
 function nextStatus(
@@ -175,7 +175,7 @@ try {
   assert.equal(versionAfter, pinnedVersion, "a copy on a blocked version moves back to the pinned one");
   assert.equal(blockedCopyKept, false, "the blocked copy goes after the move back");
   assert.equal(versionAfterRestart, pinnedVersion, "a restart keeps the pinned copy");
-  assert.equal(copyInUseKept, true, "a blocked copy that another OpenBot process stamped stays");
+  assert.equal(copyInUseKept, true, "a blocked copy that another CodeBot process stamped stays");
   assert.equal(report.blocked.unusedCopyKept, false, "the next check removes a blocked copy that nothing uses");
 
   const notBlocked = await startManager("not-blocked", []);
@@ -199,7 +199,7 @@ try {
     versionAfter: version(userCli.manager),
     blockedCopyKept: await exists(userCli.blockedRoot),
   };
-  assert.equal(report.userCli.versionAfter, BLOCKED_VERSION, "OpenBot leaves OpenCode alone next to a user's CLI");
+  assert.equal(report.userCli.versionAfter, BLOCKED_VERSION, "CodeBot leaves OpenCode alone next to a user's CLI");
 
   report.passed = true;
 } finally {

@@ -1,10 +1,10 @@
-import type { ServerCompatibility, ServerConnectionIssue, ServerSummary } from "@openbot/contracts/ipc";
-import { TEAM_PROTOCOL_V1, type TeamProtocolSupportV1 } from "@openbot/contracts/team-protocol/v1";
-import { TEAM_PROTOCOL_V3_CAPABILITIES } from "@openbot/contracts/team-protocol/v3";
-import { TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { sourceText } from "@openbot/i18n/source";
-import { isSafeConnectionError } from "@openbot/team-client/remote-recovery";
-import { errorReference, referenceFrom } from "@openbot/user-errors";
+import type { ServerCompatibility, ServerConnectionIssue, ServerSummary } from "@codebot/contracts/ipc";
+import { TEAM_PROTOCOL_V1, type TeamProtocolSupportV1 } from "@codebot/contracts/team-protocol/v1";
+import { TEAM_PROTOCOL_V3_CAPABILITIES } from "@codebot/contracts/team-protocol/v3";
+import { TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
+import { isSafeConnectionError } from "@codebot/team-client/remote-recovery";
+import { errorReference, referenceFrom } from "@codebot/user-errors";
 import { RemoteProtocolError, RemoteRequestError } from "./remote-server-errors";
 
 export const LOCAL_TEAM_PROTOCOL = { minimum: TEAM_PROTOCOL_V1, maximum: TEAM_PROTOCOL_V10 } as const;

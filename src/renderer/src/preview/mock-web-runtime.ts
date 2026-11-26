@@ -1,14 +1,14 @@
-import { CHANNEL_CHATS_CAPABILITY } from "@openbot/contracts/ipc";
-import { MESSAGE_DELETE_CAPABILITY } from "@openbot/contracts/team-protocol/message-delete-v1";
-import { MESSAGE_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/message-pins-v1";
+import { CHANNEL_CHATS_CAPABILITY } from "@codebot/contracts/ipc";
+import { MESSAGE_DELETE_CAPABILITY } from "@codebot/contracts/team-protocol/message-delete-v1";
+import { MESSAGE_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/message-pins-v1";
 import type { WebRuntimeFactory } from "../features/web-client/web-client-context";
 import type { WebRuntimeEvents, WebWorkspaceRuntime } from "../features/web-client/web-runtime";
-import { createMockOpenBot, type MockOpenBotControls } from "./mock-openbot";
+import { createMockCodeBot, type MockCodeBotControls } from "./mock-codebot";
 
 export const createMockWebRuntime: WebRuntimeFactory = (_accountId, events) =>
-  mockWebRuntimeFor(createMockOpenBot(), events);
+  mockWebRuntimeFor(createMockCodeBot(), events);
 
-export function mockWebRuntimeFor(mock: MockOpenBotControls, events: WebRuntimeEvents): WebWorkspaceRuntime {
+export function mockWebRuntimeFor(mock: MockCodeBotControls, events: WebRuntimeEvents): WebWorkspaceRuntime {
   const agent = mock.api.agent;
   const host = {
     hostId: "preview-host",
@@ -111,14 +111,14 @@ export function mockWebRuntimeFor(mock: MockOpenBotControls, events: WebRuntimeE
     },
     cancelUpload: async () => {},
     discard: (id) => agent.discardDraftAttachment(id),
-    download: async () => ({ name: "preview.txt", mimeType: "text/plain", base64: btoa("OpenBot file preview") }),
+    download: async () => ({ name: "preview.txt", mimeType: "text/plain", base64: btoa("CodeBot file preview") }),
     downloadPreview: async () => ({
       name: "preview.txt",
       mimeType: "text/plain",
-      base64: btoa("OpenBot file preview"),
+      base64: btoa("CodeBot file preview"),
     }),
-    sharedFile: async () => ({ name: "preview.txt", mimeType: "text/plain", base64: btoa("OpenBot file preview") }),
-    workspaceFile: async () => ({ name: "preview.txt", mimeType: "text/plain", base64: btoa("OpenBot file preview") }),
+    sharedFile: async () => ({ name: "preview.txt", mimeType: "text/plain", base64: btoa("CodeBot file preview") }),
+    workspaceFile: async () => ({ name: "preview.txt", mimeType: "text/plain", base64: btoa("CodeBot file preview") }),
     workspaceDirectory: (agentId, path) => agent.listWorkspaceDirectory({ agentId, path }),
     react: (input) => agent.setMessageReaction(input),
     setAvatar: async (agentId, image) => {

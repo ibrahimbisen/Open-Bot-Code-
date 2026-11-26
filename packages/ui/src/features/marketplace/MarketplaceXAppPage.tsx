@@ -1,6 +1,6 @@
-import { X_AGENT_LISTING_ID } from "@openbot/contracts/browser-extension-x";
-import type { MarketplaceAgentDetail } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import { X_AGENT_LISTING_ID } from "@codebot/contracts/browser-extension-x";
+import type { MarketplaceAgentDetail } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertContent,
@@ -22,8 +22,8 @@ import {
   SettingsSection,
   Spinner,
   Text,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, For, Match, onSettled, Show, Switch, untrack } from "solid-js";
 import { AgentAvatar } from "../agents/AgentAvatar";

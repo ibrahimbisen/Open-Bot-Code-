@@ -21,7 +21,7 @@ export const PUSH_NOTIFICATIONS_ROUTES = {
 
 export type PushNotificationLevel = "all" | "needs-me";
 
-export const PUSH_NOTIFICATION_SOUNDS = ["openbot", "warm", "mech", "bubble", "press", "default", "none"] as const;
+export const PUSH_NOTIFICATION_SOUNDS = ["codebot", "warm", "mech", "bubble", "press", "default", "none"] as const;
 export type PushNotificationSound = (typeof PUSH_NOTIFICATION_SOUNDS)[number];
 
 export interface PushNotificationRegistration {

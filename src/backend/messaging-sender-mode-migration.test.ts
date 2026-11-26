@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { DatabaseSync, type SQLOutputValue } from "node:sqlite";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { LATEST_SCHEMA_VERSION, migrateCodeBotDatabase, NewerDatabaseError } from "./codebot-database-schema";
 import { releasedDatabaseCases } from "./migration-harness";
 import { migration as senderModeMigration } from "./migrations/0069-messaging-sender-mode";
 import type * as Registry from "./migrations/registry";
-import { LATEST_SCHEMA_VERSION, migrateOpenBotDatabase, NewerDatabaseError } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -26,13 +26,13 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
 function migrateToSenderMode(db: DatabaseSync): void {
   if (LATEST_SCHEMA_VERSION > senderModeMigration.version) migrateUpTo(db, senderModeMigration.version);
-  else migrateOpenBotDatabase(db);
+  else migrateCodeBotDatabase(db);
 }
 
 function seed(db: DatabaseSync): void {
@@ -108,7 +108,7 @@ describe("messaging sender mode migration", () => {
     const columnsBefore = columns(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=69
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 69 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 69 failed");
     expect(contents(db)).toEqual(before);
     expect(columns(db)).toEqual(columnsBefore);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=69").all()).toEqual([]);
@@ -139,10 +139,10 @@ describe("messaging sender mode migration", () => {
     const before = contents(db);
     const columnsBefore = columns(db);
     db.prepare("INSERT INTO schema_migrations VALUES(?, 'now')").run(LATEST_SCHEMA_VERSION + 1);
-    expect(() => migrateOpenBotDatabase(db)).toThrow(NewerDatabaseError);
+    expect(() => migrateCodeBotDatabase(db)).toThrow(NewerDatabaseError);
     db.prepare("DELETE FROM schema_migrations WHERE version = ?").run(LATEST_SCHEMA_VERSION + 1);
     db.exec("DELETE FROM schema_migrations WHERE version=51");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 51");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 51");
     expect(contents(db)).toEqual(before);
     expect(columns(db)).toEqual(columnsBefore);
   });
@@ -157,7 +157,7 @@ describe("messaging sender mode migration", () => {
 
     const db = databaseAt(68);
     seed(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     db.exec("UPDATE projection_messaging_allowed_senders SET mode='read' WHERE kind='group'");
     const after = contents(db);
 
@@ -166,19 +166,19 @@ describe("messaging sender mode migration", () => {
       const registry = await importOriginal<typeof Registry>();
       return { ...registry, MIGRATIONS: registry.MIGRATIONS.filter((entry) => entry.version <= olderNewest) };
     });
-    const older = await import("./openbot-database-schema");
+    const older = await import("./codebot-database-schema");
     expect(older.LATEST_SCHEMA_VERSION).toBe(olderNewest);
-    expect(() => older.migrateOpenBotDatabase(db)).toThrow(older.NewerDatabaseError);
+    expect(() => older.migrateCodeBotDatabase(db)).toThrow(older.NewerDatabaseError);
     expect(contents(db)).toEqual(after);
   });
 
   it("refuses a mode other than reply or read, in an upgraded and in a new database", () => {
     const upgraded = databaseAt(68);
     seed(upgraded);
-    migrateOpenBotDatabase(upgraded);
+    migrateCodeBotDatabase(upgraded);
     const created = new DatabaseSync(":memory:");
     databases.push(created);
-    migrateOpenBotDatabase(created);
+    migrateCodeBotDatabase(created);
     seed(created);
     for (const db of [upgraded, created]) {
       expect(() => db.exec("UPDATE projection_messaging_allowed_senders SET mode='all' WHERE kind='group'")).toThrow(

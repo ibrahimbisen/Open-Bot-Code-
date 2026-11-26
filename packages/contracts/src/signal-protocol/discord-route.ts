@@ -1,4 +1,4 @@
-export const DISCORD_ROUTE_AUDIENCE = "openbot-discord-route";
+export const DISCORD_ROUTE_AUDIENCE = "codebot-discord-route";
 
 export const DISCORD_API_PATH = "/v1/discord/api";
 

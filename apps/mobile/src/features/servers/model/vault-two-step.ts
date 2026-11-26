@@ -1,4 +1,4 @@
-import type { VaultTwoStepCodes } from "@openbot/contracts/ipc";
+import type { VaultTwoStepCodes } from "@codebot/contracts/ipc";
 import {
   parseTwoStepKey,
   type TwoStepAlgorithm,
@@ -6,7 +6,7 @@ import {
   twoStepCodeFromMac,
   twoStepMessage,
   twoStepRemainingMs,
-} from "@openbot/contracts/two-step-code";
+} from "@codebot/contracts/two-step-code";
 import { useQuery } from "@tanstack/react-query";
 import { CryptoDigestAlgorithm, digest } from "expo-crypto";
 import { useIsFocused } from "expo-router/react-navigation";

@@ -1,8 +1,8 @@
-import { CHANNEL_CHATS_CAPABILITY, type RoutineCalendarOwner } from "@openbot/contracts/ipc";
-import { ROUTINES_ONCE_CAPABILITY } from "@openbot/contracts/team-protocol/routines-once-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { buildRoutineCalendar, type RoutineCalendarSource } from "@openbot/team-client/routine-calendar";
-import { type TeamApiRequest, TeamRequestError, teamAgentRoutinesApi } from "@openbot/team-client/team-api-requests";
+import { CHANNEL_CHATS_CAPABILITY, type RoutineCalendarOwner } from "@codebot/contracts/ipc";
+import { ROUTINES_ONCE_CAPABILITY } from "@codebot/contracts/team-protocol/routines-once-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { buildRoutineCalendar, type RoutineCalendarSource } from "@codebot/team-client/routine-calendar";
+import { type TeamApiRequest, TeamRequestError, teamAgentRoutinesApi } from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 import { changesSchedule, type ScheduleSource } from "../schedule/schedule-port";
 import type { WebWorkspace } from "./web-client-context";

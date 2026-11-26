@@ -1,4 +1,4 @@
-import { Button, Heart, IconButton, PlushMascot, type PlushMascotFace, X } from "@openbot/ui";
+import { Button, Heart, IconButton, PlushMascot, type PlushMascotFace, X } from "@codebot/ui";
 import { createSignal, createUniqueId, For, Match, Show, Switch } from "solid-js";
 import { currentText } from "../../text";
 import { SocialNetworkMark } from "./social-marks";

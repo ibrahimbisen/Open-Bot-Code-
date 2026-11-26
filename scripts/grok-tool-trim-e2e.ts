@@ -9,7 +9,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/grok-tool-trim-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-tool-trim-e2e");
 const NL = String.fromCharCode(10);
 const REMOVED = ["send_feedback", "workflow"];
 const KEPT = ["run_terminal_command", "image_gen", "image_to_video"];
@@ -23,7 +23,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, requests: [] };
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-grok-trim-e2e-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-grok-trim-e2e-")));
 const clients: AgentClient[] = [];
 const saved = { ...process.env };
 

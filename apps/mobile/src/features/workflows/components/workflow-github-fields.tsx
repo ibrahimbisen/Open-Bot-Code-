@@ -7,7 +7,7 @@ import {
   type WorkflowGitHubEvent,
   type WorkflowGitHubFilter,
   type WorkflowNode,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
 import { useUniwind } from "uniwind";

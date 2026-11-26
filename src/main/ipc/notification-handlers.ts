@@ -1,5 +1,5 @@
-import type { AppTranslate } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
+import type { AppTranslate } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
 import { Notification } from "electron";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { notificationSettingsUrl, showRetainedNotification } from "../desktop-notifications";
@@ -30,7 +30,7 @@ export function notificationIpcHandlers({
       }),
       test: handler(() => {
         if (!Notification.isSupported()) throw new Error(sourceText("error.app.notificationsUnsupported"));
-        showRetainedNotification(new Notification({ title: "OpenBot", body: translate("notification.test") }));
+        showRetainedNotification(new Notification({ title: "CodeBot", body: translate("notification.test") }));
       }),
       openSettings: handler(async () => {
         const url = notificationSettingsUrl(process.platform);

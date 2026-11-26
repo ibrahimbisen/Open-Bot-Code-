@@ -1,5 +1,5 @@
-import type { BrowserTab } from "@openbot/contracts/ipc";
-import type { BrowserHistoryEntry } from "@openbot/ui/features/browser/browser-suggestions";
+import type { BrowserTab } from "@codebot/contracts/ipc";
+import type { BrowserHistoryEntry } from "@codebot/ui/features/browser/browser-suggestions";
 import { createStore } from "solid-js";
 
 const CLOSED_LIMIT = 25;

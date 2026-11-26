@@ -1,21 +1,21 @@
 import {
   type CheckCustomAgentInput,
+  type CodeBotDesktopApi,
   type CustomAgentCheckResult,
   type CustomAgentResult,
   type CustomAgentSummary,
   type CustomAgentUsage,
   type DeleteCustomAgentInput,
   LOCAL_SERVER_ID,
-  type OpenBotDesktopApi,
   type SaveCustomAgentInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 interface CustomAgentsPort {
-  customAgents: OpenBotDesktopApi["customAgents"];
+  customAgents: CodeBotDesktopApi["customAgents"];
 }
 
 function customAgentsPort(): CustomAgentsPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export interface CustomAgentsEndpointApi {

@@ -2,7 +2,7 @@ import {
   type CustomServerCheckout,
   type CustomServerCheckoutRequest,
   parseCustomServerCheckout,
-} from "@openbot/contracts/custom-server-plans";
+} from "@codebot/contracts/custom-server-plans";
 import {
   type CreateHostedServerInput,
   type DeleteHostedServerInput,
@@ -20,16 +20,16 @@ import {
   parseHostedServerSummary,
   parseServerClaim,
   type ServerClaim,
-} from "@openbot/contracts/hosted-servers";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/hosted-servers";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import {
   createHostedServerStatusCheck,
   createHostedServerWake,
   type HostedServerAvailability,
   type HostedServerWakeResponse,
   WAKE_RECONNECT_STATES,
-} from "@openbot/team-client/hosted-server-wake";
+} from "@codebot/team-client/hosted-server-wake";
 import { Effect, type Layer } from "effect";
 import {
   type AccountRequestClient,
@@ -42,8 +42,8 @@ const RUNNING_REFRESH_INTERVAL_MS = 15_000;
 export type HostedServerAuthClient = AccountRequestClient;
 
 export function takeHostingDeveloperKey(environment: NodeJS.ProcessEnv, isPackaged: boolean): string | null {
-  const key = environment.OPENBOT_HOSTING_DEVELOPER_KEY?.trim() || null;
-  delete environment.OPENBOT_HOSTING_DEVELOPER_KEY;
+  const key = environment.CODEBOT_HOSTING_DEVELOPER_KEY?.trim() || null;
+  delete environment.CODEBOT_HOSTING_DEVELOPER_KEY;
   return isPackaged ? null : key;
 }
 

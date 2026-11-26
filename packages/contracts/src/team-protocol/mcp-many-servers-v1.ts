@@ -12,7 +12,7 @@ const signIns = list(fields({ mcpServerId: identifier, signedIn: boolean }), 100
 const SIGN_IN_LIST_ROUTES: ReadonlySet<string> = new Set([MCP_SIGN_IN_ROUTES.list, MCP_SIGN_IN_ROUTES.signOut]);
 
 function pathname(path: string): string {
-  return new URL(path, "http://openbot.invalid").pathname;
+  return new URL(path, "http://codebot.invalid").pathname;
 }
 
 export function mcpManyServersResponse(path: string, status: number, value: unknown): TeamProtocolV2Json {

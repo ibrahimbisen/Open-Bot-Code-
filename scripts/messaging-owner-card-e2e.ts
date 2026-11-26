@@ -3,14 +3,14 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { bugReportPlatform, type Feedback, type FeedbackPhone } from "@openbot/contracts/feedback";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { bugReportPlatform, type Feedback, type FeedbackPhone } from "@codebot/contracts/feedback";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/messaging-owner-card-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-messaging-owner-card-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/messaging-owner-card-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-messaging-owner-card-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -18,14 +18,14 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const CALL_MARK = "FEEDBACK-CALL";
 const PERSON = { id: "local", name: "Alex" };
@@ -89,9 +89,9 @@ const answer = (message) => {
           threadId: params.threadId,
           turnId,
           callId: "call-" + turnId,
-          namespace: "openbot",
+          namespace: "codebot",
           tool: "tool_call",
-          arguments: { name: "openbot." + __tool, arguments: args },
+          arguments: { name: "codebot." + __tool, arguments: args },
         },
       });
     }
@@ -190,7 +190,7 @@ const report: {
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
 const sent: Feedback[] = [];
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -257,7 +257,7 @@ try {
       .deliveries.every((delivery) => !["queued", "starting", "running"].includes(delivery.status)),
   );
 
-  const connection = agents.messaging.store.ensureConnection("discord", "guild-e2e", "OpenBot e2e");
+  const connection = agents.messaging.store.ensureConnection("discord", "guild-e2e", "CodeBot e2e");
   const receive = (id: string, text: string) =>
     runCauseEffect(
       agents.messaging.receive({

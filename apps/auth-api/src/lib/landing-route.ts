@@ -1,13 +1,13 @@
 import type { landingPageText } from "./landing-page-text";
 import { type loadSitePage, SITE_OPEN_GRAPH_LOCALES } from "./site-locale";
-import { type HomePageHead, OPENBOT_SITE_URL, openBotHomeHead } from "./site-metadata";
+import { CODEBOT_SITE_URL, codeBotHomeHead, type HomePageHead } from "./site-metadata";
 import { pagePaths, SITE_LOCALES, siteHreflang } from "./site-paths";
-import { OPENBOT_SOFTWARE_APPLICATION } from "./software-application";
+import { CODEBOT_SOFTWARE_APPLICATION } from "./software-application";
 
 type LandingPageData = Awaited<ReturnType<typeof loadSitePage<ReturnType<typeof landingPageText>>>>;
 
 export function landingHead(siteUrl: string, path: string, data: LandingPageData | undefined) {
-  if (!data) return { links: [{ rel: "canonical", href: new URL(path, OPENBOT_SITE_URL).toString() }] };
+  if (!data) return { links: [{ rel: "canonical", href: new URL(path, CODEBOT_SITE_URL).toString() }] };
   const locale = data.site.locale;
   const head: HomePageHead = {
     title: data.text.title,
@@ -20,5 +20,5 @@ export function landingHead(siteUrl: string, path: string, data: LandingPageData
       path: pagePaths("/")[alternate],
     })),
   };
-  return openBotHomeHead(OPENBOT_SOFTWARE_APPLICATION, siteUrl, head);
+  return codeBotHomeHead(CODEBOT_SOFTWARE_APPLICATION, siteUrl, head);
 }

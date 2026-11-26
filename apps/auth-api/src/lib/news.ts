@@ -7,23 +7,23 @@ export const NEWS_COLLECTION: ContentCollection<"news"> = {
   indexRoute: "/news",
   articleRoute: "/news/$slug",
   name: "News",
-  indexTitle: "OpenBot News: Updates on the Local AI Agent App",
+  indexTitle: "CodeBot News: Updates on the Local AI Agent App",
   indexDescription:
-    "Notes on building OpenBot: local-first storage, agents that outlive their provider, and how the pieces fit together.",
+    "Notes on building CodeBot: local-first storage, agents that outlive their provider, and how the pieces fit together.",
   indexSocialImage: {
     path: "/social/news.jpg",
-    alt: "Good things in the making. OpenBot agents on a paper moon under the stars",
+    alt: "Good things in the making. CodeBot agents on a paper moon under the stars",
   },
-  feedTitle: "OpenBot news",
+  feedTitle: "CodeBot news",
   backLabel: "All news",
-  moreTitle: "More from OpenBot",
-  imageEyebrow: "OPENBOT · NEWS",
+  moreTitle: "More from CodeBot",
+  imageEyebrow: "CODEBOT · NEWS",
   articles: publishedFirst([
     {
-      slug: "introducing-openbot",
-      title: "Introducing OpenBot: A Shared Workspace for AI Agents",
+      slug: "introducing-codebot",
+      title: "Introducing CodeBot: A Shared Workspace for AI Agents",
       description:
-        "Meet OpenBot, a local-first workspace where the AI models you already use can work as a team of agents, alongside you and your coworkers.",
+        "Meet CodeBot, a local-first workspace where the AI models you already use can work as a team of agents, alongside you and your coworkers.",
       publishedAt: "2026-09-14",
       author: NEWS_AUTHOR,
     },
@@ -71,7 +71,7 @@ export const NEWS_COLLECTION: ContentCollection<"news"> = {
       slug: "run-the-team-server-yourself",
       title: "Run the team server yourself",
       description:
-        "Learn how self-hosting an OpenBot team server works, where conversations and files live, what the account service handles, and who is responsible for uptime.",
+        "Learn how self-hosting an CodeBot team server works, where conversations and files live, what the account service handles, and who is responsible for uptime.",
       publishedAt: "2026-07-11",
       updatedAt: "2026-10-07",
       author: NEWS_AUTHOR,

@@ -1,4 +1,4 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { supportLog, supportLogValue } from "@/features/support/model/support-log";
 import { appGroupFile, lockAppGroupFile } from "@/shared/lib/app-group";
 

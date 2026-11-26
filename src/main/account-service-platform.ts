@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Layer, Schema } from "effect";
 import type { CentralAuthOperationError } from "./central-auth-effects";
 
@@ -53,7 +53,7 @@ export class AccountServicePlatform extends Context.Service<
     ): Effect.Effect<T, AccountRequestFailure>;
     openPage(url: string): Effect.Effect<void, AccountPageFailure>;
   }
->()("openbot/main/AccountServicePlatform") {
+>()("codebot/main/AccountServicePlatform") {
   static layer(auth: AccountRequestClient, openExternal: (url: string) => Promise<void>) {
     return Layer.succeed(
       AccountServicePlatform,

@@ -1,9 +1,9 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface AccountPort {
-  agent: Pick<OpenBotDesktopApi["agent"], "getUsage">;
+  agent: Pick<CodeBotDesktopApi["agent"], "getUsage">;
   auth: Pick<
-    OpenBotDesktopApi["auth"],
+    CodeBotDesktopApi["auth"],
     | "cancelMobileConnect"
     | "createMobileConnect"
     | "createMobileConnectLink"
@@ -27,5 +27,5 @@ export interface AccountPort {
 }
 
 export function accountPort(): AccountPort {
-  return window.openbot;
+  return window.codebot;
 }

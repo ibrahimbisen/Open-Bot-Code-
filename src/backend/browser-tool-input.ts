@@ -1,4 +1,4 @@
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 
 const REF = /^(\d+):[^:\s]+:\d+$/u;
 const REF_LINE = /^(\d+:[^:\s]+:\d+)\s/u;

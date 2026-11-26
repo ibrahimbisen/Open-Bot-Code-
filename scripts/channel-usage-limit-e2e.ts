@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
-import { type AgentSummary, type ChannelPage, MODEL_SWITCH_ITEM_TYPES } from "@openbot/contracts/ipc";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
+import { type AgentSummary, type ChannelPage, MODEL_SWITCH_ITEM_TYPES } from "@codebot/contracts/ipc";
 import { argument, ChannelClient, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
 interface Report {
@@ -27,7 +27,7 @@ const ended = (channel: ChannelPage) => {
 
 try {
   const spentProvider = argument("spent") ?? "codex";
-  const models = (await page.evaluate(() => window.openbot.agent.listModels())).flatMap((model) =>
+  const models = (await page.evaluate(() => window.codebot.agent.listModels())).flatMap((model) =>
     isAgentProvider(model.provider) ? [{ ...model, provider: model.provider }] : [],
   );
   const spent = models.find((model) => model.provider === spentProvider);
@@ -59,7 +59,7 @@ try {
   report.moved = { provider: moved.provider, model: moved.model };
   report.taskState = done.tasks.at(-1)?.state ?? "missing";
   report.channelNote = done.messages.some((message) => message.message.itemType === switchNote);
-  const chat = await page.evaluate((id) => window.openbot.agent.readConversation(id), agent.id);
+  const chat = await page.evaluate((id) => window.codebot.agent.readConversation(id), agent.id);
   report.chatNote = chat.messages.some((message) => message.itemType === switchNote);
 
   assert.ok(

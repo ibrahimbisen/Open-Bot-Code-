@@ -4,8 +4,8 @@ import type {
   RoutineRun,
   RoutineRunStatus,
   UpdateRoutineInput,
-} from "@openbot/contracts/ipc";
-import type { OpenBotDatabase } from "./openbot-database";
+} from "@codebot/contracts/ipc";
+import type { CodeBotDatabase } from "./codebot-database";
 import {
   type DueRoutine,
   type ImportedRoutineRun,
@@ -29,7 +29,7 @@ export interface DueRoutineTrigger {
 }
 
 export class AgentRoutineStore extends RoutineStore {
-  constructor(database: OpenBotDatabase) {
+  constructor(database: CodeBotDatabase) {
     super(database, ROUTINE_TABLES.agent);
   }
 

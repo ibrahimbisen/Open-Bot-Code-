@@ -1,5 +1,5 @@
-import type { AppTextKey } from "@openbot/i18n";
-import { buttonVariants, DropdownMenu, Kbd, MapIcon, Minus, Network, Plus, Scan } from "@openbot/ui";
+import type { AppTextKey } from "@codebot/i18n";
+import { buttonVariants, DropdownMenu, Kbd, MapIcon, Minus, Network, Plus, Scan } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import { HudButton, hudBarRect } from "./WorkflowCanvasHud";

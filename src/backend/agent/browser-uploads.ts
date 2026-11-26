@@ -3,8 +3,8 @@ import { chmod, mkdir, mkdtemp, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 import { pipeline } from "node:stream/promises";
-import { ATTACHMENT_LIMITS } from "@openbot/contracts/input-limits";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
+import { ATTACHMENT_LIMITS } from "@codebot/contracts/input-limits";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
 import { Effect, Exit, Fiber, Scope } from "effect";
 import {
   type AttachmentOperationError,
@@ -76,7 +76,7 @@ const removeUploadRoot = Effect.fn("BrowserUploads.removeRoot")((path: string) =
   ),
 );
 
-const logger = createOpenBotLogger("browser-uploads");
+const logger = createCodeBotLogger("browser-uploads");
 
 const MAX_BROWSER_UPLOAD_INPUTS_PER_TAB = 10;
 const MAX_BROWSER_UPLOAD_BYTES_PER_TAB = ATTACHMENT_LIMITS.totalBytes;
@@ -193,7 +193,7 @@ export class BrowserUploads {
             const stagedPaths = reused ? [...reused.files] : [];
             if (!reused) {
               yield* Effect.gen(function* () {
-                stagingRoot = yield* attachmentCall(() => mkdtemp(join(tmpdir(), "openbot-browser-upload-")));
+                stagingRoot = yield* attachmentCall(() => mkdtemp(join(tmpdir(), "codebot-browser-upload-")));
                 currentReservation.root = stagingRoot;
               }).pipe(Effect.uninterruptible);
               if (reservation.invalidated)

@@ -1,7 +1,7 @@
-import { type ComputerUsePermissionApp, LOCAL_SERVER_ID, type MacPermissionId } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { Button, FolderOpen, GripVertical, Monitor, MousePointer2 } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { type ComputerUsePermissionApp, LOCAL_SERVER_ID, type MacPermissionId } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { Button, FolderOpen, GripVertical, Monitor, MousePointer2 } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, onCleanup, onSettled, Show } from "solid-js";
 import { computerUsePort } from "./computer-use-port";
 
@@ -19,7 +19,7 @@ const PERMISSION_HELP: Record<MacPermissionId, { title: AppTextKey; pane: AppTex
 };
 
 const SUNSHINE_APP_NAME = "Sunshine";
-const OPENBOT_APP_NAME = "OpenBot";
+const CODEBOT_APP_NAME = "CodeBot";
 
 const POLL_INTERVAL_MS = 1_000;
 
@@ -149,7 +149,7 @@ export function ComputerUsePermissionHelp(props: { permission: MacPermissionId; 
           <Show
             when={app()}
             fallback={t("computerUse.help.findInList", {
-              name: props.sunshine ? SUNSHINE_APP_NAME : OPENBOT_APP_NAME,
+              name: props.sunshine ? SUNSHINE_APP_NAME : CODEBOT_APP_NAME,
             })}
           >
             {(bundle) => t("computerUse.help.dragIntoList", { name: bundle().name })}

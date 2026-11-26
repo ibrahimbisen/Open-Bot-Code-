@@ -1,4 +1,4 @@
-import type { MobilePlatformLogoVariant } from "@openbot/brand";
+import type { MobilePlatformLogoVariant } from "@codebot/brand";
 import {
   type ApprovalAutomationPreference,
   agentAutoApprovalEnabled,
@@ -7,12 +7,12 @@ import {
   type ExternalLinkTarget,
   LOCAL_SERVER_ID,
   type McpSignInState,
-} from "@openbot/contracts/ipc";
-import type { MarketplaceListingLink } from "@openbot/contracts/marketplace-links";
-import type { AppTextKey } from "@openbot/i18n";
-import { DEFAULT_GENERAL_SETTINGS, type GeneralSettingsValue } from "@openbot/ui/features/settings/app-settings";
-import type { MobileInstallRequest } from "@openbot/ui/features/settings/SettingsMobileConnectTab";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import type { MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
+import type { AppTextKey } from "@codebot/i18n";
+import { DEFAULT_GENERAL_SETTINGS, type GeneralSettingsValue } from "@codebot/ui/features/settings/app-settings";
+import type { MobileInstallRequest } from "@codebot/ui/features/settings/SettingsMobileConnectTab";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createSignal, flush, onSettled } from "solid-js";
 import { isActionSoundEnabled, readActionSoundTheme, setActionSoundChoice } from "../../action-sounds";
 import { actionToast } from "../../action-toast";
@@ -42,7 +42,7 @@ interface AppSettingRowRequest {
   nonce: number;
 }
 
-const ANALYTICS_APP_VERSION_STORAGE_KEY = "openbot:analytics-app-version";
+const ANALYTICS_APP_VERSION_STORAGE_KEY = "codebot:analytics-app-version";
 
 function islandSettings(preference: DynamicIslandPreference) {
   return {

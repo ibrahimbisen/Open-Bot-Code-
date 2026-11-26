@@ -1,14 +1,14 @@
 ; electron-builder includes this file in the NSIS installer. Its `protocols` setting registers the
-; openbot:// scheme only on macOS and Linux, so the installer writes the Windows key itself.
+; codebot:// scheme only on macOS and Linux, so the installer writes the Windows key itself.
 ; The application writes the same key at each start (`src/main/index.ts`).
 
-; A chosen folder such as D:\OpenBot inherits Modify rights for "Authenticated Users" from the drive
-; root, so another account could replace OpenBot.exe. Give access only to this user, SYSTEM and
+; A chosen folder such as D:\CodeBot inherits Modify rights for "Authenticated Users" from the drive
+; root, so another account could replace CodeBot.exe. Give access only to this user, SYSTEM and
 ; Administrators, as %LOCALAPPDATA% does, and reset the files to inherit it. This runs before the
 ; files are copied at each install and update, because an update deletes the folder. The installer
 ; makes the folder, so this user owns it and icacls can change it. On a drive with no ACLs, such as
 ; exFAT, icacls fails and the install continues.
-!macro openBotRestrictInstallDirectory
+!macro codeBotRestrictInstallDirectory
   Push $0
   Push $1
   ReadEnvStr $0 USERDOMAIN
@@ -34,25 +34,25 @@
     Quit
   ${endIf}
   CreateDirectory "$INSTDIR"
-  !insertmacro openBotRestrictInstallDirectory
+  !insertmacro codeBotRestrictInstallDirectory
 !macroend
 
 !macro customInstall
-  WriteRegStr SHCTX "Software\Classes\openbot" "" "URL:OpenBot invitations"
-  WriteRegStr SHCTX "Software\Classes\openbot" "URL Protocol" ""
-  WriteRegStr SHCTX "Software\Classes\openbot\DefaultIcon" "" "$appExe,0"
-  WriteRegStr SHCTX "Software\Classes\openbot\shell\open\command" "" '"$appExe" "%1"'
-  !insertmacro openBotRemoveAppFromDataFolder
-  !insertmacro openBotRemoveAppAboveInstallDirectory
+  WriteRegStr SHCTX "Software\Classes\codebot" "" "URL:CodeBot invitations"
+  WriteRegStr SHCTX "Software\Classes\codebot" "URL Protocol" ""
+  WriteRegStr SHCTX "Software\Classes\codebot\DefaultIcon" "" "$appExe,0"
+  WriteRegStr SHCTX "Software\Classes\codebot\shell\open\command" "" '"$appExe" "%1"'
+  !insertmacro codeBotRemoveAppFromDataFolder
+  !insertmacro codeBotRemoveAppAboveInstallDirectory
 !macroend
 
-; OpenBot keeps the agent workspaces in %USERPROFILE%\OpenBot (`src/backend/agent-store.ts`) and its
-; user data in %APPDATA%\OpenBot (`app.setName` in `src/main/index.ts`). The uninstaller deletes the
+; CodeBot keeps the agent workspaces in %USERPROFILE%\CodeBot (`src/backend/agent-store.ts`) and its
+; user data in %APPDATA%\CodeBot (`app.setName` in `src/main/index.ts`). The uninstaller deletes the
 ; installation folder, and an update moves each file in it to a temporary folder that it then
 ; deletes. An installation folder must not be one of these folders or a folder that holds one.
 ; Sets OUT to "1" when the folder in the variable PATH is such a folder, otherwise to "0". A
 ; trailing backslash is removed from PATH. OUT must not be PATH, $R8 or $R9.
-!macro openBotHoldsUserData PATH OUT
+!macro codeBotHoldsUserData PATH OUT
   Push $R8
   Push $R9
   StrCpy ${OUT} "0"
@@ -61,14 +61,14 @@
     StrCpy ${PATH} ${PATH} -1
   ${endIf}
   ${if} ${PATH} != ""
-    !insertmacro openBotHolds ${PATH} "$PROFILE\OpenBot" ${OUT}
-    !insertmacro openBotHolds ${PATH} "$APPDATA\OpenBot" ${OUT}
+    !insertmacro codeBotHolds ${PATH} "$PROFILE\CodeBot" ${OUT}
+    !insertmacro codeBotHolds ${PATH} "$APPDATA\CodeBot" ${OUT}
   ${endIf}
   Pop $R9
   Pop $R8
 !macroend
 
-!macro openBotHolds PATH FOLDER OUT
+!macro codeBotHolds PATH FOLDER OUT
   StrLen $R9 ${PATH}
   StrCpy $R8 "${FOLDER}" $R9
   ${if} $R8 == ${PATH}
@@ -82,12 +82,12 @@
 
 !ifndef BUILD_UNINSTALLER
   ; "1" when the registry names an earlier installation in a folder with user data.
-  Var openBotRegisteredInDataFolder
-  ; The folder with user data that holds an earlier OpenBot.exe. The update removes that copy.
-  Var openBotDataFolderInstall
+  Var codeBotRegisteredInDataFolder
+  ; The folder with user data that holds an earlier CodeBot.exe. The update removes that copy.
+  Var codeBotDataFolderInstall
 
   ; The assisted installer accepted a folder that did not exist yet, so a first installation could go
-  ; to %USERPROFILE%\OpenBot, and the app then made the agent folders in it. The earlier uninstaller
+  ; to %USERPROFILE%\CodeBot, and the app then made the agent folders in it. The earlier uninstaller
   ; would move them with the app files and delete them, or it stops the update with "Failed to
   ; uninstall old application files". Do not run that uninstaller: `customCheckAppRunning` removes its
   ; registry entry, and `customInstall` removes only the app files. A copy whose registry entry is
@@ -96,18 +96,18 @@
   ; page (`customPageAfterChangeDir`) refuses the folder with user data.
   !macro customInit
     ReadRegStr $1 SHCTX "${INSTALL_REGISTRY_KEY}" InstallLocation
-    !insertmacro openBotHoldsUserData $1 $0
+    !insertmacro codeBotHoldsUserData $1 $0
     ${if} $0 == "1"
-      StrCpy $openBotRegisteredInDataFolder "1"
+      StrCpy $codeBotRegisteredInDataFolder "1"
       ${if} ${FileExists} "$1\${APP_EXECUTABLE_FILENAME}"
-        StrCpy $openBotDataFolderInstall $1
+        StrCpy $codeBotDataFolderInstall $1
       ${endIf}
-    ${elseIf} ${FileExists} "$PROFILE\OpenBot\${APP_EXECUTABLE_FILENAME}"
-      StrCpy $openBotDataFolderInstall "$PROFILE\OpenBot"
-    ${elseIf} ${FileExists} "$APPDATA\OpenBot\${APP_EXECUTABLE_FILENAME}"
-      StrCpy $openBotDataFolderInstall "$APPDATA\OpenBot"
+    ${elseIf} ${FileExists} "$PROFILE\CodeBot\${APP_EXECUTABLE_FILENAME}"
+      StrCpy $codeBotDataFolderInstall "$PROFILE\CodeBot"
+    ${elseIf} ${FileExists} "$APPDATA\CodeBot\${APP_EXECUTABLE_FILENAME}"
+      StrCpy $codeBotDataFolderInstall "$APPDATA\CodeBot"
     ${endIf}
-    !insertmacro openBotHoldsUserData $INSTDIR $0
+    !insertmacro codeBotHoldsUserData $INSTDIR $0
     ${if} $0 == "1"
       StrCpy $INSTDIR "$LocalAppData\Programs\${APP_FILENAME}"
     ${endIf}
@@ -115,19 +115,19 @@
 
   ; The installer runs this check before it removes the earlier version. It is the default check.
   ; When the registry names a folder with user data, the update closes the app there, so the check
-  ; looks for the earlier OpenBot.exe only: a match on the folder would also stop the programs that
+  ; looks for the earlier CodeBot.exe only: a match on the folder would also stop the programs that
   ; agents run from their workspaces. Then the registry no longer names that installation, so
   ; `uninstallOldVersion` does not run its uninstaller. The uninstaller keeps the default check.
   !macro customCheckAppRunning
     !insertmacro IS_POWERSHELL_AVAILABLE
-    ${if} $openBotRegisteredInDataFolder == "1"
-    ${andIf} $openBotDataFolderInstall != ""
+    ${if} $codeBotRegisteredInDataFolder == "1"
+    ${andIf} $codeBotDataFolderInstall != ""
       Push $INSTDIR
-      StrCpy $INSTDIR "$openBotDataFolderInstall\${APP_EXECUTABLE_FILENAME}"
+      StrCpy $INSTDIR "$codeBotDataFolderInstall\${APP_EXECUTABLE_FILENAME}"
     ${endIf}
     !insertmacro _CHECK_APP_RUNNING
-    ${if} $openBotRegisteredInDataFolder == "1"
-      ${if} $openBotDataFolderInstall != ""
+    ${if} $codeBotRegisteredInDataFolder == "1"
+      ${if} $codeBotDataFolderInstall != ""
         Pop $INSTDIR
       ${endIf}
       DeleteRegKey SHCTX "${UNINSTALL_REGISTRY_KEY}"
@@ -144,29 +144,29 @@
 !endif
 
 ; After the new copy is installed, delete the earlier app from the folder with user data.
-!macro openBotRemoveAppFromDataFolder
-  ${if} $openBotDataFolderInstall != ""
-    !insertmacro openBotRemoveAppFiles $openBotDataFolderInstall
+!macro codeBotRemoveAppFromDataFolder
+  ${if} $codeBotDataFolderInstall != ""
+    !insertmacro codeBotRemoveAppFiles $codeBotDataFolderInstall
   ${endIf}
 !macroend
 
 ; An installation in the default folder whose registry entry is gone, for example after an update
-; that stopped, is installed again in an OpenBot subfolder (`openBotSafeInstallDirectory`). The
+; that stopped, is installed again in an CodeBot subfolder (`codeBotSafeInstallDirectory`). The
 ; earlier copy stays in the default folder, often with files missing, and no update reaches it. Its
 ; login item and shortcuts then open a copy that fails at start. Delete its app files. Only this
-; user has the default folder, and it holds only OpenBot.
-!macro openBotRemoveAppAboveInstallDirectory
+; user has the default folder, and it holds only CodeBot.
+!macro codeBotRemoveAppAboveInstallDirectory
   ${if} $INSTDIR == "$LocalAppData\Programs\${APP_FILENAME}\${APP_FILENAME}"
   ${andIf} ${FileExists} "$LocalAppData\Programs\${APP_FILENAME}\${APP_EXECUTABLE_FILENAME}"
-    !insertmacro openBotRemoveAppFiles "$LocalAppData\Programs\${APP_FILENAME}"
+    !insertmacro codeBotRemoveAppFiles "$LocalAppData\Programs\${APP_FILENAME}"
   ${endIf}
 !macroend
 
-; Only the files and folders that an OpenBot installation has are deleted from FOLDER, so the agent
+; Only the files and folders that an CodeBot installation has are deleted from FOLDER, so the agent
 ; folders stay. A file that Windows still holds stays too; it does not stop the update. The login
 ; item names the executable (`src/main/login-item.ts`), and Electron calls it by the AppUserModelId:
-; point it at the new copy, or OpenBot no longer opens at sign-in.
-!macro openBotRemoveAppFiles FOLDER
+; point it at the new copy, or CodeBot no longer opens at sign-in.
+!macro codeBotRemoveAppFiles FOLDER
   Push $0
   Push $1
   Push $2
@@ -208,15 +208,15 @@
 !macro customUnInstall
   ${ifNot} ${isUpdated}
     Push $0
-    ReadRegStr $0 SHCTX "Software\Classes\openbot\shell\open\command" ""
+    ReadRegStr $0 SHCTX "Software\Classes\codebot\shell\open\command" ""
     ${if} $0 == '"$INSTDIR\${APP_EXECUTABLE_FILENAME}" "%1"'
-      DeleteRegKey SHCTX "Software\Classes\openbot"
+      DeleteRegKey SHCTX "Software\Classes\codebot"
     ${endIf}
     Pop $0
   ${endIf}
 !macroend
 
-; OpenBot installs for the current user only. The application writes the openbot:// key in HKCU at
+; CodeBot installs for the current user only. The application writes the codebot:// key in HKCU at
 ; each start, and an update finds only one installation. This skips the "All users" page.
 !macro customInstallMode
   StrCpy $isForceCurrentInstall "1"
@@ -224,7 +224,7 @@
 
 ; The app starts an update visibly (`src/main/update-service.ts`), so the user sees the progress page
 ; until the new version opens. An update skips every other page; the earlier uninstaller deletes
-; OpenBot.exe before the new files are copied, and a silent update gave no sign of that. This is the
+; CodeBot.exe before the new files are copied, and a silent update gave no sign of that. This is the
 ; default finish page of the assisted installer, but in an update it opens the app at once and skips
 ; the page, which also closes the installer. The installer opens the app by itself only in a silent run.
 !macro customFinishPage
@@ -237,7 +237,7 @@
     ${StdUtils.ExecShellAsUser} $0 "$launchLink" "open" "$1"
   FunctionEnd
 
-  Function openBotSkipFinishPageInUpdate
+  Function codeBotSkipFinishPageInUpdate
     ${if} ${isUpdated}
       ${if} ${isForceRun}
         ; Otherwise the app window opens behind the installer window.
@@ -248,31 +248,31 @@
     ${endIf}
   FunctionEnd
 
-  !define MUI_PAGE_CUSTOMFUNCTION_PRE openBotSkipFinishPageInUpdate
+  !define MUI_PAGE_CUSTOMFUNCTION_PRE codeBotSkipFinishPageInUpdate
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION "StartApp"
   !insertmacro MUI_PAGE_FINISH
 !macroend
 
 ; The uninstaller and each update delete the whole installation folder. electron-builder adds an
-; OpenBot subfolder only when the chosen path does not contain "OpenBot", so a choice such as
-; %USERPROFILE%\OpenBot (the agent workspaces) or %APPDATA%\OpenBot (the user data) would be
+; CodeBot subfolder only when the chosen path does not contain "CodeBot", so a choice such as
+; %USERPROFILE%\CodeBot (the agent workspaces) or %APPDATA%\CodeBot (the user data) would be
 ; deleted. Another account can also make a folder first and keep its rights on it. Use only a folder
-; that does not exist or that holds this user's earlier installation. Until then, add an OpenBot
-; subfolder. The app makes %USERPROFILE%\OpenBot only at its first start, so that folder can also not
+; that does not exist or that holds this user's earlier installation. Until then, add an CodeBot
+; subfolder. The app makes %USERPROFILE%\CodeBot only at its first start, so that folder can also not
 ; exist yet: use the default folder for it and for a folder that holds it. The page shows nothing;
 ; Abort skips it. In a visible update, the install mode page has set the folder from the registry
 ; again, so this page uses the folder that `customInit` uses for a silent update.
 !macro customPageAfterChangeDir
   !include FileFunc.nsh
 
-  Page custom openBotSafeInstallDirectory
+  Page custom codeBotSafeInstallDirectory
 
-  Function openBotSafeInstallDirectory
+  Function codeBotSafeInstallDirectory
     Push $0
     Push $1
     ${if} ${isUpdated}
-      !insertmacro openBotHoldsUserData $INSTDIR $0
+      !insertmacro codeBotHoldsUserData $INSTDIR $0
       ${if} $0 == "1"
         StrCpy $INSTDIR "$LocalAppData\Programs\${APP_FILENAME}"
       ${endIf}
@@ -289,7 +289,7 @@
     ${if} $0 == ""
       StrCpy $INSTDIR "$INSTDIR\${APP_FILENAME}"
     ${endIf}
-    !insertmacro openBotHoldsUserData $INSTDIR $0
+    !insertmacro codeBotHoldsUserData $INSTDIR $0
     ${if} $0 == "1"
       StrCpy $INSTDIR "$LocalAppData\Programs\${APP_FILENAME}"
     ${endIf}

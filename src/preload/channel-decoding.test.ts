@@ -1,7 +1,7 @@
 // @vitest-environment node
 
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { decodeChannel, parseChannelCommand } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { decodeChannel, parseChannelCommand } from "@codebot/contracts/ipc";
 import { describe, expect, it } from "vitest";
 
 const CHANNEL = {

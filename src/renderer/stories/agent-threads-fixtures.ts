@@ -1,8 +1,8 @@
-import type { AgentTask, ConversationMessage, ConversationSnapshot, QueueDelivery } from "@openbot/contracts/ipc";
-import type { MockOpenBotOptions } from "../src/preview/mock-openbot";
+import type { AgentTask, ConversationMessage, ConversationSnapshot, QueueDelivery } from "@codebot/contracts/ipc";
+import type { MockCodeBotOptions } from "../src/preview/mock-codebot";
 
 export const AGENT_ID = "chief";
-export const TABS_KEY = "openbot:thread-tabs:v1";
+export const TABS_KEY = "codebot:thread-tabs:v1";
 
 function message(id: string, author: "user" | "assistant", text: string, createdAt: string): ConversationMessage {
   return { id, author, source: author, text, createdAt, status: "completed" };
@@ -98,7 +98,7 @@ function snapshot(task: AgentTask, messages: ConversationMessage[]): Conversatio
   return { agentId: AGENT_ID, threadId: task.threadId, activeTurnId: task.activeTurnId, revision: 1, messages };
 }
 
-export const THREAD_OPTIONS: MockOpenBotOptions = {
+export const THREAD_OPTIONS: MockCodeBotOptions = {
   tasks: { [AGENT_ID]: THREADS },
   runtimeSnapshot: {
     threadContextStates: [
@@ -195,7 +195,7 @@ function queued(id: string, position: number, text: string): QueueDelivery {
   };
 }
 
-export const THREAD_QUEUE_OPTIONS: MockOpenBotOptions = {
+export const THREAD_QUEUE_OPTIONS: MockCodeBotOptions = {
   ...THREAD_OPTIONS,
   tasks: {
     [AGENT_ID]: THREADS.map((task) =>
@@ -231,7 +231,7 @@ export const THREAD_QUEUE_OPTIONS: MockOpenBotOptions = {
 
 const COMPETITORS_DONE = thread("competitors", "Competitor scan", "2026-08-19T10:07:00.000Z");
 
-export const UNREAD_OPTIONS: MockOpenBotOptions = {
+export const UNREAD_OPTIONS: MockCodeBotOptions = {
   ...THREAD_OPTIONS,
   tasks: { [AGENT_ID]: THREADS.map((task) => (task.id === COMPETITORS_DONE.id ? COMPETITORS_DONE : task)) },
   taskConversations: {

@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
-import { type AgentProviderId, isAgentProvider } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { type AgentProviderId, isAgentProvider } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { DatabaseCore } from "./database-core";
 import { databaseRow, databaseRows, optionalStringColumn, requiredStringColumn } from "./database-rows";
 
@@ -35,7 +35,7 @@ export interface ProviderSessionsOptions {
   core: DatabaseCore;
 }
 
-const logger = createOpenBotLogger("provider-sessions");
+const logger = createCodeBotLogger("provider-sessions");
 
 export class ProviderSessions {
   readonly #core: DatabaseCore;
@@ -82,7 +82,7 @@ export class ProviderSessions {
     const id = requiredStringColumn(row, "id");
     if (!this.#reportedUnknownProviders.has(id)) {
       this.#reportedUnknownProviders.add(id);
-      logger.warn("A provider session names a provider that OpenBot does not know, so OpenBot skips it.", {
+      logger.warn("A provider session names a provider that CodeBot does not know, so CodeBot skips it.", {
         providerSessionId: id,
       });
     }

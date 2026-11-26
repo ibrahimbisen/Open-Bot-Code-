@@ -1,4 +1,4 @@
-import type { LicenseStoreEvent } from "@openbot/ui/features/billing/license-store";
+import type { LicenseStoreEvent } from "@codebot/ui/features/billing/license-store";
 import { desktopAnalytics } from "../../analytics";
 
 export function trackLicenseEvent(event: LicenseStoreEvent): void {

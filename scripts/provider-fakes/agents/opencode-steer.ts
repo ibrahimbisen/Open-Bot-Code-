@@ -14,7 +14,7 @@ function text(blocks: AcpRequest["params"]["prompt"]): string {
   return (blocks ?? [])
     .map((block) => block.text ?? "")
     .join("")
-    .replace(/^[\s\S]*<\/openbot-developer-instructions>/u, "")
+    .replace(/^[\s\S]*<\/codebot-developer-instructions>/u, "")
     .trim();
 }
 

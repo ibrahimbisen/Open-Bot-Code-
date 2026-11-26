@@ -59,11 +59,11 @@ continue without the user.
 
 Before you write UI, list the parts that already exist:
 
-- Primitives from `@openbot/ui` (`packages/ui/src/`).
-- Feature components from `@openbot/ui/features/<domain>/...`.
+- Primitives from `@codebot/ui` (`packages/ui/src/`).
+- Feature components from `@codebot/ui/features/<domain>/...`.
 - For public web: existing site components and classes in
   `apps/auth-api/src/components/` and `apps/auth-api/src/styles.css`. Import
-  only explicit `@openbot/ui/...` subpaths there. The `@openbot/ui` barrel
+  only explicit `@codebot/ui/...` subpaths there. The `@codebot/ui` barrel
   fails the Worker typecheck.
 - Data that already exists, such as plans, prices, and limits in
   `packages/contracts`. Use the real values, not invented ones.
@@ -209,13 +209,13 @@ Run these checks one at a time:
    that it prints in `Storybook: http://localhost:<port>`. Do not pass
    `--port`. When Storybook exits with "Port <n> is not available", another
    process holds the port that the wrapper chose. Start again with
-   `OPENBOT_STORYBOOK_PORT=<a free port>` before the command.
+   `CODEBOT_STORYBOOK_PORT=<a free port>` before the command.
 4. Open each variant at
    `http://localhost:<port>/iframe.html?id=<story-id>&viewMode=story`.
    The story ID is the title and the export name in kebab case, for example
    `prototypes-pricing-page--plan-cards`.
 5. Take a screenshot of each variant with the Playwright or Chrome DevTools
-   tools. Save them in `.openbot-build/prototypes/<feature>/`
+   tools. Save them in `.codebot-build/prototypes/<feature>/`
    (git ignores this directory), for example `a-plan-cards.png`. Use a
    desktop width (1440 px). For public web only, also use a phone width (390 px).
    Desktop and web client UI get no phone-width screenshot.

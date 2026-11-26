@@ -1,5 +1,5 @@
-import { PlatformLogo } from "@openbot/brand";
-import type { MobileConnectedDevice } from "@openbot/contracts/ipc";
+import { PlatformLogo } from "@codebot/brand";
+import type { MobileConnectedDevice } from "@codebot/contracts/ipc";
 import {
   Button,
   buttonVariants,
@@ -18,7 +18,7 @@ import {
   Smartphone,
   Text,
   Trash2,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createEffect, createSignal, For, Show } from "solid-js";
 import { useText } from "../../text";
 import {
@@ -317,7 +317,7 @@ function RouteChip(props: { store: SettingsMobileConnectStore; disabled: boolean
         const title = () =>
           current().route === "private"
             ? t("settings.mobileConnect.route.private.title")
-            : t("settings.mobileConnect.route.openbot.title");
+            : t("settings.mobileConnect.route.codebot.title");
         return (
           <Popover.Root placement="bottom-end" gutter={6}>
             <Popover.Trigger

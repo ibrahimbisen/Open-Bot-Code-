@@ -1,4 +1,4 @@
-import type { UsageTokens } from "@openbot/contracts/ipc";
+import type { UsageTokens } from "@codebot/contracts/ipc";
 
 const EFFECTIVE_DATE = "2026-10-21";
 const OPENAI = "https://developers.openai.com/api/docs/pricing";

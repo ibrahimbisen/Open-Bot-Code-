@@ -13,17 +13,17 @@ import type {
   SaveRoutineFlowPositionInput,
   StopRoutineFlowRunInput,
   UpdateRoutineFlowLinkInput,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
-import { nextValidRoutineOccurrence, routineOnceInstant } from "@openbot/team-client/routine-schedule";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
+import { nextValidRoutineOccurrence, routineOnceInstant } from "@codebot/team-client/routine-schedule";
 import { Context, Effect, Exit, Layer, ManagedRuntime, Schema, Scope, Semaphore } from "effect";
 import { quietRoutineRun } from "../agent/routine-quiet-runs";
 import { coalescedPasses } from "../coalesced-passes";
 import { routineFlowDepths } from "./routine-flow-graph";
 import { RoutineFlowError, type RoutineFlowRun, type RoutineFlowStore } from "./routine-flow-store";
 
-const logger = createOpenBotLogger("routine-flows");
+const logger = createCodeBotLogger("routine-flows");
 
 const SWEEP_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 const FULL_SWEEP_INTERVAL_MS = 30 * 60 * 1000;
@@ -87,7 +87,7 @@ export function routineFlowNoticeEvent(event: AgentEvent): boolean {
   return event.type === "turn-completed" || event.type === "queue-changed" || event.type === "routines-changed";
 }
 
-class RoutineFlows extends Context.Service<RoutineFlows, RoutineFlowsShape>()("openbot/backend/RoutineFlows") {
+class RoutineFlows extends Context.Service<RoutineFlows, RoutineFlowsShape>()("codebot/backend/RoutineFlows") {
   static layer(dependencies: RoutineFlowsDependencies) {
     return Layer.effect(
       RoutineFlows,

@@ -8,10 +8,10 @@ import {
   type ProviderCodeLoginStart,
   type ProviderHostSignInStatus,
   type ProviderRelaySignInStatus,
-} from "@openbot/contracts/ipc";
-import type { ProviderCodeLoginState } from "@openbot/ui/components/ProviderCodeLoginDialog";
-import type { BrowserViewRuntime } from "@openbot/ui/features/browser/BrowserLiveView";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import type { ProviderCodeLoginState } from "@codebot/ui/components/ProviderCodeLoginDialog";
+import type { BrowserViewRuntime } from "@codebot/ui/features/browser/BrowserLiveView";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createSignal, flush, onCleanup } from "solid-js";
 import { actionToast } from "../../action-toast";
 import type {

@@ -5,8 +5,8 @@ import {
   type McpServerConfig,
   SKILL_CATEGORIES,
   type SkillCategory,
-} from "@openbot/contracts/ipc";
-import type { MobileTextKey, MobileTranslate } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/ipc";
+import type { MobileTextKey, MobileTranslate } from "@codebot/i18n/mobile";
 import type { MobileConnectorId } from "@/features/servers/model/connectors";
 import { mcpServerDetail } from "@/features/servers/model/mcp-server-draft";
 import type { ConnectorRow } from "@/features/servers/model/use-connector-rows";

@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v61 and the separate new-database schema. IF NOT EXISTS throughout.
 //
@@ -25,7 +25,7 @@ export const PINNED_THREAD_MESSAGES_SCHEMA_SQL = `
   );
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 61,
   name: "pinned-thread-messages",
   // Only creates a table, so no foreign-key pause and no vacuum. No message was pinned before it,

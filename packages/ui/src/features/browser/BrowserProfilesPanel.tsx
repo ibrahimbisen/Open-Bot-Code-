@@ -4,7 +4,7 @@ import {
   type BrowserProfileSummary,
   type BrowserProxySummary,
   browserProxyAddressText,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Button,
   buttonVariants,
@@ -27,8 +27,8 @@ import {
   Text,
   Trash2,
   Waypoints,
-} from "@openbot/ui";
-import { errorReference, type UserErrorDetails } from "@openbot/user-errors";
+} from "@codebot/ui";
+import { errorReference, type UserErrorDetails } from "@codebot/user-errors";
 import type { JSX } from "@solidjs/web";
 import { createStore, For, Show } from "solid-js";
 import { useText } from "../../text";

@@ -3,26 +3,26 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-exit-session-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-exit-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-exit-session-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-exit-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const logPath = join(root, "protocol.jsonl");
 const fakeCodex = join(root, "codex");
 const fakeOpenCode = join(root, "opencode");
 const fakeDriver = join(root, "cua-driver");
-const driverRoot = await mkdtemp("/tmp/openbot-cua-");
+const driverRoot = await mkdtemp("/tmp/codebot-cua-");
 const PROVIDER = process.env.PROBE_PROVIDER === "opencode" ? "opencode" : "codex";
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
-process.env.OPENBOT_FAKE_CODEX_LOG = logPath;
-process.env.OPENBOT_OPENCODE_PATH = fakeOpenCode;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_FAKE_CODEX_LOG = logPath;
+process.env.CODEBOT_OPENCODE_PATH = fakeOpenCode;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -30,7 +30,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { CuaDriverRuntime } = await import("../src/main/cua-driver-runtime");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const FAKE_CODEX = `#!/usr/bin/env node
 const fs = require("node:fs");
@@ -38,7 +38,7 @@ if (process.argv.includes("--version")) {
   process.stdout.write("codex-cli 0.160.1\\n");
   process.exit(0);
 }
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, ...entry }) + "\\n");
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, ...entry }) + "\\n");
 log({ start: true });
 const config = { config: { mcp_servers: {} }, layers: [{ name: { type: "user", file: "/fake/.codex/config.toml", profile: null }, version: "1", config: { mcp_servers: {} } }] };
 let buffer = "";
@@ -100,7 +100,7 @@ const FAKE_OPENCODE = `#!/usr/bin/env node
 const fs = require("node:fs");
 const NL = String.fromCharCode(10);
 if (process.argv.includes("--version")) { process.stdout.write("1.19.3" + NL); process.exit(0); }
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, ...entry }) + NL);
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, ...entry }) + NL);
 log({ start: true, argv: process.argv.slice(2) });
 const write = (message) => process.stdout.write(JSON.stringify({ jsonrpc: "2.0", ...message }) + NL);
 const MODEL = "opencode/big-pickle";
@@ -211,7 +211,7 @@ async function waitFor<T>(label: string, read: () => T | null | undefined | fals
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
 await writeFile(fakeOpenCode, FAKE_OPENCODE, { mode: 0o755 });
 await writeFile(fakeDriver, FAKE_DRIVER, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -229,7 +229,7 @@ function driverRuntime(name: string) {
     executable: fakeDriver,
     endpoint: { kind: "unix-socket", directory: join(driverRoot, name) },
     supported: true,
-    hostBundleId: "run.openbot.e2e",
+    hostBundleId: "run.codebot.e2e",
     platform: "darwin",
     spawnProcess: (command, args, options) => {
       daemon.child = spawn(command, args, options);

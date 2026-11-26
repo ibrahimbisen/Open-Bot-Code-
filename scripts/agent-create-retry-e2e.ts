@@ -3,39 +3,39 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent } from "@openbot/contracts/ipc";
-import { isDynamicRecord as isRecord } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
+import { isDynamicRecord as isRecord } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol";
-import { AGENT_CREATE_OPERATION_CAPABILITY } from "@openbot/contracts/team-protocol/agent-create-operation-v1";
-import { teamCapabilitiesForProtocol } from "@openbot/contracts/team-protocol/current";
-import { teamHttpCodec } from "@openbot/contracts/team-protocol/http-codecs";
-import { TEAM_PROTOCOL_V8 } from "@openbot/contracts/team-protocol/v8";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
+} from "@codebot/contracts/team-protocol";
+import { AGENT_CREATE_OPERATION_CAPABILITY } from "@codebot/contracts/team-protocol/agent-create-operation-v1";
+import { teamCapabilitiesForProtocol } from "@codebot/contracts/team-protocol/current";
+import { teamHttpCodec } from "@codebot/contracts/team-protocol/http-codecs";
+import { TEAM_PROTOCOL_V8 } from "@codebot/contracts/team-protocol/v8";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
 import {
   decodeTeamProtocolV9WebRtcHttpRequest,
   encodeTeamProtocolV9WebRtcHttpRequest,
-} from "@openbot/contracts/team-protocol/v9-webrtc-adapter";
-import { retryOperationIds } from "@openbot/team-client/retry-operation-id";
+} from "@codebot/contracts/team-protocol/v9-webrtc-adapter";
+import { retryOperationIds } from "@codebot/team-client/retry-operation-id";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentService as AgentServiceType } from "../src/backend/agent-service";
+import type { CodeBotDatabase as CodeBotDatabaseType } from "../src/backend/codebot-database";
 import type { MailboxStore as MailboxStoreType } from "../src/backend/mailbox-store";
-import type { OpenBotDatabase as OpenBotDatabaseType } from "../src/backend/openbot-database";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-create-retry-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-create-retry-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const OWNER = { username: "owner-user", password: "owner-password-123" };
 const MEMBER = { username: "member-user", password: "member-password-123" };
 const STEP_DEADLINE_MS = 30_000;
 
-const root = await mkdtemp(join(tmpdir(), "openbot-agent-create-retry-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-agent-create-retry-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -43,7 +43,7 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -119,7 +119,7 @@ const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { SidebarLayoutStore } = await import("../src/backend/sidebar-layout-store");
 
 plugin({
@@ -245,7 +245,7 @@ const teamBrowser: TeamApiBrowser = {
 };
 
 interface Host {
-  database: OpenBotDatabaseType;
+  database: CodeBotDatabaseType;
   agents: AgentServiceType;
   mailbox: MailboxStoreType;
   server: InstanceType<typeof TeamApiServer>;
@@ -257,11 +257,11 @@ interface Host {
 let host: Host | null = null;
 
 async function startHost(): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   await runCauseEffect(sidebar.initialize());
   await runCauseEffect(team.initialize());
   if (!team.getIdentity()) await runCauseEffect(team.configure("E2E Host", OWNER.username, OWNER.password));

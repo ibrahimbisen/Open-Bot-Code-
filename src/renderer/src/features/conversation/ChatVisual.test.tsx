@@ -3,9 +3,9 @@ import {
   CHAT_VISUAL_FRAME_SANDBOX,
   type ChatVisualKey,
   parseChatVisualMessage,
-} from "@openbot/contracts/chat-visual";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { ChatVisual } from "@openbot/ui/features/conversation/ChatVisual";
+} from "@codebot/contracts/chat-visual";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { ChatVisual } from "@codebot/ui/features/conversation/ChatVisual";
 import { render, screen, waitFor } from "@solidjs/testing-library";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -57,7 +57,7 @@ describe("ChatVisual page requests", () => {
   });
   const key = (init: { key: string; metaKey?: boolean; ctrlKey?: boolean }) => ({
     jsonrpc: "2.0",
-    method: "openbot/notifications/keydown",
+    method: "codebot/notifications/keydown",
     params: { code: "", metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, ...init },
   });
 
@@ -137,7 +137,7 @@ describe("ChatVisual page requests", () => {
   it("refuses an image that is not a web or image data URL, and text over the limits", () => {
     const image = (src: string) => ({
       jsonrpc: "2.0",
-      method: "openbot/notifications/open-image",
+      method: "codebot/notifications/open-image",
       params: { src, name: "Chart" },
     });
     expect(parseChatVisualMessage(image("https://example.com/chart.png"))).toEqual({

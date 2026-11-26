@@ -1,4 +1,4 @@
-import type { RemoteRecoveryStatus } from "@openbot/team-client";
+import type { RemoteRecoveryStatus } from "@codebot/team-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { backgroundRefreshNative } from "@/features/background-refresh/background-refresh-native";
 import { supportLog } from "@/features/support/model/support-log";

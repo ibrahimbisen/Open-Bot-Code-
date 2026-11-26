@@ -1,4 +1,5 @@
 import {
+  type CodeBotDesktopApi,
   CRM_BUILTIN_STATUS_IDS,
   CRM_LIMITS,
   CRM_TONES,
@@ -16,9 +17,8 @@ import {
   type CrmSource,
   type CrmStatus,
   type CrmTag,
-  type OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
-import { type SourceMessages, sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { type SourceMessages, sourceText } from "@codebot/i18n/source";
 
 export type MockCrmCustomer = Omit<CrmCustomer, "paidMinor" | "openMinor" | "lateMinor" | "nextDueOn" | "lastPaidAt">;
 
@@ -67,7 +67,7 @@ function fail(key: CrmErrorKey): never {
   throw new MockCrmError(key);
 }
 
-export function mockCrm(seed: MockCrmSeed, emit: () => void): OpenBotDesktopApi["crm"] {
+export function mockCrm(seed: MockCrmSeed, emit: () => void): CodeBotDesktopApi["crm"] {
   const statuses: CrmStatus[] = [
     ...CRM_BUILTIN_STATUS_IDS.map((id) => ({ id, label: null, tone: BUILTIN_TONES[id] })),
     ...structuredClone(seed.statuses ?? []),

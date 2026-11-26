@@ -6,12 +6,12 @@ import { Effect } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { ProviderRuntime } from "../src/backend/agent/provider-runtime";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-installed-fallback-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-installed-fallback-e2e");
 const WAIT_MS = 60_000;
 const COPY = "2.3.0";
 const INSTALLED = "1.19.5";
@@ -29,7 +29,7 @@ interface Report {
   copyChosen?: { copyStarts: number };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-installed-fallback-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-installed-fallback-e2e-"));
 const log = join(root, "starts.jsonl");
 const report: Report = { passed: false };
 const userBin = join(root, "user-bin");
@@ -57,7 +57,7 @@ await installFakeAgent(join(userBin, "opencode"), "opencode-start-failure", {
 });
 
 let savedChoices = 0;
-const store = new AgentStore(join(root, "profile"), join(root, "home"), new OpenBotDatabase(join(root, "profile")));
+const store = new AgentStore(join(root, "profile"), join(root, "home"), new CodeBotDatabase(join(root, "profile")));
 const providers = new ProviderRuntime({
   offProviders: BUILT_IN_PROVIDER_DRIVERS.map((driver) => driver.id).filter((id) => id !== "opencode"),
   conversation: new ConversationRuntime(
@@ -109,7 +109,7 @@ try {
   report.savedChoices = savedChoices;
   assert.equal(row()?.version, INSTALLED, "the user's CLI runs");
   assert.equal(row()?.cliSource, "system");
-  assert.equal(row()?.otherCliVersion, COPY, "the row offers OpenBot's version back");
+  assert.equal(row()?.otherCliVersion, COPY, "the row offers CodeBot's version back");
   assert.deepEqual(report.starts, [COPY, COPY, COPY, INSTALLED], "the copy gets its 3 starts first");
   assert.equal(savedChoices, 0, "the fallback is not saved as the user's choice");
 

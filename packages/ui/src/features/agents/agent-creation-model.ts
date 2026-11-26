@@ -1,4 +1,4 @@
-import { developmentStartingModel } from "@openbot/contracts/development-defaults";
+import { developmentStartingModel } from "@codebot/contracts/development-defaults";
 import {
   type AgentModelId,
   type AgentProviderId,
@@ -8,7 +8,7 @@ import {
   type ClientAgentModelOption,
   defaultProviderModel,
   PICKER_PROVIDERS,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export type CreationPreference = Pick<AppSetupState, "preferredProvider" | "preferredModel">;
 

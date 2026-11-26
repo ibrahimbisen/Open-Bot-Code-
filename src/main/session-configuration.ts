@@ -1,8 +1,8 @@
 import { readFile, stat } from "node:fs/promises";
 import { isAbsolute, relative, resolve } from "node:path";
-import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@openbot/contracts/chat-visual";
-import { LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@codebot/contracts/chat-visual";
+import { LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { app, session } from "electron";
 import type { AgentService } from "../backend/agent-service";
 import { runCauseEffect } from "../backend/effect-boundary";
@@ -24,7 +24,7 @@ export function configureContentSecurityPolicy(): void {
   const policy = buildContentSecurityPolicy(
     app.isPackaged,
     process.env.REMOTE_SIGNAL_URL,
-    readSelfHostedSignalOrigin(process.env.OPENBOT_AUTH_API_URL, process.env.OPENBOT_REMOTE_SIGNAL_URL),
+    readSelfHostedSignalOrigin(process.env.CODEBOT_AUTH_API_URL, process.env.CODEBOT_REMOTE_SIGNAL_URL),
   );
 
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
@@ -72,8 +72,8 @@ function asksToOpen(url: URL): boolean {
 }
 
 export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: AttachmentProtocolDependencies): void {
-  const logger = createOpenBotLogger("attachment-protocol");
-  session.defaultSession.protocol.handle("openbot-attachment", async (request) => {
+  const logger = createCodeBotLogger("attachment-protocol");
+  session.defaultSession.protocol.handle("codebot-attachment", async (request) => {
     try {
       const url = new URL(request.url);
       const id = url.pathname.split("/").filter(Boolean).at(-1);
@@ -97,7 +97,7 @@ export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: 
       return new Response("Not found", { status: 404 });
     }
   });
-  session.defaultSession.protocol.handle("openbot-remote-attachment", async (request) => {
+  session.defaultSession.protocol.handle("codebot-remote-attachment", async (request) => {
     try {
       const url = new URL(request.url);
       const serverId = decodeURIComponent(url.hostname);
@@ -131,7 +131,7 @@ export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: 
       return new Response("Not found", { status: 404 });
     }
   });
-  session.defaultSession.protocol.handle("openbot-visual", async (request) => {
+  session.defaultSession.protocol.handle("codebot-visual", async (request) => {
     try {
       const url = new URL(request.url);
       if (url.hostname === "preview") return await filePreviewPages.response(request);
@@ -145,7 +145,7 @@ export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: 
       return new Response("Not found", { status: 404 });
     }
   });
-  session.defaultSession.protocol.handle("openbot-remote-visual", async (request) => {
+  session.defaultSession.protocol.handle("codebot-remote-visual", async (request) => {
     try {
       const url = new URL(request.url);
       const serverId = decodeURIComponent(url.hostname);
@@ -159,7 +159,7 @@ export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: 
       return new Response("Not found", { status: 404 });
     }
   });
-  session.defaultSession.protocol.handle("openbot-avatar", async (request) => {
+  session.defaultSession.protocol.handle("codebot-avatar", async (request) => {
     try {
       const url = new URL(request.url);
       if (url.hostname !== "agent" && url.hostname !== "channel") return new Response("Not found", { status: 404 });
@@ -179,7 +179,7 @@ export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: 
       return new Response("Not found", { status: 404 });
     }
   });
-  session.defaultSession.protocol.handle("openbot-remote-avatar", async (request) => {
+  session.defaultSession.protocol.handle("codebot-remote-avatar", async (request) => {
     try {
       const target = parseRemoteAvatarUrl(request.url);
       if (!target) return new Response("Not found", { status: 404 });
@@ -207,7 +207,7 @@ export interface ServerLogoProtocolDependencies {
 }
 
 export function configureServerLogoProtocols({ teamStore, remoteServers }: ServerLogoProtocolDependencies): void {
-  session.defaultSession.protocol.handle("openbot-server-logo", async (request) => {
+  session.defaultSession.protocol.handle("codebot-server-logo", async (request) => {
     try {
       const url = new URL(request.url);
       const logo = teamStore.resolveLogo();
@@ -225,7 +225,7 @@ export function configureServerLogoProtocols({ teamStore, remoteServers }: Serve
       return new Response("Not found", { status: 404 });
     }
   });
-  session.defaultSession.protocol.handle("openbot-remote-server-logo", async (request) => {
+  session.defaultSession.protocol.handle("codebot-remote-server-logo", async (request) => {
     try {
       const url = new URL(request.url);
       const serverId = decodeURIComponent(url.hostname);
@@ -247,7 +247,7 @@ export function configureServerLogoProtocols({ teamStore, remoteServers }: Serve
 
 export function configureApplicationProtocol(): void {
   const rendererRoot = resolve(__dirname, "../renderer");
-  session.defaultSession.protocol.handle("openbot-app", async (request) => {
+  session.defaultSession.protocol.handle("codebot-app", async (request) => {
     try {
       const url = new URL(request.url);
       if (url.host !== "app") return new Response("Not found", { status: 404 });

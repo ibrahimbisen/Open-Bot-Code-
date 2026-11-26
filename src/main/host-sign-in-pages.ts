@@ -1,9 +1,9 @@
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Duration, Effect, Exit, Fiber, Scope } from "effect";
 import type { BrowserHost } from "../backend/browser-host";
 import { runCauseEffect } from "../backend/effect-boundary";
 
-const logger = createOpenBotLogger("host-sign-in-pages");
+const logger = createCodeBotLogger("host-sign-in-pages");
 
 const RESULT_KEPT_MS = 60_000;
 

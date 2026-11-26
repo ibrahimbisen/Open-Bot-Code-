@@ -1,19 +1,19 @@
 import { spawn } from "node:child_process";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { cliSpawnTarget } from "../src/backend/cli";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 import { resolvePackageBin } from "./package-bin";
 
-const logger = createOpenBotLogger("preview");
+const logger = createCodeBotLogger("preview");
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const executable = resolvePackageBin(projectRoot, "electron-vite");
 const target = cliSpawnTarget(executable, ["preview", ...process.argv.slice(2)]);
 const child = spawn(target.command, target.args, {
   cwd: projectRoot,
-  env: { ...withoutElectronRuntimeFlags(process.env), OPENBOT_APP_VARIANT: "preview" },
+  env: { ...withoutElectronRuntimeFlags(process.env), CODEBOT_APP_VARIANT: "preview" },
   stdio: "inherit",
   shell: false,
   windowsVerbatimArguments: target.windowsVerbatimArguments,

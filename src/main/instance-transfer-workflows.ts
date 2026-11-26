@@ -13,9 +13,9 @@ import {
   workflowGraphPlaceholders,
   workflowIdFields,
   workflowIdFollowsTrigger,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { reason } from "./instance-transfer-preferences";
 import { parseCreateWorkflow } from "./ipc/workflow-inputs";

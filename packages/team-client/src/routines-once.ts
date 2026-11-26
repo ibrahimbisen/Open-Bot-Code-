@@ -10,7 +10,7 @@ import type {
   SaveEventRoutineResult,
   UpdateChannelRoutineInput,
   UpdateRoutineInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   decodeOnceAgentRoutine,
   decodeOnceAgentRoutines,
@@ -19,9 +19,9 @@ import {
   decodeOnceEventRoutines,
   decodeOnceEventSave,
   ROUTINES_ONCE_ROUTES,
-} from "@openbot/contracts/team-protocol/routines-once-v1";
-import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/routines-once-v1";
+import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { sourceText } from "@codebot/i18n/source";
 
 export type RoutinesOncePost = <T>(path: string, decode: (value: unknown) => T, body: TeamProtocolV2Json) => Promise<T>;
 

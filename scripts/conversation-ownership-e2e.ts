@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentSummary, ConversationMessage } from "@openbot/contracts/ipc";
+import type { AgentSummary, ConversationMessage } from "@codebot/contracts/ipc";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const REPORT_DIRECTORY = resolve(import.meta.dirname, "../.openbot-build/conversation-ownership-e2e");
+const REPORT_DIRECTORY = resolve(import.meta.dirname, "../.codebot-build/conversation-ownership-e2e");
 const steps: { name: string; passed: boolean; error?: string }[] = [];
 
 function step(name: string, run: () => void): void {
@@ -28,8 +28,8 @@ function agent(id: string): AgentSummary {
     notifications: true,
     model: "gpt-5.6-luna",
     reasoningEffort: "medium",
-    threadId: `openbot-thread-${id}`,
-    workspacePath: `/tmp/openbot-${id}`,
+    threadId: `codebot-thread-${id}`,
+    workspacePath: `/tmp/codebot-${id}`,
     preview: "",
     updatedAt: "2026-11-23T10:00:00.000Z",
     avatarSeed: id,
@@ -42,13 +42,13 @@ function message(id: string, createdAt: string, extra: Partial<ConversationMessa
   return { id, author: "user", text: id, status: "completed", createdAt, turnId: `${id}-turn`, ...extra };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-conversation-ownership-"));
-const database = new OpenBotDatabase(root);
+const root = await mkdtemp(join(tmpdir(), "codebot-conversation-ownership-"));
+const database = new CodeBotDatabase(root);
 await runCauseEffect(database.initialize());
 try {
   const first = agent("first");
   const second = agent("second");
-  const secondThreadId = `openbot-thread-${second.id}`;
+  const secondThreadId = `codebot-thread-${second.id}`;
   database.replaceAgents("conversation-ownership", [first, second], "agents.imported");
   database.persistConversation(
     {

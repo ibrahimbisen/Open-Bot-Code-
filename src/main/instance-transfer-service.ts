@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import { lstat, mkdir, open, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
-import { type AgentProviderId, MANAGED_SKILL_FOLDERS } from "@openbot/contracts/agent-providers";
-import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { type AgentProviderId, MANAGED_SKILL_FOLDERS } from "@codebot/contracts/agent-providers";
+import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_IMPORT_LIMITS,
   type AgentImportPreviewAgent,
@@ -67,18 +67,18 @@ import {
   type SidebarPinKind,
   type UpdateAgentInput,
   type UpdateHostIdentityInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   type EventRoutine,
   type EventRoutineOwner,
   isEventRoutineTriggerInput,
   type SaveEventRoutineInput,
-} from "@openbot/contracts/ipc-events";
-import { isDynamicRecord, isOneOf } from "@openbot/contracts/runtime-values";
-import { INSTANCE_TRANSFER_REMOTE_BYTES } from "@openbot/contracts/team-protocol/instance-transfer-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
-import { copyManifestBytes, copyTail, ZIP_TAIL_BYTES, zipDirectory } from "@openbot/team-client/instance-transfer-copy";
+} from "@codebot/contracts/ipc-events";
+import { isDynamicRecord, isOneOf } from "@codebot/contracts/runtime-values";
+import { INSTANCE_TRANSFER_REMOTE_BYTES } from "@codebot/contracts/team-protocol/instance-transfer-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
+import { copyManifestBytes, copyTail, ZIP_TAIL_BYTES, zipDirectory } from "@codebot/team-client/instance-transfer-copy";
 import { Cause, Deferred, Effect, Exit, Result } from "effect";
 import { Zip, ZipPassThrough, zipSync } from "fflate";
 import { isMissingFileError } from "../backend/file-errors";
@@ -165,7 +165,7 @@ const REMOTE_ARCHIVE: ArchiveLimits = {
   expandedTooLarge: sourceText("error.import.transferRemoteTooLarge"),
   invalid: sourceText("error.import.transferNotFile"),
 };
-const logger = createOpenBotLogger("instance-transfer");
+const logger = createCodeBotLogger("instance-transfer");
 const LOCAL_OWNER = "local";
 
 export interface MemberPreferences<Id> {
@@ -175,8 +175,8 @@ export interface MemberPreferences<Id> {
   pins: { kind: SidebarPinKind; id: Id }[];
 }
 const UPLOAD_TTL_MS = 30 * 60_000;
-const SKILL_STAGING = ".openbot/import-skills";
-const WORKSPACE_SKIPPED = [".openbot", ...MANAGED_SKILL_FOLDERS];
+const SKILL_STAGING = ".codebot/import-skills";
+const WORKSPACE_SKIPPED = [".codebot", ...MANAGED_SKILL_FOLDERS];
 const AVATAR_EXTENSIONS: Record<AvatarImageInput["mimeType"], string> = {
   "image/png": "png",
   "image/jpeg": "jpg",

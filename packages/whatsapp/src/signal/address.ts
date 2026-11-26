@@ -1,4 +1,4 @@
-import { jidDecode } from "@openbot/whatsapp/baileys";
+import { jidDecode } from "@codebot/whatsapp/baileys";
 
 export interface SignalAddress {
   name: string;

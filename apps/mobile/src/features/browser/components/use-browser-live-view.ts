@@ -2,7 +2,7 @@ import type {
   BrowserViewContextMenu,
   BrowserViewCursor,
   BrowserViewDialog,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
 import { type SkImage, Skia } from "@shopify/react-native-skia";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Alert } from "react-native";

@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { createServer, type Server as HttpServer } from "node:http";
 import { join, resolve } from "node:path";
+import { COMPUTER_USE_MCP_SERVER_ID, COMPUTER_USE_MCP_SERVER_NAME, type McpServerConfig } from "@codebot/contracts/ipc";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
-import { COMPUTER_USE_MCP_SERVER_ID, COMPUTER_USE_MCP_SERVER_NAME, type McpServerConfig } from "@openbot/contracts/ipc";
 import { readCodexMcpConfig } from "../src/backend/agent/codex-mcp-config";
 import { visibleDynamicTools } from "../src/backend/agent/tool-catalog";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
@@ -23,7 +23,7 @@ import {
 } from "../src/backend/mcp-provider-shapes";
 import { decodeRecordResponse, getRecord, getString } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-code-mode-mcp-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-code-mode-mcp-e2e");
 const NL = String.fromCharCode(10);
 const DEADLINE_MS = 60_000;
 const MODEL = "code-mode-model";
@@ -274,7 +274,7 @@ async function open(home: string) {
       client.request(
         "initialize",
         {
-          clientInfo: { name: "openbot_e2e", title: "OpenBot E2E", version: "0.0.0" },
+          clientInfo: { name: "codebot_e2e", title: "CodeBot E2E", version: "0.0.0" },
           capabilities: { experimentalApi: true },
         },
         decodeRecordResponse,
@@ -327,10 +327,10 @@ async function run(test: Case): Promise<Outcome> {
       codexDisabledServers(() => readCodexMcpConfig(session.client, keyed).pipe(toMcpShapeFailed)),
     );
     const servers = keyed(own.transports);
-    const openbot = visibleDynamicTools("codex").map((namespace) => namespace.name);
-    const current = [...openbot, ...codexDirectMcpNamespaces(servers)];
+    const codebot = visibleDynamicTools("codex").map((namespace) => namespace.name);
+    const current = [...codebot, ...codexDirectMcpNamespaces(servers)];
     const everyServer = [
-      ...openbot,
+      ...codebot,
       ...Object.keys(servers).map((key) => `mcp__${key.replace(/[^A-Za-z0-9_]/gu, "_")}`),
     ];
     const params = (directOnly: string[]) => ({
@@ -409,8 +409,8 @@ try {
     "issue #4468: the request declares no MCP schema, and exec finds the tool in ALL_TOOLS and calls it",
     { name: "deferred", rows: [row("composio")] },
     (o) => {
-      assert.deepEqual(o.keys, ["openbot_composio"]);
-      assert.ok(!o.directOnly.includes("mcp__openbot_composio"), `direct-only ${o.directOnly.join(", ")}`);
+      assert.deepEqual(o.keys, ["codebot_composio"]);
+      assert.ok(!o.directOnly.includes("mcp__codebot_composio"), `direct-only ${o.directOnly.join(", ")}`);
       assert.deepEqual(o.offered, []);
       assert.equal(o.mentionsTool, false, "the request named the MCP tool");
       assert.deepEqual(o.calls, [TOOL]);
@@ -429,7 +429,7 @@ try {
   await step(
     "a thread started with every MCP namespace direct keeps them on resume",
     { name: "resumed", rows: [row("composio")], resume: true },
-    (o) => assert.deepEqual(o.offered, ["mcp__openbot_composio"]),
+    (o) => assert.deepEqual(o.offered, ["mcp__codebot_composio"]),
   );
   await step(
     "a user stdio composio renames the row: exec reaches the renamed tool",
@@ -439,7 +439,7 @@ try {
       rows: [row("composio")],
     },
     (o) => {
-      assert.deepEqual(o.keys, ["openbot_composio"]);
+      assert.deepEqual(o.keys, ["codebot_composio"]);
       assert.deepEqual(o.offered, []);
       assert.deepEqual(o.calls, [TOOL]);
     },

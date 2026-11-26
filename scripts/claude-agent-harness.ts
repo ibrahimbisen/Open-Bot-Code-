@@ -94,8 +94,8 @@ export async function makeGitWorkspace(workspace: string, origin = false): Promi
   await writeFile(join(workspace, "count.txt"), "42\n");
   const git = (...args: string[]) => execFileSync("git", args, { cwd: workspace, encoding: "utf8" });
   git("init", "-q");
-  git("config", "user.name", "OpenBot");
-  git("config", "user.email", "e2e@openbot.invalid");
+  git("config", "user.name", "CodeBot");
+  git("config", "user.email", "e2e@codebot.invalid");
   git("add", ".");
   git("commit", "-q", "-m", "Start");
   if (origin) {

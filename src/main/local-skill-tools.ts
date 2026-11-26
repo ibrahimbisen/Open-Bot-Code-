@@ -1,7 +1,7 @@
 import { join, posix } from "node:path";
-import { MANAGED_SKILL_FOLDERS } from "@openbot/contracts/agent-providers";
-import type { InstalledSkill } from "@openbot/contracts/ipc";
-import { registerPublicValues } from "@openbot/logging";
+import { MANAGED_SKILL_FOLDERS } from "@codebot/contracts/agent-providers";
+import type { InstalledSkill } from "@codebot/contracts/ipc";
+import { registerPublicValues } from "@codebot/logging";
 import { Effect } from "effect";
 import type { LocalSkillTools } from "../backend/agent/skill-tools";
 import { ToolOperationFailed, toToolOperationFailed } from "../backend/agent/tool-operation";

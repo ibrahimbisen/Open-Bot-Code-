@@ -3,7 +3,7 @@ import { BRAND_ROUTE } from "./brand-page";
 import { CHANGELOG_ROUTE } from "./changelog";
 import { HEADER_COLLECTIONS } from "./content";
 import type { CollectionArticle, ContentCollection } from "./content-collection";
-import { OPENBOT_LINKS } from "./landing-links";
+import { CODEBOT_LINKS } from "./landing-links";
 import { MARKETPLACE_APPS_ROUTE } from "./marketplace-routes";
 import { SITE_PLUGINS, type SitePlugin } from "./plugins";
 import { PRICING_ROUTE } from "./pricing-page";
@@ -69,14 +69,14 @@ export const SITE_NAVIGATION_SECTIONS: readonly SiteNavigationSection[] = [
   {
     kind: "resources",
     id: "resources",
-    footer: { href: OPENBOT_LINKS.repository },
+    footer: { href: CODEBOT_LINKS.repository },
     links: [
       { id: "download", seed: "Download", icon: "download", to: "/download" },
       { id: "changelog", seed: "Changelog", icon: "refresh", to: CHANGELOG_ROUTE },
-      { id: "community", seed: "Community", icon: "contact", href: OPENBOT_LINKS.discord },
-      { id: "documentation", seed: "Documentation", icon: "folder", href: OPENBOT_LINKS.documentation },
+      { id: "community", seed: "Community", icon: "contact", href: CODEBOT_LINKS.discord },
+      { id: "documentation", seed: "Documentation", icon: "folder", href: CODEBOT_LINKS.documentation },
       { id: "brand", seed: "Brand", icon: "logo", to: BRAND_ROUTE },
-      { id: "status", seed: "Status", icon: "cloud", href: OPENBOT_LINKS.status },
+      { id: "status", seed: "Status", icon: "cloud", href: CODEBOT_LINKS.status },
     ],
   },
 ];

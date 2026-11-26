@@ -1,11 +1,11 @@
 # Hosted servers
 
-A hosted server is an OpenBot server that runs in a [boat](https://boat.dev) sandbox, so it works
+A hosted server is an CodeBot server that runs in a [boat](https://boat.dev) sandbox, so it works
 when the user's computer is off. Each server is one boat sandbox for one account. The sandbox runs
-the Linux build of OpenBot on the boat desktop. The server runs while it is in use. After 15 minutes with no
+the Linux build of CodeBot on the boat desktop. The server runs while it is in use. After 15 minutes with no
 use, the Worker stops it and keeps its data. The next client starts it again, the Worker cron
 starts it before its next routine run, and Signal starts it for a Slack, Discord or Telegram message
-that addresses OpenBot (see [Connector events](#connector-events)). A connected client counts as use for 5 minutes after its
+that addresses CodeBot (see [Connector events](#connector-events)). A connected client counts as use for 5 minutes after its
 last user action (`CLIENT_USE_WINDOW_MS`): a request that changes data, or a typing event. Reads and
 the requests that a client sends with no user action (polls, previews, mark-read) do not count
 (`src/main/team-api/client-use.ts`). An app that has focus (a focused desktop window, a visible and
@@ -82,7 +82,7 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    `onSubscriptionSynced`. When the plan is open and the row waits for payment, the Worker makes
    the host ID claim (1 hour; it stores only the hash) and creates the sandbox from
    `HOSTED_SERVER_TEMPLATE` with `noEnv: true`, so no operator secret or repository goes into the
-   sandbox. The sandbox env holds only `OPENBOT_HOSTED_HOST_ID` and `OPENBOT_HOSTED_CLAIM`. The cron
+   sandbox. The sandbox env holds only `CODEBOT_HOSTED_HOST_ID` and `CODEBOT_HOSTED_CLAIM`. The cron
    provisions a paid row when the webhook call failed, and deletes an unpaid row after 24 hours
    (it has no sandbox, so no data is lost). Before that delete it closes the Checkout; a Checkout
    that is paid keeps the row for the webhook. A row that stays in `creating` with no sandbox for 10
@@ -93,18 +93,18 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    server starts on that machine ([A new server on a pool machine](#a-new-server-on-a-pool-machine)),
    and steps 3 and 5 to 8 of boat (the setup script, the stop and the resume) do not apply to it.
 
-   The Worker then names the sandbox `openbot-<plan>-<owner email>-<first 8 characters of the host
+   The Worker then names the sandbox `codebot-<plan>-<owner email>-<first 8 characters of the host
    ID>` (`PATCH /sandboxes/:id`), so an operator can find it in the boat dashboard. The email is in
    lowercase, and each group of characters that are not letters or digits becomes one `-`. The name is only a label; a plan change
    renames the sandbox.
 3. **Env handoff.** boat puts the sandbox env in the setup script, not in systemd. The Worker sends
-   `setupScript: exec /opt/OpenBot/hosted/openbot-hosted-env`. That helper writes the two values to
-   `~/.config/openbot-hosted/env` (mode 0600). `openbot.service` waits for this file.
-4. **First boot.** OpenBot starts with `OPENBOT_HOSTED_SERVER=1`. It redeems the claim at
+   `setupScript: exec /opt/CodeBot/hosted/codebot-hosted-env`. That helper writes the two values to
+   `~/.config/codebot-hosted/env` (mode 0600). `codebot.service` waits for this file.
+4. **First boot.** CodeBot starts with `CODEBOT_HOSTED_SERVER=1`. It redeems the claim at
    `POST /v2/hosting/claims/redeem`, signs in as the owner, keeps the host ID, and publishes the
    host. `registerHost` refuses the host ID for any other account. This claim is not the operator's
    [server claim](self-hosted-server.md#sign-in-with-a-server-claim) of a self-hosted server.
-5. **In use.** OpenBot checks each minute whether the server is in use: an agent works, a remote
+5. **In use.** CodeBot checks each minute whether the server is in use: an agent works, a remote
    desktop view is open, a file moves, or a remote client is connected (an open Team API event
    stream) and sent a user action, a typing event or a focus ping in the last 5 minutes. A key press or pointer
    input in a browser view is a user action. An open browser view with no input does not count,
@@ -146,7 +146,7 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    **Scheduled start.** The cron starts an idle server when its `next_run_at` is less than 10 minutes
    away (one cron interval and the start time), with the wake reason `schedule`. It clears
    `next_run_at` in the same update, so a server that does not report again starts only once for
-   that run. After the start, OpenBot runs each routine that is due, and each run that it missed
+   that run. After the start, CodeBot runs each routine that is due, and each run that it missed
    becomes one run.
 
    **Keep-alive start.** boat deletes the disk of a stopped sandbox 14 days after the stop (it
@@ -170,28 +170,28 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
 
    **Disk save at a stop.** boat saves the disk of a running server file by file, with no pause,
    and a file that changes during its copy is restored torn. A SQLite checkpoint during the save
-   gave a damaged database ("OpenBot database failed its integrity check"). Thus a hosted server
-   stops OpenBot before the save. boat runs `/home/user/.boat/pre-stop` as `user` when a stop
+   gave a damaged database ("CodeBot database failed its integrity check"). Thus a hosted server
+   stops CodeBot before the save. boat runs `/home/user/.boat/pre-stop` as `user` when a stop
    starts, waits for it to end (at most 60 seconds), and then saves the disk. boat supports this
-   hook, but its documentation does not show it yet. `openbot-hosted-update` installs `scripts/hosting/openbot-boat-pre-stop` there
+   hook, but its documentation does not show it yet. `codebot-hosted-update` installs `scripts/hosting/codebot-boat-pre-stop` there
    (`install_hosting`, and `trigger` at each start, so a server that an older release updated gets
-   it). The hook makes `/run/openbot-pre-stop` and runs `systemctl stop openbot.service`: OpenBot
-   gets `SIGTERM`, stops its services and closes `openbot.db` last. After 40 seconds the hook kills
+   it). The hook makes `/run/codebot-pre-stop` and runs `systemctl stop codebot.service`: CodeBot
+   gets `SIGTERM`, stops its services and closes `codebot.db` last. After 40 seconds the hook kills
    the unit, which leaves a database that SQLite recovers. The file makes the unit condition
-   `ConditionPathExists=!/run/openbot-pre-stop` fail, so `Restart=` and the end of an update request
-   do not start OpenBot during the save. `/run` is empty at each boot. boat can also keep a stopped
+   `ConditionPathExists=!/run/codebot-pre-stop` fail, so `Restart=` and the end of an update request
+   do not start CodeBot during the save. `/run` is empty at each boot. boat can also keep a stopped
    machine in memory and continue it at a resume with no boot: the resume answers `"status":
    "running"`, and the file stays. Then the Worker runs a command on the machine that removes the
-   file and starts `openbot.service` (`HELD_RESUME_START_COMMAND`). With no file the command does
+   file and starts `codebot.service` (`HELD_RESUME_START_COMMAND`). With no file the command does
    nothing. boat can also cancel the stop after the hook, for example when it cannot pause a Docker
    container that restarts ("Final snapshot failed; stop aborted"). The machine then runs with the
-   file, and OpenBot stays stopped. Two paths start it again, both only for a file older than 5
+   file, and CodeBot stays stopped. Two paths start it again, both only for a file older than 5
    minutes: boat runs the hook again before each new try of the stop, so a newer file can belong to a
-   save that still runs. The hook sets a transient systemd timer (`openbot-pre-stop-restart`) that
+   save that still runs. The hook sets a transient systemd timer (`codebot-pre-stop-restart`) that
    fires 15 minutes after the last hook. A client wake or a connector event for a server that boat
    reports as running makes the Worker run `FAILED_STOP_START_COMMAND` after the reply. boat tries
-   the stop again every 4 to 10 minutes (seen on 2026-11-05), and each try stops OpenBot again. Thus
-   the timer fires only after boat stops its tries, and a wake keeps OpenBot running only until the
+   the stop again every 4 to 10 minutes (seen on 2026-11-05), and each try stops CodeBot again. Thus
+   the timer fires only after boat stops its tries, and a wake keeps CodeBot running only until the
    next try. boat reports these tries as `stop.status: "failing"` and keeps the sandbox state
    `idle`. On 2026-11-05 a save failed this way for 18 hours, while the restore of the disk stalled,
    and the start command failed with `sandbox_restoring`. Thus the Worker reads a failing stop as
@@ -200,15 +200,15 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    the failing stop. Each client wake and connector event still sends `FAILED_STOP_START_COMMAND`. The Worker does not end the stop. Only a resume ends it
    (`superseded`), but boat does not say if that resume keeps the disk or restores the last saved
    disk. A forced stop keeps only the last saved disk and loses what was written after it. An
-   operator decides: compare `snapshotCompletedAt` with the last writes of OpenBot before a force,
+   operator decides: compare `snapshotCompletedAt` with the last writes of CodeBot before a force,
    then wake the server. A machine that stopped
-   runs no timer. A hook that OpenBot did not write stays, and a self-hosted server gets
+   runs no timer. A hook that CodeBot did not write stays, and a self-hosted server gets
    no hook.
 
-   **Check at a start.** `PRAGMA quick_check` reads every page of `openbot.db`: on a 15.7 GB file
+   **Check at a start.** `PRAGMA quick_check` reads every page of `codebot.db`: on a 15.7 GB file
    it stopped the main thread for 77 seconds to about 4 minutes. A clean close removes
-   `openbot.db-wal`. Thus OpenBot runs the check at a start only when that file is there (a crash,
-   a kill, or a save while OpenBot ran) or when a migration ran. After a stop that did not close the
+   `codebot.db-wal`. Thus CodeBot runs the check at a start only when that file is there (a crash,
+   a kill, or a save while CodeBot ran) or when a migration ran. After a stop that did not close the
    file, the check runs in a separate database host process, so the main thread stays free. When that
    process cannot start or run the check, the main thread runs it as before. The check after a
    migration still runs on the main thread.
@@ -228,12 +228,12 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    once a minute for each host, and wakes only the selected server while the app has focus. After a
    wake, it connects again every 5 seconds, and reads the status every 30 seconds to show the step:
    the machine starts (`waking`, `starting`, `stopping`, or `stopped` with no error, which also gets a
-   wake), OpenBot starts (`running`), or the provider refused the start (`waking` with
+   wake), CodeBot starts (`running`), or the provider refused the start (`waking` with
    `provider_limit`). The client waits with no limit while the
    machine starts. When the machine is `running` and its host does not connect in 15 minutes, the
    client shows that the server did not start in time, as it does after 10 status reads in a row
    that fail. Restart is not available while the machine starts. It is available when the machine
-   runs and OpenBot does not answer. The web client does the same for its one server, and checks a
+   runs and CodeBot does not answer. The web client does the same for its one server, and checks a
    sleeping server again every 5 minutes. The mobile app has no status check: it wakes the selected server while the app is in
    the foreground, with the same limit for a `running` server. A server whose plan ended answers
    `402 plan_required`.
@@ -290,7 +290,7 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    so it never deletes the server. After an inquiry or a later dispute the server stops with
    `plan_ended` and keeps its disk for 14 days. The Worker finds the plan through
    the invoice of the PaymentIntent (`GET /v1/invoice_payments`). A refund or dispute of a payment
-   that is not an OpenBot plan invoice changes nothing.
+   that is not an CodeBot plan invoice changes nothing.
 8. **Plan change.** The Customer Portal has no plan change (`subscription_update` is off), so only an
    operator changes a plan, in the Stripe Dashboard. A portal request with `flow: "update"` from an
    older app opens the Portal home. The owner of a server on a VPS can buy more storage: see
@@ -321,7 +321,7 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
 
 ## Providers
 
-OpenBot ships no AI subscription, so a new server has no provider connected. When its owner or an
+CodeBot ships no AI subscription, so a new server has no provider connected. When its owner or an
 admin opens a server with no agent, the app shows a provider step before the first-agent form. The
 sandbox browser is on Xvfb, where nobody can see it, so each sign-in finishes on the user's own device
 over `providers-v3` and `providers-v4`: Codex, Grok and Cline show a device code, Claude shows a page
@@ -360,10 +360,10 @@ self-hosted host that has a plan.
   enterprise customer's, from 1 to 100. The row names the account that owns the server and applies
   only while that account owns it, as a plan does. The key is the server ID, so the row stays when
   the owner deletes the host and registers it again; it stops when the account is deleted. No route
-  writes it; add, change or delete it by hand (`openbot-auth-test` for the test Worker):
+  writes it; add, change or delete it by hand (`codebot-auth-test` for the test Worker):
 
   ```sh
-  bunx wrangler d1 execute openbot-auth --cwd apps/auth-api --remote --command \
+  bunx wrangler d1 execute codebot-auth --cwd apps/auth-api --remote --command \
     "INSERT INTO server_member_limits(server_id, owner_user_id, member_limit, created_at, updated_at)
      SELECT host_id, owner_user_id, 50, unixepoch() * 1000, unixepoch() * 1000
        FROM remote_hosts WHERE host_id = '<server id>'
@@ -394,7 +394,7 @@ value that you set by hand for these four is replaced. Set `DOTENV_PRIVATE_KEY_D
 
 | Name | Value |
 | --- | --- |
-| `HOSTED_SERVER_TEMPLATE` | The named snapshot from the template build, such as `openbot-server-0-9-0`. |
+| `HOSTED_SERVER_TEMPLATE` | The named snapshot from the template build, such as `codebot-server-0-9-0`. |
 | `HOSTED_SERVERS_ALLOWED_USER_IDS` | Comma-separated account IDs or emails that can create servers. `api:deploy:test` sets it from `HOSTED_SERVERS_TEST_ALLOW_LIST` and refuses `*`: the test Worker is public, and it shares its boat account with production. |
 
 The `BOAT_API_KEY` in `.env.dev` is the development key of the boat test account. It also has
@@ -418,7 +418,7 @@ Worker, and all worktrees share it, so you sign in one time.
 Each developer who has `DOTENV_PRIVATE_KEY_DEV` can create a server with any account.
 The command decrypts
 `HOSTED_SERVERS_DEVELOPER_KEY` from `.env.dev`, and main sends it in the
-`OpenBot-Hosting-Developer-Key` header of each hosted server request. The test Worker has the same
+`CodeBot-Hosting-Developer-Key` header of each hosted server request. The test Worker has the same
 key and lets the account create servers. A clone of the repository cannot decrypt the key. Main
 removes the key from its environment at the start, so agents do not get it, and a packaged build
 never sends it. To change the key, update `HOSTED_SERVERS_DEVELOPER_KEY` in `.env.dev` with a
@@ -520,7 +520,7 @@ snapshots automatically. For a separate test template, build one from a release:
 
 ```sh
 BOAT_TEMPLATE_API_KEY=... bun run hosting:template --version=0.9.0 \
-  --appimage-url=https://.../OpenBot-0.9.0-x86_64.AppImage --appimage-sha256=<hex> \
+  --appimage-url=https://.../CodeBot-0.9.0-x86_64.AppImage --appimage-sha256=<hex> \
   --auth-api-url=https://<test Worker origin>
 ```
 
@@ -530,21 +530,21 @@ named snapshot access. The script:
 1. creates a builder sandbox with `noEnv`;
 2. uploads `scripts/hosting/` and runs `provision.sh` with `sudo`. It installs the packages in
    `packages.txt` (Xvfb, D-Bus, gnome-keyring, the Electron libraries and the remote desktop runtime
-   libraries), checks the AppImage SHA-256, unpacks the AppImage to `/opt/OpenBot/app`, adds an
-   AppArmor profile that lets Chromium make user namespaces, and enables `openbot.service` and the
+   libraries), checks the AppImage SHA-256, unpacks the AppImage to `/opt/CodeBot/app`, adds an
+   AppArmor profile that lets Chromium make user namespaces, and enables `codebot.service` and the
    [update](#updates) units;
-3. checks the installed version, that OpenBot did not start, and that no profile or claim exists;
-4. saves the builder as `openbot-server-<version>` (or `--name=<snapshot>`) and deletes the builder.
+3. checks the installed version, that CodeBot did not start, and that no profile or claim exists;
+4. saves the builder as `codebot-server-<version>` (or `--name=<snapshot>`) and deletes the builder.
 
-The builder never starts OpenBot, so the template has no host identity and no session. A retry
+The builder never starts CodeBot, so the template has no host identity and no session. A retry
 reuses a ready snapshot with the same name or waits for a save in progress. It refuses a failed
 snapshot and never replaces an existing name. Automatic production releases reserve the prefix
-`openbot-server-production-` to avoid test snapshots in the same account. Keep each name tied to
+`codebot-server-production-` to avoid test snapshots in the same account. Keep each name tied to
 one release and account-service origin; do not use that production prefix for manual test builds.
 
 The builder stops before creating an eleventh snapshot. This is our automation limit:
 [boat permits additional paid snapshots](https://docs.boat.dev/api/reference/snapshots/list-named-snapshots).
-Before each production build, the release job removes `openbot-server-production-` snapshots of
+Before each production build, the release job removes `codebot-server-production-` snapshots of
 older releases and keeps the 3 newest releases, including the new one
 ([details](RELEASING.md#hosted-server-snapshots)). It never removes other names. Before removing a
 test snapshot by hand, check both Workers and pending server creation records
@@ -555,52 +555,52 @@ from a removed snapshot keep running.
 
 Server Settings > Updates has the same controls as on a computer that updates itself: download,
 **Update when idle**, **Restart now**, automatic updates, and the switch that lets members update.
-OpenBot runs as the service user from a release that root owns, so it asks root to do the work
+CodeBot runs as the service user from a release that root owns, so it asks root to do the work
 (`src/main/hosted-update-adapter.ts`). It makes an empty file in its runtime directory:
-`/run/openbot/update-stage` to download, and `/run/openbot/update-install` to install.
-`openbot-update-request.path` then starts `openbot-update-request.service`, which runs
-`openbot-hosted-update request` as root. That removes the file without reading it and runs `stage`.
-For an install, it then stops OpenBot, runs `apply` and starts OpenBot again, also after a failure.
-A request that comes during a timer download waits for it while OpenBot runs. While a request runs,
-root writes the step to `/run/openbot-update.state` and changes its time every 5 seconds. OpenBot
+`/run/codebot/update-stage` to download, and `/run/codebot/update-install` to install.
+`codebot-update-request.path` then starts `codebot-update-request.service`, which runs
+`codebot-hosted-update request` as root. That removes the file without reading it and runs `stage`.
+For an install, it then stops CodeBot, runs `apply` and starts CodeBot again, also after a failure.
+A request that comes during a timer download waits for it while CodeBot runs. While a request runs,
+root writes the step to `/run/codebot-update.state` and changes its time every 5 seconds. CodeBot
 reads each change as download progress, so the download deadline finds a request that root never
 takes or that stops.
 
 The release that an older script moves into place has these units, but that script installs only
-the units it knows. So `openbot.service` runs `openbot-hosted-update trigger` as root before OpenBot
-starts; it installs and starts the request units when they are missing. OpenBot offers the controls
-only when `/etc/systemd/system/openbot-update-request.path` is there at its start. Otherwise, and on
+the units it knows. So `codebot.service` runs `codebot-hosted-update trigger` as root before CodeBot
+starts; it installs and starts the request units when they are missing. CodeBot offers the controls
+only when `/etc/systemd/system/codebot-update-request.path` is there at its start. Otherwise, and on
 hosts older than this release, the panel checks the release (`host-release-v1`) and shows the
 host-managed update path. A container has no request units. A container of `docker/instances` uses
-the same `HostedUpdateAdapter` with folders that the host mounts in `/var/lib/openbot-update`; see
+the same `HostedUpdateAdapter` with folders that the host mounts in `/var/lib/codebot-update`; see
 [Updates from the app](docker.md#updates-from-the-app).
 
 The Linux build contains `scripts/hosting/` (without the TypeScript files) in `resources/hosting`.
-On a server, root runs `openbot-hosted-update`:
+On a server, root runs `codebot-hosted-update`:
 
-1. `openbot-update.timer` runs `check` 5 to 10 minutes after each start of the timer and then
+1. `codebot-update.timer` runs `check` 5 to 10 minutes after each start of the timer and then
    about each hour. `check` runs `stage` when no `stage` of `check` succeeded in the last 6 hours
-   (`/run/openbot-update.staged`, so the first `check` after a boot stages), and then the step that
+   (`/run/codebot-update.staged`, so the first `check` after a boot stages), and then the step that
    [Start loop](#start-loop) describes. `stage` reads the `latest-linux.yml` (`latest-linux-arm64.yml` on arm64) of the
    latest GitHub release, the manifest that the Linux desktop updater reads. When that version is newer than the installed one, it downloads the
    AppImage, checks its SHA-512 against the manifest, unpacks it in `/var/tmp`, checks that it has
    all hosting files, installs the packages in the `packages.txt` and `optional-packages.txt` of
-   that release, and copies it to `/opt/OpenBot/staged`. The packages install with `--no-remove`.
+   that release, and copies it to `/opt/CodeBot/staged`. The packages install with `--no-remove`.
    A package of `optional-packages.txt` is skipped when a command with its name already exists,
    or when it needs a removal. `stage` runs the installed
    script with the list of the new release, so a package that conflicts with a host package must
    not be in `packages.txt`: an older script would remove the host package or stop.
-   `staged.ready` comes after the last file. OpenBot keeps running. The download and unpack use
+   `staged.ready` comes after the last file. CodeBot keeps running. The download and unpack use
    idle CPU and disk priority.
 2. `apply` copies `staged` to `app`, and then installs the scripts, AppArmor profile and units of
    the new release. `.applying` and `staged` stay until all of this is complete, so after a stop or
    a failure the next start does it again, and `stage` does nothing until then.
-   `openbot-update-apply.service` runs `boot` before `openbot.service`. `boot` runs `apply` only on
-   a complete disk, or when `.applying` shows an interrupted copy. `openbot.service` does not
+   `codebot-update-apply.service` runs `boot` before `codebot.service`. `boot` runs `apply` only on
+   a complete disk, or when `.applying` shows an interrupted copy. `codebot.service` does not
    require it, so it starts after a failure too: with the old release, or with a partial copy after
    a failed copy, until the next start. On a self-installed server, the new release starts at the
    next boot, or when idle if the automatic update switch is on (it is off by default). A hosted
-   server installs it itself: when the release is staged, OpenBot asks root to
+   server installs it itself: when the release is staged, CodeBot asks root to
    install it when idle, and when no connected client changed data or typed for 5 minutes and the
    start was 5 minutes ago. Reading is not use. Server Settings shows this wait as "other work",
    because `host-update-v1` has no reason for it. The automatic update switch of a hosted server
@@ -613,21 +613,21 @@ with a probe; not in boat documentation.]
 
 boat resumes a server on a machine that booted before, restores the disk lazily, and starts the
 units before the restore ends. The restore takes about 3.5 minutes. `stage` waits until it ends (at
-most 4 minutes), and OpenBot asks for `stage` before each install, so an install never stops
-OpenBot for the restore. `boot` waits only for an interrupted copy, because OpenBot starts after
+most 4 minutes), and CodeBot asks for `stage` before each install, so an install never stops
+CodeBot for the restore. `boot` waits only for an interrupted copy, because CodeBot starts after
 it. During a restore it skips a staged release and recovers an incomplete one.
 
 boat starts the desktop (`lightdm`) about 8 s after the resume, and then the enabled units of
-`multi-user.target` again, about 16 s after it. `openbot.service` is also wanted by
-`lightdm.service`, so it starts with the desktop. The second start of `openbot-update-apply.service`
-does nothing: the unit stays active (`RemainAfterExit`), and `boot` does nothing while OpenBot runs
+`multi-user.target` again, about 16 s after it. `codebot.service` is also wanted by
+`lightdm.service`, so it starts with the desktop. The second start of `codebot-update-apply.service`
+does nothing: the unit stays active (`RemainAfterExit`), and `boot` does nothing while CodeBot runs
 (after a failed `boot`). [Observed on a boat VM on 2026-10-11; not in boat
 documentation.]
 [Not confirmed in boat documentation: the `active` and `hydration-done` files in
 `/var/lib/ascii-lazy` that mark the restore. Observed on a boat VM.] `apply` never removes a staged
 release that is not complete.
 
-A server only moves to a newer version: an older OpenBot cannot open a database that a newer one
+A server only moves to a newer version: an older CodeBot cannot open a database that a newer one
 migrated. `stage` stops when it cannot read the installed version, and `provision.sh` stops when the
 installed version is newer. A staged release that is no longer the latest one, for example a
 withdrawn release, is removed at the next `stage` run. A server that starts before that run applies
@@ -639,66 +639,66 @@ A server has no window for the recovery window of the desktop. A server whose st
 failed started again each 10 seconds, without an end, in earlier releases. Now main stops the loop
 (`src/main/server-start-halt.ts`):
 
-- at the first failure when the database is from a newer OpenBot (`newer_database`): a restart
+- at the first failure when the database is from a newer CodeBot (`newer_database`): a restart
   cannot help;
 - for all other failures, at the third failed start in a row of the same version (`start_failed`).
   A failed migration rolls back and counts as a failed start, because its cause can be temporary
   (a full disk, a lock). A start that fails with an error stops the loop at once; after a crash,
   the next start stops it. This is the count of the desktop recovery window (`start-attempts.ts`).
 
-Main then writes `openbot-start-halt-v1.json` in its user data folder. The file has the reason
+Main then writes `codebot-start-halt-v1.json` in its user data folder. The file has the reason
 word, the app version and a time only. The journal shows the reason. Then main runs its safe mode
 (`src/main/server-safe-mode.ts`): it keeps a minimal Team API up, so each member's app shows why
 the server does not start and which version it runs. The safe mode opens no database and changes
-no user data. It writes the empty file `/run/openbot/server-safe-mode` while it runs. See
+no user data. It writes the empty file `/run/codebot/server-safe-mode` while it runs. See
 [Team API](architecture/team-api.md#server-safe-mode).
 
 When the safe mode cannot start (no team, or no host credential), main exits with 78 as before.
-`openbot.service` has `RestartPreventExitStatus=78`, so systemd does not start it again.
+`codebot.service` has `RestartPreventExitStatus=78`, so systemd does not start it again.
 
 The next start reads and removes the file, logs the reason, and tries once more. A failure of that
-start stops the loop again. These start OpenBot again:
+start stops the loop again. These start CodeBot again:
 
-- a restart or a resume of the server, or `sudo openbot restart` or `start`;
-- `sudo openbot update`;
-- `check` of `openbot-update.timer`, about each hour: when `openbot.service` is stopped with
+- a restart or a resume of the server, or `sudo codebot restart` or `start`;
+- `sudo codebot update`;
+- `check` of `codebot-update.timer`, about each hour: when `codebot.service` is stopped with
   status 78, or runs its safe mode, it runs `stage`, stops the safe mode, and starts the service
   again, after `apply` when a newer release is staged. A hosted
   owner has no shell, and a failure can be temporary (a full disk, no network), so each run tries
   once more. It reads only the state of the unit (`ActiveState`, `ExecMainStatus`) and the
   existence of the empty safe-mode file, never the content of a file of the service user.
 
-When OpenBot is not running or runs its safe mode, `openbot` commands that need the control socket
-say that the start loop stopped it, and name `openbot logs`, `sudo openbot update` and
-`sudo openbot restart`. The safe mode has no control socket.
+When CodeBot is not running or runs its safe mode, `codebot` commands that need the control socket
+say that the start loop stopped it, and name `codebot logs`, `sudo codebot update` and
+`sudo codebot restart`. The safe mode has no control socket.
 
-A Docker container has no systemd and no `openbot-update.timer`. There the safe mode ends after one
+A Docker container has no systemd and no `codebot-update.timer`. There the safe mode ends after one
 hour with exit 78, and the restart policy starts the container again, with the backoff of Docker.
 Each second start after a halt tries again.
 
 There is no install or rollback action in the safe mode: a newer release is the fix, through the
-update paths above. `copy_release` of `openbot-hosted-update` still removes the old copy before it
+update paths above. `copy_release` of `codebot-hosted-update` still removes the old copy before it
 copies (`rm -rf`, then `cp -a`); see plan 011 item 3.
 
 A server that has no updater, such as one made from a template before 0.26.0, needs one upgrade by
 hand. With a boat key that has command and file access: upload `scripts/hosting/` to
-`/tmp/openbot-upgrade`, run `sudo systemctl stop openbot.service`, run `sudo bash /tmp/openbot-upgrade/provision.sh user <AppImage URL> <SHA-256>
+`/tmp/codebot-upgrade`, run `sudo systemctl stop codebot.service`, run `sudo bash /tmp/codebot-upgrade/provision.sh user <AppImage URL> <SHA-256>
 https://api.openbot.run` as a detached command, and start the service again. The data in the home
 folder and in `/srv` stays.
 
-On a server, `openbot-hosted-server` starts a D-Bus session, unlocks a gnome-keyring with a
-random password for each server (so `safeStorage` can keep the account session), and runs OpenBot
+On a server, `codebot-hosted-server` starts a D-Bus session, unlocks a gnome-keyring with a
+random password for each server (so `safeStorage` can keep the account session), and runs CodeBot
 with `--password-store=gnome-libsecret`. The agents use the boat desktop: the lightdm session of the
-sandbox user on `:0`, with openbox. So boat's desktop viewer and OpenBot remote desktop show the same
+sandbox user on `:0`, with openbox. So boat's desktop viewer and CodeBot remote desktop show the same
 screen, and a click moves the keyboard focus to another window. After a resume, the script waits up
-to 2 minutes for that session. OpenBot shows its own windows on a 1280x800 Xvfb display that
+to 2 minutes for that session. CodeBot shows its own windows on a 1280x800 Xvfb display that
 `xvfb-run` starts. `xvfb-run` adds the key of that display to `~/.Xauthority`, which has the key of
 `:0`, and lightdm keeps the other keys when it writes the file. The script names `:0` in
-`OPENBOT_AGENT_DISPLAY`, so an agent's screenshot and remote desktop do not show the OpenBot window
+`CODEBOT_AGENT_DISPLAY`, so an agent's screenshot and remote desktop do not show the CodeBot window
 (see [Computer Use and remote desktop](architecture/computer-use.md#agent-display-on-a-server)). With
 no desktop session, the server starts two Xvfb displays and Openbox on the agent display, as a
 [self-hosted server](self-hosted-server.md#how-it-works) does. The keyring files are in
-`/srv/openbot-hosted/keyrings`:
+`/srv/codebot-hosted/keyrings`:
 
 - not in `~/.local/share/keyrings`: the boat image has a locked `default` keyring there, and a
   snapshot restore resets that folder after the service starts;
@@ -708,7 +708,7 @@ no desktop session, the server starts two Xvfb displays and Openbox on the agent
   them through the slow mount for 25 s. boat keeps changes in `/srv` (not in `/var/lib`), and `/srv`
   is on the disk before the service starts.
 
-OpenBot redeems the claim only when `safeStorage` works. After the first redeem the claim works
+CodeBot redeems the claim only when `safeStorage` works. After the first redeem the claim works
 for 10 more minutes, so a server whose response was lost can redeem it again; each redeem revokes the
 session of the one before. After that, a session that is only in memory would leave the server
 signed out after its next start.
@@ -727,26 +727,26 @@ again with backoff (30 s to 10 min) and then publishes the host.
 
 ## Watchdog
 
-Before it starts OpenBot, `openbot-hosted-server` starts itself again with `--watchdog` in the
-background. Main rewrites `~/.config/OpenBot/openbot-run-marker-v1.json` every 60 s from its event
+Before it starts CodeBot, `codebot-hosted-server` starts itself again with `--watchdog` in the
+background. Main rewrites `~/.config/CodeBot/codebot-run-marker-v1.json` every 60 s from its event
 loop (`src/main/run-marker.ts`). The watchdog reads the file every 30 s. When the content does not
-change in 20 reads (10 minutes) after it changed once in this run, the watchdog logs "OpenBot did not
+change in 20 reads (10 minutes) after it changed once in this run, the watchdog logs "CodeBot did not
 update its heartbeat for 600 seconds" and sends `SIGKILL` to the process in
-`/run/openbot/openbot.pid`. `Restart=always` starts the service again 10 s later. The watchdog does
+`/run/codebot/codebot.pid`. `Restart=always` starts the service again 10 s later. The watchdog does
 nothing:
 
 - before the first change of the file in this run;
-- until the start finishes: `openbot-start-attempts-v1.json` in the same folder has
+- until the start finishes: `codebot-start-attempts-v1.json` in the same folder has
   `"attempt":null` only after the migrations, the services and the renderer load. Migrations and the
   database `quick_check` run on the main thread and can take longer than 10 minutes on a large
   database;
 - while the run marker does not have `"state":"running"`. Quitting and the server safe mode stop the
   heartbeat, and the safe mode stays alive to keep the host reachable;
 - when the folder of the file has less than 1 MB free, because main ignores a failed write;
-- when the process in the pid file is not `openbot` in the cgroup of the service.
+- when the process in the pid file is not `codebot` in the cgroup of the service.
 
 The watchdog counts reads and does not compare clock times, so a boat resume, which moves the clock
-forward, does not stop OpenBot. It does not help when the whole machine stops responding; that needs a
+forward, does not stop CodeBot. It does not help when the whole machine stops responding; that needs a
 reboot of the VM.
 
 On 2026-11-21 a Standard server on Leaseweb (0.75.0) ran out of memory: agent dev servers, browser
@@ -757,17 +757,17 @@ line and used no CPU, and the host stayed off Signal for 24 hours until a restar
 that blocked is not confirmed: the processes were gone after the restart.
 `scripts/hosted-watchdog-e2e.ts` (`bun run test:hosted-watchdog`) runs the watchdog with a 1 s
 interval against fake apps that write, stop writing or never write the file, that did not finish
-their start, that quit, or that are not `openbot`.
+their start, that quit, or that are not `codebot`.
 
 ## Memory
 
-One systemd unit holds OpenBot, its browser tabs and every agent process: one `claude` process for
+One systemd unit holds CodeBot, its browser tabs and every agent process: one `claude` process for
 each thread, one set of MCP servers for each ACP session, and one set for each loaded Codex thread.
 A Starter server has 4 GB. The guards are on a hosted server, a
 [self-hosted server](self-hosted-server.md#memory) and a [container](docker.md#memory); the desktop
 app does not change.
 
-The unit (`openbot.service`):
+The unit (`codebot.service`):
 
 - `MemoryMax=90%`: the unit can use at most 90% of the memory, so 10% stays for the desktop, sshd
   and the boat agent. The limit counts memory only, not swap. The boat image has a 2 GB swap file,
@@ -801,7 +801,7 @@ do not all pass the check before their processes grow. A start that fails counts
 
 Agent processes (`AgentProcesses` in `src/main/server-memory.ts`):
 
-- Each provider process gets `OPENBOT_AGENT_PROCESS=1`, so every program that an agent starts has
+- Each provider process gets `CODEBOT_AGENT_PROCESS=1`, so every program that an agent starts has
   it too. A job that an agent detaches (`nohup`, `&`, a routine wake-up job), and the workers of a
   build whose parent the OOM killer stopped, leave main's tree: the kernel gives them to PID 1. The
   variable still finds them. Xvfb, D-Bus and the keyring start before main and do not have it.
@@ -860,11 +860,11 @@ holds it:
    waits at most 3 seconds. With `wake`, the server then starts in the background (`waitUntil`) as for
    a client (`last_wake_reason = 'message'`). A plan that ended starts nothing. Signal asks at most
    once a minute for each hosted route, and once in 10 minutes for another route.
-2. `wake` is true only for an event that addresses OpenBot: a Slack button press, mention, direct
+2. `wake` is true only for an event that addresses CodeBot: a Slack button press, mention, direct
    message or thread reply from a person; a Discord mention or button press; a Telegram message or
    button press.
 3. For such an event and a server that starts, Signal keeps the delivery frame, sealed to the host's
-   queue key (`@openbot/contracts/signal-protocol/ingress-queue`), in memory for at most 10 minutes
+   queue key (`@codebot/contracts/signal-protocol/ingress-queue`), in memory for at most 10 minutes
    (64 events and 192 KB for each host). Slack gets 200, so it does not send the event again. Because
    the start runs after the answer and can fail, Signal asks for the start again once a minute while
    the host has kept events. Signal
@@ -874,14 +874,14 @@ holds it:
    Telegram or Discord event is lost. This is accepted: it happens only to the events that arrive
    before the host connects again. Signal keeps the keys of at most 100,000 hosts.
 4. Another Slack event of a hosted server gets 200 and is dropped: the host keeps only messages that
-   address OpenBot, and joins the public channels again when its connection starts.
+   address CodeBot, and joins the public channels again when its connection starts.
 5. When the host's socket connects again, Signal sends each kept event of the routes that the socket
    holds, in order, as `queued-delivery` with an `id`. The host opens it with its private key, handles
    it as a normal delivery, and sends `queued-delivery-ack`. Signal keeps the event until that ack, and
    sends it again on the host's next hello: the first socket can close before the host handled it. The
    transports drop an event that they already handled.
 
-The host makes its queue key once (`src/main/ingress-queue-key.ts`, `openbot-ingress-queue-key-v1.json`
+The host makes its queue key once (`src/main/ingress-queue-key.ts`, `codebot-ingress-queue-key-v1.json`
 in the user data folder), encrypted by the operating system, and sends the public half in each
 `ingress` hello. An older host sends no key, so Signal keeps nothing for it; a hello with no key
 removes the key that Signal had. A kept delivery that arrives before its connection has started waits
@@ -911,21 +911,21 @@ The `boat` scenario of `scripts/stripe-flows-e2e.ts` (see `apps/auth-api/README.
 
 - the builder user has passwordless `sudo`, and AppArmor is enabled in the boat VM;
 - boat runs `setupScript` for a sandbox created from a named snapshot, and systemd starts
-  `openbot.service` after a create;
-- OpenBot redeems its claim, publishes the host with the server name, and signs in again from the
+  `codebot.service` after a create;
+- CodeBot redeems its claim, publishes the host with the server name, and signs in again from the
   stored session after a restart (`safeStorage` with gnome-keyring under Xvfb);
 - a delete through the Worker removes the sandbox.
 
 A resume test on 2026-09-28 (one sandbox with the 0.24.0 AppImage, 6 resumes, each on another
-machine) confirmed that systemd starts `openbot.service` again after a resume, and that a keyring
-secret in `/srv` stays. From the resume call to the OpenBot start took 7 to 34 s; the keyring start
+machine) confirmed that systemd starts `codebot.service` again after a resume, and that a keyring
+secret in `/srv` stays. From the resume call to the CodeBot start took 7 to 34 s; the keyring start
 took 40 ms. Most of the time is boat: it restores the disk and then starts the enabled units, 5 to
 20 s after the sandbox is `idle`.
 
 A wake test on 2026-10-11 (one hosted server with 0.37.0) measured, from the resume call: boat
-ready at 4 s, `openbot.service` at 17 s and the host register at 22 s. A wake with a staged release
+ready at 4 s, `codebot.service` at 17 s and the host register at 22 s. A wake with a staged release
 took 3 min 35 s, because `apply` waited for the restore. With the start at `lightdm`,
-`openbot.service` started at 8 s and the host registered at about 20 s: Electron starts slowly from
+`codebot.service` started at 8 s and the host registered at about 20 s: Electron starts slowly from
 the lazily restored disk, and the desktop session holds the display until about 12 s.
 
 A resize test on 2026-09-28 (one plain sandbox with `noEnv`, `small → default → small`, each a stop
@@ -935,7 +935,7 @@ and an enabled systemd unit started again after each resume. The stop took 25 to
 sandbox was `idle` 3 to 6 s after the resume call.
 
 A memory test on 2026-09-30 (one `small` sandbox with `noEnv`, the scripts and the Linux AppImage of
-main, and a `ServerMemory` driver in a unit with the same limits as `openbot.service`)
+main, and a `ServerMemory` driver in a unit with the same limits as `codebot.service`)
 confirmed:
 
 - boat VMs use cgroup v2 with the memory controller, and the unit gets `memory.max` = 90% (3.4 GiB);
@@ -976,7 +976,7 @@ sandbox) stopped the sandbox while a writer used SQLite in WAL mode in the home 
 - with an empty WAL and only small appends at the stop, 9 checks were healthy;
 - with no automatic checkpoint, the main file was not damaged, but in 3 of 6 restores the WAL
   header was torn, and SQLite ignored the full WAL. The rows of that run were lost;
-- with `openbot-boat-pre-stop` for the writer unit (`--mode=pre-stop`), each of 4 stops during
+- with `codebot-boat-pre-stop` for the writer unit (`--mode=pre-stop`), each of 4 stops during
   writes gave a healthy database with every committed row, and no `/run` flag after the resume.
 
 A stop-order probe on the same day (a unit that records `SIGTERM` and writes each 200 ms) showed
@@ -985,12 +985,12 @@ that boat saves the disk while the processes run, about 3 seconds after the stop
 call, and the last write that the restore kept was from after the hook ended. Thus boat waits for
 the hook before it saves the disk.
 
-An install test on the same sandbox put the new `openbot-hosted-update`, `openbot.service` and hook
+An install test on the same sandbox put the new `codebot-hosted-update`, `codebot.service` and hook
 in place, as an older release does when it updates. At the next start, `trigger` installed the hook
-as `user` with mode 0755. It did not change a current hook, kept a hook that OpenBot did not write
-(a file, a link or a FIFO, with no wait), and replaced a changed OpenBot hook. At a stop of the real OpenBot, the hook
-stopped `openbot.service` in 0.3 seconds and ended with 0. After the resume (a new boot ID), the
-flag was gone, OpenBot ran, and `openbot.db` passed `quick_check`.
+as `user` with mode 0755. It did not change a current hook, kept a hook that CodeBot did not write
+(a file, a link or a FIFO, with no wait), and replaced a changed CodeBot hook. At a stop of the real CodeBot, the hook
+stopped `codebot.service` in 0.3 seconds and ended with 0. After the resume (a new boot ID), the
+flag was gone, CodeBot ran, and `codebot.db` passed `quick_check`.
 
 ## Leaseweb VPS
 
@@ -1041,20 +1041,20 @@ server that runs already, see [The plan of a custom server](#the-plan-of-a-custo
   operator keys sign in, so one operator key must be a key of this computer.
 - It makes the claim just before the install, because a claim works for 15 minutes.
 - At the end it runs `leaseweb-bootstrap-e2e.ts`, which restarts the server, and then checks that
-  OpenBot is online and that D1 shows the owner as the active owner of the server.
+  CodeBot is online and that D1 shows the owner as the active owner of the server.
 - A run that stops can run again with the same arguments: it continues with the same reference,
   does not install again when the owner is signed in, and stops when another account is signed in.
 - Its output has no email and no key. The report of the checks is in
-  `.openbot-build/leaseweb-bootstrap/`.
+  `.codebot-build/leaseweb-bootstrap/`.
 
 The steps of the command:
 
 1. Order a VPS with Ubuntu 24.04 or 26.04. The order takes no SSH key and no user data. The root password
    comes from `GET /publicCloud/v1/vps/{id}/credentials`.
-2. Install OpenBot with `install-server.sh` and a [server claim](self-hosted-server.md#sign-in-with-a-server-claim)
+2. Install CodeBot with `install-server.sh` and a [server claim](self-hosted-server.md#sign-in-with-a-server-claim)
    for the customer's email.
 3. Run `scripts/hosting/leaseweb-bootstrap.sh` as root, with the public keys of the operators. Each
-   release also has it in `/opt/OpenBot/app/resources/hosting`.
+   release also has it in `/opt/CodeBot/app/resources/hosting`.
 
    ```sh
    ssh root@<address> bash -s "$(ssh <core server> cat /root/.ssh/authorized_keys | base64 | tr -d '\n')" \
@@ -1065,23 +1065,23 @@ The steps of the command:
    again, and a boot fault must show now. `leaseweb-bootstrap-e2e.ts --restart=yes` does this and
    checks the result.
 
-The bootstrap does not restart OpenBot, and a second run gives the same state:
+The bootstrap does not restart CodeBot, and a second run gives the same state:
 
 | Part | Result | Files |
 | --- | --- | --- |
-| SSH | Keys only, no forwarding. The operator keys sign in as root, and as no other user. | `/etc/ssh/sshd_config.d/00-openbot-hardening.conf`, `/etc/ssh/openbot-operator-keys/root` |
-| Egress rules | The service user cannot connect to the CloudStack router (the DHCP server, which gives metadata and a reset root password to each process that asks), nor to private, link-local and multicast addresses. It also cannot connect to the IPv6 addresses of Google services (`goog.json` without `cloud.json` from `https://www.gstatic.com/ipranges/`), so Gemini and other Google services connect over IPv4. Google can put an IPv6 range of Leaseweb in a country where Gemini refuses requests (#15812). No user can connect to TCP port 25. | `/usr/local/sbin/openbot-egress-firewall`, `/etc/openbot/egress-router`, `openbot-egress-firewall.service`, `openbot.service.d/10-egress-firewall.conf` |
-| Updates | Security updates each day. They restart neither the server nor OpenBot. Ubuntu (`needrestart`) restarts each other service that uses an updated library. | `/etc/apt/apt.conf.d/20auto-upgrades`, `52openbot-unattended`, `/etc/needrestart/conf.d/50-openbot.conf` |
-| Kernel | A new kernel gets a boot entry: the bootstrap installs `grub-pc` when the image has no `update-grub`. The boot arguments of the image stay. | `/etc/default/grub.d/50-openbot.cfg` |
+| SSH | Keys only, no forwarding. The operator keys sign in as root, and as no other user. | `/etc/ssh/sshd_config.d/00-codebot-hardening.conf`, `/etc/ssh/codebot-operator-keys/root` |
+| Egress rules | The service user cannot connect to the CloudStack router (the DHCP server, which gives metadata and a reset root password to each process that asks), nor to private, link-local and multicast addresses. It also cannot connect to the IPv6 addresses of Google services (`goog.json` without `cloud.json` from `https://www.gstatic.com/ipranges/`), so Gemini and other Google services connect over IPv4. Google can put an IPv6 range of Leaseweb in a country where Gemini refuses requests (#15812). No user can connect to TCP port 25. | `/usr/local/sbin/codebot-egress-firewall`, `/etc/codebot/egress-router`, `codebot-egress-firewall.service`, `codebot.service.d/10-egress-firewall.conf` |
+| Updates | Security updates each day. They restart neither the server nor CodeBot. Ubuntu (`needrestart`) restarts each other service that uses an updated library. | `/etc/apt/apt.conf.d/20auto-upgrades`, `52codebot-unattended`, `/etc/needrestart/conf.d/50-codebot.conf` |
+| Kernel | A new kernel gets a boot entry: the bootstrap installs `grub-pc` when the image has no `update-grub`. The boot arguments of the image stay. | `/etc/default/grub.d/50-codebot.cfg` |
 
 The rules load before the network starts, with the router of the last run, and again before each
-start of OpenBot, with the router of the current DHCP lease. `openbot.service` requires the rules
-unit, so OpenBot does not run without them. The rules also refuse the service user a container
+start of CodeBot, with the router of the current DHCP lease. `codebot.service` requires the rules
+unit, so CodeBot does not run without them. The rules also refuse the service user a container
 network in 172.16.0.0/12 and a VPN in 100.64.0.0/10; change `PRIVATE4` in the helper for a server
 that needs one. They do not filter incoming connections: a port that an agent opens on all
 addresses is open to the internet.
 
-OpenBot thus keeps its old libraries until the operator restarts the service, and the server runs
+CodeBot thus keeps its old libraries until the operator restarts the service, and the server runs
 its old kernel until the operator restarts the server. Plan those restarts.
 
 A server has three names, and each one can change later:
@@ -1089,11 +1089,11 @@ A server has three names, and each one can change later:
 | Name | Command | Notes |
 | --- | --- | --- |
 | Leaseweb reference | `PUT /publicCloud/v1/vps/{id}` with `{"reference": "<name>"}` | At most 255 characters; `@`, `+`, a space and letters outside ASCII are kept. `GET /publicCloud/v1/vps?reference=<text>` finds each server that has the text in its reference, with no difference between capital and small letters. |
-| OpenBot server name | `openbot name <name>` as the service user | 6 to 32 characters. No restart. The customer sees this name. |
-| Linux hostname | `hostnamectl set-hostname <name>` | Set it before OpenBot starts, or restart OpenBot after it. |
+| CodeBot server name | `codebot name <name>` as the service user | 6 to 32 characters. No restart. The customer sees this name. |
+| Linux hostname | `hostnamectl set-hostname <name>` | Set it before CodeBot starts, or restart CodeBot after it. |
 
 The X authorization of the virtual display has the hostname in it. After a hostname change, a new
-program of a running OpenBot cannot open the display ("Authorization required") until OpenBot
+program of a running CodeBot cannot open the display ("Authorization required") until CodeBot
 restarts.
 
 #### Leaseweb references
@@ -1105,9 +1105,9 @@ Leaseweb accounts use one scheme:
 | --- | --- | --- |
 | None (no reference, or an empty one) | Not used. **Only a VPS with no reference can be taken for a new use.** | |
 | `pool` | In the hosted pool. It does not tell whether a server has the VPS: a purchase gives a VPS to a server in D1 and does not change the reference. `leaseweb-pool.ts status` shows the free ones. Only `leaseweb-pool.ts` and [Move a server from boat](#move-a-server-from-boat) use a pool VPS. Before 2026-11-13 a free pool VPS had `pool-free`; the script reads it as `pool`. | `pool` |
-| `<owner email> <first 8 characters of the OpenBot server ID>` | In the hosted pool, with a hosted server. `move` sets it for a moved server, and `sync` for a server that started on the machine. A label for the Leaseweb panel only: `sync` sets `pool` again on a free pool VPS that still has one. Do not decide from it whether a VPS is free. | `jane@example.com 1a2b3c4d` |
+| `<owner email> <first 8 characters of the CodeBot server ID>` | In the hosted pool, with a hosted server. `move` sets it for a moved server, and `sync` for a server that started on the machine. A label for the Leaseweb panel only: `sync` sets `pool` again on a free pool VPS that still has one. Do not decide from it whether a VPS is free. | `jane@example.com 1a2b3c4d` |
 | `custom-<NN> <customer> <owner email>` | A server for one customer, not in the pool. `<NN>` is the next number after the highest on all accounts; `leaseweb-pool.ts custom` sets it. `<customer>` is one word in small letters. | `custom-01 acme jane@example.com` |
-| `openbot-signal-<home>` | A Signal machine (see `docs/remote-session-deployment.md`). | `openbot-signal-us` |
+| `codebot-signal-<home>` | A Signal machine (see `docs/remote-session-deployment.md`). | `codebot-signal-us` |
 | `pool-test-<NN>` | A test machine of the operator. | `pool-test-01` |
 | `internal-<purpose>` | A machine of the operators, not in the pool and not for tests. `internal-store-review` is the server of the app store reviewers; see `AGENTS.md`. | `internal-store-review` |
 
@@ -1139,7 +1139,7 @@ A pool VPS and a custom VPS also use these names:
 | Name | Value | Example |
 | --- | --- | --- |
 | Linux hostname | `lsw-<Leaseweb VPS ID>`; it never changes | `lsw-12728110` |
-| OpenBot server name | The customer's choice | |
+| CodeBot server name | The customer's choice | |
 
 The operator keys are a file with one public key for each operator, in the format of
 `authorized_keys`, with no options. The fixed place of the list is `/root/.ssh/authorized_keys` of
@@ -1187,10 +1187,10 @@ that asks them to wait for the owner. A server with no plan has no paywall.
 When the billing country is in the EU, the UK or Turkey and the account has no VAT ID, the paywall
 asks the owner to accept that the service starts during the 14-day withdrawal period, as the hosted
 plans page does. Subscribe stays off until the owner selects the checkbox. The Worker writes the time
-of the request to `openbot_early_start_at` on the Checkout Session and the subscription.
+of the request to `codebot_early_start_at` on the Checkout Session and the subscription.
 
 `custom --plan=...` sets the plan at the setup. `custom-plan` shows, sets, changes or removes the
-plan of a server that runs already. It takes the OpenBot server ID, which is the last line of the
+plan of a server that runs already. It takes the CodeBot server ID, which is the last line of the
 `custom` command and the `host_id` in D1, not the VPS ID:
 
 ```sh
@@ -1207,14 +1207,14 @@ $env bun scripts/hosting/leaseweb-pool.ts custom-plan <server ID> --remove --app
 
 | Flag | Value |
 | --- | --- |
-| `--plan` | The plan name that the owner sees, 1 to 60 characters. Stripe shows it as `OpenBot <plan name>`. |
+| `--plan` | The plan name that the owner sees, 1 to 60 characters. Stripe shows it as `CodeBot <plan name>`. |
 | `--price` | The price of one period, before tax, for example `499` or `499.50`. |
 | `--currency` | `eur` (default), `usd`, `pln` or `brl`. |
 | `--interval` | `month` (default) or `year`. |
 | `--vcpu`, `--memory`, `--storage` | The spec that the paywall shows: vCPU, memory in GB, storage in GB. |
 | `--support` | The paywall shows personalized support. |
 | `--remove` | `custom-plan` only: remove the plan and the paywall. |
-| `--env=test` | Use the test D1 (`openbot-auth-test`). |
+| `--env=test` | Use the test D1 (`codebot-auth-test`). |
 | `--env=local` | `custom-plan` only: use the local D1 of `bun run dev:api` in this worktree. No Cloudflare token is necessary. |
 
 - The plan is a row of the D1 table `custom_server_offers`. `custom` writes it after the D1 owner
@@ -1224,7 +1224,7 @@ $env bun scripts/hosting/leaseweb-pool.ts custom-plan <server ID> --remove --app
   checkout stays open for 35 minutes, and a change in that time could lose the payment. When the
   server pays already, change that subscription in Stripe.
 - Checkout uses a Stripe price made for the session (`price_data`), with the metadata
-  `openbot_kind=custom_server` and the server ID. The webhook stores the subscription and its status.
+  `codebot_kind=custom_server` and the server ID. The webhook stores the subscription and its status.
   The status `active`, `trialing` or `past_due` removes the paywall; any other status shows it again.
 - Each change, from Stripe or from `custom` and `custom-plan`, sends `account-servers-changed` to the
   active members, and the apps read the server list again. The Worker sends the events of the
@@ -1239,12 +1239,12 @@ sandbox when none is. A server that starts on boat moves to a VPS later
 
 The Worker cannot connect to a machine, and it has no Leaseweb key. So the machine asks:
 
-1. `leaseweb-pool.ts prepare <VPS ID>... --apply` installs the newest OpenBot, disabled,
+1. `leaseweb-pool.ts prepare <VPS ID>... --apply` installs the newest CodeBot, disabled,
    on each free machine, as for a move. Then it offers the machine: it makes a random token, stores the
    SHA-256 of the token in `operator_hosts.assign_token_hash` (migration 0055), and runs
    `move-from-boat.sh offer leaseweb:<VPS ID>` on the machine with the token on standard input. `offer`
-   refuses a machine that has the data of a server. It writes the token to `/etc/openbot-pool/token`
-   (root only) and starts `openbot-pool-wait.service`.
+   refuses a machine that has the data of a server. It writes the token to `/etc/codebot-pool/token`
+   (root only) and starts `codebot-pool-wait.service`.
 2. The unit sends `POST /v2/hosting/pool/assignment` with `{hostId, token}` each 10 seconds. The Worker
    compares the hash, stores the time in `operator_hosts.seen_at` (at most one write each 60 seconds)
    and answers `{"state":"waiting"}`. A wrong token gets `401 hosted_pool_token_invalid`; the unit then
@@ -1263,10 +1263,10 @@ The Worker cannot connect to a machine, and it has no Leaseweb key. So the machi
    claim, and it changes no row when another server has the machine. So two payments in the same second
    never get one machine. After three machines that another payment took, the server starts on boat.
 5. The next request of the machine gets `{"state":"assigned","serverId":…,"claim":…}`. The unit runs
-   `openbot-hosted-env` as the service user with the two values (the same helper as in the boat setup
-   script), enables and starts `openbot.service`, then removes the token and disables itself. The
-   answer is the same until OpenBot signs in, so a machine that restarts in this step asks again.
-6. OpenBot redeems the claim (`POST /v2/hosting/claims/redeem`). The Worker then sets the row to
+   `codebot-hosted-env` as the service user with the two values (the same helper as in the boat setup
+   script), enables and starts `codebot.service`, then removes the token and disables itself. The
+   answer is the same until CodeBot signs in, so a machine that restarts in this step asks again.
+6. CodeBot redeems the claim (`POST /v2/hosting/claims/redeem`). The Worker then sets the row to
    `running` and clears the token hash of the machine. From here the server is the same as a moved server: the tables of
    [Move a server from boat](#move-a-server-from-boat) apply, but it has no `retired_sandbox_id`, so a
    delete sends no call to boat.
@@ -1280,7 +1280,7 @@ When a step fails, the customer still gets a server:
 | Fault | Result |
 | --- | --- |
 | No ready machine of the product, or the pool query fails | The Worker makes the boat sandbox in the same request, as before, and sends a [pool alert](#pool-alerts). |
-| The machine does not start OpenBot, or OpenBot does not sign in, in 4 minutes (`POOL_START_LOST_AFTER_MS`) | The cron takes the server off the machine and makes a boat sandbox for it. The claim of the machine stops working. The machine loses its token, because its disk can have the start of a server; `status` shows it as not ready. Run `prepare --reinstall` for it. |
+| The machine does not start CodeBot, or CodeBot does not sign in, in 4 minutes (`POOL_START_LOST_AFTER_MS`) | The cron takes the server off the machine and makes a boat sandbox for it. The claim of the machine stops working. The machine loses its token, because its disk can have the start of a server; `status` shows it as not ready. Run `prepare --reinstall` for it. |
 | The plan ends before the sign-in | The row gets `error` and no machine. A renewal sets the server up again. |
 | The owner deletes the server before the sign-in | The delete is the usual one. `sync` reinstalls the machine. |
 
@@ -1298,18 +1298,18 @@ A machine of the pool is not the boat image:
 
 - It has no agent CLI for all users (`claude`, `codex`, `pi`) and no `node`. At start, a hosted
   server downloads the CLI of each provider that an agent uses and that is not off. The user
-  downloads the CLI of another provider in OpenBot.
-- It has no Docker and no boat desktop. OpenBot uses its own virtual displays.
+  downloads the CLI of another provider in CodeBot.
+- It has no Docker and no boat desktop. CodeBot uses its own virtual displays.
 - It shows the storage of the plan (25, 75 and 150 GB), the same numbers as the pricing page
   (`storageTierGb`).
 - Restart server asks the server to restart itself (`host-restart-v1`), as on a self-hosted server,
   and the server does not stop when it is not in use.
 
 Measured on the test Worker with a real Leaseweb VPS 2 (smoke, 2026-11-13): `prepare` of a clean
-machine takes about 3 minutes. OpenBot on the machine signed in 9 seconds after the payment, and the
+machine takes about 3 minutes. CodeBot on the machine signed in 9 seconds after the payment, and the
 server was online after 13 seconds. A start on boat took 25 seconds to the sign-in. A server whose
-machine did not start OpenBot went to boat 270 seconds after the payment and signed in 15 seconds
-later; the late start of OpenBot on that machine got "The server claim is invalid or used."
+machine did not start CodeBot went to boat 270 seconds after the payment and signed in 15 seconds
+later; the late start of CodeBot on that machine got "The server claim is invalid or used."
 `prepare --reinstall` made that machine ready again in 213 seconds, and after `remove` the unit on
 the machine stopped at its next question.
 
@@ -1333,7 +1333,7 @@ The machines of the pool are in `operator_hosts` (migration 0053). A machine of 
 of `hosted_servers` names is free. See [Reuse a pool machine](#reuse-a-pool-machine).
 
 For a row with `operator_host`, the Worker sends no call to boat, with one exception (the delete).
-It writes what it wants in `desired_state`; the operator starts and stops OpenBot on the machine and
+It writes what it wants in `desired_state`; the operator starts and stops CodeBot on the machine and
 writes `observed_state`:
 
 | Event | The Worker | The operator |
@@ -1342,10 +1342,10 @@ writes `observed_state`:
 | A client or a connector event asks for a start | Nothing. | Nothing. |
 | The server reports its use | Stores `last_active_at` and `next_run_at`. | Nothing. |
 | The plan changes | Sets `size` at once. | Nothing: each pool server has the same size. |
-| The plan ends | Sets `desired_state = 'stopped'`, `observed_error = 'plan_ended'` and `plan_ended_at`. A start request gets `402 plan_required`. | Stop `openbot.service`, then write `observed_state = 'stopped'`. Until then the server still runs. |
-| The owner renews | Sets `desired_state = 'running'` and clears the error. `plan_ended_at` stays. | Start `openbot.service`, then write `observed_state = 'running'`. |
+| The plan ends | Sets `desired_state = 'stopped'`, `observed_error = 'plan_ended'` and `plan_ended_at`. A start request gets `402 plan_required`. | Stop `codebot.service`, then write `observed_state = 'stopped'`. Until then the server still runs. |
+| The owner renews | Sets `desired_state = 'running'` and clears the error. `plan_ended_at` stays. | Start `codebot.service`, then write `observed_state = 'running'`. |
 | 14 days after the plan ended, with no open subscription | Reads the subscription at Stripe, then deletes the server as the owner does. | As for a delete. |
-| The owner or an admin restarts the server | Refuses with `409 hosted_server_restart_unavailable`. The clients send the restart to the server (`host-restart-v1`), so the Worker gets no request. | Restart `openbot.service` on a request to support when OpenBot does not answer. |
+| The owner or an admin restarts the server | Refuses with `409 hosted_server_restart_unavailable`. The clients send the restart to the server (`host-restart-v1`), so the Worker gets no request. | Restart `codebot.service` on a request to support when CodeBot does not answer. |
 | The owner deletes the server | Cancels the plan, deletes the sandbox in `retired_sandbox_id`, removes the Remote host, ends the session, and sets `observed_state = 'deleted'`. `operator_host` stays. | Reinstall the VPS, set its reference to `pool`, then set `operator_host = NULL`. |
 | boat sends an event for the old sandbox | Finds no row for it. | Nothing. |
 
@@ -1355,7 +1355,7 @@ The Worker sends no message to the operator, and it connects to no machine. Run
 Never write `desired_state = 'idle'` on such a row: the next client request changes it to `running`,
 and the cron query for a server with a routine does not look at the machine.
 
-The server on the VPS stays a hosted server (no `/opt/OpenBot/hosted/mode` file), so OpenBot signs
+The server on the VPS stays a hosted server (no `/opt/CodeBot/hosted/mode` file), so CodeBot signs
 in, reports its use and installs updates as it did on boat. `provision.sh` installs it and does not
 start it, so the data is in place before the first start. `scripts/hosting/move-from-boat.sh` does
 the parts of a move that run on the two machines, as root.
@@ -1367,7 +1367,7 @@ token of the machine away, so that no new server gets it. Use `auto`: new custom
 each moment, so a VPS that you selected earlier can have a server when the move starts. `auto` selects
 a ready machine first, in the locations of the currency of the server, as the account service does
 for a new server. When a new customer gets it before the token is away, it takes the next one. After the
-row changes and before the export, it checks the same IDs of `user` on the two machines, an OpenBot
+row changes and before the export, it checks the same IDs of `user` on the two machines, an CodeBot
 on the machine that is not older than that of the sandbox, and an ssh from the sandbox to the machine.
 When a step before the export fails, it gives the row back to the sandbox, and the customer sees no
 downtime. After the export starts, it stops and names the step; then finish or roll back by
@@ -1379,7 +1379,7 @@ bunx dotenvx run -f apps/auth-api/.env.production -f apps/auth-api/.env.dev -fk 
 ```
 
 Tested on 2026-11-12 with the test Worker: one Standard server from a boat sandbox to a VPS 2 in
-`AMS-01` (OpenBot 0.68.0). The sandbox had an npm package, an apt package, a command in `/opt`, a
+`AMS-01` (CodeBot 0.68.0). The sandbox had an npm package, an apt package, a command in `/opt`, a
 crontab line, an MCP server, an Inception key and sign-in files of Claude and Codex. `prepare` of a
 new VPS took 140 s. The move took 69 s, and the downtime was 49 s: the export and the copy 28 s, the
 import 20 s, the start 2 s. After the move, the web client showed the old chats, the Inception agent
@@ -1388,7 +1388,7 @@ there. A first run waited for a sandbox state that boat does not use; it stopped
 and gave the row back, and the server had no downtime.
 
 The order of the steps keeps the downtime short. The work that does not need the data (the install
-of OpenBot, the bootstrap, the restart and the apt packages of the customer) runs while the customer
+of CodeBot, the bootstrap, the restart and the apt packages of the customer) runs while the customer
 still uses the sandbox. The downtime is the export, the copy, the import and the start. The steps:
 
 1. Deploy the Worker with migration 0052 before the first move. An older Worker does not know the
@@ -1397,8 +1397,8 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    `move-from-boat.sh prepare lsw-<VPS ID> <uid> <gid> <appimage-url> <appimage-sha256> <auth-api-url>`.
    The IDs are those of `id user` in the sandbox (1000 and 1000 in the boat image). The release is the
    one that the sandbox has, or a newer one. The command sets the hostname, makes the user `user`
-   with the home `/home/user`, runs `provision.sh`, and disables `openbot.service`, so a restart does
-   not start OpenBot with no data. `leaseweb-pool.ts prepare <VPS ID>... --apply` does
+   with the home `/home/user`, runs `provision.sh`, and disables `codebot.service`, so a restart does
+   not start CodeBot with no data. `leaseweb-pool.ts prepare <VPS ID>... --apply` does
    steps 2 and 3 on free machines before a move, with the newest release.
 3. Run `leaseweb-bootstrap.sh` with the operator keys. Restart the VPS one time. A new or reinstalled
    VPS has no key of an operator: `leaseweb-pool.ts` then signs in one time with the root password of
@@ -1420,7 +1420,7 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
 
    From this statement, the Worker sends no call to boat for the server, and the customer still uses
    the sandbox. The order is necessary: while the row has the sandbox and `desired_state = 'running'`,
-   the Worker resumes a stopped sandbox in some seconds, and a resume starts OpenBot there again. The
+   the Worker resumes a stopped sandbox in some seconds, and a resume starts CodeBot there again. The
    Worker can also stop the sandbox for no use during the export, and the next client request then
    starts it. In each case the sandbox gets data that the archive does not have. When the sandbox is
    stopped at this step, start it at boat.
@@ -1436,19 +1436,19 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    downtime. Then on the sandbox: `move-from-boat.sh export <archive>`, or `export -`, which writes the
    archive to standard output and each message to standard error. `leaseweb-pool.ts move` sends it
    with `ssh` to a key that the sandbox makes for this move: on the VPS, that key can only run
-   `cat >/root/openbot-move.tar`, and the move removes it after the export. So no archive is on the
+   `cat >/root/codebot-move.tar`, and the move removes it after the export. So no archive is on the
    disk of the sandbox, and the copy has no separate step. The downtime of the customer starts here.
-   The command sets `/run/openbot-pre-stop`, stops `openbot.service`, and archives, with numeric
-   owners, the home of `user` and `/srv/openbot-hosted`. The home has each provider sign-in, API key
-   and MCP server. The archive does not have the provider CLIs that OpenBot downloaded
-   (`~/.config/OpenBot/provider-runtimes`, but `bun` stays) or the caches: at start, a hosted server
+   The command sets `/run/codebot-pre-stop`, stops `codebot.service`, and archives, with numeric
+   owners, the home of `user` and `/srv/codebot-hosted`. The home has each provider sign-in, API key
+   and MCP server. The archive does not have the provider CLIs that CodeBot downloaded
+   (`~/.config/CodeBot/provider-runtimes`, but `bun` stays) or the caches: at start, a hosted server
    downloads the CLI of each provider that an agent uses. The archive also has what the customer installed
    outside the home, and not what the boat image has (the lists at the top of the script, from image
    `c4ed68db` and `5f37c910`):
    - each directory that the customer added in `/opt`, `/usr/local` and `/usr/local/lib`, and each
      npm package for all users. A directory that programs of root read, such as
      `/usr/local/lib/systemd` or `/usr/local/lib/python3.12`, stays out, and the report names it.
-   - the Hermes CLI of the image when its sign-in file in the home has a sign-in. OpenBot does not
+   - the Hermes CLI of the image when its sign-in file in the home has a sign-in. CodeBot does not
      download Hermes as it downloads the other provider CLIs. An empty file, a file with only `{}`, or
      the `.env` that the image writes for Hermes is not a sign-in.
    - each program in `/usr/local/bin` that the image does not have, each link there into a moved
@@ -1474,7 +1474,7 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    have the folder; the move checks this before the downtime. The operator gives this list, not the
    archive, because an agent of the customer can get root in the sandbox. `discard` removes these
    folders. A server with another such folder, such as `/var/lib/syncthing` or a file directly in `/srv`,
-   stays on boat: a copy by hand cannot work, because `move` starts OpenBot on the VPS right after the
+   stays on boat: a copy by hand cannot work, because `move` starts CodeBot on the VPS right after the
    sandbox stops.
    A file that the customer made as root is not found.
 
@@ -1497,15 +1497,15 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    with `docker compose up -d`. The containers connect through a process of `user`, so the egress rules
    also apply to them: they cannot connect to the router or to the metadata address.
    It refuses, before it changes anything, a sandbox whose stop at boat is failing
-   (`stop.status: "failing"`): each new try of boat stops OpenBot, and a try during the downtime looks
+   (`stop.status: "failing"`): each new try of boat stops CodeBot, and a try during the downtime looks
    like a stop that ended. On 2026-11-13 a move of a sandbox with a Docker container that restarted
-   started OpenBot on the VPS while boat cancelled the stop, and the sandbox started OpenBot again. It
+   started CodeBot on the VPS while boat cancelled the stop, and the sandbox started CodeBot again. It
    was rolled back.
 
-   The archive also has the SHA-256 of `openbot.db`, `agent-data.db`, `login.keyring` and
+   The archive also has the SHA-256 of `codebot.db`, `agent-data.db`, `login.keyring` and
    `keyring-password`, the names of the npm commands and groups of the sandbox, and the Ubuntu
    version. It does not have:
-   - `/opt/OpenBot`, `~/.boat`, `~/.boatignore`, `~/.ascii`, `~/.config/ascii`, `~/.Xauthority*` and
+   - `/opt/CodeBot`, `~/.boat`, `~/.boatignore`, `~/.ascii`, `~/.config/ascii`, `~/.Xauthority*` and
      `~/.npm/_cacache`.
    - the cache folders in each profile of Chromium, Chrome and Brave in `~/.config` (`Cache`,
      `Code Cache`, `GPUCache`, `GrShaderCache`, `ShaderCache`, the four Dawn caches,
@@ -1525,18 +1525,18 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    these two, it says so: then make sure that no directory of the list is from the image. The
    archive holds the account session and each provider sign-in and key of the customer: copy it only
    over SSH.
-6. On the VPS: `move-from-boat.sh import <archive>`. The command refuses an OpenBot that is older
+6. On the VPS: `move-from-boat.sh import <archive>`. The command refuses an CodeBot that is older
    than that of the sandbox, restores the archive, and compares the four SHA-256 values. An agent
    of the customer can get root in the sandbox, and the service user has no root on the VPS. So the
-   service user restores the files, and only `/home/user`, `/srv/openbot-hosted` and the moved
+   service user restores the files, and only `/home/user`, `/srv/codebot-hosted` and the moved
    directories. Root makes each moved directory new, owned by `user`; a directory that the VPS has
    already stays as it is, and the report names it. The archive cannot write a file of root, a setuid
    file of root or a device. A file that root or another user owned in the sandbox gets the service
    user as its owner. When the archive has a member that the service user cannot restore, the import
    fails. Then, as `user`, the import puts the moved commands in `~/.local/bin` (a command that is
    there already stays) and installs the crontab. When it moved an npm package and the VPS has no
-   `node`, it adds `~/.local/bin/node`, which starts the Bun that OpenBot downloaded to the home: Bun
-   runs a Node script when it starts with the name `node`. OpenBot downloads Bun at its first start
+   `node`, it adds `~/.local/bin/node`, which starts the Bun that CodeBot downloaded to the home: Bun
+   runs a Node script when it starts with the name `node`. CodeBot downloads Bun at its first start
    and when an MCP server is on; when the sandbox had no Bun, the report says so. As root, the import
    installs the apt packages of the customer. It does not install a package that changes
    the firewall, SSH or root access, such as `docker.io` or `ufw`. At the end it names each command in
@@ -1545,7 +1545,7 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    a program for Ubuntu 24.04 can fail on 26.04, such as a Python virtual environment. Delete each
    copy of the archive. When the import fails, run `move-from-boat.sh discard lsw-<VPS ID>` and then
    the import again: `discard` removes the restored data, the moved directories and the crontab (the
-   apt packages stay), and it refuses a machine on which OpenBot started.
+   apt packages stay), and it refuses a machine on which CodeBot started.
 
    The import also removes the parts of the boat desktop from the home: `~/.ascii` and `~/.config/ascii`
    (with the token of the desktop), their links in `~/.local/bin`, the `boat` skill of each agent, the
@@ -1557,8 +1557,8 @@ still uses the sandbox. The downtime is the export, the copy, the import and the
    `archived` and stops when the stop becomes `failing`. Do not start the sandbox again while the VPS
    runs: two hosts would have one ID.
 8. On the VPS: `move-from-boat.sh start`. It refuses when the import is not complete or when
-   `openbot.db` changed after the import, then enables and starts `openbot.service`. A machine with
-   no display manager does not wait for the boat desktop: OpenBot uses two virtual displays at once.
+   `codebot.db` changed after the import, then enables and starts `codebot.service`. A machine with
+   no display manager does not wait for the boat desktop: CodeBot uses two virtual displays at once.
    Confirm in the web client that the server is online and that an agent answers. Set the Leaseweb
    reference.
 9. Keep the stopped sandbox for the rollback. A delete of the server by its owner also deletes it.
@@ -1569,7 +1569,7 @@ The VPS is not the same machine as the sandbox:
   2026-11-11). The VPS has none. The move copies only the Hermes CLI of the image, and `import` names each other one that
   is missing. At start, a hosted server downloads the CLI of each
   provider that an agent uses and that is not off. The user downloads the CLI of another provider in
-  OpenBot.
+  CodeBot.
 - `prepare` makes only the primary group of `user`, and the VPS has no Docker. `import` names each
   group that `user` had in the sandbox (`docker` and `ascii-streaming-audio` on 2026-11-11). An
   agent of the customer that used Docker does not have it after the move.
@@ -1613,19 +1613,19 @@ The VPS is not the same machine as the sandbox:
   Standard server shows 75 GB on a 100 GB disk. Move it to a VPS 2 soon.
 - Settings shows the vCPU and the memory of the row `size`, and the upgrade dialog shows the memory of the
   boat size of the plan (`HOSTED_BOAT_PLAN_SIZE`), also for a moved server. A VPS has more: the VPS 2 in FRA-01 showed 6 vCPU and 16 GiB.
-- After the owner deletes the server, OpenBot still runs on the VPS with a session that is ended. It
+- After the owner deletes the server, CodeBot still runs on the VPS with a session that is ended. It
   cannot connect, and it has the data until the operator reinstalls the machine.
 
-Rollback, while the sandbox exists: run `systemctl disable --now openbot.service` on the VPS, so that
+Rollback, while the sandbox exists: run `systemctl disable --now codebot.service` on the VPS, so that
 no restart of the VPS starts a second host. Make sure that the sandbox is stopped at boat. Then give
-the row back to boat. The next client request resumes the sandbox, and the resume starts OpenBot
+the row back to boat. The next client request resumes the sandbox, and the resume starts CodeBot
 there. The work that the server did on the VPS is not in the sandbox.
 
-When the export failed before the import, the sandbox still runs with OpenBot stopped and
-`/run/openbot-pre-stop` set. Delete `/root/openbot-move` and the marker, and start `openbot.service`
-in the sandbox. Delete `/root/openbot-move.tar` on the VPS. Then give the row back with the statement
+When the export failed before the import, the sandbox still runs with CodeBot stopped and
+`/run/codebot-pre-stop` set. Delete `/root/codebot-move` and the marker, and start `codebot.service`
+in the sandbox. Delete `/root/codebot-move.tar` on the VPS. Then give the row back with the statement
 below, but with `desired_state` and `observed_state` of before the move. On 2026-11-12 an export of
-24 GB took 9 minutes; a restart timer of boat started OpenBot during it, and tar stopped the export.
+24 GB took 9 minutes; a restart timer of boat started CodeBot during it, and tar stopped the export.
 The export now stops that timer. On 2026-11-19 the `.bash_logout` of a sandbox wrote `\e[3J` after
 each boat command, and `move` read it as the status of an export that had not ended. `move` now
 reads only the output between two markers that the command writes.
@@ -1652,8 +1652,8 @@ tested: a rollback after a plan change.
 A moved server that lost its session cannot get a new claim from a client request. The operator
 makes a claim of 16 to 128 characters from `A-Z a-z 0-9 _ -`, writes its SHA-256 as base64url with no
 padding to `claim_token_hash` and a time at most one hour ahead to `claim_expires_at`, writes
-the claim to `OPENBOT_HOSTED_CLAIM` in `/home/user/.config/openbot-hosted/env`, and restarts
-`openbot.service`. The redeem ends the old session.
+the claim to `CODEBOT_HOSTED_CLAIM` in `/home/user/.config/codebot-hosted/env`, and restarts
+`codebot.service`. The redeem ends the old session.
 
 `bun run test:hosted-operator-host` drives the real service with a fake boat and checks each line of
 the table, the claim recovery, the storage of a moved server in each list, and that the servers of
@@ -1661,7 +1661,7 @@ boat still stop and start. The migration has
 its data fixture in `apps/auth-api/test/hosted-server-operator-host-migration.test.ts`.
 
 Tested on 2026-11-11 with one test server, two times (test Worker, boat sandbox with 4 vCPU and
-8 GB, VPS in AMS-01 with Ubuntu 26.04, OpenBot 0.68.0, web client):
+8 GB, VPS in AMS-01 with Ubuntu 26.04, CodeBot 0.68.0, web client):
 
 - `user` in the sandbox had the UID 1000 and the GID 1000. ID 1000 is free on the Leaseweb image.
 - `prepare` took 83 seconds. For a home of 1.1 GB, the export took 8 seconds and made an archive of
@@ -1679,7 +1679,7 @@ Tested on 2026-11-11 with one test server, two times (test Worker, boat sandbox 
   rollback. With a Worker from before `restartAvailable`, it showed the message of the Worker.
 - A plan end set `desired_state = 'stopped'`, and a renewal set `running` again.
 - Rollback: the client request resumed the sandbox in 15 seconds, and the host registered from the
-  sandbox. A restart of the VPS started no OpenBot.
+  sandbox. A restart of the VPS started no CodeBot.
 - A delete of the moved server through the Worker deleted the retired sandbox at boat.
 
 Not confirmed:
@@ -1693,14 +1693,14 @@ Not confirmed:
 - the cause of five `turn.openbot.run` resolve errors on the first start on the VPS in the first
   test. The second test did not look for them.
 
-Tested on 2026-11-11 on one VPS (FRA-01, 6 vCPU, 16 GiB, Ubuntu 24.04, OpenBot 0.67.1):
+Tested on 2026-11-11 on one VPS (FRA-01, 6 vCPU, 16 GiB, Ubuntu 24.04, CodeBot 0.67.1):
 
 - `bun scripts/hosting/leaseweb-bootstrap-e2e.ts --host=root@<address> --restart=yes` passed its 75
   checks. It runs the bootstrap two times, connects as the service user and as root, stops the rules,
-  and restarts the server. The report is in `.openbot-build/leaseweb-bootstrap/`.
+  and restarts the server. The report is in `.codebot-build/leaseweb-bootstrap/`.
 - Rescue: `attachIso` with `GRML` and then `reboot` started the GRML system. Its console gave a root
   shell with no password, and `mount -o ro,noload /dev/sda2` showed the files of the server. After
-  `detachIso` and `reboot`, Ubuntu started 173 seconds after the call, and OpenBot was online 55
+  `detachIso` and `reboot`, Ubuntu started 173 seconds after the call, and CodeBot was online 55
   seconds later.
 
 An order test through the Leaseweb API on 2026-11-11, with an API key of an account of the German
@@ -1723,7 +1723,7 @@ sales organization (locations FRA-01, FRA-10 and FRA-14), did not order a server
   `leaseweb-bootstrap-e2e.ts --restart=yes` passed its 75 checks. Ubuntu 26.04 has the `install`
   command of uutils, which refuses `/dev/stdin` as the source when the target exists; the bootstrap
   thus writes its files with `cat`. The bootstrap with this change was not run again on Ubuntu 24.04.
-- On Ubuntu 26.04, the server signed in with `openbot login`, and the web client connected to it. An
+- On Ubuntu 26.04, the server signed in with `codebot login`, and the web client connected to it. An
   agent with a free OpenCode model ran a shell command as the service user and read a web page. After
   a restart, the server was online again with no new sign-in, and the agent had its chat. The log
   has `Failed to resolve address for turn.openbot.run` lines when a client connects, although the
@@ -1737,10 +1737,10 @@ sales organization (locations FRA-01, FRA-10 and FRA-14), did not order a server
   from 17:44 to 17:45 UTC. Each has a 1-year term to 2027-11-30 with a bill each month (EUR 8.09),
   and `cancellable: true`. With the key of this account, `GET /ordering/v1/products/vps?location=AMS-01`
   answers `200` with the packages `VPS02_1` to `VPS02_6`. No order was sent through the API.
-- The first daily update on Ubuntu 26.04 restarted `openbot.service`: `needrestart` restarts each
+- The first daily update on Ubuntu 26.04 restarted `codebot.service`: `needrestart` restarts each
   service that uses an updated library. The bootstrap now writes
-  `/etc/needrestart/conf.d/50-openbot.conf`. After that, a reinstall of `libpcre2-8-0` restarted
-  `cron.service`, `ssh.service` and six other services, and listed `openbot.service` as deferred; its
+  `/etc/needrestart/conf.d/50-codebot.conf`. After that, a reinstall of `libpcre2-8-0` restarted
+  `cron.service`, `ssh.service` and six other services, and listed `codebot.service` as deferred; its
   start time did not change. The E2E reads the value that `needrestart` uses for the unit.
 - Operator keys: the E2E adds a temporary key to the list. That key signed in as root and not as the
   service user, a key outside the list did not sign in, a list with a bad line changed nothing, and a
@@ -1754,9 +1754,9 @@ sales organization (locations FRA-01, FRA-10 and FRA-14), did not order a server
   `grub-pc`, which writes GRUB to the disk and adds `update-grub` to the kernel hooks. With the
   package removed again, the E2E ran the bootstrap and restarted the server: it ran 7.0.0-43 with
   the arguments `ro net.ifnames=0 quiet splash`, SSH answered 23 seconds after the restart command,
-  and OpenBot was online 5 seconds later.
+  and CodeBot was online 5 seconds later.
 - The three names of the test VPS changed: the reference through the API, the server name with
-  `openbot name`, and the hostname, which stayed after a restart of the server.
+  `codebot name`, and the hostname, which stayed after a restart of the server.
 
 Not confirmed for Leaseweb:
 
@@ -1768,7 +1768,7 @@ Not confirmed for Leaseweb:
 - another distribution than Ubuntu 24.04 and 26.04, and a network that does not use `systemd-networkd` (the
   helper reads the DHCP server from its lease files);
 - a router address that changes while the server runs. The rules change at the next start of
-  OpenBot;
+  CodeBot;
 - `resetPassword`, which needs the guest agent, and a custom image for a VPS;
 - why the start after `detachIso` took 173 seconds;
 - WebRTC with a rule set that also filters incoming connections.
@@ -1790,8 +1790,8 @@ The sizes and prices are in `packages/contracts/src/billing.ts` (`STORAGE_TIER_G
 times 6.
 
 - **Stripe.** Each tier is a second item on the plan subscription: a Price of the Product
-  `openbot_storage_<plan>` with the lookup key `openbot_storage_<plan>_<tier>_<interval>` and the
-  metadata `openbot_kind: storage`. `bun run api:stripe:bootstrap` makes them. The Worker also knows
+  `codebot_storage_<plan>` with the lookup key `codebot_storage_<plan>_<tier>_<interval>` and the
+  metadata `codebot_kind: storage`. `bun run api:stripe:bootstrap` makes them. The Worker also knows
   an old Price by its metadata after the bootstrap moved a lookup key.
 - **Purchase.** `POST /v1/me/billing/storage` (desktop) or `/api/browser/v1/me/billing/storage`
   (browser) with `{subscriptionId, tier}`. The Worker checks in D1 and in Stripe that the plan is
@@ -1828,7 +1828,7 @@ A pool machine has one server at a time. When the server ends, the machine gets 
 system and goes back to the pool for the next new server or the next move. The Worker and the operator share the work:
 
 1. The plan ends. The Worker sets `desired_state = 'stopped'` and `plan_ended_at`. `sync` stops
-   OpenBot on the machine. The data stays, so the owner can renew.
+   CodeBot on the machine. The data stays, so the owner can renew.
 2. 14 days after `plan_ended_at`, the cron of the Worker deletes the server when its newest
    subscription is not open and Stripe reports it `canceled`. The delete is the one of the owner: the
    old sandbox, the Remote host and the session go, and `observed_state = 'deleted'`. A subscription
@@ -1840,7 +1840,7 @@ system and goes back to the pool for the next new server or the next move. The W
    to `pool`, and sets `operator_host = NULL` on the deleted row. The machine is free.
    Leaseweb shows the state `RUNNING` for the whole reinstall, so `sync` waits until SSH shows new
    host keys.
-4. `prepare` installs OpenBot on the free machine again and offers it for a new server
+4. `prepare` installs CodeBot on the free machine again and offers it for a new server
    ([A new server on a pool machine](#a-new-server-on-a-pool-machine)).
 
 ### Archive of an ended pool server
@@ -1855,7 +1855,7 @@ restored or due archive is deleted.
    subscription and no live archive. It reads the newest subscription at Stripe. It archives only a
    `canceled` or `incomplete_expired` subscription: at once, or 3 days after `plan_ended_at` when
    `cancellation_details.reason` is `payment_failed` (`POOL_UNPAID_ARCHIVE_AFTER_MS`).
-2. `sync` makes a new `age` X25519 key, starts a multipart upload in `openbot-pool-archive-eu` with the
+2. `sync` makes a new `age` X25519 key, starts a multipart upload in `codebot-pool-archive-eu` with the
    operator key, and sends the machine only the `age` recipient and a presigned URL for each 100 MiB
    part. The machine runs `move-from-boat.sh export - | age -r <recipient>`, cuts the result into parts,
    and uploads each part with `curl`. The data does not go through the operator's computer, and the
@@ -1889,7 +1889,7 @@ run after the deploy deletes each server whose plan ended 14 to 30 days before.
 Tested on 2026-11-12 with the test Worker, its D1 and one VPS in `AMS-01`: `add`, `status`, `sync`
 stop and start, the cron delete of a server whose plan ended 31 days before with a `canceled` Stripe
 test subscription, then `sync`. The reinstall took 51 seconds: the machine started 26 seconds after
-the request, and `sync` returned 25 seconds later. A file in `/root` and `/opt/OpenBot` were gone.
+the request, and `sync` returned 25 seconds later. A file in `/root` and `/opt/CodeBot` were gone.
 Then `remove` and `add`.
 
 `operator_hosts` has one row for each machine that was in the pool:
@@ -1919,15 +1919,15 @@ bunx dotenvx run -f apps/auth-api/.env.production -fk <root>/.env.keys -- \
 | `boat` | Read only. Each server on boat with a paid plan that does not end: `move` it. Also the number of servers on boat whose plan ends, is past due, or ended. A customer who takes back a cancel, or pays a past-due plan, comes back on this list. |
 | `add <VPS ID>...` | Adds bought machines. It reads the location and the product from Leaseweb, and sets the reference `pool` when the machine has none. It refuses a machine with another reference. |
 | `remove <VPS ID>...` | Takes a free machine out of the pool, for example before its contract ends. It refuses a machine that a server has. |
-| `sync` | Stops OpenBot where a plan ended, starts it where the owner renewed, and reinstalls each machine of a deleted server. It reinstalls only a machine of the pool. It also sets the reference of each machine on which a new server started, and `pool` on each free machine with the old `pool-free` or an owner reference. It changes no other reference. |
-| `prepare <VPS ID>... [--keys=<file>] [--reinstall]` | Installs the newest release, disabled, on free machines, runs the bootstrap with the operator keys of the core server and of `<file>`, restarts each machine, and offers it for a new server. A prepared machine with no server data and an older OpenBot gets the newest release (`move-from-boat.sh upgrade`); `move` does the same. A disabled OpenBot does not update itself, so run `prepare` again after each release. A free machine that has the data of a server (a start that failed) is skipped; `--reinstall` erases it first. |
+| `sync` | Stops CodeBot where a plan ended, starts it where the owner renewed, and reinstalls each machine of a deleted server. It reinstalls only a machine of the pool. It also sets the reference of each machine on which a new server started, and `pool` on each free machine with the old `pool-free` or an owner reference. It changes no other reference. |
+| `prepare <VPS ID>... [--keys=<file>] [--reinstall]` | Installs the newest release, disabled, on free machines, runs the bootstrap with the operator keys of the core server and of `<file>`, restarts each machine, and offers it for a new server. A prepared machine with no server data and an older CodeBot gets the newest release (`move-from-boat.sh upgrade`); `move` does the same. A disabled CodeBot does not update itself, so run `prepare` again after each release. A free machine that has the data of a server (a start that failed) is skipped; `--reinstall` erases it first. |
 | `move <server ID> <VPS ID \| auto> [--keys=<file>]` | Moves one server from boat to a free machine. See [Move a server from boat](#move-a-server-from-boat). It prepares the machine when necessary. The machine takes no new server from then on. `auto` selects the machine when the move starts, and takes the next one when a new customer gets it first. |
 
 `sync` connects as root over SSH with the key of the operator. Not confirmed: SSH from a server of the
 operator. One key of the computer that runs `prepare` or `move` must be in the operator keys: the
 bootstrap turns off the password, and the script refuses a list without such a key.
 
-The OpenPanel dashboard "Server pool" (project `openbot`) shows the pool. Each 5 minutes, the
+The OpenPanel dashboard "Server pool" (project `codebot`) shows the pool. Each 5 minutes, the
 production Worker sends one `hosted_pool_snapshot` event for each location and product and one with
 `location = all` (see `ANALYTICS.md`). The test Worker has no OpenPanel keys and sends none. Each
 report is a bar with the largest value of the snapshots in the last 30 minutes. Two local patches of
@@ -2008,8 +2008,8 @@ send no message either. An account that is gone shows as `unknown account`.
 
 The amount of a purchase message is the list amount of one period, before a discount. A license at the
 bundle price adds `bundle`. A claim in `billing_webhook_events` stops a second message for one change:
-`openbot_purchase:<subscription ID>` for the start, `openbot_purchase_end:<subscription ID>` for the
-end, and `openbot_purchase_cancel:<subscription ID>:<canceled_at>` for a cancel. Two Stripe events can
+`codebot_purchase:<subscription ID>` for the start, `codebot_purchase_end:<subscription ID>` for the
+end, and `codebot_purchase_cancel:<subscription ID>:<canceled_at>` for a cancel. Two Stripe events can
 see one cancel at the same time; only the event that adds the claim sends. Stripe sets `canceled_at` to
 the time of each cancel request, so a later cancel of the same subscription has a new claim and sends
 again. A resume has no claim. A cancel or resume message goes out with the sync that stores the change, so a
@@ -2062,16 +2062,16 @@ These were not tested on boat. Test them before a user gets access:
 - whether boat runs the pre-stop hook for a stop that it starts by itself: maintenance (the
   `updating` state) or the end of `ttlSeconds`. A crash of the machine restores the last periodic
   save, which also copies files while they change;
-- that OpenBot closes `openbot.db` at a `systemctl stop` on a server. The install test used a release
-  without the `SIGTERM` handler. The `ExecStop` of the unit stops OpenBot before its Xvfb displays
+- that CodeBot closes `codebot.db` at a `systemctl stop` on a server. The install test used a release
+  without the `SIGTERM` handler. The `ExecStop` of the unit stops CodeBot before its Xvfb displays
   (see [Computer Use](architecture/computer-use.md#agent-display-on-a-server)). This was tested in a
-  container with a stand-in for OpenBot, not with systemd. When OpenBot does not close the database,
+  container with a stand-in for CodeBot, not with systemd. When CodeBot does not close the database,
   it is as after a crash, which SQLite recovers, because the save starts after the stop;
 - the agent display on boat with a release build. On 2026-10-16 one boat server ran a 0.42.0 build
-  with this change, from `openbot.service`: OpenBot was on Xvfb `:99` at 1280x800, and `:0` had no
-  OpenBot window. In an agent turn, the agent shell and `cua-driver` had `DISPLAY=:0`, and Computer
+  with this change, from `codebot.service`: CodeBot was on Xvfb `:99` at 1280x800, and `:0` had no
+  CodeBot window. In an agent turn, the agent shell and `cua-driver` had `DISPLAY=:0`, and Computer
   Use saw a 1920x1080 screen with only the panel and the dock. A local remote desktop session
-  captured `:0`. The session reported the size of the OpenBot display, 1280x800. The first start
+  captured `:0`. The session reported the size of the CodeBot display, 1280x800. The first start
   after a resume, with this script in `/opt`, was not tested.
 
 

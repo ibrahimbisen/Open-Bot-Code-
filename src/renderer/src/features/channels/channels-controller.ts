@@ -5,10 +5,10 @@ import {
   type ChannelSummary,
   closedChannelTaskSequences,
   mergeChannelTasks,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import type { AgentProfile } from "@openbot/ui/data";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import type { AgentProfile } from "@codebot/ui/data";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createStore, flush, onSettled, reconcile, snapshot, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { type DesktopAnalyticsProperties, desktopAnalytics } from "../../analytics";

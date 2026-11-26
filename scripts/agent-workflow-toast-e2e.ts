@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { argument, connectChannelE2e, WAIT_MS, waitFor, writeReport } from "./channel-e2e-support";
 
 const NAME = "agent-workflow-toast-e2e";
-const OUT = resolve(import.meta.dirname, `../.openbot-build/${NAME}`);
+const OUT = resolve(import.meta.dirname, `../.codebot-build/${NAME}`);
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
 const literal = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -43,10 +43,10 @@ try {
     await whatsNew.waitFor({ state: "detached", timeout: UI_WAIT_MS });
   }
 
-  const server = await page.evaluate(async () => (await window.openbot.servers.list()).find((entry) => entry.active));
+  const server = await page.evaluate(async () => (await window.codebot.servers.list()).find((entry) => entry.active));
   assert.ok(server, "No active server.");
   assert.notEqual(server.kind, "remote", "Select a local server: a joined server sends no agent id.");
-  const agents = await page.evaluate(() => window.openbot.agent.listAgents());
+  const agents = await page.evaluate(() => window.codebot.agent.listAgents());
   const wanted = argument("agent");
   const agent = wanted ? agents.find((entry) => entry.name === wanted) : agents[0];
   assert.ok(agent, wanted ? `No agent named ${wanted}.` : "The server has no agent.");
@@ -55,7 +55,7 @@ try {
     .getByRole("navigation", { name: english("app.rail.label") })
     .getByRole("button", { name: english("app.rail.agents"), exact: true })
     .click({ timeout: UI_WAIT_MS });
-  const before = new Set((await page.evaluate(() => window.openbot.workflows.list())).map((entry) => entry.id));
+  const before = new Set((await page.evaluate(() => window.codebot.workflows.list())).map((entry) => entry.id));
 
   await page
     .getByRole("navigation", { name: english("sidebar.nav.label") })
@@ -67,7 +67,7 @@ try {
   });
   await composer.click({ timeout: UI_WAIT_MS });
   await page.keyboard.insertText(
-    `Call the openbot edit_workflow tool one time, with no workflowId, with the title "${title}" and no ops. Call no other tool. Then reply with the word done.`,
+    `Call the codebot edit_workflow tool one time, with no workflowId, with the title "${title}" and no ops. Call no other tool. Then reply with the word done.`,
   );
   await page.keyboard.press("Enter");
 
@@ -79,7 +79,7 @@ try {
     toastText.includes(english("workflow.agentMade.title", { agent: agent.name })),
     "The toast names no agent.",
   );
-  const made = (await page.evaluate(() => window.openbot.workflows.list())).find(
+  const made = (await page.evaluate(() => window.codebot.workflows.list())).find(
     (entry) => !before.has(entry.id) && entry.title === title,
   );
   assert.ok(made, "The agent did not make the workflow.");
@@ -94,7 +94,7 @@ try {
   const opened = await waitFor(
     page,
     "the Workflows page opens the agent's workflow",
-    () => page.evaluate((serverId) => window.localStorage.getItem(`openbot:last-workflow:${serverId}`), server.id),
+    () => page.evaluate((serverId) => window.localStorage.getItem(`codebot:last-workflow:${serverId}`), server.id),
     (value) => value === made.id,
     UI_WAIT_MS * 2,
   );
@@ -105,8 +105,8 @@ try {
 } finally {
   await page
     .evaluate(async (name) => {
-      for (const entry of await window.openbot.workflows.list())
-        if (entry.title === name) await window.openbot.workflows.delete(entry.id);
+      for (const entry of await window.codebot.workflows.list())
+        if (entry.title === name) await window.codebot.workflows.delete(entry.id);
     }, title)
     .catch(() => undefined);
   const path = writeReport(NAME, report);

@@ -1,4 +1,4 @@
-import type { AccountUsageLimit, AccountUsageWindow } from "@openbot/contracts/ipc";
+import type { AccountUsageLimit, AccountUsageWindow } from "@codebot/contracts/ipc";
 
 export interface PoolCandidate {
   accountId: string;

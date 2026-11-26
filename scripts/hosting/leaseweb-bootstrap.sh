@@ -2,10 +2,10 @@
 set -euo pipefail
 export LC_ALL=C DEBIAN_FRONTEND=noninteractive
 
-INSTALL=/opt/OpenBot
-HELPER=/usr/local/sbin/openbot-egress-firewall
+INSTALL=/opt/CodeBot
+HELPER=/usr/local/sbin/codebot-egress-firewall
 UNIT_DIRECTORY=/etc/systemd/system
-OPERATOR_KEYS=/etc/ssh/openbot-operator-keys
+OPERATOR_KEYS=/etc/ssh/codebot-operator-keys
 
 fail() {
   echo "$*" >&2
@@ -15,13 +15,13 @@ fail() {
 [ "$(id -u)" -eq 0 ] || fail "Run this as root."
 [ "$#" -le 1 ] || fail "usage: $0 [<operator keys in base64>]"
 [ -d /run/systemd/system ] || fail "This computer has no systemd."
-[ -r "$INSTALL/hosted/service-user" ] || fail "OpenBot is not installed. Run install-server.sh first."
+[ -r "$INSTALL/hosted/service-user" ] || fail "CodeBot is not installed. Run install-server.sh first."
 command -v nft >/dev/null || fail "This computer has no nft command."
 
 changed=0
 write_file() {
   local mode=$1 target=$2 temporary
-  temporary=$(mktemp "$(dirname "$target")/.openbot.XXXXXX")
+  temporary=$(mktemp "$(dirname "$target")/.codebot.XXXXXX")
   cat >"$temporary"
   chmod "$mode" "$temporary"
   if cmp -s "$temporary" "$target"; then
@@ -48,7 +48,7 @@ if [ "$#" -eq 1 ]; then
   write_file 0644 "$OPERATOR_KEYS/root" < <(printf '%s\n' "${operator_keys[@]}")
 fi
 
-write_file 0644 /etc/ssh/sshd_config.d/00-openbot-hardening.conf <<EOF
+write_file 0644 /etc/ssh/sshd_config.d/00-codebot-hardening.conf <<EOF
 AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2 $OPERATOR_KEYS/%u
 PasswordAuthentication no
 KbdInteractiveAuthentication no
@@ -62,18 +62,18 @@ EOF
 sshd -t
 systemctl try-reload-or-restart ssh.service
 
-install -d -m 0755 /etc/openbot
+install -d -m 0755 /etc/codebot
 write_file 0755 "$HELPER" <<'EOF'
 #!/bin/bash
-# Loads the egress rules of an OpenBot server on a Leaseweb VPS. leaseweb-bootstrap.sh installs
+# Loads the egress rules of an CodeBot server on a Leaseweb VPS. leaseweb-bootstrap.sh installs
 # this file and explains the rules.
 set -euo pipefail
 export LC_ALL=C
-STATE=/etc/openbot/egress-router
+STATE=/etc/codebot/egress-router
 PRIVATE4="0.0.0.0/8, 10.0.0.0/8, 100.64.0.0/10, 169.254.0.0/16, 172.16.0.0/12, 192.0.0.0/24, 192.168.0.0/16, 198.18.0.0/15, 224.0.0.0/4, 240.0.0.0/4"
 GOOGLE6="2001:4860::/32, 2404:6800::/32, 2404:f340::/32, 2605:ef80::/32, 2606:40::/32, 2606:73c0::/32, 2607:1c0:241:40::/60, 2607:1c0:300::/40, 2607:f8b0::/32, 2620:11a:a000::/40, 2620:120:e000::/40, 2800:3f0::/32, 2a00:1450::/32, 2a03:ace0::/32, 2c0f:fb50::/32"
 
-user=$(</opt/OpenBot/hosted/service-user)
+user=$(</opt/CodeBot/hosted/service-user)
 uid=$(id -u "$user")
 # The DHCP servers of the current leases of systemd-networkd. None before the network starts.
 routers=$(sed -n 's/^SERVER_ADDRESS=//p' /run/systemd/netif/leases/* 2>/dev/null | sort -u | paste -sd, - || true)
@@ -93,9 +93,9 @@ fi
 
 # One transaction: the new table replaces the old one with no moment without rules.
 nft -f - <<RULES
-table inet openbot_egress
-delete table inet openbot_egress
-table inet openbot_egress {
+table inet codebot_egress
+delete table inet codebot_egress
+table inet codebot_egress {
   set private4 {
     type ipv4_addr; flags interval
     elements = { $PRIVATE4, $routers }
@@ -121,36 +121,36 @@ RULES
 EOF
 
 changed=0
-write_file 0644 "$UNIT_DIRECTORY/openbot-egress-firewall.service" <<EOF
+write_file 0644 "$UNIT_DIRECTORY/codebot-egress-firewall.service" <<EOF
 [Unit]
-Description=OpenBot egress rules
+Description=CodeBot egress rules
 DefaultDependencies=no
 Wants=network-pre.target
-Before=network-pre.target shutdown.target openbot.service
+Before=network-pre.target shutdown.target codebot.service
 Conflicts=shutdown.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=$HELPER
-ExecStop=/usr/sbin/nft delete table inet openbot_egress
+ExecStop=/usr/sbin/nft delete table inet codebot_egress
 
 [Install]
 WantedBy=multi-user.target
 EOF
-install -d -m 0755 "$UNIT_DIRECTORY/openbot.service.d"
-write_file 0644 "$UNIT_DIRECTORY/openbot.service.d/10-egress-firewall.conf" <<EOF
+install -d -m 0755 "$UNIT_DIRECTORY/codebot.service.d"
+write_file 0644 "$UNIT_DIRECTORY/codebot.service.d/10-egress-firewall.conf" <<EOF
 [Unit]
-Requires=openbot-egress-firewall.service
-After=openbot-egress-firewall.service
+Requires=codebot-egress-firewall.service
+After=codebot-egress-firewall.service
 
 [Service]
 ExecStartPre=+$HELPER
 EOF
 if [ "$changed" -eq 1 ]; then systemctl daemon-reload; fi
-systemctl enable --quiet openbot-egress-firewall.service
+systemctl enable --quiet codebot-egress-firewall.service
 "$HELPER"
-systemctl start openbot-egress-firewall.service
+systemctl start codebot-egress-firewall.service
 
 missing_packages=()
 for package in unattended-upgrades age; do
@@ -165,7 +165,7 @@ APT::Periodic::Update-Package-Lists "1";
 APT::Periodic::Unattended-Upgrade "1";
 APT::Periodic::AutocleanInterval "7";
 EOF
-write_file 0644 /etc/apt/apt.conf.d/52openbot-unattended <<'EOF'
+write_file 0644 /etc/apt/apt.conf.d/52codebot-unattended <<'EOF'
 #clear Unattended-Upgrade::Allowed-Origins;
 Unattended-Upgrade::Allowed-Origins {
   "${distro_id}:${distro_codename}-security";
@@ -176,8 +176,8 @@ Unattended-Upgrade::Automatic-Reboot "false";
 Unattended-Upgrade::Remove-Unused-Dependencies "true";
 EOF
 install -d -m 0755 /etc/needrestart/conf.d
-write_file 0644 /etc/needrestart/conf.d/50-openbot.conf <<'EOF'
-$nrconf{override_rc}{qr(^openbot\.service$)} = 0;
+write_file 0644 /etc/needrestart/conf.d/50-codebot.conf <<'EOF'
+$nrconf{override_rc}{qr(^codebot\.service$)} = 0;
 EOF
 systemctl enable --quiet --now unattended-upgrades.service apt-daily.timer apt-daily-upgrade.timer
 
@@ -186,7 +186,7 @@ if ! command -v update-grub >/dev/null; then
   if [ ! -d /sys/firmware/efi ] && [ -d /boot/grub/i386-pc ] && [ -b "/dev/$boot_disk" ]; then
     arguments=$(tr ' ' '\n' </proc/cmdline | grep -v -E '^(BOOT_IMAGE=.*|root=.*|ro|quiet|splash)$' | paste -sd' ' - || true)
     install -d -m 0755 /etc/default/grub.d
-    write_file 0644 /etc/default/grub.d/50-openbot.cfg <<EOF
+    write_file 0644 /etc/default/grub.d/50-codebot.cfg <<EOF
 GRUB_CMDLINE_LINUX="$arguments"
 GRUB_TIMEOUT=5
 EOF
@@ -198,4 +198,4 @@ EOF
   fi
 fi
 
-echo "The server is hardened. Router: $(<"/etc/openbot/egress-router"). Operator keys: $(grep -c . "$OPERATOR_KEYS/root" 2>/dev/null || true)."
+echo "The server is hardened. Router: $(<"/etc/codebot/egress-router"). Operator keys: $(grep -c . "$OPERATOR_KEYS/root" 2>/dev/null || true)."

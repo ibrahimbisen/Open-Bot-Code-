@@ -1,20 +1,20 @@
 import { DatabaseSync } from "node:sqlite";
 import { describe, expect, it } from "vitest";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 
 describe("agent usage migration", () => {
   it("upgrades v14 without touching existing data and rolls back a failed migration", () => {
     const db = new DatabaseSync(":memory:");
     try {
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       db.exec(
         "DROP TABLE agent_usage_records; DROP TABLE agent_usage_checkpoints; DROP TABLE agent_usage_activity; DELETE FROM schema_migrations WHERE version >= 15; CREATE TABLE preservation(value TEXT); INSERT INTO preservation VALUES ('keep'); CREATE TABLE agent_usage_date (conflict TEXT)",
       );
-      expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 15 failed");
+      expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 15 failed");
       expect(db.prepare("SELECT name FROM sqlite_master WHERE name = 'agent_usage_records'").get()).toBeUndefined();
       expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 15").get()).toBeUndefined();
       db.exec("DROP TABLE agent_usage_date");
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(db.prepare("SELECT value FROM preservation").get()).toMatchObject({ value: "keep" });
       expect(
         db

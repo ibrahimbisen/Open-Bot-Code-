@@ -1,7 +1,7 @@
-import { MOBILE_COMPANY_SIGN_IN_RETURN } from "@openbot/contracts/company-sign-in";
-import { isAvatarColor } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { isValidHostname, normalizeEmailAddress } from "@openbot/contracts/validation";
+import { MOBILE_COMPANY_SIGN_IN_RETURN } from "@codebot/contracts/company-sign-in";
+import { isAvatarColor } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { isValidHostname, normalizeEmailAddress } from "@codebot/contracts/validation";
 import { Effect, Schema } from "effect";
 import { createRemoteJWKSet, customFetch, jwtVerify } from "jose";
 import { decodeBase64Url, deriveSecret, encodeBase64Url, hmacSha256, randomToken, sha256 } from "./crypto";
@@ -21,8 +21,8 @@ const TOKEN_PATTERN = /^[A-Za-z0-9_-]{16,128}$/u;
 const BROWSER_EXTENSION_ID_PATTERN = /^[a-p]{32}$/u;
 const RETURN_PATTERN = /^http:\/\/(?:127\.0\.0\.1|localhost):[0-9]{2,5}\/company-sign-in$/u;
 export const WEB_RETURN_PATH = "/api/browser/company/return";
-const DOMAIN_RECORD_PREFIX = "_openbot";
-const DOMAIN_RECORD_VALUE_PREFIX = "openbot-domain-verification=";
+const DOMAIN_RECORD_PREFIX = "_codebot";
+const DOMAIN_RECORD_VALUE_PREFIX = "codebot-domain-verification=";
 const CALLBACK_PATH = "/v1/auth/company/callback";
 const GOOGLE_ISSUER = "https://accounts.google.com";
 const SHARED_MAIL_DOMAINS = new Set([
@@ -745,7 +745,7 @@ export class CompanySignInService {
       return yield* new CompanySignInError(
         403,
         "browser_extension_not_allowed",
-        "This browser extension cannot sign in to OpenBot.",
+        "This browser extension cannot sign in to CodeBot.",
       );
     }
     if (!TOKEN_PATTERN.test(input.clientChallenge)) {
@@ -1243,7 +1243,7 @@ export class CompanySignInService {
   });
 
   readonly #cipherKey = Effect.fn("CompanySignIn.cipherKey")(function* (secret: string) {
-    const raw = yield* deriveSecret(secret, "openbot/company-sign-in/client-secret/v1").pipe(
+    const raw = yield* deriveSecret(secret, "codebot/company-sign-in/client-secret/v1").pipe(
       Effect.mapError(() => new CompanySignInOperationError({})),
     );
     return yield* storeCall(() =>

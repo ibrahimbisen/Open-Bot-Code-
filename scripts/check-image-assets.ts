@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 
 const ALLOWED_DIRECTORIES = [
   "build/",
@@ -17,7 +17,7 @@ const ALLOWED_DIRECTORIES = [
 
 const IMAGE_FILE = /\.(avif|bmp|gif|heic|icns|ico|jpe?g|mov|mp4|png|svg|tiff?|webm|webp)$/i;
 
-const logger = createOpenBotLogger("check-image-assets");
+const logger = createCodeBotLogger("check-image-assets");
 
 const result = spawnSync("git", ["ls-files", "-z"], { encoding: "utf8" });
 if (result.status !== 0) {

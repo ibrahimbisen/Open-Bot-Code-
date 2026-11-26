@@ -1,4 +1,4 @@
-import { ContextMenu } from "@openbot/ui";
+import { ContextMenu } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
 import { MediaGenerationSpecs } from "./media-generation-frame";

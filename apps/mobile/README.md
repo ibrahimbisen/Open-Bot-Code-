@@ -1,4 +1,4 @@
-# OpenBot Mobile
+# CodeBot Mobile
 
 React Native app built with Expo SDK 58, Expo Router, TypeScript 7, Biome, and Bun. The app uses Expo Continuous Native Generation, so native `ios/` and `android/` directories are intentionally not committed.
 
@@ -77,7 +77,7 @@ then build and launch the app with Expo. Expo arguments such as `--device` and
 `--port` pass through. The RocketSim command requires the app in `/Applications`
 or `~/Applications`, or `ROCKETSIM_APP_PATH` set to its `.app` directory. If it is
 missing, the command stops with setup instructions. The standard command does not
-look for RocketSim, even if `ROCKETSIM_APP_PATH` or the old `OPENBOT_ROCKETSIM`
+look for RocketSim, even if `ROCKETSIM_APP_PATH` or the old `CODEBOT_ROCKETSIM`
 variable is set.
 
 A build for an iPhone signs all targets with the Apple team of `ios.appleTeamId` in `app.json`, so
@@ -103,16 +103,16 @@ installs the pods again. Metro keeps its file map cache in `.expo/metro-file-map
   projects of the libraries, such as Reanimated, Worklets, Expo modules and Skia.
 
 The first build in a new worktree also reuses the work of other worktrees through two shared caches
-in `openbot-mobile-cache.noindex` of the common git directory (`git rev-parse --git-common-dir`), on
-the disk of the main checkout. `OPENBOT_MOBILE_BUILD_CACHE=<directory>` puts them in another
-directory; a relative path starts at the checkout root. `OPENBOT_MOBILE_BUILD_CACHE=off` turns them
+in `codebot-mobile-cache.noindex` of the common git directory (`git rev-parse --git-common-dir`), on
+the disk of the main checkout. `CODEBOT_MOBILE_BUILD_CACHE=<directory>` puts them in another
+directory; a relative path starts at the checkout root. `CODEBOT_MOBILE_BUILD_CACHE=off` turns them
 off. You can remove the directory at any time.
 
 - `metro/`: Metro transforms of all mobile commands (`metro-cache.js`). Each set of mobile
   dependencies in `bun.lock` and their patches has its own namespace, because the Metro cache key
   does not include the versions of the Babel plugins. Packages that only other workspaces or the dev
   dependencies of the app use are not in the namespace. When `bun.lock` or a patch is newer than the
-  last `bun install` (`node_modules/.openbot-install-stamp`), Metro warns and does not use the shared
+  last `bun install` (`node_modules/.codebot-install-stamp`), Metro warns and does not use the shared
   cache. A namespace that no worktree used for 14 days is removed. A transform that contains the
   path of the checkout, such as a `use dom` component, stays in `.expo/metro-cache` of the worktree.
   The entries use the file store of `@expo/metro-config`, which writes each entry to a temporary file
@@ -123,7 +123,7 @@ off. You can remove the directory at any time.
   `expo run` clear the Metro cache before each release bundle; `bun mobile:ios` and
   `bun mobile:android` keep it. `bun mobile -- --clear` clears the namespace for all worktrees.
 - `xcode/`: the Xcode compilation cache of `bun mobile:ios` (Swift, Objective-C and C++). Prefix
-  mapping replaces the checkout path and its real path with `/^openbot` in the cache keys, in the
+  mapping replaces the checkout path and its real path with `/^codebot` in the cache keys, in the
   debug info and in `__FILE__`. Only the `xcodebuild` build command (with `-destination`) gets these
   settings. Xcode removes old entries above 20 GB.
 
@@ -294,7 +294,7 @@ stops at the retry cooldown, then saves the encrypted workspace copy and makes t
 inactive again. The app stays "away" for the hosts, so they continue to send notifications, and a
 chat on screen is not marked as read. A refresh sends no connection analytics.
 
-- iOS uses `BGAppRefreshTask` with the identifier `run.openbot.mobile.refresh` (`UIBackgroundModes`
+- iOS uses `BGAppRefreshTask` with the identifier `run.codebot.mobile.refresh` (`UIBackgroundModes`
   `fetch` in `app.json`). The local `modules/background-refresh` module registers the task at launch
   and gives each run to JavaScript. iOS lists the app in Settings > General > Background App Refresh.
 - Android uses `expo-background-task` (WorkManager). `package.json` excludes it, `expo-task-manager`
@@ -306,19 +306,19 @@ chat on screen is not marked as read. A refresh sends no connection analytics.
   opens the app again.
 - The support log shows `Background refresh: available` (or the iOS status), and for each run the
   number of servers that loaded, or why the run did nothing (`Background refresh skipped: ...`). On
-  iOS, the device log (subsystem `run.openbot.mobile`, category `BackgroundRefresh`) shows when iOS
+  iOS, the device log (subsystem `run.codebot.mobile`, category `BackgroundRefresh`) shows when iOS
   started the task and when it ended.
-- Test on a device. iOS has no background tasks in the Simulator. Attach Xcode to `OpenBot`, put
+- Test on a device. iOS has no background tasks in the Simulator. Attach Xcode to `CodeBot`, put
   the app in the background and pause it. Select a thread that is not the main thread
   (`thread select <n>`): on the main thread the command does not return. Then run
   `e -l objc -- @import Foundation`, `e -l objc -- @import BackgroundTasks` and
-  `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] performSelector:NSSelectorFromString(@"_simulateLaunchForTaskWithIdentifier:") withObject:@"run.openbot.mobile.refresh"]`,
+  `e -l objc -- (void)[[BGTaskScheduler sharedScheduler] performSelector:NSSelectorFromString(@"_simulateLaunchForTaskWithIdentifier:") withObject:@"run.codebot.mobile.refresh"]`,
   and continue. Wait before you open the app: a run with the app in the foreground does nothing.
-  On Android, `adb shell cmd jobscheduler run -f run.openbot.mobile <job id>` starts the job.
+  On Android, `adb shell cmd jobscheduler run -f run.codebot.mobile <job id>` starts the job.
 
 ## iOS shortcuts
 
-The Shortcuts app of iOS 26 and later has three OpenBot shortcuts: List Agents, Send Message and
+The Shortcuts app of iOS 26 and later has three CodeBot shortcuts: List Agents, Send Message and
 Open Agent. An older iOS has none: their cards need `SnippetIntent`.
 
 The shortcuts run in native code, with no JavaScript of the app. iOS runs a shortcut in the
@@ -328,7 +328,7 @@ start, and iOS suspends the app soon after the intent returns.
 - The App Intents, their cards and the `AppShortcutsProvider` are Swift files in `plugins/shortcuts`.
   `plugins/with-shortcuts.js` adds them to the app target, because Xcode reads the shortcuts of an
   app from that target. iOS reads the names and the phrases of the shortcuts at build time, so they
-  are English and not from the `@openbot/i18n` catalog. The text of the cards is from the catalog.
+  are English and not from the `@codebot/i18n` catalog. The text of the cards is from the catalog.
 - The app writes `shortcuts.json` to the App Group
   (`src/features/shortcuts/model/shortcut-directory.ts`): the agents, the agent of Settings >
   Shortcuts, the app lock and the card text. Sign-out deletes it. The servers with their public
@@ -453,7 +453,7 @@ bun run mobile:ios:build:local
 
 From `apps/mobile`, the equivalent command is `bun run ios:build:local`.
 This runs EAS Build locally with the `production` profile and writes
-`/private/tmp/openbot-testflight.ipa`. Each successful build replaces that output file.
+`/private/tmp/codebot-testflight.ipa`. Each successful build replaces that output file.
 The profile uses remote build numbers and increments the build number automatically.
 EAS CLI prompts for signing credentials when needed.
 
@@ -481,20 +481,20 @@ One-time setup:
 1. In GitHub repository settings, create the `release-ios` environment. Under deployment branches
    and tags, select only the `main` branch.
 2. Add environment secrets `EXPO_TOKEN`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_PRIVATE_KEY`.
-   The Expo token needs access to the OpenBot project. The Apple secrets are the Key ID, Issuer ID,
+   The Expo token needs access to the CodeBot project. The Apple secrets are the Key ID, Issuer ID,
    and full `.p8` contents of an App Store Connect team API key with the App Manager role.
 3. Keep the iOS distribution certificate and provisioning profiles configured in EAS. CI downloads
    these existing credentials. If they expire or need repair, update them interactively through
    EAS before retrying; the upload API key is not passed to the build step. Each target has its own
-   profile: the app, `ExpoWidgetsTarget` (`run.openbot.mobile.ExpoWidgetsTarget`),
-   `OpenBotNotificationService` (`run.openbot.mobile.NotificationService`, the Notification Service
-   Extension) and `expo-sharing-extension` (`run.openbot.mobile.ShareExtension`, the share extension).
-   Each extension needs the App Group `group.run.openbot.mobile`. When a release adds a
+   profile: the app, `ExpoWidgetsTarget` (`run.codebot.mobile.ExpoWidgetsTarget`),
+   `CodeBotNotificationService` (`run.codebot.mobile.NotificationService`, the Notification Service
+   Extension) and `expo-sharing-extension` (`run.codebot.mobile.ShareExtension`, the share extension).
+   Each extension needs the App Group `group.run.codebot.mobile`. When a release adds a
    target, set up its profile interactively once (`bunx eas-cli credentials -p ios`) before CI builds
    it. Keep the saved push key; do not let EAS make a new one.
 4. Keep the OpenPanel variables in EAS `production` with `Plain text` or `Sensitive` visibility.
    `Secret` variables are unavailable to this local build. Do not copy these values into source.
-5. Ensure App Store Connect has the app `run.openbot.mobile` and the intended TestFlight group.
+5. Ensure App Store Connect has the app `run.codebot.mobile` and the intended TestFlight group.
 
 After this workflow is merged into `main`, authenticate GitHub CLI with `gh auth login`, then run
 from the repository root:
@@ -583,7 +583,7 @@ One-time setup:
    same as in `release-ios`. The Google secret is the full JSON key of a Google Cloud service account.
 3. In the Google Cloud project of that service account, enable the Google Play Android Developer API.
    In Play Console, under **Users and permissions**, invite the service account email and give it
-   access to `run.openbot.mobile` with the release permissions for testing tracks.
+   access to `run.codebot.mobile` with the release permissions for testing tracks.
 4. Keep the Android upload keystore configured in EAS as the default build credentials. CI downloads
    it. Play App Signing keeps the app signing key; the EAS keystore is the upload key.
 5. Keep the OpenPanel variables in EAS `production`, as for iOS.
@@ -593,7 +593,7 @@ One-time setup:
    published release, Play accepts only draft releases: dispatch with `release_status` set to `draft`
    and roll out the release in Play Console.
 7. Commit `apps/mobile/google-services.json`, the Firebase file of the Android app
-   `run.openbot.mobile`. `app.config.js` adds it when it exists. Without it the build has no Firebase,
+   `run.codebot.mobile`. `app.config.js` adds it when it exists. Without it the build has no Firebase,
    and Android gets no notifications. The file has public identifiers only. The account service has
    the key that sends (`FCM_SERVICE_ACCOUNT` in [the account service](../auth-api/README.md)).
 
@@ -618,7 +618,7 @@ A successful workflow means Google Play accepted the bundle on the selected trac
 upload store metadata, screenshots or release notes. Write the release notes in Play Console.
 
 To build a signed `.aab` on your computer, run `bun run mobile:android:build:local`. It needs JDK 17
-and the Android SDK, and writes `/private/tmp/openbot-play.aab`.
+and the Android SDK, and writes `/private/tmp/codebot-play.aab`.
 See [Fastlane Google Play upload](https://docs.fastlane.tools/actions/upload_to_play_store/).
 
 ### Android APK
@@ -642,7 +642,7 @@ The APK is not public after the build. It becomes public when the version is mar
 2. `scripts/android-apk-release.ts stage` reads the package, the version and the build number in
    the file and checks its signature. It stops when the file is not that build.
 3. The script puts the file on the draft GitHub release `android-v<version>` as
-   `OpenBot-<version>.apk`. Only people who can write to the repository see a draft. A second build
+   `CodeBot-<version>.apk`. Only people who can write to the repository see a draft. A second build
    of a version replaces the file of the first. The release notes have the SHA-256 of the file and
    of the signing certificate.
 
@@ -700,7 +700,7 @@ See [Fastlane universal APK download](https://docs.fastlane.tools/actions/downlo
 
 ### Discord announcement
 
-Each store gets its own post in the OpenBot Discord when users of that store can see the version.
+Each store gets its own post in the CodeBot Discord when users of that store can see the version.
 The source is `apps/mobile/CHANGELOG.md`; the gate is production. The `Announce mobile release on
 Discord` workflow (`mobile-release-announcement.yml`) runs after each CI run on `main`, at minutes
 17 and 47 of each hour, and on a manual dispatch. It posts a version for a store only when the
@@ -717,10 +717,10 @@ has its own post and its own workflow (`docs/RELEASING.md#discord-announcement`)
 
 | Event | Title | Line under the title |
 | --- | --- | --- |
-| The first store | `OpenBot vx.y.z is out on iOS` | `The Android version comes out later.` |
-| The second store | `OpenBot vx.y.z is out on Android` | `It is already out on iOS.` |
-| Both stores in the same run | `OpenBot vx.y.z is out on iOS and Android` | none |
-| The other store skipped the version | `OpenBot vx.y.z is out on iOS` | none |
+| The first store | `CodeBot vx.y.z is out on iOS` | `The Android version comes out later.` |
+| The second store | `CodeBot vx.y.z is out on Android` | `It is already out on iOS.` |
+| Both stores in the same run | `CodeBot vx.y.z is out on iOS and Android` | none |
+| The other store skipped the version | `CodeBot vx.y.z is out on iOS` | none |
 
 The message mentions the `Mobile Release Pings` role, then has the title, the highlights, and one
 line of links to each store that has the version and to `Full Changelog`, the version on the Mobile
@@ -750,7 +750,7 @@ One-time setup:
 1. In GitHub repository settings, create the `release-mobile` environment. Under deployment branches
    and tags, select only the `main` branch.
 2. In Discord, open the settings of the announcement channel, then Integrations > Webhooks. Make a
-   webhook named `OpenBot` with the OpenBot icon. Add its URL as the environment secret
+   webhook named `CodeBot` with the CodeBot icon. Add its URL as the environment secret
    `DISCORD_MOBILE_RELEASE_WEBHOOK_URL`. It can be the same channel as the desktop post.
 3. In Discord, turn on Developer Mode, open Server Settings > Roles, right-click `Mobile Release Pings`
    and select Copy Role ID. Add the ID as the environment variable `DISCORD_MOBILE_RELEASE_ROLE_ID`.
@@ -759,7 +759,7 @@ One-time setup:
 ## Over-the-air updates
 
 An over-the-air (OTA) update sends a new JavaScript bundle to the phones that have a store binary.
-It needs no store review. The phones get it from OpenBot's own update server,
+It needs no store review. The phones get it from CodeBot's own update server,
 [`apps/mobile-updates`](../mobile-updates/README.md) at `https://updates.openbot.run`, not from EAS
 Update. `expo-updates` is the client in the app.
 
@@ -857,7 +857,7 @@ that its store build accepts.
 The app asks the server at a cold start, and again when it comes back to the foreground, at most
 one time in 15 minutes (`src/features/app-update/model/app-update.ts`). The cold start counts as a
 check, so to see a new update or a rollback at once, close the app fully and open it. It downloads a new bundle in
-the background. The home header then shows **A new OpenBot is ready**, and **Update** restarts the
+the background. The home header then shows **A new CodeBot is ready**, and **Update** restarts the
 app with the new bundle. Without the tap, the next cold start uses it. The bundle is about 25 MB;
 the server sends it compressed, and the phone downloads only the assets that it does not have.
 
@@ -906,8 +906,8 @@ other files stay for the next store version. See
 3. Environment secrets of `release-mobile-ota`:
    - `MOBILE_OTA_PRIVATE_KEY`: the PEM text of the update signing key.
    - `MOBILE_OTA_R2_ACCESS_KEY_ID` and `MOBILE_OTA_R2_SECRET_ACCESS_KEY`: an R2 API token with
-     **Object Read & Write** for the bucket `openbot-mobile-updates` only. The token in Cloudflare
-     is `openbot-mobile-ota-publish`. The access key ID is the ID of the token, and the secret
+     **Object Read & Write** for the bucket `codebot-mobile-updates` only. The token in Cloudflare
+     is `codebot-mobile-ota-publish`. The access key ID is the ID of the token, and the secret
      access key is the SHA-256 of its value.
    - `EXPO_TOKEN`: the same token as in `release-ios`. The workflow reads the public values of the
      EAS environment with it, such as the OpenPanel client. It does not use EAS Update.
@@ -943,11 +943,11 @@ The endpoint is fixed to `https://analytics.openbot.run/api`. No analytics crede
 
 ### Production configuration
 
-1. In the self-hosted OpenPanel dashboard, open the existing **Openbot** project used by desktop and the website.
-   Do not create or select a separate **Openbot Mobile** project.
-   Create a separate client for OpenBot Mobile with **write** access only. Copy its Client ID and
+1. In the self-hosted OpenPanel dashboard, open the existing **Codebot** project used by desktop and the website.
+   Do not create or select a separate **Codebot Mobile** project.
+   Create a separate client for CodeBot Mobile with **write** access only. Copy its Client ID and
    Client Secret. Do not use an organization/root client or a client with read access.
-2. In the Expo dashboard, open the **openbot** project → **Environment variables**, select the
+2. In the Expo dashboard, open the **codebot** project → **Environment variables**, select the
    **production** environment, and add:
 
    | Variable | Value |
@@ -971,7 +971,7 @@ The endpoint is fixed to `https://analytics.openbot.run/api`. No analytics crede
 React Native requires a Client Secret according to OpenPanel's native SDK guide. In this direct
 native integration it is an **embedded write credential**, not a confidential server secret.
 Expo's `EXPO_PUBLIC_` values are visible in the shipped bundle. Use only a dedicated write client;
-never embed a key for Export, Insights, Manage, or an OpenBot account/session. EAS visibility can hide
+never embed a key for Export, Insights, Manage, or an CodeBot account/session. EAS visibility can hide
 values in its UI but does not hide them in the app. See [OpenPanel client access levels](https://openpanel.dev/docs/api/authentication)
 and [Expo environment variables](https://docs.expo.dev/guides/environment-variables/).
 
@@ -1021,7 +1021,7 @@ where available, `duration_ms`. Failure codes are fixed categories, never raw er
 | `analytics_preference_changed` | `enabled=false`, sent once before collection stops when the user turns analytics off; the app waits at most 2 seconds for it |
 
 Use a mobile activation funnel from open → successful QR redemption → successful connection →
-conversation load or message send. Measure signed-in D1/D7 retention by OpenBot account ID. Eligible
+conversation load or message send. Measure signed-in D1/D7 retention by CodeBot account ID. Eligible
 pre-session events join that account after sign-in. Unclaimed and expired attempts are not sent, so
 this funnel does not measure all abandoned pairing attempts.
 A message receipt means the host accepted the message, not that the agent finished its work.
@@ -1047,7 +1047,7 @@ Opt-out and process exit discard the buffer. Sign-out ends the previous account'
 new signed-out activity can be claimed by the next sign-in. There is no disk queue.
 Existing anonymous events already sent by older builds are not reassigned by this fix.
 If mobile credentials belong to another project, replace both production variables with credentials
-for a write-only client in **Openbot**, then ship a build or compatible update with those values.
+for a write-only client in **Codebot**, then ship a build or compatible update with those values.
 
 Mobile schema generation 2 adds safe error diagnostics. Native error alerts and chat send errors
 emit `notification_shown`; existing failed actions emit a separate `client_operation_failed`.
@@ -1055,7 +1055,7 @@ Only fixed cause, source, operation, and provider/model fields are sent. No aler
 
 Mobile schema generation 3 adds sign-in, hosted server plans, first-run, notification settings,
 Live Activity, voice, agent template and opt-out events, `entry_point` on pairing, and `scope` on
-`usage_viewed`. The generation comes from `ANALYTICS_GENERATIONS.mobile` in `@openbot/telemetry`.
+`usage_viewed`. The generation comes from `ANALYTICS_GENERATIONS.mobile` in `@codebot/telemetry`.
 The file queue holds at most 1,000 reports, 1 MiB, and seven days, and sends only after a local
 write succeeds. Foreground and host reconnection trigger retries. Opt-out and account changes
 clear this queue. See [the analytics contract](../../ANALYTICS.md#reliable-error-reports).

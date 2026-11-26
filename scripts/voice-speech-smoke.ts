@@ -7,8 +7,8 @@ import {
   type SpeechAudio,
   type SpeechLanguage,
   type SpeechVoice,
-} from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { SpeechPreferenceStore } from "../src/main/speech-preference-store";
 import { VoiceApiKeyStore } from "../src/main/voice-api-key-store";
@@ -16,13 +16,13 @@ import { SUPERTONIC_MODEL_DIRECTORY } from "../src/main/voice-model-service";
 import type { VoiceSpeechHostProcess, VoiceSpeechResponse } from "../src/main/voice-speech-protocol";
 import { VoiceSpeechService } from "../src/main/voice-speech-service";
 
-const RESOURCES_ROOT = resolve(".openbot-build/voice");
+const RESOURCES_ROOT = resolve(".codebot-build/voice");
 const NO_CIPHER = { canPersist: () => false, encrypt: () => Buffer.alloc(0), decrypt: () => "" };
-const OUTPUT = resolve(".openbot-build/voice-speech-smoke");
+const OUTPUT = resolve(".codebot-build/voice-speech-smoke");
 const HOST = resolve("src/main/voice-speech-host.ts");
 const ELECTRON = resolve("node_modules/electron/dist/Electron.app/Contents/MacOS/Electron");
 
-const logger = createOpenBotLogger("voice-speech-smoke");
+const logger = createCodeBotLogger("voice-speech-smoke");
 
 const SAMPLES: readonly { name: string; language: SpeechLanguage; voice: SpeechVoice; text: string }[] = [
   {
@@ -112,7 +112,7 @@ function peak({ pcm }: SpeechAudio): number {
 
 async function main(): Promise<void> {
   await mkdir(OUTPUT, { recursive: true });
-  const preferencesDirectory = await mkdtemp(join(tmpdir(), "openbot-speech-smoke-"));
+  const preferencesDirectory = await mkdtemp(join(tmpdir(), "codebot-speech-smoke-"));
   const preferences = new SpeechPreferenceStore(join(preferencesDirectory, "speech-preference.json"));
   const speech = new VoiceSpeechService({
     resourcesRoot: RESOURCES_ROOT,

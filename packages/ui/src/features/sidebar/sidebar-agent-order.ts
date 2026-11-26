@@ -1,4 +1,4 @@
-import { SIDEBAR_UNASSIGNED_SECTION_ID, type SidebarLayoutSnapshot } from "@openbot/contracts/ipc";
+import { SIDEBAR_UNASSIGNED_SECTION_ID, type SidebarLayoutSnapshot } from "@codebot/contracts/ipc";
 import type { SidebarPinnedItem } from "./sidebar-pins";
 
 export function sortByLayoutOrder<T extends { id: string }>(items: readonly T[], agentOrder: readonly string[]): T[] {

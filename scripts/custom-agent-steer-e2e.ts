@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { agentSteersTurns } from "@openbot/contracts/agent-providers";
-import type { AgentModelOption } from "@openbot/contracts/ipc";
+import { agentSteersTurns } from "@codebot/contracts/agent-providers";
+import type { AgentModelOption } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { ModelCatalog } from "../src/backend/agent/model-catalog";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -13,7 +13,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, startThread, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/custom-agent-steer-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-agent-steer-e2e");
 const TURN_TIMEOUT_MS = 20_000;
 type AgentId = "steering" | "idle" | "plain";
 const AGENTS: readonly { id: AgentId; env: { name: string; value: string }[] }[] = [
@@ -38,7 +38,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-custom-agent-steer-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-custom-agent-steer-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 const logOf = (agent: AgentId) => join(root, `${agent}.jsonl`);

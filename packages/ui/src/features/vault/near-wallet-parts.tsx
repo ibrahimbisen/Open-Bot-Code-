@@ -4,7 +4,7 @@ import type {
   NearPasskeyBackup,
   NearWalletCreateInput,
   NearWalletStatus,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Alert,
   AlertContent,
@@ -31,9 +31,9 @@ import {
   Text,
   TriangleAlert,
   X,
-} from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
+} from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
 import type { JSX } from "@solidjs/web";
 import { Switch as Choose, createSignal, createStore, createUniqueId, For, Match, onCleanup, Show } from "solid-js";
 import type { AgentProfile } from "../../data";

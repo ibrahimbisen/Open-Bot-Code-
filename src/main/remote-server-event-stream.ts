@@ -5,33 +5,33 @@ import type {
   ServerCompatibility,
   ServerSummary,
   TeamPresenceSnapshot,
-} from "@openbot/contracts/ipc";
-import { decodeRecord } from "@openbot/contracts/ipc-decoding";
-import { isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { decodeRecord } from "@codebot/contracts/ipc-decoding";
+import { isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   supportsTeamCapability,
   type TeamCurrentCapability,
   teamCapabilitiesForProtocol,
-} from "@openbot/contracts/team-protocol/current";
-import type { HostAppearanceEvent } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import type { HostRestartEvent } from "@openbot/contracts/team-protocol/host-update-v1";
-import type { LiveVoiceEvent } from "@openbot/contracts/team-protocol/live-voice-v1";
-import type { MachineAlertEvent } from "@openbot/contracts/team-protocol/machine-resources-v1";
-import { optionalTeamEvent, optionalTeamEventToCurrent } from "@openbot/contracts/team-protocol/optional-events";
+} from "@codebot/contracts/team-protocol/current";
+import type { HostAppearanceEvent } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import type { HostRestartEvent } from "@codebot/contracts/team-protocol/host-update-v1";
+import type { LiveVoiceEvent } from "@codebot/contracts/team-protocol/live-voice-v1";
+import type { MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
+import { optionalTeamEvent, optionalTeamEventToCurrent } from "@codebot/contracts/team-protocol/optional-events";
 import {
   addPromptQuestionDetails,
   TEAM_PROMPT_DETAIL_CAPABILITY,
-} from "@openbot/contracts/team-protocol/prompt-detail-v1";
-import { addSkillSuggestionNames, SKILL_LEARNING_CAPABILITY } from "@openbot/contracts/team-protocol/skill-learning-v1";
-import { TEAM_PROTOCOL_V1_WEBSOCKET } from "@openbot/contracts/team-protocol/v1";
+} from "@codebot/contracts/team-protocol/prompt-detail-v1";
+import { addSkillSuggestionNames, SKILL_LEARNING_CAPABILITY } from "@codebot/contracts/team-protocol/skill-learning-v1";
+import { TEAM_PROTOCOL_V1_WEBSOCKET } from "@codebot/contracts/team-protocol/v1";
 import {
   encodeTeamProtocolV1CurrentClientEvent,
   type TeamProtocolV1CurrentClientEvent,
-} from "@openbot/contracts/team-protocol/v1-adapter";
-import { decodeTeamProtocolV8BaseCurrentEvent } from "@openbot/contracts/team-protocol/v8-base-adapter";
-import { sourceText } from "@openbot/i18n/source";
-import { referenceFrom } from "@openbot/user-errors";
+} from "@codebot/contracts/team-protocol/v1-adapter";
+import { decodeTeamProtocolV8BaseCurrentEvent } from "@codebot/contracts/team-protocol/v8-base-adapter";
+import { sourceText } from "@codebot/i18n/source";
+import { referenceFrom } from "@codebot/user-errors";
 import { Effect, Exit, Result, Scope } from "effect";
 import { RemoteProtocolError, RemoteRequestError } from "./remote-server-errors";
 import { requestJson } from "./remote-server-http";
@@ -48,8 +48,8 @@ const HOSTED_SERVER_START_RETRY_MS = 5_000;
 const REMOTE_EVENT_HEALTHY_MS = 30_000;
 const REMOTE_EVENT_PAYLOAD_LIMIT = 1024 * 1024;
 const REMOTE_EVENT_INITIAL_BUFFER_LIMIT = 1_000;
-const REMOTE_EVENT_PROTOCOL = "openbot-events";
-const REMOTE_EVENT_SNAPSHOT_PROTOCOL = "openbot-events-v2";
+const REMOTE_EVENT_PROTOCOL = "codebot-events";
+const REMOTE_EVENT_SNAPSHOT_PROTOCOL = "codebot-events-v2";
 
 export interface RemoteEventCompatibilitySource {
   ensureCompatibility(
@@ -469,8 +469,8 @@ export class RemoteEventStream {
       const eventsUrl = new URL(TEAM_API_ROUTES.events, server.apiUrl);
       eventsUrl.protocol = eventsUrl.protocol === "https:" ? "wss:" : "ws:";
       const socketProtocols = this.#appVersion
-        ? [TEAM_PROTOCOL_V1_WEBSOCKET, `openbot-token.${this.#servers.token(server)}`]
-        : [REMOTE_EVENT_SNAPSHOT_PROTOCOL, REMOTE_EVENT_PROTOCOL, `openbot-token.${this.#servers.token(server)}`];
+        ? [TEAM_PROTOCOL_V1_WEBSOCKET, `codebot-token.${this.#servers.token(server)}`]
+        : [REMOTE_EVENT_SNAPSHOT_PROTOCOL, REMOTE_EVENT_PROTOCOL, `codebot-token.${this.#servers.token(server)}`];
       const socket = yield* remoteDecode(() => new WebSocket(eventsUrl, socketProtocols));
       let agentEventsReady = false;
       const bufferedAgentEvents: AgentEvent[] = [];

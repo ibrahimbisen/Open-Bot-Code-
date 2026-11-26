@@ -1,18 +1,18 @@
-import type { ChannelSummary, HiddenAgent, SidebarLayoutSnapshot } from "@openbot/contracts/ipc";
-import { Button } from "@openbot/ui";
-import type { AvatarMood } from "@openbot/ui/bloub-avatar";
-import type { ThreadItem } from "@openbot/ui/features/conversation/threads/thread-types";
-import { Sidebar } from "@openbot/ui/features/sidebar/Sidebar";
-import { SidebarCommunityCard } from "@openbot/ui/features/sidebar/SidebarCommunityCard";
-import { SidebarMachineCard } from "@openbot/ui/features/sidebar/SidebarMachineCard";
-import { SidebarMobileAppCard } from "@openbot/ui/features/sidebar/SidebarMobileAppCard";
-import { SidebarStorageCard } from "@openbot/ui/features/sidebar/SidebarStorageCard";
-import { normalizeSidebarPinnedItems, type SidebarPinnedItem } from "@openbot/ui/features/sidebar/sidebar-pins";
+import type { ChannelSummary, HiddenAgent, SidebarLayoutSnapshot } from "@codebot/contracts/ipc";
+import { Button } from "@codebot/ui";
+import type { AvatarMood } from "@codebot/ui/bloub-avatar";
+import type { ThreadItem } from "@codebot/ui/features/conversation/threads/thread-types";
+import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
+import { SidebarCommunityCard } from "@codebot/ui/features/sidebar/SidebarCommunityCard";
+import { SidebarMachineCard } from "@codebot/ui/features/sidebar/SidebarMachineCard";
+import { SidebarMobileAppCard } from "@codebot/ui/features/sidebar/SidebarMobileAppCard";
+import { SidebarStorageCard } from "@codebot/ui/features/sidebar/SidebarStorageCard";
+import { normalizeSidebarPinnedItems, type SidebarPinnedItem } from "@codebot/ui/features/sidebar/sidebar-pins";
 import {
   SIDEBAR_HIDDEN_GROUP_OPEN_ID,
   type SidebarAgentState,
   type SidebarAgentThreads,
-} from "@openbot/ui/features/sidebar/sidebar-types";
+} from "@codebot/ui/features/sidebar/sidebar-types";
 import { createSignal, For, untrack } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -370,7 +370,7 @@ export const StorageThisComputer: Story = {
     footer: (
       <SidebarStorageCard
         level="low"
-        serverName="OpenBot"
+        serverName="CodeBot"
         freeBytes={5_100_000_000}
         totalBytes={245_000_000_000}
         thisComputer

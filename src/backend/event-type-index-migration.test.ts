@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -14,7 +14,7 @@ function databaseAt(version: number): DatabaseSync {
   db.exec(`CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);
     CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
   return db;
 }
@@ -23,11 +23,11 @@ function seedEvents(db: DatabaseSync): void {
   db.exec(`INSERT INTO orchestration_events
       (event_id, command_id, aggregate_type, aggregate_id, event_type, occurred_at, payload_json)
     VALUES
-      ('event-1', 'command-1', 'thread', 'openbot-thread-chief', 'conversation.snapshot',
+      ('event-1', 'command-1', 'thread', 'codebot-thread-chief', 'conversation.snapshot',
         '2026-10-01T10:00:00.000Z', '{"snapshot":{"messages":[]}}'),
-      ('event-2', 'command-2', 'thread', 'openbot-thread-chief', 'conversation.message-streamed',
+      ('event-2', 'command-2', 'thread', 'codebot-thread-chief', 'conversation.message-streamed',
         '2026-10-01T10:00:01.000Z', '{"streamedMessage":{"id":"message-1","text":"Hel"}}'),
-      ('event-3', 'command-3', 'thread', 'openbot-thread-chief', 'conversation.message-streamed',
+      ('event-3', 'command-3', 'thread', 'codebot-thread-chief', 'conversation.message-streamed',
         '2026-10-01T10:00:02.000Z', '{"streamedMessage":{"id":"message-1","text":"Hello"}}'),
       ('event-4', 'command-4', 'hosted-site-operation', 'site-1', 'hosted-site.active',
         '2026-10-01T10:00:03.000Z', '{"siteId":"site-1"}');
@@ -63,7 +63,7 @@ describe("event type index migration", () => {
     const db = databaseAt(version);
     seedEvents(db);
     const before = contents(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual(before);
     expect(typeIndexColumns(db)).toEqual(TYPE_INDEX_COLUMNS);
     expectHealthy(db);
@@ -75,12 +75,12 @@ describe("event type index migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version = 43
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 43 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 43 failed");
     expect(typeIndexColumns(db)).toEqual([]);
     expect(contents(db)).toEqual(before);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 43").all()).toEqual([]);
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual(before);
     expect(typeIndexColumns(db)).toEqual(TYPE_INDEX_COLUMNS);
     expectHealthy(db);
@@ -91,11 +91,11 @@ describe("event type index migration", () => {
     seedEvents(db);
     const before = contents(db);
     db.exec("CREATE TABLE orchestration_events_thread_type (conflict TEXT)");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 43 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 43 failed");
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 43").all()).toEqual([]);
     expect(contents(db)).toEqual(before);
     db.exec("DROP TABLE orchestration_events_thread_type");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual(before);
     expect(typeIndexColumns(db)).toEqual(TYPE_INDEX_COLUMNS);
     expectHealthy(db);
@@ -106,9 +106,9 @@ describe("event type index migration", () => {
     seedEvents(db);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70, 'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version = 70; DELETE FROM schema_migrations WHERE version = 20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(typeIndexColumns(db)).toEqual([]);
   });

@@ -1,10 +1,10 @@
-import { type AppInterfaceSize, isAppInterfaceSize } from "@openbot/contracts/ipc";
+import { type AppInterfaceSize, isAppInterfaceSize } from "@codebot/contracts/ipc";
 import * as SecureStore from "expo-secure-store";
 import { useTextSize } from "./text-size-store";
 
 export { useTextSize } from "./text-size-store";
 
-const key = "openbot.mobile.text-size.v1";
+const key = "codebot.mobile.text-size.v1";
 
 export async function loadTextSize(): Promise<void> {
   if (useTextSize.getState().ready) return;

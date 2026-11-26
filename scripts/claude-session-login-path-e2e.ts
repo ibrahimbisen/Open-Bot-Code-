@@ -6,10 +6,10 @@ import { ClaudeAgentClient } from "../src/backend/claude-client";
 import { runInLoginShell } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-session-login-path-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-session-login-path-e2e");
 const report: { passed: boolean; sessionPath?: string; error?: string } = { passed: false };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-login-path-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-login-path-e2e-"));
 let client: ClaudeAgentClient | null = null;
 let passed = false;
 

@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { frozenMigrationProblems, type ReleasedMigrations } from "./frozen-migrations";
 
 const IMPORT_RULE =
-  "A frozen migration imports only node:*, @openbot/logging, ./runtime-values, earlier migrations and types from ./migration; copy other code into the file.";
+  "A frozen migration imports only node:*, @codebot/logging, ./runtime-values, earlier migrations and types from ./migration; copy other code into the file.";
 
 function migrationFile(version: number, name: string, imports = ""): string {
-  return `${imports}import type { OpenBotMigration } from "./migration";
+  return `${imports}import type { CodeBotMigration } from "./migration";
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: ${version},
   name: "${name}",
   up: (db) => db.exec("SELECT ${version}"),
@@ -19,11 +19,11 @@ function folder(entries: Record<string, string>, registryFiles = Object.keys(ent
   const ids = registryFiles.map((file) => `migration${file.slice(0, 4)}`);
   const registry = [
     ...registryFiles.map((file, index) => `import { migration as ${ids[index]} } from "./${file.slice(0, -3)}";`),
-    `export const MIGRATIONS: readonly OpenBotMigration[] = [${ids.join(", ")}];`,
+    `export const MIGRATIONS: readonly CodeBotMigration[] = [${ids.join(", ")}];`,
   ].join("\n");
   return new Map([
     ...Object.entries(entries),
-    ["migration.ts", "export interface OpenBotMigration {}\n"],
+    ["migration.ts", "export interface CodeBotMigration {}\n"],
     ["runtime-values.ts", "export const isString = () => true;\n"],
     ["registry.ts", registry],
   ]);
@@ -38,7 +38,7 @@ const RELEASED: ReleasedMigrations = { tag: "v1.0.0", files: folder(RELEASED_ENT
 describe("frozen migrations", () => {
   it("passes a new migration with the next version, a changed registry and type, and a tag with no folder", () => {
     const withNew = folder({ ...RELEASED_ENTRIES, "0010-workflows.ts": migrationFile(10, "workflows") });
-    withNew.set("migration.ts", "export interface OpenBotMigration { readonly note?: string }\n");
+    withNew.set("migration.ts", "export interface CodeBotMigration { readonly note?: string }\n");
     expect(frozenMigrationProblems(withNew, RELEASED)).toEqual([]);
     expect(frozenMigrationProblems(withNew, { tag: "v0.72.0", files: new Map() })).toEqual([]);
   });
@@ -84,8 +84,8 @@ describe("frozen migrations", () => {
       ["0008-baseline.ts", "0009-channels.ts", "0010-workflows.ts"],
     );
     expect(frozenMigrationProblems(current, RELEASED)).toEqual([
-      "0010-workflows.ts: declares no `version: 10,` in `export const migration: OpenBotMigration = {`.",
-      '0010-workflows.ts: declares no `name: "workflows",` in `export const migration: OpenBotMigration = {`.',
+      "0010-workflows.ts: declares no `version: 10,` in `export const migration: CodeBotMigration = {`.",
+      '0010-workflows.ts: declares no `name: "workflows",` in `export const migration: CodeBotMigration = {`.',
       "notes.ts: not a migration file name. Use <4-digit version>-<kebab-case name>.ts.",
     ]);
   });
@@ -96,12 +96,12 @@ describe("frozen migrations", () => {
       "0010-workflows.ts": migrationFile(
         10,
         "workflows",
-        'import { isString } from "@openbot/contracts/runtime-values";\nimport { later } from "./0011-sessions";\nimport { baseline } from "./0008-baseline";\nimport { helper } from "./migration";\n',
+        'import { isString } from "@codebot/contracts/runtime-values";\nimport { later } from "./0011-sessions";\nimport { baseline } from "./0008-baseline";\nimport { helper } from "./migration";\n',
       ),
       "0011-sessions.ts": migrationFile(11, "sessions", 'import type { DatabaseSync } from "node:sqlite";\n'),
     });
     expect(frozenMigrationProblems(current, RELEASED)).toEqual([
-      `0010-workflows.ts: imports "@openbot/contracts/runtime-values". ${IMPORT_RULE}`,
+      `0010-workflows.ts: imports "@codebot/contracts/runtime-values". ${IMPORT_RULE}`,
       `0010-workflows.ts: imports "./0011-sessions". ${IMPORT_RULE}`,
       `0010-workflows.ts: imports "./migration". ${IMPORT_RULE}`,
     ]);

@@ -1,6 +1,6 @@
 import { isBoolean, isDynamicRecord, isNumber, isOneOf, isString } from "../runtime-values";
 
-export const DISCORD_CUSTOM_ID_PREFIX = "openbot:";
+export const DISCORD_CUSTOM_ID_PREFIX = "codebot:";
 
 export const DISCORD_MESSAGE_TEXT_LIMIT = 2_000;
 

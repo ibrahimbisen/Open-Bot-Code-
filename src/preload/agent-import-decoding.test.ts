@@ -4,7 +4,7 @@ import {
   decodeAgentImportResult,
   decodeInstanceTransferResult,
   decodeRemoteInstanceTransferResult,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { describe, expect, it } from "vitest";
 
 const AGENT = {
@@ -17,7 +17,7 @@ const AGENT = {
   reasoningEffort: "medium",
   notifications: true,
   threadId: null,
-  workspacePath: "/Users/ada/OpenBot/Agents/Ada",
+  workspacePath: "/Users/ada/CodeBot/Agents/Ada",
   preview: "",
   updatedAt: null,
   avatarSeed: "agent-1",

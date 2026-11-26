@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { app, BrowserWindow, type WebContents, type WebFrameMain, webContents } from "electron";
 import { z } from "zod";
@@ -31,9 +31,9 @@ const CARD: VaultCardSecret = {
   nameOnCard: "Ada Lovelace",
 };
 const CARD_ID = "card-fixture";
-const CHECKOUT = "https://checkout.openbot.test";
-const SCRIPTED = "https://scripted.openbot.test";
-const SHOP = "https://shop.openbot.test";
+const CHECKOUT = "https://checkout.codebot.test";
+const SCRIPTED = "https://scripted.codebot.test";
+const SHOP = "https://shop.codebot.test";
 const PAYMENTS = "https://payments.cardfixture.test";
 
 const snapshotSchema = z.object({
@@ -147,7 +147,7 @@ async function main(): Promise<void> {
     await runCauseEffect(host.close(seed.id));
 
     const params = (tool: string, args: DynamicToolCallParams["arguments"]): DynamicToolCallParams => ({
-      namespace: "openbot_browser",
+      namespace: "codebot_browser",
       tool,
       arguments: args,
       ownerAgentId: "card-agent",

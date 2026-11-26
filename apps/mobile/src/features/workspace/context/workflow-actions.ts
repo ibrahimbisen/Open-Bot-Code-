@@ -1,18 +1,18 @@
-import type { WorkflowGraph, WorkflowNodeSize } from "@openbot/contracts/ipc";
-import type { TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
+import type { WorkflowGraph, WorkflowNodeSize } from "@codebot/contracts/ipc";
+import type { TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
 import {
   WORKFLOWS_GITHUB_CAPABILITY,
   WORKFLOWS_GITHUB_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-github-v1";
+} from "@codebot/contracts/team-protocol/workflows-github-v1";
 import {
   WORKFLOWS_MEDIA_CAPABILITY,
   WORKFLOWS_MEDIA_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-v1";
+} from "@codebot/contracts/team-protocol/workflows-media-v1";
 import {
   WORKFLOWS_PAUSE_CAPABILITY,
   WORKFLOWS_PAUSE_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-pause-v1";
-import { WORKFLOWS_CAPABILITY, WORKFLOWS_ROUTES } from "@openbot/contracts/team-protocol/workflows-v1";
+} from "@codebot/contracts/team-protocol/workflows-pause-v1";
+import { WORKFLOWS_CAPABILITY, WORKFLOWS_ROUTES } from "@codebot/contracts/team-protocol/workflows-v1";
 import {
   decodeRemoteWorkflowDetail,
   decodeRemoteWorkflowGitHubCatalog,
@@ -28,7 +28,7 @@ import {
   decodeRemoteWorkflowSummary,
   decodeRemoteWorkflowVersionGraph,
   decodeRemoteWorkflowVersions,
-} from "@openbot/team-client/workflow-decoding";
+} from "@codebot/team-client/workflow-decoding";
 import * as Crypto from "expo-crypto";
 import type { WorkspaceRequest } from "@/features/workspace/context/host-request-actions";
 import {

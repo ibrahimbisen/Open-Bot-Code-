@@ -1,8 +1,8 @@
-import type { AgentInstructionFileName, AgentInstructionsFile } from "@openbot/contracts/ipc";
+import type { AgentInstructionFileName, AgentInstructionsFile } from "@codebot/contracts/ipc";
 import {
   type AgentInstructionsCalls,
   AgentInstructionsView,
-} from "@openbot/ui/features/conversation/AgentInstructionsView";
+} from "@codebot/ui/features/conversation/AgentInstructionsView";
 import { untrack } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -23,7 +23,7 @@ const RULES = `# Chief
 - Tell the user when a refund appears in the export.
 `;
 
-const FOLDER = "/Users/alex/OpenBot/Agents/Chief";
+const FOLDER = "/Users/alex/CodeBot/Agents/Chief";
 
 function storyCalls(fileName: AgentInstructionFileName, text: string): AgentInstructionsCalls {
   let file: AgentInstructionsFile = { fileName, exists: text !== "", text };

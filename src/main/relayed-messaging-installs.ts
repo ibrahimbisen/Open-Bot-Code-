@@ -1,5 +1,5 @@
-import { decodeRecord, requiredBoolean } from "@openbot/contracts/ipc-decoding";
-import { CONNECTORS_ROUTES } from "@openbot/contracts/team-protocol/connectors-v1";
+import { decodeRecord, requiredBoolean } from "@codebot/contracts/ipc-decoding";
+import { CONNECTORS_ROUTES } from "@codebot/contracts/team-protocol/connectors-v1";
 import { Effect } from "effect";
 import type { ResponseDecoder } from "./remote-host-decoding";
 import type { RemoteRequestInit } from "./remote-server-client";

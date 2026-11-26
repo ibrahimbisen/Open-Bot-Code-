@@ -1,9 +1,9 @@
 import { createRequire } from "node:module";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type { BrowserWindow } from "electron";
 import type * as Koffi from "koffi";
 
-const logger = createOpenBotLogger("windows-topmost-keeper");
+const logger = createCodeBotLogger("windows-topmost-keeper");
 const requireModule = createRequire(import.meta.url);
 
 const TOPMOST_CHECK_MS = 2000;

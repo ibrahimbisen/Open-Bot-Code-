@@ -1,7 +1,7 @@
 import { readFile, rm } from "node:fs/promises";
 import { homedir } from "node:os";
 import { isAbsolute, join } from "node:path";
-import type { AppVariant } from "@openbot/contracts/ipc";
+import type { AppVariant } from "@codebot/contracts/ipc";
 import { Effect, Schema } from "effect";
 import { app } from "electron";
 import { writeFileAtomically } from "../backend/atomic-json-file";
@@ -23,7 +23,7 @@ export function createLoginItem(options: { appVariant: AppVariant; server: boole
   const configHome = process.env.XDG_CONFIG_HOME;
   return linuxAutostartLoginItem({
     configHome: configHome && isAbsolute(configHome) ? configHome : join(homedir(), ".config"),
-    fileName: options.appVariant === "production" ? "openbot.desktop" : `openbot-${options.appVariant}.desktop`,
+    fileName: options.appVariant === "production" ? "codebot.desktop" : `codebot-${options.appVariant}.desktop`,
     executablePath: process.env.APPIMAGE || process.execPath,
   });
 }

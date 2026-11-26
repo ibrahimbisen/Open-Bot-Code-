@@ -5,7 +5,7 @@ import { join, resolve } from "node:path";
 import { AcpAgentClient } from "../src/backend/acp-client";
 import { type AcpFlavor, customAgentFlavor, DEFAULT_ACP_FLAVOR, MISTRAL_ACP_FLAVOR } from "../src/backend/acp-flavor";
 import { ANTIGRAVITY_ACP_FLAVOR } from "../src/backend/acp-flavor-antigravity";
-import { openBotTool, toolActivity, toolUsage, toThreadItem } from "../src/backend/agent/thread-items";
+import { codeBotTool, toolActivity, toolUsage, toThreadItem } from "../src/backend/agent/thread-items";
 import type { AgentClient } from "../src/backend/agent-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import {
@@ -17,33 +17,33 @@ import {
 } from "../src/backend/protocol";
 import { installFakeAgent, readJsonl, runTurn, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-workspace-bridge-tools-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-workspace-bridge-tools-e2e");
 
 const BRIDGE_CALLS = [
-  { toolCallId: "agy-title", title: "Run mcp_openbot_send_message", kind: "other" },
-  { toolCallId: "agy-browser-title", title: "Run mcp_openbot_browser_open?", kind: "other" },
+  { toolCallId: "agy-title", title: "Run mcp_codebot_send_message", kind: "other" },
+  { toolCallId: "agy-browser-title", title: "Run mcp_codebot_browser_open?", kind: "other" },
   {
     toolCallId: "agy-server-name",
     title: "MCP Tool send_message",
     kind: "execute",
-    rawInput: { ServerName: "openbot", ToolName: "send_message" },
+    rawInput: { ServerName: "codebot", ToolName: "send_message" },
   },
-  { toolCallId: "grok-title", title: "openbot__send_message", kind: "other" },
+  { toolCallId: "grok-title", title: "codebot__send_message", kind: "other" },
   {
     toolCallId: "agy-meta-call",
     title: "MCP Tool tool_call",
     kind: "execute",
-    rawInput: { ServerName: "openbot", ToolName: "tool_call", Arguments: { name: "openbot.send_message" } },
+    rawInput: { ServerName: "codebot", ToolName: "tool_call", Arguments: { name: "codebot.send_message" } },
   },
 ];
 
 const CONFINED_COMMANDS = [
-  { toolCallId: "title-command", title: "Run mcp_openbot_send_message", kind: "execute" },
+  { toolCallId: "title-command", title: "Run mcp_codebot_send_message", kind: "execute" },
   {
     toolCallId: "command-line",
-    title: "Run mcp_openbot_send_message",
+    title: "Run mcp_codebot_send_message",
     kind: "execute",
-    rawInput: { CommandLine: "Run mcp_openbot_send_message" },
+    rawInput: { CommandLine: "Run mcp_codebot_send_message" },
   },
   { toolCallId: "shell", title: "ls attachments", kind: "execute" },
 ];
@@ -61,19 +61,19 @@ const OTHER_CALLS = [
     toolCallId: "unknown-tool",
     title: "MCP Tool delete_everything",
     kind: "execute",
-    rawInput: { ServerName: "openbot", ToolName: "delete_everything" },
+    rawInput: { ServerName: "codebot", ToolName: "delete_everything" },
   },
   {
     toolCallId: "server-name-edit",
     title: "Edit notes.md",
     kind: "edit",
-    rawInput: { TargetFile: "/tmp/notes.md", ServerName: "openbot", ToolName: "send_message" },
+    rawInput: { TargetFile: "/tmp/notes.md", ServerName: "codebot", ToolName: "send_message" },
   },
   {
     toolCallId: "server-name-command-line",
     title: "MCP Tool send_message",
     kind: "execute",
-    rawInput: { ServerName: "openbot", ToolName: "send_message", CommandLine: "rm -rf build" },
+    rawInput: { ServerName: "codebot", ToolName: "send_message", CommandLine: "rm -rf build" },
   },
 ];
 
@@ -89,7 +89,7 @@ const KIMI_CALLS = [
     rawInput: { command: "ls attachments" },
     idOnlyPermission: true,
   },
-  { toolCallId: "kimi-openbot-tool", title: "mcp__openbot__send_message", kind: "other", idOnlyPermission: true },
+  { toolCallId: "kimi-codebot-tool", title: "mcp__codebot__send_message", kind: "other", idOnlyPermission: true },
   {
     toolCallId: "kimi-write",
     title: "Write",
@@ -101,15 +101,15 @@ const KIMI_CALLS = [
 ];
 
 const MISTRAL_BRIDGE_CALLS = [
-  { toolCallId: "vibe-browser", title: "mcp_openbot_browser.open", kind: "other", untitledPermission: true },
-  { toolCallId: "vibe-openbot", title: "mcp_openbot.send_message", kind: "other", untitledPermission: true },
+  { toolCallId: "vibe-browser", title: "mcp_codebot_browser.open", kind: "other", untitledPermission: true },
+  { toolCallId: "vibe-codebot", title: "mcp_codebot.send_message", kind: "other", untitledPermission: true },
 ];
 
 const MISTRAL_OTHER_CALLS = [
-  { toolCallId: "vibe-longer-tool", title: "mcp_openbot_browser.open_extra", kind: "other", untitledPermission: true },
-  { toolCallId: "vibe-other-server", title: "mcp_openbot_browser_other.open", kind: "other", untitledPermission: true },
+  { toolCallId: "vibe-longer-tool", title: "mcp_codebot_browser.open_extra", kind: "other", untitledPermission: true },
+  { toolCallId: "vibe-other-server", title: "mcp_codebot_browser_other.open", kind: "other", untitledPermission: true },
   { toolCallId: "vibe-github", title: "mcp_github.create_issue", kind: "other", untitledPermission: true },
-  { toolCallId: "vibe-edit", title: "mcp_openbot.send_message", kind: "edit", untitledPermission: true },
+  { toolCallId: "vibe-edit", title: "mcp_codebot.send_message", kind: "edit", untitledPermission: true },
 ];
 
 const bridgeIds = new Set(BRIDGE_CALLS.map((call) => call.toolCallId));
@@ -117,8 +117,8 @@ const bridgeIds = new Set(BRIDGE_CALLS.map((call) => call.toolCallId));
 const DYNAMIC_TOOLS = [
   {
     type: "namespace",
-    name: "openbot",
-    description: "OpenBot tools",
+    name: "codebot",
+    description: "CodeBot tools",
     tools: [
       { type: "function", name: "send_message", description: "Send a message", inputSchema: { type: "object" } },
       { type: "function", name: "tool_call", description: "Call a tool", inputSchema: { type: "object" } },
@@ -126,8 +126,8 @@ const DYNAMIC_TOOLS = [
   },
   {
     type: "namespace",
-    name: "openbot_browser",
-    description: "OpenBot browser",
+    name: "codebot_browser",
+    description: "CodeBot browser",
     tools: [{ type: "function", name: "open", description: "Open a page", inputSchema: { type: "object" } }],
   },
 ];
@@ -152,7 +152,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-workspace-bridge-tools-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-workspace-bridge-tools-e2e-"));
 process.env.GEMINI_HOME = join(root, "gemini");
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
@@ -224,7 +224,7 @@ try {
   assert.deepEqual(
     confined.cards,
     OTHER_CALLS.map((call) => call.title),
-    "Only the requests that are not OpenBot tools or sandboxed commands show a card.",
+    "Only the requests that are not CodeBot tools or sandboxed commands show a card.",
   );
 
   const unconfined = await run("unconfined", false);
@@ -239,7 +239,7 @@ try {
   assert.deepEqual(
     unconfined.cards,
     [...CONFINED_COMMANDS, ...OTHER_CALLS].map((call) => call.title),
-    "Without Workspace only, OpenBot tools run without a card, and commands and other tools keep their card.",
+    "Without Workspace only, CodeBot tools run without a card, and commands and other tools keep their card.",
   );
 
   const readAs = {
@@ -249,11 +249,11 @@ try {
   for (const [toolCallId, tool] of Object.entries(readAs)) {
     const item = unconfined.items[toolCallId];
     assert.ok(item, `${toolCallId} has a tool item.`);
-    assert.equal(openBotTool(item), tool, `${toolCallId} is read as the OpenBot tool ${tool}.`);
+    assert.equal(codeBotTool(item), tool, `${toolCallId} is read as the CodeBot tool ${tool}.`);
     assert.deepEqual(
       toolUsage(item),
-      { kind: "mcp", server: "openbot", tool, failed: false },
-      `${toolCallId} counts as an OpenBot MCP call, not a command.`,
+      { kind: "mcp", server: "codebot", tool, failed: false },
+      `${toolCallId} counts as an CodeBot MCP call, not a command.`,
     );
   }
   const browserItem = unconfined.items["agy-browser-title"];
@@ -261,10 +261,10 @@ try {
   assert.equal(toolActivity(browserItem, false), "browsing", "A running Gemini browser call shows as browsing.");
   const metaCall = unconfined.items["agy-meta-call"];
   assert.ok(metaCall, "The tool_call call has a tool item.");
-  assert.equal(openBotTool(metaCall), "send_message", "A Gemini tool_call reads the OpenBot tool that it calls.");
+  assert.equal(codeBotTool(metaCall), "send_message", "A Gemini tool_call reads the CodeBot tool that it calls.");
   const shell = unconfined.items.shell;
   assert.ok(shell, "The shell call has a tool item.");
-  assert.equal(openBotTool(shell), null, "A shell command is not read as an OpenBot tool.");
+  assert.equal(codeBotTool(shell), null, "A shell command is not read as an CodeBot tool.");
 
   const otherUnconfined = await run("other-flavor-unconfined", false, DEFAULT_ACP_FLAVOR);
   report.otherUnconfined = otherUnconfined;
@@ -291,7 +291,7 @@ try {
   report.kimi = kimi;
   assert.equal(kimi.status, "completed", "The confined Kimi turn completes.");
   assert.equal(kimi.outcomes["kimi-bash"], "allow", "A Kimi command runs in the sandbox without a card.");
-  assert.equal(kimi.outcomes["kimi-openbot-tool"], "allow", "A Kimi call of an OpenBot tool runs without a card.");
+  assert.equal(kimi.outcomes["kimi-codebot-tool"], "allow", "A Kimi call of an CodeBot tool runs without a card.");
   assert.deepEqual(
     kimi.requests,
     [

@@ -11,14 +11,14 @@ editor. The host must be online to receive requests.
 3. Optional: enter an event type. With no event type, all event types start the routine.
 4. Optional: add filters.
 5. Save the routine. The host makes the URL and the signing secret.
-6. Copy the secret into the secret store of the sending service. OpenBot shows it one time only.
+6. Copy the secret into the secret store of the sending service. CodeBot shows it one time only.
 7. Copy the URL. The URL is empty until the account service registers the route. The host must be
-   signed in to its OpenBot account.
+   signed in to its CodeBot account.
 
 Each webhook routine has its own URL and secret. A host can have at most 64 webhook routines.
 
 You can also ask an agent in chat to make a webhook routine. The agent calls
-`openbot.create_webhook_routine` and tells you the URL and the request format. It does not get the
+`codebot.create_webhook_routine` and tells you the URL and the request format. It does not get the
 secret. A card in the chat shows the URL; press the regenerate button on the card to make the
 secret, then copy it. Only a person who can manage the host's webhook routines sees the card. When
 the agent makes the routine for another agent, get the secret in that agent's routine editor.
@@ -28,13 +28,13 @@ through an API. Press **Give the signing secret to <agent>** (the agent button n
 regenerate button) on the card or in the routine editor, and confirm. The host makes a new secret
 and saves it as an API key of that agent only, with a name such as `WEBHOOK_SECRET_3F2A…` (the routine ID in upper case, with no dashes). The old
 secret stops working immediately. Nobody copies the secret, and it does not show in the chat. The
-agent reads it from the key file (`openbot.list_api_keys` gives the path). When you regenerate the
+agent reads it from the key file (`codebot.list_api_keys` gives the path). When you regenerate the
 secret or use the sender's secret later, the host also updates the key. When you delete the
 routine or change its trigger to a schedule, the host deletes the key. A channel routine has no single agent, so it does not show the
 button.
 
 To change the event type or the filters from the chat, ask the agent: it calls
-`openbot.update_webhook_routine`. You can also change them on the card and press **Save**. The URL
+`codebot.update_webhook_routine`. You can also change them on the card and press **Save**. The URL
 and the secret stay the same. Only a person's message can start these tools: a routine run or
 another agent's message cannot make or change a webhook routine.
 
@@ -45,14 +45,14 @@ stops working immediately. A secret has the format `whsec_<44 base64 characters>
 When you change the routine to **Schedule**, or delete the routine, its URL stops working. If you
 change it back to **Webhook**, the routine gets a new URL and a new secret.
 
-The URL also changes when you sign in to a different OpenBot account on the host. The secret stays
+The URL also changes when you sign in to a different CodeBot account on the host. The secret stays
 the same. Copy the new URL into the sending service.
 
 ### Send a test event
 
 In the routine editor, select **Send test event**. The host makes an event that matches the event
 type and the filters, signs it with the routine secret, and receives it as it receives a relayed
-request. The event type is `openbot.test` when the routine accepts all types. The test shows in the
+request. The event type is `codebot.test` when the routine accepts all types. The test shows in the
 history, and a match starts one run. A paused routine does not run. The test does not go through
 the relay, so it does not show whether a sender can reach the URL.
 
@@ -72,7 +72,7 @@ shape:
 | Field | Rule |
 | --- | --- |
 | `type` | Required. A string of 1 to 256 characters. |
-| `occurredAt` | Optional. A date string. If you do not send it, OpenBot uses the receipt time. |
+| `occurredAt` | Optional. A date string. If you do not send it, CodeBot uses the receipt time. |
 | `data` | Optional. Any JSON value. If you do not send it, the value is `null`. |
 
 The body must be UTF-8 and at most 64 KiB.
@@ -92,9 +92,9 @@ pointer selects all of `data`. A routine can have at most 128 filters.
 
 | Header | Value |
 | --- | --- |
-| `X-OpenBot-Timestamp` | The current Unix time in seconds |
-| `X-OpenBot-Delivery-Id` | A unique ID for this event. Use 1 to 256 ASCII letters, digits, `.`, `_`, `:`, or `-`. The first character is a letter or a digit. |
-| `X-OpenBot-Signature` | `sha256=` and the lowercase hexadecimal HMAC-SHA256 |
+| `X-CodeBot-Timestamp` | The current Unix time in seconds |
+| `X-CodeBot-Delivery-Id` | A unique ID for this event. Use 1 to 256 ASCII letters, digits, `.`, `_`, `:`, or `-`. The first character is a letter or a digit. |
+| `X-CodeBot-Signature` | `sha256=` and the lowercase hexadecimal HMAC-SHA256 |
 
 The HMAC key is the routine secret. The signed bytes are `<timestamp>.<deliveryId>.<body>`. Use the
 exact body bytes that you send. Do not parse and serialize the body again after you sign it. The
@@ -108,21 +108,21 @@ import { createHmac, randomUUID } from "node:crypto";
 const body = JSON.stringify({ type: "deployment.completed", data: { environment: "production" } });
 const deliveryId = randomUUID(); // Keep this ID and the body for a retry.
 const timestamp = String(Math.floor(Date.now() / 1000));
-const signature = createHmac("sha256", process.env.OPENBOT_WEBHOOK_SECRET)
+const signature = createHmac("sha256", process.env.CODEBOT_WEBHOOK_SECRET)
   .update(`${timestamp}.${deliveryId}.${body}`)
   .digest("hex");
-const response = await fetch(process.env.OPENBOT_WEBHOOK_URL, {
+const response = await fetch(process.env.CODEBOT_WEBHOOK_URL, {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "X-OpenBot-Timestamp": timestamp,
-    "X-OpenBot-Delivery-Id": deliveryId,
-    "X-OpenBot-Signature": `sha256=${signature}`,
+    "X-CodeBot-Timestamp": timestamp,
+    "X-CodeBot-Delivery-Id": deliveryId,
+    "X-CodeBot-Signature": `sha256=${signature}`,
   },
   body,
 });
 if (response.status !== 200 && response.status !== 202) {
-  throw new Error(`OpenBot did not accept the event: ${response.status}`);
+  throw new Error(`CodeBot did not accept the event: ${response.status}`);
 }
 ```
 
@@ -163,7 +163,7 @@ like all routine input. The data cannot give tools to the agent or skip approval
 
 The URL also accepts requests in the [Standard Webhooks](https://www.standardwebhooks.com/) format.
 Composio, Svix, Clerk, and Resend send this format. These senders make their own signing secret, so
-you cannot give them the OpenBot secret:
+you cannot give them the CodeBot secret:
 
 1. Copy the URL of the routine into the sender.
 2. Copy the signing secret that the sender shows.
@@ -173,17 +173,17 @@ you cannot give them the OpenBot secret:
 
 | Header | Value |
 | --- | --- |
-| `webhook-id` | A unique ID for this event, with the same rules as `X-OpenBot-Delivery-Id`. |
+| `webhook-id` | A unique ID for this event, with the same rules as `X-CodeBot-Delivery-Id`. |
 | `webhook-timestamp` | The current Unix time in seconds. It must be within 5 minutes of the host clock. |
 | `webhook-signature` | One to eight space-separated `v1,<base64 HMAC-SHA256>` values. One value must match. |
 
-Svix also sends these headers with the `svix-` prefix. OpenBot accepts both names. The signed bytes
+Svix also sends these headers with the `svix-` prefix. CodeBot accepts both names. The signed bytes
 are `<webhook-id>.<webhook-timestamp>.<body>`. The HMAC key is the base64 data after `whsec_` in the
 secret, as the specification says, or the complete secret as UTF-8 text, as Composio uses it.
-A secret that an older OpenBot version made is base64url (`-` and `_`, no `=`). Standard Webhooks
+A secret that an older CodeBot version made is base64url (`-` and `_`, no `=`). Standard Webhooks
 senders need base64, so make a new secret in the routine editor and copy it into the sender.
 
-The body must be a JSON object with a `type` string. OpenBot reads the request as follows:
+The body must be a JSON object with a `type` string. CodeBot reads the request as follows:
 
 | Event field | Value |
 | --- | --- |
@@ -191,8 +191,8 @@ The body must be a JSON object with a `type` string. OpenBot reads the request a
 | `occurredAt` | The `timestamp` field of the body when it is a date string, otherwise the receipt time. |
 | `data` | The complete body. A filter reads it from the root, for example `/metadata/trigger_slug` for a Composio trigger. |
 
-The responses and the retry rules are the same as for the OpenBot format. A host that has an older
-OpenBot version cannot check this format, and the relay answers `401`.
+The responses and the retry rules are the same as for the CodeBot format. A host that has an older
+CodeBot version cannot check this format, and the relay answers `401`.
 
 ## History
 

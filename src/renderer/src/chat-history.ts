@@ -1,5 +1,5 @@
-import type { AppTextKey } from "@openbot/i18n";
-import type { ShortcutKeyEvent } from "@openbot/ui/features/settings/keyboard-shortcuts";
+import type { AppTextKey } from "@codebot/i18n";
+import type { ShortcutKeyEvent } from "@codebot/ui/features/settings/keyboard-shortcuts";
 import { createStore } from "solid-js";
 import { matchesShortcut, shortcutLabel } from "./keyboard-shortcut-preference";
 

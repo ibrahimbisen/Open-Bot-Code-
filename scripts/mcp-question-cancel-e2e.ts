@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import type { ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
-import type { ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
 import { Effect } from "effect";
 import { AttentionRegistry } from "../src/backend/agent/attention-registry";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
@@ -13,7 +13,7 @@ import { type DynamicToolNamespace, LocalMcpBridge } from "../src/backend/local-
 import { PendingServerRequests } from "../src/backend/pending-server-requests";
 import { type DynamicToolResult, isRecord, PROVIDER_STOPPED_WAITING, type RequestId } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-question-cancel-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-question-cancel-e2e");
 const THREAD = "thread-1";
 const CLIENT_TOOL_LIMIT_MS = 1_000;
 
@@ -89,7 +89,7 @@ agent = new BridgedAgentClient(requests);
 
 const namespace: DynamicToolNamespace = {
   type: "namespace",
-  name: "openbot",
+  name: "codebot",
   tools: [{ type: "function", name: "ask_user", inputSchema: { type: "object", properties: {} } }],
 };
 

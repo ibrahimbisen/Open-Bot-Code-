@@ -1,5 +1,5 @@
-import type { ConversationMessage, QueueDelivery } from "@openbot/contracts/ipc";
-import { speechTextFromMarkdown } from "@openbot/contracts/speech-text";
+import type { ConversationMessage, QueueDelivery } from "@codebot/contracts/ipc";
+import { speechTextFromMarkdown } from "@codebot/contracts/speech-text";
 
 export type LiveConversationPhase = "starting" | "listening" | "sending" | "thinking" | "speaking" | "offline";
 

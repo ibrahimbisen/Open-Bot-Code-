@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 
-export const MACHINE_HOSTING = "/root/openbot-hosting";
+export const MACHINE_HOSTING = "/root/codebot-hosting";
 
 export interface PoolRelease {
   url: string;
@@ -17,9 +17,9 @@ export function hostingCopy() {
   return `set -euo pipefail
 rm -rf ${MACHINE_HOSTING}
 install -d -m 0700 ${MACHINE_HOSTING}
-base64 -d <<'OPENBOT_HOSTING' | tar -xz --no-same-owner --strip-components=1 -C ${MACHINE_HOSTING}
+base64 -d <<'CODEBOT_HOSTING' | tar -xz --no-same-owner --strip-components=1 -C ${MACHINE_HOSTING}
 ${archive.toString("base64")}
-OPENBOT_HOSTING
+CODEBOT_HOSTING
 `;
 }
 

@@ -8,7 +8,7 @@ import { type AppServerNotification, getRecord, getString, isRecord } from "../s
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-background-command-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-background-command-e2e");
 const WAIT_MS = 60_000;
 
 interface LogEntry {
@@ -40,7 +40,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-background-command-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-background-command-e2e-"));
 process.env.GEMINI_HOME = join(root, "gemini");
 const finishDir = join(root, "finished");
 await mkdir(finishDir, { recursive: true });
@@ -62,7 +62,7 @@ function record(client: AgentClient, thread: string): Seen[] {
     if (getString(params, "threadId") !== thread || !isRecord(params)) return;
     if (notification.method === "turn/started")
       seen.push({ method: "turn/started", unprompted: params.unprompted === true });
-    if (notification.method === "openbot/background-work")
+    if (notification.method === "codebot/background-work")
       seen.push({ method: "background-work", running: params.running === true });
     if (notification.method === "turn/completed")
       seen.push({ method: "turn/completed", status: getString(getRecord(params, "turn"), "status") });
@@ -162,7 +162,7 @@ try {
   );
   assert.ok(woke.some((entry) => entry.text === "The command finished."));
   const wakePrompt = (await readJsonl<LogEntry>(own.log)).filter((entry) => entry.event === "prompt")[1]?.text ?? "";
-  assert.match(wakePrompt, /<openbot_background_wake>/u);
+  assert.match(wakePrompt, /<codebot_background_wake>/u);
   const waitsAfterWake = await waits(own.client, own.thread);
   assert.equal(waitsAfterWake, false);
   report.ownChat = { answered, waitsWhileCommandRuns, woke, waitsAfterWake, wakePrompt };

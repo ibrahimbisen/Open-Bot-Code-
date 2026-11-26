@@ -23,7 +23,7 @@ export type QueuedSignalMessage = Extract<
   { type: "slack-delivery" | "discord-delivery" | "telegram-delivery" }
 >;
 
-const KIND: HostGrantKind = { version: 1, info: "openbot-ingress-queue-v1" };
+const KIND: HostGrantKind = { version: 1, info: "codebot-ingress-queue-v1" };
 
 export const INGRESS_QUEUE_CAPABILITY = "ingress-queue";
 

@@ -1,4 +1,4 @@
-import { agentMentionRank } from "@openbot/contracts/agent-mention-rank";
+import { agentMentionRank } from "@codebot/contracts/agent-mention-rank";
 import type {
   ChannelSummary,
   ConversationFileSearchResult,
@@ -6,8 +6,8 @@ import type {
   ConversationSearchResult,
   RoutineCalendarOwner,
   RoutineCalendarRoutine,
-} from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
+} from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
 import type { MobileAgent } from "@/features/workspace/context/mobile-workspace-context";
 
 export const MOBILE_SEARCH_FILTERS = [

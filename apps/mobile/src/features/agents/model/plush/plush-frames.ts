@@ -1,3 +1,5 @@
+import { bloubAvatarProfile } from "@codebot/brand/bloub-avatar";
+import type { AvatarMood } from "@codebot/brand/bloub-avatar-motion";
 import {
   BotEngine,
   type BotExpression,
@@ -6,8 +8,6 @@ import {
   SHAPE_BY_ID,
   type ShapeId,
 } from "@norbert_bodziony/bloub";
-import { bloubAvatarProfile } from "@openbot/brand/bloub-avatar";
-import type { AvatarMood } from "@openbot/brand/bloub-avatar-motion";
 import {
   ballBox,
   type DecorTrack,

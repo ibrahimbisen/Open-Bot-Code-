@@ -5,7 +5,7 @@
 }
 
 .credits-explainer {
-  --credits-explainer-tone: var(--openbot-credit-plus);
+  --credits-explainer-tone: var(--codebot-credit-plus);
   position: relative;
   overflow: hidden;
   background:
@@ -14,22 +14,22 @@
       color-mix(in srgb, var(--credits-explainer-tone) 24%, transparent),
       transparent 70%
     ),
-    radial-gradient(40% 40% at 0% 0%, color-mix(in srgb, var(--openbot-credit-basic) 10%, transparent), transparent 70%),
-    radial-gradient(40% 40% at 100% 0%, color-mix(in srgb, var(--openbot-credit-max) 8%, transparent), transparent 70%),
-    var(--openbot-bg-sidebar);
-  transition: --credits-explainer-tone var(--openbot-duration-island-content) var(--openbot-ease-in-out);
+    radial-gradient(40% 40% at 0% 0%, color-mix(in srgb, var(--codebot-credit-basic) 10%, transparent), transparent 70%),
+    radial-gradient(40% 40% at 100% 0%, color-mix(in srgb, var(--codebot-credit-max) 8%, transparent), transparent 70%),
+    var(--codebot-bg-sidebar);
+  transition: --credits-explainer-tone var(--codebot-duration-island-content) var(--codebot-ease-in-out);
 }
 
 .credits-explainer[data-scene="chat"] {
-  --credits-explainer-tone: var(--openbot-success);
+  --credits-explainer-tone: var(--codebot-success);
 }
 
 .credits-explainer[data-scene="models"] {
-  --credits-explainer-tone: var(--openbot-credit-basic);
+  --credits-explainer-tone: var(--codebot-credit-basic);
 }
 
 .credits-explainer[data-scene="get"] {
-  --credits-explainer-tone: var(--openbot-credit-max);
+  --credits-explainer-tone: var(--codebot-credit-max);
 }
 
 .hosted-upsell-modal.credits-explainer {
@@ -41,8 +41,8 @@
 .credits-explainer-close {
   position: absolute;
   z-index: 1;
-  top: var(--openbot-space-3);
-  right: var(--openbot-space-3);
+  top: var(--codebot-space-3);
+  right: var(--codebot-space-3);
 }
 
 .credits-explainer-scene {
@@ -50,15 +50,15 @@
   display: grid;
   height: 260px;
   place-items: center;
-  padding: var(--openbot-space-6);
-  border-bottom: 1px solid var(--openbot-border);
+  padding: var(--codebot-space-6);
+  border-bottom: 1px solid var(--codebot-border);
   background:
     radial-gradient(
       45% 60% at 50% 55%,
       color-mix(in srgb, var(--credits-explainer-tone) 16%, transparent),
       transparent 70%
     ),
-    color-mix(in srgb, var(--openbot-bg-surface) 60%, transparent);
+    color-mix(in srgb, var(--codebot-bg-surface) 60%, transparent);
 }
 
 .credits-explainer-scene-in {
@@ -78,12 +78,12 @@
 .credits-explainer-orb-glow {
   position: absolute;
   inset: 4px;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: conic-gradient(
-    var(--openbot-credit-basic),
-    var(--openbot-credit-plus),
-    var(--openbot-credit-max),
-    var(--openbot-credit-basic)
+    var(--codebot-credit-basic),
+    var(--codebot-credit-plus),
+    var(--codebot-credit-max),
+    var(--codebot-credit-basic)
   );
   filter: blur(18px);
   opacity: 0.6;
@@ -94,7 +94,7 @@
   position: relative;
   width: 60px;
   height: 60px;
-  animation: credit-pop var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  animation: credit-pop var(--codebot-duration-island-content) var(--codebot-ease-out) both;
 }
 
 @keyframes credits-explainer-spin {
@@ -120,9 +120,9 @@
 .credits-explainer-orbit-path {
   position: absolute;
   inset: 22px;
-  border: 1px dashed var(--openbot-border-strong);
-  border-radius: var(--openbot-radius-pill);
-  animation: credit-pop var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  border: 1px dashed var(--codebot-border-strong);
+  border-radius: var(--codebot-radius-pill);
+  animation: credit-pop var(--codebot-duration-island-content) var(--codebot-ease-out) both;
 }
 
 .credits-explainer-orbit-ring {
@@ -132,7 +132,7 @@
 }
 
 .credits-explainer-orbit-item {
-  --tone: var(--openbot-credit-basic);
+  --tone: var(--codebot-credit-basic);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -143,11 +143,11 @@
 }
 
 .credits-explainer-orbit-item[data-kind="video"] {
-  --tone: var(--openbot-credit-max);
+  --tone: var(--codebot-credit-max);
 }
 
 .credits-explainer-orbit-item[data-kind="voice"] {
-  --tone: var(--openbot-credit-plus);
+  --tone: var(--codebot-credit-plus);
 }
 
 .credits-explainer-orbit-tile {
@@ -156,11 +156,11 @@
   height: 100%;
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--tone) 35%, transparent);
-  border-radius: var(--openbot-radius-lg);
-  background: color-mix(in srgb, var(--tone) 16%, var(--openbot-bg-sidebar));
+  border-radius: var(--codebot-radius-lg);
+  background: color-mix(in srgb, var(--tone) 16%, var(--codebot-bg-sidebar));
   color: var(--tone);
   animation:
-    credit-pop var(--openbot-duration-island-content) var(--openbot-ease-out) both,
+    credit-pop var(--codebot-duration-island-content) var(--codebot-ease-out) both,
     credits-explainer-spin-back 24s linear infinite;
   animation-delay: calc(var(--item) * 90ms + 120ms), 0s;
 }
@@ -173,23 +173,23 @@
 .credits-explainer-thread {
   display: grid;
   width: min(320px, 100%);
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .credits-explainer-thread-bubble {
   display: grid;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-3) var(--openbot-space-4);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-bubble);
-  background: var(--openbot-bg-surface);
-  animation: credit-rise var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-3) var(--codebot-space-4);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-bubble);
+  background: var(--codebot-bg-surface);
+  animation: credit-rise var(--codebot-duration-island-content) var(--codebot-ease-out) both;
 }
 
 .credits-explainer-thread-bubble[data-side="user"] {
   width: 58%;
   justify-self: end;
-  background: color-mix(in srgb, var(--openbot-text-primary) 8%, var(--openbot-bg-surface));
+  background: color-mix(in srgb, var(--codebot-text-primary) 8%, var(--codebot-bg-surface));
 }
 
 .credits-explainer-thread-bubble[data-side="agent"] {
@@ -200,25 +200,25 @@
 .credits-explainer-thread-line {
   width: var(--line);
   height: 6px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-border-strong);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-border-strong);
 }
 
 .credits-explainer-zero {
   display: inline-flex;
   align-items: center;
   justify-self: center;
-  gap: var(--openbot-space-2);
-  margin-top: var(--openbot-space-2);
-  padding: var(--openbot-space-1) var(--openbot-space-3);
-  border: 1px solid color-mix(in srgb, var(--openbot-success) 40%, transparent);
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-success-soft);
-  color: var(--openbot-success-text);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-semibold);
-  line-height: var(--openbot-leading-sm);
-  animation: credit-pop var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  gap: var(--codebot-space-2);
+  margin-top: var(--codebot-space-2);
+  padding: var(--codebot-space-1) var(--codebot-space-3);
+  border: 1px solid color-mix(in srgb, var(--codebot-success) 40%, transparent);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-success-soft);
+  color: var(--codebot-success-text);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-semibold);
+  line-height: var(--codebot-leading-sm);
+  animation: credit-pop var(--codebot-duration-island-content) var(--codebot-ease-out) both;
   animation-delay: 320ms;
 }
 
@@ -230,7 +230,7 @@
 .credits-explainer-bars {
   display: grid;
   width: 100%;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -240,10 +240,10 @@
   display: grid;
   grid-template-columns: 150px minmax(0, 1fr) 132px;
   align-items: center;
-  gap: var(--openbot-space-3);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
-  animation: credit-rise var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  gap: var(--codebot-space-3);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
+  animation: credit-rise var(--codebot-duration-island-content) var(--codebot-ease-out) both;
   animation-delay: calc(var(--item) * 70ms);
 }
 
@@ -251,7 +251,7 @@
   display: inline-flex;
   min-width: 0;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   white-space: nowrap;
 }
 
@@ -263,8 +263,8 @@
 
 .credits-explainer-bar-track {
   height: 6px;
-  border-radius: var(--openbot-radius-pill);
-  background: color-mix(in srgb, var(--openbot-text-primary) 8%, transparent);
+  border-radius: var(--codebot-radius-pill);
+  background: color-mix(in srgb, var(--codebot-text-primary) 8%, transparent);
 }
 
 .credits-explainer-bar-fill {
@@ -272,21 +272,21 @@
   width: calc(var(--share) * 100%);
   height: 100%;
   border-radius: inherit;
-  background: var(--openbot-credit-basic);
+  background: var(--codebot-credit-basic);
   transform-origin: left center;
-  animation: credit-strike var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  animation: credit-strike var(--codebot-duration-island-content) var(--codebot-ease-out) both;
   animation-delay: calc(var(--item) * 70ms + 140ms);
 }
 
 .credits-explainer-bar-fill[data-kind="video"] {
-  background: var(--openbot-credit-max);
+  background: var(--codebot-credit-max);
 }
 
 .credits-explainer-bar-cost {
   display: inline-flex;
   align-items: center;
   gap: 0.25em;
-  font-weight: var(--openbot-weight-semibold);
+  font-weight: var(--codebot-weight-semibold);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -297,44 +297,44 @@
 }
 
 .credits-explainer-bar-unit {
-  color: var(--openbot-text-muted);
-  font-weight: var(--openbot-weight-regular);
+  color: var(--codebot-text-muted);
+  font-weight: var(--codebot-weight-regular);
 }
 
 .credits-explainer-get {
   display: grid;
   justify-items: center;
-  gap: var(--openbot-space-4);
+  gap: var(--codebot-space-4);
 }
 
 .credits-explainer-pack {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-3);
-  padding: var(--openbot-space-3) var(--openbot-space-6);
-  border: 1px solid color-mix(in srgb, var(--openbot-credit-max) 35%, var(--openbot-border));
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-surface);
-  font-size: var(--openbot-text-display);
-  font-weight: var(--openbot-weight-semibold);
-  line-height: var(--openbot-leading-display);
+  gap: var(--codebot-space-3);
+  padding: var(--codebot-space-3) var(--codebot-space-6);
+  border: 1px solid color-mix(in srgb, var(--codebot-credit-max) 35%, var(--codebot-border));
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-surface);
+  font-size: var(--codebot-text-display);
+  font-weight: var(--codebot-weight-semibold);
+  line-height: var(--codebot-leading-display);
   font-variant-numeric: tabular-nums;
-  animation: credit-pop var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  animation: credit-pop var(--codebot-duration-island-content) var(--codebot-ease-out) both;
 }
 
 .credits-explainer .credits-explainer-pack-arrow {
   width: 22px;
   height: 22px;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .credits-explainer-pack-credits {
   display: inline-flex;
   align-items: center;
   gap: 0.2em;
-  background: linear-gradient(90deg, var(--openbot-credit-plus), var(--openbot-credit-max));
+  background: linear-gradient(90deg, var(--codebot-credit-plus), var(--codebot-credit-max));
   background-clip: text;
-  color: var(--openbot-transparent);
+  color: var(--codebot-transparent);
 }
 
 .credits-explainer-pack-credits .credit-icon {
@@ -343,41 +343,41 @@
 }
 
 .credits-explainer-pack-credits .credit-star {
-  fill: var(--openbot-credit-max);
+  fill: var(--codebot-credit-max);
 }
 
 .credits-explainer-gifts {
   display: grid;
   justify-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .credits-explainer-gift {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
-  animation: credit-rise var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  gap: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
+  animation: credit-rise var(--codebot-duration-island-content) var(--codebot-ease-out) both;
   animation-delay: 200ms;
 }
 
 .credits-explainer-gift svg {
   width: 16px;
   height: 16px;
-  color: var(--openbot-credit-max);
+  color: var(--codebot-credit-max);
 }
 
 .credits-explainer-text {
   display: grid;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-6) var(--openbot-space-6) 0;
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-6) var(--codebot-space-6) 0;
 }
 
 .credits-explainer-scene-in,
 .credits-explainer-text {
-  animation: credit-from-end var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  animation: credit-from-end var(--codebot-duration-island-content) var(--codebot-ease-out) both;
 }
 
 .credits-explainer[data-direction="back"] .credits-explainer-scene-in,
@@ -388,10 +388,10 @@
 .credits-explainer-kicker {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-medium);
+  gap: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .credits-explainer-kicker .credit-icon {
@@ -400,27 +400,27 @@
 }
 
 .credits-explainer-count {
-  padding-left: var(--openbot-space-2);
-  border-left: 1px solid var(--openbot-border-strong);
-  color: var(--openbot-text-muted);
+  padding-left: var(--codebot-space-2);
+  border-left: 1px solid var(--codebot-border-strong);
+  color: var(--codebot-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .credits-explainer .credits-explainer-title {
   margin: 0;
-  font-size: var(--openbot-text-3xl);
-  font-weight: var(--openbot-weight-semibold);
-  line-height: var(--openbot-leading-3xl);
+  font-size: var(--codebot-text-3xl);
+  font-weight: var(--codebot-weight-semibold);
+  line-height: var(--codebot-leading-3xl);
   text-wrap: balance;
 }
 
 .credits-explainer .credits-explainer-lead {
-  min-height: calc(var(--openbot-leading-md) * 2);
+  min-height: calc(var(--codebot-leading-md) * 2);
   max-width: 44ch;
   margin: 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
   text-wrap: pretty;
 }
 
@@ -428,12 +428,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--openbot-space-6);
+  padding: var(--codebot-space-6);
 }
 
 .credits-explainer-buttons {
   display: flex;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .credits-explainer .credits-explainer-primary {
@@ -442,7 +442,7 @@
 
 .credits-explainer-dots {
   display: flex;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -453,16 +453,16 @@
   height: 4px;
   padding: 0;
   border: 0;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-border-strong);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-border-strong);
   cursor: pointer;
   transition:
-    width var(--openbot-duration-normal) var(--openbot-ease-out),
-    background-color var(--openbot-duration-normal) var(--openbot-ease-out);
+    width var(--codebot-duration-normal) var(--codebot-ease-out),
+    background-color var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 .credits-explainer-dot[data-seen] {
-  background: color-mix(in srgb, var(--credits-explainer-tone) 45%, var(--openbot-border-strong));
+  background: color-mix(in srgb, var(--credits-explainer-tone) 45%, var(--codebot-border-strong));
 }
 
 .credits-explainer-dot[aria-current="step"] {
@@ -486,18 +486,18 @@
 
 .credits-explainer .credits-explainer-prices {
   position: absolute;
-  right: var(--openbot-space-4);
-  bottom: var(--openbot-space-3);
-  gap: var(--openbot-space-1);
-  color: var(--openbot-text-muted);
-  animation: credit-rise var(--openbot-duration-island-content) var(--openbot-ease-out) both;
+  right: var(--codebot-space-4);
+  bottom: var(--codebot-space-3);
+  gap: var(--codebot-space-1);
+  color: var(--codebot-text-muted);
+  animation: credit-rise var(--codebot-duration-island-content) var(--codebot-ease-out) both;
   animation-delay: 280ms;
 }
 
 .credits-explainer .credits-explainer-prices svg {
   width: 14px;
   height: 14px;
-  transition: translate var(--openbot-duration-fast) var(--openbot-ease-out);
+  transition: translate var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {

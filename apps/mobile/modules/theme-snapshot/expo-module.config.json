@@ -4,6 +4,6 @@
     "modules": ["ThemeSnapshotModule"]
   },
   "android": {
-    "modules": ["run.openbot.themesnapshot.ThemeSnapshotModule"]
+    "modules": ["run.codebot.themesnapshot.ThemeSnapshotModule"]
   }
 }

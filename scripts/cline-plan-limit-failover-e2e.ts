@@ -3,14 +3,14 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { CLINE_RECOMMENDED_MODELS_URL } from "../src/backend/cline-free-models";
 import { installFakeAgent } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cline-plan-limit-failover-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-cline-plan-limit-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cline-plan-limit-failover-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-cline-plan-limit-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const executable = join(root, "cline", "bin", "cline");
@@ -21,7 +21,7 @@ const BACKUP = "anthropic/claude-sonnet-5.5";
 const RESET_MS = (8 * 60 + 31) * 60_000;
 
 process.env.HOME = home;
-process.env.OPENBOT_CLINE_PATH = executable;
+process.env.CODEBOT_CLINE_PATH = executable;
 mkdirSync(home, { recursive: true });
 
 const realFetch = globalThis.fetch;
@@ -40,7 +40,7 @@ const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 interface Prompt {
   model: string;
@@ -111,7 +111,7 @@ await installFakeAgent(executable, "cline-plan-limit", {
   FAKE_MODELS: [BACKUP, SPENT_FAILOVER, SPENT_WAIT].join(","),
   FAKE_SPENT_MODELS: [SPENT_FAILOVER, SPENT_WAIT].join(","),
 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

@@ -1,5 +1,5 @@
-import { parseReferralState, type ReferralPageRequest, type ReferralState } from "@openbot/contracts/referral";
-import { sourceText } from "@openbot/i18n/source";
+import { parseReferralState, type ReferralPageRequest, type ReferralState } from "@codebot/contracts/referral";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, type Layer } from "effect";
 import {
   type AccountRequestClient,

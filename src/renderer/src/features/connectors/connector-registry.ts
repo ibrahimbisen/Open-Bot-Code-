@@ -1,5 +1,5 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { CONNECTOR_IDS, type ConnectorId } from "@openbot/ui/features/connectors/connectors";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { CONNECTOR_IDS, type ConnectorId } from "@codebot/ui/features/connectors/connectors";
 import { createEffect, createMemo, untrack } from "solid-js";
 import { serverRoleCanAdminister } from "../servers/server-capabilities";
 import { createBitwardenConnector } from "./bitwarden-connector";

@@ -128,7 +128,7 @@ async function pinArtifact(
   }
 
   const archiveBytes = await fetchBytes(fetchImpl, platform.dist.tarball);
-  const temporaryRoot = await mkdtemp(join(tmpdir(), "openbot-opencode-pin-"));
+  const temporaryRoot = await mkdtemp(join(tmpdir(), "codebot-opencode-pin-"));
   try {
     const archive = join(temporaryRoot, asset);
     const extracted = join(temporaryRoot, "extracted");
@@ -167,7 +167,7 @@ async function pinArtifact(
 async function packageLicense(fetchImpl: typeof fetch, version: string): Promise<Buffer> {
   const asset = `${LICENSE_PACKAGE}-${version}.tgz`;
   const archiveBytes = await fetchBytes(fetchImpl, `${REGISTRY}/${LICENSE_PACKAGE}/-/${asset}`);
-  const temporaryRoot = await mkdtemp(join(tmpdir(), "openbot-opencode-pin-"));
+  const temporaryRoot = await mkdtemp(join(tmpdir(), "codebot-opencode-pin-"));
   try {
     const archive = join(temporaryRoot, asset);
     await writeFile(archive, archiveBytes, { mode: 0o600 });
@@ -217,7 +217,7 @@ async function fetchParsed<Schema extends z.ZodType>(
 
 async function fetchBytes(fetchImpl: typeof fetch, url: string): Promise<Buffer> {
   const response = await fetchImpl(url, {
-    headers: { "User-Agent": "OpenBot-runtime-pin" },
+    headers: { "User-Agent": "CodeBot-runtime-pin" },
     redirect: "follow",
   });
   if (!response.ok) throw new Error(`${url} answered HTTP ${response.status}.`);

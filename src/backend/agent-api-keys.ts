@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { lstat, readdir, readFile, readlink, rename, rm, symlink } from "node:fs/promises";
 import { join } from "node:path";
-import { API_KEY_NAME_PATTERN } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, type LogValue, registerSecretValue, toLogValue } from "@openbot/logging";
+import { API_KEY_NAME_PATTERN } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, type LogValue, registerSecretValue, toLogValue } from "@codebot/logging";
 import { Effect, Result, Schema, Semaphore } from "effect";
 import { writeFileAtomically } from "./atomic-json-file";
 import { isMissingFileError } from "./file-errors";
@@ -13,7 +13,7 @@ const AGENT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
 
 const VAULT_FOLDER = ".vault";
 
-const WRITTEN_KEYS_FILE = ".openbot-keys";
+const WRITTEN_KEYS_FILE = ".codebot-keys";
 
 export interface SavedApiKey {
   name: string;
@@ -33,7 +33,7 @@ export function apiKeyFailureLog(failure: AgentApiKeyFailed): LogValue {
   return toLogValue(cause instanceof Error && cause.cause !== undefined ? cause.cause : cause);
 }
 
-const logger = createOpenBotLogger("agent-api-keys");
+const logger = createCodeBotLogger("agent-api-keys");
 
 const skipSync = (step: string) => (failure: AgentApiKeyFailed) =>
   Effect.sync(() =>

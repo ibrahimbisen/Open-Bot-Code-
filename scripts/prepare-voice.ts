@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { copyFileSync, createReadStream, existsSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdir, mkdtemp, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   PARAKEET_MODEL_FILES,
   VOICE_RUNTIME_ADDON,
@@ -12,7 +12,7 @@ import {
 } from "../src/main/voice-model-service";
 import { elfSearchPaths, ORIGIN_SEARCH_PATH } from "./elf-search-paths";
 
-const logger = createOpenBotLogger("prepare-voice");
+const logger = createCodeBotLogger("prepare-voice");
 
 const SHERPA_ONNX_VERSION = "2.0.3";
 const SPEECH_DETECTOR_FILE = {
@@ -55,7 +55,7 @@ const RUNTIME_PACKAGES: Readonly<Record<string, RuntimePackage>> = {
   },
 };
 
-const buildRoot = resolve(".openbot-build/voice");
+const buildRoot = resolve(".codebot-build/voice");
 const runtimeRoot = join(buildRoot, "runtime");
 const modelRoot = join(buildRoot, "model");
 const runtimeMarker = join(buildRoot, "runtime-package.txt");

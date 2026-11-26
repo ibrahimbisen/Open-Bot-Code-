@@ -1,4 +1,4 @@
-import { Button, Check, CircleCheck, UserCheck, X } from "@openbot/ui";
+import { Button, Check, CircleCheck, UserCheck, X } from "@codebot/ui";
 import { createSignal, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { AnswerProblems } from "./workflow-answer-parts";

@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { SLACK_BOT_SCOPES } from "@openbot/contracts/slack-app";
-import { sourceText } from "@openbot/i18n/source";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { SLACK_BOT_SCOPES } from "@codebot/contracts/slack-app";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Result } from "effect";
 import { causeHelpers } from "../../effect-boundary";
 import { mentionNames, withMentionNames } from "../messaging-mentions";
@@ -346,7 +346,7 @@ class SlackAdapter implements MessagingAdapter {
   });
 
   readonly #author = Effect.fnUntraced(function* (this: SlackAdapter, message: DynamicRecord) {
-    if (message.user === this.#botUserId) return "OpenBot";
+    if (message.user === this.#botUserId) return "CodeBot";
     if (message.bot_id !== undefined || !isString(message.user)) {
       const profile = isDynamicRecord(message.bot_profile) ? message.bot_profile.name : undefined;
       const name = isString(message.username) ? message.username : isString(profile) ? profile : "a bot";

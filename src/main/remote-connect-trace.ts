@@ -1,4 +1,4 @@
-import { ticketSignalHome } from "@openbot/contracts/signal-protocol/ticket";
+import { ticketSignalHome } from "@codebot/contracts/signal-protocol/ticket";
 import { quantize } from "./resource-summary";
 import type { TraceSpan } from "./trace-file";
 

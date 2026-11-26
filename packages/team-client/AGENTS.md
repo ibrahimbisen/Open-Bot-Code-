@@ -1,6 +1,6 @@
 # `packages/team-client`
 
-`@openbot/team-client` holds the Team connection code that desktop, mobile, and the public web
+`@codebot/team-client` holds the Team connection code that desktop, mobile, and the public web
 client share: the remote directory, the authenticated WebRTC peer, recovery, file transfer, and
 WebRTC framing. It also holds the Dynamic Island state (`dynamic-island-coordinator.ts`), which the
 macOS island and the iOS Live Activity both read, so the two show the same event for the same state.
@@ -16,7 +16,7 @@ Profile tab and the phone Profile page show the same numbers.
   [contract rules](../contracts/AGENTS.md).
 - Keep the code independent of Electron, Node, and the DOM beyond WebRTC and `fetch`. Mobile runs it
   in React Native. Pass platform objects in as arguments, as `TeamClientFetch` does.
-- Do not re-export `@openbot/contracts/team-protocol` from `index.ts`. That barrel adds every
+- Do not re-export `@codebot/contracts/team-protocol` from `index.ts`. That barrel adds every
   frozen protocol codec and adapter to each consumer of the root export. On React Native and in a
   browser, that is bundle weight for protocol versions that the client never uses. A consumer that
   needs a protocol symbol imports it from its contracts subpath. Each module of this package has

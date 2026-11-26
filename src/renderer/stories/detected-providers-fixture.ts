@@ -3,7 +3,7 @@ import type {
   DetectedProviderApi,
   DetectedProviderValue,
   ProviderDetection,
-} from "@openbot/ui/features/custom-providers/detected-providers";
+} from "@codebot/ui/features/custom-providers/detected-providers";
 import { createSignal, onCleanup } from "solid-js";
 
 export const STORY_DETECTED_PROVIDERS: readonly DetectedProvider[] = [

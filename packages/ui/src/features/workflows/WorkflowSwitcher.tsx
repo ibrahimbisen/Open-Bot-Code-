@@ -1,4 +1,4 @@
-import type { WorkflowFolder } from "@openbot/contracts/ipc";
+import type { WorkflowFolder } from "@codebot/contracts/ipc";
 import {
   buttonVariants,
   Check,
@@ -21,7 +21,7 @@ import {
   Plus,
   Trash2,
   Upload,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";

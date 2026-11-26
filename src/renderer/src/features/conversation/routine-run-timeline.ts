@@ -1,10 +1,10 @@
-import { ROUTINE_QUIET_ANSWER_ITEM_TYPE, routineQuietStepsItemId } from "@openbot/contracts/ipc";
+import { ROUTINE_QUIET_ANSWER_ITEM_TYPE, routineQuietStepsItemId } from "@codebot/contracts/ipc";
 import type {
   AgentMessage,
   ChatActionMarkerModel,
   RoutineRunMarkerModel,
   RoutineRunMarkerTransition,
-} from "@openbot/ui/data";
+} from "@codebot/ui/data";
 import { startsDay } from "./agent-message-timeline";
 
 type RoutineRunMarker = RoutineRunMarkerModel;

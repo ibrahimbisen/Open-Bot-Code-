@@ -1,4 +1,4 @@
-import type { ChannelSummary } from "@openbot/contracts/ipc";
+import type { ChannelSummary } from "@codebot/contracts/ipc";
 import { useMemo } from "react";
 import { clearPinMotion, isPinMotionRunning, markPinMotion } from "@/features/agents/components/agent-pin-motion";
 import { useMobileWorkspaceReader } from "@/features/workspace/context/mobile-workspace-context";

@@ -1,4 +1,4 @@
-import type { AgentProfile } from "@openbot/ui/data";
+import type { AgentProfile } from "@codebot/ui/data";
 import { createSignal, onCleanup } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { CrmScreen } from "../src/features/crm/CrmScreen";
@@ -7,7 +7,7 @@ import { PlatformProvider } from "../src/platform";
 import type { MockCrmSeed } from "../src/preview/mock-crm";
 import { crmDemoSeed } from "./crm-fixtures";
 import { requireFixture, STORY_AGENTS } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 const CRM_AGENTS: AgentProfile[] = ["chief", "research", "sales"].map((id) =>
   requireFixture(
@@ -18,12 +18,12 @@ const CRM_AGENTS: AgentProfile[] = ["chief", "research", "sales"].map((id) =>
 
 function CrmStory(props: { seed: MockCrmSeed; connectors?: boolean }) {
   const [connectors, setConnectors] = createSignal(props.connectors === true);
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot({ crm: props.seed });
-  window.openbot = mock.api;
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot({ crm: props.seed });
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   return (
     <PlatformProvider>

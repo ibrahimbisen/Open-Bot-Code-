@@ -20,14 +20,14 @@ export function withChannelDraftIsolation(
   projected: TeamProtocolV2Json,
   source: unknown,
 ): TeamProtocolV2Json {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   if (pathname !== CHANNEL_ROUTES.command || !isDynamicRecord(projected) || projected.type !== "save") return projected;
   if (!isDynamicRecord(source) || projected.draft === undefined) return projected;
   return { ...projected, draft: withIsolation(projected.draft, source.draft) };
 }
 
 export function withChannelIsolation(path: string, projected: TeamProtocolV2Json, source: unknown): TeamProtocolV2Json {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   if (pathname === CHANNEL_ROUTES.command) return withIsolation(projected, source);
   if (pathname === CHANNEL_ROUTES.read) {
     if (!isDynamicRecord(projected) || !isDynamicRecord(source)) return projected;

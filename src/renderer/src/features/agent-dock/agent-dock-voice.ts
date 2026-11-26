@@ -1,5 +1,5 @@
-import type { AgentDockVoice, AgentDockVoiceTarget } from "@openbot/ui/features/agent-dock/AgentDock";
-import { appendVoiceTranscript } from "@openbot/ui/voice-recording";
+import type { AgentDockVoice, AgentDockVoiceTarget } from "@codebot/ui/features/agent-dock/AgentDock";
+import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
 import { createSignal, onCleanup } from "solid-js";
 import { EMPTY_DRAFT } from "../conversation/composer-draft";
 import { composerDraftKey } from "../conversation/conversation-keys";

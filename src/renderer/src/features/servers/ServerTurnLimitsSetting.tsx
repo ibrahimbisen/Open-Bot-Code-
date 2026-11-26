@@ -1,11 +1,11 @@
 import {
+  type CodeBotDesktopApi,
   HOST_AGENT_TASK_LIMIT_MAX,
   HOST_TURN_LIMIT_MAX,
   type HostTurnLimit,
   type HostTurnLimits,
   type HostTurnLimitsInput,
-  type OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Item,
   ItemActions,
@@ -17,11 +17,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, onSettled, Show, untrack } from "solid-js";
 
-export type HostTurnLimitsCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getTurnLimits" | "setTurnLimits">;
+export type HostTurnLimitsCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getTurnLimits" | "setTurnLimits">;
 
 export interface ServerTurnLimitsOptions {
   calls?: HostTurnLimitsCalls;
@@ -71,7 +71,7 @@ export function ServerTurnLimitsSetting(
   },
 ) {
   const { t, errorMessage, format } = useText();
-  const calls = (): HostTurnLimitsCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostTurnLimitsCalls => props.calls ?? window.codebot.hostAdmin;
   const [settings, setSettings] = createSignal<HostTurnLimits | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);
   const [loaded, setLoaded] = createSignal(false);
@@ -115,7 +115,7 @@ export function ServerTurnLimitsSetting(
       if (serverId === untrack(() => props.serverId)) load(serverId);
     };
     if (props.onChanged) return props.onChanged(listener);
-    return window.openbot.agent.onScopedEvent(({ serverId, event }) => {
+    return window.codebot.agent.onScopedEvent(({ serverId, event }) => {
       if (event.type === "host-turn-limits-changed") listener(serverId);
     });
   });

@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration 42 indexes the columns that a routine flow sweep filters on. A sweep runs on each turn and queue
 // change, and without them each one is a scan of every routine run and flow step (#2283). The running steps
@@ -10,7 +10,7 @@ export const V42_ROUTINE_FLOW_SWEEP_INDEX_SQL = `
   CREATE INDEX IF NOT EXISTS routine_flow_steps_updated ON routine_flow_steps(updated_at);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 42,
   name: "routine-flow-sweep-indexes",
   // Only creates indexes, so no foreign-key pause and no vacuum.

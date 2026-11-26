@@ -1,4 +1,4 @@
-import type { QueueDelivery } from "@openbot/contracts/ipc";
+import type { QueueDelivery } from "@codebot/contracts/ipc";
 
 export interface TurnSlotsOptions {
   limit(): number | null;

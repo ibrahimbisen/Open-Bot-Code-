@@ -1,0 +1,6 @@
+[Unit]
+Description=Rotate the container logs of the CodeBot instances
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/logrotate --state /var/lib/logrotate/codebot-docker.status /etc/codebot-docker/logrotate.conf

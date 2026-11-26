@@ -1,10 +1,10 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v45 and the separate new-database schema. IF NOT EXISTS, because this text is
 // both the migration and the tail of the latest schema.
 //
 // A browser profile is a named browser session on this computer. The id names the Chromium
-// partition (`persist:openbot-browser-profile-<id>`); the name is only a label, so a rename moves no
+// partition (`persist:codebot-browser-profile-<id>`); the name is only a label, so a rename moves no
 // data. Configuration, written directly. Agents point at a profile from their `agent_json`, so no
 // foreign key: a delete moves those agents to the shared session first. The hue is one of the agent
 // avatar hues (`AVATAR_HUES`); the profile's labels use its color.
@@ -18,7 +18,7 @@ export const BROWSER_PROFILE_SCHEMA_SQL = `
   );
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 45,
   name: "browser-profiles",
   // Only creates a table, so no foreign-key pause and no vacuum. No agent names a profile yet, so

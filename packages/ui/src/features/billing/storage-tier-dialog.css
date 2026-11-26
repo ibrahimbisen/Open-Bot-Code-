@@ -4,29 +4,29 @@
 
 .storage-tier-meter {
   display: grid;
-  gap: var(--openbot-space-1-5);
-  margin: var(--openbot-space-1) 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  gap: var(--codebot-space-1-5);
+  margin: var(--codebot-space-1) 0;
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
 }
 
 .storage-tier-meter .ui-progress-fill {
-  background: var(--openbot-warning);
+  background: var(--codebot-warning);
 }
 
 .storage-tier-meter[data-level="full"] .ui-progress-fill {
-  background: var(--openbot-danger);
+  background: var(--codebot-danger);
 }
 
 .storage-tier-options.billing-lifecycle-timing {
-  margin: var(--openbot-space-2) 0 0;
+  margin: var(--codebot-space-2) 0 0;
 }
 
 .storage-tier-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   min-width: 0;
 }
 
@@ -34,14 +34,14 @@
   display: inline-flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   min-width: 0;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .storage-tier-option-price {
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-medium);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -56,8 +56,8 @@
 
 .storage-tier-error {
   margin: 0;
-  color: var(--openbot-danger);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-danger);
+  font-size: var(--codebot-text-sm);
 }
 
 .storage-tier-modal .hosted-upsell-modal-actions {

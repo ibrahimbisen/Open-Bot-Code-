@@ -3,17 +3,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { SidebarLayoutAction } from "@openbot/contracts/ipc";
+import type { SidebarLayoutAction } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/sidebar-chat-reorder-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/sidebar-chat-reorder-e2e");
 
 interface Step {
   name: string;
@@ -65,11 +65,11 @@ const agentBrowser: AgentBrowserHost = {
   agentTab: () => null,
 };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-sidebar-chat-reorder-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-sidebar-chat-reorder-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));

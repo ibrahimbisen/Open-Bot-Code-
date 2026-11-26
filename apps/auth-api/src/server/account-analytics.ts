@@ -6,16 +6,16 @@ import {
   type BillingInterval,
   type BillingPlanId,
   isBillingAmount,
-} from "@openbot/contracts/billing";
+} from "@codebot/contracts/billing";
 import {
   CREDIT_MEDIA_KINDS,
   CREDIT_MEDIA_WALLETS,
   type CreditMediaGenerationKind,
   type CreditMediaWallet,
   isCreditMediaModelId,
-} from "@openbot/contracts/credit-media";
-import type { CreditTransferDirection } from "@openbot/contracts/credits";
-import { FIRST_TOUCH_CAMPAIGN_FIELDS, type FirstTouch, parseFirstTouch } from "@openbot/contracts/first-touch";
+} from "@codebot/contracts/credit-media";
+import type { CreditTransferDirection } from "@codebot/contracts/credits";
+import { FIRST_TOUCH_CAMPAIGN_FIELDS, type FirstTouch, parseFirstTouch } from "@codebot/contracts/first-touch";
 import {
   HOSTED_SERVER_ENTRY_POINTS,
   HOSTED_SERVER_ERRORS,
@@ -23,9 +23,9 @@ import {
   type HostedServerEntryPoint,
   type HostedServerError,
   type HostedServerSize,
-} from "@openbot/contracts/hosted-servers";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { normalizeEmailAddress } from "@openbot/contracts/validation";
+} from "@codebot/contracts/hosted-servers";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { normalizeEmailAddress } from "@codebot/contracts/validation";
 import { Effect, Schema } from "effect";
 import { ACCOUNT_ACTIVITY_TIME_ZONE } from "./account-activity";
 import {

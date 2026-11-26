@@ -1,4 +1,4 @@
-import type { CentralAuthState } from "@openbot/contracts/ipc";
+import type { CentralAuthState } from "@codebot/contracts/ipc";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { MicrophonePage } from "../MicrophonePage";
 import { SignInScreen } from "../SignInScreen";
@@ -64,7 +64,7 @@ export const AccountServiceDown: Story = {
     <SignIn
       login={{
         status: "error",
-        issue: { code: "auth_api_unavailable", message: "OpenBot cannot reach its sign-in service. Try again." },
+        issue: { code: "auth_api_unavailable", message: "CodeBot cannot reach its sign-in service. Try again." },
       }}
     />
   ),

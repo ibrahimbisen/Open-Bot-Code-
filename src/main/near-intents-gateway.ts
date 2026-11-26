@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { CentralAuthManager, RelayCaller } from "./central-auth-manager";
 

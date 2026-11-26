@@ -1,4 +1,4 @@
-import { errorReference } from "@openbot/user-errors/reference";
+import { errorReference } from "@codebot/user-errors/reference";
 import { Cause, type Exit } from "effect";
 
 export interface RemoteRequestRecord {
@@ -37,11 +37,11 @@ export function installRemoteSyncProfileSink(sink: RemoteSyncProfileSink | null)
 }
 
 declare global {
-  var __openbotSyncProfile: RemoteSyncProfileSink | undefined;
+  var __codebotSyncProfile: RemoteSyncProfileSink | undefined;
 }
 
 function activeSink(): RemoteSyncProfileSink | null {
-  return installed ?? globalThis.__openbotSyncProfile ?? null;
+  return installed ?? globalThis.__codebotSyncProfile ?? null;
 }
 
 function now(): number {
@@ -115,7 +115,7 @@ export function startRemoteRequest(
 export function markRemoteSync(name: string): void {
   const clock = globalThis.performance;
   if (!clock || typeof clock.mark !== "function") return;
-  const mark = `openbot:remote-${name}`;
+  const mark = `codebot:remote-${name}`;
   if (typeof clock.clearMarks === "function") clock.clearMarks(mark);
   clock.mark(mark);
 }

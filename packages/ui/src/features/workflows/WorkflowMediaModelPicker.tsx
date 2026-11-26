@@ -1,10 +1,10 @@
-import { ProviderLogo } from "@openbot/brand";
+import { ProviderLogo } from "@codebot/brand";
 import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
   type WorkflowMediaKind,
   workflowMediaResolutions,
   workflowVideoDurations,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   buttonVariants,
   ChevronDown,
@@ -17,7 +17,7 @@ import {
   Popover,
   Search,
   Tabs,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createSignal, For, Show } from "solid-js";
 import { isApiKeyAccount, providerAccountName } from "../../components/provider-accounts";
 import { useText } from "../../text";
@@ -42,7 +42,7 @@ const rowValue = (entry: string, model: string) => `${entry}|${model}`;
 function ModelLogo(props: { model: WorkflowImageModel }) {
   return (
     <Show
-      when={props.model.provider === "openbot" && creditModelMakerNamed(props.model.maker)}
+      when={props.model.provider === "codebot" && creditModelMakerNamed(props.model.maker)}
       fallback={<ProviderLogo provider={props.model.provider} class="wfn-model-logo" />}
     >
       {(maker) => <MakerLogo maker={maker()} mono />}

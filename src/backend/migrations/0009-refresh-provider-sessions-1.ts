@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 export function refreshProviderSessionsForDynamicTools(db: DatabaseSync, appliedAt: string): void {
   db.prepare(
@@ -9,7 +9,7 @@ export function refreshProviderSessionsForDynamicTools(db: DatabaseSync, applied
   ).run(appliedAt);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 9,
   name: "refresh-provider-sessions-1",
   up: refreshProviderSessionsForDynamicTools,

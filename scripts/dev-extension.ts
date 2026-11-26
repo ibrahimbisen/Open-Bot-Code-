@@ -3,17 +3,17 @@ import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { chromium } from "playwright-core";
 import { argument } from "./channel-e2e-support";
 import { readDevStackRecords } from "./dev-automation/stack-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const EXTENSION = resolve(ROOT, "apps/browser-extension");
-const PROFILE = resolve(ROOT, ".openbot-build/dev-extension-chrome");
+const PROFILE = resolve(ROOT, ".codebot-build/dev-extension-chrome");
 const WAIT_MS = 60_000;
 const english = translateFor("en");
-const email = argument("email") ?? "openbot-dev-host@example.com";
+const email = argument("email") ?? "codebot-dev-host@example.com";
 const signedOut = process.argv.includes("--signed-out");
 
 const stack = readDevStackRecords().find((record) => resolve(record.projectRoot) === ROOT);
@@ -23,7 +23,7 @@ const authApi = `http://localhost:${apiPort}`;
 
 const build = spawnSync("bun", ["run", "build", "--", "--mode", "development"], {
   cwd: EXTENSION,
-  env: { ...process.env, VITE_OPENBOT_API_URL: authApi },
+  env: { ...process.env, VITE_CODEBOT_API_URL: authApi },
   stdio: "inherit",
 });
 assert.equal(build.status, 0, "The extension build failed.");
@@ -187,9 +187,9 @@ try {
     [
       "",
       signedOut
-        ? `Chrome is open with OpenBot (Dev) for ${authApi}. The side panel is not signed in.`
-        : `Chrome is open with OpenBot (Dev), signed in as ${email} to ${authApi}.`,
-      `The side panel page is open in a tab. Click the OpenBot icon to open it in the side panel.`,
+        ? `Chrome is open with CodeBot (Dev) for ${authApi}. The side panel is not signed in.`
+        : `Chrome is open with CodeBot (Dev), signed in as ${email} to ${authApi}.`,
+      `The side panel page is open in a tab. Click the CodeBot icon to open it in the side panel.`,
       `Profile: ${PROFILE} (--fresh starts over). Downloads go to ${downloads}.`,
       "After an extension change, run this again: it rebuilds and reloads the extension in this Chrome.",
     ].join("\n") + "\n",

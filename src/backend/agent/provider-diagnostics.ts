@@ -1,5 +1,5 @@
 export function isMcpSubsystemDiagnostic(message: string): boolean {
-  if (/openbot/i.test(message)) return false;
+  if (/codebot/i.test(message)) return false;
   return /\b(mcp|rmcp)\b|\bworker quit with (?:fatal|join error|reason):/i.test(message);
 }
 
@@ -48,7 +48,7 @@ function isMcpUnreachableDiagnostic(message: string): boolean {
 }
 
 export function isTelemetryExportDiagnostic(message: string): boolean {
-  if (/openbot/i.test(message)) return false;
+  if (/codebot/i.test(message)) return false;
   return /\b(?:batch(?:span|log|logrecord)processor|(?:span|log|logrecord|metric)exporter|opentelemetry|otlp|otel)\b/i.test(
     message,
   );

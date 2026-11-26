@@ -1,4 +1,4 @@
-import { SIDEBAR_FOLDER_LEVELS } from "@openbot/contracts/ipc";
+import { SIDEBAR_FOLDER_LEVELS } from "@codebot/contracts/ipc";
 import {
   ArrowDown,
   ArrowUp,
@@ -14,7 +14,7 @@ import {
   FolderPlus,
   Pencil,
   Trash2,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createMemo, For, Show } from "solid-js";
 import { useText } from "../../text";
 import { SidebarSectionEditor } from "./SidebarSectionEditor";

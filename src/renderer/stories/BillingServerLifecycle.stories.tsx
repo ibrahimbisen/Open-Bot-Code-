@@ -1,14 +1,14 @@
-import type { BillingPlanId, BillingServerPlan } from "@openbot/contracts/billing";
-import type { HostedServerSummary } from "@openbot/contracts/hosted-servers";
-import { Button, SettingsSection, Text } from "@openbot/ui";
-import { BillingDialog } from "@openbot/ui/features/billing/BillingDialog";
+import type { BillingPlanId, BillingServerPlan } from "@codebot/contracts/billing";
+import type { HostedServerSummary } from "@codebot/contracts/hosted-servers";
+import { Button, SettingsSection, Text } from "@codebot/ui";
+import { BillingDialog } from "@codebot/ui/features/billing/BillingDialog";
 import {
   BillingServerLifecycle,
   type BillingServerLifecycleAction,
-} from "@openbot/ui/features/billing/BillingServerLifecycle";
-import { createBillingStore } from "@openbot/ui/features/billing/billing-store";
-import { createSettingsHostedServersStore } from "@openbot/ui/features/settings/stores/hosted-servers-store";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/billing/BillingServerLifecycle";
+import { createBillingStore } from "@codebot/ui/features/billing/billing-store";
+import { createSettingsHostedServersStore } from "@codebot/ui/features/settings/stores/hosted-servers-store";
+import { useText } from "@codebot/ui/text";
 import { createStore, For, untrack } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { previewStorageFields } from "../src/preview/mock-billing";

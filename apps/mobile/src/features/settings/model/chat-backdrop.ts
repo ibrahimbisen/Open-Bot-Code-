@@ -1,6 +1,6 @@
-import { type ChatBackdropScene, isChatBackdropScene } from "@openbot/brand/chat-backdrop-scenes";
-import { type ChatBackdropBubbles, chatBackdropBubbles } from "@openbot/contracts/chat-visual";
-import { isAvatarColor } from "@openbot/contracts/ipc";
+import { type ChatBackdropScene, isChatBackdropScene } from "@codebot/brand/chat-backdrop-scenes";
+import { type ChatBackdropBubbles, chatBackdropBubbles } from "@codebot/contracts/chat-visual";
+import { isAvatarColor } from "@codebot/contracts/ipc";
 import { Directory, File, Paths } from "expo-file-system";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
@@ -34,7 +34,7 @@ interface AgentBackdropUndo {
 
 export const CHAT_BACKDROP_STRENGTH = { min: 0.1, max: 1, default: 0.55 } as const;
 
-const key = "openbot.mobile.chat-backdrop.v1";
+const key = "codebot.mobile.chat-backdrop.v1";
 const AGENT_PAGE_FILE = "agent-page.html";
 
 export const useChatBackdrop = create<

@@ -1,4 +1,4 @@
-import { Blocks, Puzzle } from "@openbot/ui";
+import { Blocks, Puzzle } from "@codebot/ui";
 import { createMemo, createSignal, Show } from "solid-js";
 
 export function PluginIcon(props: { iconUrl: string | null; fallback?: "plugin" | "skill"; class?: string }) {

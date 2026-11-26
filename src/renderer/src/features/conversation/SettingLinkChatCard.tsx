@@ -1,15 +1,15 @@
-import type { SettingLinkId } from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
+import type { SettingLinkId } from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
 import {
   AGENT_SETTING_LINK_ROWS,
   AGENT_SETTINGS_PAGE_TITLE,
   type AgentSettingLinkId,
   isAgentSettingLinkId,
-} from "@openbot/ui/features/conversation/agent-setting-links";
-import { SettingLinkCard } from "@openbot/ui/features/conversation/SettingLinkCard";
-import { CreditIcon } from "@openbot/ui/features/credits/CreditIcon";
-import { CreditsExplainerDialog } from "@openbot/ui/features/credits/CreditsExplainerDialog";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/agent-setting-links";
+import { SettingLinkCard } from "@codebot/ui/features/conversation/SettingLinkCard";
+import { CreditIcon } from "@codebot/ui/features/credits/CreditIcon";
+import { CreditsExplainerDialog } from "@codebot/ui/features/credits/CreditsExplainerDialog";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 import { usePlatform } from "../../platform";
 import { openCreditPrices } from "../servers/credit-prices";

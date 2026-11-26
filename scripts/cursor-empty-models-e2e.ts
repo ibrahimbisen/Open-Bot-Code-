@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { withStartModels } from "../src/backend/acp-client";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -11,7 +11,7 @@ import { decodeModelListResponse } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cursor-empty-models-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-empty-models-e2e");
 
 interface StartResult {
   sessions: number;
@@ -25,7 +25,7 @@ interface Report {
   alwaysEmpty?: StartResult;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-cursor-empty-models-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-cursor-empty-models-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 
@@ -54,10 +54,10 @@ try {
   report.emptyOnce = await startCursor("empty-once", 1);
   assert.equal(report.emptyOnce.error, null, "Cursor starts when its second model list has models.");
   assert.deepEqual(report.emptyOnce.models, ["auto"], "The second model list is used.");
-  assert.equal(report.emptyOnce.sessions, 2, "OpenBot asks Cursor for its models one more time.");
+  assert.equal(report.emptyOnce.sessions, 2, "CodeBot asks Cursor for its models one more time.");
 
   report.alwaysEmpty = await startCursor("always-empty", Number.MAX_SAFE_INTEGER);
-  assert.equal(report.alwaysEmpty.sessions, 2, "OpenBot asks Cursor again only once.");
+  assert.equal(report.alwaysEmpty.sessions, 2, "CodeBot asks Cursor again only once.");
   assert.ok(
     report.alwaysEmpty.error?.startsWith(sourceText("error.provider.cursorNoModels")),
     "The error tells the user what to do in plain words.",

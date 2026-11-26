@@ -1,4 +1,4 @@
-import { FEEDBACK_LIMITS, type FeedbackPhone } from "@openbot/contracts/feedback";
+import { FEEDBACK_LIMITS, type FeedbackPhone } from "@codebot/contracts/feedback";
 import * as Device from "expo-device";
 import { File, Paths } from "expo-file-system";
 import * as Updates from "expo-updates";
@@ -145,7 +145,7 @@ function systemName(): string {
 export function supportLogFileText(): string {
   const entries = supportLog.entries();
   return [
-    "OpenBot support log",
+    "CodeBot support log",
     `Saved: ${new Date().toISOString()}`,
     `App: ${appVersion()}`,
     `Bundle: ${bundleName()}`,
@@ -242,7 +242,7 @@ export function installSupportLog(): void {
   installed = true;
   restoreWhenIdle();
   supportLog.subscribe(schedulePersist);
-  supportLog.add("info", "app", `Started OpenBot ${appVersion()} on ${systemName()}, bundle ${bundleName()}`);
+  supportLog.add("info", "app", `Started CodeBot ${appVersion()} on ${systemName()}, bundle ${bundleName()}`);
   captureConsole();
   captureErrors();
   captureFetch();

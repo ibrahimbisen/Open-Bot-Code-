@@ -7,7 +7,7 @@ import { getArray, getString, isRecord } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/grok-question-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-question-e2e");
 
 interface Asked {
   id: string | null;
@@ -31,7 +31,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-grok-question-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-grok-question-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 

@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { join, resolve } from "node:path";
-import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { normalizeEmailAddress } from "@openbot/contracts/validation";
+import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { normalizeEmailAddress } from "@codebot/contracts/validation";
 
 const AUTH_API_ROOT = resolve(import.meta.dirname, "..");
 const WRANGLER = join(AUTH_API_ROOT, "..", "..", "node_modules", ".bin", "wrangler");
@@ -97,7 +97,7 @@ function sql(value: string | number): string {
 }
 
 function wranglerArgs(options: Options): string[] {
-  const database = options.target === "test" ? "openbot-auth-test" : "openbot-auth";
+  const database = options.target === "test" ? "codebot-auth-test" : "codebot-auth";
   const mode = options.target === "local" ? ["--local"] : ["--remote"];
   const environment = options.target === "test" ? ["--env", "test"] : [];
   const persist = options.persistTo ? ["--persist-to", options.persistTo] : [];

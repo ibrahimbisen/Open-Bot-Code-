@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize, relative, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const LINK = /\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
@@ -9,7 +9,7 @@ const HEADING = /^#{1,6}\s+(.+?)\s*#*\s*$/;
 const HTML_ANCHOR = /<a\s[^>]*(?:id|name)="([^"]+)"/g;
 const INLINE_CODE = /(`+)[^`]*?\1/g;
 
-const logger = createOpenBotLogger("check-doc-links");
+const logger = createCodeBotLogger("check-doc-links");
 
 function headingAnchor(heading: string): string {
   return heading

@@ -10,42 +10,42 @@ import {
   type McpServerConfig,
   type McpSignInState,
   type TestMcpServerInput,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { TEAM_APP_VERSION_HEADER, TEAM_PROTOCOL_VERSION_HEADER } from "@openbot/contracts/team-protocol";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { TEAM_APP_VERSION_HEADER, TEAM_PROTOCOL_VERSION_HEADER } from "@codebot/contracts/team-protocol";
 import {
   MCP_MEMBER_ACCESS_CAPABILITY,
   teamCapabilitiesForProtocol,
   teamCapabilityHeaders,
-} from "@openbot/contracts/team-protocol/current";
-import { MCP_ACCESS_CAPABILITY, MCP_ACCESS_ROUTES } from "@openbot/contracts/team-protocol/mcp-access-v1";
-import { MCP_SIGN_IN_APP_ROUTES } from "@openbot/contracts/team-protocol/mcp-sign-in-app-v1";
-import { MCP_SIGN_IN_ROUTES } from "@openbot/contracts/team-protocol/mcp-sign-in-v1";
-import { MCP_ROUTES } from "@openbot/contracts/team-protocol/mcp-v1";
+} from "@codebot/contracts/team-protocol/current";
+import { MCP_ACCESS_CAPABILITY, MCP_ACCESS_ROUTES } from "@codebot/contracts/team-protocol/mcp-access-v1";
+import { MCP_SIGN_IN_APP_ROUTES } from "@codebot/contracts/team-protocol/mcp-sign-in-app-v1";
+import { MCP_SIGN_IN_ROUTES } from "@codebot/contracts/team-protocol/mcp-sign-in-v1";
+import { MCP_ROUTES } from "@codebot/contracts/team-protocol/mcp-v1";
 import {
   PROVIDER_SIGN_IN_RELAY_V2_CAPABILITY,
   PROVIDER_SIGN_IN_RELAY_V2_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-sign-in-relay-v2";
+} from "@codebot/contracts/team-protocol/provider-sign-in-relay-v2";
 import {
   SIGN_IN_RELAY_DEEP_LINK_CAPABILITY,
   SIGN_IN_RELAY_DEEP_LINK_ROUTES,
-} from "@openbot/contracts/team-protocol/sign-in-relay-deep-link-v1";
-import { SIGN_IN_RELAY_ROUTES } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/sign-in-relay-deep-link-v1";
+import { SIGN_IN_RELAY_ROUTES } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamApiBrowser, TeamApiMcpSignIns, TeamApiSignInRelay } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-member-access-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-member-access-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const OWNER = { username: "owner-user", password: "owner-password-123" };
 const MEMBER = { username: "member-user", password: "member-password-123" };
@@ -217,12 +217,12 @@ const relay: TeamApiSignInRelay = {
   cancel: unused,
 };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-mcp-member-access-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-mcp-member-access-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 
 interface Host {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   agents: AgentService;
   server: InstanceType<typeof TeamApiServer>;
   team: InstanceType<typeof TeamStore>;
@@ -233,11 +233,11 @@ interface Host {
 let host: Host | null = null;
 
 async function startHost(withAccess = false): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   const owners = new McpServerOwnersStore(join(userData, MCP_SERVER_OWNERS_FILE));
   const access = new McpAccessStore(join(userData, MCP_ACCESS_FILE));
   const roles = new AgentAccessStore(join(userData, AGENT_ACCESS_FILE));
@@ -456,7 +456,7 @@ try {
     assert.deepEqual(calls, [
       `start ${MEMBER_URL}`,
       `relay ${MEMBER_URL}`,
-      `relay ${MEMBER_URL} openbot://mcp-auth`,
+      `relay ${MEMBER_URL} codebot://mcp-auth`,
       `save-app ${memberRow.id}`,
       `sign-out ${memberRow.id}`,
     ]);

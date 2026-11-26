@@ -2,7 +2,7 @@ import { createRouter } from "@tanstack/solid-router";
 import { cspNonce } from "./lib/csp-nonce";
 import { routeTree } from "./routeTree.gen";
 
-const CHUNK_RELOAD_KEY = "openbot:chunk-reload-at";
+const CHUNK_RELOAD_KEY = "codebot:chunk-reload-at";
 const CHUNK_RELOAD_WINDOW_MS = 10_000;
 
 if (typeof window !== "undefined") {
@@ -36,7 +36,7 @@ export function getRouter() {
     hydrate: async (data: { textCatalog?: string | undefined }) => {
       const locale = data.textCatalog;
       if (!locale || locale === "en") return;
-      const { loadLocale, TRANSLATED_LOCALES } = await import("@openbot/i18n");
+      const { loadLocale, TRANSLATED_LOCALES } = await import("@codebot/i18n");
       const translated = TRANSLATED_LOCALES.find((item) => item === locale);
       if (translated) await loadLocale(translated).catch(() => undefined);
     },

@@ -1,14 +1,14 @@
 import { readFileSync } from "node:fs";
-import type { HostTimezoneSettings } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import type { HostTimezoneSettings } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Semaphore } from "effect";
 import { localTimezone } from "../backend/agent/routine-tools";
 import { isMissingFileError } from "../backend/file-errors";
 import { validTimezone } from "./agent-marketplace-service";
 import { type PreferenceFileFailure, readPreferenceFile, writePreferenceFile } from "./preference-file";
 
-export const SERVER_TIMEZONE_PREFERENCE_FILE = "openbot-server-timezone-v1.json";
+export const SERVER_TIMEZONE_PREFERENCE_FILE = "codebot-server-timezone-v1.json";
 
 export class ServerTimezonePreferenceStore {
   readonly #path: string;
@@ -61,7 +61,7 @@ export function parseServerTimezone(value: unknown): string | null {
   return value;
 }
 
-const SYSTEM_TZ = "OPENBOT_SYSTEM_TZ";
+const SYSTEM_TZ = "CODEBOT_SYSTEM_TZ";
 
 function decodeServerTimezone(parsed: unknown): string | null {
   return isDynamicRecord(parsed) && parsed.version === 1 && isString(parsed.timezone) && validTimezone(parsed.timezone)

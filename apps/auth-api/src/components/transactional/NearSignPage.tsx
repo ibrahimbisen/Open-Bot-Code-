@@ -1,4 +1,4 @@
-import { AppLogo } from "@openbot/brand";
+import { AppLogo } from "@codebot/brand";
 import { createSignal, Match, onSettled, Show, Switch } from "solid-js";
 import { NearSignError, type NearSignFailure, runNearSignature } from "../../lib/near-sign-actions";
 import {

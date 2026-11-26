@@ -1,6 +1,6 @@
 umask 077
 test "$APPLE_TEAM_ID" = ZTRDTUL87R
-host_signing_dir="$(mktemp -d "$RUNNER_TEMP/openbot-host-signing.XXXXXX")"
+host_signing_dir="$(mktemp -d "$RUNNER_TEMP/codebot-host-signing.XXXXXX")"
 export HOST_SIGNING_KEYCHAIN="$host_signing_dir/host.keychain-db"
 host_previous_keychains=()
 while IFS= read -r line; do

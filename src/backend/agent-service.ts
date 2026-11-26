@@ -7,12 +7,12 @@ import {
   agentProviderDescriptor,
   agentSteersTurns,
   customAgentIdOfModel,
-} from "@openbot/contracts/agent-providers";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import { CREDIT_MEDIA_PREFERRED_MODELS } from "@openbot/contracts/credit-media";
-import { developmentStartingModel } from "@openbot/contracts/development-defaults";
-import type { FeedbackFacts } from "@openbot/contracts/feedback";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/agent-providers";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import { CREDIT_MEDIA_PREFERRED_MODELS } from "@codebot/contracts/credit-media";
+import { developmentStartingModel } from "@codebot/contracts/development-defaults";
+import type { FeedbackFacts } from "@codebot/contracts/feedback";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentAccessLevel,
   AgentAnalyticsInput,
@@ -140,7 +140,7 @@ import type {
   VoiceLiveStart,
   WithdrawFeedbackInput,
   WithdrawFeedbackResult,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AGENT_TASK_LIMIT_DEFAULT,
   type AgentDefaults,
@@ -189,18 +189,18 @@ import {
   type WorkflowMediaSpecs,
   workflowCatalogSource,
   workspaceAccessEnforced,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { AGENT_THREAD_READS_LIMIT } from "@openbot/contracts/team-protocol/agent-thread-reads-v1";
-import { browserPermissionRequests } from "@openbot/contracts/team-protocol/browser-permissions-v1";
-import { CLAUDE_API_KEY_ACCOUNT_ID } from "@openbot/contracts/team-protocol/claude-api-key-v1";
-import { ContextCompactRefusedError } from "@openbot/contracts/team-protocol/context-compact-v1";
-import { ContextResetBusyError } from "@openbot/contracts/team-protocol/context-reset-v1";
-import type { QueueEditRequest } from "@openbot/contracts/team-protocol/queue-edit-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
-import { workflowMediaCreditsOf, workflowMediaProvidersOf } from "@openbot/team-client/workflow-decoding";
-import { type CauseCode, classifyFailure, isCauseCode } from "@openbot/telemetry";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { AGENT_THREAD_READS_LIMIT } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
+import { browserPermissionRequests } from "@codebot/contracts/team-protocol/browser-permissions-v1";
+import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
+import { ContextCompactRefusedError } from "@codebot/contracts/team-protocol/context-compact-v1";
+import { ContextResetBusyError } from "@codebot/contracts/team-protocol/context-reset-v1";
+import type { QueueEditRequest } from "@codebot/contracts/team-protocol/queue-edit-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
+import { workflowMediaCreditsOf, workflowMediaProvidersOf } from "@codebot/team-client/workflow-decoding";
+import { type CauseCode, classifyFailure, isCauseCode } from "@codebot/telemetry";
 import { Cause, Deferred, Effect, Exit, Fiber, Result, Schema, Scope, Semaphore } from "effect";
 import { AgentMemories } from "./agent/agent-memories";
 import { AgentRemoval, AgentRemovalFailed } from "./agent/agent-removal";
@@ -220,6 +220,13 @@ import type { AgentBrowserProfiles } from "./agent/browser-profile-tool";
 import { BrowserUploads } from "./agent/browser-uploads";
 import type { ChatVisualPreviewHost } from "./agent/chat-visual-preview";
 import type { ClientBrowser } from "./agent/client-browser-tools";
+import {
+  type AgentFeedback,
+  type AgentMessageSteer,
+  type AgentServerClaims,
+  CodeBotToolRouter,
+  type McpServerOwnerHooks,
+} from "./agent/codebot-tool-router";
 import { CodexIdleSessions } from "./agent/codex-idle-sessions";
 import type { SetCommitCoAuthor } from "./agent/commit-co-author-tool";
 import { ContextCompaction, compactsOnRequest } from "./agent/context-compaction";
@@ -275,13 +282,6 @@ import {
   startingModel,
   workflowProvider,
 } from "./agent/model-choice";
-import {
-  type AgentFeedback,
-  type AgentMessageSteer,
-  type AgentServerClaims,
-  type McpServerOwnerHooks,
-  OpenBotToolRouter,
-} from "./agent/openbot-tool-router";
 import { PlanContinuation } from "./agent/plan-continuation";
 import { ProfileClients } from "./agent/profile-clients";
 import {
@@ -409,10 +409,10 @@ import {
   resolveWorkspaceFile,
 } from "./workspace-paths";
 
-const logger = createOpenBotLogger("agent-service");
+const logger = createCodeBotLogger("agent-service");
 
-const routingLogger = createOpenBotLogger("channel-routing");
-const errorLogger = createOpenBotLogger("agent-error");
+const routingLogger = createCodeBotLogger("channel-routing");
+const errorLogger = createCodeBotLogger("agent-error");
 
 const MEDIA_SERVICE_HOSTS: Readonly<Record<WorkflowCatalogProvider, string>> = {
   sunra: SUNRA_MCP_HOST,
@@ -635,7 +635,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly #compaction: ContextCompaction;
   readonly #duplication: DuplicationGate;
   readonly #removal: AgentRemoval;
-  readonly #tools: OpenBotToolRouter;
+  readonly #tools: CodeBotToolRouter;
   readonly #sidebarLayout: AgentSidebar | null;
   readonly #libraryFolders: AgentLibraryFolders | null;
   readonly #localSkillTools: (() => LocalSkillTools) | undefined;
@@ -716,7 +716,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       ? new CreditMediaWorkflows({
           gateway: options.creditMedia,
           warn: (message, details) => logger.warn(message, details),
-          creditsChanged: () => this.#emit({ type: "openbot-credits-changed" }),
+          creditsChanged: () => this.#emit({ type: "codebot-credits-changed" }),
         })
       : null;
     this.#sidebarLayout = sidebarLayout;
@@ -964,7 +964,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
               if (threadId && notification.method === "turn/started") this.#codexIdleSessions.busy(threadId, client);
               else if (threadId) this.#codexIdleSessions.idle(threadId, client);
             }
-            if (notification.method === "openbot/sessionSettings/updated") {
+            if (notification.method === "codebot/sessionSettings/updated") {
               const threadId = getString(notification.params, "threadId");
               const agentId = threadId ? this.#conversation.agentForThread(threadId) : undefined;
               if (agentId) this.#emit({ type: "agent-session-settings-changed", agentId });
@@ -2097,7 +2097,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       compaction: this.#compaction,
       apiKeys: options.agentApiKeys ?? null,
       deleteWithRevokedApproval: options.deleteWithRevokedApproval ?? ((_agentId, remove) => remove()),
-      logger: createOpenBotLogger("agent-removal"),
+      logger: createCodeBotLogger("agent-removal"),
       hooks: {
         emit: (event) => this.#emit(event),
         listAgents: () => this.listAgents(),
@@ -2151,7 +2151,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         settleModelMoves: () => this.#endpoints.runExclusive(() => Effect.void),
       },
     });
-    this.#tools = new OpenBotToolRouter({
+    this.#tools = new CodeBotToolRouter({
       capturedSteps: (session) => this.#threads.capturedWorkSteps(session).pipe(toToolOperationFailed),
       store,
       mailbox,
@@ -3233,11 +3233,11 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   ) {
     if (this.#stopping) return { models: [] } satisfies WorkflowMediaCatalog;
     const credit =
-      this.#creditMedia && (only === undefined || only === "openbot")
+      this.#creditMedia && (only === undefined || only === "codebot")
         ? this.#creditMedia.catalog()
         : Effect.succeed({ models: [], unavailable: [] } satisfies WorkflowMediaCatalog);
     const services =
-      only === "openbot"
+      only === "codebot"
         ? Effect.succeed({ models: [] } satisfies WorkflowMediaCatalog)
         : this.#mediaCatalog.catalog(only);
     const [listed, credits] = yield* Effect.all([services, credit], { concurrency: "unbounded" });
@@ -3254,7 +3254,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     request: WorkflowMediaPriceRequest,
   ) {
     if (this.#stopping) return { credits: null } satisfies WorkflowMediaPrice;
-    if (workflowCatalogSource(request.model) === "openbot")
+    if (workflowCatalogSource(request.model) === "codebot")
       return {
         credits: this.#creditMedia ? yield* this.#creditMedia.price(request) : null,
       } satisfies WorkflowMediaPrice;
@@ -3264,7 +3264,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   workflowMediaProviders(): WorkflowMediaProviders {
     return {
       ...workflowMediaProvidersOf(this.#mediaServiceAccounts().map(({ account }) => account)),
-      openbot: this.#creditMedia?.available() === true,
+      codebot: this.#creditMedia?.available() === true,
     };
   }
 
@@ -3273,10 +3273,10 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     only?: WorkflowCatalogSource,
   ) {
     if (this.#stopping) return { sunra: null, higgsfield: null, accounts: null } satisfies WorkflowMediaCredits;
-    const openbot =
-      this.#creditMedia && (only === undefined || only === "openbot") ? yield* this.#creditMedia.credits() : null;
-    if (only === "openbot")
-      return { sunra: null, higgsfield: null, accounts: null, openbot } satisfies WorkflowMediaCredits;
+    const codebot =
+      this.#creditMedia && (only === undefined || only === "codebot") ? yield* this.#creditMedia.credits() : null;
+    if (only === "codebot")
+      return { sunra: null, higgsfield: null, accounts: null, codebot } satisfies WorkflowMediaCredits;
     const all = this.#mediaServiceAccounts();
     const accounts = only ? all.filter((account) => account.provider === only).slice(0, 1) : all;
     const orNull = <A>(read: Effect.Effect<A, { readonly message: string }>, service: string) =>
@@ -3298,7 +3298,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     return {
       ...workflowMediaCreditsOf(listed),
       accounts: only ? null : listed,
-      ...(only ? {} : { openbot }),
+      ...(only ? {} : { codebot }),
     } satisfies WorkflowMediaCredits;
   }).bind(this);
 
@@ -3323,7 +3323,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       const pictures = input.images.filter(
         (image): image is { role: MediaPictureRole; attachmentId: string } => image.role !== "file",
       );
-      if (input.provider === "openbot") {
+      if (input.provider === "codebot") {
         if (this.#stopping) return yield* failed(sourceText("error.backend.shuttingDown"));
         if (!this.#creditMedia) return yield* failed(sourceText("error.billing.mediaSignInRequired"));
         return yield* this.#creditMedia
@@ -4017,7 +4017,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     agentId: string,
   ) {
     if (!this.#mayRecoverOrphanedDeliveries(agentId)) return;
-    logger.warn("A message that no provider runs held the agent's queue. OpenBot settles it again.", { agentId });
+    logger.warn("A message that no provider runs held the agent's queue. CodeBot settles it again.", { agentId });
     yield* this.#boot
       .reconcileUnresolvedDeliveries(agentId)
       .pipe(

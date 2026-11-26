@@ -1,12 +1,12 @@
-# @openbot/whatsapp
+# @codebot/whatsapp
 
-The WhatsApp client of the WhatsApp connector: a fork of Baileys without its copyleft parts, OpenBot's
+The WhatsApp client of the WhatsApp connector: a fork of Baileys without its copyleft parts, CodeBot's
 own Signal-protocol code, and the encrypted store of one linked device. The connector itself
 (`src/backend/messaging/whatsapp/`) uses this package; see [docs/messaging.md](../../docs/messaging.md).
 
 | Path | What it is | License |
 | --- | --- | --- |
-| `vendor/baileys/` | Baileys v7.0.0-rc14, with the patches in `vendor/baileys/OPENBOT-PATCHES.md` | MIT (`vendor/baileys/LICENSE`) |
+| `vendor/baileys/` | Baileys v7.0.0-rc14, with the patches in `vendor/baileys/CODEBOT-PATCHES.md` | MIT (`vendor/baileys/LICENSE`) |
 | `vendor/baileys/types/` | Declarations of the vendor, made by `bun run vendor:types` | MIT |
 | `src/signal/`, `src/signal-repository.ts` | Signal sessions and sender keys, clean-room | PolyForm Noncommercial 1.0.0 |
 | `src/auth-store.ts` | The device's encrypted SQLite store | PolyForm Noncommercial 1.0.0 |
@@ -17,7 +17,7 @@ own Signal-protocol code, and the encrypted store of one linked device. The conn
 
 Upstream Baileys imports `libsignal` (GPL-3.0) for Signal sessions and sender keys, and
 `whatsapp-rust-bridge`, whose WebAssembly build contains `wacore-libsignal` (files marked
-`AGPL-3.0-only`). OpenBot is PolyForm Noncommercial 1.0.0 and cannot ship either. The fork removes
+`AGPL-3.0-only`). CodeBot is PolyForm Noncommercial 1.0.0 and cannot ship either. The fork removes
 both and gets its Signal code from `src/signal/`. Every other dependency is MIT, BSD-3-Clause,
 Apache-2.0, ISC or BlueOak-1.0.0.
 
@@ -45,7 +45,7 @@ notes first. This is not legal advice: get a legal review before a release that 
   vendor under its own (`vendor/tsconfig.json`). The repository's type checks read the vendor only
   through `vendor/baileys/types/`.
 - `bun scripts/whatsapp-signal-e2e.ts`: the vectors, conversations between in-process parties, and,
-  when `OPENBOT_WA_ORACLE` names the black-box oracle of the spec author, conversations with it.
+  when `CODEBOT_WA_ORACLE` names the black-box oracle of the spec author, conversations with it.
 - `bun scripts/messaging-whatsapp-e2e.ts`: the connector against a fake WhatsApp socket.
 
 Only a live test with real phones proves that the Signal code works with WhatsApp. Run one before a
@@ -53,5 +53,5 @@ release that changes `src/signal/` or updates the vendor.
 
 ## Update Baileys
 
-Follow `vendor/baileys/OPENBOT-PATCHES.md`. Then run `bun run --cwd packages/whatsapp vendor:types`
+Follow `vendor/baileys/CODEBOT-PATCHES.md`. Then run `bun run --cwd packages/whatsapp vendor:types`
 and the checks above.

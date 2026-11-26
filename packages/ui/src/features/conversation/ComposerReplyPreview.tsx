@@ -1,5 +1,5 @@
-import type { InstalledSkill } from "@openbot/contracts/ipc";
-import { Button } from "@openbot/ui";
+import type { InstalledSkill } from "@codebot/contracts/ipc";
+import { Button } from "@codebot/ui";
 import type { AgentMessage, AgentProfile } from "../../data";
 import { useText } from "../../text";
 import { CloseIcon } from "./ConversationIcons";

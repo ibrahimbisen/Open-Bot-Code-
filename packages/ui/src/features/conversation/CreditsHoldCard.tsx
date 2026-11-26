@@ -1,9 +1,9 @@
-import type { AgentApproval, CreditsHold, CreditsHoldAction } from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import { Button, LabelTooltip, LabelTooltipTrigger, toast } from "@openbot/ui";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { CreditAmount } from "@openbot/ui/features/credits/CreditIcon";
-import { useText } from "@openbot/ui/text";
+import type { AgentApproval, CreditsHold, CreditsHoldAction } from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import { Button, LabelTooltip, LabelTooltipTrigger, toast } from "@codebot/ui";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { CreditAmount } from "@codebot/ui/features/credits/CreditIcon";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, For, onCleanup, Show, untrack } from "solid-js";
 import type { AgentProfile } from "../../data";

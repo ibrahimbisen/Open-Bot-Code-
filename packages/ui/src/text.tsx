@@ -1,4 +1,3 @@
-import { I18nProvider as ControlLocaleProvider } from "@kobalte/core/i18n";
 import {
   type AppFormat,
   type AppTranslate,
@@ -6,8 +5,9 @@ import {
   localizeSourceText,
   type TranslatedLocale,
   translateFor,
-} from "@openbot/i18n";
-import { type UserErrorDetails, userErrorDetails, userErrorMessage } from "@openbot/user-errors";
+} from "@codebot/i18n";
+import { type UserErrorDetails, userErrorDetails, userErrorMessage } from "@codebot/user-errors";
+import { I18nProvider as ControlLocaleProvider } from "@kobalte/core/i18n";
 import type { JSX } from "@solidjs/web";
 import { createContext, createEffect, createSignal, type ParentProps, useContext } from "solid-js";
 

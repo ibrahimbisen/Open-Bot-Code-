@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { agentProviderDescriptor } from "@openbot/contracts/agent-providers";
-import type { AgentTask, ChannelPage, ChannelTask } from "@openbot/contracts/ipc";
+import { agentProviderDescriptor } from "@codebot/contracts/agent-providers";
+import type { AgentTask, ChannelPage, ChannelTask } from "@codebot/contracts/ipc";
 import {
   ChannelClient,
   connectChannelE2e,
@@ -122,14 +122,14 @@ try {
   assert.ok(runningTask(other[1], a.id), "The channel turn ended before the check; use a longer prompt.");
 
   const task: AgentTask = await page.evaluate(
-    (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+    (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
     { agentId: a.id, text: SHORT_PROMPT },
   );
   startedTasks.push({ agentId: a.id, taskId: task.id });
   const [tasks, channel] = await waitFor(
     page,
     "the agent's task starts during its channel turn",
-    () => Promise.all([page.evaluate((id) => window.openbot.agent.listTasks(id), a.id), client.read(first.id)]),
+    () => Promise.all([page.evaluate((id) => window.codebot.agent.listTasks(id), a.id), client.read(first.id)]),
     ([snapshot]) => snapshot.tasks.find((item) => item.id === task.id)?.state !== "queued",
   );
   const started = tasks.tasks.find((item) => item.id === task.id);
@@ -144,8 +144,8 @@ try {
 } finally {
   await client.cleanup();
   for (const { agentId, taskId } of startedTasks) {
-    await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
-    await page.evaluate((input) => window.openbot.agent.closeTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.closeTask(input), { agentId, taskId }).catch(() => undefined);
   }
   writeReport("channel-concurrency-e2e", report);
   await session.close();

@@ -14,7 +14,7 @@ import {
   agentExclusionCoverage,
   agentFolderCoverage,
   folderInside,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { effectiveAgentFolders } from "../backend/agent/workspace-sandbox";
 import type { AgentService } from "../backend/agent-service";
 import { runCauseEffect } from "../backend/effect-boundary";
@@ -90,12 +90,12 @@ export async function isProtectedFolder(
   sharedRoot: string,
   userDataPath: string,
 ): Promise<boolean> {
-  const [openbot, userData] = await Promise.all([realFolder(dirname(sharedRoot)), realFolder(userDataPath)]);
+  const [codebot, userData] = await Promise.all([realFolder(dirname(sharedRoot)), realFolder(userDataPath)]);
   return (
     parse(path).root === path ||
     folderInside(userData, path) ||
-    folderInside(openbot, path) ||
-    [openbot, userData, ...roots].some((root) => folderInside(path, root))
+    folderInside(codebot, path) ||
+    [codebot, userData, ...roots].some((root) => folderInside(path, root))
   );
 }
 

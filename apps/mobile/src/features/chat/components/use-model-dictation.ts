@@ -1,6 +1,6 @@
-import { sourceText } from "@openbot/i18n/source";
-import { base64ToBytes } from "@openbot/team-client/base64";
-import { referenceFrom } from "@openbot/user-errors";
+import { sourceText } from "@codebot/i18n/source";
+import { base64ToBytes } from "@codebot/team-client/base64";
+import { referenceFrom } from "@codebot/user-errors";
 import { CodedError } from "expo";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Linking } from "react-native";

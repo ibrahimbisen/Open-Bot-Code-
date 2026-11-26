@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v63 and the separate new-database schema. IF NOT EXISTS, because this text is
 // both the migration and the tail of the latest schema. The INSERT OR IGNORE of the built-in
@@ -174,7 +174,7 @@ export const CRM_SCHEMA_SQL = `
   );
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 63,
   name: "crm",
   // Only creates tables and their indexes, and adds the three built-in statuses, so no foreign-key

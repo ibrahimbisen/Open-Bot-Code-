@@ -1,8 +1,8 @@
-import type { IdleRestartTarget, OpenBotDesktopApi, UpdateStatus } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, IdleRestartTarget, UpdateStatus } from "@codebot/contracts/ipc";
 
 export interface UpdatesPort {
   update: Pick<
-    OpenBotDesktopApi["update"],
+    CodeBotDesktopApi["update"],
     | "check"
     | "download"
     | "getStatus"
@@ -16,7 +16,7 @@ export interface UpdatesPort {
 }
 
 export function updatesPort(): UpdatesPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export function idleRestartTarget(status: UpdateStatus): IdleRestartTarget {

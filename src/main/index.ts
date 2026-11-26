@@ -1,6 +1,6 @@
 import { uptime } from "node:os";
 import { join, resolve } from "node:path";
-import { parseInviteUrl, selfHostedApiOrigin } from "@openbot/contracts/invite-links";
+import { parseInviteUrl, selfHostedApiOrigin } from "@codebot/contracts/invite-links";
 import {
   type AgentEvent,
   type AgentSummary,
@@ -10,11 +10,11 @@ import {
   type HostStatus,
   IPC_ENDPOINTS,
   type QuitGuard,
-} from "@openbot/contracts/ipc";
-import { createFormat, localeDirection, resolveLocale, translateFor, withHourCycle } from "@openbot/i18n";
-import { localizeSourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
-import { createRemoteDirectoryRefresh } from "@openbot/team-client/remote-directory";
+} from "@codebot/contracts/ipc";
+import { createFormat, localeDirection, resolveLocale, translateFor, withHourCycle } from "@codebot/i18n";
+import { localizeSourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
+import { createRemoteDirectoryRefresh } from "@codebot/team-client/remote-directory";
 import { Effect, Semaphore } from "effect";
 import {
   app,
@@ -36,9 +36,9 @@ import {
 } from "electron";
 import { localTimezone } from "../backend/agent/routine-tools";
 import { replaceInvalidLinuxSystemLanguages } from "../backend/browser-policy";
+import { LATEST_SCHEMA_VERSION, NewerDatabaseError } from "../backend/codebot-database-schema";
 import { setDiskRestoreProbe } from "../backend/disk-restore";
 import { runCauseEffect } from "../backend/effect-boundary";
-import { LATEST_SCHEMA_VERSION, NewerDatabaseError } from "../backend/openbot-database-schema";
 import { perfTime } from "../backend/perf-probe-hooks";
 import { OWNER_NOTIFICATION_KEY } from "./agent-notification-level-store";
 import { watchAppArchive } from "./app-archive-watch";
@@ -201,7 +201,7 @@ import { restartOutsideWindowsPackage } from "./windows-package-restart";
 guardConsoleOutput([process.stdout, process.stderr], () => {
   if (!app.isPackaged) app.quit();
 });
-const logger = createOpenBotLogger("main");
+const logger = createCodeBotLogger("main");
 
 let crashTrace: TraceFile | null = null;
 let runMarker: RunMarker | null = null;
@@ -266,13 +266,13 @@ try {
 }
 
 const commandLineUserDataDirectory = app.commandLine.getSwitchValue("user-data-dir").trim();
-const developmentProfile = !app.isPackaged ? readDevelopmentProfile(process.env.OPENBOT_DEV_PROFILE) : null;
+const developmentProfile = !app.isPackaged ? readDevelopmentProfile(process.env.CODEBOT_DEV_PROFILE) : null;
 const developmentRemoteRole =
   !app.isPackaged &&
-  (process.env.OPENBOT_DEV_REMOTE_ROLE === "host" || process.env.OPENBOT_DEV_REMOTE_ROLE === "client")
-    ? process.env.OPENBOT_DEV_REMOTE_ROLE
+  (process.env.CODEBOT_DEV_REMOTE_ROLE === "host" || process.env.CODEBOT_DEV_REMOTE_ROLE === "client")
+    ? process.env.CODEBOT_DEV_REMOTE_ROLE
     : null;
-const developmentTestClientEnabled = !app.isPackaged && process.env.OPENBOT_DEV_TEST_CLIENT_ENABLED === "1";
+const developmentTestClientEnabled = !app.isPackaged && process.env.CODEBOT_DEV_TEST_CLIENT_ENABLED === "1";
 removeClaudeCodeSessionEnvironment(process.env);
 removeOrcaPaneEnvironment(process.env);
 const hostedServer = takeHostedServerEnvironment(process.env, app.isPackaged, process.platform);
@@ -292,16 +292,16 @@ const localServerControl = localServerChild
   : null;
 if (serverMode || hostedServer || localServerChild) hideExceptionErrorBox();
 if (serverMode || hostedServer || localServerChild) keepWindowsHidden();
-if (developmentProfile && process.env.OPENBOT_DEV_WINDOW_FOCUS === "background") openWindowsInBackground();
+if (developmentProfile && process.env.CODEBOT_DEV_WINDOW_FOCUS === "background") openWindowsInBackground();
 if (localServerChild && process.platform === "darwin") app.dock?.hide();
 const inviteLinkOptions = {
   allowLocalDevelopmentApiUrl: developmentRemoteRole !== null,
-  selfHostedApiOrigin: selfHostedApiOrigin(process.env.OPENBOT_AUTH_API_URL),
+  selfHostedApiOrigin: selfHostedApiOrigin(process.env.CODEBOT_AUTH_API_URL),
 };
 const developmentRemoteDebuggingPort = !app.isPackaged
-  ? readDevelopmentRemoteDebuggingPort(process.env.OPENBOT_DEV_REMOTE_DEBUGGING_PORT)
+  ? readDevelopmentRemoteDebuggingPort(process.env.CODEBOT_DEV_REMOTE_DEBUGGING_PORT)
   : null;
-const analyticsCaptureUrl = !app.isPackaged ? readAnalyticsCaptureUrl(process.env.OPENBOT_ANALYTICS_CAPTURE_URL) : null;
+const analyticsCaptureUrl = !app.isPackaged ? readAnalyticsCaptureUrl(process.env.CODEBOT_ANALYTICS_CAPTURE_URL) : null;
 app.commandLine.appendSwitch("disable-features", "FedCm");
 if (developmentRemoteDebuggingPort) {
   app.commandLine.appendSwitch("remote-debugging-port", developmentRemoteDebuggingPort);
@@ -318,18 +318,18 @@ if (commandLineUserDataDirectory) {
       app.getPath("appData"),
       developmentUserDataName(
         developmentProfile ?? "app",
-        readDevelopmentInstanceId(process.env.OPENBOT_DEV_INSTANCE_ID),
+        readDevelopmentInstanceId(process.env.CODEBOT_DEV_INSTANCE_ID),
       ),
     ),
   );
 }
-app.setName("OpenBot");
+app.setName("CodeBot");
 const systemTimezone =
   serverMode || hostedServer || localServerChild
     ? applyServerTimezone(join(app.getPath("userData"), SERVER_TIMEZONE_PREFERENCE_FILE), process.env)
     : localTimezone;
 app.enableSandbox();
-const WINDOWS_APP_USER_MODEL_ID = app.isPackaged ? "app.openbot.desktop" : "app.openbot.desktop.dev";
+const WINDOWS_APP_USER_MODEL_ID = app.isPackaged ? "app.codebot.desktop" : "app.codebot.desktop.dev";
 if (process.platform === "win32") app.setAppUserModelId(WINDOWS_APP_USER_MODEL_ID);
 if (
   app.isPackaged &&
@@ -402,12 +402,12 @@ if (hasSingleInstanceLock) {
       previousStartHalt = takeStartHalt(app.getPath("userData"));
       if (previousStartHalt)
         logger.warn(
-          `The previous run of OpenBot ${previousStartHalt.appVersion} stopped its start loop (${previousStartHalt.reason}). This start tries again.`,
+          `The previous run of CodeBot ${previousStartHalt.appVersion} stopped its start loop (${previousStartHalt.reason}). This start tries again.`,
         );
     }
     if (attempts.consecutiveFailures > 0)
       logger.warn(
-        `OpenBot ${attempts.appVersion} did not finish its start ${attempts.consecutiveFailures} times in a row (previous start: ${attempts.previousOutcome}, last failure: ${attempts.lastFailure ?? "none"}).`,
+        `CodeBot ${attempts.appVersion} did not finish its start ${attempts.consecutiveFailures} times in a row (previous start: ${attempts.previousOutcome}, last failure: ${attempts.lastFailure ?? "none"}).`,
       );
     if (process.platform === "darwin" && (attempts.consecutiveFailures > 0 || forcedStartFailure !== null))
       systemPreferences.registerDefaults({ ApplePersistenceIgnoreState: true });
@@ -415,18 +415,18 @@ if (hasSingleInstanceLock) {
   stopAppImageCrashpadHandlerAtExit();
   stopStuckExitAfterLimit(join(app.getPath("userData"), "logs"));
   if (startedOnXWayland === "monitor")
-    logger.warn("The Wayland session had no monitor, so OpenBot uses XWayland until the next start.");
+    logger.warn("The Wayland session had no monitor, so CodeBot uses XWayland until the next start.");
   if (startedOnXWayland === "above-apps")
-    logger.info("The agent dock or the Dynamic Island shows above other apps, so OpenBot uses XWayland.");
+    logger.info("The agent dock or the Dynamic Island shows above other apps, so CodeBot uses XWayland.");
   if (startedOnXWayland === "software-rendering")
-    logger.info("Software rendering is on, so OpenBot uses XWayland: on Wayland its window can stay empty.");
+    logger.info("Software rendering is on, so CodeBot uses XWayland: on Wayland its window can stay empty.");
 }
 configureLinuxGpu({
   userDataPath: app.getPath("userData"),
   ownsInstance: hasSingleInstanceLock,
   server: hostedServer !== null || serverMode !== null,
 });
-const appVariant = readAppVariant(process.env.OPENBOT_APP_VARIANT, app.isPackaged);
+const appVariant = readAppVariant(process.env.CODEBOT_APP_VARIANT, app.isPackaged);
 const appIconPath = resolveAppIconPath({
   variant: appVariant,
   platform: process.platform,
@@ -436,43 +436,43 @@ const appIconPath = resolveAppIconPath({
 });
 protocol.registerSchemesAsPrivileged([
   {
-    scheme: "openbot-app",
+    scheme: "codebot-app",
     privileges: { standard: true, secure: true, supportFetchAPI: true },
   },
   {
-    scheme: "openbot-attachment",
+    scheme: "codebot-attachment",
     privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true },
   },
   {
-    scheme: "openbot-remote-attachment",
+    scheme: "codebot-remote-attachment",
     privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true },
   },
   {
-    scheme: "openbot-visual",
+    scheme: "codebot-visual",
     privileges: { standard: true, secure: true },
   },
   {
-    scheme: "openbot-remote-visual",
+    scheme: "codebot-remote-visual",
     privileges: { standard: true, secure: true },
   },
   {
-    scheme: "openbot-video",
+    scheme: "codebot-video",
     privileges: { standard: true, secure: true, supportFetchAPI: true, stream: true },
   },
   {
-    scheme: "openbot-avatar",
+    scheme: "codebot-avatar",
     privileges: { standard: true, secure: true, supportFetchAPI: true },
   },
   {
-    scheme: "openbot-remote-avatar",
+    scheme: "codebot-remote-avatar",
     privileges: { standard: true, secure: true, supportFetchAPI: true },
   },
   {
-    scheme: "openbot-server-logo",
+    scheme: "codebot-server-logo",
     privileges: { standard: true, secure: true, supportFetchAPI: true },
   },
   {
-    scheme: "openbot-remote-server-logo",
+    scheme: "codebot-remote-server-logo",
     privileges: { standard: true, secure: true, supportFetchAPI: true },
   },
 ]);
@@ -499,7 +499,7 @@ type RendererDeepLink = Exclude<
 let pendingDeepLink: RendererDeepLink | null = takeRendererDeepLink(findDeepLink(process.argv, inviteLinkOptions));
 let deepLinkReceiverReady = false;
 
-const MAIN_WINDOW_STATE_FILE = "openbot-main-window-state-v1.json";
+const MAIN_WINDOW_STATE_FILE = "codebot-main-window-state-v1.json";
 const WM_ENDSESSION = 0x0016;
 
 {
@@ -1150,7 +1150,7 @@ function requestDesktopNotificationPermission(
       preference,
       showWelcome: () => {
         if (!Notification.isSupported()) return;
-        showRetainedNotification(new Notification({ title: "OpenBot", body: translate("notification.welcome") }));
+        showRetainedNotification(new Notification({ title: "CodeBot", body: translate("notification.welcome") }));
       },
     }),
   );
@@ -1159,7 +1159,7 @@ function requestDesktopNotificationPermission(
 function haltServerStart(reason: StartHaltReason): Omit<StartHaltRecord, "version"> {
   const appVersion = app.getVersion();
   logger.error(
-    `OpenBot ${appVersion} stopped its start loop (${reason}). It starts again after an update or a restart of the server or of the service.`,
+    `CodeBot ${appVersion} stopped its start loop (${reason}). It starts again after an update or a restart of the server or of the service.`,
   );
   const record = { reason, appVersion, haltedAt: Date.now() };
   writeStartHalt(app.getPath("userData"), record);
@@ -1177,7 +1177,7 @@ async function enterServerSafeMode(halt: Omit<StartHaltRecord, "version">): Prom
     );
     if (shutdownStarted) await Effect.runPromise(serverSafeMode.stop);
   } catch (error) {
-    logger.warn("The safe mode did not start. OpenBot quits.", toLogValue(error));
+    logger.warn("The safe mode did not start. CodeBot quits.", toLogValue(error));
     app.quit();
     return;
   }
@@ -1191,12 +1191,12 @@ async function recoverFromStartLoop(): Promise<
   const summary = startAttempts.summary();
   if (serverStartGuard) {
     if (previousStartHalt) {
-      logger.warn(`OpenBot ${summary.appVersion} is in a start loop. It stopped the loop before, so it tries again.`);
+      logger.warn(`CodeBot ${summary.appVersion} is in a start loop. It stopped the loop before, so it tries again.`);
       return null;
     }
     return { halt: haltServerStart("start_failed") };
   }
-  logger.warn(`OpenBot ${summary.appVersion} is in a start loop. Showing the recovery window.`);
+  logger.warn(`CodeBot ${summary.appVersion} is in a start loop. Showing the recovery window.`);
   const databaseSchemaVersion = readDatabaseSchemaVersion(app.getPath("userData"));
   const previousRelease = compatiblePreviousRelease({
     summary,
@@ -1236,8 +1236,8 @@ async function presentApplication(): Promise<void> {
     process.platform === "linux" ||
     ((process.platform === "darwin" || process.platform === "win32") && app.isPackaged)
   ) {
-    if (!app.setAsDefaultProtocolClient("openbot")) {
-      logger.warn("Unable to register the openbot:// scheme. Invitation links will not open OpenBot.");
+    if (!app.setAsDefaultProtocolClient("codebot")) {
+      logger.warn("Unable to register the codebot:// scheme. Invitation links will not open CodeBot.");
     }
   }
 }
@@ -1492,7 +1492,7 @@ if (!hasSingleInstanceLock) {
   void app
     .whenReady()
     .then(async () => {
-      performance.mark("openbot:when-ready");
+      performance.mark("codebot:when-ready");
       replaceInvalidLinuxSystemLanguages();
       powerMonitor.on("suspend", () => runMarker?.suspend());
       powerMonitor.on("resume", () => runMarker?.resume());
@@ -1562,7 +1562,7 @@ if (!hasSingleInstanceLock) {
         quitting: () => quitStarted,
       });
       services = built;
-      performance.mark("openbot:services-built");
+      performance.mark("codebot:services-built");
       placeWindowButtons(BrowserWindow.getAllWindows());
       if (app.isPackaged && !serverMode && !hostedServer && !localServerChild) {
         teardown.push(0, "app archive watch", watchAppArchive(process.resourcesPath, built.language.translate));
@@ -1707,7 +1707,7 @@ if (!hasSingleInstanceLock) {
       updater.on("status", forwardUpdateStatus);
       updater.on("status", (status) => {
         if (!shutdownStarted || status.errorCode !== "install_failed") return;
-        logger.error("OpenBot update install failed after shutdown preparation and will exit now.");
+        logger.error("CodeBot update install failed after shutdown preparation and will exit now.");
         exitAfterLogFlush();
       });
       built.requestedUpdate.on("preference", forwardUpdatePreference);
@@ -1749,7 +1749,7 @@ if (!hasSingleInstanceLock) {
           })
         ) {
           void runCauseEffect(built.centralAuthInitialization.pipe(Effect.flatMap(() => host.start(true)))).catch(
-            (error) => logger.error("Unable to republish this OpenBot:", toLogValue(error)),
+            (error) => logger.error("Unable to republish this CodeBot:", toLogValue(error)),
           );
         }
       };
@@ -1839,7 +1839,7 @@ if (!hasSingleInstanceLock) {
         );
       reconcileDynamicIsland();
       await windows.loadRenderer(mainWindow);
-      performance.mark("openbot:renderer-loaded");
+      performance.mark("codebot:renderer-loaded");
       startAttempts?.finished();
       built.startup?.rendererLoaded();
       Effect.runFork(built.prewarmAgentDatabase);
@@ -1947,7 +1947,7 @@ if (!hasSingleInstanceLock) {
         return;
       }
       const message = (error instanceof Error ? error.message : String(error)).replace(/[^\P{Cc}\n\t]/gu, "�");
-      logger.error("OpenBot failed to start:", toLogValue(error));
+      logger.error("CodeBot failed to start:", toLogValue(error));
       if (!(error instanceof NewerDatabaseError)) startAttempts?.failed("error");
       if (serverStartGuard) {
         const reason = startHaltReason(error);
@@ -2037,7 +2037,7 @@ const SHUTDOWN_DEADLINE_MS = 30_000;
 
 function forceExitAfterShutdownDeadline(deadlineMs: number): void {
   setTimeout(() => {
-    logger.error(`OpenBot did not quit within ${deadlineMs} ms and will exit now.`);
+    logger.error(`CodeBot did not quit within ${deadlineMs} ms and will exit now.`);
     runMarker?.quitTimedOut();
     exitAfterLogFlush();
   }, deadlineMs);

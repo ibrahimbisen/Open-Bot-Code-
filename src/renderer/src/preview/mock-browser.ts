@@ -8,9 +8,9 @@ import type {
   BrowserTab,
   BrowserWindowEvent,
   BrowserWindowModel,
-  OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+  CodeBotDesktopApi,
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import browserTakeoverPreviewUrl from "../../stories/assets/browser-takeover-preview.svg";
 import { STORY_BROWSER_CONTROL, STORY_BROWSER_TABS } from "./fixtures";
 import { clone, type Listener, type MockRuntime } from "./mock-support";
@@ -51,7 +51,7 @@ export function createMockBrowser(
     emitAgentEvent({ type: "browser-changed", tabs: browserTabs, activeTabId: activeBrowserTabId });
   };
 
-  const browser: OpenBotDesktopApi["browser"] = {
+  const browser: CodeBotDesktopApi["browser"] = {
     open: async (input: BrowserOpenInput) => {
       const tab: BrowserTab = {
         id: `browser-tab-${browserTabs.length + 1}`,

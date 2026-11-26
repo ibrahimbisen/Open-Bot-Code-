@@ -1,5 +1,5 @@
-import type { AppFontFamily } from "@openbot/contracts/app-appearance";
-import { SearchSelect } from "@openbot/ui";
+import type { AppFontFamily } from "@codebot/contracts/app-appearance";
+import { SearchSelect } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createMemo } from "solid-js";
 import { useText } from "../../text";
@@ -11,8 +11,8 @@ interface FontOption {
 const DEFAULT_OPTION: FontOption = { font: null };
 
 const DEFAULT_FONTS = {
-  interface: "var(--openbot-font-sans-default)",
-  code: "var(--openbot-font-mono-default)",
+  interface: "var(--codebot-font-sans-default)",
+  code: "var(--codebot-font-mono-default)",
 } as const;
 
 export interface FontSelectProps {

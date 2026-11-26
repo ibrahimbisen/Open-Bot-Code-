@@ -1,6 +1,6 @@
-import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@openbot/contracts/chat-visual";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { customBackdropId } from "@openbot/ui/features/conversation/chat-backdrop";
+import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@codebot/contracts/chat-visual";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { customBackdropId } from "@codebot/ui/features/conversation/chat-backdrop";
 import { createSignal } from "solid-js";
 import { useChatBackdrop } from "./chat-backdrop-preference";
 
@@ -28,9 +28,9 @@ const CUSTOM_BACKDROP_VIDEO_LIMIT = 100 * 1_024 * 1_024;
 const CUSTOM_BACKDROP_CAPACITY = 12;
 const NAME_LIMIT = 80;
 
-const DATABASE = "openbot-backdrops";
+const DATABASE = "codebot-backdrops";
 const STORE = "backdrops";
-const CHANGED_CHANNEL = "openbot:custom-backdrops";
+const CHANGED_CHANNEL = "codebot:custom-backdrops";
 
 export function customBackdropKind(mimeType: string, size: number): CustomBackdropKind | null {
   const type = (mimeType.split(";", 1)[0] ?? "").trim().toLowerCase();

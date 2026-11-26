@@ -1,5 +1,5 @@
-import { type EventFilterDraft, eventFilterPointerValid } from "@openbot/contracts/event-filter-value";
-import { Button, ChevronDown, ChevronRight, IconButton, Input, Plus, SlidersHorizontal, Text, X } from "@openbot/ui";
+import { type EventFilterDraft, eventFilterPointerValid } from "@codebot/contracts/event-filter-value";
+import { Button, ChevronDown, ChevronRight, IconButton, Input, Plus, SlidersHorizontal, Text, X } from "@codebot/ui";
 import { createSignal, createUniqueId, For, onSettled, Show } from "solid-js";
 import { useText } from "../../text";
 

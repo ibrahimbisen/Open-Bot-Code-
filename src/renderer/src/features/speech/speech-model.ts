@@ -1,4 +1,4 @@
-import { cloudSpeechModel, type SpeechModelStatus } from "@openbot/contracts/ipc";
+import { cloudSpeechModel, type SpeechModelStatus } from "@codebot/contracts/ipc";
 import { createSignal } from "solid-js";
 import { speechPort } from "./speech-port";
 import { voiceServer } from "./voice-server";

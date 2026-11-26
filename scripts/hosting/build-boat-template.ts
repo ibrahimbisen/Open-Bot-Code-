@@ -2,30 +2,30 @@ import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, registerSecretValue, toLogValue } from "@openbot/logging";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, registerSecretValue, toLogValue } from "@codebot/logging";
 
-const logger = createOpenBotLogger("build-boat-template");
+const logger = createCodeBotLogger("build-boat-template");
 const BOAT_API_URL = "https://boat.dev/api/v1";
 const TEMPLATE_FILES = [
   "provision.sh",
   "packages.txt",
   "optional-packages.txt",
-  "openbot-hosted-server",
-  "openbot-hosted-env",
-  "openbot-hosted-update",
-  "openbot",
-  "openbot-boat-pre-stop",
-  "openbot-hosted.apparmor",
-  "openbot.service",
-  "openbot-update.service",
-  "openbot-update.timer",
-  "openbot-update-apply.service",
-  "openbot-update-request.path",
-  "openbot-update-request.service",
+  "codebot-hosted-server",
+  "codebot-hosted-env",
+  "codebot-hosted-update",
+  "codebot",
+  "codebot-boat-pre-stop",
+  "codebot-hosted.apparmor",
+  "codebot.service",
+  "codebot-update.service",
+  "codebot-update.timer",
+  "codebot-update-apply.service",
+  "codebot-update-request.path",
+  "codebot-update-request.service",
 ];
-const REMOTE_DIRECTORY = "/tmp/openbot-template";
-const PRODUCTION_PREFIX = "openbot-server-production-";
+const REMOTE_DIRECTORY = "/tmp/codebot-template";
+const PRODUCTION_PREFIX = "codebot-server-production-";
 const SNAPSHOT_NAME = /^[a-z0-9][a-z0-9-]{0,62}$/u;
 const READY_STATES = new Set(["ready", "idle", "running"]);
 const FAILED_STATES = new Set(["error", "cancelled", "archived"]);
@@ -102,17 +102,17 @@ async function main(): Promise<void> {
       boat,
       builderId,
       [
-        "test -x /opt/OpenBot/app/openbot",
-        `test "$(sed -n 's/^X-AppImage-Version=//p' /opt/OpenBot/app/*.desktop)" = ${shellQuote(options.version)}`,
-        "systemctl is-enabled --quiet openbot.service",
-        "! systemctl is-active --quiet openbot.service",
-        "systemctl is-enabled --quiet openbot-update.timer",
-        "systemctl is-enabled --quiet openbot-update-apply.service",
-        "systemctl is-enabled --quiet openbot-update-request.path",
-        "! systemctl is-active --quiet openbot-update.timer",
-        'test ! -e "$HOME/.config/OpenBot"',
-        'test ! -e "$HOME/.config/openbot-hosted"',
-        'test -z "$(ls -A /srv/openbot-hosted)"',
+        "test -x /opt/CodeBot/app/codebot",
+        `test "$(sed -n 's/^X-AppImage-Version=//p' /opt/CodeBot/app/*.desktop)" = ${shellQuote(options.version)}`,
+        "systemctl is-enabled --quiet codebot.service",
+        "! systemctl is-active --quiet codebot.service",
+        "systemctl is-enabled --quiet codebot-update.timer",
+        "systemctl is-enabled --quiet codebot-update-apply.service",
+        "systemctl is-enabled --quiet codebot-update-request.path",
+        "! systemctl is-active --quiet codebot-update.timer",
+        'test ! -e "$HOME/.config/CodeBot"',
+        'test ! -e "$HOME/.config/codebot-hosted"',
+        'test -z "$(ls -A /srv/codebot-hosted)"',
         `rm -rf ${REMOTE_DIRECTORY}`,
       ].join(" && "),
     );
@@ -325,7 +325,7 @@ function parseOptions(args: string[]): TemplateOptions {
   if (authApiUrl.protocol !== "https:") throw new Error("--auth-api-url must use HTTPS.");
   const name =
     args.find((argument) => argument.startsWith("--name="))?.slice(7) ??
-    `openbot-server-${version.replaceAll(".", "-")}`;
+    `codebot-server-${version.replaceAll(".", "-")}`;
   if (!SNAPSHOT_NAME.test(name)) throw new Error("--name must be a boat snapshot name.");
   const keepArgument = args.find((argument) => argument.startsWith("--keep-releases="))?.slice(16);
   const keepReleases = keepArgument === undefined ? null : Number(keepArgument);

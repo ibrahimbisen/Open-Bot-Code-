@@ -7,7 +7,7 @@ import {
   type TextInputProps,
   type TextProps,
   type TextStyle,
-} from "openbot-original-react-native";
+} from "codebot-original-react-native";
 import { useTextSize } from "@/features/settings/model/text-size-store";
 
 function useScale(allowFontScaling: boolean | undefined, maxFontSizeMultiplier: number | null | undefined) {

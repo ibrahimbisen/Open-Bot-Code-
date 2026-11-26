@@ -1,7 +1,7 @@
 .server-audit-controls {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .server-audit-time {
@@ -9,33 +9,33 @@
 }
 
 .server-audit-row .server-audit-title {
-  color: var(--openbot-text-secondary);
-  font-weight: var(--openbot-weight-regular);
+  color: var(--codebot-text-secondary);
+  font-weight: var(--codebot-weight-regular);
 }
 
 .server-audit-key {
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .server-audit-key[data-level="none"] {
-  color: var(--openbot-danger);
+  color: var(--codebot-danger);
 }
 
 .server-audit-key[data-level="chat"] {
-  color: var(--openbot-success);
+  color: var(--codebot-success);
 }
 
 .server-audit-key[data-level="manage"] {
-  color: var(--openbot-warning);
+  color: var(--codebot-warning);
 }
 
 .server-audit-arrow svg {
   display: inline-block;
   width: 14px;
   height: 14px;
-  margin-inline: var(--openbot-space-1);
-  color: var(--openbot-text-muted);
+  margin-inline: var(--codebot-space-1);
+  color: var(--codebot-text-muted);
   vertical-align: -2px;
 }
 
@@ -49,7 +49,7 @@
   height: 32px;
   align-items: center;
   justify-content: center;
-  border-radius: var(--openbot-radius-md);
+  border-radius: var(--codebot-radius-md);
 }
 
 .server-audit-mark svg {
@@ -58,16 +58,16 @@
 }
 
 .server-audit-mark[data-tone="success"] {
-  background: var(--openbot-success-soft);
-  color: var(--openbot-success);
+  background: var(--codebot-success-soft);
+  color: var(--codebot-success);
 }
 
 .server-audit-mark[data-tone="danger"] {
-  background: var(--openbot-danger-soft);
-  color: var(--openbot-danger);
+  background: var(--codebot-danger-soft);
+  color: var(--codebot-danger);
 }
 
 .server-audit-mark[data-tone="accent"] {
-  background: var(--openbot-accent-soft);
-  color: var(--openbot-accent-text);
+  background: var(--codebot-accent-soft);
+  color: var(--codebot-accent-text);
 }

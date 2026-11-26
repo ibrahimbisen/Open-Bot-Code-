@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import { CRM_TABLES_AFTER_MIGRATION } from "./crm/crm-schema";
 import { THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION } from "./migrations/0065-thread-event-compaction";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -21,7 +21,7 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
@@ -92,7 +92,7 @@ describe("deleted thread messages migration", () => {
       if (version < 54) migrateUpTo(db, 54);
       const before = contents(db);
       expect(before.projection_thread_messages).toHaveLength(2);
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(contents(db)).toEqual({ ...before, ...LATER_TABLES });
       expectHealthy(db);
     },
@@ -104,13 +104,13 @@ describe("deleted thread messages migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=55
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 55 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 55 failed");
     expect(contents(db)).toEqual(before);
     expect(deletedTables(db)).toEqual([]);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=55").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual({ ...before, ...LATER_TABLES });
     expectHealthy(db);
   });
@@ -120,9 +120,9 @@ describe("deleted thread messages migration", () => {
     seed(db);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version=70; DELETE FROM schema_migrations WHERE version=20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(deletedTables(db)).toEqual([]);
   });
@@ -130,7 +130,7 @@ describe("deleted thread messages migration", () => {
   it("refuses an id of no thread, an empty id or a second record, and goes with its thread", () => {
     const db = databaseAt(54);
     seed(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     const insert = db.prepare(`INSERT INTO projection_deleted_thread_messages (thread_id, message_id, deleted_at)
       VALUES (?, ?, '2026-01-02')`);
     expect(() => insert.run("thread-unknown", "message-1")).toThrow("FOREIGN KEY constraint failed");

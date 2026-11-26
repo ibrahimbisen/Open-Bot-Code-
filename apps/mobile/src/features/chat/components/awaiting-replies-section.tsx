@@ -1,4 +1,4 @@
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { Button, Spinner, Typography } from "heroui-native";
 import { View } from "react-native";
 import { useCSSVariable } from "uniwind";
@@ -36,7 +36,7 @@ export function AwaitingRepliesSection({
   onOpenAgent: (agentId: string) => void;
 }) {
   const { t } = useText();
-  const [secondaryColor, primaryColor] = useCSSVariable(["--openbot-text-grouped-secondary", "--openbot-text-primary"]);
+  const [secondaryColor, primaryColor] = useCSSVariable(["--codebot-text-grouped-secondary", "--codebot-text-primary"]);
   const secondary = String(secondaryColor);
   if (rows.length === 0) return null;
   const pending = rows.some((row) => row.state === "asked" || row.state === "working");

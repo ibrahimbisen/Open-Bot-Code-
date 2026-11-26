@@ -4,9 +4,9 @@ import {
   type ConversationMessage,
   isAgentAnswer,
   PLAN_CONTINUATION_ITEM_TYPE,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Cause, Duration, Effect, Schema } from "effect";
 import { type AgentProvider, MissingPiSessionError, RequestTimeoutError } from "../agent-client";
 import type { AgentStore } from "../agent-store";
@@ -34,8 +34,8 @@ import type { ThreadLifecycle } from "./thread-lifecycle";
 
 type UnresolvedDelivery = DeliveryContext["delivery"];
 
-const logger = createOpenBotLogger("provider-history");
-const eventLogger = createOpenBotLogger("thread-event-compaction");
+const logger = createCodeBotLogger("provider-history");
+const eventLogger = createCodeBotLogger("thread-event-compaction");
 const THREAD_EVENT_COMPACTION_INTERVAL = Duration.hours(6);
 
 export interface BootRecoveryHooks {
@@ -216,7 +216,7 @@ export class BootRecovery {
   ) {
     const interrupted = {
       terminal: "interrupted" as const,
-      reason: "OpenBot restarted before this delivery reached a confirmed terminal state.",
+      reason: "CodeBot restarted before this delivery reached a confirmed terminal state.",
     };
     const recovered = yield* Effect.gen({ self: this }, function* () {
       const { agent, client, session } = yield* recoveryStep(() => {

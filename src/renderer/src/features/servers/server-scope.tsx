@@ -1,11 +1,11 @@
-import type { ChannelSummary } from "@openbot/contracts/ipc";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { AGENT_HIDDEN_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { SIDEBAR_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/sidebar-pins-v1";
-import { createRemoteConnectionRecovery, type RemoteRecoveryStatus } from "@openbot/team-client/remote-recovery";
-import { markRemoteSync } from "@openbot/team-client/sync-profile";
-import { currentText } from "@openbot/ui/text";
-import type { UserErrorDetails } from "@openbot/user-errors";
+import type { ChannelSummary } from "@codebot/contracts/ipc";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { AGENT_HIDDEN_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { SIDEBAR_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/sidebar-pins-v1";
+import { createRemoteConnectionRecovery, type RemoteRecoveryStatus } from "@codebot/team-client/remote-recovery";
+import { markRemoteSync } from "@codebot/team-client/sync-profile";
+import { currentText } from "@codebot/ui/text";
+import type { UserErrorDetails } from "@codebot/user-errors";
 import {
   createEffect,
   createMemo,

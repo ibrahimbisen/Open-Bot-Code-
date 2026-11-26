@@ -1,12 +1,12 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   agentProviderName,
   CUSTOM_PROVIDER_LIMITS,
   type CustomProviderResult,
   type CustomProviderSummary,
   type UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Bot from "lucide-react-native/icons/bot";
@@ -146,7 +146,7 @@ function CustomProviderPresets({
   customAgents: boolean;
 }) {
   const { t } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   return (
     <SettingsContent>
       <Stack.Screen options={{ title: t("mobile.server.customProviders.add") }} />

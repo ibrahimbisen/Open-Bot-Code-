@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { MOBILE_CHAT_ORDERS, type MobileChatOrder } from "@/features/workspace/model/sidebar-layout";
 import { writesInOrder } from "@/shared/lib/writes-in-order";
 
-const key = "openbot.mobile.chatOrder.v1";
+const key = "codebot.mobile.chatOrder.v1";
 
 export const useChatOrderPreference = create<{ order: MobileChatOrder; ready: boolean }>(() => ({
   order: "unread-group",

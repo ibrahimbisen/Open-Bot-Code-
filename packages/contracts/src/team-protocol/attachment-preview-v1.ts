@@ -5,7 +5,7 @@ export const ATTACHMENT_PREVIEW_CAPABILITY = "attachment-preview-v1";
 export const ATTACHMENT_PREVIEW_EDGE = 768;
 
 export function isAttachmentPreviewRoute(path: string): boolean {
-  return /^\/v1\/attachments\/[^/]+\/preview$/u.test(new URL(path, "http://openbot.invalid").pathname);
+  return /^\/v1\/attachments\/[^/]+\/preview$/u.test(new URL(path, "http://codebot.invalid").pathname);
 }
 
 const noBody: AdminDecoder = (value) => {

@@ -1,13 +1,13 @@
 import { randomUUID } from "node:crypto";
-import { accountUsageCoversModel, isKeyOnlyProvider } from "@openbot/contracts/agent-providers";
-import { type AgentSummary, isAgentModel, type UsageTokens, WORKFLOWS_USAGE_ID } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { accountUsageCoversModel, isKeyOnlyProvider } from "@codebot/contracts/agent-providers";
+import { type AgentSummary, isAgentModel, type UsageTokens, WORKFLOWS_USAGE_ID } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { AgentUsage } from "../database/agent-usage";
 import type { ProviderSession } from "../database/provider-sessions";
 import { getRecord, getString } from "../protocol";
 
-const logger = createOpenBotLogger("usage-collection");
+const logger = createCodeBotLogger("usage-collection");
 const GROK_USD_TICKS = 10_000_000_000;
 
 function count(value: unknown): number | null {
@@ -32,7 +32,7 @@ export function collectProviderUsage(
     if (turnId && isAgentModel(model)) usage.reroute(agent.id, session.id, turnId, model);
     return;
   }
-  if (method !== "thread/tokenUsage/updated" && method !== "openbot/usage") return;
+  if (method !== "thread/tokenUsage/updated" && method !== "codebot/usage") return;
   const turnId = getString(params, "turnId") ?? "baseline";
   if (session.provider === "codex") {
     const tokenUsage = getRecord(params, "tokenUsage");

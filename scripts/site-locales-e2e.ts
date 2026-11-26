@@ -3,13 +3,13 @@ import { type ChildProcess, spawn } from "node:child_process";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { type Browser, chromium } from "playwright-core";
 
-const logger = createOpenBotLogger("site-locales-e2e");
+const logger = createCodeBotLogger("site-locales-e2e");
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/site-locales");
+const OUT = resolve(ROOT, ".codebot-build/site-locales");
 const option = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const browserExecutable = option("browser-executable");
 const givenOrigin = option("origin");
@@ -126,7 +126,7 @@ async function checkSitemap(origin: string): Promise<string[]> {
   const response = await fetch(new URL("/sitemap.xml", origin));
   assert.equal(response.status, 200);
   const xml = await response.text();
-  const urls = [...xml.matchAll(/<loc>https:\/\/openbot\.run([^<]*)<\/loc>/gu)].map((match) => match[1] ?? "");
+  const urls = [...xml.matchAll(/<loc>https:\/\/codebot\.run([^<]*)<\/loc>/gu)].map((match) => match[1] ?? "");
   const expected = SITEMAP_PAGES.flatMap((page) => LOCALES.map((locale) => localizedPath(locale, page)));
   const missing = expected.filter((path) => !urls.includes(path));
   assert.deepEqual(missing, [], "The sitemap does not list these localized pages");
@@ -152,7 +152,7 @@ async function checkLanguageMenu(browser: Browser, origin: string) {
   await target.click();
   await page.waitForURL(`${origin}/ja/pricing`);
   await page.locator('html[lang^="ja"]').waitFor({ state: "attached" });
-  const languageCookie = async () => (await context.cookies()).find((item) => item.name === "openbot_lang")?.value;
+  const languageCookie = async () => (await context.cookies()).find((item) => item.name === "codebot_lang")?.value;
   const cookie = await languageCookie();
   assert.equal(cookie, "ja");
   await page.locator(".site-language-trigger").click();

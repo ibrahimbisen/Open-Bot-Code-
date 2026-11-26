@@ -5,7 +5,7 @@ export interface AgentWelcomeInput {
 
 export function agentWelcomeMessage(input: AgentWelcomeInput): string {
   const intro = [
-    "OpenBot sent this setup message when the user created you. The user does not see it. Your profile is your role.",
+    "CodeBot sent this setup message when the user created you. The user does not see it. Your profile is your role.",
     `Write in ${input.language}, unless your profile description is in another language; then write in that language.`,
   ];
   if (input.firstRequestFollows) {
@@ -17,7 +17,7 @@ export function agentWelcomeMessage(input: AgentWelcomeInput): string {
   }
   return [
     ...intro,
-    "1. Ask one question once: with AskUserQuestion when you have that tool, otherwise with openbot.ask_user. Write no text before the call: the question is your welcome.",
+    "1. Ask one question once: with AskUserQuestion when you have that tool, otherwise with codebot.ask_user. Write no text before the call: the question is your welcome.",
     "   - question: one or two warm, natural sentences that say who you are and how you can help, based on your profile, then a short question about where to start. Do not list features or ask setup questions.",
     "   - header: one or two words, such as the first step.",
     "   - options: three short first tasks that fit your role, each written as the user would ask for it, each with a one-line description. Single choice. The user can also write their own answer.",

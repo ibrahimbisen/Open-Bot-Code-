@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, defaultProviderModel } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -15,12 +15,12 @@ import type { ReadProviderHistory } from "../src/backend/provider-history";
 
 const EXIT_MID = process.argv.includes("--exit-mid");
 const DROP = EXIT_MID || process.argv.includes("--drop");
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-late-steer-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-late-steer-e2e");
 const REPORT = join(
   OUT,
   EXIT_MID ? "report-idle-release-exit-mid.json" : DROP ? "report-idle-release-exit.json" : "report-idle-release.json",
 );
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-steer-idle-release-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-steer-idle-release-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const claudeConfig = join(home, ".claude");
@@ -36,7 +36,7 @@ const STEERED_MESSAGE = "Please also answer this.";
 const LATE_ANSWER = "Answer of the late steer.";
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = claudeConfig;
 mkdirSync(projectsDir, { recursive: true });
 
@@ -45,7 +45,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
 const fs = require("node:fs");
@@ -288,7 +288,7 @@ const events = (): StandInEvent[] =>
     : [];
 
 await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -399,7 +399,7 @@ try {
     const lateAnswer = report.events.findIndex((event) => event.event === "late-answer" && event.pid === workerPid);
     const closed = report.events.findIndex((event) => event.event === "stdin-end" && event.pid === workerPid);
     assert.ok(lateAnswer >= 0, "The worker's Claude answers the late steer.");
-    assert.ok(closed < 0 || closed > lateAnswer, "OpenBot keeps the worker's Claude open until it answers the steer.");
+    assert.ok(closed < 0 || closed > lateAnswer, "CodeBot keeps the worker's Claude open until it answers the steer.");
   }
   report.passed = true;
 } catch (error) {

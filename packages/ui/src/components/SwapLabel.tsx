@@ -1,4 +1,4 @@
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import { createEffect, untrack } from "solid-js";
 
 const COUNT_LABEL = /^(\d+)(\D.*)$/;

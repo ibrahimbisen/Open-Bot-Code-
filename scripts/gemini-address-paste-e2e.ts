@@ -1,14 +1,14 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { AgentProviderId } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentProviderId } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { startAcpAuthentication } from "../src/backend/acp-sign-in";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { LocalSignInPages } from "../src/main/local-sign-in-pages";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/gemini-address-paste-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/gemini-address-paste-e2e");
 const STATE = "gemini-state";
 
 const FAKE_AGENT = `

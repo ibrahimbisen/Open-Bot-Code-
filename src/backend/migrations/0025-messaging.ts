@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v25 and the separate new-database schema. IF NOT EXISTS throughout, because
 // this text is both the migration and the tail of the latest schema.
@@ -7,7 +7,7 @@ import type { OpenBotMigration } from "./migration";
 // what a CHECK change costs (migrations 17, 22 and 23). The code only accepts the platforms it has
 // a driver for.
 //
-// A connection is one workspace of a platform, such as a Slack workspace that installed the OpenBot
+// A connection is one workspace of a platform, such as a Slack workspace that installed the CodeBot
 // app. Its orchestrator agent receives each new conversation and asks its teammates. No token is
 // stored here. The tokens of a connection live in the main process's
 // encrypted credential file, keyed by `connection_id`.
@@ -46,7 +46,7 @@ export const MESSAGING_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS messaging_threads_agent ON projection_messaging_threads(agent_id, updated_at DESC);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 25,
   name: "messaging",
   // Only creates tables, so no foreign-key pause and no vacuum.

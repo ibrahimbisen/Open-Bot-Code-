@@ -15,7 +15,7 @@ export const NO_WINDOW_MODES: readonly ("server" | "wayland")[] = GNOME ? ["serv
 export const NO_WINDOW_WAIT_MS = 3_000;
 export const STATE_TIMEOUT_MS = 20_000;
 export const SCREEN = { width: 1600, height: 1000 };
-export const SCALE = Number(process.env.OPENBOT_E2E_SCALE ?? "1");
+export const SCALE = Number(process.env.CODEBOT_E2E_SCALE ?? "1");
 
 export function fromPixels(x: number, y: number): { x: number; y: number } {
   return { x: x / SCALE, y: y / SCALE };
@@ -64,7 +64,7 @@ export async function openSession(name: string): Promise<Session> {
   }
   const out = join(
     ROOT,
-    ".openbot-build",
+    ".codebot-build",
     name,
     `${GNOME ? "gnome-xwayland" : "x11"}${SCALE === 1 ? "" : `-scale-${SCALE}`}`,
   );
@@ -72,7 +72,7 @@ export async function openSession(name: string): Promise<Session> {
   await mkdir(out, { recursive: true });
   return {
     out,
-    root: await mkdtemp(join(tmpdir(), `openbot-${name}-`)),
+    root: await mkdtemp(join(tmpdir(), `codebot-${name}-`)),
     environment: { ...withoutElectronRuntimeFlags(process.env) },
     children: [],
   };
@@ -148,7 +148,7 @@ export function startHarness<Command extends { op: string }>(
       ...(SCALE === 1 ? [] : [`--force-device-scale-factor=${SCALE}`]),
     ],
     {
-      env: mode === "server" ? { ...session.environment, OPENBOT_E2E_SERVER: "1" } : session.environment,
+      env: mode === "server" ? { ...session.environment, CODEBOT_E2E_SERVER: "1" } : session.environment,
       stdio: ["pipe", "pipe", log],
     },
   );

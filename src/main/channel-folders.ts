@@ -5,7 +5,7 @@ import {
   type ChannelFolderList,
   channelFolderCoverage,
   folderInside,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { AgentService } from "../backend/agent-service";
 import type { ChannelService } from "../backend/channel-service";
 import type { ChannelStore } from "../backend/channel-store";

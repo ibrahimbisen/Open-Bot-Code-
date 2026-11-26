@@ -6,8 +6,8 @@ import {
   isSpeechVoice,
   type SpeechSpeed,
   type SpeechVoice,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
@@ -77,8 +77,8 @@ const DEFAULT_SETTINGS: VoiceSettings = {
   gptLiveVoice: null,
 };
 
-const SETTINGS_KEY = "openbot.mobile.voice-settings.v1";
-const ELEVENLABS_KEY = "openbot.mobile.elevenlabs-key.v1";
+const SETTINGS_KEY = "codebot.mobile.voice-settings.v1";
+const ELEVENLABS_KEY = "codebot.mobile.elevenlabs-key.v1";
 
 export const useVoiceSettings = create<VoiceSettings & { ready: boolean; hasElevenLabsKey: boolean }>(() => ({
   ...DEFAULT_SETTINGS,

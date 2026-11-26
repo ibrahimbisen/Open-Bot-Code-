@@ -2,10 +2,10 @@ import { chmod, lstat, unlink } from "node:fs/promises";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
 import type { Socket } from "node:net";
 import { dirname, isAbsolute, join } from "node:path";
-import { parseHostedServerName } from "@openbot/contracts/hosted-servers";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { CentralAuthState } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { parseHostedServerName } from "@codebot/contracts/hosted-servers";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { CentralAuthState } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect } from "effect";
 import QRCode from "qrcode";
 import { runCauseEffect } from "../backend/effect-boundary";
@@ -19,7 +19,7 @@ import type { ServerMemory } from "./server-memory";
 const CONTROL_SOCKET_FILE = "control.sock";
 const MAX_BODY_BYTES = 4096;
 const MAX_EMAIL_LENGTH = 254;
-const DEFAULT_SERVER_NAME = "OpenBot";
+const DEFAULT_SERVER_NAME = "CodeBot";
 
 export interface ServerModeEnvironment {
   controlSocketPath: string;
@@ -33,13 +33,13 @@ export function takeServerModeEnvironment(
   isPackaged: boolean,
   platform: NodeJS.Platform,
 ): ServerModeEnvironment | null {
-  if (!isPackaged || platform !== "linux" || environment.OPENBOT_SERVER !== "1") return null;
-  if (environment.OPENBOT_HOSTED_SERVER === "1") return null;
+  if (!isPackaged || platform !== "linux" || environment.CODEBOT_SERVER !== "1") return null;
+  if (environment.CODEBOT_HOSTED_SERVER === "1") return null;
   const runtimeDirectory = environment.XDG_RUNTIME_DIR?.trim() ?? "";
   if (!isAbsolute(runtimeDirectory)) return null;
   return {
     controlSocketPath: join(runtimeDirectory, CONTROL_SOCKET_FILE),
-    setupPagePort: parseSetupPagePort(environment.OPENBOT_SETUP_PAGE_PORT),
+    setupPagePort: parseSetupPagePort(environment.CODEBOT_SETUP_PAGE_PORT),
   };
 }
 

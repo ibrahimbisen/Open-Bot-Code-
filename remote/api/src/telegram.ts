@@ -6,7 +6,7 @@ import {
   type TelegramCallParams,
   type TelegramCallResult,
   type TelegramUploadAnswer,
-} from "@openbot/contracts/signal-protocol/telegram-route";
+} from "@codebot/contracts/signal-protocol/telegram-route";
 import { Effect, Schema } from "effect";
 import { z } from "zod";
 import type { TelegramConfig } from "./config";
@@ -169,7 +169,7 @@ export class TelegramBotApi {
           allowed_updates: ALLOWED_UPDATES,
         });
         if (!answer.ok)
-          console.error(`OpenBot Remote API could not set the webhook of Telegram bot ${botId} (${answer.errorCode}).`);
+          console.error(`CodeBot Remote API could not set the webhook of Telegram bot ${botId} (${answer.errorCode}).`);
       }
     }),
   );

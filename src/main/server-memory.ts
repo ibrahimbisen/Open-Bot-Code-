@@ -1,6 +1,6 @@
 import { readdir, readFile, readlink, writeFile } from "node:fs/promises";
 import { getPriority, setPriority } from "node:os";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { Deferred, Effect, Schema } from "effect";
 import { causeHelpers } from "../backend/effect-boundary";
 import type { HostMemory, HostMemoryLevel } from "../backend/host-memory";
@@ -15,7 +15,7 @@ const SMALL_HOSTED_SERVER_BYTES = 7 * GIB;
 const SMALL_HOSTED_SERVER_BROWSER_TABS = 5;
 const CHILD_OOM_SCORE_ADJ = 500;
 const PROC_READ_CONCURRENCY = 16;
-export const AGENT_PROCESS_VARIABLE = "OPENBOT_AGENT_PROCESS";
+export const AGENT_PROCESS_VARIABLE = "CODEBOT_AGENT_PROCESS";
 const AGENT_PROCESS_ENTRY = `\0${AGENT_PROCESS_VARIABLE}=1\0`;
 const AGENT_PROCESS_NICE = 10;
 const STOP_GRACE_MS = 5_000;

@@ -4,16 +4,16 @@ import {
   VOICE_MODELS,
   VOICE_STREAM_LIMITS,
   type VoiceModelId,
-} from "@openbot/contracts/ipc";
-import { VOICE_LIMIT_WARNING_SECONDS } from "@openbot/ui/features/conversation/VoiceRecordingMorph";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { VOICE_LIMIT_WARNING_SECONDS } from "@codebot/ui/features/conversation/VoiceRecordingMorph";
+import { currentText } from "@codebot/ui/text";
 import {
   appendVoiceTranscript,
   encodePcm16,
   recordingToSamples,
   recordingToWav,
   startVoiceMeter as startLevelMeter,
-} from "@openbot/ui/voice-recording";
+} from "@codebot/ui/voice-recording";
 import { onCleanup } from "solid-js";
 import { desktopAnalytics } from "../../../analytics";
 import { unlockCompletionSound } from "../../../completion-sound";
@@ -29,7 +29,7 @@ import { conversationOwnerId } from "./composer-store";
 const LIVE_TRANSCRIPT_INTERVAL_MS = 1_000;
 const STREAM_INTERVAL_MS = 250;
 
-export { VOICE_LEVEL_COUNT } from "@openbot/ui/voice-recording";
+export { VOICE_LEVEL_COUNT } from "@codebot/ui/voice-recording";
 
 export interface VoiceCloudStream {
   streamId: string;

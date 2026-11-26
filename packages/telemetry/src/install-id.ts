@@ -1,4 +1,4 @@
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 
 interface AnalyticsInstallId {
   id: string;

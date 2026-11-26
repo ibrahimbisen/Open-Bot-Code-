@@ -1,11 +1,11 @@
 import {
+  CODEBOT_AGENT_TEMPLATE_PATH_PREFIX,
   createAgentTemplateShareUrl,
-  OPENBOT_AGENT_TEMPLATE_PATH_PREFIX,
   parseAgentTemplateUrl,
-} from "@openbot/contracts/agent-template-links";
-import { parseInviteUrl, selfHostedApiOrigin } from "@openbot/contracts/invite-links";
-import { parseMobileConnectUrl } from "@openbot/contracts/mobile-connect";
-import { createPluginShareUrl, parsePluginUrl } from "@openbot/contracts/plugin-links";
+} from "@codebot/contracts/agent-template-links";
+import { parseInviteUrl, selfHostedApiOrigin } from "@codebot/contracts/invite-links";
+import { parseMobileConnectUrl } from "@codebot/contracts/mobile-connect";
+import { createPluginShareUrl, parsePluginUrl } from "@codebot/contracts/plugin-links";
 
 export type IncomingLink =
   | { kind: "invite"; url: string }
@@ -39,7 +39,7 @@ function isInviteLink(value: string): boolean {
   } catch {}
   try {
     const url = new URL(value);
-    if (url.protocol !== "openbot:") return false;
+    if (url.protocol !== "codebot:") return false;
     parseInviteUrl(value, { selfHostedApiOrigin: selfHostedApiOrigin(url.searchParams.get("api") ?? undefined) });
     return true;
   } catch {
@@ -77,14 +77,14 @@ export function pendingSignInLinkId(): string | undefined {
 }
 
 export function redirectIncomingLink(path: string, initial: boolean): string | null {
-  if (path === "openbot://" || path === "openbot:///" || path === "openbot:") return initial ? "/" : null;
+  if (path === "codebot://" || path === "codebot:///" || path === "codebot:") return initial ? "/" : null;
   if (/^exps?:\/\//u.test(path)) return path;
   if (path.startsWith("/") && !path.startsWith("//")) {
     const url = new URL(path, "https://openbot.run");
     if (
       url.pathname !== "/join" &&
       !url.pathname.startsWith("/plugins/") &&
-      !url.pathname.startsWith(OPENBOT_AGENT_TEMPLATE_PATH_PREFIX)
+      !url.pathname.startsWith(CODEBOT_AGENT_TEMPLATE_PATH_PREFIX)
     )
       return path;
     path = url.toString();

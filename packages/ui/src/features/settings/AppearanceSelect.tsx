@@ -1,6 +1,6 @@
-import { APP_APPEARANCES, type AppAppearance, isAppAppearance } from "@openbot/contracts/app-appearance";
-import type { AppTextKey } from "@openbot/i18n";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@openbot/ui";
+import { APP_APPEARANCES, type AppAppearance, isAppAppearance } from "@codebot/contracts/app-appearance";
+import type { AppTextKey } from "@codebot/i18n";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createMemo } from "solid-js";
 import { useText } from "../../text";

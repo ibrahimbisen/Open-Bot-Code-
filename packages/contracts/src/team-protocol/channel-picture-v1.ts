@@ -7,11 +7,11 @@ export const CHANNEL_PICTURE_CAPABILITY = "channel-picture-v1";
 export const CHANNEL_PICTURE_ROUTES = { image: "/v1/channels/image" } as const;
 
 const ICON_NAME = /^[a-z][a-z0-9-]{0,39}$/u;
-const IMAGE_URL_PREFIX = "openbot-avatar://channel/";
+const IMAGE_URL_PREFIX = "codebot-avatar://channel/";
 const IMAGE_URL_LIMIT = 2048;
 
 function pathname(path: string): string {
-  return new URL(path, "http://openbot.invalid").pathname;
+  return new URL(path, "http://codebot.invalid").pathname;
 }
 
 export function isChannelPictureRoute(path: string): boolean {

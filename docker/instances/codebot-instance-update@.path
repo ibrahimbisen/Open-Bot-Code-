@@ -1,0 +1,9 @@
+[Unit]
+Description=Update requests of CodeBot instance %i
+
+[Path]
+PathExists=/srv/codebot/%i/update-requests/update-stage
+PathExists=/srv/codebot/%i/update-requests/update-install
+
+[Install]
+WantedBy=paths.target

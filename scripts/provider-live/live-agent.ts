@@ -1,11 +1,11 @@
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 import type { Browser } from "@e2e-dev/web";
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
 import { expect } from "e2e";
 import { isLiveProvider, LIVE_MODELS, type LiveProvider } from "./targets";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
@@ -32,7 +32,7 @@ export async function readyProvider(browser: Browser): Promise<{ provider: LiveP
   const provider = await waitFor(
     "the app bridge",
     30_000,
-    () => browser.evaluate(async () => (await window.openbot?.getSetupState())?.preferredProvider ?? null),
+    () => browser.evaluate(async () => (await window.codebot?.getSetupState())?.preferredProvider ?? null),
     (preferred) => preferred !== null,
   );
   if (!isLiveProvider(provider)) throw new Error(`The profile names no live provider: ${String(provider)}`);
@@ -43,12 +43,12 @@ export async function readyProvider(browser: Browser): Promise<{ provider: LiveP
     PROVIDER_READY_MS,
     async () => {
       const found = await browser.evaluate(async (id) => {
-        const current = (await window.openbot.agent.getStatus()).providers?.find((candidate) => candidate.id === id);
+        const current = (await window.codebot.agent.getStatus()).providers?.find((candidate) => candidate.id === id);
         return current ? { state: current.state, message: current.message } : null;
       }, provider);
       if (found?.state === "not-installed" && !downloadStarted) {
         downloadStarted = true;
-        await browser.evaluate((id) => window.openbot.providerRuntimes.download(id).then(() => null), provider);
+        await browser.evaluate((id) => window.codebot.providerRuntimes.download(id).then(() => null), provider);
       }
       return found;
     },
@@ -62,7 +62,7 @@ export async function readyProvider(browser: Browser): Promise<{ provider: LiveP
     () =>
       browser.evaluate(
         async (id) =>
-          (await window.openbot.agent.listModels()).filter((model) => model.provider === id).map((model) => model.id),
+          (await window.codebot.agent.listModels()).filter((model) => model.provider === id).map((model) => model.id),
         provider,
       ),
     (listed) => listed.length > 0,
@@ -71,7 +71,7 @@ export async function readyProvider(browser: Browser): Promise<{ provider: LiveP
   if (!model) throw new Error(`No ${provider} model.`);
 
   await browser.evaluate(async () => {
-    for (const left of await window.openbot.agent.listAgents()) await window.openbot.agent.deleteAgent(left.id);
+    for (const left of await window.codebot.agent.listAgents()) await window.codebot.agent.deleteAgent(left.id);
     return null;
   });
   return { provider, model };

@@ -1,12 +1,12 @@
-import type { LinkAccountState, LinkAccountStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { LinkAccountState, LinkAccountStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import {
-  createOpenBotLogger,
+  createCodeBotLogger,
   redactText,
   registerSecretValue,
   registerSecretValues,
   toLogValue,
-} from "@openbot/logging";
+} from "@codebot/logging";
 import { Duration, Effect, Exit, Result, Scope, Semaphore } from "effect";
 import { z } from "zod";
 import {
@@ -35,7 +35,7 @@ import {
 } from "./link-auth";
 import { LinkOperationError, linkCall, linkDecode } from "./link-effects";
 
-const logger = createOpenBotLogger("link-account");
+const logger = createCodeBotLogger("link-account");
 
 const REFRESH_MARGIN_MS = 60_000;
 const APPROVAL_POLL_MS = 2_000;

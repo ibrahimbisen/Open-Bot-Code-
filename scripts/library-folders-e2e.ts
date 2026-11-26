@@ -4,13 +4,13 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, LIBRARY_FOLDER_LIMITS, libraryFolderPath, STORAGE_LIMITS } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, LIBRARY_FOLDER_LIMITS, libraryFolderPath, STORAGE_LIMITS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/library-folders-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-library-folders-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/library-folders-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-library-folders-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -18,7 +18,7 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -26,7 +26,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { LIBRARY_FOLDERS_FILE, LibraryFoldersStore } = await import("../src/backend/library-folders-store");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { StorageUsageScanner, StorageUsageService } = await import("../src/backend/storage-usage");
 const { LibraryFoldersService } = await import("../src/main/library-folders-service");
 type WorkflowFileOwner = import("../src/backend/workflows/workflow-file-owners").WorkflowFileOwner;
@@ -89,9 +89,9 @@ const answer = (message) => {
           threadId: params.threadId,
           turnId,
           callId: "call-" + turnId,
-          namespace: "openbot",
+          namespace: "codebot",
           tool: __direct ? __tool : "tool_call",
-          arguments: __direct ? args : { name: "openbot." + __tool, arguments: args },
+          arguments: __direct ? args : { name: "codebot." + __tool, arguments: args },
         },
       };
       waiting.set(id, { threadId: params.threadId, turnId, again: __twice ? call : null });
@@ -262,7 +262,7 @@ const storedSchema = z.object({
 });
 
 async function startHost(directory: string, withFolders: boolean) {
-  const database = new OpenBotDatabase(directory);
+  const database = new CodeBotDatabase(directory);
   const store = new AgentStore(directory, home, database);
   const mailbox = new MailboxStore(directory, store.sharedRoot, store.database);
   const foldersPath = join(directory, LIBRARY_FOLDERS_FILE);

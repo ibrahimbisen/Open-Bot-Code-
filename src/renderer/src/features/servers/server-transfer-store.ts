@@ -1,26 +1,26 @@
 import type {
+  CodeBotDesktopApi,
   InstanceTransferPreview,
   InstanceTransferResult,
   InstanceTransferSummary,
-  OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
-import { toast } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import { toast } from "@codebot/ui";
 import type {
   InstanceExportOptions,
   InstanceExportPhase,
   InstanceImportPhase,
   InstanceTransferScreen,
   TransferUploadState,
-} from "@openbot/ui/features/transfer/InstanceTransferView";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/transfer/InstanceTransferView";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createStore, onCleanup } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
 
 export type ServerTransferCalls = Omit<
-  OpenBotDesktopApi["instanceTransfer"],
+  CodeBotDesktopApi["instanceTransfer"],
   "showExport" | "copy" | "onUploadProgress"
 > &
-  Partial<Pick<OpenBotDesktopApi["instanceTransfer"], "showExport" | "onUploadProgress">>;
+  Partial<Pick<CodeBotDesktopApi["instanceTransfer"], "showExport" | "onUploadProgress">>;
 
 interface ServerTransferState {
   screen: InstanceTransferScreen;

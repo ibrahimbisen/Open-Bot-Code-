@@ -1,4 +1,4 @@
-import type { AgentMessage } from "@openbot/ui/data";
+import type { AgentMessage } from "@codebot/ui/data";
 import { createEffect, createSignal, onCleanup, untrack } from "solid-js";
 
 const STALE_STREAM_MS = 3_000;

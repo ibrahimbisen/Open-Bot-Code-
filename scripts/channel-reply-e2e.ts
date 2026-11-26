@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import type { ChannelMessage, ChannelPage, ChannelTask } from "@openbot/contracts/ipc";
+import type { ChannelMessage, ChannelPage, ChannelTask } from "@codebot/contracts/ipc";
 import { ChannelClient, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
 const REPLY_PREFIX = "channel-reply-";

@@ -1,5 +1,5 @@
-import { SKILL_CATEGORIES, type SkillCategory } from "@openbot/contracts/ipc-skills";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { SKILL_CATEGORIES, type SkillCategory } from "@codebot/contracts/ipc-skills";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 
 export const MARKETPLACE_ROUTE = "/marketplace";
 export const MARKETPLACE_SKILLS_ROUTE = "/marketplace/skills";

@@ -22,114 +22,114 @@ import {
   type WorkflowNode,
   workflowFileAssetBytes,
   workflowVideoLengthChoices,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V1_WEBSOCKET,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol";
-import { AGENT_ACCESS_CODECS, AGENT_ACCESS_ROUTES } from "@openbot/contracts/team-protocol/agent-access-v1";
+} from "@codebot/contracts/team-protocol";
+import { AGENT_ACCESS_CODECS, AGENT_ACCESS_ROUTES } from "@codebot/contracts/team-protocol/agent-access-v1";
 import {
   decodeTeamProtocolSupportExpanded,
   TEAM_CURRENT_CAPABILITIES,
   teamCapabilitiesForProtocol,
   teamCapabilityHeaders,
-} from "@openbot/contracts/team-protocol/current";
-import { LIBRARY_FOLDERS_ROUTES } from "@openbot/contracts/team-protocol/library-folders-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
-import { STORAGE_ROUTES } from "@openbot/contracts/team-protocol/storage-v1";
-import { STORAGE_WORKFLOW_FILES_CAPABILITY } from "@openbot/contracts/team-protocol/storage-workflow-files-v1";
-import { TEAM_PROTOCOL_V7 } from "@openbot/contracts/team-protocol/v7";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { WORKFLOWS_AGENT_FILES_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-agent-files-v1";
-import { WORKFLOWS_ANSWERS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-answers-v1";
-import { WORKFLOWS_CHANNELS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-channels-v1";
-import { WORKFLOWS_CHATS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-chats-v1";
+} from "@codebot/contracts/team-protocol/current";
+import { LIBRARY_FOLDERS_ROUTES } from "@codebot/contracts/team-protocol/library-folders-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
+import { STORAGE_ROUTES } from "@codebot/contracts/team-protocol/storage-v1";
+import { STORAGE_WORKFLOW_FILES_CAPABILITY } from "@codebot/contracts/team-protocol/storage-workflow-files-v1";
+import { TEAM_PROTOCOL_V7 } from "@codebot/contracts/team-protocol/v7";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { WORKFLOWS_AGENT_FILES_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-agent-files-v1";
+import { WORKFLOWS_ANSWERS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-answers-v1";
+import { WORKFLOWS_CHANNELS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-channels-v1";
+import { WORKFLOWS_CHATS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-chats-v1";
 import {
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY,
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CODECS,
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-credit-media-unavailable-v1";
+} from "@codebot/contracts/team-protocol/workflows-credit-media-unavailable-v1";
 import {
   WORKFLOWS_CREDIT_MEDIA_CAPABILITY,
   WORKFLOWS_CREDIT_MEDIA_CODECS,
   WORKFLOWS_CREDIT_MEDIA_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-credit-media-v1";
+} from "@codebot/contracts/team-protocol/workflows-credit-media-v1";
 import {
   WORKFLOWS_HIGGSFIELD_CAPABILITY,
   WORKFLOWS_HIGGSFIELD_CODECS,
   WORKFLOWS_HIGGSFIELD_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-higgsfield-v1";
-import { WORKFLOWS_MEDIA_ACCOUNT_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-media-account-v1";
+} from "@codebot/contracts/team-protocol/workflows-higgsfield-v1";
+import { WORKFLOWS_MEDIA_ACCOUNT_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-media-account-v1";
 import {
   WORKFLOWS_MEDIA_CATALOG_CAPABILITY,
   WORKFLOWS_MEDIA_CATALOG_CODECS,
   WORKFLOWS_MEDIA_CATALOG_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-catalog-v1";
+} from "@codebot/contracts/team-protocol/workflows-media-catalog-v1";
 import {
   WORKFLOWS_MEDIA_CATALOG_V2_CAPABILITY,
   WORKFLOWS_MEDIA_CATALOG_V2_CODECS,
   WORKFLOWS_MEDIA_CATALOG_V2_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-catalog-v2";
+} from "@codebot/contracts/team-protocol/workflows-media-catalog-v2";
 import {
   WORKFLOWS_MEDIA_SERVICE_ACCOUNT_CAPABILITY,
   WORKFLOWS_MEDIA_SERVICE_ACCOUNT_CODECS,
   WORKFLOWS_MEDIA_SERVICE_ACCOUNT_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-service-account-v1";
-import { WORKFLOWS_MEDIA_SIZE_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-media-size-v1";
-import { WORKFLOWS_MEDIA_TRANSPARENT_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-media-transparent-v1";
+} from "@codebot/contracts/team-protocol/workflows-media-service-account-v1";
+import { WORKFLOWS_MEDIA_SIZE_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-media-size-v1";
+import { WORKFLOWS_MEDIA_TRANSPARENT_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-media-transparent-v1";
 import {
   WORKFLOWS_MEDIA_CAPABILITY,
   WORKFLOWS_MEDIA_CODECS,
   WORKFLOWS_MEDIA_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-v1";
+} from "@codebot/contracts/team-protocol/workflows-media-v1";
 import {
   WORKFLOWS_PAUSE_CAPABILITY,
   WORKFLOWS_PAUSE_CODECS,
   WORKFLOWS_PAUSE_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-pause-v1";
+} from "@codebot/contracts/team-protocol/workflows-pause-v1";
 import {
   WORKFLOWS_PORTABLE_CAPABILITY,
   WORKFLOWS_PORTABLE_CODECS,
   WORKFLOWS_PORTABLE_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-portable-v1";
+} from "@codebot/contracts/team-protocol/workflows-portable-v1";
 import {
   WORKFLOWS_STEP_SETTINGS_CAPABILITY,
   WORKFLOWS_STEP_SETTINGS_CODECS,
   WORKFLOWS_STEP_SETTINGS_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-step-settings-v1";
+} from "@codebot/contracts/team-protocol/workflows-step-settings-v1";
 import {
   WORKFLOWS_SUNRA_CAPABILITY,
   WORKFLOWS_SUNRA_CODECS,
   WORKFLOWS_SUNRA_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-sunra-v1";
+} from "@codebot/contracts/team-protocol/workflows-sunra-v1";
 import {
   WORKFLOW_STEP_TEXT_LIMIT,
   WORKFLOWS_CAPABILITY,
   WORKFLOWS_CODECS,
   WORKFLOWS_ROUTES,
   workflowsEvent,
-} from "@openbot/contracts/team-protocol/workflows-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/workflows-v1";
+import { sourceText } from "@codebot/i18n/source";
 import {
   decodeRemoteWorkflowDetail,
   decodeRemoteWorkflowMediaUnavailable,
   decodeRemoteWorkflowRunDetail,
   decodeRemoteWorkflowVersions,
-} from "@openbot/team-client/workflow-decoding";
+} from "@codebot/team-client/workflow-decoding";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import { providerLabel } from "../src/backend/agent/thread-items";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { LIBRARY_FOLDERS_FILE, LibraryFoldersStore } from "../src/backend/library-folders-store";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import { WORKFLOW_FOLDERS_FILE, WorkflowFoldersStore } from "../src/backend/workflow-folders-store";
 import { type WorkflowFileOwnerSources, workflowFileOwners } from "../src/backend/workflows/workflow-file-owners";
@@ -142,7 +142,7 @@ import { LibraryFoldersService } from "../src/main/library-folders-service";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 import { createWorkflowFileExporter } from "../src/main/workflow-file-export";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-team-api-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-team-api-e2e");
 let sunraSignedIn = false;
 let mediaFileId = "e2e-media-file";
 const sharedFileAgents = new Map<string, string>();
@@ -203,8 +203,8 @@ const CINEMA_MODEL: WorkflowMediaCatalogModel = {
 };
 let liveModels: readonly WorkflowMediaCatalogModel[] = [LIVE_MODEL];
 const CREDIT_MODEL: WorkflowMediaCatalogModel = {
-  id: "openbot-video_e2e",
-  provider: "openbot",
+  id: "codebot-video_e2e",
+  provider: "codebot",
   providerModel: "video_e2e",
   name: "Video e2e",
   maker: "ByteDance",
@@ -218,7 +218,7 @@ const CREDIT_MODEL: WorkflowMediaCatalogModel = {
 };
 let creditModels: readonly WorkflowMediaCatalogModel[] = [];
 const CREDIT_UNAVAILABLE: WorkflowMediaUnavailableModel = {
-  id: "openbot-kling_e2e",
+  id: "codebot-kling_e2e",
   name: "Kling e2e · Omni",
   kinds: ["video"],
 };
@@ -384,7 +384,7 @@ const teamBrowser: TeamApiBrowser = {
   answerHttpSignIn: unused,
 };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-workflow-team-api-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-workflow-team-api-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -429,11 +429,11 @@ setInterval(() => {}, 1000);
 `;
 const fakeCodex = join(root, "codex");
 writeFileSync(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 process.env.CODEX_HOME = join(home, ".codex");
 
 interface Host {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   agents: AgentService;
   workflows: WorkflowsHandle;
   workflowStore: WorkflowStore;
@@ -449,11 +449,11 @@ const sockets: WebSocket[] = [];
 let failingAgent = "";
 
 async function startHost(): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   const access = new AgentAccessStore(join(userData, AGENT_ACCESS_FILE));
   await runCauseEffect(sidebar.initialize());
   await runCauseEffect(agentStore.initialize());
@@ -535,15 +535,15 @@ async function startHost(): Promise<Host> {
           sunra: sunraSignedIn ? { available: 120, quota: 500 } : null,
           higgsfield: higgsfieldSignedIn ? { available: 42, quota: null } : null,
           accounts: serviceAccounts,
-          openbot: creditBalance,
+          codebot: creditBalance,
         }),
       mediaCatalog: (only) =>
         Effect.succeed({
           models:
-            only === "openbot"
+            only === "codebot"
               ? creditModels
               : [...(higgsfieldSignedIn ? liveModels : []), ...(only === undefined ? creditModels : [])],
-          ...(only === undefined || only === "openbot" ? { unavailable: creditUnavailable } : {}),
+          ...(only === undefined || only === "codebot" ? { unavailable: creditUnavailable } : {}),
         }),
       mediaPrice: (request) =>
         Effect.sync(() => {
@@ -798,7 +798,7 @@ async function setLevels(ownerToken: string, everyone: AgentAccessChange["everyo
 async function openEvents(token: string): Promise<WebSocket> {
   const socket = new WebSocket(`ws://127.0.0.1:${current().port}${TEAM_API_ROUTES.events}`, [
     TEAM_PROTOCOL_V1_WEBSOCKET,
-    `openbot-token.${token}`,
+    `codebot-token.${token}`,
   ]);
   sockets.push(socket);
   await new Promise<void>((resolveOpen, reject) => {
@@ -2557,14 +2557,14 @@ try {
         const catalog = await read(WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog);
         assert.deepEqual(catalog, { models: [CREDIT_MODEL] });
         const credits = await read(WORKFLOWS_CREDIT_MEDIA_ROUTES.credits);
-        assert.deepEqual(credits, { openbot: { available: 350.5, quota: null } });
+        assert.deepEqual(credits, { codebot: { available: 350.5, quota: null } });
         const catalogV2 = await read(WORKFLOWS_MEDIA_CATALOG_V2_ROUTES.catalog);
         assert.deepEqual(catalogV2, { models: [LIVE_MODEL] });
         const catalogV1 = await read(WORKFLOWS_MEDIA_CATALOG_ROUTES.catalog);
         assert.deepEqual(catalogV1, { models: [LIVE_MODEL] });
         creditBalance = null;
         const signedOut = await read(WORKFLOWS_CREDIT_MEDIA_ROUTES.credits);
-        assert.deepEqual(signedOut, { openbot: null });
+        assert.deepEqual(signedOut, { codebot: null });
         const old = await raw(
           WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog,
           TEAM_CURRENT_CAPABILITIES.filter((capability) => capability !== WORKFLOWS_CREDIT_MEDIA_CAPABILITY),
@@ -3083,7 +3083,7 @@ try {
         new Map(sources.map((source) => [source.key, assetBytes])),
       );
       assert.ok(filled.ok, JSON.stringify(filled));
-      assert.equal(filled.name, "Portable.openbot-workflow.json");
+      assert.equal(filled.name, "Portable.codebot-workflow.json");
       const decoded = decodeWorkflowFile(filled.text);
       assert.ok(decoded.ok, JSON.stringify(decoded));
       assert.equal(decoded.file.title, "Portable");

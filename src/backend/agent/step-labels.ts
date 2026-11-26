@@ -1,8 +1,8 @@
 import { homedir } from "node:os";
 import { basename } from "node:path";
-import { isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+import { isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { bridgedToolName, getArray, getRecord, getString, isRecord, type ThreadItem } from "../protocol";
 
 const QUOTE_LIMIT = 48;
@@ -36,7 +36,7 @@ export function stepLabel(item: ThreadItem): string | null {
 }
 
 function webSearchQuery(item: ThreadItem): string | null {
-  if (bridgedToolName(item) !== "openbot.web_search") return null;
+  if (bridgedToolName(item) !== "codebot.web_search") return null;
   return getString(getRecord(getRecord(item, "arguments"), "arguments"), "query");
 }
 

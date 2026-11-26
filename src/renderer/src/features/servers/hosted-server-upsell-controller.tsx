@@ -1,7 +1,7 @@
-import type { RoutineFields } from "@openbot/contracts/ipc";
-import { HostedServerUpsellDialog } from "@openbot/ui/features/servers/HostedServerUpsellDialog";
-import { HostedServerUpsellNotice } from "@openbot/ui/features/servers/HostedServerUpsellNotice";
-import type { HostedUpsellHost } from "@openbot/ui/features/servers/hosted-server-upsell-host";
+import type { RoutineFields } from "@codebot/contracts/ipc";
+import { HostedServerUpsellDialog } from "@codebot/ui/features/servers/HostedServerUpsellDialog";
+import { HostedServerUpsellNotice } from "@codebot/ui/features/servers/HostedServerUpsellNotice";
+import type { HostedUpsellHost } from "@codebot/ui/features/servers/hosted-server-upsell-host";
 import { createEffect, createMemo, createSignal, onSettled, Show, untrack } from "solid-js";
 import { usePlatform } from "../../platform";
 import {

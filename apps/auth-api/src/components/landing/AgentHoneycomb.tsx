@@ -4,11 +4,11 @@ import { articleArtPath } from "../../lib/content-collection";
 import { NEWS_COLLECTION } from "../../lib/news";
 
 const AgentAvatar = lazy(() =>
-  import("@openbot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
+  import("@codebot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
 );
 
 const ART_SLUGS = new Set([
-  "introducing-openbot",
+  "introducing-codebot",
   "channels-put-agents-in-one-room",
   "every-agent-gets-a-workspace",
   "one-agent-many-providers",

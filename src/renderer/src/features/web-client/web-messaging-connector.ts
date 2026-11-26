@@ -1,4 +1,4 @@
-import { type ConnectorMessagingPlatform, messagingPage } from "@openbot/contracts/ipc";
+import { type ConnectorMessagingPlatform, messagingPage } from "@codebot/contracts/ipc";
 import {
   decodeWebMessagingInstallGrant,
   decodeWebMessagingInstallMark,
@@ -9,9 +9,9 @@ import {
   type WebMessagingInstallPlatform,
   webMessagingInstallKey,
   webMessagingInstallReceipt,
-} from "@openbot/contracts/web-messaging-install";
-import { sourceText } from "@openbot/i18n/source";
-import { runTeamEffect } from "@openbot/team-client";
+} from "@codebot/contracts/web-messaging-install";
+import { sourceText } from "@codebot/i18n/source";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   discordAccess,
   discordRoles,
@@ -25,10 +25,10 @@ import {
   messagingConnectorSetEnabled,
   setDiscordAccess,
   type TeamAdminRequestError,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { classifyFailure } from "@openbot/telemetry";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { classifyFailure } from "@codebot/telemetry";
+import { currentText } from "@codebot/ui/text";
 import { Effect } from "effect";
 import { actionToast } from "../../action-toast";
 import type { HostMessagingApi } from "../connectors/host-messaging-port";

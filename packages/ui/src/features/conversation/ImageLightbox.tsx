@@ -1,7 +1,7 @@
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
-import { ATTACHMENT_PREVIEW_EDGE } from "@openbot/contracts/team-protocol/attachment-preview-v1";
-import { Button, ChevronLeft, ChevronRight, Dialog, Spinner, toast, X } from "@openbot/ui";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
+import { ATTACHMENT_PREVIEW_EDGE } from "@codebot/contracts/team-protocol/attachment-preview-v1";
+import { Button, ChevronLeft, ChevronRight, Dialog, Spinner, toast, X } from "@codebot/ui";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import {
   createEffect,
   createMemo,

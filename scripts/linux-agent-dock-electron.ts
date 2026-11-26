@@ -2,8 +2,8 @@ import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, resolve, sep } from "node:path";
 import { createInterface } from "node:readline";
-import type { AgentDockAgent, AgentDockInputRect, AgentDockPresentation } from "@openbot/contracts/ipc";
-import { IPC_ENDPOINTS } from "@openbot/contracts/ipc";
+import type { AgentDockAgent, AgentDockInputRect, AgentDockPresentation } from "@codebot/contracts/ipc";
+import { IPC_ENDPOINTS } from "@codebot/contracts/ipc";
 import { Effect, Schema } from "effect";
 import { app, BrowserWindow, ipcMain, screen } from "electron";
 import { AgentDockWindowController } from "../src/main/agent-dock-window";
@@ -190,7 +190,7 @@ async function start(): Promise<void> {
   );
   mainWindow.showInactive();
   controller = new AgentDockWindowController({
-    windowKind: aboveAppsWindowKind(process.env.OPENBOT_E2E_SERVER === "1"),
+    windowKind: aboveAppsWindowKind(process.env.CODEBOT_E2E_SERVER === "1"),
     createWindow: (bounds) => {
       const window = createAgentDockWindow(bounds);
       window.webContents.on("console-message", (details) => {

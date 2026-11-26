@@ -1,14 +1,14 @@
-import type { MarketplaceAgentSkill, MarketplaceSkillSummary } from "@openbot/contracts/ipc";
-import type { SkillCategory } from "@openbot/contracts/ipc-skills";
+import type { MarketplaceAgentSkill, MarketplaceSkillSummary } from "@codebot/contracts/ipc";
+import type { SkillCategory } from "@codebot/contracts/ipc-skills";
 import {
-  createOpenBotMarketplaceUrl,
+  createCodeBotMarketplaceUrl,
   createWebAppMarketplacePath,
   type MarketplaceListingLink,
-} from "@openbot/contracts/marketplace-links";
-import type { AppTranslate, TranslatedLocale } from "@openbot/i18n";
-import { routineScheduleSummary } from "@openbot/ui/features/conversation/routine-schedule-ui";
-import { CATEGORY_LABELS } from "@openbot/ui/features/marketplace/marketplace-listing";
-import { type TextValue, useText } from "@openbot/ui/text";
+} from "@codebot/contracts/marketplace-links";
+import type { AppTranslate, TranslatedLocale } from "@codebot/i18n";
+import { routineScheduleSummary } from "@codebot/ui/features/conversation/routine-schedule-ui";
+import { CATEGORY_LABELS } from "@codebot/ui/features/marketplace/marketplace-listing";
+import { type TextValue, useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { Link } from "@tanstack/solid-router";
 import { For, onSettled, Show } from "solid-js";
@@ -156,9 +156,9 @@ function ListingActions(props: { link: MarketplaceListingLink; name: string }) {
   return (
     <div class="marketplace-site-actions">
       <PluginOpenButtons
-        href={createOpenBotMarketplaceUrl(props.link)}
+        href={createCodeBotMarketplaceUrl(props.link)}
         browserHref={createWebAppMarketplacePath(props.link)}
-        label={t("sitePage.marketplace.addToOpenBot")}
+        label={t("sitePage.marketplace.addToCodeBot")}
         downloadCopy={t("sitePage.marketplace.addFromApp", { name: props.name })}
         text={buttonText()}
       />

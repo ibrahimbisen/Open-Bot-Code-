@@ -1,7 +1,7 @@
-import type { ConversationMessage } from "@openbot/contracts/ipc";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
 import type { WebRuntimeFactory } from "../features/web-client/web-client-context";
 import type { WebWorkspaceRuntime } from "../features/web-client/web-runtime";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 import { mockWebRuntimeFor } from "./mock-web-runtime";
 
 interface WebBench {
@@ -45,7 +45,7 @@ const nextTask = () =>
   });
 
 export const createBenchWebRuntime: WebRuntimeFactory = (_accountId, events) => {
-  const mock = createMockOpenBot();
+  const mock = createMockCodeBot();
   const base = mockWebRuntimeFor(mock, events);
   const calls: Record<string, number> = {};
   let running = 0;
@@ -182,6 +182,6 @@ export const createBenchWebRuntime: WebRuntimeFactory = (_accountId, events) => 
     stream,
     append,
   };
-  Object.assign(globalThis, { openbotWebBench: bench });
+  Object.assign(globalThis, { codebotWebBench: bench });
   return runtime;
 };

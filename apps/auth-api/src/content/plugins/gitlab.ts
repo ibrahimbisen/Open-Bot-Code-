@@ -28,7 +28,7 @@ export const GITLAB_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the GitLab plugin need a personal access token?",
       answer:
-        "No. Each user signs in to their own GitLab account through the browser. OpenBot registers itself with GitLab, does the sign-in, keeps the tokens in encrypted storage, and adds the Authorization header. The plugin catalog holds no secret.",
+        "No. Each user signs in to their own GitLab account through the browser. CodeBot registers itself with GitLab, does the sign-in, keeps the tokens in encrypted storage, and adds the Authorization header. The plugin catalog holds no secret.",
     },
     {
       question: "Does it work with a self-hosted GitLab?",
@@ -38,7 +38,7 @@ export const GITLAB_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "What data does GitLab get?",
       answer:
-        "Your workspaces, conversations and files stay on the computer that runs OpenBot. GitLab gets the requests that the agent sends, such as a search query or a merge request update. The tools work on the groups and projects that your GitLab account can access.",
+        "Your workspaces, conversations and files stay on the computer that runs CodeBot. GitLab gets the requests that the agent sends, such as a search query or a merge request update. The tools work on the groups and projects that your GitLab account can access.",
     },
   ],
   sources: [

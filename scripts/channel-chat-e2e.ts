@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import type { CreateChannelRoutineInput } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import type { CreateChannelRoutineInput } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import type { Locator } from "playwright-core";
 import {
   ChannelClient,
@@ -12,7 +12,7 @@ import {
   writeReport,
 } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-chat-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-chat-e2e");
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
 
@@ -137,7 +137,7 @@ try {
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     schedule: { kind: "hourly", minute: (new Date().getMinutes() + 30) % 60 },
   };
-  const routine = await page.evaluate((input) => window.openbot.agent.createChannelRoutine(input), routineInput);
+  const routine = await page.evaluate((input) => window.codebot.agent.createChannelRoutine(input), routineInput);
   routineId = routine.id;
   await page.getByRole("button", { name: english("app.rail.schedule"), exact: true }).click();
   await page
@@ -222,7 +222,7 @@ try {
 } finally {
   if (routineId && report.channelId)
     await page
-      .evaluate((input) => window.openbot.agent.deleteChannelRoutine(input), {
+      .evaluate((input) => window.codebot.agent.deleteChannelRoutine(input), {
         channelId: report.channelId,
         routineId,
       })

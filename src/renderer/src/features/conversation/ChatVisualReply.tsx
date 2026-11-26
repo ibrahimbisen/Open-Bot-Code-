@@ -1,8 +1,8 @@
-import { fileQuoteId } from "@openbot/contracts/chat-tag-references";
-import { chatVisualReply } from "@openbot/contracts/chat-visual";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
-import { ChatVisual } from "@openbot/ui/features/conversation/ChatVisual";
+import { fileQuoteId } from "@codebot/contracts/chat-tag-references";
+import { chatVisualReply } from "@codebot/contracts/chat-visual";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
+import { ChatVisual } from "@codebot/ui/features/conversation/ChatVisual";
 import { createSignal, onCleanup, untrack } from "solid-js";
 import { deviceQuoteShortcut } from "../../send-shortcut-preference";
 import { isChatVisualAppShortcut } from "./chat-visual-shortcuts";

@@ -2,7 +2,7 @@ import {
   createMarketplaceShareUrl,
   isMarketplaceAgentId,
   isMarketplaceSkillSlug,
-} from "@openbot/contracts/marketplace-links";
+} from "@codebot/contracts/marketplace-links";
 import { BRAND_PAGE_UPDATED_AT, BRAND_ROUTE } from "../lib/brand-page";
 import { changelogUrl } from "../lib/changelog";
 import { CHANGELOG_UPDATED_AT } from "../lib/changelog-releases";
@@ -21,7 +21,7 @@ import { MARKETPLACE_APPS_ROUTE, MARKETPLACE_ROUTE, MARKETPLACE_SKILLS_ROUTE } f
 import { PLUGINS_UPDATED_AT, pluginUrl, SITE_PLUGINS } from "../lib/plugins";
 import { PRICING_PAGE_UPDATED_AT, PRICING_ROUTE } from "../lib/pricing-page";
 import { PRIVACY_POLICY_ROUTE, PRIVACY_POLICY_UPDATED_AT } from "../lib/privacy-policy";
-import { OPENBOT_SITE_TITLE, OPENBOT_SITE_URL } from "../lib/site-metadata";
+import { CODEBOT_SITE_TITLE, CODEBOT_SITE_URL } from "../lib/site-metadata";
 import { type EnglishPagePath, localizedPagePath, TRANSLATED_SITE_LOCALES } from "../lib/site-paths";
 import { TEAMS_PAGE_UPDATED_AT, TEAMS_ROUTE } from "../lib/teams-page";
 import { readMarketplaceSitemapListings } from "./marketplace-catalog";
@@ -67,7 +67,7 @@ function newestListingDate(listings: readonly { updatedAt: string }[]): string {
 }
 
 function marketplaceSitemapEntries(listings: MarketplaceSitemapListings | null): SitemapEntry[] {
-  const marketplaceUrl = (path: string) => new URL(path, OPENBOT_SITE_URL).toString();
+  const marketplaceUrl = (path: string) => new URL(path, CODEBOT_SITE_URL).toString();
   const apps = { loc: marketplaceUrl(MARKETPLACE_APPS_ROUTE), lastmod: PLUGINS_UPDATED_AT };
   if (!listings) {
     return [
@@ -95,14 +95,14 @@ function marketplaceSitemapEntries(listings: MarketplaceSitemapListings | null):
 
 function localizedSitemapEntries(page: EnglishPagePath, lastmod: string): SitemapEntry[] {
   return TRANSLATED_SITE_LOCALES.map((locale) => ({
-    loc: new URL(localizedPagePath(locale, page), OPENBOT_SITE_URL).toString(),
+    loc: new URL(localizedPagePath(locale, page), CODEBOT_SITE_URL).toString(),
     lastmod,
   }));
 }
 
 function contentSitemapXml(listings: MarketplaceSitemapListings | null): string {
   const entries: SitemapEntry[] = [
-    { loc: OPENBOT_SITE_URL, lastmod: latestSiteModifiedAt() },
+    { loc: CODEBOT_SITE_URL, lastmod: latestSiteModifiedAt() },
     ...localizedSitemapEntries("/", latestSiteModifiedAt()),
     { loc: downloadPageUrl("hub"), lastmod: DOWNLOAD_PAGES_UPDATED_AT },
     ...DOWNLOAD_PAGE_ORDER.map((platform) => ({
@@ -119,13 +119,13 @@ function contentSitemapXml(listings: MarketplaceSitemapListings | null): string 
     ...marketplaceSitemapEntries(listings),
     ...SITE_PLUGINS.map((plugin) => ({ loc: pluginUrl(plugin.slug), lastmod: PLUGINS_UPDATED_AT })),
     { loc: changelogUrl(), lastmod: CHANGELOG_UPDATED_AT },
-    { loc: new URL(TEAMS_ROUTE, OPENBOT_SITE_URL).toString(), lastmod: TEAMS_PAGE_UPDATED_AT },
+    { loc: new URL(TEAMS_ROUTE, CODEBOT_SITE_URL).toString(), lastmod: TEAMS_PAGE_UPDATED_AT },
     ...localizedSitemapEntries(TEAMS_ROUTE, TEAMS_PAGE_UPDATED_AT),
-    { loc: new URL(PRICING_ROUTE, OPENBOT_SITE_URL).toString(), lastmod: PRICING_PAGE_UPDATED_AT },
+    { loc: new URL(PRICING_ROUTE, CODEBOT_SITE_URL).toString(), lastmod: PRICING_PAGE_UPDATED_AT },
     ...localizedSitemapEntries(PRICING_ROUTE, PRICING_PAGE_UPDATED_AT),
-    { loc: new URL(CREDITS_ROUTE, OPENBOT_SITE_URL).toString(), lastmod: CREDITS_PAGE_UPDATED_AT },
-    { loc: new URL(BRAND_ROUTE, OPENBOT_SITE_URL).toString(), lastmod: BRAND_PAGE_UPDATED_AT },
-    { loc: new URL(PRIVACY_POLICY_ROUTE, OPENBOT_SITE_URL).toString(), lastmod: PRIVACY_POLICY_UPDATED_AT },
+    { loc: new URL(CREDITS_ROUTE, CODEBOT_SITE_URL).toString(), lastmod: CREDITS_PAGE_UPDATED_AT },
+    { loc: new URL(BRAND_ROUTE, CODEBOT_SITE_URL).toString(), lastmod: BRAND_PAGE_UPDATED_AT },
+    { loc: new URL(PRIVACY_POLICY_ROUTE, CODEBOT_SITE_URL).toString(), lastmod: PRIVACY_POLICY_UPDATED_AT },
   ];
 
   const urls = entries
@@ -160,7 +160,7 @@ function contentRssXml(collection: ContentCollection): string {
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">',
     "  <channel>",
-    `    <title>${escapeXml(`${collection.feedTitle} — ${OPENBOT_SITE_TITLE}`)}</title>`,
+    `    <title>${escapeXml(`${collection.feedTitle} — ${CODEBOT_SITE_TITLE}`)}</title>`,
     `    <link>${escapeXml(collectionIndexUrl(collection))}</link>`,
     `    <description>${escapeXml(collection.indexDescription)}</description>`,
     "    <language>en-us</language>",

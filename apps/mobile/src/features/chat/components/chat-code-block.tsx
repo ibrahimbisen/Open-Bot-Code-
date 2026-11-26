@@ -144,7 +144,7 @@ function CodeBlockFrame({
   const { t } = useText();
   const theme = useCodeTokenColors();
   const muted = tone?.muted ?? theme.muted;
-  const [textColor, canvas] = useCSSVariable(["--openbot-text-primary", "--openbot-bg-native-canvas"]).map(String);
+  const [textColor, canvas] = useCSSVariable(["--codebot-text-primary", "--codebot-bg-native-canvas"]).map(String);
   const card = tone?.panel ?? `${textColor}0f`;
   const panel = tone?.deep ?? canvas;
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -270,9 +270,9 @@ function CodeText({ runs, foreground, selectable }: { runs: CodeRun[]; foregroun
 export function useCodeTokenColors() {
   const [foreground, muted, keyword] = useThemeColor(["foreground", "muted", "link"]);
   const [string, number, error] = useCSSVariable([
-    "--openbot-success-text",
-    "--openbot-warning-text",
-    "--openbot-danger-text",
+    "--codebot-success-text",
+    "--codebot-warning-text",
+    "--codebot-danger-text",
   ]).map(String);
   const colors: Partial<Record<ShjToken, ColorValue>> = {
     kwd: keyword,

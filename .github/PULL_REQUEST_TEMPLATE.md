@@ -1,6 +1,6 @@
 ## Linked issue
 
-<!-- `Closes #123`. A new feature or a change to how OpenBot works needs an issue with the `approved` label first: see https://github.com/nightly-labs/openbot/blob/main/CONTRIBUTING.md#what-you-can-send -->
+<!-- `Closes #123`. A new feature or a change to how CodeBot works needs an issue with the `approved` label first: see https://github.com/nightly-labs/openbot/blob/main/CONTRIBUTING.md#what-you-can-send -->
 
 ## Type of change
 
@@ -17,7 +17,7 @@
 ## Verification
 
 - [ ] Narrow checks for what changed: `biome check <paths>`, a targeted `tsc`, and the affected test files — CI owns the full suite
-- [ ] Surfaces touched are named under "What changed": renderer, mobile, `apps/auth-api`, the three `--openbot-*` palettes, IPC contracts and `mock-openbot.ts`, reverse states, migrations, documentation
+- [ ] Surfaces touched are named under "What changed": renderer, mobile, `apps/auth-api`, the three `--codebot-*` palettes, IPC contracts and `mock-codebot.ts`, reverse states, migrations, documentation
 - [ ] A feature for agents, chats, channels, routines or server settings also works on a joined server (desktop, `openbot.run/app`, mobile when it fits a phone), or "What changed" says why it is local only
 - [ ] Relevant manual smoke test completed, or not applicable
 - [ ] No credentials, private data, generated output, or real user files are included

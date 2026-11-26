@@ -17,40 +17,40 @@ import {
   type SaveCustomProviderInput,
   savedCustomModelId,
   type UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
-import { Text } from "@openbot/ui";
-import type { ProviderAccountActions } from "@openbot/ui/components/provider-accounts";
-import { servesCustomProvider } from "@openbot/ui/components/provider-row";
-import type { AccountUsageProviderRow } from "@openbot/ui/features/account/account-usage-view";
+} from "@codebot/contracts/ipc";
+import { Text } from "@codebot/ui";
+import type { ProviderAccountActions } from "@codebot/ui/components/provider-accounts";
+import { servesCustomProvider } from "@codebot/ui/components/provider-row";
+import type { AccountUsageProviderRow } from "@codebot/ui/features/account/account-usage-view";
 import {
   AcpRegistrySettings,
   type AcpRegistrySettingsApi,
-} from "@openbot/ui/features/custom-providers/AcpRegistrySettings";
+} from "@codebot/ui/features/custom-providers/AcpRegistrySettings";
 import {
   CustomAgentSettings,
   type CustomAgentSettingsApi,
-} from "@openbot/ui/features/custom-providers/CustomAgentSettings";
-import { CustomProviderDialog } from "@openbot/ui/features/custom-providers/CustomProviderDialog";
-import { CustomProviderPresetDialog } from "@openbot/ui/features/custom-providers/CustomProviderPresetDialog";
-import { savedCustomProviderDraft } from "@openbot/ui/features/custom-providers/custom-provider-form";
-import { localServerProbes, presetSetupProvider } from "@openbot/ui/features/custom-providers/custom-provider-presets";
-import { DetectedProviderSetup } from "@openbot/ui/features/custom-providers/DetectedProviderSetup";
-import { DetectedProviders } from "@openbot/ui/features/custom-providers/DetectedProviders";
+} from "@codebot/ui/features/custom-providers/CustomAgentSettings";
+import { CustomProviderDialog } from "@codebot/ui/features/custom-providers/CustomProviderDialog";
+import { CustomProviderPresetDialog } from "@codebot/ui/features/custom-providers/CustomProviderPresetDialog";
+import { savedCustomProviderDraft } from "@codebot/ui/features/custom-providers/custom-provider-form";
+import { localServerProbes, presetSetupProvider } from "@codebot/ui/features/custom-providers/custom-provider-presets";
+import { DetectedProviderSetup } from "@codebot/ui/features/custom-providers/DetectedProviderSetup";
+import { DetectedProviders } from "@codebot/ui/features/custom-providers/DetectedProviders";
 import type {
   DetectedProvider,
   DetectedProviderApi,
   ProviderDetection,
-} from "@openbot/ui/features/custom-providers/detected-providers";
+} from "@codebot/ui/features/custom-providers/detected-providers";
 import {
   ProviderDetectionSettings,
   type ProviderDetectionSettingsValue,
-} from "@openbot/ui/features/custom-providers/ProviderDetectionSettings";
+} from "@codebot/ui/features/custom-providers/ProviderDetectionSettings";
 import {
   isKeyDialogProvider,
   type KeyDialogProvider,
   OpenCodeKeyDialog,
   type ProviderKeyApi,
-} from "@openbot/ui/features/settings/OpenCodeKeyDialog";
+} from "@codebot/ui/features/settings/OpenCodeKeyDialog";
 import {
   type ProviderClaudeCompactWindow,
   type ProviderClaudeUserSetup,
@@ -60,8 +60,8 @@ import {
   type ProviderPromptCache,
   type ProviderSettingsDetail,
   ProviderSettingsPage,
-} from "@openbot/ui/features/settings/ProviderSettingsPage";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/settings/ProviderSettingsPage";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, createStore, Show, untrack } from "solid-js";
 import { ProviderSignInDialogs } from "../../components/ProviderSignInDialogs";

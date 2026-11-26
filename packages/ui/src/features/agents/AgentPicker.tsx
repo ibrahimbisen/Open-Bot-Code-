@@ -1,6 +1,6 @@
-import { SearchPicker } from "@openbot/ui/components/SearchPicker";
-import type { AgentProfile } from "@openbot/ui/data";
-import { useText } from "@openbot/ui/text";
+import { SearchPicker } from "@codebot/ui/components/SearchPicker";
+import type { AgentProfile } from "@codebot/ui/data";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { Show } from "solid-js";
 import { AgentAvatar } from "./AgentAvatar";

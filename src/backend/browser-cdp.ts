@@ -9,11 +9,11 @@ import type {
   BrowserLocation,
   BrowserSnapshot,
   BrowserTarget,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { BROWSER_VIEW_MAX_CLIPBOARD_TEXT } from "@openbot/contracts/team-protocol/browser-view-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { BROWSER_VIEW_MAX_CLIPBOARD_TEXT } from "@codebot/contracts/team-protocol/browser-view-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { Deferred, Effect, Exit, Fiber, Option, Scope } from "effect";
 import type { NativeImage, WebContents } from "electron";
 import {
@@ -113,7 +113,7 @@ const BROWSER_LOCATION_DEFAULT_ACCURACY = 50;
 const PAGE_ANSWER_WAIT_MS = 2_000;
 const PAGE_ANSWER_RETRY_MS = 100;
 const MAX_RESULT_BYTES = 64 * 1024;
-const DOCUMENT_ID_PROPERTY = "__openbot_browser_document_id__";
+const DOCUMENT_ID_PROPERTY = "__codebot_browser_document_id__";
 const MAX_SNAPSHOT_FRAMES = 12;
 const DOM_QUIET_MS = 250;
 const CHOOSER_WAIT_MS = 5_000;
@@ -232,23 +232,23 @@ const MAX_FOCUSED_FRAME_DEPTH = 8;
 const CLICK_PRESS_ATTEMPTS = 3;
 
 const COUNT_TYPED_KEYS = `
-  globalThis.openbotTypedKeys?.view.removeEventListener('keydown', globalThis.openbotTypedKeys.listener, true);
+  globalThis.codebotTypedKeys?.view.removeEventListener('keydown', globalThis.codebotTypedKeys.listener, true);
   const typedKeys = {
     view: this.ownerDocument.defaultView, count: 0, text: 'value' in this ? String(this.value) : this.textContent,
     listener: () => { typedKeys.count += 1; },
   };
   typedKeys.view.addEventListener('keydown', typedKeys.listener, true);
-  globalThis.openbotTypedKeys = typedKeys;`;
+  globalThis.codebotTypedKeys = typedKeys;`;
 const TYPED_KEY_ARRIVED_FUNCTION = `function(expected) {
-  const typedKeys = globalThis.openbotTypedKeys;
+  const typedKeys = globalThis.codebotTypedKeys;
   if (!typedKeys) return true;
   typedKeys.view.removeEventListener('keydown', typedKeys.listener, true);
-  globalThis.openbotTypedKeys = undefined;
+  globalThis.codebotTypedKeys = undefined;
   const text = 'value' in this ? String(this.value) : this.textContent;
   return typedKeys.count >= expected || text !== typedKeys.text;
 }`;
 const SAVE_TYPED_TEXT_FUNCTION = `function() {
-  if (globalThis.openbotTypedKeys) globalThis.openbotTypedKeys.text = 'value' in this ? String(this.value) : this.textContent;
+  if (globalThis.codebotTypedKeys) globalThis.codebotTypedKeys.text = 'value' in this ? String(this.value) : this.textContent;
 }`;
 const PASTE_APPLY_WAIT_MS = 1000;
 const PASTE_HANDLER_WAIT_MS = 50;
@@ -323,7 +323,7 @@ const PASTE_EVENT_SCRIPT = `(text) => {${FOCUSED_SELECTION}
 
 const PAGE_COPY_RETRY_MS = 500;
 const PAGE_COPY_SCRIPT = `(() => {
-  const key = Symbol.for("openbot.pageCopy");
+  const key = Symbol.for("codebot.pageCopy");
   let state = globalThis[key];
   if (!state) {
     state = { waits: [] };
@@ -3033,7 +3033,7 @@ export class BrowserCdpEngine {
     if (this.#cardScrub.documentSecretShown && (condition.text || condition.url))
       return yield* browserFailure(
         new Error(
-          "A wait cannot check page text or the address while the page can show a password or code that OpenBot typed. Use snapshots until it navigates.",
+          "A wait cannot check page text or the address while the page can show a password or code that CodeBot typed. Use snapshots until it navigates.",
         ),
       );
     yield* this.#leaseEffect((send) =>
@@ -3261,7 +3261,7 @@ export class BrowserCdpEngine {
     )
       return yield* browserFailure(
         new Error(
-          "While the page can show a password or code that OpenBot typed, use a ref from a fresh snapshot as the target until it navigates.",
+          "While the page can show a password or code that CodeBot typed, use a ref from a fresh snapshot as the target until it navigates.",
         ),
       );
     if (target.kind === "point") {

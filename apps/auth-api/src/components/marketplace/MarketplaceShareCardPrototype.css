@@ -5,9 +5,9 @@
   overflow: hidden;
   width: 100%;
   aspect-ratio: 1200 / 630;
-  background: var(--openbot-bg-canvas);
+  background: var(--codebot-bg-canvas);
   color: #fff;
-  font-family: var(--openbot-font-sans);
+  font-family: var(--codebot-font-sans);
 }
 
 .marketplace-share-avatar {
@@ -89,19 +89,19 @@
 .marketplace-share-role,
 .marketplace-share-source,
 .marketplace-share-shield {
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .marketplace-share-page {
   min-height: 100vh;
   background: #000;
   padding: 32px;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .marketplace-share-heading {
   margin: 0 0 12px;
-  color: var(--openbot-text-dim);
+  color: var(--codebot-text-dim);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.06em;

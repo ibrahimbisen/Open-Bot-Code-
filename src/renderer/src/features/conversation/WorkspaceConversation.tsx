@@ -1,4 +1,4 @@
-import { type AgentProviderId, isKeyOnlyProvider, isKnownAgentProvider } from "@openbot/contracts/agent-providers";
+import { type AgentProviderId, isKeyOnlyProvider, isKnownAgentProvider } from "@codebot/contracts/agent-providers";
 import {
   type AgentModelChoice,
   agentPermissionLevel,
@@ -8,17 +8,17 @@ import {
   sameAgentModelChoice,
   type UpdateAgentAdminSettingsInput,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { BROWSER_PROFILES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@openbot/contracts/team-protocol/conversation-unread-from-v1";
-import { MESSAGE_DELETE_CAPABILITY } from "@openbot/contracts/team-protocol/message-delete-v1";
-import { MESSAGE_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/message-pins-v1";
-import { THREAD_MESSAGE_SEARCH_CAPABILITY } from "@openbot/contracts/team-protocol/thread-message-search-v1";
-import type { AgentMessage } from "@openbot/ui/data";
-import type { UsageLimitAskCardProps } from "@openbot/ui/features/conversation/BackupModels";
-import { unloadedHistory } from "@openbot/ui/features/conversation/ChatScrollRail";
-import { sidebarAgentWaits } from "@openbot/ui/features/sidebar/sidebar-agent-states";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@codebot/contracts/team-protocol/conversation-unread-from-v1";
+import { MESSAGE_DELETE_CAPABILITY } from "@codebot/contracts/team-protocol/message-delete-v1";
+import { MESSAGE_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/message-pins-v1";
+import { THREAD_MESSAGE_SEARCH_CAPABILITY } from "@codebot/contracts/team-protocol/thread-message-search-v1";
+import type { AgentMessage } from "@codebot/ui/data";
+import type { UsageLimitAskCardProps } from "@codebot/ui/features/conversation/BackupModels";
+import { unloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
+import { sidebarAgentWaits } from "@codebot/ui/features/sidebar/sidebar-agent-states";
+import { useText } from "@codebot/ui/text";
 import { createMemo } from "solid-js";
 import { ProviderSignInDialogs } from "../../components/ProviderSignInDialogs";
 import { useNavigation } from "../../navigation";
@@ -115,7 +115,7 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
     else await connection.connect(provider, "composer");
   };
   const signInWithCode = (provider: AgentProviderId) => connection.alternative(provider, "composer");
-  const responseStyle = createServerResponseStyle(activeServer, window.openbot.hostAdmin);
+  const responseStyle = createServerResponseStyle(activeServer, window.codebot.hostAdmin);
   const { customAgents } = useCustomAgents();
   const localEndpoints = useCustomProviders();
   const {
@@ -578,7 +578,7 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
         browserEnabled={
           !platform.landingPreview && !platform.chatWindow && activeServerSupportsCapability("browser-control")
         }
-        openLinksInBrowser={generalSettings().externalLinkTarget.kind === "openbot"}
+        openLinksInBrowser={generalSettings().externalLinkTarget.kind === "codebot"}
         remoteDesktopSessionActive={Boolean(activeRemoteDesktopSession())}
         remoteDesktopVisible={remoteDesktopWorkspaceVisible()}
         remoteDesktopEnabled={

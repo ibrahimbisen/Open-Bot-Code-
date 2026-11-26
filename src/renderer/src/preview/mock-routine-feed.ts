@@ -1,4 +1,4 @@
-import type { RoutineFeedDesktopApi } from "@openbot/contracts/ipc";
+import type { RoutineFeedDesktopApi } from "@codebot/contracts/ipc";
 
 export function createMockRoutineFeed(): RoutineFeedDesktopApi {
   let url: string | null = null;

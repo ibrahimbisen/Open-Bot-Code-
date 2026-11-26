@@ -1,6 +1,6 @@
-import type { XPost, XReplyPayload } from "@openbot/contracts/browser-extension-x";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { currentText } from "@openbot/ui/text";
+import type { XPost, XReplyPayload } from "@codebot/contracts/browser-extension-x";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { currentText } from "@codebot/ui/text";
 
 export function xPostMessage(payload: XReplyPayload): string {
   const { t } = currentText();

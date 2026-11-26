@@ -1,6 +1,6 @@
 # Self-hosted servers
 
-A self-hosted server is the Linux OpenBot build on your own computer with no screen: a VPS, a home
+A self-hosted server is the Linux CodeBot build on your own computer with no screen: a VPS, a home
 server or a cloud VM. It is a normal Remote host of your account. You use it from the desktop app,
 the iPhone app or `openbot.run/app`, as you use a [hosted server](hosted-servers.md). You install
 and control it from a terminal.
@@ -13,12 +13,12 @@ On Ubuntu 24.04 or 26.04 (x86_64 or arm64) with systemd:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh | sudo bash
-sudo openbot login
+sudo codebot login
 ```
 
-`openbot login` asks for your email and the code that OpenBot sends to it. After the sign-in, the
-server shows in the server list of that account. Its name is "OpenBot"; give another one with
-`sudo openbot login --name <name>` or `sudo openbot name <name>`. A name has 6 to 32 characters.
+`codebot login` asks for your email and the code that CodeBot sends to it. After the sign-in, the
+server shows in the server list of that account. Its name is "CodeBot"; give another one with
+`sudo codebot login --name <name>` or `sudo codebot name <name>`. A name has 6 to 32 characters.
 Then connect a provider from the app, as on a hosted server (see
 [Providers](hosted-servers.md#providers)).
 
@@ -28,12 +28,12 @@ In the desktop app, select Add server, then Other options, then New server on an
 The app shows one command with a one-time claim of your account:
 
 ```sh
-{ echo OPENBOT_CLAIM=<claim>; curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh; } | sudo bash -s
+{ echo CODEBOT_CLAIM=<claim>; curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh; } | sudo bash -s
 ```
 
 Run it on the server, or give it to an AI agent there with Copy for an AI agent. It asks no
-questions. It installs OpenBot, signs the server in with the claim (`openbot login --claim`), waits
-until the server is online, and ends with "OpenBot is connected to your account." and exit code 0.
+questions. It installs CodeBot, signs the server in with the claim (`codebot login --claim`), waits
+until the server is online, and ends with "CodeBot is connected to your account." and exit code 0.
 The app sees the new server in the server list and shows Open server.
 
 - The account service makes the claim for the signed-in user with `POST /v2/server-claims` (at most
@@ -42,46 +42,46 @@ The app sees the new server in the server list and shows Open server.
   argument or a sudo variable, because sudo logs both (`COMMAND=` and `ENV=` in `/var/log/auth.log`
   and the journal), and `ps` shows arguments to each user. A command that you paste stays in the
   history of your shell. Make a new command when it expired or when somebody else saw it.
-- The install refuses a claim on a server that is signed in already. Run `sudo openbot logout` first.
+- The install refuses a claim on a server that is signed in already. Run `sudo codebot logout` first.
 
 ### Install from a chat
 
 An agent can install the server over SSH. Write the request in a chat, for example "Install
-OpenBot on root@203.0.113.7 and name it Office server", or select Set up with an agent in the
+CodeBot on root@203.0.113.7 and name it Office server", or select Set up with an agent in the
 install dialog: it puts a short request into the composer of the open chat.
 
-The agent calls the OpenBot tool `create_server_install_command` with the server name. The owner
+The agent calls the CodeBot tool `create_server_install_command` with the server name. The owner
 of the agent's server approves each command. The tool then makes a claim, as the dialog does, and
 gives the command with `--name` only to the agent. The agent runs it as root over SSH.
 
 The chat shows a card with the name. It waits for a new server with that name, then shows Open
 server when the server is online. The card keeps only the name and the expiry time. The claim is
-not in the chat, and OpenBot logs redact it. The agent's own tool history keeps the command; the
+not in the chat, and CodeBot logs redact it. The agent's own tool history keeps the command; the
 claim in it stops working after one use or 15 minutes.
 
 ### Hermes Agent
 
-OpenBot uses the Hermes Agent of the service user, as it uses the user's own Hermes on a desktop
+CodeBot uses the Hermes Agent of the service user, as it uses the user's own Hermes on a desktop
 (see [Hermes](architecture/providers.md#hermes)). Open the server's provider settings and select
-Download on the Hermes row. OpenBot runs the official Hermes installer as the service user, then the
+Download on the Hermes row. CodeBot runs the official Hermes installer as the service user, then the
 row shows Connect. To install Hermes from a terminal instead, run the installer as that user, then
-restart OpenBot:
+restart CodeBot:
 
 ```sh
-sudo -u openbot -i bash -c 'curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --non-interactive'
-sudo openbot restart
+sudo -u codebot -i bash -c 'curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --non-interactive'
+sudo codebot restart
 ```
 
 In Docker, the service user is the image user, and its home folder is the data volume:
 
 ```sh
-docker exec openbot bash -c 'curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --non-interactive'
-docker restart openbot
+docker exec codebot bash -c 'curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --non-interactive'
+docker restart codebot
 ```
 
 Hermes keeps its settings, sign-ins and memories in `~/.hermes` of that user. Then select Connect on
 the Hermes row of the server's provider settings: it shows a Nous Portal code. Alternatively, run
-`hermes setup` or `hermes model` as that user. OpenBot sees a change to `config.yaml`, `.env` or
+`hermes setup` or `hermes model` as that user. CodeBot sees a change to `config.yaml`, `.env` or
 `auth.json` with no restart. A Hermes that another user installed is not used.
 
 The Hermes installer needs `git` and `curl`, and downloads Node.js, which needs `libatomic1`. The
@@ -91,18 +91,18 @@ service user has no sudo, so the server packages include them. `bun run test:her
 
 An operator who sets up a server for somebody else can sign it in with no code. The operator makes a
 one-time claim for the owner's email, and the server redeems it. The owner does nothing: when they
-sign in to OpenBot with that email, the server is in their server list.
+sign in to CodeBot with that email, the server is in their server list.
 
 ```sh
 printf '{"email":"%s"}' owner@example.com |
   curl --fail -sS -X POST https://api.openbot.run/v2/admin/server-claims \
     -H @server-claims.header -H 'content-type: application/json' --data-binary @- |
   sed -n 's/.*"claim":"\([A-Za-z0-9_-]*\)".*/\1/p' |
-  sudo openbot login --claim --name <name>
+  sudo codebot login --claim --name <name>
 ```
 
 `server-claims.header` holds one line, `Authorization: Bearer <token>`, so the token is in no process
-argument. `openbot login --claim` reads the claim from standard input, or asks for it without an echo
+argument. `codebot login --claim` reads the claim from standard input, or asks for it without an echo
 in a terminal, for the same reason.
 
 - `POST /v2/admin/server-claims` needs the `SERVER_CLAIMS_ADMIN_TOKEN` of the account service. It
@@ -123,42 +123,42 @@ Install options go after `sudo bash -s --`:
 
 | Option | Default | Use |
 | --- | --- | --- |
-| `--user <name>` | the installed user, else `openbot` | The user that runs OpenBot and its agents. The install makes it when it does not exist, with its home folder in `/var/lib/<name>`. |
+| `--user <name>` | the installed user, else `codebot` | The user that runs CodeBot and its agents. The install makes it when it does not exist, with its home folder in `/var/lib/<name>`. |
 | `--auth-api-url <origin>` | the installed one, else the URL in the build | Another account server, for example the `test` Worker or a [self-hosted account service](self-hosting.md). |
 | `--display-size <W>x<H>` | the installed one, else `1280x800` | The size of the virtual display that computer use reads (see [Display size](#display-size)). |
-| `--name <name>` | `OpenBot` | The server name, with a claim from the app (see [Install from the app](#install-from-the-app)). |
+| `--name <name>` | `CodeBot` | The server name, with a claim from the app (see [Install from the app](#install-from-the-app)). |
 
 Run the install again to reinstall or upgrade. The data stays in the home folder of the service
 user. A reinstall keeps the user and the account server, because the sign-in belongs to them, and
-refuses another `--user`. A reinstall without `--display-size` keeps the display size. The install refuses an older release than the installed one, because an older OpenBot cannot
+refuses another `--user`. A reinstall without `--display-size` keeps the display size. The install refuses an older release than the installed one, because an older CodeBot cannot
 open a database that a newer one migrated. It also refuses a computer that is a hosted server.
 
 ## Commands
 
 | Command | Use |
 | --- | --- |
-| `openbot status` | Show the version, the account, the server state, the memory and a staged update. |
-| `openbot login [<email>] [--name <name>]` | Sign in with an email code. |
-| `openbot login --claim [--name <name>]` | Sign in with an operator's one-time claim (see [Sign in with a server claim](#sign-in-with-a-server-claim)). |
-| `openbot mobile-connect` | Show a Mobile Connect QR code for the phone app (see [Phone app](#phone-app)). |
-| `openbot logout` | Sign out. The server is not available until the next sign-in. |
-| `openbot name <name>` | Change the server name. |
-| `openbot logs [-f]` | Show the journal of `openbot.service`. |
-| `sudo openbot start\|stop\|restart` | Control `openbot.service`. |
-| `sudo openbot update` | Download, check and install the newest release now. |
-| `sudo openbot uninstall` | Sign out and remove OpenBot. The data stays (see [Remove](#remove)). |
-| `openbot version` | Show the installed version. |
+| `codebot status` | Show the version, the account, the server state, the memory and a staged update. |
+| `codebot login [<email>] [--name <name>]` | Sign in with an email code. |
+| `codebot login --claim [--name <name>]` | Sign in with an operator's one-time claim (see [Sign in with a server claim](#sign-in-with-a-server-claim)). |
+| `codebot mobile-connect` | Show a Mobile Connect QR code for the phone app (see [Phone app](#phone-app)). |
+| `codebot logout` | Sign out. The server is not available until the next sign-in. |
+| `codebot name <name>` | Change the server name. |
+| `codebot logs [-f]` | Show the journal of `codebot.service`. |
+| `sudo codebot start\|stop\|restart` | Control `codebot.service`. |
+| `sudo codebot update` | Download, check and install the newest release now. |
+| `sudo codebot uninstall` | Sign out and remove CodeBot. The data stays (see [Remove](#remove)). |
+| `codebot version` | Show the installed version. |
 
 An owner or admin can also restart the server from the app: select Restart server in the server
-menu, or in Server settings on the phone. OpenBot closes, and `openbot.service` starts it again after
+menu, or in Server settings on the phone. CodeBot closes, and `codebot.service` starts it again after
 about 10 seconds. In Docker, the container must have a restart policy, such as `--restart
 unless-stopped`; without one, the container stays stopped. When the server does not answer, use
-`sudo openbot restart`.
+`sudo codebot restart`.
 
-When the start of OpenBot fails again and again, the service stops, and systemd does not start it again
-(see [Start loop](hosted-servers.md#start-loop)). `openbot status` then says so. Read the reason with
-`openbot logs`. Install a newer release with `sudo openbot update`, or try again with
-`sudo openbot restart`. The update timer also starts the service again about each hour, with a
+When the start of CodeBot fails again and again, the service stops, and systemd does not start it again
+(see [Start loop](hosted-servers.md#start-loop)). `codebot status` then says so. Read the reason with
+`codebot logs`. Install a newer release with `sudo codebot update`, or try again with
+`sudo codebot restart`. The update timer also starts the service again about each hour, with a
 newer release when one is staged.
 
 Run the account commands with `sudo` or as the service user. Other users cannot open the control
@@ -173,10 +173,10 @@ and unloads idle pages sooner. By default, a fixed number of turns run at the sa
 5 GiB of memory, 8 up to 10 GiB, and 16 above. An owner or admin can choose another number, 1 to 128, or
 Unlimited, in Server Settings > Agent defaults > Threads at the same time. Low memory still holds a new turn.
 
-The memory ceiling is the smaller of the machine memory and the limit of `openbot.service`
-(`MemoryMax=90%`). To give OpenBot less memory, lower the limit with
-`sudo systemctl edit openbot.service`, for example `MemoryMax=2G`, and restart the service. The
-turn limit and the low-memory levels then use the new ceiling. `openbot status` shows the ceiling,
+The memory ceiling is the smaller of the machine memory and the limit of `codebot.service`
+(`MemoryMax=90%`). To give CodeBot less memory, lower the limit with
+`sudo systemctl edit codebot.service`, for example `MemoryMax=2G`, and restart the service. The
+turn limit and the low-memory levels then use the new ceiling. `codebot status` shows the ceiling,
 the free memory, the level (`ok`, `low` or `critical`) and the turn limit:
 
 ```text
@@ -188,7 +188,7 @@ The guard reads cgroup v2. On a system with cgroup v1, it uses the machine memor
 one warning.
 
 Agent processes run at nice 10 with an OOM value of 500, also a job that an agent detaches. At the
-`critical` level, OpenBot stops leftover agent processes first. Node programs of agents see the CPU
+`critical` level, CodeBot stops leftover agent processes first. Node programs of agents see the CPU
 limit of the unit in `os.cpus()`. See [agent processes](hosted-servers.md#memory).
 
 ## Display size
@@ -198,22 +198,22 @@ The default size is 1280x800. A [Docker](docker.md#environment) container uses t
 and the same default. A hosted server gives the agents its boat desktop, and this setting does not
 change that desktop.
 
-The display size does not change the OpenBot browser (`openbot_browser`). Its pages have their own
+The display size does not change the CodeBot browser (`codebot_browser`). Its pages have their own
 size, 1200x800 when no panel shows them, and its clicks go to page elements.
 
 To use another size, give it at the install with `--display-size 1920x1080`, or write this line in
-`/opt/OpenBot/hosted/openbot.env` and run `sudo openbot restart`:
+`/opt/CodeBot/hosted/codebot.env` and run `sudo codebot restart`:
 
 ```text
-OPENBOT_DISPLAY_SIZE=1920x1080
+CODEBOT_DISPLAY_SIZE=1920x1080
 ```
 
 The value is `WIDTHxHEIGHT` in digits, from 640x480 to 2576x2576. The install refuses a value that is
-not valid. At a start, a value that is not valid writes this warning in `openbot logs`, and the
+not valid. At a start, a value that is not valid writes this warning in `codebot logs`, and the
 server starts with 1280x800:
 
 ```text
-OPENBOT_DISPLAY_SIZE is not WIDTHxHEIGHT from 640x480 to 2576x2576. The display is 1280x800.
+CODEBOT_DISPLAY_SIZE is not WIDTHxHEIGHT from 640x480 to 2576x2576. The display is 1280x800.
 ```
 
 ### Which size to use
@@ -277,10 +277,10 @@ A 1280x800 screenshot is not made smaller by any Claude or Codex model.
 ## Phone app
 
 The phone app has no email sign-in. It signs in with a Mobile Connect code. A server has no screen
-for the code, so `openbot mobile-connect` shows it in the terminal:
+for the code, so `codebot mobile-connect` shows it in the terminal:
 
-1. Sign in the server with `openbot login`.
-2. Run `openbot mobile-connect`. In a container, run `docker exec -it <container> openbot mobile-connect`.
+1. Sign in the server with `codebot login`.
+2. Run `codebot mobile-connect`. In a container, run `docker exec -it <container> codebot mobile-connect`.
 3. In the phone app, select **Scan QR code** and scan the code in the terminal.
 
 The code signs the phone in to the account of the server. It works for one sign-in and expires after
@@ -294,14 +294,14 @@ already in its server list. Remove a phone from the account in the desktop app, 
 
 ## Remove
 
-`sudo openbot uninstall` signs out, then removes the service, the units, the AppArmor profile, the
-`openbot` command and the server files in `/opt/OpenBot`. It keeps the home folder of the service user
-and the keyring in `/srv/openbot-hosted`. The keyring has the key of the encrypted data in that home
+`sudo codebot uninstall` signs out, then removes the service, the units, the AppArmor profile, the
+`codebot` command and the server files in `/opt/CodeBot`. It keeps the home folder of the service user
+and the keyring in `/srv/codebot-hosted`. The keyring has the key of the encrypted data in that home
 folder, so keep or delete the two together. An install with the same `--user` uses them again. To
 delete the data too:
 
 ```sh
-sudo userdel --remove openbot && sudo rm -rf /srv/openbot-hosted
+sudo userdel --remove codebot && sudo rm -rf /srv/codebot-hosted
 ```
 
 The server stays in the server list of the account, offline. Remove it there.
@@ -310,46 +310,46 @@ The server stays in the server list of the account, offline. Remove it there.
 
 `install-server.sh` only downloads the release. It reads `latest-linux.yml`
 (`latest-linux-arm64.yml` on arm64) of the latest GitHub release, checks the SHA-512 of the
-AppImage, unpacks it and runs `resources/hosting/openbot-server-setup` from that release. So the
+AppImage, unpacks it and runs `resources/hosting/codebot-server-setup` from that release. So the
 install steps always match the build that they install. A release before this feature has no setup
 file, and the install stops with a message.
 
-`openbot-server-setup` uses the install steps of a hosted server (`openbot-hosted-update`): it
+`codebot-server-setup` uses the install steps of a hosted server (`codebot-hosted-update`): it
 installs the packages in `packages.txt` and `optional-packages.txt`, copies the release to
-`/opt/OpenBot/app`, and installs the scripts, the AppArmor profile and the units. It writes `self`
-to `/opt/OpenBot/hosted/mode` and links `/usr/local/bin/openbot`.
+`/opt/CodeBot/app`, and installs the scripts, the AppArmor profile and the units. It writes `self`
+to `/opt/CodeBot/hosted/mode` and links `/usr/local/bin/codebot`.
 
-apt never removes a package of the computer for OpenBot (`--no-remove`). When a package in
+apt never removes a package of the computer for CodeBot (`--no-remove`). When a package in
 `packages.txt` needs a removal, the install stops. A package in `optional-packages.txt` is skipped
 when a command with its name already exists, or when it needs a removal. For example, on Raspberry
 Pi OS `pcmanfm-pi` gives the `pcmanfm` command, and the `pcmanfm` package would remove the desktop
 of the Pi.
 
-The AppArmor profile (`/etc/apparmor.d/openbot-hosted`) needs AppArmor 4 (`abi <abi/4.0>` and the
+The AppArmor profile (`/etc/apparmor.d/codebot-hosted`) needs AppArmor 4 (`abi <abi/4.0>` and the
 `userns` rule). When `/etc/apparmor.d/abi/4.0` does not exist and `apparmor_parser` cannot read the
 profile, for example on Debian 12 with AppArmor 3.0, the install does not write the profile and
-removes an old copy. These systems do not restrict user namespaces by default, so OpenBot does not need it.
+removes an old copy. These systems do not restrict user namespaces by default, so CodeBot does not need it.
 
 When Ubuntu's `bwrap-userns-restrict` profile is loaded (the default on Ubuntu 26.04), the install
-and each start of OpenBot add one rule to `/etc/apparmor.d/local/bwrap-userns-restrict`:
+and each start of CodeBot add one rule to `/etc/apparmor.d/local/bwrap-userns-restrict`:
 `priority=1 allow pix /** -> &bwrap,`. The Ubuntu profile of `/usr/bin/bwrap` removes all
 capabilities from the programs that `bwrap` starts, and the Claude sandbox ("Workspace only") needs
 `CAP_SYS_ADMIN` there. With the rule, those programs keep the profile of `bwrap`, for all users of
-the computer. `sudo openbot uninstall` removes the rule.
+the computer. `sudo codebot uninstall` removes the rule.
 
-With `mode` set to `self`, `openbot-hosted-server` does not wait for a claim or for a boat desktop.
-It starts a D-Bus session with an unlocked keyring, as on a hosted server, and runs OpenBot under
-Xvfb with `OPENBOT_SERVER=1`. Main (`src/main/server-mode.ts`) then opens the control socket
-`/run/openbot/control.sock` and publishes the host after each sign-in. The
+With `mode` set to `self`, `codebot-hosted-server` does not wait for a claim or for a boat desktop.
+It starts a D-Bus session with an unlocked keyring, as on a hosted server, and runs CodeBot under
+Xvfb with `CODEBOT_SERVER=1`. Main (`src/main/server-mode.ts`) then opens the control socket
+`/run/codebot/control.sock` and publishes the host after each sign-in. The
 [watchdog](hosted-servers.md#watchdog) also runs: when main stops updating its heartbeat file for 10
-minutes, the watchdog stops OpenBot and systemd starts it again.
+minutes, the watchdog stops CodeBot and systemd starts it again.
 
 The server has two Xvfb displays, one in each of two nested `xvfb-run` commands that share one
 authority file. The outer one starts the agent display, at the [display size](#display-size), and
-the script names it in `OPENBOT_AGENT_DISPLAY`. The inner one starts the display that OpenBot shows
+the script names it in `CODEBOT_AGENT_DISPLAY`. The inner one starts the display that CodeBot shows
 its windows on, at 1280x800. Main gives that display to Computer Use, to remote desktop and to the agent
-processes, so an agent's screenshot and remote desktop do not show the OpenBot window. The agent
-display has a window manager (Openbox) and a dark background with the OpenBot logo: windows have
+processes, so an agent's screenshot and remote desktop do not show the CodeBot window. The agent
+display has a window manager (Openbox) and a dark background with the CodeBot logo: windows have
 title bars, and a right-click on the empty screen opens a menu with a terminal and a file manager. See
 [Computer Use and remote desktop](architecture/computer-use.md#agent-display-on-a-server).
 
@@ -357,27 +357,27 @@ Updates work as on a hosted server (see [Updates](hosted-servers.md#updates)): t
 new release, and it starts at the next boot, or when an owner, an admin or a permitted member
 installs it in Server Settings > Updates. When an owner turns on the automatic update switch (it is
 off by default), the server also installs it when it is idle. A hosted server always does this, and
-also waits until no connected client uses it. `sudo openbot update` stages, stops the service, applies
+also waits until no connected client uses it. `sudo codebot update` stages, stops the service, applies
 and starts the service again. When a step fails or a signal stops it, the command completes an
 interrupted copy, starts the service, and exits with an error.
 
 ## Control socket
 
-The `openbot` command talks to main over HTTP on a Unix socket, with form bodies and `key=value`
+The `codebot` command talks to main over HTTP on a Unix socket, with form bodies and `key=value`
 text answers, so it needs only `curl`. The routes are `GET /v1/status`, `POST /v1/login/start`,
 `POST /v1/login/verify`, `POST /v1/login/claim`, `POST /v1/name`, `POST /v1/mobile-connect` and
 `POST /v1/logout`.
 
 Threat model:
 
-- systemd makes `/run/openbot` for the service user with mode 0700, and main makes the socket 0600.
+- systemd makes `/run/codebot` for the service user with mode 0700, and main makes the socket 0600.
   Main refuses to listen when the directory belongs to another user or other users can enter it. It
   never removes a file at the socket path that is not a socket.
 - Only the service user and root can connect. Agents run as the service user and already have full
-  access to its files, its keyring and the OpenBot database, so the socket gives them nothing new.
+  access to its files, its keyring and the CodeBot database, so the socket gives them nothing new.
 - The socket answers a closed list of requests. It never sends the session token, the sign-in
   code or the claim back, and a value cannot add a line to an answer. A body is at most 4 KiB.
-- Server mode starts only in a packaged Linux build with `OPENBOT_SERVER=1`, and never on a hosted
+- Server mode starts only in a packaged Linux build with `CODEBOT_SERVER=1`, and never on a hosted
   server, which signs in with its claim.
 
 ## Not confirmed
@@ -387,7 +387,7 @@ Threat model:
   the install uses those names.
 - Ubuntu 26.04: release 0.48.1 was tested on Ubuntu 26.04.1 arm64 in the Docker image, with
   `BASE=ubuntu:26.04` and the package list without `libminiupnpc17` (the 0.48.1 list stops that
-  build). The server started with the Electron sandbox on, `openbot status` answered, and it stopped
+  build). The server started with the Electron sandbox on, `codebot status` answered, and it stopped
   with exit code 0. The install with systemd and a native x86_64 run were not tested.
 - Remote desktop on Ubuntu 26.04: the runtime build checks with `ldd` that the x86_64 runtime finds
   all its libraries there (see [Linux runtime](RELEASING.md#linux-runtime-recipe-16)). In the x86_64
@@ -404,7 +404,7 @@ Threat model:
   limits from the Claude docs. The Codex limit comes from `codex-rs/utils/image` and was not checked
   again. It is not known if Claude Code or Codex makes a screenshot smaller before it sends it to
   the model.
-- The two displays were tested in an Ubuntu 24.04 container with a stand-in for OpenBot: OpenBot
+- The two displays were tested in an Ubuntu 24.04 container with a stand-in for CodeBot: CodeBot
   gets 1280x800, the agent display the display size, and a process without the authority file cannot
   open the agent display. Computer Use and remote desktop on the agent display were not tested on a
   server.

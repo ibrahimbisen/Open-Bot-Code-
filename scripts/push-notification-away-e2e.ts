@@ -3,12 +3,12 @@ import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import type { AgentEvent, AgentProviderState, AgentRuntimeSnapshot, AgentSummary } from "@openbot/contracts/ipc";
-import type { LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
-import { PUSH_NOTIFICATION_THREADS_CAPABILITY } from "@openbot/contracts/team-protocol/push-notification-threads-v1";
-import { createOpenBotLogger } from "@openbot/logging";
-import { encodeLiveActivityBytes, LIVE_ACTIVITY_SECRET_BYTES } from "@openbot/team-client/live-activity-seal";
-import { pushNotificationKeys } from "@openbot/team-client/push-notification-seal";
+import type { AgentEvent, AgentProviderState, AgentRuntimeSnapshot, AgentSummary } from "@codebot/contracts/ipc";
+import type { LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
+import { PUSH_NOTIFICATION_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/push-notification-threads-v1";
+import { createCodeBotLogger } from "@codebot/logging";
+import { encodeLiveActivityBytes, LIVE_ACTIVITY_SECRET_BYTES } from "@codebot/team-client/live-activity-seal";
+import { pushNotificationKeys } from "@codebot/team-client/push-notification-seal";
 import { Effect } from "effect";
 import { openSealedLiveActivity } from "../apps/mobile/src/features/live-activity/model/live-activity-open";
 import { ProviderSignInWaits } from "../src/backend/agent/provider-sign-in-waits";
@@ -19,14 +19,14 @@ import {
   PushNotificationService,
 } from "../src/main/push-notifications";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/push-notification-away-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/push-notification-away-e2e");
 const STEP_DEADLINE_MS = 20_000;
 const MEMBER = "fixture-member";
 const ANDROID = "android-session";
 const IPHONE = "iphone-session";
 const AGENT_A = "agent-a";
 const AGENT_B = "agent-b";
-const logger = createOpenBotLogger("push-notification-away-e2e");
+const logger = createCodeBotLogger("push-notification-away-e2e");
 const readOptions = {
   excludeRoutineEvents: true,
   excludeRoutineRunEvents: true,

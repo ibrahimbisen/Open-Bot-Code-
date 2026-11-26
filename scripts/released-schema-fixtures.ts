@@ -6,9 +6,9 @@ import { DatabaseSync } from "node:sqlite";
 import { z } from "zod";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const WORK = join(ROOT, ".openbot-build", "released-schema-fixtures");
+const WORK = join(ROOT, ".codebot-build", "released-schema-fixtures");
 const OUTPUT = join(ROOT, "src", "backend", "released-schemas", "releases.json");
-const SCHEMA_MODULE = "src/backend/openbot-database-schema.ts";
+const SCHEMA_MODULE = "src/backend/codebot-database-schema.ts";
 const FIRST_DATABASE_TAG = "v0.1.12";
 const APPLIED_AT = "2026-01-01T00:00:00.000Z";
 
@@ -26,11 +26,11 @@ const childModule = argumentValue("dump");
 const childDatabase = argumentValue("db");
 if (childModule && childDatabase) {
   const source = await readFile(childModule, "utf8");
-  const schema: { migrateOpenBotDatabase: (db: DatabaseSync, options: unknown) => void } = await import(childModule);
+  const schema: { migrateCodeBotDatabase: (db: DatabaseSync, options: unknown) => void } = await import(childModule);
   const db = new DatabaseSync(childDatabase);
-  schema.migrateOpenBotDatabase(
+  schema.migrateCodeBotDatabase(
     db,
-    source.includes("OpenBotMigrationOptions") ? { appliedAt: APPLIED_AT } : APPLIED_AT,
+    source.includes("CodeBotMigrationOptions") ? { appliedAt: APPLIED_AT } : APPLIED_AT,
   );
   const shadowTables = new Set(
     db
@@ -92,9 +92,9 @@ async function exportTag(tag: string): Promise<string> {
     maxBuffer: 512 * 1024 * 1024,
   });
   execFileSync("tar", ["-x", "-C", directory], { input: archive });
-  await mkdir(join(directory, "node_modules", "@openbot"), { recursive: true });
+  await mkdir(join(directory, "node_modules", "@codebot"), { recursive: true });
   for (const name of git("ls-tree", "--name-only", `${tag}:packages`).split("\n").filter(Boolean)) {
-    await symlink(join(directory, "packages", name), join(directory, "node_modules", "@openbot", name), "dir");
+    await symlink(join(directory, "packages", name), join(directory, "node_modules", "@codebot", name), "dir");
   }
   return join(directory, SCHEMA_MODULE);
 }

@@ -4,42 +4,42 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentEvent } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import type { AgentEvent } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V9,
   TEAM_PROTOCOL_VERSION_HEADER,
   teamCapabilitiesForProtocol,
-} from "@openbot/contracts/team-protocol";
+} from "@codebot/contracts/team-protocol";
 import {
   COMPUTER_ACTIVITY_CAPABILITY,
   COMPUTER_ACTIVITY_CODECS,
   COMPUTER_ACTIVITY_ROUTES,
-} from "@openbot/contracts/team-protocol/computer-activity-v1";
-import { CONNECTORS_ROUTES } from "@openbot/contracts/team-protocol/connectors-v1";
-import { CRM_ROUTES } from "@openbot/contracts/team-protocol/crm-v1";
-import { MCP_SIGN_IN_ROUTES } from "@openbot/contracts/team-protocol/mcp-sign-in-v1";
-import { PENDING_PROMPTS_ROUTES } from "@openbot/contracts/team-protocol/pending-prompts-v1";
-import { PROVIDER_ACCOUNTS_ROUTES } from "@openbot/contracts/team-protocol/provider-accounts-v1";
-import { WORKFLOWS_ROUTES } from "@openbot/contracts/team-protocol/workflows-v1";
-import { createOpenBotLogger } from "@openbot/logging";
-import { encodeLiveActivityBytes, LIVE_ACTIVITY_SECRET_BYTES } from "@openbot/team-client/live-activity-seal";
+} from "@codebot/contracts/team-protocol/computer-activity-v1";
+import { CONNECTORS_ROUTES } from "@codebot/contracts/team-protocol/connectors-v1";
+import { CRM_ROUTES } from "@codebot/contracts/team-protocol/crm-v1";
+import { MCP_SIGN_IN_ROUTES } from "@codebot/contracts/team-protocol/mcp-sign-in-v1";
+import { PENDING_PROMPTS_ROUTES } from "@codebot/contracts/team-protocol/pending-prompts-v1";
+import { PROVIDER_ACCOUNTS_ROUTES } from "@codebot/contracts/team-protocol/provider-accounts-v1";
+import { WORKFLOWS_ROUTES } from "@codebot/contracts/team-protocol/workflows-v1";
+import { createCodeBotLogger } from "@codebot/logging";
+import { encodeLiveActivityBytes, LIVE_ACTIVITY_SECRET_BYTES } from "@codebot/team-client/live-activity-seal";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { NotificationRelayRequest } from "../src/main/push-notifications";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/computer-activity-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/computer-activity-e2e");
 const APP_VERSION = "0.0.0-e2e";
 const STEP_DEADLINE_MS = 30_000;
 const AWAY_AFTER_MS = 2_000;
@@ -47,7 +47,7 @@ const OWNER = { username: "owner-user", password: "owner-password-123" };
 const OWNER_PHONE = "owner-phone-session";
 const WITNESS = "witness-member";
 const WITNESS_PHONE = "witness-phone-session";
-const logger = createOpenBotLogger("computer-activity-e2e");
+const logger = createCodeBotLogger("computer-activity-e2e");
 const AUTOMATIC_READS = [
   CRM_ROUTES.settings,
   PROVIDER_ACCOUNTS_ROUTES.list,
@@ -138,7 +138,7 @@ async function step<T>(name: string, run: () => Promise<T>, summarize: (value: T
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-computer-activity-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-computer-activity-"));
 const userData = join(root, "user-data");
 const unused = () => Effect.die(new Error("Not used by this check."));
 const agentBrowser: AgentBrowserHost = {
@@ -190,11 +190,11 @@ const teamBrowser: TeamApiBrowser = {
   answerHttpSignIn: unused,
 };
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, join(root, "home"), database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
 let agents: AgentService | undefined;
 let server: InstanceType<typeof TeamApiServer> | undefined;
 let phones: InstanceType<typeof PushNotificationService> | undefined;

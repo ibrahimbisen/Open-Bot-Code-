@@ -1,6 +1,6 @@
-import type { AgentProviderId, ProviderHostSignInStatus } from "@openbot/contracts/ipc";
-import { PROVIDER_HOST_SIGN_IN_ERROR_LIMIT } from "@openbot/contracts/team-protocol/provider-host-sign-in-v1";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentProviderId, ProviderHostSignInStatus } from "@codebot/contracts/ipc";
+import { PROVIDER_HOST_SIGN_IN_ERROR_LIMIT } from "@codebot/contracts/team-protocol/provider-host-sign-in-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Cause, Effect, Exit, Option } from "effect";
 import { providerLabel } from "../backend/agent/thread-items";
 import type { AgentService } from "../backend/agent-service";

@@ -15,13 +15,13 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { LocalMcpBridge, type LocalMcpSession } from "../src/backend/local-mcp-bridge";
 import type { DynamicToolCallParams } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/hermes-catalog-tools-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/hermes-catalog-tools-e2e");
 const HERMES_REPO = process.env.HERMES_REPO;
 const HERMES_PYTHON = process.env.HERMES_PYTHON ?? "python3";
 
 const SEARCHES: ReadonlyArray<[string, string]> = [
   ["channel_result", "channel_result"],
-  ["openbot.channel_result", "channel_result"],
+  ["codebot.channel_result", "channel_result"],
   ["channel result", "channel_result"],
   ["create workflow", "edit_workflow"],
   ["list agents", "list_agents"],
@@ -51,9 +51,9 @@ assembled = ts.assemble_tool_defs(defs, context_length=200000, config=config)
 search_tool = next(d["function"] for d in assembled.tool_defs if d["function"]["name"] == "tool_search")
 searches = {q: json.loads(ts.dispatch_tool_search({"queries": [q]}, current_tool_defs=defs, config=config))["results"][0]["matches"]
             for q in listed["queries"]}
-openbot = next(n for n, s in servers.items() if s == "openbot")
+codebot = next(n for n, s in servers.items() if s == "codebot")
 described = json.loads(ts.dispatch_tool_describe(
-    {"names": [f"mcp__{openbot}__channel_result", f"mcp__{openbot}__edit_workflow", f"mcp__{openbot}__send_message"]},
+    {"names": [f"mcp__{codebot}__channel_result", f"mcp__{codebot}__edit_workflow", f"mcp__{codebot}__send_message"]},
     current_tool_defs=defs, config=config))
 session = ts.session_tool_names(defs)
 call = lambda name, arguments: list(ts.resolve_underlying_call({"calls": [{"name": name, "arguments": arguments}]}, session))
@@ -61,14 +61,14 @@ print(json.dumps({
     "servers": servers,
     "activated": assembled.activated,
     "visible": [d["function"]["name"] for d in assembled.tool_defs],
-    "listsChannelResult": f"mcp__{openbot}__channel_result" in search_tool["description"],
+    "listsChannelResult": f"mcp__{codebot}__channel_result" in search_tool["description"],
     "searches": searches,
     "described": described,
     "calls": {
-        "full": call(f"mcp__{openbot}__channel_result", {"text": "Done."}),
-        "dotted": call("openbot.channel_result", {"text": "Done."}),
+        "full": call(f"mcp__{codebot}__channel_result", {"text": "Done."}),
+        "dotted": call("codebot.channel_result", {"text": "Done."}),
         "bare": call("channel_result", {"text": "Done."}),
-        "nested": call(f"mcp__{openbot}__tool_call", {"name": "openbot.channel_result", "arguments": {"text": "Done."}}),
+        "nested": call(f"mcp__{codebot}__tool_call", {"name": "codebot.channel_result", "arguments": {"text": "Done."}}),
     },
 }))
 `;
@@ -140,7 +140,7 @@ try {
   assert.ok(HERMES_REPO, "Set HERMES_REPO to a hermes-agent checkout.");
   assert.equal(HERMES_ACP_FLAVOR.catalogAsMcpTools, true, "The Hermes provider gets the catalog as MCP tools.");
   assert.equal(customAgentFlavor("/opt/bin/hermes").catalogAsMcpTools, true, "A custom hermes agent gets them too.");
-  assert.equal(customAgentFlavor("omp").catalogAsMcpTools, undefined, "Other custom agents keep OpenBot's search.");
+  assert.equal(customAgentFlavor("omp").catalogAsMcpTools, undefined, "Other custom agents keep CodeBot's search.");
 
   const sent: unknown[] = visibleDynamicTools("hermes");
   const given = sent.filter(isDynamicToolNamespace);
@@ -168,12 +168,12 @@ try {
     tools[server] = (await client.listTools()).tools;
   }
   report.listed = Object.fromEntries(Object.entries(tools).map(([server, list]) => [server, list.length]));
-  const openbotNames = (tools.openbot ?? []).map((tool) => tool.name);
+  const codebotNames = (tools.codebot ?? []).map((tool) => tool.name);
   for (const name of ["channel_result", "channel_reply", "edit_workflow", "tool_call"])
-    assert.ok(openbotNames.includes(name), `The openbot server lists ${name}.`);
+    assert.ok(codebotNames.includes(name), `The codebot server lists ${name}.`);
   for (const name of ["tool_search", "tool_describe"])
-    assert.ok(!openbotNames.includes(name), `Hermes searches with its own tool, not with OpenBot's ${name}.`);
-  assert.ok(!openbotNames.includes("web_search"), "Hermes keeps its own web search.");
+    assert.ok(!codebotNames.includes(name), `Hermes searches with its own tool, not with CodeBot's ${name}.`);
+  assert.ok(!codebotNames.includes("web_search"), "Hermes keeps its own web search.");
 
   await mkdir(OUT, { recursive: true });
   const toolsPath = join(OUT, "listed-tools.json");
@@ -210,7 +210,7 @@ try {
   assert.equal(fullError, null, "Hermes tool_call accepts the full name.");
   assert.ok(hermes.calls.dotted[2]?.includes("Use tool_search"), "The dotted name gets the search hint.");
   assert.ok(hermes.calls.bare[2]?.includes(String(fullName)), "The bare name gets the full name as a hint.");
-  assert.equal(hermes.calls.nested[2], null, "OpenBot's tool_call, which channel rules name, still resolves.");
+  assert.equal(hermes.calls.nested[2], null, "CodeBot's tool_call, which channel rules name, still resolves.");
 
   const [, prefix, tool] = /^mcp__(.+)__([^_].*)$/.exec(String(fullName)) ?? [];
   const server = prefix ? hermes.servers[prefix] : undefined;
@@ -218,8 +218,8 @@ try {
   await byServer.get(server)?.callTool({ name: tool, arguments: fullArguments });
   assert.deepEqual(
     report.bridged,
-    [{ namespace: "openbot", tool: "channel_result", arguments: { text: "Done." } }],
-    "The call reaches OpenBot as openbot.channel_result.",
+    [{ namespace: "codebot", tool: "channel_result", arguments: { text: "Done." } }],
+    "The call reaches CodeBot as codebot.channel_result.",
   );
   report.passed = true;
 } finally {

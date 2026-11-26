@@ -1,15 +1,15 @@
-import { leadingAddress } from "@openbot/contracts/chat-tag-references";
+import { leadingAddress } from "@codebot/contracts/chat-tag-references";
 import {
   type AgentApproval,
   type AgentEvent,
   type BrowserTakeoverRequest,
   type CreditsHoldAction,
   channelBrowserAgent,
-} from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
-import { unloadedHistory } from "@openbot/ui/features/conversation/ChatScrollRail";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
+import { unloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo } from "solid-js";
 import { agentMessagesEqual } from "../../app-message-projection";
 import { channelAwaitingReplies } from "../../awaiting-replies";

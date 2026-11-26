@@ -8,7 +8,7 @@ import {
   browserProxySaveAddress,
   editableBrowserProxyAddress,
   parseBrowserProxyAddress,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Badge,
   Button,
@@ -34,7 +34,7 @@ import {
   Text,
   Trash2,
   Waypoints,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createStore, For, Show, untrack } from "solid-js";
 import { useText } from "../../text";

@@ -3,8 +3,8 @@ import {
   eventFilterDraft,
   eventFilterDraftsValid,
   eventFiltersFromDrafts,
-} from "@openbot/contracts/event-filter-value";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/event-filter-value";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   ROUTINE_LIMIT_POLICIES,
   ROUTINE_MISSED_POLICIES,
@@ -16,9 +16,9 @@ import {
   type RoutineRunFields,
   type RoutineRunPlace,
   type RoutineSchedule,
-} from "@openbot/contracts/ipc";
-import type { RoutineWebhookTriggerInput, WebhookTestResult } from "@openbot/contracts/ipc-events";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { RoutineWebhookTriggerInput, WebhookTestResult } from "@codebot/contracts/ipc-events";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Button,
   CircleCheck,
@@ -39,25 +39,25 @@ import {
   Textarea,
   toast,
   Webhook,
-} from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { SettingsBackIcon, SettingsForwardIcon } from "@openbot/ui/components/SettingsPanel";
+} from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { SettingsBackIcon, SettingsForwardIcon } from "@codebot/ui/components/SettingsPanel";
 import {
   type RoutineResultChoice,
   RoutineResultDestinationField,
-} from "@openbot/ui/features/conversation/RoutineResultDestinationField";
-import { RoutineRunHistory } from "@openbot/ui/features/conversation/RoutineRunHistory";
-import { RoutineSchedulePicker } from "@openbot/ui/features/conversation/RoutineSchedulePicker";
-import { RoutineTriggerMenu } from "@openbot/ui/features/conversation/RoutineTriggerMenu";
+} from "@codebot/ui/features/conversation/RoutineResultDestinationField";
+import { RoutineRunHistory } from "@codebot/ui/features/conversation/RoutineRunHistory";
+import { RoutineSchedulePicker } from "@codebot/ui/features/conversation/RoutineSchedulePicker";
+import { RoutineTriggerMenu } from "@codebot/ui/features/conversation/RoutineTriggerMenu";
 import {
   RoutineWebhookTrigger,
   type RoutineWebhookTriggerProps,
-} from "@openbot/ui/features/conversation/RoutineWebhookTrigger";
+} from "@codebot/ui/features/conversation/RoutineWebhookTrigger";
 import {
   ROUTINE_EVERY_DAY,
   type RoutineScheduleDraft,
   switchDraftKind,
-} from "@openbot/ui/features/conversation/routine-schedule-draft";
+} from "@codebot/ui/features/conversation/routine-schedule-draft";
 import {
   ROUTINE_LOCAL_DRAFT_KINDS,
   ROUTINE_SAVED_DRAFT_KINDS,
@@ -66,8 +66,8 @@ import {
   routineOncePassed,
   routineScheduleFromDraft,
   routineScheduleToDraft,
-} from "@openbot/ui/features/conversation/routine-schedule-saved";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/routine-schedule-saved";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, createStore, For, onCleanup, Show, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";

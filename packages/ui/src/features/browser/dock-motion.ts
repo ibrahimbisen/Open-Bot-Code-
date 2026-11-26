@@ -6,8 +6,8 @@ import {
   type Spring,
   springKeyframes,
   springProgress,
-} from "@openbot/ui/spring-motion";
-import { clamp, mix, motionDuration, prefersReducedMotion } from "@openbot/ui/utils";
+} from "@codebot/ui/spring-motion";
+import { clamp, mix, motionDuration, prefersReducedMotion } from "@codebot/ui/utils";
 
 const SEND_SPRING: Spring = { response: 0.43, dampingFraction: 0.78 };
 
@@ -51,7 +51,7 @@ function inertCopy(element: Element): HTMLElement | undefined {
 }
 
 export function morphDuration(): number {
-  return motionDuration("--openbot-duration-overlay", 240) * 2.25;
+  return motionDuration("--codebot-duration-overlay", 240) * 2.25;
 }
 
 function cornerRadius(element: Element, rect: DOMRect): number {

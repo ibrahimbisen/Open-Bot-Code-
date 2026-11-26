@@ -1,4 +1,4 @@
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import type { CDPSession, Page } from "playwright-core";
 import type { MetricValues } from "./bench-stats";
 import type { InspectorClient } from "./inspector-client";
@@ -25,7 +25,7 @@ const PERFORMANCE_METRICS: readonly [string, string, number][] = [
   ["TaskDuration", "render.taskMs", 1000],
 ];
 const TOP_CALLS = 25;
-const PAGE_STATE = "__openbotBenchRender";
+const PAGE_STATE = "__codebotBenchRender";
 
 function installObservers(frames: boolean): string {
   return `(() => {
@@ -136,7 +136,7 @@ export async function startRenderRecording(
         const calls = new Map<string, number>();
         let total = 0;
         for (const script of coverage.result) {
-          if (!script.url.startsWith("openbot-app://")) continue;
+          if (!script.url.startsWith("codebot-app://")) continue;
           const file = script.url.slice(script.url.lastIndexOf("/") + 1);
           for (const fn of script.functions) {
             const count = fn.ranges[0]?.count ?? 0;
@@ -159,7 +159,7 @@ export async function startRenderRecording(
   };
 }
 
-const READ_MARKS = `performance.getEntriesByType("mark").filter((mark) => mark.name.startsWith("openbot:")).map((mark) => [mark.name, mark.startTime])`;
+const READ_MARKS = `performance.getEntriesByType("mark").filter((mark) => mark.name.startsWith("codebot:")).map((mark) => [mark.name, mark.startTime])`;
 
 function markValues(prefix: string, marks: unknown): MetricValues {
   const values: MetricValues = {};
@@ -168,7 +168,7 @@ function markValues(prefix: string, marks: unknown): MetricValues {
     if (!Array.isArray(mark)) continue;
     const [name, startTime]: unknown[] = mark;
     if (!isString(name) || !isNumber(startTime)) continue;
-    const key = `${prefix}.${name.slice("openbot:".length)}`;
+    const key = `${prefix}.${name.slice("codebot:".length)}`;
     values[key] ??= Math.round(startTime);
   }
   return values;

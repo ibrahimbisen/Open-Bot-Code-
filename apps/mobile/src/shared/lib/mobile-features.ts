@@ -1,11 +1,11 @@
-import { parseAppMinimumVersion } from "@openbot/contracts/app-minimum-version";
+import { parseAppMinimumVersion } from "@codebot/contracts/app-minimum-version";
 import {
   MOBILE_FEATURES_PATH,
   type MobileFeatureFlags,
   mobileFeaturesOff,
   parseMobileFeatureFlags,
   parseMobileLatestVersion,
-} from "@openbot/contracts/mobile-features";
+} from "@codebot/contracts/mobile-features";
 import Constants, { ExecutionEnvironment } from "expo-constants";
 import { useEffect } from "react";
 import { AppState } from "react-native";

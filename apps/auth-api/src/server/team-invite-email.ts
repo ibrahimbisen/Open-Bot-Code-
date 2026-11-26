@@ -1,5 +1,5 @@
-import { type InviteLinkPayload, isCanonicalInviteUrl, parseInviteUrl } from "@openbot/contracts/invite-links";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import { type InviteLinkPayload, isCanonicalInviteUrl, parseInviteUrl } from "@codebot/contracts/invite-links";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 import {
   AuthOperationError,
@@ -68,7 +68,7 @@ export const sendTeamInviteEmail = Effect.fn("TeamInviteEmail.send")(function* (
     .pipe(
       Effect.mapError((error) =>
         isEmailDeliveryFailure(error)
-          ? emailDeliveryFailure(error.message, "OpenBot could not send the invitation.")
+          ? emailDeliveryFailure(error.message, "CodeBot could not send the invitation.")
           : new AuthOperationError({ message: "Account operation failed." }),
       ),
     );

@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 54: one thread for each routine of an agent.
@@ -21,7 +21,7 @@ function addAgentThreadRoutine(db: DatabaseSync): void {
   db.exec(V54_AGENT_THREAD_ROUTINE_INDEX_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 54,
   name: "agent-thread-routine",
   // Adds one column with no default and an index: no rebuild, so no foreign-key pause and no vacuum.

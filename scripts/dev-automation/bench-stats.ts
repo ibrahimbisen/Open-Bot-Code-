@@ -1,4 +1,4 @@
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { type MemoryProcessKind, type ProcessTableRow, summarizeMemory } from "./cpu-sampling";
 
 export type MetricValues = Record<string, number>;

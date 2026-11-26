@@ -1,4 +1,4 @@
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import { onCleanup } from "solid-js";
 
 const ONE_ROW_MAX_PX = 40;

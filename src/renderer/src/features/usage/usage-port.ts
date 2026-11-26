@@ -1,10 +1,10 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface UsagePort {
-  agent: Pick<OpenBotDesktopApi["agent"], "getHostAnalytics" | "listAgents" | "onScopedEvent">;
-  servers: Pick<OpenBotDesktopApi["servers"], "onEvent">;
+  agent: Pick<CodeBotDesktopApi["agent"], "getHostAnalytics" | "listAgents" | "onScopedEvent">;
+  servers: Pick<CodeBotDesktopApi["servers"], "onEvent">;
 }
 
 export function usagePort(): UsagePort {
-  return window.openbot;
+  return window.codebot;
 }

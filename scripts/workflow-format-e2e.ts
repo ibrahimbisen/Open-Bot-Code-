@@ -15,14 +15,14 @@ import {
   type WorkflowRunDetail,
   workflowFileHostExport,
   workflowFromFile,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { decodeRemoteWorkflowDetail } from "../packages/team-client/src/workflow-decoding";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
@@ -30,7 +30,7 @@ import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-trigger
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 import { exportWorkflows, importWorkflows } from "../src/main/instance-transfer-workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-format-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-format-e2e");
 const APP_VERSION = String(JSON.parse(readFileSync(resolve(import.meta.dirname, "../package.json"), "utf8")).version);
 const WAIT_MS = 10_000;
 const AGENT_A = "agent-on-host-a";
@@ -157,8 +157,8 @@ const FIXTURES: Fixture[] = [
         node("start", "trigger", 0, {
           trigger: "github",
           event: "issue.opened",
-          repository: "openbot/demo",
-          repositories: "openbot/demo\nopenbot/site",
+          repository: "codebot/demo",
+          repositories: "codebot/demo\ncodebot/site",
           filters: "",
           labels: "bug",
         }),
@@ -169,7 +169,7 @@ const FIXTURES: Fixture[] = [
           item: "event",
           labelsFrom: "list",
           labels: "triage",
-          repository: "openbot/demo",
+          repository: "codebot/demo",
         }),
       ],
       [edge("start", "sort"), edge("sort", "label")],
@@ -422,13 +422,13 @@ const posts: string[] = [];
 
 interface Host {
   directory: string;
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   workflows: WorkflowsHandle;
 }
 
 async function openHost(name: string): Promise<Host> {
-  const directory = await mkdtemp(join(tmpdir(), `openbot-workflow-format-${name}-`));
-  const database = new OpenBotDatabase(directory);
+  const directory = await mkdtemp(join(tmpdir(), `codebot-workflow-format-${name}-`));
+  const database = new CodeBotDatabase(directory);
   await Effect.runPromise(database.initialize());
   const addedAt = new Date().toISOString();
   const addConnection = database.connection.prepare(

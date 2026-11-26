@@ -4,9 +4,9 @@ import type {
   DynamicIslandAction,
   DynamicIslandAgentIdentity,
   DynamicIslandPresentation,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import type { MobileTranslate } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import type { MobileTranslate } from "@codebot/i18n/mobile";
 import type { DynamicIslandText } from "./dynamic-island-presentation";
 import { signLiveActivityLink, verifyLiveActivityLink } from "./live-activity-seal";
 import { liveActivityMarkdown } from "./live-activity-text";
@@ -80,7 +80,7 @@ export interface LiveActivityViewInput {
   redact: (text: string) => string;
 }
 
-export const LIVE_ACTIVITY_URL = "openbot://live-activity";
+export const LIVE_ACTIVITY_URL = "codebot://live-activity";
 export const LIVE_ACTIVITY_LIST_URL = `${LIVE_ACTIVITY_URL}?list=1`;
 const THREAD_PARAM = "thread";
 

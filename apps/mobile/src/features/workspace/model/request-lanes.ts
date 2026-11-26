@@ -1,5 +1,5 @@
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_TASKS_ROUTES } from "@openbot/contracts/team-protocol/agent-tasks-v1";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_TASKS_ROUTES } from "@codebot/contracts/team-protocol/agent-tasks-v1";
 
 const BACKGROUND_READS: readonly { method: string; route: RegExp }[] = [
   { method: "POST", route: new RegExp(`^${AGENT_TASKS_ROUTES.list}$`) },

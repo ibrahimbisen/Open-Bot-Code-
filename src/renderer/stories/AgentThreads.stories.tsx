@@ -1,12 +1,12 @@
-import { LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
+import { LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
 import { onSettled } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import type { MockOpenBotOptions } from "../src/preview/mock-openbot";
+import type { MockCodeBotOptions } from "../src/preview/mock-codebot";
 import { AGENT_ID, TABS_KEY, THREAD_OPTIONS, THREAD_QUEUE_OPTIONS, UNREAD_OPTIONS } from "./agent-threads-fixtures";
 import { createAppDom, openChat, PrototypeApp } from "./prototype-support";
 import "./agent-threads-story.css";
 
-function AgentThreadsApp(props: { open: string[]; active: string | null; options?: MockOpenBotOptions }) {
+function AgentThreadsApp(props: { open: string[]; active: string | null; options?: MockCodeBotOptions }) {
   const options = props.options ?? THREAD_OPTIONS;
   localStorage.setItem(
     TABS_KEY,

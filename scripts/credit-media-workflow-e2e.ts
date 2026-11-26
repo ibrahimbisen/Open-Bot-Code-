@@ -2,15 +2,15 @@ import { randomUUID } from "node:crypto";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { CreditMediaJobRequest, CreditMediaModel } from "@openbot/contracts/credit-media";
+import type { CreditMediaJobRequest, CreditMediaModel } from "@codebot/contracts/credit-media";
 import {
   isWorkflowMediaCatalogModel,
   type WorkflowMediaKind,
   type WorkflowMediaSpecs,
   workflowCatalogMediaModel,
   workflowMediaSpecs,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import {
   type CreditMediaGateway,
@@ -20,7 +20,7 @@ import {
   CreditMediaWorkflows,
 } from "../src/backend/workflows/credit-media";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/credit-media-workflow-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/credit-media-workflow-e2e");
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3, 4]);
 
 const checks: { name: string; passed: boolean; detail?: unknown }[] = [];
@@ -143,7 +143,7 @@ function specs(fields: Partial<WorkflowMediaSpecs> = {}): WorkflowMediaSpecs {
   return { aspect: "1:1", duration: 6, resolution: null, transparent: false, size: null, options: [], ...fields };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-credit-media-workflow-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-credit-media-workflow-e2e-"));
 const attachments = new Map<string, { path: string; mimeType: string }>();
 for (const [id, mimeType] of [
   ["a", "image/png"],
@@ -173,7 +173,7 @@ async function generate(request: Omit<CreditMediaRequest, "model" | "jobId" | "e
         ...request,
         jobId: randomUUID(),
         earlierJobIds: [],
-        model: `openbot-${request.model}`,
+        model: `codebot-${request.model}`,
       }),
     ),
   );
@@ -188,11 +188,11 @@ async function generate(request: Omit<CreditMediaRequest, "model" | "jobId" | "e
 async function flow() {
   const listed = await Effect.runPromise(workflows.catalog());
   const catalog = listed.models;
-  const entry = (id: string) => catalog.find((item) => item.id === `openbot-${id}`);
+  const entry = (id: string) => catalog.find((item) => item.id === `codebot-${id}`);
   check(
     "a model with no route stays by workflow id and full name, apart from the models that can run",
     JSON.stringify(listed.unavailable) ===
-      JSON.stringify([{ id: "openbot-kling-omni", name: "Kling 4.0 · Omni", kinds: ["video"] }]) &&
+      JSON.stringify([{ id: "codebot-kling-omni", name: "Kling 4.0 · Omni", kinds: ["video"] }]) &&
       entry("kling-omni") === undefined,
     { unavailable: listed.unavailable },
   );
@@ -395,7 +395,7 @@ async function flow() {
   const price = (fields: Partial<WorkflowMediaSpecs>, id = "video-both") =>
     Effect.runPromise(
       workflows.price({
-        model: `openbot-${id}`,
+        model: `codebot-${id}`,
         kind: MODELS.find((entry) => entry.id === id)?.kind ?? "video",
         aspect: "16:9",
         duration: fields.duration ?? 6,
@@ -448,8 +448,8 @@ async function flow() {
   check(
     "each finished job stores its file with the right type",
     stored.length === submits.length &&
-      stored.some((file) => file.name === "openbot-video.mp4" && file.mimeType === "video/mp4") &&
-      stored.some((file) => file.name === "openbot-image.png" && file.mimeType === "image/png"),
+      stored.some((file) => file.name === "codebot-video.mp4" && file.mimeType === "video/mp4") &&
+      stored.some((file) => file.name === "codebot-image.png" && file.mimeType === "image/png"),
     stored,
   );
 }

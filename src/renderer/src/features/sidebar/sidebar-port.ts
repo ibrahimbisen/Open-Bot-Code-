@@ -1,16 +1,16 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface SidebarPort {
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     "getSidebarLayout" | "mutateSidebarLayout" | "getSidebarPins" | "setSidebarPins" | "seedSidebarPins"
   >;
-  storage: Pick<OpenBotDesktopApi["storage"], "getDisk" | "getMachineMetrics">;
-  hostAdmin: Pick<OpenBotDesktopApi["hostAdmin"], "getMachineAlerts">;
+  storage: Pick<CodeBotDesktopApi["storage"], "getDisk" | "getMachineMetrics">;
+  hostAdmin: Pick<CodeBotDesktopApi["hostAdmin"], "getMachineAlerts">;
 }
 
 export type SidebarCardsPort = Pick<SidebarPort, "storage" | "hostAdmin">;
 
 export function sidebarPort(): SidebarPort {
-  return window.openbot;
+  return window.codebot;
 }

@@ -4,8 +4,8 @@ import type {
   AgentDefaultSetting,
   AgentDefaults,
   ClientAgentSummary,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertContent,
@@ -31,7 +31,7 @@ import {
   SettingsSection,
   SwitchField,
   Text,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import { AgentAvatar } from "../agents/AgentAvatar";

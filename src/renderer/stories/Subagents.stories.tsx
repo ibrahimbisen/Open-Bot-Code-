@@ -1,5 +1,5 @@
-import type { ConversationSubagent, ConversationSubagentStep } from "@openbot/contracts/ipc";
-import { SubagentGroup, SubagentPanel } from "@openbot/ui/features/conversation/Subagents";
+import type { ConversationSubagent, ConversationSubagentStep } from "@codebot/contracts/ipc";
+import { SubagentGroup, SubagentPanel } from "@codebot/ui/features/conversation/Subagents";
 import { createSignal, onSettled, untrack } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
@@ -45,7 +45,7 @@ const NOTES = steps("notes", [
 
 const STAGING = steps("staging", [
   ["thinking", "The staging Worker writes its logs to Cloudflare. I read them with Wrangler."],
-  ["command", "wrangler tail openbot-staging --format=json"],
+  ["command", "wrangler tail codebot-staging --format=json"],
 ]);
 
 function subagent(
@@ -101,7 +101,7 @@ const FINISHED: ConversationSubagent[] = [
   subagent("staging", "Check the staging deploy logs", STAGING, STAGING.length, "failed", {
     startedSecondsAgo: 120,
     endedSecondsAgo: 90,
-    error: "The token has no access to openbot-staging (403).",
+    error: "The token has no access to codebot-staging (403).",
   }),
   subagent("competitors", "Collect the team plan prices of comparable agent apps", COMPETITORS, 2, "stopped", {
     startedSecondsAgo: 110,
@@ -115,7 +115,7 @@ const meta = {
   render: (args) => {
     const [selected, setSelected] = createSignal<string | null>(untrack(() => args.selectedId ?? null));
     return (
-      <main style={{ width: "min(760px, 100vw)", padding: "var(--openbot-space-4)" }}>
+      <main style={{ width: "min(760px, 100vw)", padding: "var(--codebot-space-4)" }}>
         <SubagentGroup
           {...args}
           selectedId={selected()}
@@ -186,7 +186,7 @@ export const Live: Story = {
     };
     const [selected, setSelected] = createSignal<string | null>(null);
     return (
-      <main style={{ width: "min(760px, 100vw)", padding: "var(--openbot-space-4)" }}>
+      <main style={{ width: "min(760px, 100vw)", padding: "var(--codebot-space-4)" }}>
         <SubagentGroup
           subagents={subagents()}
           selectedId={selected()}

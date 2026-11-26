@@ -1,5 +1,5 @@
-import { Toaster, toast } from "@openbot/ui";
-import { ProviderCodeLoginDialog, type ProviderCodeLoginState } from "@openbot/ui/components/ProviderCodeLoginDialog";
+import { Toaster, toast } from "@codebot/ui";
+import { ProviderCodeLoginDialog, type ProviderCodeLoginState } from "@codebot/ui/components/ProviderCodeLoginDialog";
 import { createSignal, onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";

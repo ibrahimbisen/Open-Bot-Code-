@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { app, type Details, powerMonitor } from "electron";
 import { isMissingFileError } from "../backend/file-errors";
 import { countCrashDumps } from "./run-marker";
@@ -20,7 +20,7 @@ const GPU_EXIT_ON_CONTEXT_LOST = 34 << 8;
 const GPU_RESTART_LOOP_LIMIT = 10;
 const GPU_RESTART_LOOP_WINDOW_MS = 60_000;
 
-const logger = createOpenBotLogger("linux-gpu");
+const logger = createCodeBotLogger("linux-gpu");
 
 interface GpuFailureRecord {
   chromium: string;
@@ -84,7 +84,7 @@ export function readLinuxGpuMode(userDataPath: string, server: boolean): LinuxGp
   return resolveLinuxGpuMode({
     platform: process.platform,
     server,
-    disableGpu: process.env.OPENBOT_DISABLE_GPU,
+    disableGpu: process.env.CODEBOT_DISABLE_GPU,
     chromiumMajor: chromiumMajorVersion(),
     crash: linux ? readGpuFailure(join(userDataPath, GPU_CRASH_FILE)) : undefined,
     unfinishedStart: linux ? readUnfinishedStart(join(userDataPath, GPU_START_FILE)) : undefined,
@@ -106,7 +106,7 @@ export function configureLinuxGpu(options: ConfigureLinuxGpuOptions): LinuxGpuMo
       logger.warn(
         `Software rendering is on because the GPU failed before (${mode.reason}). ` +
           `Remove ${mode.reason === "gpu-process-crash" ? crashPath : startPath}` +
-          `${options.server ? "" : " or set OPENBOT_DISABLE_GPU=0"} to try the GPU again.`,
+          `${options.server ? "" : " or set CODEBOT_DISABLE_GPU=0"} to try the GPU again.`,
       );
     }
     return mode;
@@ -158,7 +158,7 @@ function quitOnGpuRestartLoop(): void {
     }
     quitting = true;
     logger.error(
-      `The GPU process stopped ${GPU_RESTART_LOOP_LIMIT} times in ${GPU_RESTART_LOOP_WINDOW_MS / 1000} s, so OpenBot quits.`,
+      `The GPU process stopped ${GPU_RESTART_LOOP_LIMIT} times in ${GPU_RESTART_LOOP_WINDOW_MS / 1000} s, so CodeBot quits.`,
     );
     app.quit();
   });

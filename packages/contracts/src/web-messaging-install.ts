@@ -1,14 +1,14 @@
 import { isBoundedString } from "./ipc-bounded-values";
 import { isDynamicRecord, isNumber, isOneOf } from "./runtime-values";
 
-export const WEB_MESSAGING_INSTALL_CHANNEL = "openbot:messaging-install";
+export const WEB_MESSAGING_INSTALL_CHANNEL = "codebot:messaging-install";
 
 export const WEB_MESSAGING_INSTALL_TTL_MS = 15 * 60_000;
 
 export const WEB_MESSAGING_INSTALL_PLATFORMS = ["slack", "discord"] as const;
 export type WebMessagingInstallPlatform = (typeof WEB_MESSAGING_INSTALL_PLATFORMS)[number];
 
-export const WEB_MESSAGING_INSTALL_KEY_PREFIX = "openbot:messaging-install:";
+export const WEB_MESSAGING_INSTALL_KEY_PREFIX = "codebot:messaging-install:";
 
 export function webMessagingInstallKey(nonce: string): string {
   return `${WEB_MESSAGING_INSTALL_KEY_PREFIX}${nonce}`;

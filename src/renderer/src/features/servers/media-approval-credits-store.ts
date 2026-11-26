@@ -1,12 +1,12 @@
 import type {
+  CodeBotDesktopApi,
   MediaApprovalCreditsSetting,
   MediaApprovalCreditsUpdate,
-  OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { createStore } from "solid-js";
 
 export type HostMediaApprovalCreditsCalls = Pick<
-  OpenBotDesktopApi["hostAdmin"],
+  CodeBotDesktopApi["hostAdmin"],
   "getMediaApprovalCredits" | "setMediaApprovalCredits"
 >;
 

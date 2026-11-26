@@ -10,7 +10,7 @@ import {
   type ChannelMessage,
   COMPUTER_USE_MCP_SERVER_ID,
   COMPUTER_USE_MCP_SERVER_NAME,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { boundedHistoryPage, historyMessagePart } from "../src/backend/channel-history";
@@ -18,8 +18,8 @@ import type { boundedHistoryPage, historyMessagePart } from "../src/backend/chan
 type HistoryPage = ReturnType<typeof boundedHistoryPage>;
 type HistoryPart = ReturnType<typeof historyMessagePart>;
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-context-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-channel-context-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-context-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-channel-context-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -28,19 +28,19 @@ const release = join(root, "release");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const PERSON = { id: "local", name: "Alex" };
 const PACKET_STARTS = [
-  "You have one assignment in a shared OpenBot channel chat.",
-  "You have a new assignment in the same shared OpenBot channel chat.",
+  "You have one assignment in a shared CodeBot channel chat.",
+  "You have a new assignment in the same shared CodeBot channel chat.",
 ];
 const CHANNEL_RULE = "Use channel_history for earlier history";
 const SUMMARY_REQUEST = "Summarize shared facts";
@@ -149,7 +149,7 @@ const answer = (message) => {
           log({ threadId, turnId, method: "tool/result", text: JSON.stringify(response.result ?? response.error) });
           then();
         });
-        write({ id, method: "item/tool/call", params: { threadId, turnId, callId: "call-" + calls, namespace: "openbot", tool: "remember", arguments: args } });
+        write({ id, method: "item/tool/call", params: { threadId, turnId, callId: "call-" + calls, namespace: "codebot", tool: "remember", arguments: args } });
       };
       if (assignment.startsWith("REMEMBER")) {
         const text = assignment.slice("REMEMBER: ".length);
@@ -346,7 +346,7 @@ function record(agent: string, packet: string): void {
 }
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -712,7 +712,7 @@ try {
       events.find((event) => event.code === "context_compaction_ineffective" && event.agentId === tester.id),
     );
     pass("The notice gives the share of the window", ineffective.message.includes("76%"), ineffective.message);
-    pass("OpenBot asks for no compaction of the full session", compactions(stuckThread) === 0);
+    pass("CodeBot asks for no compaction of the full session", compactions(stuckThread) === 0);
     const smaller = await send(channelId, tester.id, "USAGE: report the size.");
     await send(channelId, tester.id, "FULL: report the size.");
     pass(
@@ -885,7 +885,7 @@ try {
     pass(
       "The packet says that the channel is isolated",
       facts(isolatedPacket).channel?.isolated === true &&
-        isolatedPacket.includes("openbot.remember saves a channel memory here"),
+        isolatedPacket.includes("codebot.remember saves a channel memory here"),
     );
     const results = turnLogs()
       .filter((entry) => entry.method === "tool/result")
@@ -914,7 +914,7 @@ try {
       "The packet says when isolation is off",
       facts(sharedPacket).channel?.isolated === undefined &&
         sharedPacket.includes("no longer isolated") &&
-        !sharedPacket.includes("openbot.remember saves a channel memory here"),
+        !sharedPacket.includes("codebot.remember saves a channel memory here"),
     );
 
     const answer = messages(channelId)

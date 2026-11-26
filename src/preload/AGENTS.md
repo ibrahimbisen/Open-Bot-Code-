@@ -3,7 +3,7 @@
 The preload is the only code that runs with both `ipcRenderer` and renderer access. It is part of the
 renderer-to-main trust boundary. [Main-process rules](../main/AGENTS.md#trust-boundary) apply here.
 
-- `index.ts` maps each `OpenBotDesktopApi` method to one IPC channel and exposes the result with
+- `index.ts` maps each `CodeBotDesktopApi` method to one IPC channel and exposes the result with
   `contextBridge.exposeInMainWorld`. Add no business rules here.
 - Decode each value that main sends before the renderer can read it. Put decoders in the
   `*-decoding.ts` file for their domain, not in `index.ts`. Keep the preload `FromMain` decoders
@@ -28,10 +28,10 @@ renderer-to-main trust boundary. [Main-process rules](../main/AGENTS.md#trust-bo
 - Add a method in the same change as its channel, handler, and preview mock. See
   [IPC binding rules](../main/ipc/AGENTS.md#adding-an-endpoint).
 - Keep the sandbox and context isolation. The browser tabs' preload (`browser-page.ts`) has no IPC
-  and exposes no world: a tab page gets no `window.openbot`. It only runs one function in the page
+  and exposes no world: a tab page gets no `window.codebot`. It only runs one function in the page
   world, and `scripts/verify-preload-bundle.ts` checks both.
 
-- `scripts/verify-preload-bundle.ts` runs the built bundle and compares `window.openbot` with
+- `scripts/verify-preload-bundle.ts` runs the built bundle and compares `window.codebot` with
   `IPC_ENDPOINTS` at the places that `IPC_GROUP_PATHS` gives. A method written by hand needs an
   entry in `HAND_WRITTEN_METHODS`. CI runs it after the build in `check:desktop:static`.
 

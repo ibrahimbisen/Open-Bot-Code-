@@ -9,7 +9,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, startThread, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-flavor-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-flavor-e2e");
 
 const COMMANDS = ["omp", "other-agent"] as const;
 type Command = (typeof COMMANDS)[number];
@@ -40,7 +40,7 @@ interface Report {
   cases: CaseResult[];
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-flavor-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-flavor-e2e-"));
 const report: Report = { passed: false, cases: [] };
 const clients: AgentClient[] = [];
 

@@ -4,13 +4,13 @@ import {
   type ServerSummary,
   STORAGE_CAPABILITY,
   type StorageUsage,
-} from "@openbot/contracts/ipc";
-import { BACKGROUND_PROCESSES_CAPABILITY } from "@openbot/contracts/team-protocol/background-processes-v1";
-import { STORAGE_CHANNEL_CAPABILITY } from "@openbot/contracts/team-protocol/storage-channel-v1";
-import { classifyFailure } from "@openbot/telemetry";
-import type { AgentProfile } from "@openbot/ui/data";
-import type { StoredFileAction, StoredFileRow } from "@openbot/ui/features/files/files-view";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { BACKGROUND_PROCESSES_CAPABILITY } from "@codebot/contracts/team-protocol/background-processes-v1";
+import { STORAGE_CHANNEL_CAPABILITY } from "@codebot/contracts/team-protocol/storage-channel-v1";
+import { classifyFailure } from "@codebot/telemetry";
+import type { AgentProfile } from "@codebot/ui/data";
+import type { StoredFileAction, StoredFileRow } from "@codebot/ui/features/files/files-view";
+import { currentText } from "@codebot/ui/text";
 import { type Accessor, createEffect, createSignal, createStore, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { toAgentProfile } from "../../app-message-projection";

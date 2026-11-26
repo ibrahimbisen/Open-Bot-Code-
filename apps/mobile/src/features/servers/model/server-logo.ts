@@ -1,5 +1,5 @@
-import { isAvatarMimeType } from "@openbot/contracts/avatar-images";
-import { bytesToBase64 } from "@openbot/team-client/base64";
+import { isAvatarMimeType } from "@codebot/contracts/avatar-images";
+import { bytesToBase64 } from "@codebot/team-client/base64";
 import { fetch } from "@/features/support/model/logged-fetch";
 
 export async function loadServerLogo(

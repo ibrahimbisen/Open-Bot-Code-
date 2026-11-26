@@ -1,5 +1,5 @@
-import type { AgentApproval, AgentTask, ConversationSnapshot } from "@openbot/contracts/ipc";
-import type { AgentProfile } from "@openbot/ui/data";
+import type { AgentApproval, AgentTask, ConversationSnapshot } from "@codebot/contracts/ipc";
+import type { AgentProfile } from "@codebot/ui/data";
 import { onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -7,7 +7,7 @@ import { TasksView } from "../src/features/tasks/TasksView";
 import { desktopTasksSource } from "../src/features/tasks/tasks-port";
 import { PlatformProvider } from "../src/platform";
 import { requireFixture, STORY_AGENTS } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 const MINUTE = 60_000;
 const NOW = Date.now();
@@ -184,10 +184,10 @@ function TasksPageStory(props: {
   waitsForAnswer?: (task: AgentTask) => boolean;
   startFails?: boolean;
 }) {
-  const previousApi = window.openbot;
+  const previousApi = window.codebot;
   const tasks: Record<string, AgentTask[]> = {};
   for (const task of props.tasks) tasks[task.agentId] = [...(tasks[task.agentId] ?? []), task];
-  const mock = createMockOpenBot({
+  const mock = createMockCodeBot({
     tasks,
     taskConversations: Object.fromEntries(props.tasks.map((task) => [task.id, conversationOf(task)])),
   });
@@ -196,10 +196,10 @@ function TasksPageStory(props: {
       throw new Error("Chief has no provider. Connect one in Settings.");
     };
   }
-  window.openbot = mock.api;
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   return (
     <PlatformProvider>
@@ -242,7 +242,7 @@ const WAITING_APPROVAL: AgentApproval = {
   turnId: "task-board-update-turn",
   kind: "file-change",
   command: null,
-  cwd: "/Users/you/OpenBot/Agents/Chief",
+  cwd: "/Users/you/CodeBot/Agents/Chief",
   reason: "Save board-update.md on the Desktop",
   grantRoot: "/Users/you/Desktop",
   permissions: null,

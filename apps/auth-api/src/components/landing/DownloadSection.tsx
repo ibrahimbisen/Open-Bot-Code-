@@ -1,10 +1,10 @@
-import { type MobilePlatformLogoVariant, PlatformLogo, type PlatformLogoVariant } from "@openbot/brand";
+import { type MobilePlatformLogoVariant, PlatformLogo, type PlatformLogoVariant } from "@codebot/brand";
 import type { JSX } from "@solidjs/web";
 import { Link } from "@tanstack/solid-router";
 import { For, Show } from "solid-js";
 import { ANDROID_APK_AVAILABLE } from "../../lib/android-apk";
 import { DOWNLOAD_PLATFORM_ORDER, DOWNLOAD_PLATFORMS } from "../../lib/download-platforms";
-import { EXTERNAL_LINK_REL, OPENBOT_ALTERNATE_DOWNLOAD_LINKS, OPENBOT_ANDROID_APK_LINK } from "../../lib/landing-links";
+import { CODEBOT_ALTERNATE_DOWNLOAD_LINKS, CODEBOT_ANDROID_APK_LINK, EXTERNAL_LINK_REL } from "../../lib/landing-links";
 import { MOBILE_APP_ORDER, MOBILE_APPS } from "../../lib/mobile-apps";
 import { createLandingReveal } from "./createLandingReveal";
 import { LandingIcon } from "./LandingIcon";
@@ -85,7 +85,7 @@ export function DownloadSection() {
                   </a>
                   <a
                     class="landing-download-action landing-download-action-alternate"
-                    href={OPENBOT_ALTERNATE_DOWNLOAD_LINKS.macos}
+                    href={CODEBOT_ALTERNATE_DOWNLOAD_LINKS.macos}
                   >
                     {text().intelMac}
                     <LandingIcon name="download" class="landing-download-action-icon" />
@@ -158,7 +158,7 @@ export function DownloadSection() {
                           </a>
                           <a
                             class="landing-download-action landing-download-action-alternate"
-                            href={OPENBOT_ANDROID_APK_LINK}
+                            href={CODEBOT_ANDROID_APK_LINK}
                           >
                             {text().apk}
                             <LandingIcon name="download" class="landing-download-action-icon" />

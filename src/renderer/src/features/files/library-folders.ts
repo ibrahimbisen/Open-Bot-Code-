@@ -4,9 +4,9 @@ import {
   type LibraryFolderContext,
   LibraryFolderRefusal,
   type LibraryFoldersSnapshot,
-} from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createSignal, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { type FilesPort, filesPort } from "./files-port";

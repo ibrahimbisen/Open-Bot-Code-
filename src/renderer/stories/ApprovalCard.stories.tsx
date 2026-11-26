@@ -1,7 +1,7 @@
-import { type BugReport, type FeatureRequest, type Feedback, feedbackPreview } from "@openbot/contracts/feedback";
-import type { AgentApproval } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { ApprovalCard } from "@openbot/ui/features/conversation/ConversationPrompts";
+import { type BugReport, type FeatureRequest, type Feedback, feedbackPreview } from "@codebot/contracts/feedback";
+import type { AgentApproval } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { ApprovalCard } from "@codebot/ui/features/conversation/ConversationPrompts";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
@@ -12,7 +12,7 @@ const approval: AgentApproval = {
   turnId: "turn-story",
   kind: "command",
   command: "bun run lint",
-  cwd: "~/OpenBot/Agents/agent-story/project",
+  cwd: "~/CodeBot/Agents/agent-story/project",
   reason: "Check the project before continuing.",
   grantRoot: null,
   permissions: null,
@@ -42,7 +42,7 @@ export const FileChange: Story = {
       kind: "file-change",
       command: null,
       cwd: null,
-      grantRoot: "~/OpenBot/Agents/agent-story/project",
+      grantRoot: "~/CodeBot/Agents/agent-story/project",
       reason: "Update the project files.",
     },
   },
@@ -71,7 +71,7 @@ export const LongContent: Story = {
       ...approval,
       command:
         "bun run test:desktop -- src/renderer/src/features/conversation/ConversationPrompts.test.tsx src/renderer/src/components/QuestionPromptBubble.test.tsx",
-      cwd: "~/OpenBot/Agents/agent-story/projects/a-project-with-a-long-directory-name/packages/desktop",
+      cwd: "~/CodeBot/Agents/agent-story/projects/a-project-with-a-long-directory-name/packages/desktop",
       reason: "Run the conversation interaction checks before sharing the updated project with the team.",
     },
   },
@@ -154,7 +154,7 @@ export const ReportProblemWithErrors: Story = {
     approval: feedbackApproval(
       preview({
         ...bugReport,
-        recentErrors: "openbot.history_search: The query is too long.\nThe provider stopped: 529 Overloaded",
+        recentErrors: "codebot.history_search: The query is too long.\nThe provider stopped: 529 Overloaded",
         sameAs: 6812,
       }),
     ),
@@ -171,7 +171,7 @@ export const ReportPhoneProblem: Story = {
         area: "Phone app and pairing",
         description:
           "The phone app shows Reconnecting and never connects while my VPN is on. I expected it to connect.",
-        reproduction: "1. Turn on the VPN on the phone.\n2. Open the OpenBot app.",
+        reproduction: "1. Turn on the VPN on the phone.\n2. Open the CodeBot app.",
       }),
       sourceText("status.agent.reportPhoneProblem"),
     ),

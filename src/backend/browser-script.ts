@@ -1,5 +1,5 @@
+import type { BrowserJsonValue, BrowserSnapshot } from "@codebot/contracts/ipc";
 import releaseSyncVariant from "@jitl/quickjs-wasmfile-release-sync";
-import type { BrowserJsonValue, BrowserSnapshot } from "@openbot/contracts/ipc";
 import { Effect, Result } from "effect";
 import {
   newQuickJSWASMModuleFromVariant,
@@ -32,9 +32,9 @@ export type BrowserStepOutcome =
   | { status: "dialog"; dialog: DialogTabResult };
 
 export const BROWSER_PAGE_CRASH_RELOADED =
-  "The page crashed and OpenBot loaded it again. Refs from before the crash are stale.";
+  "The page crashed and CodeBot loaded it again. Refs from before the crash are stale.";
 
-export const BROWSER_PAGE_CRASH_KEPT = "The page crashed. OpenBot did not reload it.";
+export const BROWSER_PAGE_CRASH_KEPT = "The page crashed. CodeBot did not reload it.";
 
 export const BROWSER_SCRIPT_USER_CONTROL_ERROR =
   "A person took control of the tab. Wait for the release, then take a fresh snapshot.";

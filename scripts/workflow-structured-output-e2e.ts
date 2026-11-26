@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { Options, SDKMessage } from "@anthropic-ai/claude-agent-sdk";
-import { type AgentModelOption, isReasoningEffort, parseWorkflowAnswerSpec } from "@openbot/contracts/ipc";
+import { type AgentModelOption, isReasoningEffort, parseWorkflowAnswerSpec } from "@codebot/contracts/ipc";
 import { generateTextWithoutTools, startToolless, stopToolless } from "../src/backend/agent/profile-generation";
 import { ClaudeAgentClient } from "../src/backend/claude-client";
 import { resolveClaudeCli } from "../src/backend/cli";
@@ -12,7 +12,7 @@ import { readAnswer, workflowAnswerJsonSchema } from "../src/backend/workflows/w
 import { modelStepPrompt } from "../src/backend/workflows/workflow-walk";
 import { observedQuery } from "./claude-agent-harness";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-structured-output-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-structured-output-e2e");
 const TIMEOUT_MS = 120_000;
 const report: { model: string; checks: { name: string; passed: boolean }[]; answers: string[] } = {
   model: "",

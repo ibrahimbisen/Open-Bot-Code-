@@ -1,6 +1,6 @@
-import type { RoutineFields, RoutineSchedule } from "@openbot/contracts/ipc";
-import { RoutineScheduleCard } from "@openbot/ui/features/conversation/RoutineScheduleCard";
-import type { RoutineScheduleDraft } from "@openbot/ui/features/conversation/routine-schedule-draft";
+import type { RoutineFields, RoutineSchedule } from "@codebot/contracts/ipc";
+import { RoutineScheduleCard } from "@codebot/ui/features/conversation/RoutineScheduleCard";
+import type { RoutineScheduleDraft } from "@codebot/ui/features/conversation/routine-schedule-draft";
 import {
   ROUTINE_LOCAL_DRAFT_KINDS,
   ROUTINE_SAVED_DRAFT_KINDS,
@@ -9,8 +9,8 @@ import {
   routineOncePassed,
   routineScheduleFromDraft,
   routineScheduleToDraft,
-} from "@openbot/ui/features/conversation/routine-schedule-saved";
-import { type TextValue, useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/routine-schedule-saved";
+import { type TextValue, useText } from "@codebot/ui/text";
 import { createEffect, createSignal } from "solid-js";
 import { knownTimeZone, localTimeZone, routinePausedByRunLabel, routineTimeZoneLabel } from "./routine-summary";
 import { agentRoutinesPort } from "./routines-port";

@@ -1,7 +1,7 @@
-import type { WhatsNewRelease } from "@openbot/ui/features/updates/whats-new";
+import type { WhatsNewRelease } from "@codebot/ui/features/updates/whats-new";
 
-const WHATS_NEW_VERSION_KEY = "openbot:whats-new-version";
-const LEGACY_VERSION_KEY = "openbot:analytics-app-version";
+const WHATS_NEW_VERSION_KEY = "codebot:whats-new-version";
+const LEGACY_VERSION_KEY = "codebot:analytics-app-version";
 
 export function releaseVersion(value: string | null): string | null {
   return value !== null && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(value) ? value : null;

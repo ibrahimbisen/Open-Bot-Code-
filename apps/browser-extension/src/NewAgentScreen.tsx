@@ -1,12 +1,12 @@
-import type { AgentStatus, ClientAgentModelOption } from "@openbot/contracts/ipc";
-import { resolveCreationModel } from "@openbot/ui/features/agents/agent-creation-model";
+import type { AgentStatus, ClientAgentModelOption } from "@codebot/contracts/ipc";
+import { resolveCreationModel } from "@codebot/ui/features/agents/agent-creation-model";
 import {
   createFirstAgentDraft,
   FIRST_AGENT_SUGGESTIONS,
   type FirstAgentDraft,
   FirstAgentSetup,
-} from "@openbot/ui/features/agents/FirstAgentSetup";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/agents/FirstAgentSetup";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createStore, onSettled } from "solid-js";
 import type { Workspace } from "./workspace";
 

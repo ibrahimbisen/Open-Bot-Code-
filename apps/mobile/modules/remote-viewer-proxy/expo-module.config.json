@@ -4,6 +4,6 @@
     "modules": ["RemoteViewerProxyModule"]
   },
   "android": {
-    "modules": ["run.openbot.remoteviewerproxy.RemoteViewerProxyModule"]
+    "modules": ["run.codebot.remoteviewerproxy.RemoteViewerProxyModule"]
   }
 }

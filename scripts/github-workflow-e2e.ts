@@ -3,10 +3,10 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { WorkflowGitHubHistory, WorkflowGraph, WorkflowNode } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { WorkflowGitHubHistory, WorkflowGraph, WorkflowNode } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { EXTERNAL_EVENT_END } from "../src/backend/webhook-trigger";
 import type { WorkflowGitHubApi, WorkflowGitHubChange } from "../src/backend/workflows/workflow-github-api";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
@@ -21,7 +21,7 @@ import {
 } from "../src/backend/workflows/workflows";
 import { receiveGitHubDelivery } from "../src/main/github-relay";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/github-workflow-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/github-workflow-e2e");
 const BOT = "openbotgit";
 
 interface Report {
@@ -115,8 +115,8 @@ const comment = (repository: string, number: number, login: string, type: "User"
   };
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-github-workflow-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-github-workflow-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 try {
@@ -251,7 +251,7 @@ try {
   check('"not a bot" refuses another bot', dependabotRow?.reason === "filter", dependabotRow);
   const ownBot = await send(comment("acme/app", 4, `${BOT}[bot]`, "Bot").body);
   const ownBotRow = await delivery(queue.summary.id, ownBot.deliveryId);
-  check('"not a bot" refuses OpenBot\'s own bot', ownBotRow?.reason === "filter", ownBotRow);
+  check('"not a bot" refuses CodeBot\'s own bot', ownBotRow?.reason === "filter", ownBotRow);
 
   const chainRows = [];
   for (let index = 0; index < 4; index += 1) {
@@ -259,7 +259,7 @@ try {
     chainRows.push(await delivery(chain.summary.id, sent.deliveryId));
   }
   check(
-    "OpenBot's bot starts runs until the chain is too long",
+    "CodeBot's bot starts runs until the chain is too long",
     chainRows.slice(0, 3).every((row) => row?.outcome === "started") && chainRows[3]?.reason === "chain",
     chainRows,
   );

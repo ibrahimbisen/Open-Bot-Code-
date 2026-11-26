@@ -1,11 +1,11 @@
-import type { HostedServerEntryPoint } from "@openbot/contracts/hosted-servers";
-import type { HostStatus, ServerNotificationLevel, ServerSummary } from "@openbot/contracts/ipc";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import { WAKE_RECONNECT_STATES } from "@openbot/team-client/hosted-server-wake";
-import { classifyFailure } from "@openbot/telemetry";
-import { toast } from "@openbot/ui";
-import { serverPlanDeletionDates } from "@openbot/ui/features/servers/ServerPlanEnd";
-import { currentText } from "@openbot/ui/text";
+import type { HostedServerEntryPoint } from "@codebot/contracts/hosted-servers";
+import type { HostStatus, ServerNotificationLevel, ServerSummary } from "@codebot/contracts/ipc";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import { WAKE_RECONNECT_STATES } from "@codebot/team-client/hosted-server-wake";
+import { classifyFailure } from "@codebot/telemetry";
+import { toast } from "@codebot/ui";
+import { serverPlanDeletionDates } from "@codebot/ui/features/servers/ServerPlanEnd";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, flush, onSettled, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { FALLBACK_HOST_STATUS } from "../../app-defaults";
@@ -20,7 +20,7 @@ import {
 import { checkServerUpdate, offerServerUpdate, type ServerUpdateTarget } from "./server-update-flow";
 import { serversPort } from "./servers-port";
 
-const LOCAL_SERVER_HIDDEN_STORAGE_KEY = "openbot:local-server-hidden";
+const LOCAL_SERVER_HIDDEN_STORAGE_KEY = "codebot:local-server-hidden";
 
 function readLocalServerHidden(): boolean {
   try {

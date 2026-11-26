@@ -1,4 +1,4 @@
-import type { AgentContextState, AgentEvent, TeamRealtimeEvent } from "@openbot/contracts/ipc";
+import type { AgentContextState, AgentEvent, TeamRealtimeEvent } from "@codebot/contracts/ipc";
 
 export interface MobileContextStates {
   agents: Readonly<Record<string, AgentContextState>>;

@@ -1,4 +1,4 @@
-import { xPageRulesHash } from "@openbot/contracts/browser-extension-x";
+import { xPageRulesHash } from "@codebot/contracts/browser-extension-x";
 import { createFileRoute } from "@tanstack/solid-router";
 import { X_PAGE_RULES_CURRENT } from "../../../server/browser-extension-x-rules";
 

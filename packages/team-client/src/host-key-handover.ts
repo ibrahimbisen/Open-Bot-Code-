@@ -1,5 +1,5 @@
+import { type HostKeyHandover, hostKeyHandoverStatement } from "@codebot/contracts/host-key-handover";
 import { sha256 } from "@noble/hashes/sha2.js";
-import { type HostKeyHandover, hostKeyHandoverStatement } from "@openbot/contracts/host-key-handover";
 import { Effect } from "effect";
 import { bytesToBase64Url } from "./base64";
 

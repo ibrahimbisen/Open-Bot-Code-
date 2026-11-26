@@ -1,8 +1,8 @@
-import { type ChatBackgroundColor, isChatBackgroundColor } from "@openbot/contracts/app-appearance";
+import { type ChatBackgroundColor, isChatBackgroundColor } from "@codebot/contracts/app-appearance";
 import { createSignal } from "solid-js";
 import { applyChatBackground } from "../../chat-background";
 
-const STORAGE_KEY = "openbot.web.chat-background";
+const STORAGE_KEY = "codebot.web.chat-background";
 
 export interface WebChatBackground {
   chatBackgroundLight: ChatBackgroundColor | null;

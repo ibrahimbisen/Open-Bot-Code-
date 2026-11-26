@@ -1,8 +1,8 @@
-import type { PasswordManagerStatus } from "@openbot/contracts/ipc";
+import type { PasswordManagerStatus } from "@codebot/contracts/ipc";
 import {
   PASSWORD_MANAGERS_KEY_LIMIT,
   PASSWORD_MANAGERS_PASSWORD_LIMIT,
-} from "@openbot/contracts/team-protocol/password-managers-v1";
+} from "@codebot/contracts/team-protocol/password-managers-v1";
 import type { UseQueryResult } from "@tanstack/react-query";
 import * as Clipboard from "expo-clipboard";
 import { openBrowserAsync } from "expo-web-browser";

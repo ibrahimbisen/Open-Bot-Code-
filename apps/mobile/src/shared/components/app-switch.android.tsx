@@ -13,8 +13,8 @@ import { useCSSVariable } from "uniwind";
 const MIN_INTERACTIVE_SIZE = 48;
 
 export function AppSwitch({ value, onValueChange, label, disabled, modifiers }: SwitchProps) {
-  const accent = String(useCSSVariable("--openbot-accent"));
-  const onAccent = String(useCSSVariable("--openbot-text-on-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
+  const onAccent = String(useCSSVariable("--codebot-text-on-accent"));
   const disabledAccent = /^#[0-9a-f]{6}$/i.test(accent) ? `${accent}61` : accent;
   const labeled = label != null;
   const toggle = (

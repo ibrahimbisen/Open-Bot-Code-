@@ -10,7 +10,7 @@ declare class ThemeSnapshotModule extends NativeModule {
   snapshot(): Promise<Uint8Array>;
 }
 
-const native = requireOptionalNativeModule<ThemeSnapshotModule>("OpenBotThemeSnapshot");
+const native = requireOptionalNativeModule<ThemeSnapshotModule>("CodeBotThemeSnapshot");
 
 export const useThemeSweep = create<{
   image: SkImage | null;

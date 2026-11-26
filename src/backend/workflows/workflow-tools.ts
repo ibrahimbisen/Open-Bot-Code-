@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   isGitHubRepositoryName,
   isRoutineSchedule,
@@ -32,13 +32,13 @@ import {
   workflowListField,
   workflowMediaKind,
   workflowUnknownFields,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { RoutineInputError } from "@openbot/team-client/routine-schedule";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { RoutineInputError } from "@codebot/team-client/routine-schedule";
 import { Effect } from "effect";
 import { z } from "zod";
-import { openBotToolFailure, openBotToolResult } from "../agent/routine-tools";
+import { codeBotToolFailure, codeBotToolResult } from "../agent/routine-tools";
 import { ToolOperationFailed, toolStep } from "../agent/tool-operation";
 import { githubTriggerRepositories } from "./github-matching";
 import { WORKFLOW_ANSWER_TOOL } from "./workflow-answers";
@@ -158,7 +158,7 @@ const answerToolSchema = z
 export const WORKFLOW_ANSWER_TOOL_DEFINITION = {
   name: WORKFLOW_ANSWER_TOOL,
   description:
-    "Only in a workflow step that asks for answer fields: give them as one JSON object. OpenBot checks them at once and tells you what to correct; then call it again. The last answer that fits is the result of the step.",
+    "Only in a workflow step that asks for answer fields: give them as one JSON object. CodeBot checks them at once and tells you what to correct; then call it again. The last answer that fits is the result of the step.",
   shape: answerToolSchema.shape,
 } as const;
 
@@ -175,20 +175,20 @@ export const handleWorkflowAnswerTool = Effect.fn("WorkflowTools.answer")(functi
     .pipe(Effect.mapError((failure) => new ToolOperationFailed({ cause: failure.cause })));
   switch (result.kind) {
     case "saved":
-      return openBotToolResult({
+      return codeBotToolResult({
         status: "saved",
-        note: "OpenBot keeps this answer as the result of the step. Finish your turn.",
+        note: "CodeBot keeps this answer as the result of the step. Finish your turn.",
       });
     case "problems":
-      return openBotToolFailure(result.text);
+      return codeBotToolFailure(result.text);
     case "free":
-      return openBotToolFailure("This workflow step asks for no answer fields. Give your answer as text.");
+      return codeBotToolFailure("This workflow step asks for no answer fields. Give your answer as text.");
     case "several":
-      return openBotToolFailure(
+      return codeBotToolFailure(
         "This turn has more than one workflow step. End your reply with one JSON object with the answer fields.",
       );
     case "none":
-      return openBotToolFailure(
+      return codeBotToolFailure(
         "Use this tool only in a workflow step that asks for answer fields. Give your answer as usual.",
       );
   }
@@ -795,7 +795,7 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
     if (tool === "list_workflows") {
       yield* toolStep(() => listSchema.parse(args ?? {}));
       const summaries = yield* workflows.list();
-      return openBotToolResult(
+      return codeBotToolResult(
         summaries.map((summary) => ({
           workflowId: summary.id,
           title: summary.title,
@@ -807,7 +807,7 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
     if (tool === "read_workflow") {
       const input = yield* toolStep(() => readSchema.parse(args));
       const detail = yield* workflows.get(input.workflowId);
-      return openBotToolResult({
+      return codeBotToolResult({
         title: detail.summary.title,
         revision: detail.revision,
         ...compactGraph(detail.graph, input.layout === true),
@@ -825,14 +825,14 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
       const tidy = input.tidy === true;
       const workflowId = input.workflowId;
       if (workflowId === undefined) {
-        if (input.title === undefined) return openBotToolFailure("A new workflow needs a title.");
+        if (input.title === undefined) return codeBotToolFailure("A new workflow needs a title.");
         const empty: WorkflowGraph = { nodes: [], edges: [], strokes: [] };
         const applied = yield* toolStep(() => applyWorkflowOps(empty, ops, agentIds, tidy, scheduleTimezone));
         const answers = newAnswerProblems(empty, applied);
         const problem = graphProblem(applied.graph) ?? answers.refusal;
-        if (problem) return openBotToolFailure(problem);
+        if (problem) return codeBotToolFailure(problem);
         const created = yield* workflows.create({ title: input.title, graph: applied.graph }, callerId);
-        return openBotToolResult({
+        return codeBotToolResult({
           workflowId: created.summary.id,
           revision: created.revision,
           ...(Object.keys(applied.ids).length > 0 ? { ids: applied.ids } : {}),
@@ -841,8 +841,8 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
       }
       const saved = ops.length > 0 || tidy ? yield* save(workflowId, ops, tidy) : null;
       if (input.title !== undefined) yield* workflows.rename({ workflowId, title: input.title });
-      if (!saved) return openBotToolResult({ workflowId });
-      return openBotToolResult({
+      if (!saved) return codeBotToolResult({ workflowId });
+      return codeBotToolResult({
         workflowId,
         revision: saved.revision,
         ...(Object.keys(saved.ids).length > 0 ? { ids: saved.ids } : {}),
@@ -853,26 +853,26 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
       const input = yield* toolStep(() => deleteSchema.parse(args));
       const detail = yield* workflows.get(input.workflowId);
       if (!(yield* confirmDelete(detail.summary.title)))
-        return openBotToolFailure("The user declined the delete. Do not try again unless they ask.");
+        return codeBotToolFailure("The user declined the delete. Do not try again unless they ask.");
       yield* workflows.remove(input.workflowId);
-      return openBotToolResult({ removed: input.workflowId });
+      return codeBotToolResult({ removed: input.workflowId });
     }
     if (tool === "run_workflow") {
       const input = yield* toolStep(() => runSchema.parse(args));
       if (input.only) {
-        if (input.fromNodeId === undefined) return openBotToolFailure("only needs fromNodeId.");
-        if (input.input !== undefined) return openBotToolFailure("only takes no input. Leave out input.");
+        if (input.fromNodeId === undefined) return codeBotToolFailure("only needs fromNodeId.");
+        if (input.input !== undefined) return codeBotToolFailure("only takes no input. Leave out input.");
         const step = yield* workflows.runStep({
           workflowId: input.workflowId,
           nodeId: input.fromNodeId,
           requestId: callKey,
         });
-        return openBotToolResult({ stepId: step.id, status: step.status });
+        return codeBotToolResult({ stepId: step.id, status: step.status });
       }
       if (input.input !== undefined && input.fromNodeId !== undefined) {
         const from = (yield* workflows.get(input.workflowId)).graph.nodes.find((node) => node.id === input.fromNodeId);
         if (from !== undefined && from.kind !== "trigger")
-          return openBotToolFailure(
+          return codeBotToolFailure(
             "input needs a full run or a run from a trigger. Leave out fromNodeId, or leave out input.",
           );
       }
@@ -884,7 +884,7 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
         },
         input.input,
       );
-      return openBotToolResult({ runId: detail.run.id, number: detail.run.number, status: detail.run.status });
+      return codeBotToolResult({ runId: detail.run.id, number: detail.run.number, status: detail.run.status });
     }
     const input = yield* toolStep(() => runsSchema.parse(args));
     const nodes = new Map((yield* workflows.get(input.workflowId)).graph.nodes.map((node) => [node.id, node]));
@@ -895,12 +895,12 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
     if (input.runId !== undefined) {
       const detail = yield* workflows.run(input.runId);
       if (detail.run.workflowId !== input.workflowId)
-        return openBotToolFailure(`No run ${input.runId} in this workflow.`);
-      return openBotToolResult(compactRun(detail, nodes, yield* settingsOf(detail.steps)));
+        return codeBotToolFailure(`No run ${input.runId} in this workflow.`);
+      return codeBotToolResult(compactRun(detail, nodes, yield* settingsOf(detail.steps)));
     }
     const page = yield* workflows.runs({ workflowId: input.workflowId, limit: input.limit ?? 1 });
     const saved = yield* settingsOf([...page.runs.flatMap((detail) => detail.steps), ...page.soloSteps]);
-    return openBotToolResult({
+    return codeBotToolResult({
       runs: page.runs.map((detail) => compactRun(detail, nodes, saved)),
       ...(page.soloSteps.length > 0 ? { steps: page.soloSteps.map((step) => compactStep(step, nodes, saved)) } : {}),
     });
@@ -909,12 +909,12 @@ export const handleWorkflowTool = Effect.fn("WorkflowTools.handle")(function* (
   return yield* operation.pipe(
     Effect.catchTag("WorkflowFailed", (failure) =>
       failure.cause instanceof WorkflowStoreError || failure.cause instanceof RoutineInputError
-        ? Effect.succeed(openBotToolFailure(failure.cause.message))
+        ? Effect.succeed(codeBotToolFailure(failure.cause.message))
         : Effect.fail(new ToolOperationFailed({ cause: failure.cause })),
     ),
     Effect.catchTag("ToolOperationFailed", (failure) =>
       failure.cause instanceof WorkflowEditRefused
-        ? Effect.succeed(openBotToolFailure(failure.cause.message))
+        ? Effect.succeed(codeBotToolFailure(failure.cause.message))
         : Effect.fail(failure),
     ),
   );

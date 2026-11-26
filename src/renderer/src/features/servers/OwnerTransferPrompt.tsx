@@ -1,4 +1,4 @@
-import type { AcceptedOwnerTransfer, OwnerTransfer } from "@openbot/contracts/owner-transfer";
+import type { AcceptedOwnerTransfer, OwnerTransfer } from "@codebot/contracts/owner-transfer";
 import {
   Alert,
   AlertContent,
@@ -9,8 +9,8 @@ import {
   Dialog,
   TriangleAlert,
   toast,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createStore, Show } from "solid-js";
 
 export interface OwnerTransferPromptCalls {

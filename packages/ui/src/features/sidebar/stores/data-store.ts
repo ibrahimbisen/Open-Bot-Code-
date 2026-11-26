@@ -6,7 +6,7 @@ import {
   sidebarFolderAncestors,
   sidebarFolderHeight,
   sidebarFolderParents,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { createMemo, createSignal } from "solid-js";
 import type { AgentProfile } from "../../../data";
 import { currentText } from "../../../text";

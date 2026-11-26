@@ -1,4 +1,4 @@
-import { chatMathStart, inlineChatMath } from "@openbot/contracts/chat-math";
+import { chatMathStart, inlineChatMath } from "@codebot/contracts/chat-math";
 
 export function liveActivityMarkdown(source: string, limit: number): string {
   return truncateMarkdown(inlineText(blockText(source)), limit);

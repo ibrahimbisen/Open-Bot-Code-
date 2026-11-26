@@ -1,4 +1,4 @@
-import { X_AGENT_LISTING_ID } from "@openbot/contracts/browser-extension-x";
+import { X_AGENT_LISTING_ID } from "@codebot/contracts/browser-extension-x";
 import {
   AVATAR_HUES,
   type ClientAgentSummary,
@@ -13,12 +13,12 @@ import {
   type McpSignInApp,
   type McpSignInState,
   type SkillCategory,
-} from "@openbot/contracts/ipc";
-import type { McpConnectFlow } from "@openbot/contracts/mcp-connect-flows";
-import { sourceText } from "@openbot/i18n";
-import { CONNECTOR_LISTINGS } from "@openbot/ui/features/connectors/connector-catalog";
-import { Marketplace } from "@openbot/ui/features/marketplace/Marketplace";
-import { AgentsDialog } from "@openbot/ui/features/marketplace/MarketplaceAgentsDialog";
+} from "@codebot/contracts/ipc";
+import type { McpConnectFlow } from "@codebot/contracts/mcp-connect-flows";
+import { sourceText } from "@codebot/i18n";
+import { CONNECTOR_LISTINGS } from "@codebot/ui/features/connectors/connector-catalog";
+import { Marketplace } from "@codebot/ui/features/marketplace/Marketplace";
+import { AgentsDialog } from "@codebot/ui/features/marketplace/MarketplaceAgentsDialog";
 import {
   type MarketplaceAgent,
   type MarketplaceApp,
@@ -27,15 +27,15 @@ import {
   type MarketplaceAppsBlock,
   type MarketplaceModel,
   X_APP_ID,
-} from "@openbot/ui/features/marketplace/marketplace-model";
+} from "@codebot/ui/features/marketplace/marketplace-model";
 import {
   createMarketplaceNavigation,
   type MarketplaceNavigation,
-} from "@openbot/ui/features/marketplace/marketplace-view";
-import { McpConnectDialog } from "@openbot/ui/features/settings/McpConnectDialog";
-import type { McpConnectSubject } from "@openbot/ui/features/settings/McpConnectShell";
-import type { MarketplacePluginApp } from "@openbot/ui/features/settings/marketplace-plugins";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/marketplace/marketplace-view";
+import { McpConnectDialog } from "@codebot/ui/features/settings/McpConnectDialog";
+import type { McpConnectSubject } from "@codebot/ui/features/settings/McpConnectShell";
+import type { MarketplacePluginApp } from "@codebot/ui/features/settings/marketplace-plugins";
+import { currentText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createStore, onSettled, Show, untrack } from "solid-js";
 import { fn } from "storybook/test";
@@ -115,7 +115,7 @@ const MORE_SKILLS: readonly MarketplaceSkillSummary[] = SKILL_WORDS.flatMap(([ca
     name,
     description: `${name.replace(/^\S+/, (verb) => `${verb}s`)} and reports what it found, one line for each.`,
     category,
-    creatorName: index % 3 === 0 ? "OpenBot" : "Priya Raman",
+    creatorName: index % 3 === 0 ? "CodeBot" : "Priya Raman",
     version: 1 + (index % 4),
     installs: 900 - index * 17,
     featured: index % 9 === 0,
@@ -277,7 +277,7 @@ const X_LISTING: MarketplaceAgentDetail = {
   name: "X",
   title: "Does what you ask in an X reply that mentions @openbot_",
   description: "Does what you ask in an X reply that mentions @openbot_.",
-  creatorName: "OpenBot",
+  creatorName: "CodeBot",
   version: 1,
   installs: 412,
   featured: false,
@@ -313,7 +313,7 @@ function storyXApp(agent: MarketplaceAgent | null): MarketplaceApp {
     category: "productivity",
     status: agent ? "connected" : "idle",
     agent,
-    extensionUrl: "https://chromewebstore.google.com/detail/openbot",
+    extensionUrl: "https://chromewebstore.google.com/detail/codebot",
   };
 }
 

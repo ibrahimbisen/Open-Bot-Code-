@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { ConversationMessage } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { argument, connectChannelE2e, writeReport } from "./channel-e2e-support";
 import { seedMessageId as messageId, readSeed, SEED_FILE, type Seed } from "./pinned-message-e2e-seed";
 
 const NAME = "pinned-message-jump-e2e";
-const OUT = resolve(import.meta.dirname, `../.openbot-build/${NAME}`);
+const OUT = resolve(import.meta.dirname, `../.codebot-build/${NAME}`);
 const MESSAGE_COUNT = 50_000;
 const THREAD_TITLE = "Pin timing 50k";
 const UI_WAIT_MS = 15_000;
@@ -39,10 +39,10 @@ async function seed(): Promise<void> {
   assert.ok(profile && existsSync(profile), "Pass --profile=<userData of this worktree's dev profile>.");
   const { isDevelopmentProfileActive } = await import("./seed-dev-state");
   assert.equal(await isDevelopmentProfileActive(profile), false, "Stop the app first: bun run dev:stop");
-  const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+  const { CodeBotDatabase } = await import("../src/backend/codebot-database");
   const { AgentThreadStore } = await import("../src/backend/agent-threads/agent-thread-store");
   const { runCauseEffect } = await import("../src/backend/effect-boundary");
-  const database = new OpenBotDatabase(profile);
+  const database = new CodeBotDatabase(profile);
   await runCauseEffect(database.initialize());
   try {
     const agent = database.listAgents()[0];
@@ -108,14 +108,14 @@ async function measure(): Promise<void> {
     }
     await page.evaluate(
       async ({ agentId, taskId, ids }) => {
-        const snapshot = await window.openbot.agent.listPinnedMessages(agentId);
+        const snapshot = await window.codebot.agent.listPinnedMessages(agentId);
         for (const pin of snapshot.pins) {
           if (pin.taskId === taskId && !ids.includes(pin.messageId)) {
-            await window.openbot.agent.setMessagePinned({ agentId, taskId, messageId: pin.messageId, pinned: false });
+            await window.codebot.agent.setMessagePinned({ agentId, taskId, messageId: pin.messageId, pinned: false });
           }
         }
         for (const id of ids) {
-          await window.openbot.agent.setMessagePinned({ agentId, taskId, messageId: id, pinned: true });
+          await window.codebot.agent.setMessagePinned({ agentId, taskId, messageId: id, pinned: true });
         }
       },
       { agentId: seedData.agentId, taskId: seedData.taskId, ids: CASES.map((item) => messageId(item.index)) },
@@ -191,7 +191,7 @@ async function measure(): Promise<void> {
       );
       const screenshot = resolve(OUT, `${item.name.replace(/[^a-z0-9]+/gi, "-")}.png`);
       await page.screenshot({ path: screenshot });
-      await page.evaluate(() => window.openbot.agent.listAgents());
+      await page.evaluate(() => window.codebot.agent.listAgents());
       const shown = await toasts();
       results.push({ ...item, messageId: id, timing, toasts: shown, screenshot });
       print(`${item.name}: ${JSON.stringify(timing)} toasts=${JSON.stringify(shown)}`);

@@ -1,20 +1,20 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Duplex } from "node:stream";
-import type { TeamMemberSummary } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { encodeTeamCapabilitiesV10 } from "@openbot/contracts/team-protocol/current";
+import type { TeamMemberSummary } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { encodeTeamCapabilitiesV10 } from "@codebot/contracts/team-protocol/current";
 import {
   SERVER_SAFE_MODE_CAPABILITY,
   SERVER_SAFE_MODE_ROUTES,
   type ServerSafeModeReason,
-} from "@openbot/contracts/team-protocol/server-safe-mode-v1";
+} from "@codebot/contracts/team-protocol/server-safe-mode-v1";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_PROTOCOL_VERSION_HEADER,
   type TeamProtocolSupportV1,
-} from "@openbot/contracts/team-protocol/v1";
-import { TEAM_PROTOCOL_V10, type TeamProtocolSupportV10 } from "@openbot/contracts/team-protocol/v10";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/v1";
+import { TEAM_PROTOCOL_V10, type TeamProtocolSupportV10 } from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
 import { bearerToken, firstHeaderValue, requestCapabilityListsV10, requestProtocol } from "./request-helpers";
 
 export interface ServerSafeModeApiOptions {

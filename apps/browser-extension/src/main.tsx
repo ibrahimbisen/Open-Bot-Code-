@@ -1,6 +1,6 @@
 import "./extension.css";
-import { formatLocale, loadLocale, localeDirection, resolveLocale } from "@openbot/i18n";
-import { TextProvider } from "@openbot/ui/text";
+import { formatLocale, loadLocale, localeDirection, resolveLocale } from "@codebot/i18n";
+import { TextProvider } from "@codebot/ui/text";
 import { render } from "@solidjs/web";
 import { App } from "./App";
 import { MicrophonePage } from "./MicrophonePage";
@@ -15,8 +15,8 @@ document.documentElement.dir = localeDirection(locale);
 const light = window.matchMedia("(prefers-color-scheme: light)");
 const applyScheme = () =>
   light.matches
-    ? document.documentElement.setAttribute("data-openbot-color-scheme", "light")
-    : document.documentElement.removeAttribute("data-openbot-color-scheme");
+    ? document.documentElement.setAttribute("data-codebot-color-scheme", "light")
+    : document.documentElement.removeAttribute("data-codebot-color-scheme");
 applyScheme();
 light.addEventListener("change", applyScheme);
 

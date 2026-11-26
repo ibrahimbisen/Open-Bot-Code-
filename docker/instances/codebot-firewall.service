@@ -1,0 +1,12 @@
+[Unit]
+Description=Firewall of the CodeBot Docker instances
+After=ufw.service
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/codebot-docker/instances/codebot-firewall
+
+[Install]
+WantedBy=multi-user.target docker.service

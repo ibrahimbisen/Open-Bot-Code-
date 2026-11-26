@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration v53: Slack triggers of workflows. The text below is the migration; the latest schema takes
 // the same run source line, so do not edit it after release.
@@ -57,7 +57,7 @@ function addSlackWorkflows(db: DatabaseSync): void {
   db.exec(V53_WORKFLOW_RUN_INDEXES_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 53,
   name: "slack-workflows",
   // Rebuilds the run table again to add the Slack run source, as migrations 50 and 52 did, so foreign

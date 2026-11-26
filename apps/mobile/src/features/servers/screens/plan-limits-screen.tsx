@@ -1,4 +1,4 @@
-import { type PlanLimitListedWindow, usagePaceRemainingPercent } from "@openbot/team-client/plan-limits";
+import { type PlanLimitListedWindow, usagePaceRemainingPercent } from "@codebot/team-client/plan-limits";
 import { useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
@@ -45,7 +45,7 @@ export function PlanLimitsScreen() {
 function PlanLimitWindowRow({ window }: { window: PlanLimitListedWindow }) {
   const { t, format } = useText();
   const track = String(useThemeColor("foreground"));
-  const [success, warning, danger] = useCSSVariable(["--openbot-success", "--openbot-warning", "--openbot-danger"]);
+  const [success, warning, danger] = useCSSVariable(["--codebot-success", "--codebot-warning", "--codebot-danger"]);
   const fill = { neutral: success, warning, critical: danger }[window.tone];
   const resetsAt = planLimitResetDate(window);
   const pace = usagePaceRemainingPercent(window.durationMins, window.resetsAt, Date.now());

@@ -8,7 +8,7 @@ function addMainHandlerFirst(contents) {
   return mergeContents({
     src: contents,
     newSrc: createMainHandlerOnMainThread,
-    tag: "openbot-main-handler-first",
+    tag: "codebot-main-handler-first",
     anchor: /^\s*loadReactNative\(this\)\s*$/,
     offset: 0,
     comment: "//",

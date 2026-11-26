@@ -1,10 +1,10 @@
-import { CHAT_HTML_PREVIEW_POLICY } from "@openbot/contracts/chat-preview";
-import { MarkdownMessageText } from "@openbot/ui/features/conversation/MarkdownMessageText";
+import { CHAT_HTML_PREVIEW_POLICY } from "@codebot/contracts/chat-preview";
+import { MarkdownMessageText } from "@codebot/ui/features/conversation/MarkdownMessageText";
 import { render, screen } from "@solidjs/testing-library";
 import { expect, it, vi } from "vitest";
 
 it("shows agent HTML in a frame that runs no scripts and loads nothing from a server", async () => {
-  const body = ["```html", '<img src="https://example.com/pixel.png"><script>parent.openbot</script>', "```"].join(
+  const body = ["```html", '<img src="https://example.com/pixel.png"><script>parent.codebot</script>', "```"].join(
     "\n",
   );
   render(() => <MarkdownMessageText body={body} agents={[]} onSelectAgent={vi.fn()} onOpenLink={vi.fn()} />);

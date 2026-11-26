@@ -1,7 +1,7 @@
-import type { ChannelDraft } from "@openbot/contracts/ipc";
-import { Alert, AlertDescription, ArrowLeft, Button, Checkbox, Field, Input, Search } from "@openbot/ui";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { useText } from "@openbot/ui/text";
+import type { ChannelDraft } from "@codebot/contracts/ipc";
+import { Alert, AlertDescription, ArrowLeft, Button, Checkbox, Field, Input, Search } from "@codebot/ui";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createStore, For, Show } from "solid-js";
 import { avatarAgent } from "./agent-look";

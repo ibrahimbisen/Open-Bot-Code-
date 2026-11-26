@@ -5,7 +5,7 @@ import {
   type BrowserProxySummary,
   browserProxyName,
   type SaveBrowserProxyInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import {

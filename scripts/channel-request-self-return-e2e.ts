@@ -4,20 +4,20 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentSummary, ChannelTask, ChannelTaskState } from "@openbot/contracts/ipc";
+import type { AgentSummary, ChannelTask, ChannelTaskState } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { deliveryPromptInput } from "../src/backend/agent/delivery-content";
 import { ChannelImages } from "../src/backend/channel-images";
 import { ChannelRequestReturns } from "../src/backend/channel-request-returns";
 import { ChannelService } from "../src/backend/channel-service";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-request-self-return-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-request-self-return-e2e");
 const PERSON = { id: "member-e2e", name: "Owner" };
 const WAIT_MS = 5_000;
-const RETURN_MARK = "This answers your openbot.send_to_channel request.";
+const RETURN_MARK = "This answers your codebot.send_to_channel request.";
 
 interface CaseReport {
   name: string;
@@ -60,8 +60,8 @@ const lead = agent("agent-lead", "Lead");
 const writer = agent("agent-writer", "Writer");
 const agents = [lead, writer];
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-channel-self-return-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-channel-self-return-"));
+const database = new CodeBotDatabase(directory);
 let channels: ChannelService | null = null;
 
 async function until<T>(read: () => T | undefined, what: string): Promise<T> {
@@ -211,7 +211,7 @@ try {
     .join("\n");
   report.promptFraming = {
     channelResult: prompt.includes("You did that channel work yourself"),
-    startTask: prompt.includes("openbot.start_task"),
+    startTask: prompt.includes("codebot.start_task"),
   };
   assert.ok(report.promptFraming.channelResult, "The self-sent result is not framed as a channel result.");
   assert.ok(!report.promptFraming.startTask, "The self-sent result is framed as a start_task brief.");

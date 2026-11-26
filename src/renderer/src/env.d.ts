@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 declare global {
   interface HighlightRegistry {
@@ -9,7 +9,7 @@ declare global {
   }
 
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 
   interface ExtensionSignInMessage {

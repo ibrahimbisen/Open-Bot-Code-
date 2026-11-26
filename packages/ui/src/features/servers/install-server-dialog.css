@@ -6,14 +6,14 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: calc(var(--openbot-space-4) + var(--openbot-space-1));
+  gap: calc(var(--codebot-space-4) + var(--codebot-space-1));
 }
 
 .install-server-block {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .install-server-block[data-expired] .message-code-block pre {
@@ -24,15 +24,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .install-server-status,
 .install-server-placeholder {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  min-height: var(--openbot-control-sm);
+  gap: var(--codebot-space-2);
+  min-height: var(--codebot-control-sm);
 }
 
 .install-server-placeholder {
@@ -50,20 +50,20 @@
 }
 
 .install-server-spin {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   animation: install-server-spin 1s linear infinite;
 }
 
 .install-server-ok {
-  color: var(--openbot-success);
+  color: var(--codebot-success);
 }
 
 .install-server-warning {
-  color: var(--openbot-warning);
+  color: var(--codebot-warning);
 }
 
 .install-server-danger {
-  color: var(--openbot-danger);
+  color: var(--codebot-danger);
 }
 
 @keyframes install-server-spin {

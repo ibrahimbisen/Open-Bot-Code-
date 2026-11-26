@@ -8,7 +8,7 @@ import { type AppServerNotification, getRecord, getString, isRecord } from "../s
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-steer-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-steer-e2e");
 const TURN_TIMEOUT_MS = 60_000;
 const COMMAND_ANSWER = "The build finished: 42 files.";
 const TEST_ANSWER = "The tests passed: 7 of 7.";
@@ -51,7 +51,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-steer-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-steer-e2e-"));
 process.env.GEMINI_HOME = join(root, "gemini");
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
@@ -98,7 +98,7 @@ async function startTurn(client: AgentClient, thread: string, log: string, text:
     listener = (notification) => {
       if (getString(notification.params, "threadId") !== thread) return;
       if (notification.method === "turn/started") started += 1;
-      if (notification.method === "openbot/usage") usage += 1;
+      if (notification.method === "codebot/usage") usage += 1;
       if (notification.method === "item/completed" && isRecord(notification.params))
         reply += getString(notification.params.item, "text") ?? "";
       if (notification.method === "turn/completed") {
@@ -363,7 +363,7 @@ try {
   const notedPrompt = async (thread: string, text: string) => {
     assert.equal((await (await startTurn(held.client, thread, held.log, text)).done).status, "completed");
     const prompt = (await prompts(held.log)).findLast((entry) => entry.text?.endsWith(text));
-    return prompt?.text?.includes("<openbot_session_reload>") === true;
+    return prompt?.text?.includes("<codebot_session_reload>") === true;
   };
   const [stoppedThread] = laterThreads;
   if (!stoppedThread) throw new Error("The later sessions did not start.");
@@ -372,7 +372,7 @@ try {
     secondPrompt: await notedPrompt(stoppedThread, "once more on the same process"),
     heldSession: await notedPrompt(daemonThread, "again on the held session"),
   };
-  assert.ok(report.reloadNote.afterIdleStop, "A session that OpenBot stopped as idle must get the reload note.");
+  assert.ok(report.reloadNote.afterIdleStop, "A session that CodeBot stopped as idle must get the reload note.");
   assert.ok(!report.reloadNote.secondPrompt, "The reload note must come only once.");
   assert.ok(!report.reloadNote.heldSession, "A session whose work held its process must not get the reload note.");
 

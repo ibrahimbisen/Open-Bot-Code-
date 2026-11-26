@@ -7,7 +7,7 @@ import {
   libraryFolderPath,
   libraryFolderTree,
   type StoredFileRow,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { router, Stack, useLocalSearchParams, useNavigation } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -108,7 +108,7 @@ function FolderActionsMenu({
   const { t } = useText();
   const { theme } = useUniwind();
   const menu = useRef<MenuComponentRef | null>(null);
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const canAdd = canHoldFolder(folders, folder?.id);
   const actions: MenuAction[] = [
     {
@@ -156,7 +156,7 @@ function FolderActionsMenu({
 
 function ExpandButton({ name, expanded, onPress }: { name: string; expanded: boolean; onPress: () => void }) {
   const { t } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   return (
     <Pressable
       accessibilityRole="button"
@@ -244,8 +244,8 @@ function PlaceSheet() {
     () => (storage.query.data?.files ?? []).filter((file) => file.status !== "missing"),
     [storage.query.data],
   );
-  const accent = String(useCSSVariable("--openbot-accent"));
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const accent = String(useCSSVariable("--codebot-accent"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const removedFiles = files.filter((file) => fromRemovedAgent(file, folders.livingAgentIds));
   const storedPlace = useLibraryPlace(serverId);
   const removedFilesExist = removedFiles.length > 0;
@@ -431,8 +431,8 @@ function MoveFileSheet({ fileId }: { fileId: string }) {
   const library = useLibrary(serverId);
   const { folders, storage, canOrganize } = library;
   const snapshot = folders.snapshot;
-  const accent = String(useCSSVariable("--openbot-accent"));
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const accent = String(useCSSVariable("--codebot-accent"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const [moving, setMoving] = useState(false);
   const file: StoredFileRow | undefined = storage.query.data?.files.find((item) => item.id === fileId);
   if (!snapshot || !storage.query.data) return <FoldersNote library={library} />;

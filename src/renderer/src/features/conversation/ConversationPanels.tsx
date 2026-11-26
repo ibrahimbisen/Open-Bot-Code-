@@ -1,18 +1,18 @@
-import { LOCAL_SERVER_ID, type ServerSummary } from "@openbot/contracts/ipc";
-import { AGENT_MEMORY_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/agent-memory-limit-v1";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { BROWSER_PROFILES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { ROUTINE_RUN_COMMAND_CAPABILITY } from "@openbot/contracts/team-protocol/routine-run-command-v1";
-import { WORKSPACE_DIRECTORY_CAPABILITY } from "@openbot/contracts/team-protocol/workspace-directory-v1";
-import { classifyFailure } from "@openbot/telemetry";
-import { PanelResizer } from "@openbot/ui/components/PanelResizer";
-import { settingsPanelMaxWidth } from "@openbot/ui/components/SettingsPanel";
+import { LOCAL_SERVER_ID, type ServerSummary } from "@codebot/contracts/ipc";
+import { AGENT_MEMORY_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/agent-memory-limit-v1";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { ROUTINE_RUN_COMMAND_CAPABILITY } from "@codebot/contracts/team-protocol/routine-run-command-v1";
+import { WORKSPACE_DIRECTORY_CAPABILITY } from "@codebot/contracts/team-protocol/workspace-directory-v1";
+import { classifyFailure } from "@codebot/telemetry";
+import { PanelResizer } from "@codebot/ui/components/PanelResizer";
+import { settingsPanelMaxWidth } from "@codebot/ui/components/SettingsPanel";
 import {
   BrowserPageCover,
   type BrowserPageMenu,
   type CoverBrowserPage,
-} from "@openbot/ui/features/browser/browser-page-cover";
-import { BROWSER_NEW_TAB_URL, browserDisplayUrl } from "@openbot/ui/features/browser/browser-suggestions";
+} from "@codebot/ui/features/browser/browser-page-cover";
+import { BROWSER_NEW_TAB_URL, browserDisplayUrl } from "@codebot/ui/features/browser/browser-suggestions";
 import {
   type SidePanelBrowsers,
   SidePanelHeader,
@@ -21,13 +21,13 @@ import {
   type SidePanelPane,
   type SidePanelPaneBadge,
   SidePanelToggle,
-} from "@openbot/ui/features/conversation/SidePanel";
-import { SideQuestionPanel } from "@openbot/ui/features/conversation/SideQuestionPanel";
-import { SubagentPanel } from "@openbot/ui/features/conversation/Subagents";
-import { ThreadsPane } from "@openbot/ui/features/conversation/threads/ThreadsPane";
-import { VoicePill } from "@openbot/ui/features/conversation/VoicePill";
-import { McpSignInRelayDialog } from "@openbot/ui/features/settings/McpSignInPage";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/SidePanel";
+import { SideQuestionPanel } from "@codebot/ui/features/conversation/SideQuestionPanel";
+import { SubagentPanel } from "@codebot/ui/features/conversation/Subagents";
+import { ThreadsPane } from "@codebot/ui/features/conversation/threads/ThreadsPane";
+import { VoicePill } from "@codebot/ui/features/conversation/VoicePill";
+import { McpSignInRelayDialog } from "@codebot/ui/features/settings/McpSignInPage";
+import { useText } from "@codebot/ui/text";
 import { actionToast } from "../../action-toast";
 import { useChatBubbleStyle } from "../../chat-bubble-style-preference";
 import {
@@ -77,7 +77,7 @@ import { setVoiceTalkMode, useVoiceTalkMode } from "./voice-talk-mode";
 
 const loadAgentSettingsPanel = () => import("./AgentSettingsPanel");
 
-import { type HostFolderPick, HostFolderPicker } from "@openbot/ui/features/conversation/HostFolderPicker";
+import { type HostFolderPick, HostFolderPicker } from "@codebot/ui/features/conversation/HostFolderPicker";
 import { Portal } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, Loading, lazy, onSettled, Show, untrack } from "solid-js";
 import {
@@ -358,7 +358,7 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
   const routineRunCommand = createMemo(() => {
     if (props.runtime) return props.runtime.routineRunCommand;
     return serverCanAdminister(props.server, ROUTINE_RUN_COMMAND_CAPABILITY)
-      ? window.openbot.agent.automationRunCommand
+      ? window.codebot.agent.automationRunCommand
       : undefined;
   });
   const routineResultsServerId = createMemo((): string | RoutineResultsCalls | undefined => {
@@ -376,7 +376,7 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
   const readMemoryLimit = (serverId: string): Promise<number> => {
     const web = props.runtime?.agentMemoryLimit;
     if (props.runtime) return web ? web() : Promise.reject(new Error(t("conversation.panels.tryAgain")));
-    return window.openbot.hostAdmin.getAgentMemoryLimit(serverId).then(({ limit }) => limit);
+    return window.codebot.hostAdmin.getAgentMemoryLimit(serverId).then(({ limit }) => limit);
   };
   const [remoteMemoryLimit, setRemoteMemoryLimit] = createSignal<{ serverId: string; limit: number } | null>(null);
   createEffect(

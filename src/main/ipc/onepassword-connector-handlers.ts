@@ -1,16 +1,16 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   decodeHostOnePasswordConnectorStatus,
   type OnePasswordConnectInput,
   type OnePasswordHostConnectInput,
-} from "@openbot/contracts/ipc";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/ipc";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
 import {
   ONEPASSWORD_CONNECTOR_CAPABILITY,
   ONEPASSWORD_CONNECTOR_ROUTES,
-} from "@openbot/contracts/team-protocol/onepassword-connector-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { registerSecretValue } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/onepassword-connector-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { registerSecretValue } from "@codebot/logging";
 import type { Effect } from "effect";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { OnePasswordConnectorService } from "../onepassword-connector-service";

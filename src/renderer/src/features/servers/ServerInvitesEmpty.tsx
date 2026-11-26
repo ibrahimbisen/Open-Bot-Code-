@@ -1,7 +1,7 @@
-import type { TeamInviteSummary } from "@openbot/contracts/ipc";
-import { Button, Heading } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import type { TeamInviteSummary } from "@codebot/contracts/ipc";
+import { Button, Heading } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, For, onSettled } from "solid-js";
 

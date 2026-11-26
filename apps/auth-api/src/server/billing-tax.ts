@@ -6,8 +6,8 @@ import {
   VAT_SELLER_COUNTRY,
   VAT_TAX_RATE,
   vatIdPrefix,
-} from "@openbot/contracts/billing-details";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/billing-details";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Option, Schema } from "effect";
 import { BillingError, type BillingOperationError, stripeFailure, stripeRequest } from "./billing-errors";
 import { requestCountry } from "./request-country";
@@ -30,9 +30,9 @@ export interface CheckoutTax {
 }
 
 const CUSTOMER_METADATA = {
-  vatId: "openbot_vat_id",
-  viesRequest: "openbot_vies_request",
-  checkedAt: "openbot_vat_checked_at",
+  vatId: "codebot_vat_id",
+  viesRequest: "codebot_vies_request",
+  checkedAt: "codebot_vat_checked_at",
 } as const;
 
 export function vatTreatment(country: string, validVatId: boolean): VatTreatment {

@@ -1,4 +1,4 @@
-import type { BrowserBounds } from "@openbot/contracts/ipc";
+import type { BrowserBounds } from "@codebot/contracts/ipc";
 import { rectanglesIntersect } from "./browser-picture-in-picture-bounds";
 
 export const DETACHED_BROWSER_MIN_WIDTH = 480;

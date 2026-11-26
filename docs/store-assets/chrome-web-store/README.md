@@ -1,10 +1,10 @@
 # Chrome Web Store screenshots
 
-Screenshots for the OpenBot extension listing in the Chrome Web Store.
+Screenshots for the CodeBot extension listing in the Chrome Web Store.
 
 - Size: 1280 × 800 px. This is the size that the store requires.
 - Format: 24-bit PNG without an alpha channel.
-- Source: Figma file "OpenBOT-AI", page "Sandbox", frames named `Web_Store`.
+- Source: Figma file "CodeBOT-AI", page "Sandbox", frames named `Web_Store`.
 
 Upload the files in this order:
 

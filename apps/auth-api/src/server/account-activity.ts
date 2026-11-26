@@ -1,4 +1,4 @@
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 import type { AccountEventDelivery } from "./account-analytics";
 

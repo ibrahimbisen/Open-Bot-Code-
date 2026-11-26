@@ -14,10 +14,10 @@ interface ProfileAvatarProps {
 }
 
 export function ProfileAvatar({ name, imageUrl, accent, size = 48, neutral = false }: ProfileAvatarProps) {
-  const brandBackground = String(useCSSVariable("--openbot-logo-production"));
-  const brandForeground = String(useCSSVariable("--openbot-text-on-light"));
-  const neutralBackground = String(useCSSVariable("--openbot-border-grouped"));
-  const neutralForeground = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const brandBackground = String(useCSSVariable("--codebot-logo-production"));
+  const brandForeground = String(useCSSVariable("--codebot-text-on-light"));
+  const neutralBackground = String(useCSSVariable("--codebot-border-grouped"));
+  const neutralForeground = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const [failedImageUrl, setFailedImageUrl] = useState<string | null>(null);
   const imageFailed = imageUrl === failedImageUrl;
 

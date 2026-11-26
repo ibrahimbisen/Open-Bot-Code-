@@ -151,7 +151,7 @@ private enum PastedItem {
 
   static func copy(_ url: URL, name: String) -> [String: String]? {
     let target = FileManager.default.temporaryDirectory
-      .appendingPathComponent("openbot-paste-\(UUID().uuidString)")
+      .appendingPathComponent("codebot-paste-\(UUID().uuidString)")
       .appendingPathExtension(url.pathExtension)
     do {
       try FileManager.default.copyItem(at: url, to: target)
@@ -241,7 +241,7 @@ private enum ComposerPaste {
   }()
 
   /// The selector of the submit key. The field class gets it as a new method.
-  private static let submit = NSSelectorFromString("openBotComposerSubmit:")
+  private static let submit = NSSelectorFromString("codeBotComposerSubmit:")
 
   /// Return and Command-Return send. Other modifiers, such as Shift, keep the line break of the field.
   @MainActor
@@ -264,7 +264,7 @@ private enum ComposerPaste {
 
 public class ComposerPasteModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("OpenBotComposerPaste")
+    Name("CodeBotComposerPaste")
 
     /// A build before the `ChatDrop` view does not have it, so the app shows the chat without it.
     Constant("chatDrop") { true }

@@ -13,7 +13,7 @@ import {
 } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-effort-variants-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-effort-variants-e2e");
 
 const FAKE_AGY = `#!/usr/bin/env node
 const fs = require("node:fs");
@@ -164,7 +164,7 @@ interface Report {
   provider?: { models: string[]; discoveryRequests: number };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-effort-variants-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-effort-variants-e2e-"));
 const log = join(root, "agy.jsonl");
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
@@ -247,8 +247,8 @@ try {
   const clientNames = discovery.filter((entry) => entry.event === "initialize").map((entry) => entry.value);
   assert.ok(clientNames.length > 0, "The discovery process is initialized.");
   assert.ok(
-    clientNames.every((name) => name === "openbot"),
-    "OpenBot names itself openbot to the Antigravity CLI 1.5, which offers Claude and GPT models to every client.",
+    clientNames.every((name) => name === "codebot"),
+    "CodeBot names itself codebot to the Antigravity CLI 1.5, which offers Claude and GPT models to every client.",
   );
   const discoveryEndsOn: Record<string, string | null> = {};
   for (const entry of discovery) if (entry.event === "set") discoveryEndsOn[entry.sessionId] = entry.model;

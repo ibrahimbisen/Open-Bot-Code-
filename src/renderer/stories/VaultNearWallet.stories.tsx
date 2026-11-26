@@ -5,10 +5,10 @@ import {
   type NearWalletDesktopApi,
   type NearWalletStatus,
   NO_NEAR_WALLET,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { NearPaymentCard } from "@openbot/ui/features/vault/NearPaymentCard";
-import { NearAddFundsDialog, NearSetupDialog, VaultNearWalletPage } from "@openbot/ui/features/vault/VaultNearWallet";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { NearPaymentCard } from "@codebot/ui/features/vault/NearPaymentCard";
+import { NearAddFundsDialog, NearSetupDialog, VaultNearWalletPage } from "@codebot/ui/features/vault/VaultNearWallet";
 import { onSettled } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";

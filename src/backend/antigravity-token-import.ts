@@ -6,7 +6,7 @@ const LEGACY_TOKEN_FILE = "acp_token.json";
 
 export const ANTIGRAVITY_TOKEN_FILE = "antigravity-oauth-token";
 
-const IMPORTED_MARKER = "openbot-token-imported";
+const IMPORTED_MARKER = "codebot-token-imported";
 
 const GOOGLE_SIGN_IN = "oauth-personal";
 

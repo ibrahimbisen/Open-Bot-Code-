@@ -1,6 +1,6 @@
-import type { AgentEvent, AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import type { Logger } from "@openbot/logging";
+import type { AgentEvent, AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import type { Logger } from "@codebot/logging";
 import { Cause, Effect, Exit, Option, Result, Schema } from "effect";
 import type { AgentApiKeys } from "../agent-api-keys";
 import type { AgentClient, AgentProvider } from "../agent-client";

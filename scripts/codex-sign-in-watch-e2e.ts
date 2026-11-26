@@ -2,13 +2,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { chmod, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { agentProviderDescriptor } from "@openbot/contracts/agent-providers";
-import type { AgentProviderState } from "@openbot/contracts/ipc";
+import { agentProviderDescriptor } from "@codebot/contracts/agent-providers";
+import type { AgentProviderState } from "@codebot/contracts/ipc";
 import { Effect, Result } from "effect";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-sign-in-watch-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-sign-in-watch-e2e");
 const WAIT_MS = 15_000;
-const root = await mkdtemp(join(tmpdir(), "openbot-codex-sign-in-watch-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-codex-sign-in-watch-"));
 const home = join(root, "home");
 const codexHome = join(home, ".codex");
 const authPath = join(codexHome, "auth.json");
@@ -16,15 +16,15 @@ const logPath = join(root, "protocol.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = codexHome;
-process.env.OPENBOT_FAKE_CODEX_LOG = logPath;
-delete process.env.OPENBOT_CODEX_PATH;
+process.env.CODEBOT_FAKE_CODEX_LOG = logPath;
+delete process.env.CODEBOT_CODEX_PATH;
 mkdirSync(codexHome, { recursive: true });
 
 const { ConversationRuntime } = await import("../src/backend/agent/conversation-runtime");
 const { ProviderRuntime } = await import("../src/backend/agent/provider-runtime");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } = await import("../src/backend/provider-drivers");
 
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -34,7 +34,7 @@ if (process.argv.includes("--version")) {
   process.stdout.write("codex-cli 99.0.0\\n");
   process.exit(0);
 }
-fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, executable: __filename }) + "\\n");
+fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, executable: __filename }) + "\\n");
 process.stdout.on("error", (error) => {
   if (error.code === "EPIPE") process.exit(0);
   throw error;
@@ -103,7 +103,7 @@ async function installFakeCodex(directory: string): Promise<string> {
 
 const executable = await installFakeCodex(join(root, "codex", "1"));
 const updatedExecutable = await installFakeCodex(join(root, "codex", "2"));
-const store = new AgentStore(join(root, "profile"), home, new OpenBotDatabase(join(root, "profile")));
+const store = new AgentStore(join(root, "profile"), home, new CodeBotDatabase(join(root, "profile")));
 const codexStates: (AgentProviderState | undefined)[] = [];
 let onStatus = () => {};
 const providers = new ProviderRuntime({

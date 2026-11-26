@@ -4,13 +4,13 @@ import type {
   AnalyticsTotals,
   HostAnalytics,
   HostAnalyticsInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   type AgentAnalytics,
   type AgentAnalyticsInput,
   type ClientAgentSummary,
   emptyAnalyticsTotals,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export function mockAgentAnalytics(
   input: AgentAnalyticsInput,

@@ -2,12 +2,12 @@
   --app-loading-at: 0s;
   --app-loading-exit-delay: 300ms;
   position: absolute;
-  z-index: var(--openbot-layer-dialog);
+  z-index: var(--codebot-layer-dialog);
   inset: 0;
   display: grid;
   place-items: center;
   overflow: hidden;
-  background: var(--openbot-bg-canvas);
+  background: var(--codebot-bg-canvas);
   -webkit-app-region: drag;
 }
 
@@ -56,8 +56,8 @@
 .app-loading-status {
   min-height: 20px;
   margin: 0;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-md);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-md);
 }
 
 .app-loading-line {
@@ -70,7 +70,7 @@
 }
 
 .app-loading:is([data-phase="fade"], [data-phase="exit"]) {
-  animation: app-loading-exit var(--openbot-duration-overlay) var(--openbot-ease-in-out) forwards;
+  animation: app-loading-exit var(--codebot-duration-overlay) var(--codebot-ease-in-out) forwards;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -80,12 +80,12 @@
   }
 
   .app-loading-stage {
-    animation: app-loading-enter var(--openbot-duration-overlay) var(--openbot-ease-out)
+    animation: app-loading-enter var(--codebot-duration-overlay) var(--codebot-ease-out)
       calc(250ms - var(--app-loading-at)) both;
   }
 
   .app-loading-line {
-    animation: app-loading-line-in 280ms var(--openbot-ease-out);
+    animation: app-loading-line-in 280ms var(--codebot-ease-out);
   }
 
   .app-loading[data-scene="quiet"] .app-loading-stage,
@@ -110,7 +110,7 @@
   }
 
   .app-loading:not([data-phase="loading"]) .app-loading-status {
-    animation: app-loading-fade 200ms var(--openbot-ease-out) forwards;
+    animation: app-loading-fade 200ms var(--codebot-ease-out) forwards;
   }
 }
 
@@ -144,22 +144,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--openbot-space-3);
-  padding: var(--openbot-space-3);
-  background: var(--openbot-bg-canvas);
-  border-bottom: 1px solid var(--openbot-border);
+  gap: var(--codebot-space-3);
+  padding: var(--codebot-space-3);
+  background: var(--codebot-bg-canvas);
+  border-bottom: 1px solid var(--codebot-border);
 }
 .server-connection-notice p {
   margin: 0;
 }
 .server-connection-detail {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-variant-numeric: tabular-nums;
   text-wrap: pretty;
 }
 .server-connection-actions {
   display: flex;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   -webkit-app-region: no-drag;
 }
 
@@ -169,31 +169,31 @@
 .server-connection-toast {
   position: relative;
   display: grid;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-4) var(--openbot-space-4) var(--openbot-space-2);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-surface-raised);
-  box-shadow: 0 0 0 1px var(--openbot-border);
-  color: var(--openbot-text-primary);
-  font-family: var(--openbot-font-sans);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-4) var(--codebot-space-4) var(--codebot-space-2);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-surface-raised);
+  box-shadow: 0 0 0 1px var(--codebot-border);
+  color: var(--codebot-text-primary);
+  font-family: var(--codebot-font-sans);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
 }
 .server-connection-toast-title {
-  padding-right: var(--openbot-space-1);
-  font-weight: var(--openbot-weight-semibold);
+  padding-right: var(--codebot-space-1);
+  font-weight: var(--codebot-weight-semibold);
   text-wrap: balance;
 }
 .server-connection-toast-body {
   margin: 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   font-variant-numeric: tabular-nums;
   text-wrap: pretty;
 }
 .server-connection-toast-actions {
-  margin-top: var(--openbot-space-1);
+  margin-top: var(--codebot-space-1);
 }
 .server-connection-content {
   position: relative;

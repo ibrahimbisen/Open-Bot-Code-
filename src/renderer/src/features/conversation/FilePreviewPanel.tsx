@@ -1,8 +1,8 @@
-import SharedFilePreviewPanel from "@openbot/ui/features/conversation/FilePreviewPanel";
+import SharedFilePreviewPanel from "@codebot/ui/features/conversation/FilePreviewPanel";
 import type { ComponentProps } from "@solidjs/web";
 import { readSidePanelWidth, resetSidePanelWidth, saveSidePanelWidth } from "../../components/side-panel-width";
 
-const WRAP_LINES_STORAGE_KEY = "openbot:file-preview-wrap-lines";
+const WRAP_LINES_STORAGE_KEY = "codebot:file-preview-wrap-lines";
 
 export default function FilePreviewPanel(
   props: Omit<

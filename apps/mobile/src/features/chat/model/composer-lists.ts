@@ -1,4 +1,4 @@
-import { type MarkdownListEdit, markdownListLineBreak } from "@openbot/contracts/markdown-lists";
+import { type MarkdownListEdit, markdownListLineBreak } from "@codebot/contracts/markdown-lists";
 import { editMentionDraft } from "./chat-mentions";
 
 export function markdownListReturn(previous: string, next: string, caret: number): MarkdownListEdit | null {

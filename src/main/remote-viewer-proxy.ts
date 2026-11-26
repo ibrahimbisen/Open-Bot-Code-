@@ -8,10 +8,10 @@ import {
 } from "node:http";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
-import { isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { browserViewStreamSessionId } from "@openbot/contracts/team-protocol/browser-view-v1";
-import { sourceText } from "@openbot/i18n/source";
+import { isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { browserViewStreamSessionId } from "@codebot/contracts/team-protocol/browser-view-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Semaphore } from "effect";
 import type * as Ws from "ws";
 import { readBodyWithin } from "./http-body";
@@ -34,7 +34,7 @@ const VIEWER_FILE_PATH = new RegExp(
   `^${TEAM_API_ROUTES.remoteScreen.sessions}/[A-Za-z0-9-]+/moonlight(/[A-Za-z0-9_./-]+\\.(?:js|mjs|css|wasm|png|svg|ico|woff2?))$`,
   "u",
 );
-const HOST_WRITTEN_VIEWER_FILES = new Set(["/config.js", "/openbot-paste.js"]);
+const HOST_WRITTEN_VIEWER_FILES = new Set(["/config.js", "/codebot-paste.js"]);
 const MAX_KEPT_VIEWER_BYTES = 32 * 1024 * 1024;
 const VIEWER_PAGE_POLICY =
   "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; media-src 'self' blob:; worker-src 'self' blob:";

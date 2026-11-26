@@ -1,20 +1,20 @@
 import { generateKeyPairSync, randomBytes, sign, verify } from "node:crypto";
 import { EventEmitter } from "node:events";
-import type { AgentEvent, TeamRealtimeEvent } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import type { AgentEvent, TeamRealtimeEvent } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import {
   decodeTeamProtocolSupportExpanded,
   teamCapabilitiesForProtocol,
   teamCapabilityLists,
-} from "@openbot/contracts/team-protocol/current";
-import { optionalTeamEvent, optionalTeamEventToCurrent } from "@openbot/contracts/team-protocol/optional-events";
-import { addPromptQuestionDetails } from "@openbot/contracts/team-protocol/prompt-detail-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
-import { addSkillSuggestionNames } from "@openbot/contracts/team-protocol/skill-learning-v1";
+} from "@codebot/contracts/team-protocol/current";
+import { optionalTeamEvent, optionalTeamEventToCurrent } from "@codebot/contracts/team-protocol/optional-events";
+import { addPromptQuestionDetails } from "@codebot/contracts/team-protocol/prompt-detail-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
+import { addSkillSuggestionNames } from "@codebot/contracts/team-protocol/skill-learning-v1";
 import {
   type TeamProtocolV1CurrentEventControl,
   toWireTeamProtocolV1ClientEvent,
-} from "@openbot/contracts/team-protocol/v1-adapter";
+} from "@codebot/contracts/team-protocol/v1-adapter";
 import {
   decodeTeamProtocolV2AuthFrame,
   decodeTeamProtocolV2EventFrame,
@@ -24,15 +24,15 @@ import {
   type TeamProtocolV2Json,
   type TeamProtocolV2RpcFrame,
   teamProtocolV2AuthenticationTranscript,
-} from "@openbot/contracts/team-protocol/v2";
-import { decodeTeamProtocolV8CurrentEvent } from "@openbot/contracts/team-protocol/v8-webrtc-adapter";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { encodeTeamProtocolV9WebRtcHttpRequest } from "@openbot/contracts/team-protocol/v9-webrtc-adapter";
-import { TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { decodeTeamProtocolV10WebRtcHttpResponse } from "@openbot/contracts/team-protocol/v10-webrtc-adapter";
-import { sourceText } from "@openbot/i18n/source";
-import { remoteWorkspaceReadTimeout, startRemoteRequestDeadline } from "@openbot/team-client/remote-recovery";
-import { type RemoteRequestProfile, startRemoteRequest } from "@openbot/team-client/sync-profile";
+} from "@codebot/contracts/team-protocol/v2";
+import { decodeTeamProtocolV8CurrentEvent } from "@codebot/contracts/team-protocol/v8-webrtc-adapter";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { encodeTeamProtocolV9WebRtcHttpRequest } from "@codebot/contracts/team-protocol/v9-webrtc-adapter";
+import { TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { decodeTeamProtocolV10WebRtcHttpResponse } from "@codebot/contracts/team-protocol/v10-webrtc-adapter";
+import { sourceText } from "@codebot/i18n/source";
+import { remoteWorkspaceReadTimeout, startRemoteRequestDeadline } from "@codebot/team-client/remote-recovery";
+import { type RemoteRequestProfile, startRemoteRequest } from "@codebot/team-client/sync-profile";
 import { Context, Deferred, Effect, Exit, Fiber, Layer, Result, Schema } from "effect";
 import type { CentralAuthOperationError } from "./central-auth-effects";
 import type { RemoteConnectionBootstrap } from "./central-auth-manager";
@@ -181,7 +181,7 @@ class TeamClientBridge extends Context.Service<
     connect(...args: Parameters<TeamWebRtcBridge["connect"]>): Effect.Effect<void, RemoteWorkflowError>;
     disconnect(hostId: string): Effect.Effect<void, RemoteWorkflowError>;
   }
->()("openbot/main/TeamClientBridge") {}
+>()("codebot/main/TeamClientBridge") {}
 
 export class TeamWebRtcClientTransport extends EventEmitter<TeamWebRtcClientTransportEvents> {
   readonly #options: TeamWebRtcClientTransportOptions;

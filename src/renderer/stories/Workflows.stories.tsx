@@ -1,17 +1,17 @@
-import type { AgentStepActivity, WorkflowStep, WorkflowStepSettings } from "@openbot/contracts/ipc";
-import { Toaster } from "@openbot/ui";
-import { AgentNode } from "@openbot/ui/features/workflows/WorkflowAgentNode";
-import { ApprovalNode } from "@openbot/ui/features/workflows/WorkflowApprovalNode";
-import { AssetNode } from "@openbot/ui/features/workflows/WorkflowAssetNode";
-import { ConditionNode } from "@openbot/ui/features/workflows/WorkflowConditionNode";
-import { ImageNode } from "@openbot/ui/features/workflows/WorkflowImageNode";
-import { LlmNode } from "@openbot/ui/features/workflows/WorkflowLlmNode";
-import { NoteNode } from "@openbot/ui/features/workflows/WorkflowNoteNode";
-import { OutputNode } from "@openbot/ui/features/workflows/WorkflowOutputNode";
-import { PromptNode } from "@openbot/ui/features/workflows/WorkflowPromptNode";
-import { TextNode } from "@openbot/ui/features/workflows/WorkflowTextNode";
-import { TriggerNode } from "@openbot/ui/features/workflows/WorkflowTriggerNode";
-import type { WorkflowCatalogs } from "@openbot/ui/features/workflows/workflow-model";
+import type { AgentStepActivity, WorkflowStep, WorkflowStepSettings } from "@codebot/contracts/ipc";
+import { Toaster } from "@codebot/ui";
+import { AgentNode } from "@codebot/ui/features/workflows/WorkflowAgentNode";
+import { ApprovalNode } from "@codebot/ui/features/workflows/WorkflowApprovalNode";
+import { AssetNode } from "@codebot/ui/features/workflows/WorkflowAssetNode";
+import { ConditionNode } from "@codebot/ui/features/workflows/WorkflowConditionNode";
+import { ImageNode } from "@codebot/ui/features/workflows/WorkflowImageNode";
+import { LlmNode } from "@codebot/ui/features/workflows/WorkflowLlmNode";
+import { NoteNode } from "@codebot/ui/features/workflows/WorkflowNoteNode";
+import { OutputNode } from "@codebot/ui/features/workflows/WorkflowOutputNode";
+import { PromptNode } from "@codebot/ui/features/workflows/WorkflowPromptNode";
+import { TextNode } from "@codebot/ui/features/workflows/WorkflowTextNode";
+import { TriggerNode } from "@codebot/ui/features/workflows/WorkflowTriggerNode";
+import type { WorkflowCatalogs } from "@codebot/ui/features/workflows/workflow-model";
 import { createSignal, onCleanup } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { NodeGallery } from "./workflow-node-gallery";
@@ -433,7 +433,7 @@ export const VideoCustomLength: Story = {
   ),
 };
 
-const UNAVAILABLE_VIDEO_MODEL = { id: "openbot-kling-4.0-omni", name: "Kling 4.0 · Omni", kinds: ["video"] } as const;
+const UNAVAILABLE_VIDEO_MODEL = { id: "codebot-kling-4.0-omni", name: "Kling 4.0 · Omni", kinds: ["video"] } as const;
 
 export const VideoModelUnavailable: Story = {
   name: "Video, model not available",
@@ -517,14 +517,14 @@ export const ImageBatchFailedTake: Story = {
 };
 
 const CREDITS_IMAGE_MODEL: WorkflowCatalogs["imageModels"][number] = {
-  id: "openbot-story-image",
-  provider: "openbot",
+  id: "codebot-story-image",
+  provider: "codebot",
   name: "Story Image",
   maker: "Northwind Labs",
   credits: true,
   kinds: ["image"],
   voices: false,
-  subscription: "OpenBot",
+  subscription: "CodeBot",
   aspects: ["1:1", "16:9"],
 };
 
@@ -775,15 +775,15 @@ export const Trigger: Story = {
       selected="schedule"
       github={STORY_GITHUB}
       fields={{
-        github: { trigger: "github", repository: "openbot-preview/app", event: "issue.opened", filters: "notBot" },
+        github: { trigger: "github", repository: "codebot-preview/app", event: "issue.opened", filters: "notBot" },
         "github-empty": { trigger: "github", event: "issue.opened", filters: "notBot" },
         "github-many": {
           trigger: "github",
-          repository: "openbot-preview/app",
+          repository: "codebot-preview/app",
           repositories: [
-            "openbot-preview/app",
-            "openbot-preview/desktop-release-pipeline-and-installers",
-            "openbot-preview-labs/team-api-gateway",
+            "codebot-preview/app",
+            "codebot-preview/desktop-release-pipeline-and-installers",
+            "codebot-preview-labs/team-api-gateway",
           ].join("\n"),
           event: "issue.opened",
           filters: "notBot",
@@ -834,8 +834,8 @@ export const Output: Story = {
         { id: "docs>review:text", from: "docs", to: "review", type: "text" },
       ]}
       fields={{
-        issue: { trigger: "github", repository: "openbot-preview/app", event: "issue.opened", filters: "notBot" },
-        docs: { trigger: "github", repository: "openbot-preview/docs", event: "pr.opened", filters: "notBot" },
+        issue: { trigger: "github", repository: "codebot-preview/app", event: "issue.opened", filters: "notBot" },
+        docs: { trigger: "github", repository: "codebot-preview/docs", event: "pr.opened", filters: "notBot" },
         comment: { target: "github", action: "comment" },
         label: { target: "github", action: "label.add", labelsFrom: "agent", labels: "bug\nenhancement" },
         review: { target: "github", action: "review.approve" },

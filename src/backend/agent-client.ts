@@ -3,8 +3,8 @@ import type {
   AgentSessionSettingsSnapshot,
   AgentSessionSettingValue,
   McpServerConfig,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import type { Effect } from "effect";
 import type { McpToolArguments } from "./mcp-probe";
 import type { RelayedMcpToolOutcome } from "./mcp-stdio-relay";

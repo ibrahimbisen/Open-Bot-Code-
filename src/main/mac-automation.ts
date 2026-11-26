@@ -1,9 +1,9 @@
 import { execFile } from "node:child_process";
-import type { MacAutomationResult, MacAutomationTarget } from "@openbot/contracts/ipc";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { MacAutomationResult, MacAutomationTarget } from "@codebot/contracts/ipc";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 
-const logger = createOpenBotLogger("mac-automation");
+const logger = createCodeBotLogger("mac-automation");
 
 const BUNDLE_IDS: Record<MacAutomationTarget, string> = {
   calendar: "com.apple.iCal",

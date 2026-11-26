@@ -1,8 +1,8 @@
-import { isString } from "@openbot/contracts/runtime-values";
+import { isString } from "@codebot/contracts/runtime-values";
 import {
   GITHUB_REPOSITORY_NAME_PATTERN,
   GITHUB_ROUTE_REPOSITORIES_LIMIT,
-} from "@openbot/contracts/signal-protocol/github-route";
+} from "@codebot/contracts/signal-protocol/github-route";
 import { createFileRoute } from "@tanstack/solid-router";
 import { Effect } from "effect";
 import { runApiResponse } from "../../../../../server/effect-runtime";

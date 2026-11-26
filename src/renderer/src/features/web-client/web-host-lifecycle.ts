@@ -3,14 +3,14 @@ import type {
   HostedServerSleep,
   HostedServerStart,
   HostedServerStartStep,
-} from "@openbot/contracts/ipc";
-import { runTeamEffect } from "@openbot/team-client";
+} from "@codebot/contracts/ipc";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   HOSTED_HOST_READY_LIMIT_MS,
   HOSTED_START_FAILED_READS,
   HOSTED_START_POLL_MS,
   hostedStartStep,
-} from "@openbot/team-client/hosted-server-wake";
+} from "@codebot/team-client/hosted-server-wake";
 import { createWebHostedServerWake } from "./web-hosted-server-wake";
 
 const SLEEP_RECHECK_MS = 5 * 60_000;
@@ -68,7 +68,7 @@ export function createWebHostLifecycle(options: {
     options.setIssue("start_timeout");
   }
   function setStep(startedAt: number, step: HostedServerStartStep): boolean {
-    if (step !== "openbot") runningSince = null;
+    if (step !== "codebot") runningSince = null;
     else runningSince ??= Date.now();
     if (runningSince !== null && Date.now() - runningSince >= HOSTED_HOST_READY_LIMIT_MS) {
       expire();

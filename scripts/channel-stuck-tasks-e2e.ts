@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
-import { agentProviderDescriptor } from "@openbot/contracts/agent-providers";
-import { type ChannelPage, type ChannelTask, channelRoutingConversationEvent } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { agentProviderDescriptor } from "@codebot/contracts/agent-providers";
+import { type ChannelPage, type ChannelTask, channelRoutingConversationEvent } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import {
   ChannelClient,
   connectChannelE2e,

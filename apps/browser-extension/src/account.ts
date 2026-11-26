@@ -1,10 +1,10 @@
-import type { CentralAuthIssue, CentralAuthUser } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { currentText } from "@openbot/ui/text";
+import type { CentralAuthIssue, CentralAuthUser } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { currentText } from "@codebot/ui/text";
 import { SIGN_IN_FAILURE_CODES, type SignInFailureCode } from "./analytics";
 import { decodeUser, deviceId, type ExtensionSession } from "./extension-storage";
 
-export const ACCOUNT_API_URL = import.meta.env.VITE_OPENBOT_API_URL;
+export const ACCOUNT_API_URL = import.meta.env.VITE_CODEBOT_API_URL;
 
 const REQUEST_TIMEOUT_MS = 20_000;
 const DEVICE_NAME = "Chrome extension";
@@ -127,7 +127,7 @@ export function signInOutcome(error: unknown): { result: "failed" | "cancelled";
   return { result: "failed", failure_code: isOneOf(SIGN_IN_FAILURE_CODES, code) ? code : "unknown" };
 }
 
-const WEB_URL = import.meta.env.VITE_OPENBOT_WEB_URL;
+const WEB_URL = import.meta.env.VITE_CODEBOT_WEB_URL;
 
 function base64Url(bytes: Uint8Array): string {
   let binary = "";
@@ -146,7 +146,7 @@ export async function signInWithWeb(): Promise<ExtensionSession> {
   return exchangeCode(silent ?? (await webCode(false)));
 }
 
-const SIGN_IN_MESSAGE = "openbot.extension-sign-in";
+const SIGN_IN_MESSAGE = "codebot.extension-sign-in";
 
 const cancelled = () =>
   new SignInIssue({ code: "sign_in_cancelled", message: currentText().t("extension.signIn.cancelled") });

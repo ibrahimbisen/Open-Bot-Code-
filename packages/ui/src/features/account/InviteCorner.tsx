@@ -1,6 +1,6 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { referralCodeFromInput } from "@openbot/contracts/referral";
-import { ArrowRight, Button, Gift, Input, Popover, X } from "@openbot/ui";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { referralCodeFromInput } from "@codebot/contracts/referral";
+import { ArrowRight, Button, Gift, Input, Popover, X } from "@codebot/ui";
 import { createSignal, onSettled, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 

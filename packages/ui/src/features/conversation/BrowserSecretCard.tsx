@@ -3,13 +3,13 @@ import type {
   BrowserTakeoverRequest,
   BrowserVaultSkipReason,
   LocalBrowserSecretResponse,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { Button, Checkbox, ErrorReference, Input, Lock, Maximize2, Monitor, ShieldCheck, X } from "@openbot/ui";
-import { OtpInput } from "@openbot/ui/features/account/OtpInput";
-import { BrowserTakeoverPreview } from "@openbot/ui/features/conversation/BrowserTakeoverPreview";
-import { useText } from "@openbot/ui/text";
-import { errorReference } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { Button, Checkbox, ErrorReference, Input, Lock, Maximize2, Monitor, ShieldCheck, X } from "@codebot/ui";
+import { OtpInput } from "@codebot/ui/features/account/OtpInput";
+import { BrowserTakeoverPreview } from "@codebot/ui/features/conversation/BrowserTakeoverPreview";
+import { useText } from "@codebot/ui/text";
+import { errorReference } from "@codebot/user-errors";
 import { createEffect, createMemo, createSignal, createUniqueId, onCleanup, Show } from "solid-js";
 import { UiBlockCard } from "./ui-blocks/UiBlockCard";
 

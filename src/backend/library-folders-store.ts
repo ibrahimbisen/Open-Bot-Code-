@@ -13,14 +13,14 @@ import {
   type LibraryFolderRefusalReason,
   type LibraryFoldersSnapshot,
   libraryFolderName,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Semaphore } from "effect";
 import { writeFileAtomically } from "./atomic-json-file";
 import { StoredStateFailure, storedIO, storedSync } from "./stored-state-effects";
 import { readVersionedJsonFile, type VersionedJsonFormat } from "./versioned-json-store";
 
-export const LIBRARY_FOLDERS_FILE = "openbot-library-folders-v1.json";
+export const LIBRARY_FOLDERS_FILE = "codebot-library-folders-v1.json";
 
 const STORED_VERSION = 1;
 

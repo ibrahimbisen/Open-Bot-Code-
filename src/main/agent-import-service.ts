@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, open, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_IMPORT_LIMITS,
   type AgentImportChannel,
@@ -17,8 +17,8 @@ import {
   type CreateChannelRoutineInput,
   type CreateRoutineInput,
   isChannelDraft,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Exit, Result } from "effect";
 import { zipSync } from "fflate";
 import { parseDocument } from "yaml";
@@ -50,7 +50,7 @@ import type { LocalSkillLibrary } from "./local-skill-library";
 import type { SkillMarketplaceFailure } from "./skill-marketplace-service";
 import { inspectArchive, SKILL_FRONTMATTER } from "./skill-package";
 
-const SKILL_STAGING = ".openbot/import-skills";
+const SKILL_STAGING = ".codebot/import-skills";
 const IMPORTED_FILES = "imported";
 const IMPORT_ARCHIVE: ArchiveLimits = {
   files: AGENT_IMPORT_LIMITS.files,

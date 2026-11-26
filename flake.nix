@@ -1,5 +1,5 @@
 {
-  description = "OpenBot: a local-first multi-agent desktop workspace";
+  description = "CodeBot: a local-first multi-agent desktop workspace";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
@@ -20,19 +20,19 @@
           f (
             import nixpkgs {
               inherit system;
-              config.allowUnfreePredicate = pkg: lib.getName pkg == "openbot";
+              config.allowUnfreePredicate = pkg: lib.getName pkg == "codebot";
             }
           )
         );
     in
     {
       packages = forEachSystem (pkgs: {
-        openbot = pkgs.callPackage ./nix/package.nix { inherit sources; };
-        default = self.packages.${pkgs.stdenv.hostPlatform.system}.openbot;
+        codebot = pkgs.callPackage ./nix/package.nix { inherit sources; };
+        default = self.packages.${pkgs.stdenv.hostPlatform.system}.codebot;
       });
 
       overlays.default = final: _prev: {
-        openbot = final.callPackage ./nix/package.nix { inherit sources; };
+        codebot = final.callPackage ./nix/package.nix { inherit sources; };
       };
 
       formatter = forEachSystem (pkgs: pkgs.nixfmt);

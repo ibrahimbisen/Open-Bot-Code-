@@ -11,12 +11,12 @@ import {
   type ProviderRuntimeStatus,
   type ServerSummary,
   type UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
-import { Toaster, toast } from "@openbot/ui";
-import type { ProviderAccountActions } from "@openbot/ui/components/provider-accounts";
-import type { ProviderDetection } from "@openbot/ui/features/custom-providers/detected-providers";
-import type { ProviderDetectionSettingsValue } from "@openbot/ui/features/custom-providers/ProviderDetectionSettings";
-import type { ProviderKeyApi } from "@openbot/ui/features/settings/OpenCodeKeyDialog";
+} from "@codebot/contracts/ipc";
+import { Toaster, toast } from "@codebot/ui";
+import type { ProviderAccountActions } from "@codebot/ui/components/provider-accounts";
+import type { ProviderDetection } from "@codebot/ui/features/custom-providers/detected-providers";
+import type { ProviderDetectionSettingsValue } from "@codebot/ui/features/custom-providers/ProviderDetectionSettings";
+import type { ProviderKeyApi } from "@codebot/ui/features/settings/OpenCodeKeyDialog";
 import { createSignal, onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -25,7 +25,7 @@ import { ServerSettingsModal } from "../src/features/servers/ServerSettingsModal
 import type { HostProviderSettings } from "../src/features/settings/ProviderSettingsSection";
 import { STORY_HOST_STATUS, STORY_INVITES, STORY_PRESENCE, STORY_SERVERS } from "../src/preview/fixtures";
 import { createStoryDetection, STORY_DETECTED_PROVIDERS } from "./detected-providers-fixture";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 import { createFakeConnection } from "./provider-connection-fixture";
 import { SettingsPageStory } from "./settings-page-story";
 
@@ -299,8 +299,8 @@ function ServerProvidersStory(props: {
             },
           ],
         };
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot({
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot({
     ...(props.providerUpdate
       ? {
           providerRuntimeSnapshot: {
@@ -320,11 +320,11 @@ function ServerProvidersStory(props: {
     ...(props.devinModels ? { models: DEVIN_MODELS } : {}),
   });
   const runtimes = createProviderRuntimeStore(() => (props.providerUpdate ? mock.api.providerRuntimes : undefined));
-  window.openbot = mock.api;
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
     toast.dismiss();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   const [preference, setPreference] = createSignal<AppSetupState>({
     completed: true,

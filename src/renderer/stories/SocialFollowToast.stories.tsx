@@ -1,6 +1,6 @@
-import { Button, Toaster, toast } from "@openbot/ui";
-import { type SocialFollowStep, SocialFollowToast } from "@openbot/ui/features/social-follow/SocialFollowToast";
-import { SOCIAL_NETWORKS } from "@openbot/ui/features/social-follow/social-networks";
+import { Button, Toaster, toast } from "@codebot/ui";
+import { type SocialFollowStep, SocialFollowToast } from "@codebot/ui/features/social-follow/SocialFollowToast";
+import { SOCIAL_NETWORKS } from "@codebot/ui/features/social-follow/social-networks";
 import { createSignal, onCleanup, onSettled } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

@@ -5,7 +5,7 @@ import {
   type AcpAgentPreset,
   type DetectedAcpAgent,
   isNewCustomAgentId,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { resolveAgentCommand } from "./acp-agent-command";
 

@@ -58,7 +58,7 @@ const REQUESTS: ReadonlyMap<string, AdminDecoder> = new Map([
 ]);
 
 function pathname(path: string): string {
-  return new URL(path, "http://openbot.invalid").pathname;
+  return new URL(path, "http://codebot.invalid").pathname;
 }
 
 export function providerManyAccountsResponse(path: string): AdminDecoder | null {

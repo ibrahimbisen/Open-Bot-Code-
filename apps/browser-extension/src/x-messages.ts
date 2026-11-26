@@ -3,16 +3,16 @@ import {
   decodeXReplyPayload,
   type XPageRules,
   type XReplyPayload,
-} from "@openbot/contracts/browser-extension-x";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/browser-extension-x";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 
-export const X_MESSAGE = "openbot-x";
-export const X_OFFSCREEN_MESSAGE = "openbot-x-offscreen";
-export const X_PANEL_MESSAGE = "openbot-x-panel";
-export const PANEL_PORT = "openbot-panel";
-export const OPEN_X_CHAT_MESSAGE = "openbot-open-x-chat";
-export const OUTBOX_FLUSH_MESSAGE = "openbot-x-outbox-flush";
-export const STORAGE_MESSAGE = "openbot-storage";
+export const X_MESSAGE = "codebot-x";
+export const X_OFFSCREEN_MESSAGE = "codebot-x-offscreen";
+export const X_PANEL_MESSAGE = "codebot-x-panel";
+export const PANEL_PORT = "codebot-panel";
+export const OPEN_X_CHAT_MESSAGE = "codebot-open-x-chat";
+export const OUTBOX_FLUSH_MESSAGE = "codebot-x-outbox-flush";
+export const STORAGE_MESSAGE = "codebot-storage";
 
 export type StorageRequest =
   | { kind: typeof STORAGE_MESSAGE; op: "get"; keys: string | string[] | null }

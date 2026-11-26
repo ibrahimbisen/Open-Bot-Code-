@@ -4,22 +4,22 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { IPC_ENDPOINTS, LOCAL_SERVER_ID, SERVER_MUTE_DURATIONS_MS, type ServerSummary } from "@openbot/contracts/ipc";
-import { createFormat, translateFor } from "@openbot/i18n";
+import { IPC_ENDPOINTS, LOCAL_SERVER_ID, SERVER_MUTE_DURATIONS_MS, type ServerSummary } from "@codebot/contracts/ipc";
+import { createFormat, translateFor } from "@codebot/i18n";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/server-mute-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/server-mute-e2e");
 const APP_VERSION = "0.0.0-e2e";
-const TRUSTED_SENDER = { senderFrame: { url: "openbot-app://app/index.html" } };
+const TRUSTED_SENDER = { senderFrame: { url: "codebot-app://app/index.html" } };
 const UNTRUSTED_SENDER = { senderFrame: { url: "https://example.com/" } };
 const STEP_DEADLINE_MS = 30_000;
 const FIFTEEN_MINUTES = 15 * 60_000;
@@ -139,7 +139,7 @@ async function step<T>(name: string, run: () => Promise<T>): Promise<T> {
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-server-mute-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-server-mute-"));
 const userData = join(root, "user-data");
 const serversPath = join(userData, "remote-servers.json");
 const unused = () => Effect.die(new Error("Not used by this check."));
@@ -197,11 +197,11 @@ const cipher = {
 };
 const centralAccount = { createTeamAuthTicket: unused, getEmail: () => "e2e@example.invalid" };
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, join(root, "home"), database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
 let manager = new RemoteServerManager(serversPath, cipher, centralAccount, { appVersion: APP_VERSION });
 let agents: AgentService | undefined;
 let restarted = () => {};

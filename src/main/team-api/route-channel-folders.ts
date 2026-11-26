@@ -1,10 +1,10 @@
-import { parseBrowseChannelFoldersInput, parseChannelFolderInput } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import { parseBrowseChannelFoldersInput, parseChannelFolderInput } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import {
   CHANNEL_FOLDERS_CAPABILITY,
   CHANNEL_FOLDERS_ROUTES,
-} from "@openbot/contracts/team-protocol/channel-folders-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/channel-folders-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { TeamApiAdmin } from "./dependencies";
 import { HttpError } from "./http-error";
 import type { RouteOutcome, TeamApiRequestContext } from "./request-context";

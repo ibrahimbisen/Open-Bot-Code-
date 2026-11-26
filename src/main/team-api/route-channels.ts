@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { isAvatarMimeType, isValidAvatarImage } from "@openbot/contracts/avatar-images";
-import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { isAvatarMimeType, isValidAvatarImage } from "@codebot/contracts/avatar-images";
+import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   CHANNEL_CHATS_CAPABILITY,
   CHANNEL_DELETE_CAPABILITY,
@@ -15,20 +15,20 @@ import {
   parseChannelCommand,
   parseChannelRead,
   settingLinkEvent,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import {
   CHANNEL_PICTURE_CAPABILITY,
   CHANNEL_PICTURE_ROUTES,
-} from "@openbot/contracts/team-protocol/channel-picture-v1";
-import { CHANNEL_ROUTES, channelRequest, isChannelSettingsRoute } from "@openbot/contracts/team-protocol/channels-v1";
+} from "@codebot/contracts/team-protocol/channel-picture-v1";
+import { CHANNEL_ROUTES, channelRequest, isChannelSettingsRoute } from "@codebot/contracts/team-protocol/channels-v1";
 import {
   CHANNEL_PAGE_TASKS_CAPABILITY,
   CHANNEL_SEEN_SUBTASKS_CAPABILITY,
   CHANNEL_TASK_WAITS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/current";
-import { SETTING_LINK_MARKERS_CAPABILITY } from "@openbot/contracts/team-protocol/setting-link-markers-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/current";
+import { SETTING_LINK_MARKERS_CAPABILITY } from "@codebot/contracts/team-protocol/setting-link-markers-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { ChannelService } from "../../backend/channel-service";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import {

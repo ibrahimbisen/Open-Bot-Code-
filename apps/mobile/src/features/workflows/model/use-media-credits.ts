@@ -11,8 +11,8 @@ import {
   workflowMediaKind,
   workflowMediaModel,
   workflowMediaSpecs,
-} from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import { useWorkflowMediaSupported } from "@/features/workflows/model/use-workflows";
@@ -103,7 +103,7 @@ export function useMediaCredits(serverId: string, nodes: readonly WorkflowNode[]
       staleTime: 60_000,
     })),
   });
-  const usesBalance = priced.some(({ choice }) => choice.chosen?.provider === "openbot");
+  const usesBalance = priced.some(({ choice }) => choice.chosen?.provider === "codebot");
   const balance = useQuery({
     queryKey: queryKeys.workflowCreditBalance(queryScope, serverId),
     queryFn: () => loadWorkflowCreditBalance(serverId),
@@ -115,7 +115,7 @@ export function useMediaCredits(serverId: string, nodes: readonly WorkflowNode[]
   priced.forEach(({ node, choice }, index) => {
     const credits = prices[index]?.data;
     if (typeof credits !== "number") return;
-    const counted = choice.chosen?.provider === "openbot" ? available : null;
+    const counted = choice.chosen?.provider === "codebot" ? available : null;
     byNode.set(node.id, { credits, short: counted !== null && credits > counted });
   });
   const total = byNode.size > 0 ? [...byNode.values()].reduce((sum, entry) => sum + entry.credits, 0) : null;

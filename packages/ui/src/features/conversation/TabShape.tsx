@@ -141,7 +141,7 @@ export function TabShape(props: { selected: string; sized: string; scroller?: st
     const changes = new MutationObserver(changed);
     changes.observe(row, { subtree: true, childList: true, attributes: true, attributeFilter: WATCHED_ATTRIBUTES });
     const appearance = new MutationObserver(schedule);
-    appearance.observe(document.documentElement, { attributes: true, attributeFilter: ["data-openbot-window-glass"] });
+    appearance.observe(document.documentElement, { attributes: true, attributeFilter: ["data-codebot-window-glass"] });
     sizes.observe(row);
     row.addEventListener("transitionend", schedule);
     row.addEventListener("animationend", schedule);

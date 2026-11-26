@@ -1,4 +1,4 @@
-import { encodedModelId } from "@openbot/contracts/ipc";
+import { encodedModelId } from "@codebot/contracts/ipc";
 
 export { encodedModelId };
 

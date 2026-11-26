@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { chromium, type Page } from "playwright-core";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/chat-scroll-streaming-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/chat-scroll-streaming-e2e");
 const SCROLL = ".conversation-scroll";
 const AGENT_COMPOSER = ".composer [contenteditable='true']";
 const REPLY = '[data-chat-search-message="reading-history-reply"]';

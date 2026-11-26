@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
-import { workspaceAccessEnforced } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import { workspaceAccessEnforced } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { ChannelClient, connectChannelE2e, WAIT_MS, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-file-link-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-file-link-e2e");
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
 
@@ -38,7 +38,7 @@ const workspaceText = `Workspace spec ${id}`;
 const outsideName = `e2e-channel-outside-${id}.md`;
 const outsideText = `Outside spec ${id}`;
 const outsideFile = join(OUT, `outside-${id}`, outsideName);
-const sharedFile = join(homedir(), "OpenBot", "Shared", sharedName);
+const sharedFile = join(homedir(), "CodeBot", "Shared", sharedName);
 let workspaceFile: string | null = null;
 mkdirSync(OUT, { recursive: true });
 
@@ -65,7 +65,7 @@ async function shot(label: string): Promise<void> {
 try {
   const [agent] = await client.agents();
   assert.ok(agent, "This check needs one visible agent.");
-  mkdirSync(join(homedir(), "OpenBot", "Shared"), { recursive: true });
+  mkdirSync(join(homedir(), "CodeBot", "Shared"), { recursive: true });
   writeFileSync(sharedFile, `# ${sharedText}\n\n[inner spec](${workspaceName})\n`);
   workspaceFile = join(agent.workspacePath, workspaceName);
   writeFileSync(workspaceFile, `# ${workspaceText}\n`);
@@ -85,7 +85,7 @@ try {
       "Reply with exactly the next line and nothing else. Do not use tools.",
       `[workspace spec](${workspaceName})`,
       "",
-      `The shared spec: [shared spec](~/OpenBot/Shared/${sharedName})`,
+      `The shared spec: [shared spec](~/CodeBot/Shared/${sharedName})`,
     ].join("\n"),
     agent.id,
   );
@@ -168,7 +168,7 @@ try {
     .click();
   await client.sendToAgent(
     agent.id,
-    `Reply with the single word ready. Do not use tools. [workspace spec](${workspaceName}) [shared spec](~/OpenBot/Shared/${sharedName})`,
+    `Reply with the single word ready. Do not use tools. [workspace spec](${workspaceName}) [shared spec](~/CodeBot/Shared/${sharedName})`,
   );
   await workspaceLink().last().click({ timeout: UI_WAIT_MS });
   await panel().getByText(workspaceText).waitFor({ timeout: UI_WAIT_MS });

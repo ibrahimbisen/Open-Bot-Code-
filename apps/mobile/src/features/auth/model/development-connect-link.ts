@@ -2,7 +2,7 @@ import {
   isMobileConnectDevelopmentHost,
   type MobileConnectHostBinding,
   parseMobileConnectUrl,
-} from "@openbot/contracts/mobile-connect";
+} from "@codebot/contracts/mobile-connect";
 
 type Listener = () => void;
 
@@ -10,7 +10,7 @@ let pendingLink: string | null = null;
 const listeners = new Set<Listener>();
 
 function isMobileConnectLink(value: string): boolean {
-  return /^openbot:\/\/mobile-connect(?:[/?#]|$)/iu.test(value.trim());
+  return /^codebot:\/\/mobile-connect(?:[/?#]|$)/iu.test(value.trim());
 }
 
 function readDevelopmentConnectLink(value: string, development: boolean): string | null {

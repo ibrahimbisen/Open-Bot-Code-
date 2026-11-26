@@ -1,5 +1,5 @@
-import type { MarketplaceSkillSummary } from "@openbot/contracts/ipc";
-import type { MarketplaceListingLink } from "@openbot/contracts/marketplace-links";
+import type { MarketplaceSkillSummary } from "@codebot/contracts/ipc";
+import type { MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
 import {
   ArrowRight,
   Button,
@@ -12,10 +12,10 @@ import {
   Skeleton,
   Sparkles,
   Text,
-} from "@openbot/ui";
-import { ReferenceChip } from "@openbot/ui/reference-chip";
-import { SkillGradient } from "@openbot/ui/skill-gradient";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { ReferenceChip } from "@codebot/ui/reference-chip";
+import { SkillGradient } from "@codebot/ui/skill-gradient";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, For, Match, Show, Switch } from "solid-js";
 import { CONNECTOR_LISTINGS } from "../connectors/connector-catalog";

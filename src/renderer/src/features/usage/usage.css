@@ -25,12 +25,12 @@
   min-height: 0;
   height: 100%;
   flex-direction: column;
-  color: var(--openbot-text-primary);
-  background: var(--openbot-bg-canvas);
+  color: var(--codebot-text-primary);
+  background: var(--codebot-bg-canvas);
 }
 .agent-usage-header {
-  padding: var(--openbot-space-4) var(--openbot-space-6);
-  border-bottom: 1px solid var(--openbot-border);
+  padding: var(--codebot-space-4) var(--codebot-space-6);
+  border-bottom: 1px solid var(--codebot-border);
 }
 
 .agent-usage-controls {
@@ -39,62 +39,62 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   margin-inline-start: auto;
 }
 .agent-usage-body {
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
-  padding: var(--openbot-space-6);
+  padding: var(--codebot-space-6);
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--openbot-space-8);
+  gap: var(--codebot-space-8);
 }
 .agent-usage h3 {
-  font-size: var(--openbot-text-xl);
+  font-size: var(--codebot-text-xl);
   font-weight: 550;
 }
 .agent-usage-notice {
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-md);
-  padding: var(--openbot-space-4);
-  background: var(--openbot-bg-surface);
-  border-radius: var(--openbot-radius-md);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-md);
+  padding: var(--codebot-space-4);
+  background: var(--codebot-bg-surface);
+  border-radius: var(--codebot-radius-md);
 }
 .agent-usage-notice .ui-button {
-  margin-top: var(--openbot-space-3);
+  margin-top: var(--codebot-space-3);
 }
 .agent-usage-loading {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-md);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-md);
 }
 .agent-usage-placeholder {
   height: 280px;
-  margin-top: var(--openbot-space-6);
-  border-radius: var(--openbot-radius-md);
-  background: var(--openbot-bg-surface);
+  margin-top: var(--codebot-space-6);
+  border-radius: var(--codebot-radius-md);
+  background: var(--codebot-bg-surface);
 }
 @container (min-width: 850px) {
   .agent-usage-overview {
     grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.5fr);
-    gap: calc(var(--openbot-space-6) * 2);
+    gap: calc(var(--codebot-space-6) * 2);
   }
   .agent-usage-body {
-    padding: var(--openbot-space-8) calc(var(--openbot-space-6) * 2);
-    gap: calc(var(--openbot-space-6) * 2);
+    padding: var(--codebot-space-8) calc(var(--codebot-space-6) * 2);
+    gap: calc(var(--codebot-space-6) * 2);
   }
 }
 @container (max-width: 480px) {
   .agent-usage-hero {
-    font-size: var(--openbot-text-display);
+    font-size: var(--codebot-text-display);
   }
   .agent-usage-body {
-    padding: var(--openbot-space-4);
+    padding: var(--codebot-space-4);
   }
   .agent-usage-header {
-    padding: var(--openbot-space-3);
+    padding: var(--codebot-space-3);
   }
   .agent-usage-controls {
     margin-inline-start: 0;
@@ -111,11 +111,11 @@
 }
 .agent-usage-controls .ui-select-trigger {
   width: max-content;
-  border-color: var(--openbot-border);
-  background: var(--openbot-bg-control);
+  border-color: var(--codebot-border);
+  background: var(--codebot-bg-control);
   box-shadow: none;
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-medium);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .app-frame-panes.server-connection-workspace {

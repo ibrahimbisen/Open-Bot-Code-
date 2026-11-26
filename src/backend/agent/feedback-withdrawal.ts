@@ -1,13 +1,13 @@
-import { feedbackSentIssue, feedbackSentItemType, feedbackWithdrawnItemType } from "@openbot/contracts/feedback";
-import type { ConversationMessage, WithdrawFeedbackInput } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { feedbackSentIssue, feedbackSentItemType, feedbackWithdrawnItemType } from "@codebot/contracts/feedback";
+import type { ConversationMessage, WithdrawFeedbackInput } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import type { AgentStore } from "../agent-store";
 import type { AgentTasks } from "../agent-tasks/agent-tasks";
 import { type StoredStateFailure, storedSync } from "../stored-state-effects";
+import type { AgentFeedback, FeedbackWithdrawResult } from "./codebot-tool-router";
 import type { ConversationRuntime } from "./conversation-runtime";
-import type { AgentFeedback, FeedbackWithdrawResult } from "./openbot-tool-router";
 import type { ToolOperationFailed } from "./tool-operation";
 
 export interface FeedbackWithdrawalOptions {
@@ -25,7 +25,7 @@ interface CardTarget {
 export type FeedbackCardWithdrawResult = FeedbackWithdrawResult | { readonly status: "notFound" };
 
 const FEEDBACK_WITHDRAWN_EVENT = "feedback.withdrawn";
-const logger = createOpenBotLogger("feedback-withdrawal");
+const logger = createCodeBotLogger("feedback-withdrawal");
 
 function cardTitle(text: string): string {
   const prefix = sourceText("status.agent.feedbackSent", { title: "" });

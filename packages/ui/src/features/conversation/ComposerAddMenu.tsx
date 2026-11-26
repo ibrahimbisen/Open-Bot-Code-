@@ -7,8 +7,8 @@ import {
   MessageCircleQuestionMark,
   Plus,
   Puzzle,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 import type { AgentProfile } from "../../data";
 import { AgentNewChatDialog } from "./AgentNewChatDialog";

@@ -1,5 +1,5 @@
-import { AppLogo, type AppLogoVariant, ProviderLogo } from "@openbot/brand";
-import { usageTone } from "@openbot/team-client/plan-limits";
+import { AppLogo, type AppLogoVariant, ProviderLogo } from "@codebot/brand";
+import { usageTone } from "@codebot/team-client/plan-limits";
 import {
   Bot,
   BriefcaseBusiness,
@@ -23,10 +23,10 @@ import {
   Store,
   toast,
   Waypoints,
-} from "@openbot/ui";
-import { AccountUsageDetails, AccountUsageWindowList } from "@openbot/ui/features/account/AccountUsageDetails";
-import { type AccountUsageProviderRow, accountUsageRowKey } from "@openbot/ui/features/account/account-usage-view";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { AccountUsageDetails, AccountUsageWindowList } from "@codebot/ui/features/account/AccountUsageDetails";
+import { type AccountUsageProviderRow, accountUsageRowKey } from "@codebot/ui/features/account/account-usage-view";
+import { useText } from "@codebot/ui/text";
 import { Dynamic, type JSX } from "@solidjs/web";
 import { createMemo, createSignal, For, onSettled, Show } from "solid-js";
 import { CreditIcon } from "../credits/CreditIcon";

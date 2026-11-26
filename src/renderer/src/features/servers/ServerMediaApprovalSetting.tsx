@@ -1,6 +1,6 @@
-import { isMediaApprovalCredits, type MediaApprovalCreditsUpdate } from "@openbot/contracts/ipc";
-import { Input, Item, ItemActions, ItemContent, ItemDescription, ItemTitle, Switch } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { isMediaApprovalCredits, type MediaApprovalCreditsUpdate } from "@codebot/contracts/ipc";
+import { Input, Item, ItemActions, ItemContent, ItemDescription, ItemTitle, Switch } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import {
   forgetMediaApprovalCredits,
@@ -31,7 +31,7 @@ export function ServerMediaApprovalSetting(
   },
 ) {
   const { t, errorMessage } = useText();
-  const calls = (): HostMediaApprovalCreditsCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostMediaApprovalCreditsCalls => props.calls ?? window.codebot.hostAdmin;
   const settings = () => mediaApprovalCredits(props.serverId);
   const [draft, setDraft] = createSignal<string | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);

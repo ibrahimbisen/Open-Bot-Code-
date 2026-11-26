@@ -1,11 +1,11 @@
-import type { AttachmentSummary, ConversationMessage } from "@openbot/contracts/ipc";
-import { parseRoutineRunConversationEventItemType, routineRunConversationEventItemType } from "@openbot/contracts/ipc";
+import type { AttachmentSummary, ConversationMessage } from "@codebot/contracts/ipc";
+import { parseRoutineRunConversationEventItemType, routineRunConversationEventItemType } from "@codebot/contracts/ipc";
 import { Effect, Schema } from "effect";
 import type { AgentThreadRecord, AgentThreadStore } from "./agent-threads/agent-thread-store";
 import { copyBranchMessages } from "./agent-threads/agent-thread-store";
+import type { CodeBotDatabase } from "./codebot-database";
 import { databaseRows, decodeConversationMessageJson, requiredStringColumn } from "./database/database-rows";
 import type { MailboxStore } from "./mailbox-store";
-import type { OpenBotDatabase } from "./openbot-database";
 
 export const HISTORY_IMPORTED_EVENT = "thread.history-imported";
 const IMPORT_BATCH = 200;
@@ -42,7 +42,7 @@ export class AgentHistoryTransferFailed extends Schema.TaggedError<AgentHistoryT
 ) {}
 
 export interface AgentHistoryTransferOptions {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   threads: AgentThreadStore;
   mailbox: Pick<
     MailboxStore,

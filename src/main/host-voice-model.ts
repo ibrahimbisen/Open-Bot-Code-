@@ -5,7 +5,7 @@ import {
   type LocalVoiceModelId,
   type VoiceModelStatus,
   type VoiceSettings,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Deferred, Effect } from "effect";
 
 type VoiceModelOperation<A> = Effect.Effect<A, { readonly cause: unknown }>;

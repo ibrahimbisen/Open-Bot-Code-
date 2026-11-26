@@ -1,4 +1,4 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { type NativeModule, requireOptionalNativeModule } from "expo";
 import { File } from "expo-file-system";
 import { supportLog, supportLogValue } from "@/features/support/model/support-log";
@@ -41,7 +41,7 @@ declare class ShareExtensionModule extends NativeModule {
   forget(conversationIds: string[] | null): Promise<void>;
 }
 
-const native = requireOptionalNativeModule<ShareExtensionModule>("OpenBotShareExtension");
+const native = requireOptionalNativeModule<ShareExtensionModule>("CodeBotShareExtension");
 
 const DIRECTORY_FILE = "share-extension.json";
 const AVATAR_FOLDER = "share-extension-avatars";

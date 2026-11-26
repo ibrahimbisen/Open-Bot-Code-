@@ -82,11 +82,11 @@ const testResult: Decoder = (value) => record(value, { toolCount: count, error: 
 const MCP_ROUTE_PATHS: ReadonlySet<string> = new Set(Object.values(MCP_ROUTES));
 
 export function isMcpRoute(path: string): boolean {
-  return MCP_ROUTE_PATHS.has(new URL(path, "http://openbot.invalid").pathname);
+  return MCP_ROUTE_PATHS.has(new URL(path, "http://codebot.invalid").pathname);
 }
 
 export function mcpRequest(path: string, value: unknown): TeamProtocolV2Json {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   if (pathname === MCP_ROUTES.list) return {};
   if (pathname === MCP_ROUTES.save) return record(value, { config });
   if (pathname === MCP_ROUTES.remove) return record(value, { mcpServerId: identifier });
@@ -97,7 +97,7 @@ export function mcpRequest(path: string, value: unknown): TeamProtocolV2Json {
 
 export function mcpResponse(path: string, status: number, value: unknown): TeamProtocolV2Json {
   if (status >= 400) return record(value, { error: string(100_000) });
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   if (pathname === MCP_ROUTES.test) return testResult(value);
   if (MCP_ROUTE_PATHS.has(pathname)) return configs(value);
   throw new Error("Unknown MCP route.");

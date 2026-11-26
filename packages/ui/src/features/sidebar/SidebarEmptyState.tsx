@@ -1,4 +1,4 @@
-import { Button } from "@openbot/ui";
+import { Button } from "@codebot/ui";
 import { Show } from "solid-js";
 import { useText } from "../../text";
 import { AgentAvatar } from "../agents/AgentAvatar";

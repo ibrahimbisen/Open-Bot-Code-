@@ -1,4 +1,4 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 import type {
   EventRoutine,
   EventRoutineOwner,
@@ -6,7 +6,7 @@ import type {
   EventStatus,
   ListEventRoutineRunsInput,
   SaveEventRoutineInput,
-} from "@openbot/contracts/ipc-events";
+} from "@codebot/contracts/ipc-events";
 import { clone } from "./mock-support";
 
 function sameOwner(left: EventRoutineOwner, right: EventRoutineOwner): boolean {
@@ -20,7 +20,7 @@ function mockSecret(): string {
 
 export function createMockEvents(
   listRuns: (input: ListEventRoutineRunsInput) => Promise<EventRoutineRun[]>,
-): OpenBotDesktopApi["events"] {
+): CodeBotDesktopApi["events"] {
   let routines: EventRoutine[] = [];
   let sequence = 0;
   const status: EventStatus = { supported: true, connected: true };
@@ -46,7 +46,7 @@ export function createMockEvents(
         timezone: input.timezone,
         trigger:
           input.trigger.kind === "webhook"
-            ? { ...clone(input.trigger), url: `https://hooks.example.test/openbot/${id}` }
+            ? { ...clone(input.trigger), url: `https://hooks.example.test/codebot/${id}` }
             : clone(input.trigger),
         ...(input.limitPolicy === undefined ? {} : { limitPolicy: input.limitPolicy }),
         ...(input.missedPolicy === undefined ? {} : { missedPolicy: input.missedPolicy }),
@@ -81,13 +81,13 @@ export function createMockEvents(
       if (routine?.trigger.kind !== "webhook") throw new Error("This routine has no webhook trigger.");
       if (!routine.active)
         return {
-          eventType: routine.trigger.eventType ?? "openbot.test",
+          eventType: routine.trigger.eventType ?? "codebot.test",
           status: "ignored",
           reason: "inactive",
           runId: null,
         };
       return {
-        eventType: routine.trigger.eventType ?? "openbot.test",
+        eventType: routine.trigger.eventType ?? "codebot.test",
         status: "started",
         reason: null,
         runId: nextId("run"),

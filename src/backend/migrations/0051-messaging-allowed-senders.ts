@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v51 and the separate new-database schema. IF NOT EXISTS throughout.
 //
@@ -17,7 +17,7 @@ export const MESSAGING_ALLOWED_SENDERS_SCHEMA_SQL = `
   );
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 51,
   name: "messaging-allowed-senders",
   // Only creates a table, so no foreign-key pause and no vacuum. No WhatsApp connection exists before

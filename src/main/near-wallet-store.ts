@@ -1,6 +1,6 @@
 import { readFile, rename, rm } from "node:fs/promises";
-import { sourceText } from "@openbot/i18n/source";
-import { registerSecretValue } from "@openbot/logging";
+import { sourceText } from "@codebot/i18n/source";
+import { registerSecretValue } from "@codebot/logging";
 import { Effect, Result, Semaphore } from "effect";
 import { z } from "zod";
 import { writeJsonFileAtomically } from "../backend/atomic-json-file";

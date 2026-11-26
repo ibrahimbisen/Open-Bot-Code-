@@ -3,8 +3,8 @@ import {
   type NearOwnerAction,
   type NearPasskeyChoice,
   type NearWalletStatus,
-} from "@openbot/contracts/ipc";
-import { Button, Field, NativeSelect, RadioGroup, Text } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import { Button, Field, NativeSelect, RadioGroup, Text } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, createStore, For, Match, Show, Switch, untrack } from "solid-js";
 import { useText } from "../../text";

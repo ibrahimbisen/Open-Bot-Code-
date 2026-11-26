@@ -1,6 +1,6 @@
-import { VOICE_AUDIO_LIMITS } from "@openbot/contracts/ipc";
-import { currentText } from "@openbot/ui/text";
-import { recordingToWav, startVoiceMeter, VOICE_LEVEL_COUNT } from "@openbot/ui/voice-recording";
+import { VOICE_AUDIO_LIMITS } from "@codebot/contracts/ipc";
+import { currentText } from "@codebot/ui/text";
+import { recordingToWav, startVoiceMeter, VOICE_LEVEL_COUNT } from "@codebot/ui/voice-recording";
 import { createSignal, onCleanup } from "solid-js";
 import { track } from "./analytics";
 

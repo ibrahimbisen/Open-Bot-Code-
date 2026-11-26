@@ -1,5 +1,5 @@
-import { isReferralCode } from "@openbot/contracts/referral";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isReferralCode } from "@codebot/contracts/referral";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { createServerFn } from "@tanstack/solid-start";
 import { readPricingOffer } from "./pricing-offer";
 import type { PricingOffer } from "./pricing-page";

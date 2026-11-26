@@ -27,7 +27,7 @@ import { pointerKey, updateKey } from "../src/protocol";
 
 const run = promisify(execFile);
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "mobile-ota-e2e");
+const OUT = join(ROOT, ".codebot-build", "mobile-ota-e2e");
 const MOBILE = join(ROOT, "apps", "mobile");
 const BIN = join(ROOT, "node_modules", ".bin");
 const SERVER = "https://updates.test";
@@ -38,7 +38,7 @@ function check(name: string, passed: boolean, detail?: unknown) {
   steps.push({ name, passed, ...(detail === undefined ? {} : { detail }) });
 }
 
-const temp = await mkdtemp(join(tmpdir(), "openbot-mobile-ota-e2e-"));
+const temp = await mkdtemp(join(tmpdir(), "codebot-mobile-ota-e2e-"));
 const proxy = await getPlatformProxy<{ UPDATES: R2Bucket }>({
   configPath: join(ROOT, "apps", "mobile-updates", "wrangler.jsonc"),
   persist: { path: join(temp, "state") },
@@ -104,7 +104,7 @@ try {
       "--certificate-validity-duration-years",
       "1",
       "--certificate-common-name",
-      "OpenBot OTA E2E",
+      "CodeBot OTA E2E",
     ],
     { cwd: MOBILE },
   );
@@ -181,7 +181,7 @@ try {
       scope: of,
       update: await readExport(directory, of.platform),
       assetBaseUrl: `${SERVER}/assets`,
-      expoClient: { name: "OpenBot", version: "9.9.9" },
+      expoClient: { name: "CodeBot", version: "9.9.9" },
       commit: "0".repeat(40),
       message,
       rollout,

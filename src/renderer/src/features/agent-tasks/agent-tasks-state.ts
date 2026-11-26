@@ -1,14 +1,14 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentEvent,
   AgentTask,
   AgentTasksSnapshot,
   ArchivedAgentTasksCursor,
   ConversationSnapshot,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { retryOperationIds } from "@openbot/team-client/retry-operation-id";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { retryOperationIds } from "@codebot/team-client/retry-operation-id";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createStore, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { desktopAnalytics } from "../../analytics";

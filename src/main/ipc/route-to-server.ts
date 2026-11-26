@@ -1,4 +1,4 @@
-import { LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
+import { LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
 
 export function routeToServer<T>(
   serverId: string,

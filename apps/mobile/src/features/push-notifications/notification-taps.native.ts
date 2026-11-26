@@ -1,5 +1,5 @@
-import { isString } from "@openbot/contracts/runtime-values";
-import type { PushNotificationKind } from "@openbot/team-client/push-notification-seal";
+import { isString } from "@codebot/contracts/runtime-values";
+import type { PushNotificationKind } from "@codebot/team-client/push-notification-seal";
 import * as Notifications from "expo-notifications";
 import { useEffect, useRef } from "react";
 import { type NotificationTarget, SOUND_PREVIEW_KEY, type WorkflowTarget } from "./push-notifications-native.types";

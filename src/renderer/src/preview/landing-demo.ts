@@ -9,7 +9,7 @@ import {
   conversationSubagentsText,
   type DirectMessage,
   type QueueDelivery,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   LANDING_DEMO_SCENES,
   LANDING_DIRECT_DEMO_SCRIPTS,
@@ -22,7 +22,7 @@ import {
   type LandingSceneStep,
 } from "./landing-demo-scripts";
 import { LANDING_CONTEXT_TOKENS, LANDING_LEAD_AGENT_ID, landingRuntimeSnapshot } from "./landing-fixtures";
-import type { MockOpenBotControls, MockSentMessage } from "./mock-openbot";
+import type { MockCodeBotControls, MockSentMessage } from "./mock-codebot";
 
 interface LandingDemoControllerOptions {
   agents: readonly ClientAgentSummary[];
@@ -86,7 +86,7 @@ function isBarrier(step: LandingSceneStep): boolean {
 }
 
 export function createLandingDemoController(
-  mock: MockOpenBotControls,
+  mock: MockCodeBotControls,
   options: LandingDemoControllerOptions,
 ): { activate: () => void; dispose: () => void } {
   const scenes = options.scenes ?? LANDING_DEMO_SCENES;

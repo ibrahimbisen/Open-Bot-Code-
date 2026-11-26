@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration v50: Discord triggers of workflows. The text below is the migration; the latest schema takes
 // the run source line of migration 53, so do not edit it after release.
@@ -57,7 +57,7 @@ function addDiscordWorkflows(db: DatabaseSync): void {
   db.exec(V50_WORKFLOW_RUN_INDEXES_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 50,
   name: "discord-workflows",
   // Rebuilds the run table again to add the Discord run source, as migration 49 did, so foreign keys

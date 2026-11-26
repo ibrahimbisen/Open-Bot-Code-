@@ -1,13 +1,13 @@
-import { isManagedRuntimeProvider, type ManagedProviderId } from "@openbot/contracts/agent-providers";
-import type { AgentProviderId, AgentProviderStatus, AgentStatus, ProviderRuntimeStatus } from "@openbot/contracts/ipc";
-import { Toaster, toast } from "@openbot/ui";
+import { isManagedRuntimeProvider, type ManagedProviderId } from "@codebot/contracts/agent-providers";
+import type { AgentProviderId, AgentProviderStatus, AgentStatus, ProviderRuntimeStatus } from "@codebot/contracts/ipc";
+import { Toaster, toast } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, onCleanup, untrack } from "solid-js";
 import { fn } from "storybook/test";
 import type { FirstRunFlowProps } from "../src/features/onboarding/FirstRunFlow";
 import { providerKeyApi } from "../src/features/settings/provider-key-api";
 import { STORY_AGENT_STATUS } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 import { createFakeConnection } from "./provider-connection-fixture";
 
 export const noProvidersConnectedAgentStatus: AgentStatus = {
@@ -92,8 +92,8 @@ const downloadedRuntimeStatuses = (): Record<ManagedProviderId, ProviderRuntimeS
 });
 
 export function MockedOnboardingApi(props: { permissions?: boolean; children: JSX.Element }) {
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot();
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot();
   if (props.permissions) {
     mock.api.computerUse.getState = async () => ({
       status: "permissions-required",
@@ -104,11 +104,11 @@ export function MockedOnboardingApi(props: { permissions?: boolean; children: JS
       message: null,
     });
   }
-  window.openbot = mock.api;
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
     toast.dismiss();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   return (
     <>

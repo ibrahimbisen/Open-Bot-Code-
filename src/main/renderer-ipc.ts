@@ -1,4 +1,4 @@
-import type { EventEndpoint, Untyped } from "@openbot/contracts/ipc";
+import type { EventEndpoint, Untyped } from "@codebot/contracts/ipc";
 import { perfIpcSend } from "../backend/perf-probe-hooks";
 
 type EventArgs<Payload> = [Payload] extends [Untyped]

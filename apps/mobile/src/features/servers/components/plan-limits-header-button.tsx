@@ -1,4 +1,4 @@
-import type { PlanLimitListedWindow, PlanLimitRow, PlanLimits } from "@openbot/team-client/plan-limits";
+import type { PlanLimitListedWindow, PlanLimitRow, PlanLimits } from "@codebot/team-client/plan-limits";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
 import { Pressable, View, type ViewStyle } from "react-native";

@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentTask, AgentTasksSnapshot, QueueSnapshot } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentTask, AgentTasksSnapshot, QueueSnapshot } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import type { Locator } from "playwright-core";
 import { argument, connectChannelE2e, LONG_PROMPT, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-threads-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-threads-e2e");
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
@@ -50,11 +50,11 @@ const menuItem = (menu: Locator, name: string) => menu.getByRole("menuitem", { n
 const button = (name: string) => page.getByRole("button", { name, exact: true });
 
 function listTasks(): Promise<AgentTasksSnapshot> {
-  return page.evaluate((id) => window.openbot.agent.listTasks(id), agentId);
+  return page.evaluate((id) => window.codebot.agent.listTasks(id), agentId);
 }
 
 function listQueue(): Promise<QueueSnapshot> {
-  return page.evaluate((id) => window.openbot.agent.listQueue(id), agentId);
+  return page.evaluate((id) => window.codebot.agent.listQueue(id), agentId);
 }
 
 function ownChatRuns(snapshot: QueueSnapshot): boolean {
@@ -100,7 +100,7 @@ async function openAgent(name: string): Promise<void> {
 }
 
 const agent = await page.evaluate(async (id) => {
-  const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === id);
+  const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === id);
   if (!found) throw new Error(`Unknown agent: ${id}`);
   return { name: found.name, provider: found.provider };
 }, agentId);
@@ -175,14 +175,14 @@ try {
   report.restored = { state: restored?.state ?? "missing", tabSelected: await selected(title) };
   assert.ok(report.restored.tabSelected);
 
-  await page.evaluate(({ agent, task }) => window.openbot.agent.closeTask({ agentId: agent, taskId: task }), {
+  await page.evaluate(({ agent, task }) => window.codebot.agent.closeTask({ agentId: agent, taskId: task }), {
     agent: agentId,
     task: task.id,
   });
   await tab(title).waitFor({ state: "detached", timeout: UI_WAIT_MS });
   const threadView = page.getByRole("region", { name: english("conversation.threads.view.label", { title }) });
   await threadView.waitFor({ state: "detached", timeout: UI_WAIT_MS });
-  await page.evaluate(({ agent, task }) => window.openbot.agent.reopenTask({ agentId: agent, taskId: task }), {
+  await page.evaluate(({ agent, task }) => window.codebot.agent.reopenTask({ agentId: agent, taskId: task }), {
     agent: agentId,
     task: task.id,
   });
@@ -202,7 +202,7 @@ try {
   await page.keyboard.press("Escape");
   const refusal = await page.evaluate(
     ({ agent, task }) =>
-      window.openbot.agent.deleteTask({ agentId: agent, taskId: task }).then(
+      window.codebot.agent.deleteTask({ agentId: agent, taskId: task }).then(
         () => "",
         (error: unknown) => (error instanceof Error ? error.message : String(error)),
       ),
@@ -212,7 +212,7 @@ try {
   assert.ok(menuDisabled, "Delete is off while a turn runs.");
   assert.ok(report.deleteWhileRunning.refused, "The host refuses a delete while a turn runs.");
   await shot("7-running");
-  await page.evaluate(({ agent, task }) => window.openbot.agent.stopTask({ agentId: agent, taskId: task }), {
+  await page.evaluate(({ agent, task }) => window.codebot.agent.stopTask({ agentId: agent, taskId: task }), {
     agent: agentId,
     task: task.id,
   });
@@ -243,7 +243,7 @@ try {
   await shot("10-deleted");
 
   const unsent = `Unsent ${crypto.randomUUID().slice(0, 4)}`;
-  await page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+  await page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
     agentId,
     text: LONG_PROMPT,
   });
@@ -274,7 +274,7 @@ try {
   assert.equal(afterReload, unsent, "The text stays after a reload.");
 
   const second = await page.evaluate(
-    (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+    (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
     { agentId, text: SHORT_PROMPT },
   );
   threadId = second.id;
@@ -304,19 +304,19 @@ try {
   for (const delivery of (await listQueue().catch(() => null))?.deliveries ?? [])
     if (delivery.turnId && (delivery.status === "starting" || delivery.status === "running"))
       await page
-        .evaluate((input) => window.openbot.agent.interrupt(input), { agentId, turnId: delivery.turnId })
+        .evaluate((input) => window.codebot.agent.interrupt(input), { agentId, turnId: delivery.turnId })
         .catch(() => undefined);
   if (threadId && !deleted) {
     const id = threadId;
     await page
-      .evaluate(({ agent, task }) => window.openbot.agent.stopTask({ agentId: agent, taskId: task }), {
+      .evaluate(({ agent, task }) => window.codebot.agent.stopTask({ agentId: agent, taskId: task }), {
         agent: agentId,
         task: id,
       })
       .catch(() => undefined);
     await waitForTask("the cleanup stop", (current) => current?.state !== "running").catch(() => undefined);
     await page
-      .evaluate(({ agent, task }) => window.openbot.agent.deleteTask({ agentId: agent, taskId: task }), {
+      .evaluate(({ agent, task }) => window.codebot.agent.deleteTask({ agentId: agent, taskId: task }), {
         agent: agentId,
         task: id,
       })

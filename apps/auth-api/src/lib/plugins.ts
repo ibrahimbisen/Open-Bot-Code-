@@ -1,9 +1,9 @@
-import { SKILL_CATEGORY_LABELS } from "@openbot/contracts/ipc-skills";
-import { createPluginShareUrl } from "@openbot/contracts/plugin-links";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { SKILL_CATEGORY_LABELS } from "@codebot/contracts/ipc-skills";
+import { createPluginShareUrl } from "@codebot/contracts/plugin-links";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { MARKETPLACE_APPS_ROUTE } from "./marketplace-routes";
 import { PLUGIN_CATALOG_DETAILS, PLUGIN_CATALOG_INDEX, type PluginCatalogDetail } from "./plugin-catalog.generated";
-import { OPENBOT_SITE_URL, type PageSocialImage } from "./site-metadata";
+import { CODEBOT_SITE_URL, type PageSocialImage } from "./site-metadata";
 
 export interface SitePlugin extends PluginCatalogDetail {
   featured: boolean;
@@ -19,10 +19,10 @@ const PLUGIN_INDEX_ROUTE = "/plugins";
 export const PLUGIN_DETAIL_ROUTE = "/plugins/$slug";
 
 export const PLUGINS_DESCRIPTION =
-  "Apps and skills an OpenBot agent can use. Open a plugin in the app, and decide there what it connects to.";
+  "Apps and skills an CodeBot agent can use. Open a plugin in the app, and decide there what it connects to.";
 export const PLUGIN_PAGE_SOCIAL_IMAGE: PageSocialImage = {
   path: "/social/plugin.jpg",
-  alt: "Plant an idea. Your agents do the rest. OpenBot agents among paper trees",
+  alt: "Plant an idea. Your agents do the rest. CodeBot agents among paper trees",
 };
 
 export const SITE_PLUGINS: readonly SitePlugin[] = PLUGIN_CATALOG_INDEX.plugins.flatMap((entry) => {
@@ -122,11 +122,11 @@ export function pluginIconPath(slug: string, appId?: string): string {
   return appId ? `${path}?app=${encodeURIComponent(appId)}` : path;
 }
 
-export function pluginUrl(slug: string, siteUrl: string = OPENBOT_SITE_URL): string {
+export function pluginUrl(slug: string, siteUrl: string = CODEBOT_SITE_URL): string {
   return new URL(pluginPath(slug), siteUrl).toString();
 }
 
-export function pluginIndexUrl(siteUrl: string = OPENBOT_SITE_URL): string {
+export function pluginIndexUrl(siteUrl: string = CODEBOT_SITE_URL): string {
   return new URL(MARKETPLACE_APPS_ROUTE, siteUrl).toString();
 }
 

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { argument, WAIT_MS } from "./channel-e2e-support";
 import { type AutomationSession, assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
@@ -15,8 +15,8 @@ const seconds = Number(argument("seconds") ?? "8");
 assert.ok(Number.isFinite(seconds) && seconds > 0, "--seconds takes a number of seconds.");
 const label = argument("label") ?? "current";
 assert.match(label, /^\w[\w.-]*$/, "--label takes a folder name, not a path.");
-const OUT = resolve(ROOT, ".openbot-build", NAME, label);
-const logger = createOpenBotLogger(NAME);
+const OUT = resolve(ROOT, ".codebot-build", NAME, label);
+const logger = createCodeBotLogger(NAME);
 const BOTTOM_TOLERANCE_PX = 2;
 
 interface Frame {
@@ -93,7 +93,7 @@ function testClient(): DevInstanceRecord {
   assert.equal(
     instances.length,
     1,
-    "Start `OPENBOT_DEV_CLIENT_TRANSPORT=webrtc OPENBOT_DEV_RTT_MS=600 bun run dev:test-client` in this worktree first.",
+    "Start `CODEBOT_DEV_CLIENT_TRANSPORT=webrtc CODEBOT_DEV_RTT_MS=600 bun run dev:test-client` in this worktree first.",
   );
   const [instance] = instances;
   assert.ok(instance);
@@ -196,10 +196,10 @@ const session = await connect(instance);
 try {
   const page = session.page;
   const server = await page.evaluate<string | null>(`(async () => {
-    const servers = await window.openbot.servers.list();
+    const servers = await window.codebot.servers.list();
     const remote = servers.find((server) => server.kind === "remote");
     if (!remote) return null;
-    if (!remote.active) await window.openbot.servers.select(remote.id);
+    if (!remote.active) await window.codebot.servers.select(remote.id);
     return remote.name;
   })()`);
   assert.ok(server, "The test client has no remote server. Restart the test client after the host registers.");

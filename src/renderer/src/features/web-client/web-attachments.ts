@@ -1,9 +1,9 @@
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@openbot/contracts/chat-visual";
-import { type AttachmentSummary, type FilePreview, filePreviewKindForFile } from "@openbot/contracts/ipc";
-import { base64ToBytes } from "@openbot/team-client/base64";
-import type { RemoteDownloadWatch } from "@openbot/team-client/remote-peer";
-import { currentText } from "@openbot/ui/text";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@codebot/contracts/chat-visual";
+import { type AttachmentSummary, type FilePreview, filePreviewKindForFile } from "@codebot/contracts/ipc";
+import { base64ToBytes } from "@codebot/team-client/base64";
+import type { RemoteDownloadWatch } from "@codebot/team-client/remote-peer";
+import { currentText } from "@codebot/ui/text";
 import type { WebAttachmentMedia } from "./web-attachment-media";
 import { createDownloadLimit, type DownloadLimit } from "./web-download-limit";
 import { createWebFileSaver } from "./web-file-download";

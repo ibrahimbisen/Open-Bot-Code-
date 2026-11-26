@@ -1,15 +1,15 @@
 import {
   type CustomServerCheckoutRequest,
   parseCustomServerCheckoutRequest,
-} from "@openbot/contracts/custom-server-plans";
+} from "@codebot/contracts/custom-server-plans";
 import {
   type CreateHostedServerInput,
   type DeleteHostedServerInput,
   parseCreateHostedServerInput,
   parseDeleteHostedServerInput,
   parseHostedServerLifecycleInput,
-} from "@openbot/contracts/hosted-servers";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/hosted-servers";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { HostedServerDesktopService } from "../hosted-server-service";
 import { handler, type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";

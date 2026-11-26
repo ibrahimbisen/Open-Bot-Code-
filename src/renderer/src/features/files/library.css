@@ -49,8 +49,8 @@
 .library-viewer {
   position: relative;
   overflow: hidden;
-  border-end-start-radius: calc(var(--openbot-radius-card) - 1px);
-  border-end-end-radius: calc(var(--openbot-radius-card) - 1px);
+  border-end-start-radius: calc(var(--codebot-radius-card) - 1px);
+  border-end-end-radius: calc(var(--codebot-radius-card) - 1px);
   outline: none;
 }
 

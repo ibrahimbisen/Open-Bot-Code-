@@ -1,4 +1,4 @@
-import { ProviderUseAppDialog } from "@openbot/ui/components/ProviderUseAppDialog";
+import { ProviderUseAppDialog } from "@codebot/ui/components/ProviderUseAppDialog";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

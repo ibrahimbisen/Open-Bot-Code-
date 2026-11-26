@@ -1,5 +1,5 @@
-import { BuyCreditsPage } from "@openbot/ui/features/credits/BuyCreditsPage";
-import { createCreditsStore } from "@openbot/ui/features/credits/credits-store";
+import { BuyCreditsPage } from "@codebot/ui/features/credits/BuyCreditsPage";
+import { createCreditsStore } from "@codebot/ui/features/credits/credits-store";
 import { appPort } from "../../app-port";
 import { useWindowPage } from "./window-page-context";
 

@@ -1,8 +1,8 @@
-import { ArrowUp } from "@openbot/ui";
-import { ComposerErrorBanner } from "@openbot/ui/features/conversation/ComposerErrorBanner";
-import { ComposerStackCard } from "@openbot/ui/features/conversation/ComposerStackCard";
-import { useText } from "@openbot/ui/text";
-import { appendVoiceTranscript } from "@openbot/ui/voice-recording";
+import { ArrowUp } from "@codebot/ui";
+import { ComposerErrorBanner } from "@codebot/ui/features/conversation/ComposerErrorBanner";
+import { ComposerStackCard } from "@codebot/ui/features/conversation/ComposerStackCard";
+import { useText } from "@codebot/ui/text";
+import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
 import { createSignal, onSettled, Show } from "solid-js";
 import { DictationMic, DictationStrip } from "./DictationStrip";
 import { createDictation } from "./dictation";

@@ -1,4 +1,4 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import * as SecureStore from "expo-secure-store";
 import { useEffect, useState } from "react";
 import { accountScope } from "@/shared/lib/account-scope";
@@ -9,7 +9,7 @@ export interface ShareTarget {
 }
 
 function lastShareTargetKey(apiUrl: string, userId: string): string {
-  return `openbot.share-target.v1.${accountScope(apiUrl, userId)}`;
+  return `codebot.share-target.v1.${accountScope(apiUrl, userId)}`;
 }
 
 async function loadLastShareTarget(apiUrl: string, userId: string): Promise<ShareTarget | null> {

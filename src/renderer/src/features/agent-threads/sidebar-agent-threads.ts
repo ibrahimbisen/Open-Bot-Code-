@@ -1,6 +1,6 @@
-import { sideThreadItem } from "@openbot/ui/features/conversation/threads/thread-items";
-import { MAIN_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
-import type { SidebarAgentThreads } from "@openbot/ui/features/sidebar/sidebar-types";
+import { sideThreadItem } from "@codebot/ui/features/conversation/threads/thread-items";
+import { MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
+import type { SidebarAgentThreads } from "@codebot/ui/features/sidebar/sidebar-types";
 import type { AgentTasks } from "../agent-tasks/agent-tasks-state";
 import type { AgentThreadTabsState } from "./agent-thread-tabs";
 import { type ThreadWaits, taskWaitsFor } from "./conversation-threads";

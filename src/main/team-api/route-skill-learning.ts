@@ -1,6 +1,6 @@
-import { hostSkillLearning, isSkillLearningMode } from "@openbot/contracts/ipc";
-import { SKILL_LEARNING_CAPABILITY, SKILL_LEARNING_ROUTES } from "@openbot/contracts/team-protocol/skill-learning-v1";
-import { sourceText } from "@openbot/i18n/source";
+import { hostSkillLearning, isSkillLearningMode } from "@codebot/contracts/ipc";
+import { SKILL_LEARNING_CAPABILITY, SKILL_LEARNING_ROUTES } from "@codebot/contracts/team-protocol/skill-learning-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { TeamApiAdmin } from "./dependencies";
 import { HttpError } from "./http-error";

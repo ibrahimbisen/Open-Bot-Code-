@@ -6,7 +6,7 @@ import {
   type WorkflowGraph,
   type WorkflowNode,
   workflowLoopEdges,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { GraphPlace } from "./workflow-graph-edit";
 
 export type FlowItem =

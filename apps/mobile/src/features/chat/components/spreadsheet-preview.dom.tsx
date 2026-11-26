@@ -1,8 +1,8 @@
 "use dom";
 
-import { OfficePreviewTooLargeError } from "@openbot/contracts/office-zip";
-import { parseSpreadsheet, type SpreadsheetData } from "@openbot/contracts/spreadsheet-workbook";
-import { base64ToBytes } from "@openbot/team-client/base64";
+import { OfficePreviewTooLargeError } from "@codebot/contracts/office-zip";
+import { parseSpreadsheet, type SpreadsheetData } from "@codebot/contracts/spreadsheet-workbook";
+import { base64ToBytes } from "@codebot/team-client/base64";
 import { useMemo, useState } from "react";
 
 interface SpreadsheetPreviewProps {

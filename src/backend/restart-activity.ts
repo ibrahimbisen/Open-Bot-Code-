@@ -1,4 +1,4 @@
-import type { AgentEvent } from "@openbot/contracts/ipc";
+import type { AgentEvent } from "@codebot/contracts/ipc";
 
 let generation = 0;
 

@@ -4,23 +4,23 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { Effect } from "effect";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/usage-limit-idle-recheck-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/usage-limit-idle-recheck-e2e");
 const MODEL = "gpt-5.5";
-const root = await mkdtemp(join(tmpdir(), "openbot-usage-limit-idle-recheck-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-usage-limit-idle-recheck-"));
 const home = join(root, "home");
 const logPath = join(root, "protocol.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_FAKE_CODEX_LOG = logPath;
-delete process.env.OPENBOT_CODEX_PATH;
+process.env.CODEBOT_FAKE_CODEX_LOG = logPath;
+delete process.env.CODEBOT_CODEX_PATH;
 mkdirSync(home, { recursive: true });
 
 const { ConversationRuntime } = await import("../src/backend/agent/conversation-runtime");
 const { ProviderRuntime } = await import("../src/backend/agent/provider-runtime");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } = await import("../src/backend/provider-drivers");
 
 const resetsAt = Math.floor(Date.now() / 1000) + 3600;
@@ -31,7 +31,7 @@ if (process.argv.includes("--version")) {
   process.stdout.write("codex-cli 99.0.0\\n");
   process.exit(0);
 }
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, ...entry }) + "\\n");
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, ...entry }) + "\\n");
 log({ start: true });
 process.stdout.on("error", (error) => {
   if (error.code === "EPIPE") process.exit(0);
@@ -119,7 +119,7 @@ function reading(usage: { limits: { primary?: { usedPercent: number } | null }[]
 }
 
 const executable = await installFakeCodex(join(root, "codex"));
-const store = new AgentStore(join(root, "profile"), home, new OpenBotDatabase(join(root, "profile")));
+const store = new AgentStore(join(root, "profile"), home, new CodeBotDatabase(join(root, "profile")));
 const providers = new ProviderRuntime({
   offProviders: BUILT_IN_PROVIDER_DRIVERS.map((driver) => driver.id).filter((id) => id !== "codex"),
   conversation: new ConversationRuntime(

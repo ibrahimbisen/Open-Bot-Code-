@@ -1,10 +1,10 @@
 import { spawn } from "node:child_process";
 import { dirname } from "node:path";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type { App } from "electron";
 import { runsFromOwnMount } from "./linux-appimage-crashpad";
 
-const logger = createOpenBotLogger("linux-appimage-relaunch");
+const logger = createCodeBotLogger("linux-appimage-relaunch");
 
 const START_AFTER_PARENT_EXIT = [
   'for fd in $(cd /proc/self/fd && echo *); do case $fd in *[!0-9]*|[012]) ;; *) eval "exec $fd>&-" ;; esac; done',

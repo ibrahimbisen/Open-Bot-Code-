@@ -1,6 +1,6 @@
-import { isAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import type { TeamProtocolV1JsonObject, TeamProtocolV1JsonValue } from "@openbot/contracts/team-protocol/v1";
+import { isAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import type { TeamProtocolV1JsonObject, TeamProtocolV1JsonValue } from "@codebot/contracts/team-protocol/v1";
 
 const FROZEN_PROVIDERS: ReadonlyMap<number, readonly string[]> = (() => {
   const v1 = ["codex", "claude", "grok"];

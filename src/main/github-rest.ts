@@ -4,11 +4,11 @@ import type {
   WorkflowGitHubEvent,
   WorkflowGitHubLabel,
   WorkflowGitHubRepositoryOptions,
-} from "@openbot/contracts/ipc";
-import { WORKFLOW_GITHUB_OPTION_LIMIT } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { WORKFLOW_GITHUB_OPTION_LIMIT } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { Effect, Option } from "effect";
 import { z } from "zod";
 import type { MessagingAdapterError } from "../backend/messaging/messaging-types";
@@ -36,13 +36,13 @@ const GITHUB_STATE_REASONS: Record<WorkflowGitHubCloseReason, string> = {
   notPlanned: "not_planned",
 };
 
-const FILES_BRANCH = "openbot-attachments";
+const FILES_BRANCH = "codebot-attachments";
 const FILE_BYTES_LIMIT = 25 * 1024 * 1024;
 const FILES_BYTES_LIMIT = 50 * 1024 * 1024;
 const FILE_TRANSFER_TIMEOUT_MS = 2 * 60 * 1000;
 const FILES_SECTION_LIMIT = GITHUB_BODY_LIMIT / 2;
 const FILE_NAME_LIMIT = 100;
-const FILES_COMMIT_MESSAGE = "Add files for an OpenBot workflow output [skip ci]";
+const FILES_COMMIT_MESSAGE = "Add files for an CodeBot workflow output [skip ci]";
 
 interface FileLink {
   name: string;
@@ -158,7 +158,7 @@ export function createGitHubRest(options: GitHubRestOptions): WorkflowGitHubApi 
         headers: {
           Accept: "application/vnd.github+json",
           Authorization: `Bearer ${token}`,
-          "User-Agent": "OpenBot",
+          "User-Agent": "CodeBot",
           "X-GitHub-Api-Version": "2022-11-28",
           ...(body ? { "Content-Type": "application/json" } : {}),
         },

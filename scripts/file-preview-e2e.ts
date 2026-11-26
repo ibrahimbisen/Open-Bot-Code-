@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
@@ -20,11 +20,11 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const session = await connectToDevApp(instance.remoteDebuggingPort, createOpenBotLogger("file-preview-e2e"), {
+const session = await connectToDevApp(instance.remoteDebuggingPort, createCodeBotLogger("file-preview-e2e"), {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
 });
-const out = resolve(".openbot-build/file-preview-e2e");
+const out = resolve(".codebot-build/file-preview-e2e");
 mkdirSync(out, { recursive: true });
 const results: string[] = [];
 try {
@@ -36,12 +36,12 @@ try {
   await open();
   await frameElement.waitFor();
   const address = await frameElement.getAttribute("src");
-  assert.ok(address?.startsWith("openbot-visual://preview/"));
+  assert.ok(address?.startsWith("codebot-visual://preview/"));
   const frame = frameElement.contentFrame();
   await frame.getByText(renderedText, { exact: true }).waitFor();
   const isolation = await frame.locator("body").evaluate(() => ({
     origin: globalThis.origin,
-    bridge: typeof window.openbot,
+    bridge: typeof window.codebot,
     node: typeof require,
   }));
   assert.deepEqual(isolation, { origin: "null", bridge: "undefined", node: "undefined" });

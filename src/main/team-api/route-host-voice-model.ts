@@ -1,9 +1,9 @@
-import { type HostVoiceModelChange, parseHostVoiceModelChange } from "@openbot/contracts/ipc";
+import { type HostVoiceModelChange, parseHostVoiceModelChange } from "@codebot/contracts/ipc";
 import {
   HOST_VOICE_MODEL_CAPABILITY,
   HOST_VOICE_MODEL_ROUTES,
-} from "@openbot/contracts/team-protocol/host-voice-model-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/host-voice-model-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { TeamApiAdmin } from "./dependencies";
 import { HttpError } from "./http-error";

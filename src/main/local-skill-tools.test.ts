@@ -1,13 +1,13 @@
-import type { InstalledSkill } from "@openbot/contracts/ipc";
-import { redactText, registerSecretValue } from "@openbot/logging";
+import type { InstalledSkill } from "@codebot/contracts/ipc";
+import { redactText, registerSecretValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { describe, expect, it } from "vitest";
 import { keepSkillIdsReadable } from "./local-skill-tools";
 
-const SAVED_PASSWORD = "openbot";
-const CURATED_ID = "openbot-curated-skill-daily-brief";
-const GITHUB_ID = `github:openbot/skills@${"a".repeat(40)}:skills/openbot-notes`;
-const WORKSPACE_ID = "home:openbot-notes";
+const SAVED_PASSWORD = "codebot";
+const CURATED_ID = "codebot-curated-skill-daily-brief";
+const GITHUB_ID = `github:codebot/skills@${"a".repeat(40)}:skills/codebot-notes`;
+const WORKSPACE_ID = "home:codebot-notes";
 
 function installed(skillId: string, origin: NonNullable<InstalledSkill["origin"]>): InstalledSkill {
   return {

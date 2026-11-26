@@ -1,5 +1,5 @@
-import { chatTagReferences } from "@openbot/contracts/chat-tag-references";
-import type { AgentTask } from "@openbot/contracts/ipc";
+import { chatTagReferences } from "@codebot/contracts/chat-tag-references";
+import type { AgentTask } from "@codebot/contracts/ipc";
 
 export const TASKS_CLOSED_SHOWN = 2;
 

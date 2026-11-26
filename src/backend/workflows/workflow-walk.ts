@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
   isWorkflowStepKind,
@@ -13,8 +13,8 @@ import {
   type WorkflowNode,
   type WorkflowStepSource,
   workflowLoopEdges,
-} from "@openbot/contracts/ipc";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { redactText } from "@codebot/logging";
 import { runtimeFields } from "./workflow-graph";
 import { isOpenStep, type StoredWorkflowStep } from "./workflow-run-store";
 
@@ -441,7 +441,7 @@ export function modelStepPrompt(system: string, prompt: string, input: string): 
 const TRANSPARENT_ASK = {
   codex: "Give it a transparent background: a cut-out PNG with clear pixels around the subject.",
   grok: "Put the subject on one flat, solid background colour, with no shadow, floor, gradient or texture, and keep a margin around the subject. Use pure green #00FF00, or pure magenta #FF00FF when the subject is green. Do not use that colour in the subject.",
-} as const satisfies Record<Exclude<WorkflowMediaProvider, "sunra" | "higgsfield" | "openbot">, string>;
+} as const satisfies Record<Exclude<WorkflowMediaProvider, "sunra" | "higgsfield" | "codebot">, string>;
 
 export function mediaStepPrompt(
   fields: WorkflowFields,
@@ -451,7 +451,7 @@ export function mediaStepPrompt(
   provider: WorkflowMediaProvider,
 ): string {
   const ask =
-    provider === "sunra" || provider === "higgsfield" || provider === "openbot"
+    provider === "sunra" || provider === "higgsfield" || provider === "codebot"
       ? ""
       : kind === "video"
         ? `Make one video of ${specs.duration} seconds at ${specs.resolution ?? "720p"}, aspect ratio ${specs.aspect}.`

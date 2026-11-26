@@ -19,11 +19,12 @@ import {
   SETTING_LINK_ITEM_TYPE_PREFIX,
   SIGNED_OUT_CHANNEL_MEMBER_ID,
   withBrowserMember,
-} from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { changesModelContent } from "./channel-history";
+import type { CodeBotDatabase } from "./codebot-database";
 import { deleteAggregateHistory, deleteReceiptsOf, deleteThreadAttachments } from "./database/database-core";
 import {
   databaseRow,
@@ -34,7 +35,6 @@ import {
 } from "./database/database-rows";
 import { withTransaction } from "./database/sqlite-transaction";
 import { cachedStatement } from "./database/statement-cache";
-import type { OpenBotDatabase } from "./openbot-database";
 import { revokeRoutineWebhooks } from "./webhook-route-store";
 
 const SHOWN_MESSAGE_SQL =
@@ -201,7 +201,7 @@ export class ChannelStore {
   #memberFolders: { connection: DatabaseSync; folders: ReadonlyMap<string, readonly string[]> } | null = null;
 
   constructor(
-    readonly database: OpenBotDatabase,
+    readonly database: CodeBotDatabase,
     private readonly memberFoldersChanged: (agentIds: readonly string[]) => void = () => {},
   ) {}
 
@@ -835,7 +835,7 @@ export class ChannelStore {
         throughSequence: requiredNumberColumn(row, "through_sequence"),
         summaryVersion: requiredNumberColumn(row, "summary_version"),
       };
-    const threadId = `openbot-thread-${randomUUID()}`;
+    const threadId = `codebot-thread-${randomUUID()}`;
     return this.database.dispatch(
       `channel-context:${channelId}:${agentId}`,
       [

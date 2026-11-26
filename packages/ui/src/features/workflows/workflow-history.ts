@@ -6,7 +6,7 @@ import {
   type WorkflowNode,
   type WorkflowNodeKind,
   type WorkflowNodeSize,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { createSignal } from "solid-js";
 import type { BoardSnapshot, WfnFields, WfnPoint, WfnSize } from "./workflow-board";
 import type { Stroke } from "./workflow-ink";
@@ -242,7 +242,7 @@ export function hostDefaults(
     case "image": {
       const media = initial?.media === "video" ? "video" : "image";
       const fits = catalogs.imageModels.filter((choice) => choice.kinds.includes(media));
-      const model = fits.find((choice) => choice.provider !== "openbot") ?? fits[0];
+      const model = fits.find((choice) => choice.provider !== "codebot") ?? fits[0];
       return model ? { model: model.id } : {};
     }
     case "trigger": {

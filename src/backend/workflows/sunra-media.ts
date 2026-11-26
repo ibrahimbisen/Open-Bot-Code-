@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import type { WorkflowMediaCreditBalance, WorkflowMediaKind, WorkflowMediaSpecs } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import type { WorkflowMediaCreditBalance, WorkflowMediaKind, WorkflowMediaSpecs } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
 import { Duration, Effect } from "effect";
 import {
   callMediaTool,
@@ -30,7 +30,7 @@ export const SUNRA_MCP_HOST = "mcp.sunra.ai";
 
 const SUNRA_MEDIA_HOSTS: ReadonlySet<string> = new Set(["cdn.sunra.ai", "cdn.ponpon.ai", "assets.sunra.ai"]);
 
-const SUNRA_PROJECT_NAME = "OpenBot";
+const SUNRA_PROJECT_NAME = "CodeBot";
 
 const SUNRA_DEADLINE = { image: Duration.minutes(5), video: Duration.minutes(20) } as const;
 const SUNRA_POLL = { image: Duration.seconds(3), video: Duration.seconds(6) } as const;
@@ -74,7 +74,7 @@ const selectedTeam = Effect.fnUntraced(function* (client: Client) {
   return text(answer.selectedWorkspaceId);
 });
 
-const openBotProject = Effect.fnUntraced(function* (client: Client, team: string | null) {
+const codeBotProject = Effect.fnUntraced(function* (client: Client, team: string | null) {
   const listed = yield* callTool(client, "list_projects", { limit: 100 });
   const projects = Array.isArray(listed.projects) ? listed.projects.filter(isDynamicRecord) : [];
   const found = text(projects.find((project) => project.name === SUNRA_PROJECT_NAME)?.project_id);
@@ -82,7 +82,7 @@ const openBotProject = Effect.fnUntraced(function* (client: Client, team: string
   const made = yield* callTool(client, "create_project", {
     name: SUNRA_PROJECT_NAME,
     ...(team
-      ? { workspace_id: team, request_id: `openbot-project-${team.replace(/[^A-Za-z0-9_-]/gu, "")}`.slice(0, 128) }
+      ? { workspace_id: team, request_id: `codebot-project-${team.replace(/[^A-Za-z0-9_-]/gu, "")}`.slice(0, 128) }
       : {}),
   });
   const id = text(made.project_id) ?? (isDynamicRecord(made.project) ? text(made.project.project_id) : null);
@@ -97,7 +97,7 @@ const uploadPicture = Effect.fnUntraced(function* (
   const bytes = yield* Effect.tryPromise({ try: () => readFile(file.path), catch: () => mediaFailed() });
   const target = yield* callTool(client, "get_upload_url", {
     content_type: file.mimeType,
-    filename: `openbot-input-${index + 1}.${pictureExtension(file.mimeType)}`,
+    filename: `codebot-input-${index + 1}.${pictureExtension(file.mimeType)}`,
   });
   const uploadUrl = text(target.upload_url);
   const assetUrl = text(target.asset_url);
@@ -181,7 +181,7 @@ export const generateSunraMedia = Effect.fn("generateSunraMedia")(function* (
       const client = yield* connectSignedIn(signIn, notSignedIn);
       const team = yield* selectedTeam(client);
       if (team && files.length > 0) return yield* mediaFail(sourceText("error.workflow.sunraTeamInputs"));
-      const project = yield* openBotProject(client, team);
+      const project = yield* codeBotProject(client, team);
       const uploaded = new Map<string, string>();
       for (const file of files) {
         if (uploaded.has(file.path)) continue;
@@ -195,7 +195,7 @@ export const generateSunraMedia = Effect.fn("generateSunraMedia")(function* (
         model: request.model,
         ...sunraChoices(request.kind, request.specs, plan),
         auto_confirm: true,
-        ...(team ? {} : { request_id: `openbot-${randomUUID()}` }),
+        ...(team ? {} : { request_id: `codebot-${randomUUID()}` }),
       };
       const answer =
         request.kind === "video"

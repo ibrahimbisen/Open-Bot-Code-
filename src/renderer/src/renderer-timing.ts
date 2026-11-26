@@ -1,4 +1,4 @@
-import { RENDERER_TIMING_LIMITS } from "@openbot/contracts/ipc";
+import { RENDERER_TIMING_LIMITS } from "@codebot/contracts/ipc";
 import { appPort } from "./app-port";
 
 const LONG_TASK_MS = 200;

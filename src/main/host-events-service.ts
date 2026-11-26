@@ -1,5 +1,5 @@
 import { randomBytes, randomUUID } from "node:crypto";
-import type { WorkflowTriggerInput, WorkflowWebhookSecret } from "@openbot/contracts/ipc";
+import type { WorkflowTriggerInput, WorkflowWebhookSecret } from "@codebot/contracts/ipc";
 import type {
   AgentWebhookSecret,
   EventFilter,
@@ -14,17 +14,17 @@ import type {
   SaveEventRoutineInput,
   SetWebhookSecretInput,
   WebhookTestResult,
-} from "@openbot/contracts/ipc-events";
-import { isEventJsonValue } from "@openbot/contracts/ipc-events";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc-events";
+import { isEventJsonValue } from "@codebot/contracts/ipc-events";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import {
   WEBHOOK_DELIVERY_BODY_BYTES_LIMIT,
   type WebhookDeliveryStatus,
-} from "@openbot/contracts/signal-protocol/messages";
-import { STANDARD_WEBHOOKS_FORMAT, WEBHOOK_ROUTES_LIMIT } from "@openbot/contracts/signal-protocol/webhook-route";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, registerSecretValue } from "@openbot/logging";
-import { RoutineInputError } from "@openbot/team-client/routine-schedule";
+} from "@codebot/contracts/signal-protocol/messages";
+import { STANDARD_WEBHOOKS_FORMAT, WEBHOOK_ROUTES_LIMIT } from "@codebot/contracts/signal-protocol/webhook-route";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, registerSecretValue } from "@codebot/logging";
+import { RoutineInputError } from "@codebot/team-client/routine-schedule";
 import { Effect, Semaphore } from "effect";
 import { RoutineOperationFailed } from "../backend/agent/routine-scheduler";
 import {
@@ -49,10 +49,10 @@ import type { SecretCipher } from "./provider-credential-store";
 import type { WebhookIngressDelivery } from "./signal-ingress";
 import { signWebhookBody, verifyStandardWebhookSignature, verifyWebhookSignature } from "./webhook-security";
 
-const logger = createOpenBotLogger("host-events");
+const logger = createCodeBotLogger("host-events");
 const DEFAULT_ACTIVITY_LIMIT = 50;
 const DEFAULT_RUN_LIMIT = 10;
-const TEST_EVENT_TYPE = "openbot.test";
+const TEST_EVENT_TYPE = "codebot.test";
 
 export interface HostWebhookRelay {
   connected(): boolean;
@@ -87,7 +87,7 @@ type WebhookIgnoredReason = "event-type" | "filter" | "inactive" | "busy" | "ref
 
 export interface WebhookDeliveryReport {
   ownerKind: WebhookRouteOwner["kind"] | null;
-  format: "openbot" | "standard";
+  format: "codebot" | "standard";
   result: WebhookDeliveryResult;
   ignoredReason: WebhookIgnoredReason | null;
   status: WebhookDeliveryStatus;
@@ -448,7 +448,7 @@ export class HostEventsService implements HostEventsApi {
       JSON.stringify({ type: eventType, data: testEventData(routine.trigger.filters) }),
     );
     const timestamp = String(Math.floor(Date.now() / 1000));
-    const deliveryId = `openbot-test-${randomUUID()}`;
+    const deliveryId = `codebot-test-${randomUUID()}`;
     const { status, received } = yield* this.#deliver(
       {
         routeId: route.routeId,
@@ -579,7 +579,7 @@ export class HostEventsService implements HostEventsApi {
     const received = processed?.received ?? null;
     this.#options.onDelivery?.({
       ownerKind: processed?.ownerKind ?? null,
-      format: input.format === STANDARD_WEBHOOKS_FORMAT ? "standard" : "openbot",
+      format: input.format === STANDARD_WEBHOOKS_FORMAT ? "standard" : "codebot",
       result: processed ? (processed.refusal ?? (received ? deliveryResult(received) : "failed")) : "failed",
       ignoredReason: received?.kind === "ignored" ? received.reason : null,
       status: processed?.status ?? 503,

@@ -7,21 +7,21 @@ import type {
   LocalBrowserSecretResponse,
   MediaApprovalChoice,
   MediaApprovalRead,
-} from "@openbot/contracts/ipc";
-import { browserPermissionSite } from "@openbot/contracts/team-protocol/browser-permissions-v1";
-import { type FeedbackApproval, feedbackApproval } from "@openbot/team-client/feedback-approval";
-import { approvalIsCut } from "@openbot/team-client/runtime-attention";
-import { classifyFailure } from "@openbot/telemetry";
-import { Button, LogIn, Maximize2, Monitor, toast } from "@openbot/ui";
-import { StandingApprovalConfirmation } from "@openbot/ui/components/StandingApprovalConfirmation";
-import { BrowserSecretCard, type BrowserSecretVault } from "@openbot/ui/features/conversation/BrowserSecretCard";
-import { BrowserTakeoverPreview } from "@openbot/ui/features/conversation/BrowserTakeoverPreview";
+} from "@codebot/contracts/ipc";
+import { browserPermissionSite } from "@codebot/contracts/team-protocol/browser-permissions-v1";
+import { type FeedbackApproval, feedbackApproval } from "@codebot/team-client/feedback-approval";
+import { approvalIsCut } from "@codebot/team-client/runtime-attention";
+import { classifyFailure } from "@codebot/telemetry";
+import { Button, LogIn, Maximize2, Monitor, toast } from "@codebot/ui";
+import { StandingApprovalConfirmation } from "@codebot/ui/components/StandingApprovalConfirmation";
+import { BrowserSecretCard, type BrowserSecretVault } from "@codebot/ui/features/conversation/BrowserSecretCard";
+import { BrowserTakeoverPreview } from "@codebot/ui/features/conversation/BrowserTakeoverPreview";
 import {
   MediaApprovalCard,
   type MediaApprovalControls,
   mediaApprovalCandidate,
-} from "@openbot/ui/features/conversation/MediaApprovalCard";
-import { type TextValue, useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/MediaApprovalCard";
+import { type TextValue, useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, For, Show, untrack } from "solid-js";
 import { CreditsHoldCard } from "./CreditsHoldCard";
 import { UiBlockCard } from "./ui-blocks/UiBlockCard";

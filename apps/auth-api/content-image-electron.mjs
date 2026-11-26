@@ -44,7 +44,7 @@ async function main() {
     let done = 0;
     for (const job of control.jobs) {
       const dataUrl = await window.webContents.executeJavaScript(
-        `window.openBotContentImage.render(${JSON.stringify(job)})`,
+        `window.codeBotContentImage.render(${JSON.stringify(job)})`,
       );
       await writeImage(path.join(control.outputDirectory, job.fileName), dataUrl);
       done += 1;

@@ -1,4 +1,4 @@
-import { type AppLogoColor, DEFAULT_APP_LOGO_COLOR } from "@openbot/contracts/app-logo-color";
+import { type AppLogoColor, DEFAULT_APP_LOGO_COLOR } from "@codebot/contracts/app-logo-color";
 import {
   BlendColor,
   Blur,
@@ -318,7 +318,7 @@ function CarouselIcon({
 }
 
 function Counter({ progress }: { progress: SharedValue<number> }) {
-  const text = String(useCSSVariable("--openbot-text-primary"));
+  const text = String(useCSSVariable("--codebot-text-primary"));
   const tens = useSharedValue(0);
   const ones = useSharedValue(0);
   useAnimatedReaction(
@@ -425,10 +425,10 @@ function ActionButton({
   currentLabel: string;
   onPress: () => void;
 }) {
-  const action = String(useCSSVariable("--openbot-action"));
-  const actionText = String(useCSSVariable("--openbot-action-foreground"));
-  const muted = String(useCSSVariable("--openbot-bg-control-active"));
-  const mutedText = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const action = String(useCSSVariable("--codebot-action"));
+  const actionText = String(useCSSVariable("--codebot-action-foreground"));
+  const muted = String(useCSSVariable("--codebot-bg-control-active"));
+  const mutedText = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const current = useDerivedValue(() => {
     const at = progress.get();
     const mix = currentMix.get();

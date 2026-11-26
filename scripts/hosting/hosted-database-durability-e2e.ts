@@ -1,18 +1,18 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, registerSecretValue } from "@openbot/logging";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, registerSecretValue } from "@codebot/logging";
 
-const logger = createOpenBotLogger("hosted-database-durability-e2e");
+const logger = createCodeBotLogger("hosted-database-durability-e2e");
 const BOAT_API_URL = "https://boat.dev/api/v1";
 const TTL_SECONDS = 7200;
-const REMOTE_DIRECTORY = "/home/user/openbot-durability";
-const REPORT_DIRECTORY = join(process.cwd(), ".openbot-build", "hosted-database-durability");
-const WRITER_UNIT = "openbot-durability-writer.service";
-const PRE_STOP_FLAG = "/run/openbot-durability-pre-stop";
+const REMOTE_DIRECTORY = "/home/user/codebot-durability";
+const REPORT_DIRECTORY = join(process.cwd(), ".codebot-build", "hosted-database-durability");
+const WRITER_UNIT = "codebot-durability-writer.service";
+const PRE_STOP_FLAG = "/run/codebot-durability-pre-stop";
 const BOAT_PRE_STOP = "/home/user/.boat/pre-stop";
-const SAVED_PRE_STOP = `${REMOTE_DIRECTORY}/openbot-pre-stop`;
+const SAVED_PRE_STOP = `${REMOTE_DIRECTORY}/codebot-pre-stop`;
 const WRITER_PRE_STOP = `${REMOTE_DIRECTORY}/writer-pre-stop`;
 
 const MODES = ["live", "pre-stop"] as const;
@@ -133,7 +133,7 @@ async function main(): Promise<void> {
   let finalCheck: DynamicRecord | null = null;
   let stoppedBootId: unknown;
   await ensureRunning(boat, options.sandboxId);
-  await saveOpenBotHook(boat, options.sandboxId);
+  await saveCodeBotHook(boat, options.sandboxId);
   for (let cycle = 1; cycle <= options.cycles; cycle += 1) {
     await ensureRunning(boat, options.sandboxId);
     if (cycle === 1) {
@@ -147,7 +147,7 @@ async function main(): Promise<void> {
     const restored = stoppedBootId === undefined ? undefined : check?.bootId !== stoppedBootId;
     logger.info("Checked the restored test database.", { cycle, restored, check });
     if (check?.present === true && !isGood(check, options.mode)) {
-      await restoreOpenBotHook(boat, options.sandboxId);
+      await restoreCodeBotHook(boat, options.sandboxId);
       cycles.push({ cycle, check, restored, stoppedBy: await stop(boat, options.sandboxId) });
       break;
     }
@@ -167,7 +167,7 @@ async function main(): Promise<void> {
     await ensureRunning(boat, options.sandboxId);
     finalCheck = await checkDatabase(boat, options.sandboxId);
     if (finalCheck?.bootId === stoppedBootId) logger.warn("The sandbox did not start again before the final check.");
-    await restoreOpenBotHook(boat, options.sandboxId);
+    await restoreCodeBotHook(boat, options.sandboxId);
     await stop(boat, options.sandboxId);
   }
   const checks = [...cycles.map((cycle) => cycle.check), finalCheck];
@@ -243,20 +243,20 @@ async function checkDatabase(boat: BoatRequester, sandboxId: string): Promise<Dy
   const output = await command(
     boat,
     sandboxId,
-    `mkdir -p ${REMOTE_DIRECTORY} && python3 -I -c ${shellQuote(CHECK)} ${REMOTE_DIRECTORY} /tmp/openbot-durability-check ${PRE_STOP_FLAG}`,
+    `mkdir -p ${REMOTE_DIRECTORY} && python3 -I -c ${shellQuote(CHECK)} ${REMOTE_DIRECTORY} /tmp/codebot-durability-check ${PRE_STOP_FLAG}`,
   );
   return parseJson(output);
 }
 
-async function saveOpenBotHook(boat: BoatRequester, sandboxId: string): Promise<void> {
+async function saveCodeBotHook(boat: BoatRequester, sandboxId: string): Promise<void> {
   await command(
     boat,
     sandboxId,
-    `mkdir -p ${REMOTE_DIRECTORY} && if grep -q '^# openbot-boat-pre-stop:' ${BOAT_PRE_STOP} 2>/dev/null; then cp -p ${BOAT_PRE_STOP} ${SAVED_PRE_STOP}; fi`,
+    `mkdir -p ${REMOTE_DIRECTORY} && if grep -q '^# codebot-boat-pre-stop:' ${BOAT_PRE_STOP} 2>/dev/null; then cp -p ${BOAT_PRE_STOP} ${SAVED_PRE_STOP}; fi`,
   );
 }
 
-async function restoreOpenBotHook(boat: BoatRequester, sandboxId: string): Promise<void> {
+async function restoreCodeBotHook(boat: BoatRequester, sandboxId: string): Promise<void> {
   await command(
     boat,
     sandboxId,
@@ -265,9 +265,9 @@ async function restoreOpenBotHook(boat: BoatRequester, sandboxId: string): Promi
 }
 
 async function installHook(boat: BoatRequester, sandboxId: string, mode: Mode): Promise<void> {
-  const writerHook = (await readFile(join(import.meta.dirname, "openbot-boat-pre-stop"), "utf8"))
-    .replaceAll("openbot.service", WRITER_UNIT)
-    .replaceAll("/run/openbot-pre-stop", PRE_STOP_FLAG);
+  const writerHook = (await readFile(join(import.meta.dirname, "codebot-boat-pre-stop"), "utf8"))
+    .replaceAll("codebot.service", WRITER_UNIT)
+    .replaceAll("/run/codebot-pre-stop", PRE_STOP_FLAG);
   const hook = [
     "#!/bin/bash",
     "# Test hook of hosted-database-durability-e2e.ts.",

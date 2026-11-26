@@ -8,9 +8,9 @@ import type {
   UpdatePreferenceChange,
   UpdateRestartMode,
   UpdateStatus,
-} from "@openbot/contracts/ipc";
-import type { HostRestartState } from "@openbot/contracts/team-protocol/host-update-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import type { HostRestartState } from "@codebot/contracts/team-protocol/host-update-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Exit, Schema, Scope } from "effect";
 import { runCauseEffect } from "../backend/effect-boundary";
 import type { PreferenceFileFailure } from "./preference-file";

@@ -1,6 +1,6 @@
-import type { AgentModelOption } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentModelOption } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Fiber } from "effect";
 import type { AgentClient, AgentProvider } from "../agent-client";
 import type { ProfileClients } from "./profile-clients";

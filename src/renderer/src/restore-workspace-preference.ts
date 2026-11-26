@@ -1,4 +1,4 @@
-const RESTORE_LAST_WORKSPACE_STORAGE_KEY = "openbot:restore-last-workspace";
+const RESTORE_LAST_WORKSPACE_STORAGE_KEY = "codebot:restore-last-workspace";
 
 export function readRestoreLastWorkspace(): boolean {
   try {

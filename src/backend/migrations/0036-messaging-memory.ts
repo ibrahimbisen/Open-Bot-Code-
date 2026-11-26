@@ -1,9 +1,9 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v36 and the separate new-database schema. IF NOT EXISTS throughout.
 //
 // Facts that agents save about one connection (a Slack workspace, a Discord server, a Telegram chat)
-// with messaging_remember. Every conversation of the connection sees them; the OpenBot user's own
+// with messaging_remember. Every conversation of the connection sees them; the CodeBot user's own
 // chats and the agents' private memories do not. The columns mirror `projection_channel_memories`,
 // because one store implementation serves every owner. No CASCADE: no code deletes a connection
 // (disconnect only disables it), and code that does must purge these rows and their
@@ -25,7 +25,7 @@ export const MESSAGING_MEMORY_SCHEMA_SQL = `
     ON projection_messaging_memories(connection_id, updated_at DESC, memory_id);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 36,
   name: "messaging-memory",
   // Only creates a table, so no foreign-key pause and no vacuum. No connection has memories yet.

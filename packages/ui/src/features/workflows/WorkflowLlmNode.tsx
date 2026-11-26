@@ -1,5 +1,5 @@
-import { AGENT_REASONING_EFFORTS, type AgentModelId, type AgentReasoningEffort } from "@openbot/contracts/ipc";
-import { Button, Play, Sparkles } from "@openbot/ui";
+import { AGENT_REASONING_EFFORTS, type AgentModelId, type AgentReasoningEffort } from "@codebot/contracts/ipc";
+import { Button, Play, Sparkles } from "@codebot/ui";
 import { untrack } from "solid-js";
 import { useText } from "../../text";
 import { AnswerAction, AnswerProblems } from "./workflow-answer-parts";

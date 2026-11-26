@@ -4,7 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentSummary, defaultProviderModel } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, type AgentSummary, defaultProviderModel } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -20,8 +20,8 @@ import {
 import { providerFailure, providerSync, requiredString } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-foreign-session-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-foreign-session-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-foreign-session-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-foreign-session-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const spawnLog = join(root, "claude-spawns.jsonl");
@@ -32,8 +32,8 @@ const OPENCODE_MODEL = "opencode/big-pickle";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
-process.env.OPENBOT_OPENCODE_PATH = opencodeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_OPENCODE_PATH = opencodeExecutable;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -41,7 +41,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
 const fs = require("node:fs");
@@ -297,7 +297,7 @@ async function settle<T>(label: string, read: () => T | null | undefined | false
 
 await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
 await writeFile(opencodeExecutable, "#!/bin/sh\necho 1.14.0\n", { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

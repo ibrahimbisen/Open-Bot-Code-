@@ -82,7 +82,7 @@ export const AGENT_DATABASE_LIMITS = {
 
 export const AGENT_DATABASE_SCHEMA_VERSION = 1;
 
-export const AGENT_DATABASE_METADATA_TABLE = "openbot_metadata";
+export const AGENT_DATABASE_METADATA_TABLE = "codebot_metadata";
 
 export interface AgentDatabaseHostProcess {
   send(request: AgentDatabaseRequest): void;

@@ -6,10 +6,10 @@ import {
   type AgentModelOption,
   type AgentSummary,
   CHANNEL_RESUME_ITEM_TYPE,
-} from "@openbot/contracts/ipc";
-import { isFixedSourceText, matchingSourceKeys, sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
-import { classifyUserError } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { isFixedSourceText, matchingSourceKeys, sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
+import { classifyUserError } from "@codebot/user-errors";
 import { Deferred, Effect, Result, Schema } from "effect";
 import {
   type AgentProvider,
@@ -69,7 +69,7 @@ import { checkAgentFolders, codexSandboxPolicy, workspaceWritableRoots } from ".
 
 export const REMOVED_ENDPOINT_MESSAGE = sourceText("error.agent.endpointRemoved");
 
-const logger = createOpenBotLogger("drain-scheduler");
+const logger = createCodeBotLogger("drain-scheduler");
 const CHANNEL_START_FAILED = "The provider could not start this assignment. Resume to try again.";
 const PROVIDER_MISSING_KEYS: ReadonlySet<string> = new Set([
   "error.provider.codexMissing",

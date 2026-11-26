@@ -13,8 +13,8 @@ import type {
   SetWebhookSecretInput,
   WebhookSecret,
   WebhookTestResult,
-} from "@openbot/contracts/ipc-events";
-import { matchingSourceKeys } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc-events";
+import { matchingSourceKeys } from "@codebot/i18n/source";
 import { type Effect, Schema } from "effect";
 
 export class HostEventsFailure extends Schema.TaggedError<HostEventsFailure>()("HostEventsFailure", {

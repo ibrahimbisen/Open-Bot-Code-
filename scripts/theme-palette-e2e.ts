@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { mkdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import type { AppThemePaletteColor } from "@openbot/contracts/app-appearance";
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { en } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { AppThemePaletteColor } from "@codebot/contracts/app-appearance";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { en } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
@@ -12,11 +12,11 @@ import { resolveDevelopmentAppDataRoot } from "./development-state-paths";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/theme-palette");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/theme-palette");
 const PALETTE_ID = "e2e-omarchy";
 const PALETTE_NAME = "E2E Omarchy";
 const DARK_CANVAS = "#1a1a1a";
@@ -64,7 +64,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("theme-palette-e2e");
+const logger = createCodeBotLogger("theme-palette-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -115,7 +115,7 @@ async function chooseTheme(page: Page, label: string) {
 async function waitForListed(page: Page, listed: boolean) {
   await page.waitForFunction(
     async ([id, expected]) =>
-      (await window.openbot.getAppAppearancePreference()).palettes.some((palette) => palette.id === id) === expected,
+      (await window.codebot.getAppAppearancePreference()).palettes.some((palette) => palette.id === id) === expected,
     [PALETTE_ID, listed] as const,
   );
 }
@@ -125,10 +125,10 @@ function shownColors(page: Page) {
     const root = document.documentElement;
     const style = getComputedStyle(root);
     return {
-      attribute: root.dataset.openbotColorScheme ?? null,
-      canvas: style.getPropertyValue("--openbot-bg-canvas").trim(),
-      accent: style.getPropertyValue("--openbot-accent").trim(),
-      inlineCanvas: root.style.getPropertyValue("--openbot-bg-canvas"),
+      attribute: root.dataset.codebotColorScheme ?? null,
+      canvas: style.getPropertyValue("--codebot-bg-canvas").trim(),
+      accent: style.getPropertyValue("--codebot-accent").trim(),
+      inlineCanvas: root.style.getPropertyValue("--codebot-bg-canvas"),
       bodyBackground: getComputedStyle(document.body).backgroundColor,
     };
   });
@@ -137,7 +137,7 @@ function shownColors(page: Page) {
 async function waitForCanvas(page: Page, canvas: string) {
   await page.waitForFunction(
     (expected) =>
-      getComputedStyle(document.documentElement).getPropertyValue("--openbot-bg-canvas").trim() === expected,
+      getComputedStyle(document.documentElement).getPropertyValue("--codebot-bg-canvas").trim() === expected,
     canvas,
   );
   return shownColors(page);
@@ -145,18 +145,18 @@ async function waitForCanvas(page: Page, canvas: string) {
 
 mkdirSync(OUT, { recursive: true });
 const page = session.page;
-const original = await page.evaluate(() => window.openbot.getAppAppearancePreference());
+const original = await page.evaluate(() => window.codebot.getAppAppearancePreference());
 type ShownColors = Awaited<ReturnType<typeof shownColors>>;
 const steps: Partial<Record<"chosen" | "rewritten" | "refused" | "restored" | "cleared", ShownColors>> = {};
 try {
-  await page.evaluate(() => window.openbot.setAppAppearancePreference({ appearance: "dark", palette: null }));
+  await page.evaluate(() => window.codebot.setAppAppearancePreference({ appearance: "dark", palette: null }));
 
   publishPalette("dark", TOKYO_NIGHT);
   await waitForListed(page, true);
 
   await chooseTheme(page, PALETTE_NAME);
   await page.waitForFunction(
-    async (id) => (await window.openbot.getAppAppearancePreference()).palette === id,
+    async (id) => (await window.codebot.getAppAppearancePreference()).palette === id,
     PALETTE_ID,
   );
   let shown = await waitForCanvas(page, TOKYO_NIGHT.canvas);
@@ -170,7 +170,7 @@ try {
 
   publishPalette("light", CATPPUCCIN_LATTE);
   shown = await waitForCanvas(page, CATPPUCCIN_LATTE.canvas);
-  await page.waitForFunction(() => document.documentElement.dataset.openbotColorScheme === "light");
+  await page.waitForFunction(() => document.documentElement.dataset.codebotColorScheme === "light");
   shown = await shownColors(page);
   assert.equal(shown.accent, CATPPUCCIN_LATTE.accent, "The rewritten accent is not on the window.");
   await page.screenshot({ path: resolve(OUT, "workspace-catppuccin-latte.png") });
@@ -178,7 +178,7 @@ try {
 
   publishPalette("dark", { ...TOKYO_NIGHT, accent: "red; background: url(https://example.com)" });
   await waitForListed(page, false);
-  await page.waitForFunction(() => document.documentElement.style.getPropertyValue("--openbot-bg-canvas") === "", {
+  await page.waitForFunction(() => document.documentElement.style.getPropertyValue("--codebot-bg-canvas") === "", {
     timeout: 10_000,
   });
   shown = await shownColors(page);
@@ -191,7 +191,7 @@ try {
   await chooseTheme(page, en["settings.appearance.theme.dark"]);
   shown = await waitForCanvas(page, DARK_CANVAS);
   assert.equal(shown.inlineCanvas, "", "Dark left the palette colors on the window.");
-  assert.equal((await page.evaluate(() => window.openbot.getAppAppearancePreference())).palette, null);
+  assert.equal((await page.evaluate(() => window.codebot.getAppAppearancePreference())).palette, null);
   await closeSettings(page);
   await page.screenshot({ path: resolve(OUT, "workspace-dark.png") });
   steps.cleared = shown;
@@ -199,7 +199,7 @@ try {
   rmSync(paletteFile, { force: true });
   rmSync(`${paletteFile}.tmp`, { force: true });
   const { appearance, transparentWindow, palette } = original;
-  await page.evaluate((preference) => window.openbot.setAppAppearancePreference(preference), {
+  await page.evaluate((preference) => window.codebot.setAppAppearancePreference(preference), {
     appearance,
     transparentWindow,
     palette,

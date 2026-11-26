@@ -1,8 +1,8 @@
-import { serializeAttachmentReference } from "@openbot/contracts/attachment-references";
-import { serializeChatTagReference } from "@openbot/contracts/chat-tag-references";
-import type { DraftAttachment, InstalledSkill } from "@openbot/contracts/ipc";
-import type { ComposerBrowserTab, ComposerThread } from "@openbot/ui/data";
-import { ComposerEditor } from "@openbot/ui/features/conversation/ComposerEditor";
+import { serializeAttachmentReference } from "@codebot/contracts/attachment-references";
+import { serializeChatTagReference } from "@codebot/contracts/chat-tag-references";
+import type { DraftAttachment, InstalledSkill } from "@codebot/contracts/ipc";
+import type { ComposerBrowserTab, ComposerThread } from "@codebot/ui/data";
+import { ComposerEditor } from "@codebot/ui/features/conversation/ComposerEditor";
 import { createSignal } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -74,7 +74,7 @@ const installedSkills: InstalledSkill[] = [
   },
   {
     skillId: "skill-site-hosting",
-    slug: "openbot-site-hosting",
+    slug: "codebot-site-hosting",
     name: "Site Hosting",
     installedVersion: 1,
     availableVersion: 1,
@@ -106,12 +106,12 @@ const longDescriptionSkill: InstalledSkill = {
 };
 
 const browserTabs: ComposerBrowserTab[] = [
-  { id: "browser-tab-docs", title: "OpenBot documentation", url: "https://openbot.run/docs" },
+  { id: "browser-tab-docs", title: "CodeBot documentation", url: "https://openbot.run/docs" },
   { id: "browser-tab-linear", title: "Plans and pricing – Linear", url: "https://linear.app/pricing" },
   {
     id: "browser-tab-github",
-    title: "Let a channel lead cancel its own runs at a person's request · Pull Request #4981 · openbot/openbot",
-    url: "https://github.com/openbot/openbot/pull/4981",
+    title: "Let a channel lead cancel its own runs at a person's request · Pull Request #4981 · codebot/codebot",
+    url: "https://github.com/codebot/codebot/pull/4981",
   },
 ];
 

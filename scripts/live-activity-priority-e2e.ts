@@ -3,27 +3,27 @@ import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import type { AgentEvent, AgentRuntimeSnapshot } from "@openbot/contracts/ipc";
-import type { LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { AgentEvent, AgentRuntimeSnapshot } from "@codebot/contracts/ipc";
+import type { LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   encodeLiveActivityBytes,
   LIVE_ACTIVITY_SECRET_BYTES,
   liveActivityKeys,
-} from "@openbot/team-client/live-activity-seal";
+} from "@codebot/team-client/live-activity-seal";
 import { Effect } from "effect";
 import { openSealedLiveActivity } from "../apps/mobile/src/features/live-activity/model/live-activity-open";
 import { LiveActivityPushService } from "../src/main/live-activity-push";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/live-activity-priority-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/live-activity-priority-e2e");
 const STEP_DEADLINE_MS = 15_000;
 const SESSION = "fixture-session";
 const FIRST = "fixture-agent-a";
 const SECOND = "fixture-agent-b";
 const AGENTS = [FIRST, SECOND] as const;
 const TIME = "2026-11-13T00:00:00.000Z";
-const logger = createOpenBotLogger("live-activity-priority-e2e");
+const logger = createCodeBotLogger("live-activity-priority-e2e");
 
 const events = new EventEmitter<{ event: [AgentEvent] }>();
 const secret = randomBytes(LIVE_ACTIVITY_SECRET_BYTES);

@@ -1,4 +1,4 @@
-import { LIBRARY_FOLDER_LIMITS, type LibraryFolder } from "@openbot/contracts/ipc";
+import { LIBRARY_FOLDER_LIMITS, type LibraryFolder } from "@codebot/contracts/ipc";
 import {
   Archive,
   Button,
@@ -22,9 +22,9 @@ import {
   Trash2,
   UsersRound,
   Waypoints,
-} from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, For, Show, untrack } from "solid-js";
 import { AgentAvatar } from "../agents/AgentAvatar";

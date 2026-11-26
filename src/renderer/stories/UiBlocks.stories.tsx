@@ -6,11 +6,11 @@ import type {
   UiConfirmBlock as UiConfirmSpec,
   UiFormBlock as UiFormSpec,
   UiQuickRepliesBlock as UiQuickRepliesSpec,
-} from "@openbot/contracts/ui-blocks";
-import { UI_API_KEY_SCOPE_FIELD_ID, uiBlockOutcomeText } from "@openbot/contracts/ui-blocks";
-import { UiChoiceBlock } from "@openbot/ui/features/conversation/ui-blocks/UiChoiceBlock";
-import { UiConfirmBlock } from "@openbot/ui/features/conversation/ui-blocks/UiConfirmBlock";
-import { UiFormBlock } from "@openbot/ui/features/conversation/ui-blocks/UiFormBlock";
+} from "@codebot/contracts/ui-blocks";
+import { UI_API_KEY_SCOPE_FIELD_ID, uiBlockOutcomeText } from "@codebot/contracts/ui-blocks";
+import { UiChoiceBlock } from "@codebot/ui/features/conversation/ui-blocks/UiChoiceBlock";
+import { UiConfirmBlock } from "@codebot/ui/features/conversation/ui-blocks/UiConfirmBlock";
+import { UiFormBlock } from "@codebot/ui/features/conversation/ui-blocks/UiFormBlock";
 import type { JSX } from "@solidjs/web";
 import { createSignal } from "solid-js";
 import { fn } from "storybook/test";
@@ -214,7 +214,7 @@ export const ConfirmManyActions: Story = {
         spec={{
           type: "confirm",
           title: "Publish the release post?",
-          preview: "OpenBot 0.65 is out. Agents now ask questions in one prompt.",
+          preview: "CodeBot 0.65 is out. Agents now ask questions in one prompt.",
           actions: [
             { id: "publish", label: "Publish on all channels", style: "primary" },
             { id: "schedule", label: "Schedule for tomorrow" },

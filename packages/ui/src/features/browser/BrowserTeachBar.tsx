@@ -1,5 +1,5 @@
-import { Button, Square, X } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { Button, Square, X } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show } from "solid-js";
 import type { BrowserTeachBarProps } from "./browser-full-view-types";
 

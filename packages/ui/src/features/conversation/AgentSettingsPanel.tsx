@@ -1,11 +1,10 @@
-import type { ExpressionId } from "@norbert_bodziony/bloub";
 import {
   agentProviderDescriptor,
   agentProviderName,
   agentSteersTurns,
   foreignProvider,
-} from "@openbot/contracts/agent-providers";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/agent-providers";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentBackupModels,
   type AgentBrowserProfile,
@@ -42,8 +41,8 @@ import {
   type UpdateAgentInput,
   widensAgentPermission,
   workspaceAccessEnforced,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   ArrowLeftRight,
   Bell,
@@ -68,8 +67,8 @@ import {
   Switch,
   Text,
   toast,
-} from "@openbot/ui";
-import { normalizeAvatarFile } from "@openbot/ui/avatar-image";
+} from "@codebot/ui";
+import { normalizeAvatarFile } from "@codebot/ui/avatar-image";
 import {
   AVATAR_COLOR_CHOICES,
   AVATAR_EXPRESSIONS,
@@ -84,10 +83,10 @@ import {
   isAvatarColorChoice,
   SUPPORTED_AVATAR_SILHOUETTES,
   type SupportedAvatarSilhouetteId,
-} from "@openbot/ui/bloub-avatar";
-import { ProviderModelPicker } from "@openbot/ui/components/ProviderModelPicker";
-import { findModelOption } from "@openbot/ui/components/provider-accounts";
-import { ResizableTextarea } from "@openbot/ui/components/ResizableTextarea";
+} from "@codebot/ui/bloub-avatar";
+import { ProviderModelPicker } from "@codebot/ui/components/ProviderModelPicker";
+import { findModelOption } from "@codebot/ui/components/provider-accounts";
+import { ResizableTextarea } from "@codebot/ui/components/ResizableTextarea";
 import {
   SettingsField,
   SettingsLinkGroup,
@@ -95,16 +94,17 @@ import {
   SettingsPanel,
   SettingsPanelContent,
   SettingsPanelHeader,
-} from "@openbot/ui/components/SettingsPanel";
-import type { AgentProfile } from "@openbot/ui/data";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { InstructionsLimit, instructionsTooLong } from "@openbot/ui/features/agents/InstructionsLimit";
+} from "@codebot/ui/components/SettingsPanel";
+import type { AgentProfile } from "@codebot/ui/data";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { InstructionsLimit, instructionsTooLong } from "@codebot/ui/features/agents/InstructionsLimit";
 import {
   type BrowserProfileChoice,
   BrowserProfileSelect,
   type BrowserProfileSelectProfile,
-} from "@openbot/ui/features/browser/BrowserProfileSelect";
-import { errorReference } from "@openbot/user-errors";
+} from "@codebot/ui/features/browser/BrowserProfileSelect";
+import { errorReference } from "@codebot/user-errors";
+import type { ExpressionId } from "@norbert_bodziony/bloub";
 import type { JSX } from "@solidjs/web";
 import {
   createEffect,

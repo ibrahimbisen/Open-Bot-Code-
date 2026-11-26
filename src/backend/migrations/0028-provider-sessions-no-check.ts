@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 import { rebuildProviderSessions } from "./0017-provider-sessions-opencode";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration 28 removes the provider CHECK, so a new provider no longer needs a table rebuild. The write path
 // validates the provider instead: `ProviderSessions.bindProviderSession` and the thread replay accept only
@@ -13,7 +13,7 @@ function removeProviderSessionsCheck(db: DatabaseSync): void {
   rebuildProviderSessions(db, V28_PROVIDER_SESSIONS_COLUMN_SQL, "projection_provider_sessions_v28");
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 28,
   name: "provider-sessions-no-check",
   // The same rebuild as migrations 17, 22, 23, 24 and 26, with foreign keys off for the same reason.

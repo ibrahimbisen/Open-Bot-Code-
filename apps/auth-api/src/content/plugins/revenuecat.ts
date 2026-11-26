@@ -27,7 +27,7 @@ export const REVENUECAT_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Which key does the RevenueCat plugin need?",
       answer:
-        "A secret API key for the REST API v2. The key starts with sk_ and reaches one project. Project Admins create secret keys under API keys in the RevenueCat dashboard. Type the key in the connect dialog in OpenBot. OpenBot sends it as a bearer token in the Authorization header. The plugin catalog holds no secret.",
+        "A secret API key for the REST API v2. The key starts with sk_ and reaches one project. Project Admins create secret keys under API keys in the RevenueCat dashboard. Type the key in the connect dialog in CodeBot. CodeBot sends it as a bearer token in the Authorization header. The plugin catalog holds no secret.",
     },
     {
       question: "What can the agent see and change in RevenueCat?",
@@ -35,9 +35,9 @@ export const REVENUECAT_PLUGIN_GUIDE: PluginGuide = {
         "The MCP server shows only the tools that your key permits. With a read-only key, the agent can only read. With a write key, it can create apps and products, submit products to the App Store for review, publish paywalls, grant entitlements to customers, and delete packages and webhooks. To stop the access, revoke the key in the RevenueCat dashboard.",
     },
     {
-      question: "Why does OpenBot not sign in to RevenueCat in the browser?",
+      question: "Why does CodeBot not sign in to RevenueCat in the browser?",
       answer:
-        "RevenueCat supports OAuth for its MCP server, but it does not let clients register themselves. Each OAuth client must be added to an allowlist by RevenueCat support. Until RevenueCat adds OpenBot, a browser sign-in stops with a message that the sign-in server does not accept OpenBot. Connect with a secret API key instead.",
+        "RevenueCat supports OAuth for its MCP server, but it does not let clients register themselves. Each OAuth client must be added to an allowlist by RevenueCat support. Until RevenueCat adds CodeBot, a browser sign-in stops with a message that the sign-in server does not accept CodeBot. Connect with a secret API key instead.",
     },
   ],
   sources: [

@@ -39,7 +39,7 @@
   the minimum, and CI refuses a minimum that is less than 60 days old. The window is a floor, not a
   daily trigger.
 - **Pre-migration copy**: dropped (developer decision, the same day, after the hosted size check). The
-  rule "No backup of `openbot.db` is made before an upgrade" stays. Migrations must be safe by
+  rule "No backup of `codebot.db` is made before an upgrade" stays. Migrations must be safe by
   themselves: items 7 to 10 and 12 come first.
 
 Host protocol by release: V4 from v0.7.0, V5 v0.24.0 (09-28), V6 v0.31.0 (10-07), V7 v0.35.0
@@ -55,7 +55,7 @@ desktop profile (the developer's), 2026-11-17:
 
 | Measure | Result |
 |---|---|
-| `openbot.db` | 384.6 MB |
+| `codebot.db` | 384.6 MB |
 | APFS clone (`cp -c`) | 0.00 s |
 | Full copy (`cp`) | 0.53 s |
 | `VACUUM INTO` (read-only source) | 0.46 s, 383.4 MB |
@@ -65,7 +65,7 @@ desktop profile (the developer's), 2026-11-17:
 
 Hosted servers on one operator host (8 customer servers, read-only check, 2026-11-17):
 
-| Server | `openbot.db` | Free on its data volume |
+| Server | `codebot.db` | Free on its data volume |
 |---|---|---|
 | Server A | 17.0 GB | 676 GB |
 | Server B | 905 MB | 99 GB |
@@ -98,8 +98,8 @@ Not confirmed: desktop users other than the developer (no central source).
 | 3 | A server stops a start loop and reports the reason through the Team API | DONE: the loop stops (#10775, `932be637d6`); safe mode (#12185, `af09bea47a`); `copy_release` stays a copy (see below) |
 | 4 | Desktop start recovery offers only a release that can open the database | DONE (#10780, `dfca5813c1`) |
 | 5 | Versioned JSON stores keep data after a downgrade; agent-data database has a version | DONE (#10776, `7190edc2a2`) |
-| 6 | No implicit `new OpenBotDatabase()`; one release version comparator | DONE (#10774, `af22902d8f`) |
-| 15 | Copy `openbot.db` before a migration (PR #7150) | DROPPED: not practical for large databases (#7150 closed) |
+| 6 | No implicit `new CodeBotDatabase()`; one release version comparator | DONE (#10774, `af22902d8f`) |
+| 15 | Copy `codebot.db` before a migration (PR #7150) | DROPPED: not practical for large databases (#7150 closed) |
 | 24 | Minimum app version for each surface; blocking "Update required" screen | DONE (#10803, `0428b8e694`; a manual minimum with a 60-day floor) |
 
 ### 1. Bootstrap list stays at 64
@@ -184,7 +184,7 @@ build, the OTA bundles, and the commit that `openbot.run/app` serves.
 
 What the deletion PR must still move, because current code uses it:
 
-- 31 files outside the contracts package import `@openbot/contracts/team-protocol/v2`. Point them at
+- 31 files outside the contracts package import `@codebot/contracts/team-protocol/v2`. Point them at
   `team-protocol/webrtc-framing` before `v2.ts` goes.
 - The WebRTC response encoders of protocols 4-8 in `src/main/team-webrtc-host-peer.ts`
   (`webRtcResponseEncoder`, selected by the peer protocol). The v3 encoder is no longer imported there.
@@ -213,8 +213,8 @@ have. A new optional capability needs protocol 10 first.
 ### 3. Server start-loop guard and safe mode
 
 Evidence: `src/main/index.ts` `recoverFromStartLoop` only logs for a server;
-`scripts/hosting/openbot.service` has `Restart=always`, `RestartSec=10`;
-`scripts/hosting/openbot-hosted-update` `copy_release` runs `rm -rf` before the copy.
+`scripts/hosting/codebot.service` has `Restart=always`, `RestartSec=10`;
+`scripts/hosting/codebot-hosted-update` `copy_release` runs `rm -rf` before the copy.
 
 Change: after repeated failed starts, or a `NewerDatabaseError`, the server stops the loop, keeps a
 minimal Team API up that tells all members the reason, and clients (desktop with a joined
@@ -222,7 +222,7 @@ server, web client, mobile) show it. The release copy is safe after a stop or a 
 
 Decisions (developer, 2026-11-18): all members see the reason. The safe mode has no install and no
 rollback action, on servers and on Docker: a newer release, through the existing update path, is the
-fix. No "skip failed version" rule. The safe mode opens no `openbot.db`.
+fix. No "skip failed version" rule. The safe mode opens no `codebot.db`.
 
 Done in #12185 (`af09bea47a`, stacked on protocol 10):
 
@@ -232,7 +232,7 @@ Done in #12185 (`af09bea47a`, stacked on protocol 10):
   and a time.
 - Optional protocol 10 capability `server-safe-mode-v1`. Desktop, web client and mobile (the
   mobile workspace now speaks 10 and keeps 9) show a translated reason.
-- `/run/openbot/server-safe-mode` marker. The hourly `check` of `openbot-hosted-update` stops the
+- `/run/codebot/server-safe-mode` marker. The hourly `check` of `codebot-hosted-update` stops the
   safe mode, stages, applies and starts. Without the marker directory (Docker), the safe mode ends
   after 1 h with exit 78.
 - `scripts/server-safe-mode-e2e.ts`.
@@ -247,7 +247,7 @@ The copy is already safe without a rename:
 - `swap_in` removes `app` before the copy, so the copy needs about the same free disk space that the
   removal gives back.
 - A container has no `copy_release`: Docker pulls the release as an image, and `staged.ready` is
-  written only after the pull, through a `.new` file and `mv -f` (`docker/instances/openbot-instance`).
+  written only after the pull, through a `.new` file and `mv -f` (`docker/instances/codebot-instance`).
 
 ### 4. Schema-aware desktop recovery
 
@@ -261,7 +261,7 @@ database.
 
 Evidence: `src/backend/sidebar-layout-store.ts` renames an unknown version to `.corrupt-<time>` and
 uses the default layout, so a downgrade loses the layout. `src/backend/agent-data/agent-tables.ts`
-creates `openbot_metadata` with no schema version.
+creates `codebot_metadata` with no schema version.
 
 Change: one helper for versioned JSON stores (keep unknown newer data, never discard it), used by
 the sidebar layout and the other versioned stores; a schema version and a newer-version guard for
@@ -270,9 +270,9 @@ the agent-data database.
 ### 6. Database instances and version comparison
 
 Evidence: `src/backend/mailbox-store.ts` and `src/backend/agent-store.ts` default to
-`new OpenBotDatabase(userDataPath)`. Four release comparators differ: `update-service.ts`
+`new CodeBotDatabase(userDataPath)`. Four release comparators differ: `update-service.ts`
 `isNewerRelease`, `host-release-service.ts` `newerRelease`, `packages/contracts/src/mobile-features.ts`
-`isNewerMobileVersion`, and `newer()` in `scripts/hosting/openbot-hosted-update`.
+`isNewerMobileVersion`, and `newer()` in `scripts/hosting/codebot-hosted-update`.
 
 Change: inject the database; one shared comparator for TypeScript, with a shared fixture that the
 bash function must also pass. Fix the hosted auto-install docs if they disagree with
@@ -331,7 +331,7 @@ Measured on 2026-11-18 on a read-only copy of one real desktop profile (the deve
   clean. 2 of 22 `thread-message` attachment rows have no message. These rows have an empty `path`
   by design (`conversation-writer.ts`).
 - **A transfers sweep is not safe.** The desktop app and every dev profile use the same
-  `~/OpenBot/Shared/Transfers` (`openbotRoot` in `agent-store.ts`). On the measured computer, 391
+  `~/CodeBot/Shared/Transfers` (`codebotRoot` in `agent-store.ts`). On the measured computer, 391
   profile databases use it and 330 name entries in it. The production profile names none of the
   11,462 `generated/` entries; dev profiles name 4,280 of them. A sweep that deletes the entries one
   database does not name deletes files that another profile uses. No `.tmp-*` folder was left.
@@ -404,7 +404,7 @@ servers after v0.73.0 were not measured.
 
 `bun scripts/thread-event-compaction-large-e2e.ts` (default 1.5 GB, 2026-11-18, Apple silicon) now
 also runs one `VACUUM` after the compaction and checks the rows and the replays again. Report:
-`.openbot-build/thread-event-compaction-large/report.json`. All acceptance checks pass.
+`.codebot-build/thread-event-compaction-large/report.json`. All acceptance checks pass.
 
 | Measure | Result |
 |---|---|

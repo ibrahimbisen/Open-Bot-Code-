@@ -1,4 +1,4 @@
-import type { BackgroundProcess } from "@openbot/contracts/ipc";
+import type { BackgroundProcess } from "@codebot/contracts/ipc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Typography } from "heroui-native";
 import Server from "lucide-react-native/icons/server";
@@ -27,7 +27,7 @@ export function BackgroundProcessesSection({ serverId, online }: { serverId: str
   const { loadBackgroundProcesses, stopBackgroundProcess } = useMobileWorkspaceActions();
   const available = useMobileWorkspaceSelector((workspace) => workspace.canManageBackgroundProcesses(serverId));
   const agents = useMobileWorkspaceSelector((workspace) => workspace.agents);
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const queryKey = queryKeys.backgroundProcesses(queryScope, serverId);
   const query = useQuery({
     queryKey,

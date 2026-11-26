@@ -1,5 +1,5 @@
-import type { CreditActivityEntry, CreditsState } from "@openbot/contracts/credits";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { CreditActivityEntry, CreditsState } from "@codebot/contracts/credits";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { Chip, Typography } from "heroui-native";
 import type { LucideIcon } from "lucide-react-native";
 import ArrowDown from "lucide-react-native/icons/arrow-down";
@@ -115,8 +115,8 @@ export function CreditActivityRow({
   const actor =
     entry.actor === "you"
       ? t("mobile.settings.credits.you")
-      : entry.actor === "openbot"
-        ? t("mobile.settings.credits.activity.openbot")
+      : entry.actor === "codebot"
+        ? t("mobile.settings.credits.activity.codebot")
         : (entry.actorName ?? t("mobile.settings.credits.activity.member"));
   const wallet = entry.serverId ? serverName(entry.serverId) : t("mobile.settings.credits.yours");
   const sameDay = new Date(entry.at).toDateString() === new Date().toDateString();

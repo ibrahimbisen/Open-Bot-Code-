@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "./runtime-values";
 
 // This is the frozen compatibility schema for every database that predates v8.
@@ -476,7 +476,7 @@ function recordValue(value: unknown): DynamicRecord {
   return isDynamicRecord(value) ? value : {};
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 8,
   name: "baseline",
   disableForeignKeys: true,

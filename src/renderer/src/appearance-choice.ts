@@ -11,12 +11,12 @@ import {
   isChatBackgroundColor,
   sameThemePalettes,
   selectedThemePalette,
-} from "@openbot/contracts/app-appearance";
+} from "@codebot/contracts/app-appearance";
 import {
   type AppearanceSelectValue,
   appearanceChangeOfSelectValue,
   appearanceSelectValue,
-} from "@openbot/ui/features/settings/AppearanceSelect";
+} from "@codebot/ui/features/settings/AppearanceSelect";
 import { createSignal, onSettled } from "solid-js";
 import { applyAppFonts } from "./app-fonts";
 import { appPort } from "./app-port";
@@ -124,13 +124,13 @@ export function useAppearanceChoice() {
   };
 }
 
-const CACHED_APPEARANCE_KEY = "openbot.appearance";
-const CACHED_TRANSPARENT_WINDOW_KEY = "openbot.transparentWindow";
-const CACHED_THEME_PALETTE_KEY = "openbot.themePalette";
-const CACHED_CHAT_BACKGROUND_LIGHT_KEY = "openbot.chatBackgroundLight";
-const CACHED_CHAT_BACKGROUND_DARK_KEY = "openbot.chatBackgroundDark";
-const CACHED_INTERFACE_FONT_KEY = "openbot.interfaceFont";
-const CACHED_CODE_FONT_KEY = "openbot.codeFont";
+const CACHED_APPEARANCE_KEY = "codebot.appearance";
+const CACHED_TRANSPARENT_WINDOW_KEY = "codebot.transparentWindow";
+const CACHED_THEME_PALETTE_KEY = "codebot.themePalette";
+const CACHED_CHAT_BACKGROUND_LIGHT_KEY = "codebot.chatBackgroundLight";
+const CACHED_CHAT_BACKGROUND_DARK_KEY = "codebot.chatBackgroundDark";
+const CACHED_INTERFACE_FONT_KEY = "codebot.interfaceFont";
+const CACHED_CODE_FONT_KEY = "codebot.codeFont";
 
 function cachedFont(key: string): AppFontFamily | null {
   const font = window.localStorage.getItem(key);

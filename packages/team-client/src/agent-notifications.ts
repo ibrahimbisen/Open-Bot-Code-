@@ -1,13 +1,13 @@
-import { type AgentProviderId, agentProviderName } from "@openbot/contracts/agent-providers";
+import { type AgentProviderId, agentProviderName } from "@codebot/contracts/agent-providers";
 import type {
   AgentEvent,
   AgentRuntimeSnapshot,
   ClientAgentSummary,
   ServerNotificationLevel,
   TeamRealtimeEvent,
-} from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import type { AppFormat, AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import type { AppFormat, AppTranslate } from "@codebot/i18n";
 import { hideRedactionMarks, messageSummary } from "./message-summary";
 
 export interface AgentNotificationContent {

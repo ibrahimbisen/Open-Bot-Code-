@@ -1,5 +1,5 @@
-import { avatarHeadColor } from "@openbot/brand/bloub-avatar";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { avatarHeadColor } from "@codebot/brand/bloub-avatar";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { router } from "expo-router";
 import type { NativeStackNavigationProp } from "expo-router/native-stack";
 import { type ParamListBase, useNavigation } from "expo-router/react-navigation";
@@ -242,7 +242,7 @@ export function OnboardingFlow({ onFinish }: { onFinish: (welcome?: WelcomeHandO
         ideas: CUSTOM_AGENT_IDEAS,
       };
   const draftColor = avatarHeadColor(draft.seed, draft.hue, draft.color);
-  const action = String(useCSSVariable("--openbot-action") ?? "#f0f0f0");
+  const action = String(useCSSVariable("--codebot-action") ?? "#f0f0f0");
   const trimmedName = name.trim();
 
   const online = servers.some((server) => server.state === "online");

@@ -1,22 +1,22 @@
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
 import {
   type ClientBrowserCommand,
   type ClientBrowserCommandEvent,
   clientBrowserCommandEvent,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
 
-export const BROWSER_RUN_MESSAGE = "openbot-browser-run";
-export const BROWSER_PRESENCE_MESSAGE = "openbot-browser-presence";
-export const BROWSER_CHANGED_MESSAGE = "openbot-browser-changed";
-export const BROWSER_ANSWER_MESSAGE = "openbot-browser-answer";
-export const BROWSER_HOLD_MESSAGE = "openbot-browser-hold";
+export const BROWSER_RUN_MESSAGE = "codebot-browser-run";
+export const BROWSER_PRESENCE_MESSAGE = "codebot-browser-presence";
+export const BROWSER_CHANGED_MESSAGE = "codebot-browser-changed";
+export const BROWSER_ANSWER_MESSAGE = "codebot-browser-answer";
+export const BROWSER_HOLD_MESSAGE = "codebot-browser-hold";
 
-export const SHARING_KEY = "openbot.client-browser.sharing.v1";
-export const SITES_KEY = "openbot.client-browser.sites.v1";
-export const ASKS_KEY = "openbot.client-browser.asks.v1";
-export const PRESENCE_KEY = "openbot.client-browser.presence.v1";
+export const SHARING_KEY = "codebot.client-browser.sharing.v1";
+export const SITES_KEY = "codebot.client-browser.sites.v1";
+export const ASKS_KEY = "codebot.client-browser.asks.v1";
+export const PRESENCE_KEY = "codebot.client-browser.presence.v1";
 
-export const OPENBOT_GROUP_TITLE = "OpenBot";
+export const CODEBOT_GROUP_TITLE = "CodeBot";
 
 export const ASK_KINDS = ["site", "password", "payment", "download", "sign-in"] as const;
 export type AskKind = (typeof ASK_KINDS)[number];

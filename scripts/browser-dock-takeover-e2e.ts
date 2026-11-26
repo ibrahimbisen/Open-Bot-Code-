@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { BrowserDockIsland } from "@openbot/contracts/ipc";
+import type { BrowserDockIsland } from "@codebot/contracts/ipc";
 import { chromium, type Page } from "playwright-core";
 
 declare global {
@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/browser-dock-takeover-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/browser-dock-takeover-e2e");
 const storybook = process.argv.find((arg) => arg.startsWith("--storybook="))?.slice("--storybook=".length);
 const browserExecutable = process.argv
   .find((arg) => arg.startsWith("--browser-executable="))

@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentApproval,
   AgentColorEntry,
@@ -33,42 +33,42 @@ import type {
   SidebarLayoutSnapshot,
   TeamPresenceSnapshot,
   TeamRealtimeEvent,
-} from "@openbot/contracts/ipc";
-import { canAdministerServer, openExchangesOutside, withModelSources } from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
+import { canAdministerServer, openExchangesOutside, withModelSources } from "@codebot/contracts/ipc";
 import {
   AGENT_ACTIVE_QUEUES_CAPABILITY,
   AGENT_ACTIVE_QUEUES_LIMIT,
   type AgentActiveQueues,
-} from "@openbot/contracts/team-protocol/agent-active-queues-v1";
+} from "@codebot/contracts/team-protocol/agent-active-queues-v1";
 import {
   AGENT_COLORS_CAPABILITY,
   AGENT_HIDDEN_CAPABILITY,
   CHAT_COLORS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/current";
-import { FOCUS_USE_CAPABILITY } from "@openbot/contracts/team-protocol/focus-use-v1";
-import { HOST_APPEARANCE_CAPABILITY, type ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import { HOST_RESTART_CAPABILITY } from "@openbot/contracts/team-protocol/host-restart-v1";
-import { MESSAGE_DELETE_CAPABILITY } from "@openbot/contracts/team-protocol/message-delete-v1";
-import { SIDEBAR_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/sidebar-pins-v1";
-import { cleanAgentMessageText } from "@openbot/team-client/agent-message-text";
-import { createFocusUsePing } from "@openbot/team-client/focus-use";
-import { WAKE_RECONNECT_DELAY_MS } from "@openbot/team-client/hosted-server-wake";
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
+} from "@codebot/contracts/team-protocol/current";
+import { FOCUS_USE_CAPABILITY } from "@codebot/contracts/team-protocol/focus-use-v1";
+import { HOST_APPEARANCE_CAPABILITY, type ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import { HOST_RESTART_CAPABILITY } from "@codebot/contracts/team-protocol/host-restart-v1";
+import { MESSAGE_DELETE_CAPABILITY } from "@codebot/contracts/team-protocol/message-delete-v1";
+import { SIDEBAR_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/sidebar-pins-v1";
+import { cleanAgentMessageText } from "@codebot/team-client/agent-message-text";
+import { createFocusUsePing } from "@codebot/team-client/focus-use";
+import { WAKE_RECONNECT_DELAY_MS } from "@codebot/team-client/hosted-server-wake";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
 import {
   createRemoteConnectionRecovery,
   isSafeConnectionError,
   type RemoteRecoveryStatus,
-} from "@openbot/team-client/remote-recovery";
+} from "@codebot/team-client/remote-recovery";
 import {
   approvalIsCut,
   keepWholeApprovals,
   reconcilePendingRequests,
   withWholeApproval,
-} from "@openbot/team-client/runtime-attention";
-import { markRemoteSync } from "@openbot/team-client/sync-profile";
-import { duplicateSection as duplicateSectionWith } from "@openbot/ui/features/sidebar/duplicate-section";
-import { currentText } from "@openbot/ui/text";
-import { errorReference, type UserErrorDetails } from "@openbot/user-errors";
+} from "@codebot/team-client/runtime-attention";
+import { markRemoteSync } from "@codebot/team-client/sync-profile";
+import { duplicateSection as duplicateSectionWith } from "@codebot/ui/features/sidebar/duplicate-section";
+import { currentText } from "@codebot/ui/text";
+import { errorReference, type UserErrorDetails } from "@codebot/user-errors";
 import { createEffect, createMemo, createSignal, createStore, onSettled } from "solid-js";
 import { toAgentProfile } from "../../app-message-projection";
 import { backgroundWorkKey } from "../conversation/background-work-key";
@@ -885,7 +885,7 @@ export function createWebWorkspace(
       online: state.status === "online",
       listed: state.status === "online" && !state.agentsFromFrame && state.agents.length > 0,
       sources: state.agents.flatMap((agent) =>
-        agent.avatarUrl?.startsWith("openbot-avatar:") ? [{ id: agent.id, source: agent.avatarUrl }] : [],
+        agent.avatarUrl?.startsWith("codebot-avatar:") ? [{ id: agent.id, source: agent.avatarUrl }] : [],
       ),
     }),
     ({ hostId, online, listed, sources }) => {

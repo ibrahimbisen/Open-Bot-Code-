@@ -1,4 +1,4 @@
-import type { AgentEvent, AgentPromptQuestion, TeamRealtimeEvent } from "@openbot/contracts/ipc";
+import type { AgentEvent, AgentPromptQuestion, TeamRealtimeEvent } from "@codebot/contracts/ipc";
 import { type MobileAgentWaitReason, WAIT_RANK } from "./agent-activity";
 
 export interface MobileThreadWait {

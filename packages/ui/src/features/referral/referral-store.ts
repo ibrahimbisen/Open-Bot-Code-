@@ -1,4 +1,4 @@
-import type { ReferralFilter, ReferralPageRequest, ReferralState } from "@openbot/contracts/referral";
+import type { ReferralFilter, ReferralPageRequest, ReferralState } from "@codebot/contracts/referral";
 import { createStore } from "solid-js";
 import { currentText } from "../../text";
 import { createStripeReturnLoad } from "../billing/billing-store";

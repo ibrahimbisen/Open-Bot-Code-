@@ -5,12 +5,12 @@ import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { AGENT_PROVIDERS, decodeUsageTokens, type UsageTokens } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, decodeUsageTokens, type UsageTokens } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-usage-metering-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-metering-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-usage-metering-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-metering-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const install = join(root, "antigravity", "1.5.4");
@@ -22,7 +22,7 @@ const PROJECT = "fake-metering-project";
 
 process.env.HOME = home;
 process.env.GEMINI_HOME = geminiHome;
-process.env.OPENBOT_ANTIGRAVITY_PATH = fakeAgy;
+process.env.CODEBOT_ANTIGRAVITY_PATH = fakeAgy;
 process.env.FAKE_AGY_LOG = logPath;
 mkdirSync(home, { recursive: true });
 
@@ -57,13 +57,13 @@ const quotaServer = createServer((request, response) => {
 await new Promise<void>((done) => quotaServer.listen(0, "127.0.0.1", done));
 const quotaAddress = quotaServer.address();
 assert.ok(quotaAddress !== null && typeof quotaAddress === "object");
-process.env.OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${quotaAddress.port}/v1internal`;
+process.env.CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${quotaAddress.port}/v1internal`;
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const FAKE_AGY = `#!/usr/bin/env node
 if (process.argv[2] === "--version") {
@@ -208,7 +208,7 @@ await writeFile(
   }),
   { mode: 0o600 },
 );
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

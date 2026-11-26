@@ -3,8 +3,8 @@ import {
   type BillingCurrency,
   type BillingInterval,
   type BillingPlanId,
-} from "@openbot/contracts/billing";
-import { catalogCurrencies, type HostedServerCatalogPlan } from "@openbot/contracts/hosted-servers";
+} from "@codebot/contracts/billing";
+import { catalogCurrencies, type HostedServerCatalogPlan } from "@codebot/contracts/hosted-servers";
 import {
   LICENSE_BUNDLE_DISCOUNT_PERCENT,
   LICENSE_INCLUDED_USERS,
@@ -17,11 +17,11 @@ import {
   licenseMonthlyPrice,
   licenseOrderMonthly,
   type PricingOrder,
-} from "@openbot/contracts/license";
-import type { AppTextKey } from "@openbot/i18n";
-import { Button } from "@openbot/ui/button";
-import { RadioGroup } from "@openbot/ui/complex";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@openbot/ui/select";
+} from "@codebot/contracts/license";
+import type { AppTextKey } from "@codebot/i18n";
+import { Button } from "@codebot/ui/button";
+import { RadioGroup } from "@codebot/ui/complex";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@codebot/ui/select";
 import { type JSX, Portal } from "@solidjs/web";
 import { type Accessor, createEffect, createMemo, createSignal, createUniqueId, For, Show, untrack } from "solid-js";
 import { RollingPrice } from "../../rolling-price";

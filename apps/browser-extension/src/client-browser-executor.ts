@@ -1,4 +1,4 @@
-import { type DynamicRecord, isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import {
   CLIENT_BROWSER_LIMITS,
   type ClientBrowserCommand,
@@ -6,7 +6,7 @@ import {
   type ClientBrowserResult,
   type ClientBrowserTarget,
   type ClientTab,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
 import type { AskKind } from "./client-browser-messages";
 
 const ATTACH_IDLE_MS = 30_000;
@@ -14,7 +14,7 @@ const LOAD_WAIT_MS = 15_000;
 const SCREENSHOT_WAIT_MS = 15_000;
 const SEND_WAIT_MS = 20_000;
 const TAB_NOT_ANSWERING =
-  "The tab did not answer in time, so OpenBot stopped this action. The action may have happened: read the page before you try again.";
+  "The tab did not answer in time, so CodeBot stopped this action. The action may have happened: read the page before you try again.";
 const SNAPSHOT_TEXT = 40_000;
 const SNAPSHOT_ELEMENTS = 400;
 
@@ -163,7 +163,7 @@ async function world(tabId: number, fresh: boolean): Promise<number> {
   const frame = isDynamicRecord(tree.frameTree) ? tree.frameTree.frame : null;
   if (!isDynamicRecord(frame) || !isString(frame.id))
     throw new BrowserCommandError("failed", "The page has no frame yet.");
-  const created = await send(tabId, "Page.createIsolatedWorld", { frameId: frame.id, worldName: "openbot" });
+  const created = await send(tabId, "Page.createIsolatedWorld", { frameId: frame.id, worldName: "codebot" });
   if (!isNumber(created.executionContextId))
     throw new BrowserCommandError("failed", "Chrome did not make a script context for the page.");
   worlds.set(tabId, created.executionContextId);
@@ -283,7 +283,7 @@ async function openTab(url: string, context: CommandContext): Promise<ClientBrow
   if (created.id === undefined) throw new BrowserCommandError("failed", "Chrome did not open the tab.");
   await context.addToGroup(created.id);
   const tab = await waitForLoad(created.id);
-  return result(`Opened ${tab.url ?? url} in a new tab of the OpenBot group.`, tab);
+  return result(`Opened ${tab.url ?? url} in a new tab of the CodeBot group.`, tab);
 }
 
 async function navigate(
@@ -606,7 +606,7 @@ function pageSnapshot(input: { text: number; elements: number; interactive: stri
     return text.length > max ? `${text.slice(0, max - 1)}…` : text;
   };
   const refs = new Map<string, WeakRef<Element>>();
-  globalThis.openbotRefs = refs;
+  globalThis.codebotRefs = refs;
   const lines: string[] = [];
   let count = 0;
   for (const element of document.querySelectorAll(input.interactive)) {
@@ -667,7 +667,7 @@ async function pageOverlay(input: {
   x: number;
   y: number;
 }) {
-  const TAG = "openbot-agent-overlay";
+  const TAG = "codebot-agent-overlay";
   const ACCENT = "214 173 242";
   const EDGE = "217 138 201";
   const INK = "#040007";
@@ -839,7 +839,7 @@ function pageLocate(input: { target: ClientBrowserTarget; focus: boolean; intera
       .trim();
   let element: Element | null = null;
   if ("ref" in target) {
-    const found = globalThis.openbotRefs?.get(target.ref)?.deref();
+    const found = globalThis.codebotRefs?.get(target.ref)?.deref();
     element = found?.isConnected ? found : null;
   } else if ("css" in target) {
     try {

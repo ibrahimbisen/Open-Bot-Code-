@@ -1,4 +1,4 @@
-import { isString } from "@openbot/contracts/runtime-values";
+import { isString } from "@codebot/contracts/runtime-values";
 import { accountScope } from "@/shared/lib/account-scope";
 
 const SERVER_ACCENTS = ["#74b9ff", "#f0a06a", "#6bc7d9", "#d98ac9", "#31cf76"] as const;
@@ -10,7 +10,7 @@ export function serverAccent(serverId: string): string {
 }
 
 export function serverOrderKey(apiUrl: string, userId: string): string {
-  return `openbot.server-order.v1.${accountScope(apiUrl, userId)}`;
+  return `codebot.server-order.v1.${accountScope(apiUrl, userId)}`;
 }
 
 export function decodeServerOrder(stored: string | null): string[] {
@@ -24,7 +24,7 @@ export function decodeServerOrder(stored: string | null): string[] {
 }
 
 export function defaultServerKey(apiUrl: string, userId: string): string {
-  return `openbot.default-server.v1.${accountScope(apiUrl, userId)}`;
+  return `codebot.default-server.v1.${accountScope(apiUrl, userId)}`;
 }
 
 export function decodeDefaultServer(stored: string | null, pairedHostId: string | undefined): string | null {

@@ -1,5 +1,5 @@
 import type { LandingIconName } from "../../components/landing/LandingIcon";
-import type { ComparisonQuestion, ComparisonSource, OpenBotPlan } from "../compare/comparison";
+import type { CodeBotPlan, ComparisonQuestion, ComparisonSource } from "../compare/comparison";
 
 export interface ProviderAdd {
   icon: LandingIconName;
@@ -14,7 +14,7 @@ interface ProviderOfficialApp {
 }
 
 export interface ProviderPage {
-  provider: OpenBotPlan["provider"];
+  provider: CodeBotPlan["provider"];
   name: string;
   answer: string;
   connect: string;
@@ -27,19 +27,19 @@ export interface ProviderPage {
   checkedAt: string;
 }
 
-const OPENBOT_PHONE_ADD: ProviderAdd = {
+const CODEBOT_PHONE_ADD: ProviderAdd = {
   icon: "phone",
   title: "Your agents on your phone",
-  text: "The OpenBot apps for iPhone and Android connect to the computer that runs your agents, over an encrypted connection, with no VPN. Remote access needs an OpenBot account.",
+  text: "The CodeBot apps for iPhone and Android connect to the computer that runs your agents, over an encrypted connection, with no VPN. Remote access needs an CodeBot account.",
 };
 
-export const OPENBOT_ADDS: readonly ProviderAdd[] = [
+export const CODEBOT_ADDS: readonly ProviderAdd[] = [
   {
     icon: "users",
     title: "A team, not one chat",
     text: "Each agent has its own job and workspace. A lead agent gives parts of a task to other agents in a shared channel, and you step in when a decision needs you.",
   },
-  OPENBOT_PHONE_ADD,
+  CODEBOT_PHONE_ADD,
   {
     icon: "blocks",
     title: "Change the provider, keep the work",
@@ -48,11 +48,11 @@ export const OPENBOT_ADDS: readonly ProviderAdd[] = [
   {
     icon: "lock",
     title: "Your data on your computer",
-    text: "Workspaces, chats and files stay on the computer that runs OpenBot. The provider you choose gets the requests you send.",
+    text: "Workspaces, chats and files stay on the computer that runs CodeBot. The provider you choose gets the requests you send.",
   },
   {
     icon: "tag",
     title: "Use your AI plans",
-    text: "OpenBot is free for noncommercial use. Your agents use the plans you already pay for.",
+    text: "CodeBot is free for noncommercial use. Your agents use the plans you already pay for.",
   },
 ];

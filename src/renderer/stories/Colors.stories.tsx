@@ -1,32 +1,32 @@
-import { Badge, Heading, Text } from "@openbot/ui";
+import { Badge, Heading, Text } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, For } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
 const colors = [
-  ["Canvas", "--openbot-bg-canvas"],
-  ["Surface", "--openbot-bg-surface"],
-  ["Control", "--openbot-bg-control"],
-  ["Border", "--openbot-border-strong"],
-  ["Accent", "--openbot-accent"],
-  ["Success", "--openbot-success"],
-  ["Warning", "--openbot-warning"],
-  ["Danger", "--openbot-danger"],
+  ["Canvas", "--codebot-bg-canvas"],
+  ["Surface", "--codebot-bg-surface"],
+  ["Control", "--codebot-bg-control"],
+  ["Border", "--codebot-border-strong"],
+  ["Accent", "--codebot-accent"],
+  ["Success", "--codebot-success"],
+  ["Warning", "--codebot-warning"],
+  ["Danger", "--codebot-danger"],
 ] as const;
 
 const accentBlue = [
-  ["Accent", "--openbot-accent", "Filled buttons, switches, the send control"],
-  ["Accent hover", "--openbot-accent-hover", "Hover on a filled control"],
-  ["Accent text", "--openbot-accent-text", "Links, and the blue word in a badge"],
-  ["Accent soft", "--openbot-accent-soft", "Badge and selected-row fills"],
-  ["Accent strong", "--openbot-accent-strong", "Selection rings, glows and gradient stops"],
-  ["Border focus", "--openbot-border-focus", "Focus ring on an interactive edge"],
-  ["Focus tint", "--openbot-focus-tint", "The ring's outer glow"],
+  ["Accent", "--codebot-accent", "Filled buttons, switches, the send control"],
+  ["Accent hover", "--codebot-accent-hover", "Hover on a filled control"],
+  ["Accent text", "--codebot-accent-text", "Links, and the blue word in a badge"],
+  ["Accent soft", "--codebot-accent-soft", "Badge and selected-row fills"],
+  ["Accent strong", "--codebot-accent-strong", "Selection rings, glows and gradient stops"],
+  ["Border focus", "--codebot-border-focus", "Focus ring on an interactive edge"],
+  ["Focus tint", "--codebot-focus-tint", "The ring's outer glow"],
 ] as const;
 
 const accentPink = [
-  ["Badge new", "--openbot-badge-new", "The word in a New pill"],
-  ["Badge new soft", "--openbot-badge-new-soft", "Its fill"],
+  ["Badge new", "--codebot-badge-new", "The word in a New pill"],
+  ["Badge new soft", "--codebot-badge-new-soft", "Its fill"],
 ] as const;
 
 const meta = {

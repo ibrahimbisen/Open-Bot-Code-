@@ -1,5 +1,5 @@
-import type { OwnerTransfer } from "@openbot/contracts/owner-transfer";
-import { type RemoteTeamDirectoryClient, runTeamEffect } from "@openbot/team-client";
+import type { OwnerTransfer } from "@codebot/contracts/owner-transfer";
+import { type RemoteTeamDirectoryClient, runTeamEffect } from "@codebot/team-client";
 import { useEffect, useRef } from "react";
 import { Alert } from "react-native";
 import { showFailureAlert } from "@/features/analytics/failure-reports";

@@ -1,6 +1,6 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { SLACK_BOT_SCOPES } from "@openbot/contracts/slack-app";
-import { isRawP256PublicKey, sealSlackWorkspaceGrant } from "@openbot/contracts/slack-workspace-grant";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { SLACK_BOT_SCOPES } from "@codebot/contracts/slack-app";
+import { isRawP256PublicKey, sealSlackWorkspaceGrant } from "@codebot/contracts/slack-workspace-grant";
 import { Effect, Schema } from "effect";
 import { decodeBase64Url, encodeBase64Url, hmacSha256, importHmacSha256Key } from "./crypto";
 import type { RemoteFailure } from "./remote-control-plane";
@@ -71,7 +71,7 @@ export class SlackAppService {
     const clientSecret = bindings.SLACK_CLIENT_SECRET?.trim();
     const stateSecret = bindings.SLACK_STATE_SECRET?.trim();
     if (!clientId || !clientSecret || !stateSecret || new TextEncoder().encode(stateSecret).byteLength < 32) {
-      throw new SlackAppError(503, "slack_not_configured", "The OpenBot Slack app is not configured.");
+      throw new SlackAppError(503, "slack_not_configured", "The CodeBot Slack app is not configured.");
     }
     this.#database = bindings.DB;
     this.#clientId = clientId;
@@ -194,7 +194,7 @@ export class SlackAppService {
       return yield* new SlackAppError(
         409,
         "slack_workspace_taken",
-        "Another OpenBot server answers this Slack workspace. Disconnect it there first.",
+        "Another CodeBot server answers this Slack workspace. Disconnect it there first.",
       );
     }
     return {

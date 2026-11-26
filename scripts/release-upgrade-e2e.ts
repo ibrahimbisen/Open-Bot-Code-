@@ -19,30 +19,30 @@ import { tmpdir } from "node:os";
 import { basename, join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { setTimeout as sleep } from "node:timers/promises";
-import { LOCAL_SERVER_ID, type OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { isNumber } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { type CodeBotDesktopApi, LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
+import { isNumber } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import { type Browser, chromium, type Page } from "playwright-core";
 import { z } from "zod";
-import { migrateOpenBotDatabase } from "../src/backend/openbot-database-schema";
+import { migrateCodeBotDatabase } from "../src/backend/codebot-database-schema";
 import { RUN_MARKER_FILE } from "../src/main/run-marker";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const logger = createOpenBotLogger("release-upgrade-e2e");
+const logger = createCodeBotLogger("release-upgrade-e2e");
 const REPOSITORY = "nightly-labs/openbot";
-const OUT = resolve(import.meta.dirname, "../.openbot-build/release-upgrade-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/release-upgrade-e2e");
 const LAUNCH_LIMIT_MS = 5 * 60_000;
 const TURN_LIMIT_MS = 2 * 60_000;
 const QUIT_LIMIT_MS = 2 * 60_000;
 const INSTALLER_LIMIT_MS = 5 * 60_000;
 const POLL_MS = 250;
 const CUSTOM_AGENT_ID = "upgradecheck";
-const MAIN_PAGE_URL = "openbot-app://app/index.html";
+const MAIN_PAGE_URL = "codebot-app://app/index.html";
 
 type Target = "macos" | "windows" | "linux" | "linux-arm64";
 
@@ -59,7 +59,7 @@ if (target === "linux-arm64" && process.arch !== "arm64")
   throw new Error("The linux-arm64 test needs an arm64 computer.");
 if (target === "windows" && process.arch !== "x64") throw new Error("The windows test needs an x64 computer.");
 if (target === "windows" && process.env.GITHUB_ACTIONS !== "true") {
-  throw new Error("The Windows test installs OpenBot for this user and runs only on a GitHub Actions runner.");
+  throw new Error("The Windows test installs CodeBot for this user and runs only on a GitHub Actions runner.");
 }
 
 function option(name: string): string | undefined {
@@ -122,12 +122,12 @@ interface QuitResult {
 const runMarkerFile = z.object({ state: z.string() });
 
 const report: Report = { passed: false, target, arch: process.arch, history, newVersion };
-const root = await mkdtemp(join(tmpdir(), "openbot-upgrade-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-upgrade-"));
 const userDataPath = join(root, "user-data");
 const homePath = join(root, "home");
 await mkdir(userDataPath);
 await mkdir(homePath);
-const agentsFolder = join(target === "windows" ? (process.env.USERPROFILE ?? homePath) : homePath, "OpenBot", "Agents");
+const agentsFolder = join(target === "windows" ? (process.env.USERPROFILE ?? homePath) : homePath, "CodeBot", "Agents");
 const earlierWorkspaces = new Set(await listWorkspaces());
 const current: { process: LaunchedProcess | null; app: RunningApp | null } = { process: null, app: null };
 
@@ -185,9 +185,9 @@ function previousTag(ageDays?: number): string {
 }
 
 function artifactName(version: string): string {
-  if (target === "macos") return `OpenBot-${version}-${process.arch === "arm64" ? "arm64" : "x64"}.zip`;
-  if (target === "windows") return `OpenBot-${version}-x64.exe`;
-  return `OpenBot-${version}-${target === "linux" ? "x86_64" : "arm64"}.AppImage`;
+  if (target === "macos") return `CodeBot-${version}-${process.arch === "arm64" ? "arm64" : "x64"}.zip`;
+  if (target === "windows") return `CodeBot-${version}-x64.exe`;
+  return `CodeBot-${version}-${target === "linux" ? "x86_64" : "arm64"}.AppImage`;
 }
 
 async function sha256(path: string): Promise<string> {
@@ -239,13 +239,13 @@ async function newArtifact(): Promise<string> {
 }
 
 const macApplications = join(root, "Applications");
-const macBundle = join(macApplications, "OpenBot.app");
-const windowsFolder = join(process.env.LOCALAPPDATA ?? "", "Programs", "OpenBot");
-const linuxAppImage = "/opt/OpenBot/OpenBot.AppImage";
+const macBundle = join(macApplications, "CodeBot.app");
+const windowsFolder = join(process.env.LOCALAPPDATA ?? "", "Programs", "CodeBot");
+const linuxAppImage = "/opt/CodeBot/CodeBot.AppImage";
 
 function executablePath(): string {
-  if (target === "macos") return join(macBundle, "Contents", "MacOS", "OpenBot");
-  if (target === "windows") return join(windowsFolder, "OpenBot.exe");
+  if (target === "macos") return join(macBundle, "Contents", "MacOS", "CodeBot");
+  if (target === "windows") return join(windowsFolder, "CodeBot.exe");
   return linuxAppImage;
 }
 
@@ -284,16 +284,16 @@ async function installPrevious(artifact: string): Promise<void> {
   }
   if (target === "windows") {
     check(process.env.LOCALAPPDATA, "LOCALAPPDATA is not set.");
-    check(!existsSync(executablePath()), `${windowsFolder} already has OpenBot. Use a computer with no OpenBot.`);
+    check(!existsSync(executablePath()), `${windowsFolder} already has CodeBot. Use a computer with no CodeBot.`);
     const exitCode = await runInstaller(artifact, "/S");
     check(exitCode === 0, `The installer of the previous release exited with code ${exitCode}.`);
-    check(existsSync(executablePath()), "The installer of the previous release did not install OpenBot.exe.");
+    check(existsSync(executablePath()), "The installer of the previous release did not install CodeBot.exe.");
     return;
   }
-  await access("/opt/OpenBot", constants.W_OK).catch(() => {
-    throw new Error("/opt/OpenBot must exist and be writable, with the AppArmor profile installed.");
+  await access("/opt/CodeBot", constants.W_OK).catch(() => {
+    throw new Error("/opt/CodeBot must exist and be writable, with the AppArmor profile installed.");
   });
-  check(!existsSync(linuxAppImage), `${linuxAppImage} already exists. Use a computer with no OpenBot there.`);
+  check(!existsSync(linuxAppImage), `${linuxAppImage} already exists. Use a computer with no CodeBot there.`);
   await copyFile(artifact, linuxAppImage);
   await chmod(linuxAppImage, 0o755);
 }
@@ -304,7 +304,7 @@ async function installNew(artifact: string): Promise<void> {
     await mkdir(staging);
     extractMacZip(artifact, staging);
     await rm(macBundle, { recursive: true, force: true });
-    await rename(join(staging, "OpenBot.app"), macBundle);
+    await rename(join(staging, "CodeBot.app"), macBundle);
     verifyMacSignature();
     return;
   }
@@ -337,9 +337,9 @@ function launchEnvironment(): NodeJS.ProcessEnv {
     ...(target === "windows" ? {} : { USERPROFILE: homePath }),
     CODEX_HOME: join(userDataPath, "codex-home"),
     CLAUDE_CONFIG_DIR: join(userDataPath, "claude-home"),
-    OPENBOT_CODEX_PATH: join(userDataPath, target === "windows" ? "missing-codex.exe" : "missing-codex"),
-    OPENBOT_CLAUDE_PATH: join(userDataPath, target === "windows" ? "missing-claude.exe" : "missing-claude"),
-    OPENBOT_GROK_PATH: join(userDataPath, target === "windows" ? "missing-grok.exe" : "missing-grok"),
+    CODEBOT_CODEX_PATH: join(userDataPath, target === "windows" ? "missing-codex.exe" : "missing-codex"),
+    CODEBOT_CLAUDE_PATH: join(userDataPath, target === "windows" ? "missing-claude.exe" : "missing-claude"),
+    CODEBOT_GROK_PATH: join(userDataPath, target === "windows" ? "missing-grok.exe" : "missing-grok"),
   };
 }
 
@@ -357,7 +357,7 @@ async function waitFor<T>(
   for (;;) {
     const value = await read();
     if (value !== null && value !== undefined) return value;
-    if (stopped) throw new Error(`OpenBot exited before ${description}.`);
+    if (stopped) throw new Error(`CodeBot exited before ${description}.`);
     if (Date.now() > deadline) throw new Error(`Timed out waiting for ${description}.`);
     await sleep(POLL_MS);
   }
@@ -433,10 +433,10 @@ async function launch(): Promise<RunningApp> {
     async () => {
       try {
         return await page.evaluate(async () => {
-          if (typeof window.openbot === "undefined") return null;
-          if ("agent" in window.openbot && "listAgents" in window.openbot.agent)
-            await window.openbot.agent.listAgents();
-          else await window.openbot.getAppInfo();
+          if (typeof window.codebot === "undefined") return null;
+          if ("agent" in window.codebot && "listAgents" in window.codebot.agent)
+            await window.codebot.agent.listAgents();
+          else await window.codebot.getAppInfo();
           return true;
         });
       } catch {
@@ -483,7 +483,7 @@ async function quit(app: RunningApp, byWindowClose = process.platform === "win32
     stopLeftovers(app);
     return { clean: true, exitCode: outcome, runMarker: await readRunMarkerState() };
   }
-  logger.warn("OpenBot did not quit in time; it is killed.");
+  logger.warn("CodeBot did not quit in time; it is killed.");
   forceKill(app.child);
   const exitCode = await app.exited;
   stopLeftovers(app);
@@ -574,10 +574,10 @@ interface Seed {
 
 async function readSeedApi(page: Page): Promise<SeedApi> {
   return page.evaluate(() => {
-    const agent = "agent" in window.openbot ? window.openbot.agent : null;
+    const agent = "agent" in window.codebot ? window.codebot.agent : null;
     return {
-      updatePreference: "update" in window.openbot && "setPreference" in window.openbot.update,
-      customAgents: "customAgents" in window.openbot && agent !== null && "createAgent" in agent,
+      updatePreference: "update" in window.codebot && "setPreference" in window.codebot.update,
+      customAgents: "customAgents" in window.codebot && agent !== null && "createAgent" in agent,
       memories: agent !== null && "createMemory" in agent && "listMemories" in agent,
       channels: agent !== null && "channelCommand" in agent && "listChannels" in agent && "readChannel" in agent,
     };
@@ -601,7 +601,7 @@ async function seed(page: Page): Promise<Seed> {
   };
 
   if (api.updatePreference) {
-    await page.evaluate(() => window.openbot.update.setPreference({ autoDownload: false, autoInstall: false }));
+    await page.evaluate(() => window.codebot.update.setPreference({ autoDownload: false, autoInstall: false }));
   }
   if (!api.customAgents) return seeded;
 
@@ -609,7 +609,7 @@ async function seed(page: Page): Promise<Seed> {
   await writeFile(fakeAgentPath, FAKE_AGENT);
   await page.evaluate(
     ({ id, command, script, server }) =>
-      window.openbot.customAgents.save(
+      window.codebot.customAgents.save(
         { id, name: "Upgrade check", command, args: [script], env: [], usagePrompt: null },
         server,
       ),
@@ -621,7 +621,7 @@ async function seed(page: Page): Promise<Seed> {
       try {
         return await page.evaluate(
           ({ name, model }) =>
-            window.openbot.agent.createAgent({
+            window.codebot.agent.createAgent({
               name,
               description: "Made by the release upgrade check.",
               avatarSeed: name.toLowerCase().replaceAll(" ", "-"),
@@ -656,7 +656,7 @@ async function seed(page: Page): Promise<Seed> {
 
   for (const agentId of api.memories ? agentIds : []) {
     const memory = await page.evaluate(
-      (id) => window.openbot.agent.createMemory({ agentId: id, text: "The release upgrade check made this memory." }),
+      (id) => window.codebot.agent.createMemory({ agentId: id, text: "The release upgrade check made this memory." }),
       agentId,
     );
     seeded.memoryIds.push(memory.id);
@@ -666,7 +666,7 @@ async function seed(page: Page): Promise<Seed> {
   const channelId = randomUUID();
   await page.evaluate(
     ({ channelId, agentIds }) =>
-      window.openbot.agent.channelCommand({
+      window.codebot.agent.channelCommand({
         type: "save",
         operationId: crypto.randomUUID(),
         channelId,
@@ -682,7 +682,7 @@ async function seed(page: Page): Promise<Seed> {
   );
   await page.evaluate(
     ({ channelId, recipient }) =>
-      window.openbot.agent.channelCommand({
+      window.codebot.agent.channelCommand({
         type: "send",
         operationId: crypto.randomUUID(),
         channelId,
@@ -694,7 +694,7 @@ async function seed(page: Page): Promise<Seed> {
     { channelId, recipient: agentIds[0] ?? null },
   );
   const channelMessages = await waitFor("the answer in the channel", TURN_LIMIT_MS, async () => {
-    const channelPage = await page.evaluate((id) => window.openbot.agent.readChannel({ channelId: id }), channelId);
+    const channelPage = await page.evaluate((id) => window.codebot.agent.readChannel({ channelId: id }), channelId);
     const answered = channelPage.messages.some(
       (entry) => entry.author.kind === "agent" && entry.message.status === "completed" && entry.message.text.length > 0,
     );
@@ -709,7 +709,7 @@ async function seed(page: Page): Promise<Seed> {
 
 async function searchSeedMessages(page: Page, agentId: string) {
   const found = await page.evaluate(
-    (id) => window.openbot.agent.searchConversationMessages({ query: "upgradecheck", agentId: id, limit: 100 }),
+    (id) => window.codebot.agent.searchConversationMessages({ query: "upgradecheck", agentId: id, limit: 100 }),
     agentId,
   );
   return found.results.filter((result) => result.agentId === agentId).map((result) => result.message);
@@ -717,7 +717,7 @@ async function searchSeedMessages(page: Page, agentId: string) {
 
 async function readSeed(page: Page, seeded: Seed): Promise<Counts> {
   const { api } = seeded;
-  const agents = seeded.agentIds.length > 0 ? await page.evaluate(() => window.openbot.agent.listAgents()) : [];
+  const agents = seeded.agentIds.length > 0 ? await page.evaluate(() => window.codebot.agent.listAgents()) : [];
   const agentIds = new Set(agents.map((agent) => agent.id));
   let agentMessages = 0;
   let memories = 0;
@@ -726,21 +726,21 @@ async function readSeed(page: Page, seeded: Seed): Promise<Counts> {
     const messageIds = new Set((await searchSeedMessages(page, agentId)).map((message) => message.id));
     agentMessages += seeded.agentMessageIds.filter((id) => messageIds.has(id)).length;
     if (!api.memories) continue;
-    const memoryList = await page.evaluate((id) => window.openbot.agent.listMemories(id), agentId);
+    const memoryList = await page.evaluate((id) => window.codebot.agent.listMemories(id), agentId);
     const memoryIds = new Set(memoryList.map((memory) => memory.id));
     memories += seeded.memoryIds.filter((id) => memoryIds.has(id)).length;
   }
   const { channelId } = seeded;
-  const channels = channelId ? await page.evaluate(() => window.openbot.agent.listChannels()) : [];
+  const channels = channelId ? await page.evaluate(() => window.codebot.agent.listChannels()) : [];
   const channelFound = channels.some((channel) => channel.id === channelId);
   let channelMessages = 0;
   if (channelId && channelFound) {
-    const channelPage = await page.evaluate((id) => window.openbot.agent.readChannel({ channelId: id }), channelId);
+    const channelPage = await page.evaluate((id) => window.codebot.agent.readChannel({ channelId: id }), channelId);
     const messageIds = new Set(channelPage.messages.map((entry) => entry.id));
     channelMessages = seeded.channelMessageIds.filter((id) => messageIds.has(id)).length;
   }
   const customAgents = api.customAgents
-    ? await page.evaluate((server) => window.openbot.customAgents.list(server), LOCAL_SERVER_ID)
+    ? await page.evaluate((server) => window.codebot.customAgents.list(server), LOCAL_SERVER_ID)
     : [];
   const workspaceFolders = (await listWorkspaces()).filter((name) => !earlierWorkspaces.has(name)).length;
   return {
@@ -759,18 +759,18 @@ async function listWorkspaces(): Promise<string[]> {
 }
 
 async function readAppVersion(page: Page): Promise<string> {
-  return (await page.evaluate(() => window.openbot.getAppInfo())).version;
+  return (await page.evaluate(() => window.codebot.getAppInfo())).version;
 }
 
 async function openDatabaseCopy(name: string): Promise<DatabaseSync> {
   const directory = join(root, name);
   await mkdir(directory);
   for (const suffix of ["", "-wal", "-shm"]) {
-    const source = join(userDataPath, `openbot.db${suffix}`);
-    if (existsSync(source)) await copyFile(source, join(directory, `openbot.db${suffix}`));
+    const source = join(userDataPath, `codebot.db${suffix}`);
+    if (existsSync(source)) await copyFile(source, join(directory, `codebot.db${suffix}`));
   }
-  check(existsSync(join(directory, "openbot.db")), "The user data folder has no openbot.db.");
-  return new DatabaseSync(join(directory, "openbot.db"));
+  check(existsSync(join(directory, "codebot.db")), "The user data folder has no codebot.db.");
+  return new DatabaseSync(join(directory, "codebot.db"));
 }
 
 function rows(db: DatabaseSync, sql: string) {
@@ -815,7 +815,7 @@ async function checkDatabase(
   previousRowCounts: ReadonlyMap<string, number>,
 ): Promise<DatabaseReport> {
   const fresh = new DatabaseSync(":memory:");
-  migrateOpenBotDatabase(fresh);
+  migrateCodeBotDatabase(fresh);
   const expectedVersions = appliedVersions(fresh);
   const expectedTables = tableColumns(fresh);
   fresh.close();
@@ -959,7 +959,7 @@ try {
   report.error = error instanceof Error ? error.message : String(error);
   logger.error(`Release upgrade check failed: ${report.error}`);
   const running = current.app ?? current.process;
-  if (running) logger.error(`OpenBot stderr (last lines):\n${running.stderr()}`);
+  if (running) logger.error(`CodeBot stderr (last lines):\n${running.stderr()}`);
   await printLogs().catch(() => undefined);
   process.exitCode = 1;
 } finally {

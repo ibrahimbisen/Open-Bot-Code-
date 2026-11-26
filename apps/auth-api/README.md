@@ -1,6 +1,6 @@
-# OpenBot Auth API
+# CodeBot Auth API
 
-This TanStack Start and Solid 2 package is the central OpenBot account API. It
+This TanStack Start and Solid 2 package is the central CodeBot account API. It
 runs on Cloudflare Workers, stores account and authentication records in D1,
 and stores account avatars in R2. Users sign in with an eight-character
 one-time email code. D1 stores hashes instead of plaintext codes, session tokens,
@@ -9,11 +9,11 @@ and team authentication tickets.
 ## Local development
 
 `.env.dev` is the committed encrypted development file. Local identity keys and saved overrides
-stay in ignored `.openbot/dev-state.json`. A checkout without a development key starts with stable
+stay in ignored `.codebot/dev-state.json`. A checkout without a development key starts with stable
 generated local defaults. Existing state files remain valid.
 
 The update resets values that exist only in the old generated `.env.dev`; it does not import them.
-Local identity and custom settings already saved in `.openbot/dev-state.json` stay unchanged.
+Local identity and custom settings already saved in `.codebot/dev-state.json` stay unchanged.
 Set new manual overrides in the shell. The load order is shell values, saved local overrides,
 decrypted development settings, then generated defaults. An explicit empty value is an override.
 Shared settings do not replace the local ticket keys, auth webhook secret, report hash secret, or
@@ -33,8 +33,8 @@ commands continue to use that file.
 
 ### Stripe sandbox
 
-`bun run api:stripe:bootstrap` creates the six plan Prices (lookup keys `openbot_{plan}_{month|year}`),
-the twelve storage add-on Prices (`openbot_storage_{plan}_{1|2}_{month|year}`, one Product for each
+`bun run api:stripe:bootstrap` creates the six plan Prices (lookup keys `codebot_{plan}_{month|year}`),
+the twelve storage add-on Prices (`codebot_storage_{plan}_{1|2}_{month|year}`, one Product for each
 plan), the license Prices, the Polish VAT Tax Rate and the Customer Portal settings in the Stripe account of
 `STRIPE_SECRET_KEY`.
 It is safe to run again: a changed amount makes a new Price and moves the lookup key to it. The Portal
@@ -42,8 +42,8 @@ has no plan change (`subscription_update` is off); it cancels plans and updates 
 `POST /v1/me/billing/storage` (and `/api/browser/v1/me/billing/storage`) with
 `{subscriptionId, tier}` buys a storage tier for a server on a VPS of the operator. See
 [Hosted servers](../../docs/hosted-servers.md#storage-tiers).
-The bootstrap also creates the `openbot_credits` Product and one Price for each credit amount
-(`openbot_credits_<n>`). `GET /v1/me/credits` returns the balance of the account and of its servers,
+The bootstrap also creates the `codebot_credits` Product and one Price for each credit amount
+(`codebot_credits_<n>`). `GET /v1/me/credits` returns the balance of the account and of its servers,
 `POST /v1/me/credits/checkout` with `{credits, currency, serverId?}` opens a Checkout, and
 `POST /v1/me/credits/transfer` with `{serverId, direction, credits}` moves credits between the account
 and a server that it owns. `POST /v1/me/credits/redeem` with `{code, serverId?}` redeems a credit code
@@ -79,7 +79,7 @@ Without `--apply` the script makes no change. `--local` (the default) and `--tes
 
 Each account gets 10 welcome credits once, with no end date. They pay only for the models that the
 media gateway gives a welcome route. The Worker reaches the media generation processor only through
-the private Worker `openbot-media-gateway` (service binding `MEDIA_GATEWAY`, production only). D1 keeps
+the private Worker `codebot-media-gateway` (service binding `MEDIA_GATEWAY`, production only). D1 keeps
 the models, prices, holds and ledger; the gateway keeps the adapters, routes and keys. Its source is
 in the private repository [`nightly-labs/openbot-media-gateway`](https://github.com/nightly-labs/openbot-media-gateway):
 change processors, routes and welcome routes there, then deploy that Worker. Without the
@@ -142,9 +142,9 @@ first and then the sent credit. The scenario moves `ready_at` in D1, because the
 not the Stripe test clock.
 
 The `portal` scenario prints a Customer Portal cancel page and waits until you use it. Then it checks
-that the plan change flow of an old app opens the Portal home, and that the Portal has no plan change. The report goes to `.openbot-build/stripe-flows-e2e.json`.
+that the plan change flow of an old app opens the Portal home, and that the Portal has no plan change. The report goes to `.codebot-build/stripe-flows-e2e.json`.
 
-The `boat` scenario runs only when you name it. It pays for a server, waits until OpenBot in the VM
+The `boat` scenario runs only when you name it. It pays for a server, waits until CodeBot in the VM
 signs in and publishes the host, restarts the service to check the stored session, and deletes the
 server. It needs the real `BOAT_API_KEY`, a template from `bun run hosting:template` whose
 `--auth-api-url` reaches your Worker (for example a `cloudflared tunnel --url` to its port), and
@@ -176,7 +176,7 @@ bun run env:validate:prod
 ```
 
 Commit the encrypted `.env.production` and `.env.dev` files. Never commit `.env.keys` or local
-state from `.openbot/`.
+state from `.codebot/`.
 
 ## Article artwork
 
@@ -250,13 +250,13 @@ license sender when it is empty.
 
 Production does not open the SMTP socket itself. From some Cloudflare locations, such as FSD, a
 socket to the mail host fails at once (#4578). The production Worker sends each email through the
-`openbot-email-relay` Worker (`wrangler.email-relay.jsonc`) over the `EMAIL_RELAY` service binding.
+`codebot-email-relay` Worker (`wrangler.email-relay.jsonc`) over the `EMAIL_RELAY` service binding.
 Cloudflare places that Worker near the mail host. The relay has no route and keeps no secret: the
 binding request carries the SMTP settings and the message. CI and `bun run api:deploy` deploy the
 relay before the production Worker. When you change `EMAIL_SMTP_HOST` or `EMAIL_SMTP_PORT`, also
 change `placement.host` in `wrangler.email-relay.jsonc`. The test Worker and local `vite dev` send
 from their own socket. Workers Logs are off. To see where the relay runs, read the `colo` of its events in
-`bunx wrangler tail openbot-email-relay`.
+`bunx wrangler tail codebot-email-relay`.
 
 For a deployed Worker, `bun run api:deploy` decrypts `.env.production`. It sends
 `EMAIL_SMTP_PASSWORD`, `SKILLS_ADMIN_TOKEN`, `REMOTE_TICKET_PRIVATE_JWK`,
@@ -270,7 +270,7 @@ write-only server client. Keep both in the encrypted `.env.production` for local
 the `cloudflare-production` GitHub Environment for CI. Both deployment paths check these values
 before remote changes. Test deployments do not send account analytics.
 
-`GITHUB_APP_PRIVATE_KEY` is the OpenBot GitHub App's private key as a PKCS #8 PEM. GitHub gives a
+`GITHUB_APP_PRIVATE_KEY` is the CodeBot GitHub App's private key as a PKCS #8 PEM. GitHub gives a
 PKCS #1 key; convert it with `openssl pkcs8 -topk8 -nocrypt -in <key>.pem`. With the key, the
 Worker gives the desktop installation tokens, so GitHub shows `openbotgit[bot]` as the author of an
 agent's work. The key also lets `POST /v1/feedback` open an approved bug report or feature idea from the app as
@@ -283,7 +283,7 @@ edited text, so the route never edits. Without that variable, an issue answers 5
 `feedback_withdraw_unavailable`; a comment can still go. A new app key makes the earlier marks invalid.
 With no key, the route answers 503, the app gives the GitHub form link instead, and the desktop acts
 as the signed-in user. In GitHub Actions the secret is
-`OPENBOT_GITHUB_APP_PRIVATE_KEY`, because GitHub refuses secret names that start with `GITHUB_`.
+`CODEBOT_GITHUB_APP_PRIVATE_KEY`, because GitHub refuses secret names that start with `GITHUB_`.
 Secrets are never passed as process arguments. The other values are Worker
 variables. The SMTP connection uses TLS from the start and accepts only port 465.
 
@@ -301,16 +301,16 @@ Environment; a local deployment reads it from the encrypted `.env.production`.
 `B2_WORKER_APPLICATION_KEY_EU` are set together or not at all. They are for the archives of ended
 pool servers ([plan 012](../../plans/012-pool-server-archive.md)). The first encrypts the `age` key
 of each archive in `hosted_server_archives`; with another value, no archive can be restored. The B2
-key reads the `openbot-pool-archive-eu` bucket and nothing else. The encrypted `.env.production` has
+key reads the `codebot-pool-archive-eu` bucket and nothing else. The encrypted `.env.production` has
 all three, and GitHub Actions reads them from the `cloudflare-production` Environment. When you
 change one, change it in both places and deploy the Worker.
-`BROWSER_EXTENSION_IDS` lists the ids of the published OpenBot browser extensions, separated by
+`BROWSER_EXTENSION_IDS` lists the ids of the published CodeBot browser extensions, separated by
 commas (a Chrome id is 32 letters from `a` to `p`). Only they get a sign-in from the web app: the
 extension opens `/app?extension=<id>&challenge=<c>&state=<s>` in its sign-in window, the person
 allows it, `/api/browser/extension/code` gives a one-time code, and the extension spends it with its
 verifier at `/v1/mobile-auth/company/exchange` (`platform: "unknown"`), as the phone does after a company sign-in. The extension first asks with no window (`&silent=1`,
 `launchWebAuthFlow` not interactive): the web app gives the code at once when this account allowed this
-extension in this browser before (`openbot.web.extension-allowed.v1` in local storage), and else answers
+extension in this browser before (`codebot.web.extension-allowed.v1` in local storage), and else answers
 `login_required` or `consent_required`, and the extension opens the window. Without the variable, production gives no extension a
 code; a development API (`AUTH_EXPOSE_DEVELOPMENT_CODE`) accepts any extension id, because an
 unpacked extension gets its id from its folder. It is not a secret: set it in `wrangler.jsonc` `vars`
@@ -336,10 +336,10 @@ who has the code can sign in to it. Change the code after a review. The encrypte
 has both values, and `scripts/deploy-auth-api.ts` puts them. The CI deploy keeps the values that the
 Worker has.
 
-Use `bun run api:deploy:test` for the isolated `openbot-auth-api-test` Worker
-and the `openbot-auth-test` D1 database.
+Use `bun run api:deploy:test` for the isolated `codebot-auth-api-test` Worker
+and the `codebot-auth-test` D1 database.
 
-As a fallback, set `EMAIL_DELIVERY_WEBHOOK_URL` to an HTTPS endpoint. OpenBot
+As a fallback, set `EMAIL_DELIVERY_WEBHOOK_URL` to an HTTPS endpoint. CodeBot
 sends this JSON:
 
 ```json
@@ -400,7 +400,7 @@ code.
 
 ## Hosted sites
 
-`/v1/sites` takes two optional headers: `OpenBot-Host-Id` and `OpenBot-Host-Token`, the machine token
+`/v1/sites` takes two optional headers: `CodeBot-Host-Id` and `CodeBot-Host-Token`, the machine token
 of a registered server. With them, a request sees only that server's sites, and a new site counts
 against the server's limit: a `server_site_limits` row, else its plan's limit, else the account's shared
 pool (3 sites for each license user, else 1), within an account cap of 300. A wrong token gets 401
@@ -486,13 +486,13 @@ To deploy your own copy of this Worker with your own Signal, see
 host to Apple Push Notification service. The host seals the content for the phone, so the Worker
 cannot read it. The Worker checks the host credential and `LIVE_ACTIVITY_RATE_LIMITER`, makes the
 APNs payload itself, and stores and logs nothing. An update that shows an event that notifies the
-member has an `alert` with the sound of the phone and "OpenBot" as its only text (iOS shows the text
+member has an `alert` with the sound of the phone and "CodeBot" as its only text (iOS shows the text
 on Apple Watch only); a host cannot give the text.
 
 `POST /v2/remote/hosts/:hostId/notification` forwards a sealed iPhone notification in the same way.
 It has its own key in `LIVE_ACTIVITY_RATE_LIMITER`, and it sends nothing for a device session that
 has ended (`RemoteControlPlane.sessionOpen`), because the host does not learn about the end. The
-alert has "OpenBot" as its only text and `mutable-content`; the app opens the sealed bytes.
+alert has "CodeBot" as its only text and `mutable-content`; the app opens the sealed bytes.
 
 The relay is off until `APNS_PRIVATE_KEY` (the `.p8` key text) and `APNS_KEY_ID` are set. Create
 the key in Apple Developer > Keys with the Apple Push Notifications service, then add both to the

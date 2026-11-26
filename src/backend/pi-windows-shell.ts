@@ -2,14 +2,14 @@ import { execFile } from "node:child_process";
 import { access, readFile } from "node:fs/promises";
 import { join, win32 } from "node:path";
 import { promisify } from "node:util";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { sharedWindowsLookup } from "./cli";
 import { piAgentDirectory } from "./process-confinement";
 
 const execFileAsync = promisify(execFile);
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 
 const WSL_LAUNCHER_FOLDERS = new Set(["system32", "sysnative", "windowsapps"]);
 

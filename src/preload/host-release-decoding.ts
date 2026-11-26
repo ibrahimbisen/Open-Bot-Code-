@@ -1,5 +1,5 @@
-import { HOST_RELEASE_METHODS, HOST_RELEASE_PHASES, type HostReleaseStatus } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+import { HOST_RELEASE_METHODS, HOST_RELEASE_PHASES, type HostReleaseStatus } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
 
 export function decodeHostReleaseStatusFromMain(value: unknown): HostReleaseStatus {
   if (

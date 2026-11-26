@@ -2,9 +2,9 @@ import { existsSync } from "node:fs";
 import { rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join } from "node:path";
-import type { ServerSafeModeReason } from "@openbot/contracts/team-protocol/server-safe-mode-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { ServerSafeModeReason } from "@codebot/contracts/team-protocol/server-safe-mode-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Exit, Schema, Scope } from "effect";
 import { app, session } from "electron";
 import { createCentralAuthManager } from "./account-service-access";
@@ -19,7 +19,7 @@ import { TEAM_STORE_FILE, TeamStore } from "./team-store";
 import { TeamWebRtcBridge } from "./team-webrtc-bridge";
 import { TeamWebRtcHostGateway } from "./team-webrtc-host-gateway";
 
-const logger = createOpenBotLogger("server-safe-mode");
+const logger = createCodeBotLogger("server-safe-mode");
 
 const SERVER_SAFE_MODE_MARKER = "server-safe-mode";
 
@@ -88,7 +88,7 @@ const open = Effect.fn("ServerSafeMode.open")(function* (options: ServerSafeMode
     .issueRemoteHostTicket(identity.serverId, { preferredSignalHome })
     .pipe(Effect.mapError(unavailable));
 
-  if (!session.defaultSession.protocol.isProtocolHandled("openbot-app")) configureApplicationProtocol();
+  if (!session.defaultSession.protocol.isProtocolHandled("codebot-app")) configureApplicationProtocol();
   const developmentUrl = process.env.ELECTRON_RENDERER_URL;
   const bridge = yield* Effect.acquireRelease(
     Effect.sync(
@@ -96,7 +96,7 @@ const open = Effect.fn("ServerSafeMode.open")(function* (options: ServerSafeMode
         new TeamWebRtcBridge({
           developmentUrl: developmentUrl ?? null,
           iceTransportPolicy:
-            developmentUrl && process.env.OPENBOT_DEV_ICE_TRANSPORT_POLICY === "relay" ? "relay" : "all",
+            developmentUrl && process.env.CODEBOT_DEV_ICE_TRANSPORT_POLICY === "relay" ? "relay" : "all",
         }),
     ),
     (value) => value.stop().pipe(Effect.ignore),
@@ -108,7 +108,7 @@ const open = Effect.fn("ServerSafeMode.open")(function* (options: ServerSafeMode
           bridge,
           store,
           appVersion: options.reason.appVersion,
-          transferDirectory: join(app.getPath("temp"), "openbot-safe-mode-transfers"),
+          transferDirectory: join(app.getPath("temp"), "codebot-safe-mode-transfers"),
           renewSignal: (hostId, failedSignalUrl) =>
             centralAuth
               .issueRemoteHostTicket(

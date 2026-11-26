@@ -12,10 +12,10 @@ import {
   workflowAnswerProblems,
   workflowGraphFormat,
   workflowInputAnswerFields,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import type { WorkflowGitHubApi } from "../src/backend/workflows/workflow-github-api";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
@@ -23,7 +23,7 @@ import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowNotice, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-trigger-fields-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-trigger-fields-e2e");
 const WAIT_MS = 5_000;
 const REPOSITORY = "acme/app";
 const RECEIVED_AT = "2026-11-22T12:00:00.000Z";
@@ -98,8 +98,8 @@ const issueBody = (number: number, author: string) => ({
   },
 });
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-trigger-fields-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-trigger-fields-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 const githubApi: WorkflowGitHubApi = {

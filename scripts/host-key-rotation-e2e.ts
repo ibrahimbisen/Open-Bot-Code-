@@ -5,18 +5,18 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { decodeHostKeyHandover, type HostKeyHandover } from "@openbot/contracts/host-key-handover";
-import { decodeRecord, requiredString } from "@openbot/contracts/ipc-decoding";
-import { verifyEd25519Base64Url } from "@openbot/team-client/ed25519";
+import { decodeHostKeyHandover, type HostKeyHandover } from "@codebot/contracts/host-key-handover";
+import { decodeRecord, requiredString } from "@codebot/contracts/ipc-decoding";
+import { verifyEd25519Base64Url } from "@codebot/team-client/ed25519";
 import {
   followHostKeyHandovers,
   hostKeyChangedAt,
   remoteHostFingerprint,
-} from "@openbot/team-client/host-key-handover";
+} from "@codebot/team-client/host-key-handover";
 import { Effect } from "effect";
 import { verifyHostKeySignature } from "../src/main/remote-server-host-directory";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/host-key-rotation-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/host-key-rotation-e2e");
 const HOST_LINE = "host-key-rotation ";
 const STEP_DEADLINE_MS = 30_000;
 
@@ -138,8 +138,8 @@ function hostFingerprint(publicKey: string): string {
 
 async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
-  const root = await mkdtemp(join(tmpdir(), "openbot-host-key-rotation-"));
-  const file = join(root, "openbot-team-server-v2.json");
+  const root = await mkdtemp(join(tmpdir(), "codebot-host-key-rotation-"));
+  const file = join(root, "codebot-team-server-v2.json");
   const checks: Record<string, boolean> = {};
   try {
     const begun = await hostStep(file, "begin");

@@ -17,9 +17,9 @@ import {
 } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { basename, dirname, isAbsolute, join, relative, resolve } from "node:path";
-import { avatarFileExtension, isAvatarMimeType, isValidAvatarImage } from "@openbot/contracts/avatar-images";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentProfileDraft } from "@openbot/contracts/ipc";
+import { avatarFileExtension, isAvatarMimeType, isValidAvatarImage } from "@codebot/contracts/avatar-images";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentProfileDraft } from "@codebot/contracts/ipc";
 import {
   AGENT_FOLDER_LIMIT,
   AGENT_PROVIDERS,
@@ -68,17 +68,17 @@ import {
   type SaveAgentProfileResult,
   type SidebarLayoutSnapshot,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isBoolean, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { isGeneratedAgentId, isUuidV4, legacyAgentId } from "@openbot/contracts/validation";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isBoolean, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { isGeneratedAgentId, isUuidV4, legacyAgentId } from "@codebot/contracts/validation";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Result, Semaphore, Stream } from "effect";
 import { ProfileCreationRecovery } from "./agent/profile-creation-recovery";
 import { isEmptyStoredFile, isHeldTargetError, parseStoredJson, writeFileAtomically } from "./atomic-json-file";
 import { automationRoot } from "./automation-command";
+import { type CodeBotDatabase, type ProviderSession, stableThreadId } from "./codebot-database";
 import type { AgentModelChange } from "./database/agent-roster";
-import { type OpenBotDatabase, type ProviderSession, stableThreadId } from "./openbot-database";
 import { isPathInside } from "./path-containment";
 import { isRecord } from "./protocol";
 import { StoredStateFailure, storedIO, storedSync } from "./stored-state-effects";
@@ -151,7 +151,7 @@ const LEGACY_AGENTS_STATE_KEY = "bots";
 const LEGACY_AGENTS_IMPORT_COMMAND_ID = "legacy-import:bots:v1";
 const CLAUDE_FAST_MODE_RESET_COMMAND_ID = "agent-fast-mode:claude-reset:v1";
 
-const logger = createOpenBotLogger("agent-store");
+const logger = createCodeBotLogger("agent-store");
 
 const fsPromisesWithoutAsarArchives: typeof nodeFsPromises = process.versions.electron
   ? createRequire(import.meta.url)("original-fs").promises
@@ -174,7 +174,7 @@ export class AgentStore {
   readonly #duplicationsRoot: string;
   readonly #automationRoot: string;
   readonly #profileCreationRecovery: ProfileCreationRecovery;
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
   #state: StoredState = { version: 2, examplesInitialized: false, agents: [] };
   readonly #avatarUpdateQueue = Semaphore.makeUnsafe(1);
   readonly #creationQueue = Semaphore.makeUnsafe(1);
@@ -184,15 +184,15 @@ export class AgentStore {
   constructor(
     userDataPath: string,
     homePath: string,
-    database: OpenBotDatabase,
+    database: CodeBotDatabase,
     agentDefaults: () => AgentDefaults = () => DEFAULT_AGENT_DEFAULTS,
-    openbotRoot = join(homePath, "OpenBot"),
+    codebotRoot = join(homePath, "CodeBot"),
   ) {
     this.#statePath = join(userDataPath, LEGACY_AGENTS_STATE_FILE);
-    this.#agentsRoot = join(openbotRoot, "Agents");
-    this.#legacyAgentsRoot = join(openbotRoot, "Bots");
-    this.#sharedRoot = join(openbotRoot, "Shared");
-    this.#downloadsRoot = join(openbotRoot, "Downloads");
+    this.#agentsRoot = join(codebotRoot, "Agents");
+    this.#legacyAgentsRoot = join(codebotRoot, "Bots");
+    this.#sharedRoot = join(codebotRoot, "Shared");
+    this.#downloadsRoot = join(codebotRoot, "Downloads");
     this.#avatarsRoot = join(userDataPath, "avatars", "agents");
     this.channelImagesRoot = join(userDataPath, "avatars", "channels");
     this.#duplicationsRoot = join(userDataPath, "agent-duplications");
@@ -209,7 +209,7 @@ export class AgentStore {
     return this.#agentDefaults();
   }
 
-  get database(): OpenBotDatabase {
+  get database(): CodeBotDatabase {
     return this.#database;
   }
 
@@ -402,9 +402,9 @@ export class AgentStore {
       if (source.avatarColor) record.avatarColor = source.avatarColor;
       if (source.chatColor) record.chatColor = source.chatColor;
 
-      const stagedWorkspace = `${record.workspacePath}.openbot-stage`;
+      const stagedWorkspace = `${record.workspacePath}.codebot-stage`;
       const avatarDirectory = join(this.#avatarsRoot, record.id);
-      const stagedAvatarDirectory = `${avatarDirectory}.openbot-stage`;
+      const stagedAvatarDirectory = `${avatarDirectory}.codebot-stage`;
       const duplicationMarker = this.#duplicationMarkerPath(record.id);
       let stagedAvatarPath: string | null = null;
       const windowsFolderLinks: string[] = [];
@@ -995,9 +995,9 @@ export class AgentStore {
       const agent = this.#state.agents.find((candidate) => candidate.id === id);
       for (const path of [
         join(this.#avatarsRoot, id),
-        `${join(this.#avatarsRoot, id)}.openbot-stage`,
+        `${join(this.#avatarsRoot, id)}.codebot-stage`,
         join(this.#agentsRoot, id),
-        `${join(this.#agentsRoot, id)}.openbot-stage`,
+        `${join(this.#agentsRoot, id)}.codebot-stage`,
       ]) {
         yield* storedIO(() => rm(path, AGENT_FILES_REMOVAL));
       }
@@ -1243,7 +1243,7 @@ export class AgentStore {
     }
     const entries = listing.success;
     yield* Effect.forEach(
-      entries.filter((entry) => entry.endsWith(".openbot-stage")),
+      entries.filter((entry) => entry.endsWith(".codebot-stage")),
       (entry) =>
         storedIO(() => rm(join(this.#legacyAgentsRoot, entry), { recursive: true, force: true })).pipe(
           Effect.catch(({ cause }) =>
@@ -1254,7 +1254,7 @@ export class AgentStore {
         ),
       { concurrency: "unbounded", discard: true },
     );
-    if (!entries.every((entry) => entry.endsWith(".openbot-stage"))) return;
+    if (!entries.every((entry) => entry.endsWith(".codebot-stage"))) return;
     yield* storedIO(() => rmdir(this.#legacyAgentsRoot)).pipe(
       Effect.catch(({ cause }) =>
         Effect.sync(() => logger.warn("Could not remove the legacy workspace root.", toLogValue(cause))),
@@ -1297,7 +1297,7 @@ export class AgentStore {
             ...roots.flatMap((root) =>
               names.flatMap((name) => [
                 storedIO(() => rm(join(root, name), { recursive: true, force: true })),
-                storedIO(() => rm(`${join(root, name)}.openbot-stage`, { recursive: true, force: true })),
+                storedIO(() => rm(`${join(root, name)}.codebot-stage`, { recursive: true, force: true })),
               ]),
             ),
             storedIO(() => rm(join(this.#duplicationsRoot, entry.name), { force: true })),
@@ -1420,7 +1420,7 @@ export class AgentStore {
 
   bindProviderSession(id: string, provider: AgentProviderId, externalSessionId: string): ProviderSession {
     const agent = this.#requireAgent(id);
-    if (!agent.threadId) throw new Error(`Agent ${id} does not have an OpenBot thread.`);
+    if (!agent.threadId) throw new Error(`Agent ${id} does not have an CodeBot thread.`);
     return this.#database.bindProviderSession({
       threadId: agent.threadId,
       provider,
@@ -2180,7 +2180,7 @@ function stringList(value: unknown): string[] {
 }
 
 function agentAvatarUrl(agentId: string, version: string, mimeType: string): string {
-  const url = new URL(`openbot-avatar://agent/${encodeURIComponent(agentId)}`);
+  const url = new URL(`codebot-avatar://agent/${encodeURIComponent(agentId)}`);
   url.searchParams.set("v", version);
   url.searchParams.set("type", mimeType);
   return url.toString();
@@ -2196,7 +2196,7 @@ function parseAgentAvatarUrl(
     const version = url.searchParams.get("v") ?? "";
     const mimeType = url.searchParams.get("type") ?? "";
     if (
-      url.protocol !== "openbot-avatar:" ||
+      url.protocol !== "codebot-avatar:" ||
       url.hostname !== "agent" ||
       agentId !== expectedAgentId ||
       !isUuidV4(version) ||

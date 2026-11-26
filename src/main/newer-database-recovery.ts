@@ -1,9 +1,9 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import type { UpdateStatus } from "@openbot/contracts/ipc";
-import { isNewerRelease, isValidSemver } from "@openbot/contracts/release-version";
-import type { AppTranslate } from "@openbot/i18n";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { UpdateStatus } from "@codebot/contracts/ipc";
+import { isNewerRelease, isValidSemver } from "@codebot/contracts/release-version";
+import type { AppTranslate } from "@codebot/i18n";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { app, type BrowserWindow, dialog, shell } from "electron";
 import { runCauseEffect } from "../backend/effect-boundary";
@@ -18,12 +18,12 @@ import {
   UPDATE_INSTALL_TIMEOUT_MS,
   UpdateService,
 } from "./update-service";
-import { listSiblingOpenBotInstances } from "./update-sibling-instances";
+import { listSiblingCodeBotInstances } from "./update-sibling-instances";
 
-const logger = createOpenBotLogger("update");
+const logger = createCodeBotLogger("update");
 const STALLED_INSTALL_DIALOG_MS = 10 * 60_000;
 const GUIDE_URL =
-  "https://github.com/nightly-labs/openbot/blob/main/docs/TROUBLESHOOTING.md#openbot-says-a-newer-version-saved-your-data";
+  "https://github.com/nightly-labs/openbot/blob/main/docs/TROUBLESHOOTING.md#codebot-says-a-newer-version-saved-your-data";
 
 interface NewerDatabaseRecoveryOptions {
   window: BrowserWindow | null;
@@ -47,7 +47,7 @@ export async function recoverFromNewerDatabase(options: NewerDatabaseRecoveryOpt
   }
   if (loopVersion) {
     logger.warn(
-      `An older OpenBot started over newer data, and OpenBot ${loopVersion} did not start. Not installing it.`,
+      `An older CodeBot started over newer data, and CodeBot ${loopVersion} did not start. Not installing it.`,
     );
     await showLatestDidNotStart(options.translate, loopVersion);
   } else {
@@ -81,7 +81,7 @@ async function createRecoveryUpdater(
     autoDownload: true,
     beforeInstall: () => beforeInstall(UPDATE_INSTALL_TIMEOUT_MS + STALLED_INSTALL_DIALOG_MS),
     checkSiblingInstances: () =>
-      listSiblingOpenBotInstances({
+      listSiblingCodeBotInstances({
         executablePath: app.getPath("exe"),
         currentPid: process.pid,
         platform: process.platform,
@@ -117,7 +117,7 @@ async function installLatest(
   updater.start(false);
   const downloaded = nextPhase(updater, ["ready", "up-to-date", "unsupported", "error"]);
   const checked = await Effect.runPromise(updater.checkForUpdates());
-  logger.info(`An older OpenBot started over newer data. Update check: ${checked.phase}.`);
+  logger.info(`An older CodeBot started over newer data. Update check: ${checked.phase}.`);
   if (checked.phase !== "available" && checked.phase !== "downloading" && checked.phase !== "ready") {
     downloaded.cancel();
     return;

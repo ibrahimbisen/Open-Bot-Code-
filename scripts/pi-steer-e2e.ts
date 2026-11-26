@@ -10,7 +10,7 @@ import { type AppServerNotification, getRecord, getString, isRecord, type Thread
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-steer-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-steer-e2e");
 const TURN_TIMEOUT_MS = 20_000;
 
 interface LogEntry {
@@ -32,7 +32,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-steer-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-steer-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 const saved = new Map<string, ThreadItem[]>();
@@ -161,7 +161,7 @@ try {
   report.steered = { turnId: turn.id, reply: finished.reply, status: finished.status, steer: sent };
 
   const note = steerNoteFor("deepseek", { kind: "user" }, "keep the tests");
-  assert.ok(note, "A provider with no steer note of its own must get OpenBot's.");
+  assert.ok(note, "A provider with no steer note of its own must get CodeBot's.");
   assert.ok(
     steerNoteFor("pi", { kind: "agent", agentId: "teammate" }, "keep the tests"),
     "A teammate's steer must get a note.",

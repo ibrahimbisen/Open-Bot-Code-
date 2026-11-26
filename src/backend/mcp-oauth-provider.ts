@@ -1,4 +1,8 @@
 import { randomUUID } from "node:crypto";
+import { MCP_SIGN_IN_TIMEOUT_MS, relayCallbackQuery } from "@codebot/contracts/ipc";
+import { mcpAccountFragment } from "@codebot/contracts/mcp-accounts";
+import { sourceText } from "@codebot/i18n/source";
+import type { Logger } from "@codebot/logging";
 import {
   auth,
   discoverAuthorizationServerMetadata,
@@ -29,10 +33,6 @@ import {
 } from "@modelcontextprotocol/sdk/shared/auth.js";
 import { checkResourceAllowed, resourceUrlFromServerUrl } from "@modelcontextprotocol/sdk/shared/auth-utils.js";
 import type { FetchLike } from "@modelcontextprotocol/sdk/shared/transport.js";
-import { MCP_SIGN_IN_TIMEOUT_MS, relayCallbackQuery } from "@openbot/contracts/ipc";
-import { mcpAccountFragment } from "@openbot/contracts/mcp-accounts";
-import { sourceText } from "@openbot/i18n/source";
-import type { Logger } from "@openbot/logging";
 import { Deferred, Effect, Exit, Fiber, Result, Scope } from "effect";
 import { getDomain } from "tldts";
 import { z } from "zod";
@@ -50,7 +50,7 @@ import { withTimeout } from "./with-timeout";
 
 const MCP_CLIENT_METADATA_URL = "https://openbot.run/oauth/mcp-client.json";
 
-const MCP_CLIENT_NAME = "OpenBot";
+const MCP_CLIENT_NAME = "CodeBot";
 
 export const MCP_OAUTH_RELAY_URL = "https://openbot.run/oauth/mcp-callback";
 

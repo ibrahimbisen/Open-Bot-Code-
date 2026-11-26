@@ -1,4 +1,4 @@
-import type { CentralAuthUser } from "@openbot/contracts/ipc";
+import type { CentralAuthUser } from "@codebot/contracts/ipc";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
 
@@ -9,7 +9,7 @@ export interface UserAvatarProps {
 }
 
 export function userInitials(user: Pick<CentralAuthUser, "name" | "email">): string {
-  const accountName = user.name?.trim() || user.email.split("@")[0] || "OpenBot";
+  const accountName = user.name?.trim() || user.email.split("@")[0] || "CodeBot";
   const parts = accountName.split(/[._\-\s]+/).filter(Boolean);
   return (parts.length > 1 ? `${parts[0]?.[0]}${parts[1]?.[0]}` : accountName.slice(0, 2)).toUpperCase();
 }

@@ -1,6 +1,6 @@
-import { type WorkflowMediaInput, workflowCatalogSource } from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
-import { Button, Download, Film, Image, Maximize2, Mic, RotateCcw, Square, Textarea, TriangleAlert } from "@openbot/ui";
+import { type WorkflowMediaInput, workflowCatalogSource } from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
+import { Button, Download, Film, Image, Maximize2, Mic, RotateCcw, Square, Textarea, TriangleAlert } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { useText } from "../../text";
@@ -187,7 +187,7 @@ export function ImageNode(props: { id: string; image?: string | undefined; promp
     const shown = board.shown(props.id);
     return shown?.failed ? shown : undefined;
   };
-  const paidWithCredits = () => workflowCatalogSource(model()?.id ?? "") === "openbot";
+  const paidWithCredits = () => workflowCatalogSource(model()?.id ?? "") === "codebot";
   const stoppable = () => !paidWithCredits() && run.stop();
   const durationText = (value: number) => t("workflow.video.seconds", { value: String(value) });
   const frameText = () => {

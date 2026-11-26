@@ -3,12 +3,12 @@ import { createHash, randomBytes } from "node:crypto";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { migrateOpenBotDatabase } from "../src/backend/openbot-database-schema";
+import { migrateCodeBotDatabase } from "../src/backend/codebot-database-schema";
 
-const reportRoot = resolve(".openbot-build/instance-backup-e2e");
-const dind = `openbot-backup-e2e-${randomBytes(4).toString("hex")}`;
-const script = "/opt/openbot-docker/instances/openbot-instance";
-const data = "/srv/openbot/main/data";
+const reportRoot = resolve(".codebot-build/instance-backup-e2e");
+const dind = `codebot-backup-e2e-${randomBytes(4).toString("hex")}`;
+const script = "/opt/codebot-docker/instances/codebot-instance";
+const data = "/srv/codebot/main/data";
 const agentId = "agent-e2e-1";
 const results: Array<{ name: string; ok: boolean; detail: string }> = [];
 
@@ -44,7 +44,7 @@ function check(name: string, ok: boolean, detail: string): void {
 }
 
 function running(): boolean {
-  return shell("docker inspect --format '{{.State.Running}}' openbot-main").stdout.trim() === "true";
+  return shell("docker inspect --format '{{.State.Running}}' codebot-main").stdout.trim() === "true";
 }
 
 function completeBackups(): string[] {
@@ -57,18 +57,18 @@ function summary(result: Run): string {
 }
 
 async function writeFixture(root: string): Promise<void> {
-  const config = join(root, ".config/OpenBot");
-  const shared = join(root, "OpenBot/Shared/Data");
+  const config = join(root, ".config/CodeBot");
+  const shared = join(root, "CodeBot/Shared/Data");
   await mkdir(config, { recursive: true });
   await mkdir(shared, { recursive: true });
   await mkdir(join(root, ".local/share/keyrings"), { recursive: true });
-  await mkdir(join(root, ".config/openbot-container"), { recursive: true });
-  await mkdir(join(root, "OpenBot/Agents/E2E"), { recursive: true });
+  await mkdir(join(root, ".config/codebot-container"), { recursive: true });
+  await mkdir(join(root, "CodeBot/Agents/E2E"), { recursive: true });
 
   const now = new Date().toISOString();
-  const db = new DatabaseSync(join(config, "openbot.db"));
+  const db = new DatabaseSync(join(config, "codebot.db"));
   try {
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     db.prepare(
       "INSERT INTO projection_agents (agent_id, thread_id, model, updated_at, sort_order, agent_json, last_event_sequence) VALUES (?, ?, 'test', ?, 0, ?, 1)",
     ).run(agentId, "thread-e2e-1", now, JSON.stringify({ id: agentId, name: "E2E" }));
@@ -88,23 +88,23 @@ async function writeFixture(root: string): Promise<void> {
   const tables = new DatabaseSync(join(shared, "agent-data.db"));
   try {
     tables.exec(
-      "CREATE TABLE openbot_metadata (table_name TEXT PRIMARY KEY, owner_agent_id TEXT NOT NULL, created_at TEXT NOT NULL)",
+      "CREATE TABLE codebot_metadata (table_name TEXT PRIMARY KEY, owner_agent_id TEXT NOT NULL, created_at TEXT NOT NULL)",
     );
     tables.exec("CREATE TABLE contacts (name TEXT, email TEXT)");
     tables.exec("INSERT INTO contacts VALUES ('Ada', 'ada@example.com')");
     tables.exec("CREATE TABLE tasks (title TEXT)");
-    tables.prepare("INSERT INTO openbot_metadata VALUES ('contacts', ?, ?)").run(agentId, now);
-    tables.prepare("INSERT INTO openbot_metadata VALUES ('tasks', 'agent-removed', ?)").run(now);
+    tables.prepare("INSERT INTO codebot_metadata VALUES ('contacts', ?, ?)").run(agentId, now);
+    tables.prepare("INSERT INTO codebot_metadata VALUES ('tasks', 'agent-removed', ?)").run(now);
   } finally {
     tables.close();
   }
 
   await writeFile(join(root, ".local/share/keyrings/login.keyring"), randomBytes(512));
-  await writeFile(join(root, ".config/openbot-container/keyring-password"), randomBytes(32).toString("hex"), {
+  await writeFile(join(root, ".config/codebot-container/keyring-password"), randomBytes(32).toString("hex"), {
     mode: 0o600,
   });
-  await writeFile(join(root, "OpenBot/Agents/E2E/notes.md"), "Saved before the backup.\n");
-  await writeFile(join(root, "OpenBot/Agents/E2E/attachment.bin"), randomBytes(256 * 1024));
+  await writeFile(join(root, "CodeBot/Agents/E2E/notes.md"), "Saved before the backup.\n");
+  await writeFile(join(root, "CodeBot/Agents/E2E/attachment.bin"), randomBytes(256 * 1024));
 }
 
 const standIn = `FROM alpine:3.22
@@ -146,21 +146,21 @@ async function main(): Promise<void> {
       "gzip",
     ]);
     if (packages.status !== 0) throw new Error(`The packages did not install: ${packages.stderr}`);
-    const scriptsCopied = run("docker", ["cp", resolve("docker"), `${dind}:/opt/openbot-docker`]);
+    const scriptsCopied = run("docker", ["cp", resolve("docker"), `${dind}:/opt/codebot-docker`]);
     if (scriptsCopied.status !== 0) throw new Error(`The instance scripts did not copy: ${scriptsCopied.stderr}`);
     const fixtureCopied = run("docker", ["cp", `${fixture}/.`, `${dind}:/fixture`]);
     if (fixtureCopied.status !== 0) throw new Error(`The instance fixture did not copy: ${fixtureCopied.stderr}`);
     must(`mkdir -p /stand-in && cat >/stand-in/Dockerfile <<'EOF'\n${standIn}EOF`);
     must("docker build --quiet --tag ghcr.io/nightly-labs/openbot:latest /stand-in >/dev/null");
 
-    must(`mkdir -p /srv/openbot/main/data /backups
-      fallocate --length 256M /srv/openbot/main/data.img
-      mkfs.ext4 -q -m 0 /srv/openbot/main/data.img
-      mount -o loop /srv/openbot/main/data.img ${data}
+    must(`mkdir -p /srv/codebot/main/data /backups
+      fallocate --length 256M /srv/codebot/main/data.img
+      mkfs.ext4 -q -m 0 /srv/codebot/main/data.img
+      mount -o loop /srv/codebot/main/data.img ${data}
       cp -a /fixture/. ${data}/ && chown -R 1000:1000 ${data} && chmod 0700 ${data}
-      printf 'OPENBOT_NAME=main\\nOPENBOT_CPUS=1\\nOPENBOT_MEM=1g\\nOPENBOT_DISK=256M\\nOPENBOT_BACKUP_DIR=/backups\\nOPENBOT_BACKUP_KEEP=2\\nOPENBOT_BACKUP_MAX_AGE=24\\n' >/opt/openbot-docker/instances/main.env
-      docker run --detach --name openbot-main --stop-timeout 20 -v ${data}:/data ghcr.io/nightly-labs/openbot:latest >/dev/null`);
-    const dataHash = must(`sha256sum ${data}/.config/OpenBot/openbot.db | cut -d ' ' -f 1`);
+      printf 'CODEBOT_NAME=main\\nCODEBOT_CPUS=1\\nCODEBOT_MEM=1g\\nCODEBOT_DISK=256M\\nCODEBOT_BACKUP_DIR=/backups\\nCODEBOT_BACKUP_KEEP=2\\nCODEBOT_BACKUP_MAX_AGE=24\\n' >/opt/codebot-docker/instances/main.env
+      docker run --detach --name codebot-main --stop-timeout 20 -v ${data}:/data ghcr.io/nightly-labs/openbot:latest >/dev/null`);
+    const dataHash = must(`sha256sum ${data}/.config/CodeBot/codebot.db | cut -d ' ' -f 1`);
 
     let result = instance("backups", "main");
     check(
@@ -177,11 +177,11 @@ async function main(): Promise<void> {
     const manifest = JSON.parse(must(`cat /backups/main/${first}/manifest.json`));
     check(
       "manifest has the version, checksum and downtime",
-      manifest.openbotVersion === "0.40.0" &&
+      manifest.codebotVersion === "0.40.0" &&
         /^[0-9a-f]{64}$/.test(manifest.archiveSha256) &&
         manifest.wasRunning === true,
       JSON.stringify({
-        version: manifest.openbotVersion,
+        version: manifest.codebotVersion,
         archive: manifest.archive,
         downtime: manifest.downtimeSeconds,
       }),
@@ -221,18 +221,18 @@ async function main(): Promise<void> {
     const invalidSources = [
       {
         name: "main database",
-        path: ".config/OpenBot/openbot.db",
-        error: /OpenBot cannot open openbot\.db|openbot\.db is damaged/,
+        path: ".config/CodeBot/codebot.db",
+        error: /CodeBot cannot open codebot\.db|codebot\.db is damaged/,
       },
       {
         name: "shared database",
-        path: "OpenBot/Shared/Data/agent-data.db",
+        path: "CodeBot/Shared/Data/agent-data.db",
         error: /shared tables cannot open|shared tables are damaged/,
       },
     ];
     for (const source of invalidSources) {
       const beforeInvalid = completeBackups();
-      const successHash = must("sha256sum /srv/openbot/main/backup-status/verify-success.json | cut -d ' ' -f 1");
+      const successHash = must("sha256sum /srv/codebot/main/backup-status/verify-success.json | cut -d ' ' -f 1");
       must(
         `cp -a ${data}/${source.path} /root/e2e-healthy-database && printf 'not a SQLite database\n' > ${data}/${source.path}`,
       );
@@ -250,18 +250,18 @@ async function main(): Promise<void> {
         summary(invalidResult),
       );
       const targetHashes = must(
-        `cd ${data} && sha256sum .config/OpenBot/openbot.db OpenBot/Shared/Data/agent-data.db OpenBot/Agents/E2E/notes.md OpenBot/Agents/E2E/attachment.bin .local/share/keyrings/login.keyring .config/openbot-container/keyring-password .e2e-starts .e2e-clean-stop`,
+        `cd ${data} && sha256sum .config/CodeBot/codebot.db CodeBot/Shared/Data/agent-data.db CodeBot/Agents/E2E/notes.md CodeBot/Agents/E2E/attachment.bin .local/share/keyrings/login.keyring .config/codebot-container/keyring-password .e2e-starts .e2e-clean-stop`,
       );
       const targetRunningBefore = running();
       const refused = instance("restore", "main", invalidBackup, "--replace");
       check(
         `restore refuses an invalid ${source.name} before it stops the target`,
-        refused.status > 0 && source.error.test(refused.stderr) && !/Stopping openbot-main/.test(refused.stdout),
+        refused.status > 0 && source.error.test(refused.stderr) && !/Stopping codebot-main/.test(refused.stdout),
         summary(refused),
       );
       const targetRunningAfter = running();
       const afterHashes = must(
-        `cd ${data} && sha256sum .config/OpenBot/openbot.db OpenBot/Shared/Data/agent-data.db OpenBot/Agents/E2E/notes.md OpenBot/Agents/E2E/attachment.bin .local/share/keyrings/login.keyring .config/openbot-container/keyring-password .e2e-starts .e2e-clean-stop`,
+        `cd ${data} && sha256sum .config/CodeBot/codebot.db CodeBot/Shared/Data/agent-data.db CodeBot/Agents/E2E/notes.md CodeBot/Agents/E2E/attachment.bin .local/share/keyrings/login.keyring .config/codebot-container/keyring-password .e2e-starts .e2e-clean-stop`,
       );
       check(
         `a refused ${source.name} restore keeps target bytes and running state`,
@@ -275,9 +275,9 @@ async function main(): Promise<void> {
       );
       check(
         `a refused ${source.name} restore removes verification work without staging or replacement`,
-        must(`find ${data} -maxdepth 1 \\( -name '.openbot-restore*' -o -name '.openbot-replaced*' \\) | wc -l`) ===
+        must(`find ${data} -maxdepth 1 \\( -name '.codebot-restore*' -o -name '.codebot-replaced*' \\) | wc -l`) ===
           "0" &&
-          must("find /var/tmp -maxdepth 1 -name 'openbot-verify.*' | wc -l") === "0" &&
+          must("find /var/tmp -maxdepth 1 -name 'codebot-verify.*' | wc -l") === "0" &&
           completeBackups().length === beforeInvalid.length + 1,
         "no restore, replacement or verification folder stays; the source backup stays",
       );
@@ -290,15 +290,15 @@ async function main(): Promise<void> {
           failedVerify["verify-attempt"]?.result === "failed" &&
           source.error.test(failedVerify["verify-attempt"]?.error ?? "") &&
           failedVerify["verify-success"]?.result === "ok" &&
-          successHash === must("sha256sum /srv/openbot/main/backup-status/verify-success.json | cut -d ' ' -f 1"),
+          successHash === must("sha256sum /srv/codebot/main/backup-status/verify-success.json | cut -d ' ' -f 1"),
         `lastVerify=${failedVerify.lastVerify}; prior success hash matches`,
       );
       must(`rm -rf /backups/main/${invalidBackup}`);
     }
 
-    must(`mv ${data}/.config/openbot-container/keyring-password /root/keyring-password`);
+    must(`mv ${data}/.config/codebot-container/keyring-password /root/keyring-password`);
     result = instance("backup", "main");
-    must(`mv /root/keyring-password ${data}/.config/openbot-container/keyring-password`);
+    must(`mv /root/keyring-password ${data}/.config/codebot-container/keyring-password`);
     check(
       "a backup without the keyring password fails",
       result.status !== 0 && /keyring-password is missing/.test(result.stderr) && completeBackups().length === 1,
@@ -313,10 +313,10 @@ async function main(): Promise<void> {
     );
 
     must("mkdir -p /small && mount -t tmpfs -o size=64k tmpfs /small");
-    must("sed -i 's#^OPENBOT_BACKUP_DIR=.*#OPENBOT_BACKUP_DIR=/small#' /opt/openbot-docker/instances/main.env");
+    must("sed -i 's#^CODEBOT_BACKUP_DIR=.*#CODEBOT_BACKUP_DIR=/small#' /opt/codebot-docker/instances/main.env");
     const startsBefore = must(`wc -l < ${data}/.e2e-starts`);
     result = instance("backup", "main");
-    must("sed -i 's#^OPENBOT_BACKUP_DIR=.*#OPENBOT_BACKUP_DIR=/backups#' /opt/openbot-docker/instances/main.env");
+    must("sed -i 's#^CODEBOT_BACKUP_DIR=.*#CODEBOT_BACKUP_DIR=/backups#' /opt/codebot-docker/instances/main.env");
     check(
       "a backup to a full disk fails without a stop",
       result.status !== 0 &&
@@ -343,17 +343,17 @@ async function main(): Promise<void> {
     );
     check(
       "verification removes its temporary folder",
-      must("find /var/tmp -maxdepth 1 -name 'openbot-verify.*' | wc -l") === "0",
-      "no openbot-verify folder in /var/tmp",
+      must("find /var/tmp -maxdepth 1 -name 'codebot-verify.*' | wc -l") === "0",
+      "no codebot-verify folder in /var/tmp",
     );
 
     const beforeFailedVerify = completeBackups();
     must(
-      "sed -i 's/^OPENBOT_BACKUP_KEEP=.*/OPENBOT_BACKUP_KEEP=1/' /opt/openbot-docker/instances/main.env && mv /usr/bin/sqlite3 /usr/bin/sqlite3.off",
+      "sed -i 's/^CODEBOT_BACKUP_KEEP=.*/CODEBOT_BACKUP_KEEP=1/' /opt/codebot-docker/instances/main.env && mv /usr/bin/sqlite3 /usr/bin/sqlite3.off",
     );
     result = instance("backup", "main", "--verify");
     must(
-      "mv /usr/bin/sqlite3.off /usr/bin/sqlite3 && sed -i 's/^OPENBOT_BACKUP_KEEP=.*/OPENBOT_BACKUP_KEEP=2/' /opt/openbot-docker/instances/main.env",
+      "mv /usr/bin/sqlite3.off /usr/bin/sqlite3 && sed -i 's/^CODEBOT_BACKUP_KEEP=.*/CODEBOT_BACKUP_KEEP=2/' /opt/codebot-docker/instances/main.env",
     );
     const afterFailedVerify = completeBackups();
     check(
@@ -376,7 +376,7 @@ async function main(): Promise<void> {
     );
 
     must(
-      `printf '{\\n  "step": "backup",\\n  "result": "running",\\n  "startedAt": "2026-01-01T00:00:00Z"\\n}\\n' >/srv/openbot/main/backup-status/backup-attempt.json`,
+      `printf '{\\n  "step": "backup",\\n  "result": "running",\\n  "startedAt": "2026-01-01T00:00:00Z"\\n}\\n' >/srv/codebot/main/backup-status/backup-attempt.json`,
     );
     result = instance("backups", "main");
     check(
@@ -401,31 +401,31 @@ async function main(): Promise<void> {
       `verified ${made}`,
     );
 
-    must("docker rm --force openbot-main >/dev/null");
+    must("docker rm --force codebot-main >/dev/null");
     result = instance("backup", "main");
     const removedBackup = completeBackups().at(-1) ?? "";
     const removedVersion = must(
-      `sed -n 's/^  "openbotVersion": "\\(.*\\)",$/\\1/p' /backups/main/${removedBackup}/manifest.json`,
+      `sed -n 's/^  "codebotVersion": "\\(.*\\)",$/\\1/p' /backups/main/${removedBackup}/manifest.json`,
     );
     must(
-      `docker run --detach --name openbot-main --stop-timeout 20 -v ${data}:/data ghcr.io/nightly-labs/openbot:latest >/dev/null`,
+      `docker run --detach --name codebot-main --stop-timeout 20 -v ${data}:/data ghcr.io/nightly-labs/openbot:latest >/dev/null`,
     );
     check(
       "a backup without a container has the version of the image",
       result.status === 0 && removedVersion === "0.40.0",
-      `openbotVersion ${removedVersion}`,
+      `codebotVersion ${removedVersion}`,
     );
     const latest = completeBackups().at(-1) ?? "";
 
-    const lock = "/run/openbot-instance-update-main.lock";
+    const lock = "/run/codebot-instance-update-main.lock";
     const waited = must(
       `flock ${lock} sleep 30 & holder=$!; until ! flock --nonblock ${lock} true; do sleep 0.1; done; set +e; timeout 3 ${script} down main >/dev/null 2>&1; code=$?; set -e; kill $holder; wait $holder 2>/dev/null || true; echo $code`,
     );
     check("down waits for the lock of the instance", waited === "124" && running(), `timeout exit ${waited}`);
 
-    must(`echo changed > ${data}/OpenBot/Agents/E2E/after-backup.md && rm ${data}/OpenBot/Agents/E2E/notes.md`);
+    must(`echo changed > ${data}/CodeBot/Agents/E2E/after-backup.md && rm ${data}/CodeBot/Agents/E2E/notes.md`);
     must(
-      `mkdir -p /trap && ln -s /trap ${data}/.openbot-replaced && ln -s /trap ${data}/.openbot-restore && ln -s /trap ${data}/.openbot-replaced.x && chown -h 1000:1000 ${data}/.openbot-*`,
+      `mkdir -p /trap && ln -s /trap ${data}/.codebot-replaced && ln -s /trap ${data}/.codebot-restore && ln -s /trap ${data}/.codebot-replaced.x && chown -h 1000:1000 ${data}/.codebot-*`,
     );
     result = instance("restore", "main", latest);
     check(
@@ -435,12 +435,12 @@ async function main(): Promise<void> {
     );
 
     must(
-      `cp -a /backups/main/${latest} /backups/main/newer && sed -i 's/"openbotVersion": "0.40.0"/"openbotVersion": "99.0.0"/' /backups/main/newer/manifest.json`,
+      `cp -a /backups/main/${latest} /backups/main/newer && sed -i 's/"codebotVersion": "0.40.0"/"codebotVersion": "99.0.0"/' /backups/main/newer/manifest.json`,
     );
     result = instance("restore", "main", "newer", "--replace");
     must("rm -rf /backups/main/newer");
     check(
-      "restore refuses a backup from a newer OpenBot",
+      "restore refuses a backup from a newer CodeBot",
       result.status !== 0 && /99\.0\.0/.test(result.stderr) && running(),
       summary(result),
     );
@@ -451,14 +451,14 @@ async function main(): Promise<void> {
       result.status !== 0 && /did not end/.test(result.stderr) && running(),
       summary(result),
     );
-    must(`rm ${data}/.openbot-replaced.x`);
+    must(`rm ${data}/.codebot-replaced.x`);
     result = instance("restore", "main", latest, "--replace");
     check("restore with --replace", result.status === 0, summary(result));
     check("instance stays stopped after a restore", !running(), `running=${running()}`);
     const restored = must(
-      `cd ${data} && test -f OpenBot/Agents/E2E/notes.md && test ! -e OpenBot/Agents/E2E/after-backup.md && test -z "$(find . -maxdepth 1 -name '.openbot-*')" && sha256sum .config/OpenBot/openbot.db | cut -d ' ' -f 1`,
+      `cd ${data} && test -f CodeBot/Agents/E2E/notes.md && test ! -e CodeBot/Agents/E2E/after-backup.md && test -z "$(find . -maxdepth 1 -name '.codebot-*')" && sha256sum .config/CodeBot/codebot.db | cut -d ' ' -f 1`,
     );
-    check("restored data is the backup", restored === dataHash, `openbot.db ${restored.slice(0, 12)}`);
+    check("restored data is the backup", restored === dataHash, `codebot.db ${restored.slice(0, 12)}`);
     check(
       "restore does not follow links that an agent made",
       must("ls -A /trap | wc -l") === "0",
@@ -469,7 +469,7 @@ async function main(): Promise<void> {
       must(`find ${data} -mindepth 1 ! -user 1000 ! -path '${data}/lost+found*' | wc -l`) === "0",
       "owner 1000",
     );
-    must("docker start openbot-main >/dev/null");
+    must("docker start codebot-main >/dev/null");
     check("instance starts on the restored data", running(), `running=${running()}`);
   } finally {
     run("docker", ["rm", "--force", "--volumes", dind]);

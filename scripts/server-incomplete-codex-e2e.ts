@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { chmod, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentStatus, ProviderRuntimeSnapshot } from "@openbot/contracts/ipc";
+import type { AgentStatus, ProviderRuntimeSnapshot } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import lockValue from "../native-runtime.lock.json";
 import { chooseInstalledFirst, resolveCodexCli } from "../src/backend/cli";
@@ -14,11 +14,11 @@ import { ProviderUseSettingsStore } from "../src/main/provider-use-settings-stor
 import { createSystemCliTracker } from "../src/main/system-cli-tracker";
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/server-incomplete-codex-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/server-incomplete-codex-e2e");
 const WAIT_MS = 30_000;
 const VERSION = "999.0.0";
 const SYSTEM_VERSION = "0.167.2";
-const root = await mkdtemp(join(tmpdir(), "openbot-server-incomplete-codex-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-server-incomplete-codex-"));
 
 interface Scenario {
   name: string;

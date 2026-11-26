@@ -1,6 +1,6 @@
-import type { BillingPlanId } from "@openbot/contracts/billing";
-import type { HostedServerSummary } from "@openbot/contracts/hosted-servers";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { BillingPlanId } from "@codebot/contracts/billing";
+import type { HostedServerSummary } from "@codebot/contracts/hosted-servers";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 
 export const HOSTED_PLAN_TEXT = {
   starter: { name: "mobile.server.hosted.plan.starter", summary: "mobile.server.hosted.plan.starterSummary" },

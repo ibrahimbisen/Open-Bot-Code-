@@ -1,5 +1,5 @@
-import type { McpSignInPageSource, McpSignInRelaySource } from "@openbot/ui/features/settings/McpSignInPage";
-import { useText } from "@openbot/ui/text";
+import type { McpSignInPageSource, McpSignInRelaySource } from "@codebot/ui/features/settings/McpSignInPage";
+import { useText } from "@codebot/ui/text";
 import type { McpPanelSignInApp } from "./McpSignInAppSection";
 import {
   isMcpSignInCancelled,

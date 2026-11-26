@@ -1,16 +1,16 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   BrowserPermissionAnswer,
   BrowserTakeoverRequest,
   BrowserVaultSkipReason,
   RespondToBrowserSecretInput,
-} from "@openbot/contracts/ipc";
-import { markdownInlinePlainText } from "@openbot/contracts/markdown-preview-text";
+} from "@codebot/contracts/ipc";
+import { markdownInlinePlainText } from "@codebot/contracts/markdown-preview-text";
 import {
   type BrowserPermissionRequestState,
   browserPermissionSite,
-} from "@openbot/contracts/team-protocol/browser-permissions-v1";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/team-protocol/browser-permissions-v1";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { GlassView } from "expo-glass-effect";
 import { Button, Spinner, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";

@@ -8,10 +8,10 @@ import {
   type PasswordManagerErrorCode,
   type PasswordManagerStatus,
   type PasswordManagerStep,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { isFixedSourceText, sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, registerSecretValue, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { isFixedSourceText, sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, registerSecretValue, toLogValue } from "@codebot/logging";
 import { Effect, Exit, Result, Schema, Scope, Semaphore } from "effect";
 import { causeHelpers } from "../../backend/effect-boundary";
 import {
@@ -26,13 +26,13 @@ import type { EncryptedRecordStore } from "./encrypted-record-store";
 import { type ExtraPasswordAnswer, openExtraPasswordPipe } from "./extra-password-pipe";
 import { allowedSignInPage } from "./password-managers-service";
 
-const logger = createOpenBotLogger("proton-pass");
+const logger = createCodeBotLogger("proton-pass");
 const { io } = causeHelpers(PasswordManagerError);
 
-const PROTON_PASS_SHARED_VAULT = "Shared with OpenBot";
+const PROTON_PASS_SHARED_VAULT = "Shared with CodeBot";
 const PROTON_PASS_SIGN_IN_HOSTS = ["account.proton.me"] as const;
 const TOKEN_VARIABLE = "PROTON_PASS_PERSONAL_ACCESS_TOKEN";
-const READ_REASON = "OpenBot fills this login in its browser.";
+const READ_REASON = "CodeBot fills this login in its browser.";
 const AGENT_EXPIRATION = "1y";
 const AGENT_LIFETIME_MS = 365 * 24 * 60 * 60 * 1000;
 const COMMAND_MS = 60_000;
@@ -596,7 +596,7 @@ export class ProtonPassDriver implements PasswordManagerDriver, PasswordVault {
           const created = yield* call(["vault", "create", "--name", PROTON_PASS_SHARED_VAULT]);
           if (created.code !== 0) return yield* fail(sourceText("error.connector.protonPassSetupFailed"));
         }
-        const hostPart = `OpenBot ${this.#options.hostName}`.slice(0, 57);
+        const hostPart = `CodeBot ${this.#options.hostName}`.slice(0, 57);
         const agentName = `${hostPart} ${randomBytes(3).toString("hex")}`;
         const agent = yield* call([
           "agent",

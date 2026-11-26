@@ -1,6 +1,6 @@
 export const WEB_APP_COMPANY_SIGN_IN_ERROR_PARAM = "companySignInError";
 
-export const MOBILE_COMPANY_SIGN_IN_RETURN = "openbot://company-sign-in";
+export const MOBILE_COMPANY_SIGN_IN_RETURN = "codebot://company-sign-in";
 
 const COMPANY_SIGN_IN_ERROR_KEYS = {
   cancelled: "error.auth.companySignInCancelled",

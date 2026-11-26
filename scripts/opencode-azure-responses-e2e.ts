@@ -7,13 +7,13 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { openCodeConfigEnv } from "../src/backend/opencode-config";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-azure-responses-e2e");
-const binaryArgument = process.argv[2] ?? process.env.OPENBOT_OPENCODE_PATH;
-if (!binaryArgument) throw new Error("Give the OpenCode binary as the first argument or in OPENBOT_OPENCODE_PATH.");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-azure-responses-e2e");
+const binaryArgument = process.argv[2] ?? process.env.CODEBOT_OPENCODE_PATH;
+if (!binaryArgument) throw new Error("Give the OpenCode binary as the first argument or in CODEBOT_OPENCODE_PATH.");
 const binary: string = binaryArgument;
 
 const MODEL = "gpt-6-luna";
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-azure-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-azure-"));
 
 const ENV_OPENAI_KEY = "openai-env-key";
 

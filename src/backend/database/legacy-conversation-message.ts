@@ -1,7 +1,7 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { ConversationMessage } from "@openbot/contracts/ipc";
-import { isConversationMessage, isConversationTurnTrace } from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
+import { isConversationMessage, isConversationTurnTrace } from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 
 const LEGACY_MESSAGE_KEYS: Readonly<Record<string, string>> = {
   botId: "agentId",

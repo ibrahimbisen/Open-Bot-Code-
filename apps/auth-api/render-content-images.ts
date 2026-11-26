@@ -55,7 +55,7 @@ console.log(`content-images: ${jobs.length} images match the articles (${stale.l
 
 async function renderInElectron(jobs: ContentImageJob[]): Promise<void> {
   const electronBinary = resolveElectronBinary();
-  const workspace = await mkdtemp(path.join(tmpdir(), "openbot-content-images-"));
+  const workspace = await mkdtemp(path.join(tmpdir(), "codebot-content-images-"));
 
   try {
     const control = {

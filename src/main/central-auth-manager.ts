@@ -2,10 +2,10 @@ import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { chmod, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { companySignInErrorKey } from "@openbot/contracts/company-sign-in";
-import { CREDIT_MEDIA_HOST_HEADER, CREDIT_MEDIA_HOST_TOKEN_HEADER } from "@openbot/contracts/credit-media";
-import type { HostKeyHandover } from "@openbot/contracts/host-key-handover";
-import { parseHostedServerClaim } from "@openbot/contracts/hosted-servers";
+import { companySignInErrorKey } from "@codebot/contracts/company-sign-in";
+import { CREDIT_MEDIA_HOST_HEADER, CREDIT_MEDIA_HOST_TOKEN_HEADER } from "@codebot/contracts/credit-media";
+import type { HostKeyHandover } from "@codebot/contracts/host-key-handover";
+import { parseHostedServerClaim } from "@codebot/contracts/hosted-servers";
 import type {
   AvatarColor,
   AvatarImageInput,
@@ -17,21 +17,21 @@ import type {
   MobileConnectedDevice,
   MobileConnectLink,
   MobileConnectTicket,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   decodeCompanySignInScimToken,
   decodeCompanySignInSettings,
   isSignalHomeId,
   type TestCompanySignInInput,
   type TestCompanySignInResult,
-} from "@openbot/contracts/ipc";
-import { decodeRecord, requiredString } from "@openbot/contracts/ipc-decoding";
-import type { LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
+} from "@codebot/contracts/ipc";
+import { decodeRecord, requiredString } from "@codebot/contracts/ipc-decoding";
+import type { LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
 import {
   createMobileConnectUrl,
   isMobileConnectHostBinding,
   type MobileConnectHostBinding,
-} from "@openbot/contracts/mobile-connect";
+} from "@codebot/contracts/mobile-connect";
 import {
   type AcceptedOwnerTransfer,
   decodeAcceptedOwnerTransfer,
@@ -39,28 +39,28 @@ import {
   decodeOwnerTransfer,
   decodePendingOwnerTransfer,
   type OwnerTransfer,
-} from "@openbot/contracts/owner-transfer";
+} from "@codebot/contracts/owner-transfer";
 import {
   decodeRemoteSession,
   decodeRemoteSessionTicket,
   type RemoteSession,
   type RemoteSessionTicket,
-} from "@openbot/contracts/remote-control-plane";
-import { isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/remote-control-plane";
+import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import {
   GITHUB_REPOSITORY_NAME_PATTERN,
   type GitHubRouteRepository,
-} from "@openbot/contracts/signal-protocol/github-route";
-import { TELEGRAM_LINK_CODE_PATTERN } from "@openbot/contracts/signal-protocol/telegram-route";
+} from "@codebot/contracts/signal-protocol/github-route";
+import { TELEGRAM_LINK_CODE_PATTERN } from "@codebot/contracts/signal-protocol/telegram-route";
 import {
   REMOTE_TICKET_AUDIENCE,
   type RemoteMemberRole,
   type RemoteTicketClaims,
-} from "@openbot/contracts/signal-protocol/ticket";
-import type { ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
-import { referenceFrom, safeReference } from "@openbot/user-errors";
+} from "@codebot/contracts/signal-protocol/ticket";
+import type { ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
+import { referenceFrom, safeReference } from "@codebot/user-errors";
 import { Deferred, Duration, Effect, Exit, type Layer, Result, Schema, Semaphore } from "effect";
 import { createLocalJWKSet, jwtVerify } from "jose";
 import { z } from "zod";
@@ -123,7 +123,7 @@ interface StoredMobileConnectLink {
 
 const MOBILE_CONNECT_LINK_TOKEN = /^[A-Za-z0-9_-]{32,128}$/u;
 
-const logger = createOpenBotLogger("central-auth");
+const logger = createCodeBotLogger("central-auth");
 
 type StoredSessionStage = "read" | "decrypt" | "decode" | "encrypt" | "write";
 
@@ -1467,7 +1467,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
         `/v2/remote/hosts/${encodeURIComponent(hostId)}/logo`,
         {
           method: "PUT",
-          headers: { "Content-Type": image.mimeType, ...(version ? { "OpenBot-Logo-Version": version } : {}) },
+          headers: { "Content-Type": image.mimeType, ...(version ? { "CodeBot-Logo-Version": version } : {}) },
           body: Buffer.from(image.bytes),
         },
         (value) => requiredString(decodeRecord(value, "remote host logo"), "logoKey"),
@@ -2669,7 +2669,7 @@ export function readCentralAuthApiUrl(value: string | undefined, fallback = "htt
   const url = new URL(value ?? fallback);
   const loopback = url.hostname === "127.0.0.1" || url.hostname === "localhost";
   if ((url.protocol !== "https:" && !(url.protocol === "http:" && loopback)) || url.pathname !== "/") {
-    throw new Error("OPENBOT_AUTH_API_URL must be HTTPS or an HTTP loopback origin.");
+    throw new Error("CODEBOT_AUTH_API_URL must be HTTPS or an HTTP loopback origin.");
   }
   return url.origin;
 }

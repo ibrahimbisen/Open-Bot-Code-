@@ -8,8 +8,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MuseAgentClient } from "../src/backend/muse-client";
 import { readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/muse-instructions-once-e2e");
-const INSTRUCTIONS = "You are a teammate in OpenBot. Memory: the user likes short answers.";
+const OUT = resolve(import.meta.dirname, "../.codebot-build/muse-instructions-once-e2e");
+const INSTRUCTIONS = "You are a teammate in CodeBot. Memory: the user likes short answers.";
 const CHANGED = `${INSTRUCTIONS} Memory: the user works in Kraków.`;
 
 const fixture = `#!${process.execPath}
@@ -80,7 +80,7 @@ interface Report {
   memoryPrompts: { texts: string[] }[];
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-muse-instructions-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-muse-instructions-e2e-"));
 const report: Report = { passed: false, steps: [], prompts: [], memoryPrompts: [] };
 const clients: AgentClient[] = [];
 
@@ -182,12 +182,12 @@ try {
   const [threeUpdate = ""] = three;
   const fiveMemories = five[1] ?? "";
   assert.equal(one[0], INSTRUCTIONS, "memory: the first turn has the instructions.");
-  assert.ok(oneMemories.startsWith("<openbot_saved_memories>"), "memory: the first turn has all memories.");
+  assert.ok(oneMemories.startsWith("<codebot_saved_memories>"), "memory: the first turn has all memories.");
   assert.ok(!oneMemories.includes("Kraków"), "memory: the first block has the first list.");
   assert.equal(oneText, "one", "memory: the user text comes last.");
   assert.deepEqual(two, ["two"], "memory: an unchanged list sends no block.");
   assert.equal(three.length, 2, "memory: the edit sends one block and no instructions.");
-  assert.ok(threeUpdate.startsWith("<openbot_saved_memories_update>"), "memory: the edit sends an update block.");
+  assert.ok(threeUpdate.startsWith("<codebot_saved_memories_update>"), "memory: the edit sends an update block.");
   assert.ok(
     threeUpdate.includes("Kraków") && !threeUpdate.includes("short answers"),
     "memory: the update has only the change.",
@@ -196,7 +196,7 @@ try {
   assert.deepEqual(compact, ["compact-now"], "memory: the compacting turn sends no block.");
   assert.equal(five[0], INSTRUCTIONS, "memory: after a compaction, the instructions come again.");
   assert.ok(
-    fiveMemories.startsWith("<openbot_saved_memories>") &&
+    fiveMemories.startsWith("<codebot_saved_memories>") &&
       fiveMemories.includes("short answers") &&
       fiveMemories.includes("Kraków"),
     "memory: after a compaction, the turn has all memories again.",

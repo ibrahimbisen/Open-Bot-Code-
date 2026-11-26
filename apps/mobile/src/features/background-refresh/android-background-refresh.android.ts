@@ -7,7 +7,7 @@ import {
   type BackgroundRefreshRun,
 } from "./background-refresh-native.types";
 
-const TASK_NAME = "openbot-background-refresh";
+const TASK_NAME = "codebot-background-refresh";
 
 let current: BackgroundRefreshRun | null = null;
 let registrations: Promise<void> = Promise.resolve();

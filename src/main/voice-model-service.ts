@@ -4,18 +4,18 @@ import { createReadStream, existsSync } from "node:fs";
 import { mkdir, open, rename, rm, stat } from "node:fs/promises";
 import { availableParallelism } from "node:os";
 import { join } from "node:path";
-import type { LocalSpeechModelId, LocalVoiceModelId, VoiceModelStatus } from "@openbot/contracts/ipc";
+import type { LocalSpeechModelId, LocalVoiceModelId, VoiceModelStatus } from "@codebot/contracts/ipc";
 import {
   PARAKEET_MODEL_FILES,
   PARAKEET_UNIFIED_MODEL_FILES,
   SUPERTONIC_MODEL_FILES,
-} from "@openbot/contracts/speech-models";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/speech-models";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Exit, Fiber, Result, Schema, Scope, Stream } from "effect";
 import { causeHelpers } from "../backend/effect-boundary";
 
-const logger = createOpenBotLogger("voice-model-service");
+const logger = createCodeBotLogger("voice-model-service");
 
 export const VOICE_RUNTIME_ADDON = "sherpa-onnx.node";
 export const VOICE_SPEECH_DETECTOR = "silero_vad_v5.onnx";
@@ -144,7 +144,7 @@ export {
   PARAKEET_MODEL_FILES,
   PARAKEET_UNIFIED_MODEL_DIRECTORY,
   SUPERTONIC_MODEL_DIRECTORY,
-} from "@openbot/contracts/speech-models";
+} from "@codebot/contracts/speech-models";
 
 const VOICE_MODEL_FILES: Record<DownloadedModelId, readonly VoiceModelFile[]> = {
   "parakeet-tdt-0.6b-v3": PARAKEET_MODEL_FILES,

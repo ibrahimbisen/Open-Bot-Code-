@@ -1,10 +1,10 @@
 import { type ChildProcess, type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { EventEmitter } from "node:events";
-import { agentProviderName } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { agentProviderName } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Fiber, Result, Schema } from "effect";
 import { isTurnContextBlock } from "./agent/developer-instructions";
 import { LOG_TIMESTAMP_PREFIX } from "./agent/provider-diagnostics";
@@ -71,7 +71,7 @@ const CODEX_TOOL_STALL_MS = 60 * 60_000;
 const CODEX_STALL_CHECK_MS = 60_000;
 const OUTPUT_ITEM_TYPES: ReadonlySet<unknown> = new Set(["agentMessage", "reasoning", "userMessage", "plan"]);
 
-const logger = createOpenBotLogger("codex-app-server");
+const logger = createCodeBotLogger("codex-app-server");
 
 interface TurnClock {
   threadId: string;
@@ -607,7 +607,7 @@ export class CodexAppServerClient extends EventEmitter<ClientEvents> {
       if ("id" in message) {
         const requestTurn = notificationTurnKey(message.params);
         if (requestTurn !== null && this.#abandonedTurns.has(requestTurn)) {
-          this.#write({ id: message.id, error: { code: -32_000, message: "OpenBot stopped this turn." } });
+          this.#write({ id: message.id, error: { code: -32_000, message: "CodeBot stopped this turn." } });
           return;
         }
         const id = randomUUID();

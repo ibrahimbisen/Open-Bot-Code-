@@ -1,4 +1,4 @@
-import { Button, FileText, MessageSquareText } from "@openbot/ui";
+import { Button, FileText, MessageSquareText } from "@codebot/ui";
 import { createEffect, createMemo, createSignal, For, onSettled, Show, untrack } from "solid-js";
 import type { ComposerAgent } from "../../data";
 import { useText } from "../../text";

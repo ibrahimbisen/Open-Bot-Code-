@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/marketplace-skills-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/marketplace-skills-e2e");
 const SKILL = "Change Review";
 const TOAST_WAIT = 15_000;
 
@@ -21,7 +21,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("marketplace-skills-e2e");
+const logger = createCodeBotLogger("marketplace-skills-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -42,10 +42,10 @@ try {
   const holders = async (enabledOnly = false) =>
     page.evaluate(
       async ({ name, enabledOnly }) => {
-        const agents = await window.openbot.agent.listAgents();
+        const agents = await window.codebot.agent.listAgents();
         const ids: string[] = [];
         for (const agent of agents) {
-          const skills = await window.openbot.skills.listInstalled(agent.id);
+          const skills = await window.codebot.skills.listInstalled(agent.id);
           if (skills.some((skill) => skill.name === name && (!enabledOnly || skill.enabled !== false)))
             ids.push(agent.name);
         }
@@ -157,10 +157,10 @@ try {
   await page.keyboard.press("Escape");
   await marketplace.getByRole("tablist", { name: "Source" }).waitFor();
   await page.evaluate(async (names) => {
-    for (const agent of await window.openbot.agent.listAgents())
-      for (const skill of await window.openbot.skills.listInstalled(agent.id))
+    for (const agent of await window.codebot.agent.listAgents())
+      for (const skill of await window.codebot.skills.listInstalled(agent.id))
         if (names.includes(skill.name))
-          await window.openbot.skills.uninstall({ agentId: agent.id, skillId: skill.skillId });
+          await window.codebot.skills.uninstall({ agentId: agent.id, skillId: skill.skillId });
   }, extra);
   await marketplace.getByRole("button", { name: "See all: Your skills", exact: true }).waitFor({ state: "detached" });
 

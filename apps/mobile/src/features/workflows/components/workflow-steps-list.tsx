@@ -1,5 +1,5 @@
-import type { WorkflowBranch, WorkflowGraph, WorkflowNode } from "@openbot/contracts/ipc";
-import type { MobileTranslate } from "@openbot/i18n/mobile";
+import type { WorkflowBranch, WorkflowGraph, WorkflowNode } from "@codebot/contracts/ipc";
+import type { MobileTranslate } from "@codebot/i18n/mobile";
 import { Typography } from "heroui-native";
 import CornerDownLeft from "lucide-react-native/icons/corner-down-left";
 import { useState } from "react";
@@ -46,7 +46,7 @@ export function FlowRowNote({
   labelOf: (id: string) => string;
 }) {
   const { t } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   if (row.type === "path" || row.type === "loose") {
     const text = row.type === "loose" ? t("mobile.workflow.editor.loose") : pathLabel(row.branch, row.index, t);
     const tone = row.type === "path" ? pathTone(row.branch) : "text-grouped-secondary";

@@ -20,7 +20,7 @@ export interface RoundupPageProps {
 }
 
 function appMark(app: RoundupApp) {
-  return app.mark === "openbot" ? undefined : app.mark;
+  return app.mark === "codebot" ? undefined : app.mark;
 }
 
 export function RoundupPage(props: RoundupPageProps) {
@@ -51,7 +51,7 @@ export function RoundupPage(props: RoundupPageProps) {
       <RevealSection class="compare-answer" titleId="compare-answer-title" title="The short answer">
         <p class="compare-answer-text">{props.roundup.answer}</p>
         <p class="compare-roundup-disclosure">
-          We make OpenBot, so it's first on the list. Every other entry links to a comparison with its sources.
+          We make CodeBot, so it's first on the list. Every other entry links to a comparison with its sources.
         </p>
       </RevealSection>
 

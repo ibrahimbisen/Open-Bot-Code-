@@ -1,5 +1,5 @@
-import type { CustomProviderRestart } from "@openbot/contracts/ipc";
-import type { AppTextKey, AppTranslate } from "@openbot/i18n";
+import type { CustomProviderRestart } from "@codebot/contracts/ipc";
+import type { AppTextKey, AppTranslate } from "@codebot/i18n";
 
 const RESTART_NOTE = {
   Saved: {

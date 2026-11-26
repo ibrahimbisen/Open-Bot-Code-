@@ -82,7 +82,7 @@ export type AgentEvent =
   | { type: "library-folders-changed" }
   | { type: "workflow-folders-changed" }
   | { type: "usage-credits-changed" }
-  | { type: "openbot-credits-changed" }
+  | { type: "codebot-credits-changed" }
   | { type: "agent-session-settings-changed"; agentId: string }
   | { type: "message-pins-changed"; agentId: string }
   | { type: "channel-memories-changed"; channelId: string }
@@ -234,7 +234,7 @@ export function isAgentEvent(value: unknown): value is AgentEvent {
     case "library-folders-changed":
     case "workflow-folders-changed":
     case "usage-credits-changed":
-    case "openbot-credits-changed":
+    case "codebot-credits-changed":
       return true;
     case "channel-memories-changed":
     case "channel-routines-changed":

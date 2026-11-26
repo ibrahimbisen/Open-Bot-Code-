@@ -1,5 +1,5 @@
-import type { ConversationSubagent } from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
+import type { ConversationSubagent } from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
 import type { VirtualItem } from "@tanstack/virtual-core";
 import { createEffect, createMemo, createSignal, untrack } from "solid-js";
 

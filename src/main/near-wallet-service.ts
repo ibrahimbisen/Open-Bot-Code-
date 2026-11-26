@@ -1,5 +1,23 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
+  NEAR_WALLET_LIMITS,
+  type NearAgentsInput,
+  type NearAllowPaymentInput,
+  type NearBalance,
+  type NearDepositAddress,
+  type NearDepositAsset,
+  type NearDepositInput,
+  type NearPasskeyBackup,
+  type NearPendingPayment,
+  type NearRuleInput,
+  type NearSigning,
+  type NearWalletCreateInput,
+  type NearWalletState,
+  type NearWalletStatus,
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText, registerSecretValue, toLogValue } from "@codebot/logging";
+import {
   type AgentApi,
   AgentApiError,
   type AgentApiOptions,
@@ -16,24 +34,6 @@ import {
   type StatusResponse,
   type TokenView,
 } from "@near-intents-agent-api/sdk";
-import {
-  NEAR_WALLET_LIMITS,
-  type NearAgentsInput,
-  type NearAllowPaymentInput,
-  type NearBalance,
-  type NearDepositAddress,
-  type NearDepositAsset,
-  type NearDepositInput,
-  type NearPasskeyBackup,
-  type NearPendingPayment,
-  type NearRuleInput,
-  type NearSigning,
-  type NearWalletCreateInput,
-  type NearWalletState,
-  type NearWalletStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText, registerSecretValue, toLogValue } from "@openbot/logging";
 import { Duration, Effect, Exit, Fiber, Result, Scope, Semaphore } from "effect";
 import {
   type NearPaymentRequest,
@@ -53,7 +53,7 @@ import {
 } from "./near-wallet-signing";
 import type { NearOwner, NearStoredPayment, NearWalletRecord, NearWalletStore } from "./near-wallet-store";
 
-const logger = createOpenBotLogger("near-wallet");
+const logger = createCodeBotLogger("near-wallet");
 
 const GRANT_DAYS = 30;
 const DAY_MS = 24 * 60 * 60_000;
@@ -69,8 +69,8 @@ const REPLAY_WINDOW_MS = 60 * 60_000;
 const SEND_ATTEMPTS = 3;
 const MAX_PREPARED = 32;
 const MAX_ACTIONS_PER_HOUR = 20;
-const AGENT_NAME = "OpenBot";
-const GATEWAY_API_KEY = "openbot-gateway";
+const AGENT_NAME = "CodeBot";
+const GATEWAY_API_KEY = "codebot-gateway";
 
 const NEAR_ACCOUNT =
   /^(?=.{2,64}$)(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$|^[0-9a-f]{64}$|^0x[0-9a-f]{40}$/u;
@@ -1318,7 +1318,7 @@ function mayHaveTakenEffect(error: AgentApiError): boolean {
 }
 
 function newKey(): string {
-  return `openbot-${randomUUID()}`;
+  return `codebot-${randomUUID()}`;
 }
 
 function apiDetail(error: AgentApiError): string {

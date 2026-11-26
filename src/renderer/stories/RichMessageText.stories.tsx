@@ -1,8 +1,8 @@
-import { serializeAttachmentReference } from "@openbot/contracts/attachment-references";
-import { serializeChatTagReference } from "@openbot/contracts/chat-tag-references";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
-import type { MessageCitation } from "@openbot/ui/data";
-import { RichMessageText } from "@openbot/ui/features/conversation/RichMessageText";
+import { serializeAttachmentReference } from "@codebot/contracts/attachment-references";
+import { serializeChatTagReference } from "@codebot/contracts/chat-tag-references";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
+import type { MessageCitation } from "@codebot/ui/data";
+import { RichMessageText } from "@codebot/ui/features/conversation/RichMessageText";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { requireFixture, STORY_AGENTS, STORY_ATTACHMENTS, STORY_INSTALLED_SKILLS } from "./fixtures";
@@ -149,7 +149,7 @@ export const InlineFileReferences: Story = {
 
 export const PlainFileReferences: Story = {
   args: {
-    body: `Here is ${firstStoryAttachment.name}. You can also review ~/OpenBot/Shared/brief.pdf.`,
+    body: `Here is ${firstStoryAttachment.name}. You can also review ~/CodeBot/Shared/brief.pdf.`,
     attachments: [firstStoryAttachment],
     onOpenAttachment: fn(),
     onOpenSharedFile: fn(),
@@ -234,7 +234,7 @@ const allChipKindsBody = [
   serializeAttachmentReference(logAttachment.name, logAttachment.id),
   serializeAttachmentReference(secondFileTypeAttachment.name, secondFileTypeAttachment.id),
   serializeAttachmentReference(fourthFileTypeAttachment.name, fourthFileTypeAttachment.id),
-  "and ~/OpenBot/Shared/brief.pdf, then compare",
+  "and ~/CodeBot/Shared/brief.pdf, then compare",
   serializeAttachmentReference(longAttachment.name, longAttachment.id),
   "with https://openbot.run/docs [1].",
 ].join(" ");

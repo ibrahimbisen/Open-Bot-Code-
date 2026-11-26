@@ -3,12 +3,12 @@ import { createHash, randomBytes } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { DEFAULT_TEAM_MEMBER_LIMIT } from "@openbot/contracts/input-limits";
+import { DEFAULT_TEAM_MEMBER_LIMIT } from "@codebot/contracts/input-limits";
 import { z } from "zod";
 import { developmentChildEnvironment } from "./development-environment";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REPORT = join(ROOT, ".openbot-build", "owner-transfer-e2e.json");
+const REPORT = join(ROOT, ".codebot-build", "owner-transfer-e2e.json");
 const DAY = 86_400_000;
 const PREFIX = "e2e-owner-transfer";
 const ACCOUNT_NAMES = ["owner", "admin", "recipient", "stranger"] as const;
@@ -31,7 +31,7 @@ const sessionSchema = z.object({ sessionToken: z.string(), user: z.object({ id: 
 function d1<T>(sql: string, schema: z.ZodType<T>): T[] {
   const result = spawnSync(
     join(ROOT, "node_modules/.bin/wrangler"),
-    ["d1", "execute", "openbot-auth", "--local", "--json", "--command", sql],
+    ["d1", "execute", "codebot-auth", "--local", "--json", "--command", sql],
     { cwd: join(ROOT, "apps/auth-api"), encoding: "utf8", env: developmentChildEnvironment(process.env, "app") },
   );
   if (result.status !== 0) {
@@ -194,7 +194,7 @@ async function run(api: string) {
     body: JSON.stringify({ email: recipient.email }),
   });
   record(
-    "a server that OpenBot hosts cannot be transferred",
+    "a server that CodeBot hosts cannot be transferred",
     (await errorCode(hosted)) === "owner_transfer_hosted",
     String(hosted.status),
   );

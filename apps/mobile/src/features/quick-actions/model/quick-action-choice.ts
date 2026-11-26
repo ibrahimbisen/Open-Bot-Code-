@@ -8,7 +8,7 @@ export const QUICK_ACTION_LIMIT = 4;
 
 const DEFAULT_KINDS: readonly QuickActionKind[] = ["latestChat", "schedule", "search", "support"];
 
-const key = "openbot.mobile.quickActions.v1";
+const key = "codebot.mobile.quickActions.v1";
 
 export const useQuickActionChoice = create<{ kinds: readonly QuickActionKind[] | null }>(() => ({ kinds: null }));
 

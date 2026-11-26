@@ -1,4 +1,4 @@
-import type { AgentEvent, TeamRealtimeEvent } from "@openbot/contracts/ipc";
+import type { AgentEvent, TeamRealtimeEvent } from "@codebot/contracts/ipc";
 import { playActionSound } from "../../action-sounds";
 
 export function createAgentEventSounds(

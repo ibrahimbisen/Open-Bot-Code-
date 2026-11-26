@@ -1,5 +1,5 @@
 import type { ChildProcess } from "node:child_process";
-import { type AgentProviderId, isAgentProvider } from "@openbot/contracts/agent-providers";
+import { type AgentProviderId, isAgentProvider } from "@codebot/contracts/agent-providers";
 
 const processes = new Map<number, AgentProviderId>();
 

@@ -2,34 +2,34 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-server-lost-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-server-lost-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-server-lost-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-server-lost-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const logPath = join(root, "protocol.jsonl");
 const fakeOpenCode = join(root, "opencode");
 
 process.env.HOME = home;
-process.env.OPENBOT_OPENCODE_PATH = fakeOpenCode;
-process.env.OPENBOT_FAKE_OPENCODE_LOG = logPath;
-process.env.OPENBOT_FAKE_OPENCODE_LOST = join(root, "server-lost");
+process.env.CODEBOT_OPENCODE_PATH = fakeOpenCode;
+process.env.CODEBOT_FAKE_OPENCODE_LOG = logPath;
+process.env.CODEBOT_FAKE_OPENCODE_LOST = join(root, "server-lost");
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const FAKE_OPENCODE = `#!/usr/bin/env node
 const fs = require("node:fs");
 const NL = String.fromCharCode(10);
 if (process.argv.includes("--version")) { process.stdout.write("2.3.0" + NL); process.exit(0); }
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_OPENCODE_LOG, JSON.stringify({ pid: process.pid, ...entry }) + NL);
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_OPENCODE_LOG, JSON.stringify({ pid: process.pid, ...entry }) + NL);
 log({ start: true });
 const write = (message) => process.stdout.write(JSON.stringify({ jsonrpc: "2.0", ...message }) + NL);
 const MODEL = "opencode/big-pickle";
@@ -47,7 +47,7 @@ function handle(message) {
   if (message.method === "session/list") return write({ id: message.id, result: { sessions: [] } });
   if (message.method === "session/prompt") {
     const lost = text.includes("Second message") ? "exit" : text.includes("Third message") ? "stay" : null;
-    const marker = process.env.OPENBOT_FAKE_OPENCODE_LOST + "-" + lost;
+    const marker = process.env.CODEBOT_FAKE_OPENCODE_LOST + "-" + lost;
     if (lost && !fs.existsSync(marker)) {
       fs.writeFileSync(marker, "");
       chunk(params.sessionId, "Here is the first part");
@@ -139,7 +139,7 @@ async function waitFor<T>(label: string, read: () => T | null | undefined | fals
 }
 
 await writeFile(fakeOpenCode, FAKE_OPENCODE, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

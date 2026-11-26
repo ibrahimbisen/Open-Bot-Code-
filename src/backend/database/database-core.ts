@@ -6,9 +6,9 @@ import { DatabaseSync, type StatementSync } from "node:sqlite";
 import { Effect, Result } from "effect";
 import {
   assertQuickCheckResult,
-  migrateOpenBotDatabase,
-  openBotDatabaseNeedsMigration,
-} from "../openbot-database-schema";
+  codeBotDatabaseNeedsMigration,
+  migrateCodeBotDatabase,
+} from "../codebot-database-schema";
 import { storedIO, storedSync } from "../stored-state-effects";
 import { databaseRow, errorCode, requiredNumberColumn, requiredStringColumn } from "./database-rows";
 import { withTransaction } from "./sqlite-transaction";
@@ -29,9 +29,9 @@ interface ReceiptRow {
   result_json: string;
 }
 
-export const COLLAPSE_WHITESPACE_FUNCTION = "openbot_collapse_whitespace";
+export const COLLAPSE_WHITESPACE_FUNCTION = "codebot_collapse_whitespace";
 
-export const LOWERCASE_FUNCTION = "openbot_lowercase";
+export const LOWERCASE_FUNCTION = "codebot_lowercase";
 
 export interface DatabaseCoreOptions {
   userDataPath: string;
@@ -45,7 +45,7 @@ export class DatabaseCore {
   #db: DatabaseSync | null = null;
 
   constructor(options: DatabaseCoreOptions) {
-    this.path = join(options.userDataPath, "openbot.db");
+    this.path = join(options.userDataPath, "codebot.db");
     this.#legacyBackupRoot = join(options.userDataPath, "legacy-backup-v1");
     this.#checkIntegrity = options.checkIntegrity;
   }
@@ -71,7 +71,7 @@ export class DatabaseCore {
         });
         const checkIntegrity = this.#checkIntegrity;
         const problems =
-          closedCleanly || !checkIntegrity || (yield* storedSync(() => openBotDatabaseNeedsMigration(db)))
+          closedCleanly || !checkIntegrity || (yield* storedSync(() => codeBotDatabaseNeedsMigration(db)))
             ? null
             : yield* checkIntegrity(this.path);
         if (problems) yield* storedSync(() => assertQuickCheckResult(problems));
@@ -99,7 +99,7 @@ export class DatabaseCore {
   }
 
   get connection(): DatabaseSync {
-    if (!this.#db) throw new Error("OpenBot database is not initialized.");
+    if (!this.#db) throw new Error("CodeBot database is not initialized.");
     return this.#db;
   }
 
@@ -192,7 +192,7 @@ export class DatabaseCore {
   }
 
   #migrate(closedCleanly: boolean): void {
-    migrateOpenBotDatabase(this.connection, { closedCleanly });
+    migrateCodeBotDatabase(this.connection, { closedCleanly });
   }
 }
 

@@ -1,11 +1,11 @@
-import { AppLogo } from "@openbot/brand";
-import type { BillingInterval } from "@openbot/contracts/billing";
-import { LICENSE_YEAR_DISCOUNT_PERCENT, licensePlanPrice } from "@openbot/contracts/license";
-import { REFERRAL_SHARE_PERCENT } from "@openbot/contracts/referral";
-import type { TranslatedLocale } from "@openbot/i18n";
-import { createFormat } from "@openbot/i18n/format";
-import { formatMinorMoney } from "@openbot/ui/features/billing/money";
-import { yearlyDiscountPercent } from "@openbot/ui/features/billing/OrderForm";
+import { AppLogo } from "@codebot/brand";
+import type { BillingInterval } from "@codebot/contracts/billing";
+import { LICENSE_YEAR_DISCOUNT_PERCENT, licensePlanPrice } from "@codebot/contracts/license";
+import { REFERRAL_SHARE_PERCENT } from "@codebot/contracts/referral";
+import type { TranslatedLocale } from "@codebot/i18n";
+import { createFormat } from "@codebot/i18n/format";
+import { formatMinorMoney } from "@codebot/ui/features/billing/money";
+import { yearlyDiscountPercent } from "@codebot/ui/features/billing/OrderForm";
 import { createSignal, For, onCleanup, onSettled, Show } from "solid-js";
 import { landingAnalytics } from "../../lib/analytics";
 import type { PricingOffer } from "../../lib/pricing-page";
@@ -253,7 +253,7 @@ function GiftCard(props: { text: ReferralPageText; invite: ReferralInvite; forma
         <div class="referral-card-top">
           <span class="referral-card-brand">
             <AppLogo variant="production" animation="blink" />
-            OpenBot
+            CodeBot
           </span>
           <Show
             when={props.invite.inviterName}

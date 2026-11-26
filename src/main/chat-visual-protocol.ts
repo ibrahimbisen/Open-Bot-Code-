@@ -3,7 +3,7 @@ import {
   CHAT_VISUAL_PAGE_LIMIT,
   type ChatVisualDocumentOptions,
   chatVisualDocument,
-} from "@openbot/contracts/chat-visual";
+} from "@codebot/contracts/chat-visual";
 import { isTrustedRendererUrl } from "./trusted-renderer";
 
 const DOCUMENT_MIME_TYPES = new Set(["text/html", "application/xhtml+xml", "image/svg+xml"]);

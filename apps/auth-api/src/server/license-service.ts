@@ -6,7 +6,7 @@ import {
   type BillingInterval,
   type BillingSubscriptionStatus,
   isOpenBillingStatus,
-} from "@openbot/contracts/billing";
+} from "@codebot/contracts/billing";
 import {
   LICENSE_INCLUDED_USERS,
   LICENSE_LOOKUP_KEYS,
@@ -27,9 +27,9 @@ import {
   licensePeriodAmount,
   licensePlanFromPrice,
   ORDER_METADATA,
-} from "@openbot/contracts/license";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/license";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Layer } from "effect";
 import {
   type AccountAnalytics,
@@ -77,9 +77,9 @@ const priceCache = new Map<string, { expiresAt: number; prices: ReadonlyMap<stri
 export type LicenseReturnTarget = "desktop" | "web";
 
 const LICENSE_EMAIL_CLAIM_PREFIXES = {
-  welcome: "openbot_license_email:",
-  payment_failed: "openbot_license_payment_failed:",
-  ended: "openbot_license_ended:",
+  welcome: "codebot_license_email:",
+  payment_failed: "codebot_license_payment_failed:",
+  ended: "codebot_license_ended:",
 } as const satisfies Record<LicenseEmailInput["kind"], string>;
 const BEFORE_FIRST_PAYMENT_STATUSES: ReadonlySet<string> = new Set(["trialing", "incomplete"]);
 const UNPAID_STATUSES: ReadonlySet<string> = new Set(["past_due", "unpaid", "paused"]);
@@ -723,7 +723,7 @@ export class LicenseService {
         !Number.isSafeInteger(users) ||
         users < 1
       ) {
-        console.warn("billing: subscription is not an OpenBot license", { subscriptionId: subscription.id });
+        console.warn("billing: subscription is not an CodeBot license", { subscriptionId: subscription.id });
         return null;
       }
       const cancelAtPeriodEnd = subscription.cancel_at_period_end || typeof subscription.cancel_at === "number";

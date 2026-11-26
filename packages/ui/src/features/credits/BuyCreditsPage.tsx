@@ -1,4 +1,4 @@
-import type { BillingCurrency } from "@openbot/contracts/billing";
+import type { BillingCurrency } from "@codebot/contracts/billing";
 import {
   CREDIT_CLIP_SECONDS,
   CREDIT_PACK_INDEXES,
@@ -17,8 +17,8 @@ import {
   creditStops,
   creditTenths,
   creditTier,
-} from "@openbot/contracts/credits";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/credits";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertActions,
@@ -32,7 +32,7 @@ import {
   SliderField,
   Text,
   TriangleAlert,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, Match, Show, Switch, untrack } from "solid-js";
 import { RollingPrice } from "../../rolling-price";

@@ -9,7 +9,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type DynamicToolNamespace, LocalMcpBridge, type LocalMcpSession } from "../src/backend/local-mcp-bridge";
 import { isRecord } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-mcp-shared-token-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-mcp-shared-token-e2e");
 
 interface Report {
   passed: boolean;
@@ -19,7 +19,7 @@ interface Report {
 
 const namespace: DynamicToolNamespace = {
   type: "namespace",
-  name: "openbot",
+  name: "codebot",
   tools: [{ type: "function", name: "whoami", inputSchema: { type: "object", properties: {} } }],
 };
 

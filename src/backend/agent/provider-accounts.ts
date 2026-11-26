@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import type { AgentProviderId } from "@openbot/contracts/agent-providers";
+import type { AgentProviderId } from "@codebot/contracts/agent-providers";
 import {
   type AccountUsage,
   type AccountUsageLimit,
@@ -14,12 +14,12 @@ import {
   type ProviderUsageResetOutcome,
   type ProviderUsageResets,
   usageQuotaForModel,
-} from "@openbot/contracts/ipc";
-import { CLAUDE_API_KEY_ACCOUNT_ID } from "@openbot/contracts/team-protocol/claude-api-key-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Cause, Deferred, Effect, Exit, Fiber, Schema, type Scope } from "effect";
-import { googleSignInByOpenBot, startAcpAuthentication } from "./../acp-sign-in";
+import { googleSignInByCodeBot, startAcpAuthentication } from "./../acp-sign-in";
 import type { AgentClient } from "./../agent-client";
 import { type AgentCliInfo, cliPathEnvironment, cliSpawnTarget } from "./../cli";
 import { type AccountReadResult, CLAUDE_CLI_API_KEY_ACCOUNT_TYPE } from "./../protocol";
@@ -34,14 +34,14 @@ import type { ProviderTempOptions } from "./../provider-temp";
 import { shortenDiagnostic } from "./../stderr-diagnostics";
 import { stopProcessTree } from "../windows-process-tree";
 import { usageWindowResetSince } from "./account-usage";
-import { captureBrowser, signInPageByOpenBot } from "./browser-capture";
+import { captureBrowser, signInPageByCodeBot } from "./browser-capture";
 import { type CliCodeLogin, type CliCodePrompt, pasteCodeLoginSupported, startCliCodeLogin } from "./cli-code-login";
 import type { ProviderAccountStore, StoredProviderAccount } from "./provider-account-store";
 import { ProviderProcessFailed, waitForSignInProcess, waitForSuccessfulProcess } from "./provider-status";
 import { providerLabel } from "./thread-items";
 import { UsageReadGate } from "./usage-read-gate";
 
-const logger = createOpenBotLogger("provider-accounts");
+const logger = createCodeBotLogger("provider-accounts");
 
 const ACCOUNT_CHECK_TTL_MS = 5 * 60_000;
 
@@ -292,11 +292,11 @@ export class ProviderAccounts {
             timeoutMs: command.timeoutMs,
             ...(added ? {} : { logout: true }),
             privateTemp: this.#host.signInTemp(provider),
-            ...(googleSignInByOpenBot(onHost) ? { openSignInPage: { site: "google", open: openExternal } } : {}),
+            ...(googleSignInByCodeBot(onHost) ? { openSignInPage: { site: "google", open: openExternal } } : {}),
           });
           return yield* login.done;
         }
-        const browser = signInPageByOpenBot(onHost, command) ? yield* captureBrowser(openExternal) : {};
+        const browser = signInPageByCodeBot(onHost, command) ? yield* captureBrowser(openExternal) : {};
         const target = cliSpawnTarget(cli.executable, command.argv);
         const child = yield* Effect.acquireRelease(
           Effect.sync(() =>

@@ -6,9 +6,9 @@ import { join, resolve } from "node:path";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-stored-sign-in-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-stored-sign-in-e2e");
 const REPORT = join(OUT, "report.json");
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-stored-sign-in-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-stored-sign-in-"));
 const executable = join(root, "claude.cjs");
 const logPath = join(root, "claude.jsonl");
 for (const name of ["ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CONFIG_DIR"]) delete process.env[name];

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentTask, ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentTask, ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { argument, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
 const fromArgument = argument("from");
@@ -40,30 +40,30 @@ const started: Array<{ agentId: string; taskId: string }> = [];
 const bridge = {
   agent: (id: string) =>
     page.evaluate(async (agentId) => {
-      const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === agentId);
+      const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === agentId);
       if (!found) throw new Error(`Unknown agent: ${agentId}`);
       return { name: found.name, provider: found.provider };
     }, id),
   tasks: (id: string): Promise<AgentTask[]> =>
-    page.evaluate((agentId) => window.openbot.agent.listTasks(agentId).then((snapshot) => snapshot.tasks), id),
+    page.evaluate((agentId) => window.codebot.agent.listTasks(agentId).then((snapshot) => snapshot.tasks), id),
   main: (id: string): Promise<ConversationSnapshot> =>
-    page.evaluate((agentId) => window.openbot.agent.readConversation(agentId), id),
+    page.evaluate((agentId) => window.codebot.agent.readConversation(agentId), id),
   side: (agentId: string, taskId: string): Promise<ConversationSnapshot> =>
-    page.evaluate((input) => window.openbot.agent.readTask(input), { agentId, taskId }),
+    page.evaluate((input) => window.codebot.agent.readTask(input), { agentId, taskId }),
   send: (agentId: string, text: string) =>
-    page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+    page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
       agentId,
       text,
     }),
   stop: (agentId: string, taskId: string) =>
-    page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId }),
+    page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId }),
   close: (agentId: string, taskId: string) =>
-    page.evaluate((input) => window.openbot.agent.closeTask(input), { agentId, taskId }),
+    page.evaluate((input) => window.codebot.agent.closeTask(input), { agentId, taskId }),
   reopen: (agentId: string, taskId: string) =>
-    page.evaluate((input) => window.openbot.agent.reopenTask(input), { agentId, taskId }),
+    page.evaluate((input) => window.codebot.agent.reopenTask(input), { agentId, taskId }),
   startTask: async (agentId: string, text: string): Promise<AgentTask> => {
     const task = await page.evaluate(
-      (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+      (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
       { agentId, text },
     );
     started.push({ agentId, taskId: task.id });
@@ -101,7 +101,7 @@ async function step(name: string, body: (details: Details) => Promise<void>): Pr
 
 const ask = (word: string, question: string, toName: string) =>
   [
-    `Use openbot.send_message to send ${toName} (agent id "${to}") this message, with expectsReply true:`,
+    `Use codebot.send_message to send ${toName} (agent id "${to}") this message, with expectsReply true:`,
     `"${word}: ${question} Answer with only the number."`,
     "Then end your turn and reply with the single word SENT. Do not wait for the answer.",
   ].join("\n");
@@ -258,7 +258,7 @@ try {
     const pong = `PONG${run}`;
     await bridge.send(
       from,
-      `Call openbot.start_task with the title "${title}" and the brief "Reply with the single word ${pong}. Do not use tools." Then reply with the single word STARTED.`,
+      `Call codebot.start_task with the title "${title}" and the brief "Reply with the single word ${pong}. Do not use tools." Then reply with the single word STARTED.`,
     );
     const created = await waitFor(
       page,
@@ -287,7 +287,7 @@ try {
     const brief = (m: ConversationMessage) => m.text.startsWith(`Reply with the single word ${pong}`);
     details.mainHasThreadAnswer = has(main, answerWith(pong));
     details.mainHasBrief = has(main, brief);
-    await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId: from, taskId: created.id });
+    await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId: from, taskId: created.id });
     started.splice(
       started.findIndex((entry) => entry.taskId === created.id),
       1,
@@ -305,8 +305,8 @@ try {
       from,
       [
         "Call each tool once, in order, and do not retry. Then reply with the exact result text of each call, one per line.",
-        `1. openbot.start_task with the title "${title}" and the brief "Reply ok."`,
-        "2. openbot.start_new_chat with no arguments.",
+        `1. codebot.start_task with the title "${title}" and the brief "Reply ok."`,
+        "2. codebot.start_new_chat with no arguments.",
       ].join("\n"),
     );
     details.taskId = side.id;
@@ -384,7 +384,7 @@ try {
       const side = await bridge.startTask(
         from,
         [
-          `Use openbot.send_message once, with recipientAgentIds ["${to}", "${alsoId}"] (${toAgentInfo.name} and ${alsoInfo.name}) and expectsReply true, to send:`,
+          `Use codebot.send_message once, with recipientAgentIds ["${to}", "${alsoId}"] (${toAgentInfo.name} and ${alsoInfo.name}) and expectsReply true, to send:`,
           `"${word}: What is 9+9? Answer with only the number."`,
           "Then end your turn and reply with the single word SENT. Do not wait for the answers.",
         ].join("\n"),
@@ -435,7 +435,7 @@ try {
     const sent = (s: ConversationSnapshot) =>
       s.messages.slice(s.messages.findIndex(fromAgent(from, word)) + 1).some((m) => m.text.includes("16"));
     details.recipientAnsweredBefore = has(recipientBefore, fromAgent(from, word)) && sent(recipientBefore);
-    await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId: from, taskId: side.id });
+    await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId: from, taskId: side.id });
     started.splice(
       started.findIndex((entry) => entry.taskId === side.id),
       1,
@@ -531,7 +531,7 @@ try {
     const side = await bridge.startTask(
       from,
       [
-        `Use openbot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
+        `Use codebot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
         `"${word}: What is 9+3? Answer with only the number."`,
         `Then ${busyFor(120)}, and then reply DONE.`,
         `When the answer comes, reply with ${got} and the number.`,
@@ -574,7 +574,7 @@ try {
     const side = await bridge.startTask(
       from,
       [
-        `Use openbot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
+        `Use codebot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
         `"${word}: What is 9+4? Answer with only the number."`,
         `Then ${busyFor(120)}, and then reply DONE.`,
       ].join("\n"),
@@ -612,27 +612,27 @@ try {
     const start = `S13${run}`;
     const personNotice = `P13${run}`;
     const personSlept = `PSLEPT13${run}`;
-    const settings = await page.evaluate((agentId) => window.openbot.agent.getAgentHostSettings(agentId), to);
+    const settings = await page.evaluate((agentId) => window.codebot.agent.getAgentHostSettings(agentId), to);
     const mode = (busyMessageMode: "steer" | "queue" | null) =>
-      page.evaluate((input) => window.openbot.agent.updateAgentHostSettings(input), {
+      page.evaluate((input) => window.codebot.agent.updateAgentHostSettings(input), {
         agentId: to,
         busyMessageMode,
       });
     const fromA = async (text: string) => {
-      const queue = await page.evaluate((agentId) => window.openbot.agent.listQueue(agentId), to);
+      const queue = await page.evaluate((agentId) => window.codebot.agent.listQueue(agentId), to);
       return queue.deliveries.find((entry) => entry.sender.kind === "agent" && entry.text.includes(text)) ?? null;
     };
     const sendFromA = (text: string) =>
       bridge.send(
         from,
         [
-          `Use openbot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply false:`,
+          `Use codebot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply false:`,
           `"${text}"`,
           "Then end your turn and reply with the single word SENT.",
         ].join("\n"),
       );
     await waitFor(page, "B's own chat is idle", () => bridge.main(to), idle, TURN_MS);
-    await page.evaluate((agentId) => window.openbot.agent.clearContext(agentId), to);
+    await page.evaluate((agentId) => window.codebot.agent.clearContext(agentId), to);
     await mode("steer");
     try {
       await bridge.send(to, `First ${busyFor(120)}, then reply with the single word ${personSlept}.`);
@@ -665,11 +665,11 @@ try {
       assert.notEqual(details.personNoticeTurnId, personTurnId, "The notice ran in the person's turn.");
       await waitFor(page, "B's own chat is idle again", () => bridge.main(to), idle, TURN_MS);
 
-      await page.evaluate((agentId) => window.openbot.agent.clearContext(agentId), to);
+      await page.evaluate((agentId) => window.codebot.agent.clearContext(agentId), to);
       await bridge.send(
         from,
         [
-          `Use openbot.send_message to send ${toAgentInfo.name} (agent id "${to}") this request, with expectsReply true:`,
+          `Use codebot.send_message to send ${toAgentInfo.name} (agent id "${to}") this request, with expectsReply true:`,
           `"${start}: Please check that the local network stays up for two minutes: ${busyFor(120)}. Then send me only the packet loss percentage."`,
           "Then end your turn and reply with the single word SENT. Do not wait for the answer.",
         ].join("\n"),
@@ -740,12 +740,12 @@ try {
     const side = await bridge.startTask(
       from,
       [
-        `Use openbot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
-        `"${word}: Before you answer, ask me which two numbers to add. Ask with openbot.send_message as a new message:`,
+        `Use codebot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
+        `"${word}: Before you answer, ask me which two numbers to add. Ask with codebot.send_message as a new message:`,
         `recipientAgentIds ["${from}"], no replyToMessageId, expectsReply true, and text that starts with Q14${run}.`,
-        "Then end your turn. When I give you the numbers, send me only their sum with openbot.send_message,",
+        "Then end your turn. When I give you the numbers, send me only their sum with codebot.send_message,",
         'no replyToMessageId."',
-        `When ${toAgentInfo.name} asks which numbers, answer "5 and 6" with openbot.send_message, replyToMessageId`,
+        `When ${toAgentInfo.name} asks which numbers, answer "5 and 6" with codebot.send_message, replyToMessageId`,
         "and expectsReply false.",
         "Then end your turn and reply with the single word SENT. Do not wait for the answer.",
       ].join("\n"),
@@ -796,7 +796,7 @@ try {
       from,
       [
         `When ${toAgentInfo.name} sends you a message that starts with ${notice}, send ${toAgentInfo.name}`,
-        `(agent id "${to}") a new message with openbot.send_message: no replyToMessageId, expectsReply false,`,
+        `(agent id "${to}") a new message with codebot.send_message: no replyToMessageId, expectsReply false,`,
         `and text that starts with ${marker}. Now reply with the single word OK.`,
       ].join("\n"),
     );
@@ -810,7 +810,7 @@ try {
     const side = await bridge.startTask(
       to,
       [
-        `Use openbot.send_message to send ${fromAgentInfo.name} (agent id "${from}") the message "${notice}",`,
+        `Use codebot.send_message to send ${fromAgentInfo.name} (agent id "${from}") the message "${notice}",`,
         "with expectsReply false. Then end your turn and reply with the single word SENT.",
       ].join("\n"),
     );
@@ -841,9 +841,9 @@ try {
     }
     const first = `M16${run}`;
     const second = `L16${run}`;
-    const settings = await page.evaluate((agentId) => window.openbot.agent.getAgentHostSettings(agentId), from);
+    const settings = await page.evaluate((agentId) => window.codebot.agent.getAgentHostSettings(agentId), from);
     const mode = (busyMessageMode: "steer" | "queue" | null) =>
-      page.evaluate((input) => window.openbot.agent.updateAgentHostSettings(input), {
+      page.evaluate((input) => window.codebot.agent.updateAgentHostSettings(input), {
         agentId: from,
         busyMessageMode,
       });
@@ -857,9 +857,9 @@ try {
       const side = await bridge.startTask(
         from,
         [
-          `Use openbot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
+          `Use codebot.send_message to send ${toAgentInfo.name} (agent id "${to}") this message, with expectsReply true:`,
           `"${first}: What is 2+2? Answer with only the number."`,
-          `When the answer comes, send ${toAgentInfo.name} this second message with openbot.send_message, expectsReply true:`,
+          `When the answer comes, send ${toAgentInfo.name} this second message with codebot.send_message, expectsReply true:`,
           `"${second}: First ${busyFor(20)}. Then answer: what is 5+5? Answer with only the number."`,
           `Right after you send it, ${busyFor(150)}, then reply with the single word DONE.`,
           "Now end your turn and reply with the single word SENT. Do not wait for the answer.",
@@ -912,7 +912,7 @@ try {
   report.passed = report.steps.every((entry) => entry.passed);
 } finally {
   for (const { agentId, taskId } of started.reverse()) {
-    await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
     await waitFor(
       page,
       "the cleanup stop",
@@ -920,7 +920,7 @@ try {
       (entry) => entry?.state !== "running",
       30_000,
     ).catch(() => undefined);
-    await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId }).catch(() => undefined);
   }
   writeReport("agent-threads-messaging-e2e", report);
   await session.close();

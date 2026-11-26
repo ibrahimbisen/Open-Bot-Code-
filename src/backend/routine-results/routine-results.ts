@@ -7,15 +7,15 @@ import type {
   RoutineResultDestination,
   RoutineResultRoutineInput,
   SetRoutineResultDestinationInput,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Cause, Context, Effect, Exit, Fiber, Layer, ManagedRuntime, Schema, Scope, Semaphore } from "effect";
 import { isNoUpdateAnswer } from "../agent/routine-quiet-runs";
 import type { MessagingPostFailure } from "../messaging/messaging-threads";
 import type { RoutineResultOutgoing, RoutineResultStore } from "./routine-result-store";
 
-const logger = createOpenBotLogger("routine-results");
+const logger = createCodeBotLogger("routine-results");
 
 const SWEEP_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 const FIRST_RETRY_MS = 60 * 1000;
@@ -60,7 +60,7 @@ export function routineResultNoticeEvent(event: AgentEvent): boolean {
   return event.type === "turn-completed" || event.type === "queue-changed" || event.type === "routines-changed";
 }
 
-class RoutineResults extends Context.Service<RoutineResults, RoutineResultsShape>()("openbot/backend/RoutineResults") {
+class RoutineResults extends Context.Service<RoutineResults, RoutineResultsShape>()("codebot/backend/RoutineResults") {
   static layer(dependencies: RoutineResultsDependencies) {
     return Layer.effect(
       RoutineResults,

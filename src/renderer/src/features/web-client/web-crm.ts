@@ -1,6 +1,6 @@
-import type { AgentEvent, TeamRealtimeEvent } from "@openbot/contracts/ipc";
-import { CRM_ROUTES, crmEvent } from "@openbot/contracts/team-protocol/crm-v1";
-import { decodeTeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
+import type { AgentEvent, TeamRealtimeEvent } from "@codebot/contracts/ipc";
+import { CRM_ROUTES, crmEvent } from "@codebot/contracts/team-protocol/crm-v1";
+import { decodeTeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
 import {
   decodeRemoteCrmActivityPage,
   decodeRemoteCrmApplyResult,
@@ -8,8 +8,8 @@ import {
   decodeRemoteCrmOverview,
   decodeRemoteCrmPaymentPage,
   decodeRemoteCrmSettings,
-} from "@openbot/team-client/crm-decoding";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/crm-decoding";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import type { CrmHost } from "../crm/crm-port";
 
 export interface WebCrmHostOptions {

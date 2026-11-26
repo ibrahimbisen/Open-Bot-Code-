@@ -1,6 +1,6 @@
+import { bloubAvatarProfile } from "@codebot/brand/bloub-avatar";
+import { type AvatarMood, avatarMoodPresentation } from "@codebot/brand/bloub-avatar-motion";
 import { BotEngine, EXPRESSION_BY_ID, SHAPE_BY_ID } from "@norbert_bodziony/bloub";
-import { bloubAvatarProfile } from "@openbot/brand/bloub-avatar";
-import { type AvatarMood, avatarMoodPresentation } from "@openbot/brand/bloub-avatar-motion";
 import { BlendMode, type SkCanvas, Skia } from "@shopify/react-native-skia";
 import { saturationMatrix } from "./plush-draw";
 import { type Matrix, matrixOf, PLUSH_BODY_SCALE, VIEW_BOX } from "./plush-felt";

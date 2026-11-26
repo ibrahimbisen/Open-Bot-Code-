@@ -1,4 +1,4 @@
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
 import { Typography } from "heroui-native";
 import Copy from "lucide-react-native/icons/copy";
 import Download from "lucide-react-native/icons/download";

@@ -3,8 +3,8 @@ import {
   type SourceMessages,
   sourceTranslateFor,
   type TranslatedLocale,
-} from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+} from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { errnoCode, errorReference, NETWORK_MESSAGE, normalizeMessage } from "./reference";
 
 export { errorReference, referenceCarrierName, referenceFrom, safeReference } from "./reference";

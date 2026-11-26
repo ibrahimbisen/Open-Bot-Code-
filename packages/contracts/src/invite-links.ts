@@ -1,8 +1,8 @@
-import { isOpenBotTeamApiHostname } from "./validation";
+import { isCodeBotTeamApiHostname } from "./validation";
 
-export const OPENBOT_INVITE_ORIGIN = "https://openbot.run";
-export const OPENBOT_INVITE_PATH = "/join";
-export const OPENBOT_CONTROL_PLANE_ORIGIN = "https://api.openbot.run";
+export const CODEBOT_INVITE_ORIGIN = "https://openbot.run";
+export const CODEBOT_INVITE_PATH = "/join";
+export const CODEBOT_CONTROL_PLANE_ORIGIN = "https://api.openbot.run";
 
 export const PERMANENT_INVITE_EXPIRES_AT_MS = 8_640_000_000_000_000;
 
@@ -45,7 +45,7 @@ export function selfHostedApiOrigin(apiUrl: string | undefined): string | undefi
   if (!apiUrl) return undefined;
   try {
     const { protocol, origin } = new URL(apiUrl);
-    return protocol === "https:" && origin !== OPENBOT_INVITE_ORIGIN && !isValidRemoteApiUrl(`${origin}/`)
+    return protocol === "https:" && origin !== CODEBOT_INVITE_ORIGIN && !isValidRemoteApiUrl(`${origin}/`)
       ? origin
       : undefined;
   } catch {
@@ -55,25 +55,25 @@ export function selfHostedApiOrigin(apiUrl: string | undefined): string | undefi
 
 export function createInviteUrl(payload: InviteLinkPayload, options: InviteLinkOptions = {}): string {
   validatePayload(payload, options);
-  if (isSelfHostedApiUrl(new URL(payload.apiUrl), options)) return createOpenBotInviteUrl(payload, options);
-  const url = new URL(OPENBOT_INVITE_PATH, OPENBOT_INVITE_ORIGIN);
+  if (isSelfHostedApiUrl(new URL(payload.apiUrl), options)) return createCodeBotInviteUrl(payload, options);
+  const url = new URL(CODEBOT_INVITE_PATH, CODEBOT_INVITE_ORIGIN);
   writePayload(url, payload);
   return url.toString();
 }
 
-export function createOpenBotInviteUrl(payload: InviteLinkPayload, options: InviteLinkOptions = {}): string {
+export function createCodeBotInviteUrl(payload: InviteLinkPayload, options: InviteLinkOptions = {}): string {
   validatePayload(payload, options);
-  const url = new URL("openbot://join");
+  const url = new URL("codebot://join");
   writePayload(url, payload);
   return url.toString();
 }
 
-export function toOpenBotInviteUrl(value: string, options: InviteLinkOptions = {}): string {
-  return createOpenBotInviteUrl(parseInviteUrl(value, options), options);
+export function toCodeBotInviteUrl(value: string, options: InviteLinkOptions = {}): string {
+  return createCodeBotInviteUrl(parseInviteUrl(value, options), options);
 }
 
 export function createWebAppInvitePath(value: string, options: InviteLinkOptions = {}): string {
-  const url = new URL("/app", OPENBOT_INVITE_ORIGIN);
+  const url = new URL("/app", CODEBOT_INVITE_ORIGIN);
   writePayload(url, parseInviteUrl(value, options));
   return `${url.pathname}${url.search}`;
 }
@@ -83,7 +83,7 @@ export const WEB_APP_INVITE_FIELDS: readonly string[] = INVITE_FIELDS;
 export function inviteUrlFromWebAppSearch(search: string, options: InviteLinkOptions = {}): string | null {
   const params = new URLSearchParams(search);
   if (!INVITE_FIELDS.some((field) => params.has(field))) return null;
-  const url = new URL(OPENBOT_INVITE_PATH, OPENBOT_INVITE_ORIGIN);
+  const url = new URL(CODEBOT_INVITE_PATH, CODEBOT_INVITE_ORIGIN);
   for (const field of INVITE_FIELDS) for (const value of params.getAll(field)) url.searchParams.append(field, value);
   try {
     return createInviteUrl(parseInviteUrl(url.toString(), options), options);
@@ -96,7 +96,7 @@ export function isCanonicalInviteUrl(value: string, options: InviteLinkOptions =
   try {
     parseInviteUrl(value, options);
     const url = new URL(value);
-    return url.origin === OPENBOT_INVITE_ORIGIN && url.pathname === OPENBOT_INVITE_PATH;
+    return url.origin === CODEBOT_INVITE_ORIGIN && url.pathname === CODEBOT_INVITE_PATH;
   } catch {
     return false;
   }
@@ -107,13 +107,13 @@ export function parseInviteUrl(value: string, options: InviteLinkOptions = {}): 
   try {
     url = new URL(value);
   } catch {
-    throw new Error("Enter a valid OpenBot invitation link.");
+    throw new Error("Enter a valid CodeBot invitation link.");
   }
 
   const canonical =
-    url.protocol === "https:" && url.origin === OPENBOT_INVITE_ORIGIN && url.pathname === OPENBOT_INVITE_PATH;
+    url.protocol === "https:" && url.origin === CODEBOT_INVITE_ORIGIN && url.pathname === CODEBOT_INVITE_PATH;
   const customScheme =
-    url.protocol === "openbot:" && url.hostname === "join" && (url.pathname === "" || url.pathname === "/");
+    url.protocol === "codebot:" && url.hostname === "join" && (url.pathname === "" || url.pathname === "/");
   if (
     (!canonical && !customScheme) ||
     url.username !== "" ||
@@ -122,7 +122,7 @@ export function parseInviteUrl(value: string, options: InviteLinkOptions = {}): 
     url.hash !== "" ||
     !hasOnlyInviteFields(url.searchParams)
   ) {
-    throw new Error("The OpenBot invitation link is invalid.");
+    throw new Error("The CodeBot invitation link is invalid.");
   }
 
   const payload: InviteLinkPayload = {
@@ -153,9 +153,9 @@ export function isValidRemoteApiUrl(value: string, options: InviteLinkOptions = 
         isSelfHostedApiUrl(url, options) ||
         (url.protocol === "https:" &&
           url.port === "" &&
-          (url.origin === OPENBOT_CONTROL_PLANE_ORIGIN ||
+          (url.origin === CODEBOT_CONTROL_PLANE_ORIGIN ||
             TRY_CLOUDFLARE_HOST_PATTERN.test(url.hostname) ||
-            isOpenBotTeamApiHostname(url.hostname))))
+            isCodeBotTeamApiHostname(url.hostname))))
     );
   } catch {
     return false;
@@ -173,7 +173,7 @@ function validatePayload(payload: InviteLinkPayload, options: InviteLinkOptions)
     !BASE64URL_SECRET_PATTERN.test(payload.fingerprint) ||
     !BASE64URL_SECRET_PATTERN.test(payload.token)
   ) {
-    throw new Error("The OpenBot invitation link is invalid.");
+    throw new Error("The CodeBot invitation link is invalid.");
   }
 }
 

@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 48. The branch link, added with no default: no rebuild, no data change, and every existing
@@ -21,7 +21,7 @@ function addAgentThreadBranch(db: DatabaseSync): void {
   }
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 48,
   name: "agent-thread-branch",
   // Adds three columns with no default: no rebuild, so no foreign-key pause and no vacuum. Every existing

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { app, BrowserWindow, nativeImage, screen, webContents } from "electron";
 import { z } from "zod";
 import { BrowserHost } from "../src/backend/browser-host";
@@ -66,7 +66,7 @@ async function main(): Promise<void> {
     const call = (tool: string, args: DynamicToolCallParams["arguments"]) =>
       runCauseEffect(
         host.handleDynamicTool({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool,
           arguments: args,
           ownerAgentId: "fixture-agent",

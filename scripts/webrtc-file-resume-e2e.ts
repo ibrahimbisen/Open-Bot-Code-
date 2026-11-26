@@ -7,7 +7,7 @@ import { join } from "node:path";
 import {
   decodeTeamProtocolV2FileChunk,
   decodeTeamProtocolV2FileControlFrame,
-} from "@openbot/contracts/team-protocol/v2";
+} from "@codebot/contracts/team-protocol/v2";
 import { Effect, Result } from "effect";
 import { RemoteWorkflowError } from "../src/main/remote-service-effects";
 import type { TeamWebRtcBridge } from "../src/main/team-webrtc-bridge";
@@ -74,7 +74,7 @@ const report: ResumeReport = {
   receivedEqualsSent: false,
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-webrtc-file-resume-"));
+const directory = await mkdtemp(join(tmpdir(), "codebot-webrtc-file-resume-"));
 const clientBridge = new LinkedBridge("client");
 const hostBridge = new LinkedBridge("host");
 clientBridge.target = hostBridge;
@@ -140,7 +140,7 @@ try {
   await Effect.runPromise(client.stop());
   await Effect.runPromise(host.stop());
   await rm(directory, { recursive: true, force: true });
-  const artifactDirectory = new URL("../.openbot-build/", import.meta.url);
+  const artifactDirectory = new URL("../.codebot-build/", import.meta.url);
   await mkdir(artifactDirectory, { recursive: true });
   await writeFile(new URL("webrtc-file-resume-e2e.json", artifactDirectory), `${JSON.stringify(report, null, 2)}\n`);
 }

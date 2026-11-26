@@ -1,4 +1,4 @@
-import type { TeamProtocolSupportV1 } from "@openbot/contracts/team-protocol/v1";
+import type { TeamProtocolSupportV1 } from "@codebot/contracts/team-protocol/v1";
 import { Schema } from "effect";
 
 export class RemoteRequestError extends Schema.TaggedError<RemoteRequestError>()("RemoteRequestError", {

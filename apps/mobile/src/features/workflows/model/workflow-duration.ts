@@ -1,4 +1,4 @@
-import type { MobileTranslate } from "@openbot/i18n/mobile";
+import type { MobileTranslate } from "@codebot/i18n/mobile";
 
 export function formatRunDuration(startedAt: string, endedAt: string | null, t: MobileTranslate): string | null {
   if (!endedAt) return null;

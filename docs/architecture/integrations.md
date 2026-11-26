@@ -1,10 +1,10 @@
 # Integrations and sign-in
 
-This guide tells you how a sign-in reaches OpenBot, how a joined server signs in through the
+This guide tells you how a sign-in reaches CodeBot, how a joined server signs in through the
 computer of its user, and how to add a provider, an application or a connector. Each section has a
 working example with real file paths.
 
-- [How a sign-in reaches OpenBot](#how-a-sign-in-reaches-openbot)
+- [How a sign-in reaches CodeBot](#how-a-sign-in-reaches-codebot)
 - [Remote sign-in: the callback relay](#remote-sign-in-the-callback-relay)
 - [Add a provider](#add-a-provider)
 - [Add an application](#add-an-application)
@@ -13,19 +13,19 @@ working example with real file paths.
 - [Test a sign-in through a joined server](#test-a-sign-in-through-a-joined-server)
 - [What cannot be relayed](#what-cannot-be-relayed)
 
-## How a sign-in reaches OpenBot
+## How a sign-in reaches CodeBot
 
-The computer that runs OpenBot keeps every grant. On a joined server, this is the host, not the
+The computer that runs CodeBot keeps every grant. On a joined server, this is the host, not the
 computer of the user who signs in. A sign-in uses one of these kinds:
 
 | Kind | Example | On this computer | On a joined server |
 | --- | --- | --- | --- |
 | Loopback callback | URL MCP servers (`McpOAuth`), Codex browser sign-in, a page that an agent's CLI prints | The page sends the browser to `http://127.0.0.1:<port>/...`. The MCP listener uses port 28417 and path `/mcp-auth` ([`mcp-oauth-redirect-server.ts`](../../src/main/mcp-oauth-redirect-server.ts)). | The [callback relay](#remote-sign-in-the-callback-relay) (`sign-in-relay-v1`). MCP on an older host: the host's live view (`mcp-sign-in-v1`). |
-| Device code | Codex (`codex-device`), Grok, Cline, Kimi, Muse, the GitHub connector | The user types a short code on the provider's page. Nothing comes back to OpenBot. | The host starts it and the client shows the code (`providers-v1` to `providers-v5`; Kimi `providers-v8` only). Muse: the relay opens its device page with no callback. GitHub: `connectors-v1`. |
-| Pasted code | Claude on Linux (`cli` / `paste`), Cursor (`cli` / `link`) | The page shows a code, and the user pastes it into OpenBot. | The host starts it and the client takes the code (`providers-v3` to `providers-v5`). |
+| Device code | Codex (`codex-device`), Grok, Cline, Kimi, Muse, the GitHub connector | The user types a short code on the provider's page. Nothing comes back to CodeBot. | The host starts it and the client shows the code (`providers-v1` to `providers-v5`; Kimi `providers-v8` only). Muse: the relay opens its device page with no callback. GitHub: `connectors-v1`. |
+| Pasted code | Claude on Linux (`cli` / `paste`), Cursor (`cli` / `link`) | The page shows a code, and the user pastes it into CodeBot. | The host starts it and the client takes the code (`providers-v3` to `providers-v5`). |
 | CLI-owned browser login | Claude (`auth login`), Codex, Gemini (`acp-authenticate`) | The provider's CLI opens the browser and takes its own callback. | The relay (`provider/start`): the host captures the page, and the client sends the callback query to the CLI's listener on the host. Grok, Cursor and Cline: a code kind. Mistral: the host takes the page from Vibe (`acp-delegated`) and the client shows it as a link (`providers-v8` with `mistral-code-sign-in-v1`). |
-| Deep link | Slack, Discord (`openbot://slack-workspace`, `openbot://discord-guild`), MCP fallback (`openbot://mcp-auth`) | A hosted page ends in an `openbot://` link, which reaches only the computer that opened it. | Slack and Discord: `connectors-v1`. The client sends the sealed grant on to the host that started the install. The browser client gets the grant from a return page of its own origin (`web-messaging-install.ts`). |
-| Terminal | Pi | OpenBot opens the CLI in a terminal on the host ([`provider-terminal-login.ts`](../../src/backend/provider-terminal-login.ts)). | Sign in on the host. |
+| Deep link | Slack, Discord (`codebot://slack-workspace`, `codebot://discord-guild`), MCP fallback (`codebot://mcp-auth`) | A hosted page ends in an `codebot://` link, which reaches only the computer that opened it. | Slack and Discord: `connectors-v1`. The client sends the sealed grant on to the host that started the install. The browser client gets the grant from a return page of its own origin (`web-messaging-install.ts`). |
+| Terminal | Pi | CodeBot opens the CLI in a terminal on the host ([`provider-terminal-login.ts`](../../src/backend/provider-terminal-login.ts)). | Sign in on the host. |
 | Key or local session | API keys, 1Password, Bitwarden, Proton Pass | The user types a key or gives a CLI session. Proton Pass also signs in on Proton's web page. | Keys go to the host over the encrypted channel. Vault approval stays on the host. A Bitwarden session key works only on the computer that made it; a joined server gets an API key and the master password. Proton Pass: `password-managers-v1`; the client opens the host's sign-in page. |
 
 The sign-in kinds of providers are in `ProviderSignIn` and `ProviderCodeSignIn` in
@@ -50,7 +50,7 @@ A dropped token is not handed to an agent: `accessToken` answers `null`. The IPC
 `McpSignInState.needsSignIn` tells the panel to show the sign-in badge and the Sign in button with
 no test. The frozen `mcp-sign-in-v1` wire keeps only `mcpServerId` and `signedIn`.
 
-Sign-out and removal delete the local tokens first. Then OpenBot sends one best-effort RFC 7009
+Sign-out and removal delete the local tokens first. Then CodeBot sends one best-effort RFC 7009
 request per token, refresh token first, to the `revocation_endpoint` of the authorization server.
 The request goes through `secureOAuthFetch`, with the client authentication of the registration and
 a 5-second limit. A failure is logged with the origin and the status only, and is not shown.
@@ -92,7 +92,7 @@ The host checks each request in [`mcp-member-access.ts`](../../src/main/team-api
 | Client | The host lets a member in only when the client also sends the capability. A released client stays admin-only. `serverCanManageMcp` decides what the desktop and web clients offer, and `canManageMcpServers` what the phone offers. |
 | Read and add | A member reads the whole list, with its `env` and header values, tests a server, and adds a server, a stdio command too. |
 | Change | A member changes, turns on or off, or removes only a server that the member added. Any other row gets 403 `error.team.mcpServerNotYours`. Owners and admins change every row. |
-| Owners | `McpServerOwnersStore` keeps the member ID of each row that a joined server added, in `openbot-mcp-server-owners-v1.json`. A row with no entry, such as one added on the host, counts as an admin's. A damaged file reads as empty. |
+| Owners | `McpServerOwnersStore` keeps the member ID of each row that a joined server added, in `codebot-mcp-server-owners-v1.json`. A row with no entry, such as one added on the host, counts as an admin's. A damaged file reads as empty. |
 | Sign-in | A sign-in belongs to an address (`mcpOAuthAccountKey`), not to a row. A member starts, cancels or signs out a sign-in, or changes a sign-in app, only when each row on that address is the member's. Each server keeps one sign-in, which every agent of the host uses. |
 | Providers | Provider sign-ins, account starts and agent links on the relay stay with owners and admins. |
 
@@ -143,7 +143,7 @@ probe are not changed.
 | --- | --- |
 | Address | `http://127.0.0.1:<port>/mcp/<route>/<agent>`. The route is a digest of the row id and its URL, so a changed URL is a new route. The agent segment is a digest of the agent id (`mcpOAuthProxyAgentKey`). `/mcp/<route>` with no agent segment stays valid: Codex sessions from before the segment hold it. |
 | Bearer | An HMAC of the route and the agent segment with the proxy secret. A bearer opens one route for one agent only. It is compared with `timingSafeEqual` and registered for redaction. |
-| Identity | The `clientInfo` of each `initialize` becomes `{ name: "openbot", title: "<agent name> (OpenBot)", version, websiteUrl }`; the name is read at each `initialize`, so a rename shows in the next session. With no known agent the title is `OpenBot`. `User-Agent` is `OpenBot/<version>` unless the row sets one. A body that is not JSON, is a batch, or is larger than 64 KiB goes through unchanged. |
+| Identity | The `clientInfo` of each `initialize` becomes `{ name: "codebot", title: "<agent name> (CodeBot)", version, websiteUrl }`; the name is read at each `initialize`, so a rename shows in the next session. With no known agent the title is `CodeBot`. `User-Agent` is `CodeBot/<version>` unless the row sets one. A body that is not JSON, is a batch, or is larger than 64 KiB goes through unchanged. |
 | Refused with 403 | A `Host` that is not `127.0.0.1:<port>` or `localhost:<port>`, an unknown path, a wrong bearer. |
 | Upstream | The row's URL and its headers, with the current token. The provider's `Authorization` and cookies are not sent. Only same-origin 307 and 308 redirects are followed, at most 3. |
 | Server answers 401 | One `McpOAuth.refreshAccessToken`, then one retry with the new token. |
@@ -155,7 +155,7 @@ editing or signing out of a row refuses its route at once; there is no list of r
 current. A proxy that cannot start drops the row from the hand-off with
 `error.backend.mcpOAuthProxyUnavailable`. The raw token is never the fallback.
 
-The port and the secret are kept encrypted in `openbot-mcp-oauth-proxy-v1.json`. Codex keeps the
+The port and the secret are kept encrypted in `codebot-mcp-oauth-proxy-v1.json`. Codex keeps the
 MCP configuration of a resumed thread, so the same address must work after a restart. When the
 saved port is in use, the proxy takes a new port and a new secret, so the old bearers stop working.
 The Codex tool manifest records the proxy address and the proxied rows; a change replaces the Codex
@@ -169,7 +169,7 @@ MCP server.
 The user is connected to a joined server, for example a cloud server. The host starts the sign-in,
 but the sign-in page opens in the browser of the user's own computer. The user's browser keeps their
 passwords, passkeys and sessions. After the user signs in, the page sends the browser back to a
-loopback address. The user's OpenBot takes that callback and sends it to the host. The host finishes
+loopback address. The user's CodeBot takes that callback and sends it to the host. The host finishes
 the sign-in and keeps the grant.
 
 The optional Team API capability `sign-in-relay-v1` carries the relay. The frozen contract is
@@ -180,11 +180,11 @@ three start routes, and `provider-account-relay-v1` and `-v2` add one more each.
 | --- | --- | --- |
 | `mcp/start` | A URL MCP server, from the Marketplace | It gives the code to `McpOAuth` (owned flow). |
 | `provider/start` | The CLI of a provider in `SIGN_IN_RELAY_PROVIDERS`: Codex, Claude, Gemini (`antigravity`) and Muse | It replays the query to the CLI's own loopback listener on the host. A Muse device page has no callback: the client only opens it. |
-| `provider/v2/start` | The CLI of a provider in `PROVIDER_SIGN_IN_RELAY_V2_PROVIDERS`: Devin. The separate capability `provider-sign-in-relay-v2` adds this route ([`provider-sign-in-relay-v2.ts`](../../packages/contracts/src/team-protocol/provider-sign-in-relay-v2.ts)). Only a Linux host advertises it, with v1: on macOS the CLI runs `/usr/bin/open` by its absolute path, and on Windows OpenBot has no `open` command that the CLI uses, so OpenBot cannot take the page there. `provider-sign-in-relays.ts` gives a client the route that takes a provider | As for `provider/start`. |
+| `provider/v2/start` | The CLI of a provider in `PROVIDER_SIGN_IN_RELAY_V2_PROVIDERS`: Devin. The separate capability `provider-sign-in-relay-v2` adds this route ([`provider-sign-in-relay-v2.ts`](../../packages/contracts/src/team-protocol/provider-sign-in-relay-v2.ts)). Only a Linux host advertises it, with v1: on macOS the CLI runs `/usr/bin/open` by its absolute path, and on Windows CodeBot has no `open` command that the CLI uses, so CodeBot cannot take the page there. `provider-sign-in-relays.ts` gives a client the route that takes a provider | As for `provider/start`. |
 | `link/start` | A sign-in page that an agent of the host printed in its conversation | It replays the query to the loopback address of that page. |
 | `provider-account/start` | An account after the first of Codex or Claude (`PROVIDER_ACCOUNT_RELAY_PROVIDERS`), new or signed out. The separate capability `provider-account-relay-v1` adds this route ([`provider-account-relay-v1.ts`](../../packages/contracts/src/team-protocol/provider-account-relay-v1.ts)) | It replays the query to the loopback listener of the account's CLI on the host, as for `provider/start`. |
 | `provider-account/v2/start` | An account after the first of Codex, Claude or Gemini (`PROVIDER_ACCOUNT_RELAY_V2_PROVIDERS`), new or signed out. The separate capability `provider-account-relay-v2` adds this route ([`provider-account-relay-v2.ts`](../../packages/contracts/src/team-protocol/provider-account-relay-v2.ts)). A host advertises it with v1, and a client uses the newest one that the host advertises | As for `provider-account/start`. |
-| `mcp/start-deep-link` | As `mcp/start`. The separate capability `sign-in-relay-deep-link-v1` adds this route ([`sign-in-relay-deep-link-v1.ts`](../../packages/contracts/src/team-protocol/sign-in-relay-deep-link-v1.ts)). A desktop client sends it only while its operating system opens `openbot://` in OpenBot. After two sign-ins of the same address got no grant back on `127.0.0.1` and on `localhost`, the host registers `openbot://mcp-auth`: TradingView's firewall blocks a page that returns to a loopback name (#9209) | The client takes the callback from `openbot://mcp-auth` by `state` and sends it with `complete`; the host gives the code to `McpOAuth`. |
+| `mcp/start-deep-link` | As `mcp/start`. The separate capability `sign-in-relay-deep-link-v1` adds this route ([`sign-in-relay-deep-link-v1.ts`](../../packages/contracts/src/team-protocol/sign-in-relay-deep-link-v1.ts)). A desktop client sends it only while its operating system opens `codebot://` in CodeBot. After two sign-ins of the same address got no grant back on `127.0.0.1` and on `localhost`, the host registers `codebot://mcp-auth`: TradingView's firewall blocks a page that returns to a loopback name (#9209) | The client takes the callback from `codebot://mcp-auth` by `state` and sends it with `complete`; the host gives the code to `McpOAuth`. |
 
 ### Sequence
 
@@ -232,7 +232,7 @@ The client tries these, in this order:
 
 1. **Its own MCP listener.** The callback names port 28417 and path `/mcp-auth`, and the client's
    own MCP grant listener has that port. The listener gives a `state` that no local sign-in started
-   to `SignInRelayClient.deliver`. The `openbot://mcp-auth` link does the same.
+   to `SignInRelayClient.deliver`. The `codebot://mcp-auth` link does the same.
 2. **The exact port.** The client binds `127.0.0.1:<port>` for the time of the sign-in with
    `listenLoopbackExact`. It never takes another port, because the page sends the browser to the
    host's port.
@@ -320,7 +320,7 @@ other places.
 3. **Backend.** `resolve<X>Cli` in `src/backend/cli.ts`, the state paths in
    `src/backend/process-confinement.ts`, `providerLabel` in `src/backend/agent/thread-items.ts` and
    `src/backend/agent/provider-diagnostics.ts`.
-4. **Managed runtime** (when OpenBot installs the CLI): `native-runtime.lock.json`,
+4. **Managed runtime** (when CodeBot installs the CLI): `native-runtime.lock.json`,
    `scripts/agent-runtime-lock.ts`, and `src/main/provider-runtime-descriptors.ts`,
    `provider-runtime-releases.ts` and `provider-runtime-manager.ts`.
 5. **Contracts and preload.** The `AgentAuthState` arm in `ipc-agent-status.ts`, then
@@ -339,7 +339,7 @@ other places.
    Download from `MANAGED_RUNTIME_PROVIDERS` and `INSTALLER_PROVIDERS`, and the key from
    `KEY_ONLY_PROVIDERS`. A peer below v8 does not see the provider
    ([`provider-visibility.ts`](../../src/main/team-api/provider-visibility.ts)), and a client that
-   does not know it shows it disabled with "Update OpenBot to use {name}". Do not edit the frozen
+   does not know it shows it disabled with "Update CodeBot to use {name}". Do not edit the frozen
    lists of a released capability. A `paste` or `link` code sign-in, or the sign-in relay, on a
    joined server needs a new capability.
 9. **Text and docs.** Error keys in `error/provider.ts` and onboarding text in all languages
@@ -378,7 +378,7 @@ is one folder per plugin in [`marketplace/plugin-catalog/`](../../marketplace/pl
    URLs. The types are in [`scripts/build-plugin-catalog.ts`](../../scripts/build-plugin-catalog.ts).
 2. Each app has a `server`: `http` with a `url`, or `stdio` with a `command` and `args`. Its `auth`
    names how the user connects:
-   - `link`: a browser sign-in. OpenBot is the OAuth client (`McpOAuth` in
+   - `link`: a browser sign-in. CodeBot is the OAuth client (`McpOAuth` in
      [`mcp-oauth-provider.ts`](../../src/backend/mcp-oauth-provider.ts)): discovery, dynamic
      registration or a client metadata document, PKCE and refresh. The tokens stay in encrypted
      storage. No bridge program.
@@ -402,7 +402,7 @@ is one folder per plugin in [`marketplace/plugin-catalog/`](../../marketplace/pl
    leaves out the vendor icon addresses: the phone loads icons from `/plugins/icon/<slug>?app=<id>`.
 5. For an `http` server, run `bun run test:mcp-catalog`
    ([`mcp-catalog-smoke.ts`](../../scripts/mcp-catalog-smoke.ts)). It connects to the live servers
-   with no account and writes `.openbot-build/mcp-catalog-smoke/report.json`. It needs the network,
+   with no account and writes `.codebot-build/mcp-catalog-smoke/report.json`. It needs the network,
    so it is a manual run and not a CI gate.
 
 The smoke checks an `http` server with no `auth` or with a `link` flow. It skips `stdio` servers and
@@ -419,21 +419,21 @@ flow for it, or leave it out. The smoke reads metadata only. It never registers 
 sends a credential.
 
 A server with no `registration_endpoint` that sets `client_id_metadata_document_supported` gets
-OpenBot's client metadata document (CIMD, SEP-991) as the `client_id`:
+CodeBot's client metadata document (CIMD, SEP-991) as the `client_id`:
 `https://openbot.run/oauth/mcp-client.json`, which `apps/auth-api` serves
 ([`mcp-client[.]json.ts`](../../apps/auth-api/src/routes/oauth/mcp-client%5B.%5Djson.ts)). Its
 `redirect_uris` holds only `http://127.0.0.1:28417/mcp-auth`: ElevenLabs refuses a document that
-also lists a custom scheme such as `openbot://mcp-auth` (#5748). A server that
+also lists a custom scheme such as `codebot://mcp-auth` (#5748). A server that
 offers registration keeps it. ElevenLabs accepts only the document. When port 28417 is in use, the
 loopback address has another port, and a server that compares ports refuses it.
 
-A server that registers only the clients it approved, and that approved OpenBot's own app, gets a
+A server that registers only the clients it approved, and that approved CodeBot's own app, gets a
 **built-in client** (`BUILT_IN_MCP_CLIENTS` in
 [`mcp-oauth-provider.ts`](../../src/backend/mcp-oauth-provider.ts)), chosen by the MCP server
 address and the issuer that discovery finds. Both must match: any server can name an issuer in its
 metadata, and the token goes to the server that asked for it. Meta Ads (`https://www.facebook.com/ads`) is one: its registration endpoint answers
 "Dynamic registration is not available for this client", and it refuses every `http` redirect,
-loopback too. Its client is the OpenBot Meta app 1479376854168579, with no secret. Its redirect is
+loopback too. Its client is the CodeBot Meta app 1479376854168579, with no secret. Its redirect is
 `https://openbot.run/oauth/mcp-callback`
 ([`mcp-callback.ts`](../../apps/auth-api/src/routes/oauth/mcp-callback.ts)), which answers 302 to
 `http://127.0.0.1:28417/mcp-auth` with the query unchanged. So the grant still arrives at the MCP
@@ -446,7 +446,7 @@ The Meta app must list the relay address in "Valid OAuth Redirect URIs", and a u
 App Review puts the app in Live mode. `bun run test:mcp-sign-in-https-relay` checks the Meta page,
 the relay, and that another server that names Meta's issuer does not get the app.
 
-A server that does not register OpenBot by itself needs a **sign-in app**: an OAuth app that the
+A server that does not register CodeBot by itself needs a **sign-in app**: an OAuth app that the
 admin registers with the provider. The user enters its client ID in the "Sign-in app" section of the
 MCP server ([`McpSignInAppSection.tsx`](../../src/renderer/src/features/servers/McpSignInAppSection.tsx)).
 The callback URL is `http://127.0.0.1:28417/mcp-auth`. On a joined server, the host keeps the app
@@ -477,7 +477,7 @@ page opens in this computer's browser through the relay.
 
 ## Add a connector
 
-A connector links OpenBot to an outside account for all agents. Each one has a main-process
+A connector links CodeBot to an outside account for all agents. Each one has a main-process
 service, an IPC contract, a renderer controller and a panel. Marketplace › Apps, the chat
 suggestion card and the browser client read one list, so a connector shows the same
 state on each of them.
@@ -485,8 +485,8 @@ state on each of them.
 | Connector | Service | Sign-in | Contract |
 | --- | --- | --- | --- |
 | GitHub | [`github-connector-service.ts`](../../src/main/github-connector-service.ts), `github-device-flow.ts` | Device flow of a GitHub App with only the public client ID | `ipc-github-connector.ts`; joined server: `connectors-v1` GitHub routes |
-| Slack | `src/backend/messaging/slack/` | Hosted OAuth in the account Worker, which ends in `openbot://slack-workspace` with a sealed grant | `slack-workspace-grant.ts`, `ipc-messaging.ts` |
-| Discord | `src/backend/messaging/discord/` | The same, with `openbot://discord-guild` | `discord-guild-grant.ts`, `ipc-messaging.ts` |
+| Slack | `src/backend/messaging/slack/` | Hosted OAuth in the account Worker, which ends in `codebot://slack-workspace` with a sealed grant | `slack-workspace-grant.ts`, `ipc-messaging.ts` |
+| Discord | `src/backend/messaging/discord/` | The same, with `codebot://discord-guild` | `discord-guild-grant.ts`, `ipc-messaging.ts` |
 | Telegram | `src/backend/messaging/telegram/` | A one-use link code in a `t.me` link. No OAuth | `telegram-app.ts`, `ipc-messaging.ts` |
 | 1Password | [`onepassword-connector-service.ts`](../../src/main/onepassword-connector-service.ts) | The user's `op` session creates a read-only service account, or the user pastes a token | `ipc-onepassword-connector.ts`; joined server: `onepassword-connector-v1` (token only) |
 | Bitwarden | [`bitwarden-connector-service.ts`](../../src/main/bitwarden-connector-service.ts) | A `bw` session key, kept in memory only; a joined server signs in with an API key and the master password | `ipc-bitwarden-connector.ts`; joined server: `bitwarden-connector-v1` |
@@ -500,7 +500,7 @@ To add a connector:
 2. Add the service in `src/main/<name>-connector-service.ts`. Keep its secret in encrypted storage,
    and call `registerSecretValue` on every token before the first log line.
 3. Prefer a device code: it works on any computer and through any joined server. A deep link
-   (`openbot://...`) reaches only the computer that opened the page. Add its kind to
+   (`codebot://...`) reaches only the computer that opened the page. Add its kind to
    [`deep-link-router.ts`](../../src/main/deep-link-router.ts), and keep a grant out of the renderer.
 4. Add the id to `CONNECTOR_IDS` and its entry to `CONNECTORS` in
    [`connectors.ts`](../../packages/ui/src/features/connectors/connectors.ts). `server` is the capability that
@@ -534,7 +534,7 @@ and Telegram:
 - **GitHub**: the host runs the device flow. The client shows `userCode` and opens
   `verificationUri`. The host sees the sign-in by itself.
 - **Slack and Discord**: the host answers the install page and a `nonce`, and opens nothing. The
-  client opens the page. The install ends in an `openbot://` link on the client, with a grant that is
+  client opens the page. The install ends in an `codebot://` link on the client, with a grant that is
   sealed to a one-use key of the host. `RelayedMessagingInstalls`
   ([`relayed-messaging-installs.ts`](../../src/main/relayed-messaging-installs.ts)) sends the grant
   with `messagingComplete` only to the server whose install this computer opened, and only once. The
@@ -548,7 +548,7 @@ is frozen once it ships.
 The optional capability `discord-access-v1`
 ([`discord-access-v1.ts`](../../packages/contracts/src/team-protocol/discord-access-v1.ts), host route
 [`route-discord-access.ts`](../../src/main/team-api/route-discord-access.ts)) reads and sets which
-Discord roles can use OpenBot in each Discord server of the host, and lists the server's roles through
+Discord roles can use CodeBot in each Discord server of the host, and lists the server's roles through
 Signal (`listRoles`). The host keeps the list in `projection_messaging_allowed_roles`. An empty list
 lets everyone. With a list, `MessagingService` ignores a mention from a member who has none of the
 roles, before it reacts or posts. Signal passes the author's role IDs with each mention; a mention
@@ -568,13 +568,13 @@ carries a stored key; the QR code text holds the one-use secret of its link.
 The optional capability `whatsapp-working-message-v1`
 ([`whatsapp-working-message-v1.ts`](../../packages/contracts/src/team-protocol/whatsapp-working-message-v1.ts),
 host route [`route-whatsapp-working-message.ts`](../../src/main/team-api/route-whatsapp-working-message.ts))
-reads and sets, for each WhatsApp number, whether OpenBot posts “Working on it…” while the agent
+reads and sets, for each WhatsApp number, whether CodeBot posts “Working on it…” while the agent
 works. The setting is on by default and is kept with the number's connection values, so it needs no
 migration. With the setting off, `MessagingService` posts no “Waiting” and no “Working on it…” line
-and edits no progress into one: the reaction shows that OpenBot read the message, and the answer is
+and edits no progress into one: the reaction shows that CodeBot read the message, and the answer is
 the only post. A request that is given to a teammate or stopped, or that ends without an answer,
 posts no line and leaves only its reaction. An error still posts its line (“Too many requests are
-waiting”, “OpenBot could not finish this request”), so the person knows that it did not succeed.
+waiting”, “CodeBot could not finish this request”), so the person knows that it did not succeed.
 A reply of `stop` still stops the request; in a group, the person replies to their own request,
 because there is no status post to reply to. The released `whatsapp-connector-v1` overview cannot
 carry the value, so a client reads this list and merges it (`withWhatsAppWorkingMessages`). A client
@@ -583,21 +583,21 @@ hides the switch while the host does not have the capability. Only protocol 9 pe
 The optional capability `whatsapp-status-reactions-v1`
 ([`whatsapp-status-reactions-v1.ts`](../../packages/contracts/src/team-protocol/whatsapp-status-reactions-v1.ts),
 host route [`route-whatsapp-status-reactions.ts`](../../src/main/team-api/route-whatsapp-status-reactions.ts))
-reads and sets, for each WhatsApp number, whether OpenBot puts status reactions on a message: 👀 when
+reads and sets, for each WhatsApp number, whether CodeBot puts status reactions on a message: 👀 when
 it arrives, then ✅, ❌ or 🫡 when the request ends. The setting is on by default and is kept with the
 number's connection values, so it needs no migration. `MessagingService` reads it at each reaction,
 so with the setting off a WhatsApp message gets no reaction, and the posts do not change. A removal
 still goes out, so a request that started before the setting went off loses its 👀 at its end. In a
 quiet chat of a personal number, a failed or stopped request then shows nothing to the other person. With both this setting and “Working on it…”
-off, only the answer shows that OpenBot read the message. A client reads this list and merges it into
+off, only the answer shows that CodeBot read the message. A client reads this list and merges it into
 the released overview (`withWhatsAppStatusReactions`), and hides the switch while the host does not
 have the capability. Only protocol 9 peers get it.
 
 Each allowed contact and group has a mode: “Can give work” (`reply`, the default) or “Read only”
 (`read`), in the `mode` column of `projection_messaging_allowed_senders` (migration 69). A message
-from a read-only chat gets the `save` sender decision (`whatsapp-senders.ts`): OpenBot saves it, with
+from a read-only chat gets the `save` sender decision (`whatsapp-senders.ts`): CodeBot saves it, with
 its author and files, for `messaging_history`, and starts no turn, also for a mention or a reply to
-an OpenBot post. `WhatsAppSession` refuses each send to a read-only chat (`place_read_only`) right
+an CodeBot post. `WhatsAppSession` refuses each send to a read-only chat (`place_read_only`) right
 before the socket sends it, so a reply, a reaction, a “Working on it…” line, a deletion, a
 `messaging_post` and a send that waited in the chat queue when the mode changed all stay out of the
 chat. `messaging_list_places` marks the place with `readOnly`, and `messaging_post` tells the agent
@@ -635,7 +635,7 @@ address, the personal API key and the master password in Marketplace › Apps �
 once, in `connect`; no answer carries them. `connect` answers `connecting` at once, because the
 first sign-in can download `bw` and sync the vault for longer than the 15-second request limit. The
 client reads `status` every 2 seconds until the state changes. The host stores the record only after
-it unlocks the vault and finds the folder `Shared with OpenBot`, and unlocks again from it after a
+it unlocks the vault and finds the folder `Shared with CodeBot`, and unlocks again from it after a
 restart. The host must reach the server address over HTTPS; the instance firewall of
 [several instances on one host](../docker.md#several-instances-on-one-host) blocks private
 addresses. A host older than this capability hides Bitwarden.
@@ -672,10 +672,10 @@ only when it is an `https:` page on `account.proton.me`
 ([`password-managers-handlers.ts`](../../src/main/ipc/password-managers-handlers.ts)); the renderer
 never names a URL. When the account has an extra password, the status step is `extra-password`, and
 the client sends it with `connect`. The CLI reads it from a FIFO (a named pipe on Windows), never
-from an argument or a file on disk. The host then finds or makes the vault `Shared with OpenBot`,
+from an argument or a file on disk. The host then finds or makes the vault `Shared with CodeBot`,
 makes an agent access key that reads only that vault and ends after one year, and signs the
 temporary session out. With `key`, the user pastes an agent access key that they made. The host
-keeps only the access key, in `openbot-protonpass-connector-v1.json`, and the CLI session in
+keeps only the access key, in `codebot-protonpass-connector-v1.json`, and the CLI session in
 `<userData>/provider-state/protonpass-host`. It installs the `pass-cli` release that
 [`proton-pass-cli-installer.ts`](../../src/main/password-managers/proton-pass-cli-installer.ts)
 pins, with a SHA-256 per target, into `<userData>/provider-state/protonpass-cli`. Disconnect removes
@@ -690,14 +690,14 @@ The Crypto tab of the Vault connects one NEAR Intents agent account (Agent API, 
 [`near-wallet-store.ts`](../../src/main/near-wallet-store.ts). The renderer, the backend and the
 agent processes never get the partner key, the grant token or a signature.
 
-- **Owner.** A passkey. OpenBot does not support an EVM wallet owner. Each owner action (register, create, grant, budget, freeze,
+- **Owner.** A passkey. CodeBot does not support an EVM wallet owner. Each owner action (register, create, grant, budget, freeze,
   unfreeze, auto-pay, a vote on a payment) opens `/near/sign` of the account service in the system
   browser ([`near-wallet-signing.ts`](../../src/main/near-wallet-signing.ts)). The request is in the
   URL fragment, which no server gets. The page returns the signature with
-  `openbot://near-signature?nonce=…&data=…`; a development build uses a loopback listener. Main takes
+  `codebot://near-signature?nonce=…&data=…`; a development build uses a loopback listener. Main takes
   only the result of the one waiting nonce (32 random bytes, used once) and checks its shape and the
   passkey key type.
-- **Grant.** OpenBot holds an agent grant for 30 days. Payments use it; Renew signs a new one.
+- **Grant.** CodeBot holds an agent grant for 30 days. Payments use it; Renew signs a new one.
 - **Payments.** An agent calls `request_near_payment`
   ([`attention-registry.ts`](../../src/backend/agent/attention-registry.ts)). All agents can ask, also
   agents made later, until the owner chooses a list on the wallet page; a wallet stored with a list
@@ -706,7 +706,7 @@ agent processes never get the partner key, the grant token or a signature.
   recipient for a domain up to a daily USD limit; the first rule turns off `owner_approval` with one
   signature. The Agent API keeps the daily budget of all payments.
 - **No double payment.** A payment is stored with its idempotency key before it is sent. A lost
-  answer is `uncertain`: OpenBot sends it again with the same key, also after a restart, for one hour.
+  answer is `uncertain`: CodeBot sends it again with the same key, also after a restart, for one hour.
 - **Test.** `bun run test:near-wallet-e2e` runs the service against a fake Agent API on 127.0.0.1
   with a real P-256 passkey owner key. The real Agent API has no test network; do not run payments
   against it without the owner's consent.
@@ -744,7 +744,7 @@ Team API adapters stay while a release in the support window speaks them (see [T
    [`team-admin-requests.ts`](../../packages/team-client/src/team-admin-requests.ts), and gate them
    on the host's capabilities in the web client.
 8. **Bootstrap.** Make sure that the capability is not in bootstrap.
-9. **Text.** Error messages use `sourceText(key)` with keys in all languages of `@openbot/i18n`.
+9. **Text.** Error messages use `sourceText(key)` with keys in all languages of `@codebot/i18n`.
 
 ## Test a sign-in through a joined server
 
@@ -788,10 +788,10 @@ There are three parts:
 
 - **Content script** (`src/x-content.ts`, built as one IIFE file, `x-content.js`). It finds the parts of
   an X page with CSS selectors only. When a reply mentions @OpenBot_ and the server answers `ready`, it
-  sets `data-openbot-x` on the reply button, and CSS gives the button the OpenBot look and motion. A
+  sets `data-codebot-x` on the reply button, and CSS gives the button the CodeBot look and motion. A
   click (or Cmd/Ctrl+Enter) is stopped in the capture phase. The script reads the post, the posts above
   it and the author's next posts (no replies by other people), gives them to the worker, and clicks the
-  button again with `data-openbot-x-pass`, so X posts the reply at once.
+  button again with `data-codebot-x-pass`, so X posts the reply at once.
   Each part has selectors for the earlier X web app (`data-testid`) and for the X web app of November
   2026, which has no test ids: its text box is a `textarea`, so the script reads its value. That app
   shows no `<time datetime>`, so the time comes from the status ID in the post link (an X ID holds its
@@ -805,7 +805,7 @@ There are three parts:
   again) and a side panel that has connected send every waiting post at once. Each failure says whether it may have
   reached the server (`XSendResult.reached`): a post that no attempt can have sent waits up to 7 days,
   and one that an attempt may have sent is tried only for 23 hours after that attempt. Nothing of
-  OpenBot shows on X for a post that waits; a post that arrives after a failed attempt, or that is
+  CodeBot shows on X for a post that waits; a post that arrives after a failed attempt, or that is
   dropped, gets a browser notification. The worker cannot load a language, so it keeps the texts that the last
   `status` answer brought. The side panel shows the posts that wait, with "Send now". The selectors come from the account service (`X_PAGE_RULES_ROUTE`, at most once an
   hour, by hash) and stay in `chrome.storage.local`. A copy whose hash does not match is dropped. The
@@ -827,7 +827,7 @@ web app that only the new selectors find.
 
 ## Agents on the member's Chrome (host side)
 
-A member can share tabs of the member's own Chrome with the agents of a server, through the OpenBot
+A member can share tabs of the member's own Chrome with the agents of a server, through the CodeBot
 Chrome extension (`client-browser-v1`, `packages/contracts/src/team-protocol/client-browser-v1.ts`).
 The extension is a remote client, so no new data channel is necessary:
 
@@ -851,7 +851,7 @@ The extension is a remote client, so no new data channel is necessary:
   200; a message that waits through a host restart counts as an app message). Such a turn gets a note
   in its prompt to work in that Chrome, and `list_tabs` adds the shared tabs of each Chrome of the one
   person who requested it (`#turnRequesters`). `open` with `browser: "chrome"` opens a tab in that
-  person's newest shared Chrome. A message from the OpenBot app or the web app, a routine run, or a
+  person's newest shared Chrome. A message from the CodeBot app or the web app, a routine run, or a
   message from another agent reaches no Chrome, and the agent instructions do not mention Chrome.
   On a Chrome tab, only `snapshot`, `screenshot`, `navigate`, `click`, `type`, `press`, `scroll`,
   `wait_for` and `close_tab` run; each other tool (Vault, secrets, takeover, uploads, `evaluate`,
@@ -860,12 +860,12 @@ The extension is a remote client, so no new data channel is necessary:
 ### The extension side
 
 The extension (`apps/browser-extension`) shares the user's open web tabs while the user is signed in.
-There is no switch to stop it. A tab that an agent works in joins the Chrome tab group "OpenBot" of its
+There is no switch to stop it. A tab that an agent works in joins the Chrome tab group "CodeBot" of its
 window.
 
 - **Worker** (`src/client-browser-worker.ts`). Only the worker can use `chrome.debugger`, so it owns the
-  group, the approvals and the commands. Sharing is always on; `openbot.client-browser.sharing.v1` keeps
-  only the ID of the OpenBot group, and the worker ignores an `{ off: true }` that an older version
+  group, the approvals and the commands. Sharing is always on; `codebot.client-browser.sharing.v1` keeps
+  only the ID of the CodeBot group, and the worker ignores an `{ off: true }` that an older version
   stored. The worker
   answers the presence (the open web tabs, the active tab first, at most 50), and tells the page with
   the connection when a tab opens, closes or changes. A command groups its tab on attach, unless the tab
@@ -876,12 +876,12 @@ window.
   answer to `/v1/client-browser/result`. The offscreen page does not close when it is idle, and the
   worker opens it when the last panel closes or the browser starts.
 - **Commands** (`src/client-browser-executor.ts`). CDP 1.3 on any open web tab: it attaches on demand,
-  puts the tab into the OpenBot group of its window, and detaches after 30 s with no command. Page
+  puts the tab into the CodeBot group of its window, and detaches after 30 s with no command. Page
   scripts run in one isolated world per tab, made again after a navigation. `snapshot` keeps a map from
-  each `ref` to its element in that world, where page scripts cannot change it. A command gets `not-found` for a closed tab. The X agent's chat of each post is kept for its notification (`openbot.x-chats.v1`,
+  each `ref` to its element in that world, where page scripts cannot change it. A command gets `not-found` for a closed tab. The X agent's chat of each post is kept for its notification (`codebot.x-chats.v1`,
   the newest 20), and becomes the chat to open only when the user clicks that notification.
 - **Approvals.** Before a command, the worker checks the site (origin) of the tab or address. A site
-  that is not in `openbot.client-browser.sites.v1` gets a card in the side panel (Allow once / Always
+  that is not in `codebot.client-browser.sites.v1` gets a card in the side panel (Allow once / Always
   for this site / Deny), or a notification when no panel is open. The card waits 100 s, then the
   command fails with `timeout`. A command also has a deadline 10 s before the host gives up on it
   (120 s from its arrival): after the deadline it does not act, so the agent is never told "timeout"
@@ -913,7 +913,7 @@ Chrome Web Store permission notes (for the store listing):
 | --- | --- |
 | `debugger` | When the user shares tabs, the user's own agents read and use the user's open tabs (page text, screenshots, clicks and typing), after the user allows each site. Chrome shows its debugging bar while it is attached. |
 | `tabs` | Lists the address and title of the user's open tabs for the user's agents, and opens or closes a tab when an agent asks. |
-| `tabGroups` | Puts the tabs that an agent works in into the "OpenBot" tab group, so the user sees them. |
+| `tabGroups` | Puts the tabs that an agent works in into the "CodeBot" tab group, so the user sees them. |
 | `downloads` | Holds a download that starts on a site where the user's agent works until the user allows it in the side panel, and cancels it when the user denies it. The extension does not read, open or list the user's files. |
 
 The Team API E2E (`scripts/team-api-routes-e2e.ts`, "A member's shared Chrome tabs") checks the

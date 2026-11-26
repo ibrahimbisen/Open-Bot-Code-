@@ -1,8 +1,8 @@
 import { lstatSync, statSync } from "node:fs";
 import { win32 } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 
 const DEFAULT_PATH_EXTENSIONS = ".COM;.EXE;.BAT;.CMD";
 

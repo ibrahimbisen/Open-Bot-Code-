@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentEvent, BrowserTab, ConversationSnapshot } from "@openbot/contracts/ipc";
-import { type UiBlockSpec, uiBlockAnswersFromResponse } from "@openbot/contracts/ui-blocks";
+import type { AgentEvent, BrowserTab, ConversationSnapshot } from "@codebot/contracts/ipc";
+import { type UiBlockSpec, uiBlockAnswersFromResponse } from "@codebot/contracts/ui-blocks";
 import { Effect } from "effect";
 import { AttentionRegistry } from "../src/backend/agent/attention-registry";
 import { vaultRequestFormSpec } from "../src/backend/agent/prompts";
@@ -15,7 +15,7 @@ import type { RequestId } from "../src/backend/protocol";
 import { VaultService } from "../src/main/vault-service";
 import { VaultStore } from "../src/main/vault-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/browser-takeover-deadline-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/browser-takeover-deadline-e2e");
 const AGENT = "agent-1";
 const THREAD = "thread-1";
 const TAB = "tab-1";
@@ -152,7 +152,7 @@ function callOn(
         threadId: THREAD,
         turnId,
         callId: `call-${id}`,
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool,
         arguments: { tabId: TAB },
       },
@@ -305,7 +305,7 @@ try {
         threadId: THREAD,
         turnId: "turn-7",
         callId: `call-${id}`,
-        namespace: "openbot",
+        namespace: "codebot",
         tool: "ask_user",
         arguments: { questions: [{ id: "q1", header: "Plan", question: "Which plan?" }] },
       },
@@ -319,10 +319,10 @@ try {
   });
 
   await step("a Vault request card stays open past its call, and its late answer has no secret", async () => {
-    const root = await mkdtemp(join(tmpdir(), "openbot-takeover-deadline-e2e-"));
+    const root = await mkdtemp(join(tmpdir(), "codebot-takeover-deadline-e2e-"));
     try {
       const vault = new VaultService({
-        store: new VaultStore(join(root, "openbot-vault.json"), {
+        store: new VaultStore(join(root, "codebot-vault.json"), {
           encrypt: (value: string) => Buffer.from(value, "utf8").reverse(),
           decrypt: (value: Buffer) => Buffer.from(value).reverse().toString("utf8"),
         }),
@@ -370,7 +370,7 @@ try {
           threadId: THREAD,
           turnId: "turn-8",
           callId: `call-${id}`,
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "request_vault_item",
           arguments: args,
         },
@@ -444,7 +444,7 @@ try {
         {
           id,
           method: "item/tool/call",
-          params: { threadId: THREAD, turnId, callId: `call-${id}`, namespace: "openbot", tool: "ask_ui" },
+          params: { threadId: THREAD, turnId, callId: `call-${id}`, namespace: "codebot", tool: "ask_ui" },
           ...(deadline ? { detachAfterMs: DEADLINE_MS } : {}),
         },
         { blockId: `block-${id}`, spec },
@@ -665,7 +665,7 @@ try {
         threadId: THREAD,
         turnId: "turn-limit-7",
         callId: `call-${id}`,
-        namespace: "openbot",
+        namespace: "codebot",
         tool: "ask_user",
         arguments: { questions: [{ id: "q1", header: "Plan", question: "Which plan?" }] },
       },
@@ -686,7 +686,7 @@ try {
         threadId: THREAD,
         turnId,
         callId: `call-${id}`,
-        namespace: "openbot",
+        namespace: "codebot",
         tool: "ask_user",
         arguments: { questions: [{ id: "q1", header: "Plan", question: "Which plan?", isSecret }] },
       },
@@ -832,14 +832,14 @@ try {
     );
     assert.equal(
       answer.secureInput,
-      "OpenBot could not finish entering the value. Authentication submit button is not ready. The page went to the user.",
+      "CodeBot could not finish entering the value. Authentication submit button is not ready. The page went to the user.",
     );
     return answer;
   });
 
   await step("a failed fill with another error tells the agent no page text", async () => {
     const answer = await failedFill("turn-10", new Error(`ERR_ABORTED loading https://example.test/?code=${SECRET}`));
-    assert.equal(answer.secureInput, "OpenBot could not finish entering the value. The page went to the user.");
+    assert.equal(answer.secureInput, "CodeBot could not finish entering the value. The page went to the user.");
     return answer;
   });
 
@@ -890,9 +890,9 @@ try {
           connected: () => true,
           loginsFor: () =>
             Effect.succeed([
-              { id: "openbot:a", title: "Account A", username: savedUsername, hasOneTimePassword: false },
+              { id: "codebot:a", title: "Account A", username: savedUsername, hasOneTimePassword: false },
             ]),
-          secretFor: (loginId) => Effect.succeed(loginId === "openbot:a" ? VAULT_SECRET : null),
+          secretFor: (loginId) => Effect.succeed(loginId === "codebot:a" ? VAULT_SECRET : null),
         },
       });
       const cards = () => vaultEvents.filter((event) => event.type === "browser-takeover-requested").length;
@@ -906,7 +906,7 @@ try {
               threadId: THREAD,
               turnId: `turn-vault-${id}`,
               callId: `call-${id}`,
-              namespace: "openbot_browser",
+              namespace: "codebot_browser",
               tool: "submit_secret",
               arguments: {
                 tabId: TAB,
@@ -1009,9 +1009,9 @@ try {
           connected: () => true,
           loginsFor: () =>
             Effect.succeed([
-              { id: "openbot:a", title: "Account A", username: "a@example.test", hasOneTimePassword: false },
+              { id: "codebot:a", title: "Account A", username: "a@example.test", hasOneTimePassword: false },
             ]),
-          secretFor: (loginId) => Effect.succeed(loginId === "openbot:a" ? VAULT_SECRET : null),
+          secretFor: (loginId) => Effect.succeed(loginId === "codebot:a" ? VAULT_SECRET : null),
         },
       });
       const cards = () => vaultEvents.filter((event) => event.type === "browser-takeover-requested").length;
@@ -1025,7 +1025,7 @@ try {
               threadId: THREAD,
               turnId: `turn-scripted-${id}`,
               callId: `call-${id}`,
-              namespace: "openbot_browser",
+              namespace: "codebot_browser",
               tool: "submit_secret",
               arguments: {
                 tabId: TAB,
@@ -1040,7 +1040,7 @@ try {
         );
       };
       const cancelledBefore = browserLog.filter((entry) => entry === "secret-cancelled").length;
-      const scripted = signIn("openbot:a");
+      const scripted = signIn("codebot:a");
       let answered = false;
       void scripted.finally(() => {
         answered = true;
@@ -1084,7 +1084,7 @@ try {
   );
 
   await step(
-    "a routine's saved login that OpenBot cannot fill goes back to the agent, with no card (#16283)",
+    "a routine's saved login that CodeBot cannot fill goes back to the agent, with no card (#16283)",
     async () => {
       const vaultEvents: AgentEvent[] = [];
       const attention: string[] = [];
@@ -1115,7 +1115,7 @@ try {
               vaultFillable: true,
               submit: () =>
                 routineFillFails
-                  ? Effect.fail(browserFailure("The secure field changed before OpenBot could enter the value."))
+                  ? Effect.fail(browserFailure("The secure field changed before CodeBot could enter the value."))
                   : Effect.succeed("submitted" as const),
             })),
           beginTakeover: () => Effect.void,
@@ -1135,9 +1135,9 @@ try {
           connected: () => true,
           loginsFor: () =>
             Effect.succeed([
-              { id: "openbot:a", title: "Account A", username: "a@example.test", hasOneTimePassword: false },
+              { id: "codebot:a", title: "Account A", username: "a@example.test", hasOneTimePassword: false },
             ]),
-          secretFor: (loginId) => Effect.succeed(loginId === "openbot:a" ? VAULT_SECRET : null),
+          secretFor: (loginId) => Effect.succeed(loginId === "codebot:a" ? VAULT_SECRET : null),
         },
       });
       const cards = () => vaultEvents.filter((event) => event.type === "browser-takeover-requested").length;
@@ -1150,7 +1150,7 @@ try {
               threadId: THREAD,
               turnId,
               callId: `call-${turnId}`,
-              namespace: "openbot_browser",
+              namespace: "codebot_browser",
               tool: "submit_secret",
               arguments: {
                 tabId: TAB,
@@ -1174,14 +1174,14 @@ try {
         return { call };
       };
       const cancelledBefore = browserLog.filter((entry) => entry === "secret-cancelled").length;
-      const { call: unknownCall } = await settled("routine-unknown-login", "openbot:missing");
+      const { call: unknownCall } = await settled("routine-unknown-login", "codebot:missing");
       assert.equal(cards(), 0, "a password card opened in a routine for an unknown saved login");
       const unknown = answerOf(await unknownCall);
       assert.equal(unknown.success, false, "the skipped saved login was reported as a success");
       assert.match(unknown.next ?? "", /list_logins/u, "the agent did not get the reason for the skip");
       assert.match(unknown.next ?? "", /routine run/u, "the agent was not told that nobody answers in a routine");
       routineScripted = true;
-      const { call: scriptedCall } = await settled("routine-scripted-login", "openbot:a");
+      const { call: scriptedCall } = await settled("routine-scripted-login", "codebot:a");
       assert.equal(cards(), 0, "a password card opened in a routine for a login that an agent script blocks");
       const scripted = answerOf(await scriptedCall);
       assert.match(scripted.next ?? "", /navigate direction=reload/u, "the agent did not get the reload step");
@@ -1192,11 +1192,11 @@ try {
       );
       routineScripted = false;
       routineFillFails = true;
-      const { call: failedCall } = await settled("routine-failed-fill", "openbot:a");
+      const { call: failedCall } = await settled("routine-failed-fill", "codebot:a");
       assert.equal(cards(), 0, "a takeover card opened in a routine after a saved login fill failed");
       const failed = answerOf(await failedCall);
       assert.equal(failed.success, false, "the failed fill was reported as a success");
-      assert.match(failed.next ?? "", /could not finish filling saved login openbot:a/u);
+      assert.match(failed.next ?? "", /could not finish filling saved login codebot:a/u);
       assert.equal(vaultRegistry.runtimeAttention().pendingBrowserTakeovers.length, 0, "the takeover stayed open");
       assert.equal(
         browserLog.filter((entry) => entry === "secret-cancelled").length,
@@ -1205,7 +1205,7 @@ try {
       );
       assert(!attention.some((entry) => entry.startsWith("needs:")), "the routine was marked as waiting for the user");
       routineFillFails = false;
-      const { call: chatCall } = await settled("turn-chat-unknown-login", "openbot:missing");
+      const { call: chatCall } = await settled("turn-chat-unknown-login", "codebot:missing");
       const card = vaultRegistry.runtimeAttention().pendingBrowserTakeovers[0];
       assert(card?.secret, "a chat lost the password card for an unknown saved login");
       await runCauseEffect(

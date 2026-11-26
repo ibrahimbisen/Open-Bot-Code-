@@ -9,7 +9,7 @@ import { passwordVaultRouter } from "../src/backend/password-vault-router";
 import { BitwardenConnectorService } from "../src/main/bitwarden-connector-service";
 import { waitForPresentedFrame } from "./browser-smoke-frames";
 
-const ORIGIN = "https://authentication.openbot.test";
+const ORIGIN = "https://authentication.codebot.test";
 const ID = "12345678-1234-1234-1234-123456789abc";
 const PASSWORD = "fixture-bitwarden-password";
 const CODE = "73918246";
@@ -35,7 +35,7 @@ export async function runBitwardenBrowserSmoke(browser: BrowserHost): Promise<vo
       if (args[1] === "folders")
         return JSON.stringify([
           { id: null, name: "No Folder" },
-          { id: "shared", name: "Shared with OpenBot" },
+          { id: "shared", name: "Shared with CodeBot" },
         ]);
       if (args[1] === "totp") return CODE;
       const item = {
@@ -48,7 +48,7 @@ export async function runBitwardenBrowserSmoke(browser: BrowserHost): Promise<vo
           username: "fixture@example.test",
           password: PASSWORD,
           totp: "fixture-seed",
-          uris: [{ uri: "accounts.openbot.test", match: null }],
+          uris: [{ uri: "accounts.codebot.test", match: null }],
         },
       };
       return JSON.stringify(args[1] === "items" ? [item] : item);
@@ -62,8 +62,8 @@ export async function runBitwardenBrowserSmoke(browser: BrowserHost): Promise<vo
     },
     { prefix: "bitwarden:", name: "Bitwarden", vault: connector },
     {
-      prefix: "openbot:",
-      name: "the OpenBot Vault",
+      prefix: "codebot:",
+      name: "the CodeBot Vault",
       vault: {
         connected: () => true,
         loginsFor: () => Effect.succeed(vaultLogins),
@@ -87,7 +87,7 @@ export async function runBitwardenBrowserSmoke(browser: BrowserHost): Promise<vo
         await waitForPresentedFrame(contents);
         const prepared = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -125,8 +125,8 @@ export async function runBitwardenBrowserSmoke(browser: BrowserHost): Promise<vo
     const failedStatus = connector.status();
     if (!Result.isFailure(failed) || failed.failure.sources?.join() !== "Bitwarden")
       throw new Error("The failed login list did not name Bitwarden.");
-    if (failed.failure.logins?.map(({ id }) => id).join() !== "openbot:vault-login")
-      throw new Error("A Bitwarden failure hid the OpenBot Vault login.");
+    if (failed.failure.logins?.map(({ id }) => id).join() !== "codebot:vault-login")
+      throw new Error("A Bitwarden failure hid the CodeBot Vault login.");
     if (!failedStatus.connected || !failedStatus.error)
       throw new Error("The Bitwarden status did not show the failed read.");
     checks.push("a Bitwarden read failure names Bitwarden, keeps the other logins, and shows the error in its status");
@@ -139,7 +139,7 @@ export async function runBitwardenBrowserSmoke(browser: BrowserHost): Promise<vo
     if (await runCauseEffect(vault.secretFor(login.id, ORIGIN, "password")))
       throw new Error("Disconnected vault returned a password.");
     checks.push("disconnect blocks further reads");
-    const directory = join(process.cwd(), ".openbot-build", "bitwarden");
+    const directory = join(process.cwd(), ".codebot-build", "bitwarden");
     await mkdir(directory, { recursive: true });
     await writeFile(
       join(directory, "browser-smoke.json"),

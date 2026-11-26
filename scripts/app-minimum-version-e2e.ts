@@ -9,9 +9,9 @@ import {
   APP_SURFACES,
   isBelowMinimumVersion,
   parseAppMinimumVersion,
-} from "@openbot/contracts/app-minimum-version";
-import type { ScheduledUpdateRestart, UpdatePreference, UpdateStatus } from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/app-minimum-version";
+import type { ScheduledUpdateRestart, UpdatePreference, UpdateStatus } from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { type ChangelogRelease, parseChangelog } from "../apps/auth-api/src/lib/changelog";
 import { APP_MINIMUM_VERSIONS } from "../apps/auth-api/src/server/app-minimum-version";
@@ -19,9 +19,9 @@ import { RequestedUpdate } from "../src/main/requested-update";
 import { RequiredUpdate, type RequiredUpdateFetch } from "../src/main/required-update";
 import { appMinimumVersionProblems } from "./check-app-minimum-version";
 
-const logger = createOpenBotLogger("app-minimum-version-e2e");
+const logger = createCodeBotLogger("app-minimum-version-e2e");
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/app-minimum-version-e2e");
+const OUT = resolve(ROOT, ".codebot-build/app-minimum-version-e2e");
 rmSync(OUT, { recursive: true, force: true });
 mkdirSync(OUT, { recursive: true });
 

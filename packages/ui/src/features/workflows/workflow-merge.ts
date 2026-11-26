@@ -1,4 +1,4 @@
-import type { WorkflowEdge, WorkflowFields, WorkflowGraph, WorkflowNode, WorkflowStroke } from "@openbot/contracts/ipc";
+import type { WorkflowEdge, WorkflowFields, WorkflowGraph, WorkflowNode, WorkflowStroke } from "@codebot/contracts/ipc";
 import { stableJson } from "./workflow-history";
 
 const same = (left: unknown, right: unknown) => stableJson(left) === stableJson(right);

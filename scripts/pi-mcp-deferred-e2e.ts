@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
 import { visibleDynamicTools } from "../src/backend/agent/tool-catalog";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolvePiCli } from "../src/backend/cli";
@@ -12,7 +12,7 @@ import type { CustomProviderConfig } from "../src/backend/opencode-config";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-mcp-deferred-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-mcp-deferred-e2e");
 const NL = String.fromCharCode(10);
 const TOOL = "ping_fixture";
 
@@ -47,7 +47,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, requests: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-deferred-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-deferred-e2e-"));
 const clients: AgentClient[] = [];
 const systems: string[] = [];
 
@@ -183,13 +183,13 @@ try {
   const bridge = (names: string[]) => names.filter((name) => name.startsWith("mcp__") && !name.endsWith(TOOL));
   assert.deepEqual(external(first), [], `The first request declares the user's tool: ${first.join(", ")}`);
   assert.ok(first.includes("tool_search"), `The first request has no tool_search: ${first.join(", ")}`);
-  assert.ok(bridge(first).length > 0, `The first request declares no OpenBot tool: ${first.join(", ")}`);
+  assert.ok(bridge(first).length > 0, `The first request declares no CodeBot tool: ${first.join(", ")}`);
   assert.equal(external(second).length, 1, `tool_search did not load the user's tool: ${second.join(", ")}`);
-  const openbotSearch = bridge(first).find((name) => name.endsWith("__tool_search"));
-  assert.ok(openbotSearch, `The first request has no OpenBot tool_search: ${first.join(", ")}`);
+  const codebotSearch = bridge(first).find((name) => name.endsWith("__tool_search"));
+  assert.ok(codebotSearch, `The first request has no CodeBot tool_search: ${first.join(", ")}`);
   assert.ok(
-    report.toolResults?.includes(`find them with ${openbotSearch},`),
-    `Pi's tool_search result does not name ${openbotSearch}: ${report.toolResults}`,
+    report.toolResults?.includes(`find them with ${codebotSearch},`),
+    `Pi's tool_search result does not name ${codebotSearch}: ${report.toolResults}`,
   );
   report.servers = systems[0]?.match(/<mcp_servers>[\s\S]*?<\/mcp_servers>/u)?.[0] ?? "";
   assert.match(report.servers, /\(tool_search\): fixture$/mu, "The system prompt does not name the server.");

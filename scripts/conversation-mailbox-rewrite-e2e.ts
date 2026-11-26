@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentEvent, ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
+import type { AgentEvent, ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { Effect, Exit, Scope } from "effect";
 import {
   CONVERSATION_CACHE_BYTES_LIMIT,
@@ -15,12 +15,12 @@ import { RoutineScheduler } from "../src/backend/agent/routine-scheduler";
 import { AgentStore } from "../src/backend/agent-store";
 import { AgentWaitStore } from "../src/backend/agent-waits/agent-wait-store";
 import { AgentWaits } from "../src/backend/agent-waits/agent-waits";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MAILBOX_CONVERSATION_MESSAGE_LIMIT, MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { RoutineTimer } from "../src/backend/routine-timer";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/conversation-mailbox-rewrite-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/conversation-mailbox-rewrite-e2e");
 const SEEDED_TURNS = 120;
 const ROUNDS = 12;
 const TIMED_QUEUE_CHANGES = 50;
@@ -85,8 +85,8 @@ function after(iso: string): string {
 }
 
 async function startRuntime() {
-  const root = await mkdtemp(join(tmpdir(), "openbot-conversation-rewrite-"));
-  const database = new OpenBotDatabase(join(root, "state"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-conversation-rewrite-"));
+  const database = new CodeBotDatabase(join(root, "state"));
   const store = new AgentStore(join(root, "state"), join(root, "home"), database);
   const mailbox = new MailboxStore(join(root, "state"), store.sharedRoot, database);
   const events: AgentEvent[] = [];

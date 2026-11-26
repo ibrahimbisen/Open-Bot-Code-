@@ -10,8 +10,8 @@ import {
   type HostAnalyticsInput,
   parseHostAnalyticsInput,
   type UsageTokens,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { estimateUsageCost } from "../agent/usage-pricing";
 import { databaseRow, databaseRows, optionalNumberColumn, requiredStringColumn } from "./database-rows";
 

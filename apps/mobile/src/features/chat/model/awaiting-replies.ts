@@ -1,5 +1,5 @@
-import type { ConversationMessage, QueueDelivery } from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
+import type { ConversationMessage, QueueDelivery } from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
 import type { MobileAgentWait } from "@/features/workspace/model/agent-activity";
 
 export type AwaitingReplyState = "asked" | "working" | "replied" | "failed";

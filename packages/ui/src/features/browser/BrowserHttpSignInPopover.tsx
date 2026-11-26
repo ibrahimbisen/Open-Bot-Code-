@@ -1,5 +1,5 @@
-import { Button, Eye, EyeOff, Field, Input, Lock, X } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { Button, Eye, EyeOff, Field, Input, Lock, X } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, createUniqueId, onSettled, Show, untrack } from "solid-js";
 import { useBrowserPageCover } from "./browser-page-cover";
 

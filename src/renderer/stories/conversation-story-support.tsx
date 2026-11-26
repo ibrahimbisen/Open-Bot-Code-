@@ -1,6 +1,6 @@
-import { serializeAttachmentReference } from "@openbot/contracts/attachment-references";
-import type { AvatarImageInput, UpdateAgentInput } from "@openbot/contracts/ipc";
-import type { AgentMessage as RendererAgentMessage } from "@openbot/ui/data";
+import { serializeAttachmentReference } from "@codebot/contracts/attachment-references";
+import type { AvatarImageInput, UpdateAgentInput } from "@codebot/contracts/ipc";
+import type { AgentMessage as RendererAgentMessage } from "@codebot/ui/data";
 import { onCleanup, type ParentProps } from "solid-js";
 import { fn } from "storybook/test";
 import { AuthProvider } from "../src/features/account/account-context";
@@ -23,7 +23,7 @@ import {
   STORY_REMOTE_DESKTOP_SESSION,
   STORY_SERVERS,
 } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 export const CONVERSATION_STORY_ATTACHMENT = requireFixture(STORY_ATTACHMENTS[0], "Story attachment");
 
@@ -133,13 +133,13 @@ export const CONVERSATION_STORY_ARGS: Parameters<typeof Conversation>[0] = {
 };
 
 export function StoryConversation(props: Partial<Parameters<typeof ConversationView>[0]>) {
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot();
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot();
   const controller = createConversationController({ onTypingChange: CONVERSATION_STORY_ARGS.onTypingChange });
-  window.openbot = mock.api;
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   return (
     <div class="conversation-story-frame">

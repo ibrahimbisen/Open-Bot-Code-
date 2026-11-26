@@ -4,8 +4,8 @@ import {
   type PasswordManagerConnectMethod,
   type PasswordManagerId,
   type PasswordManagerStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { PASSWORD_MANAGER_BRANDS } from "../../backend/password-vault";
 import type { PasswordVaultSource } from "../../backend/password-vault-router";

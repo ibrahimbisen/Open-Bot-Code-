@@ -1,4 +1,4 @@
-import type { CreditsState } from "@openbot/contracts/credits";
+import type { CreditsState } from "@codebot/contracts/credits";
 import type {
   AccountSession,
   AppInfo,
@@ -19,7 +19,7 @@ import type {
   ServerNotificationLevel,
   ServerSummary,
   UpdateStatus,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Alert,
   AlertActions,
@@ -29,30 +29,30 @@ import {
   Button,
   Tabs,
   TriangleAlert,
-} from "@openbot/ui";
-import { BillingPanel } from "@openbot/ui/features/billing/BillingPanel";
-import { createBillingStore } from "@openbot/ui/features/billing/billing-store";
-import { LicenseSection } from "@openbot/ui/features/billing/LicenseSection";
-import { createLicenseStore } from "@openbot/ui/features/billing/license-store";
-import { CreditActivitySection } from "@openbot/ui/features/credits/CreditActivitySection";
-import { CreditsSection } from "@openbot/ui/features/credits/CreditsSection";
-import { createCreditsStore } from "@openbot/ui/features/credits/credits-store";
-import { ReferralPanel } from "@openbot/ui/features/referral/ReferralPanel";
-import { createReferralStore } from "@openbot/ui/features/referral/referral-store";
-import type { GeneralSettingsValue } from "@openbot/ui/features/settings/app-settings";
+} from "@codebot/ui";
+import { BillingPanel } from "@codebot/ui/features/billing/BillingPanel";
+import { createBillingStore } from "@codebot/ui/features/billing/billing-store";
+import { LicenseSection } from "@codebot/ui/features/billing/LicenseSection";
+import { createLicenseStore } from "@codebot/ui/features/billing/license-store";
+import { CreditActivitySection } from "@codebot/ui/features/credits/CreditActivitySection";
+import { CreditsSection } from "@codebot/ui/features/credits/CreditsSection";
+import { createCreditsStore } from "@codebot/ui/features/credits/credits-store";
+import { ReferralPanel } from "@codebot/ui/features/referral/ReferralPanel";
+import { createReferralStore } from "@codebot/ui/features/referral/referral-store";
+import type { GeneralSettingsValue } from "@codebot/ui/features/settings/app-settings";
 import {
   SettingsDialogShell,
   SettingsNavGroupLabel,
   type SettingsPagePlacement,
-} from "@openbot/ui/features/settings/SettingsDialogShell";
-import type { MobileInstallRequest } from "@openbot/ui/features/settings/SettingsMobileConnectTab";
-import { SettingsMobileConnectTab } from "@openbot/ui/features/settings/SettingsMobileConnectTab";
-import { SettingsProfileTab } from "@openbot/ui/features/settings/SettingsProfileTab";
-import { SettingsUpdatesTab } from "@openbot/ui/features/settings/SettingsUpdatesTab";
-import { createSettingsHostedServersStore } from "@openbot/ui/features/settings/stores/hosted-servers-store";
-import { createSettingsMobileConnectStore } from "@openbot/ui/features/settings/stores/mobile-connect-store";
-import { createSettingsProfileStore } from "@openbot/ui/features/settings/stores/profile-store";
-import { createSettingsUpdatesStore } from "@openbot/ui/features/settings/stores/updates-store";
+} from "@codebot/ui/features/settings/SettingsDialogShell";
+import type { MobileInstallRequest } from "@codebot/ui/features/settings/SettingsMobileConnectTab";
+import { SettingsMobileConnectTab } from "@codebot/ui/features/settings/SettingsMobileConnectTab";
+import { SettingsProfileTab } from "@codebot/ui/features/settings/SettingsProfileTab";
+import { SettingsUpdatesTab } from "@codebot/ui/features/settings/SettingsUpdatesTab";
+import { createSettingsHostedServersStore } from "@codebot/ui/features/settings/stores/hosted-servers-store";
+import { createSettingsMobileConnectStore } from "@codebot/ui/features/settings/stores/mobile-connect-store";
+import { createSettingsProfileStore } from "@codebot/ui/features/settings/stores/profile-store";
+import { createSettingsUpdatesStore } from "@codebot/ui/features/settings/stores/updates-store";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { useI18n } from "../../i18n-context";
 import { ComputerUseSetup } from "../computer-use/ComputerUseSetup";

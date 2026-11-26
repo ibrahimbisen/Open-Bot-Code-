@@ -1,11 +1,11 @@
 import { createServer, type IncomingMessage, type Server } from "node:http";
 import type { Socket } from "node:net";
-import type { AppTextKey } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { AppTextKey } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { LanguageService } from "./language-service";
 import { listenLoopback, listenLoopbackExact } from "./listen-loopback";
 
-const logger = createOpenBotLogger("loopback-callback-server");
+const logger = createCodeBotLogger("loopback-callback-server");
 
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "localhost"]);
 
@@ -65,7 +65,7 @@ export async function startLoopbackCallbackServer(
     void readFormBody(request).then((form) => {
       reading.delete(socket);
       if (form === null) {
-        logger.warn("A sign-in callback was posted with a body that OpenBot cannot read.", {
+        logger.warn("A sign-in callback was posted with a body that CodeBot cannot read.", {
           contentType: request.headers["content-type"] ?? null,
         });
         return send({ status: 400, message: "error.mcp.redirectNotSignIn" });
@@ -145,5 +145,5 @@ function isLoopbackHost(host: string | undefined): boolean {
 }
 
 function callbackPage(locale: string, message: string): string {
-  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><title>OpenBot</title></head><body style="font-family:system-ui;padding:2rem"><p>${message}</p></body></html>`;
+  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><title>CodeBot</title></head><body style="font-family:system-ui;padding:2rem"><p>${message}</p></body></html>`;
 }

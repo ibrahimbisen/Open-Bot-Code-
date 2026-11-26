@@ -1,5 +1,5 @@
-import { ProviderLogo } from "@openbot/brand";
-import { Bot, Button, buttonVariants, ChevronDown, DropdownMenu, Play, TriangleAlert } from "@openbot/ui";
+import { ProviderLogo } from "@codebot/brand";
+import { Bot, Button, buttonVariants, ChevronDown, DropdownMenu, Play, TriangleAlert } from "@codebot/ui";
 import { Show, untrack } from "solid-js";
 import type { AgentProfile } from "../../data";
 import { useText } from "../../text";

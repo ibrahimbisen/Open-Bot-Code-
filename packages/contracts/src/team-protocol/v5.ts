@@ -57,10 +57,10 @@ export function decodeTeamProtocolV5HttpResponse(
 }
 
 function duplicateRoute(method: string, path: string): boolean {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   return method === "POST" && /^\/v1\/agents\/[^/]+\/duplicate$/u.test(pathname);
 }
 
 function agentPath(path: string): string {
-  return new URL(path, "http://openbot.invalid").pathname.replace(/\/duplicate$/u, "");
+  return new URL(path, "http://codebot.invalid").pathname.replace(/\/duplicate$/u, "");
 }

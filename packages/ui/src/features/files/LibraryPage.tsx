@@ -8,7 +8,7 @@ import {
   libraryFolderPath,
   libraryFolderTree,
   type StoredFileWorkflow,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   ArrowRight,
   Ban,
@@ -23,9 +23,9 @@ import {
   LayoutGrid,
   List,
   toast,
-} from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
+import { useText } from "@codebot/ui/text";
 import { type JSX, Portal } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js";
 import { AgentPicker } from "../agents/AgentPicker";

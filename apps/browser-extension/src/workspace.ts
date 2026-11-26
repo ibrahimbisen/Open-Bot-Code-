@@ -1,5 +1,5 @@
-import { isKnownAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentRuntimeSnapshot } from "@openbot/contracts/ipc";
+import { isKnownAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentRuntimeSnapshot } from "@codebot/contracts/ipc";
 import {
   type AgentStatus,
   type AgentTask,
@@ -24,30 +24,30 @@ import {
   sidebarFolderAncestors,
   sidebarFolderParents,
   sidebarFolderTreeOrder,
-} from "@openbot/contracts/ipc";
-import { guardedListDecoder } from "@openbot/contracts/ipc-decoding";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { guardedListDecoder } from "@codebot/contracts/ipc-decoding";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   AGENT_COLORS_CAPABILITY,
   AGENT_COLORS_ROUTES,
   decodeAgentColorsSnapshot,
-} from "@openbot/contracts/team-protocol/agent-colors-v1";
-import { AGENT_CREATE_OPERATION_CAPABILITY } from "@openbot/contracts/team-protocol/agent-create-operation-v1";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
-import { AGENT_THREAD_READS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-reads-v1";
-import { AGENT_WELCOME_CAPABILITY, TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/agent-colors-v1";
+import { AGENT_CREATE_OPERATION_CAPABILITY } from "@codebot/contracts/team-protocol/agent-create-operation-v1";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
+import { AGENT_THREAD_READS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
+import { AGENT_WELCOME_CAPABILITY, TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@codebot/contracts/team-protocol/current";
 import {
   SIDEBAR_FOLDERS_CAPABILITY,
   SIDEBAR_FOLDERS_ROUTES,
-} from "@openbot/contracts/team-protocol/sidebar-folders-v1";
-import { SIDEBAR_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/sidebar-pins-v1";
-import type { TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { VOICE_TRANSCRIPTION_CAPABILITY } from "@openbot/contracts/team-protocol/voice-transcription-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import type { RemoteTeamEvent } from "@openbot/team-client/remote-peer";
-import { retryOperationIds } from "@openbot/team-client/retry-operation-id";
-import { readSidebarPins, setAgentColor } from "@openbot/team-client/team-admin-requests";
+} from "@codebot/contracts/team-protocol/sidebar-folders-v1";
+import { SIDEBAR_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/sidebar-pins-v1";
+import type { TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { VOICE_TRANSCRIPTION_CAPABILITY } from "@codebot/contracts/team-protocol/voice-transcription-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import type { RemoteTeamEvent } from "@codebot/team-client/remote-peer";
+import { retryOperationIds } from "@codebot/team-client/retry-operation-id";
+import { readSidebarPins, setAgentColor } from "@codebot/team-client/team-admin-requests";
 import {
   listAgentTasks,
   markAgentThreadRead,
@@ -56,10 +56,10 @@ import {
   startAgentTask,
   type TeamApiRequest,
   teamChannelsApi,
-} from "@openbot/team-client/team-api-requests";
-import { createAgentInitialMessage } from "@openbot/ui/features/agents/agent-initial-message";
-import type { FirstAgentDraft } from "@openbot/ui/features/agents/FirstAgentSetup";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/team-api-requests";
+import { createAgentInitialMessage } from "@codebot/ui/features/agents/agent-initial-message";
+import type { FirstAgentDraft } from "@codebot/ui/features/agents/FirstAgentSetup";
+import { currentText } from "@codebot/ui/text";
 import { createStore, flush } from "solid-js";
 import { createAgentSettingsApi } from "./agent-settings";
 import { track, withResult } from "./analytics";

@@ -5,7 +5,7 @@ import {
   type BrowserDockAction,
   type BrowserDockFrame,
   type BrowserDockPresentation,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { browserDockLayout } from "../browser-dock-overlay";
@@ -61,7 +61,7 @@ const PRESENTATION: BrowserDockPresentation = {
 
 const FRAME: BrowserDockFrame = { seq: 1, height: 120, glass: [] };
 
-function event(senderId: number, url = "openbot-app://app/index.html") {
+function event(senderId: number, url = "codebot-app://app/index.html") {
   return { senderFrame: { url }, sender: { id: senderId } };
 }
 

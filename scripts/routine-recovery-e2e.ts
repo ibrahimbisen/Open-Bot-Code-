@@ -1,21 +1,21 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import type { EventRoutine, EventRoutineRun, SaveEventRoutineInput } from "@openbot/contracts/ipc-events";
-import { ROUTINE_RECOVERY_CAPABILITY } from "@openbot/contracts/team-protocol/routine-recovery-v1";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import type { EventRoutine, EventRoutineRun, SaveEventRoutineInput } from "@codebot/contracts/ipc-events";
+import { ROUTINE_RECOVERY_CAPABILITY } from "@codebot/contracts/team-protocol/routine-recovery-v1";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/routine-recovery-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/routine-recovery-e2e");
 
 interface Check {
   name: string;
@@ -35,14 +35,14 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("routine-recovery-e2e");
+const logger = createCodeBotLogger("routine-recovery-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
 });
 
 function save(page: Page, input: SaveEventRoutineInput, serverId: string): Promise<EventRoutine> {
-  return page.evaluate(async ([value, id]) => (await window.openbot.events.saveRoutine(value, id)).routine, [
+  return page.evaluate(async ([value, id]) => (await window.codebot.events.saveRoutine(value, id)).routine, [
     input,
     serverId,
   ] as const);
@@ -52,7 +52,7 @@ function refusal(page: Page, routineId: string, owner: SaveEventRoutineInput["ow
   return page.evaluate(
     async ([id, routineOwner, server]) => {
       try {
-        await window.openbot.events.listRoutineRuns({ owner: routineOwner, routineId: id }, server);
+        await window.codebot.events.listRoutineRuns({ owner: routineOwner, routineId: id }, server);
         return null;
       } catch (error) {
         return error instanceof Error ? error.message : String(error);
@@ -68,7 +68,7 @@ const checks: Check[] = [];
 const check = (name: string, passed: boolean, detail: unknown = null) => checks.push({ name, passed, detail });
 let cleanup: (() => Promise<void>) | null = null;
 try {
-  const servers = await page.evaluate(() => window.openbot.servers.list());
+  const servers = await page.evaluate(() => window.codebot.servers.list());
   const server = servers.find(
     (item) => item.kind === "remote" && item.compatibility?.capabilities.includes(ROUTINE_RECOVERY_CAPABILITY) === true,
   );
@@ -79,7 +79,7 @@ try {
   );
   assert.ok(server, "No joined server advertises routine-recovery-v1. Start the host from this worktree.");
   const serverId = server.id;
-  const agents = await page.evaluate((id) => window.openbot.agent.listAgents(id), serverId);
+  const agents = await page.evaluate((id) => window.codebot.agent.listAgents(id), serverId);
   const agent = agents[0];
   assert.ok(agent, "The joined host has no agent. Add one on the host first.");
   const owner = { kind: "agent", id: agent.id } as const;
@@ -94,7 +94,7 @@ try {
 
   const created = await save(page, { ...base, limitPolicy: "skip", missedPolicy: "run-once" }, serverId);
   cleanup = () =>
-    page.evaluate(([id, routineOwner, s]) => window.openbot.events.deleteRoutine({ id, owner: routineOwner }, s), [
+    page.evaluate(([id, routineOwner, s]) => window.codebot.events.deleteRoutine({ id, owner: routineOwner }, s), [
       created.id,
       owner,
       serverId,
@@ -104,7 +104,7 @@ try {
     missedPolicy: created.missedPolicy,
   });
 
-  const listed = await page.evaluate(([o, s]) => window.openbot.events.listRoutines({ owner: o }, s), [
+  const listed = await page.evaluate(([o, s]) => window.codebot.events.listRoutines({ owner: o }, s), [
     owner,
     serverId,
   ] as const);
@@ -129,7 +129,7 @@ try {
   );
 
   const runs: EventRoutineRun[] = await page.evaluate(
-    ([o, id, s]) => window.openbot.events.listRoutineRuns({ owner: o, routineId: id, limit: 5 }, s),
+    ([o, id, s]) => window.codebot.events.listRoutineRuns({ owner: o, routineId: id, limit: 5 }, s),
     [owner, created.id, serverId] as const,
   );
   check("the run history of a routine that never ran is empty", runs.length === 0, runs);

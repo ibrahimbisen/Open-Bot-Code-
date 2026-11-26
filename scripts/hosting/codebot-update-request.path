@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch for an CodeBot update request
+
+[Path]
+PathExists=/run/codebot/update-stage
+PathExists=/run/codebot/update-install
+
+[Install]
+WantedBy=paths.target

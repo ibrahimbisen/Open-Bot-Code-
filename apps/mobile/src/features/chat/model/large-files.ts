@@ -1,6 +1,6 @@
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
-import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES } from "@openbot/contracts/team-protocol/v2";
-import { MOBILE_ATTACHMENT_BYTES, type RemoteLargeDownload } from "@openbot/team-client/remote-peer";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
+import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES } from "@codebot/contracts/team-protocol/v2";
+import { MOBILE_ATTACHMENT_BYTES, type RemoteLargeDownload } from "@codebot/team-client/remote-peer";
 import { create } from "zustand";
 import { useLargeFilePreference } from "@/features/settings/model/large-files";
 import type { MobileText } from "@/shared/lib/text";

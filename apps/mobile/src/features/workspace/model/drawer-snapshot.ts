@@ -1,6 +1,6 @@
-import type { WorkflowSummary } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { decodeRemoteWorkflowSummary } from "@openbot/team-client/workflow-decoding";
+import type { WorkflowSummary } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { decodeRemoteWorkflowSummary } from "@codebot/team-client/workflow-decoding";
 import { create } from "zustand";
 
 export interface DrawerSnapshot {

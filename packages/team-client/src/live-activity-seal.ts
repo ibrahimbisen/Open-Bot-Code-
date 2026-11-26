@@ -15,12 +15,12 @@ export interface LiveActivityKeys {
 
 export function liveActivityKeys(secret: Uint8Array): LiveActivityKeys {
   if (secret.length !== LIVE_ACTIVITY_SECRET_BYTES) throw new Error("The Live Activity secret has a wrong size.");
-  const derive = (label: string) => hmac(sha256, secret, utf8ToBytes(`openbot live activity ${label}`));
+  const derive = (label: string) => hmac(sha256, secret, utf8ToBytes(`codebot live activity ${label}`));
   return { seal: derive("seal"), tag: derive("tag"), action: derive("action") };
 }
 
 export function liveActivityHostSecret(phoneSecret: Uint8Array, serverId: string): Uint8Array {
-  return hmac(sha256, phoneSecret, utf8ToBytes(`openbot live activity host ${serverId}`));
+  return hmac(sha256, phoneSecret, utf8ToBytes(`codebot live activity host ${serverId}`));
 }
 
 export function sealLiveActivity(

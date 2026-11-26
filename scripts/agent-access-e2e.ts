@@ -9,45 +9,45 @@ import {
   decodeAgentAccessSnapshot,
   decodeServerAuditLog,
   type ServerAuditLog,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V1_WEBSOCKET,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol";
+} from "@codebot/contracts/team-protocol";
 import {
   AGENT_ACCESS_CAPABILITY,
   AGENT_ACCESS_CODECS,
   AGENT_ACCESS_ROUTES,
   agentAccessEvent,
-} from "@openbot/contracts/team-protocol/agent-access-v1";
-import { AGENT_MEMORY_INCLUSION_ROUTE } from "@openbot/contracts/team-protocol/agent-memories-v1";
-import { CHAT_COLORS_ROUTES } from "@openbot/contracts/team-protocol/chat-colors-v1";
-import { teamCapabilitiesForProtocol } from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/agent-access-v1";
+import { AGENT_MEMORY_INCLUSION_ROUTE } from "@codebot/contracts/team-protocol/agent-memories-v1";
+import { CHAT_COLORS_ROUTES } from "@codebot/contracts/team-protocol/chat-colors-v1";
+import { teamCapabilitiesForProtocol } from "@codebot/contracts/team-protocol/current";
 import {
   SERVER_AUDIT_CAPABILITY,
   SERVER_AUDIT_CODECS,
   SERVER_AUDIT_ROUTES,
-} from "@openbot/contracts/team-protocol/server-audit-v1";
-import { STORAGE_ROUTES } from "@openbot/contracts/team-protocol/storage-v1";
-import { TEAM_PROTOCOL_V7 } from "@openbot/contracts/team-protocol/v7";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/server-audit-v1";
+import { STORAGE_ROUTES } from "@codebot/contracts/team-protocol/storage-v1";
+import { TEAM_PROTOCOL_V7 } from "@codebot/contracts/team-protocol/v7";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import { StorageUsageScanner, StorageUsageService } from "../src/backend/storage-usage";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-access-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-access-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const OWNER = { username: "owner-user", password: "owner-password-123" };
 const MEMBER = { username: "member-user", password: "member-password-123" };
@@ -194,12 +194,12 @@ const teamBrowser: TeamApiBrowser = {
   answerHttpSignIn: unused,
 };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-agent-access-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-agent-access-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 
 interface Host {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   agents: AgentService;
   mailbox: MailboxStore;
   storage: StorageUsageService;
@@ -214,11 +214,11 @@ let host: Host | null = null;
 const sockets: WebSocket[] = [];
 
 async function startHost(): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   const audit = new ServerAuditStore(join(userData, SERVER_AUDIT_FILE));
   await runCauseEffect(audit.load());
   const access = new AgentAccessStore(join(userData, AGENT_ACCESS_FILE), {
@@ -236,7 +236,7 @@ async function startHost(): Promise<Host> {
   const agents = new AgentService({ store: agentStore, mailbox, browser: agentBrowser, sidebarLayout: sidebar });
   const storageSources = {
     roots: {
-      database: join(userData, "openbot.db"),
+      database: join(userData, "codebot.db"),
       downloads: join(root, "downloads"),
       caches: [join(userData, "remote-attachments")],
       logs: [join(userData, "logs")],
@@ -409,7 +409,7 @@ function refusal(body: unknown): string {
 async function openEvents(token: string): Promise<WebSocket> {
   const socket = new WebSocket(`ws://127.0.0.1:${current().port}${TEAM_API_ROUTES.events}`, [
     TEAM_PROTOCOL_V1_WEBSOCKET,
-    `openbot-token.${token}`,
+    `codebot-token.${token}`,
   ]);
   sockets.push(socket);
   await new Promise<void>((resolveOpen, reject) => {

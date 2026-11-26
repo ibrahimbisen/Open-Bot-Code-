@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   ROUTINE_MINIMUM_INTERVAL_MINUTES,
   type RoutineCalendar,
@@ -6,7 +6,7 @@ import {
   type RoutineCalendarRun,
   type RoutineFields,
   type RoutineRunFields,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { nextValidRoutineOccurrence, validateStoredRoutineSchedule } from "./routine-schedule";
 

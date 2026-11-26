@@ -1,4 +1,4 @@
-export const RECORDER_ORIGIN = "https://recorder.openbot.invalid";
+export const RECORDER_ORIGIN = "https://recorder.codebot.invalid";
 
 interface TabCaptureRequest {
   requestingUrl: string;

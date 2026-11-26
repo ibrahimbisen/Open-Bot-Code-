@@ -1,6 +1,6 @@
-import type { McpServerConfig, McpTestResult } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { McpSignInDialog } from "@openbot/ui/features/settings/McpSignInDialog";
+import type { McpServerConfig, McpTestResult } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { McpSignInDialog } from "@codebot/ui/features/settings/McpSignInDialog";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import {
   CONNECT_GLOBALS,
@@ -72,5 +72,5 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 
 export const RemoteHost: Story = {
-  args: { hostName: "OpenBot team" },
+  args: { hostName: "CodeBot team" },
 };

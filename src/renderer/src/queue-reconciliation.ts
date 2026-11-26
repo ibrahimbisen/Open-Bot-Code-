@@ -1,4 +1,4 @@
-import { type AgentTask, isQueuedAgentReply, type QueueDelivery, type QueueSnapshot } from "@openbot/contracts/ipc";
+import { type AgentTask, isQueuedAgentReply, type QueueDelivery, type QueueSnapshot } from "@codebot/contracts/ipc";
 
 export function withoutSideThreadTurns(queue: QueueSnapshot, tasks: readonly AgentTask[]): QueueSnapshot {
   const sideTurns = new Set(tasks.flatMap((task) => (task.activeTurnId ? [task.activeTurnId] : [])));

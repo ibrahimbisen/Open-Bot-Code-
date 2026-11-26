@@ -24,14 +24,14 @@ import {
   type SessionUpdate,
   type ToolCallLocation,
 } from "@agentclientprotocol/sdk";
-import { agentProviderName } from "@openbot/contracts/agent-providers";
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import type { AgentSessionSettingsSnapshot, AgentSessionSettingValue, McpServerConfig } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isBoolean, isString } from "@openbot/contracts/runtime-values";
-import { type SourceMessages, sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
-import { type CauseCode, classifyFailure, httpStatusCause, structuredCause } from "@openbot/telemetry";
-import { classifyUserError } from "@openbot/user-errors";
+import { agentProviderName } from "@codebot/contracts/agent-providers";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import type { AgentSessionSettingsSnapshot, AgentSessionSettingValue, McpServerConfig } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isBoolean, isString } from "@codebot/contracts/runtime-values";
+import { type SourceMessages, sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
+import { type CauseCode, classifyFailure, httpStatusCause, structuredCause } from "@codebot/telemetry";
+import { classifyUserError } from "@codebot/user-errors";
 import { Deferred, Effect, Exit, Fiber, Option, Result, Scope, Semaphore } from "effect";
 import {
   AcpConfiguration,
@@ -138,7 +138,7 @@ import type {
 } from "./provider-history";
 import { TimeoutError } from "./with-timeout";
 
-const logger = createOpenBotLogger("acp-client");
+const logger = createCodeBotLogger("acp-client");
 
 const RESTORE_LIST_RETRY_MS = 500;
 
@@ -287,7 +287,7 @@ interface AcpTurn {
   answer: Deferred.Deferred<void>;
   retrying?: "agent" | "model";
   waitingOnUser: number;
-  openbotToolCalls: number;
+  codebotToolCalls: number;
   awaitingCommands: boolean;
   ownReply: "none" | "reported" | "open" | "ended";
   abandoned: boolean;
@@ -419,16 +419,16 @@ interface HistoryReplay {
   error: unknown;
 }
 
-export const OPENBOT_ACP_CLIENT_CAPABILITIES = {
+export const CODEBOT_ACP_CLIENT_CAPABILITIES = {
   fs: { readTextFile: false, writeTextFile: false },
   terminal: false,
   elicitation: { form: {} },
   session: { configOptions: { boolean: {} } },
 } as const;
 
-export const OPENBOT_ACP_CLIENT_INFO = { name: "openbot", title: "OpenBot", version: "0.1.0" } as const;
+export const CODEBOT_ACP_CLIENT_INFO = { name: "codebot", title: "CodeBot", version: "0.1.0" } as const;
 
-const START_MODELS_PARAM = "openbotStartModels";
+const START_MODELS_PARAM = "codebotStartModels";
 
 export function withStartModels(params: unknown): DynamicRecord {
   return { ...(isRecord(params) ? params : {}), [START_MODELS_PARAM]: true };
@@ -592,7 +592,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
           dynamicTools: released.dynamicTools,
           runtimeWorkspaceRoots: released.workspaceRoots,
           computerUse: released.computerUse,
-          openbotAgentId: released.agentId ?? undefined,
+          codebotAgentId: released.agentId ?? undefined,
         },
         true,
       ),
@@ -957,7 +957,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
 
   #publishSessionSettings(thread: AcpThread): void {
     this.emit("notification", {
-      method: "openbot/sessionSettings/updated",
+      method: "codebot/sessionSettings/updated",
       params: { threadId: thread.id, ...this.#configuration.sessionSettings(thread.configOptions) },
     });
   }
@@ -970,7 +970,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     thread.instructionsSent = null;
     this.#turnContext.resend(thread.id);
     this.emit("notification", {
-      method: "openbot/context-compaction",
+      method: "codebot/context-compaction",
       params: { threadId: thread.id, status: "completed" },
     });
   }
@@ -1555,11 +1555,11 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
       connection.initialize({
         protocolVersion: 1,
         clientCapabilities: this.#flavor.childSessionUpdates
-          ? { ...OPENBOT_ACP_CLIENT_CAPABILITIES, _meta: { [OPENCODE_CHILD_SESSION_UPDATES]: true } }
+          ? { ...CODEBOT_ACP_CLIENT_CAPABILITIES, _meta: { [OPENCODE_CHILD_SESSION_UPDATES]: true } }
           : this.#flavor.clientMeta
-            ? { ...OPENBOT_ACP_CLIENT_CAPABILITIES, _meta: this.#flavor.clientMeta }
-            : OPENBOT_ACP_CLIENT_CAPABILITIES,
-        clientInfo: this.#flavor.clientInfo ?? OPENBOT_ACP_CLIENT_INFO,
+            ? { ...CODEBOT_ACP_CLIENT_CAPABILITIES, _meta: this.#flavor.clientMeta }
+            : CODEBOT_ACP_CLIENT_CAPABILITIES,
+        clientInfo: this.#flavor.clientInfo ?? CODEBOT_ACP_CLIENT_INFO,
       }),
     );
   }
@@ -1611,7 +1611,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
         dynamicTools: thread.dynamicTools,
         runtimeWorkspaceRoots: thread.workspaceRoots,
         computerUse: thread.computerUse,
-        openbotAgentId: thread.agentId ?? undefined,
+        codebotAgentId: thread.agentId ?? undefined,
         model: thread.currentModelId,
       },
       true,
@@ -1694,7 +1694,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     );
   }
 
-  #openBotToolsDropped(thread: AcpThread): boolean {
+  #codeBotToolsDropped(thread: AcpThread): boolean {
     const limit = this.#flavor.mcpConnectLimitMs;
     if (limit === undefined || !this.#supportsSessionResume || Date.now() - thread.mcpSentAt < limit) return false;
     if (thread.mcp.servers.length === 0 || thread.mcp.listedWithin(0, Number.POSITIVE_INFINITY)) return false;
@@ -1851,7 +1851,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     );
     held.needsResume = false;
     held.abandonedTurn = false;
-    logger.warn("An ACP agent still holds a session after a stopped turn. OpenBot keeps using it.", {
+    logger.warn("An ACP agent still holds a session after a stopped turn. CodeBot keeps using it.", {
       provider: this.provider,
     });
     return { thread: { id: held.id } };
@@ -1971,7 +1971,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
                   Effect.sync(() =>
                     this.emit(
                       "diagnostic",
-                      this.#redact(`OpenBot could not turn on its ${this.#label} MCP servers: ${error}`),
+                      this.#redact(`CodeBot could not turn on its ${this.#label} MCP servers: ${error}`),
                     ),
                   ),
                 ),
@@ -2019,7 +2019,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
             let mcpSentAt = sentAt;
             let mcpDropped = false;
             if (connectLimit !== undefined && this.#supportsSessionResume && mcp.dropped(sentAt, connectLimit)) {
-              this.emit("diagnostic", `${this.#label} did not load OpenBot's tools in time. The session opens again.`);
+              this.emit("diagnostic", `${this.#label} did not load CodeBot's tools in time. The session opens again.`);
               mcpServers = [...given, ...mcp.renew()];
               const retriedAt = Date.now();
               mcpSentAt = retriedAt;
@@ -2033,7 +2033,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
               );
               mcpDropped = mcp.dropped(retriedAt, connectLimit);
               if (Result.isFailure(retried) || mcpDropped)
-                this.emit("diagnostic", `${this.#label} still did not load OpenBot's tools.`);
+                this.emit("diagnostic", `${this.#label} still did not load CodeBot's tools.`);
             }
             if (this.#flavor.mcpServersLoadWithSession && !mcp.reached())
               throw new Error(sourceText("error.provider.acpMcpNotLoaded", { provider: this.#label }));
@@ -2579,7 +2579,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     if (sendInstructions) {
       blocks.unshift({
         type: "text",
-        text: `<openbot-developer-instructions>\n${thread.developerInstructions}\n</openbot-developer-instructions>`,
+        text: `<codebot-developer-instructions>\n${thread.developerInstructions}\n</codebot-developer-instructions>`,
       });
       thread.instructionsSent = thread.developerInstructions;
       thread.promptsSinceInstructions = 1;
@@ -2698,7 +2698,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
       answered: false,
       answer: Deferred.makeUnsafe(),
       waitingOnUser: 0,
-      openbotToolCalls: 0,
+      codebotToolCalls: 0,
       awaitingCommands: false,
       ownReply: "none",
       abandoned: false,
@@ -2909,7 +2909,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
         !turn.providerError &&
         !turn.stopped &&
         response.stopReason === "end_turn" &&
-        (!thread.mcpListed || this.#openBotToolsDropped(thread))
+        (!thread.mcpListed || this.#codeBotToolsDropped(thread))
       ) {
         turn.failureCause = "unknown";
         turn.providerError = sourceText("error.provider.acpToolsNotLoaded", { provider: this.#label });
@@ -3002,7 +3002,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     const usage = this.#flavor.promptUsage ? this.#flavor.promptUsage(response) : response.usage;
     if (!usage) return;
     this.emit("notification", {
-      method: "openbot/usage",
+      method: "codebot/usage",
       params: {
         threadId: thread.id,
         turnId: turn.id,
@@ -3169,7 +3169,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
       if (Result.isFailure(resumed)) {
         if (resumed.failure.cause instanceof TimeoutError)
           yield* Effect.forkIn(this.#endIfUnresponsive(thread), this.#scope);
-        logger.warn("OpenBot ended a turn whose prompt got no update.", {
+        logger.warn("CodeBot ended a turn whose prompt got no update.", {
           provider: this.provider,
           reason: this.#redact(failureText(resumed.failure.cause)),
         });
@@ -3216,7 +3216,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     params: unknown,
     send: () => Effect.Effect<Result.Result<PromptResponse, ProviderClientOperationError>>,
   ): Effect.fn.Return<Result.Result<PromptResponse, ProviderClientOperationError>> {
-    logger.warn("An ACP agent refused a prompt because its session changed on disk. OpenBot opens it again.", {
+    logger.warn("An ACP agent refused a prompt because its session changed on disk. CodeBot opens it again.", {
       provider: this.provider,
     });
     yield* providerCall(() => this.#sessionConnection(thread).closeSession({ sessionId: thread.id })).pipe(
@@ -3233,7 +3233,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
       if (Result.isSuccess(sent) || !this.#flavor.staleSession?.(sent.failure.cause)) return sent;
     } else {
       thread.needsResume = true;
-      logger.warn("OpenBot could not open again a session that changed on disk.", {
+      logger.warn("CodeBot could not open again a session that changed on disk.", {
         provider: this.provider,
         reason: this.#redact(failureText(reopened.failure.cause)),
       });
@@ -3253,13 +3253,13 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     const transport = this.#threads.get(sessionId)?.transport ?? this.#transport;
     const discarded = yield* Effect.result(transport.run(lostTurns.discard(sessionId), this.#requestTimeoutMs));
     if (Result.isFailure(discarded)) {
-      logger.warn("OpenBot could not discard the turns that an ACP agent lost.", {
+      logger.warn("CodeBot could not discard the turns that an ACP agent lost.", {
         provider: this.provider,
         reason: this.#redact(failureText(discarded.failure.cause)),
       });
       return false;
     }
-    logger.info("OpenBot discarded the turns that an ACP agent lost.", { provider: this.provider });
+    logger.info("CodeBot discarded the turns that an ACP agent lost.", { provider: this.provider });
     return true;
   });
 
@@ -3347,7 +3347,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
     const server = thread.restore.mcpServers.find((entry) => entry.name === name);
     if (!server) return;
     if (thread.mcp.servers.some((bridge) => bridge === server)) {
-      this.emit("diagnostic", this.#redact(`${this.#label} could not start OpenBot's MCP server ${name}: ${reason}`));
+      this.emit("diagnostic", this.#redact(`${this.#label} could not start CodeBot's MCP server ${name}: ${reason}`));
       return;
     }
     const kind = mcpProviderFailureKind(reason);
@@ -3544,7 +3544,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
 
   #emitTurnProgress(thread: AcpThread, turn: AcpTurn, detail: string): void {
     this.emit("notification", {
-      method: "openbot/turn-progress",
+      method: "codebot/turn-progress",
       params: { threadId: thread.id, turnId: turn.id, detail },
     });
   }
@@ -3978,7 +3978,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
   #silenceLimit(turn: AcpTurn, limit: number): number {
     if (turn.waitingOnUser > 0) return Number.POSITIVE_INFINITY;
     if (turn.toolItems.size === 0) return limit;
-    if (turn.openbotToolCalls > 0 || this.#flavor.openToolStallMs === undefined) return Number.POSITIVE_INFINITY;
+    if (turn.codebotToolCalls > 0 || this.#flavor.openToolStallMs === undefined) return Number.POSITIVE_INFINITY;
     return Math.max(limit, this.#flavor.openToolStallMs);
   }
 
@@ -4069,7 +4069,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
         yield* Effect.sleep(silentFor < limit ? limit - silentFor : limit);
       }
       const message = sourceText("error.provider.acpUnresponsive", { provider: this.#label });
-      logger.warn("An ACP agent wrote nothing while a session opened, so OpenBot ended its process.", {
+      logger.warn("An ACP agent wrote nothing while a session opened, so CodeBot ended its process.", {
         provider: this.provider,
         method,
         silentMs: limit,
@@ -4652,7 +4652,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
   #showCommandWait(thread: AcpThread, shown: boolean): void {
     if (thread.showsCommandWait === shown) return;
     thread.showsCommandWait = shown;
-    this.emit("notification", { method: "openbot/background-work", params: { threadId: thread.id, running: shown } });
+    this.emit("notification", { method: "codebot/background-work", params: { threadId: thread.id, running: shown } });
   }
 
   wakesAfterBackgroundWork(threadId: string): Effect.Effect<boolean, ProviderClientOperationError> {
@@ -4886,7 +4886,7 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
           ].filter((ms) => ms !== undefined)
         : [];
     const ownTurn = turn?.id === params.turnId ? turn : null;
-    if (ownTurn) ownTurn.openbotToolCalls += 1;
+    if (ownTurn) ownTurn.codebotToolCalls += 1;
     const result = yield* this.#serverRequests
       .call(
         "item/tool/call",
@@ -4901,13 +4901,13 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
         Effect.ensuring(
           Effect.sync(() => {
             if (!ownTurn) return;
-            ownTurn.openbotToolCalls -= 1;
+            ownTurn.codebotToolCalls -= 1;
             ownTurn.lastActivityAt = Date.now();
           }),
         ),
       );
     if (!isDynamicToolResult(result))
-      return yield* providerFailure(new Error("OpenBot returned an invalid dynamic tool result."));
+      return yield* providerFailure(new Error("CodeBot returned an invalid dynamic tool result."));
     if (turn?.id === params.turnId && params.tool === ROUTINE_NO_UPDATE_TOOL) turn.quietNoUpdate = endsQuiet(result);
     return yield* providerSync(() => result);
   });

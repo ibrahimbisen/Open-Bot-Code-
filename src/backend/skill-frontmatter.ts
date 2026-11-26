@@ -1,5 +1,5 @@
-import { SKILL_DESCRIPTION_MAX_LENGTH } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { SKILL_DESCRIPTION_MAX_LENGTH } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { parse as parseYaml } from "yaml";
 
 export type SkillFrontmatterProblem =

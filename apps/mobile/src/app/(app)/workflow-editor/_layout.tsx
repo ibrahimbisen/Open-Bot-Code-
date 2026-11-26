@@ -10,7 +10,7 @@ export const unstable_settings = { anchor: "index" };
 
 export default function WorkflowEditorLayout() {
   const { t } = useText();
-  const background = String(useCSSVariable("--openbot-bg-sheet"));
+  const background = String(useCSSVariable("--codebot-bg-sheet"));
   useEffect(() => () => useWorkflowDraft.getState().clear(), []);
   return (
     <Stack screenListeners={sheetBackHaptics} screenOptions={sheetStackOptions(background, { insets: false })}>

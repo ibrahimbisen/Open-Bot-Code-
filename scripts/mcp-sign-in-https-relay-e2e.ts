@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { createServer as createHttpServer } from "node:http";
 import { createServer } from "node:net";
 import { resolve } from "node:path";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { Effect } from "effect";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import {
@@ -16,7 +16,7 @@ import {
 import { MCP_OAUTH_REDIRECT_PORT, startMcpOAuthRedirectServer } from "../src/main/mcp-oauth-redirect-server";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/mcp-sign-in-https-relay-e2e");
+const OUT = resolve(ROOT, ".codebot-build/mcp-sign-in-https-relay-e2e");
 const META_ADS_MCP_URL = "https://mcp.facebook.com/ads";
 const META_APP_ID = "1479376854168579";
 const SAVED_APP_ID = "e2e-saved-meta-app";
@@ -170,7 +170,7 @@ try {
   };
   report.store = { client: record?.client ?? null, issuer: record?.discovery?.authorizationServerUrl ?? null };
   check(page.origin === "https://www.facebook.com", `the page is on ${page.origin}`);
-  check(page.searchParams.get("client_id") === META_APP_ID, "the page does not name the OpenBot Meta app");
+  check(page.searchParams.get("client_id") === META_APP_ID, "the page does not name the CodeBot Meta app");
   check(page.searchParams.get("redirect_uri") === MCP_OAUTH_RELAY_URL, "the page does not name the relay address");
   check(page.searchParams.get("code_challenge_method") === "S256", "the page has no S256 code challenge");
   check(state.length > 0, "the page has no state");
@@ -249,7 +249,7 @@ try {
   report.impostor = { pages: impostorPages, error: impostorError };
   check(
     impostorPages.every((opened) => opened.clientId !== META_APP_ID),
-    "a server that is not Meta's got the OpenBot Meta app",
+    "a server that is not Meta's got the CodeBot Meta app",
   );
 
   const savedAppPages = pages.length;

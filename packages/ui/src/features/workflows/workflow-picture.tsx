@@ -1,4 +1,4 @@
-import { Skeleton, Spinner } from "@openbot/ui";
+import { Skeleton, Spinner } from "@codebot/ui";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 

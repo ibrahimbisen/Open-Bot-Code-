@@ -11,7 +11,7 @@
 }
 
 .tab-shape {
-  --tab-shape-curve: var(--openbot-radius-md);
+  --tab-shape-curve: var(--codebot-radius-md);
 
   position: absolute;
   z-index: -1;
@@ -20,15 +20,15 @@
   right: var(--tab-shape-right, 100%);
   display: none;
   height: var(--tab-shape-height, 0);
-  border: 1px solid var(--openbot-border);
+  border: 1px solid var(--codebot-border);
   border-bottom: 0;
-  border-start-start-radius: var(--openbot-radius-md);
-  border-start-end-radius: var(--openbot-radius-md);
+  border-start-start-radius: var(--codebot-radius-md);
+  border-start-end-radius: var(--codebot-radius-md);
   background: var(--tab-shape-fill);
   pointer-events: none;
   transition:
-    left var(--openbot-duration-overlay) var(--openbot-ease-out) var(--tab-shape-start-delay, 0ms),
-    right var(--openbot-duration-overlay) var(--openbot-ease-out) var(--tab-shape-end-delay, 0ms);
+    left var(--codebot-duration-overlay) var(--codebot-ease-out) var(--tab-shape-start-delay, 0ms),
+    right var(--codebot-duration-overlay) var(--codebot-ease-out) var(--tab-shape-end-delay, 0ms);
   -webkit-app-region: initial;
 }
 
@@ -55,8 +55,8 @@
     radial-gradient(
       circle at 0 0,
       transparent var(--tab-shape-curve),
-      var(--openbot-border) var(--tab-shape-curve),
-      var(--openbot-border) calc(var(--tab-shape-curve) + 1px),
+      var(--codebot-border) var(--tab-shape-curve),
+      var(--codebot-border) calc(var(--tab-shape-curve) + 1px),
       transparent calc(var(--tab-shape-curve) + 1px)
     ),
     radial-gradient(circle at 0 0, transparent var(--tab-shape-curve), var(--tab-shape-fill) var(--tab-shape-curve));
@@ -68,8 +68,8 @@
     radial-gradient(
       circle at 100% 0,
       transparent var(--tab-shape-curve),
-      var(--openbot-border) var(--tab-shape-curve),
-      var(--openbot-border) calc(var(--tab-shape-curve) + 1px),
+      var(--codebot-border) var(--tab-shape-curve),
+      var(--codebot-border) calc(var(--tab-shape-curve) + 1px),
       transparent calc(var(--tab-shape-curve) + 1px)
     ),
     radial-gradient(circle at 100% 0, transparent var(--tab-shape-curve), var(--tab-shape-fill) var(--tab-shape-curve));
@@ -91,31 +91,31 @@
   width: min(308px, calc(100% - 32px));
   height: 34px;
   align-items: center;
-  border: 1px solid var(--openbot-border-strong);
-  border-radius: var(--openbot-radius-lg);
-  background: var(--openbot-bg-control);
-  box-shadow: var(--openbot-shadow-raised);
-  color: var(--openbot-text-muted);
+  border: 1px solid var(--codebot-border-strong);
+  border-radius: var(--codebot-radius-lg);
+  background: var(--codebot-bg-control);
+  box-shadow: var(--codebot-shadow-raised);
+  color: var(--codebot-text-muted);
 }
 
 .chat-search-icon {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: 0 0 auto;
   margin-inline-start: 11px;
-  stroke-width: var(--openbot-icon-stroke);
+  stroke-width: var(--codebot-icon-stroke);
 }
 
 .chat-search .chat-search-input {
   min-width: 0;
-  height: var(--openbot-control-md);
+  height: var(--codebot-control-md);
   flex: 1;
   border: 0;
   background: transparent;
   padding: 0 8px;
   box-shadow: none;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-lg);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-lg);
 }
 
 .chat-search .chat-search-input:focus {
@@ -130,8 +130,8 @@
 
 .chat-search-position {
   min-width: 38px;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-md);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-md);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
@@ -140,12 +140,12 @@
   width: 1px;
   height: 20px;
   flex: 0 0 auto;
-  background: var(--openbot-border);
+  background: var(--codebot-border);
 }
 
 .chat-search .chat-search-button {
   width: 26px;
-  height: var(--openbot-control-md);
+  height: var(--codebot-control-md);
   flex: 0 0 auto;
   border: 0;
   border-radius: inherit;
@@ -153,26 +153,26 @@
 }
 
 .chat-search-button svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
-  stroke-width: var(--openbot-icon-stroke);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
+  stroke-width: var(--codebot-icon-stroke);
 }
 
 .chat-search .chat-search-close {
   margin-inline-end: 3px;
 }
 
-::highlight(openbot-chat-search-results) {
-  background: var(--openbot-accent-soft);
+::highlight(codebot-chat-search-results) {
+  background: var(--codebot-accent-soft);
 }
 
-::highlight(openbot-chat-search-current) {
-  background: var(--openbot-warning);
-  color: var(--openbot-paper-text);
+::highlight(codebot-chat-search-current) {
+  background: var(--codebot-warning);
+  color: var(--codebot-paper-text);
 }
 
 .conversation-title[aria-label="View agent settings"]:hover {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .browser-panel {
@@ -184,10 +184,10 @@
   display: flex;
   width: var(--browser-panel-width, 380px);
   flex-direction: column;
-  border-inline-start: 1px solid var(--openbot-border);
-  background: var(--openbot-bg-canvas);
-  color: var(--openbot-text-primary);
+  border-inline-start: 1px solid var(--codebot-border);
+  background: var(--codebot-bg-canvas);
+  color: var(--codebot-text-primary);
   transition:
-    border-color var(--openbot-duration-slow) ease,
-    box-shadow var(--openbot-duration-slow) ease;
+    border-color var(--codebot-duration-slow) ease,
+    box-shadow var(--codebot-duration-slow) ease;
 }

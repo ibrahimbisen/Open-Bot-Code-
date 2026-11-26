@@ -4,7 +4,7 @@ import {
   WORKFLOW_UNLINKED_CONNECTION,
   type WorkflowNode,
   workflowListField,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { SettingsSection } from "@/features/settings/components/settings-content";
 import { ValueRow } from "@/features/workflows/components/workflow-value-row";
 import { fieldOneOf, fieldText } from "@/features/workflows/model/workflow-node-fields";

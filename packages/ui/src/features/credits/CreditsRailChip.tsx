@@ -1,6 +1,6 @@
-import { ArrowLeftRight, Button, CircleQuestionMark, Gift, Popover, Switch } from "@openbot/ui";
-import { type MotionPlace, useMenuMotion } from "@openbot/ui/menu-motion";
-import { useText } from "@openbot/ui/text";
+import { ArrowLeftRight, Button, CircleQuestionMark, Gift, Popover, Switch } from "@codebot/ui";
+import { type MotionPlace, useMenuMotion } from "@codebot/ui/menu-motion";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createUniqueId, onCleanup, Show } from "solid-js";
 import { CreditIcon } from "./CreditIcon";

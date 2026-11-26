@@ -1,6 +1,6 @@
-import { type CustomServerPlan, optionalCustomServerPayment } from "@openbot/contracts/custom-server-plans";
-import type { ServerNotificationLevel, TeamRole } from "@openbot/contracts/ipc";
-import { LOCAL_SERVER_ID, SERVER_NOTIFICATION_LEVELS } from "@openbot/contracts/ipc";
+import { type CustomServerPlan, optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
+import type { ServerNotificationLevel, TeamRole } from "@codebot/contracts/ipc";
+import { LOCAL_SERVER_ID, SERVER_NOTIFICATION_LEVELS } from "@codebot/contracts/ipc";
 import {
   type DynamicRecord,
   isBoolean,
@@ -8,11 +8,11 @@ import {
   isNumber,
   isOneOf,
   isString,
-} from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/runtime-values";
 import {
   optionalServerAppearanceField,
   type ServerAppearance,
-} from "@openbot/contracts/team-protocol/host-appearance-v1";
+} from "@codebot/contracts/team-protocol/host-appearance-v1";
 
 export interface StoredRemoteServer {
   id: string;

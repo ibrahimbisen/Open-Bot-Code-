@@ -16,16 +16,16 @@ export function Cla() {
       <h2>For Individual and Corporate Contributors</h2>
       <p>
         This Contributor License Agreement ("Agreement" or "CLA") is entered into between Synthetify Labs sp. z o.o.,
-        with its registered address at Trzebunia 513, 32-438 Trzebunia, Poland, operating the OpenBot project
-        ("OpenBot"), and the individual or legal entity identified below (the "Contributor").
+        with its registered address at Trzebunia 513, 32-438 Trzebunia, Poland, operating the CodeBot project
+        ("CodeBot"), and the individual or legal entity identified below (the "Contributor").
       </p>
       <p>
-        The purpose of this Agreement is to clarify the intellectual property rights granted to OpenBot in connection
-        with Contributions made to the OpenBot project.
+        The purpose of this Agreement is to clarify the intellectual property rights granted to CodeBot in connection
+        with Contributions made to the CodeBot project.
       </p>
       <p>
         This Agreement applies to Contributions specifically identified and voluntarily submitted by the Contributor to
-        OpenBot, including Contributions submitted after the execution of this Agreement. Each Contribution becomes
+        CodeBot, including Contributions submitted after the execution of this Agreement. Each Contribution becomes
         subject to this Agreement upon its submission.
       </p>
       <p>
@@ -70,16 +70,16 @@ export function Cla() {
       <p>
         <strong>"Contribution"</strong> means any original work of authorship, including source code, software
         modifications, documentation, fixes, improvements, and other materials intentionally submitted by the
-        Contributor to OpenBot for inclusion in, or use in connection with, the OpenBot project.
+        Contributor to CodeBot for inclusion in, or use in connection with, the CodeBot project.
       </p>
       <p>
-        <strong>"Submitted"</strong> means communicated to OpenBot or its authorised representatives through source code
+        <strong>"Submitted"</strong> means communicated to CodeBot or its authorised representatives through source code
         repositories, pull requests, issue tracking systems, electronic communications, or other contribution channels
-        designated or accepted by OpenBot for the purpose of improving the project.
+        designated or accepted by CodeBot for the purpose of improving the project.
       </p>
       <p>
-        <strong>"Work"</strong> means the OpenBot software project and associated materials maintained or managed by
-        OpenBot, including modifications, extensions, and derivative works.
+        <strong>"Work"</strong> means the CodeBot software project and associated materials maintained or managed by
+        CodeBot, including modifications, extensions, and derivative works.
       </p>
       <p>
         <strong>"Corporate Contributor"</strong> means a legal entity that owns or is otherwise legally authorised to
@@ -88,8 +88,8 @@ export function Cla() {
 
       <h2>Grant of Copyright License</h2>
       <p>
-        Subject to the terms and conditions of this Agreement, You hereby grant to OpenBot and recipients of software
-        distributed by OpenBot a worldwide, non-exclusive, no-charge, royalty-free copyright license, granted for an
+        Subject to the terms and conditions of this Agreement, You hereby grant to CodeBot and recipients of software
+        distributed by CodeBot a worldwide, non-exclusive, no-charge, royalty-free copyright license, granted for an
         indefinite period, with the right to grant an unlimited number of non-exclusive sublicenses, including for
         commercial purposes, to:
       </p>
@@ -109,7 +109,7 @@ export function Cla() {
         </li>
       </ul>
       <p>
-        You expressly authorise OpenBot to exercise and authorise third parties to exercise the rights necessary to use
+        You expressly authorise CodeBot to exercise and authorise third parties to exercise the rights necessary to use
         and exploit modifications and derivative works of Your Contributions within the scope of this Agreement.
       </p>
       <p>The license is granted without additional remuneration.</p>
@@ -124,19 +124,19 @@ export function Cla() {
       <p>
         You retain ownership of the copyright in Your Contributions and remain free to use and license them
         independently, subject to any applicable third-party rights. Nothing in this Agreement transfers copyright
-        ownership to OpenBot.
+        ownership to CodeBot.
       </p>
 
       <h2>Grant of Patent License</h2>
       <p>
-        Subject to the terms and conditions of this Agreement, You hereby grant to OpenBot and recipients of software
-        distributed by OpenBot a worldwide, non-exclusive, royalty-free patent license, effective for the duration of
+        Subject to the terms and conditions of this Agreement, You hereby grant to CodeBot and recipients of software
+        distributed by CodeBot a worldwide, non-exclusive, royalty-free patent license, effective for the duration of
         the applicable patent rights and irrevocable (except as stated below), to make, have made, use, sell, offer for
         sale, import, and otherwise transfer Your Contributions, whether independently or in combination with the Work,
         including portions of such combinations.
       </p>
       <p>
-        You expressly authorise OpenBot to grant non-exclusive patent sublicenses to third parties, including for
+        You expressly authorise CodeBot to grant non-exclusive patent sublicenses to third parties, including for
         commercial purposes. The recipients of such sublicenses shall not be authorised to grant further patent
         sublicenses.
       </p>
@@ -165,7 +165,7 @@ export function Cla() {
       </p>
       <p>
         If You are a Corporate Contributor, You agree to ensure that Contributions submitted on Your behalf are
-        identifiable as such and to notify OpenBot of any changes affecting the authorisation of individuals submitting
+        identifiable as such and to notify CodeBot of any changes affecting the authorisation of individuals submitting
         Contributions on Your behalf.
       </p>
 
@@ -176,7 +176,7 @@ export function Cla() {
       </p>
       <p>
         You further represent that You have disclosed all third-party licenses, patents, trademarks, or other
-        restrictions known to You that may affect OpenBot's use, modification, licensing, or distribution of Your
+        restrictions known to You that may affect CodeBot's use, modification, licensing, or distribution of Your
         Contributions.
       </p>
 
@@ -203,8 +203,8 @@ export function Cla() {
       </p>
       <p>Such materials must be clearly identified as third-party materials.</p>
       <p>
-        OpenBot may determine whether the submitted materials can be legally incorporated into the Work. Submission of
-        third-party materials does not grant OpenBot rights that You are not legally entitled to license.
+        CodeBot may determine whether the submitted materials can be legally incorporated into the Work. Submission of
+        third-party materials does not grant CodeBot rights that You are not legally entitled to license.
       </p>
 
       <h2>Miscellaneous</h2>
@@ -218,12 +218,12 @@ export function Cla() {
         courts of Poland, to the extent permitted by applicable law.
       </p>
       <p>
-        This Agreement constitutes the entire agreement between You and OpenBot concerning the licenses granted for Your
+        This Agreement constitutes the entire agreement between You and CodeBot concerning the licenses granted for Your
         Contributions under this CLA and supersedes any prior agreements or understandings relating specifically to
         those licenses, unless otherwise expressly agreed in writing.
       </p>
       <p>
-        You agree to notify OpenBot of any facts or circumstances of which you become aware that would make this
+        You agree to notify CodeBot of any facts or circumstances of which you become aware that would make this
         Agreement inaccurate in any respect. If You are a Corporate Contributor, this obligation also includes changes
         concerning the authority of individuals submitting Contributions on Your behalf.
       </p>

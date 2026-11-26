@@ -4,29 +4,29 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
-import { WEBHOOK_DELIVERY_BODY_BYTES_LIMIT } from "@openbot/contracts/signal-protocol/messages";
-import { WEBHOOK_ROUTES_LIMIT } from "@openbot/contracts/signal-protocol/webhook-route";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
+import { WEBHOOK_DELIVERY_BODY_BYTES_LIMIT } from "@codebot/contracts/signal-protocol/messages";
+import { WEBHOOK_ROUTES_LIMIT } from "@codebot/contracts/signal-protocol/webhook-route";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { HostOpenPanelClient } from "../src/main/analytics";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/webhook-analytics-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-webhook-analytics-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/webhook-analytics-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-webhook-analytics-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { HostAnalytics } = await import("../src/main/analytics");
 const { agentWebhookRoutineWriter, HostEventsService } = await import("../src/main/host-events-service");
 const { webhookFailureCode } = await import("../src/renderer/src/webhook-failure-code");
@@ -180,7 +180,7 @@ const DELIVERY_KEYS = new Set([
 ]);
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 let principal: string | null = "account-1";
@@ -309,7 +309,7 @@ try {
   pass(
     "The started request reports its owner, result, status and size",
     started.owner_kind === "agent" &&
-      started.format === "openbot" &&
+      started.format === "codebot" &&
       started.result === "started" &&
       started.status_code === 202 &&
       typeof started.body_bytes === "number" &&

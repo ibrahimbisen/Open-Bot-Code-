@@ -5,7 +5,7 @@ import {
   type CrmMethod,
   type CrmPlan,
   type CrmTextField,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Badge,
   Button,
@@ -20,8 +20,8 @@ import {
   Trash2,
   UserRound,
   X,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import {
   ChoiceField,

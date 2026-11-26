@@ -1,4 +1,4 @@
-import type { AgentMemory, Routine } from "@openbot/contracts/ipc";
+import type { AgentMemory, Routine } from "@codebot/contracts/ipc";
 import type { QueryClient, QueryKey } from "@tanstack/react-query";
 
 export async function saveAgentRecord<T extends AgentMemory | Routine>(

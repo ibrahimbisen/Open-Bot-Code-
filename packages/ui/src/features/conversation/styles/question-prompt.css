@@ -1,15 +1,15 @@
 .question-prompt-bubble.ui-bubble {
   width: min(540px, 100%);
   max-width: 100%;
-  scroll-margin-top: var(--openbot-space-2);
+  scroll-margin-top: var(--codebot-space-2);
 }
 
 .question-prompt-with-author {
-  padding-inline-start: calc(var(--message-author-column) + var(--openbot-space-2));
+  padding-inline-start: calc(var(--message-author-column) + var(--codebot-space-2));
 }
 
 .question-prompt-with-author:has(> *) {
-  padding-block: var(--openbot-chat-entry-gap);
+  padding-block: var(--codebot-chat-entry-gap);
 }
 
 .question-prompt-bubble[data-entrance] {
@@ -26,7 +26,7 @@
 
 .question-prompt-bubble > .ui-bubble-content {
   width: 100%;
-  padding: var(--openbot-space-4) var(--openbot-space-2) var(--openbot-space-2);
+  padding: var(--codebot-space-4) var(--codebot-space-2) var(--codebot-space-2);
 }
 
 .question-prompt-form.ui-questionnaire {
@@ -37,9 +37,9 @@
 .question-prompt-cancel.ui-button {
   position: absolute;
   z-index: 2;
-  inset-block-start: calc(-1 * var(--openbot-space-2));
+  inset-block-start: calc(-1 * var(--codebot-space-2));
   inset-inline-end: 0;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .question-prompt-stage {
@@ -122,32 +122,32 @@
 
 .question-prompt-header {
   display: grid;
-  gap: var(--openbot-space-0-5);
-  padding: 0 var(--openbot-space-2) var(--openbot-space-2);
+  gap: var(--codebot-space-0-5);
+  padding: 0 var(--codebot-space-2) var(--codebot-space-2);
 }
 
 .question-prompt-page:not(.question-prompt-summary) .question-prompt-header {
-  padding-inline-end: var(--openbot-space-8);
+  padding-inline-end: var(--codebot-space-8);
 }
 
 .question-prompt-title {
   margin: 0;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-lg);
-  font-weight: var(--openbot-weight-semibold);
-  line-height: var(--openbot-leading-lg);
-  letter-spacing: var(--openbot-tracking-tight);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-lg);
+  font-weight: var(--codebot-weight-semibold);
+  line-height: var(--codebot-leading-lg);
+  letter-spacing: var(--codebot-tracking-tight);
   overflow-wrap: anywhere;
 }
 
 .question-prompt-detail {
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
   white-space: pre-line;
 }
 
 .question-prompt-options {
-  gap: var(--openbot-space-0-5);
+  gap: var(--codebot-space-0-5);
 }
 
 .question-prompt-options > .question-prompt-option {
@@ -157,27 +157,27 @@
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr);
   align-items: center;
-  gap: var(--openbot-space-3);
-  border-radius: var(--openbot-radius-md);
-  padding: var(--openbot-space-2);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  gap: var(--codebot-space-3);
+  border-radius: var(--codebot-radius-md);
+  padding: var(--codebot-space-2);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
   cursor: pointer;
-  transition: background-color var(--openbot-duration-fast) ease-out;
+  transition: background-color var(--codebot-duration-fast) ease-out;
 }
 
 .question-prompt-option:hover:not([data-disabled]),
 .question-prompt-custom:focus-within {
-  background: var(--openbot-question-option-soft);
+  background: var(--codebot-question-option-soft);
 }
 
 .question-prompt-option[data-checked] {
-  background: var(--openbot-question-option-hover);
+  background: var(--codebot-question-option-hover);
 }
 
 .question-prompt-option:active:not([data-disabled]) {
-  background: var(--openbot-question-option-pressed);
+  background: var(--codebot-question-option-pressed);
 }
 
 .question-prompt-option.ui-questionnaire-choice:focus-within {
@@ -185,8 +185,8 @@
 }
 
 .question-prompt-option:has(.ui-questionnaire-choice-input:focus-visible) {
-  background: var(--openbot-question-option-soft);
-  box-shadow: inset 0 0 0 1px var(--openbot-question-option);
+  background: var(--codebot-question-option-soft);
+  box-shadow: inset 0 0 0 1px var(--codebot-question-option);
 }
 
 .question-prompt-option-text {
@@ -199,9 +199,9 @@
 }
 
 .question-prompt-option-description {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   overflow-wrap: anywhere;
 }
 
@@ -210,35 +210,35 @@
   min-width: 22px;
   height: 22px;
   border-color: transparent;
-  border-radius: var(--openbot-radius-xs);
-  background: var(--openbot-question-badge-soft);
-  color: var(--openbot-question-badge-text);
-  font-family: var(--openbot-font-sans);
-  font-weight: var(--openbot-weight-semibold);
+  border-radius: var(--codebot-radius-xs);
+  background: var(--codebot-question-badge-soft);
+  color: var(--codebot-question-badge-text);
+  font-family: var(--codebot-font-sans);
+  font-weight: var(--codebot-weight-semibold);
   transition:
-    background-color var(--openbot-duration-fast) ease-out,
-    color var(--openbot-duration-fast) ease-out;
+    background-color var(--codebot-duration-fast) ease-out,
+    color var(--codebot-duration-fast) ease-out;
 }
 
 .question-prompt-answer-skipped .question-prompt-letter.ui-kbd,
 .question-prompt-answer-closed .question-prompt-letter.ui-kbd {
-  background: var(--openbot-bg-control-active);
-  color: var(--openbot-text-muted);
+  background: var(--codebot-bg-control-active);
+  color: var(--codebot-text-muted);
 }
 
 .question-prompt-option[data-checked] .question-prompt-letter.ui-kbd {
-  background: var(--openbot-question-option);
-  color: var(--openbot-text-on-status);
-  animation: question-prompt-badge-pop var(--openbot-duration-slow) var(--openbot-ease-out);
+  background: var(--codebot-question-option);
+  color: var(--codebot-text-on-status);
+  animation: question-prompt-badge-pop var(--codebot-duration-slow) var(--codebot-ease-out);
 }
 
 .question-prompt-letter[data-answered].ui-kbd {
-  background: var(--openbot-success);
-  color: var(--openbot-text-on-status);
+  background: var(--codebot-success);
+  color: var(--codebot-text-on-status);
 }
 
 .question-prompt-bubble[data-entrance][data-state="done"] .question-prompt-letter[data-answered].ui-kbd {
-  animation: question-prompt-badge-pop var(--openbot-duration-slow) var(--openbot-ease-out) var(--openbot-duration-fast)
+  animation: question-prompt-badge-pop var(--codebot-duration-slow) var(--codebot-ease-out) var(--codebot-duration-fast)
     both;
 }
 
@@ -261,12 +261,12 @@
   background: transparent;
   box-shadow: none;
   padding: 0;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   font: inherit;
 }
 
 .question-prompt-custom-input.ui-input::placeholder {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .question-prompt-custom-input.ui-input:focus,
@@ -278,22 +278,22 @@
 .question-prompt-footer {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  padding-block: var(--openbot-space-3) var(--openbot-space-1);
-  padding-inline: var(--openbot-space-2) var(--openbot-space-1);
+  gap: var(--codebot-space-2);
+  padding-block: var(--codebot-space-3) var(--codebot-space-1);
+  padding-inline: var(--codebot-space-2) var(--codebot-space-1);
 }
 
 .question-prompt-progress.ui-questionnaire-progress {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .question-prompt-dot {
   width: 6px;
   height: 6px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-text-dim);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-text-dim);
   transition:
     width var(--page-slide-dur) var(--page-slide-ease),
     background-color var(--page-slide-dur) var(--page-slide-ease),
@@ -301,26 +301,26 @@
 }
 
 .question-prompt-dot[data-state="done"] {
-  background: var(--openbot-question-badge-text);
+  background: var(--codebot-question-badge-text);
   opacity: 0.55;
 }
 
 .question-prompt-dot[data-state="current"] {
   width: 18px;
-  background: var(--openbot-question-option);
+  background: var(--codebot-question-option);
 }
 
 .question-prompt-actions {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   margin-inline-start: auto;
 }
 
 .question-prompt-pill.ui-button {
-  border-radius: var(--openbot-radius-pill);
-  padding-inline: var(--openbot-space-4);
-  font-size: var(--openbot-text-md);
+  border-radius: var(--codebot-radius-pill);
+  padding-inline: var(--codebot-space-4);
+  font-size: var(--codebot-text-md);
 }
 
 .question-prompt-summary {
@@ -328,54 +328,54 @@
 }
 
 .question-prompt-section .question-prompt-title {
-  padding: 0 var(--openbot-space-2) var(--openbot-space-1);
-  color: var(--openbot-text-muted);
+  padding: 0 var(--codebot-space-2) var(--codebot-space-1);
+  color: var(--codebot-text-muted);
 }
 
 .question-prompt-section + .question-prompt-section {
-  margin-top: var(--openbot-space-2);
-  border-top: 1px solid var(--openbot-border);
-  padding-top: var(--openbot-space-3);
+  margin-top: var(--codebot-space-2);
+  border-top: 1px solid var(--codebot-border);
+  padding-top: var(--codebot-space-3);
 }
 
 .question-prompt-answers {
   display: grid;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   margin: 0;
   list-style: none;
 }
 
 .question-prompt-answers,
 .question-prompt-answer-skipped {
-  padding: var(--openbot-space-0-5) var(--openbot-space-2) var(--openbot-space-2);
+  padding: var(--codebot-space-0-5) var(--codebot-space-2) var(--codebot-space-2);
 }
 
 .question-prompt-answer {
   display: grid;
   grid-template-columns: 22px minmax(0, 1fr);
   align-items: center;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   margin: 0;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
   overflow-wrap: anywhere;
 }
 
 .question-prompt-answer-skipped,
 .question-prompt-answer-closed {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .question-prompt-closed {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   margin: 0;
-  padding: 0 var(--openbot-space-2) var(--openbot-space-2);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  padding: 0 var(--codebot-space-2) var(--codebot-space-2);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
 }
 
 .question-prompt-closed svg {
@@ -387,20 +387,20 @@
 .question-prompt-empty {
   min-width: 0;
   display: grid;
-  gap: var(--openbot-space-0-5);
-  padding: var(--openbot-space-1);
+  gap: var(--codebot-space-0-5);
+  padding: var(--codebot-space-1);
 }
 
 .question-prompt-empty strong {
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-medium);
-  line-height: var(--openbot-leading-md);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-medium);
+  line-height: var(--codebot-leading-md);
 }
 
 .question-prompt-empty > span {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .question-prompt-history-entry {
@@ -417,7 +417,7 @@
   }
 
   .question-prompt-pill.ui-button {
-    padding-inline: var(--openbot-space-3);
+    padding-inline: var(--codebot-space-3);
   }
 }
 

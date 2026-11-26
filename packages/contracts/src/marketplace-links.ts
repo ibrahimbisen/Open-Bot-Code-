@@ -1,6 +1,6 @@
-export const OPENBOT_MARKETPLACE_ORIGIN = "https://openbot.run";
-export const OPENBOT_MARKETPLACE_PATH = "/marketplace";
-export const OPENBOT_MARKETPLACE_HOST = "marketplace";
+export const CODEBOT_MARKETPLACE_ORIGIN = "https://openbot.run";
+export const CODEBOT_MARKETPLACE_PATH = "/marketplace";
+export const CODEBOT_MARKETPLACE_HOST = "marketplace";
 export const WEB_APP_MARKETPLACE_AGENT_PARAM = "marketplaceAgent";
 export const WEB_APP_MARKETPLACE_SKILL_PARAM = "marketplaceSkill";
 
@@ -31,24 +31,24 @@ function isListingId(kind: MarketplaceListingKind, id: string): boolean {
 }
 
 function assertListing(link: MarketplaceListingLink): void {
-  if (!isListingId(link.kind, link.id)) throw new Error("The OpenBot Marketplace link is invalid.");
+  if (!isListingId(link.kind, link.id)) throw new Error("The CodeBot Marketplace link is invalid.");
 }
 
 export function marketplaceListingPath(link: MarketplaceListingLink): string {
   assertListing(link);
-  return `${OPENBOT_MARKETPLACE_PATH}/${LISTING_SEGMENTS[link.kind]}/${link.id}`;
+  return `${CODEBOT_MARKETPLACE_PATH}/${LISTING_SEGMENTS[link.kind]}/${link.id}`;
 }
 
 export function createMarketplaceShareUrl(
   link: MarketplaceListingLink,
-  origin: string = OPENBOT_MARKETPLACE_ORIGIN,
+  origin: string = CODEBOT_MARKETPLACE_ORIGIN,
 ): string {
-  if (!isMarketplaceShareOrigin(origin)) throw new Error("The OpenBot Marketplace link origin is invalid.");
+  if (!isMarketplaceShareOrigin(origin)) throw new Error("The CodeBot Marketplace link origin is invalid.");
   return `${origin}${marketplaceListingPath(link)}`;
 }
 
 function isMarketplaceShareOrigin(origin: string): boolean {
-  if (origin === OPENBOT_MARKETPLACE_ORIGIN) return true;
+  if (origin === CODEBOT_MARKETPLACE_ORIGIN) return true;
   try {
     const url = new URL(origin);
     return (
@@ -61,9 +61,9 @@ function isMarketplaceShareOrigin(origin: string): boolean {
   }
 }
 
-export function createOpenBotMarketplaceUrl(link: MarketplaceListingLink): string {
+export function createCodeBotMarketplaceUrl(link: MarketplaceListingLink): string {
   assertListing(link);
-  return `openbot://${OPENBOT_MARKETPLACE_HOST}/${LISTING_SEGMENTS[link.kind]}/${link.id}`;
+  return `codebot://${CODEBOT_MARKETPLACE_HOST}/${LISTING_SEGMENTS[link.kind]}/${link.id}`;
 }
 
 export function createWebAppMarketplacePath(link: MarketplaceListingLink): string {
@@ -86,13 +86,13 @@ export function parseMarketplaceUrl(value: string): MarketplaceListingLink {
   try {
     url = new URL(value);
   } catch {
-    throw new Error("The OpenBot Marketplace link is invalid.");
+    throw new Error("The CodeBot Marketplace link is invalid.");
   }
 
-  const prefix = `${OPENBOT_MARKETPLACE_PATH}/`;
+  const prefix = `${CODEBOT_MARKETPLACE_PATH}/`;
   const canonical =
-    url.protocol === "https:" && url.origin === OPENBOT_MARKETPLACE_ORIGIN && url.pathname.startsWith(prefix);
-  const customScheme = url.protocol === "openbot:" && url.hostname === OPENBOT_MARKETPLACE_HOST;
+    url.protocol === "https:" && url.origin === CODEBOT_MARKETPLACE_ORIGIN && url.pathname.startsWith(prefix);
+  const customScheme = url.protocol === "codebot:" && url.hostname === CODEBOT_MARKETPLACE_HOST;
   if (
     (!canonical && !customScheme) ||
     url.username !== "" ||
@@ -101,14 +101,14 @@ export function parseMarketplaceUrl(value: string): MarketplaceListingLink {
     url.search !== "" ||
     url.hash !== ""
   ) {
-    throw new Error("The OpenBot Marketplace link is invalid.");
+    throw new Error("The CodeBot Marketplace link is invalid.");
   }
 
   const rest = canonical ? url.pathname.slice(prefix.length) : url.pathname.replace(/^\//u, "");
   const [segment, id, ...extra] = rest.split("/");
   const kind = LISTING_KINDS.find((candidate) => LISTING_SEGMENTS[candidate] === segment);
   if (kind === undefined || id === undefined || extra.length > 0) {
-    throw new Error("The OpenBot Marketplace link is invalid.");
+    throw new Error("The CodeBot Marketplace link is invalid.");
   }
   const link = { kind, id };
   assertListing(link);

@@ -1,4 +1,4 @@
-import type { HostMemoryReview, OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, HostMemoryReview } from "@codebot/contracts/ipc";
 import {
   Item,
   ItemActions,
@@ -10,11 +10,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 
-export type HostMemoryReviewCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getMemoryReview" | "setMemoryReview">;
+export type HostMemoryReviewCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getMemoryReview" | "setMemoryReview">;
 
 export interface ServerMemoryReviewOptions {
   calls?: HostMemoryReviewCalls;
@@ -31,7 +31,7 @@ export function ServerMemoryReviewSetting(
   },
 ) {
   const { t, errorMessage } = useText();
-  const calls = (): HostMemoryReviewCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostMemoryReviewCalls => props.calls ?? window.codebot.hostAdmin;
   const [settings, setSettings] = createSignal<HostMemoryReview | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);
   let generation = 0;

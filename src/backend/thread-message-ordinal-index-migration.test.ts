@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -14,14 +14,14 @@ function databaseAt(version: number): DatabaseSync {
   db.exec(`CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);
     CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
   return db;
 }
 
 const THREADS = [
-  ["openbot-thread-agent-chief", "agent-chief", 3],
-  ["openbot-thread-agent-helper", "agent-helper", 2],
+  ["codebot-thread-agent-chief", "agent-chief", 3],
+  ["codebot-thread-agent-helper", "agent-helper", 2],
 ] as const;
 
 function seedMessages(db: DatabaseSync): void {
@@ -62,7 +62,7 @@ function nextOrdinalPlan(db: DatabaseSync) {
     .prepare(
       "EXPLAIN QUERY PLAN SELECT COALESCE(MAX(ordinal), -1) + 1 AS ordinal FROM projection_thread_messages WHERE thread_id = ?",
     )
-    .all("openbot-thread-agent-chief")
+    .all("codebot-thread-agent-chief")
     .map((step) => String(step.detail));
 }
 
@@ -78,8 +78,8 @@ function expectUpgraded(db: DatabaseSync, before: ReturnType<typeof contents>): 
   expect(contents(db)).toMatchObject(before);
   expect(ordinalIndexColumns(db)).toEqual(ORDINAL_INDEX_COLUMNS);
   expect(nextOrdinalPlan(db).some((detail) => detail.includes("thread_messages_ordinal"))).toBe(true);
-  expect(nextOrdinal(db, "openbot-thread-agent-chief")).toEqual({ ordinal: 3 });
-  expect(nextOrdinal(db, "openbot-thread-agent-helper")).toEqual({ ordinal: 2 });
+  expect(nextOrdinal(db, "codebot-thread-agent-chief")).toEqual({ ordinal: 3 });
+  expect(nextOrdinal(db, "codebot-thread-agent-helper")).toEqual({ ordinal: 2 });
   expect(db.prepare("SELECT MAX(version) AS version FROM schema_migrations").get()).toEqual({ version: 69 });
   expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
   expect(db.prepare("PRAGMA foreign_key_check").all()).toEqual([]);
@@ -91,7 +91,7 @@ describe("thread message ordinal index migration", () => {
     const db = databaseAt(version);
     seedMessages(db);
     const before = contents(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expectUpgraded(db, before);
     if (version === 66) expect(contents(db)).toEqual(before);
   });
@@ -102,12 +102,12 @@ describe("thread message ordinal index migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version = 67
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 67 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 67 failed");
     expect(ordinalIndexColumns(db)).toEqual([]);
     expect(contents(db)).toEqual(before);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 67").all()).toEqual([]);
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expectUpgraded(db, before);
   });
 
@@ -116,11 +116,11 @@ describe("thread message ordinal index migration", () => {
     seedMessages(db);
     const before = contents(db);
     db.exec("CREATE TABLE thread_messages_ordinal (conflict TEXT)");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 67 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 67 failed");
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 67").all()).toEqual([]);
     expect(contents(db)).toEqual(before);
     db.exec("DROP TABLE thread_messages_ordinal");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expectUpgraded(db, before);
   });
 
@@ -129,9 +129,9 @@ describe("thread message ordinal index migration", () => {
     seedMessages(db);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70, 'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version = 70; DELETE FROM schema_migrations WHERE version = 20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(ordinalIndexColumns(db)).toEqual([]);
   });

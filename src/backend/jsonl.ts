@@ -1,6 +1,6 @@
 import { Transform } from "node:stream";
-import { isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { perfCount } from "./perf-probe-hooks";
 import { isRpcMessage, type RpcMessage } from "./protocol";
 

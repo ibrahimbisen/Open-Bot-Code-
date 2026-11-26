@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
 import type { AgentClient } from "../src/backend/agent-client";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/copilot-mcp-relay-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/copilot-mcp-relay-e2e");
 
 interface ServerEntry {
   method: string;
@@ -46,7 +46,7 @@ process.stdin.on("data", (chunk) => {
 });
 `;
 
-const root = await mkdtemp(join(tmpdir(), "openbot-copilot-mcp-relay-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-copilot-mcp-relay-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 

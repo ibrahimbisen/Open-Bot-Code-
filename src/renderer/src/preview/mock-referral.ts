@@ -1,4 +1,4 @@
-import type { ReferralDesktopApi } from "@openbot/contracts/ipc";
+import type { ReferralDesktopApi } from "@codebot/contracts/ipc";
 import {
   REFERRAL_FRIEND_STATUSES,
   REFERRAL_PAGE_SIZE,
@@ -7,7 +7,7 @@ import {
   type ReferralFriendStatus,
   type ReferralState,
   referralMinimum,
-} from "@openbot/contracts/referral";
+} from "@codebot/contracts/referral";
 
 const OWN_CODE = "k7m2p9qx";
 

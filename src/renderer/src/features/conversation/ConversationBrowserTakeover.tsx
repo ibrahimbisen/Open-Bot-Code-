@@ -1,5 +1,5 @@
-import { BrowserTakeoverCard } from "@openbot/ui/features/conversation/ConversationPrompts";
-import { useText } from "@openbot/ui/text";
+import { BrowserTakeoverCard } from "@codebot/ui/features/conversation/ConversationPrompts";
+import { useText } from "@codebot/ui/text";
 import { Loading, Show } from "solid-js";
 import { usePlatform } from "../../platform";
 import { serverSupportsCapability } from "../servers/server-capabilities";

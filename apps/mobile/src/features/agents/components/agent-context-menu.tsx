@@ -1,4 +1,4 @@
-import { agentNotificationLevelMap } from "@openbot/contracts/ipc";
+import { agentNotificationLevelMap } from "@codebot/contracts/ipc";
 import { Link, router } from "expo-router";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";

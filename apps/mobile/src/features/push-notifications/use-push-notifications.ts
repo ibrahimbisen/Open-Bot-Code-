@@ -1,15 +1,15 @@
-import { PUSH_NOTIFICATION_THREADS_ROUTES } from "@openbot/contracts/team-protocol/push-notification-threads-v1";
+import { PUSH_NOTIFICATION_THREADS_ROUTES } from "@codebot/contracts/team-protocol/push-notification-threads-v1";
 import {
   ANDROID_PUSH_NOTIFICATIONS_ROUTES,
   type AndroidPushNotificationRegistration,
-} from "@openbot/contracts/team-protocol/push-notifications-android-v1";
+} from "@codebot/contracts/team-protocol/push-notifications-android-v1";
 import {
   PUSH_NOTIFICATIONS_ROUTES,
   type PushNotificationRegistration,
-} from "@openbot/contracts/team-protocol/push-notifications-v1";
-import type { TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { encodeLiveActivityBytes } from "@openbot/team-client/live-activity-seal";
-import { pushNotificationKeys } from "@openbot/team-client/push-notification-seal";
+} from "@codebot/contracts/team-protocol/push-notifications-v1";
+import type { TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { encodeLiveActivityBytes } from "@codebot/team-client/live-activity-seal";
+import { pushNotificationKeys } from "@codebot/team-client/push-notification-seal";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { useLiveActivityHost } from "@/features/live-activity/model/live-activity-host";

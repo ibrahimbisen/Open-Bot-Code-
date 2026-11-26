@@ -11,9 +11,9 @@ import type {
   CrmSourceKind,
   CrmStatus,
   CrmTextField,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import type { AppFormat, AppMessages, AppTextKey, AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import type { AppFormat, AppMessages, AppTextKey, AppTranslate } from "@codebot/i18n";
 import type { AgentProfile } from "../../data";
 
 export type CrmAgent = Pick<AgentProfile, "id" | "name" | "avatarSeed" | "avatarHue" | "avatarColor" | "avatarUrl">;
@@ -179,7 +179,7 @@ export const SOURCE_KEY = { stripe: "crm.method.stripe" } as const satisfies Rec
 
 export const SOURCE_KEY_PAGE = {
   stripe:
-    "https://dashboard.stripe.com/apikeys/create?name=OpenBot&permissions%5B%5D=rak_customer_read&permissions%5B%5D=rak_invoice_read&permissions%5B%5D=rak_subscription_read&permissions%5B%5D=rak_product_read&permissions%5B%5D=rak_plan_read",
+    "https://dashboard.stripe.com/apikeys/create?name=CodeBot&permissions%5B%5D=rak_customer_read&permissions%5B%5D=rak_invoice_read&permissions%5B%5D=rak_subscription_read&permissions%5B%5D=rak_product_read&permissions%5B%5D=rak_plan_read",
 } as const satisfies Record<CrmSourceKind, string>;
 
 export const SOURCE_ERROR_KEY = {

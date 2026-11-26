@@ -1,4 +1,4 @@
-import type { AgentTasksSnapshot } from "@openbot/contracts/ipc";
+import type { AgentTasksSnapshot } from "@codebot/contracts/ipc";
 import { useQueryClient } from "@tanstack/react-query";
 import { router, useGlobalSearchParams, useSegments } from "expo-router";
 import { Stack } from "expo-router/stack";
@@ -20,7 +20,7 @@ import { HomeOnboardingProvider, useHomeOnboarding } from "@/features/onboarding
 import type { NotificationTarget, WorkflowTarget } from "@/features/push-notifications/push-notifications-native.types";
 import { useNotificationTaps } from "@/features/push-notifications/use-notification-taps";
 import type { QuickActionTarget } from "@/features/quick-actions/model/quick-action-items";
-import { shareOpenBot } from "@/features/quick-actions/model/share-app";
+import { shareCodeBot } from "@/features/quick-actions/model/share-app";
 import { setQuickActionNavigator } from "@/features/quick-actions/quick-actions-native";
 import { requestHomeSearch } from "@/features/search/model/home-search-request";
 import { AppDrawerShell, useAppDrawer } from "@/features/servers/components/app-drawer-shell";
@@ -74,7 +74,7 @@ function AuthenticatedStack() {
   const chatAnimation = useSplitLayout() ? "fade" : pushAnimation;
   const { t } = useText();
   const background = useThemeColor("background");
-  const sheetBackground = String(useCSSVariable("--openbot-bg-sheet") ?? background);
+  const sheetBackground = String(useCSSVariable("--codebot-bg-sheet") ?? background);
   const nativeBarOptions = {
     headerShown: isIOS,
     headerBackVisible: false,
@@ -184,7 +184,7 @@ function AuthenticatedStack() {
       }
       whenUnlocked(() => {
         if (target.type === "share") {
-          shareOpenBot();
+          shareCodeBot();
           return;
         }
         closeDrawer();

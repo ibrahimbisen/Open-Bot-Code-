@@ -12,7 +12,7 @@
 }
 
 .chat-backdrop-custom {
-  background-color: var(--openbot-bg-canvas);
+  background-color: var(--codebot-bg-canvas);
 }
 
 .chat-backdrop-media {
@@ -27,6 +27,6 @@
 .chat-backdrop-custom::after {
   position: absolute;
   inset: 0;
-  background-color: color-mix(in srgb, var(--openbot-bg-canvas) 35%, transparent);
+  background-color: color-mix(in srgb, var(--codebot-bg-canvas) 35%, transparent);
   content: "";
 }

@@ -1,28 +1,28 @@
-import { INSTALL_SERVER_SCRIPT_URL } from "@openbot/contracts/hosted-servers";
+import { INSTALL_SERVER_SCRIPT_URL } from "@codebot/contracts/hosted-servers";
 import {
   type CentralAuthUser,
   LOCAL_SERVER_ID,
   LOCAL_SERVER_LIMIT,
   type RoutineFields,
   type ServerSummary,
-} from "@openbot/contracts/ipc";
-import { BROWSER_PROFILES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { OWNER_TRANSFER_CAPABILITY } from "@openbot/contracts/team-protocol/owner-transfer-v1";
-import { PROVIDER_DETECTION_CAPABILITY } from "@openbot/contracts/team-protocol/provider-detection-v1";
-import { VAULT_IMPORT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-import-v1";
-import { VAULT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v1";
-import { VAULT_V2_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v2";
-import { VAULT_V3_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v3";
-import { classifyFailure } from "@openbot/telemetry";
-import { isAgentAccount } from "@openbot/ui/components/provider-accounts";
-import type { AcpRegistrySettingsApi } from "@openbot/ui/features/custom-providers/AcpRegistrySettings";
-import type { CustomAgentSettingsApi } from "@openbot/ui/features/custom-providers/CustomAgentSettings";
-import { providerDiagnosticsText } from "@openbot/ui/features/provider-diagnostics/provider-diagnostics";
-import { LeaveServerDialog } from "@openbot/ui/features/servers/LeaveServerDialog";
-import { RestartServerDialog } from "@openbot/ui/features/servers/RestartServerDialog";
-import type { HostedSiteDeleteResult } from "@openbot/ui/features/settings/stores/hosted-sites-store";
-import { sidebarAgentOrder } from "@openbot/ui/features/sidebar/sidebar-agent-order";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { OWNER_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/owner-transfer-v1";
+import { PROVIDER_DETECTION_CAPABILITY } from "@codebot/contracts/team-protocol/provider-detection-v1";
+import { VAULT_IMPORT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-import-v1";
+import { VAULT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v1";
+import { VAULT_V2_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v2";
+import { VAULT_V3_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v3";
+import { classifyFailure } from "@codebot/telemetry";
+import { isAgentAccount } from "@codebot/ui/components/provider-accounts";
+import type { AcpRegistrySettingsApi } from "@codebot/ui/features/custom-providers/AcpRegistrySettings";
+import type { CustomAgentSettingsApi } from "@codebot/ui/features/custom-providers/CustomAgentSettings";
+import { providerDiagnosticsText } from "@codebot/ui/features/provider-diagnostics/provider-diagnostics";
+import { LeaveServerDialog } from "@codebot/ui/features/servers/LeaveServerDialog";
+import { RestartServerDialog } from "@codebot/ui/features/servers/RestartServerDialog";
+import type { HostedSiteDeleteResult } from "@codebot/ui/features/settings/stores/hosted-sites-store";
+import { sidebarAgentOrder } from "@codebot/ui/features/sidebar/sidebar-agent-order";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, Loading, onCleanup, Show, untrack } from "solid-js";
 import { actionToast } from "./action-toast";
 import { desktopAnalytics } from "./analytics";

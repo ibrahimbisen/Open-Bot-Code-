@@ -393,5 +393,5 @@ function reset(): void {
 export function installRendererPerfProbes(): void {
   installIntervalProbe();
   installResizeObserverProbe();
-  Object.assign(window, { __openbotPerfProbes: { start, stop, reset } });
+  Object.assign(window, { __codebotPerfProbes: { start, stop, reset } });
 }

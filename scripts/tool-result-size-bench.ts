@@ -17,8 +17,8 @@ import { GitHubMcpProxy } from "../src/main/github-mcp-proxy";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const buildRoot = await mkdtemp(join(tmpdir(), "openbot-tool-result-size-"));
-const reportPath = join(projectRoot, ".openbot-build/tool-result-size/report.json");
+const buildRoot = await mkdtemp(join(tmpdir(), "codebot-tool-result-size-"));
+const reportPath = join(projectRoot, ".codebot-build/tool-result-size/report.json");
 const runId = randomUUID();
 const measurementSchema = z.union([z.number(), z.boolean(), z.string()]);
 type Measurement = z.infer<typeof measurementSchema>;

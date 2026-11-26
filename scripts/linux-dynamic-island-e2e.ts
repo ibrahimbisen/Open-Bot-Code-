@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { DynamicIslandAgentIdentity, DynamicIslandPresentation } from "@openbot/contracts/ipc";
+import type { DynamicIslandAgentIdentity, DynamicIslandPresentation } from "@codebot/contracts/ipc";
 import { Schema } from "effect";
 import {
   buildHarness,

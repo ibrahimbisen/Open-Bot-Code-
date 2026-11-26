@@ -1,5 +1,5 @@
-import { toast } from "@openbot/ui";
-import { currentText } from "@openbot/ui/text";
+import { toast } from "@codebot/ui";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, onCleanup } from "solid-js";
 
 export function createServerConnectionToast(

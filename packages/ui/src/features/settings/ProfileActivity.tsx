@@ -4,8 +4,8 @@ import {
   heatmapWeeks,
   type ProfileDay,
   type ProfileStats,
-} from "@openbot/team-client/profile-stats";
-import { Button, ErrorReference, SettingsSection, Text } from "@openbot/ui";
+} from "@codebot/team-client/profile-stats";
+import { Button, ErrorReference, SettingsSection, Text } from "@codebot/ui";
 import { Portal } from "@solidjs/web";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import { DigitRuns } from "../../digit-runs";

@@ -3,10 +3,11 @@ import {
   itemTypeCountsAsUnread,
   READ_EXCLUDED_ITEM_TYPE_PREFIXES,
   READ_EXCLUDED_ITEM_TYPES,
-} from "@openbot/contracts/conversation-read";
-import type { AgentSummary, ConversationReadState, ConversationSnapshot } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/conversation-read";
+import type { AgentSummary, ConversationReadState, ConversationSnapshot } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import type { CodeBotDatabase } from "./codebot-database";
 import {
   type ConversationMarkerExclusions,
   ORDER_KEY_COLUMNS,
@@ -14,7 +15,6 @@ import {
   ORDERED_THREAD_MESSAGES,
 } from "./database/conversation-queries";
 import { cachedStatement } from "./database/statement-cache";
-import type { OpenBotDatabase } from "./openbot-database";
 
 export type { ConversationMarkerExclusions } from "./database/conversation-queries";
 
@@ -25,7 +25,7 @@ const UNREAD_FILTER = [
 ].join(" AND ");
 
 export class ConversationReadStore {
-  constructor(readonly database: OpenBotDatabase) {}
+  constructor(readonly database: CodeBotDatabase) {}
 
   listStates(
     memberId: string,

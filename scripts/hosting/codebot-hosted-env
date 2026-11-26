@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+umask 077
+
+[[ ${CODEBOT_HOSTED_HOST_ID:-} =~ ^[0-9a-fA-F-]{36}$ ]] || { echo "CODEBOT_HOSTED_HOST_ID is missing." >&2; exit 1; }
+[ -n "${CODEBOT_HOSTED_CLAIM:-}" ] || { echo "CODEBOT_HOSTED_CLAIM is missing." >&2; exit 1; }
+[[ $CODEBOT_HOSTED_CLAIM =~ ^[A-Za-z0-9_-]+$ ]] || { echo "CODEBOT_HOSTED_CLAIM is not valid." >&2; exit 1; }
+
+directory="$HOME/.config/codebot-hosted"
+mkdir -p "$directory"
+chmod 0700 "$directory"
+temporary=$(mktemp "$directory/env.XXXXXX")
+printf 'CODEBOT_HOSTED_HOST_ID=%s\nCODEBOT_HOSTED_CLAIM=%s\n' "$CODEBOT_HOSTED_HOST_ID" "$CODEBOT_HOSTED_CLAIM" >"$temporary"
+mv -f "$temporary" "$directory/env"

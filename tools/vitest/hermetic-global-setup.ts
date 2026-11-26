@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { isolateTestEnvironment } from "./hermetic-environment";
 
 export default function setup(): () => void {
-  const home = mkdtempSync(join(tmpdir(), "openbot-test-home-"));
+  const home = mkdtempSync(join(tmpdir(), "codebot-test-home-"));
   isolateTestEnvironment(process.env, home);
   return () => rmSync(home, { recursive: true, force: true });
 }

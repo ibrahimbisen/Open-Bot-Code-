@@ -9,7 +9,7 @@ first buffered event. The next account claims this buffer; identify precedes ord
 original timestamps. Reconnects do not replay it. Expiry, opt-out, and process exit discard it.
 Account changes invalidate prior operation scopes; the anonymous-to-account transition retains the
 pairing scope so its completion can be recorded. Mobile uses a write-only client in the existing
-Openbot OpenPanel project shared with desktop and the website.
+Codebot OpenPanel project shared with desktop and the website.
 Workspace command wrappers record outcomes once at the mobile caller; conversation availability is measured in
 the visible chat view, including cached reads, not from background broadcasts. The host remains the only source of turn lifecycle
 events. No Team API or database schema changes are required.
@@ -27,8 +27,8 @@ semantics and native verification steps are in [the mobile README](../../apps/mo
 link preference. The side panel and the background service worker call it; the offscreen page does
 not, because it has no `chrome.storage`. Each event posts straight to the OpenPanel `/track` route
 with the public client ID, with no SDK and no queue, so a send never blocks a UI action and a failed
-send is dropped. The build sets `VITE_OPENBOT_ANALYTICS_URL`: OpenPanel for a production build
-against `https://api.openbot.run`, the loopback `OPENBOT_ANALYTICS_CAPTURE_URL` when that is set,
+send is dropped. The build sets `VITE_CODEBOT_ANALYTICS_URL`: OpenPanel for a production build
+against `https://api.openbot.run`, the loopback `CODEBOT_ANALYTICS_CAPTURE_URL` when that is set,
 and empty (no sends) otherwise. `scripts/browser-extension-e2e.ts` builds with a capture server and
 checks the event names, the surface, the opt-out and that no user content is sent.
 
@@ -59,7 +59,7 @@ OpenPanel reads campaign attribution from whichever event creates the session, a
 are sent concurrently.
 See [PRIVACY.md](../../PRIVACY.md) for the data boundary.
 
-`rememberLandingFirstTouch` saves the first visit in `localStorage` (`@openbot/contracts/first-touch`
+`rememberLandingFirstTouch` saves the first visit in `localStorage` (`@codebot/contracts/first-touch`
 owns the shape, the parser and the 90-day age). The web client sends it with `email/verify`, and
 `/billing/return` sends it with the Checkout Session ID to `POST /api/browser/checkout-attribution`.
 `AccountAttribution` (`src/server/account-attribution.ts`) checks it again, keeps the first value
@@ -99,23 +99,23 @@ Database time comes from `AgentDatabaseSupervisor`, from the send of a statement
 the end of the host. The supervisor sends a statement only after the host reports ready, so the
 start of the host process is not counted. Renderer and child process exits other than a
 clean exit are written to the trace as `crash` spans at once, and counted at the next sample. A
-utility process with the reason `killed` is neither: OpenBot stops these processes itself. An exit in
+utility process with the reason `killed` is neither: CodeBot stops these processes itself. An exit in
 the last minute before a quit is not counted: a stop signal can end the child processes before the
 main process starts its teardown. The trace still has it, after the `exit` span of that quit.
 
-`index.ts` writes one `exit` span and one line in `logs/main/main.log` when OpenBot starts to quit.
+`index.ts` writes one `exit` span and one line in `logs/main/main.log` when CodeBot starts to quit.
 The name is the first reason: `main_window_closed` (Windows and Linux, where closing the main
 window quits), `signal`, `session_end` or `quit` (the menu, the tray, an update or a restart). The
 main log holds every line of the `main` logger, redacted, in two files of 1 MB. `crashReporter`
 keeps local crash dumps in `app.getPath("crashDumps")` and never uploads them. A process that ends
-with no `exit` span and no dump was stopped from outside OpenBot (#2675).
+with no `exit` span and no dump was stopped from outside CodeBot (#2675).
 
-`run-marker.ts` keeps `openbot-run-marker-v1.json` in the user data folder of the process that holds
+`run-marker.ts` keeps `codebot-run-marker-v1.json` in the user data folder of the process that holds
 the single-instance lock. It writes `running` at the start, the time of the last sign of life once a
 minute and at sleep and wake, `quitting` with the reason in `recordExit`, `quit_timeout` before the
 shutdown deadline exit, and `clean` after `teardown.runAll()`. It adds no teardown step, so the
 ordinals do not change. The heartbeat and the wake write the newest record asynchronously, through
-`openbot-run-marker-v1.json.pending`, so a slow disk, a file lock or an antivirus scan on Windows does
+`codebot-run-marker-v1.json.pending`, so a slow disk, a file lock or an antivirus scan on Windows does
 not stop the main thread. One write runs at a time; records that come during a write are not written,
 only the newest one after it. The start, sleep, `shutdown` event, `quitting`, `quit_timeout` and
 `clean` writes are synchronous, because the process can stop right after them. An asynchronous write
@@ -131,7 +131,7 @@ keeps it in memory only. `scripts/unclean-exit-e2e.ts` kills the dev app's main 
 it with SIGTERM, and checks the event and the marker on each start. `bun run dev:stop` sends SIGKILL
 to the process group after 3 s, so a dev stop can count as `quitting`.
 
-`start-attempts.ts` keeps `openbot-start-attempts-v1.json` beside the run marker. It counts the
+`start-attempts.ts` keeps `codebot-start-attempts-v1.json` beside the run marker. It counts the
 starts of one app version that did not finish. It writes `starting` before the database host and
 the migrations, and clears the attempt when the main window has loaded with the database open. A
 start error, an uncaught exception before that point, and a `starting` attempt with a new `.dmp`
@@ -140,7 +140,7 @@ restart (the `powerMonitor` event, or a boot time after the attempt) with no err
 kill from outside (no dump) do not count and keep the count. A new version starts from zero. After 3 failures in a row,
 the desktop shows `start-recovery-window.ts` before the start continues. The window has its own
 in-memory session, no preload and no IPC: the page is a `data:` URL whose links go to fixed
-`https://openbot.invalid/recovery/<action>` URLs, and `will-navigate` stops each navigation and runs
+`https://codebot.invalid/recovery/<action>` URLs, and `will-navigate` stops each navigation and runs
 only an exact action URL. The page needs a renderer, and a renderer that security software stops at
 launch cannot show it. When the renderer of the window stops, its page does not load, or it does not
 show in 15 seconds, the window stays hidden and a native message box shows the same text and choices.
@@ -150,7 +150,7 @@ renderer exit of the main window writes its reason and exit code to `main.log`. 
 `ApplePersistenceIgnoreState`: else AppKit asks with a modal alert, before `ready`, whether to reopen
 the windows, and the start waits for that answer. A server or a hosted server shows no window; it
 logs the loop and starts as before. `scripts/start-recovery-e2e.ts` forces crashes and a hang with
-`OPENBOT_E2E_FORCE_START_FAILURE`, and stops a renderer with `OPENBOT_E2E_STOP_RENDERER`
+`CODEBOT_E2E_FORCE_START_FAILURE`, and stops a renderer with `CODEBOT_E2E_STOP_RENDERER`
 (`first-load` or `recovery`). A packaged app ignores both.
 
 The pure part (`resource-summary.ts`) keeps each day as sparse histograms with two significant digits,
@@ -179,7 +179,7 @@ App windows (`src/renderer/src/renderer-timing.ts`) count long tasks and input d
 The main handler decodes bounded counts only; `ResourceMonitor` buffers them and adds them to the day
 at the next sample. The same channel carries the main window's `workspaceReady` flag:
 `StartupTiming` (`src/main/startup-timing.ts`) reads the time on the main clock and sends one
-`system_startup` per main process from the `openbot:*` startup marks. It keeps the last start in
+`system_startup` per main process from the `codebot:*` startup marks. It keeps the last start in
 `startup-history.json` to tell a cold start from a warm one. Turn timing comes from the drain
 scheduler and `TurnLifecycle`, which keep the queue pick, the provider start and the first output of
 each turn until `HostAnalytics` takes them at `turn-completed`.
@@ -242,10 +242,10 @@ Desktop opens Usage from the server context menu. It keeps the previous workspac
 inert until Back, so conversation drafts and settings survive navigation. Agent settings opens
 the same report with an agent filter. Host changes clear the filter and stale responses are rejected.
 The iPhone app opens Usage from the server menu in a sheet. It reads the same route through
-`readHostAnalytics` in `@openbot/team-client` and shows the per-agent rows; a row or the header
+`readHostAnalytics` in `@codebot/team-client` and shows the per-agent rows; a row or the header
 filter narrows the report to one agent. The agent Usage page reads the same route with the agent
 filter, so its chart has the provider split too; a host without `host-analytics` gets the
-agent-scoped route and one area. The series pivot is in `@openbot/team-client/usage-series`, which
+agent-scoped route and one area. The series pivot is in `@codebot/team-client/usage-series`, which
 the desktop chart also reads.
 
 `host:get-analytics` and the optional `host-analytics` capability expose `GET /v1/analytics`.
@@ -262,4 +262,4 @@ is stored by the account service or Signal service.
 
 The desktop chart adapts Zaidan's chart and interactive area composition. The pinned
 `solid-recharts` dependency has a Solid 2 compatibility patch and uses the application's single
-Solid runtime. Chart colors use OpenBot tokens. Daily tables provide exact accessible values.
+Solid runtime. Chart colors use CodeBot tokens. Daily tables provide exact accessible values.

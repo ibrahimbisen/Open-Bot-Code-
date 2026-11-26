@@ -1,4 +1,4 @@
-import type { NearDepositAsset } from "@openbot/contracts/ipc";
+import type { NearDepositAsset } from "@codebot/contracts/ipc";
 
 export interface NearDepositCoin {
   symbol: string;

@@ -3,7 +3,7 @@
 import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { CHAT_VISUAL_PAGE_LIMIT } from "@openbot/contracts/chat-visual";
+import { CHAT_VISUAL_PAGE_LIMIT } from "@codebot/contracts/chat-visual";
 import { afterEach, describe, expect, it } from "vitest";
 import { FilePreviewPages } from "./file-preview-pages";
 
@@ -22,10 +22,10 @@ describe("workspace HTML preview pages", () => {
     expect(await response.text()).toContain("drawChart()");
 
     for (const value of [
-      "openbot-visual://preview/unknown",
-      "openbot-visual://preview/etc/passwd",
-      "openbot-visual://preview/%2e%2e%2fprivate.html",
-      `openbot-visual://file/${new URL(address ?? "").pathname.slice(1)}`,
+      "codebot-visual://preview/unknown",
+      "codebot-visual://preview/etc/passwd",
+      "codebot-visual://preview/%2e%2e%2fprivate.html",
+      `codebot-visual://file/${new URL(address ?? "").pathname.slice(1)}`,
       `${address ?? ""}?path=/private.html`,
     ]) {
       expect(pages.get(new URL(value))).toBeUndefined();
@@ -97,7 +97,7 @@ describe("workspace HTML preview pages", () => {
     });
 
     async function reviewFolder() {
-      root = await realpath(await mkdtemp(join(tmpdir(), "openbot-preview-")));
+      root = await realpath(await mkdtemp(join(tmpdir(), "codebot-preview-")));
       const folder = join(root, "review");
       await mkdir(join(folder, "images"), { recursive: true });
       await mkdir(join(folder, ".state"));

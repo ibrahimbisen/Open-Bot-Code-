@@ -1,12 +1,12 @@
-import type { CrmApplyResult, CrmChange, CrmPaymentPageInput } from "@openbot/contracts/ipc";
-import { toast } from "@openbot/ui";
-import { type CrmLayout, defaultCrmLayout, readCrmLayout, SOURCE_KEY_PAGE } from "@openbot/ui/features/crm/crm-model";
-import type { CrmData, CrmDrawerData, CrmViewProps } from "@openbot/ui/features/crm/crm-state";
-import { useText } from "@openbot/ui/text";
+import type { CrmApplyResult, CrmChange, CrmPaymentPageInput } from "@codebot/contracts/ipc";
+import { toast } from "@codebot/ui";
+import { type CrmLayout, defaultCrmLayout, readCrmLayout, SOURCE_KEY_PAGE } from "@codebot/ui/features/crm/crm-model";
+import type { CrmData, CrmDrawerData, CrmViewProps } from "@codebot/ui/features/crm/crm-state";
+import { useText } from "@codebot/ui/text";
 import { createSignal, createStore, onCleanup, reconcile } from "solid-js";
 import type { CrmHost } from "./crm-port";
 
-const LAYOUT_KEY = "openbot:crm-layout:";
+const LAYOUT_KEY = "codebot:crm-layout:";
 const CHANGE_DELAY_MS = 200;
 
 function readLayout(serverId: string): CrmLayout {

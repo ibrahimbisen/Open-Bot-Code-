@@ -61,9 +61,9 @@ export function AppearancePreview() {
   const thinking = useThinkingDisplayPreference((state) => state.enabled);
   const memories = useMemoryChangesDisplayPreference((state) => state.enabled);
   const [surfaceColor, controlColor, mutedColor] = useCSSVariable([
-    "--openbot-bg-surface",
-    "--openbot-bg-control",
-    "--openbot-text-muted",
+    "--codebot-bg-surface",
+    "--codebot-bg-control",
+    "--codebot-text-muted",
   ]);
   const surface = String(surfaceColor);
   const control = String(controlColor);

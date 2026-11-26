@@ -1,4 +1,4 @@
-import { mobileBugReportFormUrl } from "@openbot/contracts/feedback";
+import { mobileBugReportFormUrl } from "@codebot/contracts/feedback";
 import { File, Paths } from "expo-file-system";
 import { router } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -38,7 +38,7 @@ export function SupportSettingsScreen() {
       return;
     }
     setSaving(true);
-    const file = new File(Paths.cache, `openbot-support-log-${new Date().toISOString().replace(/[:.]/gu, "-")}.txt`);
+    const file = new File(Paths.cache, `codebot-support-log-${new Date().toISOString().replace(/[:.]/gu, "-")}.txt`);
     try {
       file.writeSync(supportLogFileText());
       await Sharing.shareAsync(file.uri, {

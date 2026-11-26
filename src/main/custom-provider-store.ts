@@ -9,7 +9,7 @@ import type {
   CustomProviderSummary,
   SaveCustomProviderInput,
   UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   CUSTOM_PROVIDER_HARNESSES,
   DEFAULT_CUSTOM_PROVIDER_HARNESS,
@@ -18,8 +18,8 @@ import {
   isCustomProviderMaxOutput,
   isCustomProviderModelEfforts,
   sameCustomProviderOrigin,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Schema, Semaphore } from "effect";
 import { z } from "zod";
 import { writeFileAtomically } from "../backend/atomic-json-file";

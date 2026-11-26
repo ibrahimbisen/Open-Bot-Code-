@@ -6,9 +6,9 @@ export const CUSTOM_AGENTS_PROVIDER: ProviderPage = {
   provider: "acp",
   name: "Goose, Qwen Code or Oh My Pi",
   answer:
-    "OpenBot runs any agent that speaks the Agent Client Protocol as one agent of a team, such as Goose, Qwen Code or Oh My Pi. You get shared channels with agents on other providers, and an app on your phone.",
+    "CodeBot runs any agent that speaks the Agent Client Protocol as one agent of a team, such as Goose, Qwen Code or Oh My Pi. You get shared channels with agents on other providers, and an app on your phone.",
   connect:
-    "Add a custom agent and type the command that starts it, or pick an agent that OpenBot finds on your computer or in the ACP registry. Check agent starts the command once to make sure that the agent answers. Each agent signs in with its own command.",
+    "Add a custom agent and type the command that starts it, or pick an agent that CodeBot finds on your computer or in the ACP registry. Check agent starts the command once to make sure that the agent answers. Each agent signs in with its own command.",
   adds: [
     {
       icon: "puzzle",
@@ -18,12 +18,12 @@ export const CUSTOM_AGENTS_PROVIDER: ProviderPage = {
     {
       icon: "download",
       title: "The ACP registry",
-      text: "Search, install, update and remove agents from the ACP registry on the computer that runs OpenBot.",
+      text: "Search, install, update and remove agents from the ACP registry on the computer that runs CodeBot.",
     },
     {
       icon: "lock",
       title: "Encrypted settings",
-      text: "OpenBot keeps the environment variables of each agent, such as an API key, encrypted.",
+      text: "CodeBot keeps the environment variables of each agent, such as an API key, encrypted.",
     },
   ],
   vendor: "their makers",
@@ -52,9 +52,9 @@ export const CUSTOM_AGENTS_PROVIDER: ProviderPage = {
         "The Agent Client Protocol (ACP) is an open protocol between apps and coding agents. A local agent talks JSON-RPC over its standard input and output. Zed and JetBrains govern it.",
     },
     {
-      question: "Which agents work in OpenBot?",
+      question: "Which agents work in CodeBot?",
       answer:
-        "Any agent that speaks ACP over standard input and output. OpenBot has presets for Goose, Qwen Code and Oh My Pi, and finds more in the ACP registry.",
+        "Any agent that speaks ACP over standard input and output. CodeBot has presets for Goose, Qwen Code and Oh My Pi, and finds more in the ACP registry.",
     },
     {
       question: "Can I send a message while a custom agent works?",
@@ -64,7 +64,7 @@ export const CUSTOM_AGENTS_PROVIDER: ProviderPage = {
     {
       question: "Can I use GitHub Copilot?",
       answer:
-        "Yes. GitHub Copilot is a built-in provider in OpenBot, not a custom agent. Connect it in Settings > Providers.",
+        "Yes. GitHub Copilot is a built-in provider in CodeBot, not a custom agent. Connect it in Settings > Providers.",
     },
   ],
   sources: [

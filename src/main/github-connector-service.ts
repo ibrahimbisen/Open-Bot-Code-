@@ -11,10 +11,10 @@ import {
   type GitHubConnectorStatus,
   type McpServerConfig,
   type WorkflowGitHubCatalog,
-} from "@openbot/contracts/ipc";
-import { GITHUB_ROUTE_EVENTS } from "@openbot/contracts/signal-protocol/github-route";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText, registerSecretValue, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { GITHUB_ROUTE_EVENTS } from "@codebot/contracts/signal-protocol/github-route";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText, registerSecretValue, toLogValue } from "@codebot/logging";
 import { Deferred, Effect, Exit, type Layer, Result, Scope, Semaphore } from "effect";
 import { z } from "zod";
 import { writeFileAtomically } from "../backend/atomic-json-file";
@@ -36,7 +36,7 @@ import {
 import { GitHubOperationError, GitHubPlatform, githubCall, toGitHubOperationError } from "./github-effects";
 import { GitHubMcpProxy } from "./github-mcp-proxy";
 
-const logger = createOpenBotLogger("github-connector");
+const logger = createCodeBotLogger("github-connector");
 
 const REFRESH_MARGIN_MS = 10 * 60_000;
 const REFRESH_CHECK_MS = 60_000;
@@ -845,7 +845,7 @@ export class GitHubConnectorService {
         Effect.sync(() => {
           this.#refreshFailures += 1;
           if (this.#refreshFailures === 1) {
-            logger.warn("The GitHub token could not be refreshed. OpenBot tries again each minute.", {
+            logger.warn("The GitHub token could not be refreshed. CodeBot tries again each minute.", {
               cause: toLogValue(error),
             });
           }
@@ -1029,7 +1029,7 @@ function githubApiHeaders(accessToken: string): Record<string, string> {
   return {
     Accept: "application/vnd.github+json",
     Authorization: `Bearer ${accessToken}`,
-    "User-Agent": "OpenBot",
+    "User-Agent": "CodeBot",
     "X-GitHub-Api-Version": "2022-11-28",
   };
 }

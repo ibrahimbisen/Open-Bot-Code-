@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AUTOMATIC_VOICE_LANGUAGE,
   type CloudVoiceModelId,
@@ -27,9 +27,9 @@ import {
   type VoiceStreamAudio,
   type VoiceStreamTranscript,
   type VoiceTranscriptionResult,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Exit, Fiber, Scope, Semaphore } from "effect";
 import { savedKeyError, type VoiceApiKeyStore } from "./voice-api-key-store";
 import {
@@ -57,7 +57,7 @@ import type {
   VoiceTranscriptionResponse,
 } from "./voice-transcription-protocol";
 
-const logger = createOpenBotLogger("voice-transcription-service");
+const logger = createCodeBotLogger("voice-transcription-service");
 
 const TRANSCRIPTION_TIMEOUT_MS = 180_000;
 const TRANSCRIPTION_TIMEOUT_PER_AUDIO_SECOND_MS = 1_500;

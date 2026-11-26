@@ -25,7 +25,7 @@ const END_DISTANCE = 600;
 
 export function AgentModelPickerScreen() {
   const { t } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const workspace = useMobileWorkspaceActions();
   const queryScope = useQueryScope();
   const request = useAgentModelPicker((state) => state.request);

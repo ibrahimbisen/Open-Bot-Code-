@@ -13,27 +13,27 @@
 }
 
 .conversation-title.ui-button[data-tab] {
-  height: var(--openbot-control-sm);
-  gap: var(--openbot-space-1-5);
+  height: var(--codebot-control-sm);
+  gap: var(--codebot-space-1-5);
   padding-block: 0;
-  padding-inline: var(--openbot-space-1-5) var(--openbot-space-2);
-  border-radius: var(--openbot-radius-md);
-  color: var(--openbot-text-secondary);
+  padding-inline: var(--codebot-space-1-5) var(--codebot-space-2);
+  border-radius: var(--codebot-radius-md);
+  color: var(--codebot-text-secondary);
 }
 
 .conversation-title.ui-button[data-tab] h1 {
   color: inherit;
-  font-size: var(--openbot-text-sm);
+  font-size: var(--codebot-text-sm);
 }
 
 .conversation-title.ui-button[data-tab]:hover {
-  background: var(--openbot-bg-control-hover);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-bg-control-hover);
+  color: var(--codebot-text-primary);
 }
 
 .conversation-title.ui-button[data-tab][data-selected] {
-  background: var(--openbot-bg-control-active);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-bg-control-active);
+  color: var(--codebot-text-primary);
 }
 
 .conversation-heading-group:has(> .conversation-title[data-tab] + .agent-threads-header) {
@@ -61,7 +61,7 @@
 .conversation-heading-group:has(.agent-threads-header[data-fold]) .conversation-title {
   position: relative;
   flex-shrink: 0;
-  padding-inline-end: var(--openbot-space-1-5);
+  padding-inline-end: var(--codebot-space-1-5);
 }
 
 .conversation-heading-group:has(.agent-threads-header[data-fold]) .conversation-title h1 {
@@ -104,12 +104,12 @@
   position: absolute;
   top: 50%;
   z-index: 2;
-  height: var(--openbot-control-sm);
+  height: var(--codebot-control-sm);
   padding: 0;
   border: 0;
   border-radius: 0;
   background: transparent;
-  font-size: var(--openbot-text-sm);
+  font-size: var(--codebot-text-sm);
   transform: translateY(-50%);
 }
 
@@ -118,7 +118,7 @@
   max-width: 100%;
   padding-inline-end: 0;
   overflow-x: auto;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   background: transparent;
   box-shadow: none;
   scrollbar-width: none;
@@ -127,26 +127,26 @@
 }
 
 .agent-threads-tabs[data-more-before] {
-  mask-image: linear-gradient(to right, transparent, var(--openbot-text-primary) 24px);
+  mask-image: linear-gradient(to right, transparent, var(--codebot-text-primary) 24px);
 }
 
 .agent-threads-tabs[data-more-after] {
-  mask-image: linear-gradient(to left, transparent, var(--openbot-text-primary) 24px);
+  mask-image: linear-gradient(to left, transparent, var(--codebot-text-primary) 24px);
 }
 
 .agent-threads-tabs[data-more-before][data-more-after] {
   mask-image: linear-gradient(
     to right,
     transparent,
-    var(--openbot-text-primary) 24px,
-    var(--openbot-text-primary) calc(100% - 24px),
+    var(--codebot-text-primary) 24px,
+    var(--codebot-text-primary) calc(100% - 24px),
     transparent
   );
 }
 
 .agent-threads-tabs .agent-threads-fill {
-  border-radius: var(--openbot-radius-md);
-  background: var(--openbot-bg-control-active);
+  border-radius: var(--codebot-radius-md);
+  background: var(--codebot-bg-control-active);
 }
 
 .agent-threads-tabs .agent-threads-main-key {
@@ -160,14 +160,14 @@
   max-width: 140px;
   flex: 0 1 auto;
   align-items: center;
-  gap: var(--openbot-space-1-5);
+  gap: var(--codebot-space-1-5);
   padding-block: 0;
-  padding-inline: var(--openbot-space-1-5) var(--openbot-space-2);
-  border-radius: var(--openbot-radius-md);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-regular);
-  animation: agent-threads-tab-in var(--openbot-duration-normal) var(--openbot-ease-out);
+  padding-inline: var(--codebot-space-1-5) var(--codebot-space-2);
+  border-radius: var(--codebot-radius-md);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-regular);
+  animation: agent-threads-tab-in var(--codebot-duration-normal) var(--codebot-ease-out);
   transition:
     color var(--sliding-tabs-duration) var(--sliding-tabs-ease),
     transform var(--sliding-tabs-duration) var(--sliding-tabs-ease);
@@ -196,10 +196,10 @@
 }
 
 .agent-threads-tab.ui-sliding-tabs-trigger[data-renaming] {
-  outline: 1px solid var(--openbot-border-focus);
+  outline: 1px solid var(--codebot-border-focus);
   outline-offset: -1px;
-  background-color: var(--openbot-bg-control-active);
-  color: var(--openbot-text-primary);
+  background-color: var(--codebot-bg-control-active);
+  color: var(--codebot-text-primary);
 }
 
 .agent-threads-tab[data-renaming] .agent-threads-tab-title {
@@ -207,8 +207,8 @@
 }
 
 .agent-threads-tab.ui-sliding-tabs-trigger:not([aria-selected="true"], [data-renaming]):is(:hover, [data-menu-open]) {
-  background-color: var(--openbot-bg-control-hover);
-  color: var(--openbot-text-primary);
+  background-color: var(--codebot-bg-control-hover);
+  color: var(--codebot-text-primary);
 }
 
 .agent-threads-tab-close {
@@ -216,9 +216,9 @@
   display: grid;
   flex: none;
   place-items: center;
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
-  border-radius: var(--openbot-radius-pill);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .agent-threads-tab-icon,
@@ -233,8 +233,8 @@
 
 .agent-threads-tab-icon > svg,
 .agent-threads-tab-x {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
 }
 
 .agent-threads-tab-x {
@@ -242,7 +242,7 @@
 }
 
 .agent-threads-tab:hover:where(:not([data-renaming])) .agent-threads-tab-close {
-  background: var(--openbot-bg-control-hover);
+  background: var(--codebot-bg-control-hover);
 }
 
 .agent-threads-tab:hover:where(:not([data-renaming])) .agent-threads-tab-icon {
@@ -254,8 +254,8 @@
 }
 
 .agent-threads-tab-close:hover {
-  background: var(--openbot-bg-control-active);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-bg-control-active);
+  color: var(--codebot-text-primary);
 }
 
 .agent-threads-tab[data-renaming] .agent-threads-tab-close {
@@ -264,9 +264,9 @@
 
 .agent-threads-tab-close:has(.agent-threads-state) {
   width: auto;
-  min-width: var(--openbot-icon-md);
+  min-width: var(--codebot-icon-md);
   height: auto;
-  min-height: var(--openbot-icon-md);
+  min-height: var(--codebot-icon-md);
 }
 
 .agent-threads-tab:not(:hover) .agent-threads-tab-icon:has(.agent-threads-state) {
@@ -274,52 +274,52 @@
 }
 
 .agent-threads-icon-button.ui-button {
-  width: var(--openbot-control-sm);
-  height: var(--openbot-control-sm);
+  width: var(--codebot-control-sm);
+  height: var(--codebot-control-sm);
   flex: 0 0 auto;
-  border-radius: var(--openbot-radius-sm);
-  color: var(--openbot-text-muted);
+  border-radius: var(--codebot-radius-sm);
+  color: var(--codebot-text-muted);
 }
 
 .agent-threads-switcher.ui-button {
   min-width: 0;
   max-width: 200px;
-  height: var(--openbot-control-sm);
+  height: var(--codebot-control-sm);
   flex: 0 1 auto;
-  gap: var(--openbot-space-1-5);
-  border-radius: var(--openbot-radius-md);
-  background-color: var(--openbot-bg-control-active);
+  gap: var(--codebot-space-1-5);
+  border-radius: var(--codebot-radius-md);
+  background-color: var(--codebot-bg-control-active);
   padding-block: 0;
-  padding-inline: var(--openbot-space-1-5) var(--openbot-space-1);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-regular);
+  padding-inline: var(--codebot-space-1-5) var(--codebot-space-1);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-regular);
 }
 
 .agent-threads-switcher.ui-button:hover,
 .agent-threads-switcher.ui-button[aria-expanded="true"] {
-  background-color: var(--openbot-bg-control-hover);
+  background-color: var(--codebot-bg-control-hover);
 }
 
 .agent-threads-switcher-icon {
   display: grid;
   flex: none;
   place-items: center;
-  min-width: var(--openbot-icon-md);
-  min-height: var(--openbot-icon-md);
+  min-width: var(--codebot-icon-md);
+  min-height: var(--codebot-icon-md);
 }
 
 .agent-threads-switcher-icon > svg {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
   opacity: 0.7;
 }
 
 .agent-threads-switcher-chevron {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
   flex: none;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .agent-threads-menu {
@@ -338,8 +338,8 @@
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    var(--openbot-text-primary) var(--agent-threads-fade-top),
-    var(--openbot-text-primary) calc(100% - var(--agent-threads-fade-bottom)),
+    var(--codebot-text-primary) var(--agent-threads-fade-top),
+    var(--codebot-text-primary) calc(100% - var(--agent-threads-fade-bottom)),
     transparent
   );
 }
@@ -364,7 +364,7 @@
   display: flex;
   flex: none;
   align-self: stretch;
-  margin-block: calc(var(--openbot-space-1-5) * -1);
+  margin-block: calc(var(--codebot-space-1-5) * -1);
 }
 
 .agent-threads-stem-rail,
@@ -378,7 +378,7 @@
 .agent-threads-stem-elbow::after {
   position: absolute;
   inset-inline-start: 7px;
-  border: 0 solid color-mix(in srgb, var(--openbot-text-muted) 60%, transparent);
+  border: 0 solid color-mix(in srgb, var(--codebot-text-muted) 60%, transparent);
   content: "";
 }
 
@@ -417,8 +417,8 @@
   min-width: 44px;
   flex: 0 0 auto;
   white-space: nowrap;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   text-align: end;
 }
@@ -429,13 +429,13 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .agent-threads-unread {
   width: 8px;
   height: 8px;
-  background: var(--openbot-unread-surface);
+  background: var(--codebot-unread-surface);
 }
 
 .agent-threads-menu-button.ui-button,
@@ -445,19 +445,19 @@
 
 .agent-threads-menu-unread {
   position: absolute;
-  inset-block-start: var(--openbot-space-0-5);
-  inset-inline-end: var(--openbot-space-0-5);
+  inset-block-start: var(--codebot-space-0-5);
+  inset-inline-end: var(--codebot-space-0-5);
   width: 8px;
   height: 8px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-unread-surface);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-unread-surface);
   pointer-events: none;
 }
 
 .agent-threads-state-working {
   width: 24px;
-  background: var(--openbot-bg-control);
-  color: var(--openbot-text-secondary);
+  background: var(--codebot-bg-control);
+  color: var(--codebot-text-secondary);
 }
 
 @keyframes agent-threads-tab-in {
@@ -474,11 +474,11 @@
 }
 
 :is(.agent-threads-tab, .agent-threads-switcher, .side-panel-thread-tab)[data-attention="waiting"] {
-  --agent-threads-tint: color-mix(in srgb, var(--openbot-warning-soft) 40%, var(--openbot-transparent));
+  --agent-threads-tint: color-mix(in srgb, var(--codebot-warning-soft) 40%, var(--codebot-transparent));
 }
 
 :is(.agent-threads-tab, .agent-threads-switcher, .side-panel-thread-tab)[data-attention="failed"] {
-  --agent-threads-tint: color-mix(in srgb, var(--openbot-danger-soft) 40%, var(--openbot-transparent));
+  --agent-threads-tint: color-mix(in srgb, var(--codebot-danger-soft) 40%, var(--codebot-transparent));
 }
 
 .agent-threads-tabs .ui-sliding-tabs-pill:not(.agent-threads-fill) {
@@ -491,13 +491,13 @@
   + .agent-threads-tab::before {
   position: absolute;
   top: 50%;
-  inset-inline-start: calc(var(--openbot-space-1) / -2 - 0.5px);
+  inset-inline-start: calc(var(--codebot-space-1) / -2 - 0.5px);
   width: 1px;
-  height: var(--openbot-icon-lg);
-  background: var(--openbot-border-strong);
+  height: var(--codebot-icon-lg);
+  background: var(--codebot-border-strong);
   content: "";
   transform: translateY(-50%);
-  transition: opacity var(--openbot-duration-fast) var(--openbot-ease-out);
+  transition: opacity var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 :where(.conversation-heading-group:has(.conversation-title:is([data-selected], :hover)))
@@ -526,8 +526,8 @@
 
 .agent-threads-tab.ui-sliding-tabs-trigger[data-dragged=""] {
   z-index: 2;
-  background-color: var(--openbot-bg-control-active);
-  color: var(--openbot-text-primary);
+  background-color: var(--codebot-bg-control-active);
+  color: var(--codebot-text-primary);
   transition: color var(--sliding-tabs-duration) var(--sliding-tabs-ease);
 }
 
@@ -557,10 +557,10 @@
 }
 
 .agent-threads-header[data-drop-target] {
-  border-radius: var(--openbot-radius-md);
-  outline: 1px dashed var(--openbot-text-secondary);
+  border-radius: var(--codebot-radius-md);
+  outline: 1px dashed var(--codebot-text-secondary);
   outline-offset: 2px;
-  background: var(--openbot-bg-control-hover);
+  background: var(--codebot-bg-control-hover);
 }
 
 .agent-threads-tab-mark-slot {
@@ -572,7 +572,7 @@
   transition:
     grid-template-columns var(--sliding-tabs-duration) var(--sliding-tabs-ease),
     margin-inline-start var(--sliding-tabs-duration) var(--sliding-tabs-ease),
-    opacity var(--openbot-duration-fast) var(--openbot-ease-out);
+    opacity var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .agent-threads-tab-mark-slot[data-open] {
@@ -587,7 +587,7 @@
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .agent-threads-menu-item .agent-threads-tab-mark {
@@ -598,8 +598,8 @@
 .agent-threads-state-icon {
   width: 20px;
   height: 20px;
-  background: var(--openbot-bg-control);
-  color: var(--openbot-text-muted);
+  background: var(--codebot-bg-control);
+  color: var(--codebot-text-muted);
 }
 
 .agent-threads-state-icon svg {
@@ -608,39 +608,39 @@
 }
 
 .agent-threads-tab-mark[data-kind="waiting"] .agent-threads-state-icon {
-  background: var(--openbot-warning-soft);
-  color: var(--openbot-warning-text);
+  background: var(--codebot-warning-soft);
+  color: var(--codebot-warning-text);
 }
 
 .agent-threads-tab-mark[data-kind="failed"] .agent-threads-state-icon {
-  background: var(--openbot-danger-soft);
-  color: var(--openbot-danger-text);
+  background: var(--codebot-danger-soft);
+  color: var(--codebot-danger-text);
 }
 
 .agent-thread-origin {
   margin: 0;
-  padding-top: var(--openbot-chat-entry-gap);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  padding-top: var(--codebot-chat-entry-gap);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .agent-thread-branch-divider {
   display: flex;
   width: 100%;
   align-items: center;
-  gap: var(--openbot-space-2);
-  margin: var(--openbot-space-2) 0;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  gap: var(--codebot-space-2);
+  margin: var(--codebot-space-2) 0;
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .agent-thread-branch-divider hr {
   height: 1px;
   flex: 1;
   border: 0;
-  background: var(--openbot-border);
+  background: var(--codebot-border);
 }
 
 .agent-thread-branch-text,
@@ -649,7 +649,7 @@
   flex: 0 1 auto;
   min-width: 0;
   align-items: center;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   color: inherit;
   font-size: inherit;
 }
@@ -671,15 +671,15 @@
 .agent-thread-queued {
   display: flex;
   flex-direction: column;
-  gap: var(--openbot-space-1);
-  padding-top: var(--openbot-chat-entry-gap);
+  gap: var(--codebot-space-1);
+  padding-top: var(--codebot-chat-entry-gap);
 }
 
 .agent-thread-queued-text {
   margin: 0;
   overflow: hidden;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -697,7 +697,7 @@
   flex: 1;
   flex-direction: column;
   overflow-y: auto;
-  padding: var(--openbot-space-2) var(--openbot-space-2) var(--openbot-space-8);
+  padding: var(--codebot-space-2) var(--codebot-space-2) var(--codebot-space-8);
 }
 
 .threads-pane-list {
@@ -715,20 +715,20 @@
 .threads-pane-row.ui-button {
   display: flex;
   width: 100%;
-  height: var(--openbot-control-lg);
+  height: var(--codebot-control-lg);
   align-items: center;
   justify-content: flex-start;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   padding-block: 0;
-  padding-inline: var(--openbot-space-2);
-  border-radius: var(--openbot-radius-md);
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-regular);
+  padding-inline: var(--codebot-space-2);
+  border-radius: var(--codebot-radius-md);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-regular);
   text-align: start;
 }
 
 .threads-pane-row.ui-button[aria-current="true"] {
-  background: var(--openbot-bg-control-active);
+  background: var(--codebot-bg-control-active);
 }
 
 .threads-pane-row .agent-threads-menu-stem {
@@ -744,7 +744,7 @@
   min-width: 0;
   flex: 1;
   overflow: hidden;
-  font-size: var(--openbot-text-md);
+  font-size: var(--codebot-text-md);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -752,8 +752,8 @@
 .threads-pane-time {
   min-width: 44px;
   flex: none;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   text-align: end;
   white-space: nowrap;
@@ -762,7 +762,7 @@
 .threads-pane-beside.ui-button {
   position: absolute;
   top: 50%;
-  inset-inline-end: var(--openbot-space-1-5);
+  inset-inline-end: var(--codebot-space-1-5);
   translate: 0 -50%;
   opacity: 0;
 }
@@ -776,17 +776,17 @@
 }
 
 .threads-pane-item[data-beside] .threads-pane-beside.ui-button:not(:hover) {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .threads-pane-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   margin: auto;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   text-align: center;
 }
 

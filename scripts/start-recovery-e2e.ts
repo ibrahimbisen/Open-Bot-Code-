@@ -13,25 +13,25 @@ import {
   writeFileSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
-import { TRANSLATED_LOCALES, translateFor } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { TRANSLATED_LOCALES, translateFor } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Option, Schema } from "effect";
-import { LATEST_SCHEMA_VERSION } from "../src/backend/openbot-database-schema";
+import { LATEST_SCHEMA_VERSION } from "../src/backend/codebot-database-schema";
 import { developmentUserDataName } from "../src/main/development-profile";
 import { START_ATTEMPTS_FILE } from "../src/main/start-attempts";
 import { resolveDevelopmentAppDataRoot } from "./development-state-paths";
 
 const NAME = "start-recovery-e2e";
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", NAME);
+const OUT = join(ROOT, ".codebot-build", NAME);
 const POLL_MS = 250;
 const RUN_TIMEOUT_MS = 5 * 60_000;
-const logger = createOpenBotLogger(NAME);
+const logger = createCodeBotLogger(NAME);
 
-const instanceId = `wt-${createHash("sha256").update(`openbot:${NAME}:${ROOT}`).digest("hex")}`;
+const instanceId = `wt-${createHash("sha256").update(`codebot:${NAME}:${ROOT}`).digest("hex")}`;
 const profile = join(resolveDevelopmentAppDataRoot(), developmentUserDataName("app", instanceId));
 const attemptsPath = join(profile, START_ATTEMPTS_FILE);
-const databasePath = join(profile, "openbot.db");
+const databasePath = join(profile, "codebot.db");
 const NEWER_SCHEMA_VERSION = 9999;
 const LOOP_VERSION = "999.0.0";
 let appVersion: string | null = null;
@@ -106,12 +106,12 @@ function startStack(
   rendererStop: "first-load" | "recovery" | null = null,
 ): { child: ChildProcess; exit: Promise<number | null> } {
   const logFile = openSync(join(OUT, `run-${run}.log`), "w");
-  const env: NodeJS.ProcessEnv = { ...process.env, OPENBOT_DEV_INSTANCE_ID: instanceId };
+  const env: NodeJS.ProcessEnv = { ...process.env, CODEBOT_DEV_INSTANCE_ID: instanceId };
   delete env.ELECTRON_RUN_AS_NODE;
-  if (mode === "none") delete env.OPENBOT_E2E_FORCE_START_FAILURE;
-  else env.OPENBOT_E2E_FORCE_START_FAILURE = mode;
-  if (rendererStop) env.OPENBOT_E2E_STOP_RENDERER = rendererStop;
-  else delete env.OPENBOT_E2E_STOP_RENDERER;
+  if (mode === "none") delete env.CODEBOT_E2E_FORCE_START_FAILURE;
+  else env.CODEBOT_E2E_FORCE_START_FAILURE = mode;
+  if (rendererStop) env.CODEBOT_E2E_STOP_RENDERER = rendererStop;
+  else delete env.CODEBOT_E2E_STOP_RENDERER;
   const child = spawn("bun", ["run", "dev"], { cwd: ROOT, env, stdio: ["ignore", logFile, logFile] });
   const exit = new Promise<number | null>((done) => child.once("exit", (code) => done(code)));
   void exit.then(() => closeSync(logFile));
@@ -249,7 +249,7 @@ try {
   };
 
   const capture = (name: string): string => {
-    const captured = join(ROOT, ".openbot-build", "dev-automation", `${NAME}-${name}`);
+    const captured = join(ROOT, ".codebot-build", "dev-automation", `${NAME}-${name}`);
     automation(["screenshot", "--page=data:", `--out=${captured}`]);
     const screenshot = join(OUT, name);
     copyFileSync(captured, screenshot);
@@ -326,7 +326,7 @@ try {
     () => {
       const line = readFileSync(runLog, "utf8")
         .split("\n")
-        .find((candidate) => candidate.includes(`OpenBot ${LOOP_VERSION} did not start. Not installing it.`));
+        .find((candidate) => candidate.includes(`CodeBot ${LOOP_VERSION} did not start. Not installing it.`));
       return line ?? null;
     },
     RUN_TIMEOUT_MS,

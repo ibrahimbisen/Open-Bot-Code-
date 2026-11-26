@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "openbot-mobile-updates",
+  "name": "codebot-mobile-updates",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-18",
   "workers_dev": false,
@@ -17,8 +17,8 @@
   "r2_buckets": [
     {
       "binding": "UPDATES",
-      "bucket_name": "openbot-mobile-updates",
-      "preview_bucket_name": "openbot-mobile-updates-test"
+      "bucket_name": "codebot-mobile-updates",
+      "preview_bucket_name": "codebot-mobile-updates-test"
     }
   ]
 }

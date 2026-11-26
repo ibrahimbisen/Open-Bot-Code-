@@ -4,7 +4,7 @@ import type {
   VaultSecretRequest,
   VaultState,
   VaultTwoStepCodes,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export interface VaultCalls {
   list(): Promise<VaultState>;
@@ -19,7 +19,7 @@ export interface VaultCalls {
 }
 
 export function desktopVaultCalls(): VaultCalls {
-  const vault = () => window.openbot.vault;
+  const vault = () => window.codebot.vault;
   return {
     list: () => vault().list(),
     save: (input) => vault().save(input),
@@ -64,7 +64,7 @@ export function remoteVaultCalls(
 }
 
 export function hostVaultCalls(serverId: string, importable: boolean): VaultCalls {
-  const vault = () => window.openbot.vault;
+  const vault = () => window.codebot.vault;
   return remoteVaultCalls(
     {
       list: () => vault().hostList(serverId),
@@ -77,11 +77,11 @@ export function hostVaultCalls(serverId: string, importable: boolean): VaultCall
       ...(importable ? { importCsv: () => vault().hostImportCsv(serverId) } : {}),
     },
     (read) => {
-      const unsubscribe = window.openbot.agent.onScopedEvent((scoped) => {
+      const unsubscribe = window.codebot.agent.onScopedEvent((scoped) => {
         if (scoped.serverId === serverId && scoped.event.type === "vault-changed") read();
       });
       let online = true;
-      const reconnect = window.openbot.servers.onEvent((servers) => {
+      const reconnect = window.codebot.servers.onEvent((servers) => {
         const now = servers.some((server) => server.id === serverId && server.state === "online");
         if (now && !online) read();
         online = now;

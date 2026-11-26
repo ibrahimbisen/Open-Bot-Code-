@@ -1,7 +1,7 @@
-import type { HostPersonality, OpenBotDesktopApi, ResponseStyle, ServerSummary } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, HostPersonality, ResponseStyle, ServerSummary } from "@codebot/contracts/ipc";
 import { createEffect, createSignal } from "solid-js";
 
-export type HostPersonalityCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getPersonality" | "setPersonality">;
+export type HostPersonalityCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getPersonality" | "setPersonality">;
 
 const [styles, setStyles] = createSignal<ReadonlyMap<string, ResponseStyle>>(new Map());
 const reading = new Set<string>();

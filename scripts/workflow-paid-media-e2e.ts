@@ -3,12 +3,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { CreditMediaJob, CreditMediaModel } from "@openbot/contracts/credit-media";
-import type { WorkflowGraph } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { CreditMediaJob, CreditMediaModel } from "@codebot/contracts/credit-media";
+import type { WorkflowGraph } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import {
   type CreditMediaGateway,
   CreditMediaGatewayFailed,
@@ -22,7 +22,7 @@ import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-paid-media-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-paid-media-e2e");
 const WAIT_MS = 60_000;
 const PNG = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1, 2, 3, 4]);
 
@@ -142,12 +142,12 @@ const graph: WorkflowGraph = {
   strokes: [],
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-paid-media-"));
-let database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-paid-media-"));
+let database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   await Effect.runPromise(database.initialize());
   const credits = new CreditMediaWorkflows({ gateway, warn: () => undefined });
   const workflows = await Effect.runPromise(
@@ -164,7 +164,7 @@ async function open() {
       chooseTextModel: () => Effect.fail({ message: "No text step runs in this test." }),
       mediaCatalog: () => Effect.succeed({ models: [creditWorkflowModel(MODEL)] }),
       generateMedia: (request) =>
-        request.provider === "openbot"
+        request.provider === "codebot"
           ? credits.generate(
               {
                 resolveAttachment: () => Effect.succeed(null),

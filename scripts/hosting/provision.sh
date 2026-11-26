@@ -10,8 +10,8 @@ APPIMAGE_URL=$2
 APPIMAGE_SHA256=$3
 AUTH_API_URL=$4
 SOURCE=$(cd "$(dirname "$0")" && pwd)
-# shellcheck source=openbot-hosted-update
-source "$SOURCE/openbot-hosted-update"
+# shellcheck source=codebot-hosted-update
+source "$SOURCE/codebot-hosted-update"
 
 [[ $SERVICE_USER =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]] && id "$SERVICE_USER" >/dev/null || fail "Unknown service user."
 [[ $APPIMAGE_URL == https://* ]] || fail "The AppImage URL must use HTTPS."
@@ -32,15 +32,15 @@ fi
 apt-get clean
 install -d -m 0755 "$INSTALL" "$INSTALL/hosted"
 recover
-work=$(mktemp -d "$SCRATCH/openbot-update.XXXXXX")
+work=$(mktemp -d "$SCRATCH/codebot-update.XXXXXX")
 trap 'rm -rf "$work"' EXIT
-fetch --output "$work/OpenBot.AppImage" "$APPIMAGE_URL"
-echo "$APPIMAGE_SHA256  $work/OpenBot.AppImage" | sha256sum --check --quiet
-unpack "$work/OpenBot.AppImage"
+fetch --output "$work/CodeBot.AppImage" "$APPIMAGE_URL"
+echo "$APPIMAGE_SHA256  $work/CodeBot.AppImage" | sha256sum --check --quiet
+unpack "$work/CodeBot.AppImage"
 prepare_release "$work/squashfs-root"
 installed=$(version_of "$INSTALL/app")
 if [ -n "$installed" ] && newer "$installed" "$(version_of "$work/squashfs-root")"; then
-  fail "OpenBot $installed is installed, and this AppImage has an older version."
+  fail "CodeBot $installed is installed, and this AppImage has an older version."
 fi
 stage_release "$work/squashfs-root"
 swap_in
@@ -49,6 +49,6 @@ chmod 0644 "$INSTALL/hosted/service-user"
 install_hosting "$SOURCE"
 finish_swap
 
-install -d -o "$SERVICE_USER" -g "$(id -gn "$SERVICE_USER")" -m 0700 /srv/openbot-hosted
-printf 'OPENBOT_AUTH_API_URL=%s\n' "${AUTH_API_URL%/}" >"$INSTALL/hosted/openbot.env"
-chmod 0644 "$INSTALL/hosted/openbot.env"
+install -d -o "$SERVICE_USER" -g "$(id -gn "$SERVICE_USER")" -m 0700 /srv/codebot-hosted
+printf 'CODEBOT_AUTH_API_URL=%s\n' "${AUTH_API_URL%/}" >"$INSTALL/hosted/codebot.env"
+chmod 0644 "$INSTALL/hosted/codebot.env"

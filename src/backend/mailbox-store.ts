@@ -1,9 +1,9 @@
 import { createHash, randomUUID } from "node:crypto";
 import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { playableMediaKind } from "@openbot/contracts/attachment-files";
-import { rewriteAttachmentReferences } from "@openbot/contracts/attachment-references";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { playableMediaKind } from "@codebot/contracts/attachment-files";
+import { rewriteAttachmentReferences } from "@codebot/contracts/attachment-references";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentRuntimeWorkItem,
   AgentTaskAwaitedReply,
@@ -21,7 +21,7 @@ import type {
   QueuedMessageReceipt,
   QueueSnapshot,
   QueueSteerFallback,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AGENT_EXCHANGE_ITEM_TYPE,
   AGENT_RUNTIME_ATTENTION_LIMIT,
@@ -32,11 +32,11 @@ import {
   isConversationMessageSender,
   isMessageReaction,
   QUEUE_STEER_FALLBACKS,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { QueueEditRejectedError } from "@openbot/contracts/team-protocol/queue-edit-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { QueueEditRejectedError } from "@codebot/contracts/team-protocol/queue-edit-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
 import { Effect, Result } from "effect";
 import {
   AttachmentFiles,
@@ -52,15 +52,15 @@ import { StoredStateFailure, storedIO, storedSync, toStoredStateFailure } from "
 export type { ExportedAttachmentFile, GeneratedAttachmentSource } from "./attachment-files";
 
 import { isEmptyStoredFile, parseStoredJson } from "./atomic-json-file";
+import type { CodeBotDatabase } from "./codebot-database";
 import { routineNameInLimit } from "./database/legacy-conversation-message";
 import { mailboxReactionRowKey } from "./database/mailbox-projection";
 import { MailboxDeliveryGate } from "./mailbox-delivery-gate";
 import { runIdOrigins } from "./message-run-ids";
-import type { OpenBotDatabase } from "./openbot-database";
 import { isRecord } from "./protocol";
 import { recordRestartActivity } from "./restart-activity";
 
-const logger = createOpenBotLogger("mailbox-store");
+const logger = createCodeBotLogger("mailbox-store");
 const MAX_ATTACHMENTS = INPUT_LIMITS.attachments;
 const FAILED_REQUEST_REASON_LIMIT = 2_000;
 const FAILED_REQUEST_KEY_PREFIX = "failed-request:";
@@ -283,7 +283,7 @@ export const MESSAGING_LANE = "\u0001messaging";
 export class MailboxStore {
   readonly #statePath: string;
   readonly #files: AttachmentFiles;
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
   readonly #queueUpdates = new Set<string>();
   #usesMessagingLane: (agentId: string, linkId: string) => boolean = () => true;
   readonly #editHolds = new Map<string, { editId: string; startedAt: number }>();
@@ -309,7 +309,7 @@ export class MailboxStore {
     reactionKeys: new Set<string>(),
   };
 
-  constructor(userDataPath: string, sharedRoot: string, database: OpenBotDatabase) {
+  constructor(userDataPath: string, sharedRoot: string, database: CodeBotDatabase) {
     this.#statePath = join(userDataPath, "mailbox.json");
     this.#files = new AttachmentFiles({ userDataPath, sharedRoot });
     this.#database = database;
@@ -335,7 +335,7 @@ export class MailboxStore {
         this.#state = normalizeStoredState(persisted.state);
         for (const row of persisted.skippedRows) if (row.kind === "draft" && row.id) skippedDraftIds.push(row.id);
         if (persisted.skippedRows.length > 0) {
-          logger.warn("Stored mailbox rows that OpenBot cannot read were left out.", {
+          logger.warn("Stored mailbox rows that CodeBot cannot read were left out.", {
             skippedRows: persisted.skippedRows,
           });
         } else if (JSON.stringify(this.#state) !== JSON.stringify(stored)) {
@@ -2613,10 +2613,10 @@ export class MailboxStore {
       text: [
         "Status: blocked",
         outcome === "failed"
-          ? `Result: OpenBot note, not written by this teammate: the request failed before the teammate answered. ${(delivery.error ?? "The provider gave no reason.").slice(0, FAILED_REQUEST_REASON_LIMIT)}`
+          ? `Result: CodeBot note, not written by this teammate: the request failed before the teammate answered. ${(delivery.error ?? "The provider gave no reason.").slice(0, FAILED_REQUEST_REASON_LIMIT)}`
           : steered
-            ? "Result: OpenBot note, not written by this teammate: the request went into a running turn of the teammate, and that turn ended before the teammate answered."
-            : "Result: OpenBot note, not written by this teammate: the teammate's turn stopped when OpenBot or its provider restarted, before the teammate answered. Part of the work can be done.",
+            ? "Result: CodeBot note, not written by this teammate: the request went into a running turn of the teammate, and that turn ended before the teammate answered."
+            : "Result: CodeBot note, not written by this teammate: the teammate's turn stopped when CodeBot or its provider restarted, before the teammate answered. Part of the work can be done.",
         "Evidence: none",
         outcome === "failed" && temporary
           ? "Unblock: The failure can be temporary. Send the request again one time if you still need the result. If it fails again, tell the user."

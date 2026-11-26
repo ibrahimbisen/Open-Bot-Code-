@@ -67,7 +67,7 @@ serveFakeAcpAgent({
   "session/prompt": (request, peer) => {
     const sessionId = request.params.sessionId ?? "";
     const text = promptText(request);
-    const wake = text.includes("<openbot_background_wake>");
+    const wake = text.includes("<codebot_background_wake>");
     logEntry({ event: "prompt", sessionId, wake });
     if (wake) {
       if (silentWake) reportCommandAndAnswer(peer, sessionId);

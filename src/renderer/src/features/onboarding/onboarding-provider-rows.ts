@@ -1,5 +1,5 @@
-import type { AgentProviderId } from "@openbot/contracts/ipc";
-import type { ProviderPickerOption } from "@openbot/ui/components/ProviderPicker";
+import type { AgentProviderId } from "@codebot/contracts/ipc";
+import type { ProviderPickerOption } from "@codebot/ui/components/ProviderPicker";
 
 const POPULAR_PROVIDERS: readonly AgentProviderId[] = ["codex", "claude", "antigravity"];
 export const FREE_PROVIDER: AgentProviderId = "opencode";

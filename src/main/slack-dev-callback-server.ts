@@ -1,6 +1,6 @@
 import { createServer, type Server } from "node:http";
 import type { Socket } from "node:net";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { parseDeepLink } from "./deep-link-router";
 
 export const SLACK_DEV_CALLBACK_PATH = "/slack-workspace";
@@ -44,7 +44,7 @@ async function answer(
   receive: (nonce: string, grant: string) => Promise<boolean>,
 ): Promise<boolean> {
   if (method !== "GET" || !url?.startsWith(SLACK_DEV_CALLBACK_PATH)) return false;
-  const link = parseDeepLink(`openbot://${url.replace(/^\/+/u, "")}`);
+  const link = parseDeepLink(`codebot://${url.replace(/^\/+/u, "")}`);
   if (link?.kind !== "slack-workspace") return false;
   return receive(link.nonce, link.grant).catch(() => false);
 }

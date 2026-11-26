@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { providerFailureStatus } from "../src/backend/agent/provider-status";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -11,11 +11,11 @@ import { type CodexCliInfo, resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-login-path-e2e");
-const ROOT_VARIABLE = "OPENBOT_CODEX_LOGIN_PATH_E2E_ROOT";
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-login-path-e2e");
+const ROOT_VARIABLE = "CODEBOT_CODEX_LOGIN_PATH_E2E_ROOT";
 
 if (process.env[ROOT_VARIABLE] === undefined) {
-  const root = await mkdtemp(join(tmpdir(), "openbot-codex-login-path-e2e-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-codex-login-path-e2e-"));
   const home = join(root, "home");
   await mkdir(home, { recursive: true });
   await writeFile(join(home, ".bash_profile"), `export PATH="${join(home, "tools")}:/usr/bin:/bin"\n`);
@@ -28,7 +28,7 @@ if (process.env[ROOT_VARIABLE] === undefined) {
     PATH: "/usr/bin:/bin:/usr/sbin:/sbin",
   };
   delete env.ZDOTDIR;
-  delete env.OPENBOT_CODEX_PATH;
+  delete env.CODEBOT_CODEX_PATH;
   const child = spawnSync(process.execPath, [import.meta.filename], { stdio: "inherit", env });
   await rm(root, { recursive: true, force: true });
   process.exit(child.status ?? 1);
@@ -101,7 +101,7 @@ try {
   const tools = join(home, "tools");
 
   const loginRecorded = join(root, "login-path.txt");
-  const loginCodex = await writeStandIn(tools, "openbot-e2e-node", tools, loginRecorded);
+  const loginCodex = await writeStandIn(tools, "codebot-e2e-node", tools, loginRecorded);
   const loginCli = await runCauseEffect(resolveCodexCli({ bundledExecutable: null }));
   assert.equal(loginCli.executable, loginCodex, "Codex is found on the login shell's PATH from $SHELL.");
   assert.equal(loginCli.version, "0.200.0", "`codex --version` runs with the login shell's PATH.");
@@ -112,7 +112,7 @@ try {
   await rm(loginCodex);
   const volta = join(home, ".volta", "bin");
   const voltaRecorded = join(root, "volta-path.txt");
-  const voltaCodex = await writeStandIn(volta, "openbot-e2e-volta-node", volta, voltaRecorded);
+  const voltaCodex = await writeStandIn(volta, "codebot-e2e-volta-node", volta, voltaRecorded);
   const voltaCli = await runCauseEffect(resolveCodexCli({ bundledExecutable: null }));
   assert.equal(voltaCli.executable, voltaCodex, "Codex is found in the Volta fallback folder.");
   const voltaSession = await appServerPath(voltaCli, voltaRecorded);

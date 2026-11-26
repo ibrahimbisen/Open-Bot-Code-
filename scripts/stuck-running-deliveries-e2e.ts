@@ -3,13 +3,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { getRecord, getString, isRecord } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/stuck-running-deliveries-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-stuck-deliveries-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/stuck-running-deliveries-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-stuck-deliveries-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const logPath = join(root, "protocol.jsonl");
@@ -19,9 +19,9 @@ const SETTLE_MS = 10_000;
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
-process.env.OPENBOT_FAKE_CODEX_LOG = logPath;
-process.env.OPENBOT_FAKE_CODEX_CONTROL = controlPath;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_FAKE_CODEX_LOG = logPath;
+process.env.CODEBOT_FAKE_CODEX_CONTROL = controlPath;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -29,7 +29,7 @@ const { AgentThreadStore } = await import("../src/backend/agent-threads/agent-th
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { StoredStateFailure } = await import("../src/backend/stored-state-effects");
 
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -38,8 +38,8 @@ if (process.argv.includes("--version")) {
   process.stdout.write("codex-cli 0.160.1\\n");
   process.exit(0);
 }
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify(entry) + "\\n");
-const control = () => JSON.parse(fs.readFileSync(process.env.OPENBOT_FAKE_CODEX_CONTROL, "utf8"));
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify(entry) + "\\n");
+const control = () => JSON.parse(fs.readFileSync(process.env.CODEBOT_FAKE_CODEX_CONTROL, "utf8"));
 const config = { config: { mcp_servers: {} }, layers: [{ name: { type: "user", file: "/fake/.codex/config.toml", profile: null }, version: "1", config: { mcp_servers: {} } }] };
 const prefix = "p" + process.pid + "-";
 let buffer = "";
@@ -138,7 +138,7 @@ process.stdin.on("data", (chunk) => {
 });
 `;
 
-type Database = InstanceType<typeof OpenBotDatabase>;
+type Database = InstanceType<typeof CodeBotDatabase>;
 type Mailbox = InstanceType<typeof MailboxStore>;
 type Store = InstanceType<typeof AgentStore>;
 type Service = InstanceType<typeof AgentService>;
@@ -231,7 +231,7 @@ async function control(value: {
 }
 
 async function start(): Promise<Instance> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const agents = new AgentService({

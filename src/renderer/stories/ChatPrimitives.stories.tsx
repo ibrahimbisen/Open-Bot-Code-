@@ -1,4 +1,4 @@
-import type { MessageReaction } from "@openbot/contracts/ipc";
+import type { MessageReaction } from "@codebot/contracts/ipc";
 import {
   Bubble,
   BubbleContent,
@@ -14,9 +14,9 @@ import {
   MessageGroup,
   MessageHeader,
   Text,
-} from "@openbot/ui";
-import type { AgentMessage } from "@openbot/ui/data";
-import { MessageActions, MessageBody, MessageMenuItems } from "@openbot/ui/features/conversation/MessageRendering";
+} from "@codebot/ui";
+import type { AgentMessage } from "@codebot/ui/data";
+import { MessageActions, MessageBody, MessageMenuItems } from "@codebot/ui/features/conversation/MessageRendering";
 import { createMemo, createSignal, Show } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";

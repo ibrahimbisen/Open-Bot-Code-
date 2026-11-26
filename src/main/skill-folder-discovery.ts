@@ -5,9 +5,9 @@ import {
   AGENT_PROVIDER_DESCRIPTORS,
   agentProviderCliName,
   agentProviderDescriptor,
-} from "@openbot/contracts/agent-providers";
-import { type AgentSummary, type InstalledSkill, SKILL_DESCRIPTION_MAX_LENGTH } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/agent-providers";
+import { type AgentSummary, type InstalledSkill, SKILL_DESCRIPTION_MAX_LENGTH } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { HOME_SKILL_FOLDER, homeSkillTagId, listHomeSkills } from "../backend/home-skills";
 import { readSkillFrontmatter } from "../backend/skill-frontmatter";
@@ -83,7 +83,7 @@ const skillFoldersEffect = Effect.fn("SkillFolder.skillFolders")(function* (
     }
     const names = entries
       .map((entry) => entry.name)
-      .filter((name) => !name.startsWith(".") && !name.includes(".openbot-") && !exclude.has(name))
+      .filter((name) => !name.startsWith(".") && !name.includes(".codebot-") && !exclude.has(name))
       .sort()
       .slice(0, MAX_SKILLS_PER_FOLDER);
     for (const name of names) {

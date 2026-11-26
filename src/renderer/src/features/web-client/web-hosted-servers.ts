@@ -1,4 +1,4 @@
-import { parseCustomServerCheckout } from "@openbot/contracts/custom-server-plans";
+import { parseCustomServerCheckout } from "@codebot/contracts/custom-server-plans";
 import {
   type HostedServerCheckout,
   type HostedServerSummary,
@@ -7,10 +7,10 @@ import {
   parseHostedServerList,
   parseHostedServerSummary,
   parseServerClaim,
-} from "@openbot/contracts/hosted-servers";
-import type { HostedServersDesktopApi } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/hosted-servers";
+import type { HostedServersDesktopApi } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { currentText } from "@codebot/ui/text";
 import type { AddServerResume } from "../servers/AddServerOverlay";
 import { savedPromotionCode } from "./web-billing";
 
@@ -32,7 +32,7 @@ export function createWebHostedServerCalls(
       credentials: "same-origin",
       cache: "no-store",
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-      headers: post ? { "Content-Type": "application/json", "X-OpenBot-Browser": "1", ...init.headers } : {},
+      headers: post ? { "Content-Type": "application/json", "X-CodeBot-Browser": "1", ...init.headers } : {},
       ...(post ? { body: init.body } : {}),
     }).catch(() => {
       throw new Error(errorMessage(null));

@@ -1,4 +1,4 @@
-import { NO_BLUR_ATTRIBUTE, STILL_FACES_ATTRIBUTE } from "@openbot/ui/document-rendering";
+import { NO_BLUR_ATTRIBUTE, STILL_FACES_ATTRIBUTE } from "@codebot/ui/document-rendering";
 import { createSignal } from "solid-js";
 
 export type MotionEffect = "backgroundBlur" | "movingFaces";
@@ -6,8 +6,8 @@ export type MotionEffect = "backgroundBlur" | "movingFaces";
 const MOTION_EFFECTS: readonly MotionEffect[] = ["backgroundBlur", "movingFaces"];
 
 const STORAGE_KEYS = {
-  backgroundBlur: "openbot:background-blur",
-  movingFaces: "openbot:moving-faces",
+  backgroundBlur: "codebot:background-blur",
+  movingFaces: "codebot:moving-faces",
 } as const satisfies Record<MotionEffect, string>;
 
 const OFF_ATTRIBUTES = {

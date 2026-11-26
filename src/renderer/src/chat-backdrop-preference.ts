@@ -1,7 +1,7 @@
-import { type ChatBackdropChoice, isChatBackdropChoice } from "@openbot/ui/features/conversation/chat-backdrop";
+import { type ChatBackdropChoice, isChatBackdropChoice } from "@codebot/ui/features/conversation/chat-backdrop";
 import { createSignal } from "solid-js";
 
-const CHAT_BACKDROP_STORAGE_KEY = "openbot:chat-backdrop";
+const CHAT_BACKDROP_STORAGE_KEY = "codebot:chat-backdrop";
 
 let unsavedPreference: ChatBackdropChoice | null | undefined;
 

@@ -6,8 +6,8 @@ import { createServer as createTcpServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { promisify } from "node:util";
-import { composedCustomModelId, isAgentModel } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { composedCustomModelId, isAgentModel } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolveOpencodeCli } from "../src/backend/cli";
@@ -18,7 +18,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { createModelReasoningSupport } from "../src/main/model-reasoning-probe";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-custom-model");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-custom-model");
 const ENDPOINT = "spark";
 const DEFAULT_MODEL = "default-model";
 const AGENT_MODEL = "agent-model";
@@ -70,7 +70,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, requests: [], ollamaRequests: [], turns: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-model-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-model-e2e-"));
 const clients: AgentClient[] = [];
 const run = promisify(execFile);
 const pdfPath = join(root, "workspace", "report.pdf");
@@ -448,7 +448,7 @@ try {
   const others = report.requests.filter(
     (request) => request.auth === undefined && request.model !== null && !known.has(request.model),
   );
-  assert.deepEqual(others, [], "Each request must name a model OpenBot configured.");
+  assert.deepEqual(others, [], "Each request must name a model CodeBot configured.");
   for (const [model, budget] of budgets) {
     const seen = report.requests.filter((request) => request.model === model);
     assert.ok(seen.length > 0, `The endpoint got no request for ${model}.`);
@@ -456,7 +456,7 @@ try {
       assert.equal(
         request.maxCompletionTokens,
         budget,
-        `${model} must ask for the ${budget}-token budget OpenBot wrote, not ${request.maxCompletionTokens}.`,
+        `${model} must ask for the ${budget}-token budget CodeBot wrote, not ${request.maxCompletionTokens}.`,
       );
     }
   }

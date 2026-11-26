@@ -1,10 +1,10 @@
-import { isProviderEnvironmentProvider, type ProviderEnvironmentVariableInput } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isProviderEnvironmentProvider, type ProviderEnvironmentVariableInput } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import {
   PROVIDER_ENVIRONMENT_CAPABILITY,
   PROVIDER_ENVIRONMENT_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-environment-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/provider-environment-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { ProviderEnvironmentRefused } from "../provider-environment-store";
 import type { TeamApiAdmin } from "./dependencies";

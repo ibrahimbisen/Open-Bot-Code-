@@ -3,14 +3,14 @@ import {
   createIngressQueueKeyPair,
   importIngressQueuePrivateKey,
   isIngressQueueKey,
-} from "@openbot/contracts/signal-protocol/ingress-queue";
-import { createOpenBotLogger, registerSecretValue } from "@openbot/logging";
+} from "@codebot/contracts/signal-protocol/ingress-queue";
+import { createCodeBotLogger, registerSecretValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { z } from "zod";
 import { writeFileAtomically } from "../backend/atomic-json-file";
 import type { SecretCipher } from "./provider-credential-store";
 
-const logger = createOpenBotLogger("ingress-queue-key");
+const logger = createCodeBotLogger("ingress-queue-key");
 
 const fileSchema = z.object({ version: z.literal(1), publicKey: z.string(), privateKey: z.string() });
 

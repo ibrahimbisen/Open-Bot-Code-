@@ -1,14 +1,14 @@
-import type { CentralAuthUser } from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import type { CentralAuthUser } from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { PRESENCE_KEY, type PresenceAck } from "./client-browser-messages";
 
-const SESSION_KEY = "openbot.session.v1";
-const DEVICE_KEY = "openbot.device.v1";
-const SERVER_KEY = "openbot.server.v1";
-const HOST_KEY_PREFIX = "openbot.host-key.v1:";
-const HOST_PROTOCOL_PREFIX = "openbot.host-protocol.v1:";
-const OPEN_CHAT_KEY = "openbot.open-chat.v1";
-const X_CHATS_KEY = "openbot.x-chats.v1";
+const SESSION_KEY = "codebot.session.v1";
+const DEVICE_KEY = "codebot.device.v1";
+const SERVER_KEY = "codebot.server.v1";
+const HOST_KEY_PREFIX = "codebot.host-key.v1:";
+const HOST_PROTOCOL_PREFIX = "codebot.host-protocol.v1:";
+const OPEN_CHAT_KEY = "codebot.open-chat.v1";
+const X_CHATS_KEY = "codebot.x-chats.v1";
 const X_CHATS_KEPT = 20;
 
 let area: chrome.storage.StorageArea | null = null;

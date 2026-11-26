@@ -1,13 +1,13 @@
 import { type ChildProcess, type ExecFileException, execFile } from "node:child_process";
 import { win32 } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Deferred, Effect, Fiber, Schema } from "effect";
 
 class ProcessTreeFailed extends Schema.TaggedError<ProcessTreeFailed>()("ProcessTreeFailed", {
   cause: Schema.Defect(),
 }) {}
 
-const logger = createOpenBotLogger("windows-process-tree");
+const logger = createCodeBotLogger("windows-process-tree");
 
 const TASKKILL_PROCESS_NOT_FOUND_EXIT_CODE = 128;
 

@@ -1,16 +1,16 @@
 import { lstat, readdir, readFile, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, dirname, join, sep } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   HERMES_IMPORT_LIMITS,
   HERMES_PROFILE_KEY,
   type HermesImportReason,
   type McpServerConfig,
   type RoutineSchedule,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { parse as parseYaml } from "yaml";
 import { type ArchiveOperationError, archiveCall, archiveFailure } from "./archive-effects";
@@ -23,7 +23,7 @@ const UNSAFE_FILE_PREFIX = sourceText("error.skill.unsafeFile", { name: "" });
 const MAX_TEXT_BYTES = 256 * 1024;
 const MAX_SKILLS = 200;
 const MAX_JOBS = 200;
-const EXPORT_SKILL_NAME = "openbot-export";
+const EXPORT_SKILL_NAME = "codebot-export";
 const SKILL_CODE =
   /^(?:scripts|bin)\/|\.(?:sh|bash|zsh|fish|py|js|mjs|cjs|ts|rb|pl|php|ps1|bat|cmd|exe|go|rs|lua|jar)$/iu;
 const LOCAL_DELIVERY = new Set(["", "local", "origin"]);

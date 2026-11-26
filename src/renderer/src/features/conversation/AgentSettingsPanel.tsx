@@ -10,28 +10,28 @@ import {
   type ServerNotificationLevel,
   type TestRoutineInput,
   userAssignedSkills,
-} from "@openbot/contracts/ipc";
-import { Blocks, BookMarked, CalendarClock, FileText, Folder, Gauge, Puzzle, Table2, Upload } from "@openbot/ui";
-import { SettingsLinkGroup, SettingsLinkRow } from "@openbot/ui/components/SettingsPanel";
-import type { AgentProfile } from "@openbot/ui/data";
-import type { BrowserProfileSelectProfile } from "@openbot/ui/features/browser/BrowserProfileSelect";
-import { browserProfileProxyNames } from "@openbot/ui/features/browser/BrowserProxies";
+} from "@codebot/contracts/ipc";
+import { Blocks, BookMarked, CalendarClock, FileText, Folder, Gauge, Puzzle, Table2, Upload } from "@codebot/ui";
+import { SettingsLinkGroup, SettingsLinkRow } from "@codebot/ui/components/SettingsPanel";
+import type { AgentProfile } from "@codebot/ui/data";
+import type { BrowserProfileSelectProfile } from "@codebot/ui/features/browser/BrowserProfileSelect";
+import { browserProfileProxyNames } from "@codebot/ui/features/browser/BrowserProxies";
 import {
   type AgentInstructionsCalls,
   AgentInstructionsView,
-} from "@openbot/ui/features/conversation/AgentInstructionsView";
+} from "@codebot/ui/features/conversation/AgentInstructionsView";
 import {
   AgentSessionSettings,
   type AgentSessionSettingsApi,
-} from "@openbot/ui/features/conversation/AgentSessionSettings";
+} from "@codebot/ui/features/conversation/AgentSessionSettings";
 import SharedAgentSettingsPanel, {
   type AgentBrowserProfileOptions,
   type AgentNotificationLevelOptions,
   type AgentSettingsPanelProps as SharedAgentSettingsPanelProps,
-} from "@openbot/ui/features/conversation/AgentSettingsPanel";
-import type { AgentSettingLinkId, AgentSettingReveal } from "@openbot/ui/features/conversation/agent-setting-links";
-import { agentFilesLinkValue } from "@openbot/ui/features/files/AgentFilesView";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/AgentSettingsPanel";
+import type { AgentSettingLinkId, AgentSettingReveal } from "@codebot/ui/features/conversation/agent-setting-links";
+import { agentFilesLinkValue } from "@codebot/ui/features/files/AgentFilesView";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, createStore, Show, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { createSidePanelWidth, readSidePanelWidth, saveSidePanelWidth } from "../../components/side-panel-width";

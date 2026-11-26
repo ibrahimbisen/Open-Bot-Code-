@@ -2,13 +2,13 @@ import { randomBytes } from "node:crypto";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { resolveRemoteDesktopRuntime } from "../src/main/remote-desktop-runtime-artifact";
 import { SunshineMoonlightRuntime } from "../src/main/sunshine-moonlight-runtime";
 
-const logger = createOpenBotLogger("remote-desktop-runtime-smoke");
+const logger = createCodeBotLogger("remote-desktop-runtime-smoke");
 
 if (process.platform !== "darwin" && process.platform !== "linux") {
   throw new Error("The local runtime smoke test supports macOS and Linux only.");
@@ -24,14 +24,14 @@ const paths = await Effect.runPromise(
   }),
 );
 if (!paths) throw new Error("Build or install the remote desktop runtime before the smoke test.");
-const stateDirectory = await mkdtemp(join(tmpdir(), "openbot-remote-runtime-smoke-"));
+const stateDirectory = await mkdtemp(join(tmpdir(), "codebot-remote-runtime-smoke-"));
 const runtime = new SunshineMoonlightRuntime({
   paths,
   stateDirectory,
   platform: process.platform,
   credentials: {
-    username: process.env.OPENBOT_SMOKE_USERNAME ?? `openbot-${randomBytes(8).toString("hex")}`,
-    password: process.env.OPENBOT_SMOKE_PASSWORD ?? randomBytes(24).toString("base64url"),
+    username: process.env.CODEBOT_SMOKE_USERNAME ?? `codebot-${randomBytes(8).toString("hex")}`,
+    password: process.env.CODEBOT_SMOKE_PASSWORD ?? randomBytes(24).toString("base64url"),
   },
   getDisplays: () => [{ id: "1", label: "Primary display", width: 1920, height: 1080, primary: true }],
   getIceServers: () => Effect.succeed([{ urls: "stun:127.0.0.1:3478" }]),

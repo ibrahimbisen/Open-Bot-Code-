@@ -1,11 +1,11 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { WEBHOOK_DELIVERY_BODY_BYTES_LIMIT } from "@openbot/contracts/signal-protocol/messages";
+import { WEBHOOK_DELIVERY_BODY_BYTES_LIMIT } from "@codebot/contracts/signal-protocol/messages";
 import {
   STANDARD_WEBHOOK_SIGNATURE_PATTERN,
   WEBHOOK_DELIVERY_ID_PATTERN,
   WEBHOOK_MAX_CLOCK_SKEW_SECONDS,
   WEBHOOK_TIMESTAMP_PATTERN,
-} from "@openbot/contracts/signal-protocol/webhook-route";
+} from "@codebot/contracts/signal-protocol/webhook-route";
 import { Schema } from "effect";
 
 const WEBHOOK_MAX_CLOCK_SKEW_MS = WEBHOOK_MAX_CLOCK_SKEW_SECONDS * 1000;

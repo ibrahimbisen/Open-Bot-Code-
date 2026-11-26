@@ -1,4 +1,4 @@
-import { Button } from "@openbot/ui";
+import { Button } from "@codebot/ui";
 import { createMemo, For, Show } from "solid-js";
 import { useText } from "../../text";
 import { TeamPersonAvatar, teamMemberName } from "../team/TeamPersonAvatar";

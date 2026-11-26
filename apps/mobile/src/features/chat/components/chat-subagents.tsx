@@ -1,4 +1,4 @@
-import type { ConversationSubagent, ConversationSubagentStatus } from "@openbot/contracts/ipc";
+import type { ConversationSubagent, ConversationSubagentStatus } from "@codebot/contracts/ipc";
 import { Typography } from "heroui-native";
 import ChevronRight from "lucide-react-native/icons/chevron-right";
 import CircleCheck from "lucide-react-native/icons/circle-check";
@@ -50,16 +50,16 @@ export interface SubagentColors {
 
 export function useSubagentColors(): SubagentColors {
   const [primary, muted, dim, border, surface, control, success, danger, accent, pressed] = useCSSVariable([
-    "--openbot-text-primary",
-    "--openbot-text-muted",
-    "--openbot-text-dim",
-    "--openbot-border-strong",
-    "--openbot-bg-surface",
-    "--openbot-bg-control",
-    "--openbot-success-text",
-    "--openbot-danger-text",
-    "--openbot-accent-text",
-    "--openbot-bg-control-active",
+    "--codebot-text-primary",
+    "--codebot-text-muted",
+    "--codebot-text-dim",
+    "--codebot-border-strong",
+    "--codebot-bg-surface",
+    "--codebot-bg-control",
+    "--codebot-success-text",
+    "--codebot-danger-text",
+    "--codebot-accent-text",
+    "--codebot-bg-control-active",
   ]);
   return {
     primary: String(primary),

@@ -23,8 +23,8 @@ import {
   workflowNodeAnswerNames,
   workflowTriggerFields,
   workflowTriggerRecord,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import type { ReceivedWebhookEvent } from "../routine-store";
 import type { StoredWorkflowStep } from "./workflow-run-store";
 import { workflowScheduleRecord } from "./workflow-triggers";
@@ -181,7 +181,7 @@ function answerValueSchema(field: WorkflowAnswerField): DynamicRecord {
 export const WORKFLOW_ANSWER_TOOL = "workflow_answer";
 
 export function agentAnswerAsk(fields: readonly WorkflowAnswerField[]): string {
-  return `Give your answer with the openbot.${WORKFLOW_ANSWER_TOOL} tool, as {"answer":{…}}, with these fields:\n${workflowAnswerInstruction(fields)}\nWhen it is not in your tool list, run it with openbot.tool_call. It checks the fields at once; when it tells you a problem, correct the answer and call it again. When you cannot call it, end your reply with the same JSON object.`;
+  return `Give your answer with the codebot.${WORKFLOW_ANSWER_TOOL} tool, as {"answer":{…}}, with these fields:\n${workflowAnswerInstruction(fields)}\nWhen it is not in your tool list, run it with codebot.tool_call. It checks the fields at once; when it tells you a problem, correct the answer and call it again. When you cannot call it, end your reply with the same JSON object.`;
 }
 
 export function toolAnswerFixAsk(

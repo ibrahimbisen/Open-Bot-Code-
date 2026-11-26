@@ -137,10 +137,10 @@ export function siteLimitForPlan(plan: BillingPlanId | null): number {
   return BILLING_PLANS.find((candidate) => candidate.id === plan)?.siteLimit ?? 1;
 }
 
-export const BILLING_METADATA = { userId: "openbot_user_id", serverId: "openbot_server_id" } as const;
+export const BILLING_METADATA = { userId: "codebot_user_id", serverId: "codebot_server_id" } as const;
 
 export function billingLookupKey(plan: BillingPlanId, interval: BillingInterval): string {
-  return `openbot_${plan}_${interval}`;
+  return `codebot_${plan}_${interval}`;
 }
 
 export function storageTierLookupKey(
@@ -148,14 +148,14 @@ export function storageTierLookupKey(
   tier: BillingStorageUpgradeTier,
   interval: BillingInterval,
 ): string {
-  return `openbot_storage_${plan}_${tier}_${interval}`;
+  return `codebot_storage_${plan}_${tier}_${interval}`;
 }
 
 export function parseStorageTierLookupKey(
   value: unknown,
 ): { plan: BillingPlanId; tier: BillingStorageUpgradeTier; interval: BillingInterval } | null {
   if (!isString(value)) return null;
-  const match = /^openbot_storage_([a-z]+)_([12])_([a-z]+)$/u.exec(value);
+  const match = /^codebot_storage_([a-z]+)_([12])_([a-z]+)$/u.exec(value);
   if (!match) return null;
   const [, plan, tier, interval] = match;
   if (!isOneOf(BILLING_PLAN_IDS, plan) || !isOneOf(BILLING_INTERVALS, interval)) return null;
@@ -168,10 +168,10 @@ export function storageTierPriceMetadata(
   interval: BillingInterval,
 ): Record<string, string> {
   return {
-    openbot_kind: "storage",
-    openbot_plan: plan,
-    openbot_storage_tier: String(tier),
-    openbot_interval: interval,
+    codebot_kind: "storage",
+    codebot_plan: plan,
+    codebot_storage_tier: String(tier),
+    codebot_interval: interval,
   };
 }
 
@@ -180,14 +180,14 @@ export function parseStorageTierPrice(price: {
   metadata: Readonly<Record<string, string>>;
 }): { plan: BillingPlanId; tier: BillingStorageUpgradeTier; interval: BillingInterval } | null {
   const fromKey = parseStorageTierLookupKey(price.lookup_key);
-  if (fromKey || price.metadata.openbot_kind !== "storage") return fromKey;
-  const { openbot_plan: plan, openbot_storage_tier: tier, openbot_interval: interval } = price.metadata;
-  return parseStorageTierLookupKey(`openbot_storage_${plan}_${tier}_${interval}`);
+  if (fromKey || price.metadata.codebot_kind !== "storage") return fromKey;
+  const { codebot_plan: plan, codebot_storage_tier: tier, codebot_interval: interval } = price.metadata;
+  return parseStorageTierLookupKey(`codebot_storage_${plan}_${tier}_${interval}`);
 }
 
 export function parseBillingLookupKey(value: unknown): { plan: BillingPlanId; interval: BillingInterval } | null {
   if (!isString(value)) return null;
-  const match = /^openbot_([a-z]+)_([a-z]+)$/u.exec(value);
+  const match = /^codebot_([a-z]+)_([a-z]+)$/u.exec(value);
   if (!match) return null;
   const [, plan, interval] = match;
   if (!isOneOf(BILLING_PLAN_IDS, plan) || !isOneOf(BILLING_INTERVALS, interval)) return null;

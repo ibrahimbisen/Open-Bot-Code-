@@ -1,9 +1,9 @@
 import { readFileSync } from "node:fs";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Schema, Semaphore } from "effect";
 import { writeJsonFileAtomically } from "../atomic-json-file";
 
-const logger = createOpenBotLogger("messaging-status-posts");
+const logger = createCodeBotLogger("messaging-status-posts");
 
 const Target = Schema.Struct({ platformChannelId: Schema.String, replyThreadId: Schema.NullOr(Schema.String) });
 

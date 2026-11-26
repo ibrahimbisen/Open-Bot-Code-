@@ -2,7 +2,7 @@
 
 import { getDocument, type PDFDocumentProxy, type RenderTask } from "pdfjs-dist/legacy/build/pdf.mjs";
 import "pdfjs-dist/legacy/build/pdf.worker.mjs";
-import { base64ToBytes } from "@openbot/team-client/base64";
+import { base64ToBytes } from "@codebot/team-client/base64";
 import { useEffect, useRef, useState } from "react";
 
 interface PdfPagesProps {

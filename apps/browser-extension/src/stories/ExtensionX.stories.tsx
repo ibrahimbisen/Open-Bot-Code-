@@ -17,7 +17,7 @@ function ReplyArea(props: { state?: "armed" | "leaving"; text: string; label: st
       <span class="ext-story-x-label">{props.label}</span>
       <div class="ext-story-x-row">
         <div class="ext-story-x-box">{props.text}</div>
-        <button type="button" class="ext-story-x-button" data-openbot-x={props.state}>
+        <button type="button" class="ext-story-x-button" data-codebot-x={props.state}>
           Reply
         </button>
       </div>
@@ -29,7 +29,7 @@ export const ReplyButton: Story = {
   render: () => <ReplyArea text="Nice thread, thanks." label="Without @OpenBot_" />,
 };
 
-export const ReplyButtonOpenBot: Story = {
+export const ReplyButtonCodeBot: Story = {
   render: () => <ReplyArea state="armed" text="@OpenBot_ is the claim in this thread true?" label="With @OpenBot_" />,
 };
 

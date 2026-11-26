@@ -16,20 +16,20 @@ import {
   parseCopyInstanceAgentsInput,
   parseExportInstanceInput,
   resolveRemoteInstanceTransferResult,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { INSTANCE_TRANSFER_CHUNKS_CAPABILITY } from "@openbot/contracts/team-protocol/instance-transfer-chunks-v1";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { INSTANCE_TRANSFER_CHUNKS_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-chunks-v1";
 import {
   INSTANCE_TRANSFER_FULL_COPY_CAPABILITY,
   INSTANCE_TRANSFER_FULL_COPY_ROUTES,
-} from "@openbot/contracts/team-protocol/instance-transfer-full-copy-v1";
+} from "@codebot/contracts/team-protocol/instance-transfer-full-copy-v1";
 import {
   INSTANCE_TRANSFER_CAPABILITY,
   INSTANCE_TRANSFER_REMOTE_BYTES,
   INSTANCE_TRANSFER_ROUTES,
-} from "@openbot/contracts/team-protocol/instance-transfer-v1";
-import type { AppTranslate } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/instance-transfer-v1";
+import type { AppTranslate } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { app, type BrowserWindow, dialog, type OpenDialogOptions, type SaveDialogOptions, shell } from "electron";
 import { runCauseEffect } from "../../backend/effect-boundary";
@@ -74,7 +74,7 @@ export function instanceTransferIpcHandlers({
     const date = new Date().toISOString().slice(0, 10);
     const options: SaveDialogOptions = {
       title: translate("dialog.saveTransfer"),
-      defaultPath: join(app.getPath("downloads"), `openbot-transfer-${date}.zip`),
+      defaultPath: join(app.getPath("downloads"), `codebot-transfer-${date}.zip`),
       filters,
       showsTagField: false,
     };
@@ -234,7 +234,7 @@ export function instanceTransferIpcHandlers({
     serverId: string,
   ): Promise<InstanceTransferResult> => {
     if (fromServerId === serverId) throw new Error("Invalid copy request: the servers are the same.");
-    const directory = await mkdtemp(join(app.getPath("temp"), "openbot-copy-"));
+    const directory = await mkdtemp(join(app.getPath("temp"), "codebot-copy-"));
     try {
       const path = join(directory, "agents.zip");
       const sharedSkills = sourceText("error.import.transferSharedSkillsSkipped");

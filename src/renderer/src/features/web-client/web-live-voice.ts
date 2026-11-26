@@ -1,11 +1,11 @@
-import type { AgentEvent, TeamRealtimeEvent } from "@openbot/contracts/ipc";
-import { runTeamEffect } from "@openbot/team-client";
-import { startLiveVoice, stopLiveVoice, type TeamApiRequest } from "@openbot/team-client/team-api-requests";
+import type { AgentEvent, TeamRealtimeEvent } from "@codebot/contracts/ipc";
+import { runTeamEffect } from "@codebot/team-client";
+import { startLiveVoice, stopLiveVoice, type TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 import { createSignal } from "solid-js";
 import type { CodexLivePort } from "../conversation/stores/codex-live-conversation-store";
 
-const WEB_LIVE_VOICE_STORAGE_KEY = "openbot:web-live-voice";
+const WEB_LIVE_VOICE_STORAGE_KEY = "codebot:web-live-voice";
 
 let unsavedPreference: boolean | undefined;
 

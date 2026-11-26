@@ -6,10 +6,10 @@ import {
   RequestError,
   type SessionUpdate,
 } from "@agentclientprotocol/sdk";
-import { agentProviderName } from "@openbot/contracts/agent-providers";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { type CauseCode, classifyFailure } from "@openbot/telemetry";
+import { agentProviderName } from "@codebot/contracts/agent-providers";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { type CauseCode, classifyFailure } from "@codebot/telemetry";
 import type { GeneratedMediaKind } from "./agent/image-generation";
 import { PLAN_APPROVE, PLAN_STOP, PLAN_UNANSWERED, planApprovalQuestion } from "./agent/plan-approval";
 import { enableCursorMcpServers } from "./cursor-mcp-disabled";

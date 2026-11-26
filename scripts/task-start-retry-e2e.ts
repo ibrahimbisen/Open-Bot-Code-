@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import type { AgentTask, AgentTasksSnapshot } from "@openbot/contracts/ipc";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { AgentTask, AgentTasksSnapshot } from "@codebot/contracts/ipc";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
+import { createCodeBotLogger } from "@codebot/logging";
 import { argument, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
@@ -39,7 +39,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: clientRecord.instanceId,
 });
-const client = await connectToDevApp(clientRecord.remoteDebuggingPort, createOpenBotLogger("task-start-retry-e2e"), {
+const client = await connectToDevApp(clientRecord.remoteDebuggingPort, createCodeBotLogger("task-start-retry-e2e"), {
   expectedRendererPort: clientRecord.rendererPort,
   ownerPid: clientRecord.pid,
 });
@@ -48,7 +48,7 @@ for (const page of [host.page, client.page])
 const started = new Set<string>();
 
 function hostTasks(): Promise<AgentTasksSnapshot> {
-  return host.page.evaluate((id) => window.openbot.agent.listTasks(id), agentId);
+  return host.page.evaluate((id) => window.codebot.agent.listTasks(id), agentId);
 }
 
 async function startThreeTimes(start: (clientMessageId: string) => Promise<AgentTask>): Promise<PathResult> {
@@ -71,14 +71,14 @@ async function startThreeTimes(start: (clientMessageId: string) => Promise<Agent
 try {
   report.host = await startThreeTimes((clientMessageId) =>
     host.page.evaluate(
-      ({ id, text, clientMessageId }) => window.openbot.agent.startTask({ agentId: id, text, clientMessageId }),
+      ({ id, text, clientMessageId }) => window.codebot.agent.startTask({ agentId: id, text, clientMessageId }),
       { id: agentId, text: SHORT_PROMPT, clientMessageId },
     ),
   );
   assert.equal(new Set(report.host.taskIds).size, 1, "The host gave more than one task for one client id.");
   assert.equal(report.host.newTasks, 1, "The host made more than one task for one client id.");
 
-  const servers = await client.page.evaluate(() => window.openbot.servers.list());
+  const servers = await client.page.evaluate(() => window.codebot.servers.list());
   const server = servers.find(
     (item) => item.kind === "remote" && item.compatibility?.capabilities.includes(AGENT_TASKS_CAPABILITY) === true,
   );
@@ -88,7 +88,7 @@ try {
   report.teamApi = await startThreeTimes((clientMessageId) =>
     client.page.evaluate(
       ({ id, text, clientMessageId, server }) =>
-        window.openbot.agent.startTask({ agentId: id, text, clientMessageId }, server),
+        window.codebot.agent.startTask({ agentId: id, text, clientMessageId }, server),
       { id: agentId, text: SHORT_PROMPT, clientMessageId, server: serverId },
     ),
   );
@@ -99,7 +99,7 @@ try {
 } finally {
   for (const taskId of started)
     await host.page
-      .evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId })
+      .evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId })
       .catch((error: unknown) => process.stderr.write(`Could not delete task ${taskId}: ${String(error)}\n`));
   writeReport("task-start-retry-e2e", report);
   await client.close();

@@ -16,9 +16,9 @@ description: "Score a company against the user's ideal customer profile with a f
 1. **The ICP.** Industry, company size, region, the problem the user's product solves, buying triggers, and
    disqualifiers. If there is none, ask once with `ask_user` and offer to `remember` it for later briefs.
 2. **The company.** A name or a site address.
-3. **Tool path.** Call `openbot_browser.list_tabs`, then use a new tab. Read public company pages: home, product,
+3. **Tool path.** Call `codebot_browser.list_tabs`, then use a new tab. Read public company pages: home, product,
    pricing, careers, press, customers, documentation, and public filings. For existing relationship facts, read the
-   user's CRM in a signed-in tab or the tools of an installed plugin; `openbot.tool_search` does not list them. Read only.
+   user's CRM in a signed-in tab or the tools of an installed plugin; `codebot.tool_search` does not list them. Read only.
 4. **Paste path.** Notes, CRM exports or lists that the user gives.
 
 ## Steps

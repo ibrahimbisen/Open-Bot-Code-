@@ -1,16 +1,16 @@
 import {
+  type CodeBotDesktopApi,
   type GithubSkillSource,
   type InstalledSkill,
   type InstallSkillInput,
   LOCAL_SERVER_ID,
-  type OpenBotDesktopApi,
   type SetEnabledSkillInput,
   type UninstallSkillInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export interface SkillsPort {
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     | "addMarketplaceAgent"
     | "cancelMcpSignIn"
     | "completeMcpSignInRelay"
@@ -39,11 +39,11 @@ export interface SkillsPort {
     | "testMcpServer"
     | "uninstallAgentSkill"
   >;
-  hostAdmin: Pick<OpenBotDesktopApi["hostAdmin"], "getAgentAccess">;
-  marketplaceAgents: Pick<OpenBotDesktopApi["marketplaceAgents"], "get" | "getListing" | "install" | "list">;
-  macAutomation: Pick<OpenBotDesktopApi["macAutomation"], "request">;
+  hostAdmin: Pick<CodeBotDesktopApi["hostAdmin"], "getAgentAccess">;
+  marketplaceAgents: Pick<CodeBotDesktopApi["marketplaceAgents"], "get" | "getListing" | "install" | "list">;
+  macAutomation: Pick<CodeBotDesktopApi["macAutomation"], "request">;
   skills: Pick<
-    OpenBotDesktopApi["skills"],
+    CodeBotDesktopApi["skills"],
     | "get"
     | "getBySlug"
     | "install"
@@ -58,7 +58,7 @@ export interface SkillsPort {
 }
 
 export function skillsPort(): SkillsPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export type SkillCatalogCalls = Pick<SkillsPort["skills"], "get" | "list">;

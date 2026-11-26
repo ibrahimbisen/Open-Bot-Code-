@@ -7,7 +7,7 @@ import { tmpdir } from "node:os";
 import { join, normalize, resolve } from "node:path";
 import { Schema } from "effect";
 
-const OUT = resolve(import.meta.dirname, "../../../.openbot-build/keep-previous-assets-e2e.json");
+const OUT = resolve(import.meta.dirname, "../../../.codebot-build/keep-previous-assets-e2e.json");
 const SCRIPT = resolve(import.meta.dirname, "keep-previous-assets.ts");
 const HOUR_MS = 60 * 60 * 1000;
 

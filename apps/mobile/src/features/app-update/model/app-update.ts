@@ -3,7 +3,7 @@ import {
   MOBILE_CHANGELOG_PATH,
   type MobileReleaseNotes,
   parseMobileReleaseNotes,
-} from "@openbot/contracts/mobile-features";
+} from "@codebot/contracts/mobile-features";
 import { useQuery } from "@tanstack/react-query";
 import * as SecureStore from "expo-secure-store";
 import * as Updates from "expo-updates";
@@ -20,14 +20,14 @@ export type AppUpdate = { kind: "ready"; id: string } | { kind: "store"; id: str
 
 const IOS_STORE_URL = "itms-apps://apps.apple.com/app/id6807024266";
 const IOS_STORE_WEB_URL = "https://apps.apple.com/app/id6807024266";
-const ANDROID_STORE_URL = "market://details?id=run.openbot.mobile";
+const ANDROID_STORE_URL = "market://details?id=run.codebot.mobile";
 const ANDROID_STORE_WEB_URL = "https://openbot.run/download/android";
 
 export const MOBILE_CHANGELOG_URL = "https://openbot.run/changelog?platform=mobile";
 const NOTES_TIMEOUT_MS = 10_000;
 const NOTES_STALE_MS = 10 * 60_000;
 
-const key = "openbot.mobile.appUpdate.dismissed.v1";
+const key = "codebot.mobile.appUpdate.dismissed.v1";
 
 const UPDATE_CHECK_INTERVAL_MS = 15 * 60_000;
 let lastUpdateCheck = Date.now();

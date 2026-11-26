@@ -3,13 +3,13 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { WorkflowGraph, WorkflowNode, WorkflowRunDetail } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import type { WorkflowGraph, WorkflowNode, WorkflowRunDetail } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { MessagingDiscordMention } from "../src/backend/messaging/messaging-threads";
 import { type InboundFile, MessagingAdapterError } from "../src/backend/messaging/messaging-types";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
@@ -17,11 +17,11 @@ import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-trigger
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 import { createGitHubRest } from "../src/main/github-rest";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/discord-github-files-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/discord-github-files-e2e");
 const CONNECTION = "messaging-discord-files-e2e";
 const CHANNEL = "110000000000000001";
 const REPOSITORY = "acme/files";
-const BRANCH = "openbot-attachments";
+const BRANCH = "codebot-attachments";
 const CDN = "https://cdn.discordapp.com/attachments/110000000000000001";
 const WAIT_MS = 5_000;
 
@@ -194,8 +194,8 @@ const mentionOf = (text: string, files: InboundFile[]): MessagingDiscordMention 
   };
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-discord-github-files-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-discord-github-files-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function runEnded(workflows: WorkflowsHandle, workflowId: string, after: string | null) {

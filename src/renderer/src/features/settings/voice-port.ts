@@ -1,9 +1,9 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface VoicePort {
-  voice: OpenBotDesktopApi["voice"];
+  voice: CodeBotDesktopApi["voice"];
 }
 
 export function voicePort(): VoicePort {
-  return window.openbot;
+  return window.codebot;
 }

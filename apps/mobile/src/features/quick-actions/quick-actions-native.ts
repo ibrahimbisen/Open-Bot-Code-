@@ -7,7 +7,7 @@ declare class QuickActionsModule extends NativeModule<{ onQuickAction: (event: {
   setItems(items: QuickActionItem[]): Promise<boolean>;
 }
 
-const native = requireOptionalNativeModule<QuickActionsModule>("OpenBotQuickActions");
+const native = requireOptionalNativeModule<QuickActionsModule>("CodeBotQuickActions");
 
 let listening = false;
 const opener = pendingNavigation<QuickActionTarget>();

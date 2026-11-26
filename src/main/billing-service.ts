@@ -4,13 +4,13 @@ import {
   type BillingStorageRequest,
   parseBillingSessionUrl,
   parseBillingState,
-} from "@openbot/contracts/billing";
+} from "@codebot/contracts/billing";
 import {
   type BillingDetails,
   type BillingDetailsRequest,
   parseBillingDetails,
-} from "@openbot/contracts/billing-details";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/billing-details";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, type Layer } from "effect";
 import {
   type AccountRequestClient,

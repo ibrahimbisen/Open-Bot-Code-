@@ -3,15 +3,15 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { HostAnalyticsInput } from "@openbot/contracts/ipc";
+import type { HostAnalyticsInput } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { build } from "esbuild";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { readUsageReportInWorker } from "../src/backend/database/usage-report-reader";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build/usage-report-worker-e2e");
+const OUT = join(ROOT, ".codebot-build/usage-report-worker-e2e");
 const DAY_MS = 86_400_000;
 const RECORDS = 60_000;
 const ACTIVITY = 30_000;
@@ -41,7 +41,7 @@ function day(offset: number): string {
   return new Date(Date.now() + offset * DAY_MS).toISOString().slice(0, 10);
 }
 
-function seed(database: OpenBotDatabase): void {
+function seed(database: CodeBotDatabase): void {
   const db = database.connection;
   const start = Math.floor(Date.now() / DAY_MS) * DAY_MS - 20 * DAY_MS + 12_345;
   const tokens = JSON.stringify({ uncachedInput: 1200, cachedInput: 40000, cacheCreation: 300, output: 800 });
@@ -132,8 +132,8 @@ async function timeWorker(
 
 async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
-  const root = await mkdtemp(join(tmpdir(), "openbot-usage-report-worker-"));
-  const database = new OpenBotDatabase(join(root, "profile"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-usage-report-worker-"));
+  const database = new CodeBotDatabase(join(root, "profile"));
   try {
     await runCauseEffect(database.initialize());
     seed(database);

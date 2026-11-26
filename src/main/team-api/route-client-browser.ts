@@ -3,8 +3,8 @@ import {
   CLIENT_BROWSER_ROUTES,
   decodeClientBrowserAnswer,
   decodeClientBrowserPresence,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { TeamApiClientBrowser } from "./dependencies";
 import { HttpError } from "./http-error";
 import type { RouteOutcome, TeamApiRequestContext } from "./request-context";

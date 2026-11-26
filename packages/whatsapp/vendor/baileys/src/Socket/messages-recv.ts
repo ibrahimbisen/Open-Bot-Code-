@@ -544,7 +544,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 	}
 
 	const sendMessageAck = async (node: BinaryNode, errorCode?: number) => {
-		// OPENBOT PATCH: a node can arrive before the device is linked (upstream #2738, #2749).
+		// CODEBOT PATCH: a node can arrive before the device is linked (upstream #2738, #2749).
 		const stanza = buildAckStanza(node, errorCode, authState.creds.me?.id)
 		logger.debug({ recv: { tag: node.tag, attrs: node.attrs }, sent: stanza.attrs }, 'sent ack')
 		await sendNode(stanza)
@@ -1949,17 +1949,17 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 		}
 	}
 
-	// OPENBOT PATCH: the socket emits 'openbot:node' with `true` when the handler of a node starts and with
+	// CODEBOT PATCH: the socket emits 'codebot:node' with `true` when the handler of a node starts and with
 	// `false` when it ends, so the app can find a node whose handling stalled. A stalled handler holds the
 	// ack, and WhatsApp then stops delivering messages while keep-alives still pass (upstream #2491).
 	const trackNode =
 		(handler: (node: BinaryNode) => Promise<void>) =>
 		async (node: BinaryNode): Promise<void> => {
-			ws.emit('openbot:node', node, true)
+			ws.emit('codebot:node', node, true)
 			try {
 				await handler(node)
 			} finally {
-				ws.emit('openbot:node', node, false)
+				ws.emit('codebot:node', node, false)
 			}
 		}
 
@@ -2006,7 +2006,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 		if (isOffline) {
 			offlineNodeProcessor.enqueue(type, node)
 		} else {
-			// OPENBOT PATCH: see trackNode.
+			// CODEBOT PATCH: see trackNode.
 			await processNodeWithBuffer(node, identifier, trackNode(exec))
 		}
 	}

@@ -9,7 +9,7 @@ import { androidApkRelease, androidApkVersion } from "../apps/auth-api/src/lib/a
 import { parseStoreBuilds } from "./mobile-ota-lib";
 
 const run = promisify(execFile);
-const PACKAGE = "run.openbot.mobile";
+const PACKAGE = "run.codebot.mobile";
 const INSTALL_PAGE = "https://openbot.run/download/android";
 
 class UsageError extends Error {}
@@ -164,12 +164,12 @@ async function commandStage(args: readonly string[]) {
   const commit = (await storeBuildCommit(version, versionCode)) ?? process.env.GITHUB_SHA;
   if (!commit) throw new UsageError("Set GITHUB_SHA: the store build has no tag yet.");
   const notes = [
-    `OpenBot for Android ${version} (build ${versionCode}) as an APK, for a phone with no Google Play. It is the universal APK that Google Play makes from the store bundle, so it has the signature of the app on Google Play. Install steps: ${INSTALL_PAGE}`,
+    `CodeBot for Android ${version} (build ${versionCode}) as an APK, for a phone with no Google Play. It is the universal APK that Google Play makes from the store bundle, so it has the signature of the app on Google Play. Install steps: ${INSTALL_PAGE}`,
     "This release is not an update of the desktop app. It is a GitHub prerelease only so that it never becomes the latest release: the build is the one on Google Play.",
     `- Commit: ${commit}\n- SHA-256 of the file: \`${sha256}\`\n- SHA-256 of the signing certificate: \`${certificate}\``,
   ].join("\n\n");
 
-  const directory = await mkdtemp(join(tmpdir(), "openbot-apk-"));
+  const directory = await mkdtemp(join(tmpdir(), "codebot-apk-"));
   try {
     const asset = join(directory, release.asset);
     await copyFile(apk, asset);
@@ -179,7 +179,7 @@ async function commandStage(args: readonly string[]) {
       const target = state.draft ? ["--target", commit] : [];
       await gh("release", "edit", release.tag, "--notes", notes, "--prerelease", "--latest=false", ...target);
     } else {
-      const title = `OpenBot for Android ${version}`;
+      const title = `CodeBot for Android ${version}`;
       await gh(
         "release",
         "create",

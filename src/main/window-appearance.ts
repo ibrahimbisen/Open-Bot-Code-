@@ -3,7 +3,7 @@ import {
   DEFAULT_APP_APPEARANCE,
   DEFAULT_TRANSPARENT_WINDOW,
   selectedThemePalette,
-} from "@openbot/contracts/app-appearance";
+} from "@codebot/contracts/app-appearance";
 import { type BrowserWindow, nativeTheme } from "electron";
 
 const LIGHT_WINDOW_BACKGROUND = "#f5f5f6";

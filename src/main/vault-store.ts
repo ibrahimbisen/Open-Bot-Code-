@@ -1,6 +1,6 @@
 import { readFile, rm } from "node:fs/promises";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Result, Schema, Semaphore } from "effect";
 import { writeJsonFileAtomically } from "../backend/atomic-json-file";
 import { causeHelpers } from "../backend/effect-boundary";
@@ -84,7 +84,7 @@ const envelopeSchema = Schema.Struct({ version: Schema.Literal(1), record: Schem
 
 const MAX_VAULT_ENVELOPE_BYTES = 4 * 1024 * 1024;
 
-const logger = createOpenBotLogger("vault");
+const logger = createCodeBotLogger("vault");
 
 function unreadable() {
   return new PasswordVaultError({ cause: new Error(sourceText("error.vault.unreadable")) });
@@ -154,7 +154,7 @@ export class VaultStore {
         const error = errorKind(cause);
         if (this.#problem === `${step}:${error}`) return;
         this.#problem = `${step}:${error}`;
-        logger.warn("OpenBot cannot read the Vault file.", { step, error });
+        logger.warn("CodeBot cannot read the Vault file.", { step, error });
       });
   }
 

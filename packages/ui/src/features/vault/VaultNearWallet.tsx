@@ -1,4 +1,4 @@
-import type { NearPayRule, NearWalletStatus } from "@openbot/contracts/ipc";
+import type { NearPayRule, NearWalletStatus } from "@codebot/contracts/ipc";
 import {
   Alert,
   AlertActions,
@@ -27,7 +27,7 @@ import {
   SwitchField,
   Text,
   Trash2,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, createUniqueId, For, Show } from "solid-js";
 import { useText } from "../../text";

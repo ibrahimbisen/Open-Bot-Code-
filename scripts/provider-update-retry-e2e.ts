@@ -4,7 +4,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { chmod, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { ProviderRuntimeSnapshot } from "@openbot/contracts/ipc";
+import type { ProviderRuntimeSnapshot } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import lockValue from "../native-runtime.lock.json";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -12,10 +12,10 @@ import { ProviderRuntimeFailure } from "../src/main/provider-runtime-effects";
 import { ProviderRuntimeManager } from "../src/main/provider-runtime-manager";
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-update-retry-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-update-retry-e2e");
 const WAIT_MS = 30_000;
 const VERSION = "999.0.0";
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-update-retry-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-update-retry-"));
 
 interface FailedTry {
   phase: string;

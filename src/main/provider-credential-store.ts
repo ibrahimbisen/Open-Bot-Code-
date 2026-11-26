@@ -1,7 +1,7 @@
 import { readFile, rm } from "node:fs/promises";
-import type { AgentProviderId, ProviderApiKeyStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { registerSecretValue } from "@openbot/logging";
+import type { AgentProviderId, ProviderApiKeyStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { registerSecretValue } from "@codebot/logging";
 import { Effect, Result, Schema, Semaphore } from "effect";
 import { z } from "zod";
 import { writeFileAtomically } from "../backend/atomic-json-file";
@@ -13,7 +13,7 @@ export class CredentialStoreFailure extends Schema.TaggedError<CredentialStoreFa
 
 const { io: credentialIO, sync: credentialSync } = causeHelpers(CredentialStoreFailure);
 
-export type OpenBotSecretName = `openbot:${string}`;
+export type CodeBotSecretName = `codebot:${string}`;
 
 function accountKeyName(provider: AgentProviderId, accountId: string): string {
   return `${provider}:${accountId}`;
@@ -97,13 +97,13 @@ export class ProviderCredentialStore {
     });
   }
 
-  secret(name: OpenBotSecretName): string | null {
+  secret(name: CodeBotSecretName): string | null {
     if (!this.#loaded) throw new Error("The provider credential store is not loaded.");
     return this.#keys.get(name) ?? null;
   }
 
   setSecrets(
-    changes: readonly (readonly [OpenBotSecretName, string | null])[],
+    changes: readonly (readonly [CodeBotSecretName, string | null])[],
   ): Effect.Effect<void, CredentialStoreFailure> {
     return this.#edit((keys) => {
       let changed = false;

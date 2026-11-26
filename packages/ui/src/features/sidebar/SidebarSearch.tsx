@@ -1,4 +1,4 @@
-import { Bot, Button, DropdownMenu, FolderPlus, Hash } from "@openbot/ui";
+import { Bot, Button, DropdownMenu, FolderPlus, Hash } from "@codebot/ui";
 import { Show } from "solid-js";
 import { useText } from "../../text";
 import { SidebarFilterMenu } from "./SidebarFilterMenu";

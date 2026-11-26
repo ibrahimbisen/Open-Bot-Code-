@@ -1,4 +1,4 @@
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
 import type { OnboardingAvatarVariant } from "./onboarding-avatars";
 
 export function OnboardingComputerVisual(props: { avatar: OnboardingAvatarVariant }) {

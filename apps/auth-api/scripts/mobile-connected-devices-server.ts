@@ -1,7 +1,7 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { DatabaseSync } from "node:sqlite";
-import { isMobileConnectHostBinding } from "@openbot/contracts/mobile-connect";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isMobileConnectHostBinding } from "@codebot/contracts/mobile-connect";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { AuthService, AuthServiceError } from "../src/server/auth-service";
 import { D1AuthRepository } from "../src/server/d1-auth-repository";

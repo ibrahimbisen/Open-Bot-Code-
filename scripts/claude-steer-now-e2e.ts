@@ -5,7 +5,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { AGENT_PROVIDERS, defaultProviderModel } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -15,9 +15,9 @@ import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
 const HELD_TAKEOVER = process.argv.includes("--held=takeover");
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-steer-now-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-steer-now-e2e");
 const REPORT = join(OUT, HELD_TAKEOVER ? "report-takeover.json" : "report.json");
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-steer-now-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-steer-now-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const claudeConfig = join(home, ".claude");
@@ -33,7 +33,7 @@ const HELD_TOOL_ID = "toolu_held_command";
 const heldToolEvents: Array<{ method: string; turnId: string | null; status: string | null }> = [];
 const HELD_HOST_TOOL = HELD_TAKEOVER ? "tool_call" : "list_agents";
 const HELD_HOST_ARGUMENTS = HELD_TAKEOVER
-  ? { name: "openbot_browser.request_takeover", arguments: { tabId: "tab-1", reason: "sign-in-blocked" } }
+  ? { name: "codebot_browser.request_takeover", arguments: { tabId: "tab-1", reason: "sign-in-blocked" } }
   : {};
 const heldHostToolCalls: Array<{ signal: AbortSignal; answer: (result: unknown) => void }> = [];
 
@@ -50,7 +50,7 @@ function recordHeldTool(notification: AppServerNotification): void {
 }
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = claudeConfig;
 mkdirSync(projectsDir, { recursive: true });
 
@@ -59,7 +59,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
 const fs = require("node:fs");
@@ -136,7 +136,7 @@ const turn = (message) => {
     begin(message, ${JSON.stringify(WORKING_TEXT)});
     assistant(message, [{ type: "text", text: ${JSON.stringify(WORKING_TEXT)} },
       { type: "tool_use", id: ${JSON.stringify(HELD_TOOL_ID)}, name: "Bash", input: { command: "sleep 600" } }], "tool_use");
-    write({ type: "control_request", request_id: "req_held_host_tool", request: { subtype: "mcp_message", server_name: "openbot",
+    write({ type: "control_request", request_id: "req_held_host_tool", request: { subtype: "mcp_message", server_name: "codebot",
       message: { jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: ${JSON.stringify(HELD_HOST_TOOL)}, arguments: ${JSON.stringify(HELD_HOST_ARGUMENTS)} } } } });
     held = message;
     fs.writeFileSync(${JSON.stringify(holdMarker)}, message.uuid);
@@ -306,7 +306,7 @@ async function waitFor<T>(label: string, read: () => T | null | undefined | fals
 }
 
 function startService() {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const agents = new AgentService({
@@ -399,7 +399,7 @@ try {
   );
   assert.ok(
     report.turns.every((turn) => turn.status === "completed"),
-    "No OpenBot turn ends as interrupted when Claude stops its tools for a steer.",
+    "No CodeBot turn ends as interrupted when Claude stops its tools for a steer.",
   );
   assert.ok(
     report.deliveries.every((delivery) => delivery.status === "completed"),

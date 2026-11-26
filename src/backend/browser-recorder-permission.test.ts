@@ -3,7 +3,7 @@ import { isRecorderTabCapture } from "./browser-recorder-permission";
 
 const recorderRequest = {
   requestingUrl: "https://example.com/",
-  securityOrigin: "https://recorder.openbot.invalid/",
+  securityOrigin: "https://recorder.codebot.invalid/",
   mediaTypes: ["video"],
 };
 

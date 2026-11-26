@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { open } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
-import { isValidAvatarImage } from "@openbot/contracts/avatar-images";
-import { type InviteLinkOptions, type InviteLinkPayload, parseInviteUrl } from "@openbot/contracts/invite-links";
+import { isValidAvatarImage } from "@codebot/contracts/avatar-images";
+import { type InviteLinkOptions, type InviteLinkPayload, parseInviteUrl } from "@codebot/contracts/invite-links";
 import type {
   AgentEvent,
   AgentImportPreview,
@@ -52,7 +52,7 @@ import type {
   TeamRealtimeEvent,
   TeamRole,
   UpdateTeamMemberInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   type AgentNotificationLevelsSnapshot,
   type BrowserComputerSharing,
@@ -65,64 +65,64 @@ import {
   LOCAL_SERVER_ID,
   REMOTE_DESKTOP_SETUP_CAPABILITY,
   type RemoteDesktopTestInput,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES, WORKSPACE_FILE_EXACT_PATH_QUERY } from "@openbot/contracts/team-api-routes";
-import { AGENT_COLORS_CAPABILITY, AGENT_COLORS_ROUTES } from "@openbot/contracts/team-protocol/agent-colors-v1";
-import { AGENT_IMPORT_ROUTES } from "@openbot/contracts/team-protocol/agent-import-v1";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES, WORKSPACE_FILE_EXACT_PATH_QUERY } from "@codebot/contracts/team-api-routes";
+import { AGENT_COLORS_CAPABILITY, AGENT_COLORS_ROUTES } from "@codebot/contracts/team-protocol/agent-colors-v1";
+import { AGENT_IMPORT_ROUTES } from "@codebot/contracts/team-protocol/agent-import-v1";
 import {
   AGENT_IMPORT_V2_CHUNK_BYTES,
   AGENT_IMPORT_V2_ROUTES,
   agentImportV2ChunkPath,
-} from "@openbot/contracts/team-protocol/agent-import-v2";
+} from "@codebot/contracts/team-protocol/agent-import-v2";
 import {
   AGENT_NOTIFICATION_LEVELS_CAPABILITY,
   AGENT_NOTIFICATION_LEVELS_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { AGENT_USAGE_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/agent-usage-limit-v1";
-import { AGENT_WAITS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-waits-v1";
-import { ATTACHMENT_PREVIEW_CAPABILITY } from "@openbot/contracts/team-protocol/attachment-preview-v1";
-import { BROWSER_EGRESS_CAPABILITY } from "@openbot/contracts/team-protocol/browser-egress-v1";
-import { BROWSER_PROXIES_ROUTES } from "@openbot/contracts/team-protocol/browser-proxies-v1";
-import { decodeBrowserViewSessionResponse } from "@openbot/contracts/team-protocol/browser-view-v1";
+} from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { AGENT_USAGE_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/agent-usage-limit-v1";
+import { AGENT_WAITS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-waits-v1";
+import { ATTACHMENT_PREVIEW_CAPABILITY } from "@codebot/contracts/team-protocol/attachment-preview-v1";
+import { BROWSER_EGRESS_CAPABILITY } from "@codebot/contracts/team-protocol/browser-egress-v1";
+import { BROWSER_PROXIES_ROUTES } from "@codebot/contracts/team-protocol/browser-proxies-v1";
+import { decodeBrowserViewSessionResponse } from "@codebot/contracts/team-protocol/browser-view-v1";
 import {
   CHANNEL_PICTURE_CAPABILITY,
   CHANNEL_PICTURE_ROUTES,
-} from "@openbot/contracts/team-protocol/channel-picture-v1";
-import { CHAT_COLORS_CAPABILITY, CHAT_COLORS_ROUTES } from "@openbot/contracts/team-protocol/chat-colors-v1";
+} from "@codebot/contracts/team-protocol/channel-picture-v1";
+import { CHAT_COLORS_CAPABILITY, CHAT_COLORS_ROUTES } from "@codebot/contracts/team-protocol/chat-colors-v1";
 import {
   COMPUTER_ACTIVITY_CAPABILITY,
   COMPUTER_ACTIVITY_ROUTES,
-} from "@openbot/contracts/team-protocol/computer-activity-v1";
-import { TEAM_MEMBER_LEAVE_CAPABILITY, type TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import { FOCUS_USE_CAPABILITY, FOCUS_USE_ROUTES } from "@openbot/contracts/team-protocol/focus-use-v1";
-import type { HostAppearanceEvent, ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import type { HostRestartEvent } from "@openbot/contracts/team-protocol/host-update-v1";
-import { INSTANCE_TRANSFER_CHUNKS_ROUTES } from "@openbot/contracts/team-protocol/instance-transfer-chunks-v1";
-import { INSTANCE_TRANSFER_ROUTES } from "@openbot/contracts/team-protocol/instance-transfer-v1";
-import type { LiveVoiceEvent } from "@openbot/contracts/team-protocol/live-voice-v1";
-import type { MachineAlertEvent } from "@openbot/contracts/team-protocol/machine-resources-v1";
-import { PROVIDER_MODEL_SOURCE_CAPABILITY } from "@openbot/contracts/team-protocol/provider-model-source-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
+} from "@codebot/contracts/team-protocol/computer-activity-v1";
+import { TEAM_MEMBER_LEAVE_CAPABILITY, type TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import { FOCUS_USE_CAPABILITY, FOCUS_USE_ROUTES } from "@codebot/contracts/team-protocol/focus-use-v1";
+import type { HostAppearanceEvent, ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import type { HostRestartEvent } from "@codebot/contracts/team-protocol/host-update-v1";
+import { INSTANCE_TRANSFER_CHUNKS_ROUTES } from "@codebot/contracts/team-protocol/instance-transfer-chunks-v1";
+import { INSTANCE_TRANSFER_ROUTES } from "@codebot/contracts/team-protocol/instance-transfer-v1";
+import type { LiveVoiceEvent } from "@codebot/contracts/team-protocol/live-voice-v1";
+import type { MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
+import { PROVIDER_MODEL_SOURCE_CAPABILITY } from "@codebot/contracts/team-protocol/provider-model-source-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
 import {
   decodeThreadMessageSearchResponse,
   THREAD_MESSAGE_SEARCH_CAPABILITY,
   THREAD_MESSAGE_SEARCH_PAGE_LIMIT,
   THREAD_MESSAGE_SEARCH_ROUTES,
   type ThreadMessageSearchRequest,
-} from "@openbot/contracts/team-protocol/thread-message-search-v1";
-import { decodeTeamProtocolV1CurrentHttpResponse } from "@openbot/contracts/team-protocol/v1-adapter";
-import { sourceText } from "@openbot/i18n/source";
-import { createFocusUsePing } from "@openbot/team-client/focus-use";
-import { followHostKeyHandovers } from "@openbot/team-client/host-key-handover";
+} from "@codebot/contracts/team-protocol/thread-message-search-v1";
+import { decodeTeamProtocolV1CurrentHttpResponse } from "@codebot/contracts/team-protocol/v1-adapter";
+import { sourceText } from "@codebot/i18n/source";
+import { createFocusUsePing } from "@codebot/team-client/focus-use";
+import { followHostKeyHandovers } from "@codebot/team-client/host-key-handover";
 import {
   HOSTED_HOST_READY_LIMIT_MS,
   HOSTED_START_FAILED_READS,
   HOSTED_START_POLL_MS,
   hostedStartStep,
   WAKE_RECONNECT_STATES,
-} from "@openbot/team-client/hosted-server-wake";
-import { retryOperationIds } from "@openbot/team-client/retry-operation-id";
+} from "@codebot/team-client/hosted-server-wake";
+import { retryOperationIds } from "@codebot/team-client/retry-operation-id";
 import { Deferred, Effect, Exit, Layer, Result, Scope, Semaphore } from "effect";
 import type { CentralAuthOperationError } from "./central-auth-effects";
 import { ComputerActivityReport } from "./computer-activity-report";
@@ -1448,7 +1448,7 @@ export class RemoteServerManager extends EventEmitter<RemoteServerEvents> {
   #applyHostedStartStep(serverId: string, step: HostedServerStartStep): boolean {
     const startedAt = this.#hostedStartAt.get(serverId);
     if (startedAt === undefined) return false;
-    if (step !== "openbot") this.#hostedRunningSince.delete(serverId);
+    if (step !== "codebot") this.#hostedRunningSince.delete(serverId);
     else if (!this.#hostedRunningSince.has(serverId)) this.#hostedRunningSince.set(serverId, Date.now());
     const runningSince = this.#hostedRunningSince.get(serverId);
     if (runningSince !== undefined && Date.now() - runningSince >= HOSTED_HOST_READY_LIMIT_MS) {
@@ -2005,7 +2005,7 @@ export class RemoteServerManager extends EventEmitter<RemoteServerEvents> {
       return {
         sessionId: session.id,
         url: url.toString(),
-        protocols: [`openbot-token.${this.#store.token(server)}`],
+        protocols: [`codebot-token.${this.#store.token(server)}`],
       };
     },
     (operation) => this.#owned(operation),

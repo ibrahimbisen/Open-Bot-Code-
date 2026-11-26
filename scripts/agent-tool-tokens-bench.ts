@@ -4,25 +4,25 @@ import { createServer, type Server as HttpServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createSdkMcpServer } from "@anthropic-ai/claude-agent-sdk";
+import { type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@codebot/contracts/ipc";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@openbot/contracts/ipc";
 import { developerInstructions } from "../src/backend/agent/developer-instructions";
 import { CODEX_FEATURES_CONFIG } from "../src/backend/agent/thread-lifecycle";
 import { discoverTools, visibleDynamicTools } from "../src/backend/agent/tool-catalog";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
-import { OPENBOT_BROWSER_NAMESPACE } from "../src/backend/browser-tools";
-import { claudeBrowserTools, claudeOpenBotTools } from "../src/backend/claude-client";
+import { CODEBOT_BROWSER_NAMESPACE } from "../src/backend/browser-tools";
+import { claudeBrowserTools, claudeCodeBotTools } from "../src/backend/claude-client";
 import { resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { decodeRecordResponse, getRecord, getString } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-tool-tokens-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-tool-tokens-bench");
 const NL = String.fromCharCode(10);
 const DEADLINE_MS = 60_000;
 
 type Encode = (text: string) => number[];
-const tokenizerPath = process.env.OPENBOT_O200K_TOKENIZER;
+const tokenizerPath = process.env.CODEBOT_O200K_TOKENIZER;
 const encode: Encode | null = tokenizerPath ? (await import(tokenizerPath)).encode : null;
 
 const text = (value: unknown) => (typeof value === "string" ? value : JSON.stringify(value));
@@ -153,7 +153,7 @@ function deadline(what: string): Promise<never> {
   });
 }
 
-const OPENBOT_NAMES = new Set(visibleDynamicTools("codex").flatMap((namespace) => [namespace.name]));
+const CODEBOT_NAMES = new Set(visibleDynamicTools("codex").flatMap((namespace) => [namespace.name]));
 
 async function codexRequest(root: string) {
   const cli = await runCauseEffect(resolveCodexCli());
@@ -186,7 +186,7 @@ async function codexRequest(root: string) {
         client.request(
           "initialize",
           {
-            clientInfo: { name: "openbot_bench", title: "OpenBot Bench", version: "0.0.0" },
+            clientInfo: { name: "codebot_bench", title: "CodeBot Bench", version: "0.0.0" },
             capabilities: { experimentalApi: true },
           },
           decodeRecordResponse,
@@ -203,7 +203,7 @@ async function codexRequest(root: string) {
             model: "fake-model",
             config: CODEX_FEATURES_CONFIG,
             developerInstructions: instructions("codex"),
-            serviceName: "openbot",
+            serviceName: "codebot",
             dynamicTools: visibleDynamicTools("codex"),
           },
           decodeRecordResponse,
@@ -220,15 +220,15 @@ async function codexRequest(root: string) {
     }
     const request = model.requests.sort((a, b) => b.body.length - a.body.length)[0];
     assert(request, "Codex sent no model request.");
-    const openbotTools = request.tools.filter((tool) => OPENBOT_NAMES.has(tool.name ?? ""));
-    assert(openbotTools.length > 0, "Codex sent no openbot tools.");
-    const ownInstructions = request.developer.filter((part) => part.includes("persistent local OpenBot teammate"));
-    assert(ownInstructions.length > 0, "Codex sent no OpenBot instructions.");
-    await writeFile(join(OUT, "codex-openbot-tools.json"), `${JSON.stringify(openbotTools, null, 2)}${NL}`);
+    const codebotTools = request.tools.filter((tool) => CODEBOT_NAMES.has(tool.name ?? ""));
+    assert(codebotTools.length > 0, "Codex sent no codebot tools.");
+    const ownInstructions = request.developer.filter((part) => part.includes("persistent local CodeBot teammate"));
+    assert(ownInstructions.length > 0, "Codex sent no CodeBot instructions.");
+    await writeFile(join(OUT, "codex-codebot-tools.json"), `${JSON.stringify(codebotTools, null, 2)}${NL}`);
     return {
       codexVersion: cli.version,
       request: count(request.body),
-      openbotTools: count(openbotTools),
+      codebotTools: count(codebotTools),
       instructions: count(ownInstructions.join(NL)),
     };
   } finally {
@@ -240,13 +240,13 @@ async function claudeTools() {
   const empty = async () => ({ content: [] });
   const listed = [];
   for (const [name, tools] of [
-    ["openbot", claudeOpenBotTools(empty)],
-    [OPENBOT_BROWSER_NAMESPACE, claudeBrowserTools(empty)],
+    ["codebot", claudeCodeBotTools(empty)],
+    [CODEBOT_BROWSER_NAMESPACE, claudeBrowserTools(empty)],
   ] as const) {
     const server = createSdkMcpServer({ name, version: "0.1.0", tools: [...tools] });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     await server.instance.connect(serverTransport);
-    const client = new Client({ name: "openbot-bench", version: "0.0.0" });
+    const client = new Client({ name: "codebot-bench", version: "0.0.0" });
     await client.connect(clientTransport);
     try {
       const { tools: own } = await client.listTools();
@@ -256,7 +256,7 @@ async function claudeTools() {
       await server.instance.close();
     }
   }
-  await writeFile(join(OUT, "claude-openbot-tools.json"), `${JSON.stringify(listed, null, 2)}${NL}`);
+  await writeFile(join(OUT, "claude-codebot-tools.json"), `${JSON.stringify(listed, null, 2)}${NL}`);
   const byName = Object.fromEntries(listed.map((tool) => [tool.name, count(tool).tokens ?? count(tool).bytes]));
   return {
     tools: count(listed.map(({ name, description, inputSchema }) => ({ name, description, inputSchema }))),
@@ -276,7 +276,7 @@ function searchResults() {
             threadId: "t",
             turnId: "t",
             callId: "c",
-            namespace: "openbot",
+            namespace: "codebot",
             tool: "tool_search",
             arguments: { query },
           },
@@ -289,7 +289,7 @@ function searchResults() {
 
 await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
-const root = await mkdtemp(join(tmpdir(), "openbot-tool-tokens-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-tool-tokens-"));
 type Count = ReturnType<typeof count>;
 const report: {
   passed: boolean;

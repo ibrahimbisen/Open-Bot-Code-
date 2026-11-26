@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { app, BrowserWindow, type WebContents, webContents } from "electron";
 import { z } from "zod";
 import { BrowserHost } from "../src/backend/browser-host";
@@ -92,7 +92,7 @@ async function main(): Promise<void> {
     browser = new BrowserHost(window, join(fixtureRoot, "downloads"), statePath, hostOptions);
     const host = browser;
     const params = (tool: string, args: DynamicToolCallParams["arguments"]): DynamicToolCallParams => ({
-      namespace: "openbot_browser",
+      namespace: "codebot_browser",
       tool,
       arguments: args,
       ownerAgentId: "fixture-agent",

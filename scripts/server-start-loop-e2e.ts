@@ -16,7 +16,7 @@ import {
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Option, Schema } from "effect";
 import { developmentUserDataName } from "../src/main/development-profile";
 import { START_HALT_FILE, START_LOOP_EXIT_CODE } from "../src/main/server-start-halt";
@@ -25,20 +25,20 @@ import { resolveDevelopmentAppDataRoot } from "./development-state-paths";
 
 const NAME = "server-start-loop-e2e";
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", NAME);
+const OUT = join(ROOT, ".codebot-build", NAME);
 const POLL_MS = 250;
 const RUN_TIMEOUT_MS = 5 * 60_000;
 const NEWER_DATABASE_VERSION = 999_999;
 const MIGRATION_TRIGGER = "server_start_loop_e2e_refuse_marker";
 const HOSTING = join(ROOT, "scripts", "hosting");
 const HOUR_MS = 60 * 60_000;
-const logger = createOpenBotLogger(NAME);
+const logger = createCodeBotLogger(NAME);
 
-const instanceId = `wt-${createHash("sha256").update(`openbot:${NAME}:${ROOT}`).digest("hex")}`;
+const instanceId = `wt-${createHash("sha256").update(`codebot:${NAME}:${ROOT}`).digest("hex")}`;
 const profile = join(resolveDevelopmentAppDataRoot(), developmentUserDataName("app", instanceId));
 const attemptsPath = join(profile, START_ATTEMPTS_FILE);
 const haltPath = join(profile, START_HALT_FILE);
-const databasePath = join(profile, "openbot.db");
+const databasePath = join(profile, "codebot.db");
 
 const AttemptsFile = Schema.Struct({
   appVersion: Schema.String,
@@ -105,12 +105,12 @@ function startStack(run: number, mode: Mode): { child: ChildProcess; exit: Promi
   const logFile = openSync(join(OUT, `run-${run}.log`), "w");
   const env: NodeJS.ProcessEnv = {
     ...process.env,
-    OPENBOT_DEV_INSTANCE_ID: instanceId,
-    OPENBOT_E2E_SERVER_START_GUARD: "1",
+    CODEBOT_DEV_INSTANCE_ID: instanceId,
+    CODEBOT_E2E_SERVER_START_GUARD: "1",
   };
   delete env.ELECTRON_RUN_AS_NODE;
-  if (mode === "crash") env.OPENBOT_E2E_FORCE_START_FAILURE = mode;
-  else delete env.OPENBOT_E2E_FORCE_START_FAILURE;
+  if (mode === "crash") env.CODEBOT_E2E_FORCE_START_FAILURE = mode;
+  else delete env.CODEBOT_E2E_FORCE_START_FAILURE;
   const child = spawn("bun", ["run", "dev"], { cwd: ROOT, env, stdio: ["ignore", logFile, logFile] });
   logPath = join(OUT, `run-${run}.log`);
   const exit = new Promise<number | null>((done) => child.once("exit", (code) => done(code)));
@@ -231,7 +231,7 @@ function runCheck(entry: CheckCase): CheckResult {
       'staged_version() { echo "$E2E_STAGED_VERSION"; }',
       "check",
     ].join("\n");
-    const result = Bun.spawnSync(["bash", "-c", script, NAME, join(HOSTING, "openbot-hosted-update"), stamp, calls], {
+    const result = Bun.spawnSync(["bash", "-c", script, NAME, join(HOSTING, "codebot-hosted-update"), stamp, calls], {
       env: {
         PATH: process.env.PATH ?? "",
         E2E_ACTIVE_STATE: entry.activeState,
@@ -256,7 +256,7 @@ function stampTime(path: string): number | null {
   return existsSync(path) ? statSync(path).mtimeMs : null;
 }
 
-const START = "systemctl start --no-block openbot.service";
+const START = "systemctl start --no-block codebot.service";
 const CHECK_CASES: CheckCase[] = [
   {
     name: "start loop stopped, first run after a boot: stage and start",
@@ -333,11 +333,11 @@ const CHECK_CASES: CheckCase[] = [
 ];
 
 function checkTimerUnits(): { timer: string; service: string } {
-  const timer = readFileSync(join(HOSTING, "openbot-update.timer"), "utf8");
-  const service = readFileSync(join(HOSTING, "openbot-update.service"), "utf8");
+  const timer = readFileSync(join(HOSTING, "codebot-update.timer"), "utf8");
+  const service = readFileSync(join(HOSTING, "codebot-update.service"), "utf8");
   const interval = timer.match(/^OnUnitActiveSec=(.+)$/mu)?.[1];
-  assert.equal(interval, "1h", "openbot-update.timer runs each hour");
-  assert.match(service, /^ExecStart=\/opt\/OpenBot\/hosted\/openbot-hosted-update check$/mu);
+  assert.equal(interval, "1h", "codebot-update.timer runs each hour");
+  assert.match(service, /^ExecStart=\/opt\/CodeBot\/hosted\/codebot-hosted-update check$/mu);
   return { timer: interval, service: "check" };
 }
 

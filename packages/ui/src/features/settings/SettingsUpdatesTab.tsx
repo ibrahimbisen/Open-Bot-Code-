@@ -1,4 +1,4 @@
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertActions,
@@ -23,7 +23,7 @@ import {
   SelectValue,
   SettingsSection,
   SwitchField,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 import { restartReasonKey } from "../updates/restart-reasons";

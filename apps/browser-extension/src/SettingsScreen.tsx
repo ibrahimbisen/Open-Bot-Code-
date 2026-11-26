@@ -1,5 +1,5 @@
-import { ArrowLeft, ChevronDown, Globe2, SwitchField, Trash2 } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { ArrowLeft, ChevronDown, Globe2, SwitchField, Trash2 } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, createUniqueId, For, onSettled, Show } from "solid-js";
 import { analyticsLinked, setAnalyticsLinked } from "./analytics";
 import { removeAllowedSite, siteName, useAllowedSites } from "./BrowserSharing";

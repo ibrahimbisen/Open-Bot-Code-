@@ -1,14 +1,14 @@
-import { DEFAULT_CRM_SETTINGS } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { DEFAULT_CRM_SETTINGS } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Exit, Layer, ManagedRuntime } from "effect";
-import type { OpenBotDatabase } from "../openbot-database";
+import type { CodeBotDatabase } from "../codebot-database";
 import { type CrmAgentOperations, CrmAgentView } from "./crm-agent-view";
 import { CrmError, type CrmPeopleOperations, type CrmSettingsStore } from "./crm-handle";
 import { type CrmSourceDependencies, makeCrmSources } from "./crm-source";
 import { CrmStore } from "./crm-store";
 
 export interface CrmDependencies {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   changed: () => void;
   now?: () => Date;
   sources?: CrmSourceDependencies;
@@ -35,7 +35,7 @@ const NO_KEYS: CrmSourceDependencies["keys"] = {
   set: () => Effect.fail(new CrmError({ code: "refused", message: sourceText("error.crm.invalidChange") })),
 };
 
-class Crm extends Context.Service<Crm, CrmShape>()("openbot/backend/Crm") {
+class Crm extends Context.Service<Crm, CrmShape>()("codebot/backend/Crm") {
   static layer(dependencies: CrmDependencies) {
     return Layer.effect(
       Crm,

@@ -1,5 +1,5 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AskSideQuestionInput } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AskSideQuestionInput } from "@codebot/contracts/ipc";
 import * as Crypto from "expo-crypto";
 import { create } from "zustand";
 

@@ -1,10 +1,10 @@
+import { avatarHeadColor } from "@codebot/brand/bloub-avatar";
+import { expandAttachmentReferences } from "@codebot/contracts/attachment-references";
+import { expandChatTagReferences } from "@codebot/contracts/chat-tag-references";
+import type { AttachmentSummary, BrowserTakeoverRequest } from "@codebot/contracts/ipc";
+import { markdownInlinePlainText, markdownPlainText } from "@codebot/contracts/markdown-preview-text";
 import { KeyboardAwareLegendList } from "@legendapp/list/keyboard";
 import type { AnchoredEndSpaceConfig } from "@legendapp/list/react-native";
-import { avatarHeadColor } from "@openbot/brand/bloub-avatar";
-import { expandAttachmentReferences } from "@openbot/contracts/attachment-references";
-import { expandChatTagReferences } from "@openbot/contracts/chat-tag-references";
-import type { AttachmentSummary, BrowserTakeoverRequest } from "@openbot/contracts/ipc";
-import { markdownInlinePlainText, markdownPlainText } from "@openbot/contracts/markdown-preview-text";
 import { useIsFocused } from "expo-router";
 import { Button, Spinner, Typography } from "heroui-native";
 import CircleX from "lucide-react-native/icons/circle-x";
@@ -1305,7 +1305,7 @@ function messageCopyText(message: ChatBubbleMessage): string {
 
 function TurnFailure({ reason }: { reason: string | undefined }) {
   const { t, errorMessage } = useText();
-  const [danger] = useCSSVariable(["--openbot-danger-text"]);
+  const [danger] = useCSSVariable(["--codebot-danger-text"]);
   const text = errorMessage(reason, t("mobile.chat.failure.fallback"));
   return (
     <View
@@ -1324,7 +1324,7 @@ function TurnFailure({ reason }: { reason: string | undefined }) {
 
 function NoAnswerNotice({ text }: { text: string }) {
   const { sourceText } = useText();
-  const [warning] = useCSSVariable(["--openbot-warning-text"]);
+  const [warning] = useCSSVariable(["--codebot-warning-text"]);
   const notice = sourceText(text);
   return (
     <View accessible accessibilityLabel={notice} className="flex-row items-start gap-1.5 self-start px-1">
@@ -1482,7 +1482,7 @@ export const ChatMessageList = memo(function ChatMessageList({
       );
     }
   }, [approvals, agentsById, target.name, t]);
-  const [themeForegroundColor, themeMutedColor] = useCSSVariable(["--openbot-text-primary", "--openbot-text-muted"]);
+  const [themeForegroundColor, themeMutedColor] = useCSSVariable(["--codebot-text-primary", "--codebot-text-muted"]);
   const themeForeground = String(themeForegroundColor);
   const themeMuted = String(themeMutedColor);
   const reducedMotion = useReducedMotion();
@@ -1520,7 +1520,7 @@ export const ChatMessageList = memo(function ChatMessageList({
   const backdropBubbleColor = useChatBackdrop((state) =>
     state.choice === "agent" ? state.agentPage?.bubbles?.yours : undefined,
   );
-  const [themeSurface, controlFill] = useCSSVariable(["--openbot-bg-surface", "--openbot-bg-control"]);
+  const [themeSurface, controlFill] = useCSSVariable(["--codebot-bg-surface", "--codebot-bg-control"]);
   const seeThroughSetting = useMessageColor((state) => state.seeThrough);
   const backdropShown = useChatBackdropBase() !== null;
   const seeThrough = seeThroughSetting && backdropShown;
@@ -1606,7 +1606,7 @@ export const ChatMessageList = memo(function ChatMessageList({
   focusHandlers.current = { openAt: motion.openAt, onFocusPlaced };
   const [highlightedRowId, setHighlightedRowId] = useState<string | null>(null);
   const highlightShown = useRef(new Set<string>());
-  const highlightColor = String(useCSSVariable("--openbot-accent"));
+  const highlightColor = String(useCSSVariable("--codebot-accent"));
   useEffect(() => {
     if (!focusId || !motion.listPlaced || placedFocus.current === focusId) return;
     placedFocus.current = focusId;

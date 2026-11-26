@@ -23,7 +23,7 @@ import type {
   ProviderCodeLoginStart,
   ProviderUsageResetOutcome,
   ProviderUsageResets,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AGENT_PROVIDERS,
   accountUsageCoversModel,
@@ -38,14 +38,14 @@ import {
   isKeyOnlyProvider,
   usageQuotaForModel,
   workspaceAccessEnforced,
-} from "@openbot/contracts/ipc";
-import { matchingSourceKeys, sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
-import { classifyFailure } from "@openbot/telemetry";
-import { classifyUserError } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { matchingSourceKeys, sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
+import { classifyFailure } from "@codebot/telemetry";
+import { classifyUserError } from "@codebot/user-errors";
 import { Deferred, Effect, Exit, Fiber, Result, Schema, Scope, Semaphore } from "effect";
 import { isOpenCodeInternalFailure, isOpenCodeStarting, OPENCODE_INTERNAL_FAILURE } from "./../acp-flavor-opencode";
-import { devinSignInPageRelayed, googleSignInByOpenBot, startAcpAuthentication } from "./../acp-sign-in";
+import { devinSignInPageRelayed, googleSignInByCodeBot, startAcpAuthentication } from "./../acp-sign-in";
 import {
   type AgentClient,
   AgentProcessExitError,
@@ -102,7 +102,7 @@ import { recordRestartActivity } from "../restart-activity";
 import { shortenDiagnostic } from "./../stderr-diagnostics";
 import { stopProcessTree } from "../windows-process-tree";
 import { normalizeAccountUsage, usageWindowHasReset, usageWindowResetSince } from "./account-usage";
-import { captureBrowser, signInPageByOpenBot } from "./browser-capture";
+import { captureBrowser, signInPageByCodeBot } from "./browser-capture";
 import { CliCodeLoginFailed, type CliCodePrompt, PROMPT_TIMEOUT_MS, startCliCodeLogin } from "./cli-code-login";
 import { CliLoginFailed, CliLoginFlow, type CliLoginProcess, toCliLoginFailed } from "./cli-login-flow";
 import { CodexLoginFlow, toCodexLoginFailed } from "./codex-login";
@@ -146,8 +146,8 @@ import { providerForAgent, providerLabel } from "./thread-items";
 import { UsageReadGate } from "./usage-read-gate";
 import { checkAgentFolders, workspaceExcludedFolders, workspaceWritableRoots } from "./workspace-sandbox";
 
-const logger = createOpenBotLogger("provider-runtime");
-const stderrLogger = createOpenBotLogger("provider-stderr");
+const logger = createCodeBotLogger("provider-runtime");
+const stderrLogger = createCodeBotLogger("provider-stderr");
 
 const ACCOUNT_USAGE_READ_TIMEOUT_MS = 30_000;
 const START_ACCOUNT_READ_TIMEOUT_MS = 5_000;
@@ -1667,7 +1667,7 @@ export class ProviderRuntime implements ProviderPort {
         yield* this.#cliLogin
           .start(provider, (cli) =>
             Effect.gen(function* () {
-              const browser = signInPageByOpenBot(onHost, signIn.command) ? yield* captureBrowser(openExternal) : {};
+              const browser = signInPageByCodeBot(onHost, signIn.command) ? yield* captureBrowser(openExternal) : {};
               return yield* spawnCliSignIn(cli, signIn.command, region, browser);
             }),
           )
@@ -1704,7 +1704,7 @@ export class ProviderRuntime implements ProviderPort {
                   }
                 : {}),
               privateTemp: temp && { ...temp, provider: providerLabel(provider) },
-              ...(provider === "antigravity" && googleSignInByOpenBot(onHost)
+              ...(provider === "antigravity" && googleSignInByCodeBot(onHost)
                 ? { openSignInPage: { site: "google", open: openExternal } }
                 : {}),
               ...(provider === "devin" && onHost && devinSignInPageRelayed()
@@ -3182,7 +3182,7 @@ export class ProviderRuntime implements ProviderPort {
       .request(
         "initialize",
         {
-          clientInfo: { name: "openbot", title: "OpenBot", version: "0.1.0" },
+          clientInfo: { name: "codebot", title: "CodeBot", version: "0.1.0" },
           capabilities: { experimentalApi: true, mcpServerOpenaiFormElicitation: true },
         },
         decodeRecordResponse,
@@ -3442,12 +3442,12 @@ export class ProviderRuntime implements ProviderPort {
     keepsReleased = false,
   ): void {
     const hasActiveClient = this.#clients.has(provider) || (keepsReleased && this.#released.has(provider));
-    const fallbackMessage = `OpenBot could not connect ${providerLabel(provider)}. Try again.`;
+    const fallbackMessage = `CodeBot could not connect ${providerLabel(provider)}. Try again.`;
     const rawMessage = error instanceof Error ? error.message : String(error);
     const readable =
       matchingSourceKeys(rawMessage).length > 0 ||
       error instanceof ProviderSignInError ||
-      /^(ChatGPT connection|OpenBot)/u.test(rawMessage);
+      /^(ChatGPT connection|CodeBot)/u.test(rawMessage);
     if (isProviderTimeout(error) || !readable) this.#recordProviderError(provider, error);
     const message = readable ? redactText(rawMessage) : fallbackMessage;
     const status = hasActiveClient
@@ -3952,7 +3952,7 @@ export class ProviderRuntime implements ProviderPort {
       const redacted = this.#redactMcp(raw);
       const message = shortenDiagnostic(redacted);
       if (origin?.duringStop) {
-        stderrLogger.warn("A provider wrote an error while OpenBot stopped it.", {
+        stderrLogger.warn("A provider wrote an error while CodeBot stopped it.", {
           provider: client.provider,
           message,
         });
@@ -4072,7 +4072,7 @@ export class ProviderRuntime implements ProviderPort {
     const message = shortenDiagnostic(this.#redactMcp(getString(params, "error") ?? ""));
     const rows = this.#credentials.mcpServers();
     const config =
-      rows.find((row) => key === `openbot_${providerMcpServerName(row.name)}`) ??
+      rows.find((row) => key === `codebot_${providerMcpServerName(row.name)}`) ??
       rows.find((row) => key === providerMcpServerName(row.name)) ??
       rows.find((row) => key === row.name);
     const builtIn = config?.id === COMPUTER_USE_MCP_SERVER_ID || config?.id === GITHUB_CONNECTOR_MCP_SERVER_ID;
@@ -4083,7 +4083,7 @@ export class ProviderRuntime implements ProviderPort {
       message,
     });
     const githubKey =
-      client.provider === "codex" ? `openbot_${providerMcpServerName(config?.name ?? "")}` : config?.name;
+      client.provider === "codex" ? `codebot_${providerMcpServerName(config?.name ?? "")}` : config?.name;
     if (config?.id === GITHUB_CONNECTOR_MCP_SERVER_ID && key === githubKey)
       this.#reportGitHubToolsFailure(client.provider);
     if (!config || !server) return;
@@ -4131,7 +4131,7 @@ export class ProviderRuntime implements ProviderPort {
               capabilities: { ...this.#status.capabilities, chat: "unavailable" },
               message: startStopped
                 ? this.#startStoppedMessage(client.provider, error.message)
-                : `${providerLabel(client.provider)} stopped repeatedly. Restart OpenBot after checking the CLI.`,
+                : `${providerLabel(client.provider)} stopped repeatedly. Restart CodeBot after checking the CLI.`,
             },
       );
       return;
@@ -4201,7 +4201,7 @@ export class ProviderRuntime implements ProviderPort {
     if (waitsForUser) this.#startWaitsForUser.add(provider);
     else this.#startWaitsForUser.delete(provider);
     if (failures === START_FAILURE_LIMIT || waitsForUser)
-      logger.warn("OpenBot stopped starting a provider by itself.", { provider, failures, waitsForUser });
+      logger.warn("CodeBot stopped starting a provider by itself.", { provider, failures, waitsForUser });
     return true;
   }
 
@@ -4220,7 +4220,7 @@ export class ProviderRuntime implements ProviderPort {
       this.#installedFallback.has(cliProvider)
     )
       return false;
-    logger.warn("OpenBot's provider CLI did not start, so the installed CLI runs.", {
+    logger.warn("CodeBot's provider CLI did not start, so the installed CLI runs.", {
       provider,
       version: cli.version,
       installedVersion: installed.version,
@@ -4577,7 +4577,7 @@ export class ProviderRuntime implements ProviderPort {
       Effect.tap((routesToOpenai) => Effect.sync(() => this.#codexRoutesToOpenai.set(client, routesToOpenai))),
       Effect.catch(() =>
         Effect.sync(() => {
-          logger.warn("Codex did not give its model route. OpenBot reads the ChatGPT usage.");
+          logger.warn("Codex did not give its model route. CodeBot reads the ChatGPT usage.");
           return this.#codexRoutesToOpenai.get(client) ?? true;
         }),
       ),

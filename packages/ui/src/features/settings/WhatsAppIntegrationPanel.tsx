@@ -6,10 +6,10 @@ import type {
   WhatsAppLinkState,
   WhatsAppPairingRequest,
   WhatsAppSender,
-} from "@openbot/contracts/ipc";
-import { MESSAGING_LIMITS, parseWhatsAppPhoneNumber } from "@openbot/contracts/ipc";
-import { WHATSAPP_ORCHESTRATOR_AVATAR } from "@openbot/contracts/whatsapp-app";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { MESSAGING_LIMITS, parseWhatsAppPhoneNumber } from "@codebot/contracts/ipc";
+import { WHATSAPP_ORCHESTRATOR_AVATAR } from "@codebot/contracts/whatsapp-app";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertContent,
@@ -41,7 +41,7 @@ import {
   Text,
   UserRound,
   UsersRound,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, createStore, For, Match, onCleanup, Show, Switch, untrack } from "solid-js";
 import { useText } from "../../text";

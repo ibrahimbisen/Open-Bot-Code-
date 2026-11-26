@@ -1,4 +1,4 @@
-import { CREDIT_PRICES_URL } from "@openbot/contracts/credits";
+import { CREDIT_PRICES_URL } from "@codebot/contracts/credits";
 import { desktopAnalytics } from "../../analytics";
 
 export function openCreditPrices(openUrl: (url: string) => Promise<void>): void {

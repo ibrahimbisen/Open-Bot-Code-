@@ -6,8 +6,8 @@ import {
   type WorkflowFileSourceAsset,
   workflowFileHostExport,
   workflowFileNeeds,
-} from "@openbot/contracts/ipc";
-import { redactSecrets } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { redactSecrets } from "@codebot/logging";
 import { Effect } from "effect";
 
 interface WorkflowFileAttachment {

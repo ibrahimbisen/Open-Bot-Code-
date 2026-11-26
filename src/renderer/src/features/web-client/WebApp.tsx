@@ -1,25 +1,25 @@
-import { agentTemplateIdFromWebAppSearch, WEB_APP_AGENT_TEMPLATE_PARAM } from "@openbot/contracts/agent-template-links";
-import { companySignInErrorKey, WEB_APP_COMPANY_SIGN_IN_ERROR_PARAM } from "@openbot/contracts/company-sign-in";
-import { type FirstTouch, readFirstTouch } from "@openbot/contracts/first-touch";
-import { inviteUrlFromWebAppSearch, WEB_APP_INVITE_FIELDS } from "@openbot/contracts/invite-links";
-import { type AppVariant, type CentralAuthState, type CentralAuthUser, isAvatarColor } from "@openbot/contracts/ipc";
+import { agentTemplateIdFromWebAppSearch, WEB_APP_AGENT_TEMPLATE_PARAM } from "@codebot/contracts/agent-template-links";
+import { companySignInErrorKey, WEB_APP_COMPANY_SIGN_IN_ERROR_PARAM } from "@codebot/contracts/company-sign-in";
+import { type FirstTouch, readFirstTouch } from "@codebot/contracts/first-touch";
+import { inviteUrlFromWebAppSearch, WEB_APP_INVITE_FIELDS } from "@codebot/contracts/invite-links";
+import { type AppVariant, type CentralAuthState, type CentralAuthUser, isAvatarColor } from "@codebot/contracts/ipc";
 import {
   type MarketplaceListingLink,
   marketplaceListingFromWebAppSearch,
   WEB_APP_MARKETPLACE_AGENT_PARAM,
   WEB_APP_MARKETPLACE_SKILL_PARAM,
-} from "@openbot/contracts/marketplace-links";
-import { pluginSlugFromWebAppSearch, WEB_APP_PLUGIN_PARAM } from "@openbot/contracts/plugin-links";
-import { forgetReferralCode, readReferralCode } from "@openbot/contracts/referral";
-import { isBoolean, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { formatLocale, resolveLocale } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
-import { markRemoteSync } from "@openbot/team-client/sync-profile";
-import { classifyFailure } from "@openbot/telemetry";
-import { NotificationObserver, Toaster, toast } from "@openbot/ui";
-import { AccountLogin } from "@openbot/ui/features/account/AccountLogin";
-import { AppLoadingScreen } from "@openbot/ui/features/account/AppLoadingScreen";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/marketplace-links";
+import { pluginSlugFromWebAppSearch, WEB_APP_PLUGIN_PARAM } from "@codebot/contracts/plugin-links";
+import { forgetReferralCode, readReferralCode } from "@codebot/contracts/referral";
+import { isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { formatLocale, resolveLocale } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
+import { markRemoteSync } from "@codebot/team-client/sync-profile";
+import { classifyFailure } from "@codebot/telemetry";
+import { NotificationObserver, Toaster, toast } from "@codebot/ui";
+import { AccountLogin } from "@codebot/ui/features/account/AccountLogin";
+import { AppLoadingScreen } from "@codebot/ui/features/account/AppLoadingScreen";
+import { currentText } from "@codebot/ui/text";
 import { Dynamic } from "@solidjs/web";
 import { createEffect, createSignal, createStore, onSettled, Show } from "solid-js";
 import type { DesktopAnalyticsProperties } from "../../analytics";
@@ -298,7 +298,7 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
       headers: body
         ? {
             "Content-Type": "application/json",
-            "X-OpenBot-Browser": "1",
+            "X-CodeBot-Browser": "1",
             ...(send?.idempotencyKey ? { "Idempotency-Key": send.idempotencyKey } : {}),
           }
         : {},
@@ -499,7 +499,7 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
       method: "POST",
       credentials: "same-origin",
       cache: "no-store",
-      headers: { "Content-Type": "application/json", "X-OpenBot-Browser": "1" },
+      headers: { "Content-Type": "application/json", "X-CodeBot-Browser": "1" },
       body: JSON.stringify({ email }),
     });
     const value = await response.json().catch(() => null);
@@ -551,7 +551,7 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
     channel?.postMessage("session-changed");
   }
   onSettled(() => {
-    channel = new BroadcastChannel("openbot.web.session");
+    channel = new BroadcastChannel("codebot.web.session");
     channel.onmessage = () => {
       clearSession();
       void checkSession();

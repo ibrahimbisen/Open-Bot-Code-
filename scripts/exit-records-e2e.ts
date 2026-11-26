@@ -5,11 +5,11 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "exit-records-e2e");
+const OUT = join(ROOT, ".codebot-build", "exit-records-e2e");
 const STATE_TIMEOUT_MS = 30_000;
 const CRASH_RECORD_LIMIT_MS = 5_000;
 const electronPath = join(
@@ -21,7 +21,7 @@ const electronPath = join(
 );
 
 await mkdir(OUT, { recursive: true });
-const root = await mkdtemp(join(tmpdir(), "openbot-exit-records-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-exit-records-"));
 const bundle = join(root, "exit-records-electron.mjs");
 const userData = join(root, "user-data");
 let child: ChildProcess | undefined;

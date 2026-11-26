@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
-import { DEVELOPMENT_FREE_DEFAULT } from "@openbot/contracts/development-defaults";
-import type { AgentSummary, ChannelPage } from "@openbot/contracts/ipc";
+import { DEVELOPMENT_FREE_DEFAULT } from "@codebot/contracts/development-defaults";
+import type { AgentSummary, ChannelPage } from "@codebot/contracts/ipc";
 import { ChannelClient, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
 const WORDS = ["OSPREY", "KESTREL", "PLOVER"];

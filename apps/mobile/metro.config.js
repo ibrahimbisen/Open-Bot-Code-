@@ -50,7 +50,7 @@ if (transformCacheStore) uniwindConfig.cacheStores = [transformCacheStore];
 
 const SHIMS = path.resolve(__dirname, "src/shims");
 const UNIWIND_REACT_NATIVE = path.join(SHIMS, "uniwind-react-native.js");
-const ORIGINAL_REACT_NATIVE = "openbot-original-react-native";
+const ORIGINAL_REACT_NATIVE = "codebot-original-react-native";
 const UNIWIND_WRAPPERS = path.join("node_modules", "uniwind", "src", "components", "native");
 const uniwindResolveRequest = uniwindConfig.resolver.resolveRequest;
 uniwindConfig.resolver.resolveRequest = (context, moduleName, platform) => {

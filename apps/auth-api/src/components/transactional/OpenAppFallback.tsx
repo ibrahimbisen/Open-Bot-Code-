@@ -1,7 +1,7 @@
 import { Portal } from "@solidjs/web";
 import { type Accessor, createSignal, createUniqueId, onCleanup, Show } from "solid-js";
 import { detectDownloadPlatform } from "../../lib/download-platforms";
-import { OPENBOT_DOWNLOAD_LINKS } from "../../lib/landing-links";
+import { CODEBOT_DOWNLOAD_LINKS } from "../../lib/landing-links";
 import { Button } from "../ui/button";
 import type { OpenAppFallbackText } from "./page-text";
 
@@ -71,7 +71,7 @@ export function OpenAppFallbackDialog(props: { fallback: OpenAppFallback; text: 
             <button class="plugin-dialog-dismiss" type="button" onClick={() => dialog?.close()}>
               {props.text.dismiss}
             </button>
-            <Button autofocus href={OPENBOT_DOWNLOAD_LINKS[platform()]} variant="primary" size="sm" icon="download">
+            <Button autofocus href={CODEBOT_DOWNLOAD_LINKS[platform()]} variant="primary" size="sm" icon="download">
               {props.text.download[platform()]}
             </Button>
           </div>

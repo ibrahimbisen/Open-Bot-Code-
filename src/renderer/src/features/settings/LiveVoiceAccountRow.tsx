@@ -1,4 +1,4 @@
-import { DEFAULT_PROVIDER_ACCOUNT_ID, type ProviderAccountStatus } from "@openbot/contracts/ipc";
+import { DEFAULT_PROVIDER_ACCOUNT_ID, type ProviderAccountStatus } from "@codebot/contracts/ipc";
 import {
   Item,
   ItemActions,
@@ -10,9 +10,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@openbot/ui";
-import { isApiKeyAccount, providerAccountName } from "@openbot/ui/components/provider-accounts";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { isApiKeyAccount, providerAccountName } from "@codebot/ui/components/provider-accounts";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 
 export interface LiveVoiceAccountChoice {

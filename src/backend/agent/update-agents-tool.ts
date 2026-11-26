@@ -4,24 +4,24 @@ import {
   type AgentSummary,
   agentComputerUseEnabled,
   workspaceAccessEnforced,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import type { DynamicToolCallParams } from "../protocol";
+import type { CodeBotToolRouterHooks } from "./codebot-tool-router";
 import { agentReasoningEffort, requestedRuntime, requestedToolModel, requireRunnableChange } from "./model-tools";
-import type { OpenBotToolRouterHooks } from "./openbot-tool-router";
 import {
   profileToolErrorMessage,
   restrictionInput,
   updateAgentsToolSchema,
   widensAgentSettings,
 } from "./profile-tools";
-import { type OpenBotToolResponse, openBotToolResult } from "./routine-tools";
+import { type CodeBotToolResponse, codeBotToolResult } from "./routine-tools";
 import { ToolOperationFailed, toolStep } from "./tool-operation";
 import { unknownAgentMessage } from "./unknown-agent";
 
-const logger = createOpenBotLogger("update-agents-tool");
+const logger = createCodeBotLogger("update-agents-tool");
 
 function agentSettings(agent: AgentSummary, models: AgentModelOption[]) {
   return {
@@ -45,7 +45,7 @@ export const handleUpdateAgentsTool = Effect.fn("UpdateAgentsTool.handle")(
     params: DynamicToolCallParams,
     senderAgentId: string,
     hooks: Pick<
-      OpenBotToolRouterHooks,
+      CodeBotToolRouterHooks,
       | "listAgents"
       | "listModels"
       | "agentModels"
@@ -54,7 +54,7 @@ export const handleUpdateAgentsTool = Effect.fn("UpdateAgentsTool.handle")(
       | "updateAgent"
       | "redactMcp"
     >,
-  ): Effect.fn.Return<OpenBotToolResponse, ToolOperationFailed> {
+  ): Effect.fn.Return<CodeBotToolResponse, ToolOperationFailed> {
     const { agentIds, provider, model, reasoningEffort, access, computerUse, notifications } =
       updateAgentsToolSchema.parse(params.arguments, { reportInput: true });
     const runtimeRequest = { provider, model, reasoningEffort };
@@ -114,7 +114,7 @@ export const handleUpdateAgentsTool = Effect.fn("UpdateAgentsTool.handle")(
       ),
     );
     const updatedCount = results.filter((result) => result.ok).length;
-    return openBotToolResult({ updated: updatedCount, failed: results.length - updatedCount, results });
+    return codeBotToolResult({ updated: updatedCount, failed: results.length - updatedCount, results });
   },
   Effect.catchDefect((cause) => Effect.fail(new ToolOperationFailed({ cause }))),
 );

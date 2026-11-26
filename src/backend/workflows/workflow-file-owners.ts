@@ -3,7 +3,7 @@ import {
   type StoredFileWorkflow,
   type WorkflowFoldersSnapshot,
   type WorkflowSummary,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { WorkflowMediaOutput } from "./workflow-run-store";
 
 export interface WorkflowFileOwner {

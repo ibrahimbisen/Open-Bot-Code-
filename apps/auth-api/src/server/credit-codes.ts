@@ -5,8 +5,8 @@ import {
   creditsFromTenths,
   isCreditCode,
   normalizeCreditCode,
-} from "@openbot/contracts/credits";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credits";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { BillingError, type BillingOperationError, billingCall } from "./billing-errors";
 

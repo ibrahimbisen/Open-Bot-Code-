@@ -1,5 +1,5 @@
 import { Worker } from "node:worker_threads";
-import { decodeHostAnalytics, type HostAnalytics, type HostAnalyticsInput } from "@openbot/contracts/ipc";
+import { decodeHostAnalytics, type HostAnalytics, type HostAnalyticsInput } from "@codebot/contracts/ipc";
 import { Effect, Schema, Semaphore } from "effect";
 
 export interface UsageReportWorkerSource {

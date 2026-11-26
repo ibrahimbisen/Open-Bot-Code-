@@ -5,7 +5,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { AGENT_PROVIDERS, decodeUsageTokens, defaultProviderModel, type UsageTokens } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, decodeUsageTokens, defaultProviderModel, type UsageTokens } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -14,8 +14,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-usage-resume-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-usage-resume-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-usage-resume-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-usage-resume-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const sessionsDir = join(root, "claude-sessions");
@@ -29,7 +29,7 @@ const OUTPUT = 20;
 const REQUEST_COST = 0.01;
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 mkdirSync(sessionsDir, { recursive: true });
 
@@ -38,7 +38,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { estimateUsageCost } = await import("../src/backend/agent/usage-pricing");
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
@@ -258,7 +258,7 @@ function sum(entries: UsageTokens[]): UsageTokens {
 }
 
 await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const claudeClients: ClaudeStandIn[] = [];

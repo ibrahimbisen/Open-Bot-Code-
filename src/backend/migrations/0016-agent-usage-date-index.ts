@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // A host-wide report constrains the date and nothing else, and an index that leads with
 // `agent_id` cannot serve a range over `occurred_at` alone - so every such report used to
@@ -13,7 +13,7 @@ export const ANALYTICS_DATE_INDEX_SQL = `
   CREATE INDEX IF NOT EXISTS agent_usage_activity_occurred ON agent_usage_activity(occurred_at);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 16,
   name: "agent-usage-date-index",
   up: (db) => db.exec(ANALYTICS_DATE_INDEX_SQL),

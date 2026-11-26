@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Result } from "effect";
 import {
   ARCHIVE_REGION,
@@ -29,7 +29,7 @@ import {
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "hosted-pool-restore-e2e");
+const OUT = join(ROOT, ".codebot-build", "hosted-pool-restore-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const ALERT_URL = "https://alerts.example/webhook";
 const OWNER = {
@@ -171,7 +171,7 @@ function world(options: { archiveKeys?: boolean } = {}) {
     const path = new URL(input).pathname.replace("/api/v1", "");
     if ((init.method ?? "GET") === "POST" && path === "/sandboxes") {
       const body = JSON.parse(String(init.body));
-      sandboxes.push(String(body.env.OPENBOT_HOSTED_HOST_ID));
+      sandboxes.push(String(body.env.CODEBOT_HOSTED_HOST_ID));
       return Response.json({ ok: true, sandbox: { id: `bx_${sandboxes.length}`, state: "provisioning" } });
     }
     return Response.json({ ok: true, type: "command.finished", exitCode: 0, stdout: "", stderr: "" });
@@ -392,7 +392,7 @@ async function renewRestoresFromThePool() {
     { state: answer.state, serverId: answer.state === "assigned" ? answer.serverId : null },
   );
   check(
-    "the answer is JSON that the sed patterns of openbot-pool-wait read",
+    "the answer is JSON that the sed patterns of codebot-pool-wait read",
     restore !== undefined &&
       JSON.stringify(answer).includes(`"restore":{"url":"${restore.url}"`) &&
       /"key":"AGE-SECRET-KEY-1[0-9A-Z]{58}"/u.test(JSON.stringify(answer)) &&
@@ -497,14 +497,14 @@ async function restoreWaitsAndOldMachinesStepAside() {
   const oldAnswer = await w.poll(old);
   const released = w.row(waiting.serverId);
   check(
-    "a machine whose openbot-pool-wait cannot restore gets no server, loses its offer, and the operator gets an alert",
+    "a machine whose codebot-pool-wait cannot restore gets no server, loses its offer, and the operator gets an alert",
     oldAnswer.state === "waiting" &&
       released?.operator_host === null &&
       released.observed_state === "awaiting_payment" &&
       released.claim_token_hash === null &&
       w.machineToken(old) === null &&
       w.alerts.at(-1) ===
-        `🛠️ **Pool restore lost** · standard server · ${waiting.serverId.slice(0, 8)} · machine ${old} · its openbot-pool-wait cannot restore an archive · prepare it again`,
+        `🛠️ **Pool restore lost** · standard server · ${waiting.serverId.slice(0, 8)} · machine ${old} · its codebot-pool-wait cannot restore an archive · prepare it again`,
     { answer: oldAnswer, row: released, alert: w.alerts.at(-1) },
   );
 

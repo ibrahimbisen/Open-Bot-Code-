@@ -1,5 +1,5 @@
-import { Button } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { Button } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { Show } from "solid-js";
 import { BranchIcon } from "../ConversationIcons";
 

@@ -1,4 +1,4 @@
-import { type BackgroundProcess, isBackgroundProcess } from "@openbot/contracts/ipc";
+import { type BackgroundProcess, isBackgroundProcess } from "@codebot/contracts/ipc";
 
 function decodeBackgroundProcess(value: unknown): BackgroundProcess {
   if (!isBackgroundProcess(value)) throw new Error("Invalid background process.");

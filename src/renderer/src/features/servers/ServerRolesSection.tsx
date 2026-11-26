@@ -2,18 +2,18 @@ import type {
   AgentAccessChange,
   AgentAccessRole,
   AgentAccessSnapshot,
-  OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
-import { AGENT_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-access-v1";
-import { Alert, AlertContent, AlertDescription } from "@openbot/ui";
-import { type RoleAgent, type ServerRolePage, ServerRolesPanel } from "@openbot/ui/features/servers/ServerRoles";
-import { useText } from "@openbot/ui/text";
+  CodeBotDesktopApi,
+} from "@codebot/contracts/ipc";
+import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
+import { Alert, AlertContent, AlertDescription } from "@codebot/ui";
+import { type RoleAgent, type ServerRolePage, ServerRolesPanel } from "@codebot/ui/features/servers/ServerRoles";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createStore, Show, untrack } from "solid-js";
 import { serverCanAdminister } from "./server-capabilities";
 import type { ServerSettingsSectionHost } from "./server-settings-section";
 
-export type HostAgentAccessCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getAgentAccess" | "setAgentAccess">;
+export type HostAgentAccessCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getAgentAccess" | "setAgentAccess">;
 
 export interface ServerAgentAccessOptions {
   calls?: HostAgentAccessCalls;
@@ -51,7 +51,7 @@ function copyChange(snapshot: AgentAccessSnapshot): AgentAccessChange {
 export function createServerRolesSection(host: ServerSettingsSectionHost, visible: () => boolean): ServerRolesSection {
   const { t, errorMessage } = useText();
   const { props, configured, actionsAvailable, busy, run } = host;
-  const calls = (): HostAgentAccessCalls => props.agentAccess?.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostAgentAccessCalls => props.agentAccess?.calls ?? window.codebot.hostAdmin;
   const [state, setState] = createStore<RolesState>({
     snapshot: null,
     agents: [],

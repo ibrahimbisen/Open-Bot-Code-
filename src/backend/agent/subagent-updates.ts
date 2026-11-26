@@ -6,8 +6,8 @@ import {
   type ConversationSubagentStepKind,
   clampConversationSubagents,
   isConversationSubagents,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { isRecord } from "../protocol";
 
 export const SUBAGENTS_UPDATED_METHOD = "turn/subagents/updated";

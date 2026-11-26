@@ -5,12 +5,12 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MessagingStore } from "../src/backend/messaging/messaging-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/messaging-thread-roster-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-messaging-thread-roster-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/messaging-thread-roster-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-messaging-thread-roster-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 
@@ -26,8 +26,8 @@ interface Report {
 
 const report: Report = { passed: false };
 
-async function boot<T>(use: (store: AgentStore, database: OpenBotDatabase) => T | Promise<T>): Promise<T> {
-  const database = new OpenBotDatabase(userData);
+async function boot<T>(use: (store: AgentStore, database: CodeBotDatabase) => T | Promise<T>): Promise<T> {
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   await runCauseEffect(store.initialize());
   try {

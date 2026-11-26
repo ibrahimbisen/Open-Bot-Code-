@@ -1,8 +1,8 @@
 import { randomBytes, randomUUID } from "node:crypto";
 import { mkdir, rm } from "node:fs/promises";
 import { basename, join } from "node:path";
-import { DISCORD_ORCHESTRATOR_AVATAR } from "@openbot/contracts/discord-app";
-import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { DISCORD_ORCHESTRATOR_AVATAR } from "@codebot/contracts/discord-app";
+import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AddMessagingOrchestratorInput,
   AddTelegramOrchestratorInput,
@@ -26,16 +26,16 @@ import type {
   WhatsAppLinkState,
   WhatsAppOverview,
   WhatsAppSender,
-} from "@openbot/contracts/ipc";
-import { MESSAGING_CONNECTION_STATES, MESSAGING_LIMITS } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import type { DiscordEmbed } from "@openbot/contracts/signal-protocol/discord-api";
-import { TELEGRAM_LINK_CODE_TTL_SECONDS } from "@openbot/contracts/signal-protocol/telegram-route";
-import { SLACK_ORCHESTRATOR_AVATAR } from "@openbot/contracts/slack-app";
-import { TELEGRAM_ORCHESTRATOR_AVATAR } from "@openbot/contracts/telegram-app";
-import { WHATSAPP_ORCHESTRATOR_AVATAR } from "@openbot/contracts/whatsapp-app";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactPostText, redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { MESSAGING_CONNECTION_STATES, MESSAGING_LIMITS } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import type { DiscordEmbed } from "@codebot/contracts/signal-protocol/discord-api";
+import { TELEGRAM_LINK_CODE_TTL_SECONDS } from "@codebot/contracts/signal-protocol/telegram-route";
+import { SLACK_ORCHESTRATOR_AVATAR } from "@codebot/contracts/slack-app";
+import { TELEGRAM_ORCHESTRATOR_AVATAR } from "@codebot/contracts/telegram-app";
+import { WHATSAPP_ORCHESTRATOR_AVATAR } from "@codebot/contracts/whatsapp-app";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactPostText, redactText } from "@codebot/logging";
 import { Deferred, Effect, Exit, Result, Schedule, Schema, Scope } from "effect";
 import type { AgentLifecycleFailed } from "../agent-service";
 import { causeHelpers } from "../effect-boundary";
@@ -96,7 +96,7 @@ import { WhatsAppConnect } from "./whatsapp/whatsapp-connect";
 import { whatsAppOrchestratorMemories, whatsAppOrchestratorProfile } from "./whatsapp/whatsapp-orchestrator";
 import type { WhatsAppRuntime } from "./whatsapp/whatsapp-runtime";
 
-const logger = createOpenBotLogger("messaging");
+const logger = createCodeBotLogger("messaging");
 
 export interface MessagingCredentials {
   keys(): string[];
@@ -1065,7 +1065,7 @@ export class MessagingService {
       yield* live.adapter
         .post(
           { platformChannelId: chatId, replyThreadId: null },
-          { text: sourceText("status.messaging.telegramLinked", { bot: botUsername ? `@${botUsername}` : "OpenBot" }) },
+          { text: sourceText("status.messaging.telegramLinked", { bot: botUsername ? `@${botUsername}` : "CodeBot" }) },
         )
         .pipe(Effect.catch((failure) => Effect.sync(() => this.#warn(failure.cause))));
   }, Effect.uninterruptible);
@@ -1524,9 +1524,9 @@ export class MessagingService {
   }
 
   #pingAuthor(record: MessagingConnectionRecord, agentId: string): string {
-    if (agentId === (this.#orchestrator(record) ?? agentId)) return "OpenBot, a post of yours";
+    if (agentId === (this.#orchestrator(record) ?? agentId)) return "CodeBot, a post of yours";
     const name = this.#agents.listAgents().find((agent) => agent.id === agentId)?.name;
-    return name ? `OpenBot, a post by your teammate ${name}` : "OpenBot";
+    return name ? `CodeBot, a post by your teammate ${name}` : "CodeBot";
   }
 
   #orchestrator(record: MessagingConnectionRecord): string | null {
@@ -1641,7 +1641,7 @@ export class MessagingService {
       if (!place)
         return {
           error:
-            "This connection has no place with that id. Call openbot.messaging_list_places with the connection for the ids.",
+            "This connection has no place with that id. Call codebot.messaging_list_places with the connection for the ids.",
         };
       const recent = yield* filteredRecent(live.adapter, placeId, null, limit, filter);
       return { history: { platform, place: place.name, ...recent } };
@@ -2429,7 +2429,7 @@ function redactEmbed(embed: DiscordEmbed): DiscordEmbed {
 }
 
 const WHATSAPP_ALLOWED_PLACES =
-  "This list has only the WhatsApp chats that the user allowed, not all chats of this number. For a chat that is not in it, tell the user to open Marketplace, then Apps, then WhatsApp, and to use Add contact or Add group for this number. A place with readOnly is read only: read its history, but OpenBot cannot post in it.";
+  "This list has only the WhatsApp chats that the user allowed, not all chats of this number. For a chat that is not in it, tell the user to open Marketplace, then Apps, then WhatsApp, and to use Add contact or Add group for this number. A place with readOnly is read only: read its history, but CodeBot cannot post in it.";
 
 const WHATSAPP_NOT_CONNECTED =
   "WhatsApp is not connected on this number now. Tell the user to open Marketplace, then Apps, then WhatsApp, and to use Reconnect or Link again for this number.";
@@ -2437,35 +2437,35 @@ const WHATSAPP_NOT_CONNECTED =
 const WHATSAPP_LOCAL_REFUSALS = new Map([
   [
     "place_not_allowed",
-    "OpenBot sent nothing: the user did not allow this WhatsApp chat. Tell the user to open Marketplace, then Apps, then WhatsApp, and to use Add contact or Add group for this chat. Then the post can go to it.",
+    "CodeBot sent nothing: the user did not allow this WhatsApp chat. Tell the user to open Marketplace, then Apps, then WhatsApp, and to use Add contact or Add group for this chat. Then the post can go to it.",
   ],
   [
     "place_read_only",
-    "OpenBot sent nothing: the user made this WhatsApp chat read only. OpenBot reads it but never posts in it. Do not post it again: give the result in the conversation that you answer.",
+    "CodeBot sent nothing: the user made this WhatsApp chat read only. CodeBot reads it but never posts in it. Do not post it again: give the result in the conversation that you answer.",
   ],
   [
     "no_account",
-    `OpenBot sent nothing: WhatsApp has no account for the number of this contact. Tell the user to open Marketplace, then Apps, then WhatsApp, and to check the number of this contact. ${sourceText("error.messaging.whatsappNumberNotFound")} When the number is not correct, the user must remove the contact and add it again.`,
+    `CodeBot sent nothing: WhatsApp has no account for the number of this contact. Tell the user to open Marketplace, then Apps, then WhatsApp, and to check the number of this contact. ${sourceText("error.messaging.whatsappNumberNotFound")} When the number is not correct, the user must remove the contact and add it again.`,
   ],
   ["not_connected", WHATSAPP_NOT_CONNECTED],
   ["not_linked", WHATSAPP_NOT_CONNECTED],
   [
     "not_confirmed",
-    "The WhatsApp connection dropped before WhatsApp confirmed the message, also after OpenBot sent it again. It can be in the chat already. Do not post it again only because of this error: tell the user to check the chat.",
+    "The WhatsApp connection dropped before WhatsApp confirmed the message, also after CodeBot sent it again. It can be in the chat already. Do not post it again only because of this error: tell the user to check the chat.",
   ],
 ]);
 
 const DISCORD_NOT_LINKED =
-  "This Discord server is not linked to this OpenBot server now. Another OpenBot server of the user may answer there. Tell the user to open Marketplace, then Apps, then Discord, and to select Reconnect for this Discord server if this server must answer there.";
+  "This Discord server is not linked to this CodeBot server now. Another CodeBot server of the user may answer there. Tell the user to open Marketplace, then Apps, then Discord, and to select Reconnect for this Discord server if this server must answer there.";
 
 const TELEGRAM_RELAY_REFUSALS = new Map([
   [
     "telegram_503 relay_unavailable",
-    "OpenBot on this computer is not connected to the OpenBot service now. Telegram calls go through that service, so Telegram did not refuse this call, and the connection and place ids are not the cause. OpenBot connects again by itself. When a Telegram call fails again in a few minutes, tell the user that OpenBot on this computer cannot connect to its service, and that the computer must be online and signed in to OpenBot.",
+    "CodeBot on this computer is not connected to the CodeBot service now. Telegram calls go through that service, so Telegram did not refuse this call, and the connection and place ids are not the cause. CodeBot connects again by itself. When a Telegram call fails again in a few minutes, tell the user that CodeBot on this computer cannot connect to its service, and that the computer must be online and signed in to CodeBot.",
   ],
   [
     "telegram_504 timeout",
-    "The OpenBot service did not answer this Telegram call in time. Telegram did not refuse it, and the connection and place ids are not the cause.",
+    "The CodeBot service did not answer this Telegram call in time. Telegram did not refuse it, and the connection and place ids are not the cause.",
   ],
 ]);
 
@@ -2493,7 +2493,7 @@ function refusal(failure: MessagingAdapterError): string {
     cause instanceof SlackApiError || cause instanceof DiscordApiError || cause instanceof TelegramCallError
       ? cause.code
       : "no_answer";
-  return `The platform refused the call: ${code}. Check the connection and place ids with openbot.messaging_list_places.`;
+  return `The platform refused the call: ${code}. Check the connection and place ids with codebot.messaging_list_places.`;
 }
 
 function roleName(name: string): string {

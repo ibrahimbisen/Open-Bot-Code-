@@ -1,4 +1,4 @@
-import { WORKFLOW_PORTS, type WorkflowDetail, type WorkflowNode } from "@openbot/contracts/ipc";
+import { WORKFLOW_PORTS, type WorkflowDetail, type WorkflowNode } from "@codebot/contracts/ipc";
 import { useQueryClient } from "@tanstack/react-query";
 import { router, Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
@@ -61,7 +61,7 @@ const TITLE_LIMIT = 160;
 function AddAfterButton({ node, draft }: { node: WorkflowNode; draft: WorkflowDraft }) {
   const { t } = useText();
   const { theme } = useUniwind();
-  const accent = String(useCSSVariable("--openbot-accent-text"));
+  const accent = String(useCSSVariable("--codebot-accent-text"));
   const menu = useRef<MenuComponentRef | null>(null);
   const label = t("mobile.workflow.editor.addAfter");
   const button = (onPress?: () => void) => (
@@ -123,7 +123,7 @@ function EditorStepRow({
 }) {
   const { t } = useText();
   const { theme } = useUniwind();
-  const [muted, danger] = useCSSVariable(["--openbot-text-grouped-secondary", "--openbot-danger-text"]);
+  const [muted, danger] = useCSSVariable(["--codebot-text-grouped-secondary", "--codebot-danger-text"]);
   const menu = useRef<MenuComponentRef | null>(null);
   const { structural, actions, onAction } = useWorkflowStepMenu(node, draft);
   const opens = editable || node.kind === "trigger";
@@ -186,7 +186,7 @@ function EditorStepRow({
 }
 
 function AddRow({ list, index, label }: { list: FlowList; index: number; label: string }) {
-  const accent = String(useCSSVariable("--openbot-accent-text"));
+  const accent = String(useCSSVariable("--codebot-accent-text"));
   return (
     <SettingsRow
       disclosure={false}
@@ -203,7 +203,7 @@ export function WorkflowEditorScreen() {
   const { serverId, workflowId } = useLocalSearchParams<{ serverId: string; workflowId?: string }>();
   const queryClient = useQueryClient();
   const queryScope = useQueryScope();
-  const danger = String(useCSSVariable("--openbot-danger-text"));
+  const danger = String(useCSSVariable("--codebot-danger-text"));
   const detail = useWorkflowDetail(serverId, workflowId ?? "");
   const draft = useWorkflowDraft((state) => state.draft);
   const { start, setTitle, graphSaved } = useWorkflowDraft.getState();

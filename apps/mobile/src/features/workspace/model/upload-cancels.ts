@@ -1,4 +1,4 @@
-import type { RemoteFileUpload } from "@openbot/team-client/remote-peer";
+import type { RemoteFileUpload } from "@codebot/team-client/remote-peer";
 
 const checks = new Map<string, () => boolean>();
 

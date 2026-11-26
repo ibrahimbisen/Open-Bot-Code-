@@ -2,14 +2,14 @@ import type {
   RoutineCalendar as HostCalendar,
   RoutineCalendarInput,
   RoutineCalendarRunStatus,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   RoutineCalendar,
   type RoutineCalendarAgent,
   type RoutineCalendarRoutine,
   type RoutineCalendarStatus,
-} from "@openbot/ui/features/conversation/RoutineCalendar";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/RoutineCalendar";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, createStore, onSettled } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { useNavigation } from "../../navigation";

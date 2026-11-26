@@ -1,6 +1,6 @@
-import type { AccountSession, AvatarColor, AvatarImageInput } from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { currentText } from "@openbot/ui/text";
+import type { AccountSession, AvatarColor, AvatarImageInput } from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { currentText } from "@codebot/ui/text";
 
 export interface WebAccountCalls {
   updateName: (name: string) => Promise<void>;
@@ -31,7 +31,7 @@ export function createWebAccountCalls(
           ? {}
           : {
               "Content-Type": init.contentType ?? "application/json",
-              "X-OpenBot-Browser": "1",
+              "X-CodeBot-Browser": "1",
             },
       ...(init.body === undefined ? {} : { body: init.body }),
     }).catch(() => {

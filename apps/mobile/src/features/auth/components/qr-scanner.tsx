@@ -204,7 +204,7 @@ export function QrScanner({
   const [permission, requestPermission, getPermission] = useCameraPermissions();
   const [scanState, setScanState] = useState<ScanState>({ status: "idle" });
   const foregroundColor = useThemeColor("foreground");
-  const actionForeground = String(useCSSVariable("--openbot-action-foreground"));
+  const actionForeground = String(useCSSVariable("--codebot-action-foreground"));
   const { width: windowWidth } = useWindowDimensions();
   const reducedMotion = useReducedMotion();
   const connecting = useSharedValue(0);

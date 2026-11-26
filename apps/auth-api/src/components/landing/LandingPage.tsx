@@ -1,4 +1,4 @@
-import { AppLogo, PlatformLogo, ProviderLogo } from "@openbot/brand";
+import { AppLogo, PlatformLogo, ProviderLogo } from "@codebot/brand";
 import { For, onSettled, Show } from "solid-js";
 import { landingAnalytics } from "../../lib/analytics";
 import type { HeroProviderPart, LandingPageText } from "../../lib/landing-page-text";
@@ -138,7 +138,7 @@ function LandingPageContent() {
                 )}
               </Show>
               <AppLogo variant="production" animation="blink" interactive class="landing-hero-logo" />{" "}
-              <span>OpenBot</span>
+              <span>CodeBot</span>
               <Show when={hero().title.after}>
                 {(after) => (
                   <>

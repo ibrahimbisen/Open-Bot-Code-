@@ -1,4 +1,4 @@
-import { KeyboardShortcutsSettings } from "@openbot/ui/features/settings/KeyboardShortcutsSettings";
+import { KeyboardShortcutsSettings } from "@codebot/ui/features/settings/KeyboardShortcutsSettings";
 import type { JSX } from "@solidjs/web";
 import {
   resetShortcuts,

@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import { CHANNEL_ROUTING_EVENT_ITEM_TYPE_PREFIX, type ChannelPage, type ChannelTask } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import { CHANNEL_ROUTING_EVENT_ITEM_TYPE_PREFIX, type ChannelPage, type ChannelTask } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { ChannelClient, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-many-responders-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-many-responders-e2e");
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
 

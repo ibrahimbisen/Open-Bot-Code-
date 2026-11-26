@@ -1,6 +1,6 @@
-import type { VaultItemSummary, VaultTwoStepCodes } from "@openbot/contracts/ipc";
-import { parseTwoStepKey, twoStepCode, twoStepRemainingMs } from "@openbot/contracts/two-step-code";
-import { VaultPanel } from "@openbot/ui/features/vault/VaultPanel";
+import type { VaultItemSummary, VaultTwoStepCodes } from "@codebot/contracts/ipc";
+import { parseTwoStepKey, twoStepCode, twoStepRemainingMs } from "@codebot/contracts/two-step-code";
+import { VaultPanel } from "@codebot/ui/features/vault/VaultPanel";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { MANY_AGENTS } from "./marketplace-story-support";

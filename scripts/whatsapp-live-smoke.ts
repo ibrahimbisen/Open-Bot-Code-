@@ -3,19 +3,19 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
-import { newStoreKey } from "@openbot/whatsapp/auth-store";
-import { makeWASocket, type WAMessage } from "@openbot/whatsapp/baileys";
-import { makeOpenBotSignalRepository } from "@openbot/whatsapp/signal-repository";
+import { createCodeBotLogger } from "@codebot/logging";
+import { newStoreKey } from "@codebot/whatsapp/auth-store";
+import { makeWASocket, type WAMessage } from "@codebot/whatsapp/baileys";
+import { makeCodeBotSignalRepository } from "@codebot/whatsapp/signal-repository";
 import { Effect } from "effect";
 import QRCode from "qrcode";
 import { WhatsAppRuntime } from "../src/backend/messaging/whatsapp/whatsapp-runtime";
 
-const logger = createOpenBotLogger("whatsapp-live-smoke");
-const OUT = resolve(import.meta.dirname, "../.openbot-build/whatsapp-live-smoke");
+const logger = createCodeBotLogger("whatsapp-live-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/whatsapp-live-smoke");
 const linkIndex = process.argv.indexOf("--link");
 const peer = linkIndex > 0 ? (process.argv[linkIndex + 1] ?? "").replace(/[^0-9]/gu, "") : null;
-const root = await mkdtemp(join(tmpdir(), "openbot-whatsapp-live-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-whatsapp-live-"));
 interface LiveReport {
   stages: {
     handshake?: { qr: boolean };
@@ -31,7 +31,7 @@ const report: LiveReport = { stages: {}, passed: false };
 const runtime = new WhatsAppRuntime({
   root,
   createSocket: (config) => makeWASocket(config),
-  makeSignalRepository: makeOpenBotSignalRepository,
+  makeSignalRepository: makeCodeBotSignalRepository,
 });
 
 function waitFor<T>(subscribe: (done: (value: T) => void) => () => void, label: string, timeoutMs: number) {
@@ -88,8 +88,8 @@ try {
       300_000,
     );
     report.stages.decrypt = { text: textOf(first).length > 0 };
-    await Effect.runPromise(handle.session.send(peerJid, { text: "OpenBot live smoke: your message arrived." }));
-    const image = Buffer.from(await QRCode.toBuffer("OpenBot live smoke"));
+    await Effect.runPromise(handle.session.send(peerJid, { text: "CodeBot live smoke: your message arrived." }));
+    const image = Buffer.from(await QRCode.toBuffer("CodeBot live smoke"));
     await Effect.runPromise(handle.session.send(peerJid, { image, mimetype: "image/png", caption: "Image check" }));
     report.stages.send = { text: true, image: true };
     logger.info("Sent a text and an image. Check them on the peer phone.");

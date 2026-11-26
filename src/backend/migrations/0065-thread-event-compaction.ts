@@ -1,6 +1,6 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
-// The threads whose old events OpenBot compacted after start (`ThreadEventCompaction`). A row means
+// The threads whose old events CodeBot compacted after start (`ThreadEventCompaction`). A row means
 // that each event of the thread up to `through_sequence` keeps only the `changedMessages` items that
 // a replay needs; later events have the small shape that writes use since #8166 and #8794. A thread
 // with no row is compacted again from its first event, so a kill during its compaction loses no
@@ -18,7 +18,7 @@ export const THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION: Record<string, neve
   thread_event_compaction: [],
 };
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 65,
   name: "thread-event-compaction",
   // Only creates a table, so no foreign-key pause and no vacuum. The compaction itself runs after

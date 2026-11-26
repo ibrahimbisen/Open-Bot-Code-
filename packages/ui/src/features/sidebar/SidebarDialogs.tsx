@@ -1,4 +1,4 @@
-import { ConfirmDialog } from "@openbot/ui";
+import { ConfirmDialog } from "@codebot/ui";
 import { Show } from "solid-js";
 import { useText } from "../../text";
 import { AgentAvatar } from "../agents/AgentAvatar";

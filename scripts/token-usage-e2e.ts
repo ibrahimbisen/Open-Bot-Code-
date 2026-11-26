@@ -3,23 +3,23 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/token-usage-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/token-usage-e2e");
 const MODEL = "claude-haiku-5-5";
 const PROMPT = "Reply with the single word OK. Do not use any tool.";
 const turnsArgument = process.argv.find((argument) => argument.startsWith("--turns="));
 const CHAT_TURNS = turnsArgument ? Number(turnsArgument.slice("--turns=".length)) : 20;
 assert.ok(Number.isInteger(CHAT_TURNS) && CHAT_TURNS >= 2, "--turns must be a whole number of 2 or more");
 
-const root = await mkdtemp(join(tmpdir(), "openbot-token-usage-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-token-usage-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 mkdirSync(home, { recursive: true });
@@ -76,7 +76,7 @@ async function waitFor<T>(label: string, read: () => T | null | undefined | fals
   }
 }
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

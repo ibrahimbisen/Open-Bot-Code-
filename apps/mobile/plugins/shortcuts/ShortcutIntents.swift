@@ -1,11 +1,11 @@
 import AppIntents
 import Foundation
 
-#if canImport(OpenBotShortcuts)
-  internal import OpenBotShortcuts
+#if canImport(CodeBotShortcuts)
+  internal import CodeBotShortcuts
 #endif
 
-// The shortcuts of OpenBot: List Agents, Send Message and Open Agent.
+// The shortcuts of CodeBot: List Agents, Send Message and Open Agent.
 //
 // They run without the JavaScript of the app. iOS runs a shortcut in the background, also when the
 // app is not in memory, and there the app has no window and React Native does not run. List Agents
@@ -14,7 +14,7 @@ import Foundation
 // The snippets that show the cards need iOS 26 (`SnippetIntent`), so an older iOS has no shortcuts.
 //
 // iOS reads the names and the phrases of the shortcuts when the app is built, so they are English
-// here and not from the `@openbot/i18n` catalog. The text of the cards is from the catalog: the app
+// here and not from the `@codebot/i18n` catalog. The text of the cards is from the catalog: the app
 // writes it to `shortcuts.json`.
 
 /// Why a shortcut cannot run now. The card names the reason and has one button.
@@ -37,7 +37,7 @@ enum ShortcutNotice: String {
 struct ListAgentsIntent: AppIntent {
   static let title: LocalizedStringResource = "List Agents"
   static let description = IntentDescription(
-    "Shows your OpenBot agents. A tap on an agent opens its chat. The message button sends a message, and the app does not open."
+    "Shows your CodeBot agents. A tap on an agent opens its chat. The message button sends a message, and the app does not open."
   )
   static let supportedModes: IntentModes = .background
   static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
@@ -57,7 +57,7 @@ struct ListAgentsIntent: AppIntent {
 struct SendMessageIntent: AppIntent {
   static let title: LocalizedStringResource = "Send Message"
   static let description = IntentDescription(
-    "Sends a message to the agent that you chose in OpenBot Settings > Shortcuts. The app does not open."
+    "Sends a message to the agent that you chose in CodeBot Settings > Shortcuts. The app does not open."
   )
   static let supportedModes: IntentModes = .background
   static let authenticationPolicy: IntentAuthenticationPolicy = .requiresAuthentication
@@ -140,7 +140,7 @@ struct MessageAgentIntent: AppIntent {
 struct OpenAgentIntent: AppIntent {
   static let title: LocalizedStringResource = "Open Agent"
   static let description = IntentDescription(
-    "Opens the chat of the agent that you chose in OpenBot Settings > Shortcuts."
+    "Opens the chat of the agent that you chose in CodeBot Settings > Shortcuts."
   )
   static let supportedModes: IntentModes = .foreground(.immediate)
 
@@ -160,8 +160,8 @@ struct OpenAgentIntent: AppIntent {
 /// Opens the app: the chat of an agent, or Settings > Shortcuts. JavaScript takes the request when
 /// its screens show, so it also waits for an app that starts now.
 @available(iOS 26.0, *)
-struct OpenOpenBotIntent: AppIntent {
-  static let title: LocalizedStringResource = "Open OpenBot"
+struct OpenCodeBotIntent: AppIntent {
+  static let title: LocalizedStringResource = "Open CodeBot"
   static let isDiscoverable = false
   static let supportedModes: IntentModes = .foreground(.immediate)
 
@@ -207,7 +207,7 @@ struct OpenOpenBotIntent: AppIntent {
 }
 
 @available(iOS 26.0, *)
-struct OpenBotAppShortcuts: AppShortcutsProvider {
+struct CodeBotAppShortcuts: AppShortcutsProvider {
   static let shortcutTileColor: ShortcutTileColor = .grape
 
   static var appShortcuts: [AppShortcut] {

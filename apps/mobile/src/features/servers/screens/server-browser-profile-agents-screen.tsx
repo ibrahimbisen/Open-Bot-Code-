@@ -1,4 +1,4 @@
-import type { AgentBrowserProfile } from "@openbot/contracts/ipc";
+import type { AgentBrowserProfile } from "@codebot/contracts/ipc";
 import { useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -18,7 +18,7 @@ import { useText } from "@/shared/lib/text";
 
 export function ServerBrowserProfileAgentsScreen() {
   const { t, errorMessage } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const { serverId, profileId } = useLocalSearchParams<{ serverId: string; profileId: string }>();
   const profiles = useServerBrowserProfiles(serverId);
   const allAgents = useMobileWorkspaceSelector((workspace) => workspace.agents);

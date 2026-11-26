@@ -1,4 +1,4 @@
-import { type AnalyticsDay, type AnalyticsProviderDay, analyticsTokens } from "@openbot/contracts/ipc";
+import { type AnalyticsDay, type AnalyticsProviderDay, analyticsTokens } from "@codebot/contracts/ipc";
 
 export const usageTotalSeries = "total";
 

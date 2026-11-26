@@ -1,8 +1,8 @@
-import type { OpenBotDesktopApi, ServerSummary } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, ServerSummary } from "@codebot/contracts/ipc";
 
 export interface ServersPort {
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     | "getStatus"
     | "listAgents"
     | "listConversationReads"
@@ -26,20 +26,20 @@ export interface ServersPort {
     | "saveMcpSignInApp"
     | "removeMcpSignInApp"
   >;
-  events: OpenBotDesktopApi["events"];
-  auth: Pick<OpenBotDesktopApi["auth"], "onEvent">;
-  browser: Pick<OpenBotDesktopApi["browser"], "setVisible">;
+  events: CodeBotDesktopApi["events"];
+  auth: Pick<CodeBotDesktopApi["auth"], "onEvent">;
+  browser: Pick<CodeBotDesktopApi["browser"], "setVisible">;
   hostAdmin: Pick<
-    OpenBotDesktopApi["hostAdmin"],
+    CodeBotDesktopApi["hostAdmin"],
     "cancelUpdate" | "getUpdateStatus" | "restartHost" | "rotateHostKey" | "startUpdate" | "updateIdentity"
   >;
   hostedServers: Pick<
-    OpenBotDesktopApi["hostedServers"],
+    CodeBotDesktopApi["hostedServers"],
     "list" | "openCheckout" | "openCustomCheckout" | "restart" | "wake"
   >;
-  localServers: OpenBotDesktopApi["localServers"];
+  localServers: CodeBotDesktopApi["localServers"];
   host: Pick<
-    OpenBotDesktopApi["host"],
+    CodeBotDesktopApi["host"],
     | "configure"
     | "getRemoteControlPolicy"
     | "getStatus"
@@ -52,13 +52,13 @@ export interface ServersPort {
     | "stopRemoteControl"
     | "updateIdentity"
   >;
-  notifications: Pick<OpenBotDesktopApi["notifications"], "onOpened" | "onWorkflowOpened">;
+  notifications: Pick<CodeBotDesktopApi["notifications"], "onOpened" | "onWorkflowOpened">;
   remoteDesktop: Pick<
-    OpenBotDesktopApi["remoteDesktop"],
+    CodeBotDesktopApi["remoteDesktop"],
     "checkSetup" | "connect" | "disconnect" | "list" | "openSetup" | "test"
   >;
   servers: Pick<
-    OpenBotDesktopApi["servers"],
+    CodeBotDesktopApi["servers"],
     | "getPresenceFor"
     | "join"
     | "list"
@@ -76,29 +76,29 @@ export interface ServersPort {
 }
 
 export function serversPort(): ServersPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export type ServerAdminPort = Pick<
-  OpenBotDesktopApi["host"],
+  CodeBotDesktopApi["host"],
   "getPresence" | "listMembers" | "listInvites" | "createInvite" | "updateMember" | "removeMember" | "revokeInvite"
 >;
 
 export function serverAdminPort(server: Pick<ServerSummary, "id" | "kind">): ServerAdminPort {
-  if (server.kind === "local") return window.openbot.host;
+  if (server.kind === "local") return window.codebot.host;
   const serverId = server.id;
   return {
-    getPresence: () => window.openbot.servers.getPresenceFor(serverId),
-    listMembers: () => window.openbot.servers.listMembers(serverId),
-    listInvites: () => window.openbot.servers.listInvites(serverId),
-    createInvite: (input) => window.openbot.servers.createInvite(input, serverId),
-    updateMember: (input) => window.openbot.servers.updateMember(input, serverId),
-    removeMember: (memberId) => window.openbot.servers.removeMember(memberId, serverId),
-    revokeInvite: (inviteId) => window.openbot.servers.revokeInvite(inviteId, serverId),
+    getPresence: () => window.codebot.servers.getPresenceFor(serverId),
+    listMembers: () => window.codebot.servers.listMembers(serverId),
+    listInvites: () => window.codebot.servers.listInvites(serverId),
+    createInvite: (input) => window.codebot.servers.createInvite(input, serverId),
+    updateMember: (input) => window.codebot.servers.updateMember(input, serverId),
+    removeMember: (memberId) => window.codebot.servers.removeMember(memberId, serverId),
+    revokeInvite: (inviteId) => window.codebot.servers.revokeInvite(inviteId, serverId),
   };
 }
 
 export async function activeServerId(): Promise<string> {
-  if (!window.openbot) return "local";
-  return (await window.openbot.servers.list()).find((item) => item.active)?.id ?? "local";
+  if (!window.codebot) return "local";
+  return (await window.codebot.servers.list()).find((item) => item.active)?.id ?? "local";
 }

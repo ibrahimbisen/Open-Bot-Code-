@@ -5,9 +5,9 @@ import {
   type BillingInterval,
   type BillingStorageTier,
   parseStorageTierPrice,
-} from "@openbot/contracts/billing";
-import { LICENSE_LOOKUP_KEYS, LICENSE_METADATA, LICENSE_METADATA_KIND } from "@openbot/contracts/license";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/billing";
+import { LICENSE_LOOKUP_KEYS, LICENSE_METADATA, LICENSE_METADATA_KIND } from "@codebot/contracts/license";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { Effect, Option, Result, Schema } from "effect";
 import type { CheckoutTax } from "./billing-tax";
 import { constantTimeEqual, hexToBytes, importHmacSha256Key } from "./crypto";
@@ -81,11 +81,11 @@ const taxRateListSchema = Schema.Struct({
 const promotionCodeListSchema = Schema.Struct({ data: Schema.Array(Schema.Struct({ id: Schema.String })) });
 
 export const VAT_METADATA = {
-  country: "openbot_vat_country",
-  treatment: "openbot_vat_treatment",
+  country: "codebot_vat_country",
+  treatment: "codebot_vat_treatment",
 } as const;
 
-export const EARLY_START_METADATA = "openbot_early_start_at";
+export const EARLY_START_METADATA = "codebot_early_start_at";
 
 export interface StripeCustomerTax {
   deleted: boolean;
@@ -867,7 +867,7 @@ export class StripeClient {
       duration: "forever",
       name: input.name,
     });
-    return (yield* this.#requestEffect("POST", "/v1/coupons", body, couponSchema, `openbot-coupon-${input.id}`)).id;
+    return (yield* this.#requestEffect("POST", "/v1/coupons", body, couponSchema, `codebot-coupon-${input.id}`)).id;
   }).bind(this);
 
   readonly cardFingerprints = Effect.fn("StripeClient.cardFingerprints")(function* (

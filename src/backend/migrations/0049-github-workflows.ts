@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration v49: GitHub triggers and outputs of workflows. The text below is the migration; the latest
 // schema takes the same tables, and the run source line of migration 50, so do not edit it after release.
@@ -10,7 +10,7 @@ import type { OpenBotMigration } from "./migration";
 // and no relay route, so that table stays as it is.
 //
 // `workflow_github_runs`: the item of a run that a GitHub event started. `caused_by_bot` is set when
-// the OpenBot GitHub App's bot sent the event, so the loop guard can count a chain of such runs.
+// the CodeBot GitHub App's bot sent the event, so the loop guard can count a chain of such runs.
 //
 // `workflow_github_deliveries`: each event that GitHub sent to a trigger, once, and each time the host
 // was offline (`delivery_id` is then `offline:<from>`, and the item is null). It is also the queue: a
@@ -132,7 +132,7 @@ function addGitHubWorkflows(db: DatabaseSync): void {
   db.exec(WORKFLOW_GITHUB_SCHEMA_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 49,
   name: "github-workflows",
   // Rebuilds the run table to add the GitHub run source, so foreign keys pause while steps point to

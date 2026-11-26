@@ -4,7 +4,7 @@ import {
   WORKFLOW_MEDIA_SIZE_MIN,
   WORKFLOW_VIDEO_VOICES,
   type WorkflowMediaSize,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   Button,
   ChevronDown,
@@ -21,7 +21,7 @@ import {
   SwitchField,
   Textarea,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js";
 import { createScrollFades } from "../../components/createScrollFades";
 import { ScrollEdges } from "../../components/ScrollEdges";

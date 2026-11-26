@@ -1,4 +1,4 @@
-import type { AvatarColor } from "@openbot/contracts/ipc";
+import type { AvatarColor } from "@codebot/contracts/ipc";
 
 export const CHAT_BACKDROP_SCENES = ["pond", "jellyfish", "sunset", "snowfall", "fireflies", "coast"] as const;
 export type ChatBackdropScene = (typeof CHAT_BACKDROP_SCENES)[number];

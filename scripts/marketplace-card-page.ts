@@ -1,7 +1,7 @@
+import { APP_LOGO_CORNER, APP_LOGO_EYE_POINTS, APP_LOGO_SIZE } from "@codebot/brand/app-logo-shape";
+import { bloubAvatarProfile } from "@codebot/brand/bloub-avatar";
+import type { AvatarHue } from "@codebot/contracts/ipc";
 import { BloubBot } from "@norbert_bodziony/bloub";
-import { APP_LOGO_CORNER, APP_LOGO_EYE_POINTS, APP_LOGO_SIZE } from "@openbot/brand/app-logo-shape";
-import { bloubAvatarProfile } from "@openbot/brand/bloub-avatar";
-import type { AvatarHue } from "@openbot/contracts/ipc";
 import { render } from "@solidjs/web";
 import { flush } from "solid-js";
 
@@ -18,7 +18,7 @@ export interface MarketplaceCardJob {
 
 declare global {
   interface Window {
-    openBotMarketplaceCard?: { render: (job: MarketplaceCardJob) => Promise<string> };
+    codeBotMarketplaceCard?: { render: (job: MarketplaceCardJob) => Promise<string> };
   }
 }
 
@@ -49,7 +49,7 @@ const BLOCKS_PATHS = [
   "M15 2h6a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z",
 ];
 
-window.openBotMarketplaceCard = { render: renderMarketplaceCard };
+window.codeBotMarketplaceCard = { render: renderMarketplaceCard };
 
 async function renderMarketplaceCard(job: MarketplaceCardJob): Promise<string> {
   await Promise.all([
@@ -145,10 +145,10 @@ function drawBrand(context: CanvasRenderingContext2D): void {
   drawLogo(context, BRAND.x, BRAND.y, BRAND.logo);
   setFont(context, 600, BRAND.font, -0.02);
   context.fillStyle = PRIMARY;
-  const metrics = context.measureText("OpenBot");
+  const metrics = context.measureText("CodeBot");
   const textHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
   const baseline = BRAND.y + (BRAND.logo - textHeight) / 2 + metrics.fontBoundingBoxAscent;
-  context.fillText("OpenBot", BRAND.x + BRAND.logo + BRAND.gap, baseline);
+  context.fillText("CodeBot", BRAND.x + BRAND.logo + BRAND.gap, baseline);
 }
 
 function drawLogo(context: CanvasRenderingContext2D, x: number, y: number, size: number): void {

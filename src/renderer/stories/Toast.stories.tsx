@@ -1,4 +1,4 @@
-import { Button, Heading, Text, Toaster, toast } from "@openbot/ui";
+import { Button, Heading, Text, Toaster, toast } from "@codebot/ui";
 import { createSignal, onCleanup, type ParentProps } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
@@ -155,7 +155,7 @@ export const WithAction: Story = {
           <Button
             variant="outline"
             onClick={() =>
-              toast.success("OpenBot 0.71.0 is ready", {
+              toast.success("CodeBot 0.71.0 is ready", {
                 description: "Restart to apply the update.",
                 duration: Number.POSITIVE_INFINITY,
                 action: { label: "Restart to update", onClick: () => setStatus("Restarting.") },

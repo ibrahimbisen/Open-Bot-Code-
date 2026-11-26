@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { z } from "zod";
 
 export const READ_IMAGE_MAX_FILE_BYTES = 100 * 1024 * 1024;

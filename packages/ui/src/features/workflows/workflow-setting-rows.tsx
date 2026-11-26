@@ -1,5 +1,5 @@
-import type { MessagingPlatform } from "@openbot/contracts/ipc";
-import { Bot, ChevronDown, DropdownMenu, Hash, Input } from "@openbot/ui";
+import type { MessagingPlatform } from "@codebot/contracts/ipc";
+import { Bot, ChevronDown, DropdownMenu, Hash, Input } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Show, untrack } from "solid-js";
 import { useText } from "../../text";
@@ -277,7 +277,7 @@ const channelKey = (channelId: string) => JSON.stringify([channelId]);
 
 export function OutputChannelRow(props: {
   id: string;
-  openbot: boolean;
+  codebot: boolean;
   connectionId?: string | undefined;
   placeId?: string | undefined;
   disabled: boolean;
@@ -310,7 +310,7 @@ export function OutputChannelRow(props: {
     return [...groups.values()];
   };
   const groups = () => [
-    ...(channels().length > 0 ? [{ label: t("workflow.output.channel.openbot"), choices: channels() }] : []),
+    ...(channels().length > 0 ? [{ label: t("workflow.output.channel.codebot"), choices: channels() }] : []),
     ...connections(),
   ];
   const choose = (key: string) => {
@@ -325,7 +325,7 @@ export function OutputChannelRow(props: {
   return (
     <SettingRow
       name={t("workflow.node.place.channel")}
-      value={props.openbot ? channelKey(channelId()) : placeKey(place.connectionId(), place.placeId())}
+      value={props.codebot ? channelKey(channelId()) : placeKey(place.connectionId(), place.placeId())}
       choices={groups().flatMap((group) => group.choices)}
       groups={groups()}
       search={t("workflow.output.channel.search")}

@@ -1,8 +1,8 @@
-import { type NearWalletDesktopApi, type NearWalletStatus, NO_NEAR_WALLET } from "@openbot/contracts/ipc";
-import type { NearWalletActions } from "@openbot/ui/features/vault/VaultNearWallet";
+import { type NearWalletDesktopApi, type NearWalletStatus, NO_NEAR_WALLET } from "@codebot/contracts/ipc";
+import type { NearWalletActions } from "@codebot/ui/features/vault/VaultNearWallet";
 import { createStore } from "solid-js";
 
-export function createNearWalletStore(api: () => NearWalletDesktopApi = () => window.openbot.nearWallet) {
+export function createNearWalletStore(api: () => NearWalletDesktopApi = () => window.codebot.nearWallet) {
   const [state, setState] = createStore<{ status: NearWalletStatus }>({ status: structuredClone(NO_NEAR_WALLET) });
   let request = 0;
 

@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 35 records what started a manual run: a test, a local script or a webhook. Frozen with the
@@ -17,7 +17,7 @@ function addRoutineRunSource(db: DatabaseSync): void {
   }
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 35,
   name: "routine-run-source",
   // Adds a column with no default to two tables: no rebuild, so no foreign-key pause and no vacuum. Every

@@ -13,9 +13,9 @@ import {
   isGithubRepo,
   isGithubSkillPath,
   type MarketplaceSkillDetail,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Schema } from "effect";
 import { zipSync } from "fflate";
 import { causeHelpers } from "../backend/effect-boundary";
@@ -96,7 +96,7 @@ export function githubSkillSource(fetchImpl: GitHubFetch) {
   const request = (url: string) =>
     io((signal) =>
       fetchImpl(url, {
-        headers: { Accept: "application/vnd.github+json", "User-Agent": "OpenBot" },
+        headers: { Accept: "application/vnd.github+json", "User-Agent": "CodeBot" },
         signal: AbortSignal.any([signal, AbortSignal.timeout(GITHUB_REQUEST_TIMEOUT_MS)]),
       }),
     ).pipe(Effect.mapError(() => failure(sourceText("error.skill.githubUnavailable"))));

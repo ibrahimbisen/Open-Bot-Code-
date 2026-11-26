@@ -1,4 +1,4 @@
-import type { BrowserLiveViewEvent } from "@openbot/contracts/ipc";
+import type { BrowserLiveViewEvent } from "@codebot/contracts/ipc";
 import {
   BROWSER_VIEW_DIALOG_QUERY,
   BROWSER_VIEW_FRAME_ACK_QUERY,
@@ -19,8 +19,8 @@ import {
   TEAM_BROWSER_VIEW_FRAME_POINT_CAPABILITY,
   TEAM_BROWSER_VIEW_FRAME_SIZE_CAPABILITY,
   TEAM_BROWSER_VIEW_PAGE_COPY_CAPABILITY,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Fiber } from "effect";
 import type { RemoteServerManager } from "./remote-server-manager";
 import { RemoteWorkflowError, remoteDecode } from "./remote-service-effects";

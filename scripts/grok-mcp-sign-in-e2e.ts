@@ -3,8 +3,8 @@ import { mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { mcpProviderFailureKind } from "../src/backend/agent/provider-diagnostics";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolveGrokCli } from "../src/backend/cli";
@@ -13,7 +13,7 @@ import type { McpServerDrop } from "../src/backend/mcp-provider-shapes";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/grok-mcp-sign-in-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-mcp-sign-in-e2e");
 const NL = String.fromCharCode(10);
 const NAME = "metricool";
 const STATUS_TIMEOUT_MS = 60_000;
@@ -28,7 +28,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, drops: [], diagnostics: [], mcpRequests: 0 };
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-grok-mcp-sign-in-e2e-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-grok-mcp-sign-in-e2e-")));
 const clients: AgentClient[] = [];
 const saved = { ...process.env };
 

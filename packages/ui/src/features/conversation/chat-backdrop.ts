@@ -4,9 +4,9 @@ import {
   type ChatBackdropScene,
   isChatBackdropScene,
   paintChatBackdropScene,
-} from "@openbot/brand/chat-backdrop-scenes";
-import { chatHtmlPreviewDocument, chatPreviewKind } from "@openbot/contracts/chat-preview";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/brand/chat-backdrop-scenes";
+import { chatHtmlPreviewDocument, chatPreviewKind } from "@codebot/contracts/chat-preview";
+import type { AppTextKey } from "@codebot/i18n";
 import { Marked, type Token, type Tokens } from "marked";
 
 const CUSTOM_PREFIX = "custom:";
@@ -56,7 +56,7 @@ export {
   type ChatBackdropFrame,
   type ChatBackdropScene,
   isChatBackdropScene,
-} from "@openbot/brand/chat-backdrop-scenes";
+} from "@codebot/brand/chat-backdrop-scenes";
 
 const CALM_CENTER = 0.55;
 

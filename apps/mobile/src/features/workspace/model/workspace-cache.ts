@@ -1,4 +1,4 @@
-import { isStorageGb } from "@openbot/contracts/billing";
+import { isStorageGb } from "@codebot/contracts/billing";
 import {
   type AvatarColor,
   type ChannelPage,
@@ -9,10 +9,10 @@ import {
   isAvatarColor,
   ROUTINE_QUIET_ANSWER_ITEM_TYPE,
   type SidebarLayoutSnapshot,
-} from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { optionalServerAppearanceField } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import type { RemoteTeamHost } from "@openbot/team-client";
+} from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { optionalServerAppearanceField } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import type { RemoteTeamHost } from "@codebot/team-client";
 import * as Crypto from "expo-crypto";
 import * as FileSystem from "expo-file-system/legacy";
 import * as LockedKeychain from "@/shared/lib/locked-keychain";
@@ -42,7 +42,7 @@ export interface WorkspaceCache {
 
 const FORMAT = 1;
 const ROOT = "workspace-cache-v1/";
-const KEY_NAME = "openbot.mobile.workspace-cache-key.v1";
+const KEY_NAME = "codebot.mobile.workspace-cache-key.v1";
 const HOSTS_NAME = "~hosts";
 const MAX_JSON_LENGTH = 3 * 1024 * 1024;
 

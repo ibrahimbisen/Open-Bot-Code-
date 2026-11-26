@@ -3,15 +3,15 @@ import {
   type CreditMediaModel,
   creditMediaCost,
   creditMediaSpendable,
-} from "@openbot/contracts/credit-media";
+} from "@codebot/contracts/credit-media";
 import type {
   AgentApproval,
   MediaApprovalBalance,
   MediaApprovalChoice,
   MediaApprovalOffer,
   MediaApprovalRead,
-} from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
+} from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
 import {
   Button,
   Check,
@@ -34,11 +34,11 @@ import {
   toast,
   Volume2,
   VolumeX,
-} from "@openbot/ui";
-import { CreditAmount } from "@openbot/ui/features/credits/CreditIcon";
-import { creditModelMakerNamed, MakerLogo } from "@openbot/ui/features/credits/MakerLogo";
-import { createPickerFades } from "@openbot/ui/features/workflows/WorkflowPicker";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { CreditAmount } from "@codebot/ui/features/credits/CreditIcon";
+import { creditModelMakerNamed, MakerLogo } from "@codebot/ui/features/credits/MakerLogo";
+import { createPickerFades } from "@codebot/ui/features/workflows/WorkflowPicker";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, createStore, Show, untrack } from "solid-js";
 import type { CreditsHoldControls } from "./CreditsHoldCard";

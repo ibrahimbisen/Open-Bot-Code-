@@ -32,10 +32,10 @@ async function mcpRequest(server: NonNullable<AcpParams["mcpServers"]>[number], 
   return toolCount(await response.text());
 }
 
-async function listOpenBotTools(sessionId: string): Promise<number> {
+async function listCodeBotTools(sessionId: string): Promise<number> {
   let count = 0;
   for (const server of servers.get(sessionId) ?? []) {
-    if (server.type !== "http" || !server.name.startsWith("openbot")) continue;
+    if (server.type !== "http" || !server.name.startsWith("codebot")) continue;
     await mcpRequest(server, "initialize", 1);
     count += await mcpRequest(server, "tools/list", 2);
   }
@@ -50,7 +50,7 @@ const open = (sessionId: string, request: AcpRequest, peer: Parameters<AcpHandle
     peer.reply(request, request.method === "session/new" ? { sessionId, models: MODELS } : { models: MODELS });
   };
   if (mode === "never") return answer(null);
-  void listOpenBotTools(sessionId).then(answer);
+  void listCodeBotTools(sessionId).then(answer);
 };
 
 serveFakeAcpAgent({
@@ -75,7 +75,7 @@ serveFakeAcpAgent({
       peer.say(sessionId, "OK");
       peer.reply(request, { stopReason: "end_turn" });
     };
-    if (/\blist\b/u.test(text)) void listOpenBotTools(sessionId).then(finish);
+    if (/\blist\b/u.test(text)) void listCodeBotTools(sessionId).then(finish);
     else finish(null);
   },
 });

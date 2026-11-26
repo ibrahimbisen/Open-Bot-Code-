@@ -1,4 +1,4 @@
-import type { HostSignalHome } from "@openbot/contracts/ipc";
+import type { HostSignalHome } from "@codebot/contracts/ipc";
 import { useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -21,7 +21,7 @@ import { useText } from "@/shared/lib/text";
 
 export function ServerSignalHomeScreen() {
   const { t, errorMessage, format } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const { serverId } = useLocalSearchParams<{ serverId: string }>();
   const { available, query, save } = useServerSignalHome(serverId);
   const [pending, setPending] = useState<string | null>(null);

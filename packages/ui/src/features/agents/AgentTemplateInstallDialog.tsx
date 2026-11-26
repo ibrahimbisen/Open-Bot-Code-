@@ -1,6 +1,6 @@
-import type { AgentTemplateDetail } from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import { Button, Dialog, Heading, IconButton, Text, toast, X } from "@openbot/ui";
+import type { AgentTemplateDetail } from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import { Button, Dialog, Heading, IconButton, Text, toast, X } from "@codebot/ui";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 import { AgentAvatar } from "./AgentAvatar";

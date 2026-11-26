@@ -26,7 +26,7 @@ export function SettingsPicker<T extends string | number>({
   label,
   onChange,
 }: SettingsPickerProps<T>) {
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const selected = options.find((option) => option.value === value);
   return (
     <Host matchContents colorScheme={dark ? "dark" : "light"}>

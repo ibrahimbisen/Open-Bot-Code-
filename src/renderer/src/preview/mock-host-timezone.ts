@@ -1,4 +1,4 @@
-import type { HostAdminDesktopApi, HostTimezoneSettings } from "@openbot/contracts/ipc";
+import type { HostAdminDesktopApi, HostTimezoneSettings } from "@codebot/contracts/ipc";
 
 export function createMockHostTimezone(): Pick<HostAdminDesktopApi, "getTimezone" | "setTimezone"> {
   const settings: HostTimezoneSettings = { timezone: null, systemTimezone: "UTC" };

@@ -4,8 +4,8 @@ import {
   type XPageRules,
   type XReplyPayload,
   xPageRulesHash,
-} from "@openbot/contracts/browser-extension-x";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/browser-extension-x";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { track } from "./analytics";
 import { startClientBrowser } from "./client-browser-worker";
 import { openXChat } from "./extension-storage";
@@ -29,11 +29,11 @@ import { type QueuedPost, readOutbox, retryWait, stillSendable, writeOutbox } fr
 
 void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
-const RULES_KEY = "openbot.x-rules.v1";
+const RULES_KEY = "codebot.x-rules.v1";
 const RULES_CHECK_MS = 60 * 60 * 1_000;
 const OFFSCREEN_PAGE = "offscreen.html";
 const PANEL_PAGE = "sidepanel.html";
-const OUTBOX_ALARM = "openbot-x-outbox";
+const OUTBOX_ALARM = "codebot-x-outbox";
 
 let creating: Promise<void> | null = null;
 
@@ -44,7 +44,7 @@ async function remoteRules(): Promise<XPageRules | null> {
   if (Date.now() - checkedAt < RULES_CHECK_MS) return stored;
   try {
     const have = await xPageRulesHash(stored ?? X_PAGE_RULES_DEFAULT);
-    const url = new URL(import.meta.env.VITE_OPENBOT_X_RULES_URL);
+    const url = new URL(import.meta.env.VITE_CODEBOT_X_RULES_URL);
     url.searchParams.set("hash", have);
     const response = await fetch(url, { cache: "no-store" });
     const body = await response.json();
@@ -74,7 +74,7 @@ async function ensureOffscreen(): Promise<void> {
     .createDocument({
       url: OFFSCREEN_PAGE,
       reasons: ["WEB_RTC"],
-      justification: "Keeps the connection to the user's OpenBot server for the posts that the user sends from X.",
+      justification: "Keeps the connection to the user's CodeBot server for the posts that the user sends from X.",
     })
     .finally(() => {
       creating = null;
@@ -93,7 +93,7 @@ function fromExtensionPage(sender: chrome.runtime.MessageSender): boolean {
   return Boolean(sender.url?.startsWith(chrome.runtime.getURL("")));
 }
 
-const X_SENT_NOTIFICATION = "openbot-x-sent-";
+const X_SENT_NOTIFICATION = "codebot-x-sent-";
 const panels = new Set<chrome.runtime.Port>();
 
 chrome.runtime.onConnect.addListener((port) => {
@@ -117,7 +117,7 @@ async function ask<T>(request: XRequest, decode: (value: unknown) => T): Promise
 
 let flushing: Promise<void> | null = null;
 
-const LABELS_KEY = "openbot.x-labels.v1";
+const LABELS_KEY = "codebot.x-labels.v1";
 
 async function savedLabels(): Promise<XLabels | null> {
   return decodeXLabels((await chrome.storage.local.get(LABELS_KEY))[LABELS_KEY]);
@@ -160,7 +160,7 @@ function flushOutbox(force = false): Promise<void> {
         if (stillSendable(post, now)) queued.push(post);
         else {
           void track("x_reply_action", { action: "dropped", attempts: post.attempts });
-          if (labels) await notify(`openbot-x-dropped-${post.id}`, labels.droppedTitle, labels.droppedBody, post);
+          if (labels) await notify(`codebot-x-dropped-${post.id}`, labels.droppedTitle, labels.droppedBody, post);
         }
       }
       const kept: QueuedPost[] = [];

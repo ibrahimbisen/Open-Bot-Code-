@@ -1,6 +1,6 @@
-import { avatarHeadColor, avatarStyleForSeed } from "@openbot/brand/bloub-avatar";
-import { type AvatarMood, avatarMoodIsBusy, avatarMoodPresentation } from "@openbot/brand/bloub-avatar-motion";
-import type { AvatarColor, AvatarHue } from "@openbot/contracts/ipc";
+import { avatarHeadColor, avatarStyleForSeed } from "@codebot/brand/bloub-avatar";
+import { type AvatarMood, avatarMoodIsBusy, avatarMoodPresentation } from "@codebot/brand/bloub-avatar-motion";
+import type { AvatarColor, AvatarHue } from "@codebot/contracts/ipc";
 import { Canvas, Picture } from "@shopify/react-native-skia";
 import { Image } from "expo-image";
 import { memo, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";

@@ -3,8 +3,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import type { DiscordApiErrorCode, DiscordApiRequest } from "@openbot/contracts/signal-protocol/discord-api";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import type { DiscordApiErrorCode, DiscordApiRequest } from "@codebot/contracts/signal-protocol/discord-api";
 import { Effect } from "effect";
 import {
   type DiscordRestRequest,
@@ -16,6 +16,7 @@ import { DiscordState } from "../remote/api/src/discord-events";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
 import { discordDriver } from "../src/backend/messaging/discord/discord-driver";
@@ -26,12 +27,11 @@ import {
   MessagingAdapterError,
   type MessagingIngress,
 } from "../src/backend/messaging/messaging-types";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/messaging-place-history-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/messaging-place-history-e2e");
 const REPORT = join(OUT, "report.json");
-const root = await mkdtemp(join(tmpdir(), "openbot-messaging-place-history-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-messaging-place-history-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const APP = "300000000000000001";
@@ -146,7 +146,7 @@ const gateway = (t: string, d: unknown): Parameters<DiscordState["handle"]>[0] =
 signal.handle(
   gateway("READY", {
     v: 10,
-    user: { id: APP, username: "OpenBot", bot: true },
+    user: { id: APP, username: "CodeBot", bot: true },
     application: { id: APP, flags: 0 },
     guilds: [{ id: GUILD, unavailable: true }],
     session_id: "session",
@@ -199,7 +199,7 @@ const credentials: MessagingCredentials = {
 };
 
 async function boot<T>(use: (threads: MessagingThreads, mailbox: MailboxStore) => Promise<T>): Promise<T> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
@@ -287,7 +287,7 @@ try {
     const connection = threads.store.connections()[0]?.connectionId ?? "";
     assert.ok(connection, "The Discord connection is missing.");
 
-    await step("the place list shows the channel that OpenBot can view, and not the hidden one", async () => {
+    await step("the place list shows the channel that CodeBot can view, and not the hidden one", async () => {
       const listed = await call(threads, "messaging_list_places", { connection });
       assert.ok(listed.success, JSON.stringify(listed.result));
       assert.deepEqual(listed.result.places, [{ id: CHANNEL, name: "#general", kind: "channel" }]);

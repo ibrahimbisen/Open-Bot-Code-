@@ -2,10 +2,10 @@ import interLatinFont from "@fontsource-variable/inter/files/inter-latin-wght-no
 import type { JSX } from "@solidjs/web";
 import { createRootRoute, type ErrorComponentProps, HeadContent, Outlet, Scripts } from "@tanstack/solid-router";
 import { createSignal, onSettled, Show } from "solid-js";
-import "@openbot/brand/logo.css";
-import { rememberPromotionCode } from "@openbot/contracts/promotion-code";
-import { rememberReferralCode } from "@openbot/contracts/referral";
-import { installPointerFocusGuard } from "@openbot/ui/pointer-focus";
+import "@codebot/brand/logo.css";
+import { rememberPromotionCode } from "@codebot/contracts/promotion-code";
+import { rememberReferralCode } from "@codebot/contracts/referral";
+import { installPointerFocusGuard } from "@codebot/ui/pointer-focus";
 import "../styles.css";
 import { NotFoundPage } from "../components/landing/NotFoundPage";
 import { PageError } from "../components/landing/PageError";
@@ -15,10 +15,10 @@ import { loadPageText, type PageText } from "../lib/page-text";
 import { requestLocale } from "../lib/request-locale";
 import { servingSiteUrl } from "../lib/serving-site-url";
 import { loadSiteChrome } from "../lib/site-locale";
-import { OPENBOT_SECURITY_HEADERS, openBotRootHead } from "../lib/site-metadata";
+import { CODEBOT_SECURITY_HEADERS, codeBotRootHead } from "../lib/site-metadata";
 import type { SiteChrome } from "../lib/site-text";
 
-const NOT_FOUND_TITLE = "Page not found · OpenBot";
+const NOT_FOUND_TITLE = "Page not found · CodeBot";
 
 export const Route = createRootRoute({
   beforeLoad: () => ({ siteUrl: servingSiteUrl(), locale: requestLocale() }),
@@ -28,11 +28,11 @@ export const Route = createRootRoute({
   },
   shouldReload: false,
   head: ({ matches }) => {
-    const head = openBotRootHead(interLatinFont);
+    const head = codeBotRootHead(interLatinFont);
     if (!matches.some((match) => match._notFound)) return head;
     return { ...head, meta: head.meta.map((tag) => ("title" in tag ? { title: NOT_FOUND_TITLE } : tag)) };
   },
-  headers: () => ({ ...OPENBOT_SECURITY_HEADERS, Vary: "Accept-Language, Cookie" }),
+  headers: () => ({ ...CODEBOT_SECURITY_HEADERS, Vary: "Accept-Language, Cookie" }),
   component: RootComponent,
   shellComponent: RootDocument,
   errorComponent: RootError,

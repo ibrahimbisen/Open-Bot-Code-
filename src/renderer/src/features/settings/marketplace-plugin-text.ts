@@ -1,9 +1,9 @@
-import type { McpConnectFlow } from "@openbot/contracts/mcp-connect-flows";
-import { type AppTextKey, type AppTranslate, translateFor } from "@openbot/i18n";
+import type { McpConnectFlow } from "@codebot/contracts/mcp-connect-flows";
+import { type AppTextKey, type AppTranslate, translateFor } from "@codebot/i18n";
 import type {
   MarketplacePluginDetail,
   MarketplacePluginServer,
-} from "@openbot/ui/features/settings/marketplace-plugins";
+} from "@codebot/ui/features/settings/marketplace-plugins";
 
 interface PluginTextKeys {
   tagline: AppTextKey;

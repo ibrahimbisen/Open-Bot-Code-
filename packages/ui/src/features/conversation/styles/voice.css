@@ -2,15 +2,15 @@
   display: flex;
   width: min(560px, 100%);
   align-items: center;
-  gap: var(--openbot-space-3);
-  margin: 0 auto var(--openbot-space-2);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-surface-raised);
-  box-shadow: var(--openbot-shadow-raised);
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-2) var(--openbot-space-1);
-  animation: speaking-bar-in var(--openbot-duration-normal) var(--openbot-ease-out) both;
+  gap: var(--codebot-space-3);
+  margin: 0 auto var(--codebot-space-2);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-surface-raised);
+  box-shadow: var(--codebot-shadow-raised);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-2) var(--codebot-space-1);
+  animation: speaking-bar-in var(--codebot-duration-normal) var(--codebot-ease-out) both;
 }
 
 @keyframes speaking-bar-in {
@@ -31,7 +31,7 @@
 .speaking-bar-waveform {
   max-width: 120px;
   flex: 0 0 auto;
-  color: var(--openbot-accent);
+  color: var(--codebot-accent);
 }
 
 .speaking-bar-caption {
@@ -39,69 +39,69 @@
   flex: 1;
   margin: 0;
   overflow: hidden;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .covered-voice-recording {
   position: fixed;
-  z-index: calc(var(--openbot-layer-dropdown) - 1);
-  bottom: var(--openbot-space-4);
+  z-index: calc(var(--codebot-layer-dropdown) - 1);
+  bottom: var(--codebot-space-4);
   inset-inline: 0;
   display: flex;
-  width: min(360px, calc(100vw - 2 * var(--openbot-space-4)));
+  width: min(360px, calc(100vw - 2 * var(--codebot-space-4)));
   align-items: center;
   margin-inline: auto;
-  gap: var(--openbot-space-2);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-surface-raised);
-  box-shadow: var(--openbot-shadow-raised);
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-3) var(--openbot-space-1);
-  animation: speaking-bar-in var(--openbot-duration-normal) var(--openbot-ease-out) both;
+  gap: var(--codebot-space-2);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-surface-raised);
+  box-shadow: var(--codebot-shadow-raised);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-3) var(--codebot-space-1);
+  animation: speaking-bar-in var(--codebot-duration-normal) var(--codebot-ease-out) both;
 }
 
 .covered-voice-recording-icon {
   width: 16px;
   height: 16px;
   flex: 0 0 auto;
-  color: var(--openbot-accent);
+  color: var(--codebot-accent);
 }
 
 .covered-voice-recording-label {
   flex: 0 0 auto;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   white-space: nowrap;
 }
 
 .covered-voice-recording-waveform {
-  color: var(--openbot-accent);
+  color: var(--codebot-accent);
 }
 
 .covered-voice-recording[data-tone="warning"] :is(.covered-voice-recording-icon, .covered-voice-recording-waveform) {
-  color: var(--openbot-warning-text);
+  color: var(--codebot-warning-text);
 }
 
 .covered-voice-recording[data-tone="warning"] .voice-recording-remaining {
-  color: var(--openbot-warning-text);
+  color: var(--codebot-warning-text);
 }
 
 .covered-voice-recording-time {
   flex: 0 0 auto;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
-  line-height: var(--openbot-leading-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .voice-pill-dock {
-  --voice-pill-fill: var(--window-solid-frame, var(--openbot-bg-frame));
+  --voice-pill-fill: var(--window-solid-frame, var(--codebot-bg-frame));
   --agent-avatar-outline: var(--voice-pill-fill);
 
   position: absolute;
@@ -111,8 +111,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-4);
+  gap: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-4);
   pointer-events: none;
 }
 
@@ -120,11 +120,11 @@
   position: absolute;
   z-index: -1;
 
-  inset-block: 1px calc(-1 * var(--openbot-space-6) - var(--voice-pill-drop, 0px));
+  inset-block: 1px calc(-1 * var(--codebot-space-6) - var(--voice-pill-drop, 0px));
   inset-inline: 0;
 
-  border-start-start-radius: var(--openbot-radius-card);
-  border-start-end-radius: var(--openbot-radius-card);
+  border-start-start-radius: var(--codebot-radius-card);
+  border-start-end-radius: var(--codebot-radius-card);
 }
 
 .voice-pill-blur::before,
@@ -139,35 +139,35 @@
   content: "";
   background: linear-gradient(
     to bottom,
-    color-mix(in srgb, var(--openbot-bg-canvas) 70%, transparent),
-    color-mix(in srgb, var(--openbot-bg-canvas) 35%, transparent) 50%,
+    color-mix(in srgb, var(--codebot-bg-canvas) 70%, transparent),
+    color-mix(in srgb, var(--codebot-bg-canvas) 35%, transparent) 50%,
     transparent
   );
 }
 
 .voice-pill-blur > div:nth-child(1) {
   backdrop-filter: blur(1px);
-  mask-image: linear-gradient(to bottom, var(--openbot-text-primary) 40%, transparent);
+  mask-image: linear-gradient(to bottom, var(--codebot-text-primary) 40%, transparent);
 }
 
 .voice-pill-blur > div:nth-child(2) {
   backdrop-filter: blur(2px);
-  mask-image: linear-gradient(to bottom, var(--openbot-text-primary) 30%, transparent 90%);
+  mask-image: linear-gradient(to bottom, var(--codebot-text-primary) 30%, transparent 90%);
 }
 
 .voice-pill-blur > div:nth-child(3) {
   backdrop-filter: blur(4px);
-  mask-image: linear-gradient(to bottom, var(--openbot-text-primary) 20%, transparent 75%);
+  mask-image: linear-gradient(to bottom, var(--codebot-text-primary) 20%, transparent 75%);
 }
 
 .voice-pill-blur > div:nth-child(4) {
   backdrop-filter: blur(8px);
-  mask-image: linear-gradient(to bottom, var(--openbot-text-primary) 10%, transparent 60%);
+  mask-image: linear-gradient(to bottom, var(--codebot-text-primary) 10%, transparent 60%);
 }
 
 .voice-pill-blur > div:nth-child(5) {
   backdrop-filter: blur(16px);
-  mask-image: linear-gradient(to bottom, var(--openbot-text-primary), transparent 45%);
+  mask-image: linear-gradient(to bottom, var(--codebot-text-primary), transparent 45%);
 }
 
 .conversation-panel.browser-panel-active > .voice-pill-dock {
@@ -214,10 +214,10 @@
   width: max-content;
   max-width: 100%;
   align-items: center;
-  margin-top: var(--openbot-space-3);
-  gap: var(--openbot-space-2);
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-2) var(--openbot-space-1);
+  margin-top: var(--codebot-space-3);
+  gap: var(--codebot-space-2);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-2) var(--codebot-space-1);
   opacity: 0;
   pointer-events: auto;
   transform-origin: top center;
@@ -230,7 +230,7 @@
   width: 28px;
   height: 28px;
   flex: 0 0 auto;
-  transition: opacity var(--openbot-duration-normal) ease;
+  transition: opacity var(--codebot-duration-normal) ease;
 }
 
 .voice-pill[data-muted] .voice-pill-avatar {
@@ -240,27 +240,27 @@
 .voice-pill-waveform {
   width: 69px;
   flex: 0 0 auto;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .voice-pill[data-phase="speaking"] .voice-pill-waveform {
-  color: var(--openbot-accent);
+  color: var(--codebot-accent);
 }
 
 .voice-pill-button {
   flex: 0 0 auto;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   box-shadow: none;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   transition-property: background-color, color, opacity, scale;
-  transition-duration: var(--openbot-duration-fast);
-  transition-timing-function: var(--openbot-ease-out);
+  transition-duration: var(--codebot-duration-fast);
+  transition-timing-function: var(--codebot-ease-out);
 }
 
 .voice-pill .voice-pill-button:is(:hover, :focus-visible):not(:disabled) {
-  background: color-mix(in srgb, var(--openbot-text-primary) 6%, transparent);
+  background: color-mix(in srgb, var(--codebot-text-primary) 6%, transparent);
   box-shadow: none;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .voice-pill .voice-pill-button:active:not(:disabled) {
@@ -268,29 +268,29 @@
 }
 
 .voice-pill-button svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
 }
 
 .voice-pill .voice-pill-button[aria-pressed="true"] {
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 .voice-pill .voice-pill-button[aria-pressed="true"]:is(:hover, :focus-visible) {
-  background: color-mix(in srgb, var(--openbot-danger) 16%, transparent);
-  color: var(--openbot-danger-text);
+  background: color-mix(in srgb, var(--codebot-danger) 16%, transparent);
+  color: var(--codebot-danger-text);
 }
 
 .ui-tooltip.voice-pill-tooltip {
-  border-radius: var(--openbot-radius-md);
-  box-shadow: 0 0 0 1px var(--openbot-border-strong);
-  font-weight: var(--openbot-weight-medium);
+  border-radius: var(--codebot-radius-md);
+  box-shadow: 0 0 0 1px var(--codebot-border-strong);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .voice-pill-speed {
   width: auto;
-  padding-inline: var(--openbot-space-1-5);
-  font-size: var(--openbot-text-sm);
+  padding-inline: var(--codebot-space-1-5);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
 }
 
@@ -317,17 +317,17 @@
   align-self: stretch;
   justify-self: stretch;
   place-items: center;
-  border-radius: var(--openbot-radius-pill);
-  background: color-mix(in srgb, var(--openbot-text-primary) 6%, transparent);
+  border-radius: var(--codebot-radius-pill);
+  background: color-mix(in srgb, var(--codebot-text-primary) 6%, transparent);
 }
 
 .voice-pill-download-fill {
   position: absolute;
   inset: 0;
-  background: color-mix(in srgb, var(--openbot-accent) 28%, transparent);
+  background: color-mix(in srgb, var(--codebot-accent) 28%, transparent);
   transform: scaleX(var(--voice-pill-download, 0));
   transform-origin: left center;
-  transition: transform var(--openbot-duration-normal) var(--openbot-ease-out);
+  transition: transform var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 .voice-pill-download-fill:dir(rtl) {
@@ -337,9 +337,9 @@
 .voice-pill-download-label {
   position: relative;
   overflow: hidden;
-  padding-inline: var(--openbot-space-3);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
+  padding-inline: var(--codebot-space-3);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -359,27 +359,27 @@
   overflow: hidden;
   padding-inline: 0;
   opacity: clamp(0, var(--voice-pill-push, 0) * 2.5 - 0.25, 1);
-  border-radius: var(--openbot-radius-pill);
-  background: color-mix(in srgb, var(--openbot-text-primary) 6%, transparent);
+  border-radius: var(--codebot-radius-pill);
+  background: color-mix(in srgb, var(--codebot-text-primary) 6%, transparent);
   box-shadow: none;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   touch-action: none;
   user-select: none;
   -webkit-touch-callout: none;
   transition-property: background-color, color, box-shadow;
-  transition-duration: var(--openbot-duration-fast);
-  transition-timing-function: var(--openbot-ease-out);
+  transition-duration: var(--codebot-duration-fast);
+  transition-timing-function: var(--codebot-ease-out);
 }
 
 .voice-pill .voice-pill-talk:is(:hover, :focus-visible):not(:disabled) {
-  background: color-mix(in srgb, var(--openbot-text-primary) 10%, transparent);
-  color: var(--openbot-text-primary);
+  background: color-mix(in srgb, var(--codebot-text-primary) 10%, transparent);
+  color: var(--codebot-text-primary);
 }
 
 .voice-pill .voice-pill-talk[aria-pressed="true"]:not(:disabled) {
-  background: var(--openbot-accent);
-  box-shadow: 0 0 0 4px var(--openbot-accent-soft);
-  color: var(--openbot-text-on-accent);
+  background: var(--codebot-accent);
+  box-shadow: 0 0 0 4px var(--codebot-accent-soft);
+  color: var(--codebot-text-on-accent);
 }
 
 .voice-pill-talk-face {
@@ -387,7 +387,7 @@
   min-width: 196px;
   flex: 0 0 auto;
   place-items: center;
-  padding-inline: var(--openbot-space-3);
+  padding-inline: var(--codebot-space-3);
   opacity: clamp(0, (var(--voice-pill-push, 0) - 0.4) * 2, 1);
   filter: blur(calc((1 - var(--voice-pill-push-share)) * 4px));
   scale: calc(0.92 + var(--voice-pill-push-share) * 0.08);
@@ -402,7 +402,7 @@
   min-width: 0;
   align-items: center;
   justify-content: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .voice-pill-talk-face:has(> .voice-pill-waveform) > .voice-pill-talk-row {
@@ -410,8 +410,8 @@
 }
 
 .voice-pill-talk svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: 0 0 auto;
 }
 
@@ -421,35 +421,35 @@
 
 .voice-pill-talk-hint {
   overflow: hidden;
-  font-size: var(--openbot-text-sm);
+  font-size: var(--codebot-text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .voice-pill-talk-key {
-  --talk-key-icon-size: var(--openbot-icon-sm);
+  --talk-key-icon-size: var(--codebot-icon-sm);
   display: inline-flex;
   flex: 0 0 auto;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .voice-pill-talk-key .ui-kbd {
-  min-width: var(--openbot-control-xs);
-  height: var(--openbot-control-xs);
-  font-size: var(--openbot-text-md);
+  min-width: var(--codebot-control-xs);
+  height: var(--codebot-control-xs);
+  font-size: var(--codebot-text-md);
 }
 
 .talk-key-symbol svg {
-  width: var(--talk-key-icon-size, var(--openbot-icon-xs));
-  height: var(--talk-key-icon-size, var(--openbot-icon-xs));
+  width: var(--talk-key-icon-size, var(--codebot-icon-xs));
+  height: var(--talk-key-icon-size, var(--codebot-icon-xs));
 }
 
 .voice-pill-mute {
   display: flex;
-  width: calc(var(--openbot-control-md) * (1 - var(--voice-pill-push-share)));
+  width: calc(var(--codebot-control-md) * (1 - var(--voice-pill-push-share)));
   flex: 0 0 auto;
   justify-content: center;
-  margin-inline-start: calc(var(--openbot-space-2) * -1 * var(--voice-pill-push-share));
+  margin-inline-start: calc(var(--codebot-space-2) * -1 * var(--voice-pill-push-share));
   overflow: hidden;
   opacity: clamp(0, 1 - var(--voice-pill-push, 0) * 2, 1);
   scale: calc(1 - var(--voice-pill-push-share) * 0.4);
@@ -457,35 +457,35 @@
 
 .voice-pill-modes.ui-sliding-tabs {
   flex: 0 0 auto;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .voice-pill-modes .ui-sliding-tabs-pill,
 .voice-pill-modes .voice-pill-mode {
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .voice-pill-modes .voice-pill-mode {
-  width: var(--openbot-control-sm);
+  width: var(--codebot-control-sm);
   display: inline-grid;
   place-items: center;
   padding: 0;
 }
 
 .voice-pill-mode svg {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
 }
 
 .voice-pill-error {
   max-width: min(480px, 100%);
   margin: 0;
-  color: var(--openbot-danger);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-danger);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   text-align: center;
   pointer-events: auto;
-  transition: opacity var(--openbot-duration-fast) var(--openbot-ease-out);
+  transition: opacity var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .voice-pill-dock[data-closing] > .voice-pill-error {
@@ -509,14 +509,14 @@
 .voice-player {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  margin-top: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
+  gap: var(--codebot-space-2);
+  margin-top: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
 }
 
 .voice-player-toggle {
   flex: none;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .voice-player-toggle svg {
@@ -539,27 +539,27 @@
 .voice-player-bar {
   width: 2px;
   height: calc(3px + var(--voice-peak, 0) * 17px);
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: currentColor;
   opacity: 0.45;
 }
 
 .voice-player-bar[data-played] {
-  background: var(--openbot-accent);
+  background: var(--codebot-accent);
   opacity: 1;
 }
 
 .voice-player-time {
   min-width: 3ch;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
 }
 
 .voice-player-speed {
   flex: none;
-  width: calc(var(--openbot-space-6) * 2);
+  width: calc(var(--codebot-space-6) * 2);
   padding-inline: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   font-variant-numeric: tabular-nums;
 }

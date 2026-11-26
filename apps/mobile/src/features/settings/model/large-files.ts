@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
-const key = "openbot.mobile.large-files.v1";
+const key = "codebot.mobile.large-files.v1";
 export const useLargeFilePreference = create<{ automatic: boolean; ready: boolean; saving: boolean }>(() => ({
   automatic: false,
   ready: false,

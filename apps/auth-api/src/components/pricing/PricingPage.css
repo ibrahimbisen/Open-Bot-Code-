@@ -16,7 +16,7 @@
   z-index: -1;
   inset: 0 auto 0 50%;
   width: 100vw;
-  background: radial-gradient(36% 26% at 50% 34%, rgba(var(--pricing-accent), 0.14), var(--openbot-transparent) 70%);
+  background: radial-gradient(36% 26% at 50% 34%, rgba(var(--pricing-accent), 0.14), var(--codebot-transparent) 70%);
   content: "";
   pointer-events: none;
   transform: translateX(-50%);
@@ -25,7 +25,7 @@
 
 .pricing-page .pricing-enterprise h2 {
   margin: 0;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -41,12 +41,12 @@
 }
 
 .pricing-page:is(:lang(ar), :lang(he)) .order-form-badge {
-  font-family: var(--openbot-font-sans);
+  font-family: var(--codebot-font-sans);
 }
 
 .pricing-page .pricing-cta[data-disabled],
 .pricing-page .pricing-cta[data-disabled]:hover {
-  background: var(--openbot-surface-light);
+  background: var(--codebot-surface-light);
   cursor: not-allowed;
   opacity: 0.45;
 }
@@ -66,24 +66,24 @@
 }
 
 .pricing-page .pricing-consent-label {
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font-size: 13px;
   line-height: 1.45;
   cursor: pointer;
 }
 
 .pricing-page .pricing-consent-label a {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   text-decoration: underline;
-  text-decoration-color: var(--openbot-border-focus);
+  text-decoration-color: var(--codebot-border-focus);
   text-underline-offset: 2px;
 }
 
 .pricing-page .pricing-consent-box {
   position: relative;
   display: inline-flex;
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: 0 0 auto;
   margin-top: 2px;
 }
@@ -105,26 +105,26 @@
   height: 100%;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--openbot-border-focus);
-  border-radius: var(--openbot-radius-xs);
-  background: var(--openbot-bg-control);
-  color: var(--openbot-transparent);
+  border: 1px solid var(--codebot-border-focus);
+  border-radius: var(--codebot-radius-xs);
+  background: var(--codebot-bg-control);
+  color: var(--codebot-transparent);
 }
 
 .pricing-page .pricing-consent-box .ui-checkbox-input:checked + .ui-checkbox-visual {
-  border-color: var(--openbot-surface-light);
-  background: var(--openbot-surface-light);
-  color: var(--openbot-text-on-light);
+  border-color: var(--codebot-surface-light);
+  background: var(--codebot-surface-light);
+  color: var(--codebot-text-on-light);
 }
 
 .pricing-page .pricing-consent-box .ui-checkbox-input:focus-visible + .ui-checkbox-visual {
-  outline: 2px solid var(--openbot-border-focus);
+  outline: 2px solid var(--codebot-border-focus);
   outline-offset: 2px;
 }
 
 .pricing-page .pricing-consent-box .ui-checkbox-visual svg {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
   stroke-width: 2.5;
 }
 
@@ -154,11 +154,11 @@
 .pricing-page .pricing-enterprise {
   --pricing-band: linear-gradient(
     105deg,
-    var(--openbot-price-sheen-cool-clear) 38%,
-    var(--openbot-price-sheen-cool-soft) 46%,
-    var(--openbot-price-sheen-light) 50%,
-    var(--openbot-price-sheen-warm-soft) 54%,
-    var(--openbot-price-sheen-warm-clear) 62%
+    var(--codebot-price-sheen-cool-clear) 38%,
+    var(--codebot-price-sheen-cool-soft) 46%,
+    var(--codebot-price-sheen-light) 50%,
+    var(--codebot-price-sheen-warm-soft) 54%,
+    var(--codebot-price-sheen-warm-clear) 62%
   );
   position: relative;
   isolation: isolate;
@@ -169,26 +169,26 @@
   gap: 16px;
   margin-top: 20px;
   padding: 22px 24px;
-  border: 1px solid var(--openbot-price-rim-under);
+  border: 1px solid var(--codebot-price-rim-under);
   border-radius: 18px;
   background:
     linear-gradient(
       90deg,
-      var(--openbot-price-sheen-cool-clear),
-      var(--openbot-price-sheen-cool) 35%,
-      var(--openbot-price-sheen-light) 50%,
-      var(--openbot-price-sheen-warm) 65%,
-      var(--openbot-price-sheen-warm-clear)
+      var(--codebot-price-sheen-cool-clear),
+      var(--codebot-price-sheen-cool) 35%,
+      var(--codebot-price-sheen-light) 50%,
+      var(--codebot-price-sheen-warm) 65%,
+      var(--codebot-price-sheen-warm-clear)
     )
     top center / 70% 1px no-repeat,
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--openbot-price-rim-under) 35%, var(--openbot-transparent)),
-      var(--openbot-transparent) 70%
+      color-mix(in srgb, var(--codebot-price-rim-under) 35%, var(--codebot-transparent)),
+      var(--codebot-transparent) 70%
     );
   box-shadow:
-    inset 0 1px 0 var(--openbot-price-rim-under),
-    0 28px 90px -44px var(--openbot-price-glow);
+    inset 0 1px 0 var(--codebot-price-rim-under),
+    0 28px 90px -44px var(--codebot-price-glow);
   overflow: hidden;
 }
 
@@ -217,8 +217,8 @@
   content: "";
   pointer-events: none;
   mask:
-    linear-gradient(var(--openbot-mask-solid) 0 0) content-box exclude,
-    linear-gradient(var(--openbot-mask-solid) 0 0);
+    linear-gradient(var(--codebot-mask-solid) 0 0) content-box exclude,
+    linear-gradient(var(--codebot-mask-solid) 0 0);
   animation: pricing-sweep 6s ease-in-out infinite;
 }
 
@@ -226,26 +226,26 @@
   background:
     linear-gradient(
       105deg,
-      var(--openbot-price-sheen-cool-clear) 35%,
-      color-mix(in srgb, var(--openbot-price-sheen-cool) 50%, var(--openbot-price-sheen-cool-clear)) 47%,
-      color-mix(in srgb, var(--openbot-price-sheen-warm) 50%, var(--openbot-price-sheen-warm-clear)) 53%,
-      var(--openbot-price-sheen-warm-clear) 65%
+      var(--codebot-price-sheen-cool-clear) 35%,
+      color-mix(in srgb, var(--codebot-price-sheen-cool) 50%, var(--codebot-price-sheen-cool-clear)) 47%,
+      color-mix(in srgb, var(--codebot-price-sheen-warm) 50%, var(--codebot-price-sheen-warm-clear)) 53%,
+      var(--codebot-price-sheen-warm-clear) 65%
     )
     0 0 / 300% 100% no-repeat,
-    var(--openbot-surface-light);
-  box-shadow: 0 0 30px -10px var(--openbot-price-glow);
+    var(--codebot-surface-light);
+  box-shadow: 0 0 30px -10px var(--codebot-price-glow);
   animation: pricing-glint 6s ease-in-out infinite;
 }
 
 @media (hover: hover) {
   .pricing-page .pricing-enterprise .landing-button:hover {
-    background-color: var(--openbot-text-primary);
+    background-color: var(--codebot-text-primary);
   }
 }
 
 .pricing-page .pricing-enterprise-body {
   margin: 4px 0 0;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-size: 14px;
   line-height: 1.45;
 }

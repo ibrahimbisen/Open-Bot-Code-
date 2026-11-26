@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { usageGroupForModel } from "@openbot/contracts/ipc";
+import { usageGroupForModel } from "@codebot/contracts/ipc";
 import { Effect, Option, Schema } from "effect";
 import type {
   AccountRateLimitGroupResult,
@@ -14,7 +14,7 @@ const DAILY_CODE_ASSIST_URL = "https://daily-cloudcode-pa.googleapis.com/v1inter
 const DESKTOP_VERSION = "2.24.0";
 const DESKTOP_BUILD = "963137146";
 
-const DEV_CODE_ASSIST_URL = "OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL";
+const DEV_CODE_ASSIST_URL = "CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL";
 
 const QUOTA_CALL_TIMEOUT_MS = 10_000;
 const VALIDATION_LINK_TIMEOUT_MS = 3_000;

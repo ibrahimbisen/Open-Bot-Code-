@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentEvent, Routine, UpdateRoutineInput } from "@openbot/contracts/ipc";
+import type { AgentEvent, Routine, UpdateRoutineInput } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { RoutineScheduler } from "../src/backend/agent/routine-scheduler";
@@ -12,20 +12,20 @@ import { AgentRoutineStore } from "../src/backend/agent-routine-store";
 import { AgentStore } from "../src/backend/agent-store";
 import { AgentWaitStore } from "../src/backend/agent-waits/agent-wait-store";
 import { AgentWaits } from "../src/backend/agent-waits/agent-waits";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { RoutineTimer } from "../src/backend/routine-timer";
 import { parseCreateRoutine, parseUpdateRoutine } from "../src/main/ipc/agent-inputs";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "routine-pause-resume-e2e");
+const OUT = join(ROOT, ".codebot-build", "routine-pause-resume-e2e");
 const STEP_DEADLINE_MS = 15_000;
 const DAY = "2031-03-03";
 const at = (time: string) => new Date(`${DAY}T${time}:00.000Z`);
 
 interface Fixture {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   mailbox: MailboxStore;
   scheduler: RoutineScheduler;
   runs: AgentRoutineStore;
@@ -36,7 +36,7 @@ interface Fixture {
 }
 
 async function openFixture(root: string): Promise<Fixture> {
-  const database = new OpenBotDatabase(join(root, "state"));
+  const database = new CodeBotDatabase(join(root, "state"));
   const store = new AgentStore(join(root, "state"), join(root, "home"), database);
   const mailbox = new MailboxStore(join(root, "state"), store.sharedRoot, database);
   let conversation: ConversationRuntime | undefined;
@@ -152,7 +152,7 @@ async function step<T>(name: string, run: () => Promise<T>): Promise<T> {
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-routine-pause-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-routine-pause-"));
 let fixture: Fixture | undefined;
 
 function current(): Fixture {

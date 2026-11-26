@@ -7,8 +7,8 @@ import {
   ItemGroup,
   ItemTitle,
   SettingsSection,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createUniqueId, For, onCleanup, Show } from "solid-js";
 import { TalkKeyCaps } from "../conversation/TalkKeyCaps";

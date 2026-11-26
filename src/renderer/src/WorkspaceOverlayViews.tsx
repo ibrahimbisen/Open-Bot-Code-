@@ -1,8 +1,8 @@
-import type { AddedAgent, McpSignInState, ServerSummary } from "@openbot/contracts/ipc";
-import type { MarketplaceListingLink } from "@openbot/contracts/marketplace-links";
-import { MAC_APPS_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/mac-apps-limit-v1";
-import type { BrowserViewRuntime } from "@openbot/ui/features/browser/BrowserLiveView";
-import type { MarketplaceAppsBlock } from "@openbot/ui/features/marketplace/marketplace-model";
+import type { AddedAgent, McpSignInState, ServerSummary } from "@codebot/contracts/ipc";
+import type { MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
+import { MAC_APPS_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/mac-apps-limit-v1";
+import type { BrowserViewRuntime } from "@codebot/ui/features/browser/BrowserLiveView";
+import type { MarketplaceAppsBlock } from "@codebot/ui/features/marketplace/marketplace-model";
 import type { ComponentProps } from "@solidjs/web";
 import { createMemo, Loading, omit, Show } from "solid-js";
 import type { AgentTemplateInstallCalls } from "./features/agent-templates/agent-templates-port";

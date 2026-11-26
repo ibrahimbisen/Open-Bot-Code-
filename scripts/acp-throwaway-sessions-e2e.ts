@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AgentModelOption, isAgentModel } from "@openbot/contracts/ipc";
+import { type AgentModelOption, isAgentModel } from "@codebot/contracts/ipc";
 import { generateTextWithoutTools } from "../src/backend/agent/profile-generation";
 import type { AgentClient } from "../src/backend/agent-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -10,7 +10,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-throwaway-sessions-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-throwaway-sessions-e2e");
 const AGENTS = ["deletes", "keeps"] as const;
 type AgentName = (typeof AGENTS)[number];
 
@@ -26,7 +26,7 @@ interface Case {
   deleted: string[];
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-throwaway-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-throwaway-e2e-"));
 const report: { passed: boolean; cases: Case[] } = { passed: false, cases: [] };
 const clients: AgentClient[] = [];
 const logPath = (agent: AgentName) => join(root, `${agent}.jsonl`);
@@ -102,13 +102,13 @@ try {
   assert.equal(deleted.prompted.length, 1, "The tool-less turn prompts one session.");
   assert.ok(
     deleted.prompted.every((id) => deleted.deleted.includes(id)),
-    "OpenBot deletes the session of the tool-less turn.",
+    "CodeBot deletes the session of the tool-less turn.",
   );
 
   const kept = await toolless("tool-less turn on an agent without session/delete", "keeps");
   assert.equal(kept.answer?.trim(), '{"verdict":"done"}', "The tool-less turn answers.");
   assert.equal(kept.prompted.length, 1, "The tool-less turn prompts one session.");
-  assert.deepEqual(kept.deleted, [], "OpenBot sends no session/delete to an agent that does not support it.");
+  assert.deepEqual(kept.deleted, [], "CodeBot sends no session/delete to an agent that does not support it.");
 
   {
     const agent: AgentName = "deletes";
@@ -131,7 +131,7 @@ try {
     assert.equal(result.prompted.length, 1, "The chat prompts one session.");
     assert.ok(
       result.prompted.every((id) => !result.deleted.includes(id)),
-      "OpenBot keeps the chat session when the client stops.",
+      "CodeBot keeps the chat session when the client stops.",
     );
   }
 

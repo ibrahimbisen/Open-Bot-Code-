@@ -8,7 +8,7 @@ import {
   type VaultItemSummary,
   type VaultSaveInput,
   type VaultState,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import { Children, type ReactNode, useEffect, useId, useMemo, useRef, useState } from "react";

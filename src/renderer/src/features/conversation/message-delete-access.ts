@@ -1,7 +1,7 @@
-import type { AgentAccessLevel, AgentAccessLevels, AgentAccessSnapshot, ServerSummary } from "@openbot/contracts/ipc";
-import { AGENT_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-access-v1";
-import { MESSAGE_DELETE_CAPABILITY } from "@openbot/contracts/team-protocol/message-delete-v1";
-import type { AgentMessage } from "@openbot/ui/data";
+import type { AgentAccessLevel, AgentAccessLevels, AgentAccessSnapshot, ServerSummary } from "@codebot/contracts/ipc";
+import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
+import { MESSAGE_DELETE_CAPABILITY } from "@codebot/contracts/team-protocol/message-delete-v1";
+import type { AgentMessage } from "@codebot/ui/data";
 import { createEffect, createSignal } from "solid-js";
 import { serverRoleCanAdminister, serverSupportsCapability } from "../servers/server-capabilities";
 import { conversationPort } from "./conversation-port";

@@ -1,13 +1,13 @@
-import { ProviderLogo } from "@openbot/brand";
-import type { AgentProviderId } from "@openbot/contracts/ipc";
-import { Button, Progress, TOAST_DURATION, toast } from "@openbot/ui";
-import { createDigitRoll } from "@openbot/ui/digit-roll";
+import { ProviderLogo } from "@codebot/brand";
+import type { AgentProviderId } from "@codebot/contracts/ipc";
+import { Button, Progress, TOAST_DURATION, toast } from "@codebot/ui";
+import { createDigitRoll } from "@codebot/ui/digit-roll";
 import {
   type ProviderUpdate,
   type ProviderUpdatePresentation,
   presentProviderUpdate,
-} from "@openbot/ui/features/provider-updates/provider-update";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/provider-updates/provider-update";
+import { currentText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import {
   createEffect,

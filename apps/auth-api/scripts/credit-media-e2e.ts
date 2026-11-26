@@ -2,8 +2,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { CREDIT_MEDIA_REQUEST_PART } from "@openbot/contracts/credit-media";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { CREDIT_MEDIA_REQUEST_PART } from "@codebot/contracts/credit-media";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { createAccountAnalytics } from "../src/server/account-analytics";
 import { BillingError, type BillingOperationError } from "../src/server/billing-errors";
@@ -18,9 +18,9 @@ import { HttpMediaGateway, mediaGatewayFromBinding } from "../src/server/media-g
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "credit-media-e2e");
+const OUT = join(ROOT, ".codebot-build", "credit-media-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
-const GATEWAY = "https://openbot-media-gateway.internal";
+const GATEWAY = "https://codebot-media-gateway.internal";
 const ACCOUNT = "https://account.test";
 const OWNER = "owner";
 const OUTSIDER = "outsider";

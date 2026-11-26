@@ -1,9 +1,9 @@
 import { strict as assert } from "node:assert";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { QueuedSignalMessage } from "@openbot/contracts/signal-protocol/ingress-queue";
-import { createIngressQueueKeyPair } from "@openbot/contracts/signal-protocol/ingress-queue";
-import type { RemoteTicketClaims } from "@openbot/contracts/signal-protocol/ticket";
+import type { QueuedSignalMessage } from "@codebot/contracts/signal-protocol/ingress-queue";
+import { createIngressQueueKeyPair } from "@codebot/contracts/signal-protocol/ingress-queue";
+import type { RemoteTicketClaims } from "@codebot/contracts/signal-protocol/ticket";
 import { Effect } from "effect";
 import { createRemoteCommandMailbox, decodeRemoteTeamCommand } from "../../packages/team-client/src/remote-peer";
 import { encodeTeamWebRtcPayload, TeamWebRtcPayloadDecoder } from "../../packages/team-client/src/webrtc-framing";
@@ -11,7 +11,7 @@ import { IngressQueue, queueRouteKey } from "../api/src/ingress-queue";
 import { SignalService } from "../api/src/signal-service";
 import { RemoteTokenError } from "../api/src/tokens";
 
-const OUT = resolve(import.meta.dirname, "../../.openbot-build/remote-protocol-e2e");
+const OUT = resolve(import.meta.dirname, "../../.codebot-build/remote-protocol-e2e");
 const checks: Array<{ name: string; passed: boolean; error?: string }> = [];
 
 function check(name: string, run: () => void | Promise<void>): Promise<void> {
@@ -30,7 +30,7 @@ function check(name: string, run: () => void | Promise<void>): Promise<void> {
 function claim(role: RemoteTicketClaims["role"], jti: string): RemoteTicketClaims {
   const now = Math.floor(Date.now() / 1_000);
   return {
-    aud: "openbot-remote",
+    aud: "codebot-remote",
     jti,
     sessionId: `session-${jti}`,
     hostId: "host-protocol-e2e",

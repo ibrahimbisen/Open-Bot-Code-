@@ -1,5 +1,5 @@
-import type { BrowserLocation, BrowserPermissionAnswer, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { BROWSER_LOCATION_ACCURACY_LIMIT } from "@openbot/contracts/team-protocol/browser-permissions-v1";
+import type { BrowserLocation, BrowserPermissionAnswer, CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { BROWSER_LOCATION_ACCURACY_LIMIT } from "@codebot/contracts/team-protocol/browser-permissions-v1";
 
 const LOCATION_TIMEOUT_MS = 20_000;
 const LOCATION_MAX_AGE_MS = 60_000;
@@ -30,7 +30,7 @@ function readDeviceLocation(): Promise<BrowserLocation> {
 export type LocationAnswerResult = "answered" | "unavailable";
 
 export async function answerLocationRequest(
-  browser: Pick<OpenBotDesktopApi["browser"], "answerPermission">,
+  browser: Pick<CodeBotDesktopApi["browser"], "answerPermission">,
   remote: boolean,
   answer: Omit<BrowserPermissionAnswer, "location">,
 ): Promise<LocationAnswerResult> {

@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import type { AgentTask } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import type { AgentTask } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { argument, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-threads-narrow-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-threads-narrow-e2e");
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 15_000;
 const english = translateFor("en");
@@ -52,7 +52,7 @@ const literal = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const button = (name: string) => page.getByRole("button", { name, exact: true });
 
 async function readTask(): Promise<AgentTask | undefined> {
-  const snapshot = await page.evaluate((id) => window.openbot.agent.listTasks(id), agentId);
+  const snapshot = await page.evaluate((id) => window.codebot.agent.listTasks(id), agentId);
   return snapshot.tasks.find((task) => task.id === taskId);
 }
 
@@ -74,7 +74,7 @@ function measure(newThreadLabel: string): Promise<{ gap: number | null; lines: n
 }
 
 const agent = await page.evaluate(async (id) => {
-  const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === id);
+  const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === id);
   if (!found) throw new Error(`Unknown agent: ${id}`);
   return { name: found.name };
 }, agentId);
@@ -99,7 +99,7 @@ try {
     .click();
 
   const task = await page.evaluate(
-    (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+    (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
     { agentId, text: SHORT_PROMPT },
   );
   taskId = task.id;
@@ -157,11 +157,11 @@ try {
   if (taskId) {
     const id = taskId;
     await page
-      .evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId: id })
+      .evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId: id })
       .catch(() => undefined);
     await waitFor(page, "the cleanup stop", readTask, (current) => current?.state !== "running").catch(() => undefined);
     await page
-      .evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId: id })
+      .evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId: id })
       .catch(() => undefined);
   }
   writeReport("agent-threads-narrow-e2e", report);

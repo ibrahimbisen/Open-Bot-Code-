@@ -1,4 +1,4 @@
-import { EMPTY_CREDIT_ACTIVITY } from "@openbot/contracts/credits";
+import { EMPTY_CREDIT_ACTIVITY } from "@codebot/contracts/credits";
 import { createFileRoute } from "@tanstack/solid-router";
 import { Effect } from "effect";
 import { runApiResponse } from "../../../../server/effect-runtime";

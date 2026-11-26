@@ -1,8 +1,8 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import type { ServerActionCallbacks } from "@openbot/ui/features/servers/ServerActionItems";
-import type { HiddenServer } from "@openbot/ui/features/servers/ServerRail";
-import { useText } from "@openbot/ui/text";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import type { ServerActionCallbacks } from "@codebot/ui/features/servers/ServerActionItems";
+import type { HiddenServer } from "@codebot/ui/features/servers/ServerRail";
+import { useText } from "@codebot/ui/text";
 import { actionToast } from "../../action-toast";
 import { usePlatform } from "../../platform";
 import { useSettings } from "../settings/settings-context";

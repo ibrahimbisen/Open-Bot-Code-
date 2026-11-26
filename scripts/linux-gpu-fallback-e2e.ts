@@ -9,7 +9,7 @@ import { countCrashDumps } from "../src/main/run-marker";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "linux-gpu-fallback-e2e");
+const OUT = join(ROOT, ".codebot-build", "linux-gpu-fallback-e2e");
 const STATE_TIMEOUT_MS = 30_000;
 const GPU_START_FILE = "gpu-start.json";
 const GPU_CRASH_FILE = "gpu-crash.json";
@@ -48,7 +48,7 @@ interface Launch {
 }
 
 await mkdir(OUT, { recursive: true });
-const root = await mkdtemp(join(tmpdir(), "openbot-linux-gpu-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-linux-gpu-"));
 const bundle = join(root, "linux-gpu-fallback-electron.mjs");
 const steps: Step[] = [];
 const children: ChildProcess[] = [];
@@ -109,9 +109,9 @@ try {
   }
   assert.equal(await launch.exited, 0, "a GPU process restart loop ends with a clean quit");
   steps.push({ step: "software start with a GPU process restart loop", ready: launch.ready });
-  launch = await start(data, 1_000, { OPENBOT_DISABLE_GPU: "0" });
+  launch = await start(data, 1_000, { CODEBOT_DISABLE_GPU: "0" });
   assert.deepEqual(launch.ready.mode, { hardwareAcceleration: true, reason: "environment-on" });
-  steps.push({ step: "OPENBOT_DISABLE_GPU=0", ready: launch.ready });
+  steps.push({ step: "CODEBOT_DISABLE_GPU=0", ready: launch.ready });
   await quit(launch);
 
   await writeFile(join(data, GPU_CRASH_FILE), JSON.stringify({ version: 2, chromium: "0" }));
@@ -178,15 +178,15 @@ try {
   await quit(launch);
 
   const forced = join(root, "forced-software");
-  launch = await start(forced, 1_000, { OPENBOT_DISABLE_GPU: "1" });
+  launch = await start(forced, 1_000, { CODEBOT_DISABLE_GPU: "1" });
   assert.deepEqual(launch.ready.mode, { hardwareAcceleration: false, reason: "environment-off" });
   assert.equal(existsSync(join(forced, GPU_START_FILE)), false);
-  assert.equal(launch.ready.webglRenderer, null, "OPENBOT_DISABLE_GPU=1 turns off WebGL");
-  steps.push({ step: "OPENBOT_DISABLE_GPU=1", ready: launch.ready });
+  assert.equal(launch.ready.webglRenderer, null, "CODEBOT_DISABLE_GPU=1 turns off WebGL");
+  steps.push({ step: "CODEBOT_DISABLE_GPU=1", ready: launch.ready });
   await quit(launch);
 
   const server = join(root, "server");
-  launch = await start(server, 1_000, { OPENBOT_DISABLE_GPU: "0" }, ["--server"]);
+  launch = await start(server, 1_000, { CODEBOT_DISABLE_GPU: "0" }, ["--server"]);
   assert.deepEqual(launch.ready.mode, { hardwareAcceleration: true, reason: "server" });
   assert.equal(launch.ready.hardwareAccelerationEnabled, true);
   assert.equal(launch.ready.gpuCompositing.startsWith("enabled"), false, "a server composites on the CPU");
@@ -202,9 +202,9 @@ try {
   assert.equal(launch.ready.hardwareAccelerationEnabled, false);
   steps.push({ step: "server after gpu crash", ready: launch.ready });
   await quit(launch);
-  launch = await start(join(root, "server-forced-software"), 1_000, { OPENBOT_DISABLE_GPU: "1" }, ["--server"]);
+  launch = await start(join(root, "server-forced-software"), 1_000, { CODEBOT_DISABLE_GPU: "1" }, ["--server"]);
   assert.deepEqual(launch.ready.mode, { hardwareAcceleration: false, reason: "environment-off" });
-  steps.push({ step: "server with OPENBOT_DISABLE_GPU=1", ready: launch.ready });
+  steps.push({ step: "server with CODEBOT_DISABLE_GPU=1", ready: launch.ready });
   await quit(launch);
   passed = true;
 } catch (cause) {
@@ -230,7 +230,7 @@ async function start(
   environment: Record<string, string> = {},
   extraArguments: string[] = [],
 ): Promise<Launch> {
-  const { OPENBOT_DISABLE_GPU: _inherited, ...base } = withoutElectronRuntimeFlags(process.env);
+  const { CODEBOT_DISABLE_GPU: _inherited, ...base } = withoutElectronRuntimeFlags(process.env);
   launchCount += 1;
   const readyFile = join(root, `ready-${launchCount}.json`);
   const log = openSync(join(OUT, `electron-${launchCount}.log`), "w");

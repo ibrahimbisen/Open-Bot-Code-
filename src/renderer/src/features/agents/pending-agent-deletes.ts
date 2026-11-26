@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const PENDING_AGENT_DELETES_STORAGE_KEY = "openbot:pending-agent-deletes:v1";
+const PENDING_AGENT_DELETES_STORAGE_KEY = "codebot:pending-agent-deletes:v1";
 
 const pendingSchema = z.record(z.string().min(1), z.record(z.string().min(1), z.number()).catch({}));
 

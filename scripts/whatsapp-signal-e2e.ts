@@ -5,7 +5,7 @@ import { existsSync } from "node:fs";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   type AuthenticationCreds,
   addTransactionCapability,
@@ -23,8 +23,8 @@ import {
   type SocketConfig,
   unpadRandomMax16,
   writeRandomPadMax16,
-} from "@openbot/whatsapp/baileys";
-import { makeOpenBotSignalRepository } from "@openbot/whatsapp/signal-repository";
+} from "@codebot/whatsapp/baileys";
+import { makeCodeBotSignalRepository } from "@codebot/whatsapp/signal-repository";
 import { Schema } from "effect";
 import { addressToString, jidToAddress } from "../packages/whatsapp/src/signal/address";
 import { publicKeyOf, sharedKey, sign, verify, withKeyType } from "../packages/whatsapp/src/signal/curve";
@@ -62,9 +62,9 @@ import pkmsgVectors from "../packages/whatsapp/test-vectors/session-pkmsg.json";
 import signatureVectors from "../packages/whatsapp/test-vectors/signatures.json";
 import x25519Vectors from "../packages/whatsapp/test-vectors/x25519.json";
 
-const REPORT = resolve(import.meta.dirname, "../.openbot-build/whatsapp-signal-e2e.json");
-const ORACLE = process.env.OPENBOT_WA_ORACLE ?? "";
-const log = createOpenBotLogger("whatsapp-signal-e2e");
+const REPORT = resolve(import.meta.dirname, "../.codebot-build/whatsapp-signal-e2e.json");
+const ORACLE = process.env.CODEBOT_WA_ORACLE ?? "";
+const log = createCodeBotLogger("whatsapp-signal-e2e");
 
 type BaileysLogger = SocketConfig["logger"];
 type E2ESession = Parameters<SignalRepository["injectE2ESession"]>[0]["session"];
@@ -436,7 +436,7 @@ interface Party {
 
 function openRepository(store: MemoryKeyStore, creds: AuthenticationCreds): SignalRepositoryWithLIDStore {
   const keys = addTransactionCapability(store, silentLogger, { maxCommitRetries: 1, delayBetweenTriesMs: 0 });
-  return makeOpenBotSignalRepository({ creds, keys }, silentLogger);
+  return makeCodeBotSignalRepository({ creds, keys }, silentLogger);
 }
 
 function makeParty(jid: string): Party {
@@ -747,10 +747,10 @@ function oracle(command: string, input: { [key: string]: OracleValue }, state?: 
 
 async function checkOracleDifferential(): Promise<"ran" | "skipped"> {
   if (!ORACLE || !existsSync(ORACLE)) {
-    log.info(`SKIP differential: ${ORACLE ? `${ORACLE} does not exist` : "OPENBOT_WA_ORACLE is not set"}`);
+    log.info(`SKIP differential: ${ORACLE ? `${ORACLE} does not exist` : "CODEBOT_WA_ORACLE is not set"}`);
     return "skipped";
   }
-  const dir = await mkdtemp(join(tmpdir(), "openbot-wa-oracle-"));
+  const dir = await mkdtemp(join(tmpdir(), "codebot-wa-oracle-"));
   try {
     await check("oracle/signatures both ways", () => {
       const ours = Curve.generateKeyPair();
@@ -772,7 +772,7 @@ async function checkOracleDifferential(): Promise<"ran" | "skipped"> {
     const oracleJid = "100000000000010:4@lid";
     const oracleAddress = addressToString(jidToAddress(oracleJid));
 
-    await check("oracle/pairwise: OpenBot initiates", async () => {
+    await check("oracle/pairwise: CodeBot initiates", async () => {
       const state = join(dir, "peer-a.json");
       const bundle = oracle(
         "init",

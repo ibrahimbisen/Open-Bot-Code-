@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 export const AUTOMATIC_DICTATION_LANGUAGE = "automatic";
 
-const key = "openbot.mobile.dictation-language.v1";
+const key = "codebot.mobile.dictation-language.v1";
 export const useDictationLanguage = create<{ value: string; ready: boolean; saving: boolean }>(() => ({
   value: AUTOMATIC_DICTATION_LANGUAGE,
   ready: false,

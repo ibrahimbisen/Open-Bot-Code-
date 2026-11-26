@@ -26,10 +26,10 @@ import {
   encodeBrowserViewFrame,
   encodeBrowserViewHostMessage,
   isBrowserViewUserAction,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
-import { REMOTE_DESKTOP_MAX_SIGNAL_BYTES } from "@openbot/contracts/team-protocol/remote-stream-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
+import { REMOTE_DESKTOP_MAX_SIGNAL_BYTES } from "@codebot/contracts/team-protocol/remote-stream-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { Context, Deferred, Effect, Layer, Result, Semaphore } from "effect";
 import type * as Ws from "ws";
 import type { BrowserScreencastFrame } from "../backend/browser-cdp";
@@ -81,7 +81,7 @@ class BrowserViewPort extends Context.Service<
     copy(...args: Parameters<BrowserHost["copyViewSelection"]>): Effect.Effect<string | null, RemoteWorkflowError>;
     answerDialog(...args: Parameters<BrowserHost["answerViewDialog"]>): Effect.Effect<void, RemoteWorkflowError>;
   }
->()("openbot/main/BrowserViewPort") {
+>()("codebot/main/BrowserViewPort") {
   static layer(browser: BrowserViewGatewayOptions["browser"]) {
     return Layer.succeed(
       BrowserViewPort,
@@ -268,11 +268,11 @@ export class BrowserViewGateway {
   }
 
   #authorized(request: IncomingMessage, session: ManagedViewSession): boolean {
-    const remoteSession = request.headers["x-openbot-webrtc-session"];
+    const remoteSession = request.headers["x-codebot-webrtc-session"];
     if (remoteSession === session.teamSessionId) return true;
     const protocols = (request.headers["sec-websocket-protocol"] ?? "").split(",").map((value) => value.trim());
-    const encodedToken = protocols.find((value) => value.startsWith("openbot-token."));
-    const token = encodedToken?.slice("openbot-token.".length) ?? "";
+    const encodedToken = protocols.find((value) => value.startsWith("codebot-token."));
+    const token = encodedToken?.slice("codebot-token.".length) ?? "";
     if (!token || token.length > 512) return false;
     return this.#options.authenticate(token)?.id === session.memberId;
   }

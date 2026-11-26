@@ -1,21 +1,21 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createWebAppInvitePath, parseInviteUrl } from "@openbot/contracts/invite-links";
-import type { OpenBotDesktopApi, ServerSummary } from "@openbot/contracts/ipc";
-import { en } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createWebAppInvitePath, parseInviteUrl } from "@codebot/contracts/invite-links";
+import type { CodeBotDesktopApi, ServerSummary } from "@codebot/contracts/ipc";
+import { en } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import { chromium, type Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/local-server-members-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/local-server-members-e2e");
 const NAME = "E2E members";
 const START_DEADLINE_MS = 90_000;
 const REGISTER_DEADLINE_MS = 60_000;
@@ -51,7 +51,7 @@ async function step<T>(name: string, run: () => Promise<T>): Promise<T> {
 }
 
 async function servers(page: Page): Promise<ServerSummary[]> {
-  return page.evaluate(() => window.openbot.servers.list());
+  return page.evaluate(() => window.codebot.servers.list());
 }
 
 async function until(what: string, timeoutMs: number, check: () => Promise<boolean>): Promise<void> {
@@ -80,7 +80,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("local-server-members-e2e");
+const logger = createCodeBotLogger("local-server-members-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -93,13 +93,13 @@ const memberEmail = `e2e-member-${Date.now()}@example.com`;
 const before = await servers(page);
 try {
   await step("The dev app is signed in", async () => {
-    const state = await page.evaluate(() => window.openbot.auth.getState());
+    const state = await page.evaluate(() => window.codebot.auth.getState());
     assert.equal(state.status, "signed_in", "Sign in to the dev app first.");
     return { status: state.status };
   });
 
   const server = await step("Create a server on this computer", async () => {
-    const created = await page.evaluate((name) => window.openbot.localServers.create(name), NAME);
+    const created = await page.evaluate((name) => window.codebot.localServers.create(name), NAME);
     assert.equal(created.thisComputer, true);
     await waitForServer(page, created.id, "online");
     return created;
@@ -107,11 +107,11 @@ try {
 
   const owner = await step("The account lists the server with its owner", async () => {
     await until("The account listing the server", REGISTER_DEADLINE_MS, async () =>
-      (await page.evaluate((id) => window.openbot.servers.listMembers(id), server.id)).some(
+      (await page.evaluate((id) => window.codebot.servers.listMembers(id), server.id)).some(
         (member) => member.role === "owner" && member.email !== null,
       ),
     );
-    const members = await page.evaluate((id) => window.openbot.servers.listMembers(id), server.id);
+    const members = await page.evaluate((id) => window.codebot.servers.listMembers(id), server.id);
     const found = members.find((member) => member.role === "owner");
     assert.ok(found, "The member list has no owner.");
     assert.ok(found.email, "The owner has no email: the list did not come from the account.");
@@ -119,22 +119,22 @@ try {
   });
 
   await step("Create a link invite and a permanent link", async () => {
-    const link = await page.evaluate((id) => window.openbot.servers.createInvite({ role: "member" }, id), server.id);
+    const link = await page.evaluate((id) => window.codebot.servers.createInvite({ role: "member" }, id), server.id);
     const permanent = await page.evaluate(
-      (id) => window.openbot.servers.createInvite({ role: "member", permanent: true }, id),
+      (id) => window.codebot.servers.createInvite({ role: "member", permanent: true }, id),
       server.id,
     );
     assert.equal(permanent.permanent, true, "The permanent link came back single-use.");
     assert.ok(link.inviteUrl.includes(server.id), "The invite link does not name the server.");
-    const invites = await page.evaluate((id) => window.openbot.servers.listInvites(id), server.id);
+    const invites = await page.evaluate((id) => window.codebot.servers.listInvites(id), server.id);
     const ids = new Set(invites.map((invite) => invite.id));
     assert.ok(ids.has(link.id) && ids.has(permanent.id), "The invite list does not hold both invites.");
     for (const invite of [link, permanent])
-      await page.evaluate(([inviteId, id]) => window.openbot.servers.revokeInvite(inviteId, id), [
+      await page.evaluate(([inviteId, id]) => window.codebot.servers.revokeInvite(inviteId, id), [
         invite.id,
         server.id,
       ] as const);
-    const after = await page.evaluate((id) => window.openbot.servers.listInvites(id), server.id);
+    const after = await page.evaluate((id) => window.codebot.servers.listInvites(id), server.id);
     assert.ok(
       !after.some((invite) => invite.id === link.id || invite.id === permanent.id),
       "A revoked invite is still in the list.",
@@ -144,7 +144,7 @@ try {
 
   const web = await browser.newPage();
   await step("A new account joins from the web client over WebRTC", async () => {
-    const invite = await page.evaluate((id) => window.openbot.servers.createInvite({ role: "member" }, id), server.id);
+    const invite = await page.evaluate((id) => window.codebot.servers.createInvite({ role: "member" }, id), server.id);
     const origin = new URL(parseInviteUrl(invite.inviteUrl, LINK_OPTIONS).apiUrl).origin;
     await web.goto(`${origin}${createWebAppInvitePath(invite.inviteUrl, LINK_OPTIONS)}`);
     await web.getByLabel(en["account.login.email"], { exact: true }).fill(memberEmail);
@@ -156,7 +156,7 @@ try {
     await codeLine.waitFor({ state: "hidden" });
     await web.getByRole("button", { name: en["server.join.connect"], exact: true }).click();
     await until("The member going online on the child", CONNECT_DEADLINE_MS, async () =>
-      (await page.evaluate((id) => window.openbot.servers.getPresenceFor(id), server.id)).members.some(
+      (await page.evaluate((id) => window.codebot.servers.getPresenceFor(id), server.id)).members.some(
         (member) => member.role !== "owner" && member.online,
       ),
     );
@@ -165,18 +165,18 @@ try {
 
   const member = await step("The child knows the member by email", async () => {
     await until("The member's email on the child", CONNECT_DEADLINE_MS, async () =>
-      (await page.evaluate((id) => window.openbot.servers.getPresenceFor(id), server.id)).members.some(
+      (await page.evaluate((id) => window.codebot.servers.getPresenceFor(id), server.id)).members.some(
         (item) => item.role !== "owner" && item.username === memberEmail,
       ),
     );
-    const listed = await page.evaluate((id) => window.openbot.servers.listMembers(id), server.id);
+    const listed = await page.evaluate((id) => window.codebot.servers.listMembers(id), server.id);
     const found = listed.find((item) => item.email === memberEmail);
     assert.ok(found, "The account does not list the member.");
     return { id: found.id, role: found.role, accountMembers: listed.length };
   });
 
   await step("Removing the member ends its access", async () => {
-    await page.evaluate(([memberId, id]) => window.openbot.servers.removeMember(memberId, id), [
+    await page.evaluate(([memberId, id]) => window.codebot.servers.removeMember(memberId, id), [
       member.id,
       server.id,
     ] as const);
@@ -184,7 +184,7 @@ try {
       "The member going offline on the child",
       CONNECT_DEADLINE_MS,
       async () =>
-        !(await page.evaluate((id) => window.openbot.servers.getPresenceFor(id), server.id)).members.some(
+        !(await page.evaluate((id) => window.codebot.servers.getPresenceFor(id), server.id)).members.some(
           (item) => item.id === member.id && item.online,
         ),
     );
@@ -193,9 +193,9 @@ try {
   });
 
   await step("Restart the server: the desktop app logs in as its owner again", async () => {
-    await page.evaluate((id) => window.openbot.localServers.restart(id), server.id);
+    await page.evaluate((id) => window.codebot.localServers.restart(id), server.id);
     await waitForServer(page, server.id, "online");
-    const presence = await page.evaluate((id) => window.openbot.servers.getPresenceFor(id), server.id);
+    const presence = await page.evaluate((id) => window.codebot.servers.getPresenceFor(id), server.id);
     assert.ok(
       presence.members.some((member) => member.id === owner.ownerId),
       "The child does not show the owner after the restart.",
@@ -204,7 +204,7 @@ try {
   });
 
   await step("Delete the server", async () => {
-    await page.evaluate((id) => window.openbot.localServers.delete(id), server.id);
+    await page.evaluate((id) => window.codebot.localServers.delete(id), server.id);
     assert.ok(!(await servers(page)).some((item) => item.id === server.id), "The server is still listed.");
   });
 
@@ -213,7 +213,7 @@ try {
   const known = new Set(before.map((server) => server.id));
   const left = (await servers(page).catch(() => [])).filter((server) => server.thisComputer && !known.has(server.id));
   for (const server of left)
-    await page.evaluate((id) => window.openbot.localServers.delete(id), server.id).catch(() => undefined);
+    await page.evaluate((id) => window.codebot.localServers.delete(id), server.id).catch(() => undefined);
   writeFileSync(resolve(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();
   await session.close();

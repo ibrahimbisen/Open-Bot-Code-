@@ -6,14 +6,14 @@ import { runApiResponse } from "../../server/effect-runtime";
 import { apiError } from "../../server/request-auth";
 import { requireWorkerBindings } from "../../server/types";
 
-const PROBE_SANDBOX_ID = "openbot-status-probe";
+const PROBE_SANDBOX_ID = "codebot-status-probe";
 
 const CACHE_SECONDS = 60;
 
 const hostingResponse = (healthy: boolean) =>
   Response.json(
     healthy
-      ? { service: "openbot-hosted-servers", status: "ok" }
+      ? { service: "codebot-hosted-servers", status: "ok" }
       : { error: { code: "hosting_not_ready", message: "Hosted servers are not available." } },
     {
       status: healthy ? 200 : 503,

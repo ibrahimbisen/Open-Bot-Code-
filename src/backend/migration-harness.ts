@@ -1,10 +1,10 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync, type SQLInputValue, type SQLOutputValue } from "node:sqlite";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { Schema } from "effect";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 
 export const HARNESS_APPLIED_AT = "2026-11-01T09:00:00.000Z";
 
@@ -91,7 +91,7 @@ export function buildReleasedDatabase(db: DatabaseSync, released: ReleasedDataba
 
 export function buildDatabaseAtVersion(db: DatabaseSync, version: number): void {
   db.exec("CREATE TABLE schema_migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)");
-  migrateOpenBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT, throughVersion: version });
+  migrateCodeBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT, throughVersion: version });
 }
 
 export function latestAppliedVersion(db: DatabaseSync): number {

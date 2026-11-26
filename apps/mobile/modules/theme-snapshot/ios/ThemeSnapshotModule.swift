@@ -11,7 +11,7 @@ final class ThemeSnapshotException: Exception, @unchecked Sendable {
 /// the view. The picture stays in memory and goes to JavaScript as JPEG bytes. All calls run on the main queue.
 public class ThemeSnapshotModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("OpenBotThemeSnapshot")
+    Name("CodeBotThemeSnapshot")
 
     AsyncFunction("snapshot") { () throws -> Data in
       let window = UIApplication.shared.connectedScenes

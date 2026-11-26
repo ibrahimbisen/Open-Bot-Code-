@@ -3,7 +3,7 @@ import {
   type AgentModelOption,
   type AgentSummary,
   defaultProviderModel,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { inputPrice } from "./usage-pricing";
 
 export function backgroundModel(agent: AgentSummary, models: readonly AgentModelOption[]): AgentModelOption | null {

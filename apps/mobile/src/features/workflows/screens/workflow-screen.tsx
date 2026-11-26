@@ -1,4 +1,4 @@
-import { isWorkflowStepKind, type WorkflowNode } from "@openbot/contracts/ipc";
+import { isWorkflowStepKind, type WorkflowNode } from "@codebot/contracts/ipc";
 import * as Clipboard from "expo-clipboard";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
@@ -55,7 +55,7 @@ export function WorkflowScreen() {
   const commands = useWorkflowCommands(serverId);
   const [starting, setStarting] = useState(false);
   const { theme } = useUniwind();
-  const foreground = String(useCSSVariable("--openbot-text-primary"));
+  const foreground = String(useCSSVariable("--codebot-text-primary"));
   const view = useWorkflowEditorView((state) => state.view);
   const setView = useWorkflowEditorView((state) => state.setView);
   const workflow = detail.data;

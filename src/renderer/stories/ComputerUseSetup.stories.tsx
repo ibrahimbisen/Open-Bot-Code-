@@ -1,8 +1,8 @@
-import type { ComputerUseState, MacPermissionId } from "@openbot/contracts/ipc";
+import type { ComputerUseState, MacPermissionId } from "@codebot/contracts/ipc";
 import { onCleanup } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { ComputerUseSetup } from "../src/features/computer-use/ComputerUseSetup";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 function permissions(granted: readonly MacPermissionId[]): ComputerUseState["permissions"] {
   return (["screen-recording", "accessibility"] as const).map((id) => ({ id, granted: granted.includes(id) }));
@@ -15,8 +15,8 @@ const permissionsRequired: ComputerUseState = {
 };
 
 function MockedSetup(props: { state?: ComputerUseState; error?: Error; loading?: boolean }) {
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot();
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot();
   mock.api.computerUse.getState = props.loading
     ? () => new Promise(() => undefined)
     : props.error
@@ -24,10 +24,10 @@ function MockedSetup(props: { state?: ComputerUseState; error?: Error; loading?:
           throw props.error;
         }
       : async () => props.state ?? permissionsRequired;
-  window.openbot = mock.api;
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   return (
     <main class="foundation-story foundation-interaction-stage">
@@ -83,7 +83,7 @@ export const DriverMissing: Story = {
       state={{
         status: "driver-missing",
         permissions: permissions([]),
-        message: "This build of OpenBot carries no Computer Use driver.",
+        message: "This build of CodeBot carries no Computer Use driver.",
       }}
     />
   ),
@@ -100,12 +100,12 @@ export const ReadyWithoutInput: Story = {
         status: "ready",
         permissions: [],
         message:
-          "On this desktop, OpenBot cannot type or click in other apps. For tasks on websites, ask the agent to use the OpenBot browser.",
+          "On this desktop, CodeBot cannot type or click in other apps. For tasks on websites, ask the agent to use the CodeBot browser.",
       }}
     />
   ),
 };
 
 export const Failure: Story = {
-  render: () => <MockedSetup error={new Error("OpenBot could not check Computer Use.")} />,
+  render: () => <MockedSetup error={new Error("CodeBot could not check Computer Use.")} />,
 };

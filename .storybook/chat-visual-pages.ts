@@ -1,14 +1,14 @@
 import { createHash } from "node:crypto";
 import type { Plugin } from "vite";
 
-const CHAT_VISUAL_PAGES_ROUTE = "/__openbot/chat-visual";
+const CHAT_VISUAL_PAGES_ROUTE = "/__codebot/chat-visual";
 
 const PAGE_LIMIT = 8 * 1024 * 1024;
 
 export function chatVisualPages(): Plugin {
   const pages = new Map<string, Buffer>();
   return {
-    name: "openbot-chat-visual-pages",
+    name: "codebot-chat-visual-pages",
     configureServer(server) {
       server.middlewares.use(CHAT_VISUAL_PAGES_ROUTE, (request, response) => {
         if (request.method === "POST") {

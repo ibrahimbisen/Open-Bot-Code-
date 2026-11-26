@@ -1,5 +1,5 @@
 import { EventEmitter } from "node:events";
-import type { AgentStatus } from "@openbot/contracts/ipc";
+import type { AgentStatus } from "@codebot/contracts/ipc";
 import type { AgentProvider } from "../agent-client";
 
 export interface ProviderSignInWait {

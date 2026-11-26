@@ -4,9 +4,9 @@ import type {
   CreditMediaGenerationKind,
   CreditMediaJobRequest,
   CreditMediaModel,
-} from "@openbot/contracts/credit-media";
-import type { MediaApprovalChoice, MediaApprovalOffer } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credit-media";
+import type { MediaApprovalChoice, MediaApprovalOffer } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Exit, Fiber, Scope } from "effect";
 import { z } from "zod";
 import type { CreditsHoldAnswer, CreditsHoldCall, CreditsHoldWallet } from "../src/backend/agent/attention-registry";
@@ -19,7 +19,7 @@ import {
   CreditMediaTools,
   DEFAULT_MEDIA_APPROVAL_CREDITS,
 } from "../src/backend/agent/credit-media-tools";
-import { OPENBOT_TOOL_DEFINITIONS } from "../src/backend/openbot-tools";
+import { CODEBOT_TOOL_DEFINITIONS } from "../src/backend/codebot-tools";
 import type { DynamicToolResult } from "../src/backend/protocol";
 import {
   type CreditMediaGateway,
@@ -28,7 +28,7 @@ import {
   CreditMediaWorkflows,
 } from "../src/backend/workflows/credit-media";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/credit-media-agent-tools-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/credit-media-agent-tools-e2e");
 const PNG = new Uint8Array([
   0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 13, 0x49, 0x48, 0x44, 0x52, 0, 0, 0x07, 0x80, 0, 0, 0x04,
   0x38, 8, 6, 0, 0, 0,
@@ -337,9 +337,9 @@ async function call(
 
 async function flow() {
   check(
-    "the openbot namespace lists list_media_models, generate_image and generate_video",
+    "the codebot namespace lists list_media_models, generate_image and generate_video",
     CREDIT_MEDIA_TOOL_DEFINITIONS.every((definition) =>
-      OPENBOT_TOOL_DEFINITIONS.some((tool) => tool.name === definition.name),
+      CODEBOT_TOOL_DEFINITIONS.some((tool) => tool.name === definition.name),
     ),
   );
 

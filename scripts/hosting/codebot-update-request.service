@@ -1,0 +1,9 @@
+[Unit]
+Description=Update CodeBot on request
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/CodeBot/hosted/codebot-hosted-update request
+TimeoutStartSec=45min

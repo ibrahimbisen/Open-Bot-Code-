@@ -1,7 +1,7 @@
-import type { VoiceTalkMode } from "@openbot/ui/features/conversation/VoicePill";
+import type { VoiceTalkMode } from "@codebot/ui/features/conversation/VoicePill";
 import { createSignal } from "solid-js";
 
-const VOICE_TALK_MODE_STORAGE_KEY = "openbot:voice-talk-mode";
+const VOICE_TALK_MODE_STORAGE_KEY = "codebot:voice-talk-mode";
 
 let unsavedPreference: VoiceTalkMode | undefined;
 

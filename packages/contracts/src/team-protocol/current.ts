@@ -93,6 +93,7 @@ import { CLAUDE_API_KEY_CAPABILITY } from "./claude-api-key-v1";
 import { CLAUDE_COMPACT_WINDOW_CAPABILITY } from "./claude-compact-window-v1";
 import { CLAUDE_USER_SETUP_CAPABILITY } from "./claude-user-setup-v1";
 import { CLIENT_BROWSER_CAPABILITY } from "./client-browser-v1";
+import { CODEBOT_CREDITS_EVENTS_CAPABILITY } from "./codebot-credits-events-v1";
 import { CODEX_API_KEY_CAPABILITY } from "./codex-api-key-v1";
 import { COMPUTER_ACTIVITY_CAPABILITY } from "./computer-activity-v1";
 import { CONNECTORS_CAPABILITY } from "./connectors-v1";
@@ -154,7 +155,6 @@ import { MODEL_STEERING_CAPABILITY } from "./model-steering-v1";
 import { MODEL_VISIBILITY_KEPT_CAPABILITY } from "./model-visibility-kept-v1";
 import { MODEL_VISIBILITY_CAPABILITY } from "./model-visibility-v1";
 import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "./onepassword-connector-v1";
-import { OPENBOT_CREDITS_EVENTS_CAPABILITY } from "./openbot-credits-events-v1";
 import { OWNER_TRANSFER_CAPABILITY } from "./owner-transfer-v1";
 import { PASSWORD_MANAGERS_CAPABILITY } from "./password-managers-v1";
 import { PENDING_APPROVAL_CAPABILITY } from "./pending-approval-v1";
@@ -383,6 +383,7 @@ export {
   CHANNEL_TASK_WAITS_CAPABILITY,
   CHAT_COLORS_CAPABILITY,
   CHAT_HISTORY_CAPABILITY,
+  CODEBOT_CREDITS_EVENTS_CAPABILITY,
   COMPUTER_ACTIVITY_CAPABILITY,
   CONNECTORS_CAPABILITY,
   CONTEXT_COMPACT_CAPABILITY,
@@ -431,7 +432,6 @@ export {
   MODEL_STEERING_CAPABILITY,
   MODEL_VISIBILITY_CAPABILITY,
   ONEPASSWORD_CONNECTOR_CAPABILITY,
-  OPENBOT_CREDITS_EVENTS_CAPABILITY,
   PASSWORD_MANAGERS_CAPABILITY,
   PENDING_APPROVAL_CAPABILITY,
   PHONE_FEEDBACK_CAPABILITY,
@@ -869,7 +869,7 @@ const TEAM_CAPABILITY_REGISTRY = [
   [HOST_TURN_LIMITS_EVENTS_CAPABILITY, V10],
   [MEDIA_APPROVAL_CREDITS_CAPABILITY, V10],
   [MEDIA_APPROVAL_CHOICE_CAPABILITY, V10],
-  [OPENBOT_CREDITS_EVENTS_CAPABILITY, V10],
+  [CODEBOT_CREDITS_EVENTS_CAPABILITY, V10],
   [TEAM_BROWSER_VIEW_FRAME_SIZE_CAPABILITY, V10],
   [AGENT_ERROR_LINK_CAPABILITY, V10],
   [BROWSER_PERMISSIONS_CAPABILITY, V10],
@@ -900,42 +900,42 @@ export function supportsTeamSemanticTags(capabilities: readonly string[] | Reado
 export function isConversationUnreadRoute(method: string, path: string): boolean {
   return (
     method === "POST" &&
-    /^\/v1\/agents\/[^/]+\/conversation\/unread$/u.test(new URL(path, "http://openbot.invalid").pathname)
+    /^\/v1\/agents\/[^/]+\/conversation\/unread$/u.test(new URL(path, "http://codebot.invalid").pathname)
   );
 }
 
 export function isQueueSnapshotRoute(method: string, path: string): boolean {
-  return method === "GET" && /^\/v1\/agents\/[^/]+\/queue$/u.test(new URL(path, "http://openbot.invalid").pathname);
+  return method === "GET" && /^\/v1\/agents\/[^/]+\/queue$/u.test(new URL(path, "http://codebot.invalid").pathname);
 }
 
 export function isConversationRoute(method: string, path: string): boolean {
   return (
     method === "GET" &&
-    /^\/v1\/agents\/[^/]+\/conversation(?:-page)?$/u.test(new URL(path, "http://openbot.invalid").pathname)
+    /^\/v1\/agents\/[^/]+\/conversation(?:-page)?$/u.test(new URL(path, "http://codebot.invalid").pathname)
   );
 }
 
 export function isAgentProfileRoute(method: string, path: string): boolean {
   return (
     method === "POST" &&
-    /^\/v1\/agents\/profile\/(generate|save)$/u.test(new URL(path, "http://openbot.invalid").pathname)
+    /^\/v1\/agents\/profile\/(generate|save)$/u.test(new URL(path, "http://codebot.invalid").pathname)
   );
 }
 
 export function isAgentAnalyticsRoute(method: string, path: string): boolean {
-  return method === "GET" && /^\/v1\/agents\/[^/]+\/analytics$/u.test(new URL(path, "http://openbot.invalid").pathname);
+  return method === "GET" && /^\/v1\/agents\/[^/]+\/analytics$/u.test(new URL(path, "http://codebot.invalid").pathname);
 }
 
 export function isHostAnalyticsRoute(method: string, path: string): boolean {
-  return method === "GET" && new URL(path, "http://openbot.invalid").pathname === "/v1/analytics";
+  return method === "GET" && new URL(path, "http://codebot.invalid").pathname === "/v1/analytics";
 }
 
 export function isAgentCreateRoute(method: string, path: string): boolean {
-  return method === "POST" && new URL(path, "http://openbot.invalid").pathname === "/v1/agents";
+  return method === "POST" && new URL(path, "http://codebot.invalid").pathname === "/v1/agents";
 }
 
 export function isAgentMessageRoute(method: string, path: string): boolean {
-  return method === "POST" && /^\/v1\/agents\/[^/]+\/messages$/u.test(new URL(path, "http://openbot.invalid").pathname);
+  return method === "POST" && /^\/v1\/agents\/[^/]+\/messages$/u.test(new URL(path, "http://codebot.invalid").pathname);
 }
 
 export const TEAM_BOOTSTRAP_CAPABILITIES = capabilitiesWhere((placement) => placement.bootstrap);

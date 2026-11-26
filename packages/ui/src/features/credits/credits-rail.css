@@ -1,12 +1,12 @@
 .credits-rail-star {
   transition:
-    rotate var(--openbot-duration-overlay) var(--openbot-ease-out),
-    scale var(--openbot-duration-overlay) var(--openbot-ease-out);
+    rotate var(--codebot-duration-overlay) var(--codebot-ease-out),
+    scale var(--codebot-duration-overlay) var(--codebot-ease-out);
 }
 
 .credits-rail-chip .credit-star,
 .credits-rail-head-star .credit-star {
-  transition: fill var(--openbot-duration-hover) var(--openbot-ease-out);
+  transition: fill var(--codebot-duration-hover) var(--codebot-ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -17,12 +17,12 @@
 }
 
 .credits-rail-card {
-  z-index: var(--openbot-layer-popover);
+  z-index: var(--codebot-layer-popover);
   display: grid;
   width: max-content;
   min-width: 264px;
-  padding: var(--openbot-space-1);
-  gap: var(--openbot-space-1);
+  padding: var(--codebot-space-1);
+  gap: var(--codebot-space-1);
   transform-origin: var(--kb-popover-content-transform-origin);
   animation: ui-menu-in var(--ui-submenu-duration) var(--ui-submenu-ease) both;
 }
@@ -62,23 +62,23 @@
   }
 
   .credits-rail-chip:hover .credits-rail-tile {
-    background: var(--openbot-bg-control-hover);
+    background: var(--codebot-bg-control-hover);
   }
 }
 
 .credits-rail-tile {
   display: flex;
-  width: var(--openbot-control-lg);
-  height: var(--openbot-control-lg);
+  width: var(--codebot-control-lg);
+  height: var(--codebot-control-lg);
   align-items: center;
   justify-content: center;
-  border-radius: var(--openbot-radius-lg);
-  background: var(--openbot-transparent);
-  transition: background-color var(--openbot-duration-hover) var(--openbot-ease-out);
+  border-radius: var(--codebot-radius-lg);
+  background: var(--codebot-transparent);
+  transition: background-color var(--codebot-duration-hover) var(--codebot-ease-out);
 }
 
 .credits-rail-chip:is([data-open], [aria-current="page"]) .credits-rail-tile {
-  background: var(--openbot-bg-control-active);
+  background: var(--codebot-bg-control-active);
 }
 
 .credits-rail-tile .credits-rail-star {
@@ -91,46 +91,46 @@
   min-width: 26px;
   margin-top: -9px;
   padding: 2px 5px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-credit-star);
-  box-shadow: 0 0 0 2px var(--openbot-bg-frame);
-  color: var(--openbot-credit-tile-ink);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-bold);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-credit-star);
+  box-shadow: 0 0 0 2px var(--codebot-bg-frame);
+  color: var(--codebot-credit-tile-ink);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-bold);
   font-variant-numeric: tabular-nums;
   line-height: 14px;
   text-align: center;
 }
 
 .credits-rail-chip[data-agents="off"] .credits-rail-star .credit-star {
-  fill: var(--openbot-text-muted);
+  fill: var(--codebot-text-muted);
 }
 
 .credits-rail-chip[data-agents="off"] .credits-rail-count,
 .credits-rail-chip[data-empty] .credits-rail-count {
-  background: var(--openbot-bg-control-active);
-  color: var(--openbot-text-secondary);
+  background: var(--codebot-bg-control-active);
+  color: var(--codebot-text-secondary);
 }
 
 .credits-rail-row {
   display: flex;
   width: 100%;
-  min-height: var(--openbot-control-md);
+  min-height: var(--codebot-control-md);
   align-items: center;
-  gap: var(--openbot-space-2);
-  border-radius: var(--openbot-radius-sm);
-  padding-inline: var(--openbot-space-2);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-regular);
-  line-height: var(--openbot-leading-md);
+  gap: var(--codebot-space-2);
+  border-radius: var(--codebot-radius-sm);
+  padding-inline: var(--codebot-space-2);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-regular);
+  line-height: var(--codebot-leading-md);
   cursor: pointer;
-  transition: background-color var(--openbot-duration-hover) var(--openbot-ease-out);
+  transition: background-color var(--codebot-duration-hover) var(--codebot-ease-out);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .credits-rail-row:hover {
-    background: var(--openbot-bg-control);
+    background: var(--codebot-bg-control);
   }
 }
 
@@ -145,10 +145,10 @@
 }
 
 .credits-rail-move-icon {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: none;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .credits-rail-head-icon {
@@ -157,49 +157,49 @@
   height: 20px;
   flex: none;
   place-items: center;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .credits-rail-head-icon > svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
 }
 
 .credits-rail-switch.ui-switch {
-  background: var(--openbot-bg-control-active);
-  box-shadow: inset 0 0 0 1px var(--openbot-border-strong);
+  background: var(--codebot-bg-control-active);
+  box-shadow: inset 0 0 0 1px var(--codebot-border-strong);
 }
 
 .credits-rail-switch.ui-switch[data-checked] {
   background: linear-gradient(
     135deg,
-    color-mix(in oklab, var(--openbot-credit-star) 62%, var(--openbot-surface-light)),
-    var(--openbot-credit-star)
+    color-mix(in oklab, var(--codebot-credit-star) 62%, var(--codebot-surface-light)),
+    var(--codebot-credit-star)
   );
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--openbot-credit-tile-ink) 14%, var(--openbot-transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--codebot-credit-tile-ink) 14%, var(--codebot-transparent));
 }
 
 .credits-rail-switch .ui-switch-thumb {
-  background: var(--openbot-text-muted);
+  background: var(--codebot-text-muted);
   box-shadow: none;
 }
 
 .credits-rail-switch .ui-switch-thumb[data-checked] {
-  background: var(--openbot-credit-tile-ink);
+  background: var(--codebot-credit-tile-ink);
 }
 
 .credits-rail-switch .ui-switch-thumb::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--openbot-bg-control-active);
+  background: var(--codebot-bg-control-active);
   clip-path: polygon(50% 19%, 56.8% 43.2%, 81% 50%, 56.8% 56.8%, 50% 81%, 43.2% 56.8%, 19% 50%, 43.2% 43.2%);
   rotate: calc(var(--ui-switch-position, 0) * 180deg);
-  transition: background-color var(--openbot-duration-fast) var(--openbot-ease-out);
+  transition: background-color var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .credits-rail-switch .ui-switch-thumb[data-checked]::after {
-  background: var(--openbot-credit-star);
+  background: var(--codebot-credit-star);
 }
 
 .credits-rail-body {
@@ -209,24 +209,24 @@
 .credits-rail-head {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-3) var(--openbot-space-2) 10px;
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-3) var(--codebot-space-2) 10px;
 }
 
 .credits-rail-welcome {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   margin: 0;
-  padding: 0 var(--openbot-space-2) var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  padding: 0 var(--codebot-space-2) var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
 }
 
 .credits-rail-welcome svg {
   width: 14px;
   height: 14px;
-  color: var(--openbot-credit-max);
+  color: var(--codebot-credit-max);
 }
 
 .credits-rail-head .credits-rail-head-icon > .credits-rail-head-star {
@@ -235,7 +235,7 @@
 }
 
 .credits-rail-body[data-agents="off"] .credits-rail-head-star .credit-star {
-  fill: var(--openbot-text-muted);
+  fill: var(--codebot-text-muted);
 }
 
 .credits-rail-amount {
@@ -243,28 +243,28 @@
   min-width: 0;
   flex: 1;
   align-items: baseline;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .credits-rail-number {
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-3xl);
-  font-weight: var(--openbot-weight-semibold);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-3xl);
+  font-weight: var(--codebot-weight-semibold);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .credits-rail-unit {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .credits-rail-rows {
   display: grid;
-  margin-inline: calc(-1 * var(--openbot-space-1));
-  padding: var(--openbot-space-1) var(--openbot-space-1) 0;
-  border-top: 1px solid var(--openbot-border);
+  margin-inline: calc(-1 * var(--codebot-space-1));
+  padding: var(--codebot-space-1) var(--codebot-space-1) 0;
+  border-top: 1px solid var(--codebot-border);
 }
 
 .credits-rail-glow {
@@ -290,20 +290,20 @@
   filter: blur(6px);
   opacity: 0.9;
   transition:
-    inset var(--openbot-duration-overlay) var(--openbot-ease-out),
-    filter var(--openbot-duration-overlay) var(--openbot-ease-out),
-    opacity var(--openbot-duration-overlay) var(--openbot-ease-out);
+    inset var(--codebot-duration-overlay) var(--codebot-ease-out),
+    filter var(--codebot-duration-overlay) var(--codebot-ease-out),
+    opacity var(--codebot-duration-overlay) var(--codebot-ease-out);
 }
 
 .credits-rail-glow-ring {
-  background-color: color-mix(in srgb, var(--openbot-credit-star) 22%, var(--openbot-transparent));
+  background-color: color-mix(in srgb, var(--codebot-credit-star) 22%, var(--codebot-transparent));
 }
 
 .credits-rail-glow-fill {
   position: absolute;
   inset: var(--credits-rail-glow-width);
   border-radius: inherit;
-  background-color: var(--openbot-credit-tile-ink);
+  background-color: var(--codebot-credit-tile-ink);
 }
 
 .credits-rail-spin {
@@ -320,19 +320,19 @@
 .credits-rail-spin-a {
   background: conic-gradient(
     from 0deg,
-    var(--openbot-transparent) 0deg 14deg,
-    var(--openbot-file-red) 20deg,
-    var(--openbot-file-yellow) 30deg,
-    var(--openbot-paper) 40deg,
-    var(--openbot-file-teal) 50deg,
-    var(--openbot-file-blue) 58deg,
-    var(--openbot-transparent) 68deg 164deg,
-    var(--openbot-file-blue) 170deg,
-    var(--openbot-file-teal) 178deg,
-    var(--openbot-paper) 186deg,
-    var(--openbot-file-yellow) 194deg,
-    var(--openbot-file-red) 200deg,
-    var(--openbot-transparent) 208deg
+    var(--codebot-transparent) 0deg 14deg,
+    var(--codebot-file-red) 20deg,
+    var(--codebot-file-yellow) 30deg,
+    var(--codebot-paper) 40deg,
+    var(--codebot-file-teal) 50deg,
+    var(--codebot-file-blue) 58deg,
+    var(--codebot-transparent) 68deg 164deg,
+    var(--codebot-file-blue) 170deg,
+    var(--codebot-file-teal) 178deg,
+    var(--codebot-paper) 186deg,
+    var(--codebot-file-yellow) 194deg,
+    var(--codebot-file-red) 200deg,
+    var(--codebot-transparent) 208deg
   );
   animation: credits-rail-spin-a 10.3s var(--credits-rail-glow-ease) infinite;
 }
@@ -340,12 +340,12 @@
 .credits-rail-spin-b {
   background: conic-gradient(
     from 0deg,
-    var(--openbot-transparent) 0deg 244deg,
-    var(--openbot-file-yellow) 250deg,
-    var(--openbot-paper) 262deg,
-    var(--openbot-file-teal) 276deg,
-    var(--openbot-file-blue) 290deg,
-    var(--openbot-transparent) 300deg
+    var(--codebot-transparent) 0deg 244deg,
+    var(--codebot-file-yellow) 250deg,
+    var(--codebot-paper) 262deg,
+    var(--codebot-file-teal) 276deg,
+    var(--codebot-file-blue) 290deg,
+    var(--codebot-transparent) 300deg
   );
   animation: credits-rail-spin-b 12.7s var(--credits-rail-glow-ease) infinite;
 }
@@ -353,11 +353,11 @@
 .credits-rail-spin-c {
   background: conic-gradient(
     from 0deg,
-    var(--openbot-transparent) 0deg 90deg,
-    var(--openbot-file-red) 96deg,
-    var(--openbot-paper) 104deg,
-    var(--openbot-file-blue) 112deg,
-    var(--openbot-transparent) 120deg
+    var(--codebot-transparent) 0deg 90deg,
+    var(--codebot-file-red) 96deg,
+    var(--codebot-paper) 104deg,
+    var(--codebot-file-blue) 112deg,
+    var(--codebot-transparent) 120deg
   );
   animation: credits-rail-spin-c 7.9s var(--credits-rail-glow-ease) infinite;
 }
@@ -365,9 +365,9 @@
 .credits-rail-spin-d {
   background: conic-gradient(
     from 0deg,
-    var(--openbot-transparent) 0deg 30deg,
-    color-mix(in srgb, var(--openbot-paper) 75%, var(--openbot-transparent)) 75deg 120deg,
-    var(--openbot-transparent) 200deg
+    var(--codebot-transparent) 0deg 30deg,
+    color-mix(in srgb, var(--codebot-paper) 75%, var(--codebot-transparent)) 75deg 120deg,
+    var(--codebot-transparent) 200deg
   );
   animation: credits-rail-spin-d 15.1s var(--credits-rail-glow-ease) infinite;
 }
@@ -495,10 +495,10 @@
 .credits-rail-buy {
   position: relative;
   isolation: isolate;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-transparent);
-  color: var(--openbot-paper);
-  font-weight: var(--openbot-weight-semibold);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-transparent);
+  color: var(--codebot-paper);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .credits-rail-buy :is(.credits-rail-glow-haze, .credits-rail-glow-ring)::before {
@@ -510,24 +510,24 @@
   translate: -50% -50%;
   background: conic-gradient(
     from 0deg,
-    var(--openbot-file-red),
-    var(--openbot-file-yellow),
-    var(--openbot-file-teal),
-    var(--openbot-file-blue),
-    var(--openbot-credit-star),
-    var(--openbot-file-red)
+    var(--codebot-file-red),
+    var(--codebot-file-yellow),
+    var(--codebot-file-teal),
+    var(--codebot-file-blue),
+    var(--codebot-credit-star),
+    var(--codebot-file-red)
   );
   content: "";
   mix-blend-mode: screen;
   opacity: 0;
-  transition: opacity var(--openbot-duration-overlay) var(--openbot-ease-out);
+  transition: opacity var(--codebot-duration-overlay) var(--codebot-ease-out);
   animation: credits-rail-spin-b 12.7s var(--credits-rail-glow-ease) infinite;
   will-change: rotate;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .credits-rail-buy:hover:not(:disabled):not([data-disabled]) {
-    background: var(--openbot-transparent);
+    background: var(--codebot-transparent);
   }
 
   .credits-rail-buy:hover:not(:disabled):not([data-disabled]) .credits-rail-glow-haze {
@@ -545,8 +545,8 @@
 .credits-rail-buy-star {
   position: relative;
   display: inline-grid;
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: none;
 }
 
@@ -568,7 +568,7 @@
 }
 
 .credits-rail-star-haze > .credits-rail-star-light {
-  background-color: var(--openbot-credit-star);
+  background-color: var(--codebot-credit-star);
 }
 
 .credits-rail-star-light .credits-rail-spin {
@@ -578,7 +578,7 @@
 }
 
 .credits-rail-buy-star > .credits-rail-star-light {
-  background-color: var(--openbot-paper);
+  background-color: var(--codebot-paper);
 }
 
 @media (prefers-reduced-motion: reduce) {

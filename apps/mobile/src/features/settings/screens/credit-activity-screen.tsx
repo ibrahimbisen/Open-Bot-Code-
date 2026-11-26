@@ -1,4 +1,4 @@
-import { CREDIT_ACTIVITY_LIMIT, creditsFromTenths, creditTenths } from "@openbot/contracts/credits";
+import { CREDIT_ACTIVITY_LIMIT, creditsFromTenths, creditTenths } from "@codebot/contracts/credits";
 import { useFocusEffect } from "expo-router";
 import { Typography } from "heroui-native";
 import { useCallback } from "react";

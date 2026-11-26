@@ -1,12 +1,12 @@
-# OpenBot Mobile Design Guidelines
+# CodeBot Mobile Design Guidelines
 
 These rules apply to design, implementation, review, and AI-generated mobile UI. They define which layer owns each part of the interface and prevent the app from drifting into multiple visual systems.
 
 ## Core rule
 
-HeroUI Native is the foundation for application content. It is already installed, its provider is mounted in `src/app/_layout.tsx`, and its theme aliases are mapped to OpenBot tokens in `global.css`.
+HeroUI Native is the foundation for application content. It is already installed, its provider is mounted in `src/app/_layout.tsx`, and its theme aliases are mapped to CodeBot tokens in `global.css`.
 
-Use HeroUI Native for product UI such as buttons, cards, fields, alerts, chips, accordions, and other content rendered inside a screen. Reuse an existing OpenBot component first, then a HeroUI Native component. Do not recreate a component that either layer already provides.
+Use HeroUI Native for product UI such as buttons, cards, fields, alerts, chips, accordions, and other content rendered inside a screen. Reuse an existing CodeBot component first, then a HeroUI Native component. Do not recreate a component that either layer already provides.
 
 HeroUI Native is a component source, not a requirement to decorate every screen. Start with the lightest useful composition. A focused screen may need only layout, `Typography`, and one `Button`; add `Card`, `Chip`, `Surface`, or `Alert` only when it expresses real grouping, state, interaction, or actionable information.
 
@@ -65,10 +65,10 @@ large title does not work under the custom scroll edge effect on iOS 27, and And
   blur described below (the surface solid under the bar and a 32 dp fade below it before Android 12),
   a 22 dp regular small title on the 72 dp line, and 48 dp icon buttons with a round ripple: a 40 dp filled circle on full screens, the plain icon in sheets.
 - Android has no Liquid Glass. The search fields and the bar buttons are plain: the opaque HeroUI
-  `default` fill (`--openbot-bg-control`) of the chat composer and its buttons, with no edge, shadow,
+  `default` fill (`--codebot-bg-control`) of the chat composer and its buttons, with no edge, shadow,
   sheen or blur. `GlassCapsule` and `useChromeGlass()` give them that fill. iOS without Liquid Glass
   keeps the solid `default` capsule with a soft shadow for the search fields, and the solid glass of
-  the design (`--openbot-bg-chrome-glass`) for the bar buttons.
+  the design (`--codebot-bg-chrome-glass`) for the bar buttons.
 - Android 12 and later blur the content under the bar with `AndroidHeaderBlur`
   (`src/shared/components/android-header-blur.tsx`): the scroll content is in an `AndroidBlurTarget`
   on the surface color. The bar draws the usual Expo progressive blur: a `BlurView` of the target
@@ -214,7 +214,7 @@ a standalone sheet with a native title is:
 }
 ```
 
-Resolve `sheetBackground` from `--openbot-bg-sheet`, as in `src/app/(app)/_layout.tsx`.
+Resolve `sheetBackground` from `--codebot-bg-sheet`, as in `src/app/(app)/_layout.tsx`.
 Keep `headerShadowVisible: false` from the parent stack. A headerless sheet uses
 `headerShown: false`; do not add a fake navigation bar. Full-height detents are appropriate for
 search or similarly large content, not the default for a short form.
@@ -374,7 +374,7 @@ saved name. Reserve a compact Cancel area so editing does not shift the page.
 Group the identity, action area and Profile photo section together instead of applying the
 standard section gap on both sides of the reserved area. Keep the email close to the name.
 
-About ends with a centered, interactive `AppLogo`, the OpenBot name and the app version, including
+About ends with a centered, interactive `AppLogo`, the CodeBot name and the app version, including
 the build number when available. Reuse the logo's existing tap animation; do not create another
 mascot animation or add a marketing subtitle. Read version metadata from the app rather than
 hardcoding it.
@@ -401,9 +401,9 @@ The text colors must retain at least 4.5:1 contrast on the surfaces that use the
 Fixed colors in camera overlays, QR codes, SVG alpha masks and agent artwork serve their
 respective media or identity roles. Do not replace these with foreground/background theme colors.
 
-- `packages/brand/src/tokens.css` is the single source of truth for OpenBot color, typography, radius, shadow, and motion tokens, shared with the desktop and web apps; `tokens-native.css` beside it carries the light and dark values for the tokens mobile themes. `global.css` imports both and declares none of its own — it maps them to Tailwind utilities and HeroUI semantic aliases.
+- `packages/brand/src/tokens.css` is the single source of truth for CodeBot color, typography, radius, shadow, and motion tokens, shared with the desktop and web apps; `tokens-native.css` beside it carries the light and dark values for the tokens mobile themes. `global.css` imports both and declares none of its own — it maps them to Tailwind utilities and HeroUI semantic aliases.
 - Use HeroUI semantic variants and existing utility classes. Do not add raw colors, arbitrary radii, or one-off shadows to a screen when a token or component variant can express the intent.
-- Extend OpenBot tokens only for a new semantic role that will be reused. Keep HeroUI aliases mapped to OpenBot tokens rather than creating a second palette.
+- Extend CodeBot tokens only for a new semantic role that will be reused. Keep HeroUI aliases mapped to CodeBot tokens rather than creating a second palette.
 - Support light and dark appearance, dynamic type, reduced motion, reduced transparency, and sufficient contrast.
 - Favor composition and shared variants over copying styled JSX between screens.
 - Keep status and instructional copy evidence-based. Do not introduce badges, alerts, or lifecycle requirements that cannot be derived from the actual session, connectivity, or persistence implementation.
@@ -423,7 +423,7 @@ sticky header would stick under the native bar.
 The backdrop of Settings › Appearance (`features/settings/model/chat-backdrop.ts`) is the desktop
 window backdrop in the Ambient look: a quiet layer, not a wallpaper.
 
-- The built-in scenes come from `@openbot/brand/chat-backdrop-scenes`, the same painters as the
+- The built-in scenes come from `@codebot/brand/chat-backdrop-scenes`, the same painters as the
   desktop. `ChatBackdropSceneView` draws them with Skia in 6 pt cells at about 15 frames each second.
   A scene stops on a hidden screen (also under a sheet), in the background and with reduced motion.
   A stop keeps the frame that shows, and the scene goes on from that time; a new screen goes on from

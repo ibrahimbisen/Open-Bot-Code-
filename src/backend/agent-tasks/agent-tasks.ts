@@ -1,9 +1,9 @@
 import { createHash, randomUUID } from "node:crypto";
-import { agentProviderDescriptor } from "@openbot/contracts/agent-providers";
-import { expandAttachmentReferences } from "@openbot/contracts/attachment-references";
-import { chatVisualReply } from "@openbot/contracts/chat-visual";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { agentProviderDescriptor } from "@codebot/contracts/agent-providers";
+import { expandAttachmentReferences } from "@codebot/contracts/attachment-references";
+import { chatVisualReply } from "@codebot/contracts/chat-visual";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_TASK_QUEUED_PREVIEW,
   type AgentEvent,
@@ -21,15 +21,15 @@ import {
   type ConversationMessage,
   type ConversationSnapshot,
   fitAgentTaskTitle,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Deferred, Effect, Schema, Semaphore } from "effect";
 import { z } from "zod";
 import type { ConversationRuntime } from "../agent/conversation-runtime";
 import { TASK_REPORT_CUT_MARK, type TaskReportState, visualReplyMessageId } from "../agent/delivery-content";
 import type { TaskLanes } from "../agent/drain-scheduler";
-import { type OpenBotToolResponse, openBotToolFailure, openBotToolResult } from "../agent/routine-tools";
+import { type CodeBotToolResponse, codeBotToolFailure, codeBotToolResult } from "../agent/routine-tools";
 import {
   type AgentThreadOrigin,
   type AgentThreadRecord,
@@ -41,7 +41,7 @@ import type { MailboxStore, TaskWork } from "../mailbox-store";
 import type { DynamicToolCallParams } from "../protocol";
 import { storedSync } from "../stored-state-effects";
 
-const logger = createOpenBotLogger("agent-tasks");
+const logger = createCodeBotLogger("agent-tasks");
 
 const PROGRESS_PUBLISH_MS = 150;
 
@@ -323,7 +323,7 @@ export class AgentTasks implements TaskLanes {
         ? taskTitle(messages.findLast((message) => message.author === "user")?.text ?? "") ||
           sourceText("status.agent.branchTitle")
         : branchTitle(source.title, this.#store.titles(input.agentId));
-    const threadId = `openbot-thread-${randomUUID()}`;
+    const threadId = `codebot-thread-${randomUUID()}`;
     const staged: string[] = [];
     const record = yield* Effect.gen({ self: this }, function* () {
       const files = new Map<string, AttachmentSummary>();
@@ -525,23 +525,23 @@ export class AgentTasks implements TaskLanes {
     this: AgentTasks,
     params: DynamicToolCallParams,
     caller: AgentTaskCaller,
-  ): Effect.fn.Return<OpenBotToolResponse | null> {
+  ): Effect.fn.Return<CodeBotToolResponse | null> {
     if (!TASK_TOOLS.has(params.tool)) return null;
     if (params.tool === MESSAGE_TASK_TOOL) {
       const parsed = messageTaskToolSchema.safeParse(params.arguments);
-      if (!parsed.success) return openBotToolFailure(sourceText("error.backend.taskControlInvalid"));
-      if (caller.inExecutionThread) return openBotToolFailure(sourceText("error.backend.taskOwnChatOnly"));
+      if (!parsed.success) return codeBotToolFailure(sourceText("error.backend.taskControlInvalid"));
+      if (caller.inExecutionThread) return codeBotToolFailure(sourceText("error.backend.taskOwnChatOnly"));
       return yield* this.#starts.withPermit(this.#message(params, caller, parsed.data));
     }
     if (params.tool === CLOSE_TASK_TOOL) {
       const parsed = closeTaskToolSchema.safeParse(params.arguments);
-      if (!parsed.success) return openBotToolFailure(sourceText("error.backend.taskControlInvalid"));
-      if (caller.inExecutionThread) return openBotToolFailure(sourceText("error.backend.taskOwnChatOnly"));
+      if (!parsed.success) return codeBotToolFailure(sourceText("error.backend.taskControlInvalid"));
+      if (caller.inExecutionThread) return codeBotToolFailure(sourceText("error.backend.taskOwnChatOnly"));
       return yield* this.#close(caller, parsed.data.taskId);
     }
     const parsed = startTaskToolSchema.safeParse(params.arguments);
-    if (!parsed.success) return openBotToolFailure(sourceText("error.backend.taskToolInvalid"));
-    if (caller.inExecutionThread) return openBotToolFailure(sourceText("error.backend.taskOwnChatOnly"));
+    if (!parsed.success) return codeBotToolFailure(sourceText("error.backend.taskToolInvalid"));
+    if (caller.inExecutionThread) return codeBotToolFailure(sourceText("error.backend.taskOwnChatOnly"));
     return yield* this.#starts.withPermit(this.#start(params, caller, parsed.data));
   });
 
@@ -555,21 +555,21 @@ export class AgentTasks implements TaskLanes {
     params: DynamicToolCallParams,
     caller: AgentTaskCaller,
     input: z.infer<typeof messageTaskToolSchema>,
-  ): Effect.fn.Return<OpenBotToolResponse> {
+  ): Effect.fn.Return<CodeBotToolResponse> {
     const task = this.#startedBy(caller.agentId, input.taskId);
-    if (!task) return openBotToolFailure(sourceText("error.backend.taskNotFound"));
+    if (!task) return codeBotToolFailure(sourceText("error.backend.taskNotFound"));
     const idempotencyKey = `message-task:${createHash("sha256")
       .update(JSON.stringify([caller.agentId, params.turnId, params.callId]))
       .digest("hex")}`;
     if (this.#mailbox.deliveryForKey(idempotencyKey)) return messagedTaskResult(task, false);
     const running = task.closedAt === null && !this.#finished(task);
     if (!running && this.#unfinishedTasks(caller.agentId) >= AGENT_STARTED_UNFINISHED_TASKS)
-      return openBotToolFailure(
+      return codeBotToolFailure(
         sourceText("error.backend.taskUnfinishedLimit", { count: AGENT_STARTED_UNFINISHED_TASKS }),
       );
     if (task.closedAt !== null) {
       if (this.#store.openTaskIds(caller.agentId).length >= INPUT_LIMITS.agentTasks)
-        return openBotToolFailure(
+        return codeBotToolFailure(
           sourceText("error.backend.threadOpenLimitReached", { count: INPUT_LIMITS.agentTasks }),
         );
       this.reopen(task);
@@ -593,7 +593,7 @@ export class AgentTasks implements TaskLanes {
           }),
         ),
       );
-    if (!queued) return openBotToolFailure(sourceText("error.backend.taskMessageFailed"));
+    if (!queued) return codeBotToolFailure(sourceText("error.backend.taskMessageFailed"));
     this.changed(caller.agentId);
     this.#hooks.queued(caller.agentId);
     return messagedTaskResult(task, running);
@@ -603,9 +603,9 @@ export class AgentTasks implements TaskLanes {
     this: AgentTasks,
     caller: AgentTaskCaller,
     taskId: string,
-  ): Effect.fn.Return<OpenBotToolResponse> {
+  ): Effect.fn.Return<CodeBotToolResponse> {
     const task = this.#startedBy(caller.agentId, taskId);
-    if (!task) return openBotToolFailure(sourceText("error.backend.taskNotFound"));
+    if (!task) return codeBotToolFailure(sourceText("error.backend.taskNotFound"));
     if (task.closedAt === null) {
       const closed = yield* this.#hooks.closeTask(caller.agentId, task.taskId).pipe(
         Effect.as(true),
@@ -616,9 +616,9 @@ export class AgentTasks implements TaskLanes {
           }),
         ),
       );
-      if (!closed) return openBotToolFailure(sourceText("error.backend.taskStillRunning"));
+      if (!closed) return codeBotToolFailure(sourceText("error.backend.taskStillRunning"));
     }
-    return openBotToolResult({ taskId: task.taskId, title: task.title, state: "closed" });
+    return codeBotToolResult({ taskId: task.taskId, title: task.title, state: "closed" });
   });
 
   readonly #start = Effect.fn("AgentTasks.start")(function* (
@@ -626,7 +626,7 @@ export class AgentTasks implements TaskLanes {
     params: DynamicToolCallParams,
     caller: AgentTaskCaller,
     input: z.infer<typeof startTaskToolSchema>,
-  ): Effect.fn.Return<OpenBotToolResponse> {
+  ): Effect.fn.Return<CodeBotToolResponse> {
     const idempotencyKey = `start-task:${createHash("sha256")
       .update(JSON.stringify([caller.agentId, params.turnId, params.callId]))
       .digest("hex")}`;
@@ -637,7 +637,7 @@ export class AgentTasks implements TaskLanes {
     const open = this.#store.openTaskIds(caller.agentId).flatMap((taskId) => this.#store.task(taskId) ?? []);
     const finished = open.filter((task) => this.#finished(task));
     if (this.#unfinishedTasks(caller.agentId) >= AGENT_STARTED_UNFINISHED_TASKS)
-      return openBotToolFailure(
+      return codeBotToolFailure(
         sourceText("error.backend.taskUnfinishedLimit", { count: AGENT_STARTED_UNFINISHED_TASKS }),
       );
     const finishedByAgent = finished
@@ -647,7 +647,7 @@ export class AgentTasks implements TaskLanes {
     const kept = Math.max(0, Math.min(AGENT_STARTED_FINISHED_KEPT, INPUT_LIMITS.agentTasks - 1 - others));
     const archived = finishedByAgent.slice(kept);
     if (open.length - archived.length >= INPUT_LIMITS.agentTasks)
-      return openBotToolFailure(sourceText("error.backend.threadOpenLimitReached", { count: INPUT_LIMITS.agentTasks }));
+      return codeBotToolFailure(sourceText("error.backend.threadOpenLimitReached", { count: INPUT_LIMITS.agentTasks }));
     for (const task of archived) this.#closeQuietly(task);
     const task = this.create(caller.agentId, input.title, "agent");
     if (archived.length > 0) yield* this.#hooks.archived(caller.agentId, archived);
@@ -675,14 +675,14 @@ export class AgentTasks implements TaskLanes {
     if (!queued) {
       this.discard(task);
       if (archived.length > 0) this.changed(caller.agentId);
-      return openBotToolFailure(sourceText("error.backend.taskStartFailed"));
+      return codeBotToolFailure(sourceText("error.backend.taskStartFailed"));
     }
     this.changed(caller.agentId);
     this.#hooks.queued(caller.agentId);
     return this.#startedResult(task);
   });
 
-  #startedResult(task: AgentThreadRecord): OpenBotToolResponse {
+  #startedResult(task: AgentThreadRecord): CodeBotToolResponse {
     const waiting = [
       ...new Set(
         this.#mailbox
@@ -1070,25 +1070,25 @@ function branchTitle(sourceTitle: string, titles: readonly string[]): string {
   return `${prefix}${last + 1}`;
 }
 
-function startedTaskResult(task: AgentThreadRecord, waiting: readonly string[]): OpenBotToolResponse {
+function startedTaskResult(task: AgentThreadRecord, waiting: readonly string[]): CodeBotToolResponse {
   const note =
-    "The task runs in its own conversation beside this chat, and the user can follow it in its tab. When its turn ends, OpenBot sends its final answer to your main chat as a task report. Start the other independent tasks now, do the quick parts yourself, tell the user in one sentence what runs, and end your turn. Do not wait for the task or read it to check progress.";
-  return openBotToolResult({
+    "The task runs in its own conversation beside this chat, and the user can follow it in its tab. When its turn ends, CodeBot sends its final answer to your main chat as a task report. Start the other independent tasks now, do the quick parts yourself, tell the user in one sentence what runs, and end your turn. Do not wait for the task or read it to check progress.";
+  return codeBotToolResult({
     taskId: task.taskId,
     title: task.title,
     note:
       waiting.length === 0
         ? note
-        : `${note} ${waiting.join(", ")} still wait for the result of their request: OpenBot sends them your answer to the task report as your reply. Do not send them a status or a result now.`,
+        : `${note} ${waiting.join(", ")} still wait for the result of their request: CodeBot sends them your answer to the task report as your reply. Do not send them a status or a result now.`,
   });
 }
 
-function messagedTaskResult(task: AgentThreadRecord, running: boolean): OpenBotToolResponse {
-  return openBotToolResult({
+function messagedTaskResult(task: AgentThreadRecord, running: boolean): CodeBotToolResponse {
+  return codeBotToolResult({
     taskId: task.taskId,
     title: task.title,
     state: running ? "queued after the current turn of the task" : "sent",
-    note: "The task answers in its own conversation, and OpenBot sends that answer to your main chat as a task report. Continue with other work or end your turn.",
+    note: "The task answers in its own conversation, and CodeBot sends that answer to your main chat as a task report. Continue with other work or end your turn.",
   });
 }
 

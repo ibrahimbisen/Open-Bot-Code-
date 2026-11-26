@@ -1,5 +1,5 @@
-import type { MachineAlertSettings, MachineMetrics } from "@openbot/contracts/ipc";
-import { useText } from "@openbot/ui/text";
+import type { MachineAlertSettings, MachineMetrics } from "@codebot/contracts/ipc";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createStore, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import type { FilesPort } from "./files-port";

@@ -1,17 +1,17 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   DetectedAcpAgent,
   DetectedModelServer,
   DiscoverModelsInput,
   DiscoverModelsResult,
   ProviderDetectionSettings,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   customProviderEndpointKey,
   DEFAULT_MODEL_SERVERS,
   isNewCustomProviderId,
   sameCustomProviderOrigin,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Context, Effect, Exit, Fiber, Layer, ManagedRuntime, Scope } from "effect";
 import { scanAcpAgents } from "../backend/acp-agent-scan";
 import type { CustomProviderConfig } from "../backend/opencode-config";
@@ -86,7 +86,7 @@ class ProviderDiscovery extends Context.Service<
     scanAgents(): Effect.Effect<DetectedAcpAgent[]>;
     discoverModels(input: DiscoverModelsInput): Effect.Effect<DiscoverModelsResult, ProbeError>;
   }
->()("openbot/main/ProviderDiscovery") {
+>()("codebot/main/ProviderDiscovery") {
   static layer(dependencies: ProviderDetectionDependencies) {
     return Layer.effect(
       ProviderDiscovery,

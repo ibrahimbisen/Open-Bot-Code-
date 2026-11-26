@@ -1,4 +1,4 @@
-import { BILLING_CURRENCIES } from "@openbot/contracts/billing";
+import { BILLING_CURRENCIES } from "@codebot/contracts/billing";
 import {
   isReferralCode,
   parseReferralPageRequest,
@@ -12,8 +12,8 @@ import {
   type ReferralPageRequest,
   type ReferralState,
   referralMinimum,
-} from "@openbot/contracts/referral";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/referral";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { type BillingError, BillingOperationError, billingCall, OPEN_STATUSES_SQL } from "./billing-errors";
 

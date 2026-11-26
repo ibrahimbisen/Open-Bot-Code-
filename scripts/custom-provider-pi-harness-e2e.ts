@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promis
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { isAgentModel, savedCustomModelId } from "@openbot/contracts/ipc";
+import { isAgentModel, savedCustomModelId } from "@codebot/contracts/ipc";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolvePiCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -17,7 +17,7 @@ import { getArray, getRecord, getString, isRecord } from "../src/backend/protoco
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/custom-provider-pi-harness");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-provider-pi-harness");
 const REPLY = "pong from the fake endpoint";
 const KEY = "!sk-e2e-$HOME-literal";
 const HEADER_VALUE = "team-$PATH";
@@ -56,7 +56,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, requests: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-custom-pi-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-custom-pi-e2e-"));
 const clients: AgentClient[] = [];
 
 function header(request: IncomingMessage, name: string): string | null {
@@ -112,7 +112,7 @@ async function extensionFiles(directory: string): Promise<{ names: string[]; tex
   const names: string[] = [];
   let text = "";
   for (const folder of await readdir(directory).catch(() => [])) {
-    if (!folder.startsWith("openbot-pi-")) continue;
+    if (!folder.startsWith("codebot-pi-")) continue;
     for (const name of await readdir(join(directory, folder))) {
       names.push(`${folder}/${name}`);
       text += await readFile(join(directory, folder, name), "utf8");
@@ -277,7 +277,7 @@ try {
   });
   const refused = messages.filter((message) => message.includes("Key refused"));
   report.failure = { error: failure.error, status: failure.status, messages: refused };
-  assert.ok(refused.length > 0, "The refusal must reach OpenBot.");
+  assert.ok(refused.length > 0, "The refusal must reach CodeBot.");
   assert.ok(
     report.requests.some((request) => request.model === FAILING_MODEL),
     "The endpoint got no request for the failing model.",

@@ -1,27 +1,27 @@
-import { parseBillingSessionUrl, parseBillingState } from "@openbot/contracts/billing";
-import { parseBillingDetails } from "@openbot/contracts/billing-details";
+import { parseBillingSessionUrl, parseBillingState } from "@codebot/contracts/billing";
+import { parseBillingDetails } from "@codebot/contracts/billing-details";
 import {
   parseCreditActivity,
   parseCreditCheckoutUrl,
   parseCreditRedeemResult,
   parseCreditsState,
-} from "@openbot/contracts/credits";
+} from "@codebot/contracts/credits";
 import {
   PRICING_ORDER_PARAMS,
   type PricingOrder,
   parseLicenseCheckoutUrl,
   parseLicenseState,
   parsePricingOrder,
-} from "@openbot/contracts/license";
-import { readPromotionCode } from "@openbot/contracts/promotion-code";
-import { parseReferralState } from "@openbot/contracts/referral";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import type { BillingDetailsCalls } from "@openbot/ui/features/billing/BillingDetailsFields";
-import type { BillingCalls } from "@openbot/ui/features/billing/billing-store";
-import type { LicenseCalls } from "@openbot/ui/features/billing/license-store";
-import type { CreditsCalls } from "@openbot/ui/features/credits/credits-store";
-import type { ReferralCalls } from "@openbot/ui/features/referral/referral-store";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/license";
+import { readPromotionCode } from "@codebot/contracts/promotion-code";
+import { parseReferralState } from "@codebot/contracts/referral";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import type { BillingDetailsCalls } from "@codebot/ui/features/billing/BillingDetailsFields";
+import type { BillingCalls } from "@codebot/ui/features/billing/billing-store";
+import type { LicenseCalls } from "@codebot/ui/features/billing/license-store";
+import type { CreditsCalls } from "@codebot/ui/features/credits/credits-store";
+import type { ReferralCalls } from "@codebot/ui/features/referral/referral-store";
+import { currentText } from "@codebot/ui/text";
 
 const REQUEST_TIMEOUT_MS = 15_000;
 
@@ -149,7 +149,7 @@ function browserRequest(accountFetch: typeof fetch) {
       credentials: "same-origin",
       cache: "no-store",
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-      headers: post ? { "Content-Type": "application/json", "X-OpenBot-Browser": "1" } : {},
+      headers: post ? { "Content-Type": "application/json", "X-CodeBot-Browser": "1" } : {},
       ...(post ? { body } : {}),
     }).catch(() => {
       throw new Error(errorMessage(null));

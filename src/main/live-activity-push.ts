@@ -1,10 +1,10 @@
-import { avatarHeadColor } from "@openbot/brand/bloub-avatar";
-import type { AgentRuntimeSnapshot, DynamicIslandPresentation } from "@openbot/contracts/ipc";
-import { LIVE_ACTIVITY_SEALED_LIMIT, type LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
-import type { LiveActivityPushRegistration } from "@openbot/contracts/team-protocol/live-activity-push-v1";
-import { mobileTranslateFor, resolveLocale } from "@openbot/i18n/mobile";
-import { redactText, toLogValue } from "@openbot/logging";
-import { DynamicIslandCoordinator } from "@openbot/team-client/dynamic-island-coordinator";
+import { avatarHeadColor } from "@codebot/brand/bloub-avatar";
+import type { AgentRuntimeSnapshot, DynamicIslandPresentation } from "@codebot/contracts/ipc";
+import { LIVE_ACTIVITY_SEALED_LIMIT, type LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
+import type { LiveActivityPushRegistration } from "@codebot/contracts/team-protocol/live-activity-push-v1";
+import { mobileTranslateFor, resolveLocale } from "@codebot/i18n/mobile";
+import { redactText, toLogValue } from "@codebot/logging";
+import { DynamicIslandCoordinator } from "@codebot/team-client/dynamic-island-coordinator";
 import {
   type AgentLiveActivityProps,
   type LiveActivityUnreadAgent,
@@ -12,14 +12,14 @@ import {
   liveActivityIslandText,
   liveActivityShorterProps,
   liveActivityView,
-} from "@openbot/team-client/live-activity-props";
+} from "@codebot/team-client/live-activity-props";
 import {
   decodeLiveActivityBytes,
   LIVE_ACTIVITY_NONCE_BYTES,
   type LiveActivityKeys,
   liveActivityKeys,
   sealLiveActivity,
-} from "@openbot/team-client/live-activity-seal";
+} from "@codebot/team-client/live-activity-seal";
 import { Effect, Exit, Schema, Scope } from "effect";
 import type { PushNotificationSubject } from "./push-notifications";
 import type { TeamApiAgents } from "./team-api/dependencies";

@@ -1,5 +1,5 @@
-import type { IdleRestart as IdleRestartStatus, IdleRestartTarget, UpdateStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { IdleRestart as IdleRestartStatus, IdleRestartTarget, UpdateStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import type { RoutineHoldWindow } from "../backend/routine-store";
 import type { RestartReadiness } from "./update-readiness";
@@ -126,7 +126,7 @@ export class IdleRestart {
 
   readonly #restart = Effect.fn("IdleRestart.restart")(function* (this: IdleRestart, status: IdleRestartStatus) {
     if (status.target === "relaunch") {
-      this.#log("Restarting OpenBot.");
+      this.#log("Restarting CodeBot.");
       this.#relaunch();
       return;
     }

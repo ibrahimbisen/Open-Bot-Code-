@@ -6,10 +6,10 @@ import {
   decodeAgentProfileDraft,
   type GenerateAgentProfileInput,
   type SidebarSection,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Fiber, Result, Schema } from "effect";
 import type { AgentClient } from "../agent-client";
 import { causeHelpers } from "../effect-boundary";
@@ -25,7 +25,7 @@ import { extractJsonObject, StructuredOutputError } from "../structured-output";
 import { isBalanceDiagnostic, isPlanLimitDiagnostic } from "./provider-diagnostics";
 import { USAGE_LIMIT_METHOD } from "./usage-limit-gate";
 
-const logger = createOpenBotLogger("profile-generation");
+const logger = createCodeBotLogger("profile-generation");
 
 const GENERATION_TIMEOUT_MS = 120_000;
 const MEDIA_GENERATION_TIMEOUT_MS = 600_000;
@@ -115,7 +115,7 @@ export const generateTextWithoutTools = Effect.fn("Agent.generateTextWithoutTool
   return result.success.text;
 });
 
-export const makeToollessDirectory = () => profileIo(() => mkdtemp(join(tmpdir(), "openbot-profile-")));
+export const makeToollessDirectory = () => profileIo(() => mkdtemp(join(tmpdir(), "codebot-profile-")));
 
 export const removeToollessDirectory = (cwd: string) =>
   profileIo(() => rm(cwd, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }));
@@ -126,7 +126,7 @@ export const startToolless = Effect.fnUntraced(function* (client: AgentClient) {
     .request(
       "initialize",
       {
-        clientInfo: { name: "openbot-profile", title: "OpenBot profile generation", version: "0.1.0" },
+        clientInfo: { name: "codebot-profile", title: "CodeBot profile generation", version: "0.1.0" },
         capabilities: { experimentalApi: true },
       },
       decodeRecordResponse,

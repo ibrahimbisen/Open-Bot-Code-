@@ -7,7 +7,7 @@ import type { DynamicToolCallParams } from "../src/backend/protocol";
 import { bitwardenLoginFixture, runBitwardenBrowserSmoke } from "./bitwarden-browser-smoke";
 import { waitForPresentedFrame } from "./browser-smoke-frames";
 
-const FRAME_HOSTS = ["login.openbot.test", "login.other-site.test"];
+const FRAME_HOSTS = ["login.codebot.test", "login.other-site.test"];
 const FRAME_PASSWORD = "fixture-frame-password-201938";
 const HIDDEN_PASSWORD = "fixture-hidden-password-480317";
 
@@ -22,7 +22,7 @@ async function runFrameScenario(browser: BrowserHost): Promise<void> {
   } = {};
   for (const path of ["framed", "framed-other"] as const) {
     const tab = await runCauseEffect(
-      browser.open(`https://authentication.openbot.test/${path}`, "secret-thread", "secret-agent"),
+      browser.open(`https://authentication.codebot.test/${path}`, "secret-thread", "secret-agent"),
     );
     try {
       const contents = webContents.getAllWebContents().find((item) => item.getURL() === tab.url);
@@ -48,7 +48,7 @@ async function runFrameScenario(browser: BrowserHost): Promise<void> {
       if (!password || !submit) throw new Error(`The ${path} snapshot does not show the frame's fields.`);
       const prepared = await runCauseEffect(
         browser.prepareSecret({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -88,9 +88,9 @@ async function runFrameScenario(browser: BrowserHost): Promise<void> {
     report.completed === true &&
     report.snapshotHasValue === false &&
     report.otherSiteRefused === true;
-  await mkdir(".openbot-build", { recursive: true });
+  await mkdir(".codebot-build", { recursive: true });
   await writeFile(
-    ".openbot-build/browser-secret-frame.json",
+    ".codebot-build/browser-secret-frame.json",
     JSON.stringify({ status: passed ? "passed" : "issues_found", ...report }, null, 2),
   );
   if (!passed) throw new Error(`Secure fill in a frame is wrong: ${JSON.stringify(report)}`);
@@ -98,7 +98,7 @@ async function runFrameScenario(browser: BrowserHost): Promise<void> {
 
 async function failedFillEndsView(browser: BrowserHost): Promise<string | null> {
   const tab = await runCauseEffect(
-    browser.open("https://authentication.openbot.test/long-form", "secret-thread", "secret-agent"),
+    browser.open("https://authentication.codebot.test/long-form", "secret-thread", "secret-agent"),
   );
   try {
     const contents = webContents.getAllWebContents().find((item) => item.getURL() === tab.url);
@@ -121,7 +121,7 @@ async function failedFillEndsView(browser: BrowserHost): Promise<string | null> 
     try {
       const handoff = await runCauseEffect(
         browser.prepareSecret({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -148,7 +148,7 @@ async function failedFillEndsView(browser: BrowserHost): Promise<string | null> 
 
 async function runLiveViewScenario(browser: BrowserHost): Promise<void> {
   const tab = await runCauseEffect(
-    browser.open("https://authentication.openbot.test/long-form", "secret-thread", "secret-agent"),
+    browser.open("https://authentication.codebot.test/long-form", "secret-thread", "secret-agent"),
   );
   let frameWaiter: (() => void) | undefined;
   let endedReason: string | null = null;
@@ -203,7 +203,7 @@ async function runLiveViewScenario(browser: BrowserHost): Promise<void> {
     await nextFrame("before the card");
     const handoff = await runCauseEffect(
       browser.prepareSecret({
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "submit_secret",
         threadId: "secret-thread",
         ownerAgentId: "secret-agent",
@@ -245,8 +245,8 @@ async function runLiveViewScenario(browser: BrowserHost): Promise<void> {
       secretInPage: page.includes(secret),
       failedFillViewEnded,
     };
-    await mkdir(".openbot-build", { recursive: true });
-    await writeFile(".openbot-build/browser-secret-live-view.json", JSON.stringify(report, null, 2));
+    await mkdir(".codebot-build", { recursive: true });
+    await writeFile(".codebot-build/browser-secret-live-view.json", JSON.stringify(report, null, 2));
     if (report.status !== "passed")
       throw new Error(`The live view did not stay usable around a password card: ${JSON.stringify(report)}`);
   } finally {
@@ -271,11 +271,11 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       return new Response(
         `<!doctype html><body>
         <label>Frame password<input id="frame-password" type="password"></label>
-        <button id="frame-submit" onclick="parent.postMessage(document.querySelector('#frame-password').value === '${FRAME_PASSWORD}', 'https://authentication.openbot.test')">Frame sign in</button>
+        <button id="frame-submit" onclick="parent.postMessage(document.querySelector('#frame-password').value === '${FRAME_PASSWORD}', 'https://authentication.codebot.test')">Frame sign in</button>
         </body>`,
         { headers: { "Content-Type": "text/html" } },
       );
-    if (url.hostname !== "authentication.openbot.test") return new Response("Not found", { status: 404 });
+    if (url.hostname !== "authentication.codebot.test") return new Response("Not found", { status: 404 });
     if (url.pathname === "/framed" || url.pathname === "/framed-other")
       return new Response(
         `<!doctype html><body>
@@ -399,13 +399,13 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       ["password", "native-submit"],
     ] as const) {
       const tab = await runCauseEffect(
-        browser.open(`https://authentication.openbot.test/${path}`, "secret-thread", "secret-agent"),
+        browser.open(`https://authentication.codebot.test/${path}`, "secret-thread", "secret-agent"),
       );
       const tabContents = webContents.getAllWebContents().find((contents) => contents.getURL() === tab.url);
       if (!tabContents) throw new Error(`Missing ${path} fixture.`);
       await waitForPresentedFrame(tabContents);
       const params: DynamicToolCallParams = {
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "submit_secret",
         threadId: "secret-thread",
         ownerAgentId: "secret-agent",
@@ -457,7 +457,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       { selector: "#masked-visible", submission: "click", vault: false },
     ] as const) {
       const tab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/hidden-password", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/hidden-password", "secret-thread", "secret-agent"),
       );
       try {
         const contents = webContents.getAllWebContents().find((candidate) => candidate.getURL() === tab.url);
@@ -466,7 +466,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         const label = `${selector} with submission=${submission} and vault=${vault}`;
         const prepared = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -506,7 +506,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
     }
     {
       const tab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/address-change", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/address-change", "secret-thread", "secret-agent"),
       );
       try {
         const contents = webContents.getAllWebContents().find((candidate) => candidate.getURL() === tab.url);
@@ -514,7 +514,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         await waitForPresentedFrame(contents);
         const handoff = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -546,14 +546,14 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
     const combinedCode = "604213";
     {
       const tab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/combined", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/combined", "secret-thread", "secret-agent"),
       );
       try {
         const contents = webContents.getAllWebContents().find((candidate) => candidate.getURL() === tab.url);
         if (!contents) throw new Error("Missing combined sign-in fixture.");
         await waitForPresentedFrame(contents);
         const params = ({ saved = true, codeSelector = "#combined-code" } = {}): DynamicToolCallParams => ({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -606,12 +606,12 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       ["#script-password", true, "/complete", "submitted"],
     ] as const) {
       const tab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/login", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/login", "secret-thread", "secret-agent"),
       );
       try {
         const handoff = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -660,12 +660,12 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       ["#code", false],
     ] as const) {
       const tab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/login", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/login", "secret-thread", "secret-agent"),
       );
       try {
         const handoff = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -694,12 +694,12 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       ],
     ] as const) {
       const staleTab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/login", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/login", "secret-thread", "secret-agent"),
       );
       try {
         const handoff = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -739,12 +739,12 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       [[{ kind: "css", selector: "#password" }], undefined, "submission=click needs submitTarget"],
     ] as const) {
       const wrongTab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/login", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/login", "secret-thread", "secret-agent"),
       );
       try {
         const failure = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -775,7 +775,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       ["#name", "must both be password fields"],
     ] as const) {
       const signupTab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/signup", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/signup", "secret-thread", "secret-agent"),
       );
       try {
         const signupContents = webContents.getAllWebContents().find((item) => item.getURL() === signupTab.url);
@@ -783,7 +783,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         await waitForPresentedFrame(signupContents);
         const result = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -817,13 +817,13 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       }
     }
     if (!vaultFillable) throw new Error("A sign-up password and confirmation were not vault-fillable.");
-    await mkdir(".openbot-build", { recursive: true });
+    await mkdir(".codebot-build", { recursive: true });
     await writeFile(
-      ".openbot-build/browser-secret-confirm-password.json",
+      ".codebot-build/browser-secret-confirm-password.json",
       JSON.stringify({ status: "passed", vaultFillable, signup }, null, 2),
     );
     const mirroredTab = await runCauseEffect(
-      browser.open("https://authentication.openbot.test/mirrored", "secret-thread", "secret-agent"),
+      browser.open("https://authentication.codebot.test/mirrored", "secret-thread", "secret-agent"),
     );
     try {
       const mirroredContents = webContents.getAllWebContents().find((item) => item.getURL() === mirroredTab.url);
@@ -831,7 +831,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       await waitForPresentedFrame(mirroredContents);
       const handoff = await runCauseEffect(
         browser.prepareSecret({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -873,15 +873,15 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         fieldEmpty: page.value === "" && !page.attribute,
         snapshotHasValue: snapshot.includes(secret),
       };
-      await mkdir(".openbot-build", { recursive: true });
-      await writeFile(".openbot-build/browser-secret-mirrored-value.json", JSON.stringify(report, null, 2));
+      await mkdir(".codebot-build", { recursive: true });
+      await writeFile(".codebot-build/browser-secret-mirrored-value.json", JSON.stringify(report, null, 2));
       if (report.status !== "passed")
         throw new Error(`A same-document sign-in lost its answer: ${JSON.stringify(report)}`);
     } finally {
       await runCauseEffect(browser.close(mirroredTab.id));
     }
     const modalTab = await runCauseEffect(
-      browser.open("https://authentication.openbot.test/modal", "secret-thread", "secret-agent"),
+      browser.open("https://authentication.codebot.test/modal", "secret-thread", "secret-agent"),
     );
     try {
       const modalContents = webContents.getAllWebContents().find((item) => item.getURL() === modalTab.url);
@@ -893,7 +893,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       );
       const handoff = await runCauseEffect(
         browser.prepareSecret({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -923,7 +923,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       const tool = (name: string, args: DynamicToolCallParams["arguments"]) =>
         runCauseEffect(
           browser.handleDynamicTool({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: name,
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -982,22 +982,22 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         cssTargetRefused,
         refClickWorks,
       };
-      await mkdir(".openbot-build", { recursive: true });
-      await writeFile(".openbot-build/browser-secret-dialog.json", JSON.stringify(report, null, 2));
+      await mkdir(".codebot-build", { recursive: true });
+      await writeFile(".codebot-build/browser-secret-dialog.json", JSON.stringify(report, null, 2));
       if (report.status !== "passed")
         throw new Error(`A password fill in a dialog lost the dialog or showed the value: ${JSON.stringify(report)}`);
     } finally {
       await runCauseEffect(browser.close(modalTab.id));
     }
     const stuckTab = await runCauseEffect(
-      browser.open("https://authentication.openbot.test/stuck", "secret-thread", "secret-agent"),
+      browser.open("https://authentication.codebot.test/stuck", "secret-thread", "secret-agent"),
     );
     try {
       const stuckContents = webContents.getAllWebContents().find((item) => item.getURL() === stuckTab.url);
       if (!stuckContents) throw new Error("Missing takeover view fixture.");
       const handoff = await runCauseEffect(
         browser.prepareSecret({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -1051,8 +1051,8 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         takeoverViewFrames: frames > 0,
         secretInPage: page.includes(secret),
       };
-      await mkdir(".openbot-build", { recursive: true });
-      await writeFile(".openbot-build/browser-secret-takeover-view.json", JSON.stringify(report, null, 2));
+      await mkdir(".codebot-build", { recursive: true });
+      await writeFile(".codebot-build/browser-secret-takeover-view.json", JSON.stringify(report, null, 2));
       if (report.status !== "passed")
         throw new Error(`The takeover view of a protected tab is wrong: ${JSON.stringify(report)}`);
     } finally {
@@ -1062,14 +1062,14 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
     for (const ending of ["after-fill", "during-fill"] as const) {
       lostPageOffline = false;
       const lostTab = await runCauseEffect(
-        browser.open("https://authentication.openbot.test/lost", "secret-thread", "secret-agent"),
+        browser.open("https://authentication.codebot.test/lost", "secret-thread", "secret-agent"),
       );
       try {
         const lostContents = webContents.getAllWebContents().find((item) => item.getURL() === lostTab.url);
         if (!lostContents) throw new Error("Missing failed fill fixture.");
         const handoff = await runCauseEffect(
           browser.prepareSecret({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "submit_secret",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -1109,7 +1109,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
         );
         const closed = await runCauseEffect(
           browser.handleDynamicTool({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: "close_tab",
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -1136,14 +1136,14 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
     }
     lostPageOffline = false;
     const heldTab = await runCauseEffect(
-      browser.open("https://authentication.openbot.test/lost", "secret-thread", "secret-agent"),
+      browser.open("https://authentication.codebot.test/lost", "secret-thread", "secret-agent"),
     );
     try {
       const heldContents = webContents.getAllWebContents().find((item) => item.getURL() === heldTab.url);
       if (!heldContents) throw new Error("Missing failed fill fixture.");
       const handoff = await runCauseEffect(
         browser.prepareSecret({
-          namespace: "openbot_browser",
+          namespace: "codebot_browser",
           tool: "submit_secret",
           threadId: "secret-thread",
           ownerAgentId: "secret-agent",
@@ -1160,7 +1160,7 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       const tool = (name: string, args: DynamicToolCallParams["arguments"]) =>
         runCauseEffect(
           browser.handleDynamicTool({
-            namespace: "openbot_browser",
+            namespace: "codebot_browser",
             tool: name,
             threadId: "secret-thread",
             ownerAgentId: "secret-agent",
@@ -1203,8 +1203,8 @@ export async function runSecretHandoffScenario(browser: BrowserHost, localOrigin
       status: Object.values(lostResults).every((result) => result.passed) ? "passed" : "issues_found",
       ...lostResults,
     };
-    await mkdir(".openbot-build", { recursive: true });
-    await writeFile(".openbot-build/browser-secret-ended-fill.json", JSON.stringify(lostReport, null, 2));
+    await mkdir(".codebot-build", { recursive: true });
+    await writeFile(".codebot-build/browser-secret-ended-fill.json", JSON.stringify(lostReport, null, 2));
     if (lostReport.status !== "passed")
       throw new Error(`A tab stayed locked after its saved login ended: ${JSON.stringify(lostReport)}`);
     await runLiveViewScenario(browser);

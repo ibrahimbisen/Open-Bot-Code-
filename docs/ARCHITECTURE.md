@@ -1,6 +1,6 @@
-# OpenBot architecture
+# CodeBot architecture
 
-OpenBot is a Bun workspace with desktop, browser, and mobile applications, two Cloudflare Workers,
+CodeBot is a Bun workspace with desktop, browser, and mobile applications, two Cloudflare Workers,
 a self-hosted Signal service, and shared packages.
 
 The architecture notes are in one file for each topic:
@@ -58,7 +58,7 @@ The architecture notes are in one file for each topic:
   - [Local skill library](architecture/skills-and-plugins.md#local-skill-library)
   - [Plugin distribution](architecture/skills-and-plugins.md#plugin-distribution)
 - [Integrations and sign-in](architecture/integrations.md)
-  - [How a sign-in reaches OpenBot](architecture/integrations.md#how-a-sign-in-reaches-openbot)
+  - [How a sign-in reaches CodeBot](architecture/integrations.md#how-a-sign-in-reaches-codebot)
   - [Remote sign-in: the callback relay](architecture/integrations.md#remote-sign-in-the-callback-relay)
   - [Add a provider](architecture/integrations.md#add-a-provider)
   - [Add an application](architecture/integrations.md#add-an-application)

@@ -1,4 +1,4 @@
-import type { AppTranslate } from "@openbot/i18n";
+import type { AppTranslate } from "@codebot/i18n";
 import type { AgentProfile } from "../../data";
 
 export function agentAccessLockLabel(agent: Pick<AgentProfile, "access">, t: AppTranslate): string {

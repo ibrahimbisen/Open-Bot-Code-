@@ -1,9 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { join } from "node:path";
-import { CHANNEL_PARALLEL_LIMIT, type DynamicIslandPreference } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import type { Logger } from "@openbot/logging";
+import { CHANNEL_PARALLEL_LIMIT, type DynamicIslandPreference } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import type { Logger } from "@codebot/logging";
 import type { Browser, Page } from "playwright-core";
 import { NO_SCALE, parseSeedScale, type SeedScale } from "../seed-dev-scale";
 import { type FakeCodexCorpus, writeFakeCodex } from "./bench-fake-codex";
@@ -96,7 +96,7 @@ async function useProvider(
 ): Promise<void> {
   let models: ListedModel[] = [];
   await poll(`${provider} models to be listed`, MODEL_DISCOVERY_TIMEOUT_MS, SECOND, async () => {
-    models = await context.evaluate<ListedModel[]>("window.openbot.agent.listModels()");
+    models = await context.evaluate<ListedModel[]>("window.codebot.agent.listModels()");
     return models.some(
       (model) => model.provider === provider && (requiredModel === undefined || model.id === requiredModel),
     );
@@ -109,7 +109,7 @@ async function useProvider(
   context.logger.info(`${provider}: ${choice.id} (${reasoningEffort}) for ${agentIds.join(", ")}`);
   for (const agentId of agentIds) {
     await context.evaluate(
-      `window.openbot.agent.updateAgent(${json({ agentId, provider, model: choice.id, reasoningEffort })}).then(() => null)`,
+      `window.codebot.agent.updateAgent(${json({ agentId, provider, model: choice.id, reasoningEffort })}).then(() => null)`,
     );
   }
 }
@@ -128,7 +128,7 @@ async function openAgent(context: ScenarioContext, agentId: string): Promise<voi
     await byId.click();
   } else {
     const name = await context.evaluate<string>(
-      `window.openbot.agent.listAgents().then((agents) => agents.find((agent) => agent.id === ${json(agentId)})?.name ?? "")`,
+      `window.codebot.agent.listAgents().then((agents) => agents.find((agent) => agent.id === ${json(agentId)})?.name ?? "")`,
     );
     if (!name) throw new Error(`No agent ${agentId} in the agent list.`);
     await sidebarRowButton(context, name).click();
@@ -149,11 +149,11 @@ interface SentDelivery {
 async function turnsEnded(context: ScenarioContext, deliveries: SentDelivery[]): Promise<boolean> {
   return context.evaluate<boolean>(`(async (sent) => {
     for (const { agentId, id } of sent) {
-      const queue = await window.openbot.agent.listQueue(agentId);
+      const queue = await window.codebot.agent.listQueue(agentId);
       const delivery = queue.deliveries.find((one) => one.id === id);
       if (!delivery || ["queued", "starting", "running"].includes(delivery.status)) return false;
       if (delivery.status !== "completed" && delivery.status !== "interrupted") continue;
-      const page = await window.openbot.agent.readConversationPage({ agentId, limit: 1 });
+      const page = await window.codebot.agent.readConversationPage({ agentId, limit: 1 });
       const last = page.messages[page.messages.length - 1];
       if (!last || last.source === "user" || last.status === "streaming") return false;
     }
@@ -167,7 +167,7 @@ interface TurnOutcome {
 }
 
 async function lastReply(context: ScenarioContext, agentId: string): Promise<TurnOutcome> {
-  return context.evaluate<TurnOutcome>(`window.openbot.agent
+  return context.evaluate<TurnOutcome>(`window.codebot.agent
     .readConversationPage({ agentId: ${json(agentId)}, limit: 1 })
     .then((page) => {
       const last = page.messages[page.messages.length - 1];
@@ -181,7 +181,7 @@ async function runTurns(context: ScenarioContext, agentIds: string[], text: stri
   const sent: SentDelivery[] = [];
   for (const agentId of agentIds) {
     const deliveryIds = await context.evaluate<string[]>(
-      `window.openbot.agent.sendMessage(${json({ agentId, text })}).then((receipt) => receipt.deliveries.map((one) => one.id))`,
+      `window.codebot.agent.sendMessage(${json({ agentId, text })}).then((receipt) => receipt.deliveries.map((one) => one.id))`,
     );
     for (const id of deliveryIds) sent.push({ agentId, id });
   }
@@ -199,7 +199,7 @@ async function runTurns(context: ScenarioContext, agentIds: string[], text: stri
 
 const MAIN_WINDOW = `require("electron").BrowserWindow.getAllWindows().find((window) => {
   const url = window.webContents.getURL();
-  return url.startsWith("openbot-app://app/index.html") && !url.includes("surface=");
+  return url.startsWith("codebot-app://app/index.html") && !url.includes("surface=");
 })`;
 
 type MainWindowAction = "close" | "minimize" | "hide" | "show" | "blur";
@@ -271,14 +271,14 @@ async function openTabs(context: ScenarioContext, count: number): Promise<void> 
   try {
     for (let index = 1; index <= count; index += 1) {
       await context.evaluate(
-        `window.openbot.browser.open(${json({ url: `${origin}/?tab=${index}`, focus: false })}).then(() => null)`,
+        `window.codebot.browser.open(${json({ url: `${origin}/?tab=${index}`, focus: false })}).then(() => null)`,
       );
     }
     await poll("the tabs to load", 2 * MINUTE, SECOND, () =>
-      context.evaluate<boolean>("window.openbot.browser.listTabs().then((tabs) => tabs.every((tab) => !tab.loading))"),
+      context.evaluate<boolean>("window.codebot.browser.listTabs().then((tabs) => tabs.every((tab) => !tab.loading))"),
     );
     context.record({
-      "browser.tabs": await context.evaluate<number>("window.openbot.browser.listTabs().then((tabs) => tabs.length)"),
+      "browser.tabs": await context.evaluate<number>("window.codebot.browser.listTabs().then((tabs) => tabs.length)"),
     });
     await context.wait(MINUTE);
   } finally {
@@ -323,13 +323,13 @@ const MAIN_WINDOW_START = `(() => {
   const { monitorEventLoopDelay } = require("node:perf_hooks");
   const histogram = monitorEventLoopDelay({ resolution: 10 });
   histogram.enable();
-  globalThis.__openbotBenchWindow = { histogram, cpu: process.cpuUsage(), at: performance.now() };
+  globalThis.__codebotBenchWindow = { histogram, cpu: process.cpuUsage(), at: performance.now() };
   return true;
 })()`;
 
 const MAIN_WINDOW_STOP = `(() => {
-  const reading = globalThis.__openbotBenchWindow;
-  delete globalThis.__openbotBenchWindow;
+  const reading = globalThis.__codebotBenchWindow;
+  delete globalThis.__codebotBenchWindow;
   reading.histogram.disable();
   const cpu = process.cpuUsage(reading.cpu);
   const elapsed = performance.now() - reading.at;
@@ -349,13 +349,13 @@ const WINDOW_LAG_START = `(() => {
     lags.push(Math.max(0, now - last - 50));
     last = now;
   }, 50);
-  window.__openbotBenchLag = { timer, lags };
+  window.__codebotBenchLag = { timer, lags };
   return true;
 })()`;
 
 const WINDOW_LAG_STOP = `(() => {
-  const { timer, lags } = window.__openbotBenchLag;
-  delete window.__openbotBenchLag;
+  const { timer, lags } = window.__codebotBenchLag;
+  delete window.__codebotBenchLag;
   clearInterval(timer);
   const sorted = lags.slice().sort((left, right) => left - right);
   const at = (share) => sorted[Math.min(sorted.length - 1, Math.floor(share * sorted.length))] ?? 0;
@@ -438,7 +438,7 @@ function manyAgents(total: number, channelMembers: number): Scenario {
         title: string;
         instructions: string;
       }
-      const channels = await context.evaluate<ListedChannel[]>("window.openbot.agent.listChannels()");
+      const channels = await context.evaluate<ListedChannel[]>("window.codebot.agent.listChannels()");
       const channel = channels.find((one) => one.id === "scale-channel-001");
       if (!channel) throw new Error("The scaled seed has no channel scale-channel-001.");
       const save = {
@@ -454,11 +454,11 @@ function manyAgents(total: number, channelMembers: number): Scenario {
           leadAgentId: members[0],
         },
       };
-      await context.evaluate(`window.openbot.agent.channelCommand(${json(save)}).then(() => null)`);
+      await context.evaluate(`window.codebot.agent.channelCommand(${json(save)}).then(() => null)`);
       await openChannel(context, channel.name);
       await context.wait(5 * SECOND);
 
-      const profile = process.env.OPENBOT_BENCH_PROFILE_STREAM === "1" && !profiled;
+      const profile = process.env.CODEBOT_BENCH_PROFILE_STREAM === "1" && !profiled;
       profiled ||= profile;
       const rendererSession = await context.page.context().newCDPSession(context.page);
       await rendererSession.send("Performance.enable");
@@ -481,7 +481,7 @@ function manyAgents(total: number, channelMembers: number): Scenario {
       const sent: SentDelivery[] = [];
       for (const agentId of direct) {
         const deliveryIds = await context.evaluate<string[]>(
-          `window.openbot.agent.sendMessage(${json({ agentId, text: SHORT_REPLY_PROMPT })}).then((receipt) => receipt.deliveries.map((one) => one.id))`,
+          `window.codebot.agent.sendMessage(${json({ agentId, text: SHORT_REPLY_PROMPT })}).then((receipt) => receipt.deliveries.map((one) => one.id))`,
         );
         for (const id of deliveryIds) sent.push({ agentId, id });
       }
@@ -495,7 +495,7 @@ function manyAgents(total: number, channelMembers: number): Scenario {
           replyToMessageId: null,
           attachmentDraftIds: [],
         };
-        await context.evaluate(`window.openbot.agent.channelCommand(${json(command)}).then(() => null)`);
+        await context.evaluate(`window.codebot.agent.channelCommand(${json(command)}).then(() => null)`);
       }
       const sendMs = Date.now() - started;
       await poll(
@@ -524,7 +524,7 @@ function manyAgents(total: number, channelMembers: number): Scenario {
       await poll("the direct turns to settle", 2 * MINUTE, 2 * SECOND, () => turnsEnded(context, sent));
       await poll("the channel tasks to settle", 2 * MINUTE, 2 * SECOND, async () => {
         const active = await context.evaluate<number>(
-          `window.openbot.agent.listChannels().then((all) => all.find((one) => one.id === ${json(channel.id)})?.activeTasks ?? 0)`,
+          `window.codebot.agent.listChannels().then((all) => all.find((one) => one.id === ${json(channel.id)})?.activeTasks ?? 0)`,
         );
         return active === 0;
       });
@@ -688,10 +688,10 @@ const SWITCH_LONG_TASKS_START = `(() => {
     }
   });
   observer.observe({ type: "longtask" });
-  window.__openbotSwitchLongTasks = { state, observer };
+  window.__codebotSwitchLongTasks = { state, observer };
 })()`;
 const SWITCH_LONG_TASKS_STOP = `(() => {
-  const probe = window.__openbotSwitchLongTasks;
+  const probe = window.__codebotSwitchLongTasks;
   if (!probe) return { count: 0, ms: 0 };
   for (const entry of probe.observer.takeRecords()) {
     probe.state.count += 1;
@@ -746,7 +746,7 @@ function fakeStream(plan: FakeStreamPlan): Scenario {
       const sent: SentDelivery[] = [];
       for (const agentId of agents) {
         const deliveryIds = await context.evaluate<string[]>(
-          `window.openbot.agent.sendMessage(${json({ agentId, text: SHORT_REPLY_PROMPT })}).then((receipt) => receipt.deliveries.map((one) => one.id))`,
+          `window.codebot.agent.sendMessage(${json({ agentId, text: SHORT_REPLY_PROMPT })}).then((receipt) => receipt.deliveries.map((one) => one.id))`,
         );
         for (const id of deliveryIds) sent.push({ agentId, id });
       }
@@ -848,7 +848,7 @@ function streamChatWindow(): Scenario {
       if (!first || !second) throw new Error("This scenario needs 2 agents.");
       await openAgent(context, second);
       await context.evaluate(
-        `window.openbot.openChatWindow(${json({ serverId: "local", agentId: first })}).then(() => null)`,
+        `window.codebot.openChatWindow(${json({ serverId: "local", agentId: first })}).then(() => null)`,
       );
       chatPage = await chatWindowPage(context, first);
     },
@@ -1027,8 +1027,8 @@ export const SCENARIOS: Scenario[] = [
     corpus: "markdown",
     after: async (context, agents) => {
       await context.wait(2 * SECOND);
-      await context.evaluate("window.__openbotPerfProbes?.reset()");
-      if (context.inspector) await context.inspector.evaluate("globalThis.__openbotPerfProbes?.reset()");
+      await context.evaluate("window.__codebotPerfProbes?.reset()");
+      if (context.inspector) await context.inspector.evaluate("globalThis.__codebotPerfProbes?.reset()");
       await context.evaluate(SWITCH_LONG_TASKS_START);
       const started = Date.now();
       for (let index = 0; index < SWITCH_COUNT; index += 1) {
@@ -1193,7 +1193,7 @@ export const SCENARIOS: Scenario[] = [
         members: { agentId: string }[];
         activeTasks: number;
       }
-      const channels = await context.evaluate<ListedChannel[]>("window.openbot.agent.listChannels()");
+      const channels = await context.evaluate<ListedChannel[]>("window.codebot.agent.listChannels()");
       const channel = channels.find((one) => one.members.length >= 3);
       if (!channel) throw new Error("The showcase seed has no channel with 3 members.");
       const members = channel.members.slice(0, 3).map((member) => member.agentId);
@@ -1210,11 +1210,11 @@ export const SCENARIOS: Scenario[] = [
           replyToMessageId: null,
           attachmentDraftIds: [],
         };
-        await context.evaluate(`window.openbot.agent.channelCommand(${json(command)}).then(() => null)`);
+        await context.evaluate(`window.codebot.agent.channelCommand(${json(command)}).then(() => null)`);
       }
       const activeTasks = (): Promise<number> =>
         context.evaluate<number>(
-          `window.openbot.agent.listChannels().then((all) => all.find((one) => one.id === ${json(channel.id)})?.activeTasks ?? 0)`,
+          `window.codebot.agent.listChannels().then((all) => all.find((one) => one.id === ${json(channel.id)})?.activeTasks ?? 0)`,
         );
       await poll("the channel tasks to start", MINUTE, SECOND, async () => (await activeTasks()) > 0);
       await poll(
@@ -1237,7 +1237,7 @@ export const SCENARIOS: Scenario[] = [
     description: "Computer Use state read (starts the driver when permitted), idle 2 min",
     seed: SHOWCASE,
     act: async (context) => {
-      const state = await context.evaluate<{ status: string }>("window.openbot.computerUse.getState()");
+      const state = await context.evaluate<{ status: string }>("window.codebot.computerUse.getState()");
       context.logger.info(`Computer Use: ${state.status}`);
       context.record({ "computerUse.ready": state.status === "ready" ? 1 : 0 });
       await context.wait(2 * MINUTE);
@@ -1249,10 +1249,10 @@ export const SCENARIOS: Scenario[] = [
     seed: SHOWCASE,
     act: async (context) => {
       const preference = await context.evaluate<DynamicIslandPreference>(
-        "window.openbot.dynamicIsland.getPreference()",
+        "window.codebot.dynamicIsland.getPreference()",
       );
       await context.evaluate(
-        `window.openbot.dynamicIsland.setPreference(${json({ ...preference, enabled: false })}).then(() => null)`,
+        `window.codebot.dynamicIsland.setPreference(${json({ ...preference, enabled: false })}).then(() => null)`,
       );
       await context.wait(2 * MINUTE);
     },

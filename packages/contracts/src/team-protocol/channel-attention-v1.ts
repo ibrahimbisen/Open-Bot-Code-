@@ -35,7 +35,7 @@ function author(value: unknown): TeamProtocolV2Json {
 }
 
 export function isChannelAttentionRoute(path: string): boolean {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   return pathname === CHANNEL_ROUTES.list || pathname === CHANNEL_ROUTES.read;
 }
 
@@ -77,7 +77,7 @@ function withPageUiBlocks(projected: TeamProtocolV2Json, source: unknown): TeamP
 }
 
 export function withChannelAttention(path: string, projected: TeamProtocolV2Json, source: unknown): TeamProtocolV2Json {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   if (pathname === CHANNEL_ROUTES.read) return withPageUiBlocks(projected, source);
   if (pathname !== CHANNEL_ROUTES.list || !Array.isArray(projected) || !Array.isArray(source)) return projected;
   return projected.map((summary, index) => withSummaryAttention(summary, source[index]));

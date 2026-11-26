@@ -1,6 +1,6 @@
-import { browserAddressPasteSupported } from "@openbot/contracts/agent-providers";
-import { type AgentProviderId, loopbackCallback, relayCallbackQuery } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { browserAddressPasteSupported } from "@codebot/contracts/agent-providers";
+import { type AgentProviderId, loopbackCallback, relayCallbackQuery } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Schema } from "effect";
 import { replaySignInCallback } from "./sign-in-relay-host";
 

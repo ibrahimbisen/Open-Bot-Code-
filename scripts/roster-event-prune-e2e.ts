@@ -4,16 +4,16 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_REASONING_EFFORTS, type AgentSummary } from "@openbot/contracts/ipc";
+import { AGENT_REASONING_EFFORTS, type AgentSummary } from "@codebot/contracts/ipc";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import type { AgentModelChange } from "../src/backend/database/agent-roster";
 import { databaseRows, requiredStringColumn } from "../src/backend/database/database-rows";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/roster-event-prune-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/roster-event-prune-e2e");
 const LEGACY_WRITES = 50;
-const root = await mkdtemp(join(tmpdir(), "openbot-roster-event-prune-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-roster-event-prune-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 
@@ -34,8 +34,8 @@ interface Report {
 
 const report: Report = { passed: false };
 
-async function boot<T>(use: (store: AgentStore, database: OpenBotDatabase) => T | Promise<T>): Promise<T> {
-  const database = new OpenBotDatabase(userData);
+async function boot<T>(use: (store: AgentStore, database: CodeBotDatabase) => T | Promise<T>): Promise<T> {
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   await runCauseEffect(store.initialize());
   try {
@@ -45,7 +45,7 @@ async function boot<T>(use: (store: AgentStore, database: OpenBotDatabase) => T 
   }
 }
 
-function rosterEvents(database: OpenBotDatabase): RosterEvents & { types: string[]; commandIds: string[] } {
+function rosterEvents(database: CodeBotDatabase): RosterEvents & { types: string[]; commandIds: string[] } {
   const rows = databaseRows(
     database.connection
       .prepare(
@@ -76,7 +76,7 @@ interface LegacyRosterPayload {
 }
 
 function appendLegacyRosterEvent(
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   commandId: string,
   eventType: string,
   payload: LegacyRosterPayload,

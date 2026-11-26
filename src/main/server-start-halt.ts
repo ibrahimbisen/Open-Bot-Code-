@@ -1,10 +1,10 @@
 import { readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { Effect, Option, Schema } from "effect";
-import { NewerDatabaseError } from "../backend/openbot-database-schema";
+import { NewerDatabaseError } from "../backend/codebot-database-schema";
 
 export const START_LOOP_EXIT_CODE = 78;
-export const START_HALT_FILE = "openbot-start-halt-v1.json";
+export const START_HALT_FILE = "codebot-start-halt-v1.json";
 
 const StartHaltReason = Schema.Literals(["newer_database", "start_failed"]);
 export type StartHaltReason = typeof StartHaltReason.Type;
@@ -66,7 +66,7 @@ export function writeStartHalt(userDataPath: string, record: Omit<StartHaltRecor
 }
 
 export function takeServerStartGuardTest(environment: NodeJS.ProcessEnv, isPackaged: boolean): boolean {
-  const value = environment.OPENBOT_E2E_SERVER_START_GUARD;
-  delete environment.OPENBOT_E2E_SERVER_START_GUARD;
+  const value = environment.CODEBOT_E2E_SERVER_START_GUARD;
+  delete environment.CODEBOT_E2E_SERVER_START_GUARD;
   return !isPackaged && value === "1";
 }

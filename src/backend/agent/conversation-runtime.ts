@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
 import {
   type AgentEvent,
   type AgentSummary,
@@ -7,15 +7,15 @@ import {
   type ConversationMessage,
   type ConversationSnapshot,
   type QueueDeliveryStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { AgentClient } from "../agent-client";
 import type { AgentStore } from "../agent-store";
+import type { CodeBotDatabase } from "../codebot-database";
 import { isTurnEndEvent, withoutQueuePositions } from "../database/conversation-writer";
 import { withTransaction } from "../database/sqlite-transaction";
 import { MAILBOX_CONVERSATION_MESSAGE_LIMIT } from "../mailbox-store";
-import type { OpenBotDatabase } from "../openbot-database";
 import { perfCount, perfTimed } from "../perf-probe-hooks";
 import { conversationContentSignature } from "./delivery-content";
 
@@ -31,12 +31,12 @@ export const CONVERSATION_CACHE_TOTAL_BYTES_LIMIT = 64 * 1024 * 1024;
 const UNSTORED_SENDS_WARNING_COUNT = 10;
 const UNSTORED_SENDS_WARNING_INTERVAL_MS = 60_000;
 
-const logger = createOpenBotLogger("conversation-runtime");
+const logger = createCodeBotLogger("conversation-runtime");
 
-const openTransactions = new WeakMap<OpenBotDatabase, TransactionScope>();
+const openTransactions = new WeakMap<CodeBotDatabase, TransactionScope>();
 
 export function withDatabaseTransaction<T>(
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   work: () => T,
   onRollback?: () => void,
   onCommit?: () => void,

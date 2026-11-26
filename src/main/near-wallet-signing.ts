@@ -1,9 +1,9 @@
 import { createHash, createPublicKey, randomBytes, timingSafeEqual, verify } from "node:crypto";
 import { createServer, type Server } from "node:http";
 import type { Socket } from "node:net";
+import type { NearOwnerAction, NearPasskeyBackup } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import type { Intent, SignedData } from "@near-intents-agent-api/sdk";
-import type { NearOwnerAction, NearPasskeyBackup } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
 import { z } from "zod";
 import { parseDeepLink } from "./deep-link-router";
 import type { NearOwner } from "./near-wallet-store";
@@ -343,7 +343,7 @@ export class NearOwnerSigning {
 
   #returnedLink(method: string | undefined, url: string | undefined): { nonce: string; data: string } | null {
     if (method !== "GET" || !url?.startsWith(`${NEAR_SIGNATURE_DEV_PATH}?`)) return null;
-    const link = parseDeepLink(`openbot://${url.replace(/^\/+/u, "")}`);
+    const link = parseDeepLink(`codebot://${url.replace(/^\/+/u, "")}`);
     const session = this.#session;
     if (link?.kind !== "near-signature" || !session || !timingSafeEqualText(session.nonce, link.nonce)) return null;
     return { nonce: link.nonce, data: link.data };

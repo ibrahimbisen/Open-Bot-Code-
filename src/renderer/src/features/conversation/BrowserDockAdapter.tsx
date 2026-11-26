@@ -1,4 +1,4 @@
-import { agentSteersTurns } from "@openbot/contracts/agent-providers";
+import { agentSteersTurns } from "@codebot/contracts/agent-providers";
 import {
   BROWSER_DOCK_LIMITS,
   type BrowserDockAction,
@@ -11,12 +11,12 @@ import {
   isBrowserDockIsland,
   queueHoldWorker,
   routineRunsTurn,
-} from "@openbot/contracts/ipc";
-import { BROWSER_USER_CONTROL_CAPABILITY } from "@openbot/contracts/team-protocol/browser-user-control-v1";
-import type { ComposerAgent, ComposerMcpServer, ComposerSkill } from "@openbot/ui/data";
-import { BrowserDock, type BrowserIslandContent } from "@openbot/ui/features/browser/BrowserDock";
-import { browserActionLabel } from "@openbot/ui/features/browser/browser-action-labels";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { BROWSER_USER_CONTROL_CAPABILITY } from "@codebot/contracts/team-protocol/browser-user-control-v1";
+import type { ComposerAgent, ComposerMcpServer, ComposerSkill } from "@codebot/ui/data";
+import { BrowserDock, type BrowserIslandContent } from "@codebot/ui/features/browser/BrowserDock";
+import { browserActionLabel } from "@codebot/ui/features/browser/browser-action-labels";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, Show, snapshot, untrack } from "solid-js";
 import { deviceSendShortcut } from "../../send-shortcut-preference";
 import { serverSupportsCapability } from "../servers/server-capabilities";

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { agentSteersTurns } from "@openbot/contracts/agent-providers";
+import { agentSteersTurns } from "@codebot/contracts/agent-providers";
 import { Effect } from "effect";
 import { ModelCatalog } from "../src/backend/agent/model-catalog";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -11,7 +11,7 @@ import { type AppServerNotification, getRecord, getString, isRecord } from "../s
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-steer-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-steer-e2e");
 const TURN_TIMEOUT_MS = 20_000;
 const PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
@@ -42,7 +42,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-steer-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-steer-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 

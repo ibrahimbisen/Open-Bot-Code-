@@ -8,15 +8,15 @@ import type {
   AgentDockInputRect,
   AgentDockPresentation,
   SetAgentDockInteractiveInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AGENT_DOCK_LIMITS,
   AGENT_DOCK_SIZE_LIMITS,
   IPC_ENDPOINTS,
   sameAgentDockDisplayBounds,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, type Logger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, type Logger, toLogValue } from "@codebot/logging";
 import { Deferred, Effect, Schema, Semaphore } from "effect";
 import type { BrowserWindow, Display, Rectangle, Screen } from "electron";
 import { causeHelpers } from "../backend/effect-boundary";
@@ -25,7 +25,7 @@ import { letPointerThrough, type PointerForwardingGate } from "./pointer-forward
 import { sendToRenderer } from "./renderer-ipc";
 import type { WindowsTopmostKeeper } from "./windows-topmost-keeper";
 
-const logger = createOpenBotLogger("agent-dock-window");
+const logger = createCodeBotLogger("agent-dock-window");
 
 const AGENT_DOCK_WINDOW_SIZE = { width: 502, height: 640 } as const;
 

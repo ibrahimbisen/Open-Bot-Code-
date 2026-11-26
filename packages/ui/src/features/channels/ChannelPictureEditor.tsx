@@ -5,11 +5,11 @@ import {
   type ChannelIcon,
   type ChannelIconName,
   type ChannelMember,
-} from "@openbot/contracts/ipc";
-import { Button, IconButton, Input, Pencil, Plus, Popover, RotateCcw, toast } from "@openbot/ui";
-import { normalizeAvatarFile } from "@openbot/ui/avatar-image";
-import { AVATAR_HUE_CHOICES, avatarHueSwatch } from "@openbot/ui/bloub-avatar";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { Button, IconButton, Input, Pencil, Plus, Popover, RotateCcw, toast } from "@codebot/ui";
+import { normalizeAvatarFile } from "@codebot/ui/avatar-image";
+import { AVATAR_HUE_CHOICES, avatarHueSwatch } from "@codebot/ui/bloub-avatar";
+import { useText } from "@codebot/ui/text";
 import { createSignal, For, Show } from "solid-js";
 import type { AgentProfile } from "../../data";
 import { AVATAR_HUE_LABEL } from "../agents/avatar-hue-label";

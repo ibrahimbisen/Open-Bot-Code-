@@ -10,8 +10,8 @@
 .agent-folders-entry-add {
   position: absolute;
   top: 50%;
-  inset-inline-end: calc(var(--openbot-space-3) + 14px + var(--openbot-space-2));
-  color: var(--openbot-text-muted);
+  inset-inline-end: calc(var(--codebot-space-3) + 14px + var(--codebot-space-2));
+  color: var(--codebot-text-muted);
   transform: translateY(-50%);
 }
 
@@ -27,11 +27,11 @@
 }
 
 .agent-folders-lost {
-  color: var(--openbot-warning-text);
+  color: var(--codebot-warning-text);
 }
 
 .agent-folders-dot {
-  margin-inline: calc(var(--openbot-space-1) * -1);
+  margin-inline: calc(var(--codebot-space-1) * -1);
 }
 
 .agent-folders-entry,
@@ -39,19 +39,19 @@
   outline: 1px dashed transparent;
   outline-offset: -1px;
   transition:
-    outline-color var(--openbot-duration-fast) var(--openbot-ease-out),
-    background-color var(--openbot-duration-fast) var(--openbot-ease-out);
+    outline-color var(--codebot-duration-fast) var(--codebot-ease-out),
+    background-color var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .agent-folders-entry[data-dragging],
 .agent-folders-drop-target[data-dragging] {
-  outline-color: var(--openbot-text-muted);
-  background-color: var(--openbot-hover);
+  outline-color: var(--codebot-text-muted);
+  background-color: var(--codebot-hover);
 }
 
 .agent-folders-page {
   display: grid;
-  gap: var(--openbot-space-4);
+  gap: var(--codebot-space-4);
 }
 
 .agent-folders-row {
@@ -60,10 +60,10 @@
   grid-auto-flow: column;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   min-height: 48px;
-  padding-block: var(--openbot-space-1-5);
-  padding-inline: var(--openbot-space-3) var(--openbot-space-1-5);
+  padding-block: var(--codebot-space-1-5);
+  padding-inline: var(--codebot-space-3) var(--codebot-space-1-5);
 }
 
 .agent-folders-text {
@@ -73,44 +73,44 @@
 
 .agent-folders-name {
   overflow: hidden;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-medium);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .agent-folders-path {
   overflow: hidden;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .agent-folders-row[data-missing] .settings-link-icon,
 .agent-folders-row[data-missing] .agent-folders-path {
-  color: var(--openbot-warning-text);
+  color: var(--codebot-warning-text);
 }
 
 .agent-folders-access {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--openbot-space-2);
-  padding-block: var(--openbot-space-2);
-  padding-inline: var(--openbot-space-3) var(--openbot-space-2);
+  gap: var(--codebot-space-2);
+  padding-block: var(--codebot-space-2);
+  padding-inline: var(--codebot-space-3) var(--codebot-space-2);
 }
 
 .agent-folders-access-text {
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
   text-wrap: pretty;
 }
 
 .agent-folders-remove {
   position: relative;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .agent-folders-remove::before {
@@ -120,25 +120,25 @@
 }
 
 .agent-folders-add {
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .agent-folders-drop-target[data-dragging] .agent-folders-add {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .agent-folders-row[data-fresh] {
-    animation: agent-folders-row-in var(--openbot-duration-normal) var(--openbot-ease-out) both;
+    animation: agent-folders-row-in var(--codebot-duration-normal) var(--codebot-ease-out) both;
   }
 
   .agent-folders-chat-drop {
-    animation: agent-folders-fade-in var(--openbot-duration-fast) var(--openbot-ease-out) both;
+    animation: agent-folders-fade-in var(--codebot-duration-fast) var(--codebot-ease-out) both;
   }
 
   .agent-folders-row[data-flash],
   .agent-folders-entry[data-flash] {
-    animation: agent-folders-row-flash 900ms var(--openbot-ease-out);
+    animation: agent-folders-row-flash 900ms var(--codebot-ease-out);
   }
 }
 
@@ -152,7 +152,7 @@
 @keyframes agent-folders-row-flash {
   from,
   40% {
-    background-color: var(--openbot-hover);
+    background-color: var(--codebot-hover);
   }
 }
 
@@ -172,18 +172,18 @@
 .agent-folders-chat-drop {
   position: absolute;
   z-index: 60;
-  inset: var(--openbot-space-3);
+  inset: var(--codebot-space-3);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--openbot-space-3);
-  border-radius: var(--openbot-radius-lg);
+  gap: var(--codebot-space-3);
+  border-radius: var(--codebot-radius-lg);
   background: color-mix(in srgb, var(--background) 70%, transparent);
   pointer-events: none;
   backdrop-filter: blur(3px);
 }
 
 .conversation-panel[data-settings-panel] .agent-folders-chat-drop {
-  inset-inline-end: calc(var(--settings-panel-width, 360px) + var(--openbot-space-3));
+  inset-inline-end: calc(var(--settings-panel-width, 360px) + var(--codebot-space-3));
 }
 
 .agent-folders-chat-zone {
@@ -191,18 +191,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--openbot-space-3);
-  padding: var(--openbot-space-6);
-  border: 1px dashed var(--openbot-text-muted);
-  border-radius: var(--openbot-radius-lg);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-lg);
-  font-weight: var(--openbot-weight-semibold);
+  gap: var(--codebot-space-3);
+  padding: var(--codebot-space-6);
+  border: 1px dashed var(--codebot-text-muted);
+  border-radius: var(--codebot-radius-lg);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-lg);
+  font-weight: var(--codebot-weight-semibold);
   text-align: center;
   text-wrap: balance;
   transition:
-    border-color var(--openbot-duration-fast) var(--openbot-ease-out),
-    background-color var(--openbot-duration-fast) var(--openbot-ease-out);
+    border-color var(--codebot-duration-fast) var(--codebot-ease-out),
+    background-color var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .agent-folders-chat-zone > span {
@@ -214,32 +214,32 @@
 }
 
 .agent-folders-chat-zone[data-dragging] {
-  border-color: color-mix(in srgb, var(--accent) 70%, var(--openbot-text-primary));
-  background: var(--openbot-hover);
+  border-color: color-mix(in srgb, var(--accent) 70%, var(--codebot-text-primary));
+  background: var(--codebot-hover);
 }
 
 .agent-folders-chat-zone svg {
   flex: none;
   width: 24px;
   height: 24px;
-  color: var(--openbot-text-secondary);
-  transition: color var(--openbot-duration-fast) var(--openbot-ease-out);
+  color: var(--codebot-text-secondary);
+  transition: color var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .agent-folders-chat-zone[data-dragging] svg {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .host-folder-picker-places {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--openbot-space-1);
-  padding: 0 var(--openbot-space-3) var(--openbot-space-2);
+  gap: var(--codebot-space-1);
+  padding: 0 var(--codebot-space-3) var(--codebot-space-2);
 }
 
 .host-folder-picker-path {
   margin: 0;
-  padding: 0 var(--openbot-space-3) var(--openbot-space-2);
+  padding: 0 var(--codebot-space-3) var(--codebot-space-2);
 }
 
 .host-folder-picker-path .ui-input {
@@ -253,15 +253,15 @@
 
 .host-folder-picker-note {
   margin: 0;
-  padding: var(--openbot-space-2) var(--openbot-space-3);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  padding: var(--codebot-space-2) var(--codebot-space-3);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .host-folder-picker-footer {
   display: flex;
   flex-shrink: 0;
   justify-content: flex-end;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-2) var(--openbot-space-1) var(--openbot-space-1);
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-2) var(--codebot-space-1) var(--codebot-space-1);
 }

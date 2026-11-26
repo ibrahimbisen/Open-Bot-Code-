@@ -4,7 +4,7 @@ import {
   type HostedSiteRouteManifest,
   hostedSiteBlockKey,
   hostedSiteRouteKey,
-} from "@openbot/contracts/hosted-sites";
+} from "@codebot/contracts/hosted-sites";
 import { Context, Effect, Layer, Schema } from "effect";
 
 interface SiteBucket {
@@ -58,7 +58,7 @@ class SiteStorage extends Context.Service<
   {
     get(key: string, options?: R2GetOptions): Effect.Effect<R2ObjectBody | R2Object | null, SiteStorageError>;
   }
->()("@openbot/site-router/SiteStorage") {
+>()("@codebot/site-router/SiteStorage") {
   static layer(bucket: SiteBucket) {
     return Layer.succeed(
       SiteStorage,
@@ -72,7 +72,7 @@ class SiteStorage extends Context.Service<
 }
 
 const openAssetCache = Effect.fn("SiteRouter.openAssetCache")(() =>
-  storageCall(() => caches.open("openbot-site-assets-v1")).pipe(
+  storageCall(() => caches.open("codebot-site-assets-v1")).pipe(
     Effect.catch((error) => {
       console.error(JSON.stringify({ event: "site_asset_cache_open_error", message: error.message }));
       return Effect.succeed(undefined);
@@ -93,7 +93,7 @@ export const routeRequest = Effect.fn("SiteRouter.routeRequest")(
     const url = new URL(request.url);
     const hostname = url.hostname.toLowerCase();
     if (!isHostedSiteHostname(hostname)) return errorResponse(request, env, "siteNotFound");
-    if (url.pathname === "/_openbot/report" || url.pathname === "/_openbot/report/") {
+    if (url.pathname === "/_codebot/report" || url.pathname === "/_codebot/report/") {
       const report = accountUrl(env, "/report-site");
       if (!report) return errorResponse(request, env, "reportUnavailable");
       report.searchParams.set("hostname", hostname);
@@ -182,7 +182,7 @@ const readCachedAsset = Effect.fn("SiteRouter.readCachedAsset")(
 
 function assetCacheRequest(request: Request, file: HostedSiteRouteFile): Request {
   const url = new URL(request.url);
-  url.pathname = `/_openbot/asset-cache/${encodeURIComponent(file.key)}`;
+  url.pathname = `/_codebot/asset-cache/${encodeURIComponent(file.key)}`;
   url.search = "";
   return new Request(url, { method: "GET" });
 }
@@ -228,7 +228,7 @@ function hasBody(object: R2Object | R2ObjectBody): object is R2ObjectBody {
 }
 
 function isHostedSiteHostname(hostname: string): boolean {
-  return /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.openbot\.site$/u.test(hostname);
+  return /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.codebot\.site$/u.test(hostname);
 }
 
 function requestPath(pathname: string): string | null {
@@ -280,25 +280,25 @@ const siteErrors = {
     status: 503,
     text: "Site hosting is temporarily unavailable",
     title: "Site hosting is paused",
-    detail: "OpenBot sites are temporarily unavailable. Try again later.",
+    detail: "CodeBot sites are temporarily unavailable. Try again later.",
   },
   siteNotFound: {
     status: 404,
     text: "Site not found",
     title: "Site not found",
-    detail: "No OpenBot site uses this address. Make sure that the address is correct.",
+    detail: "No CodeBot site uses this address. Make sure that the address is correct.",
   },
   siteBlocked: {
     status: 451,
     text: "Site unavailable",
     title: "Site unavailable",
-    detail: "OpenBot blocked this site. You cannot open it.",
+    detail: "CodeBot blocked this site. You cannot open it.",
   },
   siteFailed: {
     status: 500,
     text: "Site unavailable",
     title: "Site unavailable",
-    detail: "OpenBot could not load this site. Try again in a few minutes.",
+    detail: "CodeBot could not load this site. Try again in a few minutes.",
   },
   siteGone: {
     status: 410,
@@ -372,7 +372,7 @@ function errorPage(request: Request, env: SiteRouterEnv, error: SiteError, nonce
   const home = accountUrl(env, "/");
   const links = [
     error === "pageNotFound" ? `<a href="/">Open the site home page</a>` : "",
-    home ? `<a href="${escapeHtml(home.toString())}">Go to OpenBot</a>` : "",
+    home ? `<a href="${escapeHtml(home.toString())}">Go to CodeBot</a>` : "",
   ].join("");
   return `<!doctype html>
 <html lang="en">
@@ -380,12 +380,12 @@ function errorPage(request: Request, env: SiteRouterEnv, error: SiteError, nonce
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>${escapeHtml(title)} - OpenBot</title>
+<title>${escapeHtml(title)} - CodeBot</title>
 <style nonce="${nonce}">${errorPageStyle}</style>
 </head>
 <body>
 <main>
-<p class="brand">OpenBot</p>
+<p class="brand">CodeBot</p>
 <p class="meta">Error ${status} - ${escapeHtml(hostname)}</p>
 <h1>${escapeHtml(title)}</h1>
 <p>${escapeHtml(detail)}</p>

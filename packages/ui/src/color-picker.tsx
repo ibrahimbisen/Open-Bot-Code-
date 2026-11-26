@@ -14,15 +14,15 @@
  * The port keeps the area with its loupe, the hue slider, the eye dropper, the format switch with
  * the hex field or the RGB and HSL channels, the swatch and the presets with the hopping ring. The
  * presets are "no color" and the swatches of the caller. It drops alpha, because a tint has no
- * opacity. Springs come from `@openbot/ui/spring-motion` as CSS `linear()` curves and WAAPI
+ * opacity. Springs come from `@codebot/ui/spring-motion` as CSS `linear()` curves and WAAPI
  * keyframes. The panel has a 1px ring and no drop shadow.
  *
  * `ColorPickerPopover` floats the picker beside its trigger, and `ColorPickerTrigger` is a trigger
  * that looks like the select triggers.
  */
 
-import type { AvatarColor } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import type { AvatarColor } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import { type JSX, Portal } from "@solidjs/web";
 import ChevronsUpDown from "lucide-solid/icons/chevrons-up-down";
 import Pipette from "lucide-solid/icons/pipette";
@@ -678,7 +678,7 @@ async function playClose(panel: HTMLElement, shift: number): Promise<void> {
   if (reducedMotion()) return;
   const animation = panel.animate(
     { opacity: [1, 0], transform: ["none", `translateY(${shift}px) scale(0.96)`] },
-    { duration: durationToken(panel, "--openbot-duration-dialog"), easing: "ease-in", fill: "forwards" },
+    { duration: durationToken(panel, "--codebot-duration-dialog"), easing: "ease-in", fill: "forwards" },
   );
   await animation.finished.catch(() => undefined);
 }

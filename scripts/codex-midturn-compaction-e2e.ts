@@ -3,32 +3,32 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { agentProviderName } from "@openbot/contracts/agent-providers";
-import { AGENT_PROVIDERS, type AgentEvent, PLAN_CONTINUATION_ITEM_TYPE } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { agentProviderName } from "@codebot/contracts/agent-providers";
+import { AGENT_PROVIDERS, type AgentEvent, PLAN_CONTINUATION_ITEM_TYPE } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-midturn-compaction-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-midturn-compaction-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-midturn-compaction-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-midturn-compaction-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
 const fakeLog = join(root, "codex.jsonl");
-const NOTE_MARKER = "OpenBot note, not a message from the user";
+const NOTE_MARKER = "CodeBot note, not a message from the user";
 const CODEX_ERROR = "Error running remote compact task: Connection failed: error sending request";
 const COMPACTION_TIMEOUT_MS = 200;
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 type FakeTurn = "ok" | "fail" | "stall" | "loop";
 const turns = (...list: FakeTurn[]) => `<<TURNS${JSON.stringify(list)}TURNS>>`;
@@ -231,7 +231,7 @@ async function check(name: string, run: () => Promise<unknown>) {
 }
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const service = new AgentService({
@@ -319,7 +319,7 @@ try {
   await check("a compaction that sends nothing is stopped at the deadline, then continues", async () => {
     const result = await request("Stalled", ["stall", "ok"]);
     assert.equal(result.status, "completed", "The request did not complete.");
-    assert.deepEqual(result.interrupts, [{ stalled: true }], "OpenBot did not stop the stalled turn.");
+    assert.deepEqual(result.interrupts, [{ stalled: true }], "CodeBot did not stop the stalled turn.");
     assert.deepEqual(result.turns, [
       { kind: "stall", note: false },
       { kind: "ok", note: true },
@@ -345,8 +345,8 @@ try {
   await check("a turn that compacts again and again is stopped and does not continue", async () => {
     const result = await request("Looping", ["loop", "ok"]);
     assert.equal(result.status, "failed", "The request did not fail.");
-    assert.equal(result.compactions, 3, "OpenBot did not stop the loop at its third compaction.");
-    assert.equal(result.interrupts.length, 1, "OpenBot did not stop the turn once.");
+    assert.equal(result.compactions, 3, "CodeBot did not stop the loop at its third compaction.");
+    assert.equal(result.interrupts.length, 1, "CodeBot did not stop the turn once.");
     assert.deepEqual(result.turns, [{ kind: "loop", note: false }], "The stopped turn continued.");
     assert.deepEqual(result.errors, [loopError], "The error is not the plain text.");
     assert.equal(result.deliveryError, loopError);

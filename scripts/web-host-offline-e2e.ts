@@ -4,7 +4,7 @@
 // not "Loading" with Connect done. It stops the host's server and starts it again at the end. Pass the
 // Auth API address that the stack log prints:
 // `bun scripts/web-host-offline-e2e.ts --allow-mutations --auth-api=http://localhost:<port>
-//  [--email=openbot-dev-host@example.com] [--browser-executable=<path>]`
+//  [--email=codebot-dev-host@example.com] [--browser-executable=<path>]`
 //
 // 1. The web app signs in as the host owner with the development code and loads the workspace.
 // 2. The host stops its server. The web app loads the page again: it shows "Connecting to <name>", or
@@ -13,22 +13,22 @@
 // 3. The host starts its server again. The web app loads the workspace without a user action.
 // 4. The host stops its server while the workspace is open. The web app shows "Reconnecting to <name>",
 //    never "Loading <name>". When the host starts again, the notice goes without a user action.
-// Writes .openbot-build/web-host-offline-e2e/report.json and screenshots.
+// Writes .codebot-build/web-host-offline-e2e/report.json and screenshots.
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import type { HostStatus } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import type { HostStatus } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { chromium, type Page } from "playwright-core";
 import { argument, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/web-host-offline-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/web-host-offline-e2e");
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 60_000;
 const english = translateFor("en");
 const authApi = argument("auth-api")?.replace(/\/$/, "");
 assert.ok(authApi, "Pass --auth-api=<url> from the dev log.");
-const email = argument("email") ?? "openbot-dev-host@example.com";
+const email = argument("email") ?? "codebot-dev-host@example.com";
 const browserExecutable = argument("browser-executable");
 
 interface Report {
@@ -58,7 +58,7 @@ web.on("pageerror", (error) => report.pageErrors.push(error.stack ?? error.messa
 let stopped = false;
 
 function hostStatus(): Promise<HostStatus> {
-  return host.page.evaluate(() => window.openbot.host.getStatus());
+  return host.page.evaluate(() => window.codebot.host.getStatus());
 }
 
 async function shot(page: Page, label: string): Promise<void> {
@@ -83,7 +83,7 @@ try {
   let status = await hostStatus();
   assert.ok(status.configured && status.serverName, "Set up the server of this computer in the dev app first.");
   if (status.phase !== "online") {
-    await host.page.evaluate(() => window.openbot.host.start());
+    await host.page.evaluate(() => window.codebot.host.start());
     status = await waitFor(host.page, "the host publishes", hostStatus, (value) => value.phase === "online");
   }
   const name = status.serverName ?? "";
@@ -104,7 +104,7 @@ try {
   report.online = { workspaceLoaded: true };
   await shot(web, "1-online");
 
-  await host.page.evaluate(() => window.openbot.host.stop());
+  await host.page.evaluate(() => window.codebot.host.stop());
   stopped = true;
   await waitFor(host.page, "the host stops", hostStatus, (value) => value.phase === "idle");
   await web.reload();
@@ -139,14 +139,14 @@ try {
   assert.ok(!loadStepDone, "The workspace load shows as done.");
   await web.keyboard.press("Escape");
 
-  await host.page.evaluate(() => window.openbot.host.start());
+  await host.page.evaluate(() => window.codebot.host.start());
   stopped = false;
   await waitFor(host.page, "the host publishes again", hostStatus, (value) => value.phase === "online");
   await workspaceReady([loading, connecting]);
   report.back = { workspaceLoaded: true };
   await shot(web, "4-back-online");
 
-  await host.page.evaluate(() => window.openbot.host.stop());
+  await host.page.evaluate(() => window.codebot.host.stop());
   stopped = true;
   await waitFor(host.page, "the host stops again", hostStatus, (value) => value.phase === "idle");
   await web.getByText(reconnecting, { exact: true }).first().waitFor({ timeout: UI_WAIT_MS });
@@ -162,7 +162,7 @@ try {
     );
   await shot(web, "5-reconnecting");
   assert.ok(!reconnectLoadingShown, `The web app shows "${loading}" for a held reconnect.`);
-  await host.page.evaluate(() => window.openbot.host.start());
+  await host.page.evaluate(() => window.codebot.host.start());
   stopped = false;
   await waitFor(host.page, "the host publishes after the reconnect", hostStatus, (value) => value.phase === "online");
   await workspaceReady([reconnecting, loading]);
@@ -173,7 +173,7 @@ try {
   await shot(web, "failure-web").catch(() => undefined);
   throw error;
 } finally {
-  if (stopped) await host.page.evaluate(() => window.openbot.host.start()).catch(() => undefined);
+  if (stopped) await host.page.evaluate(() => window.codebot.host.start()).catch(() => undefined);
   writeReport("web-host-offline-e2e", report);
   await browser.close();
   await host.close();

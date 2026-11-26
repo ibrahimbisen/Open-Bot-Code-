@@ -1,11 +1,11 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { AGENT_IMPORT_LIMITS, isAgentImportKey, isRoutineSchedule, type RoutineSchedule } from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { AGENT_IMPORT_LIMITS, isAgentImportKey, isRoutineSchedule, type RoutineSchedule } from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { isUnsafeArchivePath } from "./skill-package";
 
-export const AGENT_IMPORT_MANIFEST = "openbot-import.json";
-const FORMAT = "openbot-agent-import";
+export const AGENT_IMPORT_MANIFEST = "codebot-import.json";
+const FORMAT = "codebot-agent-import";
 const VERSION = 1;
 
 interface ImportRoutine {

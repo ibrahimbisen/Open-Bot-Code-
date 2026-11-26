@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v31 and the separate new-database schema. IF NOT EXISTS throughout, because
 // this text is both the migration and the tail of the latest schema.
@@ -60,7 +60,7 @@ export const ROUTINE_FLOW_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS routine_flow_steps_agent ON routine_flow_steps(agent_id);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 31,
   name: "routine-flows",
   // Only creates tables, so no foreign-key pause and no vacuum. Existing routines have no links,

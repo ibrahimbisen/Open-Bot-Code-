@@ -1,8 +1,8 @@
-import { APP_LOGO_CORNER, APP_LOGO_EYE_POINTS, APP_LOGO_SIZE } from "@openbot/brand/app-logo-shape";
-import { WORDMARK_PATHS, WORDMARK_WIDTH } from "@openbot/brand/wordmark-shape";
+import { APP_LOGO_CORNER, APP_LOGO_EYE_POINTS, APP_LOGO_SIZE } from "@codebot/brand/app-logo-shape";
+import { WORDMARK_PATHS, WORDMARK_WIDTH } from "@codebot/brand/wordmark-shape";
 import { BRAND_ROUTE } from "./brand-page";
 
-export const BRAND_ZIP_FILE = "openbot-brand.zip";
+export const BRAND_ZIP_FILE = "codebot-brand.zip";
 
 type IconColor = "lilac" | "white" | "black";
 type IconShape = "rounded" | "square";
@@ -52,7 +52,7 @@ function svgDocument(width: number, height: number, body: string): string {
 
 function iconAsset(color: IconColor, shape: IconShape): BrandAsset {
   return {
-    file: shape === "rounded" ? `openbot-icon-${color}` : `openbot-icon-square-${color}`,
+    file: shape === "rounded" ? `codebot-icon-${color}` : `codebot-icon-square-${color}`,
     label: shape === "rounded" ? `${COLOR_NAME[color]} icon` : `${COLOR_NAME[color]} square`,
     svg: svgDocument(APP_LOGO_SIZE, APP_LOGO_SIZE, mark(color, shape, 0, 0)),
     width: APP_LOGO_SIZE,
@@ -66,7 +66,7 @@ function lockupAsset(color: IconColor, ink: Ink, space: BrandSpace): BrandAsset 
   const width = APP_LOGO_SIZE + LOCKUP_GAP + WORDMARK_WIDTH + pad * 2;
   const height = APP_LOGO_SIZE + pad * 2;
   return {
-    file: `openbot-logo-${color}-${ink}${space === "safe" ? "-clear-space" : ""}`,
+    file: `codebot-logo-${color}-${ink}${space === "safe" ? "-clear-space" : ""}`,
     label: `${COLOR_NAME[color]} icon, ${ink} name`,
     svg: svgDocument(
       width,

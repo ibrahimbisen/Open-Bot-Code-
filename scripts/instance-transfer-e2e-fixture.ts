@@ -4,7 +4,7 @@ import {
   DEFAULT_MACHINE_ALERT_SETTINGS,
   DEFAULT_MEDIA_APPROVAL_CREDITS_SETTING,
   type HostTurnLimitsInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { type InstanceTransferOptions, InstanceTransferService } from "../src/main/instance-transfer-service";
 import { LocalSkillFailure } from "../src/main/local-skill-library";

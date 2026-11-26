@@ -1,8 +1,8 @@
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
-const key = "openbot.mobile.full-screen-camera.v1";
-const tipKey = "openbot.mobile.full-screen-camera-tip-seen.v1";
+const key = "codebot.mobile.full-screen-camera.v1";
+const tipKey = "codebot.mobile.full-screen-camera-tip-seen.v1";
 export const useFullScreenCameraPreference = create<{
   fullScreen: boolean;
   tipSeen: boolean;

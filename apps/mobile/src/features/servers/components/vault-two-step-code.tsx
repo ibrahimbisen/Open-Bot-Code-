@@ -1,4 +1,4 @@
-import { groupedTwoStepCode } from "@openbot/contracts/two-step-code";
+import { groupedTwoStepCode } from "@codebot/contracts/two-step-code";
 import * as Clipboard from "expo-clipboard";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -55,9 +55,9 @@ function TwoStepTimer({
   stroke?: number;
 }) {
   const reducedMotion = useReducedMotion();
-  const accent = String(useCSSVariable("--openbot-accent"));
-  const warning = String(useCSSVariable("--openbot-warning"));
-  const track = String(useCSSVariable("--openbot-border-grouped"));
+  const accent = String(useCSSVariable("--codebot-accent"));
+  const warning = String(useCSSVariable("--codebot-warning"));
+  const track = String(useCSSVariable("--codebot-border-grouped"));
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const periodMs = code.period * 1000;
@@ -128,7 +128,7 @@ function TwoStepDigits({
 export function TwoStepRowCode({ code, now, site }: { code: LiveTwoStepCode; now: number; site: string }) {
   const { t } = useText();
   const { copy, copied } = useCopyTwoStepCode();
-  const success = String(useCSSVariable("--openbot-success-text"));
+  const success = String(useCSSVariable("--codebot-success-text"));
   return (
     <Pressable
       accessibilityRole="button"
@@ -157,8 +157,8 @@ export function TwoStepCodePanel({
 }) {
   const { t } = useText();
   const { copy, copied } = useCopyTwoStepCode();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
-  const success = String(useCSSVariable("--openbot-success-text"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
+  const success = String(useCSSVariable("--codebot-success-text"));
   const label = code
     ? `${t("mobile.server.vault.twoStep.codeLabel", {
         code: groupedTwoStepCode(code.code),
@@ -216,8 +216,8 @@ export function TwoStepCodeRow({
 }) {
   const { t } = useText();
   const { copy, copied } = useCopyTwoStepCode();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
-  const success = String(useCSSVariable("--openbot-success-text"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
+  const success = String(useCSSVariable("--codebot-success-text"));
   if (!code)
     return (
       <SettingsRow

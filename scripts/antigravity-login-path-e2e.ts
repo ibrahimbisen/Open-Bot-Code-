@@ -8,12 +8,12 @@ import { type AntigravityCliInfo, resolveAntigravityCli } from "../src/backend/c
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-login-path-e2e");
-const ROOT_VARIABLE = "OPENBOT_ANTIGRAVITY_LOGIN_PATH_E2E_ROOT";
-const MCP_COMMAND = "openbot-e2e-mcp-server";
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-login-path-e2e");
+const ROOT_VARIABLE = "CODEBOT_ANTIGRAVITY_LOGIN_PATH_E2E_ROOT";
+const MCP_COMMAND = "codebot-e2e-mcp-server";
 
 if (process.env[ROOT_VARIABLE] === undefined) {
-  const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-login-path-e2e-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-login-path-e2e-"));
   const home = join(root, "home");
   await mkdir(home, { recursive: true });
   await writeFile(join(home, ".bash_profile"), `export PATH="${join(home, "tools")}:/usr/bin:/bin"\n`);

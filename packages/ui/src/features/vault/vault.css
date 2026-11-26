@@ -1,6 +1,6 @@
 .vault-panel {
   display: grid;
-  gap: var(--openbot-space-6);
+  gap: var(--codebot-space-6);
   min-width: 0;
 }
 
@@ -18,14 +18,14 @@
 }
 
 .vault-icon svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
 }
 
 .vault-letter {
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-semibold);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .vault-card-logo {
@@ -34,10 +34,10 @@
   width: var(--integration-tile, 36px);
   height: calc(var(--integration-tile, 36px) * 2 / 3);
   place-items: center;
-  border: 1px solid var(--openbot-paper-border);
-  border-radius: var(--openbot-radius-xs);
-  background: var(--openbot-paper);
-  color: var(--openbot-paper-text);
+  border: 1px solid var(--codebot-paper-border);
+  border-radius: var(--codebot-radius-xs);
+  background: var(--codebot-paper);
+  color: var(--codebot-paper-text);
 }
 
 .vault-card-logo > svg {
@@ -51,37 +51,37 @@
   width: var(--integration-tile, 36px);
   height: var(--integration-tile, 36px);
   place-items: center;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-accent-soft);
-  color: var(--openbot-accent-hover);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-semibold);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-accent-soft);
+  color: var(--codebot-accent-hover);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .vault-avatar > svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
 }
 
 .vault-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--openbot-space-1);
+  margin-bottom: var(--codebot-space-1);
 }
 
 .vault-count {
-  margin-inline-start: var(--openbot-space-1-5);
-  color: var(--openbot-text-muted);
+  margin-inline-start: var(--codebot-space-1-5);
+  color: var(--codebot-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .vault-fields {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--openbot-space-3) var(--openbot-space-4);
+  gap: var(--codebot-space-3) var(--codebot-space-4);
   align-items: start;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .vault-fill-sites > .ui-label {
-  margin-block-end: var(--openbot-space-1-5);
+  margin-block-end: var(--codebot-space-1-5);
   padding: 0;
 }
 
@@ -112,7 +112,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   min-width: 0;
 }
 
@@ -124,12 +124,12 @@
 
 .vault-secret .ui-input {
   flex: 1;
-  padding-inline-end: var(--openbot-space-8);
+  padding-inline-end: var(--codebot-space-8);
 }
 
 .vault-secret .ui-icon-button {
   position: absolute;
-  inset-inline-end: var(--openbot-space-1);
+  inset-inline-end: var(--codebot-space-1);
 }
 
 .vault-toolbar .server-settings-search {
@@ -138,12 +138,12 @@
 
 .vault-toolbar .server-settings-search .ui-input {
   height: 100%;
-  border-color: var(--openbot-transparent);
-  font-size: var(--openbot-text-md);
+  border-color: var(--codebot-transparent);
+  font-size: var(--codebot-text-md);
 }
 
 .vault-toolbar .server-settings-search .ui-input:focus-visible {
-  border-color: var(--openbot-border-focus);
+  border-color: var(--codebot-border-focus);
 }
 
 .vault-dialog.ui-confirm-dialog {
@@ -158,18 +158,18 @@
 
 .vault-dialog-header {
   display: flex;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   align-items: center;
-  padding-block: var(--openbot-space-4) 0;
-  padding-inline: var(--openbot-space-6) var(--openbot-space-4);
+  padding-block: var(--codebot-space-4) 0;
+  padding-inline: var(--codebot-space-6) var(--codebot-space-4);
 }
 
 .vault-dialog-title {
   flex: 1;
   min-width: 0;
   margin: 0;
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-medium);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -179,20 +179,20 @@
 
 .vault-dialog-body {
   display: grid;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   min-height: 0;
   overflow-y: auto;
-  padding: var(--openbot-space-4) var(--openbot-space-6) var(--openbot-space-6);
+  padding: var(--codebot-space-4) var(--codebot-space-6) var(--codebot-space-6);
 }
 
 .vault-link-accounts {
   display: grid;
-  gap: var(--openbot-space-2);
-  margin-bottom: var(--openbot-space-3);
+  gap: var(--codebot-space-2);
+  margin-bottom: var(--codebot-space-3);
 }
 
 .vault-group-label {
-  padding: 0 var(--openbot-space-3);
+  padding: 0 var(--codebot-space-3);
 }
 
 .vault-link-logo > svg {
@@ -201,7 +201,7 @@
 }
 
 .ui-item-content > .vault-link-error {
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 .vault-request {
@@ -214,35 +214,35 @@
 }
 
 .vault-two-step-digits {
-  font-family: var(--openbot-font-mono);
-  font-size: var(--openbot-text-lg);
+  font-family: var(--codebot-font-mono);
+  font-size: var(--codebot-text-lg);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .vault-two-step-timer.ui-radial-progress {
-  width: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
 }
 
 .vault-two-step-code {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .vault-two-step-code[data-size="lg"] {
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   justify-content: center;
-  padding: var(--openbot-space-4) 0;
+  padding: var(--codebot-space-4) 0;
 }
 
 .vault-two-step-code[data-size="lg"] .vault-two-step-digits {
-  font-size: var(--openbot-text-3xl);
+  font-size: var(--codebot-text-3xl);
 }
 
 .vault-two-step-code[data-size="lg"] .vault-two-step-timer.ui-radial-progress {
-  width: var(--openbot-icon-lg, 20px);
+  width: var(--codebot-icon-lg, 20px);
 }
 
 .vault-two-step-row-code {
@@ -250,31 +250,31 @@
   z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   height: auto;
-  border-radius: var(--openbot-radius-sm);
-  padding: var(--openbot-space-1) var(--openbot-space-2);
+  border-radius: var(--codebot-radius-sm);
+  padding: var(--codebot-space-1) var(--codebot-space-2);
   color: inherit;
 }
 
 .vault-two-step-setup {
   display: grid;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
 }
 
 .vault-two-step-or {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-3);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  gap: var(--codebot-space-3);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .vault-two-step-or::before,
 .vault-two-step-or::after {
   flex: 1;
   height: 1px;
-  background: var(--openbot-border);
+  background: var(--codebot-border);
   content: "";
 }
 
@@ -289,14 +289,14 @@
 
 .near-wallet-risk .ui-alert-content {
   display: grid;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .near-wallet-accept {
   display: flex;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   align-items: center;
-  font-size: var(--openbot-text-sm);
+  font-size: var(--codebot-text-sm);
 }
 
 .near-wallet-accept a {
@@ -306,20 +306,20 @@
 
 .near-wallet-funds {
   display: grid;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
 }
 
 .near-wallet-funds-pick {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
 }
 
 .near-wallet-pick-row {
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .near-wallet-pick-name {
@@ -330,8 +330,8 @@
 .near-wallet-pick-detail {
   min-width: 0;
   overflow: hidden;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -345,22 +345,22 @@
 .crypto-logo-letter {
   display: grid;
   place-items: center;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-control-active);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-medium);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-control-active);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-medium);
   line-height: 1;
 }
 
 .near-wallet-deposit {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--openbot-space-4);
+  gap: var(--codebot-space-4);
   align-items: center;
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-lg);
-  padding: var(--openbot-space-3);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-lg);
+  padding: var(--codebot-space-3);
 }
 
 .near-wallet-deposit-loading {
@@ -374,10 +374,10 @@
   min-height: 188px;
   align-content: center;
   justify-items: center;
-  gap: var(--openbot-space-3);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-lg);
-  padding: var(--openbot-space-4);
+  gap: var(--codebot-space-3);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-lg);
+  padding: var(--codebot-space-4);
   text-align: center;
 }
 
@@ -388,28 +388,28 @@
 
 .near-wallet-deposit-fields {
   display: grid;
-  gap: var(--openbot-space-4);
+  gap: var(--codebot-space-4);
   min-width: 0;
 }
 
 .near-wallet-copy {
   display: grid;
   justify-items: start;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .near-wallet-copy-value {
   margin: 0;
   justify-self: stretch;
-  font-family: var(--openbot-font-mono);
-  font-size: var(--openbot-text-sm);
+  font-family: var(--codebot-font-mono);
+  font-size: var(--codebot-text-sm);
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
 .near-wallet-network {
-  color: var(--openbot-text-muted);
-  font-weight: var(--openbot-weight-regular);
+  color: var(--codebot-text-muted);
+  font-weight: var(--codebot-weight-regular);
 }
 
 .near-wallet-amount {
@@ -419,7 +419,7 @@
 }
 
 .near-wallet-total {
-  font-weight: var(--openbot-weight-semibold);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .near-wallet-status {
@@ -430,7 +430,7 @@
 .near-wallet-waiting {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   align-items: center;
   justify-content: center;
   min-block-size: 160px;
@@ -439,24 +439,24 @@
 .near-wallet-waiting-actions {
   display: flex;
   flex-basis: 100%;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   justify-content: center;
 }
 
 .near-wallet-page {
   display: grid;
-  gap: var(--openbot-space-6);
+  gap: var(--codebot-space-6);
 }
 
 .near-wallet-meter {
   max-inline-size: 320px;
-  margin-block-start: var(--openbot-space-2);
+  margin-block-start: var(--codebot-space-2);
 }
 
 .near-wallet-chevron {
   inline-size: 16px;
   block-size: 16px;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .near-wallet-dialog .ui-confirm-dialog-actions > .near-wallet-grant-submit {
@@ -490,15 +490,15 @@
   --near-wallet-fade-top: 0px;
   --near-wallet-fade-bottom: 0px;
   display: grid;
-  max-block-size: calc(var(--openbot-space-1) * 90);
+  max-block-size: calc(var(--codebot-space-1) * 90);
   overflow-y: auto;
   scrollbar-width: none;
   mask-image: linear-gradient(
     to bottom,
-    var(--openbot-transparent),
-    var(--openbot-text-primary) var(--near-wallet-fade-top),
-    var(--openbot-text-primary) calc(100% - var(--near-wallet-fade-bottom)),
-    var(--openbot-transparent)
+    var(--codebot-transparent),
+    var(--codebot-text-primary) var(--near-wallet-fade-top),
+    var(--codebot-text-primary) calc(100% - var(--near-wallet-fade-bottom)),
+    var(--codebot-transparent)
   );
 }
 
@@ -507,19 +507,19 @@
 }
 
 .near-wallet-picker-list.scroll-fade-top {
-  --near-wallet-fade-top: calc(var(--openbot-space-1) * 6);
+  --near-wallet-fade-top: calc(var(--codebot-space-1) * 6);
 }
 
 .near-wallet-picker-list.scroll-fade-bottom {
-  --near-wallet-fade-bottom: calc(var(--openbot-space-1) * 6);
+  --near-wallet-fade-bottom: calc(var(--codebot-space-1) * 6);
 }
 
 .near-wallet-picker-list > .ui-item {
-  padding: var(--openbot-space-3) var(--openbot-space-4);
+  padding: var(--codebot-space-3) var(--codebot-space-4);
 }
 
 .near-wallet-picker-none {
-  padding: var(--openbot-space-4);
+  padding: var(--codebot-space-4);
 }
 
 .near-site-icon:has(> img) {
@@ -537,7 +537,7 @@
 .near-wallet-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -545,31 +545,31 @@
 
 .near-wallet-steps li {
   display: grid;
-  gap: var(--openbot-space-1-5);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  gap: var(--codebot-space-1-5);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .near-wallet-steps-line {
   block-size: 3px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-border);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-border);
 }
 
 .near-wallet-steps li[data-state="current"] {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .near-wallet-steps li[data-state="current"] .near-wallet-steps-line {
-  background: var(--openbot-text-primary);
+  background: var(--codebot-text-primary);
 }
 
 .near-wallet-steps li[data-state="done"] .near-wallet-steps-line {
-  background: var(--openbot-success);
+  background: var(--codebot-success);
 }
 
 .near-wallet-signature {
-  transition: opacity var(--openbot-duration-fast) ease;
+  transition: opacity var(--codebot-duration-fast) ease;
 }
 
 .near-wallet-signature .near-wallet-signature-icon {
@@ -578,15 +578,15 @@
   justify-content: center;
   inline-size: 36px;
   block-size: 36px;
-  border-radius: var(--openbot-radius-md);
-  background: var(--openbot-bg-control);
-  color: var(--openbot-text-secondary);
-  transition: color var(--openbot-duration-fast) ease;
+  border-radius: var(--codebot-radius-md);
+  background: var(--codebot-bg-control);
+  color: var(--codebot-text-secondary);
+  transition: color var(--codebot-duration-fast) ease;
 }
 
 .near-wallet-signature[data-state="current"] .near-wallet-signature-icon,
 .near-wallet-signature[data-state="failed"] .near-wallet-signature-icon {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .near-wallet-signatures:has(.near-wallet-signature[data-state="current"], .near-wallet-signature[data-state="failed"])
@@ -602,45 +602,45 @@
   box-sizing: border-box;
   inline-size: 22px;
   block-size: 22px;
-  border: 1px solid var(--openbot-border-strong);
-  border-radius: var(--openbot-radius-pill);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  border: 1px solid var(--codebot-border-strong);
+  border-radius: var(--codebot-radius-pill);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
 .near-wallet-mark[data-tone="busy"] {
   border: none;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .near-wallet-mark[data-tone="success"] {
   border: none;
-  background: var(--openbot-success);
-  color: var(--openbot-bg-canvas);
+  background: var(--codebot-success);
+  color: var(--codebot-bg-canvas);
 }
 
 .near-wallet-mark[data-tone="danger"] {
   border: none;
-  background: var(--openbot-danger);
-  color: var(--openbot-bg-canvas);
+  background: var(--codebot-danger);
+  color: var(--codebot-bg-canvas);
 }
 
 .near-wallet-risk-check {
   display: grid;
   grid-template-columns: auto 1fr;
-  column-gap: var(--openbot-space-2);
-  row-gap: var(--openbot-space-3);
+  column-gap: var(--codebot-space-2);
+  row-gap: var(--codebot-space-3);
   align-items: center;
-  padding: var(--openbot-space-3) var(--openbot-space-4);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-md);
+  padding: var(--codebot-space-3) var(--codebot-space-4);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-md);
 }
 
 .near-wallet-risk-icon {
   justify-self: center;
-  color: var(--openbot-warning);
+  color: var(--codebot-warning);
 }
 
 .near-wallet-risk-check p {
@@ -648,9 +648,9 @@
 }
 
 .near-wallet-risk-label {
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .near-wallet-risk-label label {
@@ -658,7 +658,7 @@
 }
 
 .near-wallet-risk-label a {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
 }

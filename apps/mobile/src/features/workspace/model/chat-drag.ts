@@ -4,7 +4,7 @@ import {
   type SidebarLayoutSnapshot,
   type SidebarPin,
   sidebarPinKey,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { samePinList } from "./agent-pins";
 import { moveSidebarChat } from "./sidebar-layout";
 

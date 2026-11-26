@@ -1,8 +1,8 @@
 import { createRequire } from "node:module";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type * as WindowsNotifications from "@indutny/simple-windows-notifications";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
 
-const logger = createOpenBotLogger("windows-notification-history");
+const logger = createCodeBotLogger("windows-notification-history");
 const requireModule = createRequire(import.meta.url);
 
 export function clearEarlierWindowsNotifications(appUserModelId: string): void {

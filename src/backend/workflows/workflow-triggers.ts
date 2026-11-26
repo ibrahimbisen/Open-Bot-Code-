@@ -1,13 +1,13 @@
-import type { RoutineSchedule, WorkflowGraph } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { RoutineSchedule, WorkflowGraph } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   collapseMissedOccurrences,
   nextValidRoutineOccurrence,
   normalizeRoutineSchedule,
   RoutineInputError,
   validateRoutineSchedule,
-} from "@openbot/team-client/routine-schedule";
+} from "@codebot/team-client/routine-schedule";
 import { Effect } from "effect";
 import { routineLocalTime } from "../agent/delivery-content";
 import type { ReceivedWebhookEvent } from "../routine-store";
@@ -16,7 +16,7 @@ import { EXTERNAL_EVENT_END, EXTERNAL_EVENT_START } from "../webhook-trigger";
 import { nodeTimezone } from "./workflow-graph";
 import type { DueWorkflowTrigger, WorkflowStore } from "./workflow-store";
 
-const logger = createOpenBotLogger("workflow-triggers");
+const logger = createCodeBotLogger("workflow-triggers");
 
 export interface ScheduledWorkflowStart {
   workflowId: string;

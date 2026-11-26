@@ -1,4 +1,4 @@
-import { parseCreditCheckoutRequest } from "@openbot/contracts/credits";
+import { parseCreditCheckoutRequest } from "@codebot/contracts/credits";
 import { createFileRoute } from "@tanstack/solid-router";
 import { Effect } from "effect";
 import { runApiResponse } from "../../../../server/effect-runtime";

@@ -1,5 +1,5 @@
-import { ChevronDown, CircleCheck, LoaderCircle } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { ChevronDown, CircleCheck, LoaderCircle } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createSignal, For, onSettled, Show } from "solid-js";
 import { OUTBOX_FLUSH_MESSAGE } from "./x-messages";
 import { OUTBOX_KEY, type QueuedPost, readOutbox } from "./x-outbox";

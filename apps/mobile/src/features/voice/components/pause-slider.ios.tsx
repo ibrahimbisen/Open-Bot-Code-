@@ -16,7 +16,7 @@ export function PauseSlider({
   onChangeEnd,
 }: PauseSliderProps) {
   const { theme } = useUniwind();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const latest = useRef(value);
   latest.current = value;
   return (

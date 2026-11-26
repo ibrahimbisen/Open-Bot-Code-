@@ -1,11 +1,11 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v34 and the separate new-database schema. IF NOT EXISTS throughout, because
 // this text is both the migration and the tail of the latest schema.
 //
 // An open wait is work an agent stopped before it was done, because it waits for something outside
-// the turn: a build, a deploy, the next routine run. The agent opens it with `openbot.await_event`,
-// lists it with `openbot.list_waits` and closes it with `openbot.close_wait`; another local agent
+// the turn: a build, a deploy, the next routine run. The agent opens it with `codebot.await_event`,
+// lists it with `codebot.list_waits` and closes it with `codebot.close_wait`; another local agent
 // can list and close it with `agentId`; the user can cancel it. A closed or cancelled wait is
 // deleted, so every row is an open wait.
 //
@@ -33,7 +33,7 @@ export const AGENT_WAIT_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS agent_waits_routine ON agent_waits(routine_id) WHERE routine_id IS NOT NULL;
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 34,
   name: "agent-waits",
   // Only creates a table, so no foreign-key pause and no vacuum. No agent has an open wait yet.

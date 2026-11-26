@@ -1,12 +1,12 @@
 import { execFile } from "node:child_process";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Schema } from "effect";
 
 export class SiblingScanFailed extends Schema.TaggedError<SiblingScanFailed>()("SiblingScanFailed", {
   cause: Schema.Defect(),
 }) {}
 
-export interface OpenBotSiblingInstance {
+export interface CodeBotSiblingInstance {
   pid: number;
   uid: number;
 }
@@ -19,9 +19,9 @@ interface SiblingScanInput {
   listProcesses?: () => Effect.Effect<string, SiblingScanFailed>;
 }
 
-export function listSiblingOpenBotInstances(
+export function listSiblingCodeBotInstances(
   input: SiblingScanInput,
-): Effect.Effect<OpenBotSiblingInstance[], SiblingScanFailed> {
+): Effect.Effect<CodeBotSiblingInstance[], SiblingScanFailed> {
   return Effect.suspend(() => {
     const platform = input.platform ?? process.platform;
     if (platform !== "darwin") return Effect.succeed([]);
@@ -34,8 +34,8 @@ export function listSiblingOpenBotInstances(
 function parseSiblingInstances(
   output: string,
   input: Pick<SiblingScanInput, "executablePath" | "currentPid" | "excludedPids">,
-): OpenBotSiblingInstance[] {
-  const siblings: OpenBotSiblingInstance[] = [];
+): CodeBotSiblingInstance[] {
+  const siblings: CodeBotSiblingInstance[] = [];
   const excluded = input.excludedPids?.() ?? new Set<number>();
   if (!input.executablePath.trim()) return siblings;
   for (const line of output.split("\n")) {

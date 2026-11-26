@@ -4,8 +4,8 @@ import { mkdir, mkdtemp, open, readFile, rm, utimes, writeFile } from "node:fs/p
 import { createServer, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
-import type { BrowserBounds } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import type { BrowserBounds } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import {
   app,
@@ -125,7 +125,7 @@ const server = createServer((request, response) => {
   if (url.pathname === "/download") {
     response.writeHead(200, {
       "content-type": "text/plain",
-      "content-disposition": 'attachment; filename="openbot-smoke.txt"',
+      "content-disposition": 'attachment; filename="codebot-smoke.txt"',
     });
     response.end("local download");
     return;
@@ -136,7 +136,7 @@ const server = createServer((request, response) => {
     return;
   }
   if (url.pathname === "/cookie") {
-    if (url.searchParams.has("set")) response.setHeader("set-cookie", "openbot=shared; Path=/");
+    if (url.searchParams.has("set")) response.setHeader("set-cookie", "codebot=shared; Path=/");
     response.setHeader("content-type", "text/html; charset=utf-8");
     response.end(`<main>cookie:${request.headers.cookie ?? "none"}</main><span data-load-environment></span><script>
       document.querySelector('[data-load-environment]').textContent = 'load-environment:' + innerWidth + ':' + (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') + ':' + (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduce' : 'motion');
@@ -528,10 +528,10 @@ async function main(): Promise<void> {
   const configuredRoot = argumentValue("--smoke-root=");
   const persistencePhase = argumentValue("--persistence-phase=");
   const persistenceOrigin = argumentValue("--persistence-origin=");
-  const temporaryRoot = configuredRoot ?? (await mkdtemp(join(tmpdir(), "openbot-browser-smoke-")));
+  const temporaryRoot = configuredRoot ?? (await mkdtemp(join(tmpdir(), "codebot-browser-smoke-")));
   const userDataPath = join(temporaryRoot, "user-data");
   await mkdir(userDataPath, { recursive: true });
-  app.setName("OpenBot");
+  app.setName("CodeBot");
   app.setPath("userData", userDataPath);
   app.setPath("sessionData", userDataPath);
   const hardTimeout = setTimeout(() => {
@@ -1075,7 +1075,7 @@ async function main(): Promise<void> {
       true,
     );
     await runCauseEffect(browser.snapshot(v2Tab.id));
-    const noDomRefs = await v2Contents.executeJavaScript("document.querySelector('[data-openbot-ref]') === null", true);
+    const noDomRefs = await v2Contents.executeJavaScript("document.querySelector('[data-codebot-ref]') === null", true);
     if (noDomRefs !== true) throw new Error("V2 snapshot mutated the page DOM.");
     await runControlActions(browser, v2Tab.id, v2Contents);
     await runKeyboardScenario(browser, origin, temporaryRoot);
@@ -1425,7 +1425,7 @@ async function main(): Promise<void> {
       throw new Error("V2 ref wait matched an element after it was removed.");
     }
     await v2Contents.executeJavaScript(
-      "globalThis.__openbotSlowNoise = setInterval(() => document.body.toggleAttribute('data-slow-noise'), 10); setTimeout(() => { clearInterval(globalThis.__openbotSlowNoise); delete globalThis.__openbotSlowNoise; }, 1200); true",
+      "globalThis.__codebotSlowNoise = setInterval(() => document.body.toggleAttribute('data-slow-noise'), 10); setTimeout(() => { clearInterval(globalThis.__codebotSlowNoise); delete globalThis.__codebotSlowNoise; }, 1200); true",
       true,
     );
     const patientQuietWait = await callBrowserTool(browser, "wait_for", {
@@ -1437,7 +1437,7 @@ async function main(): Promise<void> {
       throw new Error(`V2 DOM-quiet wait ignored the requested timeout: ${toolError(patientQuietWait)}`);
     }
     await v2Contents.executeJavaScript(
-      "globalThis.__openbotTransient = document.body.appendChild(Object.assign(document.createElement('span'), { textContent: 'transient quiet condition' })); setTimeout(() => { globalThis.__openbotTransient.remove(); delete globalThis.__openbotTransient; }, 100); true",
+      "globalThis.__codebotTransient = document.body.appendChild(Object.assign(document.createElement('span'), { textContent: 'transient quiet condition' })); setTimeout(() => { globalThis.__codebotTransient.remove(); delete globalThis.__codebotTransient; }, 100); true",
       true,
     );
     const invalidatedQuietWait = await callBrowserTool(browser, "wait_for", {
@@ -1931,7 +1931,7 @@ async function main(): Promise<void> {
     await runCauseEffect(browser.open(`${origin}/cookie?set=1`, "smoke-thread"));
     const cookieTab = await runCauseEffect(browser.open(`${origin}/cookie`, "other-thread"));
     const cookieSnapshot = await runCauseEffect(browser.snapshot(cookieTab.id));
-    if (!cookieSnapshot.text.includes("openbot=shared")) throw new Error("Cookies were not shared.");
+    if (!cookieSnapshot.text.includes("codebot=shared")) throw new Error("Cookies were not shared.");
     process.stdout.write("BrowserHost: shared cookies passed.\n");
 
     const firstCachedTab = await runCauseEffect(browser.open(`${origin}/cached`, "smoke-thread"));
@@ -1976,7 +1976,7 @@ async function main(): Promise<void> {
         ref: download.ref,
       }),
     );
-    await expectDownloadedFile(await firstDownload, join(downloadsRoot, "openbot-smoke.txt"), "first");
+    await expectDownloadedFile(await firstDownload, join(downloadsRoot, "codebot-smoke.txt"), "first");
     const nextDownloadSnapshot = await runCauseEffect(browser.snapshot(downloadPage.id));
     const nextDownload = nextDownloadSnapshot.elements.find((element) => element.name === "Download");
     if (!nextDownload) throw new Error("Download link disappeared.");
@@ -1987,7 +1987,7 @@ async function main(): Promise<void> {
         ref: nextDownload.ref,
       }),
     );
-    await expectDownloadedFile(await secondDownload, join(downloadsRoot, "openbot-smoke (2).txt"), "second");
+    await expectDownloadedFile(await secondDownload, join(downloadsRoot, "codebot-smoke (2).txt"), "second");
     process.stdout.write("BrowserHost: download passed.\n");
 
     const toolResult = await runCauseEffect(
@@ -1996,7 +1996,7 @@ async function main(): Promise<void> {
         turnId: "browser-smoke-turn",
         callId: "browser-smoke-call",
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "open",
         arguments: { url: `${origin}/cookie` },
       }),
@@ -2365,9 +2365,9 @@ async function runTypingFocusScenario(browser: BrowserHost, origin: string): Pro
         });
       }
     }
-    await mkdir(".openbot-build", { recursive: true });
+    await mkdir(".codebot-build", { recursive: true });
     await writeFile(
-      ".openbot-build/browser-typing-focus.json",
+      ".codebot-build/browser-typing-focus.json",
       JSON.stringify(
         { status: cases.every((item) => item.safe) ? "passed" : "issues_found", versions: process.versions, cases },
         null,
@@ -2445,9 +2445,9 @@ async function runFocusScenario(browser: BrowserHost, origin: string, window: Br
     openedFocusedTab = webContents.getFocusedWebContents() === openedContents;
   });
   await runCauseEffect(browser.close((await focusedOpen).id));
-  await mkdir(".openbot-build", { recursive: true });
+  await mkdir(".codebot-build", { recursive: true });
   await writeFile(
-    ".openbot-build/browser-focus-same-window.json",
+    ".codebot-build/browser-focus-same-window.json",
     JSON.stringify({ sameWindowFocus, addressFocusedTab, openedFocusedTab }, null, 2),
   );
   const lost = Object.entries(sameWindowFocus).filter(([, kept]) => !kept);
@@ -2516,9 +2516,9 @@ async function runFocusScenario(browser: BrowserHost, origin: string, window: Br
   );
   const closeKeptFocus = webContents.getFocusedWebContents() === focusSentinel.webContents;
   await runCauseEffect(browser.close(opener.id));
-  await mkdir(".openbot-build", { recursive: true });
+  await mkdir(".codebot-build", { recursive: true });
   await writeFile(
-    ".openbot-build/browser-focus-report.json",
+    ".codebot-build/browser-focus-report.json",
     JSON.stringify({ focusLosses, success: backgroundAction.success, popupKeptFocus, closeKeptFocus }, null, 2),
   );
   if (!popupKeptFocus)
@@ -2571,9 +2571,9 @@ async function runRedirectNavigationScenario(browser: BrowserHost, origin: strin
   } finally {
     await runCauseEffect(browser.close(tab.id));
   }
-  await mkdir(".openbot-build", { recursive: true });
+  await mkdir(".codebot-build", { recursive: true });
   await writeFile(
-    ".openbot-build/browser-redirect-navigation-report.json",
+    ".codebot-build/browser-redirect-navigation-report.json",
     JSON.stringify({ processAlive: true, attempts: outcomes.length, outcomes }, null, 2),
   );
   const failed = outcomes.filter((outcome) => !outcome.success);
@@ -2598,8 +2598,8 @@ async function runStalledOpenScenario(browser: BrowserHost, origin: string): Pro
     tabsAfter: tabs.length,
     text: toolError(result).slice(0, 300),
   };
-  await mkdir(".openbot-build", { recursive: true });
-  await writeFile(".openbot-build/browser-stalled-open-report.json", JSON.stringify(outcome, null, 2));
+  await mkdir(".codebot-build", { recursive: true });
+  await writeFile(".codebot-build/browser-stalled-open-report.json", JSON.stringify(outcome, null, 2));
   if (!outcome.success || !outcome.text.includes("Stalled page") || outcome.tabsAfter !== 1)
     throw new Error(`A page with a stalled image did not open with its snapshot: ${JSON.stringify(outcome)}`);
   if (seconds > STALLED_OPEN_LIMIT_SECONDS)
@@ -2683,7 +2683,7 @@ async function runWaitDeadlines(browser: BrowserHost, tabId: string, v2Contents:
     throw new Error("V2 bounded action point fixture was not available.");
   }
   await v2Contents.executeJavaScript(
-    "globalThis.__openbotNoise = setInterval(() => document.querySelector('output').toggleAttribute('data-noise'), 10); true",
+    "globalThis.__codebotNoise = setInterval(() => document.querySelector('output').toggleAttribute('data-noise'), 10); true",
     true,
   );
   const actionTimeoutStarted = Date.now();
@@ -2713,7 +2713,7 @@ async function runWaitDeadlines(browser: BrowserHost, tabId: string, v2Contents:
     throw new Error("V2 DOM-quiet wait suppressed its timeout.");
   }
   await v2Contents.executeJavaScript(
-    "clearInterval(globalThis.__openbotNoise); delete globalThis.__openbotNoise; true",
+    "clearInterval(globalThis.__codebotNoise); delete globalThis.__codebotNoise; true",
     true,
   );
   const address = server.address();
@@ -2850,7 +2850,7 @@ async function runLiveViewScenario(browser: BrowserHost, tabId: string, contents
     })()`,
       true,
     );
-    const uploadRoot = await mkdtemp(join(tmpdir(), "openbot-live-view-upload-"));
+    const uploadRoot = await mkdtemp(join(tmpdir(), "codebot-live-view-upload-"));
     try {
       const uploadPath = join(uploadRoot, "live-view-upload.txt");
       await writeFile(uploadPath, "live view upload");
@@ -2909,7 +2909,7 @@ async function runLiveViewPageCopy(browser: BrowserHost, tabId: string, contents
     const armedDeadline = Date.now() + 5_000;
     let armed = false;
     while (!armed && Date.now() < armedDeadline) {
-      armed = await contents.executeJavaScript("window[Symbol.for('openbot.pageCopy')]?.waits?.length > 0", false);
+      armed = await contents.executeJavaScript("window[Symbol.for('codebot.pageCopy')]?.waits?.length > 0", false);
       if (!armed) await new Promise((resolve) => setTimeout(resolve, 50));
     }
     const idleDeadline = Date.now() + 12_000;
@@ -2988,7 +2988,7 @@ async function runLiveViewPageCopy(browser: BrowserHost, tabId: string, contents
     await click("page-copy-library", "copied by a library selection");
     await click("page-copy-library-data", "copied by a library format");
     const report = { armed, copies };
-    const reportDirectory = join(process.cwd(), ".openbot-build");
+    const reportDirectory = join(process.cwd(), ".codebot-build");
     await mkdir(reportDirectory, { recursive: true });
     await writeFile(join(reportDirectory, "browser-live-view-page-copy.json"), `${JSON.stringify(report, null, 2)}\n`);
     if (!armed) throw new Error("The live view did not arm the page that loaded for page copies.");
@@ -3197,7 +3197,7 @@ async function runLiveViewClipboard(browser: BrowserHost, tabId: string, content
   const hostClipboardHasMemberText = (await clipboard.readText()).includes(pasted);
   if (hostClipboardHasMemberText) throw new Error("A live view copy or paste wrote the host clipboard.");
 
-  const reportDirectory = join(process.cwd(), ".openbot-build");
+  const reportDirectory = join(process.cwd(), ".codebot-build");
   await mkdir(reportDirectory, { recursive: true });
   await writeFile(
     join(reportDirectory, "browser-live-view-clipboard.json"),
@@ -3736,7 +3736,7 @@ async function runStagedUploadScenario(
         turnId: `browser-v2-${browserToolCall}`,
         callId: `browser-v2-call-${browserToolCall}`,
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "upload_files",
         arguments: { tabId, target, paths },
       }),
@@ -3899,7 +3899,7 @@ async function runToolBoundaryScenario(browser: BrowserHost, origin: string): Pr
         turnId: "browser-smoke-scope-turn",
         callId: "browser-smoke-scope-call",
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "list_tabs",
         arguments: {},
       }),
@@ -3920,7 +3920,7 @@ async function runToolBoundaryScenario(browser: BrowserHost, origin: string): Pr
         turnId: "browser-smoke-scope-turn",
         callId: "browser-smoke-cross-agent-call",
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "snapshot",
         arguments: { tabId: otherAgentTab.id },
       }),
@@ -3932,7 +3932,7 @@ async function runToolBoundaryScenario(browser: BrowserHost, origin: string): Pr
         turnId: "browser-smoke-cross-agent-close-turn",
         callId: "browser-smoke-cross-agent-close-call",
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "close_tab",
         arguments: { tabId: otherAgentTab.id },
       }),
@@ -3947,7 +3947,7 @@ async function runToolBoundaryScenario(browser: BrowserHost, origin: string): Pr
         turnId: "browser-smoke-close-turn-1",
         callId: "browser-smoke-close-call-1",
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "close_tab",
         arguments: { tabId: closableToolTab.id },
       }),
@@ -3958,7 +3958,7 @@ async function runToolBoundaryScenario(browser: BrowserHost, origin: string): Pr
         turnId: "browser-smoke-close-turn-2",
         callId: "browser-smoke-close-call-2",
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool: "close_tab",
         arguments: { tabId: closableToolTab.id },
       }),
@@ -4020,13 +4020,13 @@ async function checkOnePersistencePage(
       (expectedStored &&
         (localStorageValue !== "kept" ||
           indexedDbValue !== "kept" ||
-          (requireCrossProcessCookie && !cookie.includes("openbot_persistence=kept")))) ||
+          (requireCrossProcessCookie && !cookie.includes("codebot_persistence=kept")))) ||
       (!expectedStored &&
-        (cookie.includes("openbot_persistence=kept") || localStorageValue !== null || indexedDbValue !== null))
+        (cookie.includes("codebot_persistence=kept") || localStorageValue !== null || indexedDbValue !== null))
     ) {
       throw new Error(`Browser persistence phase ${phase} returned invalid state: ${JSON.stringify(snapshot)}`);
     }
-    if (expectedStored && !requireCrossProcessCookie && !cookie.includes("openbot_persistence=kept")) {
+    if (expectedStored && !requireCrossProcessCookie && !cookie.includes("codebot_persistence=kept")) {
       process.stdout.write("BrowserHost: signed macOS app must verify encrypted cookie persistence.\n");
     }
   } finally {
@@ -4087,7 +4087,7 @@ async function runPopupScenario(browser: BrowserHost, origin: string): Promise<v
         .find((item) => item.getURL().endsWith("/popup-login") && !item.isLoading());
       if (!popupContents) throw new Error("Popup contents missing.");
       const shared = await popupContents.executeJavaScript(
-        "(location.hostname === 'localhost' || document.cookie.includes('popup_session=shared')) && !!opener && typeof window.openbot === 'undefined' && typeof require === 'undefined'",
+        "(location.hostname === 'localhost' || document.cookie.includes('popup_session=shared')) && !!opener && typeof window.codebot === 'undefined' && typeof require === 'undefined'",
       );
       if (!shared) throw new Error("Popup lost session, opener, or isolation.");
       if (button !== "Cross-origin sign-in" && button !== "Iframe sign-in")
@@ -4167,7 +4167,7 @@ async function runCookieBannerScenario(browser: BrowserHost, origin: string): Pr
     const output = (contents: WebContents) =>
       contents.executeJavaScript("document.querySelector('output')?.textContent ?? ''", true);
     const consentScript = (contents: WebContents) =>
-      contents.executeJavaScriptInIsolatedWorld(CONSENT_WORLD, [{ code: "globalThis.__openbotConsent ?? null" }]);
+      contents.executeJavaScriptInIsolatedWorld(CONSENT_WORLD, [{ code: "globalThis.__codebotConsent ?? null" }]);
     await waitFor(async () => (await output(agent.contents)) === "rejected", "the agent tab to refuse cookies");
     await waitFor(async () => (await output(shadow.contents)) === "rejected", "the shadow banner to be refused");
     await waitFor(async () => (await consentScript(acceptOnly.contents)) !== null, "the script in the accept-only tab");
@@ -4191,8 +4191,8 @@ async function runCookieBannerScenario(browser: BrowserHost, origin: string): Pr
       takeoverTab: "stopped",
       personTab: { output: personOutput, consentScript: personScript },
     };
-    await mkdir(".openbot-build", { recursive: true });
-    await writeFile(".openbot-build/browser-cookie-banner.json", JSON.stringify(report, null, 2));
+    await mkdir(".codebot-build", { recursive: true });
+    await writeFile(".codebot-build/browser-cookie-banner.json", JSON.stringify(report, null, 2));
     if (report.status !== "passed") throw new Error(`A cookie banner was changed: ${JSON.stringify(report)}`);
   } finally {
     await runCauseEffect(browser.close(agent.tab.id));
@@ -4232,7 +4232,7 @@ function callBrowserTool(
         turnId: `browser-v2-${browserToolCall}`,
         callId: `browser-v2-call-${browserToolCall}`,
         ownerAgentId: "smoke-bot",
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool,
         arguments: argumentsValue,
       },
@@ -4269,9 +4269,9 @@ async function runIdentityScenario(browser: BrowserHost, origin: string): Promis
   const second = await checkBrowserIdentity(browser, secondTab.id);
   await runIdentityFrameProbe(browser, origin);
   const requestedHints = await runRequestedHintsProbe(browser, origin);
-  await mkdir(".openbot-build", { recursive: true });
+  await mkdir(".codebot-build", { recursive: true });
   await writeFile(
-    ".openbot-build/browser-identity.json",
+    ".codebot-build/browser-identity.json",
     JSON.stringify({ initial, reloaded, navigated, second, requestedHints, requests: recordedIdentityAgents }, null, 2),
   );
   process.stdout.write("BrowserHost: matching page, reload, navigation, and second-tab identity passed.\n");
@@ -4353,7 +4353,7 @@ async function checkBrowserIdentity(browser: BrowserHost, tabId: string): Promis
   if (
     !navigatorUserAgent?.includes(`Chrome/${chromiumMajorVersion}`) ||
     navigatorUserAgent.includes("Electron/") ||
-    navigatorUserAgent.includes("OpenBot/") ||
+    navigatorUserAgent.includes("CodeBot/") ||
     getString(identity.requestHeaders, "user-agent") !== navigatorUserAgent ||
     identity.navigatorWebdriver !== false ||
     getString(identity.requestHeaders, "sec-ch-ua-platform") !== `"${getString(identity, "navigatorPlatform")}"` ||
@@ -4361,7 +4361,7 @@ async function checkBrowserIdentity(browser: BrowserHost, tabId: string): Promis
     !navigatorBrands.some(
       (brand) => getString(brand, "brand") === "Chromium" && getString(brand, "version") === chromiumMajorVersion,
     ) ||
-    /Electron|OpenBot/u.test(clientHintBrands) ||
+    /Electron|CodeBot/u.test(clientHintBrands) ||
     clientHintBrands !==
       navigatorBrands.map((brand) => `"${getString(brand, "brand")}";v="${getString(brand, "version")}"`).join(", ")
   ) {
@@ -4462,7 +4462,7 @@ async function runGoogleLiveProbe(browser: BrowserHost): Promise<void> {
     browser.act(googleTab.id, identifierPage.revision, {
       type: "type",
       ref: identifier.ref,
-      text: "openbot-google-probe@example.com",
+      text: "codebot-google-probe@example.com",
       submit: true,
     }),
   );
@@ -4622,7 +4622,7 @@ async function runFramerLiveProbe(browser: BrowserHost, panelBounds: BrowserBoun
       browser.act(framerTab.id, page.revision, {
         type: "type",
         ref: email.ref,
-        text: "openbot-framer-probe@example.com",
+        text: "codebot-framer-probe@example.com",
         submit: true,
       }),
     );

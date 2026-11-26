@@ -2,7 +2,7 @@ import {
   type RoutineResultConnectionOption,
   WORKFLOW_SLACK_TRIGGER_WORKSPACE,
   WORKFLOW_TELEGRAM_TRIGGER_CHAT,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export const TELEGRAM_TRIGGER_DEFAULTS = { event: "mention", connectionId: "" } as const;
 export const SLACK_TRIGGER_DEFAULTS = { event: "mention", connectionId: "", placeId: "" } as const;

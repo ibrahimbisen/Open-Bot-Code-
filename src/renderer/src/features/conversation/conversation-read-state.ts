@@ -1,10 +1,10 @@
-import { itemTypeCountsAsUnread } from "@openbot/contracts/conversation-read";
+import { itemTypeCountsAsUnread } from "@codebot/contracts/conversation-read";
 import type {
   ConversationMessageAuthor,
   ConversationReadState,
   DirectConversationSnapshot,
   DirectMessage,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   CONTEXT_RESET_ITEM_TYPE,
   HOSTED_SITE_EVENT_ITEM_TYPE_PREFIX,
@@ -14,8 +14,8 @@ import {
   ROUTINE_RUN_EVENT_ITEM_TYPE_PREFIX,
   SETTING_LINK_ITEM_TYPE_PREFIX,
   SKILL_EVENT_ITEM_TYPE_PREFIX,
-} from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
+} from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
 
 export type AgentAutoReadEntry =
   | { messageId: string; status: "pending"; optimisticState: ConversationReadState | null }

@@ -8,11 +8,11 @@ const CACHE_FORMAT = "1";
 const UNUSED_NAMESPACE_MS = 14 * 24 * 60 * 60 * 1000;
 
 function mobileBuildCacheRoot(projectRoot) {
-  const setting = process.env.OPENBOT_MOBILE_BUILD_CACHE;
+  const setting = process.env.CODEBOT_MOBILE_BUILD_CACHE;
   if (setting === "off") return undefined;
   if (setting) return path.resolve(projectRoot, "../..", setting);
   const gitDirectory = runGit(projectRoot, ["rev-parse", "--path-format=absolute", "--git-common-dir"]);
-  return gitDirectory && path.join(gitDirectory, "openbot-mobile-cache.noindex");
+  return gitDirectory && path.join(gitDirectory, "codebot-mobile-cache.noindex");
 }
 
 function runGit(cwd, args) {
@@ -100,7 +100,7 @@ function reachablePackages(lock, roots) {
 
 function installIsCurrent(repositoryRoot) {
   const modifiedAt = (file) => fs.statSync(path.join(repositoryRoot, file)).mtimeMs;
-  const stamp = path.join(repositoryRoot, "node_modules/.openbot-install-stamp");
+  const stamp = path.join(repositoryRoot, "node_modules/.codebot-install-stamp");
   if (!fs.existsSync(stamp)) return false;
   const patches = fs.existsSync(path.join(repositoryRoot, "patches"))
     ? fs.readdirSync(path.join(repositoryRoot, "patches")).map((patch) => path.join("patches", patch))
@@ -169,7 +169,7 @@ class WorktreeTransformStore {
   }
 
   clear() {
-    if (process.env.OPENBOT_KEEP_METRO_CACHE) return;
+    if (process.env.CODEBOT_KEEP_METRO_CACHE) return;
     this.#shared.clear();
     this.#local.clear();
   }

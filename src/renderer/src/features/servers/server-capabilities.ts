@@ -5,17 +5,17 @@ import {
   canAdministerServer,
   pasteCodeSignInSupported,
   type ServerSummary,
-} from "@openbot/contracts/ipc";
-import { ANTIGRAVITY_CODE_SIGN_IN_CAPABILITY } from "@openbot/contracts/team-protocol/antigravity-code-sign-in-v1";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import { MISTRAL_CODE_SIGN_IN_CAPABILITY } from "@openbot/contracts/team-protocol/mistral-code-sign-in-v1";
-import { PROVIDER_HOST_SIGN_IN_PROVIDERS } from "@openbot/contracts/team-protocol/provider-host-sign-in-v1";
-import { providerSignInRelayProviders } from "@openbot/contracts/team-protocol/provider-sign-in-relays";
-import { PROVIDERS_ADMIN_CODE_SIGN_IN_PROVIDERS } from "@openbot/contracts/team-protocol/providers-v1";
-import { PROVIDERS_SIGN_IN_V3_PROVIDERS } from "@openbot/contracts/team-protocol/providers-v3";
-import { PROVIDERS_V4_SIGN_IN_PROVIDERS } from "@openbot/contracts/team-protocol/providers-v4";
-import { PROVIDERS_V8_CAPABILITY } from "@openbot/contracts/team-protocol/providers-v8";
-import { SIGN_IN_RELAY_PROVIDERS } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
+} from "@codebot/contracts/ipc";
+import { ANTIGRAVITY_CODE_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/antigravity-code-sign-in-v1";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import { MISTRAL_CODE_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/mistral-code-sign-in-v1";
+import { PROVIDER_HOST_SIGN_IN_PROVIDERS } from "@codebot/contracts/team-protocol/provider-host-sign-in-v1";
+import { providerSignInRelayProviders } from "@codebot/contracts/team-protocol/provider-sign-in-relays";
+import { PROVIDERS_ADMIN_CODE_SIGN_IN_PROVIDERS } from "@codebot/contracts/team-protocol/providers-v1";
+import { PROVIDERS_SIGN_IN_V3_PROVIDERS } from "@codebot/contracts/team-protocol/providers-v3";
+import { PROVIDERS_V4_SIGN_IN_PROVIDERS } from "@codebot/contracts/team-protocol/providers-v4";
+import { PROVIDERS_V8_CAPABILITY } from "@codebot/contracts/team-protocol/providers-v8";
+import { SIGN_IN_RELAY_PROVIDERS } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
 
 export function serverSupportsCapability(
   server: ServerSummary | undefined,

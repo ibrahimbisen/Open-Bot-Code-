@@ -10,7 +10,7 @@ import {
   type DiscordInboundInteraction,
   type DiscordInboundMessage,
   type DiscordInboundQuote,
-} from "@openbot/contracts/signal-protocol/discord-api";
+} from "@codebot/contracts/signal-protocol/discord-api";
 import {
   GatewayDispatchEvents,
   type GatewayDispatchPayload,
@@ -18,7 +18,7 @@ import {
   MessageReferenceType,
 } from "discord-api-types/v10";
 
-export const DISCORD_DIRECT_MESSAGE_REPLY = "OpenBot answers in Discord servers. Mention @OpenBot in a server channel.";
+export const DISCORD_DIRECT_MESSAGE_REPLY = "CodeBot answers in Discord servers. Mention @CodeBot in a server channel.";
 
 const INTERACTION_TOKEN_TTL_MILLISECONDS = 15 * 60_000;
 const MAXIMUM_INTERACTIONS = 10_000;

@@ -1,38 +1,38 @@
 # Local scripts API
 
-A script on the computer that runs OpenBot can send an agent a message, wait for its answer, run a
+A script on the computer that runs CodeBot can send an agent a message, wait for its answer, run a
 routine, read pending questions and approvals, submit responses, change the agent's model or
 provider account, and start a new chat with the agent. Enable **Local scripts** for each agent that the integration needs. Use this API
 for a local Slack bridge, to report a build result, or to give an agent a task from a terminal.
 
 ```sh
-long-job; curl -sS -X POST "$(cat "$OPENBOT_AUTOMATION/url")/v1/agents/<agentId>/routines/<routineId>/run" \
-  -H @"$OPENBOT_AUTOMATION/headers" \
+long-job; curl -sS -X POST "$(cat "$CODEBOT_AUTOMATION/url")/v1/agents/<agentId>/routines/<routineId>/run" \
+  -H @"$CODEBOT_AUTOMATION/headers" \
   -H 'Content-Type: application/json' \
   -d '{"payload":"long-job ended with code 0"}'
 ```
 
-`$OPENBOT_AUTOMATION` is not set by OpenBot. It stands for the folder below.
+`$CODEBOT_AUTOMATION` is not set by CodeBot. It stands for the folder below.
 
 ## Command line
 
-`openbot-cli` uses this API, so you do not write the requests yourself. It needs Node 18 or later.
-OpenBot puts it in its resources folder:
+`codebot-cli` uses this API, so you do not write the requests yourself. It needs Node 18 or later.
+CodeBot puts it in its resources folder:
 
-- macOS: `/Applications/OpenBot.app/Contents/Resources/cli/openbot-cli.mjs`
-- Linux: `resources/cli/openbot-cli.mjs` in the install folder (for an AppImage, copy it out of the image)
-- Windows: `resources\cli\openbot-cli.mjs` in the install folder. The default folder is
-  `%LOCALAPPDATA%\Programs\OpenBot`.
+- macOS: `/Applications/CodeBot.app/Contents/Resources/cli/codebot-cli.mjs`
+- Linux: `resources/cli/codebot-cli.mjs` in the install folder (for an AppImage, copy it out of the image)
+- Windows: `resources\cli\codebot-cli.mjs` in the install folder. The default folder is
+  `%LOCALAPPDATA%\Programs\CodeBot`.
 
 ```sh
-alias openbot-cli='node "/Applications/OpenBot.app/Contents/Resources/cli/openbot-cli.mjs"'
-openbot-cli list                                    # the agents with Local scripts on
-openbot-cli run "Ada" "Run the tests and tell me what failed" --wait
-openbot-cli run "Ada" - --wait --json < task.md     # the task from standard input, one JSON answer
-openbot-cli status "Ada" <deliveryId>               # a delivery that an earlier run left
-openbot-cli agent set-account "Ada" <accountId>     # or "default" for the provider's own sign-in
-openbot-cli agent set-model "Ada" claude-opus-5-5 --effort high
-openbot-cli agent new-chat "Ada"                    # the agent forgets the chat; its setup stays
+alias codebot-cli='node "/Applications/CodeBot.app/Contents/Resources/cli/codebot-cli.mjs"'
+codebot-cli list                                    # the agents with Local scripts on
+codebot-cli run "Ada" "Run the tests and tell me what failed" --wait
+codebot-cli run "Ada" - --wait --json < task.md     # the task from standard input, one JSON answer
+codebot-cli status "Ada" <deliveryId>               # a delivery that an earlier run left
+codebot-cli agent set-account "Ada" <accountId>     # or "default" for the provider's own sign-in
+codebot-cli agent set-model "Ada" claude-opus-5-5 --effort high
+codebot-cli agent new-chat "Ada"                    # the agent forgets the chat; its setup stays
 ```
 
 `<agent>` is an agent ID or a name; case is ignored. Without `--wait`, `run` returns when the
@@ -44,15 +44,15 @@ With `--json`, the output is one JSON object, also for a failure (`{ "ok": false
 | Exit code | Meaning |
 | --- | --- |
 | 0 | Done. For `run --wait`, the turn completed. |
-| 1 | The turn failed, was stopped or was cancelled, OpenBot refused the request, or the delivery is unknown. |
+| 1 | The turn failed, was stopped or was cancelled, CodeBot refused the request, or the delivery is unknown. |
 | 2 | The command line is wrong, or two agents have the name. |
-| 3 | The agent waits for a person: a question, an approval or a browser takeover, also of an earlier turn that this task waits behind. Answer it in OpenBot or through the routes below, then use `status`. |
+| 3 | The agent waits for a person: a question, an approval or a browser takeover, also of an earlier turn that this task waits behind. Answer it in CodeBot or through the routes below, then use `status`. |
 | 4 | The wait timed out. The agent continues. |
-| 5 | OpenBot is not running, no agent has Local scripts on, or the agent was not found. |
+| 5 | CodeBot is not running, no agent has Local scripts on, or the agent was not found. |
 
 The command reads the files below each time and sends the token only in a request header. When
-OpenBot restarts during a wait, the command reads the new files and continues the wait.
-Set `OPENBOT_AUTOMATION_DIR` to use another folder, for example the one of a development profile.
+CodeBot restarts during a wait, the command reads the new files and continues the wait.
+Set `CODEBOT_AUTOMATION_DIR` to use another folder, for example the one of a development profile.
 
 ## Turn it on
 
@@ -63,10 +63,10 @@ An agent cannot turn it on for itself or for a teammate.
 
 For a headless host, connect as its owner or administrator and turn on the setting there. The
 listener and the files below are on the host. Run the script on that host, as the OS user that
-runs OpenBot. No local screen is necessary. Turn the same setting off to remove access for that agent.
+runs CodeBot. No local screen is necessary. Turn the same setting off to remove access for that agent.
 
 The setting also permits scripts to answer questions and accept or decline approvals. Browser
-takeovers and secret questions must be completed in OpenBot.
+takeovers and secret questions must be completed in CodeBot.
 Agents that already have Local scripts enabled get these operations after upgrade. No new opt-in
 is needed. Older clients can still change this setting, although their text can describe routines only.
 
@@ -77,7 +77,7 @@ so it can start a long command in the background and ask to be woken when it end
 
 ## Files
 
-While at least one agent allows local scripts, OpenBot listens on `127.0.0.1` on a free port and
+While at least one agent allows local scripts, CodeBot listens on `127.0.0.1` on a free port and
 writes three files in `<userData>/automation/`:
 
 | File | Contents |
@@ -86,16 +86,16 @@ writes three files in `<userData>/automation/`:
 | `token` | The bearer token |
 | `headers` | `Authorization: Bearer <token>`, for `curl -H @headers` |
 
-The folder is `0700` and the files are `0600`, so only the same OS user can read them. OpenBot
+The folder is `0700` and the files are `0600`, so only the same OS user can read them. CodeBot
 makes a new token and a new port at each start. A command reads the files when it runs, so a
 command that you copied before a restart still works. When the last agent turns the setting off, or
-OpenBot quits, OpenBot stops listening and deletes the files.
+CodeBot quits, CodeBot stops listening and deletes the files.
 
-`<userData>` is the OpenBot application data folder:
+`<userData>` is the CodeBot application data folder:
 
-- macOS: `~/Library/Application Support/OpenBot`
-- Linux: `~/.config/OpenBot`
-- Windows: `%APPDATA%\OpenBot`
+- macOS: `~/Library/Application Support/CodeBot`
+- Linux: `~/.config/CodeBot`
+- Windows: `%APPDATA%\CodeBot`
 
 ## Routes
 
@@ -121,7 +121,7 @@ heading `--- event from a local script ---`, with a line that tells the agent to
 not as instructions. The run history keeps it, so a run that a restart
 interrupts sends it again.
 
-An agent can stop a request and wait for an event: it opens a wait with `openbot.await_event` and
+An agent can stop a request and wait for an event: it opens a wait with `codebot.await_event` and
 gives the user its wait ID. A run without `waitId` wakes every open wait of the agent that has no
 routine or has this routine. A run with `waitId` wakes only that wait. When no such wait is open,
 the run starts without a wait. The run's input repeats the request and the agent's note, so the
@@ -151,9 +151,9 @@ set to skip at the limit drops the run instead, and its run history shows it as 
 | 415 | `Content-Type` is not `application/json`. |
 | 429 | The agent got its limit of messages and runs from local scripts in the last hour (30 by default). |
 
-An agent can have at most 20 open waits. `openbot.list_waits` shows an agent's open waits with their
-IDs, and `openbot.close_wait` closes one by ID. With `agentId`, both tools act on another local
-agent's waits, as the routine tools do. `openbot.list_agents` shows `openWaits` for each agent that
+An agent can have at most 20 open waits. `codebot.list_waits` shows an agent's open waits with their
+IDs, and `codebot.close_wait` closes one by ID. With `agentId`, both tools act on another local
+agent's waits, as the routine tools do. `codebot.list_agents` shows `openWaits` for each agent that
 has open waits.
 
 ### `POST /v1/agents/:agentId/messages`
@@ -193,7 +193,7 @@ valid values. A change of provider or account waits until the agent is idle: whi
 answer is `409` with the reason. A
 successful response is `200` with `id`, `name`, `provider`, `model`, `reasoningEffort` and
 `providerAccountId`. Other fields, such as the name, permissions or Local scripts, give `400`: change
-them in OpenBot.
+them in CodeBot.
 
 ### `POST /v1/agents/:agentId/context/clear`
 
@@ -214,7 +214,7 @@ returned. The response has three arrays:
 {
   "prompts": [{
     "requestId": "opaque-request-id",
-    "requiresOpenBot": false,
+    "requiresCodeBot": false,
     "questions": [{ "id": "build", "header": "Build", "question": "Which build?",
       "options": [{ "label": "Debug", "description": "Use debug settings" }] }]
   }],
@@ -225,10 +225,10 @@ returned. The response has three arrays:
 
 An approval has `requestId`, `agentId`, `threadId`, `turnId`, `kind`, `command`, `cwd`, `reason`,
 `grantRoot`, and `permissions`. Show the full details to the person before accepting it. Text is
-secret-redacted. A browser takeover has only `requestId` and `requiresOpenBot: true`.
+secret-redacted. A browser takeover has only `requestId` and `requiresCodeBot: true`.
 A secret question, or a question whose IDs or choice labels need redaction, has
-`requiresOpenBot: true` and an empty `questions` array.
-Direct the person to the agent in OpenBot for these requests.
+`requiresCodeBot: true` and an empty `questions` array.
+Direct the person to the agent in CodeBot for these requests.
 
 Request IDs are opaque. Keep them unchanged. They identify one pending request and expire when
 it ends, even if the provider reuses its own ID. They do not survive a host restart.
@@ -258,7 +258,7 @@ requests return `409`; refresh the pending list instead of retrying the old resp
 A script is not the server owner, because an agent can run one. It cannot press a card button that
 only the owner or an admin can press (a danger button or a button with confirm), or accept an
 approval that only the owner can give. These answers return `403`; ask the person to answer in
-OpenBot.
+CodeBot.
 
 All request bodies have a 32 KiB limit. Messages and routine runs share a limit of accepted
 requests per agent per hour, including message retries. The limit is 30 by default; change it in
@@ -270,8 +270,8 @@ retrying a run can start it twice.
 
 ```powershell
 Invoke-RestMethod -Method Post `
-  -Uri ((Get-Content -Raw "$env:APPDATA\OpenBot\automation\url").Trim() + '/v1/agents/<agentId>/routines/<routineId>/run') `
-  -Headers @{ Authorization = 'Bearer ' + (Get-Content -Raw "$env:APPDATA\OpenBot\automation\token").Trim() } `
+  -Uri ((Get-Content -Raw "$env:APPDATA\CodeBot\automation\url").Trim() + '/v1/agents/<agentId>/routines/<routineId>/run') `
+  -Headers @{ Authorization = 'Bearer ' + (Get-Content -Raw "$env:APPDATA\CodeBot\automation\token").Trim() } `
   -ContentType 'application/json' -Body '{"payload":"long-job ended"}'
 ```
 
@@ -279,13 +279,13 @@ Invoke-RestMethod -Method Post `
 
 - The listener binds only `127.0.0.1`. Other computers cannot reach it.
 - A request with an `Origin` header, or with a `Host` other than `127.0.0.1:<port>`, gets 403 before
-  OpenBot reads the token. A web page cannot use it through DNS rebinding.
-- The token is a secret: OpenBot redacts it from logs and never puts it in a prompt. The agent gets
+  CodeBot reads the token. A web page cannot use it through DNS rebinding.
+- The token is a secret: CodeBot redacts it from logs and never puts it in a prompt. The agent gets
   only the file paths.
 - Do not put the token in a command's arguments, for example with `-H "Authorization: Bearer
   $(cat token)"`. On Linux, other users can read the arguments of a running process. Use
   `-H @headers`.
-- OpenBot logs the agent and the routine of each run, never the payload.
+- CodeBot logs the agent and the routine of each run, never the payload.
 - A process that runs as the same OS user can read the token. Turn the setting on only for agents
   that you want such processes to message and control, including approval decisions, the
   agent's model and provider account, and a new chat. A script cannot change the agent's permissions or turn Local

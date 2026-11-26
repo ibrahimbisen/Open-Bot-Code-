@@ -48,17 +48,17 @@ async function build(): Promise<void> {
     await command("/usr/libexec/PlistBuddy", [
       "-c",
       "Print CFBundleShortVersionString",
-      "dist/mac-arm64/OpenBot.app/Contents/Info.plist",
+      "dist/mac-arm64/CodeBot.app/Contents/Info.plist",
     ])
   ).trim();
-  if (appVersion !== version) throw new Error("OpenBot.app and Host package versions differ.");
-  const temp = await mkdtemp(join(tmpdir(), "openbot-host-build-"));
+  if (appVersion !== version) throw new Error("CodeBot.app and Host package versions differ.");
+  const temp = await mkdtemp(join(tmpdir(), "codebot-host-build-"));
   const payload = join(temp, "payload");
   const installerScripts = join(temp, "scripts");
-  const destination = resolve(`dist/OpenBot-Host-${version}-arm64.pkg`);
+  const destination = resolve(`dist/CodeBot-Host-${version}-arm64.pkg`);
   try {
     await mkdir(join(payload, HOST_MANAGER_DIRECTORY), { recursive: true });
-    for (const name of ["host-manager", "openbot-host"]) {
+    for (const name of ["host-manager", "codebot-host"]) {
       await command("bun", [
         "build",
         `scripts/${name}.ts`,
@@ -92,7 +92,7 @@ async function build(): Promise<void> {
         "--options",
         "runtime",
         "--identifier",
-        `app.openbot.host.${name}`,
+        `app.codebot.host.${name}`,
         ...(name === "create-tenants" ? [] : ["--entitlements", "build/macos/host-updates/entitlements.plist"]),
         binary,
       ]);
@@ -106,10 +106,10 @@ async function build(): Promise<void> {
       ]);
     }
     for (const [source, target] of [
-      ["openbot-host", "/usr/local/bin/openbot-host"],
-      ["openbot-relaunch.sh", `${HOST_MANAGER_DIRECTORY}/openbot-relaunch.sh`],
-      ["app.openbot.host-manager.plist", "/Library/LaunchDaemons/app.openbot.host-manager.plist"],
-      ["app.openbot.desktop.relaunch.plist", "/Library/LaunchAgents/app.openbot.desktop.relaunch.plist"],
+      ["codebot-host", "/usr/local/bin/codebot-host"],
+      ["codebot-relaunch.sh", `${HOST_MANAGER_DIRECTORY}/codebot-relaunch.sh`],
+      ["app.codebot.host-manager.plist", "/Library/LaunchDaemons/app.codebot.host-manager.plist"],
+      ["app.codebot.desktop.relaunch.plist", "/Library/LaunchAgents/app.codebot.desktop.relaunch.plist"],
     ] as const) {
       await mkdir(dirname(join(payload, target)), { recursive: true });
       await copyFile(`build/macos/host-updates/${source}`, join(payload, target));

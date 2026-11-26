@@ -2,13 +2,13 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { developmentUserDataName, readDevelopmentInstanceId } from "../src/main/development-profile";
 import { type AutomationSession, assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { type DevInstanceRecord, readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/spreadsheet-preview-e2e");
+const OUT = resolve(ROOT, ".codebot-build/spreadsheet-preview-e2e");
 const SOURCE = resolve(ROOT, "packages/contracts/src/spreadsheet-workbook.ts");
 const phase = process.argv.find((arg) => arg.startsWith("--phase="))?.slice("--phase=".length);
 if (phase !== "before" && phase !== "after") throw new Error("Pass --phase=before or --phase=after.");
@@ -137,7 +137,7 @@ try {
     pid: instance.pid,
   };
   stage = "Connect to the registered app";
-  session = await connectToDevApp(instance.remoteDebuggingPort, createOpenBotLogger("spreadsheet-preview-e2e"), {
+  session = await connectToDevApp(instance.remoteDebuggingPort, createCodeBotLogger("spreadsheet-preview-e2e"), {
     expectedRendererPort: instance.rendererPort,
     ownerPid: instance.pid,
   });

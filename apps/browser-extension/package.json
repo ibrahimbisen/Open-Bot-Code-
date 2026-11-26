@@ -1,5 +1,5 @@
 {
-  "name": "@openbot/browser-extension",
+  "name": "@codebot/browser-extension",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@fontsource-variable/inter": "catalog:",
-    "@openbot/brand": "workspace:*",
-    "@openbot/contracts": "workspace:*",
-    "@openbot/i18n": "workspace:*",
-    "@openbot/telemetry": "workspace:*",
-    "@openbot/team-client": "workspace:*",
-    "@openbot/ui": "workspace:*",
+    "@codebot/brand": "workspace:*",
+    "@codebot/contracts": "workspace:*",
+    "@codebot/i18n": "workspace:*",
+    "@codebot/telemetry": "workspace:*",
+    "@codebot/team-client": "workspace:*",
+    "@codebot/ui": "workspace:*",
     "@solidjs/signals": "catalog:",
     "@solidjs/web": "catalog:",
     "solid-js": "2.0.3"

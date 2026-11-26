@@ -1,5 +1,5 @@
-import type { BrowserTakeoverRequest } from "@openbot/contracts/ipc";
-import type { BrowserPermissionRequestState } from "@openbot/contracts/team-protocol/browser-permissions-v1";
+import type { BrowserTakeoverRequest } from "@codebot/contracts/ipc";
+import type { BrowserPermissionRequestState } from "@codebot/contracts/team-protocol/browser-permissions-v1";
 import { useCallback, useMemo, useSyncExternalStore } from "react";
 import { agentBrowserTab, agentBrowserTabs, type MobileBrowserTabs } from "@/features/browser/model/browser-tabs";
 import {

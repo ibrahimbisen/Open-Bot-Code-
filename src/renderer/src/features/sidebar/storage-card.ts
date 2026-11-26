@@ -1,7 +1,7 @@
-import { hostedPlanDisk } from "@openbot/contracts/hosted-servers";
-import type { ServerSummary, StorageDisk } from "@openbot/contracts/ipc";
-import { STORAGE_DISK_CAPABILITY } from "@openbot/contracts/team-protocol/storage-disk-v1";
-import type { SidebarStorageLevel } from "@openbot/ui/features/sidebar/SidebarStorageCard";
+import { hostedPlanDisk } from "@codebot/contracts/hosted-servers";
+import type { ServerSummary, StorageDisk } from "@codebot/contracts/ipc";
+import { STORAGE_DISK_CAPABILITY } from "@codebot/contracts/team-protocol/storage-disk-v1";
+import type { SidebarStorageLevel } from "@codebot/ui/features/sidebar/SidebarStorageCard";
 import { createMemo, createSignal, untrack } from "solid-js";
 import { createUsageRefreshPoll } from "../account/usage-refresh-poll";
 import { canManageStorage, hostedPlanStorageGb } from "../files/storage-usage";
@@ -10,7 +10,7 @@ import { type SidebarCardsPort, sidebarPort } from "./sidebar-port";
 
 const GB = 1024 ** 3;
 
-const DISMISSED_KEY_PREFIX = "openbot:storage-card-dismissed:";
+const DISMISSED_KEY_PREFIX = "codebot:storage-card-dismissed:";
 
 function storageLevel(disk: StorageDisk, storageGb: number | null): SidebarStorageLevel | null {
   const { freeBytes, totalBytes } = storageGb === null ? disk : hostedPlanDisk(disk, storageGb);
@@ -36,7 +36,7 @@ function writeDismissed(serverId: string, dismissed: boolean): void {
   } catch {}
 }
 
-const UPGRADE_OFFERED_KEY_PREFIX = "openbot:server-upgrade-offered:";
+const UPGRADE_OFFERED_KEY_PREFIX = "codebot:server-upgrade-offered:";
 
 export function readUpgradeOffered(serverId: string): SidebarStorageLevel | null {
   try {

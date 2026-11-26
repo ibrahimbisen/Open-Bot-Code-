@@ -1,7 +1,8 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentWait } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentWait } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import type { CodeBotDatabase } from "../codebot-database";
 import {
   databaseRow,
   databaseRows,
@@ -9,14 +10,13 @@ import {
   requiredNumberColumn,
   requiredStringColumn,
 } from "../database/database-rows";
-import type { OpenBotDatabase } from "../openbot-database";
 
 export class AgentWaitError extends Error {}
 
 export class AgentWaitLimitError extends AgentWaitError {}
 
 export interface AgentWaitStoreOptions {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   createId?: () => string;
   now?: () => Date;
 }
@@ -30,7 +30,7 @@ export interface OpenAgentWaitInput {
 }
 
 export class AgentWaitStore {
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
   readonly #createId: () => string;
   readonly #now: () => Date;
 

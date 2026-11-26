@@ -1,6 +1,6 @@
-import { isAgentProvider } from "@openbot/contracts/agent-providers";
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { isAgentProvider } from "@codebot/contracts/agent-providers";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentEvent,
   type AgentReasoningEffort,
@@ -57,10 +57,10 @@ import {
   workflowMediaKind,
   workflowMediaModel,
   workflowMediaSpecs,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   Cause,
   Context,
@@ -196,7 +196,7 @@ import {
   usedMediaSettings,
 } from "./workflow-walk";
 
-const logger = createOpenBotLogger("workflows");
+const logger = createCodeBotLogger("workflows");
 
 const GITHUB_CHAIN_RUNS = 3;
 const GITHUB_CHAIN_WINDOW_MS = 10 * 60_000;
@@ -205,7 +205,7 @@ const CREDIT_MEDIA_AT_ONCE = 4;
 const SUBSCRIPTION_MEDIA_AT_ONCE = 2;
 
 const paysWithCredits = (provider: WorkflowMediaProvider) =>
-  provider === "sunra" || provider === "higgsfield" || provider === "openbot";
+  provider === "sunra" || provider === "higgsfield" || provider === "codebot";
 
 class WorkflowFailed extends Schema.TaggedError<WorkflowFailed>()("WorkflowFailed", {
   cause: Schema.Defect(),
@@ -442,7 +442,7 @@ interface WorkflowsShape {
   working(): boolean;
 }
 
-class Workflows extends Context.Service<Workflows, WorkflowsShape>()("openbot/backend/Workflows") {
+class Workflows extends Context.Service<Workflows, WorkflowsShape>()("codebot/backend/Workflows") {
   static layer(dependencies: WorkflowsDependencies) {
     return Layer.effect(
       Workflows,
@@ -754,7 +754,7 @@ class Workflows extends Context.Service<Workflows, WorkflowsShape>()("openbot/ba
               ? (yield* mediaCatalog(service)).models.flatMap((entry) => workflowCatalogMediaModel(entry) ?? [])
               : [];
             const model = workflowMediaModel(node.fields, live);
-            if (resumed && model?.provider !== "openbot") {
+            if (resumed && model?.provider !== "codebot") {
               settle(step, { status: "failed", error: sourceText("error.workflow.interrupted") });
               return yield* requestSweep();
             }
@@ -763,7 +763,7 @@ class Workflows extends Context.Service<Workflows, WorkflowsShape>()("openbot/ba
               runs.recordUsedSettings(step.id, usedMediaSettings(kind, model, specs));
             const recorded = runs.step(step.id) ?? step;
             const earlier =
-              model?.provider === "openbot"
+              model?.provider === "codebot"
                 ? earlierJobIds(recorded, runs.earlierAttempts(recorded, EARLIER_JOB_LOOKUPS))
                 : [];
             const result = empty
@@ -775,7 +775,7 @@ class Workflows extends Context.Service<Workflows, WorkflowsShape>()("openbot/ba
                   : yield* (paysWithCredits(model.provider) ? creditMedia : subscriptionMedia)
                       .withPermit(
                         Effect.suspend(() => {
-                          if (model.provider === "openbot") paidMedia.add(step.id);
+                          if (model.provider === "codebot") paidMedia.add(step.id);
                           return generateMedia({
                             jobId: step.id,
                             earlierJobIds: earlier,

@@ -1,10 +1,10 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Context, Effect, Layer, Schema } from "effect";
 import { hexToBytes, importHmacSha256Key } from "./crypto";
 
 const BOAT_API_URL = "https://boat.dev/api/v1";
 const REQUEST_TIMEOUT_MS = 15_000;
-const HOSTED_SERVER_SETUP_SCRIPT = "exec /opt/OpenBot/hosted/openbot-hosted-env\n";
+const HOSTED_SERVER_SETUP_SCRIPT = "exec /opt/CodeBot/hosted/codebot-hosted-env\n";
 
 export type BoatSandboxType = "small" | "default" | "large";
 
@@ -51,7 +51,7 @@ class BoatTransport extends Context.Service<
     apiKey: string;
     baseUrl: string;
   }
->()("@openbot/auth-api/BoatTransport") {}
+>()("@codebot/auth-api/BoatTransport") {}
 
 const boatRequest = Effect.fn("BoatClient.request")(function* (
   method: string,

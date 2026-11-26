@@ -3,7 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { chromium, type Page } from "playwright-core";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/side-panel-panes-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/side-panel-panes-e2e");
 const STORY = "app--playground";
 const LISTED = ["Browser", "Files", "Threads", "Agent settings"];
 const WAIT_MS = 15_000;
@@ -25,7 +25,7 @@ const report: { passed: boolean; checks: typeof checks; errors: string[]; error?
   errors: [],
 };
 
-const PAGE = "OpenBot documentation";
+const PAGE = "CodeBot documentation";
 const PANE_NAMES = ["Browser", "Files", "Threads", "Agent settings", "Side question", "Page"];
 const PAGE_TABS = ".conversation-panel > .side-panel-header .side-panel-page-tab";
 const MAIN_HEADER = ".conversation-panel > .side-panel-header";
@@ -83,7 +83,7 @@ async function moveSelected(page: Page, header: string, action: string): Promise
 
 async function recordPageVisibility(page: Page): Promise<void> {
   await page.evaluate(() => {
-    const browser = window.openbot.browser;
+    const browser = window.codebot.browser;
     const setVisible = browser.setVisible.bind(browser);
     document.documentElement.dataset.e2ePageVisibility = "";
     browser.setVisible = (request) => {
@@ -342,7 +342,7 @@ async function splitAreaChange(page: Page, before: number): Promise<number> {
 }
 
 function savedSplitLayout(page: Page): Promise<{ areas?: Record<string, number>; lower?: number | null }> {
-  return page.evaluate(() => JSON.parse(window.localStorage.getItem("openbot:side-split-layout") ?? "{}"));
+  return page.evaluate(() => JSON.parse(window.localStorage.getItem("codebot:side-split-layout") ?? "{}"));
 }
 
 async function dragHandle(page: Page, name: string, distance: number): Promise<void> {

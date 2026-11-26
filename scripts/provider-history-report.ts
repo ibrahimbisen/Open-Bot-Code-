@@ -2,7 +2,7 @@ import { writeFileSync } from "node:fs";
 import { mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { CONVERSATION_SNAPSHOT_MESSAGE_LIMIT, type ConversationSnapshot } from "@openbot/contracts/ipc";
+import { CONVERSATION_SNAPSHOT_MESSAGE_LIMIT, type ConversationSnapshot } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import {
   CONVERSATION_CACHE_BYTES_LIMIT,
@@ -10,8 +10,8 @@ import {
   ConversationRuntime,
 } from "../src/backend/agent/conversation-runtime";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { isRecord, type ThreadItem } from "../src/backend/protocol";
 import {
   PROVIDER_HISTORY_PAGE_SIZE,
@@ -86,9 +86,9 @@ interface Options {
 }
 
 export async function runProviderHistoryReport(options: Options): Promise<Report> {
-  const databaseRoot = await mkdtemp(join(tmpdir(), "openbot-provider-history-report-"));
-  const homeRoot = await mkdtemp(join(tmpdir(), "openbot-provider-history-report-home-"));
-  const database = new OpenBotDatabase(databaseRoot);
+  const databaseRoot = await mkdtemp(join(tmpdir(), "codebot-provider-history-report-"));
+  const homeRoot = await mkdtemp(join(tmpdir(), "codebot-provider-history-report-home-"));
+  const database = new CodeBotDatabase(databaseRoot);
   const agentStore = new AgentStore(databaseRoot, homeRoot, database);
   const sessionId = "provider-history-report-session";
   const agentId = "provider-history-report-agent";
@@ -267,7 +267,7 @@ function reportItemText(bytes: number, seed: number): string {
 }
 
 function scanStagedPages(
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   sessionId: string,
   turnCount: number,
 ): {
@@ -299,7 +299,7 @@ function scanStagedPages(
   return { pagesRead, maxPageItems, scannedItemCount };
 }
 
-function rowCount(database: OpenBotDatabase, table: string, column: string, value: string): number {
+function rowCount(database: CodeBotDatabase, table: string, column: string, value: string): number {
   const allowed = new Set(["provider_history_turns", "provider_history_staging", "projection_thread_messages"]);
   if (!allowed.has(table) || (column !== "session_id" && column !== "thread_id")) {
     throw new Error("Provider history report requested an invalid count query.");
@@ -310,7 +310,7 @@ function rowCount(database: OpenBotDatabase, table: string, column: string, valu
   return row.count;
 }
 
-function stagedStorageBytes(database: OpenBotDatabase, sessionId: string): number {
+function stagedStorageBytes(database: CodeBotDatabase, sessionId: string): number {
   const row = database.connection
     .prepare("SELECT COALESCE(SUM(length(item_json)), 0) AS bytes FROM provider_history_staging WHERE session_id = ?")
     .get(sessionId);
@@ -330,7 +330,7 @@ function createCacheRuntime(agentStore: AgentStore): ConversationRuntime {
 
 function setLatestPersistedCache(
   runtime: ConversationRuntime,
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   agentId: string,
   threadId: string,
 ): CacheMeasurement {
@@ -376,7 +376,7 @@ function byteLength(value: string): number {
 
 function parseOptions(argv: readonly string[]): Options {
   let totalBytes = DEFAULT_TOTAL_BYTES;
-  let outputPath = resolve(process.cwd(), ".openbot-build", REPORT_NAME);
+  let outputPath = resolve(process.cwd(), ".codebot-build", REPORT_NAME);
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === "--total-bytes") {

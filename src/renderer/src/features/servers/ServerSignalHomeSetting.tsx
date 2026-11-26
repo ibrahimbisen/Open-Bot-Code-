@@ -1,5 +1,5 @@
-import type { HostSignalHome, HostSignalHomeSettings, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import type { CodeBotDesktopApi, HostSignalHome, HostSignalHomeSettings } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Item,
   ItemActions,
@@ -13,11 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
   SettingsSection,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 
-export type HostSignalHomeCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getSignalHome" | "setSignalHome">;
+export type HostSignalHomeCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getSignalHome" | "setSignalHome">;
 
 export interface ServerSignalHomeOptions {
   calls?: HostSignalHomeCalls;
@@ -44,7 +44,7 @@ export function ServerSignalHomeSetting(
   },
 ) {
   const { t, errorMessage, format } = useText();
-  const calls = (): HostSignalHomeCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostSignalHomeCalls => props.calls ?? window.codebot.hostAdmin;
   const [settings, setSettings] = createSignal<HostSignalHomeSettings | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);
   const [changed, setChanged] = createSignal(false);

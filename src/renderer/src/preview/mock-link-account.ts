@@ -1,4 +1,4 @@
-import { DISCONNECTED_LINK_ACCOUNT, type LinkAccountDesktopApi, type LinkAccountStatus } from "@openbot/contracts/ipc";
+import { DISCONNECTED_LINK_ACCOUNT, type LinkAccountDesktopApi, type LinkAccountStatus } from "@codebot/contracts/ipc";
 
 const MOCK_SIGN_IN_MS = 4_000;
 

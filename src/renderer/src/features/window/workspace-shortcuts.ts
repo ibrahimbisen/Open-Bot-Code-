@@ -1,4 +1,4 @@
-import type { ShortcutCommand } from "@openbot/ui/features/settings/keyboard-shortcuts";
+import type { ShortcutCommand } from "@codebot/ui/features/settings/keyboard-shortcuts";
 import { onSettled } from "solid-js";
 import { matchesShortcut } from "../../keyboard-shortcut-preference";
 

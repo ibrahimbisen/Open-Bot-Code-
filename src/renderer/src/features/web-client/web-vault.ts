@@ -3,16 +3,16 @@ import {
   decodeHostVaultSecret,
   decodeHostVaultState,
   type VaultSaveInput,
-} from "@openbot/contracts/ipc";
-import { VAULT_IMPORT_CSV_LIMIT } from "@openbot/contracts/team-protocol/vault-import-v1";
-import { VAULT_ROUTES } from "@openbot/contracts/team-protocol/vault-v1";
-import { VAULT_V2_ROUTES } from "@openbot/contracts/team-protocol/vault-v2";
-import { VAULT_V3_ROUTES } from "@openbot/contracts/team-protocol/vault-v3";
-import { VAULT_V4_ROUTES } from "@openbot/contracts/team-protocol/vault-v4";
-import { runTeamEffect } from "@openbot/team-client";
-import { importHostVaultCsv } from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { VAULT_IMPORT_CSV_LIMIT } from "@codebot/contracts/team-protocol/vault-import-v1";
+import { VAULT_ROUTES } from "@codebot/contracts/team-protocol/vault-v1";
+import { VAULT_V2_ROUTES } from "@codebot/contracts/team-protocol/vault-v2";
+import { VAULT_V3_ROUTES } from "@codebot/contracts/team-protocol/vault-v3";
+import { VAULT_V4_ROUTES } from "@codebot/contracts/team-protocol/vault-v4";
+import { runTeamEffect } from "@codebot/team-client";
+import { importHostVaultCsv } from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 import { Effect } from "effect";
 import { remoteVaultCalls, type VaultCalls } from "../vault/vault-port";
 import { chooseFiles } from "./web-channels-runtime";

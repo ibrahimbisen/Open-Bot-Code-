@@ -1,5 +1,5 @@
-import { browserAddressPasteSupported } from "@openbot/contracts/agent-providers";
-import { type AgentProviderId, agentProviderDescriptor, type ServerSummary } from "@openbot/contracts/ipc";
+import { browserAddressPasteSupported } from "@codebot/contracts/agent-providers";
+import { type AgentProviderId, agentProviderDescriptor, type ServerSummary } from "@codebot/contracts/ipc";
 import {
   hostSignInProviders,
   localCodeSignInProviders,

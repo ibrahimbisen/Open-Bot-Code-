@@ -2,12 +2,12 @@ import type { ChildProcess } from "node:child_process";
 import { mkdirSync, mkdtempSync, statfsSync } from "node:fs";
 import { readdir, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Schema } from "effect";
 import { causeHelpers } from "./effect-boundary";
 
-const logger = createOpenBotLogger("provider-temp");
+const logger = createCodeBotLogger("provider-temp");
 
 const PROVIDER_TEMP_FREE_BYTES = 1024 ** 3;
 

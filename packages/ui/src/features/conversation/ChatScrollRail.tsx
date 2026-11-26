@@ -1,7 +1,7 @@
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import { Button } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import { Button } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import { Portal } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, createStore, For, onSettled, Show, untrack } from "solid-js";
 import type { DayMarkerOptions } from "./chat-day-markers";

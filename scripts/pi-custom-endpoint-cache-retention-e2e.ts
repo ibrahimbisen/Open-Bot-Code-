@@ -3,15 +3,15 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { PromptCacheTtl } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import type { PromptCacheTtl } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import type { AgentClient } from "../src/backend/agent-client";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-custom-endpoint-cache-retention-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-custom-endpoint-cache-retention-e2e");
 const PI =
-  process.env.OPENBOT_REAL_PI_PATH ?? join(homedir(), ".config/OpenBot/provider-runtimes/pi/linux-x64/1.6.0/bin/pi");
+  process.env.CODEBOT_REAL_PI_PATH ?? join(homedir(), ".config/CodeBot/provider-runtimes/pi/linux-x64/1.6.0/bin/pi");
 const MODEL = "lab-model";
 
 interface CaseReport {
@@ -29,7 +29,7 @@ const report: { pi: string; passed: boolean; cases: CaseReport[]; failures: stri
   cases: [],
   failures: [],
 };
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-endpoint-cache-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-endpoint-cache-"));
 const clients: AgentClient[] = [];
 const bodies: DynamicRecord[] = [];
 
@@ -124,7 +124,7 @@ async function runCase(ttl: PromptCacheTtl, baseUrl: string): Promise<void> {
 }
 
 try {
-  if (!existsSync(PI)) throw new Error(`No Pi binary at ${PI}. Set OPENBOT_REAL_PI_PATH.`);
+  if (!existsSync(PI)) throw new Error(`No Pi binary at ${PI}. Set CODEBOT_REAL_PI_PATH.`);
   await new Promise<void>((done) => server.listen(0, "127.0.0.1", done));
   const address = server.address();
   if (!address || typeof address === "string") throw new Error("The test endpoint has no port.");

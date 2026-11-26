@@ -1,4 +1,4 @@
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 
 const SWEEP_TYPE = "theme-sweep";
 const SWEEP_MS = 1200;
@@ -411,7 +411,7 @@ export function sweepTheme(apply: () => void): void {
   let frame = 0;
   let stopped = false;
   let transition: ViewTransition | undefined;
-  const before = root.dataset.openbotColorScheme;
+  const before = root.dataset.codebotColorScheme;
   let down = false;
   const show = (radius: number) => {
     for (const [name, value] of Object.entries(sweepProperties(radius, down))) root.style.setProperty(name, value);
@@ -435,7 +435,7 @@ export function sweepTheme(apply: () => void): void {
     update: () => {
       apply();
       if (stopped) return;
-      down = before === "dark" && root.dataset.openbotColorScheme === "light";
+      down = before === "dark" && root.dataset.codebotColorScheme === "light";
       show(radiusAt(0));
       band.setDown(down);
       ripple.setDown(down);

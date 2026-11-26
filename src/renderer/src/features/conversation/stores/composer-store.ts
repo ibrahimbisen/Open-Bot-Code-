@@ -1,5 +1,5 @@
-import { attachmentReferenceIds } from "@openbot/contracts/attachment-references";
-import { appendVoiceTranscript } from "@openbot/ui/voice-recording";
+import { attachmentReferenceIds } from "@codebot/contracts/attachment-references";
+import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
 import { createMemo } from "solid-js";
 import { EMPTY_DRAFT, rowAttachments, type StoredQueueEdit } from "../composer-draft";
 import { composerDraftKey } from "../conversation-keys";

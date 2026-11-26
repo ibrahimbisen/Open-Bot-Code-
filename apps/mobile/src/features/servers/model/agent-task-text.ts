@@ -1,5 +1,5 @@
-import type { AgentTask, AgentTaskHold, AgentTaskOutcome } from "@openbot/contracts/ipc";
-import type { MobileTextKey, MobileTranslate } from "@openbot/i18n/mobile";
+import type { AgentTask, AgentTaskHold, AgentTaskOutcome } from "@codebot/contracts/ipc";
+import type { MobileTextKey, MobileTranslate } from "@codebot/i18n/mobile";
 
 const OUTCOME_TEXT = {
   completed: "mobile.server.threads.state.completed",

@@ -31,9 +31,9 @@ export function bloubGradient(light: string, body: string): string {
 }
 
 export function useBloubColors() {
-  const logo = String(useCSSVariable("--openbot-logo-production") ?? "#d6adf2");
-  const canvas = String(useCSSVariable("--openbot-bg-native-canvas") ?? "#141414");
-  const eye = String(useCSSVariable("--openbot-logo-eye") ?? "#040007");
+  const logo = String(useCSSVariable("--codebot-logo-production") ?? "#d6adf2");
+  const canvas = String(useCSSVariable("--codebot-bg-native-canvas") ?? "#141414");
+  const eye = String(useCSSVariable("--codebot-logo-eye") ?? "#040007");
   const dark = useUniwind().theme === "dark";
   const dimBody = mix(logo, canvas, DARK_BODY_SHARE);
   return {

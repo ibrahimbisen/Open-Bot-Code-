@@ -1,4 +1,4 @@
-import type { AgentEvent, RoutineCalendar, RoutineCalendarInput, TeamRealtimeEvent } from "@openbot/contracts/ipc";
+import type { AgentEvent, RoutineCalendar, RoutineCalendarInput, TeamRealtimeEvent } from "@codebot/contracts/ipc";
 
 export interface ScheduleSource {
   calendar(input: RoutineCalendarInput, serverId: string): Promise<RoutineCalendar>;
@@ -16,12 +16,12 @@ export function changesSchedule(event: AgentEvent | TeamRealtimeEvent): boolean 
 
 export function desktopScheduleSource(): ScheduleSource {
   return {
-    calendar: (input, serverId) => window.openbot.agent.routineCalendar(input, serverId),
+    calendar: (input, serverId) => window.codebot.agent.routineCalendar(input, serverId),
     onStale(serverId, stale) {
-      const unsubscribe = window.openbot.agent.onScopedEvent((scoped) => {
+      const unsubscribe = window.codebot.agent.onScopedEvent((scoped) => {
         if (scoped.serverId === serverId && changesSchedule(scoped.event)) stale();
       });
-      const reconnect = window.openbot.servers.onEvent((servers) => {
+      const reconnect = window.codebot.servers.onEvent((servers) => {
         if (servers.some((server) => server.id === serverId && server.state === "online")) stale();
       });
       return () => {

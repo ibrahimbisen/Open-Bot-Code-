@@ -2,18 +2,18 @@ import { execFile } from "node:child_process";
 import { chmod, lstat, mkdir, readdir, readlink, rename, rm } from "node:fs/promises";
 import { dirname, join, resolve, sep } from "node:path";
 import { promisify } from "node:util";
-import { isNewerRelease as isNewerSharedRelease } from "@openbot/contracts/release-version";
+import { isNewerRelease as isNewerSharedRelease } from "@codebot/contracts/release-version";
 import { z } from "zod";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { HostManagerOperations } from "../src/main/host-manager";
 import { HOST_MANAGER_DIRECTORY, verifyHostDirectory } from "../src/main/host-update-files";
 
 const exec = promisify(execFile);
-export const SHARED_APP = "/Applications/OpenBot.app";
-const STAGING = "/Applications/.openbot-host-stage";
+export const SHARED_APP = "/Applications/CodeBot.app";
+const STAGING = "/Applications/.codebot-host-stage";
 const PRIVATE = join(HOST_MANAGER_DIRECTORY, "private");
 const SIGNING_REQUIREMENT =
-  '=anchor apple generic and identifier "app.openbot.desktop" and certificate leaf[subject.OU] = "ZTRDTUL87R"';
+  '=anchor apple generic and identifier "app.codebot.desktop" and certificate leaf[subject.OU] = "ZTRDTUL87R"';
 const releaseSchema = z.object({
   tag_name: z.string().regex(/^v?\d+\.\d+\.\d+$/),
   draft: z.literal(false),
@@ -131,19 +131,19 @@ export async function bundleProcesses(): Promise<Array<{ uid: number; pid: numbe
       processes.push({
         pid: Number(pid),
         uid: Number(uid),
-        main: executable === `${SHARED_APP}/Contents/MacOS/OpenBot`,
+        main: executable === `${SHARED_APP}/Contents/MacOS/CodeBot`,
       });
   }
   return processes;
 }
 
-export async function runningOpenBotProcesses(): Promise<Array<{ uid: number; pid: number }>> {
+export async function runningCodeBotProcesses(): Promise<Array<{ uid: number; pid: number }>> {
   return (await bundleProcesses()).filter((process) => process.main).map(({ uid, pid }) => ({ uid, pid }));
 }
 
 export function macHostOperations(): HostManagerOperations {
   return {
-    runningTenants: runningOpenBotProcesses,
+    runningTenants: runningCodeBotProcesses,
     applicationInUse: async () => (await bundleProcesses()).length !== 0,
     installedVersion: async () => {
       await verifyBundleTree(SHARED_APP, true);
@@ -167,7 +167,7 @@ export function macHostOperations(): HostManagerOperations {
       await ensureHostDirectory(STAGING, 0o700);
       const dmg = join(PRIVATE, "release.dmg");
       await rm(dmg, { force: true });
-      const url = `https://github.com/nightly-labs/openbot/releases/download/${release.tag_name}/OpenBot-${version}-arm64.dmg`;
+      const url = `https://github.com/nightly-labs/openbot/releases/download/${release.tag_name}/CodeBot-${version}-arm64.dmg`;
       await command(
         "/usr/bin/curl",
         [
@@ -191,11 +191,11 @@ export function macHostOperations(): HostManagerOperations {
       await ensureHostDirectory(mount, 0o700);
       await command("/usr/bin/hdiutil", ["attach", dmg, "-readonly", "-nobrowse", "-noautoopen", "-mountpoint", mount]);
       try {
-        const source = join(mount, "OpenBot.app");
+        const source = join(mount, "CodeBot.app");
         await verifyBundleTree(source, false);
         await verifySignature(source);
         if ((await bundleVersion(source)) !== version) throw new Error("Downloaded version mismatch.");
-        const staged = join(STAGING, "OpenBot.app");
+        const staged = join(STAGING, "CodeBot.app");
         await rm(staged, { recursive: true, force: true });
         await command("/usr/bin/ditto", ["--noqtn", source, staged], 180_000);
         await command("/usr/sbin/chown", ["-Rh", "root:wheel", staged]);
@@ -212,11 +212,11 @@ export function macHostOperations(): HostManagerOperations {
     install: async (version) => {
       await verifySharedAppParent();
       await verifyHostPath(STAGING);
-      const staged = join(STAGING, "OpenBot.app");
+      const staged = join(STAGING, "CodeBot.app");
       await verifyBundleTree(staged, true);
       await verifySignature(staged);
       if ((await bundleVersion(staged)) !== version) throw new Error("Staged version mismatch.");
-      if ((await bundleProcesses()).length !== 0) throw new Error("OpenBot restarted during maintenance.");
+      if ((await bundleProcesses()).length !== 0) throw new Error("CodeBot restarted during maintenance.");
       const retired = join(STAGING, "retired.app");
       await rm(retired, { recursive: true, force: true });
       await rename(SHARED_APP, retired);

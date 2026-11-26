@@ -13,8 +13,8 @@ import {
   type PromptCacheTtl,
   type ProviderEnvironmentProvider,
   type ProviderModelSource,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { AcpAgentClient, type AcpHistoryPersistence } from "./acp-client";
 import {
@@ -146,7 +146,7 @@ interface ProviderCliCommand {
   readonly timeoutMs: number;
   readonly closeInput?: true;
   readonly acpLogout?: true | AcpExtensionMethod;
-  readonly pageByOpenBotOn?: readonly NodeJS.Platform[];
+  readonly pageByCodeBotOn?: readonly NodeJS.Platform[];
   readonly failureText?: (output: string) => string | null;
 }
 
@@ -209,7 +209,7 @@ const CLAUDE_CODE_SIGN_IN: ProviderCliCommand = {
 };
 const GROK_CODE_SIGN_IN: ProviderCliCommand = {
   argv: ["--no-auto-update", "login", "--device-auth"],
-  env: () => ({ GROK_OAUTH2_REFERRER: "openbot" }),
+  env: () => ({ GROK_OAUTH2_REFERRER: "codebot" }),
   timeoutMs: CLI_LOGIN_TIMEOUT_MS,
 };
 function claudeSignInFailure(output: string): string | null {
@@ -219,7 +219,7 @@ const CLAUDE_SIGN_IN: ProviderCliCommand = {
   argv: ["auth", "login", "--claudeai"],
   env: CLAUDE_COMMAND_ENV,
   timeoutMs: CLI_LOGIN_TIMEOUT_MS,
-  pageByOpenBotOn: ["win32", "darwin"],
+  pageByCodeBotOn: ["win32", "darwin"],
   failureText: claudeSignInFailure,
 };
 
@@ -304,7 +304,7 @@ function antigravitySettingsUnreadable(appDataDir: string): boolean {
   }
 }
 
-const ANTIGRAVITY_ENV = { WSL_DISTRO_NAME: "OpenBot", ...ANTIGRAVITY_UPDATE_ENV };
+const ANTIGRAVITY_ENV = { WSL_DISTRO_NAME: "CodeBot", ...ANTIGRAVITY_UPDATE_ENV };
 
 const ANTIGRAVITY_APP_DATA = "antigravity-acp";
 
@@ -480,7 +480,7 @@ function codexVariableOverrides(variables: Readonly<Record<string, string>>): st
   if (!baseUrl || !/^https?:\/\/[^/\s]+/.test(baseUrl) || /\s/.test(baseUrl)) return [];
   return [
     `model_provider=${CODEX_VARIABLE_PROVIDER}`,
-    `model_providers.${CODEX_VARIABLE_PROVIDER}.name=OpenBot`,
+    `model_providers.${CODEX_VARIABLE_PROVIDER}.name=CodeBot`,
     `model_providers.${CODEX_VARIABLE_PROVIDER}.base_url=${baseUrl}`,
     `model_providers.${CODEX_VARIABLE_PROVIDER}.wire_api=responses`,
     ...("OPENAI_API_KEY" in variables ? [`model_providers.${CODEX_VARIABLE_PROVIDER}.env_key=OPENAI_API_KEY`] : []),
@@ -733,7 +733,7 @@ export const BUILT_IN_PROVIDER_DRIVERS: readonly BuiltInProviderDriver[] = [
     catalog: { paged: true, modelFields: serviceTierFields, source: readCodexModelSource, relistWhileRunning: true },
     resolveCli: resolveCodexCli,
     createClient: (cli, requestTimeoutMs, context) => {
-      const { SSL_CERT_FILE: _openBotRoots, ...serverEnvironment } = context.serverEnvironment ?? {};
+      const { SSL_CERT_FILE: _codeBotRoots, ...serverEnvironment } = context.serverEnvironment ?? {};
       const variables = context.providerEnvironment?.("codex") ?? {};
       const overrides = codexVariableOverrides(variables);
       return new CodexAppServerClient(
@@ -795,7 +795,7 @@ export const BUILT_IN_PROVIDER_DRIVERS: readonly BuiltInProviderDriver[] = [
       kind: "cli-command",
       command: {
         argv: ["--no-auto-update", "login"],
-        env: () => ({ GROK_OAUTH2_REFERRER: "openbot" }),
+        env: () => ({ GROK_OAUTH2_REFERRER: "codebot" }),
         timeoutMs: CLI_LOGIN_TIMEOUT_MS,
       },
     },
@@ -804,7 +804,7 @@ export const BUILT_IN_PROVIDER_DRIVERS: readonly BuiltInProviderDriver[] = [
       homeVariable: "GROK_HOME",
       signIn: {
         argv: ["--no-auto-update", "login"],
-        env: () => ({ GROK_OAUTH2_REFERRER: "openbot" }),
+        env: () => ({ GROK_OAUTH2_REFERRER: "codebot" }),
         timeoutMs: CLI_LOGIN_TIMEOUT_MS,
       },
       codeSignIn: { flow: "device", command: GROK_CODE_SIGN_IN },
@@ -1522,7 +1522,7 @@ export function savedCustomAgents(context: ProviderClientContext): readonly Cust
 let customAgentDiscoveryRoot: string | undefined;
 
 function discoveryFolder(agentId: string): string {
-  customAgentDiscoveryRoot ??= mkdtempSync(join(tmpdir(), "openbot-custom-agents-"));
+  customAgentDiscoveryRoot ??= mkdtempSync(join(tmpdir(), "codebot-custom-agents-"));
   const folder = join(customAgentDiscoveryRoot, agentId);
   mkdirSync(folder, { recursive: true, mode: 0o700 });
   return folder;

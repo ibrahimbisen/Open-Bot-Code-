@@ -9,7 +9,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-model-reread-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-model-reread-e2e");
 const BEFORE = ["gemini-4-carbon", "gemini-4-argon"];
 const RELEASED = "gemini-4-neon";
 
@@ -31,7 +31,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-model-reread-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-model-reread-e2e-"));
 process.env.GEMINI_HOME = join(root, "gemini");
 const executable = join(root, "agy", "bin", "antigravity");
 const log = join(root, "agent.jsonl");

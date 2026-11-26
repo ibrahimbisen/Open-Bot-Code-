@@ -1,5 +1,5 @@
+import { AppLogo } from "@codebot/brand";
 import { ContextMenu } from "@kobalte/core/context-menu";
-import { AppLogo } from "@openbot/brand";
 import { Link, useRouter } from "@tanstack/solid-router";
 import { BRAND_ROUTE } from "../../lib/brand-page";
 import { localizedPath } from "../../lib/site-paths";
@@ -56,7 +56,7 @@ export function SiteLogoLink() {
           onKeyDown={handleKeyDown}
         >
           <AppLogo variant="production" class="landing-brand-logo" />
-          <span>OpenBot</span>
+          <span>CodeBot</span>
         </Link>
       </ContextMenu.Trigger>
       <ContextMenu.Content class="site-logo-menu" aria-label={text().logo.menu}>

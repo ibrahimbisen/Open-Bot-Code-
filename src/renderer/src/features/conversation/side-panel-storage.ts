@@ -1,12 +1,12 @@
-import { isAttachmentSummary } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isAttachmentSummary } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { createEffect, type Store } from "solid-js";
 import { readRestoreLastWorkspace } from "../../restore-workspace-preference";
 import type { RightPanelMode } from "./conversation-types";
 import { filePreviewKey, type SidePanelFile, type SidePanelState, type SidePanelsState } from "./stores/panels-store";
 
-const SIDE_PANEL_FILES_STORAGE_KEY = "openbot:side-panel-files";
-const LOCAL_ATTACHMENT_URL = /^openbot-attachment:/u;
+const SIDE_PANEL_FILES_STORAGE_KEY = "codebot:side-panel-files";
+const LOCAL_ATTACHMENT_URL = /^codebot-attachment:/u;
 
 interface StoredSidePanels {
   shown: boolean;

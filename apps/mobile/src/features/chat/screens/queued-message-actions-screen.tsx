@@ -1,4 +1,4 @@
-import type { AttachmentSummary, QueueDelivery } from "@openbot/contracts/ipc";
+import type { AttachmentSummary, QueueDelivery } from "@codebot/contracts/ipc";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { StackActions } from "expo-router/react-navigation";
 import { Typography } from "heroui-native";
@@ -34,7 +34,7 @@ export function QueuedMessageActionsScreen() {
   const { queue } = useQueuedChat(chat);
   const sheetStack = useNavigation().getParent();
   const foreground = useThemeColor("foreground");
-  const danger = String(useCSSVariable("--openbot-danger-text"));
+  const danger = String(useCSSVariable("--codebot-danger-text"));
   const held = queue?.edit?.delivery ?? null;
   const reply = queue?.replies.find((item) => item.id === deliveryId);
   const [moving, setMoving] = useState<QueueDelivery | null>(null);

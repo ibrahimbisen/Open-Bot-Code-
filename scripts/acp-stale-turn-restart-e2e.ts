@@ -4,15 +4,15 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
 import type { AgentCliInfo } from "../src/backend/cli";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-stale-turn-restart-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-stale-restart-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-stale-turn-restart-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-stale-restart-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeAgy = join(root, "antigravity", "1.5.15", "bin", "antigravity");
@@ -20,14 +20,14 @@ const HELD_MESSAGE = "Message to another Gemini agent while Gemini waits to rest
 
 process.env.HOME = home;
 process.env.GEMINI_HOME = join(home, ".gemini");
-process.env.OPENBOT_ANTIGRAVITY_PATH = fakeAgy;
+process.env.CODEBOT_ANTIGRAVITY_PATH = fakeAgy;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { NO_PROVIDER_CREDENTIALS, requireProviderDriver } = await import("../src/backend/provider-drivers");
 
 const FAKE_AGY = `#!/usr/bin/env node
@@ -174,7 +174,7 @@ const report: {
 
 await mkdir(join(root, "antigravity", "1.5.15", "bin"), { recursive: true });
 await writeFile(fakeAgy, FAKE_AGY, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

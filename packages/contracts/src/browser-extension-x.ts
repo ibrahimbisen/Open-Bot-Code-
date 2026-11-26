@@ -1,6 +1,6 @@
 import { isDynamicRecord, isString } from "./runtime-values";
 
-export const X_AGENT_LISTING_ID = "openbot-curated-agent-x-desk";
+export const X_AGENT_LISTING_ID = "codebot-curated-agent-x-desk";
 
 export const X_EXTENSION_URL: string | null = null;
 

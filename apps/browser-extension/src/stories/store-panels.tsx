@@ -1,5 +1,5 @@
-import type { ClientAgentSummary } from "@openbot/contracts/ipc";
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
+import type { ClientAgentSummary } from "@codebot/contracts/ipc";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
 import { BrowserAsks } from "../BrowserSharing";
 import { ChannelScreen } from "../ChannelScreen";
 import { ChatScreen } from "../ChatScreen";

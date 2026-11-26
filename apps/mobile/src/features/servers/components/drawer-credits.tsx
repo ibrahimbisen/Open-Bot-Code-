@@ -24,7 +24,7 @@ export function DrawerCredits({ serverId, open, onNavigate }: DrawerCreditsProps
   const { t, format } = useText();
   const credits = useCreditsState();
   const { refetch, dataUpdatedAt } = credits;
-  const fill = String(useCSSVariable("--openbot-credit-star-fill"));
+  const fill = String(useCSSVariable("--codebot-credit-star-fill"));
   useEffect(() => {
     if (open && Date.now() - dataUpdatedAt > CREDITS_FRESH_MS) void refetch({ cancelRefetch: false });
   }, [dataUpdatedAt, open, refetch]);

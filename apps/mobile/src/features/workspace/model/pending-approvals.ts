@@ -1,5 +1,5 @@
-import type { AgentApproval, AgentEvent, AgentRuntimeApproval, TeamRealtimeEvent } from "@openbot/contracts/ipc";
-import { approvalIsCut, keepWholeApprovals, reconcilePendingRequests } from "@openbot/team-client/runtime-attention";
+import type { AgentApproval, AgentEvent, AgentRuntimeApproval, TeamRealtimeEvent } from "@codebot/contracts/ipc";
+import { approvalIsCut, keepWholeApprovals, reconcilePendingRequests } from "@codebot/team-client/runtime-attention";
 
 export type PendingApproval = AgentApproval | AgentRuntimeApproval;
 

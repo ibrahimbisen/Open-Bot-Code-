@@ -1,12 +1,12 @@
-import { CONNECTOR_IDS, type ConnectorId } from "@openbot/contracts/ipc";
-import { BITWARDEN_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/bitwarden-connector-v1";
-import { CONNECTORS_CAPABILITY } from "@openbot/contracts/team-protocol/connectors-v1";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/onepassword-connector-v1";
-import { PASSWORD_MANAGERS_CAPABILITY } from "@openbot/contracts/team-protocol/password-managers-v1";
-import { WHATSAPP_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-connector-v1";
+import { CONNECTOR_IDS, type ConnectorId } from "@codebot/contracts/ipc";
+import { BITWARDEN_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/bitwarden-connector-v1";
+import { CONNECTORS_CAPABILITY } from "@codebot/contracts/team-protocol/connectors-v1";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/onepassword-connector-v1";
+import { PASSWORD_MANAGERS_CAPABILITY } from "@codebot/contracts/team-protocol/password-managers-v1";
+import { WHATSAPP_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-connector-v1";
 
-export { CONNECTOR_IDS, type ConnectorId } from "@openbot/contracts/ipc";
+export { CONNECTOR_IDS, type ConnectorId } from "@codebot/contracts/ipc";
 
 export interface ConnectorDefinition {
   server: TeamCurrentCapability | null;

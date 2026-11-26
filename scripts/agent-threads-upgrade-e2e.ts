@@ -6,9 +6,9 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { migrateOpenBotDatabase } from "../src/backend/openbot-database-schema";
+import { migrateCodeBotDatabase } from "../src/backend/codebot-database-schema";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-threads-upgrade-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-threads-upgrade-e2e");
 const THREAD_VERSION = 47;
 const TASK_COLUMNS =
   "task_id, agent_id, thread_id, origin, title, outcome, error, created_at, updated_at, closed_at, last_event_sequence";
@@ -58,7 +58,7 @@ function migrateUpTo(db: DatabaseSync, last: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${last}
     BEGIN SELECT RAISE(ABORT, 'upgrade smoke stop'); END;`);
   try {
-    assert.throws(() => migrateOpenBotDatabase(db), new RegExp(`migration to version ${last + 1} failed`));
+    assert.throws(() => migrateCodeBotDatabase(db), new RegExp(`migration to version ${last + 1} failed`));
   } finally {
     db.exec("DROP TRIGGER stop_at_version");
   }
@@ -66,7 +66,7 @@ function migrateUpTo(db: DatabaseSync, last: number): void {
 
 async function upgrade(source: string, workDirectory: string, index: number): Promise<SourceReport> {
   const report: SourceReport = { source, passed: false };
-  const copy = join(workDirectory, `openbot-${index}.db`);
+  const copy = join(workDirectory, `codebot-${index}.db`);
   const uri = existsSync(`${source}-wal`) ? source : `file:${encodeURI(source)}?immutable=1`;
   try {
     execFileSync("sqlite3", ["-readonly", uri, `.backup '${copy.replaceAll("'", "''")}'`], { stdio: "pipe" });
@@ -101,7 +101,7 @@ async function upgrade(source: string, workDirectory: string, index: number): Pr
     assert.deepEqual(tableHashes(db), before, "a failed migration 47 changed a table");
     report.rolledBack = true;
 
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     assert.equal(version(db), THREAD_VERSION);
     const names = tableNames(db);
     assert.ok(!names.includes("projection_agent_tasks"), "the task table is still there");
@@ -163,11 +163,11 @@ async function upgrade(source: string, workDirectory: string, index: number): Pr
 
 const sources = process.argv.slice(2).filter((arg) => !arg.startsWith("--"));
 if (sources.length === 0) {
-  process.stderr.write("Usage: bun scripts/agent-threads-upgrade-e2e.ts <openbot.db> [<openbot.db>...]\n");
+  process.stderr.write("Usage: bun scripts/agent-threads-upgrade-e2e.ts <codebot.db> [<codebot.db>...]\n");
   process.exit(2);
 }
 await mkdir(OUT, { recursive: true });
-const workDirectory = await mkdtemp(join(tmpdir(), "openbot-thread-upgrade-"));
+const workDirectory = await mkdtemp(join(tmpdir(), "codebot-thread-upgrade-"));
 const reports: SourceReport[] = [];
 try {
   for (const [index, source] of sources.entries()) reports.push(await upgrade(resolve(source), workDirectory, index));

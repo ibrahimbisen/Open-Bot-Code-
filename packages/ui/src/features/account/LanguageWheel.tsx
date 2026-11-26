@@ -1,8 +1,8 @@
-import { AppLogo } from "@openbot/brand";
-import type { AppVariant } from "@openbot/contracts/ipc";
-import { TRANSLATED_LOCALES, type TranslatedLocale } from "@openbot/i18n";
-import { APP_LANGUAGE_OPTIONS, type AppLanguageOption } from "@openbot/i18n/languages";
-import { ArrowRight, Button, ChevronDown, ChevronUp, IconButton, RadioGroup } from "@openbot/ui";
+import { AppLogo } from "@codebot/brand";
+import type { AppVariant } from "@codebot/contracts/ipc";
+import { TRANSLATED_LOCALES, type TranslatedLocale } from "@codebot/i18n";
+import { APP_LANGUAGE_OPTIONS, type AppLanguageOption } from "@codebot/i18n/languages";
+import { ArrowRight, Button, ChevronDown, ChevronUp, IconButton, RadioGroup } from "@codebot/ui";
 import { createSignal, createStore, For, onSettled } from "solid-js";
 import { useText } from "../../text";
 
@@ -19,7 +19,7 @@ interface WheelEntry {
   option: AppLanguageOption;
 }
 
-const PRODUCT_NAME = "OpenBot";
+const PRODUCT_NAME = "CodeBot";
 const TITLE_ID = "language-wheel-title";
 
 const WHEEL: readonly WheelEntry[] = APP_LANGUAGE_OPTIONS.flatMap((option) => {

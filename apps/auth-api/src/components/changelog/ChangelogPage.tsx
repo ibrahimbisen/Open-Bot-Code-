@@ -1,6 +1,6 @@
-import { ANDROID_PLAY_STORE_URL } from "@openbot/ui/features/mobile-app/android-play-store";
-import { IOS_APP_STORE_URL } from "@openbot/ui/features/mobile-app/ios-app-store";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { ANDROID_PLAY_STORE_URL } from "@codebot/ui/features/mobile-app/android-play-store";
+import { IOS_APP_STORE_URL } from "@codebot/ui/features/mobile-app/ios-app-store";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import { createEffect, createSignal, For, onSettled, Show, untrack } from "solid-js";
 import { landingAnalytics } from "../../lib/analytics";
 import { CHANGELOG_ROUTE, type ChangelogPlatform, type ChangelogRelease as Release } from "../../lib/changelog";
@@ -17,7 +17,7 @@ import { ChangelogRelease } from "./ChangelogRelease";
 import { ChangelogStores } from "./ChangelogStores";
 import { ChangelogSwap, createPlatformSwap } from "./ChangelogSwap";
 
-const HERO_GRADIENT_SEED = "OpenBot releases";
+const HERO_GRADIENT_SEED = "CodeBot releases";
 
 const ACTIVE_LINE = 0.3;
 
@@ -32,8 +32,8 @@ interface ReleaseMonth {
 }
 
 const PRODUCT_NAMES: Record<ChangelogPlatform, string> = {
-  desktop: "OpenBot",
-  mobile: "OpenBot Mobile",
+  desktop: "CodeBot",
+  mobile: "CodeBot Mobile",
 };
 
 function releaseMonths(releases: readonly Release[]): ReleaseMonth[] {
@@ -137,7 +137,7 @@ export function ChangelogPage(props: ChangelogPageProps) {
             <div class="changelog-hero-copy" data-enter="post-copy">
               <p class="changelog-eyebrow">Changelog</p>
               <h1 class="changelog-title" id="changelog-title">
-                What's new in OpenBot
+                What's new in CodeBot
               </h1>
               <p class="changelog-lede">
                 New providers, new ways to work as a team, and the fixes that make each release steadier. Every release

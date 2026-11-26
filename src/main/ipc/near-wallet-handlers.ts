@@ -6,7 +6,7 @@ import {
   parseNearDomainInput,
   parseNearRuleInput,
   parseNearWalletCreateInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { NearWalletService } from "../near-wallet-service";

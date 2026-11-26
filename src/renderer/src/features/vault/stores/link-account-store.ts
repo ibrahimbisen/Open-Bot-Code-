@@ -1,7 +1,7 @@
-import { DISCONNECTED_LINK_ACCOUNT, type LinkAccountDesktopApi, type LinkAccountStatus } from "@openbot/contracts/ipc";
+import { DISCONNECTED_LINK_ACCOUNT, type LinkAccountDesktopApi, type LinkAccountStatus } from "@codebot/contracts/ipc";
 import { createStore } from "solid-js";
 
-export function createLinkAccountStore(api: () => LinkAccountDesktopApi = () => window.openbot.linkAccount) {
+export function createLinkAccountStore(api: () => LinkAccountDesktopApi = () => window.codebot.linkAccount) {
   const [state, setState] = createStore<{ status: LinkAccountStatus }>({ status: { ...DISCONNECTED_LINK_ACCOUNT } });
   let request = 0;
 

@@ -1,4 +1,4 @@
-import { APP_LANGUAGES, type AppLanguage } from "@openbot/contracts/app-language";
+import { APP_LANGUAGES, type AppLanguage } from "@codebot/contracts/app-language";
 
 export interface AppLanguageOption {
   readonly id: AppLanguage;

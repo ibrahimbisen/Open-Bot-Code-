@@ -1,10 +1,10 @@
-import type { CodexLiveVoice } from "@openbot/contracts/ipc";
+import type { CodexLiveVoice } from "@codebot/contracts/ipc";
 import {
   isLiveVoiceName,
   type LiveVoiceEvent,
   type LiveVoiceSessionResponse,
   type LiveVoiceStartRequest,
-} from "@openbot/contracts/team-protocol/live-voice-v1";
+} from "@codebot/contracts/team-protocol/live-voice-v1";
 import { useEffect, useRef, useState } from "react";
 import { type SharedValue, useSharedValue, withTiming } from "react-native-reanimated";
 import type { MediaStream, MediaStreamTrack, RTCPeerConnection } from "react-native-webrtc";

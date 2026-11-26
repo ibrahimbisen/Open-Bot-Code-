@@ -1,20 +1,20 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { type OpenBotDesktopApi, SPEECH_VOICES, type SpeechVoice } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { type CodeBotDesktopApi, SPEECH_VOICES, type SpeechVoice } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/speech-voice-select-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/speech-voice-select-e2e");
 const t = translateFor("en");
 
 const instances = readDevInstanceRecords().filter(
@@ -29,7 +29,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("speech-voice-select-e2e");
+const logger = createCodeBotLogger("speech-voice-select-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -42,7 +42,7 @@ function voiceName(voice: SpeechVoice): string {
 }
 
 async function savedVoice(page: Page): Promise<SpeechVoice> {
-  return (await page.evaluate(() => window.openbot.voice.getSpeechSettings())).voice;
+  return (await page.evaluate(() => window.codebot.voice.getSpeechSettings())).voice;
 }
 
 function settingsTitle(page: Page) {
@@ -103,8 +103,8 @@ try {
   }
 } finally {
   await page.evaluate(async (voice) => {
-    const settings = await window.openbot.voice.getSpeechSettings();
-    await window.openbot.voice.setSpeechSettings({ ...settings, voice });
+    const settings = await window.codebot.voice.getSpeechSettings();
+    await window.codebot.voice.setSpeechSettings({ ...settings, voice });
   }, original);
   await session.close();
 }

@@ -1,10 +1,10 @@
-import type { UpdatePreference, UpdatePreferenceChange } from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import type { UpdatePreference, UpdatePreferenceChange } from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Semaphore } from "effect";
 import { isMissingFileError } from "../backend/file-errors";
 import { readPreferenceFile, writePreferenceFile } from "./preference-file";
 
-export const UPDATE_PREFERENCE_FILE = "openbot-update-preference-v1.json";
+export const UPDATE_PREFERENCE_FILE = "codebot-update-preference-v1.json";
 
 const DEFAULT_PREFERENCE: UpdatePreference = { autoDownload: true, allowRemoteUpdates: true, autoInstall: false };
 

@@ -3,11 +3,11 @@ export const MIGRATIONS_DIR = "src/backend/migrations";
 const FIRST_VERSION = 8;
 const UNFROZEN_FILES: ReadonlySet<string> = new Set(["registry.ts", "migration.ts"]);
 const NOT_MIGRATIONS: ReadonlySet<string> = new Set([...UNFROZEN_FILES, "runtime-values.ts"]);
-const ALLOWED_IMPORTS: ReadonlySet<string> = new Set(["@openbot/logging", "./runtime-values"]);
+const ALLOWED_IMPORTS: ReadonlySet<string> = new Set(["@codebot/logging", "./runtime-values"]);
 const TYPE_ONLY_IMPORTS: ReadonlySet<string> = new Set(["./migration"]);
 
 const MIGRATION_FILE = /^(\d{4})-([a-z0-9]+(?:-[a-z0-9]+)*)\.ts$/;
-const MIGRATION_DECLARATION = "export const migration: OpenBotMigration = {";
+const MIGRATION_DECLARATION = "export const migration: CodeBotMigration = {";
 
 export interface ReleasedMigrations {
   readonly tag: string;
@@ -71,7 +71,7 @@ export function frozenMigrationProblems(current: ReadonlyMap<string, string>, re
         (source.startsWith("./") && fileVersion(earlier) > 0 && fileVersion(earlier) < version && current.has(earlier));
       if (!allowed) {
         problems.push(
-          `${file}: imports "${source}". A frozen migration imports only node:*, @openbot/logging, ./runtime-values, earlier migrations and types from ./migration; copy other code into the file.`,
+          `${file}: imports "${source}". A frozen migration imports only node:*, @codebot/logging, ./runtime-values, earlier migrations and types from ./migration; copy other code into the file.`,
         );
       }
     }

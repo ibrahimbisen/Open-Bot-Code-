@@ -1,5 +1,5 @@
-import { isAgentProvider } from "@openbot/contracts/agent-providers";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { isAgentProvider } from "@codebot/contracts/agent-providers";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   isAgentImportKey,
   isAgentTaskLimit,
@@ -11,15 +11,15 @@ import {
   ROUTINE_LIMIT_POLICIES,
   ROUTINE_MISSED_POLICIES,
   ROUTINE_RUN_PLACES,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Result, Schema } from "effect";
 import { ServerPreferencesInFile, type TransferServerPreferences } from "./instance-transfer-server-preferences";
 import { TRANSFER_WORKFLOWS } from "./instance-transfer-workflows";
 import { isUnsafeArchivePath } from "./skill-package";
 
-export { INSTANCE_TRANSFER_MANIFEST } from "@openbot/team-client/instance-transfer-copy";
-export const INSTANCE_TRANSFER_FORMAT = "openbot-instance-transfer";
+export { INSTANCE_TRANSFER_MANIFEST } from "@codebot/team-client/instance-transfer-copy";
+export const INSTANCE_TRANSFER_FORMAT = "codebot-instance-transfer";
 export const INSTANCE_TRANSFER_VERSION = 1;
 export const SHARED_FOLDER = "shared";
 export const SERVER_FOLDER = "server";

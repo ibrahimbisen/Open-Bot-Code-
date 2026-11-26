@@ -28,7 +28,7 @@ if (args.includes("--help") || args.includes("-h")) {
 
 if (process.platform !== "darwin") throw new Error("The iOS simulator requires macOS.");
 
-delete process.env.OPENBOT_ROCKETSIM_FRAMEWORK;
+delete process.env.CODEBOT_ROCKETSIM_FRAMEWORK;
 if (useRocketSim) {
   const app =
     process.env.ROCKETSIM_APP_PATH ??
@@ -40,13 +40,13 @@ if (useRocketSim) {
     );
   }
   run("open", ["-a", app]);
-  process.env.OPENBOT_ROCKETSIM_FRAMEWORK = framework;
+  process.env.CODEBOT_ROCKETSIM_FRAMEWORK = framework;
 }
 
-process.env.OPENBOT_XCODE_DERIVED_DATA ??= join(mobileRoot, "ios/DerivedData");
+process.env.CODEBOT_XCODE_DERIVED_DATA ??= join(mobileRoot, "ios/DerivedData");
 process.env.PATH = [fileURLToPath(new URL("mobile-ios-bin", import.meta.url)), process.env.PATH].join(delimiter);
 
-process.env.OPENBOT_KEEP_METRO_CACHE = "1";
+process.env.CODEBOT_KEEP_METRO_CACHE = "1";
 
 const { mobileBuildCacheRoot }: { mobileBuildCacheRoot: (projectRoot: string) => string | undefined } = require(
   join(mobileRoot, "metro-cache.js"),
@@ -54,15 +54,15 @@ const { mobileBuildCacheRoot }: { mobileBuildCacheRoot: (projectRoot: string) =>
 const buildCacheRoot = mobileBuildCacheRoot(mobileRoot);
 if (buildCacheRoot) {
   const checkout = dirname(dirname(mobileRoot));
-  process.env.OPENBOT_XCODE_COMPILATION_CACHE = join(buildCacheRoot, "xcode");
-  process.env.OPENBOT_XCODE_PREFIX_MAPPINGS = [...new Set([checkout, realpathSync(checkout)])]
-    .map((path) => `"${path}=/^openbot"`)
+  process.env.CODEBOT_XCODE_COMPILATION_CACHE = join(buildCacheRoot, "xcode");
+  process.env.CODEBOT_XCODE_PREFIX_MAPPINGS = [...new Set([checkout, realpathSync(checkout)])]
+    .map((path) => `"${path}=/^codebot"`)
     .join(" ");
 }
 
 const podsOutput = join(mobileRoot, "ios/build/generated/autolinking/autolinking.json");
 const podfileLock = join(mobileRoot, "ios/Podfile.lock");
-const podsStamp = join(mobileRoot, "ios/Pods/.openbot-installed");
+const podsStamp = join(mobileRoot, "ios/Pods/.codebot-installed");
 const modulesRoot = join(mobileRoot, "modules");
 const nativeInputs = [
   join(mobileRoot, "package.json"),

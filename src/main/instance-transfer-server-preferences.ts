@@ -17,9 +17,9 @@ import {
   parseMediaApprovalCreditsSetting,
   type ServerNotificationLevel,
   type SkillLearningPreference,
-} from "@openbot/contracts/ipc";
-import { isBoolean, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Schema } from "effect";
 import {
   parseAgentDefaults,

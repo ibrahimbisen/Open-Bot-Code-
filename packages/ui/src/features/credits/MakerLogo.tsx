@@ -1,4 +1,4 @@
-import { CREDIT_MODEL_MAKERS, type CreditModelMaker } from "@openbot/contracts/credits";
+import { CREDIT_MODEL_MAKERS, type CreditModelMaker } from "@codebot/contracts/credits";
 import type { JSX } from "@solidjs/web";
 import { Show } from "solid-js";
 import alibabaLogo from "../../assets/maker-logos/alibaba.svg";

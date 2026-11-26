@@ -2,17 +2,17 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { decodeMcpServerConfigs, type McpServerConfig } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { decodeMcpServerConfigs, type McpServerConfig } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { McpGateway } from "../src/backend/agent/mcp-gateway";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { McpServerError, McpServerStore } from "../src/backend/mcp-server-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-server-unreadable-row-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-server-unreadable-row-e2e");
 const HEADER_SECRET = "header-secret-5e19c3";
 
 const draft = (name: string, fields: Partial<McpServerConfig>): McpServerConfig => ({
@@ -30,8 +30,8 @@ const draft = (name: string, fields: Partial<McpServerConfig>): McpServerConfig 
   ...fields,
 });
 
-const root = await mkdtemp(join(tmpdir(), "openbot-mcp-unreadable-row-"));
-const database = new OpenBotDatabase(root);
+const root = await mkdtemp(join(tmpdir(), "codebot-mcp-unreadable-row-"));
+const database = new CodeBotDatabase(root);
 const steps: Array<{ step: string; detail: unknown }> = [];
 const report: { passed: boolean; steps: typeof steps; warnings: string[]; failures: string[] } = {
   passed: false,
@@ -44,13 +44,13 @@ try {
   await runCauseEffect(database.initialize());
   const store = new McpServerStore(
     database,
-    createOpenBotLogger("mcp-server-store", (line) => report.warnings.push(line)),
+    createCodeBotLogger("mcp-server-store", (line) => report.warnings.push(line)),
   );
   const gateway = new McpGateway({
     servers: store,
     credentials: NO_PROVIDER_CREDENTIALS,
     computerUseMcpServer: () => null,
-    logger: createOpenBotLogger("agent-service", () => undefined),
+    logger: createCodeBotLogger("agent-service", () => undefined),
     hooks: { emitError: () => undefined, refreshAllAgentRuntimes: () => Effect.void },
   });
 

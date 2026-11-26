@@ -1,7 +1,7 @@
-import type { BrowserTab, ServerSummary } from "@openbot/contracts/ipc";
-import { BROWSER_PROFILES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { BROWSER_PROXIES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-proxies-v1";
-import { BROWSER_NEW_TAB_URL } from "@openbot/ui/features/browser/browser-suggestions";
+import type { BrowserTab, ServerSummary } from "@codebot/contracts/ipc";
+import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { BROWSER_PROXIES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-proxies-v1";
+import { BROWSER_NEW_TAB_URL } from "@codebot/ui/features/browser/browser-suggestions";
 import { createEffect, createMemo, untrack } from "solid-js";
 import { desktopBrowserProfileCalls } from "../browser/browser-profiles-port";
 import {

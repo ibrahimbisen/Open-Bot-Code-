@@ -1,5 +1,5 @@
-import type { AvatarImageInput, CentralAuthUser } from "@openbot/contracts/ipc";
-import { Button, Dialog, Field, IconButton, ImageRemoveButton, Input, Pencil, Text, UserAvatar, X } from "@openbot/ui";
+import type { AvatarImageInput, CentralAuthUser } from "@codebot/contracts/ipc";
+import { Button, Dialog, Field, IconButton, ImageRemoveButton, Input, Pencil, Text, UserAvatar, X } from "@codebot/ui";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 import { blobDataUrl } from "./ProfileShareDialog";

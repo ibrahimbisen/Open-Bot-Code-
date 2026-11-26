@@ -1,5 +1,5 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AvatarImageInput, ServerAppearance } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AvatarImageInput, ServerAppearance } from "@codebot/contracts/ipc";
 import {
   Button,
   buttonVariants,
@@ -16,13 +16,13 @@ import {
   Popover,
   SettingsSection,
   Text,
-} from "@openbot/ui";
-import { avatarImageDataUrl, normalizeAvatarFile } from "@openbot/ui/avatar-image";
-import { LeaveServerDialog } from "@openbot/ui/features/servers/LeaveServerDialog";
-import { ServerAppearancePicker } from "@openbot/ui/features/servers/ServerAppearancePicker";
-import { ServerLogo } from "@openbot/ui/features/servers/ServerLogo";
-import { ServerPlushLogo } from "@openbot/ui/server-plush-logo";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { avatarImageDataUrl, normalizeAvatarFile } from "@codebot/ui/avatar-image";
+import { LeaveServerDialog } from "@codebot/ui/features/servers/LeaveServerDialog";
+import { ServerAppearancePicker } from "@codebot/ui/features/servers/ServerAppearancePicker";
+import { ServerLogo } from "@codebot/ui/features/servers/ServerLogo";
+import { ServerPlushLogo } from "@codebot/ui/server-plush-logo";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { type Accessor, createStore, Show, snapshot } from "solid-js";
 import { actionToast } from "../../action-toast";

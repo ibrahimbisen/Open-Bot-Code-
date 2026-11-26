@@ -18,10 +18,10 @@ import {
   creditMediaRequiredInput,
   parseCreditMediaJobRequest,
   parseCreditMediaModel,
-} from "@openbot/contracts/credit-media";
-import { creditsFromTenths } from "@openbot/contracts/credits";
-import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credit-media";
+import { creditsFromTenths } from "@codebot/contracts/credits";
+import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import type { AccountAnalytics } from "./account-analytics";
 import { BillingError, BillingOperationError, billingCall } from "./billing-errors";

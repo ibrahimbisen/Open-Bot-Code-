@@ -1,4 +1,4 @@
-import { ArrowDownWideNarrow, Badge, Check, ChevronRight, DropdownMenu, Filter, Folder, Minus, X } from "@openbot/ui";
+import { ArrowDownWideNarrow, Badge, Check, ChevronRight, DropdownMenu, Filter, Folder, Minus, X } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import {

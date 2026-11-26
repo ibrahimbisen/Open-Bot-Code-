@@ -8,8 +8,8 @@ import {
   type NearWalletStatus,
   parseNearWalletCreateInput,
   parseNearWalletStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { z } from "zod";
 import { NearWalletService } from "../src/main/near-wallet-service";
@@ -27,7 +27,7 @@ import {
   withDeadline,
 } from "./near-wallet-fake-api";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/near-passkey-backup-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/near-passkey-backup-e2e");
 const RP_ID = new URL(PAGE_ORIGIN).hostname;
 const AGENT = "agent-a";
 const UP = 0x01;
@@ -268,7 +268,7 @@ const ownerTypeSchema = z.object({ owner: z.object({ type: z.string(), credentia
 
 async function main(): Promise<void> {
   await mkdir(OUT, { recursive: true });
-  const dir = await mkdtemp(join(tmpdir(), "openbot-near-passkey-backup-e2e-"));
+  const dir = await mkdtemp(join(tmpdir(), "codebot-near-passkey-backup-e2e-"));
   const api = new FakeAgentApi();
   await api.start();
 

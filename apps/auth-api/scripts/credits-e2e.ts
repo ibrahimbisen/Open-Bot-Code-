@@ -14,7 +14,7 @@ import {
   parseCreditActivity,
   parseCreditRedeemRequest,
   parseCreditTransferRequest,
-} from "@openbot/contracts/credits";
+} from "@codebot/contracts/credits";
 import { Effect } from "effect";
 import { createAccountAnalytics } from "../src/server/account-analytics";
 import { BillingError, type BillingOperationError } from "../src/server/billing-errors";
@@ -42,10 +42,10 @@ import { EARLY_START_METADATA } from "../src/server/stripe-client";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "credits-e2e");
+const OUT = join(ROOT, ".codebot-build", "credits-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const WEBHOOK_SECRET = "whsec_test";
-const ORIGIN = "https://openbot.test";
+const ORIGIN = "https://codebot.test";
 const OWNER = { id: "owner", email: "owner@example.test" };
 const MEMBER = { id: "member", email: "member@example.test" };
 const OUTSIDER = { id: "outsider", email: "outsider@example.test" };
@@ -189,7 +189,7 @@ function fakeStripe() {
     }
     if (method === "POST" && url.pathname === "/v1/customers") {
       const body = new URLSearchParams(String(init.body));
-      return Response.json({ id: `cus_${body.get("metadata[openbot_user_id]") ?? "x"}` });
+      return Response.json({ id: `cus_${body.get("metadata[codebot_user_id]") ?? "x"}` });
     }
     if (method === "GET" && url.pathname.startsWith("/v1/customers/")) {
       return Response.json({ id: decodeURIComponent(url.pathname.slice(14)), metadata: {}, tax_ids: { data: [] } });
@@ -1303,10 +1303,10 @@ async function creditActivity(database: DatabaseSync, credits: CreditService) {
   setActor.run(MEMBER.id);
   const refund = kinds(owner.entries, "refund")[0];
   check(
-    "a generation of a deleted account shows a member, and only OpenBot entries show OpenBot",
+    "a generation of a deleted account shows a member, and only CodeBot entries show CodeBot",
     afterDelete?.actor === "member" &&
       afterDelete.actorName === undefined &&
-      refund?.actor === "openbot" &&
+      refund?.actor === "codebot" &&
       serverMove?.actor === "you",
     { afterDelete, refund },
   );

@@ -1,4 +1,4 @@
-import type { CreditActivityEntry, CreditsState } from "@openbot/contracts/credits";
+import type { CreditActivityEntry, CreditsState } from "@codebot/contracts/credits";
 import {
   ArrowDown,
   ArrowUp,
@@ -18,7 +18,7 @@ import {
   SettingsSection,
   SlidingTabs,
   Text,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, For, Match, Show, Switch } from "solid-js";
 import { useText } from "../../text";
@@ -145,7 +145,7 @@ function ActivityRow(props: { entry: CreditActivityEntry; credits: CreditsState;
   const actor = () => {
     const entry = props.entry;
     if (entry.actor === "you") return t("billing.credits.you");
-    if (entry.actor === "openbot") return t("billing.credits.activity.openbot");
+    if (entry.actor === "codebot") return t("billing.credits.activity.codebot");
     return entry.actorName ?? t("billing.credits.activity.member");
   };
   const wallet = () => (props.entry.serverId ? serverName(props.entry.serverId) : t("billing.credits.yours"));

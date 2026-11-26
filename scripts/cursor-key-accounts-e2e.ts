@@ -3,20 +3,20 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { ProviderAccountStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { ProviderAccountStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Cause, Effect, Exit } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { ProviderAccountStore } from "../src/backend/agent/provider-account-store";
 import { ProviderRuntime } from "../src/backend/agent/provider-runtime";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 import { ProviderCredentialStore } from "../src/main/provider-credential-store";
 import { installFakeAgent, readJsonl } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cursor-key-accounts-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-key-accounts-e2e");
 const GOOD_KEY = "key_e2e_good_5d1c0a97";
 const SECOND_GOOD_KEY = "key_e2e_good_second_77aa";
 const BAD_KEY = "key_e2e_refused_0b44";
@@ -28,13 +28,13 @@ interface Start {
   authToken: "absent" | "empty" | "set";
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-cursor-key-accounts-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-cursor-key-accounts-"));
 const log = join(root, "starts.jsonl");
 const executable = join(root, "cursor", "cursor-agent");
 const credentialPath = join(root, "profile", "provider-credentials.json");
 delete process.env.CURSOR_API_KEY;
 delete process.env.CURSOR_AUTH_TOKEN;
-process.env.OPENBOT_CURSOR_PATH = executable;
+process.env.CODEBOT_CURSOR_PATH = executable;
 
 const accepted = new Set([GOOD_KEY, SECOND_GOOD_KEY]);
 let serverError = false;
@@ -61,7 +61,7 @@ const cipher = {
   decrypt: (value: Buffer) => Buffer.from([...value].map((byte) => byte ^ 0x5a)).toString("utf8"),
 };
 
-const database = new OpenBotDatabase(join(root, "profile"));
+const database = new CodeBotDatabase(join(root, "profile"));
 const agents = new AgentStore(join(root, "profile"), join(root, "home"), database);
 const errors: string[] = [];
 

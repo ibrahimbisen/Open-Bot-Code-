@@ -40,7 +40,7 @@ async function main() {
     let done = 0;
     for (const item of control.items) {
       const dataUrl = await window.webContents.executeJavaScript(
-        `window.openBotMarketplaceCard.render(${JSON.stringify(item.job)})`,
+        `window.codeBotMarketplaceCard.render(${JSON.stringify(item.job)})`,
       );
       const comma = typeof dataUrl === "string" ? dataUrl.indexOf(",") : -1;
       if (comma === -1) throw new Error(`The page did not return a card for ${item.fileName}.`);

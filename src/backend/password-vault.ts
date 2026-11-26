@@ -1,4 +1,4 @@
-import type { PasswordManagerId } from "@openbot/contracts/ipc";
+import type { PasswordManagerId } from "@codebot/contracts/ipc";
 import { type Effect, Schema } from "effect";
 import { getDomain } from "tldts";
 

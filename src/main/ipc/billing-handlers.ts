@@ -1,6 +1,6 @@
-import { parseBillingPortalRequest, parseBillingStorageRequest } from "@openbot/contracts/billing";
-import { parseBillingDetailsRequest } from "@openbot/contracts/billing-details";
-import { sourceText } from "@openbot/i18n/source";
+import { parseBillingPortalRequest, parseBillingStorageRequest } from "@codebot/contracts/billing";
+import { parseBillingDetailsRequest } from "@codebot/contracts/billing-details";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { BillingDesktopService } from "../billing-service";
 import { handler, type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";

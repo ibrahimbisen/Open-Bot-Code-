@@ -4,16 +4,16 @@ import {
   isQueuedAgentReply,
   type QueueDelivery,
   type QueueSnapshot,
-} from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import type { AgentMessage, AgentProfile } from "@openbot/ui/data";
+} from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import type { AgentMessage, AgentProfile } from "@codebot/ui/data";
 import {
   type AwaitingReplyItem,
   type AwaitingReplyState,
   awaitingReplyEnded,
-} from "@openbot/ui/features/conversation/AwaitingReplies";
-import type { SidebarAgentWait } from "@openbot/ui/features/sidebar/sidebar-agent-states";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/AwaitingReplies";
+import type { SidebarAgentWait } from "@codebot/ui/features/sidebar/sidebar-agent-states";
+import { currentText } from "@codebot/ui/text";
 
 const PREVIEW_LIMIT = 160;
 

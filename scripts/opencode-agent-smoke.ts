@@ -16,7 +16,7 @@ import {
 } from "./opencode-agent-harness";
 import { runTurn } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-agent-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-agent-smoke");
 const NL = "\n";
 const SUBAGENT_MARKER = "SMOKE-SUBAGENT";
 const ANSWER = "Blue, please.";
@@ -32,14 +32,14 @@ interface Report {
   firstRequest?: { tools: string[]; skills: string[]; catalog: ReturnType<typeof codeModeCatalog> };
   steps: StepReport[];
   hostRequests: string[];
-  openbotToolCalls: string[];
+  codebotToolCalls: string[];
   subagentRequests: number;
   file?: string;
   userRules?: { tools: string[]; skills: string[]; catalog: ReturnType<typeof codeModeCatalog>; defaults: Json };
   error?: string;
 }
 
-const report: Report = { passed: false, steps: [], hostRequests: [], openbotToolCalls: [], subagentRequests: 0 };
+const report: Report = { passed: false, steps: [], hostRequests: [], codebotToolCalls: [], subagentRequests: 0 };
 const harness = await startOpenCodeHarness("opencode-agent-smoke");
 const { workspace } = harness;
 const file = join(workspace, "a.txt");
@@ -58,7 +58,7 @@ const steps: ModelAnswer[] = [
   {
     tool: "execute",
     arguments: {
-      code: 'return await tools.openbot.ask_user({ questions: [{ id: "color", question: "Which color?" }] });',
+      code: 'return await tools.codebot.ask_user({ questions: [{ id: "color", question: "Which color?" }] });',
     },
   },
 ];
@@ -76,7 +76,7 @@ function answerHost(client: AgentClient): void {
     report.hostRequests.push(request.method);
     if (request.method === "item/tool/call") {
       const tool = getString(request.params, "tool") ?? "";
-      report.openbotToolCalls.push(`${getString(request.params, "namespace") ?? ""}.${tool}`);
+      report.codebotToolCalls.push(`${getString(request.params, "namespace") ?? ""}.${tool}`);
       client.respond(request.id, { success: true, contentItems: [{ type: "inputText", text: ANSWER }] });
       return;
     }
@@ -155,7 +155,7 @@ try {
   assert.match(result("grep"), /a\.txt/u);
   assert.ok(report.subagentRequests > 0, "The subagent sent no request.");
   assert.match(result("subagent"), /done/u);
-  assert.deepEqual(report.openbotToolCalls, ["openbot.ask_user"]);
+  assert.deepEqual(report.codebotToolCalls, ["codebot.ask_user"]);
   assert.ok(result("execute").includes(ANSWER), `execute did not return the answer: ${result("execute")}`);
   await runCauseEffect(client.stop());
 
@@ -173,7 +173,7 @@ try {
   const userRequest = harness.requests.filter((request) => request.tools.length > 0).at(-1);
   assert.ok(userRequest, "OpenCode sent no request with tools.");
   const defaults = JSON.parse(
-    await readFile(join(harness.root, "provider-state", "opencode", "openbot-agent-defaults.json"), "utf8"),
+    await readFile(join(harness.root, "provider-state", "opencode", "codebot-agent-defaults.json"), "utf8"),
   );
   report.userRules = {
     tools: [...userRequest.tools].sort(),
@@ -187,7 +187,7 @@ try {
     report.userRules.catalog.opencode.includes("read_mcp_resource"),
     "The global pattern did not keep opencode.read_mcp_resource.",
   );
-  assert.ok(!report.userRules.skills.includes("opencode"), "OpenBot's rule for the opencode skill is gone.");
+  assert.ok(!report.userRules.skills.includes("opencode"), "CodeBot's rule for the opencode skill is gone.");
   assert.ok(
     !report.userRules.catalog.opencode.includes("list_mcp_resources"),
     "The catalog lists list_mcp_resources again.",

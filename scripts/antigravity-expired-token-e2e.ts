@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import type { AgentClient } from "../src/backend/agent-client";
 import type { AgentCliInfo } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-expired-token-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-expired-token-e2e");
 const FAIL_LIMIT_MS = 20_000;
 
 interface LogEntry {
@@ -27,7 +27,7 @@ interface Report {
   error?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-expired-token-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-expired-token-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 process.env.GEMINI_HOME = join(root, "gemini");

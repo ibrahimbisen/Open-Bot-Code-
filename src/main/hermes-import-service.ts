@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, realpath, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_IMPORT_LIMITS,
   type AgentImportResult,
@@ -15,9 +15,9 @@ import {
   type HermesImportProfile,
   type McpServerConfig,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { parseStoredJson, writeJsonFileAtomically } from "../backend/atomic-json-file";
 import { writeTreeEffect } from "./agent-archive";
@@ -32,7 +32,7 @@ import {
   routineSchedule,
 } from "./hermes-import-reader";
 
-const SKILL_STAGING = ".openbot/import-skills";
+const SKILL_STAGING = ".codebot/import-skills";
 const SOUL_COPY = ["imported", "hermes", "SOUL.md"] as const;
 const SOUL_POINTER = "\n\nThe full persona is in imported/hermes/SOUL.md. Read it before your first task.";
 const LINKS_VERSION = 1;

@@ -1,10 +1,10 @@
-import { createOpenBotLogger, registerSecretValue, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, registerSecretValue, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { GitHubFetch } from "./github-device-flow";
 import { GitHubOperationError, githubCall, githubDecode } from "./github-effects";
 
-const logger = createOpenBotLogger("github-bot-tokens");
+const logger = createCodeBotLogger("github-bot-tokens");
 
 const RENEW_MARGIN_MS = 10 * 60_000;
 const RETRY_MS = 15 * 60_000;
@@ -100,7 +100,7 @@ export class GitHubBotTokens {
       refused = response.status === 401;
       if (!response.ok)
         return yield* new GitHubOperationError({
-          cause: new Error(`The OpenBot API refused the GitHub token request (HTTP ${response.status}).`),
+          cause: new Error(`The CodeBot API refused the GitHub token request (HTTP ${response.status}).`),
         });
       const json = yield* githubCall(() => response.json());
       const answer = yield* githubDecode(() => answerSchema.parse(json));

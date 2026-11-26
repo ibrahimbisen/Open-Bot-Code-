@@ -1,6 +1,6 @@
-import type { OpenBotDesktopApi, VoiceLiveEvent } from "@openbot/contracts/ipc";
-import type { VoicePhase, VoiceTalkMode } from "@openbot/ui/features/conversation/VoicePill";
-import { currentText } from "@openbot/ui/text";
+import type { CodeBotDesktopApi, VoiceLiveEvent } from "@codebot/contracts/ipc";
+import type { VoicePhase, VoiceTalkMode } from "@codebot/ui/features/conversation/VoicePill";
+import { currentText } from "@codebot/ui/text";
 import { createStore, onCleanup } from "solid-js";
 import { SPEECH_LEVEL_COUNT } from "../../speech/speech-playback";
 import { voiceCaptureError } from "../voice-status";
@@ -10,10 +10,10 @@ const LEVEL_FLOOR_DB = -60;
 const LEVEL_RANGE_DB = 50;
 const EVENTS_CHANNEL = "oai-events";
 
-export type CodexLivePort = Pick<OpenBotDesktopApi["voice"], "startLive" | "stopLive" | "onLiveEvent">;
+export type CodexLivePort = Pick<CodeBotDesktopApi["voice"], "startLive" | "stopLive" | "onLiveEvent">;
 
 function codexLivePort(): CodexLivePort {
-  return window.openbot.voice;
+  return window.codebot.voice;
 }
 
 type LiveStep = "starting" | "listening" | "thinking" | "speaking";

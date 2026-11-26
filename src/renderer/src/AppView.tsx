@@ -1,6 +1,6 @@
-import { AppLoadingScreen } from "@openbot/ui/features/account/AppLoadingScreen";
-import { UpdateRequiredScreen } from "@openbot/ui/features/updates/UpdateRequiredScreen";
-import { useText } from "@openbot/ui/text";
+import { AppLoadingScreen } from "@codebot/ui/features/account/AppLoadingScreen";
+import { UpdateRequiredScreen } from "@codebot/ui/features/updates/UpdateRequiredScreen";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, Loading, Show } from "solid-js";
 import { appPort } from "./app-port";
 import { useAuth } from "./features/account/account-context";
@@ -77,7 +77,7 @@ export function AppAccessGate() {
     },
   );
   createEffect(started, (ready) => {
-    if (ready) performance.mark("openbot:app-started");
+    if (ready) performance.mark("codebot:app-started");
   });
   createEffect(workspaceReady, (ready) => {
     if (ready && platform.chatWindow === null) reportWorkspaceReady();

@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 40 stores the shown-order keys of each thread message, so a page reads an index range rather
@@ -66,7 +66,7 @@ function addThreadMessageOrder(db: DatabaseSync): void {
   db.exec(V40_THREAD_MESSAGE_ORDER_INDEX_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 40,
   name: "thread-message-order",
   // Adds columns with no default and two indexes: no rebuild, so no foreign-key pause and no vacuum. The

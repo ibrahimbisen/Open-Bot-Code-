@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { app, BrowserWindow, type WebContents } from "electron";
 import { z } from "zod";
@@ -100,7 +100,7 @@ async function main(): Promise<void> {
   const call = async (tool: string, args: DynamicToolCallParams["arguments"]) => {
     const result = await Effect.runPromise(
       host.handleDynamicTool({
-        namespace: "openbot_browser",
+        namespace: "codebot_browser",
         tool,
         arguments: args,
         ownerAgentId: "probe-agent",

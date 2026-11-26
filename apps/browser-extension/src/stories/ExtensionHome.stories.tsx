@@ -1,4 +1,4 @@
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { HomeScreen } from "../HomeScreen";
 import type { Workspace } from "../workspace";

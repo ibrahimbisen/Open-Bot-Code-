@@ -15,7 +15,7 @@ import {
 } from "./opencode-agent-harness";
 import { runTurn } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-prompt-settings-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-prompt-settings-bench");
 const NL = "\n";
 const run = promisify(execFile);
 const REPLY_PROMPT = "Reply with the single word OK. Do not use any tool.";
@@ -186,7 +186,7 @@ try {
         result.turns.push({ step, requests: [], total: 0 });
       }
       if (!variant.config) {
-        const written = join(harness.root, "provider-state", "opencode", "openbot-agent-defaults.json");
+        const written = join(harness.root, "provider-state", "opencode", "codebot-agent-defaults.json");
         result.driverDefaults = await readFile(written, "utf8")
           .then((text) => JSON.parse(text))
           .catch(() => null);

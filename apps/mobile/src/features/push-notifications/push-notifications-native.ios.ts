@@ -1,4 +1,4 @@
-import { NOTIFICATION_SOUND_FILES } from "@openbot/contracts/notification-relay";
+import { NOTIFICATION_SOUND_FILES } from "@codebot/contracts/notification-relay";
 import * as Notifications from "expo-notifications";
 import type { NotificationPermission } from "@/features/settings/model/push-notifications";
 import { appGroupFile } from "@/shared/lib/app-group";

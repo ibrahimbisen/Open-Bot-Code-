@@ -1,6 +1,6 @@
-import type { AgentProviderRef } from "@openbot/contracts/agent-providers";
-import { isNarrationItemId, showsNarration } from "@openbot/contracts/conversation-narration";
-import type { AgentMessage } from "@openbot/ui/data";
+import type { AgentProviderRef } from "@codebot/contracts/agent-providers";
+import { isNarrationItemId, showsNarration } from "@codebot/contracts/conversation-narration";
+import type { AgentMessage } from "@codebot/ui/data";
 import { formatMessageTime } from "../../app-message-projection";
 
 export function narrationRows(thinking: AgentMessage, provider: AgentProviderRef | undefined): AgentMessage[] {

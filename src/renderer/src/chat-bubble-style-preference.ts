@@ -2,10 +2,10 @@ import {
   type ChatBubbleStyle,
   DEFAULT_CHAT_BUBBLE_STYLE,
   isChatBubbleStyle,
-} from "@openbot/ui/features/conversation/own-bubble";
+} from "@codebot/ui/features/conversation/own-bubble";
 import { createSignal } from "solid-js";
 
-const CHAT_BUBBLE_STYLE_STORAGE_KEY = "openbot:chat-bubble-style";
+const CHAT_BUBBLE_STYLE_STORAGE_KEY = "codebot:chat-bubble-style";
 
 let unsavedPreference: ChatBubbleStyle | undefined;
 

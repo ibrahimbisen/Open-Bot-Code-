@@ -2,14 +2,14 @@
 
 .skill-preview {
   display: grid;
-  gap: var(--openbot-space-6);
+  gap: var(--codebot-space-6);
   min-width: 0;
 }
 .skill-preview-heading {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  column-gap: var(--openbot-space-3);
-  row-gap: var(--openbot-space-3);
+  column-gap: var(--codebot-space-3);
+  row-gap: var(--codebot-space-3);
   align-items: center;
 }
 .skill-preview-heading .agent-skill-icon {
@@ -33,21 +33,21 @@
   margin: 0;
 }
 .skill-preview-heading h2 {
-  font-size: var(--openbot-text-2xl);
-  font-weight: var(--openbot-weight-medium);
+  font-size: var(--codebot-text-2xl);
+  font-weight: var(--codebot-weight-medium);
   overflow-wrap: anywhere;
 }
 .skill-preview-heading p,
 .skill-preview-description {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-lg);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-lg);
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
 .skill-preview-heading .skill-preview-creator {
-  margin-top: var(--openbot-space-1);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-md);
+  margin-top: var(--codebot-space-1);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-md);
 }
 .skill-preview-card {
   position: relative;
@@ -56,8 +56,8 @@
   min-height: 160px;
   overflow: hidden;
   isolation: isolate;
-  border-radius: var(--openbot-radius-xl);
-  padding: var(--openbot-space-6);
+  border-radius: var(--codebot-radius-xl);
+  padding: var(--codebot-space-6);
 }
 .skill-preview-gradient,
 .skill-preview-gradient canvas {
@@ -69,7 +69,7 @@
 
   overflow: hidden;
   border-radius: inherit;
-  clip-path: inset(0 round var(--openbot-radius-xl));
+  clip-path: inset(0 round var(--codebot-radius-xl));
 }
 
 .skill-preview-card > :not(.skill-preview-gradient) {
@@ -78,14 +78,14 @@
 .skill-preview-request {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   width: min(100%, 520px);
   min-width: 0;
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-canvas);
-  padding: var(--openbot-space-3);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-lg);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-canvas);
+  padding: var(--codebot-space-3);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-lg);
   line-height: 1.5;
 }
 .skill-preview-request p {
@@ -105,8 +105,8 @@
 }
 .skill-preview-unavailable {
   margin: 0;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-md);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-md);
 }
 .skill-preview-description > :first-child {
   margin-top: 0;
@@ -116,8 +116,8 @@
 }
 
 .skill-preview-request .ui-icon-button {
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-border);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-border);
 }
 .agent-skills-modal:has(.agent-skill-detail) {
   width: min(760px, calc(100vw - 32px));
@@ -224,8 +224,8 @@
 }
 
 .skill-preview-request .skill-preview-chip {
-  color: color-mix(in srgb, var(--skill-logo-color, var(--openbot-accent-text)), var(--openbot-text-primary) 35%);
-  background: color-mix(in srgb, var(--skill-logo-color, var(--openbot-accent-text)) 18%, transparent);
+  color: color-mix(in srgb, var(--skill-logo-color, var(--codebot-accent-text)), var(--codebot-text-primary) 35%);
+  background: color-mix(in srgb, var(--skill-logo-color, var(--codebot-accent-text)) 18%, transparent);
 }
 
 .agent-skills-tabs {
@@ -238,9 +238,9 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   flex-shrink: 0;
-  margin: var(--openbot-space-3);
+  margin: var(--codebot-space-3);
 }
 
 .agent-skills-tab-content {
@@ -255,7 +255,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 .agent-skills-tab-slot {
   flex: 1;
@@ -271,7 +271,7 @@
 }
 
 .agent-local-library:not(.agent-skill-detail) {
-  gap: var(--openbot-space-0-5);
+  gap: var(--codebot-space-0-5);
   padding: 0;
 }
 .agent-local-skill-row:has(.agent-skill-update) {

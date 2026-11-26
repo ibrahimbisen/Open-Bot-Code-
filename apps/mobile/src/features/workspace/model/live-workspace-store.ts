@@ -1,5 +1,5 @@
-import type { BrowserTakeoverRequest } from "@openbot/contracts/ipc";
-import type { BrowserPermissionRequestState } from "@openbot/contracts/team-protocol/browser-permissions-v1";
+import type { BrowserTakeoverRequest } from "@codebot/contracts/ipc";
+import type { BrowserPermissionRequestState } from "@codebot/contracts/team-protocol/browser-permissions-v1";
 import type { MobileBrowserTabs, MobileHttpSignIns } from "@/features/browser/model/browser-tabs";
 import type { MobileAgentActivities } from "./agent-activity";
 import type { MobileContextStates } from "./context-states";

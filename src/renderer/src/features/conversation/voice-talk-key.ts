@@ -7,11 +7,11 @@ import {
   type TalkKey,
   type TalkKeyBinding,
   type TalkKeyPlatform,
-} from "@openbot/ui/features/conversation/talk-key";
+} from "@codebot/ui/features/conversation/talk-key";
 import { createSignal } from "solid-js";
 import { currentDevicePlatform } from "../../send-shortcut-preference";
 
-const VOICE_TALK_KEY_STORAGE_KEY = "openbot:voice-talk-key";
+const VOICE_TALK_KEY_STORAGE_KEY = "codebot:voice-talk-key";
 
 let unsavedPreference: TalkKey | null | undefined;
 

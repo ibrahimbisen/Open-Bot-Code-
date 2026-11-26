@@ -5,8 +5,8 @@ import {
   type AppLogoColor,
   DEFAULT_APP_LOGO_COLOR,
   isAppLogoColor,
-} from "@openbot/contracts/app-logo-color";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/app-logo-color";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { type NativeModule, requireOptionalNativeModule } from "expo";
 import { create } from "zustand";
 
@@ -15,7 +15,7 @@ declare class AppIconModule extends NativeModule {
   setIcon(id: string): Promise<void>;
 }
 
-const native = requireOptionalNativeModule<AppIconModule>("OpenBotAppIcon");
+const native = requireOptionalNativeModule<AppIconModule>("CodeBotAppIcon");
 
 const MAIN_ICON = "default";
 

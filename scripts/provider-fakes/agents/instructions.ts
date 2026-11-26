@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { type AcpHandler, logEntry, serveFakeAcpAgent } from "../acp-agent";
 
-const INSTRUCTIONS_TAG = "<openbot-developer-instructions>";
+const INSTRUCTIONS_TAG = "<codebot-developer-instructions>";
 const mode = process.env.FAKE_MODE;
 const contexts = new Map<string, number>();
 
@@ -26,8 +26,8 @@ serveFakeAcpAgent({
     const first = blocks[0]?.text ?? "";
     const instructions = first.startsWith(INSTRUCTIONS_TAG);
     const rest = blocks.slice(instructions ? 1 : 0).map((block) => block.text ?? "");
-    const context = rest.filter((block) => block.startsWith("<openbot_"));
-    const text = rest.filter((block) => !block.startsWith("<openbot_")).join("");
+    const context = rest.filter((block) => block.startsWith("<codebot_"));
+    const text = rest.filter((block) => !block.startsWith("<codebot_")).join("");
     logEntry({ sessionId, instructions, instructionsText: instructions ? first : null, context, text });
     if (text.includes("fail-now")) {
       peer.fail(request, { code: -32603, message: "Internal error", data: "the model failed" });

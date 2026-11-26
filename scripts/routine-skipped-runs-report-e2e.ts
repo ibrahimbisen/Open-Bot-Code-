@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { Routine, RoutineRun } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+import type { Routine, RoutineRun } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { deliveryPromptInput, type SkippedRoutineRuns } from "../src/backend/agent/delivery-content";
@@ -13,17 +13,17 @@ import { AgentRoutineStore } from "../src/backend/agent-routine-store";
 import { AgentStore } from "../src/backend/agent-store";
 import { AgentWaitStore } from "../src/backend/agent-waits/agent-wait-store";
 import { AgentWaits } from "../src/backend/agent-waits/agent-waits";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { RoutineTimer } from "../src/backend/routine-timer";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "routine-skipped-runs-report-e2e");
+const OUT = join(ROOT, ".codebot-build", "routine-skipped-runs-report-e2e");
 const STEP = 5 * 60_000;
-const NOTE_START = "OpenBot note, not from the user:";
+const NOTE_START = "CodeBot note, not from the user:";
 const RUN_OPEN_REASON = sourceText("status.agent.routineSkippedRunOpen");
-const CLOSED_REASON = "Skipped: OpenBot was closed at the scheduled time.";
+const CLOSED_REASON = "Skipped: CodeBot was closed at the scheduled time.";
 
 interface Fixture {
   store: AgentStore;
@@ -51,9 +51,9 @@ const ownedRoots: string[] = [];
 const cases: CaseResult[] = [];
 
 async function openFixture(): Promise<Fixture> {
-  const root = await mkdtemp(join(tmpdir(), "openbot-routine-skipped-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-routine-skipped-"));
   ownedRoots.push(root);
-  const database = new OpenBotDatabase(join(root, "state"));
+  const database = new CodeBotDatabase(join(root, "state"));
   const store = new AgentStore(join(root, "state"), join(root, "home"), database);
   const mailbox = new MailboxStore(join(root, "state"), store.sharedRoot, database);
   await runCauseEffect(store.initialize());
@@ -218,11 +218,11 @@ async function skippedWhileClosed(): Promise<CaseDetails> {
     const [run] = deliveredRuns(fixture, routine);
     assert.ok(run?.deliveryId, "The first occurrence after the restart starts a run.");
     const skipped = fixture.scheduler.skippedBefore(run);
-    assert.ok(skipped && skipped.count >= 1, "The runs missed while OpenBot was closed are counted.");
+    assert.ok(skipped && skipped.count >= 1, "The runs missed while CodeBot was closed are counted.");
     assert.deepEqual(skipped.reasons, [CLOSED_REASON]);
     const note = skipNote(routineTaskText(fixture, run));
     assert.ok(note, "The run after the restart gets the skip note.");
-    assert.ok(note.includes(CLOSED_REASON), "The note says OpenBot was closed.");
+    assert.ok(note.includes(CLOSED_REASON), "The note says CodeBot was closed.");
     assert.deepEqual(fixture.errors, []);
     return { skipped, note };
   } finally {
@@ -250,7 +250,7 @@ async function runCase(name: string, work: () => Promise<CaseDetails>): Promise<
 
 try {
   await runCase("skipped while the last run was open", skippedWhileRunOpen);
-  await runCase("skipped while OpenBot was closed", skippedWhileClosed);
+  await runCase("skipped while CodeBot was closed", skippedWhileClosed);
 } finally {
   for (const root of ownedRoots) await rm(root, { recursive: true, force: true });
   const passed = cases.length === 2 && cases.every((row) => row.passed);

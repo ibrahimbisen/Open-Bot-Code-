@@ -1,5 +1,5 @@
-import type { RoutineCalendarRoutine, RoutineCalendarRun, RoutineCalendarRunStatus } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { RoutineCalendarRoutine, RoutineCalendarRun, RoutineCalendarRunStatus } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import {
   addCalendarDays,
   type CalendarDay,
@@ -7,7 +7,7 @@ import {
   calendarDayOf,
   calendarDays,
   calendarWeekStart,
-} from "@openbot/team-client/routine-calendar-dates";
+} from "@codebot/team-client/routine-calendar-dates";
 import { useQueries } from "@tanstack/react-query";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
@@ -86,7 +86,7 @@ function rangeAround(first: CalendarDay, last: CalendarDay) {
 export function ServerRoutinesScreen() {
   const { t, format } = useText();
   const { theme } = useUniwind();
-  const foreground = String(useCSSVariable("--openbot-text-primary"));
+  const foreground = String(useCSSVariable("--codebot-text-primary"));
   const { serverId } = useLocalSearchParams<{ serverId: string }>();
   const queryScope = useQueryScope();
   const { servers, agents, loadRoutineCalendar } = useMobileWorkspace();
@@ -451,10 +451,10 @@ function AgentStack({ agents, serverId }: { agents: MobileAgent[]; serverId: str
 }
 
 function StatusMark({ status }: { status: RunStatus }) {
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
-  const accent = String(useCSSVariable("--openbot-accent-text"));
-  const success = String(useCSSVariable("--openbot-success-text"));
-  const danger = String(useCSSVariable("--openbot-danger-text"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
+  const accent = String(useCSSVariable("--codebot-accent-text"));
+  const success = String(useCSSVariable("--codebot-success-text"));
+  const danger = String(useCSSVariable("--codebot-danger-text"));
   return (
     <View className="size-4 items-center justify-center">
       {status === "paused" ? (

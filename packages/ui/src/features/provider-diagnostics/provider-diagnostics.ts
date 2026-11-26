@@ -1,4 +1,4 @@
-import type { AgentProviderStatus } from "@openbot/contracts/ipc";
+import type { AgentProviderStatus } from "@codebot/contracts/ipc";
 
 export function providerDiagnosticsText(status: AgentProviderStatus): string {
   return JSON.stringify(

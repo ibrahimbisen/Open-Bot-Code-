@@ -1,4 +1,4 @@
-import { type DynamicRecord, isBoolean, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import type { ScimUser } from "./company-sign-in";
 import { CompanySignInError } from "./company-sign-in";

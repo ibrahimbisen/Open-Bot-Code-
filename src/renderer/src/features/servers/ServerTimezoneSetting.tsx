@@ -1,9 +1,9 @@
-import type { HostTimezoneSettings, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle, SearchSelect } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import type { CodeBotDesktopApi, HostTimezoneSettings } from "@codebot/contracts/ipc";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle, SearchSelect } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 
-export type HostTimezoneCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getTimezone" | "setTimezone">;
+export type HostTimezoneCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getTimezone" | "setTimezone">;
 
 export interface ServerTimezoneOptions {
   calls?: HostTimezoneCalls;
@@ -44,7 +44,7 @@ export function ServerTimezoneSetting(
   },
 ) {
   const { t, errorMessage, locale } = useText();
-  const calls = (): HostTimezoneCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostTimezoneCalls => props.calls ?? window.codebot.hostAdmin;
   const [settings, setSettings] = createSignal<HostTimezoneSettings | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);
   let generation = 0;

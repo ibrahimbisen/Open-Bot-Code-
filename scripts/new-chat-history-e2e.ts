@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import { CONTEXT_RESET_ITEM_TYPE, type ConversationMessage, type ConversationSnapshot } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n";
+import { CONTEXT_RESET_ITEM_TYPE, type ConversationMessage, type ConversationSnapshot } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n";
 import { argument, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
 const agentArgument = argument("agent");
@@ -33,9 +33,9 @@ const session = await connectChannelE2e("new-chat-history-e2e");
 const { page } = session;
 
 const main = (): Promise<ConversationSnapshot> =>
-  page.evaluate((id) => window.openbot.agent.readConversation(id), agentId);
+  page.evaluate((id) => window.codebot.agent.readConversation(id), agentId);
 const send = (text: string) =>
-  page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+  page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
     agentId,
     text,
   });
@@ -63,7 +63,7 @@ const turn = async (prompt: string, label: string) => {
 };
 
 try {
-  const agent = (await page.evaluate(() => window.openbot.agent.listAgents())).find(
+  const agent = (await page.evaluate(() => window.codebot.agent.listAgents())).find(
     (candidate) => candidate.id === agentId,
   );
   assert.ok(agent, `Unknown agent: ${agentId}`);
@@ -73,7 +73,7 @@ try {
   await send(seed);
   await waitFor(page, "seed reply", main, (snapshot) => repliesAfter(snapshot, seed).length > 0);
 
-  await page.evaluate((id) => window.openbot.agent.clearContext(id), agentId);
+  await page.evaluate((id) => window.codebot.agent.clearContext(id), agentId);
 
   const first = await turn("What is 7 times 6? Reply with the number only.", "first reply after New chat");
   report.firstTurn = {
@@ -93,10 +93,10 @@ try {
     after.messages.slice(seedIndex + 1, recallIndex).some((message) => message.itemType === CONTEXT_RESET_ITEM_TYPE);
   report.recall = { ...result, found: result.reply.includes(word) };
 
-  const memories = await page.evaluate((id) => window.openbot.agent.listMemories(id), agentId);
+  const memories = await page.evaluate((id) => window.codebot.agent.listMemories(id), agentId);
   report.wordInMemories = memories.some((memory) => JSON.stringify(memory).includes(word));
 
-  const screenshot = resolve(import.meta.dirname, "../.openbot-build/new-chat-history-e2e/chat.png");
+  const screenshot = resolve(import.meta.dirname, "../.codebot-build/new-chat-history-e2e/chat.png");
   await page.screenshot({ path: screenshot });
   report.screenshot = screenshot;
 

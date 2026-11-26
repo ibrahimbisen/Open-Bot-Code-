@@ -1,8 +1,8 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { connect, createServer, isIP, type Server, type Socket } from "node:net";
 import type { Duplex } from "node:stream";
-import type { BrowserProxyFailure } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { BrowserProxyFailure } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { type BrowserOperationError, browserFailure } from "../browser-effects";
 
@@ -40,7 +40,7 @@ export interface BrowserProxyRelay {
   readonly close: Effect.Effect<void>;
 }
 
-const RELAY_USERNAME = "openbot";
+const RELAY_USERNAME = "codebot";
 const HEAD_MAX_BYTES = 64 * 1024;
 const HEAD_TIMEOUT_MS = 30_000;
 const SOCKS_TIMEOUT_MS = 20_000;
@@ -54,7 +54,7 @@ function addressRefusedResponse(): string {
 }
 const BAD_REQUEST = "HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
 const SIGN_IN_REQUIRED =
-  'HTTP/1.1 407 Proxy Authentication Required\r\nProxy-Authenticate: Basic realm="OpenBot"\r\nContent-Length: 0\r\nConnection: close\r\n\r\n';
+  'HTTP/1.1 407 Proxy Authentication Required\r\nProxy-Authenticate: Basic realm="CodeBot"\r\nContent-Length: 0\r\nConnection: close\r\n\r\n';
 
 interface RelayRequest {
   target: RelayTarget;

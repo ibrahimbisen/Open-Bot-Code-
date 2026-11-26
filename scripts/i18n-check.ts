@@ -1,10 +1,10 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve, sep } from "node:path";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import type { Message, PluralMessage } from "@openbot/i18n";
-import { TRANSLATED_LOCALES } from "@openbot/i18n";
-import { matchingSourceKeys } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import type { Message, PluralMessage } from "@codebot/i18n";
+import { TRANSLATED_LOCALES } from "@codebot/i18n";
+import { matchingSourceKeys } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const MESSAGES = resolve(ROOT, "packages/i18n/src/messages");
@@ -44,7 +44,7 @@ const RELEASED_SOURCE_KEYS = new Set([
   "error.connector.protonPassPlan",
 ]);
 
-const logger = createOpenBotLogger("i18n-check");
+const logger = createCodeBotLogger("i18n-check");
 const failures: string[] = [];
 const OBJECT_START = "export const messages = {";
 const LEADING_KEY = /^(?:\s|\/\/[^\n]*)*"([^"\\]+)"\s*:/;
@@ -321,7 +321,7 @@ const report = {
 };
 
 if (process.argv.includes("--json")) {
-  const path = resolve(ROOT, ".openbot-build/i18n-report.json");
+  const path = resolve(ROOT, ".codebot-build/i18n-report.json");
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(path, `${JSON.stringify(report, null, 2)}\n`);
   logger.info(`Wrote ${relative(ROOT, path)}.`);

@@ -1,4 +1,4 @@
-import type { AvatarColor } from "@openbot/contracts/ipc";
+import type { AvatarColor } from "@codebot/contracts/ipc";
 
 export const CHAT_COLOR_PRESETS = [
   { id: "red", value: "#f75d59" },

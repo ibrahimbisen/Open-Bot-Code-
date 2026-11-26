@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   isGitHubRepositoryName,
   WORKFLOW_GITHUB_EVENTS,
@@ -9,7 +9,7 @@ import {
   workflowGitHubEventItemKind,
   workflowGitHubTriggerRepositories,
   workflowListField,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   type DynamicRecord,
   isBoolean,
@@ -17,7 +17,7 @@ import {
   isNumber,
   isOneOf,
   isString,
-} from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/runtime-values";
 import { EXTERNAL_EVENT_END, EXTERNAL_EVENT_START } from "../webhook-trigger";
 
 export interface GitHubEventFacts {

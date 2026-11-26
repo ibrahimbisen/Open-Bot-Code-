@@ -1,7 +1,7 @@
 .subagents-elapsed {
   flex: 0 0 auto;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
 }
 
@@ -9,15 +9,15 @@
   display: flex;
   min-width: 0;
   align-items: flex-start;
-  gap: var(--openbot-space-1-5);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  gap: var(--codebot-space-1-5);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .subagents-live-glyph {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
   flex: 0 0 auto;
   margin-top: 2px;
 }
@@ -31,14 +31,14 @@
 }
 
 .subagents-live[data-state="failed"] {
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 .subagents-group {
   display: flex;
   width: 100%;
   flex-direction: column;
-  gap: var(--openbot-space-1-5);
+  gap: var(--codebot-space-1-5);
 }
 
 .subagents-group .subagents-group-header {
@@ -46,14 +46,14 @@
   height: auto;
   align-self: flex-start;
   align-items: center;
-  gap: var(--openbot-space-2);
-  margin-inline-start: calc(-1 * var(--openbot-space-1-5));
-  border-radius: var(--openbot-radius-sm);
-  padding: var(--openbot-space-0-5) var(--openbot-space-1-5);
+  gap: var(--codebot-space-2);
+  margin-inline-start: calc(-1 * var(--codebot-space-1-5));
+  border-radius: var(--codebot-radius-sm);
+  padding: var(--codebot-space-0-5) var(--codebot-space-1-5);
   color: inherit;
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-regular);
-  line-height: var(--openbot-leading-md);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-regular);
+  line-height: var(--codebot-leading-md);
   text-align: start;
 }
 
@@ -63,10 +63,10 @@
 }
 
 .subagents-group-chevron {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
-  color: var(--openbot-text-muted);
-  transition: rotate var(--openbot-duration-fast) var(--openbot-ease-out);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
+  color: var(--codebot-text-muted);
+  transition: rotate var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .subagents-group-header[aria-expanded="true"] .subagents-group-chevron {
@@ -80,16 +80,16 @@
 }
 
 .subagents-group-title {
-  font-weight: var(--openbot-weight-medium);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .subagents-progress {
-  gap: var(--openbot-space-1-5);
+  gap: var(--codebot-space-1-5);
   font-variant-numeric: tabular-nums;
 }
 
 .subagents-ring {
-  width: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
 }
 
 .subagents-ring .ui-radial-progress-track,
@@ -98,11 +98,11 @@
 }
 
 .subagents-ring .ui-radial-progress-indicator {
-  transition: stroke-dasharray var(--openbot-duration-slow) var(--openbot-ease-out);
+  transition: stroke-dasharray var(--codebot-duration-slow) var(--codebot-ease-out);
 }
 
 .subagents-progress-failed {
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -114,7 +114,7 @@
 .subagents-dock {
   position: relative;
   z-index: 3;
-  width: calc(100% - 2 * var(--openbot-space-3));
+  width: calc(100% - 2 * var(--codebot-space-3));
   max-width: var(--conversation-column-width, none);
   height: 0;
   flex: 0 0 auto;
@@ -123,27 +123,27 @@
 
 .subagents-dock .subagents-dock-bar {
   position: absolute;
-  top: var(--openbot-space-1);
+  top: var(--codebot-space-1);
   inset-inline-start: 0;
   display: flex;
   width: var(--message-wide-bubble-width);
   height: auto;
   align-items: center;
-  gap: var(--openbot-space-2);
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-canvas);
-  padding: var(--openbot-space-1-5) var(--openbot-space-3);
+  gap: var(--codebot-space-2);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-canvas);
+  padding: var(--codebot-space-1-5) var(--codebot-space-3);
   color: inherit;
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-regular);
-  line-height: var(--openbot-leading-md);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-regular);
+  line-height: var(--codebot-leading-md);
   text-align: start;
 }
 
 .subagents-dock .subagents-dock-bar:hover {
-  border-color: var(--openbot-border-strong);
-  background: var(--openbot-bg-canvas);
+  border-color: var(--codebot-border-strong);
+  background: var(--codebot-bg-canvas);
 }
 
 .subagents-dock-live {
@@ -153,10 +153,10 @@
 }
 
 .subagents-dock-chevron {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
   flex: 0 0 auto;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   rotate: 90deg;
 }
 
@@ -165,10 +165,10 @@
   width: var(--message-wide-bubble-width);
   flex-direction: column;
   margin: 0;
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-canvas);
-  padding: var(--openbot-space-1);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-canvas);
+  padding: var(--codebot-space-1);
   list-style: none;
 }
 
@@ -177,14 +177,14 @@
   width: 100%;
   height: auto;
   align-items: start;
-  grid-template-columns: var(--openbot-icon-sm) minmax(0, 1fr) auto auto;
-  gap: 2px var(--openbot-space-2);
+  grid-template-columns: var(--codebot-icon-sm) minmax(0, 1fr) auto auto;
+  gap: 2px var(--codebot-space-2);
   border: 0;
-  border-radius: var(--openbot-radius-sm);
+  border-radius: var(--codebot-radius-sm);
   background: transparent;
-  padding: var(--openbot-space-2);
+  padding: var(--codebot-space-2);
   color: inherit;
-  font-weight: var(--openbot-weight-regular);
+  font-weight: var(--codebot-weight-regular);
   line-height: inherit;
   text-align: start;
   white-space: normal;
@@ -192,15 +192,15 @@
 }
 
 .subagents-list .subagents-row:hover {
-  background: var(--openbot-hover);
+  background: var(--codebot-hover);
 }
 
 .subagents-list .subagents-row.subagents-row-selected {
-  background: var(--openbot-bg-surface);
+  background: var(--codebot-bg-surface);
 }
 
 .subagents-row:focus-visible {
-  outline: 2px solid var(--openbot-focus-ring);
+  outline: 2px solid var(--codebot-focus-ring);
   outline-offset: -2px;
 }
 
@@ -212,15 +212,15 @@
 .subagents-row-title {
   display: -webkit-box;
   overflow: hidden;
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-medium);
-  line-height: var(--openbot-leading-md);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-medium);
+  line-height: var(--codebot-leading-md);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
 
 .subagents-row .subagents-elapsed {
-  line-height: var(--openbot-leading-md);
+  line-height: var(--codebot-leading-md);
 }
 
 .subagents-row .subagents-live-glyph {
@@ -237,13 +237,13 @@
 }
 
 .subagents-row-chevron {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
   flex: 0 0 auto;
   margin-top: 4px;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   opacity: 0;
-  transition: opacity var(--openbot-duration-fast) var(--openbot-ease-out);
+  transition: opacity var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .subagents-row:hover .subagents-row-chevron,
@@ -267,35 +267,35 @@
   min-height: 0;
   flex: 1;
   flex-direction: column;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
   overflow-y: auto;
-  padding: var(--openbot-space-4);
+  padding: var(--codebot-space-4);
 }
 
 .subagents-panel-head {
   display: flex;
   align-items: flex-start;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .subagents-panel-head h3 {
   margin: 0;
-  font-size: var(--openbot-text-lg);
-  font-weight: var(--openbot-weight-semibold);
-  line-height: var(--openbot-leading-lg);
+  font-size: var(--codebot-text-lg);
+  font-weight: var(--codebot-weight-semibold);
+  line-height: var(--codebot-leading-lg);
   overflow-wrap: anywhere;
 }
 
 .subagents-panel-meta {
   margin: 0;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .subagents-steps {
   display: flex;
   flex-direction: column;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .subagents-prompt {
@@ -303,24 +303,24 @@
   flex-direction: column;
   gap: 2px;
   margin: 0;
-  border-inline-start: 2px solid var(--openbot-border-strong);
-  padding-inline-start: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  border-inline-start: 2px solid var(--codebot-border-strong);
+  padding-inline-start: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
 .subagents-prompt-label {
-  color: var(--openbot-text-muted);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-muted);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .subagents-step-list {
   display: flex;
   flex-direction: column;
-  gap: var(--openbot-space-1-5);
+  gap: var(--codebot-space-1-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -329,28 +329,28 @@
 .subagents-step {
   display: flex;
   align-items: flex-start;
-  gap: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  gap: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   overflow-wrap: anywhere;
 }
 
 .subagents-step-glyph {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
   flex: 0 0 auto;
   margin-top: 2px;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .subagents-step[data-kind="thinking"] .subagents-step-text {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-style: italic;
 }
 
 .subagents-step[data-kind="text"] .subagents-step-text {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .subagents-step-text.agent-activity-label {
@@ -360,36 +360,36 @@
 .subagents-error {
   display: flex;
   align-items: flex-start;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   margin: 0;
-  color: var(--openbot-danger-text);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-danger-text);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .subagents-error-icon {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
   flex: 0 0 auto;
   margin-top: 2px;
 }
 
 .subagents-status {
   display: inline-flex;
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-leading-md);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-leading-md);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
 }
 
 .subagents-status-icon {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
 }
 
 .subagents-status[data-state="running"] {
-  color: var(--openbot-accent);
+  color: var(--codebot-accent);
 }
 
 .subagents-status[data-state="running"] .subagents-status-icon {
@@ -397,15 +397,15 @@
 }
 
 .subagents-status[data-state="completed"] {
-  color: var(--openbot-success);
+  color: var(--codebot-success);
 }
 
 .subagents-status[data-state="failed"] {
-  color: var(--openbot-danger);
+  color: var(--codebot-danger);
 }
 
 .subagents-status[data-state="stopped"] {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {

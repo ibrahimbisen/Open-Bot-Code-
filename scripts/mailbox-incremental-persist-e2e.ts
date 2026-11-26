@@ -4,13 +4,13 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { withDatabaseTransaction } from "../src/backend/agent/conversation-runtime";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { databaseRows } from "../src/backend/database/database-rows";
 import type { MailboxProjectionChanges, MailboxProjectionState } from "../src/backend/database/mailbox-projection";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mailbox-incremental-persist-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mailbox-incremental-persist-e2e");
 const AGENT = "agent-a";
 const OTHER_AGENT = "agent-b";
 const CHANNEL = "channel-1";
@@ -53,10 +53,10 @@ const report: Report = {
   passed: false,
 };
 
-class MirroredDatabase extends OpenBotDatabase {
-  readonly #reference: OpenBotDatabase;
+class MirroredDatabase extends CodeBotDatabase {
+  readonly #reference: CodeBotDatabase;
 
-  constructor(path: string, reference: OpenBotDatabase) {
+  constructor(path: string, reference: CodeBotDatabase) {
     super(path);
     this.#reference = reference;
   }
@@ -90,7 +90,7 @@ class MirroredDatabase extends OpenBotDatabase {
   }
 }
 
-function projectionRows(database: OpenBotDatabase): Record<string, unknown[]> {
+function projectionRows(database: CodeBotDatabase): Record<string, unknown[]> {
   const rows: Record<string, unknown[]> = {};
   for (const [table, order] of TABLES) {
     rows[table] = databaseRows(database.connection.prepare(`SELECT * FROM ${table} ORDER BY ${order}`).all()).map(
@@ -103,7 +103,7 @@ function projectionRows(database: OpenBotDatabase): Record<string, unknown[]> {
   return rows;
 }
 
-function check(step: string, database: OpenBotDatabase, reference: OpenBotDatabase): void {
+function check(step: string, database: CodeBotDatabase, reference: CodeBotDatabase): void {
   const actual = projectionRows(database);
   const expected = projectionRows(reference);
   const rows = Object.values(actual).reduce((count, table) => count + table.length, 0);
@@ -112,9 +112,9 @@ function check(step: string, database: OpenBotDatabase, reference: OpenBotDataba
   assert.deepEqual(actual, expected, `The rows differ from the full replace after: ${step}`);
 }
 
-async function openProfile(root: string, name: string, reference?: OpenBotDatabase) {
+async function openProfile(root: string, name: string, reference?: CodeBotDatabase) {
   const path = join(root, name);
-  const database = reference ? new MirroredDatabase(path, reference) : new OpenBotDatabase(path);
+  const database = reference ? new MirroredDatabase(path, reference) : new CodeBotDatabase(path);
   const mailbox = new MailboxStore(path, join(root, "shared"), database);
   await runCauseEffect(mailbox.initialize());
   return { database, mailbox };
@@ -152,7 +152,7 @@ function deliveryOf(receipt: { deliveries: Array<{ id: string; recipientAgentId:
 }
 
 async function parity(root: string): Promise<void> {
-  const reference = new OpenBotDatabase(join(root, "reference"));
+  const reference = new CodeBotDatabase(join(root, "reference"));
   await runCauseEffect(reference.initialize());
   let { database, mailbox } = await openProfile(root, "profile", reference);
   check("legacy import", database, reference);
@@ -351,7 +351,7 @@ async function timing(root: string): Promise<NonNullable<Report["timing"]>> {
   };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-mailbox-persist-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-mailbox-persist-"));
 try {
   await parity(root);
   report.timing = await timing(root);

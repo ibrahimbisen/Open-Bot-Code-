@@ -1,5 +1,5 @@
-import { SwitchField } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { SwitchField } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { setMotionEffect, useMotionEffect } from "../../motion-preference";
 import { setStartupAnimation, useStartupAnimation } from "../../startup-animation-preference";
 

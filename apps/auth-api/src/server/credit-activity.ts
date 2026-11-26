@@ -5,7 +5,7 @@ import {
   type CreditActivityKind,
   type CreditActivityStatus,
   creditsFromTenths,
-} from "@openbot/contracts/credits";
+} from "@codebot/contracts/credits";
 import { Effect } from "effect";
 import { type BillingError, type BillingOperationError, billingCall } from "./billing-errors";
 
@@ -88,11 +88,11 @@ const ACTIVITY_SQL = `
    ORDER BY e.at DESC, e.id DESC
    LIMIT ?2`;
 
-const OPENBOT_KINDS: readonly CreditActivityKind[] = ["free", "expired", "refund"];
+const CODEBOT_KINDS: readonly CreditActivityKind[] = ["free", "expired", "refund"];
 
 function activityActor(row: ActivityRow, kind: CreditActivityKind, userId: string): CreditActivityEntry["actor"] {
   if (row.actor_id === userId) return "you";
-  if (row.actor_id === null && OPENBOT_KINDS.includes(kind)) return "openbot";
+  if (row.actor_id === null && CODEBOT_KINDS.includes(kind)) return "codebot";
   return "member";
 }
 

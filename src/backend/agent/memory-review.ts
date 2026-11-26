@@ -11,8 +11,8 @@ import {
   skillConversationEventItemType,
   skillSuggestionItemType,
   skillSuggestionTarget,
-} from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Deferred, Effect, Exit, Fiber, Schema, Scope } from "effect";
 import type { AgentClient } from "../agent-client";
 import { extractJsonObject } from "../structured-output";
@@ -43,7 +43,7 @@ import {
 } from "./skill-learning";
 import { reviewedChat, skillSuggestionMessages, skillSuggestionSaved } from "./skill-suggestion";
 
-const logger = createOpenBotLogger("memory-review");
+const logger = createCodeBotLogger("memory-review");
 
 const MEMORY_REVIEW_INTERVAL = 20;
 const MEMORY_REVIEW_IDLE_MS = 15 * 60_000;

@@ -10,7 +10,7 @@ import {
   type AgentModelOption,
   BROWSER_SECRET_RESPONSE_PATH,
   LEGACY_AGENT_REASONING_EFFORTS,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   createTeamProtocolV2Request,
   createTeamProtocolV8Event,
@@ -42,10 +42,10 @@ import {
   TEAM_PROTOCOL_VERSION_HEADER,
   teamCapabilitiesForProtocol,
   teamProtocolV2AuthenticationTranscript,
-} from "@openbot/contracts/team-protocol";
-import { AGENT_BACKGROUND_WORK_CAPABILITY } from "@openbot/contracts/team-protocol/agent-background-work-v1";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { teamProtocolCapabilityLimit } from "@openbot/contracts/team-protocol/capability-limits";
+} from "@codebot/contracts/team-protocol";
+import { AGENT_BACKGROUND_WORK_CAPABILITY } from "@codebot/contracts/team-protocol/agent-background-work-v1";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { teamProtocolCapabilityLimit } from "@codebot/contracts/team-protocol/capability-limits";
 import {
   AGENT_ERROR_LINK_CAPABILITY,
   BROWSER_VAULT_SKIP_CAPABILITY,
@@ -55,39 +55,39 @@ import {
   TEAM_WEB_CLIENT_PROTOCOL,
   TEAM_WEBRTC_CLIENT_PROTOCOL,
   teamWebRtcClientProtocol,
-} from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/current";
 import {
   TEAM_REASONING_EFFORTS,
   TEAM_REASONING_EFFORTS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/reasoning-efforts-v1";
-import { TEAM_PI_MUSE_CAPABILITY } from "@openbot/contracts/team-protocol/v7";
-import { decodeTeamProtocolV8CurrentHttpResponse } from "@openbot/contracts/team-protocol/v8-adapter";
-import { decodeTeamProtocolSupportV8Base } from "@openbot/contracts/team-protocol/v8-base";
+} from "@codebot/contracts/team-protocol/reasoning-efforts-v1";
+import { TEAM_PI_MUSE_CAPABILITY } from "@codebot/contracts/team-protocol/v7";
+import { decodeTeamProtocolV8CurrentHttpResponse } from "@codebot/contracts/team-protocol/v8-adapter";
+import { decodeTeamProtocolSupportV8Base } from "@codebot/contracts/team-protocol/v8-base";
 import {
   decodeTeamProtocolV8BaseCurrentEvent,
   encodeTeamProtocolV8BaseCurrentEvent,
-} from "@openbot/contracts/team-protocol/v8-base-adapter";
+} from "@codebot/contracts/team-protocol/v8-base-adapter";
 import {
   decodeTeamProtocolSupportV9,
   TEAM_LONG_CAPABILITY_LISTS_CAPABILITY,
   TEAM_PROTOCOL_V9,
   TEAM_PROTOCOL_V9_CAPABILITY_LIMIT,
-} from "@openbot/contracts/team-protocol/v9";
-import { TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/v9";
+import { TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 import type { TeamWebRtcChannel } from "../src/main/team-webrtc-bridge";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/team-api-legacy-clients-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/team-api-legacy-clients-e2e");
 const FIXTURES = resolve(import.meta.dirname, "../packages/contracts/src/team-protocol/fixtures");
 const HOST_VERSION = "0.0.0-e2e";
 const STEP_DEADLINE_MS = 30_000;
@@ -360,14 +360,14 @@ class LoopbackBridge extends TeamWebRtcBridge {
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-team-api-legacy-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-team-api-legacy-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
 const access = new AgentAccessStore(join(userData, AGENT_ACCESS_FILE));
 let agents: AgentService | null = null;
 let server: InstanceType<typeof TeamApiServer> | null = null;
@@ -495,7 +495,7 @@ try {
   await step("v1 events: the released socket subprotocol, scope and `botId` events", async () => {
     const opened = new WebSocket(`ws://127.0.0.1:${port}/v1/events`, [
       TEAM_PROTOCOL_V1_WEBSOCKET,
-      `openbot-token.${member.token}`,
+      `codebot-token.${member.token}`,
     ]);
     socket = opened;
     await new Promise<void>((resolveOpen, reject) => {
@@ -755,7 +755,7 @@ try {
   async function currentRuntimeSnapshot(capabilities: readonly string[]): Promise<JsonObject> {
     const opened = new WebSocket(`ws://127.0.0.1:${port}/v1/events`, [
       TEAM_PROTOCOL_V1_WEBSOCKET,
-      `openbot-token.${member.token}`,
+      `codebot-token.${member.token}`,
     ]);
     await new Promise<void>((resolveOpen, reject) => {
       opened.addEventListener("open", () => resolveOpen(), { once: true });
@@ -1017,7 +1017,7 @@ try {
   ): Promise<JsonObject> {
     const opened = new WebSocket(`ws://127.0.0.1:${port}/v1/events`, [
       TEAM_PROTOCOL_V1_WEBSOCKET,
-      `openbot-token.${member.token}`,
+      `codebot-token.${member.token}`,
     ]);
     await new Promise<void>((resolveOpen, reject) => {
       opened.addEventListener("open", () => resolveOpen(), { once: true });
@@ -1239,7 +1239,7 @@ try {
   async function currentTakeoverEvent(capabilities: readonly string[]): Promise<JsonObject> {
     const opened = new WebSocket(`ws://127.0.0.1:${port}/v1/events`, [
       TEAM_PROTOCOL_V1_WEBSOCKET,
-      `openbot-token.${member.token}`,
+      `codebot-token.${member.token}`,
     ]);
     await new Promise<void>((resolveOpen, reject) => {
       opened.addEventListener("open", () => resolveOpen(), { once: true });
@@ -1321,7 +1321,7 @@ try {
   async function currentErrorEvent(capabilities: readonly string[]): Promise<JsonObject> {
     const opened = new WebSocket(`ws://127.0.0.1:${port}/v1/events`, [
       TEAM_PROTOCOL_V1_WEBSOCKET,
-      `openbot-token.${member.token}`,
+      `codebot-token.${member.token}`,
     ]);
     await new Promise<void>((resolveOpen, reject) => {
       opened.addEventListener("open", () => resolveOpen(), { once: true });
@@ -1621,7 +1621,7 @@ try {
 
   await step("v8 RPC: a browser tab opened over WebRTC keeps its owner agent", async () => {
     const path = "/v1/browser/open";
-    const owners = { ownerThreadId: `openbot-thread-${source.id}`, ownerAgentId: source.id };
+    const owners = { ownerThreadId: `codebot-thread-${source.id}`, ownerAgentId: source.id };
     const requestId = randomUUID();
     const from = v2.bridge.sent.length;
     openedTabOwners.length = 0;

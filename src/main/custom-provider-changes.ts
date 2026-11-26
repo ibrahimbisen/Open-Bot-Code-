@@ -6,7 +6,7 @@ import {
   DEFAULT_CUSTOM_PROVIDER_HARNESS,
   type SaveCustomProviderInput,
   type UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect, Semaphore } from "effect";
 import { AgentLifecycleFailed, type AgentService } from "../backend/agent-service";
 import type { CustomProviderStore } from "./custom-provider-store";

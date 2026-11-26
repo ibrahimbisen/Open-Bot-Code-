@@ -1,4 +1,4 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 
 const NEAR_INTENTS_RELAY_PREFIX = "/v1/near";

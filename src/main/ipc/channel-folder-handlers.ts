@@ -1,11 +1,11 @@
-import { parseBrowseChannelFoldersInput, parseChannelFolderInput } from "@openbot/contracts/ipc";
+import { parseBrowseChannelFoldersInput, parseChannelFolderInput } from "@codebot/contracts/ipc";
 import {
   CHANNEL_FOLDERS_CAPABILITY,
   CHANNEL_FOLDERS_ROUTES,
-} from "@openbot/contracts/team-protocol/channel-folders-v1";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import type { AppTranslate } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/channel-folders-v1";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import type { AppTranslate } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
 import type { Effect } from "effect";
 import type { BrowserWindow } from "electron";
 import { runCauseEffect } from "../../backend/effect-boundary";

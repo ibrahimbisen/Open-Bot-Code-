@@ -1,13 +1,13 @@
-import { type AgentProviderId, type AgentProviderRef, isKnownAgentProvider } from "@openbot/contracts/agent-providers";
+import { type AgentProviderId, type AgentProviderRef, isKnownAgentProvider } from "@codebot/contracts/agent-providers";
 import type {
   AgentAdminSettings,
   AgentStatus,
   ClientAgentModelOption,
   UpdateAgentAdminSettingsInput,
-} from "@openbot/contracts/ipc";
-import { toAgentProfile } from "@openbot/ui/features/agents/agent-profile";
-import AgentSettingsPanel from "@openbot/ui/features/conversation/AgentSettingsPanel";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { toAgentProfile } from "@codebot/ui/features/agents/agent-profile";
+import AgentSettingsPanel from "@codebot/ui/features/conversation/AgentSettingsPanel";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createStore, onSettled, Show } from "solid-js";
 import type { AgentSettingsApi } from "./agent-settings";
 import type { Workspace } from "./workspace";

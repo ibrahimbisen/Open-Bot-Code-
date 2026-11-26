@@ -8,7 +8,7 @@ export interface AgentThreadTabs {
 
 export type ThreadTabsByServer = Record<string, Record<string, AgentThreadTabs>>;
 
-const THREAD_TABS_STORAGE_KEY = "openbot:thread-tabs:v1";
+const THREAD_TABS_STORAGE_KEY = "codebot:thread-tabs:v1";
 const MAX_STORED_TABS = 50;
 
 type ThreadTabsStorage = Pick<Storage, "getItem" | "setItem">;
@@ -66,7 +66,7 @@ export function writeThreadTabs(tabs: ThreadTabsByServer, storage: ThreadTabsSto
 
 type SeenThreadsByServer = Record<string, Record<string, string>>;
 
-const THREADS_SEEN_STORAGE_KEY = "openbot:thread-tabs-seen:v1";
+const THREADS_SEEN_STORAGE_KEY = "codebot:thread-tabs-seen:v1";
 const seenThreadsSchema = z.record(id, z.record(id, id.nullable().catch(null)).catch({}));
 
 function readSeenThreads(storage: ThreadTabsStorage): SeenThreadsByServer {
@@ -119,7 +119,7 @@ export interface PendingThreadDelete {
   restore: boolean;
 }
 
-const THREAD_DELETES_STORAGE_KEY = "openbot:thread-deletes:v1";
+const THREAD_DELETES_STORAGE_KEY = "codebot:thread-deletes:v1";
 const MAX_STORED_DELETES = 200;
 
 const pendingDeleteSchema = z.object({

@@ -15,7 +15,7 @@ const COMMENT_MARKER = "<!-- contribution-policy -->";
 const COMMENT_AUTHOR = "github-actions[bot]";
 const CLOSE_AFTER_DAYS = 7;
 const FORM_DIR = ".github/ISSUE_TEMPLATE";
-const REPORT_PATH = ".openbot-build/contribution-policy/report.json";
+const REPORT_PATH = ".codebot-build/contribution-policy/report.json";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -214,7 +214,7 @@ function loadPullRequest(number: number): PullRequest {
 
 function failureComment(author: string): string {
   return [
-    `@${author}, thank you for the pull request. A maintainer marked it as a feature or a change to how OpenBot works.`,
+    `@${author}, thank you for the pull request. A maintainer marked it as a feature or a change to how CodeBot works.`,
     "",
     `Changes of this type need an issue with the \`${LABEL_APPROVED}\` label before we review code. To continue:`,
     "",

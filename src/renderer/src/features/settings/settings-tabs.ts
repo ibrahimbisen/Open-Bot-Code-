@@ -1,5 +1,5 @@
-import type { AppInfo } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppInfo } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Bell,
   CircleArrowDown,
@@ -16,8 +16,8 @@ import {
   Settings,
   Smartphone,
   UserRound,
-} from "@openbot/ui";
-import { SHORTCUT_COMMANDS, SHORTCUT_TITLES } from "@openbot/ui/features/settings/keyboard-shortcuts";
+} from "@codebot/ui";
+import { SHORTCUT_COMMANDS, SHORTCUT_TITLES } from "@codebot/ui/features/settings/keyboard-shortcuts";
 
 export type SettingsTab =
   | "general"

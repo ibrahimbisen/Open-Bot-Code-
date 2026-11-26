@@ -1,6 +1,6 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { toast } from "@openbot/ui";
-import { currentText } from "@openbot/ui/text";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { toast } from "@codebot/ui";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, onSettled } from "solid-js";
 import { agentAskedHere } from "../../agent-requests";
 import { desktopWorkflowList, onDesktopWorkflowsChanged } from "./workflows-port";

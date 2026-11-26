@@ -1,6 +1,6 @@
-import type { AppInfo, SettingLinkId } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import type { AgentSettingLinkId } from "@openbot/ui/features/conversation/agent-setting-links";
+import type { AppInfo, SettingLinkId } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import type { AgentSettingLinkId } from "@codebot/ui/features/conversation/agent-setting-links";
 import { type SettingsTab, settingsTabShown } from "./settings-tabs";
 
 type CreditsSettingLinkId = "credits.explainer";

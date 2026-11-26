@@ -1,5 +1,5 @@
-import type { McpServerConfig, McpTestResult } from "@openbot/contracts/ipc";
-import { Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle, Button, OctagonX, Puzzle } from "@openbot/ui";
+import type { McpServerConfig, McpTestResult } from "@codebot/contracts/ipc";
+import { Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle, Button, OctagonX, Puzzle } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createStore, onCleanup, Show } from "solid-js";
 import { useText } from "../../text";

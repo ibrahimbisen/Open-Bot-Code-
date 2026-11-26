@@ -1,15 +1,15 @@
-import type { ChatWindowTarget } from "@openbot/contracts/ipc";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@openbot/contracts/team-protocol/conversation-unread-from-v1";
-import { AGENT_HIDDEN_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { MAIN_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
-import { Sidebar } from "@openbot/ui/features/sidebar/Sidebar";
-import { SidebarCommunityCard } from "@openbot/ui/features/sidebar/SidebarCommunityCard";
-import { SidebarMobileAppCard } from "@openbot/ui/features/sidebar/SidebarMobileAppCard";
-import { sidebarAgentOrder } from "@openbot/ui/features/sidebar/sidebar-agent-order";
-import { sidebarChannelWaits } from "@openbot/ui/features/sidebar/sidebar-agent-states";
-import { teamMemberName } from "@openbot/ui/features/team/TeamPersonAvatar";
-import { useText } from "@openbot/ui/text";
+import type { ChatWindowTarget } from "@codebot/contracts/ipc";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@codebot/contracts/team-protocol/conversation-unread-from-v1";
+import { AGENT_HIDDEN_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
+import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
+import { SidebarCommunityCard } from "@codebot/ui/features/sidebar/SidebarCommunityCard";
+import { SidebarMobileAppCard } from "@codebot/ui/features/sidebar/SidebarMobileAppCard";
+import { sidebarAgentOrder } from "@codebot/ui/features/sidebar/sidebar-agent-order";
+import { sidebarChannelWaits } from "@codebot/ui/features/sidebar/sidebar-agent-states";
+import { teamMemberName } from "@codebot/ui/features/team/TeamPersonAvatar";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, onSettled, Show } from "solid-js";
 import { appPort } from "../../app-port";
 import { type ChatHistoryEntry, chatHistoryKeys } from "../../chat-history";
@@ -44,7 +44,7 @@ import { createSidebarAlertCards, SidebarAlertCards } from "./SidebarAlertCards"
 import { ServerUpgradeOffer } from "./server-upgrade-offer";
 import { useSidebar } from "./sidebar-context";
 
-const MOBILE_APP_DISMISSED_STORAGE_KEY = "openbot:mobile-app-card-dismissed";
+const MOBILE_APP_DISMISSED_STORAGE_KEY = "codebot:mobile-app-card-dismissed";
 
 export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
   const { t } = useText();

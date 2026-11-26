@@ -1,4 +1,4 @@
-import type { AppFormat } from "@openbot/i18n";
+import type { AppFormat } from "@codebot/i18n";
 import { currentText } from "../../text";
 
 export function formatChatTimestamp(date: Date, format: AppFormat = currentText().format): string {

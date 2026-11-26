@@ -2,8 +2,8 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { ChannelStore } from "../src/backend/channel-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
 const CHANNEL_COUNT = 64;
 const MESSAGE_COUNT = 500;
@@ -12,7 +12,7 @@ const RUNS = 7;
 const MEMBER_ID = "member-bench";
 const SHOWN_MESSAGE_SQL =
   "(instr(message_json, '\"deleted\"') = 0 OR json_extract(message_json, '$.deleted') IS NOT 1)";
-const outputPath = resolve(".openbot-build", "channel-list-bench.json");
+const outputPath = resolve(".codebot-build", "channel-list-bench.json");
 
 function channel(id: string) {
   return {
@@ -83,8 +83,8 @@ function timed(run: () => void): number {
 }
 
 async function main(): Promise<void> {
-  const root = await mkdtemp(join(tmpdir(), "openbot-channel-list-bench-"));
-  const database = new OpenBotDatabase(root);
+  const root = await mkdtemp(join(tmpdir(), "codebot-channel-list-bench-"));
+  const database = new CodeBotDatabase(root);
   await runCauseEffect(database.initialize());
   try {
     const connection = database.connection;
@@ -168,7 +168,7 @@ async function main(): Promise<void> {
       tasksInFirstChannelAfterChange: { open: changedSummary.openTasks, active: changedSummary.activeTasks },
     };
     const medianMs = { cold: median(cold), warm: median(warm), oneChanged: median(oneChanged) };
-    await mkdir(resolve(".openbot-build"), { recursive: true });
+    await mkdir(resolve(".codebot-build"), { recursive: true });
     await writeFile(outputPath, `${JSON.stringify({ counts, runs: RUNS, medianMs }, null, 2)}\n`);
     process.stdout.write(`${outputPath}\n`);
   } finally {

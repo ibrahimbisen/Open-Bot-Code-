@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentSummary,
   AVATAR_HUES,
@@ -7,15 +7,15 @@ import {
   type Channel,
   type ChannelDraft,
   isAvatarHue,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { ChannelService } from "../channel-service";
 import type { DynamicToolCallParams } from "../protocol";
 import { type AvatarImageDecoder, loadAvatarFile } from "./avatar-file";
 import { profileToolErrorMessage } from "./profile-tools";
-import { openBotToolResult } from "./routine-tools";
+import { codeBotToolResult } from "./routine-tools";
 import { toolCallIdempotencyKey } from "./tool-call-idempotency";
 import { ToolOperationFailed, toToolOperationFailed } from "./tool-operation";
 import { unknownAgentMessage } from "./unknown-agent";
@@ -61,7 +61,7 @@ export const createChannelToolSchema = z
     name: channelFields.name,
     title: channelFields.title.optional(),
     instructions: channelFields.instructions.optional(),
-    memberAgentIds: agentIds.min(1).describe("Ids from openbot.list_agents of the agents in the channel."),
+    memberAgentIds: agentIds.min(1).describe("Ids from codebot.list_agents of the agents in the channel."),
     leadAgentId: agentId
       .describe("The member that routes requests that name no member. Omit it for the first member.")
       .optional(),
@@ -73,11 +73,11 @@ export const createChannelToolSchema = z
 
 export const updateChannelToolSchema = z
   .strictObject({
-    channelId: z.string().trim().min(1).max(INPUT_LIMITS.identifier).describe("Id from openbot.list_channels."),
+    channelId: z.string().trim().min(1).max(INPUT_LIMITS.identifier).describe("Id from codebot.list_channels."),
     name: channelFields.name.optional(),
     title: channelFields.title.optional(),
     instructions: channelFields.instructions.optional(),
-    addMemberAgentIds: agentIds.describe("Ids from openbot.list_agents of the agents to add.").optional(),
+    addMemberAgentIds: agentIds.describe("Ids from codebot.list_agents of the agents to add.").optional(),
     removeMemberAgentIds: agentIds
       .describe("Ids of the members to remove. Their open tasks in the channel stop.")
       .optional(),
@@ -118,7 +118,7 @@ export function channelAgentToolErrorMessage(tool: string, error: unknown): stri
 type CreateChannelArgs = z.infer<typeof createChannelToolSchema>;
 type UpdateChannelArgs = z.infer<typeof updateChannelToolSchema>;
 
-const UNKNOWN_CHANNEL = "No channel has that channelId. Call openbot.list_channels.";
+const UNKNOWN_CHANNEL = "No channel has that channelId. Call codebot.list_channels.";
 const OWN_CHANNEL_IN_TASK =
   "update_channel does not change the channel of your current task. For this channel, use channel_add_member, channel_remove_member and channel_set_instructions.";
 
@@ -244,12 +244,12 @@ export const handleChannelAgentTool = Effect.fn("ChannelAgentTool.handle")(funct
           () =>
             new ToolOperationFailed({
               cause: new Error(
-                `Channel ${channelId} was created, but its picture was not saved. To try again, call openbot.update_channel with that channelId and imagePath.`,
+                `Channel ${channelId} was created, but its picture was not saved. To try again, call codebot.update_channel with that channelId and imagePath.`,
               ),
             }),
         ),
       );
-    return openBotToolResult({ status: "created", channel: channelResult(channel, agents) });
+    return codeBotToolResult({ status: "created", channel: channelResult(channel, agents) });
   }
 
   const args = updateChannelToolSchema.parse(params.arguments, { reportInput: true });
@@ -275,7 +275,7 @@ export const handleChannelAgentTool = Effect.fn("ChannelAgentTool.handle")(funct
   else if (image === null || (args.icon !== undefined && args.icon !== null)) channel = yield* removeImage(channel);
   if (archived === true && !channel.archived)
     channel = yield* channels.command({ type: "archive", operationId: `${operationId}:archive`, channelId }, actor);
-  return openBotToolResult({ status: "updated", channel: channelResult(channel, agents) });
+  return codeBotToolResult({ status: "updated", channel: channelResult(channel, agents) });
 });
 
 export const CHANNEL_AGENT_TOOL_NEEDS_LOCAL_PERSON =

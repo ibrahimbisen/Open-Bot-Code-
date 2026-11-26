@@ -13,9 +13,9 @@ import {
   SettingsSection,
   Switch,
   Text,
-} from "@openbot/ui";
-import { McpSignInLinkCopy } from "@openbot/ui/features/settings/McpSignInDialog";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { McpSignInLinkCopy } from "@codebot/ui/features/settings/McpSignInDialog";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createStore, Show } from "solid-js";
 import { McpRelaySignIn } from "./McpRelaySignIn";
 import { McpSignInAppSection } from "./McpSignInAppSection";

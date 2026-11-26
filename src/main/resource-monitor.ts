@@ -3,7 +3,7 @@ import { cpus, totalmem } from "node:os";
 import { join } from "node:path";
 import { monitorEventLoopDelay } from "node:perf_hooks";
 import { getHeapStatistics } from "node:v8";
-import type { AgentEvent } from "@openbot/contracts/ipc";
+import type { AgentEvent } from "@codebot/contracts/ipc";
 import { Effect, Exit, Option, Schema, Scope, Semaphore } from "effect";
 import {
   app,
@@ -57,7 +57,7 @@ import { appendRotatingLines, type TraceFile } from "./trace-file";
 
 const SAMPLE_INTERVAL_MS = 60_000;
 const PERSIST_INTERVAL_MS = 15 * 60_000;
-const RESOURCE_SUMMARY_FILE = "openbot-resource-summary-v1.json";
+const RESOURCE_SUMMARY_FILE = "codebot-resource-summary-v1.json";
 const SAMPLES_FILE = "resources.ndjson";
 const MAX_SAMPLES_BYTES = 1024 * 1024;
 const STALL_PROFILES_FILE = "stall-profiles.ndjson";
@@ -76,9 +76,9 @@ const MAX_WINDOW_HEAP_BYTES = 1024 ** 4;
 const MAX_WINDOW_DOM_NODES = 1_000_000_000;
 const LOOP_RESOLUTION_MS = 20;
 const UTILITY_GROUPS = new Map<string, ProcessGroup & ChildType>([
-  ["OpenBot databases", "database_host"],
-  ["OpenBot voice transcription", "voice_host"],
-  ["OpenBot speech", "voice_host"],
+  ["CodeBot databases", "database_host"],
+  ["CodeBot voice transcription", "voice_host"],
+  ["CodeBot speech", "voice_host"],
 ]);
 
 export interface ResourceMonitorOptions {

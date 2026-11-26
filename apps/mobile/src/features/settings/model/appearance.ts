@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { sweepTheme } from "@/features/settings/model/theme-sweep";
 
 export type Appearance = "system" | "light" | "dark";
-const key = "openbot.mobile.appearance.v1";
+const key = "codebot.mobile.appearance.v1";
 export const useAppearance = create<{ value: Appearance; ready: boolean; saving: boolean }>(() => ({
   value: "system",
   ready: false,

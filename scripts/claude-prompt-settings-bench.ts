@@ -8,7 +8,7 @@ import { type ClaudeCliInfo, resolveClaudeCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { makeGitWorkspace, messageNames, observedQuery, removeRun, startClaudeAgent } from "./claude-agent-harness";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-prompt-settings-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-prompt-settings-bench");
 const REPLY_PROMPT = "Reply with the single word OK. Do not use any tool.";
 const TASK_PROMPT =
   "Read notes.md and count.txt. Then reply with one line: the title of notes.md and the number in count.txt. " +
@@ -39,7 +39,7 @@ const REFERENCES: Variant[] = [
 const VARIANTS: Variant[] = [
   { name: "current", settings: {} },
   {
-    name: "without-openbot-flag-settings",
+    name: "without-codebot-flag-settings",
     settings: {},
     remove: ["attribution", "disableRemoteControl", "skillOverrides"],
   },
@@ -97,7 +97,7 @@ const variants = onlyVariant ? VARIANTS.filter((variant) => variant.name === onl
 if (variants.length === 0) throw new Error(`Unknown variant: ${onlyVariant}`);
 const setups = onlySetup ? [onlySetup === "on"] : [false, true];
 
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-claude-prompt-bench-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-claude-prompt-bench-")));
 const cli = await runCauseEffect(resolveClaudeCli());
 const report: {
   cli: Pick<ClaudeCliInfo, "executable" | "version" | "source">;

@@ -3,7 +3,7 @@
   min-height: 100vh;
   place-items: center;
   padding: 24px;
-  background: color-mix(in srgb, var(--openbot-text-primary) 8%, var(--openbot-bg-canvas));
+  background: color-mix(in srgb, var(--codebot-text-primary) 8%, var(--codebot-bg-canvas));
 }
 
 .ext-story-panel {
@@ -13,7 +13,7 @@
   overflow: hidden;
   border-radius: 12px;
   box-shadow:
-    0 0 0 1px var(--openbot-border),
+    0 0 0 1px var(--codebot-border),
     0 24px 48px -16px rgb(0 0 0 / 0.4);
 }
 

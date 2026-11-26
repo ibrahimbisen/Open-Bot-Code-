@@ -3,8 +3,8 @@ import { EventEmitter } from "node:events";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { agentProviderName, type ProviderAccountState, type ProviderAccountStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { agentProviderName, type ProviderAccountState, type ProviderAccountStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { ProviderAccountStore } from "../src/backend/agent/provider-account-store";
@@ -12,20 +12,20 @@ import { ProviderRuntime } from "../src/backend/agent/provider-runtime";
 import { AgentStore } from "../src/backend/agent-store";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
 import { ClaudeAgentClient } from "../src/backend/claude-client";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 
 export async function checkProviderAccountReload(): Promise<void> {
-  const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-update-busy-e2e");
-  const root = await mkdtemp(join(tmpdir(), "openbot-account-reload-"));
+  const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-update-busy-e2e");
+  const root = await mkdtemp(join(tmpdir(), "codebot-account-reload-"));
   const providersToCheck = ["codex", "claude"] as const;
   type Provider = (typeof providersToCheck)[number];
   const changes = new EventEmitter();
   const results: { name: string; passed: boolean }[] = [];
   const savedEnvironment = {
-    OPENBOT_CODEX_PATH: process.env.OPENBOT_CODEX_PATH,
-    OPENBOT_CLAUDE_PATH: process.env.OPENBOT_CLAUDE_PATH,
+    CODEBOT_CODEX_PATH: process.env.CODEBOT_CODEX_PATH,
+    CODEBOT_CLAUDE_PATH: process.env.CODEBOT_CLAUDE_PATH,
   };
 
   const FAKE_CLI = `#!${process.execPath}
@@ -85,7 +85,7 @@ require("node:readline").createInterface({ input: process.stdin }).on("line", (l
     return join(root, `default-${provider}`);
   }
 
-  const database = new OpenBotDatabase(join(root, "profile"));
+  const database = new CodeBotDatabase(join(root, "profile"));
   const agents = new AgentStore(join(root, "profile"), join(root, "home"), database);
   const accountsPath = join(root, "accounts.json");
   const accountsRoot = join(root, "accounts");
@@ -205,7 +205,7 @@ require("node:readline").createInterface({ input: process.stdin }).on("line", (l
       const executable = join(root, `${provider}.cjs`);
       await writeFile(executable, FAKE_CLI);
       await chmod(executable, 0o755);
-      process.env[provider === "codex" ? "OPENBOT_CODEX_PATH" : "OPENBOT_CLAUDE_PATH"] = executable;
+      process.env[provider === "codex" ? "CODEBOT_CODEX_PATH" : "CODEBOT_CLAUDE_PATH"] = executable;
       await saveAccount(defaultHome(provider), `${provider}-default@example.invalid`);
     }
     const initial = new ProviderAccountStore(accountsPath, accountsRoot);
@@ -227,7 +227,7 @@ require("node:readline").createInterface({ input: process.stdin }).on("line", (l
           const executable = join(root, `${provider}-updated.cjs`);
           await writeFile(executable, FAKE_CLI);
           await chmod(executable, 0o755);
-          process.env[provider === "codex" ? "OPENBOT_CODEX_PATH" : "OPENBOT_CLAUDE_PATH"] = executable;
+          process.env[provider === "codex" ? "CODEBOT_CODEX_PATH" : "CODEBOT_CLAUDE_PATH"] = executable;
         }
       }
       const loaded = new ProviderAccountStore(accountsPath, accountsRoot);

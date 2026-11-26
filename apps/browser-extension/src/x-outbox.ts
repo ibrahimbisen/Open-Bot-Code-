@@ -1,7 +1,7 @@
-import { decodeXReplyPayload, type XReplyPayload } from "@openbot/contracts/browser-extension-x";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { decodeXReplyPayload, type XReplyPayload } from "@codebot/contracts/browser-extension-x";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 
-export const OUTBOX_KEY = "openbot.x-outbox.v1";
+export const OUTBOX_KEY = "codebot.x-outbox.v1";
 const OUTBOX_LIFE_MS = 7 * 24 * 60 * 60 * 1_000;
 const REPEAT_SAFE_MS = 23 * 60 * 60 * 1_000;
 

@@ -1,5 +1,5 @@
-import type { BillingCurrency } from "@openbot/contracts/billing";
-import type { AppFormat } from "@openbot/i18n";
+import type { BillingCurrency } from "@codebot/contracts/billing";
+import type { AppFormat } from "@codebot/i18n";
 
 export function formatMinorMoney(format: AppFormat, minor: number, currency: BillingCurrency): string {
   const whole = minor % 100 === 0;

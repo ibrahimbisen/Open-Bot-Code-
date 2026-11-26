@@ -7,14 +7,14 @@ import { AIAgentsExamples } from "./ai-agents-examples";
 import { AIAgentsVsAgenticAI } from "./ai-agents-vs-agentic-ai";
 import { AITeammatesVsAIChatbots } from "./ai-teammates-vs-ai-chatbots";
 import { AIWorkspaceVsChat } from "./ai-workspace-vs-chat";
+import { CodeBot101 } from "./codebot-101";
+import { CodeBotHostedServers } from "./codebot-hosted-servers";
+import { CodeBotMarketplace } from "./codebot-marketplace";
 import { ImportGrokBotAgents } from "./import-grok-bot-agents";
 import { ImportHermesAgents } from "./import-hermes-agents";
-import { InstallOpenBotVPS } from "./install-openbot-vps";
-import { OpenBot101 } from "./openbot-101";
-import { OpenBotHostedServers } from "./openbot-hosted-servers";
-import { OpenBotMarketplace } from "./openbot-marketplace";
+import { InstallCodeBotVPS } from "./install-codebot-vps";
 import { WhatAreAIAgents } from "./what-are-ai-agents";
-import { WtfIsOpenBot } from "./wtf-is-openbot";
+import { WtfIsCodeBot } from "./wtf-is-codebot";
 
 export const GUIDE_BODIES: Readonly<Record<string, ArticleBody>> = {
   "ai-agent-workflows": AIAgentWorkflows,
@@ -22,15 +22,15 @@ export const GUIDE_BODIES: Readonly<Record<string, ArticleBody>> = {
   "ai-agent-workflow": AIAgentWorkflow,
   "ai-teammates-vs-ai-chatbots": AITeammatesVsAIChatbots,
   "ai-workspace-vs-chat": AIWorkspaceVsChat,
-  "install-openbot-vps": InstallOpenBotVPS,
+  "install-codebot-vps": InstallCodeBotVPS,
   "import-hermes-agents": ImportHermesAgents,
   "import-grok-bot-agents": ImportGrokBotAgents,
   "ai-agents-examples": AIAgentsExamples,
   "ai-agents-vs-agentic-ai": AIAgentsVsAgenticAI,
   "agentic-ai-definition": AgenticAIDefinition,
   "what-are-ai-agents": WhatAreAIAgents,
-  "openbot-101": OpenBot101,
-  "openbot-hosted-servers": OpenBotHostedServers,
-  "openbot-marketplace": OpenBotMarketplace,
-  "wtf-is-openbot": WtfIsOpenBot,
+  "codebot-101": CodeBot101,
+  "codebot-hosted-servers": CodeBotHostedServers,
+  "codebot-marketplace": CodeBotMarketplace,
+  "wtf-is-codebot": WtfIsCodeBot,
 };

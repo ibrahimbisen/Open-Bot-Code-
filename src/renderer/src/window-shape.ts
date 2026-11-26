@@ -3,7 +3,7 @@ import {
   type AgentDockEdge,
   type AgentDockExtent,
   type AgentDockInputRect,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 const EXTENT_MARGIN = 16;
 

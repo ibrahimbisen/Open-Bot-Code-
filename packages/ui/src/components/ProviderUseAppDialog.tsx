@@ -1,4 +1,4 @@
-import { Button, Dialog, IconButton, X } from "@openbot/ui";
+import { Button, Dialog, IconButton, X } from "@codebot/ui";
 import { useText } from "../text";
 
 export interface ProviderUseAppDialogProps {

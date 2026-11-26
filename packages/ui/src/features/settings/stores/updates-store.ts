@@ -1,6 +1,6 @@
-import type { AppInfo, UpdateStatus } from "@openbot/contracts/ipc";
-import { isUpdateActivePhase } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppInfo, UpdateStatus } from "@codebot/contracts/ipc";
+import { isUpdateActivePhase } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import { createMemo, createSignal } from "solid-js";
 import { currentText } from "../../../text";
 import { presentUpdateStatus } from "../../updates/update-status";
@@ -23,7 +23,7 @@ export function createSettingsUpdatesStore(props: UpdatesStoreProps) {
     props.updateStatus.currentVersion || props.appInfo?.version || currentText().t("settings.updates.versionUnknown");
   const targetUpdate = () =>
     props.updateStatus.availableVersion
-      ? `OpenBot v${props.updateStatus.availableVersion}`
+      ? `CodeBot v${props.updateStatus.availableVersion}`
       : currentText().t("settings.updates.target.latest");
   const hostMessage = () => {
     const { t, errorMessage } = currentText();
@@ -68,7 +68,7 @@ export function createSettingsUpdatesStore(props: UpdatesStoreProps) {
         return t("settings.updates.status.installing", { target: targetUpdate() });
       case "up-to-date":
         return props.updateStatus.stagedVersion
-          ? t("settings.updates.status.staged", { target: `OpenBot v${props.updateStatus.stagedVersion}` })
+          ? t("settings.updates.status.staged", { target: `CodeBot v${props.updateStatus.stagedVersion}` })
           : t("settings.updates.status.upToDate");
       case "error":
         return errorMessage(props.updateStatus.message, t("settings.updates.status.checkFailed"));

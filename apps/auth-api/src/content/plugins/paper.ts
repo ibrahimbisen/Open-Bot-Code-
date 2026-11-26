@@ -16,14 +16,14 @@ export const PAPER_PLUGIN_GUIDE: PluginGuide = {
     },
     {
       title: "Fill a design with real content",
-      text: "The agent can pull real content into a design from another MCP server, such as Notion. For example, select a testimonial frame in Paper. Then ask the agent to sync it with the entries of a Notion database. OpenBot also lists a Notion plugin.",
+      text: "The agent can pull real content into a design from another MCP server, such as Notion. For example, select a testimonial frame in Paper. Then ask the agent to sync it with the entries of a Notion database. CodeBot also lists a Notion plugin.",
     },
   ],
   faq: [
     {
       question: "Does the Paper MCP server need an API key?",
       answer:
-        "No. Paper Desktop starts the MCP server in the background and installs the Paper CLI. OpenBot starts that CLI as a local relay to the open file. Install Paper Desktop, open it once, and open a file before you start.",
+        "No. Paper Desktop starts the MCP server in the background and installs the Paper CLI. CodeBot starts that CLI as a local relay to the open file. Install Paper Desktop, open it once, and open a file before you start.",
     },
     {
       question: "Which Paper file does the agent change?",

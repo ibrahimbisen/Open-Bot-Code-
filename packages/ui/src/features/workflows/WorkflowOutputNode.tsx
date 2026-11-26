@@ -1,5 +1,5 @@
-import type { AppTranslate } from "@openbot/i18n";
-import { Bell, Button, CircleCheck, FileText, Hash, Play, Send, Skeleton } from "@openbot/ui";
+import type { AppTranslate } from "@codebot/i18n";
+import { Bell, Button, CircleCheck, FileText, Hash, Play, Send, Skeleton } from "@codebot/ui";
 import { Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { AnswerProblems } from "./workflow-answer-parts";
@@ -160,7 +160,7 @@ export function OutputNode(props: {
         <Show when={isChannel()}>
           <OutputChannelRow
             id={props.id}
-            openbot={target() === "chat-channel"}
+            codebot={target() === "chat-channel"}
             connectionId={untrack(() => props.connectionId)}
             placeId={untrack(() => props.placeId)}
             disabled={locked()}

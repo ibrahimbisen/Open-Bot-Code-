@@ -1,7 +1,7 @@
-import { agentWelcomeMessage } from "@openbot/contracts/agent-welcome";
-import type { CreateAgentInput } from "@openbot/contracts/ipc";
-import { appLanguageOption } from "@openbot/i18n/languages";
-import type { TranslatedLocale } from "@openbot/i18n/mobile";
+import { agentWelcomeMessage } from "@codebot/contracts/agent-welcome";
+import type { CreateAgentInput } from "@codebot/contracts/ipc";
+import { appLanguageOption } from "@codebot/i18n/languages";
+import type { TranslatedLocale } from "@codebot/i18n/mobile";
 
 export type NewAgentInput = Omit<CreateAgentInput, "initialMessage"> & { firstTask?: string };
 

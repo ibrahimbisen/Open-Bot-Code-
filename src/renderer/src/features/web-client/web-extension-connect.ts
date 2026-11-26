@@ -1,4 +1,4 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 
 export interface ExtensionConnectRequest {
   extensionId: string;
@@ -8,7 +8,7 @@ export interface ExtensionConnectRequest {
   tab: boolean;
 }
 
-const STORAGE_KEY = "openbot.web.extension-connect";
+const STORAGE_KEY = "codebot.web.extension-connect";
 const REQUEST_LIFE_MS = 10 * 60_000;
 const EXTENSION_ID = /^[a-p]{32}$/u;
 const TOKEN = /^[A-Za-z0-9_-]{16,128}$/u;
@@ -67,7 +67,7 @@ export function extensionReturnUrl(
   return url.toString();
 }
 
-const SIGN_IN_MESSAGE = "openbot.extension-sign-in";
+const SIGN_IN_MESSAGE = "codebot.extension-sign-in";
 
 export async function answerExtensionTab(
   request: ExtensionConnectRequest,
@@ -87,7 +87,7 @@ export async function answerExtensionTab(
   }
 }
 
-const ALLOWED_KEY = "openbot.web.extension-allowed.v1";
+const ALLOWED_KEY = "codebot.web.extension-allowed.v1";
 
 function readAllowed(): Record<string, string> {
   try {

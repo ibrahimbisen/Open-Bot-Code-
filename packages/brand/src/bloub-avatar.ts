@@ -1,3 +1,4 @@
+import { type AvatarColor, type AvatarHue, nearestAvatarHue } from "@codebot/contracts/ipc";
 import {
   COLOR_BY_ID,
   type ColorId,
@@ -6,7 +7,6 @@ import {
   SHAPES,
   type ShapeId,
 } from "@norbert_bodziony/bloub";
-import { type AvatarColor, type AvatarHue, nearestAvatarHue } from "@openbot/contracts/ipc";
 
 export type SupportedAvatarSilhouetteId = Exclude<ShapeId, "goutte">;
 

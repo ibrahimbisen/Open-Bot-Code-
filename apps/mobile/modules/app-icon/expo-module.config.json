@@ -4,6 +4,6 @@
     "modules": ["AppIconModule"]
   },
   "android": {
-    "modules": ["run.openbot.appicon.AppIconModule"]
+    "modules": ["run.codebot.appicon.AppIconModule"]
   }
 }

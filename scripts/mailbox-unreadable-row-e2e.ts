@@ -2,15 +2,15 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { databaseRow, requiredNumberColumn, requiredStringColumn } from "../src/backend/database/database-rows";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mailbox-unreadable-row-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mailbox-unreadable-row-e2e");
 const AGENT_ID = "agent-unreadable-row";
 const RETRY_KEY = "retry-key-unreadable-row";
-const root = await mkdtemp(join(tmpdir(), "openbot-mailbox-unreadable-row-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-mailbox-unreadable-row-"));
 const userData = join(root, "user-data");
 const sharedRoot = join(root, "shared");
 
@@ -27,8 +27,8 @@ const check = (name: string, passed: boolean, detail?: unknown) => {
   if (!passed) throw new Error(`Check failed: ${name}`);
 };
 
-async function openMailbox(): Promise<{ database: OpenBotDatabase; mailbox: MailboxStore }> {
-  const database = new OpenBotDatabase(userData);
+async function openMailbox(): Promise<{ database: CodeBotDatabase; mailbox: MailboxStore }> {
+  const database = new CodeBotDatabase(userData);
   const mailbox = new MailboxStore(userData, sharedRoot, database);
   await runCauseEffect(mailbox.initialize());
   return { database, mailbox };
@@ -46,7 +46,7 @@ async function enqueue(mailbox: MailboxStore, text: string, idempotencyKey?: str
   return receipt.messageId;
 }
 
-function storedMessageJson(database: OpenBotDatabase, messageId: string): string | null {
+function storedMessageJson(database: CodeBotDatabase, messageId: string): string | null {
   const row = databaseRow(
     database.connection
       .prepare("SELECT message_json FROM projection_mailbox_messages WHERE message_id = ?")
@@ -55,7 +55,7 @@ function storedMessageJson(database: OpenBotDatabase, messageId: string): string
   return row ? requiredStringColumn(row, "message_json") : null;
 }
 
-function storedDeliveryCount(database: OpenBotDatabase, messageId: string): number {
+function storedDeliveryCount(database: CodeBotDatabase, messageId: string): number {
   const row = databaseRow(
     database.connection
       .prepare("SELECT COUNT(*) AS count FROM projection_deliveries WHERE message_id = ?")

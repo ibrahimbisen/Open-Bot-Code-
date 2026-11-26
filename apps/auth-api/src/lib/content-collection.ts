@@ -1,4 +1,4 @@
-import { OPENBOT_SITE_URL, type PageSocialImage } from "./site-metadata";
+import { CODEBOT_SITE_URL, type PageSocialImage } from "./site-metadata";
 
 export type CollectionId = "news" | "guides" | "compare" | "providers";
 export type ProseCollectionId = Exclude<CollectionId, "compare" | "providers">;
@@ -43,15 +43,15 @@ export function reportedArticlePath(collection: ContentCollection, slug: string)
   return findArticle(collection, slug) ? articlePath(collection, slug) : collection.indexRoute;
 }
 
-export function articleUrl(collection: ContentCollection, slug: string, siteUrl = OPENBOT_SITE_URL): string {
+export function articleUrl(collection: ContentCollection, slug: string, siteUrl = CODEBOT_SITE_URL): string {
   return new URL(articlePath(collection, slug), siteUrl).toString();
 }
 
-export function articleMarkdownUrl(collection: ContentCollection, slug: string, siteUrl = OPENBOT_SITE_URL): string {
+export function articleMarkdownUrl(collection: ContentCollection, slug: string, siteUrl = CODEBOT_SITE_URL): string {
   return new URL(`${articlePath(collection, slug)}.md`, siteUrl).toString();
 }
 
-export function collectionIndexUrl(collection: ContentCollection, siteUrl = OPENBOT_SITE_URL): string {
+export function collectionIndexUrl(collection: ContentCollection, siteUrl = CODEBOT_SITE_URL): string {
   return new URL(collection.indexRoute, siteUrl).toString();
 }
 
@@ -59,11 +59,11 @@ function collectionFeedPath(collection: ContentCollection): string {
   return `${collection.indexRoute}/rss.xml`;
 }
 
-export function collectionFeedUrl(collection: ContentCollection, siteUrl = OPENBOT_SITE_URL): string {
+export function collectionFeedUrl(collection: ContentCollection, siteUrl = CODEBOT_SITE_URL): string {
   return new URL(collectionFeedPath(collection), siteUrl).toString();
 }
 
-export function articleOgImageUrl(collection: ContentCollection, slug: string, siteUrl = OPENBOT_SITE_URL): string {
+export function articleOgImageUrl(collection: ContentCollection, slug: string, siteUrl = CODEBOT_SITE_URL): string {
   return new URL(`/${collection.id}/og/${slug}.png`, siteUrl).toString();
 }
 

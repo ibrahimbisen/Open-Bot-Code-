@@ -1,4 +1,4 @@
-import { isAvatarMimeType } from "@openbot/contracts/avatar-images";
+import { isAvatarMimeType } from "@codebot/contracts/avatar-images";
 import {
   type AvatarColor,
   agentSpeed,
@@ -47,93 +47,93 @@ import {
   withWhatsAppStatusReactions,
   withWhatsAppWorkingMessages,
   withWorkspaceOnlyLimit,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-access-v1";
-import { AGENT_ADMIN_CAPABILITY, AGENT_ADMIN_ROUTES } from "@openbot/contracts/team-protocol/agent-admin-v1";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
+import { AGENT_ADMIN_CAPABILITY, AGENT_ADMIN_ROUTES } from "@codebot/contracts/team-protocol/agent-admin-v1";
 import {
   AGENT_BACKUP_MODELS_CAPABILITY,
   AGENT_BACKUP_MODELS_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-backup-models-v1";
+} from "@codebot/contracts/team-protocol/agent-backup-models-v1";
 import {
   AGENT_BUILTIN_MEMORY_CAPABILITY,
   AGENT_BUILTIN_MEMORY_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-builtin-memory-v1";
+} from "@codebot/contracts/team-protocol/agent-builtin-memory-v1";
 import {
   AGENT_COLORS_CAPABILITY,
   AGENT_COLORS_ROUTES,
   type AgentColorsSnapshot,
   decodeAgentColorsSnapshot,
-} from "@openbot/contracts/team-protocol/agent-colors-v1";
-import { AGENT_DEFAULTS_CAPABILITY, AGENT_DEFAULTS_ROUTES } from "@openbot/contracts/team-protocol/agent-defaults-v1";
+} from "@codebot/contracts/team-protocol/agent-colors-v1";
+import { AGENT_DEFAULTS_CAPABILITY, AGENT_DEFAULTS_ROUTES } from "@codebot/contracts/team-protocol/agent-defaults-v1";
 import {
   AGENT_FAST_MODE_CAPABILITY,
   AGENT_FAST_MODE_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-fast-mode-v1";
-import { AGENT_FOLDERS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-folders-v1";
-import { AGENT_HIDDEN_CAPABILITY } from "@openbot/contracts/team-protocol/agent-hidden-v1";
+} from "@codebot/contracts/team-protocol/agent-fast-mode-v1";
+import { AGENT_FOLDERS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-folders-v1";
+import { AGENT_HIDDEN_CAPABILITY } from "@codebot/contracts/team-protocol/agent-hidden-v1";
 import {
   AGENT_HOST_SETTINGS_CAPABILITY,
   AGENT_HOST_SETTINGS_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-host-settings-v1";
-import { AGENT_IMPORT_CAPABILITY, AGENT_IMPORT_UPLOAD_BYTES } from "@openbot/contracts/team-protocol/agent-import-v1";
-import { AGENT_IMPORT_V2_CAPABILITY } from "@openbot/contracts/team-protocol/agent-import-v2";
-import { AGENT_INSTALL_CAPABILITY } from "@openbot/contracts/team-protocol/agent-install-v1";
+} from "@codebot/contracts/team-protocol/agent-host-settings-v1";
+import { AGENT_IMPORT_CAPABILITY, AGENT_IMPORT_UPLOAD_BYTES } from "@codebot/contracts/team-protocol/agent-import-v1";
+import { AGENT_IMPORT_V2_CAPABILITY } from "@codebot/contracts/team-protocol/agent-import-v2";
+import { AGENT_INSTALL_CAPABILITY } from "@codebot/contracts/team-protocol/agent-install-v1";
 import {
   AGENT_INSTRUCTIONS_CAPABILITY,
   AGENT_INSTRUCTIONS_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-instructions-v1";
-import { AGENT_MEMORIES_CAPABILITY } from "@openbot/contracts/team-protocol/agent-memories-v1";
-import { AGENT_MEMORY_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/agent-memory-limit-v1";
-import { AGENT_NEW_CHAT_CAPABILITY, AGENT_NEW_CHAT_ROUTES } from "@openbot/contracts/team-protocol/agent-new-chat-v1";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
+} from "@codebot/contracts/team-protocol/agent-instructions-v1";
+import { AGENT_MEMORIES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-memories-v1";
+import { AGENT_MEMORY_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/agent-memory-limit-v1";
+import { AGENT_NEW_CHAT_CAPABILITY, AGENT_NEW_CHAT_ROUTES } from "@codebot/contracts/team-protocol/agent-new-chat-v1";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
 import {
   AGENT_PLAN_CARD_CAPABILITY,
   AGENT_PLAN_CARD_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-plan-card-v1";
-import { AGENT_PUBLISH_CAPABILITY } from "@openbot/contracts/team-protocol/agent-publish-v1";
-import { AGENT_QUEUE_TASK_CAPABILITY } from "@openbot/contracts/team-protocol/agent-queue-task-v1";
-import { AGENT_SESSION_SETTINGS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-session-settings-v1";
-import { AGENT_SPEED_CAPABILITY, AGENT_SPEED_ROUTES } from "@openbot/contracts/team-protocol/agent-speed-v1";
+} from "@codebot/contracts/team-protocol/agent-plan-card-v1";
+import { AGENT_PUBLISH_CAPABILITY } from "@codebot/contracts/team-protocol/agent-publish-v1";
+import { AGENT_QUEUE_TASK_CAPABILITY } from "@codebot/contracts/team-protocol/agent-queue-task-v1";
+import { AGENT_SESSION_SETTINGS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-session-settings-v1";
+import { AGENT_SPEED_CAPABILITY, AGENT_SPEED_ROUTES } from "@codebot/contracts/team-protocol/agent-speed-v1";
 import {
   AGENT_TASK_LIMIT_CAPABILITY,
   AGENT_TASK_LIMIT_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-task-limit-v1";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
+} from "@codebot/contracts/team-protocol/agent-task-limit-v1";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
 import {
   AGENT_THREAD_BRANCHES_CAPABILITY,
   withAgentThreadBranches,
-} from "@openbot/contracts/team-protocol/agent-thread-branches-v1";
-import { AGENT_THREAD_FILES_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-files-v1";
-import { AGENT_THREAD_READS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-reads-v1";
-import { AGENT_THREADS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-threads-v1";
-import { AGENT_UPDATE_CAPABILITY } from "@openbot/contracts/team-protocol/agent-update-v1";
+} from "@codebot/contracts/team-protocol/agent-thread-branches-v1";
+import { AGENT_THREAD_FILES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-files-v1";
+import { AGENT_THREAD_READS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
+import { AGENT_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-threads-v1";
+import { AGENT_UPDATE_CAPABILITY } from "@codebot/contracts/team-protocol/agent-update-v1";
 import {
   BACKGROUND_PROCESSES_CAPABILITY,
   BACKGROUND_PROCESSES_ROUTES,
   decodeBackgroundProcessesResponse,
-} from "@openbot/contracts/team-protocol/background-processes-v1";
-import { BITWARDEN_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/bitwarden-connector-v1";
-import { BROWSER_PROFILES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { BROWSER_PROXIES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-proxies-v1";
-import { BROWSING_MEMORY_CAPABILITY } from "@openbot/contracts/team-protocol/browsing-memory-v1";
-import { CHANNEL_FOLDERS_CAPABILITY } from "@openbot/contracts/team-protocol/channel-folders-v1";
-import { CHANNEL_ROUTES } from "@openbot/contracts/team-protocol/channels-v1";
-import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@openbot/contracts/team-protocol/chat-history-v1";
-import { CONNECTORS_CAPABILITY } from "@openbot/contracts/team-protocol/connectors-v1";
+} from "@codebot/contracts/team-protocol/background-processes-v1";
+import { BITWARDEN_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/bitwarden-connector-v1";
+import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { BROWSER_PROXIES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-proxies-v1";
+import { BROWSING_MEMORY_CAPABILITY } from "@codebot/contracts/team-protocol/browsing-memory-v1";
+import { CHANNEL_FOLDERS_CAPABILITY } from "@codebot/contracts/team-protocol/channel-folders-v1";
+import { CHANNEL_ROUTES } from "@codebot/contracts/team-protocol/channels-v1";
+import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@codebot/contracts/team-protocol/chat-history-v1";
+import { CONNECTORS_CAPABILITY } from "@codebot/contracts/team-protocol/connectors-v1";
 import {
   CONTEXT_COMPACT_CAPABILITY,
   CONTEXT_COMPACT_ROUTES,
-} from "@openbot/contracts/team-protocol/context-compact-v1";
-import { CONTEXT_RESET_CAPABILITY } from "@openbot/contracts/team-protocol/context-reset-v1";
+} from "@codebot/contracts/team-protocol/context-compact-v1";
+import { CONTEXT_RESET_CAPABILITY } from "@codebot/contracts/team-protocol/context-reset-v1";
 import {
   CONVERSATION_FILE_SEARCH_CAPABILITY,
   CONVERSATION_FILE_SEARCH_ROUTES,
   type ConversationFileSearchRequest,
   decodeConversationFileSearchResponse,
-} from "@openbot/contracts/team-protocol/conversation-file-search-v1";
-import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@openbot/contracts/team-protocol/conversation-unread-from-v1";
+} from "@codebot/contracts/team-protocol/conversation-file-search-v1";
+import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@codebot/contracts/team-protocol/conversation-unread-from-v1";
 import {
   TEAM_AGENT_CREATE_MODEL_CAPABILITY,
   TEAM_ANY_FILE_ATTACHMENTS_CAPABILITY,
@@ -144,91 +144,91 @@ import {
   TEAM_SEMANTIC_TAGS_CAPABILITY,
   TEAM_SVG_ATTACHMENTS_CAPABILITY,
   TEAM_ZIP_ATTACHMENTS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/current";
-import { EVENTS_CAPABILITY } from "@openbot/contracts/team-protocol/events-v1";
-import { HOST_MEMBER_UPDATE_CAPABILITY } from "@openbot/contracts/team-protocol/host-member-update-v1";
-import { HOST_PERSONALITY_CAPABILITY } from "@openbot/contracts/team-protocol/host-personality-v1";
-import { HOST_RELEASE_CAPABILITY } from "@openbot/contracts/team-protocol/host-release-v1";
-import { HOST_RESTART_CAPABILITY } from "@openbot/contracts/team-protocol/host-restart-v1";
-import { HOST_SIGNAL_HOME_CAPABILITY } from "@openbot/contracts/team-protocol/host-signal-home-v1";
-import { HOST_TIMEZONE_CAPABILITY } from "@openbot/contracts/team-protocol/host-timezone-v1";
-import { HOST_TURN_LIMITS_CAPABILITY } from "@openbot/contracts/team-protocol/host-turn-limits-v1";
-import { HOST_UPDATE_CAPABILITY } from "@openbot/contracts/team-protocol/host-update-v1";
-import { HOST_VOICE_MODEL_CAPABILITY } from "@openbot/contracts/team-protocol/host-voice-model-v1";
-import { HOSTED_SITES_CAPABILITY } from "@openbot/contracts/team-protocol/hosted-sites-v1";
-import { INSTANCE_TRANSFER_CAPABILITY } from "@openbot/contracts/team-protocol/instance-transfer-v1";
+} from "@codebot/contracts/team-protocol/current";
+import { EVENTS_CAPABILITY } from "@codebot/contracts/team-protocol/events-v1";
+import { HOST_MEMBER_UPDATE_CAPABILITY } from "@codebot/contracts/team-protocol/host-member-update-v1";
+import { HOST_PERSONALITY_CAPABILITY } from "@codebot/contracts/team-protocol/host-personality-v1";
+import { HOST_RELEASE_CAPABILITY } from "@codebot/contracts/team-protocol/host-release-v1";
+import { HOST_RESTART_CAPABILITY } from "@codebot/contracts/team-protocol/host-restart-v1";
+import { HOST_SIGNAL_HOME_CAPABILITY } from "@codebot/contracts/team-protocol/host-signal-home-v1";
+import { HOST_TIMEZONE_CAPABILITY } from "@codebot/contracts/team-protocol/host-timezone-v1";
+import { HOST_TURN_LIMITS_CAPABILITY } from "@codebot/contracts/team-protocol/host-turn-limits-v1";
+import { HOST_UPDATE_CAPABILITY } from "@codebot/contracts/team-protocol/host-update-v1";
+import { HOST_VOICE_MODEL_CAPABILITY } from "@codebot/contracts/team-protocol/host-voice-model-v1";
+import { HOSTED_SITES_CAPABILITY } from "@codebot/contracts/team-protocol/hosted-sites-v1";
+import { INSTANCE_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-v1";
 import {
   LIBRARY_FOLDERS_CAPABILITY,
   LIBRARY_FOLDERS_ROUTES,
-} from "@openbot/contracts/team-protocol/library-folders-v1";
-import { LIVE_VOICE_CAPABILITY } from "@openbot/contracts/team-protocol/live-voice-v1";
+} from "@codebot/contracts/team-protocol/library-folders-v1";
+import { LIVE_VOICE_CAPABILITY } from "@codebot/contracts/team-protocol/live-voice-v1";
 import {
   MACHINE_RESOURCES_CAPABILITY,
   MACHINE_RESOURCES_ROUTES,
-} from "@openbot/contracts/team-protocol/machine-resources-v1";
-import { MCP_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/mcp-access-v1";
-import { MCP_SIGN_IN_CAPABILITY } from "@openbot/contracts/team-protocol/mcp-sign-in-v1";
-import { MEDIA_APPROVAL_CREDITS_CAPABILITY } from "@openbot/contracts/team-protocol/media-approval-credits-v1";
-import { MEMORY_REVIEW_CAPABILITY } from "@openbot/contracts/team-protocol/memory-review-v1";
-import { MESSAGE_DELETE_CAPABILITY, MESSAGE_DELETE_ROUTES } from "@openbot/contracts/team-protocol/message-delete-v1";
-import { MESSAGE_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/message-pins-v1";
-import { MODEL_STEERING_CAPABILITY, MODEL_STEERING_ROUTES } from "@openbot/contracts/team-protocol/model-steering-v1";
+} from "@codebot/contracts/team-protocol/machine-resources-v1";
+import { MCP_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/mcp-access-v1";
+import { MCP_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/mcp-sign-in-v1";
+import { MEDIA_APPROVAL_CREDITS_CAPABILITY } from "@codebot/contracts/team-protocol/media-approval-credits-v1";
+import { MEMORY_REVIEW_CAPABILITY } from "@codebot/contracts/team-protocol/memory-review-v1";
+import { MESSAGE_DELETE_CAPABILITY, MESSAGE_DELETE_ROUTES } from "@codebot/contracts/team-protocol/message-delete-v1";
+import { MESSAGE_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/message-pins-v1";
+import { MODEL_STEERING_CAPABILITY, MODEL_STEERING_ROUTES } from "@codebot/contracts/team-protocol/model-steering-v1";
 import {
   MODEL_VISIBILITY_KEPT_CAPABILITY,
   MODEL_VISIBILITY_KEPT_ROUTES,
-} from "@openbot/contracts/team-protocol/model-visibility-kept-v1";
-import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/onepassword-connector-v1";
-import { PASSWORD_MANAGERS_CAPABILITY } from "@openbot/contracts/team-protocol/password-managers-v1";
-import { PROVIDER_ACCOUNT_MODELS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-account-models-v1";
-import { PROVIDER_ACCOUNT_POOL_CAPABILITY } from "@openbot/contracts/team-protocol/provider-account-pool-v1";
-import { PROVIDER_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-accounts-v1";
-import { PROVIDERS_ADMIN_CAPABILITY } from "@openbot/contracts/team-protocol/providers-v1";
-import { TEAM_QUEUE_EDIT_CAPABILITY } from "@openbot/contracts/team-protocol/queue-edit-v1";
-import { ROUTINE_RECOVERY_CAPABILITY } from "@openbot/contracts/team-protocol/routine-recovery-v1";
-import { ROUTINE_RESULTS_CAPABILITY } from "@openbot/contracts/team-protocol/routine-results-v1";
-import { ROUTINES_ONCE_CAPABILITY } from "@openbot/contracts/team-protocol/routines-once-v1";
-import { SERVER_AUDIT_CAPABILITY } from "@openbot/contracts/team-protocol/server-audit-v1";
-import { SHARED_TABLES_CAPABILITY } from "@openbot/contracts/team-protocol/shared-tables-v1";
+} from "@codebot/contracts/team-protocol/model-visibility-kept-v1";
+import { ONEPASSWORD_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/onepassword-connector-v1";
+import { PASSWORD_MANAGERS_CAPABILITY } from "@codebot/contracts/team-protocol/password-managers-v1";
+import { PROVIDER_ACCOUNT_MODELS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-account-models-v1";
+import { PROVIDER_ACCOUNT_POOL_CAPABILITY } from "@codebot/contracts/team-protocol/provider-account-pool-v1";
+import { PROVIDER_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-accounts-v1";
+import { PROVIDERS_ADMIN_CAPABILITY } from "@codebot/contracts/team-protocol/providers-v1";
+import { TEAM_QUEUE_EDIT_CAPABILITY } from "@codebot/contracts/team-protocol/queue-edit-v1";
+import { ROUTINE_RECOVERY_CAPABILITY } from "@codebot/contracts/team-protocol/routine-recovery-v1";
+import { ROUTINE_RESULTS_CAPABILITY } from "@codebot/contracts/team-protocol/routine-results-v1";
+import { ROUTINES_ONCE_CAPABILITY } from "@codebot/contracts/team-protocol/routines-once-v1";
+import { SERVER_AUDIT_CAPABILITY } from "@codebot/contracts/team-protocol/server-audit-v1";
+import { SHARED_TABLES_CAPABILITY } from "@codebot/contracts/team-protocol/shared-tables-v1";
 import {
   decodeSideQuestionResponse,
   SIDE_QUESTION_CAPABILITY,
   SIDE_QUESTION_ROUTES,
-} from "@openbot/contracts/team-protocol/side-question-v1";
-import { SIGN_IN_RELAY_CAPABILITY } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { SKILL_LEARNING_CAPABILITY } from "@openbot/contracts/team-protocol/skill-learning-v1";
-import { SKILLS_ADMIN_CAPABILITY } from "@openbot/contracts/team-protocol/skills-admin-v1";
-import { STORAGE_DISK_CAPABILITY, STORAGE_DISK_ROUTES } from "@openbot/contracts/team-protocol/storage-disk-v1";
+} from "@codebot/contracts/team-protocol/side-question-v1";
+import { SIGN_IN_RELAY_CAPABILITY } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { SKILL_LEARNING_CAPABILITY } from "@codebot/contracts/team-protocol/skill-learning-v1";
+import { SKILLS_ADMIN_CAPABILITY } from "@codebot/contracts/team-protocol/skills-admin-v1";
+import { STORAGE_DISK_CAPABILITY, STORAGE_DISK_ROUTES } from "@codebot/contracts/team-protocol/storage-disk-v1";
 import {
   STORAGE_USER_FILES_CAPABILITY,
   STORAGE_USER_FILES_ROUTES,
-} from "@openbot/contracts/team-protocol/storage-user-files-v1";
-import { STORAGE_ROUTES } from "@openbot/contracts/team-protocol/storage-v1";
-import { USAGE_CREDITS_CAPABILITY } from "@openbot/contracts/team-protocol/usage-credits-v1";
-import type { TeamProtocolV1Capability } from "@openbot/contracts/team-protocol/v1";
-import type { TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { decodeTeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { VAULT_IMPORT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-import-v1";
-import { VAULT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v1";
-import { VAULT_V2_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v2";
-import { VAULT_V3_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v3";
-import { VAULT_V4_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v4";
-import { WHATSAPP_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-connector-v1";
-import { WHATSAPP_READ_ONLY_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-read-only-v1";
-import { WHATSAPP_STATUS_REACTIONS_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-status-reactions-v1";
-import { WHATSAPP_WORKING_MESSAGE_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-working-message-v1";
-import { WORKFLOWS_CHATS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-chats-v1";
-import { WORKFLOWS_GITHUB_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-github-v1";
-import { WORKFLOWS_MEDIA_SIZE_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-media-size-v1";
-import { WORKFLOWS_MEDIA_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-media-v1";
-import { WORKFLOWS_PAUSE_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-pause-v1";
-import { WORKFLOWS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-v1";
-import { WORKSPACE_ONLY_PROCESS_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/workspace-only-process-limit-v1";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
-import { sourceText } from "@openbot/i18n/source";
-import { readHostAnalytics } from "@openbot/team-client";
-import { readPlanLimits } from "@openbot/team-client/plan-limits";
-import type { RemoteDownloadWatch, RemoteFileUpload, RemoteLargeDownload } from "@openbot/team-client/remote-peer";
-import { buildRoutineCalendar, type RoutineCalendarSource } from "@openbot/team-client/routine-calendar";
+} from "@codebot/contracts/team-protocol/storage-user-files-v1";
+import { STORAGE_ROUTES } from "@codebot/contracts/team-protocol/storage-v1";
+import { USAGE_CREDITS_CAPABILITY } from "@codebot/contracts/team-protocol/usage-credits-v1";
+import type { TeamProtocolV1Capability } from "@codebot/contracts/team-protocol/v1";
+import type { TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { decodeTeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { VAULT_IMPORT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-import-v1";
+import { VAULT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v1";
+import { VAULT_V2_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v2";
+import { VAULT_V3_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v3";
+import { VAULT_V4_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v4";
+import { WHATSAPP_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-connector-v1";
+import { WHATSAPP_READ_ONLY_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-read-only-v1";
+import { WHATSAPP_STATUS_REACTIONS_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-status-reactions-v1";
+import { WHATSAPP_WORKING_MESSAGE_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-working-message-v1";
+import { WORKFLOWS_CHATS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-chats-v1";
+import { WORKFLOWS_GITHUB_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-github-v1";
+import { WORKFLOWS_MEDIA_SIZE_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-media-size-v1";
+import { WORKFLOWS_MEDIA_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-media-v1";
+import { WORKFLOWS_PAUSE_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-pause-v1";
+import { WORKFLOWS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-v1";
+import { WORKSPACE_ONLY_PROCESS_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/workspace-only-process-limit-v1";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
+import { sourceText } from "@codebot/i18n/source";
+import { readHostAnalytics } from "@codebot/team-client";
+import { readPlanLimits } from "@codebot/team-client/plan-limits";
+import type { RemoteDownloadWatch, RemoteFileUpload, RemoteLargeDownload } from "@codebot/team-client/remote-peer";
+import { buildRoutineCalendar, type RoutineCalendarSource } from "@codebot/team-client/routine-calendar";
 import {
   createOnceAgentRoutine,
   isOnceSchedule,
@@ -237,7 +237,7 @@ import {
   type RoutinesOncePost,
   requireReleasedScheduleOn,
   updateAgentRoutineOnce,
-} from "@openbot/team-client/routines-once";
+} from "@codebot/team-client/routines-once";
 import {
   addAgentFolder,
   addChannelFolder,
@@ -375,7 +375,7 @@ import {
   whatsappConnectorStartLink,
   whatsappConnectorStatusReactions,
   whatsappConnectorWorkingMessages,
-} from "@openbot/team-client/team-admin-requests";
+} from "@codebot/team-client/team-admin-requests";
 import {
   type AgentMemoriesRequest,
   agentTaskControl,
@@ -409,7 +409,7 @@ import {
   stopLiveVoice,
   type TeamApiRequest,
   TeamRequestError,
-} from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-api-requests";
 import type { QueryClient } from "@tanstack/react-query";
 import { Effect } from "effect";
 import * as Crypto from "expo-crypto";

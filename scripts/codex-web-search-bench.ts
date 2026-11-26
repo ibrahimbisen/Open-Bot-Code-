@@ -2,15 +2,15 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { getRecord, getString, isRecord } from "../src/backend/protocol";
 import {
   answerCatalogTool,
+  codebotConfig,
   makeCodexHome,
   makeGitWorkspace,
-  openbotConfig,
   promptContents,
   type RequestUsage,
   removeRun,
@@ -23,12 +23,12 @@ import {
 const argument = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
 const MODEL = argument("model") ?? "gpt-6-luna";
 const RUNS = Number(argument("runs") ?? 2);
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-web-search-bench");
-const VARIANTS = ["inline", "openbot"] as const;
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-web-search-bench");
+const VARIANTS = ["inline", "codebot"] as const;
 type Variant = (typeof VARIANTS)[number];
 
 async function fetchVersion(url: string, read: (body: unknown) => string | null | undefined): Promise<string> {
-  const response = await fetch(url, { headers: { accept: "application/json", "user-agent": "openbot-bench" } });
+  const response = await fetch(url, { headers: { accept: "application/json", "user-agent": "codebot-bench" } });
   if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
   const version = read(await response.json());
   if (!version) throw new Error(`${url} names no version.`);
@@ -128,7 +128,7 @@ const expected = await Promise.all(QUESTIONS.map((question) => question.answer))
 const cli = await runCauseEffect(resolveCodexCli());
 
 async function runChat(variant: Variant, run: number) {
-  const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-web-search-bench-")));
+  const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-web-search-bench-")));
   const workspace = join(root, "ws");
   await makeGitWorkspace(workspace);
   const home = await makeCodexHome(join(root, "home"));
@@ -157,7 +157,7 @@ async function runChat(variant: Variant, run: number) {
   const turns: TurnLog[] = [];
   let webRun = false;
   try {
-    const base = openbotConfig(agent.read);
+    const base = codebotConfig(agent.read);
     const config = variant === "inline" ? base : { ...base, web_search: "disabled" };
     const thread = await agent.startThread(workspace, MODEL, config, catalog);
     const prompts = [
@@ -236,7 +236,7 @@ const failures = [
     .map((entry) => `inline run ${entry.run}: no web__run`),
   ...runs
     .filter((entry) => entry.variant !== "inline" && entry.webRun)
-    .map((entry) => `openbot run ${entry.run}: web__run declared`),
+    .map((entry) => `codebot run ${entry.run}: web__run declared`),
   ...runs.flatMap((entry) =>
     entry.turns.filter((turn) => turn.error).map((turn) => `${entry.variant} run ${entry.run}: ${turn.error}`),
   ),
@@ -244,7 +244,7 @@ const failures = [
     .filter(
       (entry) => entry.variant !== "inline" && entry.turns.some((turn) => turn.expected && turn.searches.length === 0),
     )
-    .map((entry) => `openbot run ${entry.run}: a search turn called no openbot.web_search`),
+    .map((entry) => `codebot run ${entry.run}: a search turn called no codebot.web_search`),
 ];
 const report = { codexVersion: cli.version, model: MODEL, expected, medians, failures, runs };
 mkdirSync(OUT, { recursive: true });

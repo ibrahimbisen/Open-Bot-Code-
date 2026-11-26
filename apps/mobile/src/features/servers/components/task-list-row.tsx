@@ -1,5 +1,5 @@
-import type { AgentTask } from "@openbot/contracts/ipc";
-import { taskTone } from "@openbot/team-client/agent-tasks";
+import type { AgentTask } from "@codebot/contracts/ipc";
+import { taskTone } from "@codebot/team-client/agent-tasks";
 import { Typography } from "heroui-native";
 import { memo, useRef, useState } from "react";
 import { Pressable, View } from "react-native";
@@ -51,7 +51,7 @@ function TaskListRowContent({ task, agent, dimmed = false, onPress, menu, slotWi
     : t("mobile.server.threads.rowMetaTimeOnly", { status: STATUS_MARK, when });
   const [before = "", after = ""] = line.split(STATUS_MARK);
   const tone = taskTone(task);
-  const [success, danger] = useCSSVariable(["--openbot-success-text", "--openbot-danger-text"]);
+  const [success, danger] = useCSSVariable(["--codebot-success-text", "--codebot-danger-text"]);
   const mark = tone === "attention" ? String(success) : tone === "danger" ? String(danger) : null;
   const menuItems = menu ? leafActions(menu.actions) : [];
   const row = (

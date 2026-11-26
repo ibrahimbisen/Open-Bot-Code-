@@ -1,4 +1,4 @@
-import type { RemoteWorkspacePreferences } from "@openbot/team-client";
+import type { RemoteWorkspacePreferences } from "@codebot/team-client";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useCSSVariable } from "uniwind";
 import { useAppLock } from "@/features/app-lock/model/app-lock";
@@ -44,7 +44,7 @@ function ShortcutsDirectorySync({
   preferences,
 }: ShortcutsSyncProps): null {
   const { t } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const locked = useAppLock((state) => state.status !== "ready" || appLockEnabled(state.config));
   const [saved] = useState(() => readShortcutDirectory(apiUrl, userId));
   const target = useShortcutAgent((state) => state.target);

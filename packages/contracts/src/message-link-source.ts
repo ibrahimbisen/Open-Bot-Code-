@@ -1,4 +1,4 @@
-const OPENBOT_SOURCE_QUERY = "utm_source=openbot";
+const CODEBOT_SOURCE_QUERY = "utm_source=codebot";
 const SECRET_QUERY_PARAMETER =
   /signature|sign|token|hmac|hash|^auth|^session|^sig$|^s$|^h$|^md5$|^expires$|^state$|^code$|^ticket$|^otp$|^key$|^sid$|^x-(amz|goog)-/i;
 const PRIVATE_HOST_SUFFIXES = [
@@ -15,7 +15,7 @@ const PRIVATE_HOST_SUFFIXES = [
   ".example",
 ];
 
-export function withOpenBotSource(address: string): string {
+export function withCodeBotSource(address: string): string {
   const url = URL.parse(address);
   if (!url || (url.protocol !== "http:" && url.protocol !== "https:")) return address;
   const names = [...url.searchParams.keys()];
@@ -24,7 +24,7 @@ export function withOpenBotSource(address: string): string {
     names.some((name) => name.toLowerCase() === "utm_source" || SECRET_QUERY_PARAMETER.test(name))
   )
     return address;
-  url.search = url.search ? `${url.search}&${OPENBOT_SOURCE_QUERY}` : `?${OPENBOT_SOURCE_QUERY}`;
+  url.search = url.search ? `${url.search}&${CODEBOT_SOURCE_QUERY}` : `?${CODEBOT_SOURCE_QUERY}`;
   return url.toString();
 }
 

@@ -39,7 +39,7 @@ const option = fields({
 const model = fields(
   {
     id: identifier,
-    provider: oneOf("openbot"),
+    provider: oneOf("codebot"),
     providerModel: identifier,
     name: string(160),
     maker: string(120),
@@ -58,7 +58,7 @@ export const WORKFLOWS_CREDIT_MEDIA_CODECS: ReadonlyMap<string, OptionalRouteCod
     WORKFLOWS_CREDIT_MEDIA_ROUTES.credits,
     adminRoute(
       empty,
-      fields({ openbot: nullable(fields({ available: creditAmount, quota: nullable(creditAmount) })) }),
+      fields({ codebot: nullable(fields({ available: creditAmount, quota: nullable(creditAmount) })) }),
     ),
   ],
 ]);

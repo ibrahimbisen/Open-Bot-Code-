@@ -1,4 +1,4 @@
-import type { WorkflowFolderAction } from "@openbot/contracts/ipc";
+import type { WorkflowFolderAction } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { WorkflowFoldersStore } from "../backend/workflow-folders-store";
 import type { WorkflowsHandle } from "../backend/workflows/workflows";

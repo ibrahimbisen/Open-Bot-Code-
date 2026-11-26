@@ -1,4 +1,4 @@
-import type { HostVoiceModelChange, LocalVoiceModelInfo } from "@openbot/contracts/ipc";
+import type { HostVoiceModelChange, LocalVoiceModelInfo } from "@codebot/contracts/ipc";
 import { useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -16,7 +16,7 @@ import { useText } from "@/shared/lib/text";
 
 export function ServerVoiceModelScreen() {
   const { t, format, errorMessage } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const { serverId } = useLocalSearchParams<{ serverId: string }>();
   const { available, query, change } = useServerVoiceModel(serverId);
   const [pending, setPending] = useState(false);

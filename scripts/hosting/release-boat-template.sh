@@ -13,8 +13,8 @@ if [[ ! $RELEASE_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   exit 1
 fi
 version=${RELEASE_TAG#v}
-name="openbot-server-production-${version//./-}"
-asset="OpenBot-$version-x86_64.AppImage"
+name="codebot-server-production-${version//./-}"
+asset="CodeBot-$version-x86_64.AppImage"
 
 require_latest() {
   local latest

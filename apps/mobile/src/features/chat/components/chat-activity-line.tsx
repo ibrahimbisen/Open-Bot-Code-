@@ -23,11 +23,11 @@ export type ActivityColors = {
 
 export function useActivityColors(): ActivityColors {
   const [muted, dim, name, danger, running] = useCSSVariable([
-    "--openbot-text-muted",
-    "--openbot-text-dim",
-    "--openbot-text-secondary",
-    "--openbot-danger-text",
-    "--openbot-accent-text",
+    "--codebot-text-muted",
+    "--codebot-text-dim",
+    "--codebot-text-secondary",
+    "--codebot-danger-text",
+    "--codebot-accent-text",
   ]);
   return {
     muted: String(muted),

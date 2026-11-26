@@ -10,29 +10,29 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-md);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-md);
   line-height: 18px;
 }
 
 .update-required-progress-value {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   font-variant-numeric: tabular-nums;
 }
 
 .update-required .ui-progress-fill {
-  background: var(--openbot-text-primary);
+  background: var(--codebot-text-primary);
 }
 
 .update-required-note {
   margin: 24px 0 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-md);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-md);
   line-height: 18px;
 }
 
 .update-required-error {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   text-wrap: balance;
 }
 
@@ -41,7 +41,7 @@
   width: 15px;
   height: 15px;
   margin-inline-end: 6px;
-  color: var(--openbot-danger);
+  color: var(--codebot-danger);
   vertical-align: -2px;
 }
 
@@ -53,5 +53,5 @@
   align-self: center;
   width: auto;
   margin-top: 12px;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }

@@ -1,4 +1,4 @@
-import type { CrmCustomer, CrmPayment, CrmPlan, CrmSourceKind, CrmTextField } from "@openbot/contracts/ipc";
+import type { CrmCustomer, CrmPayment, CrmPlan, CrmSourceKind, CrmTextField } from "@codebot/contracts/ipc";
 import {
   Badge,
   Button,
@@ -29,10 +29,10 @@ import {
   Undo2,
   UserRound,
   X,
-} from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createContext, createMemo, createSignal, createUniqueId, For, onCleanup, Show, useContext } from "solid-js";
 import { createAutoScroll, MenuMark } from "./CrmSheet";

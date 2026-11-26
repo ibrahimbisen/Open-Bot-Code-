@@ -1,6 +1,6 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { McpServerConfig, McpTestResult, McpTransport } from "@openbot/contracts/ipc";
-import { matchingSourceKeys } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { McpServerConfig, McpTestResult, McpTransport } from "@codebot/contracts/ipc";
+import { matchingSourceKeys } from "@codebot/i18n/source";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import LogIn from "lucide-react-native/icons/log-in";

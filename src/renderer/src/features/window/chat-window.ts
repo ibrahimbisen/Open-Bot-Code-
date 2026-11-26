@@ -1,4 +1,4 @@
-import type { ChatWindowTarget } from "@openbot/contracts/ipc";
+import type { ChatWindowTarget } from "@codebot/contracts/ipc";
 
 export function readChatWindowTarget(search: string): ChatWindowTarget | null {
   const query = new URLSearchParams(search);

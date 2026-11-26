@@ -1,5 +1,5 @@
-import { MCP_SIGN_IN_TIMEOUT_MS } from "@openbot/contracts/ipc";
-import { Alert, AlertDescription, Button, Copy, ExternalLink, Text } from "@openbot/ui";
+import { MCP_SIGN_IN_TIMEOUT_MS } from "@codebot/contracts/ipc";
+import { Alert, AlertDescription, Button, Copy, ExternalLink, Text } from "@codebot/ui";
 import { createSignal, onSettled, Show } from "solid-js";
 import { useText } from "../../text";
 import { createConnectRun, type McpConnectBaseProps, McpConnectShell } from "./McpConnectShell";

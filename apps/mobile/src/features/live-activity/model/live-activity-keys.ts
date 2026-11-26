@@ -3,12 +3,12 @@ import {
   type LiveActivityKeys,
   liveActivityHostSecret,
   liveActivityKeys,
-} from "@openbot/team-client/live-activity-seal";
+} from "@codebot/team-client/live-activity-seal";
 import * as Crypto from "expo-crypto";
 import * as SecureStore from "expo-secure-store";
 import { untilForeground } from "../../../shared/lib/until-foreground";
 
-const key = "openbot.mobile.live-activity-secret.v1";
+const key = "codebot.mobile.live-activity-secret.v1";
 
 export interface LiveActivityHostKeys {
   secret: Uint8Array;

@@ -20,15 +20,15 @@ import type {
   SidebarLayoutSnapshot,
   TeamPresenceSnapshot,
   UpdateStatus,
-} from "@openbot/contracts/ipc";
-import { SIDEBAR_UNASSIGNED_SECTION_ID } from "@openbot/contracts/ipc";
-import { TEAM_CURRENT_CAPABILITIES } from "@openbot/contracts/team-protocol/current";
-import { TEAM_PROTOCOL_V6 } from "@openbot/contracts/team-protocol/v6";
-import developmentLogoUrl from "../assets/openbot-logo-dev.png";
-import productionLogoUrl from "../assets/openbot-logo-production.png";
+} from "@codebot/contracts/ipc";
+import { SIDEBAR_UNASSIGNED_SECTION_ID } from "@codebot/contracts/ipc";
+import { TEAM_CURRENT_CAPABILITIES } from "@codebot/contracts/team-protocol/current";
+import { TEAM_PROTOCOL_V6 } from "@codebot/contracts/team-protocol/v6";
+import developmentLogoUrl from "../assets/codebot-logo-dev.png";
+import productionLogoUrl from "../assets/codebot-logo-production.png";
 import { STORY_AGENT_STATUS, STORY_PRESENCE } from "./fixtures";
 import type { MockChannelSeed } from "./mock-channels";
-import type { MockOpenBotOptions } from "./mock-openbot";
+import type { MockCodeBotOptions } from "./mock-codebot";
 
 const LANDING_PREVIEW_EMAIL = "norbertbodziony@gmail.com";
 const MINUTE_MS = 60_000;
@@ -122,7 +122,7 @@ function landingAgents(at: (minutesAgo: number) => string): ClientAgentSummary[]
     ...fields,
     notifications: true,
     threadId: `thread-${fields.id}`,
-    workspacePath: `/mock/OpenBot/Agents/${fields.id}`,
+    workspacePath: `/mock/CodeBot/Agents/${fields.id}`,
     updatedAt: at(minutesAgo),
     avatarSeed: fields.id,
     avatarHue: hue,
@@ -275,7 +275,7 @@ function landingServers(): ServerSummary[] {
     },
     {
       id: "team",
-      name: "OpenBot team",
+      name: "CodeBot team",
       logoUrl: productionLogoUrl,
       notificationsMuted: false,
       notificationsMutedUntil: null,
@@ -436,7 +436,7 @@ function landingUpdateStatus(at: (minutesAgo: number) => string): UpdateStatus {
   };
 }
 
-type LandingRoutines = Required<Pick<MockOpenBotOptions, "routines" | "routineRuns">>;
+type LandingRoutines = Required<Pick<MockCodeBotOptions, "routines" | "routineRuns">>;
 
 function landingRoutines(at: (minutesAgo: number) => string, timezone: string): LandingRoutines {
   const createdAt = at(14 * 24 * 60);
@@ -607,7 +607,7 @@ function landingConversationReads(
   );
 }
 
-export function createLandingPreviewOptions(now: Date): MockOpenBotOptions {
+export function createLandingPreviewOptions(now: Date): MockCodeBotOptions {
   const nowMs = now.getTime();
   const at = (minutesAgo: number) => new Date(nowMs - minutesAgo * MINUTE_MS).toISOString();
   const agents = landingAgents(at);

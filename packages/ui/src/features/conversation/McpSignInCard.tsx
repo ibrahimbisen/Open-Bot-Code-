@@ -1,4 +1,4 @@
-import { Button, CircleCheck, Lock } from "@openbot/ui";
+import { Button, CircleCheck, Lock } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { Match, Show, Switch } from "solid-js";
 import { useText } from "../../text";

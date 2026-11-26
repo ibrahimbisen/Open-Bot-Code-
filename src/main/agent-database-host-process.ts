@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { utilityProcess } from "electron";
 import {
@@ -8,14 +8,14 @@ import {
   type AgentDatabaseHostProcess,
 } from "../backend/agent-data/agent-database-protocol";
 
-const logger = createOpenBotLogger("database-check");
+const logger = createCodeBotLogger("database-check");
 const DAMAGED_FILE_CODES = new Set([11, 26]);
 
 const OUTPUT_TAIL_CHARS = 1_900;
 
 export function spawnAgentDatabaseHost(): AgentDatabaseHostProcess {
   const child = utilityProcess.fork(join(__dirname, "agent-database-host.js"), [], {
-    serviceName: "OpenBot databases",
+    serviceName: "CodeBot databases",
     stdio: ["ignore", "ignore", "pipe"],
   });
   let output = "";

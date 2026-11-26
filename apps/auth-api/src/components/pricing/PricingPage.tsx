@@ -1,9 +1,9 @@
-import type { BillingPlanId } from "@openbot/contracts/billing";
-import { type LicenseTier, pricingOrderSearch } from "@openbot/contracts/license";
-import type { TranslatedLocale } from "@openbot/i18n";
-import { Checkbox } from "@openbot/ui/checkbox";
-import { OrderForm, type OrderFormOrder } from "@openbot/ui/features/billing/OrderForm";
-import { TextProvider, useText } from "@openbot/ui/text";
+import type { BillingPlanId } from "@codebot/contracts/billing";
+import { type LicenseTier, pricingOrderSearch } from "@codebot/contracts/license";
+import type { TranslatedLocale } from "@codebot/i18n";
+import { Checkbox } from "@codebot/ui/checkbox";
+import { OrderForm, type OrderFormOrder } from "@codebot/ui/features/billing/OrderForm";
+import { TextProvider, useText } from "@codebot/ui/text";
 import { Link } from "@tanstack/solid-router";
 import { type Accessor, createSignal, createUniqueId, onSettled, Show } from "solid-js";
 import { landingAnalytics } from "../../lib/analytics";

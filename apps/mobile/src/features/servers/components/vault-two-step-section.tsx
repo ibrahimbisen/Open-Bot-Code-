@@ -1,4 +1,4 @@
-import type { VaultLoginSummary } from "@openbot/contracts/ipc";
+import type { VaultLoginSummary } from "@codebot/contracts/ipc";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
 import ShieldCheck from "lucide-react-native/icons/shield-check";
@@ -40,7 +40,7 @@ export function VaultTwoStepSection({
   onChange: (twoStepKey: string | null) => void;
 }) {
   const { t } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const savedKey = saved?.hasTwoStep === true;
   const keepsSaved = twoStepKey === null && savedKey;
   const newKey = twoStepKey !== null && twoStepKey !== "";

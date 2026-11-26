@@ -1,4 +1,4 @@
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   parseShortcutOverrides,
   resolveShortcut,
@@ -11,11 +11,11 @@ import {
   shortcutMatches,
   shortcutText,
   withShortcut,
-} from "@openbot/ui/features/settings/keyboard-shortcuts";
+} from "@codebot/ui/features/settings/keyboard-shortcuts";
 import { createSignal } from "solid-js";
 import { currentDevicePlatform } from "./send-shortcut-preference";
 
-const KEYBOARD_SHORTCUTS_STORAGE_KEY = "openbot:keyboard-shortcuts";
+const KEYBOARD_SHORTCUTS_STORAGE_KEY = "codebot:keyboard-shortcuts";
 
 let unsavedOverrides: ShortcutOverrides | undefined;
 
@@ -55,7 +55,7 @@ if (typeof window !== "undefined") {
 }
 
 export function shortcutEnvironment(): ShortcutEnvironment {
-  return { platform: currentDevicePlatform(), browser: typeof window === "undefined" || !("openbot" in window) };
+  return { platform: currentDevicePlatform(), browser: typeof window === "undefined" || !("codebot" in window) };
 }
 
 export function useShortcutOverrides(): () => ShortcutOverrides {

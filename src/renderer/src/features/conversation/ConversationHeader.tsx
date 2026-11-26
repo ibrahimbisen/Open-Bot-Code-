@@ -1,4 +1,4 @@
-import { foreignProvider, isKnownAgentProvider } from "@openbot/contracts/agent-providers";
+import { foreignProvider, isKnownAgentProvider } from "@codebot/contracts/agent-providers";
 import {
   type AgentModelId,
   type AgentProviderRef,
@@ -7,12 +7,12 @@ import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
   providerDisplayName,
   workspaceAccessEnforced,
-} from "@openbot/contracts/ipc";
-import { reasoningLabel } from "@openbot/ui/components/ProviderModelPicker";
-import { findModelOption, providerAccountName } from "@openbot/ui/components/provider-accounts";
-import { ConversationHeader as SharedConversationHeader } from "@openbot/ui/features/conversation/ConversationHeader";
-import { ThreadHeader } from "@openbot/ui/features/conversation/threads/ThreadHeader";
-import { DRAFT_THREAD_ID, MAIN_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
+} from "@codebot/contracts/ipc";
+import { reasoningLabel } from "@codebot/ui/components/ProviderModelPicker";
+import { findModelOption, providerAccountName } from "@codebot/ui/components/provider-accounts";
+import { ConversationHeader as SharedConversationHeader } from "@codebot/ui/features/conversation/ConversationHeader";
+import { ThreadHeader } from "@codebot/ui/features/conversation/threads/ThreadHeader";
+import { DRAFT_THREAD_ID, MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
 import { Show } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { useConversationViewScope } from "./conversation-scope";
@@ -26,7 +26,7 @@ interface BadgeRuntime {
   providerAccountId?: string | undefined;
 }
 
-import { useText } from "@openbot/ui/text";
+import { useText } from "@codebot/ui/text";
 
 export function ConversationHeader() {
   const { t } = useText();

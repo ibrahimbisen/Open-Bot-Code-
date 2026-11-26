@@ -7,43 +7,43 @@ import {
   type ConversationPage,
   type ConversationSnapshot,
   isConversationMessage,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   TEAM_BOOTSTRAP_CAPABILITIES,
   TEAM_CURRENT_CAPABILITIES,
   TEAM_UI_BLOCKS_CAPABILITY,
   teamCapabilitiesForProtocol,
-} from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/current";
 import {
   addUiBlockAutoAnswers,
   TEAM_UI_BLOCK_AUTO_ANSWER_CAPABILITY,
   withUiBlockAutoAnswers,
-} from "@openbot/contracts/team-protocol/ui-block-auto-answer-v1";
+} from "@codebot/contracts/team-protocol/ui-block-auto-answer-v1";
 import {
   addUiBlockLocationRequests,
   encodeSharedLocationAnswer,
   type SharedLocation,
   TEAM_UI_BLOCK_LOCATION_CAPABILITY,
   withUiBlockLocationRequests,
-} from "@openbot/contracts/team-protocol/ui-block-location-v1";
-import { UI_BLOCK_PREVIEW_EDIT_CAPABILITY } from "@openbot/contracts/team-protocol/ui-block-preview-edit-v1";
+} from "@codebot/contracts/team-protocol/ui-block-location-v1";
+import { UI_BLOCK_PREVIEW_EDIT_CAPABILITY } from "@codebot/contracts/team-protocol/ui-block-preview-edit-v1";
 import {
   addUiBlockVaultRequests,
   TEAM_UI_BLOCK_VAULT_CAPABILITY,
   withUiBlockVaultRequests,
-} from "@openbot/contracts/team-protocol/ui-block-vault-v1";
+} from "@codebot/contracts/team-protocol/ui-block-vault-v1";
 import {
   decodeTeamProtocolV6CurrentHttpResponse,
   encodeTeamProtocolV6CurrentHttpResponse,
-} from "@openbot/contracts/team-protocol/v6-adapter";
+} from "@codebot/contracts/team-protocol/v6-adapter";
 import {
   decodeTeamProtocolV7CurrentHttpResponse,
   encodeTeamProtocolV7CurrentHttpResponse,
-} from "@openbot/contracts/team-protocol/v7-adapter";
+} from "@codebot/contracts/team-protocol/v7-adapter";
 import {
   decodeTeamProtocolV7BaseCurrentEvent,
   encodeTeamProtocolV7BaseCurrentEvent,
-} from "@openbot/contracts/team-protocol/v7-base-adapter";
+} from "@codebot/contracts/team-protocol/v7-base-adapter";
 import {
   type ConversationUiBlock,
   normalizeUiBlockSpec,
@@ -54,7 +54,7 @@ import {
   type UiBlockValue,
   type UiBlockVaultRequest,
   uiBlockAnswersFromResponse,
-} from "@openbot/contracts/ui-blocks";
+} from "@codebot/contracts/ui-blocks";
 import { Effect } from "effect";
 import { AttentionRegistry, type PromptResponder } from "../src/backend/agent/attention-registry";
 import { ForbiddenAttentionAnswer } from "../src/backend/agent/inactive-attention-request";
@@ -63,7 +63,7 @@ import { CodexAppServerClient } from "../src/backend/app-server-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { RequestId } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/ui-blocks-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/ui-blocks-e2e");
 const PAGE_PATH = "/v1/agents/agent-1/conversation-page";
 const THREAD = "thread-1";
 const SECRET = "e2e-secret-4be1c0";

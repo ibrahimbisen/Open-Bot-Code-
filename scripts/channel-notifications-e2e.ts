@@ -15,8 +15,8 @@ import {
   IPC_ENDPOINTS,
   LOCAL_SERVER_ID,
   type NotificationOpenedEvent,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
@@ -24,36 +24,36 @@ import {
   TEAM_PROTOCOL_V9,
   TEAM_PROTOCOL_VERSION_HEADER,
   teamCapabilitiesForProtocol,
-} from "@openbot/contracts/team-protocol";
-import { CHANNEL_ROUTES, channelResponse } from "@openbot/contracts/team-protocol/channels-v1";
-import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@openbot/contracts/team-protocol/chat-history-v1";
+} from "@codebot/contracts/team-protocol";
+import { CHANNEL_ROUTES, channelResponse } from "@codebot/contracts/team-protocol/channels-v1";
+import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@codebot/contracts/team-protocol/chat-history-v1";
 import {
   CHANNEL_BROWSER_CAPABILITY,
   CHANNEL_ISOLATION_CAPABILITY,
   CHANNEL_SEEN_SUBTASKS_CAPABILITY,
   CHANNEL_TASK_WAITS_CAPABILITY,
   TEAM_CHANNEL_ATTENTION_CAPABILITY,
-} from "@openbot/contracts/team-protocol/current";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
+} from "@codebot/contracts/team-protocol/current";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
 import {
   STORAGE_CHANNEL_CAPABILITY,
   STORAGE_CHANNEL_ROUTES,
-} from "@openbot/contracts/team-protocol/storage-channel-v1";
-import { createFormat, translateFor } from "@openbot/i18n";
+} from "@codebot/contracts/team-protocol/storage-channel-v1";
+import { createFormat, translateFor } from "@codebot/i18n";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
 import type { ChannelAssignment } from "../src/backend/channel-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import { StorageUsageScanner, StorageUsageService } from "../src/backend/storage-usage";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-notifications-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-notifications-e2e");
 const APP_VERSION = "0.0.0-e2e";
 const STEP_DEADLINE_MS = 30_000;
 const OWNER = { username: "owner-user", password: "owner-password-123" };
@@ -217,7 +217,7 @@ function lastOpened(): NotificationOpenedEvent {
   return event;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-channel-notifications-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-channel-notifications-"));
 const userData = join(root, "user-data");
 const unused = () => Effect.die(new Error("Not used by this check."));
 const agentBrowser: AgentBrowserHost = {
@@ -274,11 +274,11 @@ const cipher = {
 };
 const centralAccount = { createTeamAuthTicket: unused, getEmail: () => "e2e@example.invalid" };
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const agentStore = new AgentStore(userData, join(root, "home"), database);
 const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
 const manager = new RemoteServerManager(join(userData, "remote-servers.json"), cipher, centralAccount, {
   appVersion: APP_VERSION,
 });
@@ -286,7 +286,7 @@ let agents: AgentService | undefined;
 let server: InstanceType<typeof TeamApiServer> | undefined;
 const storageSources = {
   roots: {
-    database: join(userData, "openbot.db"),
+    database: join(userData, "codebot.db"),
     downloads: join(root, "downloads"),
     caches: [join(userData, "remote-attachments")],
     logs: [join(userData, "logs")],
@@ -573,7 +573,7 @@ try {
 
   await step("A prompt on the agent's own thread does not name a channel", async () => {
     const notified = nextNotification();
-    forwarders.forwardAgentEvent(LOCAL_SERVER_ID, prompt(2, agent.threadId ?? "openbot-thread-own-chat"));
+    forwarders.forwardAgentEvent(LOCAL_SERVER_ID, prompt(2, agent.threadId ?? "codebot-thread-own-chat"));
     const notification = await notified;
     assert.equal(notification.title, agent.name);
     notification.click();

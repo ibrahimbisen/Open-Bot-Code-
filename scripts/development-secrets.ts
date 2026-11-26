@@ -16,9 +16,9 @@ import {
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const TICKET_KEY_ID = "openbot-remote-1";
+const TICKET_KEY_ID = "codebot-remote-1";
 const DEVELOPMENT_STATE_VERSION = 1 as const;
-const DEVELOPMENT_STATE_DIRECTORY = ".openbot";
+const DEVELOPMENT_STATE_DIRECTORY = ".codebot";
 const DEVELOPMENT_STATE_FILE = "dev-state.json";
 const DEVELOPMENT_STATE_LOCK = "dev-state.json.lock";
 
@@ -176,11 +176,11 @@ function readStateIfPresent(path: string): DevelopmentState | undefined {
   try {
     parsed = JSON.parse(readFileSync(path, "utf8"));
   } catch {
-    throw new Error("The development state file is invalid or unreadable. Restore .openbot/dev-state.json.");
+    throw new Error("The development state file is invalid or unreadable. Restore .codebot/dev-state.json.");
   }
   if (!isDevelopmentState(parsed)) {
     throw new Error(
-      "The development state file has an invalid format. Restore .openbot/dev-state.json before continuing.",
+      "The development state file has an invalid format. Restore .codebot/dev-state.json before continuing.",
     );
   }
   chmodSync(path, 0o600);
@@ -263,7 +263,7 @@ function releaseStateLock(path: string, lock: string): void {
 
 function ensurePrivateDirectory(path: string): void {
   if (existsSync(path)) {
-    if (!lstatSync(path).isDirectory()) throw new Error("The .openbot development state path is not a directory.");
+    if (!lstatSync(path).isDirectory()) throw new Error("The .codebot development state path is not a directory.");
   } else {
     mkdirSync(path, { recursive: true, mode: 0o700 });
   }
@@ -294,7 +294,7 @@ if (import.meta.main) {
   const outcome = ensureDevelopmentState(projectRoot);
   process.stdout.write(
     outcome === "created"
-      ? "Generated .openbot/dev-state.json for local development.\n"
-      : "Kept the existing .openbot/dev-state.json.\n",
+      ? "Generated .codebot/dev-state.json for local development.\n"
+      : "Kept the existing .codebot/dev-state.json.\n",
   );
 }

@@ -5,8 +5,8 @@ import {
   type WorkflowGitHubHistory,
   type WorkflowSummary,
   type WorkflowVersion,
-} from "@openbot/contracts/ipc";
-import type { WorkflowRunView } from "@openbot/ui/features/workflows/workflow-run-view";
+} from "@codebot/contracts/ipc";
+import type { WorkflowRunView } from "@codebot/ui/features/workflows/workflow-run-view";
 
 export interface StoredWorkflow {
   detail: WorkflowDetail;

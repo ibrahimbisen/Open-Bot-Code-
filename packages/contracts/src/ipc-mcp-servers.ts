@@ -3,12 +3,12 @@ import { isBoolean, isDynamicRecord, isNumber, isOneOf, isString } from "./runti
 
 export const MCP_SERVERS_CAPABILITY = "mcp-servers-v1";
 
-export const RESERVED_MCP_SERVER_NAMES = ["openbot", "openbot_browser"] as const;
+export const RESERVED_MCP_SERVER_NAMES = ["codebot", "codebot_browser"] as const;
 
 export const COMPUTER_USE_MCP_SERVER_NAME = "computer_use";
-export const COMPUTER_USE_MCP_SERVER_ID = "openbot-computer-use";
+export const COMPUTER_USE_MCP_SERVER_ID = "codebot-computer-use";
 
-export const GITHUB_CONNECTOR_MCP_SERVER_ID = "openbot-github";
+export const GITHUB_CONNECTOR_MCP_SERVER_ID = "codebot-github";
 export const GITHUB_CONNECTOR_MCP_SERVER_NAME = "github";
 export const GITHUB_CONNECTOR_MCP_SERVER_URL = "https://api.githubcopilot.com/mcp/";
 
@@ -131,7 +131,7 @@ export function mcpConfigErrors(config: McpServerConfig): McpConfigErrors {
   else if (name.length > INPUT_LIMITS.mcpServerName)
     errors.name = `Use ${INPUT_LIMITS.mcpServerName} characters or fewer for the name.`;
   else if (isReservedMcpServerName(name) || name.toLowerCase() === COMPUTER_USE_MCP_SERVER_NAME)
-    errors.name = `OpenBot already uses the name ${name}.`;
+    errors.name = `CodeBot already uses the name ${name}.`;
   if (config.transport === "stdio") {
     if (!config.command.trim()) errors.command = "Enter the command that launches this server.";
     return errors;

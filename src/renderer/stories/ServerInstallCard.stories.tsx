@@ -1,4 +1,4 @@
-import { ServerInstallCard, type ServerInstallCardStep } from "@openbot/ui/features/conversation/ServerInstallCard";
+import { ServerInstallCard, type ServerInstallCardStep } from "@codebot/ui/features/conversation/ServerInstallCard";
 import { createSignal, onSettled } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -9,7 +9,7 @@ const meta = {
   title: "Conversation/Server install card",
   component: ServerInstallCard,
   render: (args) => (
-    <main style={{ width: "min(560px, 100vw)", padding: "var(--openbot-space-4)" }}>
+    <main style={{ width: "min(560px, 100vw)", padding: "var(--codebot-space-4)" }}>
       <ServerInstallCard {...args} />
     </main>
   ),
@@ -42,7 +42,7 @@ export const Reveal: Story = {
       };
     });
     return (
-      <main style={{ width: "min(560px, 100vw)", padding: "var(--openbot-space-4)" }}>
+      <main style={{ width: "min(560px, 100vw)", padding: "var(--codebot-space-4)" }}>
         <ServerInstallCard
           step={step()}
           name={args.name}

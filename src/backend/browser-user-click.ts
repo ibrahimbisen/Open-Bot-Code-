@@ -1,4 +1,4 @@
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import {
   automationContextId,
@@ -11,7 +11,7 @@ import { stepText, USER_BROWSING_TEXT_CHARACTERS } from "./user-browsing-log";
 
 export const CLICK_READ_TIMEOUT_MS = 1_000;
 const MAX_CLICK_FRAME_DEPTH = 8;
-const CLICK_FRAME_GLOBAL = "__openbotClickFrame";
+const CLICK_FRAME_GLOBAL = "__codebotClickFrame";
 
 const clickScript = (point: { x: number; y: number } | null, byHover: boolean) => `(() => {
   const point = ${JSON.stringify(point)};

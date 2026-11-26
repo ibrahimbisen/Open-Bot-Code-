@@ -1,5 +1,5 @@
-import type { WorkflowRunStatus } from "@openbot/contracts/ipc";
-import type { AppFormat, AppTranslate } from "@openbot/i18n";
+import type { WorkflowRunStatus } from "@codebot/contracts/ipc";
+import type { AppFormat, AppTranslate } from "@codebot/i18n";
 import {
   Button,
   buttonVariants,
@@ -15,7 +15,7 @@ import {
   Square,
   UserCheck,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createMemo, For, Show, untrack } from "solid-js";
 import { useText } from "../../text";

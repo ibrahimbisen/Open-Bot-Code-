@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { nextRoutineOccurrence } from "@openbot/team-client/routine-schedule";
+import { nextRoutineOccurrence } from "@codebot/team-client/routine-schedule";
 import {
   ROUTINE_EVERY_DAY,
   ROUTINE_WORKDAYS,
@@ -11,10 +11,10 @@ import {
   routineRunsPerDay,
   routineScheduleFromDraft,
   routineScheduleToDraft,
-} from "@openbot/team-client/routine-schedule-draft";
+} from "@codebot/team-client/routine-schedule-draft";
 import { Effect } from "effect";
 import { AgentRoutineStore } from "../src/backend/agent-routine-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 
 type HourlyDraft = Extract<RoutineScheduleDraft, { kind: "hourly" }>;
 
@@ -26,7 +26,7 @@ interface WindowCase {
   readBack: HourlyDraft;
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/routine-overnight-window-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/routine-overnight-window-e2e");
 const START = new Date("2035-01-01T00:00:00.000Z");
 const DAYS_CHECKED = 7;
 const MINUTE_MS = 60_000;
@@ -132,8 +132,8 @@ interface CaseReport {
 }
 
 const reports: CaseReport[] = [];
-const root = await mkdtemp(join(tmpdir(), "openbot-routine-overnight-"));
-const database = new OpenBotDatabase(root);
+const root = await mkdtemp(join(tmpdir(), "codebot-routine-overnight-"));
+const database = new CodeBotDatabase(root);
 let fatal: string | undefined;
 
 try {

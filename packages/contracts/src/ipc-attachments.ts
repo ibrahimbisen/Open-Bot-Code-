@@ -193,7 +193,7 @@ export interface FilePreview {
 export function isFilePreviewPageUrl(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    /^openbot-visual:\/\/preview\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u.test(value)
+    /^codebot-visual:\/\/preview\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u.test(value)
   );
 }
 

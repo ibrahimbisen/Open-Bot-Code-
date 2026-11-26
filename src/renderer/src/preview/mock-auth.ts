@@ -2,12 +2,12 @@ import type {
   AccountSession,
   CentralAuthState,
   CentralAuthUser,
+  CodeBotDesktopApi,
   CompanySignInSettings,
   MobileConnectLink,
-  OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
-import type { OwnerTransfer } from "@openbot/contracts/owner-transfer";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import type { OwnerTransfer } from "@codebot/contracts/owner-transfer";
+import { sourceText } from "@codebot/i18n/source";
 import { clone, type Listener, type MockRuntime } from "./mock-support";
 
 export interface MockAuthOptions {
@@ -65,7 +65,7 @@ export function createMockAuth(options: MockAuthOptions, { emit }: MockRuntime) 
   let companySignIn: CompanySignInSettings = {
     redirectUri: "https://api.openbot.run/v1/auth/company/callback",
     scimUrl: "https://api.openbot.run/scim/v2",
-    domainRecord: { name: "_openbot", value: "openbot-domain=preview" },
+    domainRecord: { name: "_codebot", value: "codebot-domain=preview" },
     domainCheck: false,
     connection: null,
   };
@@ -76,7 +76,7 @@ export function createMockAuth(options: MockAuthOptions, { emit }: MockRuntime) 
     emit(authListeners, state);
   }
 
-  const auth: OpenBotDesktopApi["auth"] = {
+  const auth: CodeBotDesktopApi["auth"] = {
     getState: async () => clone(authState),
     retry: async () => clone(authState),
     requestEmailCode: async (email) => {
@@ -124,14 +124,14 @@ export function createMockAuth(options: MockAuthOptions, { emit }: MockRuntime) 
     },
     createMobileConnect: async () => ({
       qrData:
-        "openbot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=preview-mobile-ticket_1234567890abcdef",
+        "codebot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=preview-mobile-ticket_1234567890abcdef",
       expiresAt: Date.now() + 120_000,
     }),
     cancelMobileConnect: async () => undefined,
     getMobileConnectLink: async () => clone(mobileConnectLink),
     createMobileConnectLink: async () => {
       mobileConnectLink = {
-        url: `openbot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=preview-mobile-link_${crypto.randomUUID().replaceAll("-", "")}`,
+        url: `codebot://mobile-connect?api=https%3A%2F%2Fapi.openbot.run&ticket=preview-mobile-link_${crypto.randomUUID().replaceAll("-", "")}`,
         createdAt: Date.now(),
       };
       return clone(mobileConnectLink);

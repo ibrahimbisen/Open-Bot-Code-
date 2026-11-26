@@ -1,9 +1,9 @@
-import type { CreditsState } from "@openbot/contracts/credits";
-import { accountUsageProviderRows } from "@openbot/ui/features/account/account-usage-view";
-import { creditsRailWallet } from "@openbot/ui/features/credits/credits-store";
-import { RailMoveCreditsDialog } from "@openbot/ui/features/credits/MoveCreditsDialog";
-import { ServerMenu } from "@openbot/ui/features/servers/ServerMenu";
-import { HelpMenu } from "@openbot/ui/features/updates/HelpMenu";
+import type { CreditsState } from "@codebot/contracts/credits";
+import { accountUsageProviderRows } from "@codebot/ui/features/account/account-usage-view";
+import { creditsRailWallet } from "@codebot/ui/features/credits/credits-store";
+import { RailMoveCreditsDialog } from "@codebot/ui/features/credits/MoveCreditsDialog";
+import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
+import { HelpMenu } from "@codebot/ui/features/updates/HelpMenu";
 import {
   type CustomAgentUsageRailRow,
   type MediaCreditsRailRow,
@@ -12,8 +12,8 @@ import {
   type PageRailPage,
   type PageRailPinnablePage,
   type PageRailProps,
-} from "@openbot/ui/features/window/PageRail";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/window/PageRail";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -241,7 +241,7 @@ function RailPreview(props: {
 function CreditMovePreview(props: { personal: number; server: number }) {
   const calls = createMockCredits({
     balance: props.personal,
-    servers: [{ serverId: "team", name: "OpenBot team", role: "owner", balance: props.server }],
+    servers: [{ serverId: "team", name: "CodeBot team", role: "owner", balance: props.server }],
   });
   const [state, setState] = createSignal<CreditsState | null>(null);
   const [moving, setMoving] = createSignal(false);
@@ -333,7 +333,7 @@ export const CreditsHundredThousand: Story = {
     creditAgents: true,
     creditAsk: true,
     creditMove: true,
-    creditWalletName: "OpenBot team",
+    creditWalletName: "CodeBot team",
   },
 };
 

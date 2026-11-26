@@ -62,7 +62,7 @@ Read the Signal app startup and team-client transport entry points. Reuse throwa
 
 Cover remote HTTP authentication and rejection, WebSocket reconnect and close behavior, ingress queue ordering and retry limits, relay/credential bounds, and team-client request/response decoding with malformed and unknown optional fields. Use real local servers and injected transports where the package boundary permits.
 
-**Verify**: the new focused command writes a JSON report under `.openbot-build/` and exits 0.
+**Verify**: the new focused command writes a JSON report under `.codebot-build/` and exits 0.
 
 ### Step 3: Register narrow checks
 

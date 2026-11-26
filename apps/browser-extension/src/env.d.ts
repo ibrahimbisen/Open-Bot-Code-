@@ -1,10 +1,10 @@
 interface ImportMetaEnv {
-  readonly VITE_OPENBOT_API_URL: string;
-  readonly VITE_OPENBOT_WEB_URL: string;
-  readonly VITE_OPENBOT_X_RULES_URL: string;
-  readonly VITE_OPENBOT_ANALYTICS_URL: string;
+  readonly VITE_CODEBOT_API_URL: string;
+  readonly VITE_CODEBOT_WEB_URL: string;
+  readonly VITE_CODEBOT_X_RULES_URL: string;
+  readonly VITE_CODEBOT_ANALYTICS_URL: string;
 }
 
-declare const __OPENBOT_X_NOTES__: boolean;
+declare const __CODEBOT_X_NOTES__: boolean;
 
-declare var openbotRefs: Map<string, WeakRef<Element>> | undefined;
+declare var codebotRefs: Map<string, WeakRef<Element>> | undefined;

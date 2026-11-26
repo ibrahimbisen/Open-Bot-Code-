@@ -52,7 +52,7 @@ export default defineConfig({
       ...configDefaults.exclude,
       "apps/auth-api/**",
       "tests/visual/**",
-      ".openbot-build/**",
+      ".codebot-build/**",
       "**/.worktrees/**",
       "**/.claude/worktrees/**",
       "**/.codex/**",

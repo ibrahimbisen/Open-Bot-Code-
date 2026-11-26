@@ -1,7 +1,7 @@
-import type { AgentDockEdge } from "@openbot/contracts/ipc";
-import { Button } from "@openbot/ui";
-import { agentDockBody } from "@openbot/ui/features/agent-dock/AgentDock";
-import { useText } from "@openbot/ui/text";
+import type { AgentDockEdge } from "@codebot/contracts/ipc";
+import { Button } from "@codebot/ui";
+import { agentDockBody } from "@codebot/ui/features/agent-dock/AgentDock";
+import { useText } from "@codebot/ui/text";
 import { createEffect, onSettled } from "solid-js";
 
 export const AGENT_DOCK_STRIP_WIDTH = 6;

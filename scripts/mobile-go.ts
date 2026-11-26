@@ -18,11 +18,11 @@ function sessionName(branch: string): string | undefined {
   return issueNumber ? `Issue #${issueNumber}` : undefined;
 }
 
-const name = process.env.OPENBOT_EXPO_SESSION_NAME || sessionName(currentBranch());
+const name = process.env.CODEBOT_EXPO_SESSION_NAME || sessionName(currentBranch());
 const result = spawnSync("node", [expo, "start", "--go", "--clear", ...extraArgs], {
   cwd: mobileRoot,
   stdio: "inherit",
-  env: name ? { ...process.env, OPENBOT_EXPO_SESSION_NAME: name } : process.env,
+  env: name ? { ...process.env, CODEBOT_EXPO_SESSION_NAME: name } : process.env,
 });
 if (result.error) throw result.error;
 process.exit(result.status ?? 1);

@@ -1,5 +1,5 @@
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
 import { createContext, useCallback, useContext, useRef, useState } from "react";
 import { useMobileWorkspaceActions } from "@/features/workspace/context/mobile-workspace-context";
 import { haptics } from "@/shared/lib/haptics";

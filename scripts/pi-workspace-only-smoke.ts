@@ -11,7 +11,7 @@ import { getArray, getString } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-workspace-only-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-workspace-only-smoke");
 const SANDBOX_FAILURE = /Credential store read failed|EPERM|Operation not permitted|\.lock/u;
 
 interface TurnCase {
@@ -55,7 +55,7 @@ async function runPi(turn: TurnCase): Promise<void> {
   const client = requireProviderDriver("deepseek").createClient(
     cli,
     60_000,
-    { apiKey: () => "sk-openbot-smoke-not-valid", customProviders: () => [], mcpServers: () => [] },
+    { apiKey: () => "sk-codebot-smoke-not-valid", customProviders: () => [], mcpServers: () => [] },
     confinement,
   );
   clients.push(client);

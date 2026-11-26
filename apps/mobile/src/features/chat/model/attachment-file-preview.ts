@@ -1,6 +1,6 @@
-import { attachmentFileExtension, attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { isChatVisualMimeType } from "@openbot/contracts/chat-visual";
-import { type AttachmentSummary, filePreviewKindForFile } from "@openbot/contracts/ipc";
+import { attachmentFileExtension, attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { isChatVisualMimeType } from "@codebot/contracts/chat-visual";
+import { type AttachmentSummary, filePreviewKindForFile } from "@codebot/contracts/ipc";
 import type { CodePreviewEntry } from "./code-preview-store";
 
 export type AttachmentPreviewKind = Extract<

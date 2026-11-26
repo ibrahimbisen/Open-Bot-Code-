@@ -15,7 +15,7 @@ import { D1AuthRepository } from "../src/server/d1-auth-repository";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "account-activity-e2e");
+const OUT = join(ROOT, ".codebot-build", "account-activity-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const LATE_23RD = Date.parse("2026-11-23T22:30:00Z");
 const EARLY_24TH = Date.parse("2026-11-23T23:30:00Z");

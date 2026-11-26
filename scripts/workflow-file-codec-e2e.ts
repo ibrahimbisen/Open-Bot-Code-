@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { ATTACHMENT_LIMITS } from "@openbot/contracts/input-limits";
+import { ATTACHMENT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   decodeWorkflowFile,
   encodeWorkflowFile,
@@ -23,18 +23,18 @@ import {
   workflowFileNeeds,
   workflowFromFile,
   workflowGraphFormat,
-} from "@openbot/contracts/ipc";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-file-codec-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-file-codec-e2e");
 const APP_VERSION = String(JSON.parse(readFileSync(resolve(import.meta.dirname, "../package.json"), "utf8")).version);
 const TIMEZONE = "Europe/Warsaw";
 
@@ -122,8 +122,8 @@ const withNode = (file: WorkflowFile, id: string, fields: WorkflowNode["fields"]
 
 const fieldsOf = (graph: WorkflowGraph, id: string) => graph.nodes.find((candidate) => candidate.id === id)?.fields;
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-file-codec-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-file-codec-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 try {
@@ -224,7 +224,7 @@ try {
   const file = filledFile.file;
   const text = filled.text;
   mkdirSync(OUT, { recursive: true });
-  const path = join(OUT, "daily-note.openbot-workflow.json");
+  const path = join(OUT, "daily-note.codebot-workflow.json");
   writeFileSync(path, text);
   report.file = path;
 

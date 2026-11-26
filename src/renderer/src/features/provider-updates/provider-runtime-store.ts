@@ -9,14 +9,14 @@ import {
   type ProviderRuntimeStatus,
   type ProviderRuntimesDesktopApi,
   type ServerSummary,
-} from "@openbot/contracts/ipc";
-import { matchingSourceKeys } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { matchingSourceKeys } from "@codebot/i18n";
 import {
   type ProviderUpdate,
   providerUpdateAvailable,
   providerUpdatesToAnnounce,
-} from "@openbot/ui/features/provider-updates/provider-update";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/provider-updates/provider-update";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createSignal, flush, onSettled } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
 import { FALLBACK_PROVIDER_RUNTIMES } from "../../app-defaults";
@@ -94,7 +94,7 @@ export function createProviderRuntimeStore(
   const isLocalServer = owners.isLocalServer ?? (() => true);
   const managesRuntimes = owners.managesRuntimes ?? isLocalServer;
   function providerUpdate(provider: AgentProviderId, snapshot = providerRuntimeSnapshot()): ProviderUpdate {
-    if (!isManagedRuntimeProvider(provider)) throw new Error("OpenBot does not manage this provider's CLI.");
+    if (!isManagedRuntimeProvider(provider)) throw new Error("CodeBot does not manage this provider's CLI.");
     const runtime = snapshot.providers[provider];
     const systemVersion = owners.systemCliVersion?.(provider, runtime) ?? null;
     const availableVersion = runtime.availableVersion ?? null;

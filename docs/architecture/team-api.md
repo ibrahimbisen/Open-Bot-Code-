@@ -6,11 +6,11 @@ Current remote connections use Team API protocol v9 over three ordered WebRTC Da
 `events`, and `files`. A sandboxed hidden Chromium page owns each `RTCPeerConnection`. Electron main
 uses a `MessagePort` and transfers binary data as `ArrayBuffer`. Signal carries SDP and ICE only,
 except the Slack requests of an agent's Slack app (see [Messaging connections](channels-and-messaging.md#messaging-connections)).
-OpenBot Mobile uses the same ticket, authentication transcript, framing, RPC codec, and event stream.
+CodeBot Mobile uses the same ticket, authentication transcript, framing, RPC codec, and event stream.
 In Expo Go, an Expo DOM component owns the browser `RTCPeerConnection` inside a hidden WebView and
 passes only serializable, validated commands and events to the native React UI; no native WebRTC
 module or development build is required.
-The host's network route preference (`openbot-remote-network-route-v1.json`) applies to every
+The host's network route preference (`codebot-remote-network-route-v1.json`) applies to every
 remote connection to the computer. With `private`, the host gives WebRTC no ICE servers, and the
 hidden page removes each local, remote, and SDP candidate that is not a `host` candidate on a private
 address (RFC 1918, 100.64.0.0/10, `fc00::/7`, or `.local`). A change to `private` closes the
@@ -185,15 +185,15 @@ origin. It reads the servers in the app's order, the agents with their avatar pi
 and the localized text that `ShareExtensionSync` writes to the App Group, and the session from a
 keychain group that only the app and the extension share. The app donates `INSendMessageIntent`
 for each agent it sends to, with its avatar, so the share sheet offers those agents first. With no data, the app lock on, a share that one message cannot hold, or a failed send that the
-user gives to the app, the extension opens `openbot://expo-sharing` as before. Android always uses that
+user gives to the app, the extension opens `codebot://expo-sharing` as before. Android always uses that
 path. The share waits in native storage through sign-in. The share
 sheet moves its files into the app cache, the user chooses an agent, and that chat's composer gets the
 text and files, which follow the attachment rules above. The phone reads the response headers of a
 shared link; a link to an image of at most 10 MB is downloaded and comes as a file instead of the link. Permanent invitation metadata comes from the shared Team client; revocation stops
 new joins without removing existing members.
-iOS associates `https://openbot.run/join` and `https://openbot.run/agents/*` with `run.openbot.mobile`. Changes to associated
+iOS associates `https://openbot.run/join` and `https://openbot.run/agents/*` with `run.codebot.mobile`. Changes to associated
 domains require a new native app build and deployment of the website association file. Android
-continues to open HTTPS invitations in the browser, whose button opens `openbot://join`. Enabling
+continues to open HTTPS invitations in the browser, whose button opens `codebot://join`. Enabling
 verified Android App Links requires the release app-signing certificate's SHA-256 fingerprint,
 `/.well-known/assetlinks.json`, and a matching verified `/join` intent filter. No certificate
 fingerprint is stored in this repository yet.
@@ -289,7 +289,7 @@ Tunnel transport is retired. The old public endpoints return `host_update_requir
 
 The desktop client starts each remote connection with `GET /v1/compatibility`. The response contains the host application version, the minimum and maximum Team API protocol versions, and host capabilities. The client selects the highest protocol in the shared range. Application SemVer does not select or reject a protocol.
 
-The first released Team API protocol is `1`. All later HTTP requests include `OpenBot-Protocol-Version` and `OpenBot-App-Version`. The event socket uses the `openbot-team-v1` WebSocket subprotocol. A host without the compatibility endpoint is treated as an old host and is blocked. A request without the required protocol headers is treated as an old client and is blocked.
+The first released Team API protocol is `1`. All later HTTP requests include `CodeBot-Protocol-Version` and `CodeBot-App-Version`. The event socket uses the `codebot-team-v1` WebSocket subprotocol. A host without the compatibility endpoint is treated as an old host and is blocked. A request without the required protocol headers is treated as an old client and is blocked.
 
 Each protocol has a frozen codec and adapter in `packages/contracts/src/team-protocol`. The v1 HTTP codec owns the fixed route registry and validates JSON requests and responses before the adapter converts current values. Uploads, downloads, and other binary routes use the same negotiated headers and error envelope. The host does not write current service or IPC values directly to the network. Breaking or semantic changes add a new protocol directory and registry entry. A released adapter keeps its original meaning.
 
@@ -310,7 +310,7 @@ Protocol 10 is the protocol 9 wire with two capability lists (`v10.ts`). The pro
 and protocol 10 does not send it again: it is the frozen baseline. A protocol 10 peer sends
 `capabilities`, with the names after protocol 9 and the markers, and `absent`, with the baseline
 names that it does not serve. The full set is `(baseline - absent) + capabilities`. Over HTTP the
-lists are the `OpenBot-Capabilities` and `OpenBot-Absent-Capabilities` headers; over WebRTC they are
+lists are the `CodeBot-Capabilities` and `CodeBot-Absent-Capabilities` headers; over WebRTC they are
 the `capabilities` and `absent` keys of `http.request`, and the marker `capability-baseline-v1` says
 that a request has the two lists. `capabilities` also keeps `long-capability-lists-v1`, so a host of
 protocol 9 reads a protocol 10 request as protocol 9. A host ignores an unknown name in `absent`
@@ -334,7 +334,7 @@ with no marker comes from a release before v0.7.0, and the host refuses it with 
 
 A server that stopped its start loop (see [hosted servers](../hosted-servers.md#start-loop)) keeps a
 minimal Team API up: `src/main/server-safe-mode.ts`, with the routes in
-`src/main/team-api/server-safe-mode-api.ts`. It opens no `openbot.db` and starts no service. It reads
+`src/main/team-api/server-safe-mode-api.ts`. It opens no `codebot.db` and starts no service. It reads
 the team file without a write, so members sign in with their sessions and the WebRTC peer
 (`TeamWebRtcHostGateway`) works as before. It answers:
 
@@ -487,7 +487,7 @@ The optional `phone-feedback-v1` capability (protocol 9 only) adds
 `POST /v1/agent-approvals/send-phone-feedback` (`requestId`, `phone`). `phone` is what only the phone
 has: `platform` (`iOS` or `Android`), `appVersion`, `system`, `network` (the kind of connection and
 the name of the VPN or mesh network that is on, never an address) and `log`, the last redacted lines
-of its support log. An agent's bug report with the surface `Phone app` (`openbot.send_feedback`) waits on an
+of its support log. An agent's bug report with the surface `Phone app` (`codebot.send_feedback`) waits on an
 approval whose notice is `status.agent.reportPhoneProblem`. This route answers that approval with
 "accept" and gives the phone's data to the report. The agent service refuses a plain "accept" of such
 an approval on each path (`POST /v1/respond/approval`, the local IPC), with
@@ -631,7 +631,7 @@ that member starts. `POST /v1/agent-approvals/media/muted` (`muted`: a boolean) 
 same mute (the client's Undo and the switch in the Credits rail hover card).
 `POST /v1/agent-approvals/media/muted/read` (empty body) gives `{ muted }`: for an owner or an admin,
 `askWhenBlocked` is false; for a member, that member muted the asks. The host keeps the muted members in
-`openbot-credit-asks-muted-v1.json`. An older client shows the hold as a plain approval card: Allow
+`codebot-credit-asks-muted-v1.json`. An older client shows the hold as a plain approval card: Allow
 continues and Decline skips.
 
 The optional `provider-environment-v1` capability (protocol 9 only) adds
@@ -732,8 +732,8 @@ PNG, JPEG, GIF or WebP body of at most 512 KiB sets the image, and `DELETE` remo
 (else 404); owners and admins see all channels. `src/main/team-api/route-channels.ts` owns the route.
 The host adds and reads these keys only for a request that advertises the capability, so released
 peers see the same `channels-v1` wire. The host's `imageUrl` is an
-`openbot-avatar://channel/<id>?v=&type=` URL. The desktop changes it to
-`openbot-remote-avatar://<server>/channel/<id>?v=`, the scheme of remote agent avatars, so the CSP does
+`codebot-avatar://channel/<id>?v=&type=` URL. The desktop changes it to
+`codebot-remote-avatar://<server>/channel/<id>?v=`, the scheme of remote agent avatars, so the CSP does
 not change; the main process reads that URL with `GET /v1/channels/image`. The web client reads the
 bytes into a data URL. Over WebRTC, a `PUT` body and a `GET` answer go as file transfers, as for agent
 avatars. Without the capability a client hides the picture control for that host, and the channel

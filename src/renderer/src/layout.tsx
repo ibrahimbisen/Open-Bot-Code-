@@ -1,12 +1,12 @@
-import type { AppInfo } from "@openbot/contracts/ipc";
-import type { ServerView } from "@openbot/ui/features/servers/ServerMenu";
-import { SIDEBAR_CHAT_ORDERS, type SidebarChatOrder } from "@openbot/ui/features/sidebar/sidebar-types";
+import type { AppInfo } from "@codebot/contracts/ipc";
+import type { ServerView } from "@codebot/ui/features/servers/ServerMenu";
+import { SIDEBAR_CHAT_ORDERS, type SidebarChatOrder } from "@codebot/ui/features/sidebar/sidebar-types";
 import {
   PAGE_RAIL_HIDEABLE_ITEMS,
   PAGE_RAIL_PINNABLE_PAGES,
   type PageRailHideableItem,
   type PageRailPinnablePage,
-} from "@openbot/ui/features/window/PageRail";
+} from "@codebot/ui/features/window/PageRail";
 import { createEffect, createMemo, createSignal, onSettled } from "solid-js";
 import { z } from "zod";
 import { readPanelWidth } from "./components/panel-width-storage";

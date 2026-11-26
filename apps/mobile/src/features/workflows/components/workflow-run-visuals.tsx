@@ -1,4 +1,4 @@
-import type { WorkflowStep } from "@openbot/contracts/ipc";
+import type { WorkflowStep } from "@codebot/contracts/ipc";
 import { Typography } from "heroui-native";
 import CircleCheck from "lucide-react-native/icons/circle-check";
 import CircleX from "lucide-react-native/icons/circle-x";
@@ -38,7 +38,7 @@ const CONNECTOR_HEIGHT = 6;
 
 export function RunningRing({ width, height, radius }: { width: number; height: number; radius: number }) {
   const reduced = useReducedMotion();
-  const text = String(useCSSVariable("--openbot-text-primary"));
+  const text = String(useCSSVariable("--codebot-text-primary"));
   const w = width - STROKE;
   const h = height - STROKE;
   const r = Math.max(0, radius - STROKE / 2);
@@ -87,7 +87,7 @@ export type RunTone = "idle" | "run" | "done";
 
 export function RunConnector({ tone }: { tone: RunTone }) {
   const reduced = useReducedMotion();
-  const text = String(useCSSVariable("--openbot-text-primary"));
+  const text = String(useCSSVariable("--codebot-text-primary"));
   const moving = tone === "run" && !reduced;
   const march = useSharedValue(0);
   const comet = useSharedValue(0);
@@ -160,10 +160,10 @@ function useElapsed(startedAt: string | null): string | null {
 export function RunStepStatus({ step }: { step: WorkflowStep | undefined }) {
   const { t } = useText();
   const [secondary, warning, success, danger] = useCSSVariable([
-    "--openbot-text-secondary",
-    "--openbot-warning-text",
-    "--openbot-success-text",
-    "--openbot-danger-text",
+    "--codebot-text-secondary",
+    "--codebot-warning-text",
+    "--codebot-success-text",
+    "--codebot-danger-text",
   ]);
   const status = step?.status;
   const timed = status === "running" && !step?.waiting;

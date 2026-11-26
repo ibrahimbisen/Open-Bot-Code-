@@ -1,10 +1,10 @@
-import type { AgentTemplateDetail } from "@openbot/contracts/ipc";
+import type { AgentTemplateDetail } from "@codebot/contracts/ipc";
 import { createFileRoute, notFound } from "@tanstack/solid-router";
 import { AgentTemplateNotSharedPage } from "../../components/agents/AgentTemplateNotSharedPage";
 import { AgentTemplatePage } from "../../components/agents/AgentTemplatePage";
 import { agentTemplatePath } from "../../lib/agent-template-path";
 import { readAgentTemplate } from "../../lib/agent-templates";
-import { OPENBOT_SOCIAL_IMAGE_ALT, OPENBOT_SOCIAL_IMAGE_URL } from "../../lib/site-metadata";
+import { CODEBOT_SOCIAL_IMAGE_ALT, CODEBOT_SOCIAL_IMAGE_URL } from "../../lib/site-metadata";
 
 async function loadAgentTemplate(templateId: string): Promise<AgentTemplateDetail> {
   const template = await readAgentTemplate({ data: templateId });
@@ -13,24 +13,24 @@ async function loadAgentTemplate(templateId: string): Promise<AgentTemplateDetai
 }
 
 async function agentTemplateHead(template: AgentTemplateDetail, siteUrl: string) {
-  const { AGENT_TEMPLATE_CARD } = await import("@openbot/contracts/ipc");
-  const { markdownPreviewText } = await import("@openbot/contracts/markdown-preview-text");
+  const { AGENT_TEMPLATE_CARD } = await import("@codebot/contracts/ipc");
+  const { markdownPreviewText } = await import("@codebot/contracts/markdown-preview-text");
   const url = new URL(agentTemplatePath(template.id), siteUrl).toString();
-  const title = `${template.name} — OpenBot agent`;
+  const title = `${template.name} — CodeBot agent`;
   const description = template.title || markdownPreviewText(template.description).slice(0, 200);
   const card = template.cardUrl
     ? {
         url: new URL(template.cardUrl, siteUrl).toString(),
-        alt: `${template.name}, an OpenBot agent by ${template.creatorName}`,
+        alt: `${template.name}, an CodeBot agent by ${template.creatorName}`,
       }
-    : { url: OPENBOT_SOCIAL_IMAGE_URL, alt: OPENBOT_SOCIAL_IMAGE_ALT };
+    : { url: CODEBOT_SOCIAL_IMAGE_URL, alt: CODEBOT_SOCIAL_IMAGE_ALT };
   return {
     meta: [
       { title },
       { name: "description", content: description },
       { name: "robots", content: "noindex, nofollow" },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "OpenBot" },
+      { property: "og:site_name", content: "CodeBot" },
       { property: "og:url", content: url },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
@@ -54,7 +54,7 @@ async function agentTemplateHead(template: AgentTemplateDetail, siteUrl: string)
 }
 
 const NOT_SHARED_HEAD = {
-  meta: [{ title: "Agent no longer shared — OpenBot" }, { name: "robots", content: "noindex, nofollow" }],
+  meta: [{ title: "Agent no longer shared — CodeBot" }, { name: "robots", content: "noindex, nofollow" }],
 };
 
 export const Route = createFileRoute("/agents/$templateId")({

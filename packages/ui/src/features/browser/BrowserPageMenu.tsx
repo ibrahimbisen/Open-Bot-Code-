@@ -1,5 +1,5 @@
-import { buttonVariants, DropdownMenu, Ellipsis } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { buttonVariants, DropdownMenu, Ellipsis } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 import { BrowserShortcutHint } from "./BrowserTabIcon";
 import { type BrowserFullViewProps, browserTabStoppable } from "./browser-full-view-types";

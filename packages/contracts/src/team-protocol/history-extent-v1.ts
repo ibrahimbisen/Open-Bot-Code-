@@ -8,7 +8,7 @@ const OLDEST_AT_LIMIT = 64;
 
 export function isHistoryExtentRoute(method: string, path: string): boolean {
   if (method !== "GET") return false;
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   return (
     /^\/v1\/agents\/[^/]+\/conversation-page$/u.test(pathname) ||
     /^\/v1\/direct\/conversations\/[^/]+\/page$/u.test(pathname)
@@ -16,7 +16,7 @@ export function isHistoryExtentRoute(method: string, path: string): boolean {
 }
 
 export function isChannelHistoryExtentRoute(path: string): boolean {
-  return new URL(path, "http://openbot.invalid").pathname === CHANNEL_ROUTES.read;
+  return new URL(path, "http://codebot.invalid").pathname === CHANNEL_ROUTES.read;
 }
 
 function historyExtent(source: unknown): { olderCount?: number; oldestAt?: string } {

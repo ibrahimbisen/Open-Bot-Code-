@@ -3,20 +3,20 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { basename, join, resolve } from "node:path";
-import { LOCAL_SERVER_LIMIT, type OpenBotDesktopApi, type ServerSummary } from "@openbot/contracts/ipc";
-import { en } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { type CodeBotDesktopApi, LOCAL_SERVER_LIMIT, type ServerSummary } from "@codebot/contracts/ipc";
+import { en } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/local-servers-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/local-servers-e2e");
 const NAMES = ["E2E studio one", "E2E studio two"] as const;
 const START_DEADLINE_MS = 90_000;
 const STOPPED_API_URL = "http://127.0.0.1:0";
@@ -72,12 +72,12 @@ function childOf(entryId: string): Child | undefined {
 }
 
 async function servers(page: Page): Promise<ServerSummary[]> {
-  return page.evaluate(() => window.openbot.servers.list());
+  return page.evaluate(() => window.codebot.servers.list());
 }
 
 async function waitForServer(page: Page, serverId: string, state: ServerSummary["state"]): Promise<void> {
   await page.waitForFunction(
-    async ([id, expected]) => (await window.openbot.servers.list()).some((s) => s.id === id && s.state === expected),
+    async ([id, expected]) => (await window.codebot.servers.list()).some((s) => s.id === id && s.state === expected),
     [serverId, state] as const,
     { timeout: START_DEADLINE_MS, polling: 250 },
   );
@@ -97,7 +97,7 @@ async function waitForLocalServer(page: Page, serverId: string, phase: "stopped"
 
 async function waitForActive(page: Page, serverId: string): Promise<void> {
   await page.waitForFunction(
-    async (id) => (await window.openbot.servers.list()).some((s) => s.id === id && s.active),
+    async (id) => (await window.codebot.servers.list()).some((s) => s.id === id && s.active),
     serverId,
     { timeout: 10_000, polling: 100 },
   );
@@ -156,7 +156,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("local-servers-e2e");
+const logger = createCodeBotLogger("local-servers-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -195,7 +195,7 @@ try {
 
   await step("Create a second server", async () => {
     const childrenBefore = new Set(children().map((child) => child.pid));
-    const server = await page.evaluate((name) => window.openbot.localServers.create(name), NAMES[1]);
+    const server = await page.evaluate((name) => window.codebot.localServers.create(name), NAMES[1]);
     assert.equal(server.thisComputer, true);
     const child = children().find((item) => !childrenBefore.has(item.pid));
     assert.ok(child, "No child process started for the second server.");
@@ -208,8 +208,8 @@ try {
     assert.ok(first && second);
     assert.notEqual(first.child.userData, second.child.userData);
     for (const { entryId, child } of created) {
-      assert.ok(existsSync(join(child.userData, "openbot.db")), `${child.userData} has no openbot.db.`);
-      assert.ok(existsSync(join(homedir(), "OpenBot", "Servers", entryId)), `No agent folder for ${entryId}.`);
+      assert.ok(existsSync(join(child.userData, "codebot.db")), `${child.userData} has no codebot.db.`);
+      assert.ok(existsSync(join(homedir(), "CodeBot", "Servers", entryId)), `No agent folder for ${entryId}.`);
     }
     return created.map(({ child }) => child.userData);
   });
@@ -258,7 +258,7 @@ try {
     stoppedPids.push(last);
     process.kill(last, "SIGKILL");
     await waitForLocalServer(page, first.server.id, "stopped");
-    const summary = await page.evaluate((id) => window.openbot.servers.retryConnection(id), first.server.id);
+    const summary = await page.evaluate((id) => window.codebot.servers.retryConnection(id), first.server.id);
     assert.equal(summary.state, "online", "Retry did not start the stopped server.");
     const next = await waitForChild(first.entryId, last);
     first.child = next;
@@ -269,7 +269,7 @@ try {
     const [, second] = created;
     assert.ok(second);
     const previous = second.child.pid;
-    await page.evaluate((id) => window.openbot.localServers.restart(id), second.server.id);
+    await page.evaluate((id) => window.codebot.localServers.restart(id), second.server.id);
     const next = await waitForChild(second.entryId, previous);
     await waitForServer(page, second.server.id, "online");
     second.child = next;
@@ -286,14 +286,14 @@ try {
     const existing = (await servers(page)).filter((server) => server.thisComputer).length;
     for (let index = existing; index < LOCAL_SERVER_LIMIT; index += 1) {
       const childrenBefore = new Set(children().map((child) => child.pid));
-      const server = await page.evaluate((name) => window.openbot.localServers.create(name), `E2E limit ${index + 1}`);
+      const server = await page.evaluate((name) => window.codebot.localServers.create(name), `E2E limit ${index + 1}`);
       const child = children().find((item) => !childrenBefore.has(item.pid));
       assert.ok(child, `No child process started for ${server.name}.`);
       created.push({ server, entryId: basename(child.userData), child });
     }
     const running = children().length;
     const refused = await page
-      .evaluate(() => window.openbot.localServers.create("E2E over the limit"))
+      .evaluate(() => window.codebot.localServers.create("E2E over the limit"))
       .then(
         () => null,
         (error: unknown) => (error instanceof Error ? error.message : String(error)),
@@ -317,13 +317,13 @@ try {
   await step("Delete moves each server to the Trash", async () => {
     const results = [];
     for (const { server, entryId, child } of created.splice(0)) {
-      await page.evaluate((id) => window.openbot.localServers.delete(id), server.id);
+      await page.evaluate((id) => window.codebot.localServers.delete(id), server.id);
       assert.equal(childOf(entryId), undefined, `The child of ${server.id} still runs.`);
       assert.equal(
         (await servers(page)).some((item) => item.id === server.id),
         false,
       );
-      const agentRoot = join(homedir(), "OpenBot", "Servers", entryId);
+      const agentRoot = join(homedir(), "CodeBot", "Servers", entryId);
       assert.equal(existsSync(child.userData), false, `${child.userData} is still in place.`);
       assert.equal(existsSync(agentRoot), false, `${agentRoot} is still in place.`);
       const trash = trashEntries();
@@ -350,7 +350,7 @@ try {
   const known = new Set(before.map((server) => server.id));
   const left = (await servers(page).catch(() => [])).filter((server) => server.thisComputer && !known.has(server.id));
   for (const server of left)
-    await page.evaluate((id) => window.openbot.localServers.delete(id), server.id).catch(() => undefined);
+    await page.evaluate((id) => window.codebot.localServers.delete(id), server.id).catch(() => undefined);
   writeFileSync(resolve(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   await session.close();
 }

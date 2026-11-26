@@ -1,6 +1,6 @@
-import type { AppTextKey, AppTranslate, TranslatedLocale } from "@openbot/i18n";
-import { localeDirection } from "@openbot/i18n";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { AppTextKey, AppTranslate, TranslatedLocale } from "@codebot/i18n";
+import { localeDirection } from "@codebot/i18n";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { app, BrowserWindow, dialog, nativeTheme, session, shell } from "electron";
 import { runCauseEffect } from "../backend/effect-boundary";
 import { DOWNLOAD_URL, RELEASES_URL } from "./download-url";
@@ -8,8 +8,8 @@ import { exportStartDiagnostics } from "./maintenance-service";
 import type { StartAttemptsSummary } from "./start-attempts";
 import { recoveryPlushSvg } from "./start-recovery-plush";
 
-const logger = createOpenBotLogger("start-recovery");
-const ACTION_ORIGIN = "https://openbot.invalid";
+const logger = createCodeBotLogger("start-recovery");
+const ACTION_ORIGIN = "https://codebot.invalid";
 const ACTIONS = [
   "retry",
   "previous-version",
@@ -27,7 +27,7 @@ const ACTION_LABELS: Record<RecoveryAction, AppTextKey> = {
   "open-data-folder": "startup.recoveryOpenDataFolder",
   quit: "startup.recoveryQuit",
 };
-const PARTITION = "openbot-start-recovery";
+const PARTITION = "codebot-start-recovery";
 const WINDOW_SHOW_TIMEOUT_MS = 15_000;
 const REPLACED_LOAD_ERROR = -3;
 

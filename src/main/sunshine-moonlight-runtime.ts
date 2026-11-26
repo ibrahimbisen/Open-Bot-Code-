@@ -13,8 +13,8 @@ import type {
   RemoteDesktopIceServer,
   RemoteDesktopSetupStatus,
   RemoteDesktopTestStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Schema } from "effect";
 import { runCauseEffect } from "../backend/effect-boundary";
 import { agentDisplayEnvironment } from "./agent-display";
@@ -337,11 +337,11 @@ export class SunshineMoonlightRuntime {
   #moonlight: ChildProcess | null = null;
   #iceServer: Server | null = null;
   #iceToken = "";
-  readonly #pairingName = `openbot-remote-${randomBytes(16).toString("hex")}`;
+  readonly #pairingName = `codebot-remote-${randomBytes(16).toString("hex")}`;
   #state: SunshineMoonlightRuntimeState | null = null;
   #screenCaptureDenied = false;
   #windowsCaptureDenied = false;
-  readonly #moonlightHeader = `X-OpenBot-Remote-${randomBytes(32).toString("hex")}`;
+  readonly #moonlightHeader = `X-CodeBot-Remote-${randomBytes(32).toString("hex")}`;
   #selectedDisplayId: string | null = null;
   #softwareEncoder = false;
   readonly #lifecycle = new LifecycleGate<SunshineMoonlightRuntimeState, RemoteDesktopOperationError>();
@@ -408,7 +408,7 @@ export class SunshineMoonlightRuntime {
   > {
     return yield* sunshineJsonEffect(
       yield* desktopSync(() => this.#requireSunshineHttpsPort()),
-      "/api/openbot/setup",
+      "/api/codebot/setup",
       this.#options.credentials,
       join(this.#options.stateDirectory, "sunshine-cert.pem"),
       sunshineSetupSchema,
@@ -424,14 +424,14 @@ export class SunshineMoonlightRuntime {
     if (action !== "status")
       yield* sunshineRequestEffect(
         port,
-        "/api/openbot/test",
+        "/api/codebot/test",
         this.#options.credentials,
         certificate,
         JSON.stringify({ action, displayId: this.#selectedDisplayId ?? "" }),
       );
     return yield* sunshineJsonEffect(
       port,
-      "/api/openbot/test",
+      "/api/codebot/test",
       this.#options.credentials,
       certificate,
       sunshineTestSchema,
@@ -464,7 +464,7 @@ export class SunshineMoonlightRuntime {
     yield* desktopCall(() => writeFile(this.#softwareEncoderMarker(), until, { mode: 0o600 }));
     this.#options.onDiagnostic?.(
       "sunshine",
-      "OpenBot: no picture reached the viewer with the hardware encoder. Sunshine uses the software encoder for 7 days from its next start.\n",
+      "CodeBot: no picture reached the viewer with the hardware encoder. Sunshine uses the software encoder for 7 days from its next start.\n",
     );
   }).bind(this);
 
@@ -597,7 +597,7 @@ export class SunshineMoonlightRuntime {
           },
           this.#moonlight,
         ).pipe(Effect.mapError(this.#failStart("moonlight")));
-        this.#options.onDiagnostic?.("moonlight", "OpenBot: Moonlight Web is ready.\n");
+        this.#options.onDiagnostic?.("moonlight", "CodeBot: Moonlight Web is ready.\n");
         const paired = yield* this.#bootstrapMoonlightEffect(moonlightPort).pipe(
           Effect.mapError(this.#failStart("pairing")),
         );
@@ -651,7 +651,7 @@ export class SunshineMoonlightRuntime {
     const directory = windowsShortPath(this.#options.stateDirectory);
     this.#softwareEncoder = this.#options.platform === "win32" && (yield* this.#softwareEncoderActiveEffect());
     const values = [
-      "sunshine_name = OpenBot Remote Desktop",
+      "sunshine_name = CodeBot Remote Desktop",
       `port = ${basePort}`,
       "upnp = disabled",
       "stream_audio = disabled",
@@ -699,7 +699,7 @@ export class SunshineMoonlightRuntime {
         ice_servers: [],
         ice_server_script: join(
           this.#options.stateDirectory,
-          this.#options.platform === "win32" ? "openbot-ice-helper.cmd" : "openbot-ice-helper.sh",
+          this.#options.platform === "win32" ? "codebot-ice-helper.cmd" : "codebot-ice-helper.sh",
         ),
         port_range: { min: webRtcRange.min, max: webRtcRange.max },
         nat_1to1: null,
@@ -738,12 +738,12 @@ export class SunshineMoonlightRuntime {
   ): Effect.fn.Return<void, RemoteDesktopOperationError> {
     const path = join(
       this.#options.stateDirectory,
-      this.#options.platform === "win32" ? "openbot-ice-helper.cmd" : "openbot-ice-helper.sh",
+      this.#options.platform === "win32" ? "codebot-ice-helper.cmd" : "codebot-ice-helper.sh",
     );
     const contents =
       this.#options.platform === "win32"
-        ? "@powershell.exe -NoProfile -NonInteractive -Command \"(Invoke-WebRequest -UseBasicParsing -Headers @{Authorization=('Bearer ' + $env:OPENBOT_ICE_HELPER_TOKEN)} -Uri $env:OPENBOT_ICE_HELPER_URL).Content\"\r\n"
-        : `#!/bin/sh\nprintf 'header = "Authorization: Bearer %s"\\nurl = "%s"\\n' "$OPENBOT_ICE_HELPER_TOKEN" "$OPENBOT_ICE_HELPER_URL" | /usr/bin/curl --fail --silent --show-error --config -\n`;
+        ? "@powershell.exe -NoProfile -NonInteractive -Command \"(Invoke-WebRequest -UseBasicParsing -Headers @{Authorization=('Bearer ' + $env:CODEBOT_ICE_HELPER_TOKEN)} -Uri $env:CODEBOT_ICE_HELPER_URL).Content\"\r\n"
+        : `#!/bin/sh\nprintf 'header = "Authorization: Bearer %s"\\nurl = "%s"\\n' "$CODEBOT_ICE_HELPER_TOKEN" "$CODEBOT_ICE_HELPER_URL" | /usr/bin/curl --fail --silent --show-error --config -\n`;
     yield* desktopCall(() => writeFile(path, contents, { mode: 0o700 }));
     if (this.#options.platform !== "win32") yield* desktopCall(() => chmod(path, 0o700));
   });
@@ -795,7 +795,7 @@ export class SunshineMoonlightRuntime {
     this.#sunshine = yield* desktopSync(() =>
       this.#spawn(executable, [join(windowsShortPath(this.#options.stateDirectory), "sunshine.conf")], {
         cwd: dirname(executable),
-        env: { ...process.env, ...agentDisplayEnvironment(this.#options.platform), OPENBOT_REMOTE_SETUP: "1" },
+        env: { ...process.env, ...agentDisplayEnvironment(this.#options.platform), CODEBOT_REMOTE_SETUP: "1" },
         stdio: ["ignore", "pipe", "pipe"],
         windowsHide: true,
       }),
@@ -826,8 +826,8 @@ export class SunshineMoonlightRuntime {
         cwd: dirname(this.#options.paths.moonlightWebServer),
         env: {
           ...process.env,
-          OPENBOT_ICE_HELPER_URL: iceEndpoint,
-          OPENBOT_ICE_HELPER_TOKEN: this.#iceToken,
+          CODEBOT_ICE_HELPER_URL: iceEndpoint,
+          CODEBOT_ICE_HELPER_TOKEN: this.#iceToken,
         },
         stdio: ["ignore", "pipe", "pipe"],
         windowsHide: true,
@@ -862,7 +862,7 @@ export class SunshineMoonlightRuntime {
       )).hosts;
       this.#options.onDiagnostic?.(
         "moonlight",
-        `OpenBot: found ${hosts.length} local Moonlight hosts for streamer slot ${slot}.\n`,
+        `CodeBot: found ${hosts.length} local Moonlight hosts for streamer slot ${slot}.\n`,
       );
       for (const previous of endpointChanged ? hosts : []) {
         const deleted = yield* moonlightHttpResponseEffect(
@@ -895,7 +895,7 @@ export class SunshineMoonlightRuntime {
       if (host.paired !== "Paired") {
         this.#options.onDiagnostic?.(
           "moonlight",
-          `OpenBot: pairing local host ${host.host_id} for streamer slot ${slot}.\n`,
+          `CodeBot: pairing local host ${host.host_id} for streamer slot ${slot}.\n`,
         );
         yield* this.#pairMoonlightEffect(baseUrl, host.host_id, user);
       }
@@ -925,7 +925,7 @@ export class SunshineMoonlightRuntime {
   ): Effect.fn.Return<RemoteDesktopDisplay[], RemoteDesktopOperationError> {
     const native = yield* sunshineJsonEffect(
       yield* desktopSync(() => this.#requireSunshineHttpsPort()),
-      "/api/openbot/displays",
+      "/api/codebot/displays",
       this.#options.credentials,
       join(this.#options.stateDirectory, "sunshine-cert.pem"),
       sunshineDisplaysSchema,
@@ -1021,16 +1021,16 @@ export class SunshineMoonlightRuntime {
                 Effect.mapError(desktopFailure),
               );
               if (typeof message === "object" && "Pin" in message) {
-                this.#options.onDiagnostic?.("moonlight", "OpenBot: received local pairing PIN.\n");
+                this.#options.onDiagnostic?.("moonlight", "CodeBot: received local pairing PIN.\n");
                 const pairingId = yield* this.#waitForPairingRequestEffect();
                 yield* sunshineRequestEffect(
                   yield* desktopSync(() => this.#requireSunshineHttpsPort()),
                   "/api/pin",
                   this.#options.credentials,
                   join(this.#options.stateDirectory, "sunshine-cert.pem"),
-                  JSON.stringify({ pairing_id: pairingId, pin: message.Pin, name: "OpenBot Remote Desktop" }),
+                  JSON.stringify({ pairing_id: pairingId, pin: message.Pin, name: "CodeBot Remote Desktop" }),
                 );
-                this.#options.onDiagnostic?.("moonlight", "OpenBot: submitted local pairing PIN.\n");
+                this.#options.onDiagnostic?.("moonlight", "CodeBot: submitted local pairing PIN.\n");
                 pinSubmitted = true;
                 continue;
               }
@@ -1116,12 +1116,12 @@ export class SunshineMoonlightRuntime {
 
   #watchExit(child: ChildProcess, source: "sunshine" | "moonlight"): void {
     child.on("error", (error) => {
-      this.#options.onDiagnostic?.(source, `OpenBot: ${source} had a process error (${error.message}).\n`);
+      this.#options.onDiagnostic?.(source, `CodeBot: ${source} had a process error (${error.message}).\n`);
     });
     child.once("exit", (code, signal) => {
       if ((source === "sunshine" ? this.#sunshine : this.#moonlight) !== child || !this.#state) return;
       this.#state = null;
-      this.#options.onDiagnostic?.(source, `OpenBot: ${source} exited unexpectedly (${signal ?? `code ${code}`}).\n`);
+      this.#options.onDiagnostic?.(source, `CodeBot: ${source} exited unexpectedly (${signal ?? `code ${code}`}).\n`);
       this.#options.onExit?.(source);
     });
   }
@@ -1440,7 +1440,7 @@ function arrayUrls(urls: string | string[]): string[] {
 }
 
 function moonlightSlotUser(slot: number): string {
-  return `openbot-remote-slot-${slot}`;
+  return `codebot-remote-slot-${slot}`;
 }
 
 function sunshinePasswordHash(password: string, salt: string): string {

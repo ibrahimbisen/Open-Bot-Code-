@@ -7,10 +7,10 @@ import { homedir, hostname, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import type { Readable } from "node:stream";
-import { isKeyOnlyProvider, isManagedRuntimeProvider } from "@openbot/contracts/agent-providers";
-import { leadingAddress } from "@openbot/contracts/chat-tag-references";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { selfHostedApiOrigin } from "@openbot/contracts/invite-links";
+import { isKeyOnlyProvider, isManagedRuntimeProvider } from "@codebot/contracts/agent-providers";
+import { leadingAddress } from "@codebot/contracts/chat-tag-references";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { selfHostedApiOrigin } from "@codebot/contracts/invite-links";
 import type {
   AgentStatus,
   AppVariant,
@@ -25,7 +25,7 @@ import type {
   VoiceModelStatus,
   VoiceServerSettings,
   VoiceStreamTranscript,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   agentBrowserProfile,
   agentMemoryEnabled,
@@ -41,20 +41,20 @@ import {
   isUpdateBusyPhase,
   LOCAL_SERVER_ID,
   latestTurnAnswer,
-} from "@openbot/contracts/ipc";
-import { decodeRecord, requiredString } from "@openbot/contracts/ipc-decoding";
-import { isValidSemver } from "@openbot/contracts/release-version";
-import { AGENT_TASKS_ROUTES } from "@openbot/contracts/team-protocol/agent-tasks-v1";
-import { CHANNEL_ROUTES } from "@openbot/contracts/team-protocol/channels-v1";
-import { localeDirection } from "@openbot/i18n";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactSecrets, registerSecretValue, toLogValue } from "@openbot/logging";
-import { REMOTE_ACCOUNT_CHECK_INTERVAL_MS } from "@openbot/team-client";
-import { installRemoteSyncProfileSink } from "@openbot/team-client/sync-profile";
-import { ANALYTICS_GENERATIONS, openPanelTransport, ReportQueue } from "@openbot/telemetry";
-import { fileReportStorage } from "@openbot/telemetry/node";
-import { makeWASocket } from "@openbot/whatsapp/baileys";
-import { makeOpenBotSignalRepository } from "@openbot/whatsapp/signal-repository";
+} from "@codebot/contracts/ipc";
+import { decodeRecord, requiredString } from "@codebot/contracts/ipc-decoding";
+import { isValidSemver } from "@codebot/contracts/release-version";
+import { AGENT_TASKS_ROUTES } from "@codebot/contracts/team-protocol/agent-tasks-v1";
+import { CHANNEL_ROUTES } from "@codebot/contracts/team-protocol/channels-v1";
+import { localeDirection } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactSecrets, registerSecretValue, toLogValue } from "@codebot/logging";
+import { REMOTE_ACCOUNT_CHECK_INTERVAL_MS } from "@codebot/team-client";
+import { installRemoteSyncProfileSink } from "@codebot/team-client/sync-profile";
+import { ANALYTICS_GENERATIONS, openPanelTransport, ReportQueue } from "@codebot/telemetry";
+import { fileReportStorage } from "@codebot/telemetry/node";
+import { makeWASocket } from "@codebot/whatsapp/baileys";
+import { makeCodeBotSignalRepository } from "@codebot/whatsapp/signal-repository";
 import { Effect, Fiber, Schema } from "effect";
 import {
   app,
@@ -90,6 +90,7 @@ import { AgentThreadStore } from "../backend/agent-threads/agent-thread-store";
 import { type BrowserAgentChat, BrowserHost } from "../backend/browser-host";
 import { BrowserProfileStore } from "../backend/browser-profiles/browser-profile-store";
 import { BrowserProxyStore } from "../backend/browser-profiles/browser-proxy-store";
+import { CodeBotDatabase } from "../backend/codebot-database";
 import { type CrmHandle, createCrm } from "../backend/crm/crm";
 import { CrmError } from "../backend/crm/crm-handle";
 import { stripeSource } from "../backend/crm/crm-stripe";
@@ -106,7 +107,6 @@ import { slackDriver } from "../backend/messaging/slack/slack-driver";
 import { telegramDriver } from "../backend/messaging/telegram/telegram-driver";
 import { whatsAppDriver } from "../backend/messaging/whatsapp/whatsapp-driver";
 import { WhatsAppRuntime } from "../backend/messaging/whatsapp/whatsapp-runtime";
-import { OpenBotDatabase } from "../backend/openbot-database";
 import { PASSWORD_MANAGER_BRANDS } from "../backend/password-vault";
 import { passwordVaultRouter } from "../backend/password-vault-router";
 import { perfTime } from "../backend/perf-probe-hooks";
@@ -495,7 +495,7 @@ import {
   type UpdateAdapter,
   UpdateService,
 } from "./update-service";
-import { listSiblingOpenBotInstances } from "./update-sibling-instances";
+import { listSiblingCodeBotInstances } from "./update-sibling-instances";
 import { VaultService } from "./vault-service";
 import { VaultStore } from "./vault-store";
 import { VideoReader } from "./video-reader";
@@ -523,68 +523,68 @@ import { createWorkflowFileExporter, type WorkflowFileExporter } from "./workflo
 import { WorkflowFoldersService } from "./workflow-folders-service";
 import { sizeWorkflowPicture } from "./workflow-picture-size";
 
-const logger = createOpenBotLogger("application-services");
-const SETUP_FILE = "openbot-setup-v2.json";
-const ANALYTICS_PREFERENCE_FILE = "openbot-analytics-preference-v1.json";
-const ANALYTICS_INVENTORY_FILE = "openbot-analytics-inventory-v1.json";
-const ANALYTICS_INSTALL_ID_FILE = "openbot-analytics-install-id-v1.json";
-const APPROVAL_AUTOMATION_FILE = "openbot-approval-automation-v3.json";
-const V2_APPROVAL_AUTOMATION_FILE = "openbot-approval-automation-v2.json";
-const ROUTINE_FEED_FILE = "openbot-routine-feed-v1.json";
-const LEGACY_APPROVAL_AUTOMATION_FILE = "openbot-approval-automation-v1.json";
-const LANGUAGE_PREFERENCE_FILE = "openbot-language-preference-v1.json";
-const LOGO_COLOR_PREFERENCE_FILE = "openbot-logo-color-preference-v1.json";
-export const APPEARANCE_PREFERENCE_FILE = "openbot-appearance-preference-v1.json";
-const INTERFACE_SIZE_PREFERENCE_FILE = "openbot-interface-size-preference-v1.json";
-const NOTIFICATION_PREFERENCE_FILE = "openbot-notification-preference-v1.json";
-const PUSH_NOTIFICATION_FILE = "openbot-push-notifications-v1.json";
-const BUSY_MESSAGE_MODE_PREFERENCE_FILE = "openbot-busy-message-mode-v1.json";
-const AGENT_DEFAULTS_PREFERENCE_FILE = "openbot-agent-defaults-v1.json";
-const AGENT_MEMORY_LIMIT_PREFERENCE_FILE = "openbot-agent-memory-limit-v1.json";
-const MEMORY_REVIEW_PREFERENCE_FILE = "openbot-memory-review-v1.json";
-const SKILL_LEARNING_PREFERENCE_FILE = "openbot-skill-learning-v1.json";
-const BROWSING_MEMORY_PREFERENCE_FILE = "openbot-browsing-memory-v1.json";
-const USER_BROWSING_FILE = "openbot-browsing-steps-v1.json";
-const AGENT_NOTIFICATION_LEVELS_FILE = "openbot-agent-notification-levels-v1.json";
-const SIDEBAR_PINS_FILE = "openbot-sidebar-pins-v1.json";
-const HOST_TURN_LIMITS_PREFERENCE_FILE = "openbot-host-turn-limits-v1.json";
-const SERVER_PERSONALITY_PREFERENCE_FILE = "openbot-server-personality-v1.json";
-const PROMPT_CACHE_TTL_PREFERENCE_FILE = "openbot-prompt-cache-ttl-v1.json";
-const CLAUDE_USER_SETUP_PREFERENCE_FILE = "openbot-claude-user-setup-v1.json";
-const CACHE_EXPIRY_COMPACTION_PREFERENCE_FILE = "openbot-cache-expiry-compaction-v1.json";
-const MEDIA_APPROVAL_CREDITS_PREFERENCE_FILE = "openbot-media-approval-credits-v1.json";
-const CREDIT_ASKS_MUTED_PREFERENCE_FILE = "openbot-credit-asks-muted-v1.json";
-const CRM_PREFERENCE_FILE = "openbot-crm-v1.json";
-const CLAUDE_COMPACT_WINDOW_PREFERENCE_FILE = "openbot-claude-compact-window-v1.json";
-const PROVIDER_ENVIRONMENT_PREFERENCE_FILE = "openbot-provider-environment-v1.json";
-const MODEL_VISIBILITY_PREFERENCE_FILE = "openbot-model-visibility-v1.json";
-const REMOTE_SESSION_REUSE_PREFERENCE_FILE = "openbot-remote-session-reuse-preference-v1.json";
-const EXTERNAL_LINK_PREFERENCE_FILE = "openbot-external-link-preference-v1.json";
-const REMOTE_NETWORK_ROUTE_PREFERENCE_FILE = "openbot-remote-network-route-v1.json";
-const REMOTE_CONTROL_POLICY_FILE = "openbot-remote-control-policy-v1.json";
-const APP_BEHAVIOR_PREFERENCE_FILE = "openbot-app-behavior-preference-v1.json";
-const DYNAMIC_ISLAND_PREFERENCE_FILE = "openbot-dynamic-island-preference-v1.json";
-const BROWSER_STATE_FILE = "openbot-browser-state-v1.json";
-const SIDEBAR_LAYOUT_FILE = "openbot-sidebar-layout-v1.json";
-const REMOTE_SERVERS_FILE = "openbot-remote-servers-v1.json";
-const REMOTE_SESSIONS_FILE = "openbot-remote-sessions-v1.bin";
-const LEGACY_REMOTE_DESKTOP_CREDENTIAL_FILE = "openbot-remote-desktop-credential-v1.json";
-const CUSTOM_PROVIDERS_FILE = "openbot-custom-providers-v1.json";
-const PROVIDER_CREDENTIAL_FILE = "openbot-provider-credentials-v1.json";
-const MESSAGING_CREDENTIAL_FILE = "openbot-messaging-credentials-v1.json";
-const INGRESS_QUEUE_KEY_FILE = "openbot-ingress-queue-key-v1.json";
-const MCP_OAUTH_FILE = "openbot-mcp-oauth-v1.json";
-const MCP_OAUTH_PROXY_FILE = "openbot-mcp-oauth-proxy-v1.json";
-const GITHUB_CONNECTOR_FILE = "openbot-github-connector-v1.json";
-const LINK_ACCOUNT_FILE = "openbot-link-account-v1.json";
-const NEAR_WALLET_FILE = "openbot-near-wallet-v1.json";
-const ONEPASSWORD_CONNECTOR_FILE = "openbot-onepassword-connector-v1.json";
-const BITWARDEN_CONNECTOR_FILE = "openbot-bitwarden-connector-v1.json";
-const PROTONPASS_CONNECTOR_FILE = "openbot-protonpass-connector-v1.json";
-const VAULT_FILE = "openbot-vault-v1.json";
-const HERMES_IMPORT_LINKS_FILE = "openbot-hermes-imports-v1.json";
+const logger = createCodeBotLogger("application-services");
+const SETUP_FILE = "codebot-setup-v2.json";
+const ANALYTICS_PREFERENCE_FILE = "codebot-analytics-preference-v1.json";
+const ANALYTICS_INVENTORY_FILE = "codebot-analytics-inventory-v1.json";
+const ANALYTICS_INSTALL_ID_FILE = "codebot-analytics-install-id-v1.json";
+const APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v3.json";
+const V2_APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v2.json";
+const ROUTINE_FEED_FILE = "codebot-routine-feed-v1.json";
+const LEGACY_APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v1.json";
+const LANGUAGE_PREFERENCE_FILE = "codebot-language-preference-v1.json";
+const LOGO_COLOR_PREFERENCE_FILE = "codebot-logo-color-preference-v1.json";
+export const APPEARANCE_PREFERENCE_FILE = "codebot-appearance-preference-v1.json";
+const INTERFACE_SIZE_PREFERENCE_FILE = "codebot-interface-size-preference-v1.json";
+const NOTIFICATION_PREFERENCE_FILE = "codebot-notification-preference-v1.json";
+const PUSH_NOTIFICATION_FILE = "codebot-push-notifications-v1.json";
+const BUSY_MESSAGE_MODE_PREFERENCE_FILE = "codebot-busy-message-mode-v1.json";
+const AGENT_DEFAULTS_PREFERENCE_FILE = "codebot-agent-defaults-v1.json";
+const AGENT_MEMORY_LIMIT_PREFERENCE_FILE = "codebot-agent-memory-limit-v1.json";
+const MEMORY_REVIEW_PREFERENCE_FILE = "codebot-memory-review-v1.json";
+const SKILL_LEARNING_PREFERENCE_FILE = "codebot-skill-learning-v1.json";
+const BROWSING_MEMORY_PREFERENCE_FILE = "codebot-browsing-memory-v1.json";
+const USER_BROWSING_FILE = "codebot-browsing-steps-v1.json";
+const AGENT_NOTIFICATION_LEVELS_FILE = "codebot-agent-notification-levels-v1.json";
+const SIDEBAR_PINS_FILE = "codebot-sidebar-pins-v1.json";
+const HOST_TURN_LIMITS_PREFERENCE_FILE = "codebot-host-turn-limits-v1.json";
+const SERVER_PERSONALITY_PREFERENCE_FILE = "codebot-server-personality-v1.json";
+const PROMPT_CACHE_TTL_PREFERENCE_FILE = "codebot-prompt-cache-ttl-v1.json";
+const CLAUDE_USER_SETUP_PREFERENCE_FILE = "codebot-claude-user-setup-v1.json";
+const CACHE_EXPIRY_COMPACTION_PREFERENCE_FILE = "codebot-cache-expiry-compaction-v1.json";
+const MEDIA_APPROVAL_CREDITS_PREFERENCE_FILE = "codebot-media-approval-credits-v1.json";
+const CREDIT_ASKS_MUTED_PREFERENCE_FILE = "codebot-credit-asks-muted-v1.json";
+const CRM_PREFERENCE_FILE = "codebot-crm-v1.json";
+const CLAUDE_COMPACT_WINDOW_PREFERENCE_FILE = "codebot-claude-compact-window-v1.json";
+const PROVIDER_ENVIRONMENT_PREFERENCE_FILE = "codebot-provider-environment-v1.json";
+const MODEL_VISIBILITY_PREFERENCE_FILE = "codebot-model-visibility-v1.json";
+const REMOTE_SESSION_REUSE_PREFERENCE_FILE = "codebot-remote-session-reuse-preference-v1.json";
+const EXTERNAL_LINK_PREFERENCE_FILE = "codebot-external-link-preference-v1.json";
+const REMOTE_NETWORK_ROUTE_PREFERENCE_FILE = "codebot-remote-network-route-v1.json";
+const REMOTE_CONTROL_POLICY_FILE = "codebot-remote-control-policy-v1.json";
+const APP_BEHAVIOR_PREFERENCE_FILE = "codebot-app-behavior-preference-v1.json";
+const DYNAMIC_ISLAND_PREFERENCE_FILE = "codebot-dynamic-island-preference-v1.json";
+const BROWSER_STATE_FILE = "codebot-browser-state-v1.json";
+const SIDEBAR_LAYOUT_FILE = "codebot-sidebar-layout-v1.json";
+const REMOTE_SERVERS_FILE = "codebot-remote-servers-v1.json";
+const REMOTE_SESSIONS_FILE = "codebot-remote-sessions-v1.bin";
+const LEGACY_REMOTE_DESKTOP_CREDENTIAL_FILE = "codebot-remote-desktop-credential-v1.json";
+const CUSTOM_PROVIDERS_FILE = "codebot-custom-providers-v1.json";
+const PROVIDER_CREDENTIAL_FILE = "codebot-provider-credentials-v1.json";
+const MESSAGING_CREDENTIAL_FILE = "codebot-messaging-credentials-v1.json";
+const INGRESS_QUEUE_KEY_FILE = "codebot-ingress-queue-key-v1.json";
+const MCP_OAUTH_FILE = "codebot-mcp-oauth-v1.json";
+const MCP_OAUTH_PROXY_FILE = "codebot-mcp-oauth-proxy-v1.json";
+const GITHUB_CONNECTOR_FILE = "codebot-github-connector-v1.json";
+const LINK_ACCOUNT_FILE = "codebot-link-account-v1.json";
+const NEAR_WALLET_FILE = "codebot-near-wallet-v1.json";
+const ONEPASSWORD_CONNECTOR_FILE = "codebot-onepassword-connector-v1.json";
+const BITWARDEN_CONNECTOR_FILE = "codebot-bitwarden-connector-v1.json";
+const PROTONPASS_CONNECTOR_FILE = "codebot-protonpass-connector-v1.json";
+const VAULT_FILE = "codebot-vault-v1.json";
+const HERMES_IMPORT_LINKS_FILE = "codebot-hermes-imports-v1.json";
 
-const PACKAGED_BUNDLE_IDENTIFIER = "app.openbot.desktop";
+const PACKAGED_BUNDLE_IDENTIFIER = "app.codebot.desktop";
 const DEVELOPMENT_BUNDLE_IDENTIFIER = "com.github.Electron";
 
 const TEARDOWN_ORDER = {
@@ -856,7 +856,7 @@ async function createMessagingServices({
   const messagingCredentialLoadError = await Effect.runPromise(messagingCredentials.load());
   if (messagingCredentialLoadError)
     logger.warn(
-      `OpenBot could not read the messaging token file (${messagingCredentialLoadError.name}). It was left unchanged.`,
+      `CodeBot could not read the messaging token file (${messagingCredentialLoadError.name}). It was left unchanged.`,
     );
   const signalIngress = new SignalIngress({
     hostId: readHostId,
@@ -880,7 +880,7 @@ async function createMessagingServices({
     resolveProxy: (url) =>
       Effect.tryPromise(() => session.defaultSession.resolveProxy(url)).pipe(
         Effect.tapError(() =>
-          Effect.sync(() => logger.warn("OpenBot could not read the proxy settings. Signal connects directly.")),
+          Effect.sync(() => logger.warn("CodeBot could not read the proxy settings. Signal connects directly.")),
         ),
         Effect.orElseSucceed(() => "DIRECT"),
       ),
@@ -888,11 +888,11 @@ async function createMessagingServices({
   teardown.push(TEARDOWN_ORDER.signalIngress, "the Signal ingress socket", () =>
     Effect.runPromise(signalIngress.dispose()),
   );
-  const developmentSlackCallbackPort = app.isPackaged ? 0 : Number(process.env.OPENBOT_DEV_SLACK_CALLBACK_PORT ?? 0);
+  const developmentSlackCallbackPort = app.isPackaged ? 0 : Number(process.env.CODEBOT_DEV_SLACK_CALLBACK_PORT ?? 0);
   const whatsapp = new WhatsAppRuntime({
     root: join(app.getPath("userData"), "whatsapp"),
     createSocket: (config) => makeWASocket(config),
-    makeSignalRepository: makeOpenBotSignalRepository,
+    makeSignalRepository: makeCodeBotSignalRepository,
   });
   const messaging = new MessagingService({
     threads: service.messaging,
@@ -918,7 +918,7 @@ async function createMessagingServices({
       whatsAppDriver({ runtime: whatsapp }),
     ],
     downloadsRoot: join(app.getPath("userData"), "messaging-downloads"),
-    statusPath: join(app.getPath("userData"), "openbot-messaging-status-v1.json"),
+    statusPath: join(app.getPath("userData"), "codebot-messaging-status-v1.json"),
     ingress: signalIngress,
     whatsapp,
     sidebar: sidebarLayout,
@@ -1059,7 +1059,7 @@ export async function createApplicationServices({
   prepareForUpdateInstall,
   quitting,
 }: ApplicationServiceContext): Promise<ApplicationServices> {
-  performance.mark("openbot:services.start");
+  performance.mark("codebot:services.start");
   teardown.push(
     TEARDOWN_ORDER.providerLog,
     "the provider log",
@@ -1289,31 +1289,31 @@ export async function createApplicationServices({
   const store = new AgentStore(
     app.getPath("userData"),
     homedir(),
-    new OpenBotDatabase(app.getPath("userData"), checkDatabaseIntegrityInHost),
+    new CodeBotDatabase(app.getPath("userData"), checkDatabaseIntegrityInHost),
     () => agentDefaults.get(),
     localServerChild?.agentRoot,
   );
-  performance.mark("openbot:services.pre-store");
+  performance.mark("codebot:services.pre-store");
   await runCauseEffect(store.initialize());
-  performance.mark("openbot:services.store");
+  performance.mark("codebot:services.store");
   teardown.push(TEARDOWN_ORDER.database, "the database", () => store.database.close(), { afterAbandonedSteps: true });
   const managedSkills = new ManagedSkillService(
     app.isPackaged
-      ? join(process.resourcesPath, "managed-skills", "openbot-site-hosting", "SKILL.md")
-      : resolve(__dirname, "../../resources/managed-skills/openbot-site-hosting/SKILL.md"),
+      ? join(process.resourcesPath, "managed-skills", "codebot-site-hosting", "SKILL.md")
+      : resolve(__dirname, "../../resources/managed-skills/codebot-site-hosting/SKILL.md"),
   );
   const skillCreator = new ManagedSkillService(
     app.isPackaged
-      ? join(process.resourcesPath, "managed-skills", "openbot-skill-creator", "SKILL.md")
-      : resolve(__dirname, "../../resources/managed-skills/openbot-skill-creator/SKILL.md"),
+      ? join(process.resourcesPath, "managed-skills", "codebot-skill-creator", "SKILL.md")
+      : resolve(__dirname, "../../resources/managed-skills/codebot-skill-creator/SKILL.md"),
     undefined,
     undefined,
     SKILL_CREATOR_SKILL_SLUG,
   );
   const dataSkill = new ManagedSkillService(
     app.isPackaged
-      ? join(process.resourcesPath, "managed-skills", "openbot-data", "SKILL.md")
-      : resolve(__dirname, "../../resources/managed-skills/openbot-data/SKILL.md"),
+      ? join(process.resourcesPath, "managed-skills", "codebot-data", "SKILL.md")
+      : resolve(__dirname, "../../resources/managed-skills/codebot-data/SKILL.md"),
     undefined,
     undefined,
     DATA_SKILL_SLUG,
@@ -1327,7 +1327,7 @@ export async function createApplicationServices({
       },
     ),
   );
-  performance.mark("openbot:services.skills");
+  performance.mark("codebot:services.skills");
   const hostedSites = new HostedSiteDesktopService(centralAuth, () => {
     const hostId = teamStore.getIdentity()?.serverId;
     return hostId ? centralAuth.hostSiteCredential(hostId) : null;
@@ -1367,7 +1367,7 @@ export async function createApplicationServices({
   const developmentUrl = process.env.ELECTRON_RENDERER_URL;
   const teamWebRtcBridge = new TeamWebRtcBridge({
     developmentUrl: developmentUrl ?? null,
-    iceTransportPolicy: developmentUrl && process.env.OPENBOT_DEV_ICE_TRANSPORT_POLICY === "relay" ? "relay" : "all",
+    iceTransportPolicy: developmentUrl && process.env.CODEBOT_DEV_ICE_TRANSPORT_POLICY === "relay" ? "relay" : "all",
   });
   teamWebRtcBridge.on("accountProfileChanged", refreshAccountProfile);
   teardown.push(TEARDOWN_ORDER.teamWebRtcBridge, "the team WebRTC bridge", () =>
@@ -1461,7 +1461,7 @@ export async function createApplicationServices({
   });
   teardown.push(TEARDOWN_ORDER.browser, "the browser", () => runCauseEffect(browser.destroy()));
   await runCauseEffect(browser.restore(store.list().map((agent) => ({ id: agent.id, threadId: agent.threadId }))));
-  performance.mark("openbot:services.browser");
+  performance.mark("codebot:services.browser");
   const browserPictureInPicture = new BrowserPictureInPicture({
     mainWindow,
     browser,
@@ -1685,9 +1685,9 @@ export async function createApplicationServices({
     ),
     knownAgentIds: () => store.list().map((agent) => agent.id),
   });
-  const providerUse = new ProviderUseSettingsStore(join(app.getPath("userData"), "openbot-provider-use-v1.json"));
+  const providerUse = new ProviderUseSettingsStore(join(app.getPath("userData"), "codebot-provider-use-v1.json"));
   const providerAccounts = new ProviderAccountStore(
-    join(app.getPath("userData"), "openbot-provider-accounts-v1.json"),
+    join(app.getPath("userData"), "codebot-provider-accounts-v1.json"),
     join(app.getPath("userData"), "provider-accounts"),
   );
   await Promise.all([runCauseEffect(providerUse.load()), runCauseEffect(providerAccounts.load())]);
@@ -1753,7 +1753,7 @@ export async function createApplicationServices({
   const providerDetectionSettings = new ProviderDetectionSettingsStore(
     join(app.getPath("userData"), PROVIDER_DETECTION_SETTINGS_FILE),
   );
-  performance.mark("openbot:services.preferences");
+  performance.mark("codebot:services.preferences");
   await runCauseEffect(providerDetectionSettings.load());
   const modelReleaseCatalog = new ModelReleaseCatalog();
   const providerDetection = await Effect.runPromise(
@@ -1771,10 +1771,10 @@ export async function createApplicationServices({
     join(app.getPath("userData"), PROVIDER_CREDENTIAL_FILE),
     secretCipher,
   );
-  performance.mark("openbot:services.provider-detection");
+  performance.mark("codebot:services.provider-detection");
   const credentialLoadError = await Effect.runPromise(providerCredentials.load());
   if (credentialLoadError) {
-    logger.warn(`OpenBot could not read the provider key file (${credentialLoadError.name}). It was left unchanged.`);
+    logger.warn(`CodeBot could not read the provider key file (${credentialLoadError.name}). It was left unchanged.`);
   }
   const providerEnvironmentSetting = providerEnvironmentControl(providerEnvironment, providerCredentials, (provider) =>
     service.providerSpawnSettingsChanged(provider).pipe(
@@ -1790,7 +1790,7 @@ export async function createApplicationServices({
   const mcpOAuthStore = new McpOAuthStore(join(app.getPath("userData"), MCP_OAUTH_FILE), secretCipher);
   const mcpOAuthLoadError = await Effect.runPromise(mcpOAuthStore.load());
   if (mcpOAuthLoadError) {
-    logger.warn(`OpenBot could not read the MCP sign-in file (${mcpOAuthLoadError.name}). It was left unchanged.`);
+    logger.warn(`CodeBot could not read the MCP sign-in file (${mcpOAuthLoadError.name}). It was left unchanged.`);
   }
   const mcpOAuthProxySettings = new McpOAuthProxySettingsFile(
     join(app.getPath("userData"), MCP_OAUTH_PROXY_FILE),
@@ -1799,12 +1799,12 @@ export async function createApplicationServices({
   const mcpOAuthProxyLoadError = await Effect.runPromise(mcpOAuthProxySettings.load());
   if (mcpOAuthProxyLoadError) {
     logger.warn(
-      `OpenBot could not read the MCP sign-in proxy file (${mcpOAuthProxyLoadError.name}). A new port is used.`,
+      `CodeBot could not read the MCP sign-in proxy file (${mcpOAuthProxyLoadError.name}). A new port is used.`,
     );
   }
   let mcpOAuthAuthority: McpOAuth | null = null;
   const mcpOAuthDeepLink = () =>
-    (process.platform === "linux" || app.isPackaged) && app.isDefaultProtocolClient("openbot")
+    (process.platform === "linux" || app.isPackaged) && app.isDefaultProtocolClient("codebot")
       ? MCP_OAUTH_REDIRECT_URL
       : undefined;
   const signInRelayClient = new SignInRelayClient({
@@ -1816,7 +1816,7 @@ export async function createApplicationServices({
         ? { port: Number(new URL(mcpOAuthRedirect.redirectUrl).port), paths: MCP_OAUTH_REDIRECT_PATHS }
         : null,
   });
-  performance.mark("openbot:services.mcp-sign-in-file");
+  performance.mark("codebot:services.mcp-sign-in-file");
   const mcpOAuthRedirect = await startMcpOAuthRedirectServer({
     language,
     preferredPort: MCP_OAUTH_REDIRECT_PORT,
@@ -1835,7 +1835,7 @@ export async function createApplicationServices({
     },
   }).catch((error: unknown) => {
     logger.warn(
-      "OpenBot could not listen for MCP sign-ins on this machine, so the openbot:// link is used instead. Servers that refuse it cannot be signed in to:",
+      "CodeBot could not listen for MCP sign-ins on this machine, so the codebot:// link is used instead. Servers that refuse it cannot be signed in to:",
       toLogValue(error),
     );
     return null;
@@ -1848,7 +1848,7 @@ export async function createApplicationServices({
     openExternal: openLink,
     redirectUrl: mcpOAuthRedirect?.redirectUrl ?? MCP_OAUTH_REDIRECT_URL,
     deepLinkRedirectUrl: mcpOAuthDeepLink,
-    logger: createOpenBotLogger("mcp-oauth"),
+    logger: createCodeBotLogger("mcp-oauth"),
   });
   mcpOAuthAuthority = mcpOAuth;
   teardown.push(TEARDOWN_ORDER.mcpOAuth, "MCP token refresh", () => Effect.runPromise(mcpOAuth.close()));
@@ -1880,11 +1880,11 @@ export async function createApplicationServices({
     signing: new NearOwnerSigning({
       pageOrigin: app.isPackaged
         ? NEAR_PASSKEY_WALLET_ORIGIN
-        : nearPasskeyPageOrigin(process.env.OPENBOT_DEV_NEAR_SIGNING_ORIGIN || centralAuthApiUrl()),
+        : nearPasskeyPageOrigin(process.env.CODEBOT_DEV_NEAR_SIGNING_ORIGIN || centralAuthApiUrl()),
       openExternal: openLink,
       loopback: !app.isPackaged,
     }),
-    baseUrl: app.isPackaged ? undefined : process.env.OPENBOT_DEV_NEAR_AGENT_API_URL || undefined,
+    baseUrl: app.isPackaged ? undefined : process.env.CODEBOT_DEV_NEAR_AGENT_API_URL || undefined,
   });
   await Effect.runPromise(nearWallet.load());
   centralAuth.on("changed", (state) => {
@@ -1928,7 +1928,7 @@ export async function createApplicationServices({
     openExternal: openLink,
   });
   await runCauseEffect(onePasswordConnector.load());
-  performance.mark("openbot:services.connectors");
+  performance.mark("codebot:services.connectors");
   teardown.push(TEARDOWN_ORDER.onePasswordConnector, "the 1Password connection", () =>
     runCauseEffect(onePasswordConnector.dispose()),
   );
@@ -1984,7 +1984,7 @@ export async function createApplicationServices({
       architecture: process.arch,
       homeDirectory: homedir(),
       pathVariable: process.env.PATH ?? null,
-      overrides: [process.env.OPENBOT_CUA_DRIVER_PATH, process.env.CUA_DRIVER_PATH],
+      overrides: [process.env.CODEBOT_CUA_DRIVER_PATH, process.env.CUA_DRIVER_PATH],
       ...(installDirectory === undefined ? {} : { installDirectory }),
       ...(localAppDataDirectory === undefined ? {} : { localAppDataDirectory }),
       applicationsDirectory: "/Applications",
@@ -2091,7 +2091,7 @@ export async function createApplicationServices({
   const processLauncher = process.platform === "win32" ? new ProcessLauncher() : null;
   if (processLauncher)
     teardown.push(TEARDOWN_ORDER.processLauncher, "the process launcher", () => processLauncher.dispose());
-  performance.mark("openbot:services.computer-use");
+  performance.mark("codebot:services.computer-use");
   if (process.platform === "win32") await Effect.runPromise(sweepProviderTemp(providerTempDirectory));
   const agentApiKeys = new AgentApiKeys(join(app.getPath("userData"), "agent-api-keys"), vault.items);
   await Effect.runPromise(agentApiKeys.registerSaved());
@@ -2332,7 +2332,7 @@ export async function createApplicationServices({
       { prefix: "", name: PASSWORD_MANAGER_BRANDS.onepassword, vault: onePasswordConnector },
       { prefix: "bitwarden:", name: PASSWORD_MANAGER_BRANDS.bitwarden, vault: bitwardenConnector },
       ...passwordManagers.routes(),
-      { prefix: "openbot:", name: "the OpenBot Vault", vault: vault.logins },
+      { prefix: "codebot:", name: "the CodeBot Vault", vault: vault.logins },
     ]),
     vaultItems: vault.items,
     linkWallet: linkAccount,
@@ -2641,9 +2641,9 @@ export async function createApplicationServices({
         adapters: [
           stripeSource({
             fetch: (input, init) => net.fetch(input.href, init),
-            ...(app.isPackaged || !process.env.OPENBOT_DEV_STRIPE_API_BASE
+            ...(app.isPackaged || !process.env.CODEBOT_DEV_STRIPE_API_BASE
               ? {}
-              : { apiBase: process.env.OPENBOT_DEV_STRIPE_API_BASE }),
+              : { apiBase: process.env.CODEBOT_DEV_STRIPE_API_BASE }),
           }),
         ],
       },
@@ -2686,7 +2686,7 @@ export async function createApplicationServices({
   await Effect.runPromise(routineFeed.start());
   teardown.push(TEARDOWN_ORDER.routineFeed, "the routine feed", () => Effect.runPromise(routineFeed.stop()));
   let ingressHostId: () => string | null = () => null;
-  performance.mark("openbot:services.routines");
+  performance.mark("codebot:services.routines");
   const githubRelay = new GitHubRelay({
     account: centralAuth,
     githubToken: () => githubConnector.accessToken(),
@@ -2742,7 +2742,7 @@ export async function createApplicationServices({
   });
   if (!setupState.completed || service.enabledMcpServers().length > 0)
     Effect.runFork(providerRuntimes.ensureToolRuntimes());
-  performance.mark("openbot:services.messaging");
+  performance.mark("codebot:services.messaging");
   await runCauseEffect(sidebarLayout.reconcileAgents(service.sidebarChatIds()));
   libraryFolders.onChanged(() => service.notifyLibraryFoldersChanged());
   workflowFolders.onChanged(() => service.notifyWorkflowFoldersChanged());
@@ -2813,7 +2813,7 @@ export async function createApplicationServices({
   );
   await runCauseEffect(teamStore.initialize());
   nearHost.serverId = () => teamStore.getIdentity()?.serverId ?? null;
-  performance.mark("openbot:services.team");
+  performance.mark("codebot:services.team");
   const machineAlertStore = new MachineAlertPreferenceStore(
     join(app.getPath("userData"), MACHINE_ALERTS_PREFERENCE_FILE),
   );
@@ -2905,8 +2905,8 @@ export async function createApplicationServices({
       applyDevelopmentRemoteAccount({
         role: developmentRemoteRole,
         testClientEnabled: developmentTestClientEnabled,
-        clientTransport: readDevelopmentClientTransport(process.env.OPENBOT_DEV_CLIENT_TRANSPORT),
-        hostEmail: readDevelopmentHostEmail(process.env.OPENBOT_DEV_HOST_EMAIL),
+        clientTransport: readDevelopmentClientTransport(process.env.CODEBOT_DEV_CLIENT_TRANSPORT),
+        hostEmail: readDevelopmentHostEmail(process.env.CODEBOT_DEV_HOST_EMAIL),
         centralAuth,
         teamStore,
         setupFile,
@@ -2949,7 +2949,7 @@ export async function createApplicationServices({
   }
 
   const teamChatStore = new TeamChatStore(store.database);
-  performance.mark("openbot:services.hosted");
+  performance.mark("codebot:services.hosted");
   const remoteDesktopRuntime = await Effect.runPromise(
     resolveRemoteDesktopRuntime({
       isPackaged: app.isPackaged,
@@ -2957,9 +2957,9 @@ export async function createApplicationServices({
       sourceRoot: resolve(__dirname, "../.."),
       platform: process.platform === "darwin" || process.platform === "win32" ? process.platform : "linux",
       architecture: process.arch,
-      ...(process.env.OPENBOT_REMOTE_DESKTOP_RUNTIME_PATH === undefined
+      ...(process.env.CODEBOT_REMOTE_DESKTOP_RUNTIME_PATH === undefined
         ? {}
-        : { overrideRoot: process.env.OPENBOT_REMOTE_DESKTOP_RUNTIME_PATH }),
+        : { overrideRoot: process.env.CODEBOT_REMOTE_DESKTOP_RUNTIME_PATH }),
     }),
   );
   const agentAdminSettings = createAgentAdminSettings({ agents: service, approvalAutomation });
@@ -3280,7 +3280,7 @@ export async function createApplicationServices({
         ? Effect.succeed(localServersForTeam)
         : Effect.fail(new RemoteWorkflowError({ cause: new Error(sourceText("error.team.localServersUnsupported")) })),
     );
-  const awaySeconds = app.isPackaged ? Number.NaN : Number(process.env.OPENBOT_DEV_AWAY_SECONDS);
+  const awaySeconds = app.isPackaged ? Number.NaN : Number(process.env.CODEBOT_DEV_AWAY_SECONDS);
   const awayAfterMs = Number.isInteger(awaySeconds) && awaySeconds > 0 ? awaySeconds * 1_000 : DESKTOP_USE_MS;
   const computerIdle = createComputerIdle(
     (contents) =>
@@ -3308,7 +3308,7 @@ export async function createApplicationServices({
       }),
     remove: (mcpServerId) => mcpAccessStore.remove(mcpServerId),
   };
-  const remoteDesktopRuntimeCredentials = { username: "openbot", password: randomBytes(32).toString("base64url") };
+  const remoteDesktopRuntimeCredentials = { username: "codebot", password: randomBytes(32).toString("base64url") };
   const attachmentPreviews = new AttachmentPreviews(join(app.getPath("userData"), "attachment-previews"));
   const resolveHostOwner = () => {
     const state = centralAuth.getState();
@@ -3699,7 +3699,7 @@ export async function createApplicationServices({
   if (analyticsPlatform !== "darwin" && analyticsPlatform !== "win32" && analyticsPlatform !== "linux") {
     throw new Error(`Unsupported analytics platform: ${analyticsPlatform}`);
   }
-  performance.mark("openbot:services.remote-desktop");
+  performance.mark("codebot:services.remote-desktop");
   const analyticsEnabled = (app.isPackaged && appVariant === "production") || analyticsCaptureUrl !== null;
   const analyticsInstallId = analyticsEnabled
     ? await Effect.runPromise(
@@ -3708,10 +3708,10 @@ export async function createApplicationServices({
     : null;
   const failureReports = analyticsEnabled
     ? new ReportQueue(
-        fileReportStorage(join(app.getPath("userData"), "openbot-error-reports-v1.json")),
+        fileReportStorage(join(app.getPath("userData"), "codebot-error-reports-v1.json")),
         openPanelTransport({
           clientId: "6c989975-87ef-4f0c-857e-ab449a65b5c2",
-          origin: "openbot-app://app",
+          origin: "codebot-app://app",
           ...(analyticsCaptureUrl ? { endpoint: `${analyticsCaptureUrl}/track` } : {}),
         }),
         {
@@ -3829,12 +3829,12 @@ export async function createApplicationServices({
     (span) => trace.record(span),
     (summary) => analytics.handleRemoteConnect(summary),
   );
-  const developmentRoundTripMs = app.isPackaged ? 0 : Math.max(0, Number(process.env.OPENBOT_DEV_RTT_MS) || 0);
-  const developmentDownlinkKbps = app.isPackaged ? 0 : Math.max(0, Number(process.env.OPENBOT_DEV_DOWNLINK_KBPS) || 0);
+  const developmentRoundTripMs = app.isPackaged ? 0 : Math.max(0, Number(process.env.CODEBOT_DEV_RTT_MS) || 0);
+  const developmentDownlinkKbps = app.isPackaged ? 0 : Math.max(0, Number(process.env.CODEBOT_DEV_DOWNLINK_KBPS) || 0);
   installRemoteSyncProfileSink(
     remoteSyncProfileFile({
       isPackaged: app.isPackaged,
-      setting: process.env.OPENBOT_DEV_SYNC_PROFILE,
+      setting: process.env.CODEBOT_DEV_SYNC_PROFILE,
       userData: app.getPath("userData"),
       roundTripMs: developmentRoundTripMs,
     }),
@@ -3930,14 +3930,14 @@ export async function createApplicationServices({
     remoteServers.off("changed", browserEgressClient.reconcile);
     browserEgressClient.dispose();
   });
-  performance.mark("openbot:services.plugin-catalog");
+  performance.mark("codebot:services.plugin-catalog");
   const localServers =
     localServerChild || serverModeEnvironment || hostedServer
       ? null
       : new LocalServers({
           registryPath: join(app.getPath("userData"), LOCAL_SERVERS_FILE),
           userDataRoot: join(app.getPath("userData"), "local-servers"),
-          agentRoot: join(homedir(), "OpenBot", "Servers"),
+          agentRoot: join(homedir(), "CodeBot", "Servers"),
           runtimeRoot: providerRuntimesRoot,
           cipher: safeStorageCipher("error.app.macSecureStorageUnavailable"),
           remoteServers,
@@ -3986,7 +3986,7 @@ export async function createApplicationServices({
     await Effect.runPromise(localServers.load());
   }
   await runCauseEffect(remoteServers.initialize());
-  performance.mark("openbot:services.remote-servers");
+  performance.mark("codebot:services.remote-servers");
   criticalActionTargets = { agents: service, host, remoteServers };
   if (developmentRemoteRole) {
     await runCauseEffect(remoteServers.awaitHostDirectory());
@@ -3994,7 +3994,7 @@ export async function createApplicationServices({
       startDevelopmentRemoteRole({
         role: developmentRemoteRole,
         testClientEnabled: developmentTestClientEnabled,
-        clientTransport: readDevelopmentClientTransport(process.env.OPENBOT_DEV_CLIENT_TRANSPORT),
+        clientTransport: readDevelopmentClientTransport(process.env.CODEBOT_DEV_CLIENT_TRANSPORT),
         host,
         remoteServers,
       }),
@@ -4105,23 +4105,23 @@ export async function createApplicationServices({
   const voiceModelFetch = (input: string | URL | Request, init?: RequestInit) =>
     net.fetch(input instanceof URL ? input.href : input, init);
   const voice = new VoiceTranscriptionService({
-    resourcesRoot: app.isPackaged ? join(process.resourcesPath, "voice") : resolve(".openbot-build/voice"),
+    resourcesRoot: app.isPackaged ? join(process.resourcesPath, "voice") : resolve(".codebot-build/voice"),
     modelDirectories: {
       "parakeet-tdt-0.6b-v3": app.isPackaged
         ? join(app.getPath("userData"), "runtimes", PARAKEET_MODEL_DIRECTORY)
-        : resolve(".openbot-build/voice/model"),
+        : resolve(".codebot-build/voice/model"),
       "parakeet-unified-en-0.6b": app.isPackaged
         ? join(app.getPath("userData"), "runtimes", PARAKEET_UNIFIED_MODEL_DIRECTORY)
-        : resolve(".openbot-build/voice", PARAKEET_UNIFIED_MODEL_DIRECTORY),
+        : resolve(".codebot-build/voice", PARAKEET_UNIFIED_MODEL_DIRECTORY),
       "bark-3.0-plus": app.isPackaged
         ? join(app.getPath("userData"), "runtimes", BARK_PLUS_MODEL_DIRECTORY)
-        : resolve(".openbot-build/voice", BARK_PLUS_MODEL_DIRECTORY),
+        : resolve(".codebot-build/voice", BARK_PLUS_MODEL_DIRECTORY),
       "whisper-turbo": app.isPackaged
         ? join(app.getPath("userData"), "runtimes", WHISPER_TURBO_MODEL_DIRECTORY)
-        : resolve(".openbot-build/voice", WHISPER_TURBO_MODEL_DIRECTORY),
+        : resolve(".codebot-build/voice", WHISPER_TURBO_MODEL_DIRECTORY),
       "cohere-transcribe-03-2026": app.isPackaged
         ? join(app.getPath("userData"), "runtimes", COHERE_TRANSCRIBE_MODEL_DIRECTORY)
-        : resolve(".openbot-build/voice", COHERE_TRANSCRIBE_MODEL_DIRECTORY),
+        : resolve(".codebot-build/voice", COHERE_TRANSCRIBE_MODEL_DIRECTORY),
     },
     preferences: voicePreferences,
     apiKeys: { elevenlabs: voiceApiKeys, groq: groqVoiceKeys },
@@ -4149,10 +4149,10 @@ export async function createApplicationServices({
   });
   await runCauseEffect(xaiSpeechKeys.load());
   const speech = new VoiceSpeechService({
-    resourcesRoot: app.isPackaged ? join(process.resourcesPath, "voice") : resolve(".openbot-build/voice"),
+    resourcesRoot: app.isPackaged ? join(process.resourcesPath, "voice") : resolve(".codebot-build/voice"),
     modelDirectory: app.isPackaged
       ? join(app.getPath("userData"), "runtimes", SUPERTONIC_MODEL_DIRECTORY)
-      : resolve(".openbot-build/voice", SUPERTONIC_MODEL_DIRECTORY),
+      : resolve(".codebot-build/voice", SUPERTONIC_MODEL_DIRECTORY),
     preferences: speechPreferences,
     spawnHost: spawnVoiceSpeechHost,
     apiKeys: { elevenlabs: voiceApiKeys, xai: xaiSpeechKeys },
@@ -4180,7 +4180,7 @@ export async function createApplicationServices({
     containerInstaller ||
     (app.isPackaged &&
       process.platform === "linux" &&
-      (process.env.OPENBOT_HOSTED_SERVER === "1" || (serverModeEnvironment !== null && installationMode === "self")) &&
+      (process.env.CODEBOT_HOSTED_SERVER === "1" || (serverModeEnvironment !== null && installationMode === "self")) &&
       existsSync(HOSTED_UPDATE_TRIGGER));
   const updatesEnabled =
     !localServerChild &&
@@ -4189,7 +4189,7 @@ export async function createApplicationServices({
     (hostedInstaller || (supportsInstalledUpdates(process.platform) && updateMetadataAvailable)) &&
     isValidSemver(currentVersion);
   if (app.isPackaged && updateMetadataAvailable && !isValidSemver(currentVersion)) {
-    logger.warn(`OpenBot updates are disabled because the application version is not valid SemVer: ${currentVersion}`);
+    logger.warn(`CodeBot updates are disabled because the application version is not valid SemVer: ${currentVersion}`);
   }
   let updateAdapter: UpdateAdapter = createDisabledUpdateAdapter();
   let updaterEnabled = updatesEnabled;
@@ -4219,7 +4219,7 @@ export async function createApplicationServices({
     ...(app.isPackaged
       ? {
           checkSiblingInstances: () =>
-            listSiblingOpenBotInstances({
+            listSiblingCodeBotInstances({
               executablePath: app.getPath("exe"),
               currentPid: process.pid,
               platform: process.platform,
@@ -4230,7 +4230,7 @@ export async function createApplicationServices({
                   if (siblings.length === 0) return;
                   const list = siblings.map(({ pid, uid }) => `pid ${pid} (uid ${uid})`).join(", ");
                   logger.warn(
-                    `OpenBot update install refused: other OpenBot processes run from this application: ${list}`,
+                    `CodeBot update install refused: other CodeBot processes run from this application: ${list}`,
                   );
                 }),
               ),
@@ -4450,7 +4450,7 @@ export async function createApplicationServices({
     const setupPagePort = serverModeEnvironment?.setupPagePort ?? null;
     let setupPage: ServerSetupPage | null = null;
     if (setupPagePort !== null && installationMode !== "container") {
-      logger.warn("OPENBOT_SETUP_PAGE_PORT works only in the OpenBot container. The setup page did not start.");
+      logger.warn("CODEBOT_SETUP_PAGE_PORT works only in the CodeBot container. The setup page did not start.");
     } else if (setupPagePort !== null) {
       const page = new ServerSetupPage({
         port: setupPagePort,
@@ -4472,9 +4472,9 @@ export async function createApplicationServices({
       await Effect.runPromise(serverMode.close());
     });
   }
-  performance.mark("openbot:services.updates");
+  performance.mark("codebot:services.updates");
   await runCauseEffect(hostUpdateCoordinator.tick());
-  performance.mark("openbot:services.host-update");
+  performance.mark("codebot:services.host-update");
   hostUpdateCoordinator.start();
   teardown.push(TEARDOWN_ORDER.hostUpdateCoordinator, "the host update coordinator", () =>
     Effect.runPromise(hostUpdateCoordinator.stop()),

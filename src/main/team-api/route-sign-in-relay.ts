@@ -1,19 +1,19 @@
-import { PROVIDER_ACCOUNT_RELAYS } from "@openbot/contracts/team-protocol/provider-account-relays";
+import { PROVIDER_ACCOUNT_RELAYS } from "@codebot/contracts/team-protocol/provider-account-relays";
 import {
   PROVIDER_SIGN_IN_RELAY_V2_CAPABILITY,
   PROVIDER_SIGN_IN_RELAY_V2_PROVIDERS,
   PROVIDER_SIGN_IN_RELAY_V2_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-sign-in-relay-v2";
+} from "@codebot/contracts/team-protocol/provider-sign-in-relay-v2";
 import {
   SIGN_IN_RELAY_DEEP_LINK_CAPABILITY,
   SIGN_IN_RELAY_DEEP_LINK_ROUTES,
-} from "@openbot/contracts/team-protocol/sign-in-relay-deep-link-v1";
+} from "@codebot/contracts/team-protocol/sign-in-relay-deep-link-v1";
 import {
   SIGN_IN_RELAY_CAPABILITY,
   SIGN_IN_RELAY_PROVIDERS,
   SIGN_IN_RELAY_ROUTES,
-} from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { devinSignInPageRelayed } from "../../backend/acp-sign-in";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { MCP_OAUTH_REDIRECT_URL } from "../deep-link-router";

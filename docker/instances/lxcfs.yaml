@@ -1,5 +1,5 @@
 services:
-  openbot:
+  codebot:
     volumes:
       - /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:ro
       - /var/lib/lxcfs/proc/stat:/proc/stat:ro

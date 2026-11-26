@@ -5,29 +5,29 @@ export const messages = {
   "error.agent.historyUnavailable":
     "Historia jest niedostępna dla tego żądania. Odczytaj ponownie najnowszą historię lub użyj channel_history do pracy z kanałem.",
   "error.agent.historyArgumentsInvalid":
-    "Nieprawidłowe argumenty historii: {detail} Popraw argumenty i spróbuj ponownie. openbot.tool_describe podaje schemat.",
+    "Nieprawidłowe argumenty historii: {detail} Popraw argumenty i spróbuj ponownie. codebot.tool_describe podaje schemat.",
   "error.agent.toolRequestInvalid":
     "Nieprawidłowe argumenty wyszukiwania narzędzi. Użyj zadeklarowanego schematu i oryginalnej kwalifikowanej nazwy narzędzia.",
   "error.agent.toolCallArgumentsNotObject":
     "Narzędzie nie zostało uruchomione. W tool_call pole arguments musi być obiektem JSON, a nie tekstem. Wyślij wywołanie ponownie z arguments jako obiektem.",
   "error.agent.toolCallDiscoveryTool":
-    "Narzędzie nie zostało uruchomione. tool_call nie może uruchomić openbot.tool_search ani openbot.tool_describe. Wywołaj je bezpośrednio z tymi samymi argumentami.",
+    "Narzędzie nie zostało uruchomione. tool_call nie może uruchomić codebot.tool_search ani codebot.tool_describe. Wywołaj je bezpośrednio z tymi samymi argumentami.",
   "error.agent.toolCallEnvelopeKeys":
     "Narzędzie nie zostało uruchomione. tool_call przyjmuje tylko name i arguments. Umieść argumenty narzędzia w arguments jako obiekt i wyślij wywołanie ponownie.",
   "error.agent.toolCallMissingName":
-    "Narzędzie nie zostało uruchomione. tool_call nie ma name. Wpisz w name pełną nazwę z tool_search, na przykład openbot.history_read, i wyślij wywołanie ponownie.",
+    "Narzędzie nie zostało uruchomione. tool_call nie ma name. Wpisz w name pełną nazwę z tool_search, na przykład codebot.history_read, i wyślij wywołanie ponownie.",
   "error.agent.toolCallUnknownTool":
-    "Narzędzie nie zostało uruchomione. tool_call nie znalazł narzędzia o tej nazwie. Użyj dokładnej pełnej nazwy z tool_search, na przykład openbot_browser.snapshot.",
+    "Narzędzie nie zostało uruchomione. tool_call nie znalazł narzędzia o tej nazwie. Użyj dokładnej pełnej nazwy z tool_search, na przykład codebot_browser.snapshot.",
   "error.agent.toolCallUnknownToolSuggest":
     "Narzędzie nie zostało uruchomione. tool_call nie znalazł narzędzia o tej nazwie. Pełna nazwa to prawdopodobnie {name}. Jeśli tak, wyślij wywołanie ponownie z tą nazwą.",
   "error.agent.toolCallNullValue":
     "Narzędzie nie zostało uruchomione. {name} wymaga obiektu lub listy w {paths}, ale każdy z tych elementów listy dotarł jako null. Wyślij wywołanie ponownie i podaj każdy z tych elementów jako ciąg znaków z jego JSON.",
   "error.agent.toolDescribeUnknownNames":
-    "tool_describe nie znalazł narzędzia OpenBot o nazwie {names}. Opisuje tylko narzędzia OpenBot i przeglądarki, które podaje openbot.tool_search, a nie narzędzia MCP.",
+    "tool_describe nie znalazł narzędzia CodeBot o nazwie {names}. Opisuje tylko narzędzia CodeBot i przeglądarki, które podaje codebot.tool_search, a nie narzędzia MCP.",
   "error.agent.toolDescribeDiscoveryNames":
     "Wywołaj {names} bezpośrednio. tool_describe nie opisuje narzędzi wyszukiwania.",
   "error.agent.routineScheduleArgumentsInvalid":
-    "Harmonogram rutyny jest nieprawidłowy: {detail} Popraw harmonogram i spróbuj ponownie. openbot.tool_describe podaje schemat.",
+    "Harmonogram rutyny jest nieprawidłowy: {detail} Popraw harmonogram i spróbuj ponownie. codebot.tool_describe podaje schemat.",
   "error.agent.approvalWhileDeleting": "Nie można udzielić zatwierdzenia podczas usuwania agenta.",
   "error.agent.accessLocalOnly": "Dostęp agenta można zmienić tylko na komputerze, na którym działa agent.",
   "error.agent.duplicateCleanupFailed": "Duplikowanie agenta nie powiodło się i nie udało się usunąć niepełnej kopii.",
@@ -43,7 +43,7 @@ export const messages = {
   "error.agent.gone": "Ten agent już nie istnieje.",
   "error.agent.instructionsTooLarge": "Plik instrukcji jest za duży, aby go tu otworzyć. Skróć go w edytorze tekstu.",
   "error.agent.instructionsOutside":
-    "Plik instrukcji wskazuje miejsce poza obszarem roboczym agenta, więc OpenBot go nie otwiera.",
+    "Plik instrukcji wskazuje miejsce poza obszarem roboczym agenta, więc CodeBot go nie otwiera.",
   "error.agent.instructionsReadFailed": "Nie udało się odczytać pliku instrukcji.",
   "error.agent.instructionsSaveFailed": "Nie udało się zapisać pliku instrukcji.",
   "error.agent.profileGenerationBusy": "Generowanie profilu już trwa. Spróbuj ponownie za chwilę.",
@@ -99,17 +99,17 @@ export const messages = {
   "error.agent.hostLimit": "Host może mieć maksymalnie {limit} agentów.",
   "error.agent.changedWhileDuplicating": "Agent zmienił się podczas duplikowania. Spróbuj ponownie.",
   "error.agent.duplicatedAgentGone": "Zduplikowany agent już nie istnieje.",
-  "error.agent.stateCorrupt": "Stan agenta jest uszkodzony lub pochodzi z nowszej wersji OpenBot; odmowa nadpisania.",
+  "error.agent.stateCorrupt": "Stan agenta jest uszkodzony lub pochodzi z nowszej wersji CodeBot; odmowa nadpisania.",
   "error.agent.oldRoleField":
-    "Zapisane profile agentów używają starego pola roli; zaktualizuj dane przed uruchomieniem OpenBot.",
+    "Zapisane profile agentów używają starego pola roli; zaktualizuj dane przed uruchomieniem CodeBot.",
   "error.agent.duplicateIds": "Stan agentów zawiera zduplikowane identyfikatory agentów; odmowa nadpisania.",
-  "error.agent.copyNameFailed": "OpenBot nie mógł utworzyć unikalnej nazwy kopii agenta.",
+  "error.agent.copyNameFailed": "CodeBot nie mógł utworzyć unikalnej nazwy kopii agenta.",
   "error.agent.endpointRemoved": "Endpoint używany przez tego agenta został usunięty. Wybierz dla niego inny model.",
   "error.agent.turnStalled":
-    "{provider} przestał odpowiadać, więc OpenBot zakończył tę turę. Wyślij wiadomość ponownie albo wybierz inny model.",
+    "{provider} przestał odpowiadać, więc CodeBot zakończył tę turę. Wyślij wiadomość ponownie albo wybierz inny model.",
   "error.agent.promptCancelled": "{provider} anulował tę wiadomość, zanim się zaczęła. Wyślij wiadomość ponownie.",
   "error.agent.toolLoopStopped":
-    "{provider} wiele razy powtórzył nieudany krok, więc OpenBot zatrzymał tę turę. Wyślij wiadomość ponownie lub wybierz inny model.",
+    "{provider} wiele razy powtórzył nieudany krok, więc CodeBot zatrzymał tę turę. Wyślij wiadomość ponownie lub wybierz inny model.",
   "error.agent.answerCutOff":
     "Agent zatrzymał się przed ukończeniem odpowiedzi, więc odpowiedź jest niepełna. Wyślij wiadomość ponownie.",
   "error.agent.compactionConnectionLost":
@@ -117,7 +117,7 @@ export const messages = {
   "error.agent.compactionConnectionLostAddress":
     "Połączenie przerwało się, gdy agent kompaktował kontekst, więc zadanie się zatrzymało. Sprawdź połączenie z internetem. Sprawdź też, czy {variable} w sekcji Zmienne w ustawieniach {provider} to adres API Twojej usługi modeli (często kończy się na /v1). Potem wyślij wiadomość.",
   "error.agent.compactionLoopStopped":
-    "{provider} kompaktował kontekst raz za razem i za każdym razem był on zbyt pełny, aby kontynuować, więc OpenBot zatrzymał tę turę. Wyłącz serwery MCP lub użycie komputera, których ten agent nie potrzebuje, a potem wyślij wiadomość. Jeśli ty lub agent zmieniliście, kiedy {provider} kompaktuje, cofnij tę zmianę.",
+    "{provider} kompaktował kontekst raz za razem i za każdym razem był on zbyt pełny, aby kontynuować, więc CodeBot zatrzymał tę turę. Wyłącz serwery MCP lub użycie komputera, których ten agent nie potrzebuje, a potem wyślij wiadomość. Jeśli ty lub agent zmieniliście, kiedy {provider} kompaktuje, cofnij tę zmianę.",
   "error.agent.selectedGone": "Wybrany agent już nie istnieje.",
   "error.agent.profileEndpointsChanged": "Własne endpointy zmieniły się w trakcie generowania. Spróbuj ponownie.",
   "error.agent.profileInvalid": "Dostawca zwrócił nieprawidłowy profil. Spróbuj zmienić prompt.",
@@ -133,19 +133,19 @@ export const messages = {
   "error.agent.stopBeforeDelete": "Zatrzymaj agenta i anuluj wiadomości w kolejce, zanim go usuniesz.",
   "error.agent.deleteIncomplete": "Nie udało się całkowicie usunąć danych agenta. Spróbuj ponownie usunąć agenta.",
   "error.agent.deleteFolderInUse":
-    "Praca innego agenta nadal używa folderu tego agenta. Usuń agenta ponownie, gdy ta praca się zakończy, lub po ponownym uruchomieniu OpenBot.",
+    "Praca innego agenta nadal używa folderu tego agenta. Usuń agenta ponownie, gdy ta praca się zakończy, lub po ponownym uruchomieniu CodeBot.",
   "error.agent.deleteFolderLocked":
     "Inny program nadal używa folderu tego agenta, na przykład program uruchomiony przez agenta. Zamknij ten program lub uruchom ponownie komputer, na którym działa ten agent, a potem usuń agenta ponownie.",
   "error.agent.deleteWhenFolderFree":
-    "Praca innego agenta nadal używa folderu tego agenta. OpenBot usunie tego agenta, gdy ta praca się zakończy.",
+    "Praca innego agenta nadal używa folderu tego agenta. CodeBot usunie tego agenta, gdy ta praca się zakończy.",
   "error.agent.duplicationBusy": "Ten agent jest już duplikowany.",
   "error.agent.waitBeforeDuplicate": "Poczekaj, aż agent skończy i opróżni kolejkę, zanim go zduplikujesz.",
   "error.agent.saveOtherAgent": "Ten zapis należy do innego agenta.",
   "error.agent.savedGone": "Zapisany agent już nie istnieje.",
   "error.agent.storedProfileUnreadable":
-    "Zapisany profil agenta ma nieczytelną wartość „{field}”; zaktualizuj dane przed uruchomieniem OpenBot.",
+    "Zapisany profil agenta ma nieczytelną wartość „{field}”; zaktualizuj dane przed uruchomieniem CodeBot.",
   "error.agent.storedProfileUnreadableId":
-    "Zapisany profil agenta {id} ma nieczytelną wartość „{field}”; zaktualizuj dane przed uruchomieniem OpenBot.",
+    "Zapisany profil agenta {id} ma nieczytelną wartość „{field}”; zaktualizuj dane przed uruchomieniem CodeBot.",
   "error.agent.queueEditRejected": "Odrzucono edycję kolejki: {reason}",
   "error.agent.computerUseLocalOnly":
     "Sterowanie komputerem można zmienić tylko na komputerze, na którym działa agent.",
@@ -177,7 +177,7 @@ export const messages = {
   "error.agent.lowMemoryServer":
     "Na tym serwerze brakuje pamięci. Twoja wiadomość czeka w kolejce i ruszy, gdy pamięć się zwolni.",
   "error.agent.workspaceOnlyToolMissing":
-    "Tryb „Tylko obszar roboczy” wymaga narzędzia {tool}, którego OpenBot nie znalazł. Zainstaluj je lub wybierz pełny dostęp w ustawieniach agenta.",
+    "Tryb „Tylko obszar roboczy” wymaga narzędzia {tool}, którego CodeBot nie znalazł. Zainstaluj je lub wybierz pełny dostęp w ustawieniach agenta.",
   "error.agent.codexSandboxUnavailable":
     "Tryb „Tylko obszar roboczy” wymaga piaskownicy Codex, której Codex nie może uruchomić na tym komputerze, więc polecenia agenta kończą się błędem. Wybierz „Najpierw pytaj” lub „Pełny dostęp” w ustawieniach agenta.",
   "error.agent.claudeSandboxUnavailable":
@@ -194,7 +194,7 @@ export const messages = {
   "error.agent.screenCaptureDeclined":
     "Użytkownik nie zezwolił na to przechwycenie ekranu. Nic nie zostało przechwycone.",
   "error.agent.creditMediaDeclined": "Użytkownik nie zezwolił na to generowanie. Nie wydano żadnych kredytów.",
-  "error.agent.creditMediaNotSaved": "Plik został utworzony, ale OpenBot nie mógł zapisać go w czacie.",
+  "error.agent.creditMediaNotSaved": "Plik został utworzony, ale CodeBot nie mógł zapisać go w czacie.",
   "error.agent.mcpToolDeclined":
     "Użytkownik nie zezwolił na to wywołanie narzędzia MCP. Narzędzie nie zostało uruchomione.",
   "error.agent.screenCaptureWindowMissing":
@@ -204,9 +204,9 @@ export const messages = {
   "error.agent.screenCaptureRegionOutside":
     "Obszar nie mieści się w jednym wyświetlaczu. Użyj punktów pulpitu w granicach jednego wyświetlacza z list_capture_sources.",
   "error.agent.screenCapturePermissionMissing":
-    "OpenBot nie ma uprawnienia do nagrywania ekranu. Poproś użytkownika, aby otworzył Ustawienia systemowe > Prywatność i ochrona > Nagrywanie ekranu i dźwięku systemowego, włączył OpenBot, a potem zamknął i ponownie otworzył OpenBot.",
+    "CodeBot nie ma uprawnienia do nagrywania ekranu. Poproś użytkownika, aby otworzył Ustawienia systemowe > Prywatność i ochrona > Nagrywanie ekranu i dźwięku systemowego, włączył CodeBot, a potem zamknął i ponownie otworzył CodeBot.",
   "error.agent.screenCaptureListPermission":
-    "OpenBot nie ma jeszcze uprawnienia do nagrywania ekranu, więc nie może wyświetlić listy okien. Aby przechwycić ekran, wywołaj capture_screen z target screen. Użytkownik najpierw zatwierdza przechwycenie, a potem macOS może poprosić go o uprawnienie.",
+    "CodeBot nie ma jeszcze uprawnienia do nagrywania ekranu, więc nie może wyświetlić listy okien. Aby przechwycić ekran, wywołaj capture_screen z target screen. Użytkownik najpierw zatwierdza przechwycenie, a potem macOS może poprosić go o uprawnienie.",
   "error.agent.screenCaptureEmptyWindows":
     "Windows zwrócił pusty obraz. Poproś użytkownika, aby odblokował komputer i zamknął chronione treści. Przechwytywanie ekranu może też blokować zasada organizacji.",
   "error.agent.screenCaptureFailed": "Przechwycenie ekranu nie powiodło się. Spróbuj ponownie.",

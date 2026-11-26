@@ -7,7 +7,7 @@ import { parseChangelog } from "../apps/auth-api/src/lib/changelog";
 import { isNewerMobileVersion } from "../packages/contracts/src/mobile-features";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REPORT = join(root, ".openbot-build", "mobile-ota-release-notes-e2e.json");
+const REPORT = join(root, ".codebot-build", "mobile-ota-release-notes-e2e.json");
 const CHANGELOG = "apps/mobile/CHANGELOG.md";
 const NOTES = "apps/mobile/changelog.d";
 const VERSION_FILES = [
@@ -17,7 +17,7 @@ const VERSION_FILES = [
   "apps/mobile/release-announcement.json",
 ];
 
-const work = mkdtempSync(join(tmpdir(), "openbot-mobile-ota-notes-e2e-"));
+const work = mkdtempSync(join(tmpdir(), "codebot-mobile-ota-notes-e2e-"));
 const read = (path: string) => readFileSync(join(work, path), "utf8");
 function write(path: string, text: string): void {
   mkdirSync(dirname(join(work, path)), { recursive: true });
@@ -66,10 +66,10 @@ function check(name: string, passed: boolean, detail: unknown): void {
 try {
   git("init", "--quiet", "--initial-branch=main");
   write("apps/mobile/app.json", `${JSON.stringify({ expo: { version: "1.4.8" } }, null, 2)}\n`);
-  write("apps/mobile/package.json", `${JSON.stringify({ name: "@openbot/mobile", version: "1.4.8" }, null, 2)}\n`);
+  write("apps/mobile/package.json", `${JSON.stringify({ name: "@codebot/mobile", version: "1.4.8" }, null, 2)}\n`);
   write(
     "bun.lock",
-    `{\n  "workspaces": {\n    "apps/mobile": {\n      "name": "@openbot/mobile",\n      "version": "1.4.8",\n    },\n  },\n}\n`,
+    `{\n  "workspaces": {\n    "apps/mobile": {\n      "name": "@codebot/mobile",\n      "version": "1.4.8",\n    },\n  },\n}\n`,
   );
   write("apps/mobile/release-announcement.json", JSON.stringify({ version: "1.4.8", highlights: ["One."] }));
   write(

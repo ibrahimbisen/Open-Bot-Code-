@@ -6,7 +6,7 @@ import type { AgentClient } from "../src/backend/agent-client";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-long-instructions-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-long-instructions-e2e");
 const INSTRUCTIONS = `You are a careful assistant.\n${"Rule for the assistant: prefer the smallest change that solves the problem. ".repeat(200)}`;
 
 interface LogEntry {
@@ -31,7 +31,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-long-instructions-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-long-instructions-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 

@@ -1,6 +1,6 @@
-import { type WORKFLOW_ANSWER_FIELD, WORKFLOW_CHECK_FIELD, type WorkflowAnswerProblem } from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
-import { ListChecks, Popover, Textarea, TriangleAlert } from "@openbot/ui";
+import { type WORKFLOW_ANSWER_FIELD, WORKFLOW_CHECK_FIELD, type WorkflowAnswerProblem } from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
+import { ListChecks, Popover, Textarea, TriangleAlert } from "@codebot/ui";
 import { createSignal, For, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { AnswerRows, answerRows } from "./workflow-answer-rows";

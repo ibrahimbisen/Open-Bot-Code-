@@ -1,6 +1,6 @@
-import { isFixedSourceText, sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
-import { type CauseCode, classifyFailure } from "@openbot/telemetry";
+import { isFixedSourceText, sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
+import { type CauseCode, classifyFailure } from "@codebot/telemetry";
 import type { AgentProvider } from "../agent-client";
 import { isSpentBalanceDiagnostic } from "./provider-diagnostics";
 import { providerLabel } from "./thread-items";

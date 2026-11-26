@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { DatabaseSync, type SQLOutputValue } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import { CRM_TABLES_AFTER_MIGRATION } from "./crm/crm-schema";
 import { CRM_SCHEMA_SQL } from "./migrations/0063-crm";
 import { THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION } from "./migrations/0065-thread-event-compaction";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -29,7 +29,7 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
@@ -136,7 +136,7 @@ function insertPayment(
 function migrated(): DatabaseSync {
   const db = databaseAt(62);
   seed(db, 62);
-  migrateOpenBotDatabase(db);
+  migrateCodeBotDatabase(db);
   return db;
 }
 
@@ -148,7 +148,7 @@ describe("CRM migration", () => {
       seed(db, version);
       if (version < 62) migrateUpTo(db, 62);
       const before = contents(db);
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(contents(db)).toEqual({
         ...before,
         ...CRM_TABLES_AFTER_MIGRATION,
@@ -164,13 +164,13 @@ describe("CRM migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=63
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 63 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 63 failed");
     expect(contents(db)).toEqual(before);
     expect(crmObjects(db)).toEqual([]);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=63").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual({
       ...before,
       ...CRM_TABLES_AFTER_MIGRATION,
@@ -184,9 +184,9 @@ describe("CRM migration", () => {
     seed(db, 62);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version=70; DELETE FROM schema_migrations WHERE version=20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(crmObjects(db)).toEqual([]);
   });
@@ -196,7 +196,7 @@ describe("CRM migration", () => {
     insertCustomer(db);
     const after = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     expect(contents(db)).toEqual(after);
   });
 
@@ -205,7 +205,7 @@ describe("CRM migration", () => {
     upgraded.exec(CRM_SCHEMA_SQL);
     const created = new DatabaseSync(":memory:");
     databases.push(created);
-    migrateOpenBotDatabase(created);
+    migrateCodeBotDatabase(created);
     created.exec(CRM_SCHEMA_SQL);
     for (const db of [upgraded, created]) {
       expect(db.prepare("SELECT * FROM crm_statuses").all()).toEqual(CRM_TABLES_AFTER_MIGRATION.crm_statuses);

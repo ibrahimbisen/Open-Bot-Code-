@@ -9,6 +9,6 @@ export interface Clip {
   edges: readonly WfnEdge[];
 }
 
-export const CLIP_TYPE = "application/x-openbot-workflow-nodes";
+export const CLIP_TYPE = "application/x-codebot-workflow-nodes";
 
 export const [copied, setCopied] = createSignal<{ key: string; clip: Clip; from: string; server: string }>();

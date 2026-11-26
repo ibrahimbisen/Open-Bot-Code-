@@ -1,10 +1,10 @@
-import { optionalCustomServerPayment } from "@openbot/contracts/custom-server-plans";
-import { isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { optionalServerAppearanceField } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
+import { optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
+import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { optionalServerAppearanceField } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
 
 function cacheKey(accountId: string): string {
-  return `openbot.web.hosts:${accountId}`;
+  return `codebot.web.hosts:${accountId}`;
 }
 
 function decodeHost(value: unknown): RemoteTeamHost | null {
@@ -66,7 +66,7 @@ export function deleteCachedWebHosts(accountId: string | null): void {
     if (accountId === null) {
       for (let index = window.localStorage.length - 1; index >= 0; index -= 1) {
         const key = window.localStorage.key(index);
-        if (key?.startsWith("openbot.web.hosts:")) window.localStorage.removeItem(key);
+        if (key?.startsWith("codebot.web.hosts:")) window.localStorage.removeItem(key);
       }
       return;
     }

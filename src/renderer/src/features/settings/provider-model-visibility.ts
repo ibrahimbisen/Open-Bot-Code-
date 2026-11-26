@@ -1,10 +1,10 @@
-import type { AgentModelId, AgentProviderId, OpenBotDesktopApi, ProviderModelVisibility } from "@openbot/contracts/ipc";
-import type { ProviderModelVisibilityControl } from "@openbot/ui/features/settings/ProviderSettingsPage";
-import { useText } from "@openbot/ui/text";
+import type { AgentModelId, AgentProviderId, CodeBotDesktopApi, ProviderModelVisibility } from "@codebot/contracts/ipc";
+import type { ProviderModelVisibilityControl } from "@codebot/ui/features/settings/ProviderSettingsPage";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createStore, untrack } from "solid-js";
 
 export type HostModelVisibilityCalls = Pick<
-  OpenBotDesktopApi["hostAdmin"],
+  CodeBotDesktopApi["hostAdmin"],
   "getModelVisibility" | "setModelVisibility"
 >;
 
@@ -21,7 +21,7 @@ export function createProviderModelVisibility(
   status: () => unknown,
 ): () => ((provider: AgentProviderId) => ProviderModelVisibilityControl) | undefined {
   const { t, errorMessage } = useText();
-  const calls = (): HostModelVisibilityCalls => source()?.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostModelVisibilityCalls => source()?.calls ?? window.codebot.hostAdmin;
 
   function open(provider: AgentProviderId): ProviderModelVisibilityControl {
     const [state, setState] = createStore<{ list: ProviderModelVisibility | null; error: string | null }>({

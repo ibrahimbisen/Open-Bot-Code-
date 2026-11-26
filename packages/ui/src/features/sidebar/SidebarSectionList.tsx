@@ -1,4 +1,4 @@
-import { SIDEBAR_PEOPLE_SECTION_ID } from "@openbot/contracts/ipc";
+import { SIDEBAR_PEOPLE_SECTION_ID } from "@codebot/contracts/ipc";
 import { For } from "solid-js";
 import { SidebarAgentSection } from "./SidebarAgentSection";
 import { SidebarPeopleSection } from "./SidebarPeopleSection";

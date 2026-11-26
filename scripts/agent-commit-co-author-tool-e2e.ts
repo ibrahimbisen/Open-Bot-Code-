@@ -3,28 +3,28 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { OPENBOT_COMMIT_TRAILER } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { CODEBOT_COMMIT_TRAILER } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { ToolApprovalDecision } from "../src/backend/agent/attention-registry";
 import { handleSetCommitCoAuthorTool } from "../src/backend/agent/commit-co-author-tool";
 import { developerInstructions } from "../src/backend/agent/developer-instructions";
 import { PROFILE_TOOL_NAMES, profileToolErrorMessage } from "../src/backend/agent/profile-tools";
-import { openBotToolFailure } from "../src/backend/agent/routine-tools";
+import { codeBotToolFailure } from "../src/backend/agent/routine-tools";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
+import { CODEBOT_TOOL_DEFINITIONS } from "../src/backend/codebot-tools";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
-import { OPENBOT_TOOL_DEFINITIONS } from "../src/backend/openbot-tools";
 import { createAgentDefaultsPreferenceStore } from "../src/main/agent-defaults-preference-store";
 import { createAgentDefaultsSettings } from "../src/main/agent-defaults-settings";
 import { BusyMessageModePreferenceStore } from "../src/main/busy-message-mode-preference-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-commit-co-author-tool-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-commit-co-author-tool-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-commit-co-author-tool-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-commit-co-author-tool-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 mkdirSync(home, { recursive: true });
@@ -73,9 +73,9 @@ const agentBrowser: AgentBrowserHost = {
   agentTab: () => null,
 };
 
-const defaultsPath = join(userData, "openbot-agent-defaults-v1.json");
+const defaultsPath = join(userData, "codebot-agent-defaults-v1.json");
 const agentDefaults = createAgentDefaultsPreferenceStore(defaultsPath);
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database, () => agentDefaults.get());
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 let agents: AgentService | null = null;
@@ -104,7 +104,7 @@ try {
           threadId: "t",
           turnId: "turn",
           callId: "c",
-          namespace: "openbot",
+          namespace: "codebot",
           tool: "set_commit_co_author",
           arguments: args,
         },
@@ -118,7 +118,7 @@ try {
               return answer;
             }),
         },
-      ).pipe(Effect.catch((failure) => Effect.succeed(openBotToolFailure(profileToolErrorMessage(failure.cause))))),
+      ).pipe(Effect.catch((failure) => Effect.succeed(codeBotToolFailure(profileToolErrorMessage(failure.cause))))),
     );
     const item = response.contentItems[0];
     assert.ok(item && item.type === "inputText", "The answer is text.");
@@ -134,13 +134,13 @@ try {
   };
 
   await step("Agents get the tool, and the prompt names it while the trailer is on", async () => {
-    assert.ok(OPENBOT_TOOL_DEFINITIONS.some((tool) => tool.name === "set_commit_co_author"));
+    assert.ok(CODEBOT_TOOL_DEFINITIONS.some((tool) => tool.name === "set_commit_co_author"));
     assert.ok(PROFILE_TOOL_NAMES.has("set_commit_co_author"), "A failure goes back to the agent to correct.");
     assert.equal(store.agentDefaults().commitCoAuthor, true, "The trailer is on by default.");
     const text = prompt();
-    assert.ok(text.includes(OPENBOT_COMMIT_TRAILER));
-    assert.ok(text.includes("openbot.set_commit_co_author"));
-    assert.ok(text.includes(`trailer once: ${OPENBOT_COMMIT_TRAILER}\n`), "No period follows the trailer.");
+    assert.ok(text.includes(CODEBOT_COMMIT_TRAILER));
+    assert.ok(text.includes("codebot.set_commit_co_author"));
+    assert.ok(text.includes(`trailer once: ${CODEBOT_COMMIT_TRAILER}\n`), "No period follows the trailer.");
     return { commitCoAuthor: true };
   });
 
@@ -175,7 +175,7 @@ try {
     assert.equal(value.enabled, false);
     assert.equal(store.agentDefaults().commitCoAuthor, false);
     assert.equal(saved(), false, "The preference file keeps the change.");
-    assert.ok(!prompt().includes(OPENBOT_COMMIT_TRAILER), "The prompt no longer asks for the trailer.");
+    assert.ok(!prompt().includes(CODEBOT_COMMIT_TRAILER), "The prompt no longer asks for the trailer.");
     return value;
   });
 
@@ -201,7 +201,7 @@ try {
     assert.equal(value.status, "changed");
     assert.equal(cards.at(-1), sourceText("status.agent.commitCoAuthorOn"));
     assert.equal(saved(), true);
-    assert.ok(prompt().includes(OPENBOT_COMMIT_TRAILER));
+    assert.ok(prompt().includes(CODEBOT_COMMIT_TRAILER));
     return value;
   });
 

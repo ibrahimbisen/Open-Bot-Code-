@@ -3,13 +3,13 @@ import { createHash } from "node:crypto";
 import { closeSync, type FSWatcher, fstatSync, openSync, readSync, watch } from "node:fs";
 import { join } from "node:path";
 import { promisify } from "node:util";
-import type { AppTranslate } from "@openbot/i18n";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { AppTranslate } from "@codebot/i18n";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Option, Schema } from "effect";
 import { dialog, shell } from "electron";
 import { DOWNLOAD_URL } from "./download-url";
 
-const logger = createOpenBotLogger("app-archive");
+const logger = createCodeBotLogger("app-archive");
 const SETTLE_MS = 2_000;
 
 const decodePlistIntegrity = Schema.decodeUnknownOption(
@@ -86,7 +86,7 @@ export function watchAppArchive(resourcesPath: string, translate: AppTranslate):
     const expected = process.platform === "darwin" ? ((await readPlistHash(resourcesPath)) ?? startHash) : startHash;
     if (stopped || current === expected) return;
     stop();
-    logger.error("app.asar changed while OpenBot runs; the next start fails the integrity check.");
+    logger.error("app.asar changed while CodeBot runs; the next start fails the integrity check.");
     await showArchiveChanged(translate);
   };
 

@@ -1,5 +1,5 @@
-import type { AppTranslate, LayoutDirection } from "@openbot/i18n";
-import { appLanguageOption } from "@openbot/i18n/languages";
+import type { AppTranslate, LayoutDirection } from "@codebot/i18n";
+import { appLanguageOption } from "@codebot/i18n/languages";
 import type { SiteLocale } from "./site-paths";
 import { slot } from "./text-slots";
 
@@ -92,12 +92,12 @@ export function siteText(t: AppTranslate) {
     cta: {
       title: t("sitePage.site.cta.title"),
       description: t("sitePage.site.cta.description"),
-      download: t("sitePage.site.downloadOpenBot"),
+      download: t("sitePage.site.downloadCodeBot"),
       contact,
     },
     footer: {
       description: t("sitePage.site.footer.description"),
-      download: t("sitePage.site.downloadOpenBot"),
+      download: t("sitePage.site.downloadCodeBot"),
       navigation: t("sitePage.site.footer.navigation"),
       columns: {
         product: t("sitePage.site.footer.product"),

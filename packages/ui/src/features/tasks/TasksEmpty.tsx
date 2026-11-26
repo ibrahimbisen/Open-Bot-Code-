@@ -1,14 +1,14 @@
-import type { AvatarMood } from "@openbot/brand/bloub-avatar-motion";
-import type { AgentTask } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { taskTone } from "@openbot/team-client/agent-tasks";
-import { buttonVariants } from "@openbot/ui";
-import { SwapLabel } from "@openbot/ui/components/SwapLabel";
-import type { AgentProfile } from "@openbot/ui/data";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { AgentTaskMark, agentTaskStatus } from "@openbot/ui/features/conversation/AgentTasks";
-import { useText } from "@openbot/ui/text";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import type { AvatarMood } from "@codebot/brand/bloub-avatar-motion";
+import type { AgentTask } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { taskTone } from "@codebot/team-client/agent-tasks";
+import { buttonVariants } from "@codebot/ui";
+import { SwapLabel } from "@codebot/ui/components/SwapLabel";
+import type { AgentProfile } from "@codebot/ui/data";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { AgentTaskMark, agentTaskStatus } from "@codebot/ui/features/conversation/AgentTasks";
+import { useText } from "@codebot/ui/text";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import { createMemo, createSignal, For, onSettled } from "solid-js";
 
 interface SampleTask {

@@ -94,7 +94,7 @@ try {
   style.textContent = "html,body,#root,.video-stream{background:" + background + " !important}body::before{display:none !important}.video-stats{display:none !important}.video-stream{transition:none !important}.local-touch-cursor{display:none !important}";
   (document.head || document.documentElement).appendChild(style);
 } catch {}
-if (window.__openbotRemote) return;
+if (window.__codebotRemote) return;
 const KEYS = ${JSON.stringify(usKeyboard())};
 const STATS_PATH = ${JSON.stringify(VIEWER_STATS_FILE)};
 let statsTimer = null;
@@ -143,7 +143,7 @@ const zoomAt = (scale, ax, ay, dx, dy) => {
   view.scale = next; view.x = x; view.y = y;
   apply();
 };
-window.__openbotRemote = {
+window.__codebotRemote = {
   key(code, key) { tap(code, key, false); },
   modifier(code, down) {
     if (!(code in FLAGS)) return;
@@ -263,14 +263,14 @@ requestAnimationFrame(follow);
 true;`;
 }
 
-export const VIEWER_STATS_FILE = "openbot-phone-stats";
+export const VIEWER_STATS_FILE = "codebot-phone-stats";
 
 export function viewerCall(
   method: "key" | "modifier" | "type" | "touchMode" | "fit" | "stats",
   ...values: unknown[]
 ): string {
   const args = values.map((value) => JSON.stringify(value)).join(",");
-  return `window.__openbotRemote && window.__openbotRemote.${method}(${args});true;`;
+  return `window.__codebotRemote && window.__codebotRemote.${method}(${args});true;`;
 }
 
 export function viewerTouchModeValue(mode: ViewerTouchMode): string {

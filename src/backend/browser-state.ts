@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { type BrowserBounds, type BrowserEnvironment, isBrowserProfileId } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isBoolean, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { legacyAgentId } from "@openbot/contracts/validation";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { type BrowserBounds, type BrowserEnvironment, isBrowserProfileId } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isBoolean, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { legacyAgentId } from "@codebot/contracts/validation";
 import { Effect } from "effect";
 import type { BrowserToolArguments } from "./browser-tools";
 import { isRecord } from "./protocol";
@@ -23,8 +23,8 @@ export type BrowserTabSession = { kind: "agent"; key: string } | { kind: "profil
 
 export function browserTabPartition(tabSession: BrowserTabSession): string {
   return tabSession.kind === "agent"
-    ? `openbot-browser-agent-${tabSession.key}`
-    : `openbot-browser-profile-${tabSession.profileId}`;
+    ? `codebot-browser-agent-${tabSession.key}`
+    : `codebot-browser-profile-${tabSession.profileId}`;
 }
 
 export function storedTabSession(

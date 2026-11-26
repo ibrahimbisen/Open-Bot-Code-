@@ -2,9 +2,9 @@ import type { DatabaseSync } from "node:sqlite";
 
 /**
  * One database migration, in its own frozen file `<version>-<name>.ts` (see `src/backend/AGENTS.md`).
- * `migrateOpenBotDatabase` runs `up` in one transaction with the `schema_migrations` marker of `version`.
+ * `migrateCodeBotDatabase` runs `up` in one transaction with the `schema_migrations` marker of `version`.
  */
-export interface OpenBotMigration {
+export interface CodeBotMigration {
   readonly version: number;
   /** Stable, unique, kebab-case, and the same as in the file name. */
   readonly name: string;

@@ -3,13 +3,13 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
 import { ClientSideConnection, type InitializeResponse, ndJsonStream } from "@agentclientprotocol/sdk";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { CUSTOM_AGENT_LIMITS, type CustomAgentCheckResult } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText, toLogValue } from "@openbot/logging";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { CUSTOM_AGENT_LIMITS, type CustomAgentCheckResult } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText, toLogValue } from "@codebot/logging";
 import { Deferred, Effect } from "effect";
-import { OPENBOT_ACP_CLIENT_CAPABILITIES, OPENBOT_ACP_CLIENT_INFO } from "./acp-client";
+import { CODEBOT_ACP_CLIENT_CAPABILITIES, CODEBOT_ACP_CLIENT_INFO } from "./acp-client";
 import { type AcpModel, modelsFromSessionSetup } from "./acp-configuration";
 import { cliSpawnTarget } from "./cli";
 import {
@@ -21,13 +21,13 @@ import {
 import { stopWindowsProcessTree } from "./windows-process-tree";
 import { TimeoutError } from "./with-timeout";
 
-const logger = createOpenBotLogger("acp-agent-check");
+const logger = createCodeBotLogger("acp-agent-check");
 
 const AGENT_CHECK_TIMEOUT_MS = 20_000;
 const MODEL_LIST_TIMEOUT_MS = 10_000;
 const STOP_GRACE_MS = 2_000;
 const DETAIL_LIMIT = 300;
-const OPENBOT_ACP_PROTOCOL_VERSION = 1;
+const CODEBOT_ACP_PROTOCOL_VERSION = 1;
 
 export interface AgentCheckTarget {
   executable: string;
@@ -40,7 +40,7 @@ export interface AgentCheckTarget {
 
 export const checkAcpAgent = Effect.fn("AcpAgent.check")((target: AgentCheckTarget) =>
   Effect.acquireUseRelease(
-    providerCall(() => mkdtemp(join(tmpdir(), "openbot-agent-check-"))),
+    providerCall(() => mkdtemp(join(tmpdir(), "codebot-agent-check-"))),
     (folder) =>
       Effect.gen(function* () {
         const secrets = Object.values(target.env).filter((value) => value.length >= 4);
@@ -84,9 +84,9 @@ export const checkAcpAgent = Effect.fn("AcpAgent.check")((target: AgentCheckTarg
           );
           const initialization = yield* providerCall(() =>
             connection.initialize({
-              protocolVersion: OPENBOT_ACP_PROTOCOL_VERSION,
-              clientCapabilities: OPENBOT_ACP_CLIENT_CAPABILITIES,
-              clientInfo: OPENBOT_ACP_CLIENT_INFO,
+              protocolVersion: CODEBOT_ACP_PROTOCOL_VERSION,
+              clientCapabilities: CODEBOT_ACP_CLIENT_CAPABILITIES,
+              clientInfo: CODEBOT_ACP_CLIENT_INFO,
             }),
           ).pipe(
             Effect.raceFirst(Deferred.await(ended)),
@@ -96,7 +96,7 @@ export const checkAcpAgent = Effect.fn("AcpAgent.check")((target: AgentCheckTarg
                 Effect.fail(providerFailure(new TimeoutError(sourceText("error.provider.customAgentCheckTimedOut")))),
             }),
           );
-          if (initialization.protocolVersion !== OPENBOT_ACP_PROTOCOL_VERSION) {
+          if (initialization.protocolVersion !== CODEBOT_ACP_PROTOCOL_VERSION) {
             return yield* providerFailure(
               new CheckFailure(
                 sourceText("error.provider.customAgentProtocolVersion", {

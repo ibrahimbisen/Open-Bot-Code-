@@ -1,12 +1,13 @@
 import { randomUUID } from "node:crypto";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AGENT_TASK_OUTCOMES,
   type AgentTaskOutcome,
   type AttachmentSummary,
   type ConversationMessage,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import type { CodeBotDatabase } from "../codebot-database";
 import { ORDER_KEY_DESC } from "../database/conversation-queries";
 import { deleteAggregateHistory, deleteThreadAttachments } from "../database/database-core";
 import {
@@ -17,7 +18,6 @@ import {
   requiredStringColumn,
 } from "../database/database-rows";
 import { refreshThreadOrder } from "../database/thread-message-order";
-import type { OpenBotDatabase } from "../openbot-database";
 
 const AGENT_THREAD_ORIGINS = ["user", "agent"] as const;
 export type AgentThreadOrigin = (typeof AGENT_THREAD_ORIGINS)[number];
@@ -73,9 +73,9 @@ export interface AgentThreadInput {
 const SELECT_THREAD = "SELECT *, COALESCE(legacy_task_id, thread_id) AS task_id FROM projection_agent_threads";
 
 export class AgentThreadStore {
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
 
-  constructor(database: OpenBotDatabase) {
+  constructor(database: CodeBotDatabase) {
     this.#database = database;
   }
 
@@ -344,7 +344,7 @@ export class AgentThreadStore {
   }
 
   create(input: AgentThreadInput): AgentThreadRecord {
-    const threadId = `openbot-thread-${randomUUID()}`;
+    const threadId = `codebot-thread-${randomUUID()}`;
     this.#database.dispatch(
       `agent-thread:${threadId}`,
       [
@@ -519,7 +519,7 @@ export function copyBranchMessages(
 
 const BY_TASK_ID = "(legacy_task_id = ? OR (legacy_task_id IS NULL AND thread_id = ?))";
 
-type Connection = OpenBotDatabase["connection"];
+type Connection = CodeBotDatabase["connection"];
 
 function deleteThreadRows(db: Connection, threads: readonly AgentThreadRecord[]): void {
   deleteAggregateHistory(

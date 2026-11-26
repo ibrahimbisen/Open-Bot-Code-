@@ -5,7 +5,7 @@ export { isRawP256PublicKey } from "./host-grant";
 
 export const SLACK_WORKSPACE_GRANT_VERSION = 2;
 
-const KIND: HostGrantKind = { version: SLACK_WORKSPACE_GRANT_VERSION, info: "openbot-slack-workspace-grant-v2" };
+const KIND: HostGrantKind = { version: SLACK_WORKSPACE_GRANT_VERSION, info: "codebot-slack-workspace-grant-v2" };
 
 export interface SlackWorkspaceGrant {
   botToken: string;

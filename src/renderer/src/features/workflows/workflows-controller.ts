@@ -15,28 +15,28 @@ import {
   type WorkflowSaveResult,
   type WorkflowStep,
   type WorkflowSummary,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { toast } from "@openbot/ui";
-import type { WorkflowCanvasProps } from "@openbot/ui/features/workflows/WorkflowCanvas";
-import type { WorkflowCanvasTabs } from "@openbot/ui/features/workflows/WorkflowTabs";
-import type { WorkflowBuild } from "@openbot/ui/features/workflows/workflow-build";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { toast } from "@codebot/ui";
+import type { WorkflowCanvasProps } from "@codebot/ui/features/workflows/WorkflowCanvas";
+import type { WorkflowCanvasTabs } from "@codebot/ui/features/workflows/WorkflowTabs";
+import type { WorkflowBuild } from "@codebot/ui/features/workflows/workflow-build";
 import {
   EMPTY_GITHUB_HISTORY,
   githubItemUrl,
   type WorkflowGitHubCanvas,
-} from "@openbot/ui/features/workflows/workflow-github";
-import { stableJson } from "@openbot/ui/features/workflows/workflow-history";
-import { mergeWorkflowGraphs } from "@openbot/ui/features/workflows/workflow-merge";
+} from "@codebot/ui/features/workflows/workflow-github";
+import { stableJson } from "@codebot/ui/features/workflows/workflow-history";
+import { mergeWorkflowGraphs } from "@codebot/ui/features/workflows/workflow-merge";
 import type {
   WorkflowChannel,
   WorkflowDiscordServer,
   WorkflowPlace,
   WorkflowSlackWorkspace,
   WorkflowTelegramChat,
-} from "@openbot/ui/features/workflows/workflow-model";
-import { EMPTY_WORKFLOW_RUN_VIEW, sameWorkflowStep } from "@openbot/ui/features/workflows/workflow-run-view";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/workflows/workflow-model";
+import { EMPTY_WORKFLOW_RUN_VIEW, sameWorkflowStep } from "@codebot/ui/features/workflows/workflow-run-view";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, onSettled, untrack } from "solid-js";
 import { agentAskedHere } from "../../agent-requests";
 import type { DesktopAnalyticsScope, WorkflowAnalyticsAction } from "../../analytics";
@@ -116,7 +116,7 @@ const sameRunPage = (left: RunPageLike, right: RunPageLike): boolean =>
     return other !== undefined && sameWorkflowStep(step, other);
   });
 
-const lastWorkflowKey = (hostKey: string) => `openbot:last-workflow:${hostKey}`;
+const lastWorkflowKey = (hostKey: string) => `codebot:last-workflow:${hostKey}`;
 function readLastWorkflow(hostKey: string): string | undefined {
   try {
     return window.localStorage.getItem(lastWorkflowKey(hostKey)) ?? undefined;
@@ -132,7 +132,7 @@ function rememberLastWorkflow(hostKey: string, workflowId: string): void {
   } catch {}
 }
 
-const tabsKey = (hostKey: string) => `openbot:workflow-tabs:${hostKey}`;
+const tabsKey = (hostKey: string) => `codebot:workflow-tabs:${hostKey}`;
 function readTabs(hostKey: string | undefined): readonly string[] {
   if (hostKey === undefined) return [];
   try {

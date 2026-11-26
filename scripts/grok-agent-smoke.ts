@@ -12,7 +12,7 @@ import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/p
 import { type GrokRequest, grokEnvironment, makeGitWorkspace, makeGrokHome, startGrokProxy } from "./grok-live-harness";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/grok-agent-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-agent-smoke");
 const MODEL = process.argv.find((arg) => arg.startsWith("--model="))?.slice("--model=".length) ?? "grok-4.7-build-fast";
 const WORD = "MARIGOLD-7";
 const SKILL = `---
@@ -58,7 +58,7 @@ const roots: string[] = [];
 const clients: AgentClient[] = [];
 
 async function session(name: string, config: Record<string, boolean>, text: string): Promise<SessionReport> {
-  const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-grok-agent-smoke-")));
+  const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-grok-agent-smoke-")));
   roots.push(root);
   const grokHome = await makeGrokHome(root, { config });
   mkdirSync(join(grokHome, "skills", "garden-word"), { recursive: true });

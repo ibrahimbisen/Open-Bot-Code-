@@ -4,8 +4,8 @@ import type {
   NotificationOpenedEvent,
   ServerSummary,
   WorkflowNotificationOpenedEvent,
-} from "@openbot/contracts/ipc";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { currentText } from "@codebot/ui/text";
 import { onSettled } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { desktopAnalytics } from "../../analytics";

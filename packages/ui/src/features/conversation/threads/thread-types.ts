@@ -1,4 +1,4 @@
-import type { SidebarWaitReason } from "@openbot/ui/features/sidebar/sidebar-types";
+import type { SidebarWaitReason } from "@codebot/ui/features/sidebar/sidebar-types";
 import type { JSX } from "@solidjs/web";
 
 export type ThreadStatus =

@@ -3,9 +3,9 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { agentProviderDescriptor } from "@openbot/contracts/agent-providers";
-import type { ChannelPage, ChannelTask } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { agentProviderDescriptor } from "@codebot/contracts/agent-providers";
+import type { ChannelPage, ChannelTask } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { ChannelClient, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 import { resolveDevelopmentAppDataRoot } from "./development-state-paths";
 
@@ -23,7 +23,7 @@ const report: Report = { passed: false };
 const session = await connectChannelE2e("channel-reply-quality-e2e");
 const { page, instance } = session;
 const client = new ChannelClient(page);
-const database = new Database(join(resolveDevelopmentAppDataRoot(), instance.profile, "openbot.db"), {
+const database = new Database(join(resolveDevelopmentAppDataRoot(), instance.profile, "codebot.db"), {
   readonly: true,
 });
 

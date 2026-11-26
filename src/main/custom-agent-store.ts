@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
-import type { CustomAgentEnvInput, CustomAgentSummary, SaveCustomAgentInput } from "@openbot/contracts/ipc";
-import { CUSTOM_AGENT_LIMITS, isCustomAgentUsagePrompt } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { registerSecretValue } from "@openbot/logging";
+import type { CustomAgentEnvInput, CustomAgentSummary, SaveCustomAgentInput } from "@codebot/contracts/ipc";
+import { CUSTOM_AGENT_LIMITS, isCustomAgentUsagePrompt } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { registerSecretValue } from "@codebot/logging";
 import { Effect, Schema, Semaphore } from "effect";
 import { z } from "zod";
 import { resolveAgentCommand } from "../backend/acp-agent-command";

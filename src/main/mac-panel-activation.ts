@@ -1,9 +1,9 @@
 import { createRequire } from "node:module";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type { BaseWindow, BrowserWindow } from "electron";
 import type * as Koffi from "koffi";
 
-const logger = createOpenBotLogger("mac-panel-activation");
+const logger = createCodeBotLogger("mac-panel-activation");
 const requireModule = createRequire(import.meta.url);
 
 interface ObjcRuntime {
@@ -48,7 +48,7 @@ export function preventPanelActivation(window: BrowserWindow): void {
     }
     objc.sendBool(nsWindow, setPreventsActivation, true);
   } catch (error) {
-    logger.warn("Unable to stop the panel from activating OpenBot:", toLogValue(error));
+    logger.warn("Unable to stop the panel from activating CodeBot:", toLogValue(error));
   }
 }
 
@@ -85,6 +85,6 @@ export function keepPanelThroughAppHide(window: BrowserWindow): void {
     }
     objc.sendBool(nsWindow, setCanHide, false);
   } catch (error) {
-    logger.warn("Unable to keep the panel on screen when OpenBot hides:", toLogValue(error));
+    logger.warn("Unable to keep the panel on screen when CodeBot hides:", toLogValue(error));
   }
 }

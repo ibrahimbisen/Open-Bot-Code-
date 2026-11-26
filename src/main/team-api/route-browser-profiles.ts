@@ -6,12 +6,12 @@ import {
   parseClearBrowserDataInput,
   parseUpdateAgentBrowserProfileInput,
   parseUpdateBrowserProfileInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   BROWSER_PROFILES_CAPABILITY,
   BROWSER_PROFILES_ROUTES,
-} from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { AgentNotFoundError } from "../agent-admin-settings";
 import { BrowserProfileRejectedError } from "../browser-profile-service";

@@ -5,8 +5,8 @@ import {
   type MobileTranslate,
   mobileTranslateFor,
   type TranslatedLocale,
-} from "@openbot/i18n/mobile";
-import { type UserErrorDetails, userErrorDetails, userErrorMessage } from "@openbot/user-errors";
+} from "@codebot/i18n/mobile";
+import { type UserErrorDetails, userErrorDetails, userErrorMessage } from "@codebot/user-errors";
 
 export interface MobileText {
   locale: TranslatedLocale;

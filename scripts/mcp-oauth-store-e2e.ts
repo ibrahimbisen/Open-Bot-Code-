@@ -3,8 +3,8 @@ import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { mcpAccountUrl } from "@openbot/contracts/mcp-accounts";
-import { sourceText } from "@openbot/i18n/source";
+import { mcpAccountUrl } from "@codebot/contracts/mcp-accounts";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { z } from "zod";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -18,7 +18,7 @@ import {
 import { McpOAuthStore } from "../src/main/mcp-oauth-store";
 import type { SecretCipher } from "../src/main/provider-credential-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-oauth-store-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-oauth-store-e2e");
 const NOTION = "https://mcp.notion.com/mcp";
 const VERCEL = "https://mcp.vercel.com/";
 const STRIPE = "https://mcp.stripe.com/";
@@ -172,7 +172,7 @@ async function connect(
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-mcp-oauth-store-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-mcp-oauth-store-"));
 const auth = await startAuthorizationServer();
 
 try {

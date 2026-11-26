@@ -16,9 +16,9 @@ description: "Compare products or vendors against criteria chosen from the decis
 1. **The decision.** Who decides, what they choose, and what is a must-have. If this is missing, ask once with
    `ask_user`: "What decision does this comparison feed?"
 2. **The options.** 2 to 6 products. If the user names none, propose up to 4 from a search and ask them to confirm.
-3. **Tool path.** Call `openbot_browser.list_tabs`, then use a new tab. Read each vendor's product pages, pricing
+3. **Tool path.** Call `codebot_browser.list_tabs`, then use a new tab. Read each vendor's product pages, pricing
    page, documentation, changelog and status or limits pages. Use the tools of an installed plugin that
-   holds the user's notes (Notion, Airtable); `openbot.tool_search` does not list them.
+   holds the user's notes (Notion, Airtable); `codebot.tool_search` does not list them.
 4. **Paste path.** Trial notes, sales calls, spreadsheets or screenshots that the user gives.
 
 ## Steps

@@ -4,19 +4,19 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent, routineConversationEvent } from "@openbot/contracts/ipc";
-import type { EventActivity, EventRoutine } from "@openbot/contracts/ipc-events";
+import { AGENT_PROVIDERS, type AgentEvent, routineConversationEvent } from "@codebot/contracts/ipc";
+import type { EventActivity, EventRoutine } from "@codebot/contracts/ipc-events";
 import {
   STANDARD_WEBHOOKS_FORMAT,
   WEBHOOK_DELIVERY_ID_HEADER,
   WEBHOOK_SIGNATURE_HEADER,
   WEBHOOK_TIMESTAMP_HEADER,
-} from "@openbot/contracts/signal-protocol/webhook-route";
+} from "@codebot/contracts/signal-protocol/webhook-route";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-webhook-routine-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-webhook-tool-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-webhook-routine-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-webhook-tool-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -24,14 +24,14 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { agentWebhookRoutineWriter, HostEventsService, hostAgentWebhookKeys } = await import(
   "../src/main/host-events-service"
 );
@@ -97,11 +97,11 @@ const answer = (message) => {
           threadId: params.threadId,
           turnId,
           callId: "call-" + turnId,
-          namespace: "openbot",
+          namespace: "codebot",
           tool: "tool_call",
           arguments: (() => {
             const { __tool = "create_webhook_routine", ...args } = JSON.parse(match[1]);
-            return { name: "openbot." + __tool, arguments: args };
+            return { name: "codebot." + __tool, arguments: args };
           })(),
         },
       });
@@ -248,7 +248,7 @@ function pass(name: string, condition: boolean, detail?: string) {
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
 const vault = new VaultService({
-  store: new VaultStore(join(root, "openbot-vault.json"), {
+  store: new VaultStore(join(root, "codebot-vault.json"), {
     encrypt: (value: string) => Buffer.from(value, "utf8").reverse(),
     decrypt: (value: Buffer) => Buffer.from(value).reverse().toString("utf8"),
   }),
@@ -256,7 +256,7 @@ const vault = new VaultService({
 });
 await Effect.runPromise(vault.load());
 const apiKeys = new AgentApiKeys(join(root, "agent-api-keys"), vault.items);
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 let relayUp = true;

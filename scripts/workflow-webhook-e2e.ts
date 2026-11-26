@@ -3,12 +3,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type WorkflowGraph, type WorkflowNode } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, type WorkflowGraph, type WorkflowNode } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-webhook-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-workflow-webhook-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-webhook-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-workflow-webhook-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 process.env.HOME = home;
@@ -19,7 +19,7 @@ const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { WorkflowGitHubStore } = await import("../src/backend/workflows/workflow-github-store");
 const { WorkflowRunStore } = await import("../src/backend/workflows/workflow-run-store");
 const { WorkflowStore } = await import("../src/backend/workflows/workflow-store");
@@ -84,7 +84,7 @@ const graphOf = (type: "webhook" | "manual", step: "notify" | "approval"): Workf
   strokes: [],
 });
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({ store, mailbox, browser, preferredProvider: "codex", offProviders: AGENT_PROVIDERS });

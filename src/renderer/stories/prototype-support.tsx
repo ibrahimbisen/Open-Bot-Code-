@@ -2,17 +2,17 @@ import { type JSX, Portal } from "@solidjs/web";
 import { createStore, onSettled, Show, untrack } from "solid-js";
 import { App } from "../src/App";
 import { skipStartupSplash } from "../src/AppView";
-import { createMockOpenBot, type MockOpenBotControls, type MockOpenBotOptions } from "../src/preview/mock-openbot";
-import { OpenBotPlayground } from "../src/preview/OpenBotPlayground";
+import { CodeBotPlayground } from "../src/preview/CodeBotPlayground";
+import { createMockCodeBot, type MockCodeBotControls, type MockCodeBotOptions } from "../src/preview/mock-codebot";
 
-export function PrototypeApp(props: { options?: MockOpenBotOptions; setup?: (mock: MockOpenBotControls) => void }) {
+export function PrototypeApp(props: { options?: MockCodeBotOptions; setup?: (mock: MockCodeBotControls) => void }) {
   skipStartupSplash();
   return (
-    <OpenBotPlayground
+    <CodeBotPlayground
       options={props.options}
       dependencies={{
         createMock: (options) => {
-          const mock = createMockOpenBot(options);
+          const mock = createMockCodeBot(options);
           untrack(() => props.setup)?.(mock);
           return mock;
         },

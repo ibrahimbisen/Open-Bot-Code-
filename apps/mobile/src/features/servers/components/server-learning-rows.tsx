@@ -3,7 +3,7 @@ import {
   isSkillLearningMode,
   RESPONSE_STYLES,
   type ResponseStyle,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { type QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Input, Typography } from "heroui-native";
 import BellRing from "lucide-react-native/icons/bell-ring";

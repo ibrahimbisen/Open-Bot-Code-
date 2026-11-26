@@ -1,6 +1,6 @@
-import type { McpServerConfig, McpTestResult } from "@openbot/contracts/ipc";
-import type { McpConnectFlow } from "@openbot/contracts/mcp-connect-flows";
-import { Button } from "@openbot/ui";
+import type { McpServerConfig, McpTestResult } from "@codebot/contracts/ipc";
+import type { McpConnectFlow } from "@codebot/contracts/mcp-connect-flows";
+import { Button } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, Match, Show, Switch } from "solid-js";
 import { useText } from "../../text";

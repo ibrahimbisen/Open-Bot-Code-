@@ -1,4 +1,4 @@
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import {
   CLIENT_BROWSER_CAPABILITY,
   CLIENT_BROWSER_EVENT,
@@ -8,10 +8,10 @@ import {
   type ClientBrowserPresence,
   decodeClientBrowserAnswer,
   decodeClientBrowserPresence,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
-import type { RemoteTeamEvent } from "@openbot/team-client/remote-peer";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
+import type { RemoteTeamEvent } from "@codebot/team-client/remote-peer";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 import { BROWSER_CHANGED_MESSAGE, BROWSER_PRESENCE_MESSAGE, BROWSER_RUN_MESSAGE } from "./client-browser-messages";
 import { savePresenceAck } from "./extension-storage";
 

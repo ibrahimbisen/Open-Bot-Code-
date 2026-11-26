@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { isReservedMcpServerName, type McpServerConfig } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isReservedMcpServerName, type McpServerConfig } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { analyticsIO, analyticsSync } from "./analytics-effects";
 
@@ -68,7 +68,7 @@ export function isReportedMcpServerName(configured: string, reported: string): b
   return (
     configured === reported ||
     form(configured) === form(reported) ||
-    (!isReservedMcpServerName(reported) && `openbot_${form(configured)}` === form(reported))
+    (!isReservedMcpServerName(reported) && `codebot_${form(configured)}` === form(reported))
   );
 }
 

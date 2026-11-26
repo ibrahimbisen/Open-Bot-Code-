@@ -1,18 +1,18 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import { isAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import { isAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import type { FrameLocator, Locator, Page } from "playwright-core";
 import { argument, ChannelClient, connectChannelE2e, WAIT_MS, waitFor, writeReport } from "./channel-e2e-support";
 
 declare global {
   interface Window {
-    openbotPage?: { displayMode: "inline" | "fullscreen" };
+    codebotPage?: { displayMode: "inline" | "fullscreen" };
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/chat-visual-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/chat-visual-e2e");
 const UI_WAIT_MS = 30_000;
 const TITLE = "Plan picker";
 const PICK_TEXT = "I pick plan B.";
@@ -34,8 +34,8 @@ const draw = canvas.getContext("2d");
 draw.fillStyle = "gray"; draw.fillRect(20, 40, 60, 80); draw.fillRect(110, 10, 60, 110);
 document.getElementById("chart").src = canvas.toDataURL("image/png");
 document.getElementById("count").onclick = (event) => { count += 1; event.currentTarget.textContent = "Count: " + count; };
-document.getElementById("pick").onclick = () => openbotPage.sendMessage(${JSON.stringify(PICK_TEXT)});
-document.getElementById("context").onclick = () => openbotPage.setContext("The counter shows " + count + ".");
+document.getElementById("pick").onclick = () => codebotPage.sendMessage(${JSON.stringify(PICK_TEXT)});
+document.getElementById("context").onclick = () => codebotPage.setContext("The counter shows " + count + ".");
 </script></body></html>`;
 const VISUAL_PROMPT = `Call the html_render tool once with the title "${TITLE}" and exactly this HTML, with no change: ${PAGE} Then reply with DONE only.`;
 const english = translateFor("en");
@@ -138,7 +138,7 @@ try {
   assert.ok(agent, agentId ? `No visible agent has the id ${agentId}.` : "This check needs one visible agent.");
   const providerId = argument("provider");
   if (providerId && providerId !== agent.provider) {
-    const models = await desktop.evaluate(() => window.openbot.agent.listModels());
+    const models = await desktop.evaluate(() => window.codebot.agent.listModels());
     const target = models.find((model) => model.provider === providerId);
     assert.ok(target && isAgentProvider(target.provider), `No model of ${providerId} is available. Sign in first.`);
     restore = agent;
@@ -177,7 +177,7 @@ try {
   await waitFor(
     desktop,
     "the page has the full-screen size",
-    () => inlineCounter.evaluate(() => window.openbotPage?.displayMode === "fullscreen" && window.innerWidth > 720),
+    () => inlineCounter.evaluate(() => window.codebotPage?.displayMode === "fullscreen" && window.innerWidth > 720),
     Boolean,
     UI_WAIT_MS,
   );

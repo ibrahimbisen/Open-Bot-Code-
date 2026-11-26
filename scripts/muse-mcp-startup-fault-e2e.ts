@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
 import { refusedSessionFailure } from "../src/backend/agent/thread-items";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MuseAgentClient } from "../src/backend/muse-client";
@@ -10,7 +10,7 @@ import { type AppServerNotification, getString, isRecord } from "../src/backend/
 
 const museArg = process.argv.slice(2).find((arg) => arg.startsWith("--muse="));
 const executable = museArg ? museArg.slice(7) : join(process.env.HOME ?? "", ".local/bin/muse");
-const out = resolve(import.meta.dirname, "../.openbot-build/muse-mcp-startup-fault-e2e");
+const out = resolve(import.meta.dirname, "../.codebot-build/muse-mcp-startup-fault-e2e");
 const turnDeadlineMs = 180_000;
 
 interface Step {
@@ -140,7 +140,7 @@ async function run(name: string, cwd: string, servers: McpServerConfig[]): Promi
 
 let root: string | undefined;
 try {
-  root = await realpath(await mkdtemp(join(tmpdir(), "openbot-muse-mcp-fault-")));
+  root = await realpath(await mkdtemp(join(tmpdir(), "codebot-muse-mcp-fault-")));
   const cwd = join(root, "workspace");
   await mkdir(cwd);
   const skipped = await run("broken-optional-app", cwd, [brokenServer()]);

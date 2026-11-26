@@ -1,11 +1,11 @@
-import type { RemoteAuthEvent } from "@openbot/contracts/signal-protocol/auth-events";
+import type { RemoteAuthEvent } from "@codebot/contracts/signal-protocol/auth-events";
 import {
   DISCORD_UPLOAD_BYTES_LIMIT,
   type DiscordApiErrorBody,
   type DiscordApiErrorCode,
   type DiscordApiRequest,
-} from "@openbot/contracts/signal-protocol/discord-api";
-import { DISCORD_API_PATH } from "@openbot/contracts/signal-protocol/discord-route";
+} from "@codebot/contracts/signal-protocol/discord-api";
+import { DISCORD_API_PATH } from "@codebot/contracts/signal-protocol/discord-route";
 import {
   GITHUB_DELIVERY_BODY_BYTES_LIMIT,
   GITHUB_DELIVERY_HEADER,
@@ -15,12 +15,12 @@ import {
   GITHUB_EVENTS_PATH,
   GITHUB_SIGNATURE_HEADER,
   GITHUB_SIGNATURE_PATTERN,
-} from "@openbot/contracts/signal-protocol/github-route";
+} from "@codebot/contracts/signal-protocol/github-route";
 import {
   WEBHOOK_DELIVERY_BODY_BYTES_LIMIT,
   type WebhookDeliveryStatus,
-} from "@openbot/contracts/signal-protocol/messages";
-import { SLACK_EVENTS_PATH } from "@openbot/contracts/signal-protocol/slack-route";
+} from "@codebot/contracts/signal-protocol/messages";
+import { SLACK_EVENTS_PATH } from "@codebot/contracts/signal-protocol/slack-route";
 import {
   TELEGRAM_BOT_ID_PATTERN,
   TELEGRAM_CHAT_ID_PATTERN,
@@ -31,7 +31,7 @@ import {
   TELEGRAM_UPDATES_PATH,
   TELEGRAM_UPLOADS_PATH,
   type TelegramUploadAnswer,
-} from "@openbot/contracts/signal-protocol/telegram-route";
+} from "@codebot/contracts/signal-protocol/telegram-route";
 import {
   STANDARD_WEBHOOK_HEADER_SETS,
   STANDARD_WEBHOOK_SIGNATURE_PATTERN,
@@ -45,7 +45,7 @@ import {
   WEBHOOK_TIMESTAMP_HEADER,
   WEBHOOK_TIMESTAMP_PATTERN,
   type WebhookSignatureFormat,
-} from "@openbot/contracts/signal-protocol/webhook-route";
+} from "@codebot/contracts/signal-protocol/webhook-route";
 import { Effect, type ManagedRuntime, Result } from "effect";
 import { Elysia } from "elysia";
 import { z } from "zod";
@@ -171,19 +171,19 @@ export function createRemoteApiApp(
   discordApi: () => DiscordApi | null = () => null,
 ) {
   const app = new Elysia()
-    .get("/health/live", () => ({ service: "openbot-remote-api", status: "live", commit: config.sourceCommit }))
-    .get("/health/ready", () => ({ service: "openbot-remote-api", status: "ready" }))
+    .get("/health/live", () => ({ service: "codebot-remote-api", status: "live", commit: config.sourceCommit }))
+    .get("/health/ready", () => ({ service: "codebot-remote-api", status: "ready" }))
     .get("/health/turn", async ({ set }) => {
       const result = await runtime.runPromise(turnRelays.localProbe.pipe(Effect.result));
-      if (Result.isSuccess(result)) return { service: "openbot-turn", status: "ready" };
+      if (Result.isSuccess(result)) return { service: "codebot-turn", status: "ready" };
       set.status = 503;
       return result.failure.reason === "full"
         ? { error: { code: "turn_full", message: "The TURN relay has no free allocation." } }
         : { error: { code: "turn_unavailable", message: "The TURN relay did not allocate a relay address." } };
     })
     .post("/internal/auth-events", async ({ request, set }) => {
-      const timestamp = request.headers.get("OpenBot-Timestamp") ?? "";
-      const signature = request.headers.get("OpenBot-Signature") ?? "";
+      const timestamp = request.headers.get("CodeBot-Timestamp") ?? "";
+      const signature = request.headers.get("CodeBot-Signature") ?? "";
       const bytes = await readBody(request, AUTH_EVENT_BODY_BYTES_LIMIT);
       if (!bytes) {
         set.status = 413;
@@ -767,62 +767,62 @@ export function prometheusMetrics(signal: SignalService, turnRelays: TurnRelays,
   return [
     ...(entry.enabled
       ? [
-          "# TYPE openbot_remote_signal_entry gauge",
-          `openbot_remote_signal_entry${entryLabel} ${entry.isEntry ? 1 : 0}`,
+          "# TYPE codebot_remote_signal_entry gauge",
+          `codebot_remote_signal_entry${entryLabel} ${entry.isEntry ? 1 : 0}`,
         ]
       : []),
-    "# TYPE openbot_remote_turn_relay_available gauge",
-    ...relays.map((relay) => `openbot_remote_turn_relay_available{host="${relay.host}"} ${relay.available ? 1 : 0}`),
-    "# TYPE openbot_remote_signal_sockets gauge",
-    `openbot_remote_signal_sockets ${metrics.activeSockets}`,
-    "# TYPE openbot_remote_peer_connections gauge",
-    `openbot_remote_peer_connections ${metrics.activePeerConnections}`,
-    "# TYPE openbot_remote_signal_messages_total counter",
-    `openbot_remote_signal_messages_total ${metrics.relayedMessages}`,
-    "# TYPE openbot_remote_auth_failures_total counter",
-    `openbot_remote_auth_failures_total ${metrics.authenticationFailures}`,
-    "# TYPE openbot_remote_auth_unavailable_total counter",
-    `openbot_remote_auth_unavailable_total ${metrics.authenticationUnavailable}`,
-    "# TYPE openbot_remote_protocol_failures_total counter",
-    `openbot_remote_protocol_failures_total ${metrics.protocolFailures}`,
-    "# TYPE openbot_remote_slack_deliveries_total counter",
-    `openbot_remote_slack_deliveries_total ${metrics.slackDeliveries}`,
-    "# TYPE openbot_remote_slack_deliveries_unavailable_total counter",
-    `openbot_remote_slack_deliveries_unavailable_total ${metrics.slackDeliveriesUnavailable}`,
-    "# TYPE openbot_remote_webhook_answers_total counter",
+    "# TYPE codebot_remote_turn_relay_available gauge",
+    ...relays.map((relay) => `codebot_remote_turn_relay_available{host="${relay.host}"} ${relay.available ? 1 : 0}`),
+    "# TYPE codebot_remote_signal_sockets gauge",
+    `codebot_remote_signal_sockets ${metrics.activeSockets}`,
+    "# TYPE codebot_remote_peer_connections gauge",
+    `codebot_remote_peer_connections ${metrics.activePeerConnections}`,
+    "# TYPE codebot_remote_signal_messages_total counter",
+    `codebot_remote_signal_messages_total ${metrics.relayedMessages}`,
+    "# TYPE codebot_remote_auth_failures_total counter",
+    `codebot_remote_auth_failures_total ${metrics.authenticationFailures}`,
+    "# TYPE codebot_remote_auth_unavailable_total counter",
+    `codebot_remote_auth_unavailable_total ${metrics.authenticationUnavailable}`,
+    "# TYPE codebot_remote_protocol_failures_total counter",
+    `codebot_remote_protocol_failures_total ${metrics.protocolFailures}`,
+    "# TYPE codebot_remote_slack_deliveries_total counter",
+    `codebot_remote_slack_deliveries_total ${metrics.slackDeliveries}`,
+    "# TYPE codebot_remote_slack_deliveries_unavailable_total counter",
+    `codebot_remote_slack_deliveries_unavailable_total ${metrics.slackDeliveriesUnavailable}`,
+    "# TYPE codebot_remote_webhook_answers_total counter",
     ...WEBHOOK_ANSWER_STATUSES.map(
-      (status) => `openbot_remote_webhook_answers_total{status="${status}"} ${metrics.webhookAnswers[status]}`,
+      (status) => `codebot_remote_webhook_answers_total{status="${status}"} ${metrics.webhookAnswers[status]}`,
     ),
-    "# TYPE openbot_remote_webhook_waits_total counter",
-    `openbot_remote_webhook_waits_total ${metrics.webhookWaits}`,
-    "# TYPE openbot_remote_webhook_wait_milliseconds_total counter",
-    `openbot_remote_webhook_wait_milliseconds_total ${metrics.webhookWaitMilliseconds}`,
-    "# TYPE openbot_remote_webhook_slow_waits_total counter",
-    `openbot_remote_webhook_slow_waits_total ${metrics.webhookSlowWaits}`,
-    "# TYPE openbot_remote_github_deliveries_total counter",
-    `openbot_remote_github_deliveries_total ${metrics.githubDeliveries}`,
-    "# TYPE openbot_remote_github_deliveries_unavailable_total counter",
-    `openbot_remote_github_deliveries_unavailable_total ${metrics.githubDeliveriesUnavailable}`,
-    "# TYPE openbot_remote_telegram_deliveries_total counter",
-    `openbot_remote_telegram_deliveries_total ${metrics.telegramDeliveries}`,
-    "# TYPE openbot_remote_telegram_deliveries_unrouted_total counter",
-    `openbot_remote_telegram_deliveries_unrouted_total ${metrics.telegramDeliveriesUnrouted}`,
-    "# TYPE openbot_remote_telegram_calls_total counter",
-    `openbot_remote_telegram_calls_total ${metrics.telegramCalls}`,
-    "# TYPE openbot_remote_telegram_calls_refused_total counter",
-    `openbot_remote_telegram_calls_refused_total ${metrics.telegramCallsRefused}`,
-    "# TYPE openbot_remote_queued_deliveries_total counter",
-    `openbot_remote_queued_deliveries_total ${metrics.queuedDeliveries}`,
-    "# TYPE openbot_remote_queued_deliveries_flushed_total counter",
-    `openbot_remote_queued_deliveries_flushed_total ${metrics.queuedDeliveriesFlushed}`,
-    "# TYPE openbot_remote_discord_deliveries_total counter",
-    `openbot_remote_discord_deliveries_total ${metrics.discordDeliveries}`,
-    "# TYPE openbot_remote_discord_deliveries_unavailable_total counter",
-    `openbot_remote_discord_deliveries_unavailable_total ${metrics.discordDeliveriesUnavailable}`,
-    "# TYPE openbot_remote_discord_api_calls_total counter",
-    `openbot_remote_discord_api_calls_total ${metrics.discordApiCalls}`,
-    "# TYPE openbot_remote_discord_api_failures_total counter",
-    `openbot_remote_discord_api_failures_total ${metrics.discordApiFailures}`,
+    "# TYPE codebot_remote_webhook_waits_total counter",
+    `codebot_remote_webhook_waits_total ${metrics.webhookWaits}`,
+    "# TYPE codebot_remote_webhook_wait_milliseconds_total counter",
+    `codebot_remote_webhook_wait_milliseconds_total ${metrics.webhookWaitMilliseconds}`,
+    "# TYPE codebot_remote_webhook_slow_waits_total counter",
+    `codebot_remote_webhook_slow_waits_total ${metrics.webhookSlowWaits}`,
+    "# TYPE codebot_remote_github_deliveries_total counter",
+    `codebot_remote_github_deliveries_total ${metrics.githubDeliveries}`,
+    "# TYPE codebot_remote_github_deliveries_unavailable_total counter",
+    `codebot_remote_github_deliveries_unavailable_total ${metrics.githubDeliveriesUnavailable}`,
+    "# TYPE codebot_remote_telegram_deliveries_total counter",
+    `codebot_remote_telegram_deliveries_total ${metrics.telegramDeliveries}`,
+    "# TYPE codebot_remote_telegram_deliveries_unrouted_total counter",
+    `codebot_remote_telegram_deliveries_unrouted_total ${metrics.telegramDeliveriesUnrouted}`,
+    "# TYPE codebot_remote_telegram_calls_total counter",
+    `codebot_remote_telegram_calls_total ${metrics.telegramCalls}`,
+    "# TYPE codebot_remote_telegram_calls_refused_total counter",
+    `codebot_remote_telegram_calls_refused_total ${metrics.telegramCallsRefused}`,
+    "# TYPE codebot_remote_queued_deliveries_total counter",
+    `codebot_remote_queued_deliveries_total ${metrics.queuedDeliveries}`,
+    "# TYPE codebot_remote_queued_deliveries_flushed_total counter",
+    `codebot_remote_queued_deliveries_flushed_total ${metrics.queuedDeliveriesFlushed}`,
+    "# TYPE codebot_remote_discord_deliveries_total counter",
+    `codebot_remote_discord_deliveries_total ${metrics.discordDeliveries}`,
+    "# TYPE codebot_remote_discord_deliveries_unavailable_total counter",
+    `codebot_remote_discord_deliveries_unavailable_total ${metrics.discordDeliveriesUnavailable}`,
+    "# TYPE codebot_remote_discord_api_calls_total counter",
+    `codebot_remote_discord_api_calls_total ${metrics.discordApiCalls}`,
+    "# TYPE codebot_remote_discord_api_failures_total counter",
+    `codebot_remote_discord_api_failures_total ${metrics.discordApiFailures}`,
     "",
   ].join("\n");
 }

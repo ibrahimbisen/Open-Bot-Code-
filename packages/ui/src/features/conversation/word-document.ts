@@ -1,4 +1,4 @@
-import { unzipOfficeXml } from "@openbot/contracts/office-zip";
+import { unzipOfficeXml } from "@codebot/contracts/office-zip";
 
 const WORD_DOCUMENT_MAX_BLOCKS = 5000;
 const MAX_STYLE_DEPTH = 16;

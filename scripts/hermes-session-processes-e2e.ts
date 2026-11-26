@@ -8,8 +8,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AppServerNotification, type AppServerRequest, getString, isRecord } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 
-const out = resolve(import.meta.dirname, "../.openbot-build/hermes-session-processes-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-hermes-processes-"));
+const out = resolve(import.meta.dirname, "../.codebot-build/hermes-session-processes-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-hermes-processes-"));
 
 const fixtureSource = String.raw`
 const fs = require("node:fs");
@@ -23,8 +23,8 @@ const processServers = new Map();
 let opened = 0;
 log({ event: "start" });
 async function callWhoami(sessionId) {
-  const own = sessions.get(sessionId).find((server) => server.name === "openbot");
-  const server = sharing === "process" ? processServers.get("openbot") : own;
+  const own = sessions.get(sessionId).find((server) => server.name === "codebot");
+  const server = sharing === "process" ? processServers.get("codebot") : own;
   const { Client } = await import(pathToFileURL(clientPath).href);
   const { StreamableHTTPClientTransport } = await import(pathToFileURL(transportPath).href);
   const headers = Object.fromEntries(server.headers.map((header) => [header.name, header.value]));
@@ -72,7 +72,7 @@ lines.on("line", (line) => {
 
 const whoamiTools = {
   type: "namespace",
-  name: "openbot",
+  name: "codebot",
   tools: [{ type: "function", name: "whoami", inputSchema: { type: "object", properties: {} } }],
 };
 

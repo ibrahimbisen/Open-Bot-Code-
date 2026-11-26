@@ -1,11 +1,11 @@
 import { chmodSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Schema } from "effect";
 
-const logger = createOpenBotLogger("umbrel-app");
+const logger = createCodeBotLogger("umbrel-app");
 const ROOT = resolve(import.meta.dirname, "..");
-const TEMPLATE = join(ROOT, "docker/umbrel/openbot");
+const TEMPLATE = join(ROOT, "docker/umbrel/codebot");
 const IMAGE = "nightly-labs/openbot";
 const decodePullToken = Schema.decodeUnknownSync(Schema.fromJsonString(Schema.Struct({ token: Schema.String })));
 const INDEX_TYPES = [
@@ -18,16 +18,16 @@ if (!version || !/^\d+\.\d+\.\d+$/u.test(version)) {
   throw new Error("Give the release as --version <x.y.z>.");
 }
 const official = process.argv.includes("--official");
-const appId = argument("id") ?? "openbot";
-if (official && appId !== "openbot") throw new Error("The official app has the id openbot. Remove --id.");
+const appId = argument("id") ?? "codebot";
+if (official && appId !== "codebot") throw new Error("The official app has the id codebot. Remove --id.");
 const submission = argument("submission") ?? "";
 if (submission && !/^https:\/\/github\.com\/getumbrel\/umbrel-apps\/pull\/\d+$/u.test(submission)) {
   throw new Error("Give --submission as the URL of a pull request to getumbrel/umbrel-apps.");
 }
 if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/u.test(appId)) {
-  throw new Error("Give the app id as lowercase letters, digits and dashes, such as --id openbot-server.");
+  throw new Error("Give the app id as lowercase letters, digits and dashes, such as --id codebot-server.");
 }
-const out = resolve(ROOT, argument("out") ?? `.openbot-build/umbrel/${appId}`);
+const out = resolve(ROOT, argument("out") ?? `.codebot-build/umbrel/${appId}`);
 
 const notAppFolder = existsSync(out) && readdirSync(out).length > 0 && !existsSync(join(out, "umbrel-app.yml"));
 if (out === TEMPLATE || notAppFolder) {

@@ -2,7 +2,7 @@ import {
   type ChatBackdropCells,
   type ChatBackdropScene,
   paintChatBackdropScene,
-} from "@openbot/brand/chat-backdrop-scenes";
+} from "@codebot/brand/chat-backdrop-scenes";
 import { Canvas, createPicture, Picture, type SkColor, Skia, type SkPicture } from "@shopify/react-native-skia";
 import { useEffect, useRef, useState } from "react";
 import { type LayoutChangeEvent, View } from "react-native";

@@ -1,6 +1,6 @@
-import type { NearOwnerAction } from "@openbot/contracts/ipc";
-import type { WebMessagingInstallPlatform } from "@openbot/contracts/web-messaging-install";
-import type { AppTranslate } from "@openbot/i18n";
+import type { NearOwnerAction } from "@codebot/contracts/ipc";
+import type { WebMessagingInstallPlatform } from "@codebot/contracts/web-messaging-install";
+import type { AppTranslate } from "@codebot/i18n";
 import { DOWNLOAD_PLATFORMS, type DownloadPlatform } from "../../lib/download-platforms";
 import type { NearSignFailure } from "../../lib/near-sign-actions";
 import type { FailureKind } from "./MessagingConnectPage";

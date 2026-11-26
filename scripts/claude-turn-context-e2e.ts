@@ -4,7 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, defaultProviderModel } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { isTurnContextBlock } from "../src/backend/agent/developer-instructions";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
@@ -14,8 +14,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-turn-context-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-claude-turn-context-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-turn-context-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-claude-turn-context-"));
 const home = join(root, "home");
 const messageLog = join(root, "claude-messages.jsonl");
 const claudeExecutable = join(root, "claude");
@@ -25,7 +25,7 @@ const memoryText = (index: number) =>
   `Fact ${index}: ${"The user ships each release on Friday after a tested database backup. ".repeat(4)}`;
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -33,7 +33,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
 const fs = require("node:fs");
@@ -232,13 +232,13 @@ function logged(): LoggedMessage[] {
 
 function describe(name: string, message: LoggedMessage): TurnReport {
   const context = message.blocks.filter(isTurnContextBlock);
-  const memory = context.find((block) => block.startsWith("<openbot_saved_memories"));
+  const memory = context.find((block) => block.startsWith("<codebot_saved_memories"));
   return {
     name,
     resumed: message.resume !== null,
     sessionId: message.sessionId,
     contextCharacters: context.reduce((total, block) => total + block.length, 0),
-    memoryBlock: !memory ? null : memory.startsWith("<openbot_saved_memories_update>") ? "update" : "full",
+    memoryBlock: !memory ? null : memory.startsWith("<codebot_saved_memories_update>") ? "update" : "full",
   };
 }
 
@@ -246,7 +246,7 @@ await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
 
 async function run(release: "before" | "after"): Promise<void> {
   const userData = join(root, `user-data-${release}`);
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const agents = new AgentService({

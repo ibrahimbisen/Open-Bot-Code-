@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 import { z } from "zod";
 import { create } from "zustand";
 
-const key = "openbot.mobile.location-always-allowed.v1";
+const key = "codebot.mobile.location-always-allowed.v1";
 const VALUE_LIMIT = 2048;
 
 const allowedSchema = z.array(z.string().min(1));

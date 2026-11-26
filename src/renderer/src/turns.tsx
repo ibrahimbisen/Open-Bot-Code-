@@ -10,10 +10,10 @@ import type {
   MediaApprovalRead,
   QueueSnapshot,
   RoutineFields,
-} from "@openbot/contracts/ipc";
-import type { AgentActiveQueues } from "@openbot/contracts/team-protocol/agent-active-queues-v1";
-import { approvalIsCut, withWholeApproval } from "@openbot/team-client/runtime-attention";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import type { AgentActiveQueues } from "@codebot/contracts/team-protocol/agent-active-queues-v1";
+import { approvalIsCut, withWholeApproval } from "@codebot/team-client/runtime-attention";
+import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, createStore, untrack } from "solid-js";
 import { desktopAnalytics } from "./analytics";
 import { useAnsweredPrompts } from "./answered-prompts";

@@ -1,6 +1,6 @@
-import { COMPUTER_USE_MCP_SERVER_NAME, isReservedMcpServerName } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { COMPUTER_USE_MCP_SERVER_NAME, isReservedMcpServerName } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Semaphore } from "effect";
 import type { AgentClient } from "../agent-client";
 import {
@@ -87,7 +87,7 @@ function plainKeyPlaceholders(saved: DynamicRecord | null, own: CodexOwnTranspor
     const entry = getRecord(saved, name);
     const placeholder =
       entry?.enabled === false && (entry.url === CODEX_PLACEHOLDER_URL || entry.command === CODEX_PLACEHOLDER_COMMAND);
-    const renamed = `openbot_${name}`;
+    const renamed = `codebot_${name}`;
     if (!placeholder || name.startsWith("openbot_") || name === COMPUTER_USE_MCP_SERVER_NAME) return [];
     return Object.hasOwn(own, renamed) || isReservedMcpServerName(renamed) ? [] : [[name, renamed]];
   });

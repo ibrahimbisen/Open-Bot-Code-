@@ -1,5 +1,5 @@
-import { type AgentReasoningEffort, canAdministerServer, type WorkflowNode } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import { type AgentReasoningEffort, canAdministerServer, type WorkflowNode } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { useQuery } from "@tanstack/react-query";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
@@ -88,7 +88,7 @@ function TextField({
 
 function AgentChoice({ node, agents }: { node: WorkflowNode; agents: readonly MobileAgent[] }) {
   const { t } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const setFields = useWorkflowDraft((state) => state.setFields);
   const selected = fieldText(node, "agentId");
   return (
@@ -210,7 +210,7 @@ const TARGET_DEFAULTS = {
 
 function OutputChoice({ node, draft }: { node: WorkflowNode; draft: WorkflowDraft }) {
   const { t } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const setFields = useWorkflowDraft((state) => state.setFields);
   const admin = useMobileWorkspaceSelector((current) =>
     canAdministerServer(current.servers.find((server) => server.id === draft.serverId)?.role),

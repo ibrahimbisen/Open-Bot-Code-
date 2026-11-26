@@ -7,9 +7,9 @@ import { Effect } from "effect";
 const NODE_IMAGE = "node:24-slim";
 const BUN_IMAGE = "oven/bun:1.4.2";
 const root = resolve(import.meta.dirname, "..");
-const reportRoot = join(root, ".openbot-build/instance-resource-guard-e2e");
+const reportRoot = join(root, ".codebot-build/instance-resource-guard-e2e");
 const INSIDE = "--inside";
-const WAKE_FILE = "/tmp/openbot-e2e-wake";
+const WAKE_FILE = "/tmp/codebot-e2e-wake";
 interface CheckResult {
   name: string;
   ok: boolean;

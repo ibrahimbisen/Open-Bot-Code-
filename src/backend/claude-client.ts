@@ -24,14 +24,14 @@ import {
   type SpawnOptions,
   tool,
 } from "@anthropic-ai/claude-agent-sdk";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { type AgentContextCategoryUsage, agentProviderName, defaultProviderModel } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
+import { classifyFailure } from "@codebot/telemetry";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { type AgentContextCategoryUsage, agentProviderName, defaultProviderModel } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
-import { classifyFailure } from "@openbot/telemetry";
 import { Deferred, Effect, Exit, Fiber, Option, Scope } from "effect";
 import { z } from "zod";
 import { advertisedZodShape } from "./agent/advertised-json-schema";
@@ -78,7 +78,7 @@ import {
   ProviderTurnActiveError,
   RequestTimeoutError,
 } from "./agent-client";
-import { OPENBOT_BROWSER_NAMESPACE } from "./browser-tools";
+import { CODEBOT_BROWSER_NAMESPACE } from "./browser-tools";
 import { CHANNEL_TOOL_DEFINITIONS } from "./channel-tools";
 import { claudeContextCategories } from "./claude-context-categories";
 import {
@@ -301,17 +301,17 @@ function isClaudeAutoToolSearch(value: string | undefined): boolean {
 const TOOL_DESCRIPTION_LIMIT = 120;
 const LABELLED_TOOLS: ReadonlySet<string> = new Set(["Bash", "Task", "Agent"]);
 
-const OPENBOT_CLAUDE_CLIENT = {
-  CLAUDE_AGENT_SDK_CLIENT_APP: "openbot/0.1.0",
+const CODEBOT_CLAUDE_CLIENT = {
+  CLAUDE_AGENT_SDK_CLIENT_APP: "codebot/0.1.0",
   CLAUDE_CODE_ARTIFACT: "0",
-  CLAUDE_CODE_ENTRYPOINT: "openbot",
+  CLAUDE_CODE_ENTRYPOINT: "codebot",
   CLAUDE_CODE_SILENT_TURN_REMINDER: "0",
 };
 const CLAUDE_TERMINAL_CHANNEL_TOOLS: readonly string[] = [
-  "mcp__openbot__channel_result",
-  "mcp__openbot__channel_reply",
+  "mcp__codebot__channel_result",
+  "mcp__codebot__channel_reply",
 ];
-const CLAUDE_TERMINAL_NO_UPDATE_TOOL = `mcp__openbot__${ROUTINE_NO_UPDATE_TOOL}`;
+const CLAUDE_TERMINAL_NO_UPDATE_TOOL = `mcp__codebot__${ROUTINE_NO_UPDATE_TOOL}`;
 
 function claudeTerminalTools(channelTools: boolean): readonly string[] {
   return channelTools
@@ -320,7 +320,7 @@ function claudeTerminalTools(channelTools: boolean): readonly string[] {
 }
 
 function terminalToolRefusal(namespace: string, name: string, content: CallToolResult["content"]): boolean {
-  if (namespace !== "openbot" || !claudeTerminalTools(true).includes(`mcp__openbot__${name}`)) return false;
+  if (namespace !== "codebot" || !claudeTerminalTools(true).includes(`mcp__codebot__${name}`)) return false;
   const [first] = content;
   if (first?.type !== "text") return false;
   try {
@@ -334,12 +334,12 @@ function terminalToolRefusal(namespace: string, name: string, content: CallToolR
 function withClaudeClientLabels(environment: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
   return {
     ...environment,
-    ...OPENBOT_CLAUDE_CLIENT,
+    ...CODEBOT_CLAUDE_CLIENT,
     ...(environment.ANTHROPIC_API_KEY ? { CLAUDE_CODE_ENTRYPOINT: "sdk-ts" } : {}),
   };
 }
 const CLAUDE_MCP_USER_AGENT = "claude-code-mcp-client";
-const CLAUDE_SESSION_TITLE = "OpenBot";
+const CLAUDE_SESSION_TITLE = "CodeBot";
 
 interface ClientEvents {
   notification: [notification: AppServerNotification];
@@ -527,10 +527,10 @@ function lostBackgroundTaskLine(task: ClaudeBackgroundTask): string {
 function lostBackgroundWorkNote(tasks: readonly ClaudeBackgroundTask[]): string {
   return [
     `<${LOST_BACKGROUND_WORK_TAG}>`,
-    "OpenBot note, not a message from the user. Your Claude Code process exited unexpectedly while this chat was idle. This background work stopped, or it ended but its result did not reach you, and it does not report back on its own:",
+    "CodeBot note, not a message from the user. Your Claude Code process exited unexpectedly while this chat was idle. This background work stopped, or it ended but its result did not reach you, and it does not report back on its own:",
     ...tasks.map(lostBackgroundTaskLine),
     "Tell the user in one short line what stopped. Then resume or restart only the work that the user's request still needs, and wait for its result. A step possibly finished before the stop: check its result before you do it again. This note does not approve a risky action.",
-    "Write each line for the user in the language of the user's chat messages, not in the language of OpenBot notes or other agents.",
+    "Write each line for the user in the language of the user's chat messages, not in the language of CodeBot notes or other agents.",
     `</${LOST_BACKGROUND_WORK_TAG}>`,
   ].join("\n");
 }
@@ -607,7 +607,7 @@ type QueryFactory = (params: Parameters<typeof query>[0]) => ClaudeQuery;
 type SessionHistoryReader = (sessionId: string, options?: { dir?: string }) => Promise<SessionMessage[]>;
 type ClaudeEffortCapability = { supported: ClaudeEffort[]; defaultEffort: ClaudeEffort } | null;
 
-const queryLogger = createOpenBotLogger("claude-query");
+const queryLogger = createCodeBotLogger("claude-query");
 const lastAuthStatuses = new Map<string, DynamicRecord>();
 
 function claudeSettingSources(
@@ -626,7 +626,7 @@ const readClaudeSettingsFile = Effect.fn("readClaudeSettingsFile")(function* (pa
   try {
     parsed = JSON.parse(text.value);
   } catch {
-    queryLogger.warn("OpenBot reads no values from a Claude settings file: the file is not valid JSON.", { path });
+    queryLogger.warn("CodeBot reads no values from a Claude settings file: the file is not valid JSON.", { path });
     return {};
   }
   const record: DynamicRecord = isDynamicRecord(parsed) ? parsed : {};
@@ -883,7 +883,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
 
   #emitBackgroundWork(runtime: ThreadRuntime, closed = false): void {
     this.emit("notification", {
-      method: "openbot/background-work",
+      method: "codebot/background-work",
       params: {
         threadId: runtime.id,
         running: runtime.backgroundTasks > 0,
@@ -1004,7 +1004,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     if (stopped) return;
     for (const turnId of new Set(unread.map((steer) => steer.turnId)))
       this.emit("notification", {
-        method: "openbot/unread-steers",
+        method: "codebot/unread-steers",
         params: {
           threadId: runtime.id,
           turnId,
@@ -1587,7 +1587,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         : null;
     const plugins = [skillPlugin, homeSkillPlugin].filter((plugin) => plugin !== null);
     const launchPath = yield* cliLaunchPath(this.#cli.executable, this.#cli.source);
-    const openBotServers = handoff ? this.#createOpenBotServers(threadId, config.channelTools) : {};
+    const codeBotServers = handoff ? this.#createCodeBotServers(threadId, config.channelTools) : {};
     const nodeOptions = this.#agentEnvironment?.().NODE_OPTIONS;
     const mcpConfigFile =
       handoff && stateDirectory && Object.keys(handoff.servers).length > 0
@@ -1608,7 +1608,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       ...this.#environment(this.#onApiKey),
     };
     const {
-      settings: openBotSettings,
+      settings: codeBotSettings,
       firstPartyApi,
       customApiHost,
     } = config.profileGeneration
@@ -1630,10 +1630,10 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
           config.excludedInstructionFiles,
         );
     const flagSettings: Settings = {
-      ...openBotSettings,
+      ...codeBotSettings,
       ...nodeOptionsSettings,
-      ...(openBotSettings.env || nodeOptionsSettings.env
-        ? { env: { ...openBotSettings.env, ...nodeOptionsSettings.env } }
+      ...(codeBotSettings.env || nodeOptionsSettings.env
+        ? { env: { ...codeBotSettings.env, ...nodeOptionsSettings.env } }
         : {}),
     };
     const sandbox = config.workspaceOnly
@@ -1644,8 +1644,8 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         ? stateDirectory
           ? yield* writeClaudeFlagSettings(stateDirectory, threadId, {
               ...signInSettings,
-              ...openBotSettings,
-              env: { ...signInSettings.env, ...openBotSettings.env, ...nodeOptionsSettings.env },
+              ...codeBotSettings,
+              env: { ...signInSettings.env, ...codeBotSettings.env, ...nodeOptionsSettings.env },
               ...(sandbox ? { sandbox } : {}),
             }).pipe(
               Effect.catch((error) =>
@@ -1665,7 +1665,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       return yield* providerFailure(new Error("Claude Agent SDK is not running."));
     }
     if (handoff) this.#reportMcpDrops?.(this.provider, handoff.dropped);
-    const mcpServers = handoff ? { ...(mcpConfigFile ? {} : handoff.servers), ...openBotServers } : {};
+    const mcpServers = handoff ? { ...(mcpConfigFile ? {} : handoff.servers), ...codeBotServers } : {};
     const extraArgs: Record<string, string | null> = {
       ...(claudeTakesPromptSnapshotFlag(this.#cli.version) ? { "system-prompt-snapshot": "off" } : {}),
       ...(mcpConfigFile ? { "mcp-config": mcpConfigFile } : {}),
@@ -1961,7 +1961,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         );
     } else if (turn.unprompted && origin !== turn.id)
       this.emit("notification", {
-        method: "openbot/turn-continues",
+        method: "codebot/turn-continues",
         params: { threadId: runtime.id, turnId: turn.id, continues: origin },
       });
   }
@@ -2104,7 +2104,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
 
   #emitTurnProgress(runtime: ThreadRuntime, turn: ActiveTurn, detail: string): void {
     this.emit("notification", {
-      method: "openbot/turn-progress",
+      method: "codebot/turn-progress",
       params: { threadId: runtime.id, turnId: turn.id, detail },
     });
   }
@@ -2156,7 +2156,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
               : null;
       if (status) runtime.compacting = status === "running";
       if (status)
-        this.emit("notification", { method: "openbot/context-compaction", params: { threadId: runtime.id, status } });
+        this.emit("notification", { method: "codebot/context-compaction", params: { threadId: runtime.id, status } });
       return;
     }
     if (message.type === "system" && message.subtype === "api_retry") {
@@ -2233,7 +2233,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       runtime.compacting = false;
       this.#turnContext.resend(runtime.id);
       this.emit("notification", {
-        method: "openbot/context-compaction",
+        method: "codebot/context-compaction",
         params: {
           threadId: runtime.id,
           status: "completed",
@@ -2448,7 +2448,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       runtime.usageCost = message.total_cost_usd ?? runtime.usageCost;
     if (runtime.activeTurn && message.modelUsage) {
       this.emit("notification", {
-        method: "openbot/usage",
+        method: "codebot/usage",
         params: {
           threadId: runtime.id,
           turnId: runtime.activeTurn.id,
@@ -2602,8 +2602,8 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
   ): void {
     const turn = runtime.activeTurn;
     if (!turn) return;
-    const bridged = name === "mcp__openbot__tool_call" && isRecord(input) && input.name === "openbot.send_message";
-    const message = name === "mcp__openbot__send_message" ? input : bridged ? input.arguments : undefined;
+    const bridged = name === "mcp__codebot__tool_call" && isRecord(input) && input.name === "codebot.send_message";
+    const message = name === "mcp__codebot__send_message" ? input : bridged ? input.arguments : undefined;
     const recipients =
       isRecord(message) && Array.isArray(message.recipientAgentIds)
         ? { recipientAgentIds: message.recipientAgentIds }
@@ -2642,7 +2642,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
             : {}),
           ...(recipients === null
             ? {}
-            : { arguments: bridged ? { name: "openbot.send_message", arguments: recipients } : recipients }),
+            : { arguments: bridged ? { name: "codebot.send_message", arguments: recipients } : recipients }),
         },
       },
     });
@@ -2814,7 +2814,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     if (runtime.compacting && status !== "completed") {
       runtime.compacting = false;
       this.emit("notification", {
-        method: "openbot/context-compaction",
+        method: "codebot/context-compaction",
         params: { threadId: runtime.id, status: "failed" },
       });
     }
@@ -3001,20 +3001,20 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     return { thread: { id: threadId, turns } };
   });
 
-  #createOpenBotServers(threadId: string, channelTools: boolean) {
+  #createCodeBotServers(threadId: string, channelTools: boolean) {
     const call = (namespace: string, name: string, args: unknown) =>
       runCauseEffect(this.#callDynamicTool(threadId, namespace, name, args));
     return {
-      openbot: createSdkMcpServer({
-        name: "openbot",
+      codebot: createSdkMcpServer({
+        name: "codebot",
         version: "0.1.0",
-        tools: claudeOpenBotTools((name, args) => call("openbot", name, args), channelTools),
+        tools: claudeCodeBotTools((name, args) => call("codebot", name, args), channelTools),
       }),
-      [OPENBOT_BROWSER_NAMESPACE]: createSdkMcpServer({
-        name: OPENBOT_BROWSER_NAMESPACE,
+      [CODEBOT_BROWSER_NAMESPACE]: createSdkMcpServer({
+        name: CODEBOT_BROWSER_NAMESPACE,
         version: "0.1.0",
         alwaysLoad: true,
-        tools: claudeBrowserTools((name, args) => call(OPENBOT_BROWSER_NAMESPACE, name, args)),
+        tools: claudeBrowserTools((name, args) => call(CODEBOT_BROWSER_NAMESPACE, name, args)),
       }),
     };
   }
@@ -3212,7 +3212,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
 type ClaudeSdkLaunch = Pick<Options, "pathToClaudeCodeExecutable" | "spawnClaudeCodeProcess">;
 
 const BROWSER_PERSON_TOOLS: ReadonlySet<string> = new Set(
-  ["request_takeover", "submit_secret"].map((tool) => `mcp__${OPENBOT_BROWSER_NAMESPACE}__${tool}`),
+  ["request_takeover", "submit_secret"].map((tool) => `mcp__${CODEBOT_BROWSER_NAMESPACE}__${tool}`),
 );
 
 function waitsForBrowserPerson(namespace: string, name: string, args: unknown): boolean {
@@ -3243,13 +3243,13 @@ const writeClaudeFlagSettings = Effect.fn("ClaudeAgentClient.writeFlagSettings")
   return file;
 });
 
-export function claudeOpenBotTools(
+export function claudeCodeBotTools(
   call: (name: string, args: unknown) => Promise<CallToolResult>,
   channelTools = false,
 ) {
   const channel = channelTools
     ? CHANNEL_TOOL_DEFINITIONS.filter((definition) =>
-        CLAUDE_TERMINAL_CHANNEL_TOOLS.includes(`mcp__openbot__${definition.name}`),
+        CLAUDE_TERMINAL_CHANNEL_TOOLS.includes(`mcp__codebot__${definition.name}`),
       )
     : [];
   const claudeTool = (definition: (typeof channel)[number], extras?: { alwaysLoad: true }) =>

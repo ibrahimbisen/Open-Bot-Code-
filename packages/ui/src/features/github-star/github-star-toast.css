@@ -5,53 +5,53 @@
 .github-star-toast {
   position: relative;
   display: grid;
-  gap: var(--openbot-space-2);
-  padding: var(--openbot-space-4);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-surface-raised);
-  box-shadow: 0 0 0 1px var(--openbot-border);
-  color: var(--openbot-text-primary);
-  font-family: var(--openbot-font-sans);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  gap: var(--codebot-space-2);
+  padding: var(--codebot-space-4);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-surface-raised);
+  box-shadow: 0 0 0 1px var(--codebot-border);
+  color: var(--codebot-text-primary);
+  font-family: var(--codebot-font-sans);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
 }
 
 .github-star-toast:has(.github-star-toast-actions) {
-  padding-bottom: var(--openbot-space-2);
+  padding-bottom: var(--codebot-space-2);
 }
 
 .github-star-toast-head {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  padding-inline-end: var(--openbot-space-1);
+  gap: var(--codebot-space-2);
+  padding-inline-end: var(--codebot-space-1);
 }
 
 .github-star-toast-head > strong {
-  font-weight: var(--openbot-weight-semibold);
+  font-weight: var(--codebot-weight-semibold);
   text-wrap: balance;
 }
 
 .github-star-toast-mark {
-  width: var(--openbot-icon-lg);
-  height: var(--openbot-icon-lg);
+  width: var(--codebot-icon-lg);
+  height: var(--codebot-icon-lg);
   flex: none;
 }
 
 .github-star-toast-star {
-  color: var(--openbot-star-edge);
-  fill: var(--openbot-star);
+  color: var(--codebot-star-edge);
+  fill: var(--codebot-star);
 }
 
 .github-star-toast-body {
   margin: 0;
-  padding-inline-start: calc(var(--openbot-icon-lg) + var(--openbot-space-2));
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  padding-inline-start: calc(var(--codebot-icon-lg) + var(--codebot-space-2));
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   text-wrap: pretty;
 }
 
 .github-star-toast-actions {
-  margin-top: var(--openbot-space-1);
+  margin-top: var(--codebot-space-1);
 }

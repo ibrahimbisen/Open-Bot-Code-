@@ -7,7 +7,7 @@ import type {
   AgentDockInputRect,
   AgentDockPresentation,
   SetAgentDockInteractiveInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { agentDockIpcHandlers } from "./agent-dock-handlers";
@@ -94,7 +94,7 @@ const SEND: AgentDockAction = {
   clientMessageId: "draft-1",
 };
 
-function event(senderId: number, url = "openbot-app://app/helper.html?surface=agent-dock") {
+function event(senderId: number, url = "codebot-app://app/helper.html?surface=agent-dock") {
   return { senderFrame: { url }, sender: { id: senderId } };
 }
 

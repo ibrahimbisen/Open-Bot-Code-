@@ -1,5 +1,5 @@
-import { HelpMenu, type HelpMenuNews } from "@openbot/ui/features/updates/HelpMenu";
-import { whatsNewEntry } from "@openbot/ui/features/updates/whats-new";
+import { HelpMenu, type HelpMenuNews } from "@codebot/ui/features/updates/HelpMenu";
+import { whatsNewEntry } from "@codebot/ui/features/updates/whats-new";
 import { createSignal } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
 import { useI18n } from "../../i18n-context";

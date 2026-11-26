@@ -1,8 +1,8 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
-// Migration 33 adds what a routine does with the occurrences that came due while OpenBot was closed, and
+// Migration 33 adds what a routine does with the occurrences that came due while CodeBot was closed, and
 // the run columns that record those occurrences on one cancelled run. Frozen with the migration. The policy
 // goes after the migration 27 column. ADD COLUMN puts a run column before the UNIQUE constraint that ends
 // the run tables, so the latest schema puts the two run columns there as well.
@@ -31,7 +31,7 @@ function addRoutineMissedRuns(db: DatabaseSync): void {
   }
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 33,
   name: "routine-missed-runs",
   // Adds columns with a constant default or none to four tables: no rebuild, so no foreign-key pause and

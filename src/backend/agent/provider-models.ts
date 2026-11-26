@@ -1,6 +1,6 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentModelOption } from "@openbot/contracts/ipc";
-import { isFreeOpencodeModel, OPENCODE_RECOMMENDED_FREE_MODELS } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentModelOption } from "@codebot/contracts/ipc";
+import { isFreeOpencodeModel, OPENCODE_RECOMMENDED_FREE_MODELS } from "@codebot/contracts/ipc";
 import type { AgentProvider } from "./../agent-client";
 import type { ModelListResponse } from "./../protocol";
 

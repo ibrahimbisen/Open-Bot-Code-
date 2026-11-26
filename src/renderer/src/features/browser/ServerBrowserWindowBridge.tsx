@@ -1,7 +1,7 @@
-import { TEAM_BROWSER_NAVIGATION_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { classifyFailure } from "@openbot/telemetry";
-import { BROWSER_NEW_TAB_URL, browserAddressUrl } from "@openbot/ui/features/browser/browser-suggestions";
-import { currentText } from "@openbot/ui/text";
+import { TEAM_BROWSER_NAVIGATION_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { classifyFailure } from "@codebot/telemetry";
+import { BROWSER_NEW_TAB_URL, browserAddressUrl } from "@codebot/ui/features/browser/browser-suggestions";
+import { currentText } from "@codebot/ui/text";
 import { createMemo, Show } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { usePlatform } from "../../platform";

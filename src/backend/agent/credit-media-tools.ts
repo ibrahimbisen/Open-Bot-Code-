@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
 import {
   CREDIT_MEDIA_PROMPT_LIMIT,
   CREDIT_MEDIA_REFERENCE_LIMIT,
@@ -12,8 +12,8 @@ import {
   creditMediaCost,
   creditMediaRequestProblem,
   creditMediaSpendable,
-} from "@openbot/contracts/credit-media";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/credit-media";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type ImageGenerationAspectRatio,
   type ImageGenerationInfo,
@@ -23,8 +23,8 @@ import {
   type MediaApprovalChoice,
   type MediaApprovalOffer,
   type VideoGenerationInfo,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Exit, Fiber, type Scope } from "effect";
 import { z } from "zod";
 import { imageSizeOfBytes } from "../image-size";
@@ -33,7 +33,7 @@ import type { CreditMediaInputRead, CreditMediaWorkflows } from "../workflows/cr
 import type { CreditAnswerVia, CreditsHoldAnswer, CreditsHoldCall, CreditsHoldWallet } from "./attention-registry";
 import { generatedImageName, generatedVideoName } from "./image-generation";
 import type { ImageFitter } from "./image-reader";
-import { openBotToolFailure, openBotToolResult } from "./routine-tools";
+import { codeBotToolFailure, codeBotToolResult } from "./routine-tools";
 
 export const LIST_MEDIA_MODELS_TOOL = "list_media_models";
 const GENERATE_IMAGE_TOOL = "generate_image";
@@ -81,16 +81,16 @@ const generateVideoToolSchema = z.strictObject({
 });
 
 const PAID_RULE =
-  "It spends OpenBot credits. OpenBot asks the user above the price limit, so do not ask for approval yourself.";
+  "It spends CodeBot credits. CodeBot asks the user above the price limit, so do not ask for approval yourself.";
 
 const OWN_TOOL_RULE =
-  "only when you have no such tool of your own, when the user asks for OpenBot credits, or when the user names a model that your own tool cannot make.";
+  "only when you have no such tool of your own, when the user asks for CodeBot credits, or when the user names a model that your own tool cannot make.";
 
 export const CREDIT_MEDIA_TOOL_DEFINITIONS = [
   {
     name: LIST_MEDIA_MODELS_TOOL,
     description:
-      "List the models of generate_image and generate_video with their options and prices, the default model of each kind, the credit balance, freeCredits (they pay only for models with takesFreeCredits), and askAboveCredits: the price above which OpenBot asks the user.",
+      "List the models of generate_image and generate_video with their options and prices, the default model of each kind, the credit balance, freeCredits (they pay only for models with takesFreeCredits), and askAboveCredits: the price above which CodeBot asks the user.",
     shape: listMediaModelsToolSchema.shape,
   },
   {
@@ -220,7 +220,7 @@ interface PlannedJob {
   freeNote: string | null;
 }
 
-const failure = (message: string) => openBotToolFailure(message);
+const failure = (message: string) => codeBotToolFailure(message);
 
 interface Blocked {
   reason: "balance" | "agentsOff";
@@ -433,10 +433,10 @@ function freeNoteText(asked: PlannedJob, free: PlannedJob): string {
   const settings = settingsText(free);
   const used = settings === "" ? freeName : `${freeName} at ${settings}`;
   if (asked.model.welcome !== true)
-    return `The paid balance was too low for ${askedName}, so OpenBot used ${used}, which takes free credits.`;
+    return `The paid balance was too low for ${askedName}, so CodeBot used ${used}, which takes free credits.`;
   if (free.model.id === asked.model.id)
-    return `The free credits were too few for ${askedName} at the asked settings, so OpenBot used ${used}.`;
-  return `The free credits were too few for ${askedName}, so OpenBot used ${used}, which also takes free credits.`;
+    return `The free credits were too few for ${askedName} at the asked settings, so CodeBot used ${used}.`;
+  return `The free credits were too few for ${askedName}, so CodeBot used ${used}, which also takes free credits.`;
 }
 
 function freeNote(planned: PlannedJob): { note?: string } {
@@ -612,7 +612,7 @@ export class CreditMediaTools {
     if (!parsed.success) return failure(z.prettifyError(parsed.error));
     const kind = parsed.data.kind;
     const [models, balance] = yield* Effect.all([media.models(), media.balance()], { concurrency: "unbounded" });
-    return openBotToolResult({
+    return codeBotToolResult({
       balance: balance?.available ?? null,
       ...(balance?.welcome ? { freeCredits: balance.welcome } : {}),
       agentsCanUseCredits: this.#options.agentsAllowed(),
@@ -771,7 +771,7 @@ export class CreditMediaTools {
     run.facts.outcome = "generated";
     const file = shown.success === null ? {} : { file: shown.success };
     if (kind === "image") return this.#imageResult(planned, credits, bytes, size, file);
-    return openBotToolResult({
+    return codeBotToolResult({
       status: "shown",
       model: planned.model.id,
       credits,
@@ -831,7 +831,7 @@ export class CreditMediaTools {
     if (!this.#options.askWhenBlocked() || this.#options.asksMuted(call.requesters)) {
       hold.answer = "not_asked";
       run.facts.outcome = "not_asked";
-      return `${blockedText(blocked, cost)} The user turned off credit requests, so OpenBot did not ask. ${NOT_AGAIN} Tell the user once, in a few words, that you skipped this step.`;
+      return `${blockedText(blocked, cost)} The user turned off credit requests, so CodeBot did not ask. ${NOT_AGAIN} Tell the user once, in a few words, that you skipped this step.`;
     }
     const reason =
       blocked.reason === "agentsOff"
@@ -850,7 +850,7 @@ export class CreditMediaTools {
     if (answer.action === "skip") return `The user skipped this step. ${NOT_AGAIN}`;
     const person = answer.responder?.person ?? null;
     yield* this.#options.muteAsks(person).pipe(Effect.ignore);
-    return `The user skipped this step and asked OpenBot not to ask about credits again. ${NOT_AGAIN}`;
+    return `The user skipped this step and asked CodeBot not to ask about credits again. ${NOT_AGAIN}`;
   });
 
   #funded = Effect.fn("CreditMediaTools.funded")(function* (media: CreditMediaWorkflows, planned: PlannedJob) {
@@ -875,7 +875,7 @@ export class CreditMediaTools {
       ...freeNote(planned),
     };
     const fitted = this.#options.fitImage?.(bytes);
-    if (!fitted || typeof fitted === "string") return openBotToolResult(summary);
+    if (!fitted || typeof fitted === "string") return codeBotToolResult(summary);
     return {
       success: true,
       contentItems: [

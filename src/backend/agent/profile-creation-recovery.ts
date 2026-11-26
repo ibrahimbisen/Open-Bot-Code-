@@ -1,9 +1,9 @@
 import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { decodeSaveAgentProfileResult } from "@openbot/contracts/ipc";
-import { isGeneratedAgentId, isUuidV4 } from "@openbot/contracts/validation";
+import { decodeSaveAgentProfileResult } from "@codebot/contracts/ipc";
+import { isGeneratedAgentId, isUuidV4 } from "@codebot/contracts/validation";
 import { Effect } from "effect";
-import type { OpenBotDatabase } from "../openbot-database";
+import type { CodeBotDatabase } from "../codebot-database";
 import { StoredStateFailure, storedIO, storedSync } from "../stored-state-effects";
 
 export class ProfileCreationRecovery {
@@ -27,7 +27,7 @@ export class ProfileCreationRecovery {
 
   recover = Effect.fn("ProfileCreationRecovery.recover")(function* (
     this: ProfileCreationRecovery,
-    database: OpenBotDatabase,
+    database: CodeBotDatabase,
     removeAgent: (agentId: string) => Effect.Effect<void, StoredStateFailure>,
   ) {
     yield* storedIO(() => mkdir(this.root, { recursive: true, mode: 0o700 }));

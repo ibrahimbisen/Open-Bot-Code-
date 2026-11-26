@@ -3,26 +3,26 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentEvent } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import type { AgentEvent } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { deliveryPromptInput } from "../src/backend/agent/delivery-content";
 import { RoutineScheduler } from "../src/backend/agent/routine-scheduler";
-import type { OpenBotToolResponse } from "../src/backend/agent/routine-tools";
+import type { CodeBotToolResponse } from "../src/backend/agent/routine-tools";
 import { AgentStore } from "../src/backend/agent-store";
 import { AgentTasks } from "../src/backend/agent-tasks/agent-tasks";
 import { AgentThreadStore } from "../src/backend/agent-threads/agent-thread-store";
 import { AgentWaitStore } from "../src/backend/agent-waits/agent-wait-store";
 import { AgentWaits, AWAIT_EVENT_TOOL } from "../src/backend/agent-waits/agent-waits";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { RoutineTimer } from "../src/backend/routine-timer";
 import { parseCreateRoutine } from "../src/main/ipc/agent-inputs";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "agent-waits-side-thread-e2e");
+const OUT = join(ROOT, ".codebot-build", "agent-waits-side-thread-e2e");
 
 interface Step {
   name: string;
@@ -45,7 +45,7 @@ async function step<T>(name: string, run: () => Promise<T>): Promise<T> {
   }
 }
 
-function body(response: OpenBotToolResponse | null): { success: boolean; value: DynamicRecord } {
+function body(response: CodeBotToolResponse | null): { success: boolean; value: DynamicRecord } {
   assert.ok(response, "AgentWaits answers the tool.");
   const item = response.contentItems[0];
   assert.ok(item && item.type === "inputText", "The answer is text.");
@@ -54,8 +54,8 @@ function body(response: OpenBotToolResponse | null): { success: boolean; value: 
   return { success: response.success, value };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-agent-waits-side-thread-"));
-const database = new OpenBotDatabase(join(root, "state"));
+const root = await mkdtemp(join(tmpdir(), "codebot-agent-waits-side-thread-"));
+const database = new CodeBotDatabase(join(root, "state"));
 const store = new AgentStore(join(root, "state"), join(root, "home"), database);
 const mailbox = new MailboxStore(join(root, "state"), store.sharedRoot, database);
 const conversation = new ConversationRuntime(
@@ -150,7 +150,7 @@ function awaitEvent(agentId: string, threadId: string, turnId: string, note: str
         threadId,
         turnId,
         callId: crypto.randomUUID(),
-        namespace: "openbot",
+        namespace: "codebot",
         tool: AWAIT_EVENT_TOOL,
         arguments: { note },
       },

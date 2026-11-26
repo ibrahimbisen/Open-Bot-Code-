@@ -1,5 +1,5 @@
-import type { AppTextKey } from "@openbot/i18n";
-import { Bold, Button, buttonVariants, ChevronDown, DropdownMenu, LabelTooltipTrigger, Textarea } from "@openbot/ui";
+import type { AppTextKey } from "@codebot/i18n";
+import { Bold, Button, buttonVariants, ChevronDown, DropdownMenu, LabelTooltipTrigger, Textarea } from "@codebot/ui";
 import { Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { PickerMenu } from "./WorkflowPicker";

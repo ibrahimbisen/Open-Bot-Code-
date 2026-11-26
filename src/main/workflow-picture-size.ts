@@ -1,4 +1,4 @@
-import type { WorkflowMediaSize } from "@openbot/contracts/ipc";
+import type { WorkflowMediaSize } from "@codebot/contracts/ipc";
 import { nativeImage } from "electron";
 
 export function sizeWorkflowPicture(bytes: Uint8Array, size: WorkflowMediaSize): Uint8Array | null {

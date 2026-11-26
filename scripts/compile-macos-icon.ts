@@ -2,9 +2,9 @@ import { execFileSync } from "node:child_process";
 import { copyFile, cp, mkdir, mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 
-const logger = createOpenBotLogger("compile-macos-icon");
+const logger = createCodeBotLogger("compile-macos-icon");
 const sourcePath = resolve("build/icon-production.icon");
 const catalogPath = resolve("build/macos/Assets.car");
 const icnsPath = resolve("build/icon-production.icns");
@@ -17,7 +17,7 @@ const iconComposerTool = join(
   "../Applications/Icon Composer.app/Contents/Executables/ictool",
 );
 
-const workPath = await mkdtemp(join(tmpdir(), "openbot-macos-icon-"));
+const workPath = await mkdtemp(join(tmpdir(), "codebot-macos-icon-"));
 try {
   const iconPath = join(workPath, "Icon.icon");
   await cp(sourcePath, iconPath, { recursive: true });

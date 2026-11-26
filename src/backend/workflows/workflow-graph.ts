@@ -1,4 +1,4 @@
-import { WORKFLOW_RUNTIME_FIELDS, type WorkflowFieldValue, type WorkflowNode } from "@openbot/contracts/ipc";
+import { WORKFLOW_RUNTIME_FIELDS, type WorkflowFieldValue, type WorkflowNode } from "@codebot/contracts/ipc";
 
 export function nodeTimezone(node: WorkflowNode): string | null {
   const timezone = node.fields.timezone;

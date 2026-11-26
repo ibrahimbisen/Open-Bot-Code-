@@ -1,10 +1,10 @@
-export const LEFT_PANEL_STORAGE_KEY = "openbot:left-panel-width";
-export const LEFT_PANEL_COLLAPSED_STORAGE_KEY = "openbot:left-panel-collapsed";
-export const LEFT_PANEL_CLOSED_STORAGE_KEY = "openbot:left-panel-closed";
-export const SERVER_VIEW_STORAGE_KEY = "openbot:server-view";
-export const SIDEBAR_CHAT_ORDER_STORAGE_KEY = "openbot:sidebar-chat-order";
-export const RAIL_PINS_STORAGE_KEY = "openbot:rail-pins";
-export const RAIL_HIDDEN_STORAGE_KEY = "openbot:rail-hidden";
+export const LEFT_PANEL_STORAGE_KEY = "codebot:left-panel-width";
+export const LEFT_PANEL_COLLAPSED_STORAGE_KEY = "codebot:left-panel-collapsed";
+export const LEFT_PANEL_CLOSED_STORAGE_KEY = "codebot:left-panel-closed";
+export const SERVER_VIEW_STORAGE_KEY = "codebot:server-view";
+export const SIDEBAR_CHAT_ORDER_STORAGE_KEY = "codebot:sidebar-chat-order";
+export const RAIL_PINS_STORAGE_KEY = "codebot:rail-pins";
+export const RAIL_HIDDEN_STORAGE_KEY = "codebot:rail-hidden";
 export const LEFT_PANEL_DEFAULT = 280;
 export const LEFT_PANEL_MIN = 128;
 export const LEFT_PANEL_MAX = 400;

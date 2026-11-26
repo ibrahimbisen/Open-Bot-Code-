@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { writesInOrder } from "@/shared/lib/writes-in-order";
 
-const key = "openbot.mobile.onboarding.v1";
+const key = "codebot.mobile.onboarding.v1";
 const MAX_ACCOUNTS = 20;
 
 export const useOnboardingProgress = create<{ ready: boolean; finished: readonly string[] }>(() => ({

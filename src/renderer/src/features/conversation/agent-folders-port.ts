@@ -1,22 +1,22 @@
-import { agentFolderParent, type OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import type { AgentFolderCalls } from "@openbot/ui/features/conversation/AgentFolders";
+import { agentFolderParent, type CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import type { AgentFolderCalls } from "@codebot/ui/features/conversation/AgentFolders";
 import type {
   AgentInstructionsCalls,
   AgentInstructionsFileCalls,
-} from "@openbot/ui/features/conversation/AgentInstructionsView";
-import type { HostFolderPickMode } from "@openbot/ui/features/conversation/HostFolderPicker";
+} from "@codebot/ui/features/conversation/AgentInstructionsView";
+import type { HostFolderPickMode } from "@codebot/ui/features/conversation/HostFolderPicker";
 
 export function agentFolderCalls(): AgentFolderCalls {
   return {
-    list: (agentId) => window.openbot.agent.listAgentFolders(agentId),
+    list: (agentId) => window.codebot.agent.listAgentFolders(agentId),
     choose: (agentId, replace) =>
-      window.openbot.agent.chooseAgentFolder(replace === undefined ? { agentId } : { agentId, replace }),
-    add: (agentId, path) => window.openbot.agent.addAgentFolder({ agentId, path }),
-    remove: (agentId, path) => window.openbot.agent.removeAgentFolder({ agentId, path }),
-    drop: (agentId, folder) => window.openbot.agent.addDroppedAgentFolder(agentId, folder),
-    exclude: (agentId) => window.openbot.agent.chooseAgentExclusion(agentId),
-    addExclusion: (agentId, path) => window.openbot.agent.addAgentExclusion({ agentId, path }),
-    include: (agentId, path) => window.openbot.agent.removeAgentExclusion({ agentId, path }),
+      window.codebot.agent.chooseAgentFolder(replace === undefined ? { agentId } : { agentId, replace }),
+    add: (agentId, path) => window.codebot.agent.addAgentFolder({ agentId, path }),
+    remove: (agentId, path) => window.codebot.agent.removeAgentFolder({ agentId, path }),
+    drop: (agentId, folder) => window.codebot.agent.addDroppedAgentFolder(agentId, folder),
+    exclude: (agentId) => window.codebot.agent.chooseAgentExclusion(agentId),
+    addExclusion: (agentId, path) => window.codebot.agent.addAgentExclusion({ agentId, path }),
+    include: (agentId, path) => window.codebot.agent.removeAgentExclusion({ agentId, path }),
   };
 }
 
@@ -27,7 +27,7 @@ export type HostFolderPickFn = (
 ) => Promise<string | null>;
 
 export type AgentFoldersApi = Pick<
-  OpenBotDesktopApi["agent"],
+  CodeBotDesktopApi["agent"],
   | "listAgentFolders"
   | "addAgentFolder"
   | "removeAgentFolder"
@@ -36,14 +36,14 @@ export type AgentFoldersApi = Pick<
   | "browseAgentFolders"
 >;
 
-export type AgentInstructionsApi = Pick<OpenBotDesktopApi["agent"], "readAgentInstructions" | "saveAgentInstructions">;
+export type AgentInstructionsApi = Pick<CodeBotDesktopApi["agent"], "readAgentInstructions" | "saveAgentInstructions">;
 
 export function remoteAgentFolderCalls(
   serverId: string,
   pick: HostFolderPickFn,
   api?: AgentFoldersApi,
 ): AgentFolderCalls {
-  const agent = () => api ?? window.openbot.agent;
+  const agent = () => api ?? window.codebot.agent;
   const list = (agentId: string) => agent().listAgentFolders(agentId, serverId);
   return {
     list,
@@ -73,7 +73,7 @@ export function remoteAgentFolderCalls(
 }
 
 export function browseHostFolders(serverId: string, agentId: string, path: string | null, api?: AgentFoldersApi) {
-  return (api ?? window.openbot.agent).browseAgentFolders({ agentId, path }, serverId);
+  return (api ?? window.codebot.agent).browseAgentFolders({ agentId, path }, serverId);
 }
 
 type InstructionsWatcher = Parameters<AgentInstructionsFileCalls["watch"]>[0];
@@ -94,7 +94,7 @@ export function agentInstructionsCalls(
   api?: AgentInstructionsApi,
 ): Omit<AgentInstructionsCalls, "openLink"> {
   const watchers = watchersOf(serverId ?? "");
-  const agent = () => api ?? window.openbot.agent;
+  const agent = () => api ?? window.codebot.agent;
   return {
     read: (agentId) => agent().readAgentInstructions(agentId, serverId),
     save: async (agentId, text, expected) => {
@@ -106,6 +106,6 @@ export function agentInstructionsCalls(
       watchers.add(watcher);
       return () => watchers.delete(watcher);
     },
-    reveal: serverId === undefined ? (agentId) => window.openbot.agent.revealAgentInstructions(agentId) : undefined,
+    reveal: serverId === undefined ? (agentId) => window.codebot.agent.revealAgentInstructions(agentId) : undefined,
   };
 }

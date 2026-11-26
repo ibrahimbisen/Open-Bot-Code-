@@ -4,7 +4,7 @@ import {
   IMAGE_ATTACHMENT_EXTENSIONS,
   MEDIA_ATTACHMENT_EXTENSIONS,
   MP4_ATTACHMENT_EXTENSIONS,
-} from "@openbot/contracts/attachment-files";
+} from "@codebot/contracts/attachment-files";
 
 const ABSOLUTE_PATH = /(?<=^|[\s"'`(<[*])(?:~\/|\/|[A-Za-z]:[\\/])[^\s"'`<>()[\]]+/gu;
 const PATH_CODE_SPAN = /`((?:~\/|\/|[A-Za-z]:[\\/])[^`\n]+)`/gu;

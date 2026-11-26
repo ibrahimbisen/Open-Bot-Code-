@@ -2,7 +2,7 @@ import {
   LIVE_ACTIVITY_SEALED_LIMIT,
   LIVE_ACTIVITY_TOKEN_PATTERN,
   type LiveActivityRelayPush,
-} from "@openbot/contracts/live-activity-relay";
+} from "@codebot/contracts/live-activity-relay";
 import {
   NOTIFICATION_SEALED_LIMIT,
   NOTIFICATION_SOUND_FILES,
@@ -10,8 +10,8 @@ import {
   NOTIFICATION_TOKEN_PATTERN,
   type NotificationRelayPush,
   type NotificationSound,
-} from "@openbot/contracts/notification-relay";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/notification-relay";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 import { importPKCS8, SignJWT } from "jose";
 
@@ -26,7 +26,7 @@ export interface ApnsConfig {
 export type ApnsRelayResult = "sent" | "gone" | "rejected" | "unavailable";
 
 const ACTIVITY_NAME = "AgentActivity";
-const NOTIFICATION_TITLE = "OpenBot";
+const NOTIFICATION_TITLE = "CodeBot";
 const ACTIVITY_ALERT = { title: NOTIFICATION_TITLE, body: NOTIFICATION_TITLE };
 const NOTIFICATION_LIFETIME_SECONDS = 24 * 60 * 60;
 const LIVE_ACTIVITY_END_LIFETIME_SECONDS = 60 * 60;

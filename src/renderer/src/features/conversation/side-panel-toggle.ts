@@ -1,5 +1,5 @@
-import type { SidePanelToggleProps } from "@openbot/ui/features/conversation/SidePanel";
-import { useText } from "@openbot/ui/text";
+import type { SidePanelToggleProps } from "@codebot/ui/features/conversation/SidePanel";
+import { useText } from "@codebot/ui/text";
 import { useConversationViewScope } from "./conversation-scope";
 
 export function useSidePanelToggle(): () => SidePanelToggleProps | undefined {

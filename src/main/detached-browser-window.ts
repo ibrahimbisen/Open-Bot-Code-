@@ -3,7 +3,7 @@ import type {
   BrowserWindowAction,
   BrowserWindowEvent,
   BrowserWindowModel,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect, Schema } from "effect";
 import { BrowserWindow, screen } from "electron";
 import type { BrowserHost } from "../backend/browser-host";
@@ -105,7 +105,7 @@ export class DetachedBrowserWindow {
     const developmentUrl = this.#options.developmentUrl;
     const pageUrl = developmentUrl
       ? new URL("browser-window.html", `${developmentUrl}/`)
-      : new URL("openbot-app://app/browser-window.html");
+      : new URL("codebot-app://app/browser-window.html");
     yield* windowCall(() => window.loadURL(pageUrl.toString()));
     if (window.isDestroyed()) return bounds;
     window.show();

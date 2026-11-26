@@ -1,4 +1,4 @@
-import type { HostAdminDesktopApi, HostSignalHomeSettings } from "@openbot/contracts/ipc";
+import type { HostAdminDesktopApi, HostSignalHomeSettings } from "@codebot/contracts/ipc";
 
 export function createMockHostSignalHome(): Pick<HostAdminDesktopApi, "getSignalHome" | "setSignalHome"> {
   const settings: HostSignalHomeSettings = {

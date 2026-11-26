@@ -1,9 +1,9 @@
-import type { HostReleaseStatus, HostUpdateStatus, ServerAppearance } from "@openbot/contracts/ipc";
+import type { HostReleaseStatus, HostUpdateStatus, ServerAppearance } from "@codebot/contracts/ipc";
 import { createSignal, onSettled, snapshot } from "solid-js";
 import { fn } from "storybook/test";
 import { ServerSettingsModal, type ServerSettingsModalProps } from "../src/features/servers/ServerSettingsModal";
 import { STORY_HOST_STATUS, STORY_INVITES, STORY_PRESENCE, STORY_SERVERS } from "../src/preview/fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 import { SettingsPageStory } from "./settings-page-story";
 
 function storyServer(kind: (typeof STORY_SERVERS)[number]["kind"]) {
@@ -51,17 +51,17 @@ export function ServerSettingsStory(props: {
   hostUpdate?: HostUpdateStatus;
   hostRelease?: HostReleaseStatus;
 }) {
-  const previous = window.openbot;
+  const previous = window.codebot;
   const hostStatus = props.settings.hostStatus;
-  const mock = createMockOpenBot({
+  const mock = createMockCodeBot({
     ...(hostStatus ? { hostStatus: snapshot(hostStatus) } : {}),
     ...(props.hostUpdate ? { hostUpdate: props.hostUpdate } : {}),
     ...(props.hostRelease ? { hostRelease: props.hostRelease } : {}),
   });
-  window.openbot = mock.api;
+  window.codebot = mock.api;
   onSettled(() => () => {
     mock.dispose();
-    window.openbot = previous;
+    window.codebot = previous;
   });
   const [appearance, setAppearance] = createSignal<ServerAppearance | null | undefined>(undefined);
   const server = () => {

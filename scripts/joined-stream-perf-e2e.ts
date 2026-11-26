@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { translateFor } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { translateFor } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import { chromium, type Page } from "playwright-core";
 import { argument, WAIT_MS } from "./channel-e2e-support";
 import { type FakeCodexCorpus, writeFakeCodex } from "./dev-automation/bench-fake-codex";
@@ -18,17 +18,17 @@ import { startRenderRecording } from "./dev-automation/render-metrics";
 
 const NAME = "joined-stream-perf";
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build", NAME);
+const OUT = resolve(ROOT, ".codebot-build", NAME);
 const FAKE_CODEX_DIRECTORY = join(OUT, "fake-codex");
 const FAKE_LOG = join(FAKE_CODEX_DIRECTORY, "codex.jsonl");
-const DEV_HOST_EMAIL = "openbot-dev-host@example.com";
-const SELECTED_SERVER_PREFIX = "openbot.web.selected-server:";
+const DEV_HOST_EMAIL = "codebot-dev-host@example.com";
+const SELECTED_SERVER_PREFIX = "codebot.web.selected-server:";
 const CONVERSATION = ".conversation-scroll";
 const CODEX_MODEL = "gpt-5.5";
 const PROMPT = "Reply with a long answer. Do not use tools.";
 const POLL_MS = 250;
 const english = translateFor("en");
-const logger = createOpenBotLogger(NAME);
+const logger = createCodeBotLogger(NAME);
 
 const prepare = process.argv.includes("--prepare");
 const allowMutations = process.argv.includes("--allow-mutations");
@@ -118,7 +118,7 @@ function toReply(value: unknown): Reply | null {
 
 async function lastReply(page: Page, serverId: string | null): Promise<Reply | null> {
   const serverArgument = serverId === null ? "" : `, ${json(serverId)}`;
-  const value = await page.evaluate(`window.openbot.agent
+  const value = await page.evaluate(`window.codebot.agent
     .readConversationPage({ agentId: ${json(agentId)}, limit: 1 }${serverArgument})
     .then((page) => {
       const last = page.messages[page.messages.length - 1];
@@ -130,7 +130,7 @@ async function lastReply(page: Page, serverId: string | null): Promise<Reply | n
 
 async function useFakeCodex(host: Page): Promise<void> {
   const chosen = await poll(`the host lists the ${CODEX_MODEL} Codex model`, async () => {
-    const models = await host.evaluate("window.openbot.agent.listModels()");
+    const models = await host.evaluate("window.codebot.agent.listModels()");
     if (!Array.isArray(models)) return null;
     const model = models.find(
       (entry) => isDynamicRecord(entry) && entry.provider === "codex" && entry.id === CODEX_MODEL,
@@ -144,13 +144,13 @@ async function useFakeCodex(host: Page): Promise<void> {
       ? chosen.defaultReasoningEffort
       : "low";
   await host.evaluate(
-    `window.openbot.agent.updateAgent(${json({ agentId, provider: "codex", model: CODEX_MODEL, reasoningEffort })}).then(() => null)`,
+    `window.codebot.agent.updateAgent(${json({ agentId, provider: "codex", model: CODEX_MODEL, reasoningEffort })}).then(() => null)`,
   );
 }
 
 async function joinedServerId(testClient: Page): Promise<string> {
   if (serverIdArgument) return serverIdArgument;
-  const servers = await testClient.evaluate("window.openbot.servers.list()");
+  const servers = await testClient.evaluate("window.codebot.servers.list()");
   assert.ok(Array.isArray(servers), "The test client returned no server list.");
   const remote = servers.filter((server) => isDynamicRecord(server) && server.kind === "remote");
   assert.equal(remote.length, 1, `The test client has ${remote.length} joined servers. Name one with --server-id.`);
@@ -224,14 +224,14 @@ interface Recording {
 async function startRecording(surface: Recording["surface"], page: Page): Promise<Recording> {
   const stop = await startRenderRecording(page, { frames: false, callCounts: false });
   const probesPresent = await page.evaluate(
-    "typeof window.__openbotPerfProbes?.start === 'function' ? (window.__openbotPerfProbes.start(), true) : false",
+    "typeof window.__codebotPerfProbes?.start === 'function' ? (window.__codebotPerfProbes.start(), true) : false",
   );
   return { surface, page, stop, probesPresent: probesPresent === true };
 }
 
 async function finishRecording(recording: Recording, reply: Reply | null): Promise<SurfaceResult> {
   const visibleTextCharacters = await settledText(recording.page);
-  const probes = recording.probesPresent ? await recording.page.evaluate("window.__openbotPerfProbes.stop()") : null;
+  const probes = recording.probesPresent ? await recording.page.evaluate("window.__codebotPerfProbes.stop()") : null;
   const { values } = await recording.stop();
   return {
     surface: recording.surface,
@@ -291,7 +291,7 @@ async function run(): Promise<void> {
     const turnsBefore = fakeTurns().length;
     const recordings = [await startRecording("web", web), await startRecording("test-client", client.page)];
     const started = Date.now();
-    await host.page.evaluate(`window.openbot.agent.sendMessage(${json({ agentId, text: PROMPT })}).then(() => null)`);
+    await host.page.evaluate(`window.codebot.agent.sendMessage(${json({ agentId, text: PROMPT })}).then(() => null)`);
     const turn = await poll("the fake Codex ends the turn", () => fakeTurns()[turnsBefore] ?? null);
     assert.equal(turn.status, "completed", `The fake Codex ended the turn as "${turn.status}".`);
     const accepted = new Set([turn.characters, turn.trimmedCharacters]);
@@ -315,7 +315,7 @@ async function run(): Promise<void> {
     const report = {
       generatedAt: new Date().toISOString(),
       method:
-        "Counts only. CDP Performance.getMetrics deltas and longtasks per page, from before the send until the reply is complete and the conversation text is stable. Probes come from window.__openbotPerfProbes when the page has them.",
+        "Counts only. CDP Performance.getMetrics deltas and longtasks per page, from before the send until the reply is complete and the conversation text is stable. Probes come from window.__codebotPerfProbes when the page has them.",
       options: { agentId, deltas, deltaMs, corpus, model: CODEX_MODEL, api },
       fakeTurn: turn,
       streamMs,

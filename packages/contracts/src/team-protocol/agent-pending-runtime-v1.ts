@@ -66,7 +66,7 @@ export function pendingRuntimeUpdateBody(input: UpdateAgentInput): Record<string
 }
 
 export function isAgentListRoute(method: string, path: string): boolean {
-  return method === "GET" && new URL(path, "http://openbot.invalid").pathname === TEAM_API_ROUTES.agents.all;
+  return method === "GET" && new URL(path, "http://codebot.invalid").pathname === TEAM_API_ROUTES.agents.all;
 }
 
 export function withAgentPendingRuntimes(

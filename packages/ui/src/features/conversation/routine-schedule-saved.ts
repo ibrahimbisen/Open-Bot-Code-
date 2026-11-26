@@ -1,15 +1,15 @@
-import type { RoutineSchedule } from "@openbot/contracts/ipc";
-import type { AppTextKey, AppTranslate } from "@openbot/i18n";
-import { routineOnceInstant } from "@openbot/team-client/routine-schedule";
+import type { RoutineSchedule } from "@codebot/contracts/ipc";
+import type { AppTextKey, AppTranslate } from "@codebot/i18n";
+import { routineOnceInstant } from "@codebot/team-client/routine-schedule";
 import {
   type RoutineDraftProblem,
   type RoutineScheduleDraft,
   routineDraftProblemCode,
-} from "@openbot/team-client/routine-schedule-draft";
+} from "@codebot/team-client/routine-schedule-draft";
 import { currentText } from "../../text";
 import { ROUTINE_DRAFT_KINDS } from "./routine-schedule-draft";
 
-export { routineScheduleFromDraft, routineScheduleToDraft } from "@openbot/team-client/routine-schedule-draft";
+export { routineScheduleFromDraft, routineScheduleToDraft } from "@codebot/team-client/routine-schedule-draft";
 
 export const ROUTINE_SAVED_DRAFT_KINDS = ROUTINE_DRAFT_KINDS.filter((option) => option.value !== "once");
 

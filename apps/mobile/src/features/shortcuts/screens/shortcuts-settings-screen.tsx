@@ -25,7 +25,7 @@ export function ShortcutsSettingsScreen() {
   const target = useShortcutAgent((state) => state.target);
   const ready = useShortcutAgent((state) => state.account !== null);
   const saving = useShortcutAgent((state) => state.saving);
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const [error, setError] = useState<string | null>(null);
   const apiUrl = session?.apiUrl;
   const userId = session?.user.id;

@@ -11,7 +11,7 @@ import {
   Pin,
   PinOff,
   RotateCcw,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { Show } from "solid-js";
 import type { AgentProfile } from "../../data";
 import { useText } from "../../text";

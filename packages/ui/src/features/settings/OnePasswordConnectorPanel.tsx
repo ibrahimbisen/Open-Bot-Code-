@@ -1,4 +1,4 @@
-import type { OnePasswordConnectorStatus, OnePasswordSetup } from "@openbot/contracts/ipc";
+import type { OnePasswordConnectorStatus, OnePasswordSetup } from "@codebot/contracts/ipc";
 import {
   Button,
   CircleCheck,
@@ -17,7 +17,7 @@ import {
   RefreshCw,
   SettingsSection,
   Text,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, For, onSettled, Show } from "solid-js";
 import { useText } from "../../text";

@@ -5,7 +5,7 @@ import {
   isDownloadableProvider,
   isManagedRuntimeProvider,
   type ManagedProviderId,
-} from "@openbot/contracts/agent-providers";
+} from "@codebot/contracts/agent-providers";
 import {
   type AgentProviderId,
   type ConnectProviderAccountInput,
@@ -19,11 +19,11 @@ import {
   type SetLiveVoiceAccountInput,
   type SetProviderAccountPoolInput,
   type SetProviderApiKeyInput,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { decodeLiveVoiceAccount } from "@openbot/contracts/team-protocol/live-voice-account-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { registerSecretValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { decodeLiveVoiceAccount } from "@codebot/contracts/team-protocol/live-voice-account-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { registerSecretValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { AgentLifecycleFailed, type AgentService } from "../../backend/agent-service";
 import { runCauseEffect } from "../../backend/effect-boundary";
@@ -206,13 +206,13 @@ export function parseProviderApiKeyInput(value: unknown): SetProviderApiKeyInput
 
 function parseManagedProviderId(value: unknown): ManagedProviderId {
   const provider = parseProviderId(value);
-  if (!isManagedRuntimeProvider(provider)) throw new Error("OpenBot does not manage this provider's CLI.");
+  if (!isManagedRuntimeProvider(provider)) throw new Error("CodeBot does not manage this provider's CLI.");
   return provider;
 }
 
 export function parseDownloadableProviderId(value: unknown): DownloadableProviderId {
   const provider = parseProviderId(value);
-  if (!isDownloadableProvider(provider)) throw new Error("OpenBot does not manage this provider's CLI.");
+  if (!isDownloadableProvider(provider)) throw new Error("CodeBot does not manage this provider's CLI.");
   return provider;
 }
 

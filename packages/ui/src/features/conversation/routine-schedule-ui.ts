@@ -1,8 +1,8 @@
-import type { RoutineSchedule } from "@openbot/contracts/ipc";
-import type { AppMessages } from "@openbot/i18n";
+import type { RoutineSchedule } from "@codebot/contracts/ipc";
+import type { AppMessages } from "@codebot/i18n";
 import { currentText, type TextValue } from "../../text";
 
-export { routineTimeMinutes } from "@openbot/team-client/routine-schedule-draft";
+export { routineTimeMinutes } from "@codebot/team-client/routine-schedule-draft";
 
 export interface RoutineSelectOption {
   value: string;

@@ -4,32 +4,32 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent, type HiddenAgentsSnapshot } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import { AGENT_PROVIDERS, type AgentEvent, type HiddenAgentsSnapshot } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V1_WEBSOCKET,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol";
+} from "@codebot/contracts/team-protocol";
 import {
   AGENT_HIDDEN_CAPABILITY,
   AGENT_HIDDEN_CODECS,
   AGENT_HIDDEN_ROUTES,
   agentHiddenEvent,
-} from "@openbot/contracts/team-protocol/agent-hidden-v1";
-import { teamCapabilitiesForProtocol } from "@openbot/contracts/team-protocol/current";
-import { TEAM_PROTOCOL_V7 } from "@openbot/contracts/team-protocol/v7";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/agent-hidden-v1";
+import { teamCapabilitiesForProtocol } from "@codebot/contracts/team-protocol/current";
+import { TEAM_PROTOCOL_V7 } from "@codebot/contracts/team-protocol/v7";
+import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentService as AgentServiceType } from "../src/backend/agent-service";
+import type { CodeBotDatabase as CodeBotDatabaseType } from "../src/backend/codebot-database";
 import type { MailboxStore as MailboxStoreType } from "../src/backend/mailbox-store";
-import type { OpenBotDatabase as OpenBotDatabaseType } from "../src/backend/openbot-database";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-hide-restore-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-hide-restore-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const OWNER = { username: "owner-user", password: "owner-password-123" };
 const MEMBER = { username: "member-user", password: "member-password-123" };
@@ -37,7 +37,7 @@ const STEP_DEADLINE_MS = 30_000;
 const DAY = "2031-05-05";
 const at = (time: string) => new Date(`${DAY}T${time}:00.000Z`);
 
-const root = await mkdtemp(join(tmpdir(), "openbot-agent-hide-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-agent-hide-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -45,7 +45,7 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -121,7 +121,7 @@ const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { SidebarLayoutStore } = await import("../src/backend/sidebar-layout-store");
 
 plugin({
@@ -264,7 +264,7 @@ const teamBrowser: TeamApiBrowser = {
 };
 
 interface Host {
-  database: OpenBotDatabaseType;
+  database: CodeBotDatabaseType;
   agents: AgentServiceType;
   mailbox: MailboxStoreType;
   server: InstanceType<typeof TeamApiServer>;
@@ -277,11 +277,11 @@ let host: Host | null = null;
 const sockets: WebSocket[] = [];
 
 async function startHost(mode: "app" | "stores-only" = "app"): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   await runCauseEffect(sidebar.initialize());
   await runCauseEffect(team.initialize());
   if (!team.getIdentity()) await runCauseEffect(team.configure("E2E Host", OWNER.username, OWNER.password));
@@ -373,7 +373,7 @@ async function login(credentials: { username: string; password: string }): Promi
 async function openEvents(token: string): Promise<WebSocket> {
   const socket = new WebSocket(`ws://127.0.0.1:${current().port}${TEAM_API_ROUTES.events}`, [
     TEAM_PROTOCOL_V1_WEBSOCKET,
-    `openbot-token.${token}`,
+    `codebot-token.${token}`,
   ]);
   sockets.push(socket);
   await new Promise<void>((resolveOpen, reject) => {

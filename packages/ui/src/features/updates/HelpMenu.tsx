@@ -1,4 +1,4 @@
-import { BookOpen, Bug, CircleQuestionMark, DropdownMenu, Gift, Megaphone, MotionTooltip } from "@openbot/ui";
+import { BookOpen, Bug, CircleQuestionMark, DropdownMenu, Gift, Megaphone, MotionTooltip } from "@codebot/ui";
 import { createSignal, For, Show } from "solid-js";
 import { useText } from "../../text";
 import { CreditIcon } from "../credits/CreditIcon";

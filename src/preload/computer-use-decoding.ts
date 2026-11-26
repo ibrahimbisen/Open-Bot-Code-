@@ -6,8 +6,8 @@ import {
   type ComputerUsePermission,
   type ComputerUsePermissionApp,
   type ComputerUseState,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
 
 export function decodeComputerUseState(value: unknown): ComputerUseState {
   if (

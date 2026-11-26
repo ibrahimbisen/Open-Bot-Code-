@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
-import { serverStorageGb } from "@openbot/contracts/billing";
-import { parseHostedServerList } from "@openbot/contracts/hosted-servers";
-import type { CentralAuthState, CentralAuthUser } from "@openbot/contracts/ipc";
+import { serverStorageGb } from "@codebot/contracts/billing";
+import { parseHostedServerList } from "@codebot/contracts/hosted-servers";
+import type { CentralAuthState, CentralAuthUser } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { CentralAuthManager } from "./central-auth-manager";
 import { RemoteWorkflowError, toRemoteWorkflowError } from "./remote-service-effects";
@@ -19,10 +19,10 @@ export function takeHostedServerEnvironment(
   isPackaged: boolean,
   platform: NodeJS.Platform,
 ): HostedServerEnvironment | null {
-  const claim = environment.OPENBOT_HOSTED_CLAIM?.trim() || null;
-  delete environment.OPENBOT_HOSTED_CLAIM;
-  if (!isPackaged || platform !== "linux" || environment.OPENBOT_HOSTED_SERVER !== "1") return null;
-  const hostId = environment.OPENBOT_HOSTED_HOST_ID?.trim().toLowerCase() ?? "";
+  const claim = environment.CODEBOT_HOSTED_CLAIM?.trim() || null;
+  delete environment.CODEBOT_HOSTED_CLAIM;
+  if (!isPackaged || platform !== "linux" || environment.CODEBOT_HOSTED_SERVER !== "1") return null;
+  const hostId = environment.CODEBOT_HOSTED_HOST_ID?.trim().toLowerCase() ?? "";
   if (!HOST_ID_PATTERN.test(hostId)) return null;
   return { hostId, claim };
 }

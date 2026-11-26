@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { CDPSession, Page } from "playwright-core";
 import { argument, WAIT_MS } from "./channel-e2e-support";
 import { type AutomationSession, assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
@@ -21,8 +21,8 @@ assert.ok(Number.isFinite(pauseOnlineS) && pauseOnlineS >= 0, "--pause-host-onli
 const accountWaitS = Number(argument("account-wait") ?? "6");
 assert.ok(Number.isFinite(accountWaitS) && accountWaitS > 0, "--account-wait takes a number of seconds.");
 assert.match(label, /^\w[\w.-]*$/, "--label takes a folder name, not a path.");
-const OUT = resolve(ROOT, ".openbot-build", NAME, label);
-const logger = createOpenBotLogger(NAME);
+const OUT = resolve(ROOT, ".codebot-build", NAME, label);
+const logger = createCodeBotLogger(NAME);
 
 interface SplashLog {
   screens: { at: number; pileAge: number; where: string; goneAt?: number }[];
@@ -92,13 +92,13 @@ const RECORDER = `(() => {
     if (reading) return;
     reading = true;
     try {
-      const remote = (await window.openbot.servers.list()).find((server) => server.kind === "remote");
+      const remote = (await window.codebot.servers.list()).find((server) => server.kind === "remote");
       const last = log.states[log.states.length - 1];
       const state = remote?.state ?? "none";
       const issue = remote?.issue?.code ?? null;
       if (!last || last.state !== state || last.issue !== issue)
         log.states.push({ at: Math.round(performance.now()), state, issue });
-      const status = (await window.openbot.auth.getState()).status;
+      const status = (await window.codebot.auth.getState()).status;
       if (log.auth[log.auth.length - 1]?.status !== status) log.auth.push({ at: Math.round(performance.now()), status });
     } finally {
       reading = false;
@@ -128,7 +128,7 @@ function testClient(): DevInstanceRecord {
   assert.equal(
     instances.length,
     1,
-    "Start `OPENBOT_DEV_CLIENT_TRANSPORT=webrtc OPENBOT_DEV_RTT_MS=600 bun run dev:test-client` in this worktree first.",
+    "Start `CODEBOT_DEV_CLIENT_TRANSPORT=webrtc CODEBOT_DEV_RTT_MS=600 bun run dev:test-client` in this worktree first.",
   );
   const [instance] = instances;
   assert.ok(instance);
@@ -211,10 +211,10 @@ async function selectRemoteServer(instance: DevInstanceRecord): Promise<void> {
   const session = await connect(instance);
   try {
     const selected = await session.page.evaluate(`(async () => {
-      const servers = await window.openbot.servers.list();
+      const servers = await window.codebot.servers.list();
       const remote = servers.find((server) => server.kind === "remote");
       if (!remote) return null;
-      if (!remote.active) await window.openbot.servers.select(remote.id);
+      if (!remote.active) await window.codebot.servers.select(remote.id);
       return remote.name;
     })()`);
     assert.ok(selected, "The test client has no remote server. Restart the test client after the host registers.");
@@ -228,7 +228,7 @@ async function waitForWorkspace(page: Page, what: string): Promise<void> {
   await page
     .waitForFunction(
       () =>
-        performance.getEntriesByName("openbot:remote-workspace-ready").length > 0 &&
+        performance.getEntriesByName("codebot:remote-workspace-ready").length > 0 &&
         document.querySelector(".app-loading") === null,
       undefined,
       { polling: POLL_MS, timeout: WAIT_MS },
@@ -302,7 +302,7 @@ async function readReport(page: Page): Promise<RunReport | null> {
   if (log.screens.length === 0) return null;
   const unseenSplash = log.splashEndedAtAttach;
   const ready = await page.evaluate<number | null>(
-    `performance.getEntriesByName("openbot:remote-workspace-ready")[0]?.startTime ?? null`,
+    `performance.getEntriesByName("codebot:remote-workspace-ready")[0]?.startTime ?? null`,
   );
   return {
     rains: log.starts.length + (unseenSplash ? 1 : 0),
@@ -322,9 +322,9 @@ async function checkAccountWait(instance: DevInstanceRecord): Promise<RunReport>
     const page = session.page;
     await page.addInitScript(RECORDER);
     resume = pause("The account service", -accountServiceGroup(), accountWaitS);
-    await page.evaluate("void window.openbot.auth.retry().catch(() => undefined)");
+    await page.evaluate("void window.codebot.auth.retry().catch(() => undefined)");
     await poll("main loads the account", async () =>
-      (await page.evaluate("window.openbot.auth.getState().then((state) => state.status)")) === "loading" ? true : null,
+      (await page.evaluate("window.codebot.auth.getState().then((state) => state.status)")) === "loading" ? true : null,
     );
     await page.reload({ waitUntil: "commit" });
     await waitForWorkspace(page, "the workspace shows after the account loads");
@@ -346,7 +346,7 @@ async function recordStart(instance: DevInstanceRecord, resumes: (() => void)[])
     if (pauseOnlineS > 0) {
       await page.evaluate(`new Promise((done) => {
         const observer = new PerformanceObserver((list) => {
-          if (!list.getEntriesByName("openbot:remote-workspace-load").length) return;
+          if (!list.getEntriesByName("codebot:remote-workspace-load").length) return;
           observer.disconnect();
           done(true);
         });

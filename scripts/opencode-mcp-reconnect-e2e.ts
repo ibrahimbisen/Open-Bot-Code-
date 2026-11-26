@@ -15,7 +15,7 @@ import { getArray, getRecord, getString, isRecord } from "../src/backend/protoco
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-mcp-reconnect");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-mcp-reconnect");
 const ENDPOINT = "spark";
 const MODEL = "agent-model";
 const SLOW_CONNECT_MS = 35_000;
@@ -96,7 +96,7 @@ const model = createServer((request, response) => {
       return;
     }
     calls += 1;
-    const code = "return await tools.openbot.whoami({})";
+    const code = "return await tools.codebot.whoami({})";
     sse(
       response,
       {
@@ -137,7 +137,7 @@ async function startThread(client: AgentClient, cwd: string): Promise<string> {
         dynamicTools: [
           {
             type: "namespace",
-            name: "openbot",
+            name: "codebot",
             tools: [
               {
                 type: "function",
@@ -157,7 +157,7 @@ async function startThread(client: AgentClient, cwd: string): Promise<string> {
   return id;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-mcp-reconnect-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-mcp-reconnect-"));
 const clients: AgentClient[] = [];
 let cliPath: string | null = null;
 try {
@@ -198,7 +198,7 @@ try {
   });
   clients.push(client);
   client.on("diagnostic", (line: string) => {
-    if (/OpenBot's tools/.test(line)) report.diagnostics.push(line);
+    if (/CodeBot's tools/.test(line)) report.diagnostics.push(line);
   });
   client.on("request", (request) => {
     if (request.method !== "item/tool/call") return;
@@ -226,10 +226,10 @@ try {
     report.toolResults[1]?.includes(`thread=${second}`),
     `The second chat must reach its tool: ${report.toolResults[1]}`,
   );
-  assert.equal(report.toolCalls.length, 2, "Each chat must call OpenBot's tool once.");
+  assert.equal(report.toolCalls.length, 2, "Each chat must call CodeBot's tool once.");
   assert.deepEqual(
     report.diagnostics,
-    ["OpenCode did not load OpenBot's tools in time. The session opens again."],
+    ["OpenCode did not load CodeBot's tools in time. The session opens again."],
     "Only the first chat must open again, and it must load the tools then.",
   );
   report.passed = true;

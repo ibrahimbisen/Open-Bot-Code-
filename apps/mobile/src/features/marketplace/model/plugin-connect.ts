@@ -1,5 +1,5 @@
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import { isListingUrl, type McpAuthValues, mcpFlowFields } from "@openbot/contracts/mcp-connect-flows";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import { isListingUrl, type McpAuthValues, mcpFlowFields } from "@codebot/contracts/mcp-connect-flows";
 import type {
   MobilePlugin,
   MobilePluginApp,

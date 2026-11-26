@@ -1,7 +1,7 @@
-import type { BitwardenConnectorStatus, BitwardenHostConnectInput, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { BitwardenConnectorStatus, BitwardenHostConnectInput, CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 
-type DesktopBitwarden = OpenBotDesktopApi["bitwardenConnector"];
+type DesktopBitwarden = CodeBotDesktopApi["bitwardenConnector"];
 
 export type BitwardenConnectorPort = Pick<DesktopBitwarden, "status" | "connect" | "disconnect" | "onChanged"> & {
   connectHost: (input: BitwardenHostConnectInput) => Promise<BitwardenConnectorStatus>;
@@ -10,7 +10,7 @@ export type BitwardenConnectorPort = Pick<DesktopBitwarden, "status" | "connect"
 const unsupported = () => Promise.reject(new Error(sourceText("error.team.connectorsUnsupported")));
 
 export function bitwardenConnectorPort(): BitwardenConnectorPort {
-  const api = window.openbot.bitwardenConnector;
+  const api = window.codebot.bitwardenConnector;
   return {
     status: () => api.status(),
     connect: (key) => api.connect(key),
@@ -78,7 +78,7 @@ export function hostBitwardenConnectorPort(serverId: () => string | undefined): 
     if (!id) throw new Error(sourceText("error.team.connectorsUnsupported"));
     return id;
   };
-  const api = () => window.openbot.bitwardenConnector;
+  const api = () => window.codebot.bitwardenConnector;
   return polledBitwardenConnectorPort({
     status: async () => api().hostStatus(server()),
     connectHost: async (input) => api().hostConnect(input, server()),

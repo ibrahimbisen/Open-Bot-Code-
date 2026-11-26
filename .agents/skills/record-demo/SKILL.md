@@ -39,7 +39,7 @@ profile already has showcase data; use it. Do not run `dev:seed` for a demo.
    ```
 
    - Use a `<name>` with no `/`, so that the file stays at
-     `.openbot-build/dev-automation/<name>.webm`.
+     `.codebot-build/dev-automation/<name>.webm`.
 
    - `--page=<target-id|url-substring>` records another window or an
      embedded browser view. `--service=test-client` records the second
@@ -59,8 +59,8 @@ Other surfaces:
 | Surface | Record with |
 | --- | --- |
 | Desktop app, test client | `bun run dev:automation record` |
-| Browser client (`/app`), public web | The harness's preview recording tool, if it has one. Otherwise a temporary script under `.openbot-build/` with Playwright `page.screencast.start({ path })` |
-| iOS simulator | `xcrun simctl io booted recordVideo --codec=h264 .openbot-build/<name>.mp4`, stop with `kill -INT <pid>` |
+| Browser client (`/app`), public web | The harness's preview recording tool, if it has one. Otherwise a temporary script under `.codebot-build/` with Playwright `page.screencast.start({ path })` |
+| iOS simulator | `xcrun simctl io booted recordVideo --codec=h264 .codebot-build/<name>.mp4`, stop with `kill -INT <pid>` |
 
 ## Step 3 — Check the video
 
@@ -80,12 +80,12 @@ When a check fails, record again. Do not edit the video.
 
 Use gh 2.101 or later (`gh --version`). Do not commit the video.
 
-- New PR: add `--attach .openbot-build/dev-automation/<name>.webm` to
+- New PR: add `--attach .codebot-build/dev-automation/<name>.webm` to
   `gh pr create`.
-- Existing PR: `gh pr edit <pr> --attach .openbot-build/dev-automation/<name>.webm`.
+- Existing PR: `gh pr edit <pr> --attach .codebot-build/dev-automation/<name>.webm`.
   Without a body flag, gh keeps the body and appends the video.
 - To put the video in `## Screenshots`, write
-  `![demo](.openbot-build/dev-automation/<name>.webm)` there in the body
+  `![demo](.codebot-build/dev-automation/<name>.webm)` there in the body
   file and pass `--body-file <file> --attach <same path>`. gh replaces the
   reference with the uploaded asset.
 

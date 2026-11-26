@@ -5,7 +5,7 @@ import { createServer } from "node:net";
 import { type NetworkInterfaceInfo, networkInterfaces } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { cliSpawnTarget } from "../src/backend/cli";
 import {
   developmentInstanceIdForWorktree,
@@ -41,7 +41,7 @@ import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 import { resolvePackageBin } from "./package-bin";
 import { prepareDevelopmentEnvironment } from "./prepare-dev-environment";
 
-const logger = createOpenBotLogger("dev-services");
+const logger = createCodeBotLogger("dev-services");
 
 export type DevelopmentService = "api" | "remote" | "app" | "test-client";
 type DevelopmentTarget = Exclude<DevelopmentService, "remote"> | "all";
@@ -76,7 +76,7 @@ export function developmentEnvironmentForTarget(
 ): NodeJS.ProcessEnv {
   return {
     ...environment,
-    OPENBOT_DEV_TEST_CLIENT_ENABLED: target === "test-client" ? "1" : "0",
+    CODEBOT_DEV_TEST_CLIENT_ENABLED: target === "test-client" ? "1" : "0",
   };
 }
 
@@ -137,15 +137,15 @@ export function createDevelopmentServiceSpec(
     cwd: projectRoot,
     env: {
       ...childEnvironment,
-      OPENBOT_APP_VARIANT: "dev",
-      OPENBOT_DEV_PROFILE: isTestClient ? "test-client" : "app",
-      OPENBOT_DEV_RENDERER_PORT:
-        childEnvironment.OPENBOT_DEV_RENDERER_PORT ??
+      CODEBOT_APP_VARIANT: "dev",
+      CODEBOT_DEV_PROFILE: isTestClient ? "test-client" : "app",
+      CODEBOT_DEV_RENDERER_PORT:
+        childEnvironment.CODEBOT_DEV_RENDERER_PORT ??
         String(isTestClient ? DEFAULT_RENDERER_PORTS["test-client"] : DEFAULT_RENDERER_PORTS.app),
-      OPENBOT_DEV_REMOTE_DEBUGGING_PORT:
-        childEnvironment.OPENBOT_DEV_REMOTE_DEBUGGING_PORT ??
+      CODEBOT_DEV_REMOTE_DEBUGGING_PORT:
+        childEnvironment.CODEBOT_DEV_REMOTE_DEBUGGING_PORT ??
         String(isTestClient ? DEFAULT_REMOTE_DEBUGGING_PORTS["test-client"] : DEFAULT_REMOTE_DEBUGGING_PORTS.app),
-      OPENBOT_DEV_REMOTE_ROLE: childEnvironment.OPENBOT_DEV_REMOTE_ROLE ?? (isTestClient ? "client" : "host"),
+      CODEBOT_DEV_REMOTE_ROLE: childEnvironment.CODEBOT_DEV_REMOTE_ROLE ?? (isTestClient ? "client" : "host"),
     },
   };
 }
@@ -156,10 +156,10 @@ export function createDevInstanceRecord(
   startedAt: number,
 ): DevInstanceRecord | null {
   if (spec.name !== "app" && spec.name !== "test-client") return null;
-  const rendererPort = readPort(spec.env.OPENBOT_DEV_RENDERER_PORT);
-  const remoteDebuggingPort = readPort(spec.env.OPENBOT_DEV_REMOTE_DEBUGGING_PORT);
+  const rendererPort = readPort(spec.env.CODEBOT_DEV_RENDERER_PORT);
+  const remoteDebuggingPort = readPort(spec.env.CODEBOT_DEV_REMOTE_DEBUGGING_PORT);
   if (!rendererPort || !remoteDebuggingPort) return null;
-  const instanceId = readDevelopmentInstanceId(spec.env.OPENBOT_DEV_INSTANCE_ID);
+  const instanceId = readDevelopmentInstanceId(spec.env.CODEBOT_DEV_INSTANCE_ID);
   const profileKind = spec.name === "test-client" ? "test-client" : "app";
   return {
     service: spec.name,
@@ -179,7 +179,7 @@ export function developmentProfileToSeed(
 ): { profile: string; env: NodeJS.ProcessEnv } | null {
   const app = specs.find((spec) => spec.name === "app");
   if (!app) return null;
-  const instanceId = readDevelopmentInstanceId(app.env.OPENBOT_DEV_INSTANCE_ID);
+  const instanceId = readDevelopmentInstanceId(app.env.CODEBOT_DEV_INSTANCE_ID);
   const profile = resolve(
     resolveDevelopmentAppDataRoot(process.platform, app.env),
     developmentUserDataName("app", instanceId),
@@ -274,16 +274,16 @@ async function main(): Promise<void> {
   const developmentEnvironment = dryRun ? {} : await loadDevelopmentEnvironment(projectRoot);
   const sharedEnvironment = developmentEnvironmentForTarget(target);
   if (hostingTest) {
-    sharedEnvironment.OPENBOT_AUTH_API_URL = TEST_ACCOUNT_API_URL;
-    sharedEnvironment.OPENBOT_MOBILE_AUTH_API_URL = TEST_ACCOUNT_API_URL;
-    sharedEnvironment.OPENBOT_DEV_INSTANCE_ID ??= developmentInstanceIdForWorktree("openbot:hosting-test");
-    sharedEnvironment.OPENBOT_HOSTING_DEVELOPER_KEY = await readHostingDeveloperKey();
-    sharedEnvironment.OPENBOT_DEV_REMOTE_ROLE = "none";
+    sharedEnvironment.CODEBOT_AUTH_API_URL = TEST_ACCOUNT_API_URL;
+    sharedEnvironment.CODEBOT_MOBILE_AUTH_API_URL = TEST_ACCOUNT_API_URL;
+    sharedEnvironment.CODEBOT_DEV_INSTANCE_ID ??= developmentInstanceIdForWorktree("codebot:hosting-test");
+    sharedEnvironment.CODEBOT_HOSTING_DEVELOPER_KEY = await readHostingDeveloperKey();
+    sharedEnvironment.CODEBOT_DEV_REMOTE_ROLE = "none";
     logger.info(`The app signs in to the test account Worker: ${TEST_ACCOUNT_API_URL}.`);
   }
-  sharedEnvironment.OPENBOT_DEV_STACK_ID = String(process.pid);
-  if (foreground) sharedEnvironment.OPENBOT_DEV_WINDOW_FOCUS = "foreground";
-  else sharedEnvironment.OPENBOT_DEV_WINDOW_FOCUS ??= "background";
+  sharedEnvironment.CODEBOT_DEV_STACK_ID = String(process.pid);
+  if (foreground) sharedEnvironment.CODEBOT_DEV_WINDOW_FOCUS = "foreground";
+  else sharedEnvironment.CODEBOT_DEV_WINDOW_FOCUS ??= "background";
 
   const { specs, stack } = await withDevPortAllocation(async (records) => {
     const conflicts = conflictingDevStacks(records, { projectRoot, services });
@@ -298,14 +298,14 @@ async function main(): Promise<void> {
       logger.warn(`This worktree already runs a dev stack:\n${detail}`);
     }
     const instanceId = developmentInstanceIdForStart({
-      configured: sharedEnvironment.OPENBOT_DEV_INSTANCE_ID,
+      configured: sharedEnvironment.CODEBOT_DEV_INSTANCE_ID,
       shared,
       besideOwnStack: conflicts.length > 0,
       projectRoot,
     });
-    if (instanceId !== sharedEnvironment.OPENBOT_DEV_INSTANCE_ID) {
-      sharedEnvironment.OPENBOT_DEV_INSTANCE_ID = instanceId;
-      logger.info("This worktree opens its own dev profile. Pass --shared to open the shared OpenBot Dev profile.");
+    if (instanceId !== sharedEnvironment.CODEBOT_DEV_INSTANCE_ID) {
+      sharedEnvironment.CODEBOT_DEV_INSTANCE_ID = instanceId;
+      logger.info("This worktree opens its own dev profile. Pass --shared to open the shared CodeBot Dev profile.");
     }
     const allocated = await allocateDevelopmentPorts(
       services,
@@ -361,14 +361,14 @@ export function createDevStackRecord(
     if (port !== undefined) ports.push({ name, port });
   };
   for (const spec of specs) {
-    if (spec.name === "api") addPort("api", spec.env.OPENBOT_API_PORT);
+    if (spec.name === "api") addPort("api", spec.env.CODEBOT_API_PORT);
     if (spec.name === "remote") {
       addPort("signal", spec.env.REMOTE_SIGNAL_PORT);
       addPort("signal-health", spec.env.REMOTE_HEALTH_PORT);
     }
     if (spec.name === "app" || spec.name === "test-client") {
-      addPort(`${spec.name}-renderer`, spec.env.OPENBOT_DEV_RENDERER_PORT);
-      addPort(`${spec.name}-debug`, spec.env.OPENBOT_DEV_REMOTE_DEBUGGING_PORT);
+      addPort(`${spec.name}-renderer`, spec.env.CODEBOT_DEV_RENDERER_PORT);
+      addPort(`${spec.name}-debug`, spec.env.CODEBOT_DEV_REMOTE_DEBUGGING_PORT);
     }
   }
   return {
@@ -391,14 +391,14 @@ async function allocateDevelopmentPorts(
 
   if (services.includes("api")) {
     const apiPort = await findAvailablePort(
-      readPort(sharedEnvironment.OPENBOT_API_PORT) ?? DEFAULT_API_PORT,
+      readPort(sharedEnvironment.CODEBOT_API_PORT) ?? DEFAULT_API_PORT,
       reservedPorts,
       heldPorts,
     );
     reservedPorts.add(apiPort);
-    sharedEnvironment.OPENBOT_API_PORT = String(apiPort);
-    if (!sharedEnvironment.OPENBOT_AUTH_API_URL) {
-      sharedEnvironment.OPENBOT_AUTH_API_URL = `http://127.0.0.1:${apiPort}`;
+    sharedEnvironment.CODEBOT_API_PORT = String(apiPort);
+    if (!sharedEnvironment.CODEBOT_AUTH_API_URL) {
+      sharedEnvironment.CODEBOT_AUTH_API_URL = `http://127.0.0.1:${apiPort}`;
     }
     configureSiteHostingDevelopmentEnvironment(sharedEnvironment, apiPort);
     if (services.includes("remote")) {
@@ -427,8 +427,8 @@ async function allocateDevelopmentPorts(
       }
     }
     configureMobileConnectDevelopmentNetwork(services, sharedEnvironment, networkInterfaces());
-    if (sharedEnvironment.OPENBOT_MOBILE_AUTH_API_URL) {
-      logger.info(`Mobile Connect API: ${sharedEnvironment.OPENBOT_MOBILE_AUTH_API_URL}`);
+    if (sharedEnvironment.CODEBOT_MOBILE_AUTH_API_URL) {
+      logger.info(`Mobile Connect API: ${sharedEnvironment.CODEBOT_MOBILE_AUTH_API_URL}`);
     }
     if (apiPort !== DEFAULT_API_PORT) {
       logger.info(`API port ${DEFAULT_API_PORT} is busy. Using ${apiPort}.`);
@@ -441,25 +441,25 @@ async function allocateDevelopmentPorts(
     if (service === "app" || service === "test-client") {
       const defaultPort = DEFAULT_RENDERER_PORTS[service];
       const rendererPort = await findAvailablePort(
-        readPort(environment.OPENBOT_DEV_RENDERER_PORT) ?? defaultPort,
+        readPort(environment.CODEBOT_DEV_RENDERER_PORT) ?? defaultPort,
         reservedPorts,
         heldPorts,
       );
       reservedPorts.add(rendererPort);
-      environment.OPENBOT_DEV_RENDERER_PORT = String(rendererPort);
+      environment.CODEBOT_DEV_RENDERER_PORT = String(rendererPort);
       if (rendererPort !== defaultPort) {
-        environment.OPENBOT_DEV_INSTANCE_ID ??= String(rendererPort);
+        environment.CODEBOT_DEV_INSTANCE_ID ??= String(rendererPort);
         logger.info(`Renderer port ${defaultPort} is busy. Using ${rendererPort} for ${service}.`);
       }
 
       const defaultRemoteDebuggingPort = DEFAULT_REMOTE_DEBUGGING_PORTS[service];
       const remoteDebuggingPort = await findAvailablePort(
-        readPort(environment.OPENBOT_DEV_REMOTE_DEBUGGING_PORT) ?? defaultRemoteDebuggingPort,
+        readPort(environment.CODEBOT_DEV_REMOTE_DEBUGGING_PORT) ?? defaultRemoteDebuggingPort,
         reservedPorts,
         heldPorts,
       );
       reservedPorts.add(remoteDebuggingPort);
-      environment.OPENBOT_DEV_REMOTE_DEBUGGING_PORT = String(remoteDebuggingPort);
+      environment.CODEBOT_DEV_REMOTE_DEBUGGING_PORT = String(remoteDebuggingPort);
       if (remoteDebuggingPort !== defaultRemoteDebuggingPort) {
         logger.info(
           `Electron debug port ${defaultRemoteDebuggingPort} is busy. Using ${remoteDebuggingPort} for ${service}.`,
@@ -537,7 +537,7 @@ async function runDevelopmentServices(specs: DevelopmentServiceSpec[], stack: De
         process.exitCode = code ?? 1;
       });
     });
-    if (spec.name === "api") await waitForDevelopmentApi(spec.env.OPENBOT_API_PORT, child);
+    if (spec.name === "api") await waitForDevelopmentApi(spec.env.CODEBOT_API_PORT, child);
     if (spec.name === "remote") await waitForDevelopmentRemote(spec.env.REMOTE_HEALTH_PORT, child);
   };
 
@@ -581,7 +581,7 @@ async function runDevelopmentServices(specs: DevelopmentServiceSpec[], stack: De
 export function configureSiteHostingDevelopmentEnvironment(environment: NodeJS.ProcessEnv, apiPort: number): void {
   environment.SITE_PUBLISH_ENABLED ??= "true";
   environment.SITE_COOKIE_ISOLATION_READY ??= "true";
-  environment.SITE_LOCAL_ORIGIN ??= `http://openbot.localhost:${apiPort}`;
+  environment.SITE_LOCAL_ORIGIN ??= `http://codebot.localhost:${apiPort}`;
 }
 
 export function configureMobileConnectDevelopmentNetwork(
@@ -590,9 +590,9 @@ export function configureMobileConnectDevelopmentNetwork(
   interfaces: DevelopmentNetworkInterfaces,
 ): void {
   const hasMobileClient = services.some((service) => service === "app" || service === "test-client");
-  const apiPort = readPort(environment.OPENBOT_API_PORT);
+  const apiPort = readPort(environment.CODEBOT_API_PORT);
   if (!apiPort) return;
-  const exposeToLan = hasMobileClient && environment.OPENBOT_API_HOST !== "127.0.0.1";
+  const exposeToLan = hasMobileClient && environment.CODEBOT_API_HOST !== "127.0.0.1";
   const address = exposeToLan ? selectMobileConnectLanAddress(interfaces) : null;
 
   if (services.includes("remote")) {
@@ -609,8 +609,8 @@ export function configureMobileConnectDevelopmentNetwork(
   }
 
   if (!address) return;
-  environment.OPENBOT_API_HOST ??= "0.0.0.0";
-  environment.OPENBOT_MOBILE_AUTH_API_URL ??= `http://${address}:${apiPort}`;
+  environment.CODEBOT_API_HOST ??= "0.0.0.0";
+  environment.CODEBOT_MOBILE_AUTH_API_URL ??= `http://${address}:${apiPort}`;
 }
 
 export function selectMobileConnectLanAddress(interfaces: DevelopmentNetworkInterfaces): string | null {

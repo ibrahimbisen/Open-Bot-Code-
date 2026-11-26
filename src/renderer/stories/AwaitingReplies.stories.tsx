@@ -1,5 +1,5 @@
-import type { AgentProfile } from "@openbot/ui/data";
-import { AwaitingReplies, type AwaitingReplyItem } from "@openbot/ui/features/conversation/AwaitingReplies";
+import type { AgentProfile } from "@codebot/ui/data";
+import { AwaitingReplies, type AwaitingReplyItem } from "@codebot/ui/features/conversation/AwaitingReplies";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { requireFixture, STORY_AGENTS } from "../src/preview/fixtures";
@@ -26,7 +26,7 @@ const meta = {
   title: "Conversation/Awaiting replies",
   component: AwaitingReplies,
   render: (args) => (
-    <main style={{ width: "min(640px, 100vw)", padding: "var(--openbot-space-4)" }}>
+    <main style={{ width: "min(640px, 100vw)", padding: "var(--codebot-space-4)" }}>
       <AwaitingReplies {...args} />
     </main>
   ),

@@ -3,7 +3,7 @@ import {
   type OnePasswordConnectorDesktopApi,
   type OnePasswordConnectorStatus,
   type OnePasswordSetup,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 const MOCK_INSTALL_MS = 1_500;
 const MOCK_CONNECT_MS = 1_500;
@@ -14,7 +14,7 @@ const CONNECTED: OnePasswordConnectorStatus = {
   ...DISCONNECTED_ONEPASSWORD_CONNECTOR,
   state: "connected",
   setup: READY,
-  vaultNames: ["Shared with OpenBot"],
+  vaultNames: ["Shared with CodeBot"],
   loginCount: 3,
 };
 

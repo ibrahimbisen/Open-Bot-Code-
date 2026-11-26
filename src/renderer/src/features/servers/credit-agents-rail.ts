@@ -1,7 +1,7 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { MEDIA_APPROVAL_CHOICE_CAPABILITY } from "@openbot/contracts/team-protocol/media-approval-choice-v1";
-import { MEDIA_APPROVAL_CREDITS_CAPABILITY } from "@openbot/contracts/team-protocol/media-approval-credits-v1";
-import { useText } from "@openbot/ui/text";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { MEDIA_APPROVAL_CHOICE_CAPABILITY } from "@codebot/contracts/team-protocol/media-approval-choice-v1";
+import { MEDIA_APPROVAL_CREDITS_CAPABILITY } from "@codebot/contracts/team-protocol/media-approval-credits-v1";
+import { useText } from "@codebot/ui/text";
 import { createEffect } from "solid-js";
 import { actionToast } from "../../action-toast";
 import {

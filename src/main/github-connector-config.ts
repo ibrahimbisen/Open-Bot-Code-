@@ -7,8 +7,8 @@ export interface GitHubAppConfig {
 }
 
 export function githubAppConfig(env: NodeJS.ProcessEnv = process.env): GitHubAppConfig | null {
-  const clientId = env.OPENBOT_GITHUB_CLIENT_ID?.trim() || GITHUB_APP_CLIENT_ID;
-  const slug = env.OPENBOT_GITHUB_APP_SLUG?.trim() || GITHUB_APP_SLUG;
+  const clientId = env.CODEBOT_GITHUB_CLIENT_ID?.trim() || GITHUB_APP_CLIENT_ID;
+  const slug = env.CODEBOT_GITHUB_APP_SLUG?.trim() || GITHUB_APP_SLUG;
   if (!/^[A-Za-z0-9.]+$/u.test(clientId) || !/^[a-z0-9-]+$/u.test(slug)) return null;
   return { clientId, slug };
 }

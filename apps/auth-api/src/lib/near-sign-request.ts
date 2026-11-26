@@ -1,4 +1,4 @@
-import type { NearOwnerAction } from "@openbot/contracts/ipc";
+import type { NearOwnerAction } from "@codebot/contracts/ipc";
 
 export type NearJsonValue = string | number | boolean | null | NearJsonValue[] | NearJsonObject;
 export interface NearJsonObject {
@@ -152,6 +152,6 @@ export function nearSignAction(request: NearSignRequest): NearOwnerAction {
 export function nearReturnUrl(request: NearSignRequest, data: string): string {
   const query = `nonce=${encodeURIComponent(request.nonce)}&data=${data}`;
   return request.port === null
-    ? `openbot://near-signature?${query}`
+    ? `codebot://near-signature?${query}`
     : `http://127.0.0.1:${request.port}/near-signature?${query}`;
 }

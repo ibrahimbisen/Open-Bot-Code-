@@ -17,7 +17,7 @@ declare class BackgroundRefreshModule extends NativeModule<{
   finish(id: string, success: boolean): Promise<void>;
 }
 
-const native = requireOptionalNativeModule<BackgroundRefreshModule>("OpenBotBackgroundRefresh");
+const native = requireOptionalNativeModule<BackgroundRefreshModule>("CodeBotBackgroundRefresh");
 
 function enable(module: BackgroundRefreshModule, run: BackgroundRefreshRun): () => void {
   const runs = new Map<string, AbortController>();

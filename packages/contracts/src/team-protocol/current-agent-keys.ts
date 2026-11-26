@@ -40,7 +40,7 @@ const OPAQUE_KEYS: ReadonlySet<string> = new Set(["layout"]);
 const DYNAMIC_MAP_KEYS: ReadonlySet<string> = new Set(["responses", "references", "answers"]);
 
 function isUntranslatedPath(path: string): boolean {
-  const { pathname } = new URL(path, "http://openbot.invalid");
+  const { pathname } = new URL(path, "http://codebot.invalid");
   return pathname.startsWith("/v1/sidebar-layout") || pathname === "/v1/agents/conversation-reads";
 }
 

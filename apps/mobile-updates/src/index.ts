@@ -75,7 +75,7 @@ class UpdateStorage extends Context.Service<
   {
     get(key: string): Effect.Effect<UpdateObject | null, UpdateStorageError>;
   }
->()("@openbot/mobile-updates/UpdateStorage") {
+>()("@codebot/mobile-updates/UpdateStorage") {
   static layer(bucket: UpdateBucket) {
     return Layer.succeed(
       UpdateStorage,
@@ -87,7 +87,7 @@ class UpdateStorage extends Context.Service<
 }
 
 const openCache = Effect.fn("MobileUpdates.openCache")(() =>
-  storageCall(() => caches.open("openbot-mobile-updates-v1")).pipe(
+  storageCall(() => caches.open("codebot-mobile-updates-v1")).pipe(
     Effect.catch((error) => {
       console.error(JSON.stringify({ event: "mobile_updates_cache_open_error", message: error.message }));
       return Effect.succeed(undefined);
@@ -119,7 +119,7 @@ const routeGet = Effect.fn("MobileUpdates.routeGet")(function* (
   if (url.pathname.startsWith("/assets/")) {
     return yield* assetResponse(url, url.pathname.slice("/assets/".length), runtime);
   }
-  if (url.pathname === "/") return textResponse(200, "OpenBot mobile updates.");
+  if (url.pathname === "/") return textResponse(200, "CodeBot mobile updates.");
   return textResponse(404, "Not found.");
 });
 
@@ -285,7 +285,7 @@ function noUpdateResponse(): Response {
 
 function partResponse(name: "manifest" | "directive", part: StoredDirective, signed: boolean): Response | null {
   if (signed && part.signature === null) return null;
-  const boundary = `openbot-${crypto.randomUUID()}`;
+  const boundary = `codebot-${crypto.randomUUID()}`;
   const lines = [
     `--${boundary}`,
     `Content-Disposition: form-data; name="${name}"`,

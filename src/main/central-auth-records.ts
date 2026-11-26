@@ -1,18 +1,18 @@
-import { type CustomServerPlan, optionalCustomServerPayment } from "@openbot/contracts/custom-server-plans";
-import { type HostKeyHandover, optionalHostKeyHandovers } from "@openbot/contracts/host-key-handover";
-import { inviteUseCount, isPermanentInvite } from "@openbot/contracts/invite-links";
+import { type CustomServerPlan, optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
+import { type HostKeyHandover, optionalHostKeyHandovers } from "@codebot/contracts/host-key-handover";
+import { inviteUseCount, isPermanentInvite } from "@codebot/contracts/invite-links";
 import {
   type AvatarColor,
   type CentralAuthUser,
   isAvatarColor,
   type MobileConnectedDevice,
-} from "@openbot/contracts/ipc";
-import { decodeRecord, requiredString } from "@openbot/contracts/ipc-decoding";
-import { type DynamicRecord, isBoolean, isNumber, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { decodeRecord, requiredString } from "@codebot/contracts/ipc-decoding";
+import { type DynamicRecord, isBoolean, isNumber, isString } from "@codebot/contracts/runtime-values";
 import {
   optionalServerAppearanceField,
   type ServerAppearance,
-} from "@openbot/contracts/team-protocol/host-appearance-v1";
+} from "@codebot/contracts/team-protocol/host-appearance-v1";
 
 export interface RegisteredRemoteHost {
   hostId: string;

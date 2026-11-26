@@ -14,7 +14,7 @@ import {
   isAgentTemplateCardPng,
   type MarketplaceAgentDetail,
   type MarketplaceSkillDetail,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { MarketplaceCardJob } from "./marketplace-card-page";
 
 const execFileAsync = promisify(execFile);
@@ -155,7 +155,7 @@ export function outDirectoryArgument(args: readonly string[]): string | undefine
 
 export async function renderMarketplaceCards(jobs: readonly MarketplaceCardJob[]): Promise<Uint8Array[]> {
   if (jobs.length === 0) return [];
-  const workspace = await mkdtemp(path.join(tmpdir(), "openbot-marketplace-cards-"));
+  const workspace = await mkdtemp(path.join(tmpdir(), "codebot-marketplace-cards-"));
   try {
     const items = jobs.map((job, index) => ({ job, fileName: `card-${index}.png` }));
     const control = {

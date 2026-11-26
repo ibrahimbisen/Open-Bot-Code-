@@ -10,7 +10,7 @@ import {
   memberLimitForPlan,
   storageTierGb,
   storageTierOf,
-} from "@openbot/contracts/billing";
+} from "@codebot/contracts/billing";
 import {
   HOSTED_BOAT_PLAN_SIZE,
   HOSTED_PLAN_SIZE,
@@ -28,11 +28,11 @@ import {
   type HostedServerStatus,
   type HostedServerSummary,
   parseHostedServerName,
-} from "@openbot/contracts/hosted-servers";
-import { parseLicenseOrder } from "@openbot/contracts/license";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import type { RouteHostState } from "@openbot/contracts/signal-protocol/ingress-queue";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/hosted-servers";
+import { parseLicenseOrder } from "@codebot/contracts/license";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import type { RouteHostState } from "@codebot/contracts/signal-protocol/ingress-queue";
+import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Layer, Result, Schema } from "effect";
 import { SOLD_OUT_PLANS } from "../lib/pricing-page";
 import {
@@ -102,10 +102,10 @@ const RESIZE_AFTER_NO_USE_MS = 7 * 60_000;
 const LEASE_TTL_SECONDS = 2 * 60 * 60;
 const LEASE_EXTEND_BEFORE_MS = 60 * 60_000;
 const HELD_RESUME_START_COMMAND =
-  "if [ -e /run/openbot-pre-stop ]; then sudo -n rm -f /run/openbot-pre-stop && sudo -n systemctl start --no-block openbot.service && echo started; fi";
+  "if [ -e /run/codebot-pre-stop ]; then sudo -n rm -f /run/codebot-pre-stop && sudo -n systemctl start --no-block codebot.service && echo started; fi";
 const HELD_RESUME_START_TIMEOUT_SECONDS = 10;
 const FAILED_STOP_START_COMMAND =
-  "if find /run/openbot-pre-stop -mmin +5 2>/dev/null | grep -q .; then sudo -n rm -f /run/openbot-pre-stop && sudo -n systemctl start --no-block openbot.service && echo started; fi";
+  "if find /run/codebot-pre-stop -mmin +5 2>/dev/null | grep -q .; then sudo -n rm -f /run/codebot-pre-stop && sudo -n systemctl start --no-block codebot.service && echo started; fi";
 const SCHEDULE_WAKE_BEFORE_MS = 10 * 60_000;
 const RETENTION_WAKE_AFTER_MS = 10 * 24 * 60 * 60_000;
 const RETENTION_DISK_KEPT_MS = 14 * 24 * 60 * 60_000;
@@ -1215,7 +1215,7 @@ export class HostedServerService {
       if (claimHash !== row.claim_token_hash) return { state: "waiting" };
       if (!row.archived) return { state: "assigned", serverId: row.server_id, claim };
       if (restoreVersion !== POOL_RESTORE_VERSION) {
-        yield* this.#releaseRestore(row, "its openbot-pool-wait cannot restore an archive · prepare it again");
+        yield* this.#releaseRestore(row, "its codebot-pool-wait cannot restore an archive · prepare it again");
         return { state: "waiting" };
       }
       const restore = yield* this.#restoreOf(row.server_id, now);
@@ -2713,7 +2713,7 @@ export class HostedServerService {
     const sandboxId = row.provider_sandbox_id;
     if (!boat || !sandboxId) return;
     if (row.observed_state !== "running" && !(stopFailing && row.observed_state === "stopping")) return;
-    dependencies.schedule(startOpenBot(boat, row.server_id, sandboxId, "failed stop"));
+    dependencies.schedule(startCodeBot(boat, row.server_id, sandboxId, "failed stop"));
   });
 
   readonly #wakeForClient = Effect.fn("HostedServerService.wakeForClient")(function* (
@@ -2872,7 +2872,7 @@ export class HostedServerService {
       );
       this.#track(row, { name: "hosted_server_action", action: "resized", plan: row.plan, size });
     }
-    if (operationResult2.success) dependencies.schedule(startOpenBot(boat, row.server_id, sandboxId, "held resume"));
+    if (operationResult2.success) dependencies.schedule(startCodeBot(boat, row.server_id, sandboxId, "held resume"));
   });
 
   readonly #observe = Effect.fn("HostedServerService.observe")(function* (
@@ -3001,7 +3001,7 @@ export class HostedServerService {
     const ticketKey = this.#ticketKey;
     if (!ticketKey) return null;
     const privateValue = yield* hostedValidate(() => ticketPrivateValue(ticketKey));
-    this.#claimSecret ??= yield* deriveSecret(privateValue, "openbot-hosted-claim-key:v1").pipe(
+    this.#claimSecret ??= yield* deriveSecret(privateValue, "codebot-hosted-claim-key:v1").pipe(
       Effect.mapError(hostedFailure),
     );
     return this.#claimSecret;
@@ -3142,7 +3142,7 @@ function createRequest(row: HostedServerRow, from: string, claim: string) {
   return {
     type: row.size,
     from,
-    env: { OPENBOT_HOSTED_CLAIM: claim, OPENBOT_HOSTED_HOST_ID: row.server_id },
+    env: { CODEBOT_HOSTED_CLAIM: claim, CODEBOT_HOSTED_HOST_ID: row.server_id },
     ttlSeconds: LEASE_TTL_SECONDS,
     idempotencyKey: row.server_id,
   };
@@ -3164,11 +3164,11 @@ function isDeveloperKey(expected: string | undefined, provided: string | null | 
 }
 
 function hostedClaim(secret: string, serverId: string) {
-  return hmacSha256(secret, `openbot-hosted-claim:v1:${serverId}`);
+  return hmacSha256(secret, `codebot-hosted-claim:v1:${serverId}`);
 }
 
 function hostedPoolClaim(secret: string, serverId: string, hostId: string) {
-  return hmacSha256(secret, `openbot-hosted-pool-claim:v1:${serverId}:${hostId}`);
+  return hmacSha256(secret, `codebot-hosted-pool-claim:v1:${serverId}:${hostId}`);
 }
 
 function poolLocations(currency: BillingCurrency): readonly [string, ...string[]] {
@@ -3181,7 +3181,7 @@ function sandboxName(plan: BillingPlanId, email: string, serverId: string): stri
       .toLowerCase()
       .replace(/[^a-z0-9]+/gu, "-")
       .replace(/^-+|-+$/gu, "");
-  const prefix = `openbot-${plan}-`;
+  const prefix = `codebot-${plan}-`;
   const suffix = `-${slug(serverId).slice(0, 8)}`;
   const owner = slug(email)
     .slice(0, SANDBOX_NAME_MAX_LENGTH - prefix.length - suffix.length)
@@ -3238,7 +3238,7 @@ function rateLimitRetryAt(row: HostedServerRow): number {
   return row.updated_at + Math.min(RATE_LIMIT_RETRY_MAX_MS, Math.max(RATE_LIMIT_RETRY_MIN_MS, waited));
 }
 
-const startOpenBot = Effect.fn("HostedServerService.startOpenBot")(function* (
+const startCodeBot = Effect.fn("HostedServerService.startCodeBot")(function* (
   boat: BoatClient,
   serverId: string,
   sandboxId: string,

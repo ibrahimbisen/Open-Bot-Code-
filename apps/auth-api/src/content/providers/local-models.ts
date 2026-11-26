@@ -4,9 +4,9 @@ export const LOCAL_MODELS_PROVIDER: ProviderPage = {
   provider: "custom",
   name: "Ollama and LM Studio",
   answer:
-    "OpenBot runs a coding agent on a model from Ollama or LM Studio, on macOS, Windows or Linux. The model, your files and your chats stay on your computer, and your agents work in a team with an app on your phone.",
+    "CodeBot runs a coding agent on a model from Ollama or LM Studio, on macOS, Windows or Linux. The model, your files and your chats stay on your computer, and your agents work in a team with an app on your phone.",
   connect:
-    "Start Ollama or LM Studio. OpenBot looks at their usual addresses, 127.0.0.1:11434 and 127.0.0.1:1234, and shows the server under Found on this computer, in onboarding and in Settings. Press Add, and OpenCode runs your agents on its models.",
+    "Start Ollama or LM Studio. CodeBot looks at their usual addresses, 127.0.0.1:11434 and 127.0.0.1:1234, and shows the server under Found on this computer, in onboarding and in Settings. Press Add, and OpenCode runs your agents on its models.",
   adds: [
     {
       icon: "laptop",
@@ -37,7 +37,7 @@ export const LOCAL_MODELS_PROVIDER: ProviderPage = {
     {
       question: "Can I use Ollama or LM Studio with a coding agent?",
       answer:
-        "Yes. In OpenBot, OpenCode runs the agent on the OpenAI-compatible server of Ollama or LM Studio. Choose a model that supports tool calls: smaller models and models not trained for tools can send tool calls in the wrong format.",
+        "Yes. In CodeBot, OpenCode runs the agent on the OpenAI-compatible server of Ollama or LM Studio. Choose a model that supports tool calls: smaller models and models not trained for tools can send tool calls in the wrong format.",
     },
     {
       question: "How much context does a local model need?",
@@ -51,7 +51,7 @@ export const LOCAL_MODELS_PROVIDER: ProviderPage = {
     {
       question: "Can I use a model server on another computer?",
       answer:
-        "Yes. Add the address of any OpenAI-compatible server in OpenBot's settings, with a key if the server needs one.",
+        "Yes. Add the address of any OpenAI-compatible server in CodeBot's settings, with a key if the server needs one.",
     },
   ],
   sources: [

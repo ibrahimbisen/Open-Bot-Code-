@@ -12,8 +12,8 @@ import {
 } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { type NearWalletStatus, parseNearDepositInput, parseNearWalletCreateInput } from "@codebot/contracts/ipc";
 import { createAgentApi } from "@near-intents-agent-api/sdk";
-import { type NearWalletStatus, parseNearDepositInput, parseNearWalletCreateInput } from "@openbot/contracts/ipc";
 import { Effect, Result } from "effect";
 import { z } from "zod";
 import { NearWalletService } from "../src/main/near-wallet-service";
@@ -22,11 +22,11 @@ import { NearWalletStore } from "../src/main/near-wallet-store";
 import type { SecretCipher } from "../src/main/provider-credential-store";
 import { KeyedNearGateway } from "./near-wallet-fake-api";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/near-wallet-live");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/near-wallet-live");
 const PAGE_ORIGIN = "https://api.openbot.run";
 const BASE_URL = process.env.NEAR_LIVE_API_URL || undefined;
 const AGENT_ID = "live-smoke-agent";
-const TEST_WALLET_EXTERNAL_ID = "openbot-mainnet-test-wallet";
+const TEST_WALLET_EXTERNAL_ID = "codebot-mainnet-test-wallet";
 const FIRST_BUDGET_USD = "5";
 const NEXT_BUDGET_USD = "6";
 const WAIT_MS = 180_000;
@@ -125,7 +125,7 @@ class KeyCipher implements SecretCipher {
   readonly #key: Buffer;
 
   constructor(secret: string) {
-    this.#key = Buffer.from(hkdfSync("sha256", secret, "openbot-near-live", "store", 32));
+    this.#key = Buffer.from(hkdfSync("sha256", secret, "codebot-near-live", "store", 32));
   }
 
   encrypt = (value: string): Buffer => {
@@ -188,7 +188,7 @@ async function adoptTestWallet(
   accountId: string,
 ): Promise<void> {
   const api = createAgentApi({
-    apiKey: "openbot-gateway",
+    apiKey: "codebot-gateway",
     fetch: gateway.fetch("personal"),
     ...(BASE_URL ? { baseUrl: BASE_URL } : {}),
   });

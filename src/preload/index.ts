@@ -1,7 +1,8 @@
-import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentIpcRequest,
   type AttachmentImportEvent,
+  type CodeBotDesktopApi,
   decodeAddedAgent,
   decodeAgentAccessSnapshot,
   decodeAgentAdminSettings,
@@ -101,12 +102,11 @@ import {
   IPC_ENDPOINTS,
   type IpcEndpointGroup,
   LOCAL_SERVER_ID,
-  type OpenBotDesktopApi,
   type RequestEndpoint,
   type ServerScope,
   type ServerSummary,
   type Untyped,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   decodeAgentWebhookSecret,
   decodeEventActivity,
@@ -116,9 +116,9 @@ import {
   decodeSaveEventRoutineResult,
   decodeWebhookSecret,
   decodeWebhookTestResult,
-} from "@openbot/contracts/ipc-events";
-import { decodeAcceptedOwnerTransfer, decodeOwnerTransfer } from "@openbot/contracts/owner-transfer";
-import { decodeChannelCompactAvailability } from "@openbot/contracts/team-protocol/channel-compact-availability-v1";
+} from "@codebot/contracts/ipc-events";
+import { decodeAcceptedOwnerTransfer, decodeOwnerTransfer } from "@codebot/contracts/owner-transfer";
+import { decodeChannelCompactAvailability } from "@codebot/contracts/team-protocol/channel-compact-availability-v1";
 import { contextBridge, ipcRenderer, webUtils } from "electron";
 import {
   decodeAccountUsageFromMain,
@@ -622,7 +622,7 @@ window.addEventListener("paste", (event) => {
 });
 window.addEventListener("change", (event) => {
   const input = event.target;
-  if (!(input instanceof HTMLInputElement) || input.dataset.openbotAttachmentPicker !== "true") return;
+  if (!(input instanceof HTMLInputElement) || input.dataset.codebotAttachmentPicker !== "true") return;
   void importFiles([...(input.files ?? [])]);
 });
 
@@ -781,7 +781,7 @@ function selectJoinedServer(server: ServerSummary): ServerSummary {
   return server;
 }
 
-const openbotApi: OpenBotDesktopApi = {
+const codebotApi: CodeBotDesktopApi = {
   ...bridgeGroup(IPC_ENDPOINTS.app, {
     getAppInfo: decodeAppInfo,
     getSetupState: decodeAppSetupState,
@@ -1759,4 +1759,4 @@ const openbotApi: OpenBotDesktopApi = {
   }),
 };
 
-contextBridge.exposeInMainWorld("openbot", openbotApi);
+contextBridge.exposeInMainWorld("codebot", codebotApi);

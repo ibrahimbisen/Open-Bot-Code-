@@ -1,6 +1,6 @@
-import type { LibraryFolder } from "@openbot/contracts/ipc";
-import { Bot, Check, ChevronRight, DropdownMenu, Folder, FolderInput, FolderPlus, X } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import type { LibraryFolder } from "@codebot/contracts/ipc";
+import { Bot, Check, ChevronRight, DropdownMenu, Folder, FolderInput, FolderPlus, X } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { For, Show } from "solid-js";
 
 interface LibraryMoveEntry {

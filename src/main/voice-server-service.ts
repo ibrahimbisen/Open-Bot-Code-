@@ -13,8 +13,8 @@ import {
   type VoiceServerRoutes,
   type VoiceServerSettings,
   type VoiceTranscriptionResult,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import {
   decodeVoiceServerWav,
   OPENAI_VOICES,
@@ -23,16 +23,16 @@ import {
   voiceServerHost,
   voiceServerModelLists,
   voiceServerVoiceNames,
-} from "@openbot/contracts/voice-server";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, registerSecretValue } from "@openbot/logging";
+} from "@codebot/contracts/voice-server";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, registerSecretValue } from "@codebot/logging";
 import { Effect, Schema } from "effect";
 import { readLimitedBody } from "../backend/limited-body";
 import { PreferenceStore } from "./preference-file";
 import type { VoiceApiKeyStore } from "./voice-api-key-store";
 import { VoiceOperationError } from "./voice-model-service";
 
-const logger = createOpenBotLogger("voice-server-service");
+const logger = createCodeBotLogger("voice-server-service");
 
 const PROBE_TIMEOUT_MS = 8_000;
 const TRANSCRIPTION_TIMEOUT_MS = 120_000;

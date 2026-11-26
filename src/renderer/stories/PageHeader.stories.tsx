@@ -1,5 +1,5 @@
-import { Button } from "@openbot/ui";
-import { PageHeader } from "@openbot/ui/features/window/PageHeader";
+import { Button } from "@codebot/ui";
+import { PageHeader } from "@codebot/ui/features/window/PageHeader";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

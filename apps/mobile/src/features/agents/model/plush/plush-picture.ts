@@ -1,6 +1,6 @@
-import { avatarHeadColor, avatarStyleForSeed } from "@openbot/brand/bloub-avatar";
-import type { AvatarMood } from "@openbot/brand/bloub-avatar-motion";
-import type { AvatarColor, AvatarHue } from "@openbot/contracts/ipc";
+import { avatarHeadColor, avatarStyleForSeed } from "@codebot/brand/bloub-avatar";
+import type { AvatarMood } from "@codebot/brand/bloub-avatar-motion";
+import type { AvatarColor, AvatarHue } from "@codebot/contracts/ipc";
 import { ImageFormat, Skia } from "@shopify/react-native-skia";
 import { Directory, File, Paths } from "expo-file-system";
 import { drawFlat, flatGeometryKey, flatRestFrame } from "./flat-draw";

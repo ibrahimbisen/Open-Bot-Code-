@@ -22,14 +22,14 @@
 }
 
 .scroll-edges > .scroll-edges-view {
-  --scroll-edges-fade-size: var(--openbot-space-8);
+  --scroll-edges-fade-size: var(--codebot-space-8);
   --scroll-edges-fade-side: to right;
 
   mask-image: linear-gradient(
     var(--scroll-edges-fade-side),
     transparent,
-    var(--openbot-text-primary) var(--scroll-edges-fade-start),
-    var(--openbot-text-primary) calc(100% - var(--scroll-edges-fade-end)),
+    var(--codebot-text-primary) var(--scroll-edges-fade-start),
+    var(--codebot-text-primary) calc(100% - var(--scroll-edges-fade-end)),
     transparent
   );
 }
@@ -39,7 +39,7 @@
 }
 
 .scroll-edges:has(> .scroll-edges-view:focus-visible) {
-  outline: 2px solid var(--openbot-border-focus);
+  outline: 2px solid var(--codebot-border-focus);
   outline-offset: 2px;
 }
 
@@ -107,7 +107,7 @@
   position: absolute;
   z-index: 1;
   display: flex;
-  padding: var(--openbot-space-1-5);
+  padding: var(--codebot-space-1-5);
   pointer-events: none;
 }
 
@@ -138,28 +138,28 @@
 }
 
 .scroll-edges-edge .scroll-edges-arrow {
-  border-radius: var(--openbot-radius-pill);
-  background: color-mix(in srgb, var(--openbot-text-primary) 16%, var(--openbot-bg-surface-raised));
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--openbot-text-primary) 28%, transparent);
-  color: var(--openbot-text-primary);
+  border-radius: var(--codebot-radius-pill);
+  background: color-mix(in srgb, var(--codebot-text-primary) 16%, var(--codebot-bg-surface-raised));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--codebot-text-primary) 28%, transparent);
+  color: var(--codebot-text-primary);
   opacity: 0;
   visibility: hidden;
   pointer-events: auto;
   transition:
-    opacity var(--openbot-duration-fast) ease,
-    visibility 0s linear var(--openbot-duration-fast);
+    opacity var(--codebot-duration-fast) ease,
+    visibility 0s linear var(--codebot-duration-fast);
 }
 
 .scroll-edges-edge .scroll-edges-arrow:hover {
-  background: color-mix(in srgb, var(--openbot-text-primary) 26%, var(--openbot-bg-surface-raised));
+  background: color-mix(in srgb, var(--codebot-text-primary) 26%, var(--codebot-bg-surface-raised));
 }
 
-:root[data-openbot-color-scheme="light"] .scroll-edges-edge .scroll-edges-arrow {
-  background: var(--openbot-bg-surface-raised);
+:root[data-codebot-color-scheme="light"] .scroll-edges-edge .scroll-edges-arrow {
+  background: var(--codebot-bg-surface-raised);
 }
 
-:root[data-openbot-color-scheme="light"] .scroll-edges-edge .scroll-edges-arrow:hover {
-  background: color-mix(in srgb, var(--openbot-text-primary) 8%, var(--openbot-bg-surface-raised));
+:root[data-codebot-color-scheme="light"] .scroll-edges-edge .scroll-edges-arrow:hover {
+  background: color-mix(in srgb, var(--codebot-text-primary) 8%, var(--codebot-bg-surface-raised));
 }
 
 .scroll-edges:is(:hover, :has(> .scroll-edges-view:focus-visible))

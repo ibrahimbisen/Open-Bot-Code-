@@ -2,22 +2,22 @@ import type {
   AgentImportPreview,
   AgentImportResult,
   AgentImportSkillSource,
+  CodeBotDesktopApi,
   HermesImportPreview,
-  OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import { AgentImportSources } from "@openbot/ui/features/import/AgentImportSources";
+} from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import { AgentImportSources } from "@codebot/ui/features/import/AgentImportSources";
 import {
   type AgentImportPhase,
   type AgentImportSetup,
   AgentImportView,
-} from "@openbot/ui/features/import/AgentImportView";
+} from "@codebot/ui/features/import/AgentImportView";
 import {
   type HermesImportPhase,
   type HermesImportSelection,
   HermesImportView,
-} from "@openbot/ui/features/import/HermesImportView";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/import/HermesImportView";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, createStore, Match, onSettled, Switch } from "solid-js";
 import { actionToast } from "../../action-toast";
 
@@ -32,8 +32,8 @@ export interface ServerImportDetail {
 }
 
 const SETUP_STORAGE_KEYS = {
-  "grok-bot": "openbot.agent-import.setup",
-  "hermes-agent": "openbot.agent-import.hermes-setup",
+  "grok-bot": "codebot.agent-import.setup",
+  "hermes-agent": "codebot.agent-import.hermes-setup",
 } as const satisfies Record<AgentImportSkillSource, string>;
 
 function setupsFor(source: AgentImportSkillSource, folder: boolean): readonly AgentImportSetup[] {
@@ -54,10 +54,10 @@ function readSetup(source: AgentImportSkillSource, folder: boolean): AgentImport
 
 type HermesCall = "readHermes" | "chooseHermes" | "applyHermes" | "discardHermes";
 
-export type AgentImportCalls = Omit<OpenBotDesktopApi["agentImport"], HermesCall> & {
+export type AgentImportCalls = Omit<CodeBotDesktopApi["agentImport"], HermesCall> & {
   openExportAgent(): void;
-  hermes?: Pick<OpenBotDesktopApi["agentImport"], Exclude<HermesCall, "chooseHermes">> &
-    Partial<Pick<OpenBotDesktopApi["agentImport"], "chooseHermes">>;
+  hermes?: Pick<CodeBotDesktopApi["agentImport"], Exclude<HermesCall, "chooseHermes">> &
+    Partial<Pick<CodeBotDesktopApi["agentImport"], "chooseHermes">>;
 };
 
 export type HermesFolderPlace = "computer" | "server";
@@ -69,9 +69,9 @@ export interface ServerImportOptions {
 }
 
 const desktopCalls = (): AgentImportCalls => ({
-  ...window.openbot.agentImport,
-  openExportAgent: () => void window.openbot.openExternal("grok-bot-export"),
-  hermes: window.openbot.agentImport,
+  ...window.codebot.agentImport,
+  openExportAgent: () => void window.codebot.openExternal("grok-bot-export"),
+  hermes: window.codebot.agentImport,
 });
 
 interface ImportState {

@@ -2,8 +2,8 @@ import {
   parseCreditCheckoutRequest,
   parseCreditRedeemRequest,
   parseCreditTransferRequest,
-} from "@openbot/contracts/credits";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credits";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { CreditsDesktopService } from "../credits-service";
 import { handler, type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";

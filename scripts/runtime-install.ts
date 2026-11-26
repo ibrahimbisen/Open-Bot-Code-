@@ -1,8 +1,8 @@
 import { cp, mkdir, rename, rm } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 
-const logger = createOpenBotLogger("runtime-install");
+const logger = createCodeBotLogger("runtime-install");
 
 export async function isCurrentInstallation(verify: () => Promise<void>): Promise<boolean> {
   try {
@@ -20,7 +20,7 @@ export async function download(fetchImpl: typeof fetch, url: string, label: stri
     let failure: unknown;
     try {
       response = await fetchImpl(url, {
-        headers: { "User-Agent": "OpenBot-runtime-installer" },
+        headers: { "User-Agent": "CodeBot-runtime-installer" },
         redirect: "follow",
       });
       if (response.ok) return Buffer.from(await response.arrayBuffer());

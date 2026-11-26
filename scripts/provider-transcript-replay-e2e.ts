@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { isAgentProvider } from "@openbot/contracts/agent-providers";
+import { isAgentProvider } from "@codebot/contracts/agent-providers";
 import type { AgentClient } from "../src/backend/agent-client";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 import type { TranscriptLine } from "./provider-fakes/transcript-proxy";
 import { REDACTED } from "./provider-fakes/transcript-redaction";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-transcript-replay-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-transcript-replay-e2e");
 const TRANSCRIPTS = resolve(import.meta.dirname, "provider-fakes/transcripts");
 
 interface Header {
@@ -32,7 +32,7 @@ interface Result {
 }
 
 const report: { passed: boolean; results: Result[]; error?: string } = { passed: false, results: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-transcript-replay-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-transcript-replay-e2e-"));
 const clients: AgentClient[] = [];
 
 try {

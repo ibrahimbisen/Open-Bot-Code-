@@ -10,7 +10,7 @@ import type {
   CrmSettings,
   CrmSourceConnectInput,
   CrmSourceInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { appPort } from "../../app-port";
 
 export interface CrmHost {
@@ -29,7 +29,7 @@ export interface CrmHost {
 }
 
 export function desktopCrmHost(serverId: string): CrmHost {
-  const api = () => window.openbot.crm;
+  const api = () => window.codebot.crm;
   return {
     overview: () => api().overview(serverId),
     customers: (after) => api().customers(after === undefined ? {} : { after }, serverId),
@@ -43,11 +43,11 @@ export function desktopCrmHost(serverId: string): CrmHost {
     setSettings: (input) => api().setSettings(input, serverId),
     openUrl: (url) => void appPort().openUrl(url),
     onChanged(listener) {
-      const events = window.openbot.agent.onScopedEvent((scoped) => {
+      const events = window.codebot.agent.onScopedEvent((scoped) => {
         if (scoped.serverId === serverId && scoped.event.type === "crm-changed") listener();
       });
       let online: boolean | undefined;
-      const reconnect = window.openbot.servers.onEvent((servers) => {
+      const reconnect = window.codebot.servers.onEvent((servers) => {
         const now = servers.some((server) => server.id === serverId && server.state === "online");
         if (now && online === false) listener();
         online = now;

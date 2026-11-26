@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/solid-router";
 import { For, Show } from "solid-js";
 import {
+  CODEBOT_PLANS,
+  type CodeBotPlan,
   comparisonScore,
   type MatchupComparison,
-  OPENBOT_PLANS,
-  type OpenBotPlan,
 } from "../../content/compare/comparison";
 import { PROVIDER_PAGES, providerPageSlug } from "../../content/providers";
 import { type CollectionArticle, type ContentCollection, formatArticleDate } from "../../lib/content-collection";
@@ -39,9 +39,9 @@ export function MatchupPage(props: MatchupPageProps) {
   const names = () => props.matchup.products.map((product) => product.name);
   const score = () => comparisonScore(props.matchup.rows, ["a", "b"]);
   const topics = () => props.matchup.rows.length;
-  const isCompared = (plan: OpenBotPlan) =>
+  const isCompared = (plan: CodeBotPlan) =>
     props.matchup.products.some((product) => product.provider === plan.provider);
-  const plans = () => [...OPENBOT_PLANS.filter(isCompared), ...OPENBOT_PLANS.filter((plan) => !isCompared(plan))];
+  const plans = () => [...CODEBOT_PLANS.filter(isCompared), ...CODEBOT_PLANS.filter((plan) => !isCompared(plan))];
   const setups = () =>
     props.matchup.products.flatMap((product) => {
       const slug = providerPageSlug(product.provider);
@@ -133,7 +133,7 @@ export function MatchupPage(props: MatchupPageProps) {
       <Show when={props.matchup.benchmark}>{(benchmark) => <CompareBenchmark benchmark={benchmark()} />}</Show>
 
       <RevealSection class="compare-plans" titleId="compare-plans-title" title="You don't have to pick one">
-        <p class="compare-plans-lead">{props.matchup.bothInOpenBot}</p>
+        <p class="compare-plans-lead">{props.matchup.bothInCodeBot}</p>
         <ul class="compare-plans-grid">
           <For each={plans()}>
             {(plan, index) => <PlanCard plan={plan} index={index()} highlighted={isCompared(plan)} />}
@@ -145,7 +145,7 @@ export function MatchupPage(props: MatchupPageProps) {
               {(setup) => (
                 <li>
                   <Link to="/providers/$slug" params={{ slug: setup.slug }}>
-                    Set up {setup.name} in OpenBot
+                    Set up {setup.name} in CodeBot
                     <LandingIcon name="arrow-right" class="provider-step-arrow provider-related-arrow" />
                   </Link>
                 </li>

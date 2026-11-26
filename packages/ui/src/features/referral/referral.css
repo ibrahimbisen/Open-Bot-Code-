@@ -1,16 +1,16 @@
 .referral-panel {
   position: relative;
   display: grid;
-  gap: var(--openbot-space-6);
+  gap: var(--codebot-space-6);
 }
 
 .referral-split {
   position: absolute;
-  top: calc(-1 * (var(--openbot-leading-3xl) + var(--openbot-space-6)));
+  top: calc(-1 * (var(--codebot-leading-3xl) + var(--codebot-space-6)));
   right: 0;
   display: flex;
   align-items: center;
-  height: calc(var(--openbot-leading-3xl) + var(--openbot-space-6) + var(--openbot-leading-lg));
+  height: calc(var(--codebot-leading-3xl) + var(--codebot-space-6) + var(--codebot-leading-lg));
   pointer-events: none;
 }
 
@@ -21,60 +21,60 @@
 }
 
 .referral-fork-stem {
-  width: var(--openbot-space-3);
+  width: var(--codebot-space-3);
   height: 2px;
-  margin-left: var(--openbot-space-2);
-  background: linear-gradient(90deg, var(--openbot-beam-pink), var(--openbot-beam-teal));
+  margin-left: var(--codebot-space-2);
+  background: linear-gradient(90deg, var(--codebot-beam-pink), var(--codebot-beam-teal));
   transform-origin: left center;
-  animation: referral-draw-x 300ms var(--openbot-ease-out) 100ms backwards;
+  animation: referral-draw-x 300ms var(--codebot-ease-out) 100ms backwards;
 }
 
 .referral-fork-branches {
   display: grid;
-  width: var(--openbot-space-3);
+  width: var(--codebot-space-3);
   height: 38px;
-  animation: referral-draw-x 300ms var(--openbot-ease-out) 250ms backwards;
+  animation: referral-draw-x 300ms var(--codebot-ease-out) 250ms backwards;
   transform-origin: left center;
 }
 
 .referral-fork-branches > span {
-  border: 2px solid var(--openbot-beam-pink);
+  border: 2px solid var(--codebot-beam-pink);
   border-right: 0;
   border-bottom: 0;
-  border-top-left-radius: var(--openbot-radius-md);
+  border-top-left-radius: var(--codebot-radius-md);
 }
 
 .referral-fork-branches > [data-side="you"] {
-  border-color: var(--openbot-beam-teal);
+  border-color: var(--codebot-beam-teal);
   border-top: 0;
-  border-bottom: 2px solid var(--openbot-beam-teal);
-  border-radius: 0 0 0 var(--openbot-radius-md);
+  border-bottom: 2px solid var(--codebot-beam-teal);
+  border-radius: 0 0 0 var(--codebot-radius-md);
 }
 
 .referral-fork-rows {
   display: grid;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   justify-items: start;
-  margin-left: var(--openbot-space-1);
+  margin-left: var(--codebot-space-1);
 }
 
 .referral-chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-1-5);
-  padding: 2px var(--openbot-space-3);
-  border-radius: var(--openbot-radius-pill);
-  color: var(--openbot-text-on-accent);
-  background: linear-gradient(135deg, var(--openbot-beam-teal), var(--openbot-beam-blue));
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-semibold);
-  line-height: var(--openbot-leading-sm);
+  gap: var(--codebot-space-1-5);
+  padding: 2px var(--codebot-space-3);
+  border-radius: var(--codebot-radius-pill);
+  color: var(--codebot-text-on-accent);
+  background: linear-gradient(135deg, var(--codebot-beam-teal), var(--codebot-beam-blue));
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-semibold);
+  line-height: var(--codebot-leading-sm);
   white-space: nowrap;
-  animation: referral-throw 700ms var(--openbot-ease-out) 560ms backwards;
+  animation: referral-throw 700ms var(--codebot-ease-out) 560ms backwards;
 }
 
 .referral-chip[data-side="friend"] {
-  background: linear-gradient(135deg, var(--openbot-beam-pink), var(--openbot-beam-blue));
+  background: linear-gradient(135deg, var(--codebot-beam-pink), var(--codebot-beam-blue));
   animation-delay: 400ms;
 }
 
@@ -85,7 +85,7 @@
 
 .referral-link {
   display: flex;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .referral-link .ui-input {
@@ -97,24 +97,24 @@
 .referral-friends-title {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .referral-list {
   display: grid;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
 }
 
 .referral-pages {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--openbot-space-3);
+  gap: var(--codebot-space-3);
 }
 
 .referral-pages-buttons {
   display: flex;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 @keyframes referral-draw-x {
@@ -150,52 +150,52 @@
 .referral-credit > div {
   display: grid;
   align-content: start;
-  gap: var(--openbot-space-1);
-  padding: var(--openbot-space-4);
+  gap: var(--codebot-space-1);
+  padding: var(--codebot-space-4);
 }
 
 .referral-credit > div + div {
-  border-left: 1px solid var(--openbot-border);
+  border-left: 1px solid var(--codebot-border);
 }
 
 .referral-credit dt {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .referral-credit dd {
   margin: 0;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .referral-credit .referral-credit-amount {
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-xl);
-  font-weight: var(--openbot-weight-semibold);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-xl);
+  font-weight: var(--codebot-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
 
 .referral-friend-credit {
   display: grid;
   justify-items: end;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .referral-friend-earned {
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .referral-credit-progress {
   display: grid;
-  gap: var(--openbot-space-1);
-  padding-block: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
+  padding-block: var(--codebot-space-1);
 }
 
 .referral-credit-progress .ui-progress-fill {
-  background: linear-gradient(90deg, var(--openbot-beam-pink), var(--openbot-beam-teal));
+  background: linear-gradient(90deg, var(--codebot-beam-pink), var(--codebot-beam-teal));
 }

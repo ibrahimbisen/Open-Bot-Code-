@@ -10,8 +10,9 @@ import {
   type WorkflowGitHubHistory,
   type WorkflowGitHubItem,
   type WorkflowGitHubSkipReason,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import type { CodeBotDatabase } from "../codebot-database";
 import {
   checkedColumn,
   databaseRow,
@@ -22,7 +23,6 @@ import {
   requiredNumberColumn,
   requiredStringColumn,
 } from "../database/database-rows";
-import type { OpenBotDatabase } from "../openbot-database";
 import { workflowTransaction } from "./workflow-transaction";
 
 const OPEN_RUN_STATUSES = ["running", "approval", "stopping"] as const;
@@ -82,9 +82,9 @@ export interface GitHubActionRecord {
 }
 
 export class WorkflowGitHubStore {
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
 
-  constructor(options: { database: OpenBotDatabase }) {
+  constructor(options: { database: CodeBotDatabase }) {
     this.#database = options.database;
   }
 

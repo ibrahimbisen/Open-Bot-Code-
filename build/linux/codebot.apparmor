@@ -1,0 +1,7 @@
+abi <abi/4.0>,
+include <tunables/global>
+
+profile codebot "/{home/*/{Applications,Desktop,Downloads,.local/bin},opt/CodeBot}/CodeBot*.AppImage" flags=(unconfined) {
+  userns,
+  include if exists <local/codebot>
+}

@@ -11,10 +11,10 @@ describe("maskIdentifiers", () => {
       "[ipv6], [ipv6], [ipv6]",
     );
     expect(maskIdentifiers("http://192.168.1.5:8080/v1/me")).toBe("http://[private-ip]:8080/v1/me");
-    expect(maskIdentifiers("OpenBot 1.4.0 (212), 999.1.1.1")).toBe("OpenBot 1.4.0 (212), 999.1.1.1");
+    expect(maskIdentifiers("CodeBot 1.4.0 (212), 999.1.1.1")).toBe("CodeBot 1.4.0 (212), 999.1.1.1");
   });
 
-  it("masks each host name that is not an OpenBot service", () => {
+  it("masks each host name that is not an CodeBot service", () => {
     expect(maskIdentifiers("GET https://anna.example.com:8443/v1/me -> failed")).toBe(
       "GET https://[host]:8443/v1/me -> failed",
     );

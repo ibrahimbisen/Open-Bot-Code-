@@ -1,8 +1,8 @@
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Semaphore } from "effect";
 import { type PreferenceFileFailure, PreferenceStore } from "./preference-file";
 
-export const MCP_SERVER_OWNERS_FILE = "openbot-mcp-server-owners-v1.json";
+export const MCP_SERVER_OWNERS_FILE = "codebot-mcp-server-owners-v1.json";
 
 interface McpServerOwnersFile {
   owners: Record<string, string>;

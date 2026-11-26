@@ -1,4 +1,4 @@
-import { REFERRAL_SHARE_PERCENT } from "@openbot/contracts/referral";
+import { REFERRAL_SHARE_PERCENT } from "@codebot/contracts/referral";
 import { Stack } from "expo-router";
 import { Button, Typography } from "heroui-native";
 import Copy from "lucide-react-native/icons/copy";
@@ -50,7 +50,7 @@ export function InviteFriendsScreen() {
   const { theme } = useUniwind();
   const mode = theme === "dark" ? "dark" : "light";
   const glow = INVITE_GLOWS[mode];
-  const sheet = String(useCSSVariable("--openbot-bg-sheet"));
+  const sheet = String(useCSSVariable("--codebot-bg-sheet"));
 
   async function share(): Promise<void> {
     if (!link) return;

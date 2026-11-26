@@ -1,5 +1,5 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { Button, Plus, Workflow } from "@openbot/ui";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { Button, Plus, Workflow } from "@codebot/ui";
 import { useText } from "../../text";
 import { TabShape } from "../conversation/TabShape";
 import { ThreadTabs } from "../conversation/threads/ThreadTabs";

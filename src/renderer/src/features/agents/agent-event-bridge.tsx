@@ -1,19 +1,19 @@
-import { providerDisplayName } from "@openbot/contracts/agent-providers";
+import { providerDisplayName } from "@codebot/contracts/agent-providers";
 import {
   type AgentEvent,
   type AgentRuntimeSnapshot,
   type AttachmentSummary,
   type ConversationMessage,
   LOCAL_SERVER_ID,
-} from "@openbot/contracts/ipc";
-import { cleanAgentMessageText } from "@openbot/team-client/agent-message-text";
-import { agentNotificationLevel } from "@openbot/team-client/agent-notifications";
-import { reconcileQueuesWithRuntimeWork } from "@openbot/team-client/dynamic-island-coordinator";
-import { approvalIsCut } from "@openbot/team-client/runtime-attention";
-import { classifyFailure } from "@openbot/telemetry";
-import { toast } from "@openbot/ui";
-import { currentText } from "@openbot/ui/text";
-import { classifyUserError } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { cleanAgentMessageText } from "@codebot/team-client/agent-message-text";
+import { agentNotificationLevel } from "@codebot/team-client/agent-notifications";
+import { reconcileQueuesWithRuntimeWork } from "@codebot/team-client/dynamic-island-coordinator";
+import { approvalIsCut } from "@codebot/team-client/runtime-attention";
+import { classifyFailure } from "@codebot/telemetry";
+import { toast } from "@codebot/ui";
+import { currentText } from "@codebot/ui/text";
+import { classifyUserError } from "@codebot/user-errors";
 import { flush, onSettled } from "solid-js";
 import { showNewAgentBackdrop } from "../../agent-backdrops";
 import { withoutAgent } from "../../app-message-projection";

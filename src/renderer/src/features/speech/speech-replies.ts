@@ -6,11 +6,11 @@ import {
   isAgentAnswer,
   latestTurnAnswer,
   type SpeechLanguage,
-} from "@openbot/contracts/ipc";
-import { speechLanguageOf } from "@openbot/contracts/speech-language";
-import { speechTextFromMarkdown } from "@openbot/contracts/speech-text";
-import { toast } from "@openbot/ui";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { speechLanguageOf } from "@codebot/contracts/speech-language";
+import { speechTextFromMarkdown } from "@codebot/contracts/speech-text";
+import { toast } from "@codebot/ui";
+import { currentText } from "@codebot/ui/text";
 import { desktopAnalytics } from "../../analytics";
 import { followSpeechModel, speechModelFindsLanguage } from "./speech-model";
 import {

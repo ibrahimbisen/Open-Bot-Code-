@@ -2,7 +2,7 @@ import { createHmac } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { Schema } from "effect";
 import { connectClickHouse, credentials, type QueryResult, runQuery } from "./openpanel-sql";
 import { readScriptArguments } from "./script-arguments";
@@ -160,7 +160,7 @@ async function publishedReleases(): Promise<Release[]> {
     response = await fetch(`https://api.github.com/repos/${REPOSITORY}/releases?per_page=50`, {
       headers: {
         Accept: "application/vnd.github+json",
-        "User-Agent": "openbot-release-health",
+        "User-Agent": "codebot-release-health",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       signal: AbortSignal.timeout(NETWORK_TIMEOUT_MS),
@@ -558,7 +558,7 @@ ${verdict(report)}
 
 function buildDirectory(): string {
   const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-  return join(projectRoot, ".openbot-build", "release-health");
+  return join(projectRoot, ".codebot-build", "release-health");
 }
 
 async function writeReport(report: Report): Promise<string> {

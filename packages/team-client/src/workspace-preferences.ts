@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Schema } from "effect";
 import { remoteHostFingerprint } from "./host-key-handover";
 
@@ -29,7 +29,7 @@ export function createWorkspacePreferences(
   storage: { get(key: string): string | null; set(key: string, value: string): void },
 ) {
   const scope = remoteHostFingerprint(JSON.stringify([new URL(apiUrl).origin, userId]));
-  const key = (hostId: string) => `openbot.workspace.v1.${scope}.${remoteHostFingerprint(hostId)}`;
+  const key = (hostId: string) => `codebot.workspace.v1.${scope}.${remoteHostFingerprint(hostId)}`;
   const cache = new Map<string, RemoteWorkspacePreferences>();
   const read = Effect.fn("WorkspacePreferences.read")(function* (hostId: string) {
     const cached = cache.get(hostId);

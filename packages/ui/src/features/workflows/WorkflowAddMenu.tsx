@@ -1,5 +1,5 @@
-import type { WorkflowNodeKind } from "@openbot/contracts/ipc";
-import type { AppTextKey, AppTranslate } from "@openbot/i18n";
+import type { WorkflowNodeKind } from "@codebot/contracts/ipc";
+import type { AppTextKey, AppTranslate } from "@codebot/i18n";
 import {
   Bot,
   Button,
@@ -21,7 +21,7 @@ import {
   Type,
   UserCheck,
   Zap,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";

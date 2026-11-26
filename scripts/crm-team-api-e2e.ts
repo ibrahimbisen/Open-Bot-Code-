@@ -3,20 +3,20 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { CrmChange } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import type { CrmChange } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_V1_WEBSOCKET,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol";
-import { CRM_CAPABILITY, CRM_CODECS, CRM_ROUTES, crmEvent } from "@openbot/contracts/team-protocol/crm-v1";
-import { teamCapabilitiesForProtocol } from "@openbot/contracts/team-protocol/current";
-import { TEAM_PROTOCOL_V8 } from "@openbot/contracts/team-protocol/v8";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { VAULT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol";
+import { CRM_CAPABILITY, CRM_CODECS, CRM_ROUTES, crmEvent } from "@codebot/contracts/team-protocol/crm-v1";
+import { teamCapabilitiesForProtocol } from "@codebot/contracts/team-protocol/current";
+import { TEAM_PROTOCOL_V8 } from "@codebot/contracts/team-protocol/v8";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { VAULT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v1";
+import { sourceText } from "@codebot/i18n/source";
 import {
   decodeRemoteCrmActivityPage,
   decodeRemoteCrmApplyResult,
@@ -24,20 +24,20 @@ import {
   decodeRemoteCrmOverview,
   decodeRemoteCrmPaymentPage,
   decodeRemoteCrmSettings,
-} from "@openbot/team-client/crm-decoding";
+} from "@codebot/team-client/crm-decoding";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { type CrmHandle, createCrm } from "../src/backend/crm/crm";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/crm-team-api-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/crm-team-api-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const OWNER = { username: "owner-user", password: "owner-password-123" };
 const MEMBER = { username: "member-user", password: "member-password-123" };
@@ -188,13 +188,13 @@ const teamBrowser: TeamApiBrowser = {
   answerHttpSignIn: unused,
 };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-crm-team-api-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-crm-team-api-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
-const crmPreferencePath = join(userData, "openbot-crm-v1.json");
+const crmPreferencePath = join(userData, "codebot-crm-v1.json");
 
 interface Host {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   agents: AgentService;
   crm: CrmHandle;
   server: InstanceType<typeof TeamApiServer>;
@@ -206,11 +206,11 @@ let host: Host | null = null;
 const sockets: WebSocket[] = [];
 
 async function startHost(): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   const access = new AgentAccessStore(join(userData, AGENT_ACCESS_FILE));
   await runCauseEffect(sidebar.initialize());
   await runCauseEffect(agentStore.initialize());
@@ -324,7 +324,7 @@ function typeOf(value: unknown): string[] {
 async function openEvents(token: string): Promise<{ socket: WebSocket; types: string[] }> {
   const socket = new WebSocket(`ws://127.0.0.1:${current().port}${TEAM_API_ROUTES.events}`, [
     TEAM_PROTOCOL_V1_WEBSOCKET,
-    `openbot-token.${token}`,
+    `codebot-token.${token}`,
   ]);
   sockets.push(socket);
   const types: string[] = [];

@@ -1,4 +1,4 @@
-import { providerCliSource } from "@openbot/contracts/cli-version";
+import { providerCliSource } from "@codebot/contracts/cli-version";
 import {
   AGENT_PROVIDERS,
   type AgentProviderId,
@@ -7,9 +7,9 @@ import {
   isLocalOnlyProvider,
   type ProviderApiKeyStatus,
   type ProviderRuntimeStatus,
-} from "@openbot/contracts/ipc";
-import type { ProviderPickerOption } from "@openbot/ui/components/ProviderPicker";
-import { providerDiagnosticsText } from "@openbot/ui/features/provider-diagnostics/provider-diagnostics";
+} from "@codebot/contracts/ipc";
+import type { ProviderPickerOption } from "@codebot/ui/components/ProviderPicker";
+import { providerDiagnosticsText } from "@codebot/ui/features/provider-diagnostics/provider-diagnostics";
 import { createMemo } from "solid-js";
 import { useI18n } from "../../../i18n-context";
 

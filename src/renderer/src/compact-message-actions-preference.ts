@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-const COMPACT_MESSAGE_ACTIONS_STORAGE_KEY = "openbot:compact-message-actions";
+const COMPACT_MESSAGE_ACTIONS_STORAGE_KEY = "codebot:compact-message-actions";
 
 let unsavedPreference: boolean | undefined;
 

@@ -1,4 +1,4 @@
-import { isDynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
 import {
   CLIENT_BROWSER_COMMAND_TIMEOUT_MS,
   CLIENT_BROWSER_LIMITS,
@@ -6,7 +6,7 @@ import {
   type ClientBrowserCommandEvent,
   type ClientBrowserPresence,
   type ClientTab,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
 import { track } from "./analytics";
 import { BrowserCommandError, clientTab, installExecutor, isWebUrl, runCommand } from "./client-browser-executor";
 import {
@@ -20,11 +20,11 @@ import {
   BROWSER_PRESENCE_MESSAGE,
   BROWSER_RUN_MESSAGE,
   type BrowserAsk,
+  CODEBOT_GROUP_TITLE,
   decodeAnswer,
   decodeAsks,
   decodeRunRequest,
   decodeSites,
-  OPENBOT_GROUP_TITLE,
   SHARING_KEY,
   SITES_KEY,
 } from "./client-browser-messages";
@@ -39,7 +39,7 @@ function lateAnswer(id: string): ClientBrowserAnswer {
 const KEEP_ALIVE_MS = 20_000;
 const GROUP_COLOR = "pink";
 const CHANGE_DELAY_MS = 400;
-const ASK_NOTIFICATION = "openbot-browser-ask-";
+const ASK_NOTIFICATION = "codebot-browser-ask-";
 const DOWNLOAD_GUARD_MS = 30_000;
 const DOWNLOAD_START_MS = 500;
 const DOWNLOAD_LINK_START_MS = 3_000;
@@ -81,7 +81,7 @@ async function findGroup(saved: number | null): Promise<number | null> {
     const group = await chrome.tabGroups.get(saved).catch(() => null);
     if (group) return group.id;
   }
-  return (await chrome.tabGroups.query({ title: OPENBOT_GROUP_TITLE }))[0]?.id ?? null;
+  return (await chrome.tabGroups.query({ title: CODEBOT_GROUP_TITLE }))[0]?.id ?? null;
 }
 
 async function sharedGroupId(): Promise<number | null> {
@@ -107,11 +107,11 @@ async function presence(): Promise<ClientBrowserPresence> {
 async function addToGroup(tabId: number): Promise<number | null> {
   const tab = await chrome.tabs.get(tabId);
   if (tab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) return null;
-  const [inWindow] = await chrome.tabGroups.query({ title: OPENBOT_GROUP_TITLE, windowId: tab.windowId });
+  const [inWindow] = await chrome.tabGroups.query({ title: CODEBOT_GROUP_TITLE, windowId: tab.windowId });
   const next = inWindow
     ? await chrome.tabs.group({ tabIds: [tabId], groupId: inWindow.id })
     : await chrome.tabs.group({ tabIds: [tabId], createProperties: { windowId: tab.windowId } });
-  await chrome.tabGroups.update(next, { title: OPENBOT_GROUP_TITLE, color: GROUP_COLOR });
+  await chrome.tabGroups.update(next, { title: CODEBOT_GROUP_TITLE, color: GROUP_COLOR });
   await chrome.storage.local.set({ [SHARING_KEY]: { groupId: next } });
   return next;
 }

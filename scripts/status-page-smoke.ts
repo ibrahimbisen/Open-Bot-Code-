@@ -5,15 +5,15 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } fr
 import { createServer, type Server } from "node:http";
 import { extname, resolve } from "node:path";
 import { promisify } from "node:util";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { chromium } from "playwright-core";
 
-const logger = createOpenBotLogger("status-page-smoke");
+const logger = createCodeBotLogger("status-page-smoke");
 const run = promisify(execFile);
 
 const ROOT = resolve(import.meta.dirname, "..");
 const APP = resolve(ROOT, "apps/status");
-const OUT = resolve(ROOT, ".openbot-build/status-page");
+const OUT = resolve(ROOT, ".codebot-build/status-page");
 const WORK = resolve(OUT, "work");
 const option = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(name.length + 3);
 const browserExecutable = option("browser-executable");
@@ -46,7 +46,7 @@ const probeServer = createServer((request, response) => {
   if (path === "/signal/health/turn") return reply("connections", '{"status":"ready"}');
   if (path === "/api/health/hosting") return reply("hosted", '{"status":"ok"}');
   if (path === "/api/v1/skills?limit=1") return reply("marketplace", '{"skills":[]}');
-  if (/^\/github\/nightly-labs\/openbot\/releases\/latest\/download\/latest(-mac|-linux)?\.yml$/.test(path)) {
+  if (/^\/github\/nightly-labs\/codebot\/releases\/latest\/download\/latest(-mac|-linux)?\.yml$/.test(path)) {
     return reply("updates", "version: 0.42.0\n");
   }
   response.writeHead(404).end();
@@ -337,7 +337,7 @@ const receiver = createServer((request, response) => {
   request.on("data", (chunk: Buffer) => chunks.push(chunk));
   request.on("end", () => {
     const headers = Object.fromEntries(
-      ["content-type", "x-openbot-event", "x-openbot-delivery-id", "x-openbot-timestamp", "x-openbot-signature"].map(
+      ["content-type", "x-codebot-event", "x-codebot-delivery-id", "x-codebot-timestamp", "x-codebot-signature"].map(
         (name) => [name, request.headers[name]?.toString()],
       ),
     );
@@ -508,20 +508,20 @@ const take = () => {
 const bySubscription = (list: Received[]) => {
   const groups: Record<string, string[]> = {};
   for (const item of list) {
-    groups[item.subscription] = [...(groups[item.subscription] ?? []), item.headers["x-openbot-event"] ?? ""];
+    groups[item.subscription] = [...(groups[item.subscription] ?? []), item.headers["x-codebot-event"] ?? ""];
   }
   return groups;
 };
 
 function verify(item: Received, secret: string) {
-  const timestamp = item.headers["x-openbot-timestamp"] ?? "";
+  const timestamp = item.headers["x-codebot-timestamp"] ?? "";
   assert.ok(Math.abs(Date.now() / 1000 - Number(timestamp)) < 300, "The timestamp is not the send time.");
   const expected = Buffer.from(
     `sha256=${createHmac("sha256", secret)
-      .update(`${timestamp}.${item.headers["x-openbot-delivery-id"] ?? ""}.${item.body}`)
+      .update(`${timestamp}.${item.headers["x-codebot-delivery-id"] ?? ""}.${item.body}`)
       .digest("hex")}`,
   );
-  const actual = Buffer.from(item.headers["x-openbot-signature"] ?? "");
+  const actual = Buffer.from(item.headers["x-codebot-signature"] ?? "");
   assert.ok(
     actual.length === expected.length && timingSafeEqual(actual, expected),
     `Bad signature for ${item.subscription}.`,
@@ -593,12 +593,12 @@ for (const item of got.filter((entry) => entry.subscription === "team" || entry.
   verify(item, item.subscription === "team" ? SECRETS.team : SECRETS.ops);
   const body = JSON.parse(item.body);
   assert.equal(body.version, 1);
-  assert.equal(body.type, item.headers["x-openbot-event"]);
+  assert.equal(body.type, item.headers["x-codebot-event"]);
   assert.equal(body.page, "https://status.openbot.run");
-  assert.match(item.headers["x-openbot-delivery-id"] ?? "", /^[0-9a-f]{32}$/);
+  assert.match(item.headers["x-codebot-delivery-id"] ?? "", /^[0-9a-f]{32}$/);
 }
 const created = JSON.parse(
-  got.find((item) => item.subscription === "team" && item.headers["x-openbot-event"] === "incident.created")?.body ??
+  got.find((item) => item.subscription === "team" && item.headers["x-codebot-event"] === "incident.created")?.body ??
     "{}",
 );
 assert.deepEqual(
@@ -621,18 +621,18 @@ assert.deepEqual(changed.service, {
   checkedAt: "2026-10-16T12:05:00Z",
 });
 const slack = got.find((item) => item.subscription === "slack");
-assert.equal(slack?.headers["x-openbot-signature"], undefined, "A chat subscription without a secret got a signature.");
+assert.equal(slack?.headers["x-codebot-signature"], undefined, "A chat subscription without a secret got a signature.");
 const slackText = JSON.parse(slack?.body ?? "{}").text;
 assert.match(slackText, /^\*New incident: Sign-in fails\*/);
 assert.match(slackText, /&lt;some&gt; users &amp; @everyone/, "Slack text is not escaped.");
-assert.match(slackText, /<https:\/\/github\.com\/nightly-labs\/openbot\/issues\/203\|Open>$/);
+assert.match(slackText, /<https:\/\/github\.com\/nightly-labs\/codebot\/issues\/203\|Open>$/);
 const discord = JSON.parse(got.filter((item) => item.subscription === "discord").at(-1)?.body ?? "{}");
 assert.deepEqual(discord.allowed_mentions, { parse: [] }, "A Discord message can notify @everyone.");
 assert.match(
   discord.content,
   /^\*\*New incident: Sign-in fails\*\*\nMajor outage: Accounts and sign-in, Hosted servers\n/,
 );
-const deliveryIds = got.map((item) => item.headers["x-openbot-delivery-id"]);
+const deliveryIds = got.map((item) => item.headers["x-codebot-delivery-id"]);
 assert.equal(new Set(deliveryIds).size, deliveryIds.length, "Two deliveries have the same ID.");
 assert.deepEqual(
   notifyState().outbox.map((item) => [item.subscription, item.attempts, item.nextAt]),
@@ -718,7 +718,7 @@ assert.deepEqual(bySubscription(got), {
   discord: ["incident.resolved"],
 });
 const resolved = JSON.parse(
-  got.find((item) => item.subscription === "team" && item.headers["x-openbot-event"] === "incident.resolved")?.body ??
+  got.find((item) => item.subscription === "team" && item.headers["x-codebot-event"] === "incident.resolved")?.body ??
     "{}",
 );
 assert.equal(resolved.incident.update.stage, "resolved", "The resolved event does not carry the final update.");
@@ -726,7 +726,7 @@ assert.equal(resolved.incident.update.stage, "resolved", "The resolved event doe
 notified = await notify("test", STATUS_C, "2026-10-17T00:01:00Z", { hooks: hooksLeft, extra: ["--test"] });
 got = take();
 assert.deepEqual(Object.keys(bySubscription(got)).sort(), ["dead", "discord", "flaky", "ops", "slack", "team"]);
-assert.ok(got.every((item) => item.headers["x-openbot-event"] === "test"));
+assert.ok(got.every((item) => item.headers["x-codebot-event"] === "test"));
 const teamTest = got.find((item) => item.subscription === "team");
 assert.ok(teamTest);
 verify(teamTest, SECRETS.team);
@@ -791,7 +791,7 @@ assert.deepEqual(sortedEvents(got), {
   ops: undefined,
 });
 const removed = JSON.parse(
-  got.find((item) => item.subscription === "team" && item.headers["x-openbot-event"] === "incident.removed")?.body ??
+  got.find((item) => item.subscription === "team" && item.headers["x-codebot-event"] === "incident.removed")?.body ??
     "{}",
 );
 assert.equal(removed.incident.id, 203);

@@ -8,7 +8,7 @@ import {
   DEFAULT_EXTERNAL_LINK_PREFERENCE,
   type ExternalLinkTarget,
   type QuitGuard,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { SendShortcutMode } from "../conversation/send-shortcut";
 
 export type { SendShortcutMode };

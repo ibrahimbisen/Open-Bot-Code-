@@ -1,5 +1,5 @@
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { SERVER_SETUP_HEADER, SERVER_SETUP_ROUTES } from "@openbot/contracts/server-setup";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { SERVER_SETUP_HEADER, SERVER_SETUP_ROUTES } from "@codebot/contracts/server-setup";
 
 export interface SetupAnswer {
   ok: boolean;

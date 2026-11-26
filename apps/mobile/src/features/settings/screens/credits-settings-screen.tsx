@@ -4,8 +4,8 @@ import type {
   CreditServerRole,
   CreditServerWallet,
   CreditsState,
-} from "@openbot/contracts/credits";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/credits";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { router, useFocusEffect } from "expo-router";
 import { Button, Typography } from "heroui-native";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
@@ -133,7 +133,7 @@ interface HighlightProps {
 
 function BalanceHero({ state, highlight, onHighlightDone }: { state: CreditsState } & HighlightProps) {
   const { t, format } = useText();
-  const [warningSoft, warning] = useCSSVariable(["--openbot-warning-soft", "--openbot-warning-text"]);
+  const [warningSoft, warning] = useCSSVariable(["--codebot-warning-soft", "--codebot-warning-text"]);
   const amount = format.number(state.balance);
   return (
     <View className="items-center gap-2 pt-2">
@@ -172,7 +172,7 @@ function BalanceHero({ state, highlight, onHighlightDone }: { state: CreditsStat
 
 function ServerCredits({ servers, highlight, onHighlightDone }: { servers: CreditServerWallet[] } & HighlightProps) {
   const { t } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const [showsEmpty, setShowsEmpty] = useState(false);
   const funded = servers.filter((server) => server.balance > 0);
   const empty = servers.filter((server) => server.balance === 0);
@@ -231,7 +231,7 @@ function ServerCredits({ servers, highlight, onHighlightDone }: { servers: Credi
 
 function ServerCreditRow({ wallet, highlight, onHighlightDone }: { wallet: CreditServerWallet } & HighlightProps) {
   const { t, format } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const owner = wallet.role === "owner";
   const highlighted = highlight?.serverId === wallet.serverId ? highlight : null;
   const server = useMobileWorkspaceSelector((current) => current.servers.find((item) => item.id === wallet.serverId));

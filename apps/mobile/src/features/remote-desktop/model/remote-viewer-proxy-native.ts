@@ -24,4 +24,4 @@ declare class RemoteViewerProxyModule extends NativeModule<ViewerProxyEvents> {
   setSecure(enabled: boolean): Promise<void>;
 }
 
-export const remoteViewerProxyNative = requireOptionalNativeModule<RemoteViewerProxyModule>("OpenBotRemoteViewerProxy");
+export const remoteViewerProxyNative = requireOptionalNativeModule<RemoteViewerProxyModule>("CodeBotRemoteViewerProxy");

@@ -1,4 +1,4 @@
-import { Archive, Button, ChevronDown, ContextMenu, MessageCirclePlus, Popover, Trash2 } from "@openbot/ui";
+import { Archive, Button, ChevronDown, ContextMenu, MessageCirclePlus, Popover, Trash2 } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import { useText } from "../../text";

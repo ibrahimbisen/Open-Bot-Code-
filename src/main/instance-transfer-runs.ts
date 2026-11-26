@@ -1,6 +1,6 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { ROUTINE_RUN_SOURCES, type RoutineRunFields } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { ROUTINE_RUN_SOURCES, type RoutineRunFields } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
 import type { ImportedRoutineRun } from "../backend/routine-store";
 
 export interface TransferRun extends ImportedRoutineRun {

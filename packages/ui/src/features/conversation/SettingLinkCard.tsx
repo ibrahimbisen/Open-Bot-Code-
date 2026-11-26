@@ -1,4 +1,4 @@
-import { Button, ChevronRight, Settings } from "@openbot/ui";
+import { Button, ChevronRight, Settings } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";

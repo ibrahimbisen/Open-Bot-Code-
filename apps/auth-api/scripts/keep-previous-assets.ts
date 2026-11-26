@@ -1,10 +1,10 @@
 import { existsSync } from "node:fs";
 import { readdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Option, Schema } from "effect";
 
-const logger = createOpenBotLogger("keep-previous-assets");
+const logger = createCodeBotLogger("keep-previous-assets");
 
 const ASSET_HISTORY_FILE = "asset-history.json";
 const PRODUCTION_ORIGIN = "https://openbot.run";

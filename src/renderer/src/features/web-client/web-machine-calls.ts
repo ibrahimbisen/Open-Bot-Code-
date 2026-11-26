@@ -1,27 +1,27 @@
 import {
+  type CodeBotDesktopApi,
   decodeLibraryFoldersSnapshot,
   decodeMachineAlertSettings,
   decodeMachineMetrics,
   decodeStorageDisk,
   type MachineAlertSettings,
-  type OpenBotDesktopApi,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   LIBRARY_FOLDERS_CAPABILITY,
   LIBRARY_FOLDERS_ROUTES,
-} from "@openbot/contracts/team-protocol/library-folders-v1";
+} from "@codebot/contracts/team-protocol/library-folders-v1";
 import {
   MACHINE_RESOURCES_CAPABILITY,
   MACHINE_RESOURCES_ROUTES,
-} from "@openbot/contracts/team-protocol/machine-resources-v1";
-import { STORAGE_DISK_CAPABILITY, STORAGE_DISK_ROUTES } from "@openbot/contracts/team-protocol/storage-disk-v1";
+} from "@codebot/contracts/team-protocol/machine-resources-v1";
+import { STORAGE_DISK_CAPABILITY, STORAGE_DISK_ROUTES } from "@codebot/contracts/team-protocol/storage-disk-v1";
 import {
   STORAGE_USER_FILES_CAPABILITY,
   STORAGE_USER_FILES_ROUTES,
-} from "@openbot/contracts/team-protocol/storage-user-files-v1";
-import { decodeTeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/team-protocol/storage-user-files-v1";
+import { decodeTeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 import type { FilesPort } from "../files/files-port";
 import type { SidebarCardsPort } from "../sidebar/sidebar-port";
 
@@ -29,7 +29,7 @@ export function webMachineCalls(
   request: (serverId: string) => TeamApiRequest,
   hasCapability: (capability: string) => boolean,
 ): SidebarCardsPort & {
-  storage: Pick<OpenBotDesktopApi["storage"], "getLibraryFolders" | "changeLibraryFolders">;
+  storage: Pick<CodeBotDesktopApi["storage"], "getLibraryFolders" | "changeLibraryFolders">;
   hostAdmin: NonNullable<FilesPort["hostAdmin"]>;
 } {
   async function alerts(serverId: string, settings?: MachineAlertSettings) {

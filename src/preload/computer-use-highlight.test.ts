@@ -1,15 +1,15 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { IPC_ENDPOINTS } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { IPC_ENDPOINTS } from "@codebot/contracts/ipc";
 import { expect, it, vi } from "vitest";
 
 const bridge = vi.hoisted(() => {
   vi.stubGlobal("window", { addEventListener: () => {}, location: { search: "" } });
-  const api: { current: OpenBotDesktopApi | null } = { current: null };
+  const api: { current: CodeBotDesktopApi | null } = { current: null };
   return { api, listeners: new Map<string, Set<(event: null, payload: unknown) => void>>() };
 });
 vi.mock("electron", () => ({
   contextBridge: {
-    exposeInMainWorld: (_name: string, api: OpenBotDesktopApi) => {
+    exposeInMainWorld: (_name: string, api: CodeBotDesktopApi) => {
       bridge.api.current = api;
     },
   },

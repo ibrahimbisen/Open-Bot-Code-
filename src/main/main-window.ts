@@ -10,9 +10,9 @@ import {
   LOCAL_SERVER_ID,
   type MacPermissionId,
   type QuitGuard,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey, AppTranslate, LayoutDirection } from "@openbot/i18n";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey, AppTranslate, LayoutDirection } from "@codebot/i18n";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import {
   app,
@@ -67,7 +67,7 @@ import { followAppearance, followWindowGlass, glassWindowOptions, windowBackgrou
 import { followWindowButtonSide, WINDOW_BUTTON_INSET } from "./window-buttons";
 
 const MAIN_WINDOW_DARK_BACKGROUND = "#0b0d0e";
-const logger = createOpenBotLogger("main-window");
+const logger = createCodeBotLogger("main-window");
 
 const FIRST_LOAD_ATTEMPTS = 3;
 const RENDERER_RELOAD_MAX = 3;
@@ -320,7 +320,7 @@ export function createMainWindowController({
     followWindowGlass(window, MAIN_WINDOW_DARK_BACKGROUND);
 
     window.once("ready-to-show", () => {
-      performance.mark("openbot:window-ready");
+      performance.mark("codebot:window-ready");
       if (
         !windowsKeptHidden &&
         shouldShowDevelopmentWindow({
@@ -857,7 +857,7 @@ export function createComputerUsePermissionHelpWindow(
 }
 
 function appRendererUrl(developmentUrl: string | undefined): URL {
-  return developmentUrl ? new URL(developmentUrl) : new URL("openbot-app://app/index.html");
+  return developmentUrl ? new URL(developmentUrl) : new URL("codebot-app://app/index.html");
 }
 
 function chatWindowKey(target: ChatWindowTarget): string {
@@ -901,7 +901,7 @@ function replacementLoad(contents: WebContents, replaced: Error): Promise<void> 
 }
 
 function helperRendererUrl(developmentUrl: string | undefined): URL {
-  return developmentUrl ? new URL("helper.html", `${developmentUrl}/`) : new URL("openbot-app://app/helper.html");
+  return developmentUrl ? new URL("helper.html", `${developmentUrl}/`) : new URL("codebot-app://app/helper.html");
 }
 
 export function loadComputerUsePermissionHelpRenderer(

@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { lstat, mkdir, readlink, realpath, rename, rm, symlink, writeFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import type { HookCallbackMatcher, Options, SdkPluginConfig, Settings } from "@anthropic-ai/claude-agent-sdk";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Result } from "effect";
 import { workspaceTemporaryPaths } from "./agent/workspace-sandbox";
 import { runCauseEffect } from "./effect-boundary";
@@ -35,7 +35,7 @@ export const claudeWorkspaceSkillPlugin = Effect.fn("ClaudeWorkspace.skillPlugin
   const directory = join(stateDirectory, "claude-skill-plugins", createHash("sha256").update(cwd).digest("hex"));
   yield* providerCall(() => mkdir(join(directory, ".claude-plugin"), { recursive: true, mode: 0o700 }));
   yield* providerCall(() =>
-    writeFile(join(directory, ".claude-plugin", "plugin.json"), `${JSON.stringify({ name: "openbot" })}\n`),
+    writeFile(join(directory, ".claude-plugin", "plugin.json"), `${JSON.stringify({ name: "codebot" })}\n`),
   );
   const link = join(directory, "skills");
   const target = join(cwd, ".claude", "skills");

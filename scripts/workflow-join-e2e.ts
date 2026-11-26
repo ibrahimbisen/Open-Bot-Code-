@@ -3,17 +3,17 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { WorkflowGraph, WorkflowStep } from "@openbot/contracts/ipc";
+import type { WorkflowGraph, WorkflowStep } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-join-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-join-e2e");
 const WAIT_MS = 5_000;
 const BOARD_ERROR = "The job board did not answer. Authorization: Bearer abcdefghijklmnop1234567890";
 const SAFE_ERROR = "The job board did not answer. Authorization: [redacted]";
@@ -57,13 +57,13 @@ const GRAPH: WorkflowGraph = {
   strokes: [],
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-join-"));
-let database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-join-"));
+let database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 let generations = 0;
 
 async function open() {
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   await Effect.runPromise(database.initialize());
   const workflows = await Effect.runPromise(
     createWorkflows({

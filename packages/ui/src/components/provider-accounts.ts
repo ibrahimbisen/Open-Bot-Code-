@@ -1,4 +1,4 @@
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
 import {
   type AgentProviderId,
   type ClientAgentModelOption,
@@ -6,9 +6,9 @@ import {
   type ProviderAccountStatus,
   type ProviderUsageResetOutcome,
   type ProviderUsageResets,
-} from "@openbot/contracts/ipc";
-import { CLAUDE_API_KEY_ACCOUNT_ID } from "@openbot/contracts/team-protocol/claude-api-key-v1";
-import type { AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
+import type { AppTranslate } from "@codebot/i18n";
 
 export interface ProviderPickerAccount extends ProviderAccountStatus {
   usedBy?: readonly string[] | undefined;

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentEvent,
   AgentSummary,
@@ -19,17 +19,17 @@ import type {
   TestRoutineInput,
   UpdateRoutineInput,
   WorkflowRunSource,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   ROUTINE_MISSED_COUNT_LIMIT,
   routineConversationEventItemType,
   routineRunConversationEventItemType,
-} from "@openbot/contracts/ipc";
-import type { EventRoutine } from "@openbot/contracts/ipc-events";
-import { type DynamicRecord, isBoolean } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
-import { collapseMissedOccurrences, RoutineInputError } from "@openbot/team-client/routine-schedule";
+} from "@codebot/contracts/ipc";
+import type { EventRoutine } from "@codebot/contracts/ipc-events";
+import { type DynamicRecord, isBoolean } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
+import { collapseMissedOccurrences, RoutineInputError } from "@codebot/team-client/routine-schedule";
 import { Effect, Schema } from "effect";
 import { AgentRoutineStore } from "../agent-routine-store";
 import type { AgentStore } from "../agent-store";
@@ -55,10 +55,10 @@ import {
 import { failedRunReason, routineStatusForDelivery, type SkippedRoutineRuns } from "./delivery-content";
 import { quietRoutineRun } from "./routine-quiet-runs";
 import {
+  type CodeBotToolResponse,
+  codeBotToolFailure,
+  codeBotToolResult,
   localTimezone,
-  type OpenBotToolResponse,
-  openBotToolFailure,
-  openBotToolResult,
   ROUTINE_LIST_TRUNCATION_NOTE,
   routineListInstruction,
   routineToolAgentId,
@@ -107,15 +107,15 @@ export interface RoutineHooks {
   routineDeleted(agentId: string, routineId: string): Effect.Effect<void>;
 }
 
-const logger = createOpenBotLogger("routine-scheduler");
+const logger = createCodeBotLogger("routine-scheduler");
 
 const DELIVERY_TIMEZONE_LIMIT = 10_000;
-const SKIPPED_WHILE_CLOSED = "Skipped: OpenBot was closed at the scheduled time.";
+const SKIPPED_WHILE_CLOSED = "Skipped: CodeBot was closed at the scheduled time.";
 const QUEUED_RUN_REASONS: Record<string, string> = {
   "active-turn": "Waiting: another turn still runs in the same chat. This run starts when that turn ends.",
-  "provider-start": "Waiting: the provider did not start a new chat in time. OpenBot tries again later.",
+  "provider-start": "Waiting: the provider did not start a new chat in time. CodeBot tries again later.",
   "usage-limit": "Waiting: the provider usage limit is reached. This run starts when the limit resets.",
-  "sign-in": "Waiting: the provider needs sign-in on the computer that runs OpenBot. This run starts after sign-in.",
+  "sign-in": "Waiting: the provider needs sign-in on the computer that runs CodeBot. This run starts after sign-in.",
 };
 
 function queuedRunReason(hold: string): string {
@@ -357,7 +357,7 @@ export class RoutineScheduler implements RoutineDueSource {
     try {
       this.#routines.markPausedByRun(routineId, { scheduledFor });
     } catch (error) {
-      logger.warn("OpenBot could not keep why a run paused its routine.", {
+      logger.warn("CodeBot could not keep why a run paused its routine.", {
         error: error instanceof Error ? error.message : String(error),
       });
       return;
@@ -610,12 +610,12 @@ export class RoutineScheduler implements RoutineDueSource {
     params: DynamicToolCallParams,
     senderAgentId: string,
     requestedByPerson: () => boolean,
-  ): Effect.Effect<OpenBotToolResponse | null, RoutineOperationFailed> {
+  ): Effect.Effect<CodeBotToolResponse | null, RoutineOperationFailed> {
     return this.#handleTool(params, senderAgentId, requestedByPerson).pipe(
       Effect.catchDefect((cause) => Effect.fail(new RoutineOperationFailed({ cause }))),
       Effect.catch((failure) =>
         failure.cause instanceof RoutineInputError
-          ? Effect.succeed(openBotToolFailure(failure.cause.message))
+          ? Effect.succeed(codeBotToolFailure(failure.cause.message))
           : Effect.fail(failure),
       ),
     );
@@ -663,7 +663,7 @@ export class RoutineScheduler implements RoutineDueSource {
           ...(onlyId === null ? routineListInstruction(routine.instruction) : {}),
           lastRun: this.#lastRun(agentId, routine.id),
         }));
-      return openBotToolResult({
+      return codeBotToolResult({
         routines,
         ...(routines.some((routine) => "instructionTruncated" in routine)
           ? { truncatedInstructions: ROUTINE_LIST_TRUNCATION_NOTE }
@@ -727,7 +727,7 @@ export class RoutineScheduler implements RoutineDueSource {
         },
         this.#toolMutationOptions(agentId, senderAgentId, params),
       );
-      return openBotToolResult(routine);
+      return codeBotToolResult(routine);
     }
 
     if (params.tool === CREATE_WEBHOOK_ROUTINE_TOOL) {
@@ -757,7 +757,7 @@ export class RoutineScheduler implements RoutineDueSource {
       });
       const turnId = agentId === senderAgentId ? params.turnId : undefined;
       const recorded = this.#recordWebhookEvent(agentId, "created", routine, turnId);
-      return openBotToolResult(webhookRoutineToolResult(routine, recorded && turnId !== undefined));
+      return codeBotToolResult(webhookRoutineToolResult(routine, recorded && turnId !== undefined));
     }
 
     if (params.tool === UPDATE_WEBHOOK_ROUTINE_TOOL) {
@@ -805,7 +805,7 @@ export class RoutineScheduler implements RoutineDueSource {
       });
       const turnId = agentId === senderAgentId ? params.turnId : undefined;
       const recorded = this.#recordWebhookEvent(agentId, "updated", routine, turnId);
-      return openBotToolResult(webhookRoutineToolResult(routine, recorded && turnId !== undefined, true));
+      return codeBotToolResult(webhookRoutineToolResult(routine, recorded && turnId !== undefined, true));
     }
 
     if (params.tool === "update_routine") {
@@ -853,7 +853,7 @@ export class RoutineScheduler implements RoutineDueSource {
       if (this.#requireToolRoutine(input.agentId, input.routineId).trigger.kind === "webhook") {
         throw new RoutineInputError(`Routine ${input.routineId} is a webhook routine. Use update_webhook_routine.`);
       }
-      return openBotToolResult(this.update(input, this.#toolMutationOptions(input.agentId, senderAgentId, params)));
+      return codeBotToolResult(this.update(input, this.#toolMutationOptions(input.agentId, senderAgentId, params)));
     }
 
     if (params.tool === "delete_routine") {
@@ -870,7 +870,7 @@ export class RoutineScheduler implements RoutineDueSource {
       } else {
         yield* this.delete({ agentId, routineId }, agentId === senderAgentId ? { turnId: params.turnId } : {});
       }
-      return openBotToolResult({ deleted: true, agentId, routineId });
+      return codeBotToolResult({ deleted: true, agentId, routineId });
     }
 
     if (params.tool === "test_routine") {
@@ -887,7 +887,7 @@ export class RoutineScheduler implements RoutineDueSource {
           `Routine ${routineId} is a webhook routine. Only the user tests it, in Routines settings. Tell the user to do it there.`,
         );
       }
-      return openBotToolResult(yield* this.test({ agentId, routineId }));
+      return codeBotToolResult(yield* this.test({ agentId, routineId }));
     }
 
     return null;
@@ -1384,7 +1384,7 @@ export class RoutineScheduler implements RoutineDueSource {
     if (!webhooks) throw new RoutineInputError("This server cannot create webhook routines.");
     if (!requestedByPerson()) {
       throw new RoutineInputError(
-        "Only a person's message, in your OpenBot chat or a thread they opened, can create, change or delete a webhook routine. Ask the user to request it there.",
+        "Only a person's message, in your CodeBot chat or a thread they opened, can create, change or delete a webhook routine. Ask the user to request it there.",
       );
     }
     return webhooks;

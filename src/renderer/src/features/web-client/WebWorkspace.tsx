@@ -1,8 +1,8 @@
-import { isKnownAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AppAppearance } from "@openbot/contracts/app-appearance";
-import type { AppLanguage } from "@openbot/contracts/app-language";
-import type { CreditMediaGenerationKind } from "@openbot/contracts/credit-media";
-import { HOSTED_SERVER_CONTACT_URL } from "@openbot/contracts/hosted-servers";
+import { isKnownAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AppAppearance } from "@codebot/contracts/app-appearance";
+import type { AppLanguage } from "@codebot/contracts/app-language";
+import type { CreditMediaGenerationKind } from "@codebot/contracts/credit-media";
+import { HOSTED_SERVER_CONTACT_URL } from "@codebot/contracts/hosted-servers";
 import {
   type AddedAgent,
   type AgentModelChoice,
@@ -35,81 +35,81 @@ import {
   type ServerConnectionState,
   type ServerSummary,
   STORAGE_CAPABILITY,
-} from "@openbot/contracts/ipc";
-import type { PricingOrder } from "@openbot/contracts/license";
-import type { MarketplaceListingLink } from "@openbot/contracts/marketplace-links";
-import { AGENT_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-access-v1";
-import { AGENT_BACKUP_MODELS_ROUTES } from "@openbot/contracts/team-protocol/agent-backup-models-v1";
-import { AGENT_BUILTIN_MEMORY_ROUTES } from "@openbot/contracts/team-protocol/agent-builtin-memory-v1";
-import { AGENT_DEFAULTS_ROUTES } from "@openbot/contracts/team-protocol/agent-defaults-v1";
-import { AGENT_FAST_MODE_ROUTES } from "@openbot/contracts/team-protocol/agent-fast-mode-v1";
-import { AGENT_HOST_SETTINGS_ROUTES } from "@openbot/contracts/team-protocol/agent-host-settings-v1";
-import { AGENT_IMPORT_CAPABILITY } from "@openbot/contracts/team-protocol/agent-import-v1";
-import { AGENT_IMPORT_V2_CAPABILITY } from "@openbot/contracts/team-protocol/agent-import-v2";
-import { AGENT_NEW_CHAT_ROUTES } from "@openbot/contracts/team-protocol/agent-new-chat-v1";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
-import { AGENT_PLAN_CARD_ROUTES } from "@openbot/contracts/team-protocol/agent-plan-card-v1";
-import { AGENT_SPEED_CAPABILITY, AGENT_SPEED_ROUTES } from "@openbot/contracts/team-protocol/agent-speed-v1";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
-import { AGENT_THREAD_FILES_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-files-v1";
-import { AGENT_USAGE_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/agent-usage-limit-v1";
-import { AGENT_WAITS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-waits-v1";
-import { ATTACHMENT_PREVIEW_CAPABILITY } from "@openbot/contracts/team-protocol/attachment-preview-v1";
-import { BROWSER_PROFILES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { BROWSER_PROXIES_CAPABILITY } from "@openbot/contracts/team-protocol/browser-proxies-v1";
-import { TEAM_BROWSER_VIEW_CAPABILITY } from "@openbot/contracts/team-protocol/browser-view-v1";
-import { CHANNEL_BROWSER_CAPABILITY } from "@openbot/contracts/team-protocol/channel-browser-v1";
-import { CHANNEL_FOLDERS_CAPABILITY } from "@openbot/contracts/team-protocol/channel-folders-v1";
-import { CHANNEL_ISOLATION_CAPABILITY } from "@openbot/contracts/team-protocol/channel-isolation-v1";
-import { CHANNEL_PICTURE_CAPABILITY } from "@openbot/contracts/team-protocol/channel-picture-v1";
-import { CHAT_HISTORY_CAPABILITY } from "@openbot/contracts/team-protocol/chat-history-v1";
+} from "@codebot/contracts/ipc";
+import type { PricingOrder } from "@codebot/contracts/license";
+import type { MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
+import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
+import { AGENT_BACKUP_MODELS_ROUTES } from "@codebot/contracts/team-protocol/agent-backup-models-v1";
+import { AGENT_BUILTIN_MEMORY_ROUTES } from "@codebot/contracts/team-protocol/agent-builtin-memory-v1";
+import { AGENT_DEFAULTS_ROUTES } from "@codebot/contracts/team-protocol/agent-defaults-v1";
+import { AGENT_FAST_MODE_ROUTES } from "@codebot/contracts/team-protocol/agent-fast-mode-v1";
+import { AGENT_HOST_SETTINGS_ROUTES } from "@codebot/contracts/team-protocol/agent-host-settings-v1";
+import { AGENT_IMPORT_CAPABILITY } from "@codebot/contracts/team-protocol/agent-import-v1";
+import { AGENT_IMPORT_V2_CAPABILITY } from "@codebot/contracts/team-protocol/agent-import-v2";
+import { AGENT_NEW_CHAT_ROUTES } from "@codebot/contracts/team-protocol/agent-new-chat-v1";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
+import { AGENT_PLAN_CARD_ROUTES } from "@codebot/contracts/team-protocol/agent-plan-card-v1";
+import { AGENT_SPEED_CAPABILITY, AGENT_SPEED_ROUTES } from "@codebot/contracts/team-protocol/agent-speed-v1";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
+import { AGENT_THREAD_FILES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-files-v1";
+import { AGENT_USAGE_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/agent-usage-limit-v1";
+import { AGENT_WAITS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-waits-v1";
+import { ATTACHMENT_PREVIEW_CAPABILITY } from "@codebot/contracts/team-protocol/attachment-preview-v1";
+import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { BROWSER_PROXIES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-proxies-v1";
+import { TEAM_BROWSER_VIEW_CAPABILITY } from "@codebot/contracts/team-protocol/browser-view-v1";
+import { CHANNEL_BROWSER_CAPABILITY } from "@codebot/contracts/team-protocol/channel-browser-v1";
+import { CHANNEL_FOLDERS_CAPABILITY } from "@codebot/contracts/team-protocol/channel-folders-v1";
+import { CHANNEL_ISOLATION_CAPABILITY } from "@codebot/contracts/team-protocol/channel-isolation-v1";
+import { CHANNEL_PICTURE_CAPABILITY } from "@codebot/contracts/team-protocol/channel-picture-v1";
+import { CHAT_HISTORY_CAPABILITY } from "@codebot/contracts/team-protocol/chat-history-v1";
 import {
   CLAUDE_USER_SETUP_ROUTES,
   decodeClaudeUserSetupResponse,
-} from "@openbot/contracts/team-protocol/claude-user-setup-v1";
-import { CONNECTORS_CAPABILITY } from "@openbot/contracts/team-protocol/connectors-v1";
-import { CONTEXT_COMPACT_CAPABILITY } from "@openbot/contracts/team-protocol/context-compact-v1";
-import { CONTEXT_RESET_CAPABILITY } from "@openbot/contracts/team-protocol/context-reset-v1";
-import { CONVERSATION_FILE_SEARCH_CAPABILITY } from "@openbot/contracts/team-protocol/conversation-file-search-v1";
-import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@openbot/contracts/team-protocol/conversation-unread-from-v1";
-import { CRM_CAPABILITY } from "@openbot/contracts/team-protocol/crm-v1";
-import { AGENT_HIDDEN_CAPABILITY, AGENT_HIDDEN_WORK_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { DISCORD_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/discord-access-v1";
-import { EVENTS_CAPABILITY } from "@openbot/contracts/team-protocol/events-v1";
-import { HOST_PERSONALITY_CAPABILITY } from "@openbot/contracts/team-protocol/host-personality-v1";
-import { HOST_RELEASE_CAPABILITY } from "@openbot/contracts/team-protocol/host-release-v1";
-import { HOST_SIGNAL_HOME_ROUTES } from "@openbot/contracts/team-protocol/host-signal-home-v1";
-import { HOST_TURN_LIMITS_ROUTES } from "@openbot/contracts/team-protocol/host-turn-limits-v1";
-import { HOST_VOICE_MODEL_ROUTES } from "@openbot/contracts/team-protocol/host-voice-model-v1";
-import { HOSTED_SITES_CAPABILITY } from "@openbot/contracts/team-protocol/hosted-sites-v1";
-import { INSTANCE_TRANSFER_CHUNKS_CAPABILITY } from "@openbot/contracts/team-protocol/instance-transfer-chunks-v1";
-import { INSTANCE_TRANSFER_FULL_COPY_CAPABILITY } from "@openbot/contracts/team-protocol/instance-transfer-full-copy-v1";
-import { INSTANCE_TRANSFER_CAPABILITY } from "@openbot/contracts/team-protocol/instance-transfer-v1";
-import { MCP_SIGN_IN_CAPABILITY } from "@openbot/contracts/team-protocol/mcp-sign-in-v1";
-import { MESSAGE_DELETE_CAPABILITY } from "@openbot/contracts/team-protocol/message-delete-v1";
-import { MESSAGE_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/message-pins-v1";
-import { OWNER_TRANSFER_CAPABILITY } from "@openbot/contracts/team-protocol/owner-transfer-v1";
-import { PROVIDER_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-accounts-v1";
-import { ROUTINE_RECOVERY_CAPABILITY } from "@openbot/contracts/team-protocol/routine-recovery-v1";
-import { ROUTINE_RUN_PLACE_CAPABILITY } from "@openbot/contracts/team-protocol/routine-run-place-v1";
-import { ROUTINES_ONCE_CAPABILITY } from "@openbot/contracts/team-protocol/routines-once-v1";
-import { SIDE_QUESTION_CAPABILITY } from "@openbot/contracts/team-protocol/side-question-v1";
-import { SIGN_IN_RELAY_CAPABILITY } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { SKILL_LEARNING_CAPABILITY } from "@openbot/contracts/team-protocol/skill-learning-v1";
-import { STORAGE_CHANNEL_CAPABILITY } from "@openbot/contracts/team-protocol/storage-channel-v1";
-import { THREAD_MESSAGE_SEARCH_CAPABILITY } from "@openbot/contracts/team-protocol/thread-message-search-v1";
-import { VAULT_IMPORT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-import-v1";
-import { VAULT_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v1";
-import { VAULT_V2_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v2";
-import { VAULT_V3_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v3";
-import { VAULT_V4_CAPABILITY } from "@openbot/contracts/team-protocol/vault-v4";
-import { WEBHOOK_AGENT_SECRET_CAPABILITY } from "@openbot/contracts/team-protocol/webhook-agent-secret-v1";
-import { WEBHOOK_SENDER_SECRET_CAPABILITY } from "@openbot/contracts/team-protocol/webhook-sender-secret-v1";
-import { WEBHOOK_TESTS_CAPABILITY } from "@openbot/contracts/team-protocol/webhook-tests-v1";
-import { WHATSAPP_CONNECTOR_CAPABILITY } from "@openbot/contracts/team-protocol/whatsapp-connector-v1";
-import { WORKFLOWS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { channelForThread } from "@openbot/team-client/channel-notifications";
+} from "@codebot/contracts/team-protocol/claude-user-setup-v1";
+import { CONNECTORS_CAPABILITY } from "@codebot/contracts/team-protocol/connectors-v1";
+import { CONTEXT_COMPACT_CAPABILITY } from "@codebot/contracts/team-protocol/context-compact-v1";
+import { CONTEXT_RESET_CAPABILITY } from "@codebot/contracts/team-protocol/context-reset-v1";
+import { CONVERSATION_FILE_SEARCH_CAPABILITY } from "@codebot/contracts/team-protocol/conversation-file-search-v1";
+import { CONVERSATION_UNREAD_FROM_CAPABILITY } from "@codebot/contracts/team-protocol/conversation-unread-from-v1";
+import { CRM_CAPABILITY } from "@codebot/contracts/team-protocol/crm-v1";
+import { AGENT_HIDDEN_CAPABILITY, AGENT_HIDDEN_WORK_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { DISCORD_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/discord-access-v1";
+import { EVENTS_CAPABILITY } from "@codebot/contracts/team-protocol/events-v1";
+import { HOST_PERSONALITY_CAPABILITY } from "@codebot/contracts/team-protocol/host-personality-v1";
+import { HOST_RELEASE_CAPABILITY } from "@codebot/contracts/team-protocol/host-release-v1";
+import { HOST_SIGNAL_HOME_ROUTES } from "@codebot/contracts/team-protocol/host-signal-home-v1";
+import { HOST_TURN_LIMITS_ROUTES } from "@codebot/contracts/team-protocol/host-turn-limits-v1";
+import { HOST_VOICE_MODEL_ROUTES } from "@codebot/contracts/team-protocol/host-voice-model-v1";
+import { HOSTED_SITES_CAPABILITY } from "@codebot/contracts/team-protocol/hosted-sites-v1";
+import { INSTANCE_TRANSFER_CHUNKS_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-chunks-v1";
+import { INSTANCE_TRANSFER_FULL_COPY_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-full-copy-v1";
+import { INSTANCE_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-v1";
+import { MCP_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/mcp-sign-in-v1";
+import { MESSAGE_DELETE_CAPABILITY } from "@codebot/contracts/team-protocol/message-delete-v1";
+import { MESSAGE_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/message-pins-v1";
+import { OWNER_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/owner-transfer-v1";
+import { PROVIDER_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-accounts-v1";
+import { ROUTINE_RECOVERY_CAPABILITY } from "@codebot/contracts/team-protocol/routine-recovery-v1";
+import { ROUTINE_RUN_PLACE_CAPABILITY } from "@codebot/contracts/team-protocol/routine-run-place-v1";
+import { ROUTINES_ONCE_CAPABILITY } from "@codebot/contracts/team-protocol/routines-once-v1";
+import { SIDE_QUESTION_CAPABILITY } from "@codebot/contracts/team-protocol/side-question-v1";
+import { SIGN_IN_RELAY_CAPABILITY } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { SKILL_LEARNING_CAPABILITY } from "@codebot/contracts/team-protocol/skill-learning-v1";
+import { STORAGE_CHANNEL_CAPABILITY } from "@codebot/contracts/team-protocol/storage-channel-v1";
+import { THREAD_MESSAGE_SEARCH_CAPABILITY } from "@codebot/contracts/team-protocol/thread-message-search-v1";
+import { VAULT_IMPORT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-import-v1";
+import { VAULT_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v1";
+import { VAULT_V2_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v2";
+import { VAULT_V3_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v3";
+import { VAULT_V4_CAPABILITY } from "@codebot/contracts/team-protocol/vault-v4";
+import { WEBHOOK_AGENT_SECRET_CAPABILITY } from "@codebot/contracts/team-protocol/webhook-agent-secret-v1";
+import { WEBHOOK_SENDER_SECRET_CAPABILITY } from "@codebot/contracts/team-protocol/webhook-sender-secret-v1";
+import { WEBHOOK_TESTS_CAPABILITY } from "@codebot/contracts/team-protocol/webhook-tests-v1";
+import { WHATSAPP_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/whatsapp-connector-v1";
+import { WORKFLOWS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { channelForThread } from "@codebot/team-client/channel-notifications";
 import {
   cancelHostUpdate,
   checkHostForUpdate,
@@ -155,57 +155,57 @@ import {
   startHostUpdate,
   stopHostBackgroundProcess,
   updateAgentAdminSettings,
-} from "@openbot/team-client/team-admin-requests";
-import { clearAgentContext, type TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { classifyFailure } from "@openbot/telemetry";
-import { toast } from "@openbot/ui";
-import type { GlobalSearchRoutine } from "@openbot/ui/components/GlobalSearch";
-import type { AgentMessage, ComposerThreadMessageMatch } from "@openbot/ui/data";
-import { accountUsageProviderRows } from "@openbot/ui/features/account/account-usage-view";
-import { computeAgentAvatarMoods } from "@openbot/ui/features/agents/agent-avatar-mood";
-import { createFirstAgentDraft, type FirstAgentDraft } from "@openbot/ui/features/agents/FirstAgentSetup";
-import { BillingDialog } from "@openbot/ui/features/billing/BillingDialog";
-import { createBillingStore } from "@openbot/ui/features/billing/billing-store";
-import { LicenseSection } from "@openbot/ui/features/billing/LicenseSection";
-import { createLicenseStore } from "@openbot/ui/features/billing/license-store";
-import { unloadedHistory } from "@openbot/ui/features/conversation/ChatScrollRail";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
-import { MAIN_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
-import { BuyCreditsPage } from "@openbot/ui/features/credits/BuyCreditsPage";
-import { CreditActivitySection } from "@openbot/ui/features/credits/CreditActivitySection";
-import { CreditsSection } from "@openbot/ui/features/credits/CreditsSection";
+} from "@codebot/team-client/team-admin-requests";
+import { clearAgentContext, type TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { classifyFailure } from "@codebot/telemetry";
+import { toast } from "@codebot/ui";
+import type { GlobalSearchRoutine } from "@codebot/ui/components/GlobalSearch";
+import type { AgentMessage, ComposerThreadMessageMatch } from "@codebot/ui/data";
+import { accountUsageProviderRows } from "@codebot/ui/features/account/account-usage-view";
+import { computeAgentAvatarMoods } from "@codebot/ui/features/agents/agent-avatar-mood";
+import { createFirstAgentDraft, type FirstAgentDraft } from "@codebot/ui/features/agents/FirstAgentSetup";
+import { BillingDialog } from "@codebot/ui/features/billing/BillingDialog";
+import { createBillingStore } from "@codebot/ui/features/billing/billing-store";
+import { LicenseSection } from "@codebot/ui/features/billing/LicenseSection";
+import { createLicenseStore } from "@codebot/ui/features/billing/license-store";
+import { unloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
+import { MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
+import { BuyCreditsPage } from "@codebot/ui/features/credits/BuyCreditsPage";
+import { CreditActivitySection } from "@codebot/ui/features/credits/CreditActivitySection";
+import { CreditsSection } from "@codebot/ui/features/credits/CreditsSection";
 import {
   type CreditsMenu,
   createCreditsStore,
   createCreditsSummary,
   creditsRailWallet,
-} from "@openbot/ui/features/credits/credits-store";
-import { RailMoveCreditsDialog } from "@openbot/ui/features/credits/MoveCreditsDialog";
-import { LeaveServerDialog } from "@openbot/ui/features/servers/LeaveServerDialog";
-import { RestartServerDialog } from "@openbot/ui/features/servers/RestartServerDialog";
-import type { ServerActionCallbacks } from "@openbot/ui/features/servers/ServerActionItems";
+} from "@codebot/ui/features/credits/credits-store";
+import { RailMoveCreditsDialog } from "@codebot/ui/features/credits/MoveCreditsDialog";
+import { LeaveServerDialog } from "@codebot/ui/features/servers/LeaveServerDialog";
+import { RestartServerDialog } from "@codebot/ui/features/servers/RestartServerDialog";
+import type { ServerActionCallbacks } from "@codebot/ui/features/servers/ServerActionItems";
 import {
   ConversationLoadNotice,
   ServerConnectionNotice,
   ServerPanelLoadNotice,
   serverWorkspacePhase,
-} from "@openbot/ui/features/servers/ServerConnectionNotice";
-import { ServerMenu } from "@openbot/ui/features/servers/ServerMenu";
-import { createServerPaywall } from "@openbot/ui/features/servers/ServerPaywall";
-import { serverPlanBlocks, serverPlanScreenShown } from "@openbot/ui/features/servers/ServerPlanEnd";
-import { type HiddenServer, ServerRail } from "@openbot/ui/features/servers/ServerRail";
-import type { SettingsPagePlacement } from "@openbot/ui/features/settings/SettingsDialogShell";
-import { createSettingsHostedServersStore } from "@openbot/ui/features/settings/stores/hosted-servers-store";
-import { Sidebar } from "@openbot/ui/features/sidebar/Sidebar";
-import { SidebarCommunityCard } from "@openbot/ui/features/sidebar/SidebarCommunityCard";
-import { sidebarAgentOrder } from "@openbot/ui/features/sidebar/sidebar-agent-order";
+} from "@codebot/ui/features/servers/ServerConnectionNotice";
+import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
+import { createServerPaywall } from "@codebot/ui/features/servers/ServerPaywall";
+import { serverPlanBlocks, serverPlanScreenShown } from "@codebot/ui/features/servers/ServerPlanEnd";
+import { type HiddenServer, ServerRail } from "@codebot/ui/features/servers/ServerRail";
+import type { SettingsPagePlacement } from "@codebot/ui/features/settings/SettingsDialogShell";
+import { createSettingsHostedServersStore } from "@codebot/ui/features/settings/stores/hosted-servers-store";
+import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
+import { SidebarCommunityCard } from "@codebot/ui/features/sidebar/SidebarCommunityCard";
+import { sidebarAgentOrder } from "@codebot/ui/features/sidebar/sidebar-agent-order";
 import {
   computeSidebarAgentStates,
   sidebarAgentWaits,
   sidebarChannelWaits,
-} from "@openbot/ui/features/sidebar/sidebar-agent-states";
-import { PageRail, type PageRailPage } from "@openbot/ui/features/window/PageRail";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/sidebar/sidebar-agent-states";
+import { PageRail, type PageRailPage } from "@codebot/ui/features/window/PageRail";
+import { useText } from "@codebot/ui/text";
 import { Effect } from "effect";
 import {
   createEffect,
@@ -226,7 +226,7 @@ import { queuedDeliveriesInOrder } from "../../queue-reconciliation";
 import { backgroundWorkKey } from "../conversation/background-work-key";
 import "katex/contrib/copy-tex";
 import "../../selection-copy";
-import type { CreationPreference } from "@openbot/ui/features/agents/agent-creation-model";
+import type { CreationPreference } from "@codebot/ui/features/agents/agent-creation-model";
 import { actionToast } from "../../action-toast";
 import { desktopAnalytics } from "../../analytics";
 import { collectThreadMessageMatches, formatMessageTime, toAgentMessage } from "../../app-message-projection";
@@ -425,9 +425,9 @@ const CONNECTING_STATUS: AgentStatus = {
   message: null,
   fullAccess: true,
 };
-const WEB_APP_INFO: AppInfo = { name: "OpenBot", version: "web", platform: "darwin", variant: "production" };
+const WEB_APP_INFO: AppInfo = { name: "CodeBot", version: "web", platform: "darwin", variant: "production" };
 const PHONE_QUERY = "(max-width: 720px)";
-const QUEUE_EDIT_ACCOUNT_KEY = "openbot.web.queue-edit-account";
+const QUEUE_EDIT_ACCOUNT_KEY = "codebot.web.queue-edit-account";
 const SEARCH_ROUTINE_REQUESTS = 4;
 const SIDEBAR_WAIT_MS = 5000;
 
@@ -1525,7 +1525,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
   );
   onCleanup(
     workspace.onHostEvent((event) => {
-      if (event.type === "openbot-credits-changed") creditsSummary.refresh();
+      if (event.type === "codebot-credits-changed") creditsSummary.refresh();
     }),
   );
   const creditWallet = () => creditsRailWallet(creditsSummary.state(), server() ?? null, null);
@@ -3094,7 +3094,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                 <>
                   <ServerMenu
                     rail
-                    serverName={workspace.state.host?.name ?? "OpenBot"}
+                    serverName={workspace.state.host?.name ?? "CodeBot"}
                     servers={shownServers()}
                     hiddenServers={hiddenServers()}
                     view={layout.serverView()}
@@ -3435,7 +3435,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                             !pausedAgentIds().has(agent.id) && (workspace.state.reads[agent.id]?.unreadCount ?? 0) > 0,
                         ) || channels.hasUnread()
                       }
-                      serverName={workspace.state.host?.name ?? "OpenBot"}
+                      serverName={workspace.state.host?.name ?? "CodeBot"}
                       serverUpdate={(() => {
                         const id = server()?.id;
                         const badge = id ? serverUpdateBadge(id) : null;

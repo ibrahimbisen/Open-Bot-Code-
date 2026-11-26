@@ -8,7 +8,7 @@ import { SalesAnalyticsDelivery } from "../src/server/sales-analytics-delivery";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "paid-account-identity-e2e");
+const OUT = join(ROOT, ".codebot-build", "paid-account-identity-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const PAYER = { id: "payer", email: "  Payer.Name@Example.TEST " };
 const NORMALIZED_EMAIL = "payer.name@example.test";

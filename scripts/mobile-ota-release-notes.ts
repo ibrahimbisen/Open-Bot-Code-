@@ -1,6 +1,6 @@
 import { rm, writeFile } from "node:fs/promises";
-import { isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import { appJsonVersion, appVersion, readText, run, today } from "./mobile-release-steps";
 import {
   assembleSection,
@@ -98,7 +98,7 @@ export async function otaNotesPlan({ base, head, stores, date }: OtaNotesInput):
 }
 
 if (import.meta.main) {
-  const logger = createOpenBotLogger("mobile-ota-release-notes");
+  const logger = createCodeBotLogger("mobile-ota-release-notes");
   const args = process.argv.slice(2);
   const option = (name: string) => {
     const index = args.indexOf(name);

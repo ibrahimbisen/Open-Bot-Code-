@@ -11,9 +11,9 @@ import {
   chatVisualReplyMessage,
   chatVisualThemeMessage,
   parseChatVisualMessage,
-} from "@openbot/contracts/chat-visual";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
-import { Button, Maximize2, PanelRight, Wallpaper } from "@openbot/ui";
+} from "@codebot/contracts/chat-visual";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
+import { Button, Maximize2, PanelRight, Wallpaper } from "@codebot/ui";
 import { Portal } from "@solidjs/web";
 import { createEffect, createSignal, onSettled, Show, untrack } from "solid-js";
 import { documentColorScheme } from "../../document-color-scheme";
@@ -32,24 +32,24 @@ import {
 } from "./SelectionActions";
 
 const THEME_TOKENS: ReadonlyArray<readonly [`--${string}`, string]> = [
-  ["--foreground", "--openbot-text-primary"],
-  ["--muted-foreground", "--openbot-text-muted"],
-  ["--muted", "--openbot-bg-surface"],
-  ["--card", "--openbot-bg-surface"],
-  ["--card-foreground", "--openbot-text-primary"],
-  ["--border", "--openbot-border-strong"],
-  ["--accent", "--openbot-accent-text"],
-  ["--destructive", "--openbot-danger-text"],
-  ["--success", "--openbot-success-text"],
-  ["--chart-1", "--openbot-chart-storage-workspaces"],
-  ["--chart-2", "--openbot-chart-storage-files"],
-  ["--chart-3", "--openbot-chart-storage-chats"],
-  ["--chart-4", "--openbot-chart-storage-downloads"],
-  ["--chart-5", "--openbot-chart-series-codex"],
-  ["--chart-6", "--openbot-chart-series-grok"],
-  ["--radius", "--openbot-radius-lg"],
-  ["--font-sans", "--openbot-font-sans"],
-  ["--font-mono", "--openbot-font-mono"],
+  ["--foreground", "--codebot-text-primary"],
+  ["--muted-foreground", "--codebot-text-muted"],
+  ["--muted", "--codebot-bg-surface"],
+  ["--card", "--codebot-bg-surface"],
+  ["--card-foreground", "--codebot-text-primary"],
+  ["--border", "--codebot-border-strong"],
+  ["--accent", "--codebot-accent-text"],
+  ["--destructive", "--codebot-danger-text"],
+  ["--success", "--codebot-success-text"],
+  ["--chart-1", "--codebot-chart-storage-workspaces"],
+  ["--chart-2", "--codebot-chart-storage-files"],
+  ["--chart-3", "--codebot-chart-storage-chats"],
+  ["--chart-4", "--codebot-chart-storage-downloads"],
+  ["--chart-5", "--codebot-chart-series-codex"],
+  ["--chart-6", "--codebot-chart-series-grok"],
+  ["--radius", "--codebot-radius-lg"],
+  ["--font-sans", "--codebot-font-sans"],
+  ["--font-mono", "--codebot-font-mono"],
 ];
 
 function visualTheme(element: Element): ChatVisualTheme {

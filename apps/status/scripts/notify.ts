@@ -2,7 +2,7 @@ import { createHash, createHmac } from "node:crypto";
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { parseArgs } from "node:util";
-import { createOpenBotLogger, registerSecretValue } from "@openbot/logging";
+import { createCodeBotLogger, registerSecretValue } from "@codebot/logging";
 import { Schema } from "effect";
 import {
   CheckResult,
@@ -16,7 +16,7 @@ import {
   serviceName,
 } from "../src/model";
 
-const logger = createOpenBotLogger("status-notify");
+const logger = createCodeBotLogger("status-notify");
 
 const { values: args } = parseArgs({
   options: {
@@ -341,7 +341,7 @@ function message(event: WebhookEvent): { headline: string; lines: string[]; link
       link: SITE_URL,
     };
   }
-  return { headline: "Test event from the OpenBot status page", lines: ["The webhook works."], link: SITE_URL };
+  return { headline: "Test event from the CodeBot status page", lines: ["The webhook works."], link: SITE_URL };
 }
 
 const slackText = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -370,16 +370,16 @@ async function send(subscription: Subscription, delivery: Delivery): Promise<Out
   const timestamp = String(Math.floor(Date.now() / 1000));
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    "User-Agent": "openbot-status-webhook",
-    "x-openbot-event": delivery.event.type,
-    "x-openbot-delivery-id": delivery.id,
-    "x-openbot-timestamp": timestamp,
+    "User-Agent": "codebot-status-webhook",
+    "x-codebot-event": delivery.event.type,
+    "x-codebot-delivery-id": delivery.id,
+    "x-codebot-timestamp": timestamp,
   };
   if (subscription.secret) {
     const signature = createHmac("sha256", subscription.secret)
       .update(`${timestamp}.${delivery.id}.${body}`)
       .digest("hex");
-    headers["x-openbot-signature"] = `sha256=${signature}`;
+    headers["x-codebot-signature"] = `sha256=${signature}`;
   }
   try {
     const response = await fetch(subscription.url, {

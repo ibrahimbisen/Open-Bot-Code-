@@ -2,6 +2,7 @@
 
 import type { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import {
   actualRows,
   buildDatabaseAtVersion,
@@ -20,7 +21,6 @@ import {
   seedEveryTable,
   sortedRows,
 } from "./migration-harness";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const connections: DatabaseSync[] = [];
 afterEach(() => {
@@ -39,7 +39,7 @@ const fresh = (() => {
   return () => {
     if (shape) return shape;
     const db = open();
-    migrateOpenBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT });
+    migrateCodeBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT });
     shape = {
       tables: readTableShapes(db),
       declarations: readNormalizedDeclarations(db),
@@ -57,7 +57,7 @@ function expectUpgradeKeepsData(db: DatabaseSync): void {
   const before = readTableRows(db);
   const oldMarkers = readAppliedVersions(db).filter((version) => version < 8);
 
-  migrateOpenBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT });
+  migrateCodeBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT });
 
   const latest = fresh();
   const expected = expectedRowsAfterUpgrade(before, fromVersion, latest.versions.at(-1) ?? 0);
@@ -73,7 +73,7 @@ function expectUpgradeKeepsData(db: DatabaseSync): void {
 
   const afterFirst = { rows: readTableRows(db), declarations: readNormalizedDeclarations(db) };
   const appliedAt = query(db, "SELECT version, applied_at FROM schema_migrations ORDER BY version");
-  migrateOpenBotDatabase(db, { appliedAt: "2026-12-01T00:00:00.000Z", closedCleanly: true });
+  migrateCodeBotDatabase(db, { appliedAt: "2026-12-01T00:00:00.000Z", closedCleanly: true });
   expect({ rows: readTableRows(db), declarations: readNormalizedDeclarations(db) }).toEqual(afterFirst);
   expect(query(db, "SELECT version, applied_at FROM schema_migrations ORDER BY version")).toEqual(appliedAt);
 }

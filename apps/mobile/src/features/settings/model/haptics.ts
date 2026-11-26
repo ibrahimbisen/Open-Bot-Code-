@@ -1,8 +1,8 @@
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
-const key = "openbot.mobile.haptics.v1";
-const repliesKey = "openbot.mobile.haptics.replies.v1";
+const key = "codebot.mobile.haptics.v1";
+const repliesKey = "codebot.mobile.haptics.replies.v1";
 
 export const useHapticsPreference = create<{ enabled: boolean; replies: boolean; ready: boolean; saving: boolean }>(
   () => ({

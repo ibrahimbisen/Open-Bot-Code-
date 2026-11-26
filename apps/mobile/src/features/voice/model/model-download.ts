@@ -1,4 +1,4 @@
-import type { SpeechModelFile } from "@openbot/contracts/speech-models";
+import type { SpeechModelFile } from "@codebot/contracts/speech-models";
 import { Directory, type DownloadProgress, File } from "expo-file-system";
 import { Platform } from "react-native";
 import { create } from "zustand";

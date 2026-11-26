@@ -1,5 +1,5 @@
-import type { ConversationSubagentStepKind } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import type { ConversationSubagentStepKind } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { isRecord } from "../protocol";
 import {
   dropSubagent,

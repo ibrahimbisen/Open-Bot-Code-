@@ -5,39 +5,39 @@ const version = "0b6f0c52-7a4e-4c1f-9d2b-3f6a8e1c5d70";
 
 describe("remote avatar URLs", () => {
   it("names an agent avatar and a channel picture", () => {
-    expect(parseRemoteAvatarUrl(`openbot-remote-avatar://server-1/agent-1?v=${version}`)).toEqual({
+    expect(parseRemoteAvatarUrl(`codebot-remote-avatar://server-1/agent-1?v=${version}`)).toEqual({
       kind: "agent",
       serverId: "server-1",
       id: "agent-1",
       version,
     });
     expect(
-      parseRemoteAvatarUrl(`openbot-remote-avatar://server-1/channel/channel-1?v=${version}&type=image/png`),
+      parseRemoteAvatarUrl(`codebot-remote-avatar://server-1/channel/channel-1?v=${version}&type=image/png`),
     ).toEqual({ kind: "channel", serverId: "server-1", id: "channel-1", version });
   });
 
   it("refuses every other form", () => {
     for (const url of [
-      `openbot-avatar://server-1/agent-1?v=${version}`,
+      `codebot-avatar://server-1/agent-1?v=${version}`,
       `https://server-1/agent-1?v=${version}`,
-      "openbot-remote-avatar://server-1/agent-1",
-      `openbot-remote-avatar://server-1/?v=${version}`,
-      `openbot-remote-avatar://server-1/agent-1/extra?v=${version}`,
-      `openbot-remote-avatar://server-1/folder/channel-1?v=${version}`,
-      `openbot-remote-avatar://server-1/channel/channel-1/extra?v=${version}`,
-      `openbot-remote-avatar://server-1/%E0%A4%A?v=${version}`,
+      "codebot-remote-avatar://server-1/agent-1",
+      `codebot-remote-avatar://server-1/?v=${version}`,
+      `codebot-remote-avatar://server-1/agent-1/extra?v=${version}`,
+      `codebot-remote-avatar://server-1/folder/channel-1?v=${version}`,
+      `codebot-remote-avatar://server-1/channel/channel-1/extra?v=${version}`,
+      `codebot-remote-avatar://server-1/%E0%A4%A?v=${version}`,
       "not a url",
     ])
       expect(parseRemoteAvatarUrl(url)).toBeNull();
   });
 
   it("rewrites only the host's own channel picture URL of the same channel", () => {
-    const source = `openbot-avatar://channel/channel-1?v=${version}&type=image%2Fpng`;
+    const source = `codebot-avatar://channel/channel-1?v=${version}&type=image%2Fpng`;
     const [kept, foreign, other] = addRemotePreviewUrls(
       [
         { id: "channel-1", imageUrl: source },
         { id: "channel-2", imageUrl: source },
-        { id: "channel-3", imageUrl: `openbot-avatar://channel/channel-3/../secret?v=${version}&type=image%2Fpng` },
+        { id: "channel-3", imageUrl: `codebot-avatar://channel/channel-3/../secret?v=${version}&type=image%2Fpng` },
       ],
       "server-1",
     );

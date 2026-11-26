@@ -33,7 +33,7 @@ function withBrowser(projected: TeamProtocolV2Json, source: unknown): TeamProtoc
 }
 
 function pathname(path: string): string {
-  return new URL(path, "http://openbot.invalid").pathname;
+  return new URL(path, "http://codebot.invalid").pathname;
 }
 
 export function withChannelDraftBrowser(

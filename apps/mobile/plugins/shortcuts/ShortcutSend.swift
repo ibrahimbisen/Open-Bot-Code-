@@ -1,7 +1,7 @@
 import UIKit
 
-#if canImport(OpenBotShortcuts)
-  internal import OpenBotShortcuts
+#if canImport(CodeBotShortcuts)
+  internal import CodeBotShortcuts
 #endif
 
 /// What happened to a message of the Send Message shortcut.
@@ -82,7 +82,7 @@ enum ShortcutMessageSender {
         case .sent:
           result.finish(.sent)
         case let .failed(unconfirmed, detail):
-          NSLog("OpenBot shortcut: send failed at %@", detail)
+          NSLog("CodeBot shortcut: send failed at %@", detail)
           result.finish(unconfirmed ? .unconfirmed : .failed)
         }
       }

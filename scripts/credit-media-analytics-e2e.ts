@@ -1,11 +1,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { ANALYTICS_GENERATIONS } from "@openbot/telemetry";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { ANALYTICS_GENERATIONS } from "@codebot/telemetry";
 import type { CreditMediaReport } from "../src/backend/agent/credit-media-tools";
 import { HostAnalytics, type HostOpenPanelClient } from "../src/main/analytics";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/credit-media-analytics-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/credit-media-analytics-e2e");
 const PROMPT = "a secret prompt about the launch";
 
 const AGENT: AgentSummary = {

@@ -5,14 +5,14 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { ProviderRuntimeSnapshot } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { ProviderRuntimeSnapshot } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import lockValue from "../native-runtime.lock.json";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { ProviderRuntimeManager } from "../src/main/provider-runtime-manager";
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-runtime-kernel-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-runtime-kernel-e2e");
 const WAIT_MS = 30_000;
 const TARGET = "linux-arm64";
 
@@ -37,7 +37,7 @@ interface CaseReport {
   passed: boolean;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-runtime-kernel-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-runtime-kernel-e2e-"));
 const report: { passed: boolean; cases: CaseReport[]; error?: string } = { passed: false, cases: [] };
 const baseLock = parseAgentRuntimeLock(lockValue);
 const sha256 = (value: Buffer | string) => createHash("sha256").update(value).digest("hex");

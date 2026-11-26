@@ -101,7 +101,7 @@ async function pinArtifact(
   }
 
   const archiveBytes = await fetchBytes(fetchImpl, platform.dist.tarball);
-  const temporaryRoot = await mkdtemp(join(tmpdir(), "openbot-bun-pin-"));
+  const temporaryRoot = await mkdtemp(join(tmpdir(), "codebot-bun-pin-"));
   try {
     const archive = join(temporaryRoot, asset);
     const extracted = join(temporaryRoot, "extracted");
@@ -166,7 +166,7 @@ async function fetchParsed<Schema extends z.ZodType>(
 
 async function fetchBytes(fetchImpl: typeof fetch, url: string): Promise<Buffer> {
   const response = await fetchImpl(url, {
-    headers: { "User-Agent": "OpenBot-runtime-pin" },
+    headers: { "User-Agent": "CodeBot-runtime-pin" },
     redirect: "follow",
   });
   if (!response.ok) throw new Error(`${url} answered HTTP ${response.status}.`);

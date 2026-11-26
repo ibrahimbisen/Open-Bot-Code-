@@ -34,7 +34,7 @@ export function AccessLevelMenu<T extends string>({
   extra?: { label: string; onPress: () => void } | undefined;
   onChange: (value: T) => void;
 }) {
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const selected = options.find((option) => option.value === value);
   const text = selected ? (source ? `${selected.label} · ${source}` : selected.label) : (placeholder ?? "");
   const levels: MenuAction[] = options.map((option) => ({

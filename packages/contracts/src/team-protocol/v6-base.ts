@@ -25,7 +25,7 @@ export {
 } from "./provider-aware-codec";
 
 export const TEAM_PROTOCOL_V6Base = 6;
-export const TEAM_PROTOCOL_V6Base_WEBSOCKET = "openbot-team-v6";
+export const TEAM_PROTOCOL_V6Base_WEBSOCKET = "codebot-team-v6";
 
 const codec = createProviderAwareCodec({
   providers: ["codex", "claude", "grok", "opencode", "antigravity", "acp", "cursor", "cline"],

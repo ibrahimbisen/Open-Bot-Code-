@@ -1,4 +1,4 @@
-const STORAGE_KEY = "openbot:voice-language-notice";
+const STORAGE_KEY = "codebot:voice-language-notice";
 
 export function claimVoiceLanguageNotice(): boolean {
   try {

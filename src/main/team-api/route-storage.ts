@@ -6,19 +6,19 @@ import {
   STORAGE_CAPABILITY,
   type StorageUsage,
   type StoredFileRow,
-} from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
 import {
   STORAGE_CHANNEL_CAPABILITY,
   STORAGE_CHANNEL_ROUTES,
-} from "@openbot/contracts/team-protocol/storage-channel-v1";
-import { STORAGE_DISK_CAPABILITY, STORAGE_DISK_ROUTES } from "@openbot/contracts/team-protocol/storage-disk-v1";
+} from "@codebot/contracts/team-protocol/storage-channel-v1";
+import { STORAGE_DISK_CAPABILITY, STORAGE_DISK_ROUTES } from "@codebot/contracts/team-protocol/storage-disk-v1";
 import {
   STORAGE_USER_FILES_CAPABILITY,
   STORAGE_USER_FILES_ROUTES,
-} from "@openbot/contracts/team-protocol/storage-user-files-v1";
-import { STORAGE_ROUTES } from "@openbot/contracts/team-protocol/storage-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/storage-user-files-v1";
+import { STORAGE_ROUTES } from "@codebot/contracts/team-protocol/storage-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { ChannelService } from "../../backend/channel-service";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { StorageNotFoundError } from "../../backend/storage-usage";

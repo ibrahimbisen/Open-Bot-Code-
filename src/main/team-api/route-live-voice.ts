@@ -1,4 +1,4 @@
-import { isCodexLiveVoice, type VoiceLiveEvent, type VoiceLiveSession } from "@openbot/contracts/ipc";
+import { isCodexLiveVoice, type VoiceLiveEvent, type VoiceLiveSession } from "@codebot/contracts/ipc";
 import {
   decodeLiveVoiceStartRequest,
   decodeLiveVoiceStopRequest,
@@ -8,8 +8,8 @@ import {
   LIVE_VOICE_ROUTES,
   LIVE_VOICE_TRANSCRIPT_LIMIT,
   type LiveVoiceEvent,
-} from "@openbot/contracts/team-protocol/live-voice-v1";
-import { isFixedSourceText, sourceText, sourceTextValues } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/live-voice-v1";
+import { isFixedSourceText, sourceText, sourceTextValues } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { TeamApiAgents, TeamApiLiveVoice } from "./dependencies";
 import { HttpError } from "./http-error";

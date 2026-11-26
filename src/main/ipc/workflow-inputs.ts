@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type CreateWorkflowInput,
   type DecideWorkflowStepInput,
@@ -33,8 +33,8 @@ import {
   type WorkflowRunsInput,
   type WorkflowTriggerInput,
   type WorkflowVersionInput,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { requireString } from "./validation";
 
 const point = ({ x, y }: WorkflowPoint): WorkflowPoint => ({ x, y });

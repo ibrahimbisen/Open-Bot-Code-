@@ -8,14 +8,14 @@
   align-items: center;
   justify-content: center;
   border: 0;
-  border-radius: var(--openbot-radius-sm);
+  border-radius: var(--codebot-radius-sm);
   background: transparent;
   padding: 0;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   opacity: 0;
   transition:
-    opacity var(--openbot-duration-fast) var(--openbot-ease-out),
-    background-color var(--openbot-duration-hover) ease;
+    opacity var(--codebot-duration-fast) var(--codebot-ease-out),
+    background-color var(--codebot-duration-hover) ease;
 }
 
 .sidebar-threads-toggle-icon {
@@ -24,8 +24,8 @@
 }
 
 .sidebar-threads-toggle.ui-button:hover:not(:disabled) {
-  background: var(--openbot-hover);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-hover);
+  color: var(--codebot-text-primary);
 }
 
 .sidebar-agent-item:hover > .sidebar-threads-toggle,
@@ -48,13 +48,13 @@
 }
 
 .sidebar-agent-item:has(.sidebar-threads[data-open] [aria-current]) .agent-row-active {
-  --agent-avatar-outline: var(--openbot-bg-sidebar, transparent);
+  --agent-avatar-outline: var(--codebot-bg-sidebar, transparent);
 
   background: transparent;
 }
 
 .sidebar-agent-item:has(.sidebar-threads[data-open] [aria-current]) .agent-row-active:hover {
-  background: var(--openbot-hover);
+  background: var(--codebot-hover);
 }
 
 .sidebar-threads {
@@ -95,27 +95,27 @@
   width: 100%;
   height: 30px;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   border: 0;
-  border-radius: var(--openbot-radius-md);
+  border-radius: var(--codebot-radius-md);
   background: transparent;
-  padding: 0 var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-md);
-  font-weight: var(--openbot-weight-regular);
+  padding: 0 var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-md);
+  font-weight: var(--codebot-weight-regular);
   justify-content: flex-start;
   text-align: start;
-  transition: background-color var(--openbot-duration-hover) ease;
+  transition: background-color var(--codebot-duration-hover) ease;
 }
 
 .sidebar-thread-row.ui-button:hover:not(:disabled) {
-  background: var(--openbot-hover);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-hover);
+  color: var(--codebot-text-primary);
 }
 
 .sidebar-thread-row.ui-button[aria-current]:not(:disabled) {
-  background: var(--openbot-bg-surface);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-bg-surface);
+  color: var(--codebot-text-primary);
 }
 
 .sidebar-thread-icon {
@@ -123,7 +123,7 @@
   width: 16px;
   flex: none;
   justify-content: center;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .sidebar-thread-icon svg {
@@ -141,14 +141,14 @@
 
 .sidebar-thread-time {
   flex: none;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .sidebar-thread-more {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .sidebar-thread-more[aria-expanded="true"] .sidebar-thread-more-icon {
@@ -182,17 +182,17 @@
 .sidebar-threads-card-row {
   display: flex;
   width: 100%;
-  height: var(--openbot-control-md);
+  height: var(--codebot-control-md);
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
   border: 0;
   border-radius: var(--ui-menu-item-radius);
   outline: 0;
   background: transparent;
   padding: 0 var(--ui-menu-inset);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-lg);
-  font-weight: var(--openbot-weight-regular);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-lg);
+  font-weight: var(--codebot-weight-regular);
   justify-content: flex-start;
   text-align: start;
 }
@@ -206,7 +206,7 @@
   width: 16px;
   flex: none;
   justify-content: center;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .sidebar-threads-card-icon svg {
@@ -215,7 +215,7 @@
 }
 
 .sidebar-threads-card-new .sidebar-threads-card-icon {
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .sidebar-threads-card-title {
@@ -228,21 +228,21 @@
 
 .sidebar-threads-card-time {
   flex: none;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .sidebar-threads {
-    transition: grid-template-rows var(--openbot-duration-slow) var(--openbot-ease-out);
+    transition: grid-template-rows var(--codebot-duration-slow) var(--codebot-ease-out);
   }
 
   .sidebar-thread-item {
     transition:
-      opacity var(--openbot-duration-slow) var(--openbot-ease-out),
-      transform var(--openbot-duration-slow) var(--openbot-ease-out);
+      opacity var(--codebot-duration-slow) var(--codebot-ease-out),
+      transform var(--codebot-duration-slow) var(--codebot-ease-out);
   }
 
   .sidebar-threads[data-open] .sidebar-thread-item {
@@ -251,6 +251,6 @@
 
   .sidebar-threads-toggle-icon,
   .sidebar-thread-more-icon {
-    transition: transform var(--openbot-duration-slow) var(--openbot-ease-out);
+    transition: transform var(--codebot-duration-slow) var(--codebot-ease-out);
   }
 }

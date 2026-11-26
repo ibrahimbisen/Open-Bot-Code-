@@ -1,6 +1,6 @@
-import type { AvatarHue, ChannelIcon, ChannelIconName, ChannelMember } from "@openbot/contracts/ipc";
-import { UsersRound } from "@openbot/ui";
-import { avatarHueSwatch } from "@openbot/ui/bloub-avatar";
+import type { AvatarHue, ChannelIcon, ChannelIconName, ChannelMember } from "@codebot/contracts/ipc";
+import { UsersRound } from "@codebot/ui";
+import { avatarHueSwatch } from "@codebot/ui/bloub-avatar";
 import { createMemo, createSignal, For, Show } from "solid-js";
 import type { ComposerAgent } from "../../data";
 import { AgentAvatar } from "../agents/AgentAvatar";

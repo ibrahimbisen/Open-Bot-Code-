@@ -1,9 +1,9 @@
-import type { ProviderLogoVariant } from "@openbot/brand";
+import type { ProviderLogoVariant } from "@codebot/brand";
 import {
   isFreeOpencodeModel,
   isKnownAgentProvider,
   OPENCODE_DEFAULT_FREE_MODEL,
-} from "@openbot/contracts/agent-providers";
+} from "@codebot/contracts/agent-providers";
 import {
   type AgentProviderRef,
   type AgentStatus,
@@ -25,7 +25,7 @@ import {
   type WorkflowOutputTarget,
   type WorkflowStepSettings,
   type WorkflowTriggerType,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { providerOffersModels } from "../../components/provider-model-options";
 import type { AgentProfile } from "../../data";
 import type { CreationPreference } from "../agents/agent-creation-model";

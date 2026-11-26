@@ -10,21 +10,21 @@ import {
   type DiscoverModelsResult,
   detectedModelServerKey,
   type ProviderDetectionSettings,
-} from "@openbot/contracts/ipc";
-import { checkResult } from "@openbot/ui/features/custom-providers/CustomAgentSettings";
+} from "@codebot/contracts/ipc";
+import { checkResult } from "@codebot/ui/features/custom-providers/CustomAgentSettings";
 import {
   customAgentCheckInput,
   customAgentInput,
   formatAgentArgs,
-} from "@openbot/ui/features/custom-providers/custom-acp-agent-form";
-import { customProviderUpdate } from "@openbot/ui/features/custom-providers/custom-provider-form";
+} from "@codebot/ui/features/custom-providers/custom-acp-agent-form";
+import { customProviderUpdate } from "@codebot/ui/features/custom-providers/custom-provider-form";
 import type {
   DetectedProvider,
   DetectedProviderApi,
   ProviderDetection,
-} from "@openbot/ui/features/custom-providers/detected-providers";
-import type { ProviderDetectionSettingsValue } from "@openbot/ui/features/custom-providers/ProviderDetectionSettings";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/custom-providers/detected-providers";
+import type { ProviderDetectionSettingsValue } from "@codebot/ui/features/custom-providers/ProviderDetectionSettings";
+import { currentText } from "@codebot/ui/text";
 import { createStore, snapshot } from "solid-js";
 import type { createCustomAgentsStore } from "../../custom-agents/stores/custom-agents-store";
 import type { createCustomProvidersStore } from "./custom-providers-store";

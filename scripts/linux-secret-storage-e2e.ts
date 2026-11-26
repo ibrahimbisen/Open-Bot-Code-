@@ -5,11 +5,11 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "linux-secret-storage-e2e");
+const OUT = join(ROOT, ".codebot-build", "linux-secret-storage-e2e");
 const READY_TIMEOUT_MS = 30_000;
 const electronPath = process.env.ELECTRON_OVERRIDE_DIST_PATH
   ? join(process.env.ELECTRON_OVERRIDE_DIST_PATH, "electron")
@@ -63,7 +63,7 @@ const hasKeyring =
   spawnSync("sh", ["-c", "command -v dbus-run-session && command -v gnome-keyring-daemon"]).status === 0;
 
 await mkdir(OUT, { recursive: true });
-const root = await mkdtemp(join(tmpdir(), "openbot-linux-secret-storage-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-linux-secret-storage-"));
 const bundle = join(root, "linux-secret-storage-electron.mjs");
 const results: Record<string, StepResult[]> = {};
 const skipped: string[] = [];
@@ -208,7 +208,7 @@ async function runCase(name: string, steps: Step[]): Promise<StepResult[]> {
 async function launch(step: Step, userData: string, blob: string): Promise<StepResult> {
   const index = launches++;
   const base = withoutElectronRuntimeFlags(process.env);
-  base.DBUS_SESSION_BUS_ADDRESS = "unix:path=/nonexistent/openbot-e2e-bus";
+  base.DBUS_SESSION_BUS_ADDRESS = "unix:path=/nonexistent/codebot-e2e-bus";
   delete base.GNOME_KEYRING_CONTROL;
   base.XDG_CURRENT_DESKTOP = "XFCE";
   const readyFile = join(root, `ready-${index}.json`);

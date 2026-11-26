@@ -2,7 +2,8 @@ import { spawn } from "node:child_process";
 import { constants, copyFileSync, existsSync, mkdirSync, rmSync, statfsSync, statSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { migrateCodeBotDatabase } from "../src/backend/codebot-database-schema";
 import {
   buildDatabaseAtVersion,
   HARNESS_APPLIED_AT,
@@ -12,9 +13,8 @@ import {
   quote,
   seedEveryTable,
 } from "../src/backend/migration-harness";
-import { migrateOpenBotDatabase } from "../src/backend/openbot-database-schema";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/migration-large-db");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/migration-large-db");
 const BIG_TABLES = ["orchestration_events", "provider_history_staging", "projection_thread_messages"] as const;
 const GIB = 1024 ** 3;
 
@@ -77,7 +77,7 @@ if (childDatabase) {
   const db = openHarnessDatabase(childDatabase);
   const before = schemaObjects(db);
   const started = performance.now();
-  migrateOpenBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT, throughVersion: through, closedCleanly: true });
+  migrateCodeBotDatabase(db, { appliedAt: HARNESS_APPLIED_AT, throughVersion: through, closedCleanly: true });
   const seconds = (performance.now() - started) / 1000;
   const changes = query(db, "SELECT total_changes() AS n")[0]?.n;
   const result: StartResult = {

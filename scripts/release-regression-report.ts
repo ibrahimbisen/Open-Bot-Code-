@@ -2,7 +2,7 @@ import { createHmac } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { type Connection, connectClickHouse, credentials, type QueryResult, runQuery } from "./openpanel-sql";
 import { readScriptArguments } from "./script-arguments";
 
@@ -335,7 +335,7 @@ function failureRows(result: QueryResult, versions: { previous: string; next: st
   ];
   if (sendsCause(result, versions.previous) && sendsCause(result, versions.next)) {
     specs.push({
-      metric: "failed turns, OpenBot causes",
+      metric: "failed turns, CodeBot causes",
       column: "own_failed_share",
       unit: "share",
       floor: 0.02,
@@ -516,10 +516,10 @@ function sections(report: Report): Embed[] {
   add(
     "Failed turns",
     failures.map((row) =>
-      statusLine(row, `${group(row)}${row.metric === "failed turns" ? "" : " OpenBot causes only"}`),
+      statusLine(row, `${group(row)}${row.metric === "failed turns" ? "" : " CodeBot causes only"}`),
     ),
     failures,
-    `Providers with ${MIN_TURNS_FOR_SHARE} turns or more in both releases. OpenBot causes leave out limits, sign-in, network and provider outages.`,
+    `Providers with ${MIN_TURNS_FOR_SHARE} turns or more in both releases. CodeBot causes leave out limits, sign-in, network and provider outages.`,
   );
   if (report.risenErrorCodes !== null) {
     const errors = of("errors");
@@ -703,7 +703,7 @@ async function buildReport(connection: Connection): Promise<Report | null> {
 
 function buildDirectory(): string {
   const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-  return join(projectRoot, ".openbot-build", "release-regression");
+  return join(projectRoot, ".codebot-build", "release-regression");
 }
 
 async function writeReport(report: Report): Promise<string> {

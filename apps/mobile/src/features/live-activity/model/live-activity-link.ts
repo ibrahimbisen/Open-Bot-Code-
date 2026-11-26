@@ -2,7 +2,7 @@ import {
   type LiveActivityAction,
   type LiveActivityLink,
   readLiveActivityLink,
-} from "@openbot/team-client/live-activity-props";
+} from "@codebot/team-client/live-activity-props";
 import type { OutsideTarget } from "../../workspace/model/outside-target";
 
 export interface LiveActivityRequest {
@@ -60,7 +60,7 @@ export function setLiveActivityNavigator(
 export function isLiveActivityLink(path: string): boolean {
   try {
     const url = new URL(path);
-    return url.protocol === "openbot:" && url.host === "live-activity";
+    return url.protocol === "codebot:" && url.host === "live-activity";
   } catch {
     return false;
   }

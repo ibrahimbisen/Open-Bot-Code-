@@ -57,7 +57,7 @@ jobs:
         run: |
           # Outside the checkout: each job of this runner cleans the checkout, and the profiles hold
           # the sign-in of the test accounts and the record of an app that an earlier run left.
-          export OPENBOT_PROVIDER_LIVE_DIR="$HOME/Library/Caches/openbot-provider-live"
+          export CODEBOT_PROVIDER_LIVE_DIR="$HOME/Library/Caches/codebot-provider-live"
           if [ -n "$PROVIDER" ] && [ "$PROVIDER" != "all" ]; then
             bun run test:provider-live --target="$PROVIDER"
           else

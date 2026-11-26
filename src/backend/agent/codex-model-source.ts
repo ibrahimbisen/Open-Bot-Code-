@@ -5,14 +5,14 @@ import {
   DEFAULT_MODEL_SERVERS,
   PROVIDER_MODEL_SOURCE_NAME_LIMIT,
   type ProviderModelSource,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentClient } from "../agent-client";
 import { decodeRecordResponse, getRecord, getString, isRecord } from "../protocol";
 
 const OPENAI_PROVIDER_ID = "openai";
 
-export const CODEX_VARIABLE_PROVIDER = "openbot_environment";
+export const CODEX_VARIABLE_PROVIDER = "codebot_environment";
 
 function codexModelSource(config: unknown): ProviderModelSource | null {
   const providerId = getString(config, "model_provider")?.trim() || OPENAI_PROVIDER_ID;

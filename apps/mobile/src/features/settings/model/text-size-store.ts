@@ -1,4 +1,4 @@
-import { type AppInterfaceSize, DEFAULT_APP_INTERFACE_SIZE } from "@openbot/contracts/ipc";
+import { type AppInterfaceSize, DEFAULT_APP_INTERFACE_SIZE } from "@codebot/contracts/ipc";
 import { create } from "zustand";
 
 export const useTextSize = create<{ percent: AppInterfaceSize; ready: boolean }>(() => ({

@@ -1,5 +1,5 @@
-import type { CreditsHoldControls } from "@openbot/ui/features/conversation/CreditsHoldCard";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
+import type { CreditsHoldControls } from "@codebot/ui/features/conversation/CreditsHoldCard";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import { type DesktopAnalyticsProperties, desktopAnalytics } from "../../analytics";
 
 type CreditsCardEvent = DesktopAnalyticsProperties<"credits_card_action">;

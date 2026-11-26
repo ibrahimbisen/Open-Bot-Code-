@@ -1,5 +1,5 @@
-import { isSkillCategory, type MarketplaceSkillQuery } from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+import { isSkillCategory, type MarketplaceSkillQuery } from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { STORY_AGENT_TEMPLATE_DETAIL } from "./agent-template-fixtures";
 import {
   STORY_MARKETPLACE_AGENT_DETAILS,

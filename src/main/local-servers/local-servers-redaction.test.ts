@@ -3,8 +3,8 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { PassThrough } from "node:stream";
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { formatLocalServerReady, LOCAL_SERVER_ENVIRONMENT } from "../local-server-child";
@@ -74,7 +74,7 @@ function summary(input: LocalServerAttachInput): ServerSummary {
 let root: string;
 
 beforeEach(async () => {
-  root = await mkdtemp(join(tmpdir(), "openbot-local-servers-"));
+  root = await mkdtemp(join(tmpdir(), "codebot-local-servers-"));
 });
 
 afterEach(async () => {
@@ -87,11 +87,11 @@ function servers(
   spawned: Spawned[],
   platform: NodeJS.Platform = "darwin",
 ): LocalServers {
-  const logger = createOpenBotLogger("local-servers", onLine);
+  const logger = createCodeBotLogger("local-servers", onLine);
   const options: LocalServersOptions = {
     registryPath: join(root, LOCAL_SERVERS_FILE),
     userDataRoot: join(root, "local-servers"),
-    agentRoot: join(root, "OpenBot", "Servers"),
+    agentRoot: join(root, "CodeBot", "Servers"),
     runtimeRoot: join(root, "provider-runtimes"),
     cipher: {
       encrypt: (value) => Buffer.from(`sealed:${value}`).reverse(),
@@ -113,7 +113,7 @@ function servers(
       requestAuthorized: () => Effect.succeed(null),
       downloadAuthorized: () => Effect.succeed(new Uint8Array()),
     },
-    command: { executable: "/Applications/OpenBot.app/Contents/MacOS/OpenBot", args: [] },
+    command: { executable: "/Applications/CodeBot.app/Contents/MacOS/CodeBot", args: [] },
     trash: () => Promise.resolve(),
     log: {
       info: (message) => logger.info(message),

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 import { readSeed, seedMessageId as seedId } from "./pinned-message-e2e-seed";
 
@@ -26,13 +26,13 @@ const literal = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const pinsOf = (taskId: string) =>
   page.evaluate(
     async ({ agentId, taskId }) =>
-      (await window.openbot.agent.listPinnedMessages(agentId)).pins
+      (await window.codebot.agent.listPinnedMessages(agentId)).pins
         .filter((pin) => pin.taskId === taskId)
         .map((pin) => pin.messageId),
     { agentId: seed.agentId, taskId },
   );
 const setPinned = (taskId: string, messageId: string, pinned: boolean) =>
-  page.evaluate((input) => window.openbot.agent.setMessagePinned(input), {
+  page.evaluate((input) => window.codebot.agent.setMessagePinned(input), {
     agentId: seed.agentId,
     taskId,
     messageId,
@@ -96,7 +96,7 @@ try {
   }
   await openAgent();
 
-  const branch = await page.evaluate((input) => window.openbot.agent.branchTask(input), {
+  const branch = await page.evaluate((input) => window.codebot.agent.branchTask(input), {
     agentId: seed.agentId,
     taskId: seed.taskId,
     messageId: seedId(21),
@@ -104,7 +104,7 @@ try {
   });
   branchId = branch.id;
   const branchMessages = await page.evaluate(
-    async (input) => (await window.openbot.agent.readTask(input)).messages.map((message) => message.id),
+    async (input) => (await window.codebot.agent.readTask(input)).messages.map((message) => message.id),
     { agentId: seed.agentId, taskId: branch.id },
   );
   assert.ok(branchMessages.length >= 22, `The branch has ${branchMessages.length} messages.`);
@@ -117,7 +117,7 @@ try {
   await setPinned(branch.id, threadPin, true);
   await openPinList();
   await pinEntry(deletedText).waitFor({ timeout: UI_WAIT_MS });
-  await page.evaluate((input) => window.openbot.agent.deleteConversationMessage(input), {
+  await page.evaluate((input) => window.codebot.agent.deleteConversationMessage(input), {
     agentId: seed.agentId,
     taskId: branch.id,
     messageId: deletedPin,
@@ -159,7 +159,7 @@ try {
   await undo.click();
   const archived = await page.evaluate(
     async ({ agentId, taskId }) =>
-      (await window.openbot.agent.listTasks(agentId)).tasks.find((task) => task.id === taskId)?.state ?? null,
+      (await window.codebot.agent.listTasks(agentId)).tasks.find((task) => task.id === taskId)?.state ?? null,
     { agentId: seed.agentId, taskId: branch.id },
   );
   await clearToasts();
@@ -170,7 +170,7 @@ try {
 
   await openPinList();
   await pinEntry(threadText).waitFor({ timeout: UI_WAIT_MS });
-  await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId: seed.agentId, taskId: branch.id });
+  await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId: seed.agentId, taskId: branch.id });
   branchId = null;
   const threadLeft = await pinEntry(threadText)
     .waitFor({ state: "detached", timeout: UI_WAIT_MS })
@@ -207,8 +207,8 @@ try {
   assert.ok(victim.startsWith("pin-timing-"), "The part has no seeded message after the pin.");
   const victimRow = page.locator(`[data-chat-search-message="${victim}"]`);
   const victimShown = await victimRow.count();
-  await page.evaluate((input) => window.openbot.agent.readTask(input), { agentId: seed.agentId, taskId: seed.taskId });
-  await page.evaluate((input) => window.openbot.agent.deleteConversationMessage(input), {
+  await page.evaluate((input) => window.codebot.agent.readTask(input), { agentId: seed.agentId, taskId: seed.taskId });
+  await page.evaluate((input) => window.codebot.agent.deleteConversationMessage(input), {
     agentId: seed.agentId,
     taskId: seed.taskId,
     messageId: victim,
@@ -233,7 +233,7 @@ try {
 } finally {
   if (branchId) {
     await page
-      .evaluate((input) => window.openbot.agent.deleteTask(input), { agentId: seed.agentId, taskId: branchId })
+      .evaluate((input) => window.codebot.agent.deleteTask(input), { agentId: seed.agentId, taskId: branchId })
       .catch(() => undefined);
   }
   await session.close();

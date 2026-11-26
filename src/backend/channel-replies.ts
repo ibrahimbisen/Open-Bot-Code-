@@ -1,5 +1,5 @@
-import type { ChannelMessage, ChannelTask } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import type { ChannelMessage, ChannelTask } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
 
 export const CHANNEL_REPLY_ID_PREFIX = "channel-reply-";
 export const CHANNEL_REPLY_LIMIT = 2;

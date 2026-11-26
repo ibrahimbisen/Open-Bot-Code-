@@ -1,4 +1,4 @@
-import { installPointerFocusGuard } from "@openbot/ui/pointer-focus";
+import { installPointerFocusGuard } from "@codebot/ui/pointer-focus";
 import { render } from "@solidjs/web";
 import "katex/contrib/copy-tex";
 import "./selection-copy";
@@ -18,8 +18,8 @@ if (!root) {
   throw new Error("Renderer root element was not found.");
 }
 
-performance.mark("openbot:renderer-start");
-if (__OPENBOT_PERF_PROBES__) {
+performance.mark("codebot:renderer-start");
+if (__CODEBOT_PERF_PROBES__) {
   const { installRendererPerfProbes } = await import("./perf-probes");
   installRendererPerfProbes();
 }

@@ -1,6 +1,6 @@
-import { ProviderLogo } from "@openbot/brand";
-import type { AgentProviderId } from "@openbot/contracts/ipc";
-import { Button, Dialog, IconButton, Input, SlidersHorizontal, X } from "@openbot/ui";
+import { ProviderLogo } from "@codebot/brand";
+import type { AgentProviderId } from "@codebot/contracts/ipc";
+import { Button, Dialog, IconButton, Input, SlidersHorizontal, X } from "@codebot/ui";
 import { createSignal, For, Show } from "solid-js";
 import { useText } from "../text";
 

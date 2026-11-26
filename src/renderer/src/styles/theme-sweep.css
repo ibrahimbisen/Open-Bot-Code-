@@ -10,7 +10,7 @@
 .theme-sweep-beam {
   position: fixed;
   inset: 0;
-  z-index: calc(var(--openbot-layer-tooltip) + 1);
+  z-index: calc(var(--codebot-layer-tooltip) + 1);
   inline-size: 100vw;
   block-size: 100vh;
   pointer-events: none;
@@ -32,8 +32,8 @@ html:active-view-transition-type(theme-sweep)::view-transition-new(root) {
   mix-blend-mode: normal;
   mask-image: radial-gradient(
     100% var(--theme-sweep-radius) at 50% var(--theme-sweep-origin, 100%),
-    var(--openbot-text-primary) var(--theme-sweep-reveal-from),
-    var(--openbot-transparent) var(--theme-sweep-reveal-to)
+    var(--codebot-text-primary) var(--theme-sweep-reveal-from),
+    var(--codebot-transparent) var(--theme-sweep-reveal-to)
   );
 }
 

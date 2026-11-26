@@ -1,9 +1,9 @@
 // @vitest-environment node
 import { DatabaseSync, type SQLOutputValue } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import { CRM_TABLES_AFTER_MIGRATION } from "./crm/crm-schema";
 import { THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION } from "./migrations/0065-thread-event-compaction";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -30,7 +30,7 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
@@ -110,7 +110,7 @@ describe("agent skill loads migration", () => {
       seed(db, version);
       if (version < 57) migrateUpTo(db, 57);
       const before = contents(db);
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(contents(db)).toEqual({ ...withNoMemorySite(before), ...SKILL_TABLES });
       expectHealthy(db);
     },
@@ -122,13 +122,13 @@ describe("agent skill loads migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=58
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 58 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 58 failed");
     expect(contents(db)).toEqual(before);
     expect(skillObjects(db)).toEqual([]);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=58").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual({ ...withNoMemorySite(before), ...SKILL_TABLES });
     expect(skillObjects(db)).toEqual([
       { type: "table", name: "agent_usage_skill_loads" },
@@ -143,9 +143,9 @@ describe("agent skill loads migration", () => {
     seed(db, 57);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version=70; DELETE FROM schema_migrations WHERE version=20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(skillObjects(db)).toEqual([]);
   });
@@ -153,7 +153,7 @@ describe("agent skill loads migration", () => {
   it("refuses a bad load, and keeps one row for a repeated load", () => {
     const db = databaseAt(57);
     seed(db, 57);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(() => insertLoad(db, { skill: "" })).toThrow("CHECK constraint failed");
     expect(() => insertLoad(db, { skill: "s".repeat(129) })).toThrow("CHECK constraint failed");
     expect(() => insertLoad(db, { tokens: -1 })).toThrow("CHECK constraint failed");

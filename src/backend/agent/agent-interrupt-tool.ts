@@ -1,6 +1,6 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { AgentStore } from "../agent-store";
@@ -10,7 +10,7 @@ import type { DynamicToolCallParams } from "../protocol";
 import type { ConversationRuntime } from "./conversation-runtime";
 import type { DrainScheduler } from "./drain-scheduler";
 import type { MailboxSync } from "./mailbox-sync";
-import { openBotToolFailure, openBotToolResult } from "./routine-tools";
+import { codeBotToolFailure, codeBotToolResult } from "./routine-tools";
 import { toolCallIdempotencyKey } from "./tool-call-idempotency";
 import { ToolOperationFailed, toolStep, toToolOperationFailed } from "./tool-operation";
 import { unknownAgentMessage } from "./unknown-agent";
@@ -61,7 +61,7 @@ export class AgentInterruptTool {
     requesterIds: readonly string[],
   ) {
     const { agentId, reason } = yield* toolStep(() => interruptAgentToolSchema.parse(params.arguments));
-    if (agentId === callerAgentId) return openBotToolFailure(sourceText("error.backend.interruptSelf"));
+    if (agentId === callerAgentId) return codeBotToolFailure(sourceText("error.backend.interruptSelf"));
     const agents = this.#hooks.listAgents();
     if (!agents.some((agent) => agent.id === agentId)) {
       const candidates = agents.filter((agent) => agent.id !== callerAgentId);
@@ -73,12 +73,12 @@ export class AgentInterruptTool {
       if (task) yield* task.pipe(toToolOperationFailed);
     }
     if (this.#mailbox.startingDeliveryForAgent(agentId, null)) {
-      return openBotToolFailure(sourceText("error.backend.interruptStarting"));
+      return codeBotToolFailure(sourceText("error.backend.interruptStarting"));
     }
 
     const cancelledMessages = yield* toolStep(() => this.#cancelQueuedFrom(agentId, callerAgentId));
     const refuse = (message: string) =>
-      openBotToolFailure(message, cancelledMessages > 0 ? { cancelledMessages } : undefined);
+      codeBotToolFailure(message, cancelledMessages > 0 ? { cancelledMessages } : undefined);
 
     const turnId = this.#activeTurnId(agentId);
     let deliveries: DeliveryContext[] = [];
@@ -106,7 +106,7 @@ export class AgentInterruptTool {
     if (!turnId) {
       const runningTasks = this.#conversation.workingTaskSnapshots(agentId).length;
       if (this.#conversation.workingChannelSnapshots(agentId).length > 0) {
-        return openBotToolResult({
+        return codeBotToolResult({
           interruptedTurnId: null,
           cancelledMessages,
           ...(runningTasks > 0 ? { runningTasks } : {}),
@@ -114,8 +114,8 @@ export class AgentInterruptTool {
           note: "This agent still works on a channel task. This tool cannot stop it. Use the task controls in the channel.",
         });
       }
-      if (runningTasks === 0) return openBotToolResult({ interruptedTurnId: null, cancelledMessages });
-      return openBotToolResult({
+      if (runningTasks === 0) return codeBotToolResult({ interruptedTurnId: null, cancelledMessages });
+      return codeBotToolResult({
         interruptedTurnId: null,
         cancelledMessages,
         runningTasks,
@@ -125,7 +125,7 @@ export class AgentInterruptTool {
 
     const mayStop = () => ownedBy(this.#mailbox.findDeliveriesByTurn(agentId, turnId), callerAgentId);
     if (!(yield* this.#hooks.interrupt(agentId, turnId, mayStop).pipe(toToolOperationFailed))) {
-      return openBotToolResult({ interruptedTurnId: null, cancelledMessages });
+      return codeBotToolResult({ interruptedTurnId: null, cancelledMessages });
     }
     yield* this.#notifyEffect(
       params,
@@ -135,7 +135,7 @@ export class AgentInterruptTool {
       deliveries[0]?.delivery.messageId ?? null,
       reason,
     );
-    return openBotToolResult({ interruptedTurnId: turnId, cancelledMessages });
+    return codeBotToolResult({ interruptedTurnId: turnId, cancelledMessages });
   }, Effect.uninterruptible);
 
   #activeTurnId(agentId: string): string | null {

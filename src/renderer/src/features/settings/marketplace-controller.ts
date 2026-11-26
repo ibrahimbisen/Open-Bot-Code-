@@ -1,5 +1,5 @@
-import { X_AGENT_LISTING_ID, X_EXTENSION_URL } from "@openbot/contracts/browser-extension-x";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { X_AGENT_LISTING_ID, X_EXTENSION_URL } from "@codebot/contracts/browser-extension-x";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AddedAgent,
   ClientAgentSummary,
@@ -20,7 +20,7 @@ import type {
   McpSignInRelayPage,
   McpSignInState,
   SaveMcpSignInAppInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   assignedSkillCount,
   DEFAULT_MCP_SERVER_ACCESS,
@@ -30,17 +30,17 @@ import {
   isRemovableSkill,
   isSkillEnabled,
   mcpConfigErrors,
-} from "@openbot/contracts/ipc";
-import { createMarketplaceShareUrl, type MarketplaceListingLink } from "@openbot/contracts/marketplace-links";
-import { mcpAccountFragment, mcpAccountUrl } from "@openbot/contracts/mcp-accounts";
-import { type McpConnectFlow, mcpFlowFields, savedKeyFlow } from "@openbot/contracts/mcp-connect-flows";
-import { createPluginShareUrl } from "@openbot/contracts/plugin-links";
-import { TOAST_DURATION, toast } from "@openbot/ui";
-import type { BrowserViewRuntime } from "@openbot/ui/features/browser/BrowserLiveView";
-import { connectorSummary } from "@openbot/ui/features/connectors/ConnectorDetailPanel";
-import { CONNECTOR_LISTINGS } from "@openbot/ui/features/connectors/connector-catalog";
-import { isConnectorId } from "@openbot/ui/features/connectors/connectors";
-import { safeBrowserUrl } from "@openbot/ui/features/conversation/RichMessageText";
+} from "@codebot/contracts/ipc";
+import { createMarketplaceShareUrl, type MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
+import { mcpAccountFragment, mcpAccountUrl } from "@codebot/contracts/mcp-accounts";
+import { type McpConnectFlow, mcpFlowFields, savedKeyFlow } from "@codebot/contracts/mcp-connect-flows";
+import { createPluginShareUrl } from "@codebot/contracts/plugin-links";
+import { TOAST_DURATION, toast } from "@codebot/ui";
+import type { BrowserViewRuntime } from "@codebot/ui/features/browser/BrowserLiveView";
+import { connectorSummary } from "@codebot/ui/features/connectors/ConnectorDetailPanel";
+import { CONNECTOR_LISTINGS } from "@codebot/ui/features/connectors/connector-catalog";
+import { isConnectorId } from "@codebot/ui/features/connectors/connectors";
+import { safeBrowserUrl } from "@codebot/ui/features/conversation/RichMessageText";
 import type {
   AgentListingState,
   GithubSkillRead,
@@ -56,20 +56,20 @@ import type {
   MarketplaceSkillChange,
   MarketplaceSkillRef,
   SkillRead,
-} from "@openbot/ui/features/marketplace/marketplace-model";
-import { pluginNeedsMac, X_APP_ID } from "@openbot/ui/features/marketplace/marketplace-model";
-import { serverAddress } from "@openbot/ui/features/marketplace/marketplace-view";
-import type { McpConnectSubject } from "@openbot/ui/features/settings/McpConnectShell";
+} from "@codebot/ui/features/marketplace/marketplace-model";
+import { pluginNeedsMac, X_APP_ID } from "@codebot/ui/features/marketplace/marketplace-model";
+import { serverAddress } from "@codebot/ui/features/marketplace/marketplace-view";
+import type { McpConnectSubject } from "@codebot/ui/features/settings/McpConnectShell";
 import {
   currentPluginAppConfig,
   isPluginAppConfig,
   type MarketplacePluginApp,
   type MarketplacePluginDetail,
   type MarketplacePluginPrompt,
-} from "@openbot/ui/features/settings/marketplace-plugins";
-import type { PluginUninstallPlan } from "@openbot/ui/features/settings/PluginUninstallDialog";
-import { currentText, useText } from "@openbot/ui/text";
-import { errorReference } from "@openbot/user-errors";
+} from "@codebot/ui/features/settings/marketplace-plugins";
+import type { PluginUninstallPlan } from "@codebot/ui/features/settings/PluginUninstallDialog";
+import { currentText, useText } from "@codebot/ui/text";
+import { errorReference } from "@codebot/user-errors";
 import { createEffect, createMemo, createSignal, createStore, onCleanup, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { desktopAnalytics } from "../../analytics";

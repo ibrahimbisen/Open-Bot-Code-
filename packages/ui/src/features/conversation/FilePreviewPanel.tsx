@@ -1,11 +1,11 @@
-import type { ChatVisualKey } from "@openbot/contracts/chat-visual";
-import { ATTACHMENT_LIMITS } from "@openbot/contracts/input-limits";
+import type { ChatVisualKey } from "@codebot/contracts/chat-visual";
+import { ATTACHMENT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type FilePreview,
   filePreviewKindForFile,
   type WorkspaceDirectory,
   type WorkspaceDirectoryEntry,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   ArrowLeft,
   Button,
@@ -20,18 +20,18 @@ import {
   LabelTooltipTrigger,
   WrapText,
   X,
-} from "@openbot/ui";
-import { PanelResizer } from "@openbot/ui/components/PanelResizer";
-import { SETTINGS_PANEL_DEFAULT } from "@openbot/ui/components/SettingsPanel";
-import type { AgentProfile } from "@openbot/ui/data";
-import { ChatVisual } from "@openbot/ui/features/conversation/ChatVisual";
-import { type CodeToken, fileCodeLanguage, highlightedCodeLines } from "@openbot/ui/features/conversation/CodeBlock";
-import { MarkdownFilePreview } from "@openbot/ui/features/conversation/MarkdownFilePreview";
-import type { QuoteShortcutModifier } from "@openbot/ui/features/conversation/SelectionActions";
-import { SpreadsheetFilePreview } from "@openbot/ui/features/conversation/SpreadsheetFilePreview";
-import { WordFilePreview } from "@openbot/ui/features/conversation/WordFilePreview";
-import { useText } from "@openbot/ui/text";
-import { holdFlag } from "@openbot/ui/utils";
+} from "@codebot/ui";
+import { PanelResizer } from "@codebot/ui/components/PanelResizer";
+import { SETTINGS_PANEL_DEFAULT } from "@codebot/ui/components/SettingsPanel";
+import type { AgentProfile } from "@codebot/ui/data";
+import { ChatVisual } from "@codebot/ui/features/conversation/ChatVisual";
+import { type CodeToken, fileCodeLanguage, highlightedCodeLines } from "@codebot/ui/features/conversation/CodeBlock";
+import { MarkdownFilePreview } from "@codebot/ui/features/conversation/MarkdownFilePreview";
+import type { QuoteShortcutModifier } from "@codebot/ui/features/conversation/SelectionActions";
+import { SpreadsheetFilePreview } from "@codebot/ui/features/conversation/SpreadsheetFilePreview";
+import { WordFilePreview } from "@codebot/ui/features/conversation/WordFilePreview";
+import { useText } from "@codebot/ui/text";
+import { holdFlag } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, onCleanup, onSettled, Show, untrack } from "solid-js";
 

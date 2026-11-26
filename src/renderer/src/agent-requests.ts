@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const REQUESTS_KEY = "openbot:agent-requests";
+const REQUESTS_KEY = "codebot:agent-requests";
 const REQUEST_WINDOW_MS = 30 * 60_000;
 
 const requestKey = (serverId: string, agentId: string) => `${serverId}\n${agentId}`;

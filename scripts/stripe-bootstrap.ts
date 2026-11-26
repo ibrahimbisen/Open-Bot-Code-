@@ -14,8 +14,8 @@ import {
   storageTierListPrices,
   storageTierLookupKey,
   storageTierPriceMetadata,
-} from "@openbot/contracts/billing";
-import { VAT_TAX_RATE } from "@openbot/contracts/billing-details";
+} from "@codebot/contracts/billing";
+import { VAT_TAX_RATE } from "@codebot/contracts/billing-details";
 import {
   CREDIT_LOOKUP_KEYS,
   CREDIT_METADATA,
@@ -25,7 +25,7 @@ import {
   creditLookupKey,
   creditStopPrice,
   creditStops,
-} from "@openbot/contracts/credits";
+} from "@codebot/contracts/credits";
 import {
   LICENSE_LOOKUP_KEYS,
   LICENSE_METADATA,
@@ -37,11 +37,11 @@ import {
   licenseIncludedUsers,
   licenseLookupKey,
   licensePlanPrice,
-} from "@openbot/contracts/license";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/license";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { z } from "zod";
 
-const logger = createOpenBotLogger("stripe-bootstrap");
+const logger = createCodeBotLogger("stripe-bootstrap");
 const STRIPE_API_VERSION = "2025-03-31.basil";
 
 const PLAN_NAME: Record<BillingPlanId, string> = { starter: "Starter", standard: "Standard", pro: "Pro" };
@@ -201,20 +201,20 @@ async function ensureExclusiveTax(stripe: StripeAdmin, price: Price): Promise<vo
 }
 
 function productId(plan: BillingPlanId): string {
-  return `openbot_${plan}`;
+  return `codebot_${plan}`;
 }
 
 function storageProductId(plan: BillingPlanId): string {
-  return `openbot_storage_${plan}`;
+  return `codebot_storage_${plan}`;
 }
 
 async function ensureStorageProduct(stripe: StripeAdmin, plan: BillingPlanId): Promise<void> {
   const id = storageProductId(plan);
   const body = new URLSearchParams({
-    name: `OpenBot ${PLAN_NAME[plan]} storage`,
+    name: `CodeBot ${PLAN_NAME[plan]} storage`,
     active: "true",
-    "metadata[openbot_kind]": "storage",
-    "metadata[openbot_plan]": plan,
+    "metadata[codebot_kind]": "storage",
+    "metadata[codebot_plan]": plan,
   });
   if (await stripe.findProduct(id)) {
     await stripe.request("POST", `/v1/products/${id}`, body, productSchema);
@@ -276,9 +276,9 @@ async function ensureStoragePrice(
 async function ensureProduct(stripe: StripeAdmin, plan: BillingPlanId): Promise<void> {
   const id = productId(plan);
   const body = new URLSearchParams({
-    name: `OpenBot ${PLAN_NAME[plan]}`,
+    name: `CodeBot ${PLAN_NAME[plan]}`,
     active: "true",
-    "metadata[openbot_plan]": plan,
+    "metadata[codebot_plan]": plan,
   });
   const existing = await stripe.findProduct(id);
   if (existing) {
@@ -344,8 +344,8 @@ async function ensurePrice(
     transfer_lookup_key: "true",
     "currency_options[usd][unit_amount]": String(amounts.usd),
     "currency_options[pln][unit_amount]": String(amounts.pln),
-    "metadata[openbot_plan]": plan,
-    "metadata[openbot_interval]": interval,
+    "metadata[codebot_plan]": plan,
+    "metadata[codebot_interval]": interval,
   });
   for (const currency of currencies) body.set(`currency_options[${currency}][unit_amount]`, String(amounts[currency]));
   const created = await stripe.request("POST", "/v1/prices", withExclusiveTax(body), priceSchema);
@@ -355,7 +355,7 @@ async function ensurePrice(
 
 async function ensureCreditProduct(stripe: StripeAdmin): Promise<void> {
   const body = new URLSearchParams({
-    name: "OpenBot credits",
+    name: "CodeBot credits",
     active: "true",
     [`metadata[${CREDIT_METADATA.kind}]`]: CREDIT_METADATA_KIND,
   });
@@ -420,7 +420,7 @@ function licensePriceSignature(prices: Readonly<Record<string, LicensePrice>>, i
 
 async function ensureLicenseProduct(stripe: StripeAdmin): Promise<void> {
   const body = new URLSearchParams({
-    name: "OpenBot commercial license",
+    name: "CodeBot commercial license",
     active: "true",
     [`metadata[${LICENSE_METADATA.kind}]`]: LICENSE_METADATA_KIND,
   });
@@ -455,7 +455,7 @@ async function ensureLicensePrice(
     current.product === LICENSE_PRODUCT_ID &&
     current.currency === "eur" &&
     current.recurring?.interval === plan.interval &&
-    current.metadata?.openbot_license_prices === signature &&
+    current.metadata?.codebot_license_prices === signature &&
     current.metadata?.[LICENSE_METADATA.tier] === plan.tier &&
     current.metadata?.[LICENSE_METADATA.interval] === plan.interval &&
     current.metadata?.[LICENSE_METADATA.bundle] === bundle
@@ -474,7 +474,7 @@ async function ensureLicensePrice(
     [`metadata[${LICENSE_METADATA.tier}]`]: plan.tier,
     [`metadata[${LICENSE_METADATA.interval}]`]: plan.interval,
     [`metadata[${LICENSE_METADATA.bundle}]`]: bundle,
-    "metadata[openbot_license_prices]": signature,
+    "metadata[codebot_license_prices]": signature,
   });
   if (plan.tier === "team") {
     body.set("billing_scheme", "tiered");
@@ -546,7 +546,7 @@ async function defaultPortalConfiguration(stripe: StripeAdmin): Promise<string> 
   const customer = await stripe.request(
     "POST",
     "/v1/customers",
-    new URLSearchParams({ description: "OpenBot bootstrap: creates the default Customer Portal configuration" }),
+    new URLSearchParams({ description: "CodeBot bootstrap: creates the default Customer Portal configuration" }),
     z.object({ id: z.string() }),
   );
   try {
@@ -588,7 +588,7 @@ async function ensureWebhookEndpoint(stripe: StripeAdmin, url: string, replace: 
   if (parsed.protocol !== "https:" || !parsed.pathname.endsWith("/v1/stripe/webhook")) {
     throw new Error("--webhook-url must be an https URL that ends with /v1/stripe/webhook.");
   }
-  const body = new URLSearchParams({ url: parsed.href, description: "OpenBot account server" });
+  const body = new URLSearchParams({ url: parsed.href, description: "CodeBot account server" });
   for (const event of BILLING_WEBHOOK_EVENTS) body.append("enabled_events[]", event);
   let current: { id: string } | null = null;
   let startingAfter: string | null = null;

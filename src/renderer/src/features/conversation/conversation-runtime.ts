@@ -3,17 +3,17 @@ import type {
   AgentSessionSettings,
   AskSideQuestionInput,
   AttachmentSummary,
+  CodeBotDesktopApi,
   FilePreview,
-  OpenBotDesktopApi,
   ResetAgentSessionSettingInput,
   SaveSkillSuggestionInput,
   SaveSkillSuggestionResult,
   SetAgentSessionSettingInput,
   TestRoutineInput,
   WithdrawFeedbackResult,
-} from "@openbot/contracts/ipc";
-import type { AttachmentMediaSource } from "@openbot/ui/features/conversation/AttachmentCards";
-import type { ImageCopies } from "@openbot/ui/features/conversation/ImageLightbox";
+} from "@codebot/contracts/ipc";
+import type { AttachmentMediaSource } from "@codebot/ui/features/conversation/AttachmentCards";
+import type { ImageCopies } from "@codebot/ui/features/conversation/ImageLightbox";
 import type { AgentSkillCalls, SkillCatalogCalls } from "../../skills-port";
 import type { AgentTemplatePublishCalls } from "../agent-templates/agent-templates-port";
 import type { BrowserProfileCalls } from "../browser/browser-profiles-port";
@@ -28,7 +28,7 @@ import type { CodexLivePort } from "./stores/codex-live-conversation-store";
 
 export interface ConversationRuntime {
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     | "discardDraftAttachment"
     | "importAttachmentData"
     | "downloadAttachments"
@@ -45,12 +45,12 @@ export interface ConversationRuntime {
     | "respondToBrowserSecret"
     | "setMessageReaction"
   > &
-    Partial<Pick<OpenBotDesktopApi["agent"], "openMessageLink" | "pasteMessageLink" | "cancelMessageLink">> &
-    Partial<Pick<OpenBotDesktopApi["agent"], "stopAttachmentDownload" | "onAttachmentDownload">> &
-    Partial<Pick<OpenBotDesktopApi["agent"], "retryAttachmentImport" | "discardAttachmentImport">> &
-    Partial<Pick<OpenBotDesktopApi["agent"], "testMcpServer">>;
+    Partial<Pick<CodeBotDesktopApi["agent"], "openMessageLink" | "pasteMessageLink" | "cancelMessageLink">> &
+    Partial<Pick<CodeBotDesktopApi["agent"], "stopAttachmentDownload" | "onAttachmentDownload">> &
+    Partial<Pick<CodeBotDesktopApi["agent"], "retryAttachmentImport" | "discardAttachmentImport">> &
+    Partial<Pick<CodeBotDesktopApi["agent"], "testMcpServer">>;
   browser: Pick<
-    OpenBotDesktopApi["browser"],
+    CodeBotDesktopApi["browser"],
     | "capturePreview"
     | "closePictureInPicture"
     | "closeWindow"
@@ -73,7 +73,7 @@ export interface ConversationRuntime {
     | "takeControl"
   >;
   voice: Pick<
-    OpenBotDesktopApi["voice"],
+    CodeBotDesktopApi["voice"],
     | "getSettings"
     | "setSettings"
     | "getServer"
@@ -87,7 +87,7 @@ export interface ConversationRuntime {
     | "cancelStream"
     | "onStreamTranscript"
   >;
-  openUrl: OpenBotDesktopApi["openUrl"];
+  openUrl: CodeBotDesktopApi["openUrl"];
   askSideQuestion?: ((input: AskSideQuestionInput) => Promise<string>) | undefined;
   sideQuestionThreads?: boolean | undefined;
   liveVoice?: CodexLivePort | undefined;
@@ -134,5 +134,5 @@ export interface AgentNotificationLevelCalls {
 }
 
 export function conversationRuntime(props: Pick<ConversationProps, "runtime">): ConversationRuntime {
-  return props.runtime ?? window.openbot;
+  return props.runtime ?? window.codebot;
 }

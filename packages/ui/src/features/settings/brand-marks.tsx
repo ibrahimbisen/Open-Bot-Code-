@@ -7,7 +7,7 @@ import {
   STRIPE_MARK_PATH,
   TELEGRAM_MARK_PATH,
   WHATSAPP_MARK_PATH,
-} from "@openbot/brand/connector-mark-shape";
+} from "@codebot/brand/connector-mark-shape";
 import type { JSX } from "@solidjs/web";
 
 export function GitHubMark(props: { class?: string | undefined }) {

@@ -3,37 +3,37 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { McpServerConfig, McpSignInState } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { McpServerConfig, McpSignInState } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   TEAM_APP_VERSION_HEADER,
   TEAM_CAPABILITIES_HEADER,
   TEAM_PROTOCOL_VERSION_HEADER,
-} from "@openbot/contracts/team-protocol";
-import { teamCapabilitiesForProtocol } from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol";
+import { teamCapabilitiesForProtocol } from "@codebot/contracts/team-protocol/current";
 import {
   MCP_FROZEN_SERVERS_LIST_LIMIT,
   MCP_MANY_SERVERS_CAPABILITY,
   MCP_MANY_SERVERS_LIST_LIMIT,
-} from "@openbot/contracts/team-protocol/mcp-many-servers-v1";
-import { MCP_SIGN_IN_ROUTES } from "@openbot/contracts/team-protocol/mcp-sign-in-v1";
-import { MCP_ROUTES, mcpResponse } from "@openbot/contracts/team-protocol/mcp-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/mcp-many-servers-v1";
+import { MCP_SIGN_IN_ROUTES } from "@codebot/contracts/team-protocol/mcp-sign-in-v1";
+import { MCP_ROUTES, mcpResponse } from "@codebot/contracts/team-protocol/mcp-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamApiBrowser, TeamApiMcpSignIns } from "../src/main/team-api/dependencies";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-many-servers-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-many-servers-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const OWNER = { username: "owner-user", password: "owner-password-123" };
 const STEP_DEADLINE_MS = 60_000;
@@ -173,12 +173,12 @@ function signInList(): McpSignInState[] {
     .map((server) => ({ mcpServerId: server.id, signedIn: false }));
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-mcp-many-servers-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-mcp-many-servers-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 
 interface Host {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   agents: AgentService;
   server: InstanceType<typeof TeamApiServer>;
   team: InstanceType<typeof TeamStore>;
@@ -188,11 +188,11 @@ interface Host {
 let host: Host | null = null;
 
 async function startHost(): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const agentStore = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, agentStore.sharedRoot, agentStore.database);
   const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
-  const team = new TeamStore(join(userData, "openbot-team-server-v2.json"));
+  const team = new TeamStore(join(userData, "codebot-team-server-v2.json"));
   await runCauseEffect(sidebar.initialize());
   await runCauseEffect(agentStore.initialize());
   await runCauseEffect(mailbox.initialize());

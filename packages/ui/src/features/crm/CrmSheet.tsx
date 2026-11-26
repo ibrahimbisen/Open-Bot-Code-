@@ -1,4 +1,4 @@
-import type { CrmPrivateField } from "@openbot/contracts/ipc";
+import type { CrmPrivateField } from "@codebot/contracts/ipc";
 import {
   ArrowDown,
   ArrowLeft,
@@ -22,9 +22,9 @@ import {
   toast,
   type UsersRound,
   X,
-} from "@openbot/ui";
-import { PanelResizer } from "@openbot/ui/components/PanelResizer";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { PanelResizer } from "@codebot/ui/components/PanelResizer";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createUniqueId, For, onCleanup, Show } from "solid-js";
 import { COLUMN_MAX_WIDTH, COLUMN_MIN_WIDTH, matches, parseNumber, type SheetRange, type SheetSort } from "./crm-model";

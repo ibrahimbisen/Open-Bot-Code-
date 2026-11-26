@@ -1,19 +1,19 @@
 import type { DatabaseSync } from "node:sqlite";
-import { createOpenBotLogger } from "@openbot/logging";
-import type { OpenBotMigration } from "./migration";
+import { createCodeBotLogger } from "@codebot/logging";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord, isString } from "./runtime-values";
 
-// The value of `COMPUTER_USE_MCP_SERVER_NAME` in `@openbot/contracts/ipc` when this migration shipped.
+// The value of `COMPUTER_USE_MCP_SERVER_NAME` in `@codebot/contracts/ipc` when this migration shipped.
 const COMPUTER_USE_MCP_SERVER_NAME = "computer_use";
 
-const logger = createOpenBotLogger("openbot-database-schema");
+const logger = createCodeBotLogger("codebot-database-schema");
 
 /**
  * Moves a saved MCP server off the name the Computer Use driver now takes.
  *
  * The name was free until the driver arrived, so a database written by a shipped release can hold a
- * server the user named `computer_use`. OpenBot appends its own entry under that name at spawn, and
- * all four providers key servers by name: Codex and Claude would hand the agent OpenBot's server in
+ * server the user named `computer_use`. CodeBot appends its own entry under that name at spawn, and
+ * all four providers key servers by name: Codex and Claude would hand the agent CodeBot's server in
  * place of the user's, and an ACP provider would receive two servers with one name. The row is
  * renamed rather than removed, so the user keeps the server, its command and its secrets, and sees
  * the new name where they configured it. A later save cannot take the name back: `mcpConfigErrors`
@@ -52,7 +52,7 @@ function freeServerName(taken: ReadonlySet<string>): string {
   }
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 21,
   name: "free-computer-use-server-name",
   // Renames rows only, so no foreign-key pause, no vacuum, and nothing to mirror in the latest

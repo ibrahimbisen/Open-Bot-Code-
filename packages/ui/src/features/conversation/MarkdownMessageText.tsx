@@ -1,16 +1,16 @@
-import { fileReferenceName, isFileReference } from "@openbot/brand/file-reference";
-import { attachmentReferenceAt } from "@openbot/contracts/attachment-references";
+import { fileReferenceName, isFileReference } from "@codebot/brand/file-reference";
+import { attachmentReferenceAt } from "@codebot/contracts/attachment-references";
 import {
   blockChatMath,
   chatMathBlockInterrupts,
   chatMathBlockStart,
   chatMathStart,
   inlineChatMath,
-} from "@openbot/contracts/chat-math";
-import { chatPreviewKind } from "@openbot/contracts/chat-preview";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { markdownImageName } from "@openbot/contracts/markdown-preview-text";
-import { Button, Checkbox } from "@openbot/ui";
+} from "@codebot/contracts/chat-math";
+import { chatPreviewKind } from "@codebot/contracts/chat-preview";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { markdownImageName } from "@codebot/contracts/markdown-preview-text";
+import { Button, Checkbox } from "@codebot/ui";
 import { Dynamic } from "@solidjs/web";
 import { Marked, type Token, type Tokens, type TokensList } from "marked";
 import markedCjkFriendly from "marked-cjk-friendly";
@@ -1145,9 +1145,9 @@ function sharedFileTarget(value: string): string | null {
   const path = value.trim();
   if (!path || /[\0\r\n]/u.test(path)) return null;
   const normalized = path.replaceAll("\\", "/");
-  return normalized.startsWith("~/OpenBot/Shared/") ||
-    normalized.startsWith("OpenBot/Shared/") ||
-    normalized.includes("/OpenBot/Shared/")
+  return normalized.startsWith("~/CodeBot/Shared/") ||
+    normalized.startsWith("CodeBot/Shared/") ||
+    normalized.includes("/CodeBot/Shared/")
     ? path
     : null;
 }

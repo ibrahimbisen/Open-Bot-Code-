@@ -315,7 +315,7 @@ serveFakeAcpAgent(
     "session/prompt": (request, peer) => {
       const root = request.params.sessionId ?? "";
       const text = request.params.prompt?.map((part) => part.text ?? "").join("") ?? "";
-      const prompt = text.split("</openbot-developer-instructions>").at(-1) ?? "";
+      const prompt = text.split("</codebot-developer-instructions>").at(-1) ?? "";
       const reply = () => peer.reply(request, { stopReason: "end_turn" });
       if (prompt.includes("stop")) {
         stoppedWork(peer, root);

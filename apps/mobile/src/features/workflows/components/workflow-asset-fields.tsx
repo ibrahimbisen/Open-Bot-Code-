@@ -1,7 +1,7 @@
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { type StoredFileRow, WORKFLOW_PICTURE_TYPES, type WorkflowNode } from "@openbot/contracts/ipc";
-import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES } from "@openbot/contracts/team-protocol/v2";
-import { MOBILE_ATTACHMENT_BYTES, type RemoteFileUpload } from "@openbot/team-client/remote-peer";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { type StoredFileRow, WORKFLOW_PICTURE_TYPES, type WorkflowNode } from "@codebot/contracts/ipc";
+import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES } from "@codebot/contracts/team-protocol/v2";
+import { MOBILE_ATTACHMENT_BYTES, type RemoteFileUpload } from "@codebot/team-client/remote-peer";
 import { useQueryClient } from "@tanstack/react-query";
 import { File } from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
@@ -108,7 +108,7 @@ function usePictureUpload(serverId: string, onKept: (fileId: string, name: strin
 
 export function AssetFields({ node, draft }: { node: WorkflowNode; draft: WorkflowDraft }) {
   const { t } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const setFields = useWorkflowDraft((state) => state.setFields);
   const supported = useWorkflowAssetsSupported(draft.serverId);
   const { available, query } = useServerStorage(draft.serverId);

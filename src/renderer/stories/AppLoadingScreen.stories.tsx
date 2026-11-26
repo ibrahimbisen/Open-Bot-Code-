@@ -1,5 +1,5 @@
-import { AppLoadingScreen } from "@openbot/ui/features/account/AppLoadingScreen";
-import { ConversationLoadNotice, ServerConnectionNotice } from "@openbot/ui/features/servers/ServerConnectionNotice";
+import { AppLoadingScreen } from "@codebot/ui/features/account/AppLoadingScreen";
+import { ConversationLoadNotice, ServerConnectionNotice } from "@codebot/ui/features/servers/ServerConnectionNotice";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { SplashPlayground } from "./splash-story-support";
 
@@ -37,7 +37,7 @@ export const Loading: Story = {
 };
 
 export const QuietLoading: Story = {
-  render: () => <AppLoadingScreen scene="quiet" title="Loading OpenBot" />,
+  render: () => <AppLoadingScreen scene="quiet" title="Loading CodeBot" />,
 };
 
 export const QuietStartingServer: Story = {
@@ -59,12 +59,12 @@ export const HistoryLoading: Story = {
 export const StartingServer: Story = {
   render: () => <ServerConnectionNotice name="My server" phase="waking" initial onRetry={() => {}} />,
 };
-export const StartingOpenBot: Story = {
+export const StartingCodeBot: Story = {
   render: () => (
     <ServerConnectionNotice
       name="My server"
       phase="waking"
-      start={{ step: "openbot", startedAt: Date.now() - 4 * 60_000 }}
+      start={{ step: "codebot", startedAt: Date.now() - 4 * 60_000 }}
       initial
       onRetry={() => {}}
     />

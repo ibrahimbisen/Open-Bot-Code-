@@ -1,5 +1,5 @@
-import { isAgentTaskOpen } from "@openbot/team-client/agent-tasks";
-import { addCalendarDays, calendarDayOf } from "@openbot/team-client/routine-calendar-dates";
+import { isAgentTaskOpen } from "@codebot/team-client/agent-tasks";
+import { addCalendarDays, calendarDayOf } from "@codebot/team-client/routine-calendar-dates";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import { lastUsageDays } from "@/features/agents/components/usage-range-picker";

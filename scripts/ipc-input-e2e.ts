@@ -1,21 +1,21 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { en } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { en } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/ipc-input-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/ipc-input-e2e");
 const TOO_LONG_ID = "x".repeat(INPUT_LIMITS.identifier + 1);
 
 interface Check {
@@ -89,7 +89,7 @@ const CHECKS: readonly Check[] = [
 ];
 
 async function refusal(page: Page, check: Check): Promise<string | null> {
-  const call = `window.openbot.${check.method.join(".")}(${check.args.map((arg) => JSON.stringify(arg)).join(", ")})`;
+  const call = `window.codebot.${check.method.join(".")}(${check.args.map((arg) => JSON.stringify(arg)).join(", ")})`;
   const result = await page.evaluate(`(async () => {
     try {
       await ${call};
@@ -113,7 +113,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("ipc-input-e2e");
+const logger = createCodeBotLogger("ipc-input-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
@@ -121,14 +121,14 @@ const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
 
 mkdirSync(OUT, { recursive: true });
 const page = session.page;
-const languageBefore = await page.evaluate(() => window.openbot.getAppLanguagePreference());
+const languageBefore = await page.evaluate(() => window.codebot.getAppLanguagePreference());
 const results: { name: string; refusal: string | null; passed: boolean }[] = [];
 try {
   for (const check of CHECKS) {
     const message = await refusal(page, check);
     results.push({ name: check.name, refusal: message, passed: message?.includes(check.refusal) ?? false });
   }
-  const languageAfter = await page.evaluate(() => window.openbot.getAppLanguagePreference());
+  const languageAfter = await page.evaluate(() => window.codebot.getAppLanguagePreference());
   results.push({
     name: "a refused language request leaves the saved language unchanged",
     refusal: null,

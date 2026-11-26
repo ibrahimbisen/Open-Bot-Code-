@@ -1,6 +1,6 @@
 import { uptime } from "node:os";
 import { join } from "node:path";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { readPreferenceFile, writePreferenceFile } from "./preference-file";
 import { quantize } from "./resource-summary";
@@ -96,7 +96,7 @@ function startKind(saved: SavedStart | null, appVersion: string, bootedAt: numbe
 }
 
 function markMs(name: string): number | undefined {
-  const value = performance.getEntriesByName(`openbot:${name}`, "mark")[0]?.startTime;
+  const value = performance.getEntriesByName(`codebot:${name}`, "mark")[0]?.startTime;
   return value === undefined || !Number.isFinite(value) || value < 0 ? undefined : value;
 }
 

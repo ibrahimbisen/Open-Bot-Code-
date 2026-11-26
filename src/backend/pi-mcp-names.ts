@@ -1,10 +1,10 @@
 import { createHash } from "node:crypto";
-import { COMPUTER_USE_MCP_SERVER_NAME } from "@openbot/contracts/ipc";
+import { COMPUTER_USE_MCP_SERVER_NAME } from "@codebot/contracts/ipc";
 
 export const COMPUTER_USE_GUIDE_URI = "skill://cua-driver/SKILL.md";
 
 export function piMcpServerName(kind: "external" | "local", name: string): string {
-  return `openbot_${createHash("sha256").update(`${kind}:${name}`).digest("hex").slice(0, 8)}`;
+  return `codebot_${createHash("sha256").update(`${kind}:${name}`).digest("hex").slice(0, 8)}`;
 }
 
 export function piComputerUseGuideStep(): string {

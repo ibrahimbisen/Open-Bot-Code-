@@ -3,8 +3,8 @@ import {
   type DynamicIslandAction,
   LOCAL_SERVER_ID,
   type SendMessageInput,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import { Effect } from "effect";
 import type { PromptResponder } from "../backend/agent/attention-registry";
 import type { AgentLifecycleFailed } from "../backend/agent-service";

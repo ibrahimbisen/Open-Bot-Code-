@@ -3,8 +3,8 @@ import type {
   WorkflowGitHubCloseReason,
   WorkflowGitHubEvent,
   WorkflowGitHubRepositoryOptions,
-} from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import type { Effect } from "effect";
 
 export const GITHUB_BODY_LIMIT = 65_536;

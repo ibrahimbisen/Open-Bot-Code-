@@ -1,5 +1,5 @@
-import { type CreditsMenu, createCreditsSummary } from "@openbot/ui/features/credits/credits-store";
-import type { SettingsPageBack, SettingsPagePlacement } from "@openbot/ui/features/settings/SettingsDialogShell";
+import { type CreditsMenu, createCreditsSummary } from "@codebot/ui/features/credits/credits-store";
+import type { SettingsPageBack, SettingsPagePlacement } from "@codebot/ui/features/settings/SettingsDialogShell";
 import { createEffect, createMemo, createSignal, onCleanup, untrack } from "solid-js";
 import { appPort } from "../../app-port";
 import { createSimpleContext } from "../../simple-context";
@@ -52,7 +52,7 @@ const context = createSimpleContext({
     );
     onCleanup(
       appPort().agent.onScopedEvent(({ event }) => {
-        if (event.type === "openbot-credits-changed") credits.refresh();
+        if (event.type === "codebot-credits-changed") credits.refresh();
       }),
     );
     const [settingsMounts, setSettingsMounts] = createSignal<SettingsPagePlacement | undefined>();

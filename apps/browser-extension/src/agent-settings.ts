@@ -7,30 +7,30 @@ import {
   isClientAgentModelOption,
   type UpdateAgentAdminSettingsInput,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { guardedListDecoder } from "@openbot/contracts/ipc-decoding";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_ADMIN_CAPABILITY } from "@openbot/contracts/team-protocol/agent-admin-v1";
-import { AGENT_COLORS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-colors-v1";
+} from "@codebot/contracts/ipc";
+import { guardedListDecoder } from "@codebot/contracts/ipc-decoding";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_ADMIN_CAPABILITY } from "@codebot/contracts/team-protocol/agent-admin-v1";
+import { AGENT_COLORS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-colors-v1";
 import {
   AGENT_PENDING_RUNTIME_CAPABILITY,
   AGENT_PENDING_RUNTIME_ROUTES,
   pendingRuntimeUpdateBody,
-} from "@openbot/contracts/team-protocol/agent-pending-runtime-v1";
-import { CHAT_COLORS_CAPABILITY } from "@openbot/contracts/team-protocol/chat-colors-v1";
-import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@openbot/contracts/team-protocol/chat-history-v1";
-import { CONTEXT_RESET_CAPABILITY, CONTEXT_RESET_ROUTES } from "@openbot/contracts/team-protocol/context-reset-v1";
-import type { TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { runTeamEffect } from "@openbot/team-client";
-import { bytesToBase64 } from "@openbot/team-client/base64";
+} from "@codebot/contracts/team-protocol/agent-pending-runtime-v1";
+import { CHAT_COLORS_CAPABILITY } from "@codebot/contracts/team-protocol/chat-colors-v1";
+import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@codebot/contracts/team-protocol/chat-history-v1";
+import { CONTEXT_RESET_CAPABILITY, CONTEXT_RESET_ROUTES } from "@codebot/contracts/team-protocol/context-reset-v1";
+import type { TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { runTeamEffect } from "@codebot/team-client";
+import { bytesToBase64 } from "@codebot/team-client/base64";
 import {
   getAgentAdminSettings,
   setAgentChatColor,
   setAgentColor,
   updateAgentAdminSettings,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 
 const decodeModels = guardedListDecoder(isClientAgentModelOption, "models");
 const ignore = () => null;

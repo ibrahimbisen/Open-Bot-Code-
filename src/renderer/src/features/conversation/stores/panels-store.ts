@@ -1,4 +1,4 @@
-import { isOpenableAttachmentName } from "@openbot/contracts/attachment-files";
+import { isOpenableAttachmentName } from "@codebot/contracts/attachment-files";
 import {
   type AttachmentSummary,
   type BrowserBounds,
@@ -6,15 +6,15 @@ import {
   type FileAction,
   type FilePreview,
   type WorkspaceDirectory,
-} from "@openbot/contracts/ipc";
-import { ATTACHMENT_PREVIEW_CAPABILITY } from "@openbot/contracts/team-protocol/attachment-preview-v1";
-import { matchingSourceKeys } from "@openbot/i18n";
-import type { AgentSettingLinkId, AgentSettingReveal } from "@openbot/ui/features/conversation/agent-setting-links";
-import type { ImageCopies } from "@openbot/ui/features/conversation/ImageLightbox";
-import type { MessageImageFile } from "@openbot/ui/features/conversation/MarkdownMessageText";
-import { isSidePanelPane } from "@openbot/ui/features/conversation/SidePanel";
-import { currentText } from "@openbot/ui/text";
-import { normalizeMessage } from "@openbot/user-errors/reference";
+} from "@codebot/contracts/ipc";
+import { ATTACHMENT_PREVIEW_CAPABILITY } from "@codebot/contracts/team-protocol/attachment-preview-v1";
+import { matchingSourceKeys } from "@codebot/i18n";
+import type { AgentSettingLinkId, AgentSettingReveal } from "@codebot/ui/features/conversation/agent-setting-links";
+import type { ImageCopies } from "@codebot/ui/features/conversation/ImageLightbox";
+import type { MessageImageFile } from "@codebot/ui/features/conversation/MarkdownMessageText";
+import { isSidePanelPane } from "@codebot/ui/features/conversation/SidePanel";
+import { currentText } from "@codebot/ui/text";
+import { normalizeMessage } from "@codebot/user-errors/reference";
 import { createEffect, createMemo, createSignal, onCleanup, type Store, type StoreSetter, untrack } from "solid-js";
 import { createScopeGuard } from "../../../scope-lifetime";
 import { serverSupportsCapability } from "../../servers/server-capabilities";
@@ -104,9 +104,9 @@ export interface PanelsStoreDeps {
   setRightPanels: (update: (current: Record<string, RightPanelMode>) => Record<string, RightPanelMode>) => void;
   panels: Store<SidePanelsState>;
   setPanels: StoreSetter<SidePanelsState>;
-  settingsProvider: () => import("@openbot/contracts/ipc").AgentProviderId;
-  settingsModel: () => import("@openbot/contracts/ipc").AgentModelId;
-  settingsReasoning: () => import("@openbot/contracts/ipc").AgentReasoningEffort;
+  settingsProvider: () => import("@codebot/contracts/ipc").AgentProviderId;
+  settingsModel: () => import("@codebot/contracts/ipc").AgentModelId;
+  settingsReasoning: () => import("@codebot/contracts/ipc").AgentReasoningEffort;
   setBrowserPipBounds: (bounds: BrowserBounds | null) => void;
   browserWindowOpen: () => boolean;
   setBrowserWindowOpen: (open: boolean) => void;

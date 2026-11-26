@@ -19,7 +19,7 @@ index 4c87a15f58e385da47145658ea1d82f5d4f82285..f10af236cee2198ce2a99d7da3e428b9
 -        if (type === 'oauth') {
 -            return auth_js_2.OAuthMetadataSchema.parse(await response.json());
 +        // Validate by the document, not by the address: RFC 8414 section 5 lets a plain OAuth
-+        // server publish its metadata at openid-configuration (OpenBot #6854, SDK #2733).
++        // server publish its metadata at openid-configuration (CodeBot #6854, SDK #2733).
 +        // The schema of the address is tried first. A document that fits neither schema
 +        // goes to the next address.
 +        const metadata = await response.json();
@@ -62,7 +62,7 @@ index 9b184c011ffa092078a7ed951be21a2bd99d5f89..58bcb88c10100748bdf978522bb96116
 -        if (type === 'oauth') {
 -            return OAuthMetadataSchema.parse(await response.json());
 +        // Validate by the document, not by the address: RFC 8414 section 5 lets a plain OAuth
-+        // server publish its metadata at openid-configuration (OpenBot #6854, SDK #2733).
++        // server publish its metadata at openid-configuration (CodeBot #6854, SDK #2733).
 +        // The schema of the address is tried first. A document that fits neither schema
 +        // goes to the next address.
 +        const metadata = await response.json();

@@ -1,10 +1,10 @@
-import { isManagedRuntimeProvider, type ManagedProviderId } from "@openbot/contracts/agent-providers";
-import type { AgentProviderId, ProviderRuntimeStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { Button, Checkbox, Heading, Text, Toaster, toast } from "@openbot/ui";
-import type { ProviderPickerOption } from "@openbot/ui/components/ProviderPicker";
-import { ProviderPicker } from "@openbot/ui/components/ProviderPicker";
-import { type ProviderUpdate, providerUpdatesToAnnounce } from "@openbot/ui/features/provider-updates/provider-update";
+import { isManagedRuntimeProvider, type ManagedProviderId } from "@codebot/contracts/agent-providers";
+import type { AgentProviderId, ProviderRuntimeStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { Button, Checkbox, Heading, Text, Toaster, toast } from "@codebot/ui";
+import type { ProviderPickerOption } from "@codebot/ui/components/ProviderPicker";
+import { ProviderPicker } from "@codebot/ui/components/ProviderPicker";
+import { type ProviderUpdate, providerUpdatesToAnnounce } from "@codebot/ui/features/provider-updates/provider-update";
 import { createEffect, createSignal, createUniqueId, onCleanup, onSettled, Show, untrack } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import {
@@ -300,7 +300,7 @@ export const WaitsForTurn: Story = {
 };
 
 const LONG_FAILURE =
-  "OpenBot could not update the Claude CLI. The registry at https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.250.tgz answered with a checksum that does not match the published package, so the download stopped before it replaced the version you have.";
+  "CodeBot could not update the Claude CLI. The registry at https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.250.tgz answered with a checksum that does not match the published package, so the download stopped before it replaced the version you have.";
 
 export const LongFailure: Story = {
   render: () => <ProviderUpdateFlow controls failure={LONG_FAILURE} />,

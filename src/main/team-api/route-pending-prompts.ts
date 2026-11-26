@@ -1,10 +1,10 @@
-import { agentAccessRank } from "@openbot/contracts/ipc";
+import { agentAccessRank } from "@codebot/contracts/ipc";
 import {
   PENDING_PROMPTS_CAPABILITY,
   PENDING_PROMPTS_ROUTES,
   pendingPromptsWithinLimits,
-} from "@openbot/contracts/team-protocol/pending-prompts-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/pending-prompts-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { TeamApiAgents } from "./dependencies";
 import { HttpError } from "./http-error";
 import type { RouteOutcome, TeamApiRequestContext } from "./request-context";

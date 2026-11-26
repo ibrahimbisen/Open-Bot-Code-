@@ -1,6 +1,6 @@
-import { TEAM_BROWSER_VIEW_CAPABILITY } from "@openbot/contracts/team-protocol/browser-view-v1";
-import type { TeamProtocolV1Capability } from "@openbot/contracts/team-protocol/v1";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import { TEAM_BROWSER_VIEW_CAPABILITY } from "@codebot/contracts/team-protocol/browser-view-v1";
+import type { TeamProtocolV1Capability } from "@codebot/contracts/team-protocol/v1";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { currentText } from "@/shared/lib/text";
 
 export type ServerCapabilities = ReadonlyMap<string, readonly string[]>;

@@ -3,8 +3,6 @@ import { createHash, randomUUID } from "node:crypto";
 import { lstat, mkdir, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { connect } from "node:net";
 import { dirname, isAbsolute, join } from "node:path";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { getDefaultEnvironment, StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import {
   COMPUTER_USE_MCP_SERVER_ID,
   COMPUTER_USE_MCP_SERVER_NAME,
@@ -12,9 +10,11 @@ import {
   type ComputerUseState,
   type MacPermissionId,
   type McpServerConfig,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { getDefaultEnvironment, StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { Deferred, Effect, Exit, Result, Semaphore } from "effect";
 import { agentDisplayEnvironment } from "./agent-display";
 import { CuaDriverActionTap, type ObservedAction, type ObservedPointer } from "./cua-driver-action-tap";
@@ -101,10 +101,10 @@ export const resolveCuaDriverEndpoint = Effect.fn("CuaDriver.endpoint")(function
       ? runtimeDirectory
       : input.temporaryDirectory;
   const digest = createHash("sha256").update(input.userDataPath).digest("hex").slice(0, 12);
-  return { kind: "unix-socket", directory: join(parent, `openbot-cua-${digest}`) };
+  return { kind: "unix-socket", directory: join(parent, `codebot-cua-${digest}`) };
 });
 
-const WINDOWS_PIPE_NAME = /^\\\\\.\\pipe\\openbot-cua-[0-9a-f-]{36}$/;
+const WINDOWS_PIPE_NAME = /^\\\\\.\\pipe\\codebot-cua-[0-9a-f-]{36}$/;
 
 const windowsPipeName = Effect.fn("CuaDriver.windowsPipeName")(function* (userDataPath: string) {
   const file = join(userDataPath, ...PIPE_NAME_FILE);
@@ -113,7 +113,7 @@ const windowsPipeName = Effect.fn("CuaDriver.windowsPipeName")(function* (userDa
     Effect.catch(() => Effect.succeed("")),
   );
   if (WINDOWS_PIPE_NAME.test(stored)) return stored;
-  const name = `\\\\.\\pipe\\openbot-cua-${randomUUID()}`;
+  const name = `\\\\.\\pipe\\codebot-cua-${randomUUID()}`;
   yield* cuaIO(() => mkdir(dirname(file), { recursive: true, mode: 0o700 }));
   yield* cuaIO(() => writeFile(file, name, { mode: 0o600 }));
   return name;
@@ -397,13 +397,13 @@ export class CuaDriverRuntime {
     const spawnFailure = Deferred.makeUnsafe<never, CuaDriverFailure>();
     child.once("error", (error: Error) => {
       if (this.#child === child) this.#child = null;
-      this.#options.onDiagnostic?.(`OpenBot: the Computer Use driver could not start. ${error.message}\n`);
+      this.#options.onDiagnostic?.(`CodeBot: the Computer Use driver could not start. ${error.message}\n`);
       Deferred.doneUnsafe(spawnFailure, Exit.fail(new CuaDriverFailure({ cause: error })));
     });
     child.once("exit", (code) => {
       if (this.#child !== child) return;
       this.#child = null;
-      this.#options.onDiagnostic?.(`OpenBot: the Computer Use driver stopped with code ${code ?? "unknown"}.\n`);
+      this.#options.onDiagnostic?.(`CodeBot: the Computer Use driver stopped with code ${code ?? "unknown"}.\n`);
       this.#announceMcpServer();
       this.#publish({
         status: "error",
@@ -434,7 +434,7 @@ export class CuaDriverRuntime {
     const listening = yield* Effect.result(this.#tap.listen({ upstream: socketPath, tap: address }));
     if (Result.isFailure(listening))
       this.#options.onDiagnostic?.(
-        `OpenBot: the Computer Use tap could not listen. ${describe(listening.failure.cause)}\n`,
+        `CodeBot: the Computer Use tap could not listen. ${describe(listening.failure.cause)}\n`,
       );
     return Result.isSuccess(listening);
   });
@@ -444,13 +444,13 @@ export class CuaDriverRuntime {
     socketPath: string,
   ): Effect.fn.Return<void, CuaDriverFailure> {
     if (!(yield* acceptsEffect(socketPath, `${JSON.stringify({ method: "shutdown" })}\n`))) return;
-    this.#options.onDiagnostic?.("OpenBot: stopping a Computer Use driver that a previous run left running.\n");
+    this.#options.onDiagnostic?.("CodeBot: stopping a Computer Use driver that a previous run left running.\n");
     const deadline = Date.now() + ORPHAN_STOP_TIMEOUT_MS;
     while (Date.now() < deadline) {
       yield* Effect.sleep(READY_POLL_MS / 4);
       if (!(yield* acceptsEffect(socketPath))) return;
     }
-    this.#options.onDiagnostic?.("OpenBot: the Computer Use driver left by a previous run did not stop.\n");
+    this.#options.onDiagnostic?.("CodeBot: the Computer Use driver left by a previous run did not stop.\n");
   });
 
   #removeSocket = Effect.fn("CuaDriver.removeSocket")(function* (
@@ -481,7 +481,7 @@ export class CuaDriverRuntime {
     );
     if (Result.isFailure(linked)) {
       this.#options.onDiagnostic?.(
-        `OpenBot: the Computer Use driver link could not be written. ${describe(linked.failure.cause)}\n`,
+        `CodeBot: the Computer Use driver link could not be written. ${describe(linked.failure.cause)}\n`,
       );
       return executable;
     }
@@ -491,7 +491,7 @@ export class CuaDriverRuntime {
   #requireRestart(): void {
     if (this.#restartRequired) return;
     this.#restartRequired = true;
-    this.#options.onDiagnostic?.("OpenBot: macOS refused Accessibility to Computer Use (AXError -25211).\n");
+    this.#options.onDiagnostic?.("CodeBot: macOS refused Accessibility to Computer Use (AXError -25211).\n");
     if (this.#state.status === "ready") this.#publish(restartRequiredState(this.#state.permissions));
   }
 
@@ -690,7 +690,7 @@ const readPermissionsOverMcpEffect = Effect.fn("CuaDriver.permissions")(
   (config: McpServerConfig, platform: NodeJS.Platform) =>
     Effect.acquireUseRelease(
       cuaSync(() => ({
-        client: new Client({ name: "openbot-computer-use", version: "1" }, { capabilities: {} }),
+        client: new Client({ name: "codebot-computer-use", version: "1" }, { capabilities: {} }),
         transport: new StdioClientTransport({
           command: config.command,
           args: config.args,

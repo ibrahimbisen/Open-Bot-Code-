@@ -1,8 +1,8 @@
 import { createRequire } from "node:module";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type * as Koffi from "koffi";
 
-const logger = createOpenBotLogger("windows-short-path");
+const logger = createCodeBotLogger("windows-short-path");
 const requireModule = createRequire(import.meta.url);
 
 type GetShortPathName = (longPath: string, shortPath: Buffer | null, length: number) => number;

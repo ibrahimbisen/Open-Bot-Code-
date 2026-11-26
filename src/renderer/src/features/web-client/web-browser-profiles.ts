@@ -7,10 +7,10 @@ import {
   decodeBrowserProxySummary,
   decodeHostBrowserTabProfiles,
   type TeamRealtimeEvent,
-} from "@openbot/contracts/ipc";
-import { BROWSER_PROFILES_ROUTES } from "@openbot/contracts/team-protocol/browser-profiles-v1";
-import { BROWSER_PROXIES_ROUTES } from "@openbot/contracts/team-protocol/browser-proxies-v1";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/contracts/ipc";
+import { BROWSER_PROFILES_ROUTES } from "@codebot/contracts/team-protocol/browser-profiles-v1";
+import { BROWSER_PROXIES_ROUTES } from "@codebot/contracts/team-protocol/browser-proxies-v1";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import type { BrowserProfileCalls } from "../browser/browser-profiles-port";
 
 const ignoreResponse = (): void => {};

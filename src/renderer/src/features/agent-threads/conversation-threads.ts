@@ -1,13 +1,13 @@
-import type { AgentApproval, AgentContextState, AgentEvent, AgentTask } from "@openbot/contracts/ipc";
-import { isAgentTaskActive, taskApproval } from "@openbot/team-client/agent-tasks";
-import type { AgentThreadOlderMessages } from "@openbot/ui/features/conversation/threads/AgentThreadView";
+import type { AgentApproval, AgentContextState, AgentEvent, AgentTask } from "@codebot/contracts/ipc";
+import { isAgentTaskActive, taskApproval } from "@codebot/team-client/agent-tasks";
+import type { AgentThreadOlderMessages } from "@codebot/ui/features/conversation/threads/AgentThreadView";
 import {
   activeThreadId,
   type ThreadListsInput,
   threadLists,
-} from "@openbot/ui/features/conversation/threads/thread-items";
-import { DRAFT_THREAD_ID, MAIN_THREAD_ID } from "@openbot/ui/features/conversation/threads/thread-types";
-import type { SidebarWaitReason } from "@openbot/ui/features/sidebar/sidebar-types";
+} from "@codebot/ui/features/conversation/threads/thread-items";
+import { DRAFT_THREAD_ID, MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
+import type { SidebarWaitReason } from "@codebot/ui/features/sidebar/sidebar-types";
 import type { AgentTasks } from "../agent-tasks/agent-tasks-state";
 import type {
   BrowserTakeoverRequest,

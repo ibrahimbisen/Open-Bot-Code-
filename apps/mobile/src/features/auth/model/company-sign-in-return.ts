@@ -1,4 +1,4 @@
-import { MOBILE_COMPANY_SIGN_IN_RETURN } from "@openbot/contracts/company-sign-in";
+import { MOBILE_COMPANY_SIGN_IN_RETURN } from "@codebot/contracts/company-sign-in";
 
 export function isCompanySignInReturn(path: string): boolean {
   return (

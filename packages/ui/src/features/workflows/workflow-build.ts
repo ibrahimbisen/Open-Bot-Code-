@@ -1,4 +1,4 @@
-import type { WorkflowGraph, WorkflowNode } from "@openbot/contracts/ipc";
+import type { WorkflowGraph, WorkflowNode } from "@codebot/contracts/ipc";
 import { stableJson } from "./workflow-history";
 
 export interface WorkflowBuild {

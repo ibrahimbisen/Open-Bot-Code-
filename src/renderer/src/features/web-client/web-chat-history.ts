@@ -1,9 +1,9 @@
-import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { createEffect, onCleanup, untrack } from "solid-js";
 
 export type WebChatHistoryEntry = { hostId: string; kind: "agent" | "channel"; id: string };
 
-const CHAT_STATE_KEY = "openbotChat";
+const CHAT_STATE_KEY = "codebotChat";
 const ROUTER_INDEX_KEY = "__TSR_index";
 
 function sameEntry(a: WebChatHistoryEntry | null, b: WebChatHistoryEntry | null): boolean {

@@ -10,11 +10,11 @@ import {
   mcpConfigErrors,
   normalizeMcpConfig,
   type SkillCategory,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 
-const logger = createOpenBotLogger("build-plugin-catalog");
+const logger = createCodeBotLogger("build-plugin-catalog");
 
 const scriptRoot = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptRoot, "..");
@@ -636,8 +636,8 @@ function renderRendererModule(plugins: PluginDetail[]): string {
  * bun run marketplace:build:plugins -- --check to verify.
  */
 
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import type { MarketplacePluginApp, MarketplacePluginDetail } from "@openbot/ui/features/settings/marketplace-plugins";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import type { MarketplacePluginApp, MarketplacePluginDetail } from "@codebot/ui/features/settings/marketplace-plugins";
 
 export function createPluginAppConfig(app: MarketplacePluginApp): McpServerConfig {
   return {
@@ -684,7 +684,7 @@ function renderMobileModule(plugins: PluginDetail[]): string {
  * bun run marketplace:build:plugins -- --check to verify.
  */
 
-import type { SkillCategory } from "@openbot/contracts/ipc";
+import type { SkillCategory } from "@codebot/contracts/ipc";
 
 /** One credential the user types. It goes into a \`header\` (http) or an \`env\` value (stdio). */
 export interface MobilePluginAuthField {

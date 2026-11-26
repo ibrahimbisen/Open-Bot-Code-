@@ -1,6 +1,6 @@
-import { CHANNEL_ASSIGNMENT_LIMIT_ERROR, type ChannelMember, type ChannelTask } from "@openbot/contracts/ipc";
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
-import { Button, buttonVariants, DropdownMenu } from "@openbot/ui";
+import { CHANNEL_ASSIGNMENT_LIMIT_ERROR, type ChannelMember, type ChannelTask } from "@codebot/contracts/ipc";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
+import { Button, buttonVariants, DropdownMenu } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 

@@ -1,10 +1,10 @@
-import { VAT_SELLER_COUNTRY, VAT_TAX_RATE } from "@openbot/contracts/billing-details";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { VAT_SELLER_COUNTRY, VAT_TAX_RATE } from "@codebot/contracts/billing-details";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { z } from "zod";
 import { billingDetailsOf, type VatTreatment, vatTreatment } from "../apps/auth-api/src/server/billing-tax";
 import { STRIPE_API_VERSION, type StripeCustomerTax, VAT_METADATA } from "../apps/auth-api/src/server/stripe-client";
 
-const logger = createOpenBotLogger("stripe-vat-migrate");
+const logger = createCodeBotLogger("stripe-vat-migrate");
 const OPEN_STATUSES = new Set(["active", "trialing", "past_due", "unpaid", "incomplete", "paused"]);
 
 const taxRateListSchema = z.object({

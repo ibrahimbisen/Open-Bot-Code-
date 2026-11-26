@@ -1,5 +1,5 @@
-import { sourceText } from "@openbot/i18n/source";
-import { MOBILE_ATTACHMENT_BYTES } from "@openbot/team-client/remote-peer";
+import { sourceText } from "@codebot/i18n/source";
+import { MOBILE_ATTACHMENT_BYTES } from "@codebot/team-client/remote-peer";
 import type { ChatAttachment } from "../components/use-chat-attachments";
 import {
   type DecodedOutbox,

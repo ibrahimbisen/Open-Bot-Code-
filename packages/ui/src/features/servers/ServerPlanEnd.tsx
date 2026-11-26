@@ -1,6 +1,6 @@
-import type { HostedServerSummary } from "@openbot/contracts/hosted-servers";
-import type { AvatarHue, ServerSummary } from "@openbot/contracts/ipc";
-import type { AppFormat, AppTranslate } from "@openbot/i18n";
+import type { HostedServerSummary } from "@codebot/contracts/hosted-servers";
+import type { AvatarHue, ServerSummary } from "@codebot/contracts/ipc";
+import type { AppFormat, AppTranslate } from "@codebot/i18n";
 import {
   Alert,
   AlertActions,
@@ -14,7 +14,7 @@ import {
   ConfirmDialog,
   type DropdownMenu,
   TriangleAlert,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createSignal, For, Show } from "solid-js";
 import { useText } from "../../text";
 import { AgentAvatar } from "../agents/AgentAvatar";

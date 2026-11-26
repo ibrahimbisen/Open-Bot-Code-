@@ -3,15 +3,15 @@ import type {
   CustomProviderSummary,
   SaveCustomProviderInput,
   UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
-import { customAgentRestartKey } from "@openbot/ui/features/custom-providers/CustomAgentSettings";
+} from "@codebot/contracts/ipc";
+import { customAgentRestartKey } from "@codebot/ui/features/custom-providers/CustomAgentSettings";
 import {
   type CustomProviderEndpoint,
   customProviderUpdate,
   type DiscoveredModel,
   type ModelDiscovery,
-} from "@openbot/ui/features/custom-providers/custom-provider-form";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/features/custom-providers/custom-provider-form";
+import { currentText } from "@codebot/ui/text";
 import { createSignal, createStore } from "solid-js";
 import { customProviderRestartMessage } from "./custom-provider-restart";
 

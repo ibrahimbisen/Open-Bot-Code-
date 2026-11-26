@@ -1,4 +1,4 @@
-import type { MarketplaceAgentSummary } from "@openbot/contracts/ipc";
+import type { MarketplaceAgentSummary } from "@codebot/contracts/ipc";
 import type { JSX } from "@solidjs/web";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import "../../styles.css";

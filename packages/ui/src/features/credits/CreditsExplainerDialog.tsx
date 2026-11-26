@@ -1,4 +1,4 @@
-import type { BillingCurrency } from "@openbot/contracts/billing";
+import type { BillingCurrency } from "@codebot/contracts/billing";
 import {
   CREDIT_CLIP_SECONDS,
   CREDIT_MODEL_COSTS,
@@ -7,8 +7,8 @@ import {
   creditModelCharge,
   creditStopPrice,
   creditStops,
-} from "@openbot/contracts/credits";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/credits";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   ArrowRight,
   AudioLines,
@@ -21,9 +21,9 @@ import {
   Image,
   MessageCircle,
   X,
-} from "@openbot/ui";
-import { RollingPrice } from "@openbot/ui/rolling-price";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { RollingPrice } from "@codebot/ui/rolling-price";
+import { useText } from "@codebot/ui/text";
 import { createSignal, For, onSettled, Show } from "solid-js";
 import { formatMinorMoney } from "../billing/money";
 import { CreditIcon } from "./CreditIcon";

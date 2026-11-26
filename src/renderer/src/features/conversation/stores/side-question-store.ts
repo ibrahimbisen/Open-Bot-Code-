@@ -1,10 +1,10 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   SIDE_QUESTION_CAPABILITY,
   SIDE_QUESTION_THREADS_CAPABILITY,
-} from "@openbot/contracts/team-protocol/side-question-v1";
-import type { SideQuestionExchange } from "@openbot/ui/features/conversation/SideQuestionPanel";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/team-protocol/side-question-v1";
+import type { SideQuestionExchange } from "@codebot/ui/features/conversation/SideQuestionPanel";
+import { currentText } from "@codebot/ui/text";
 import type { Store, StoreSetter } from "solid-js";
 import { serverSupportsCapability } from "../../servers/server-capabilities";
 import { conversationPort } from "../conversation-port";

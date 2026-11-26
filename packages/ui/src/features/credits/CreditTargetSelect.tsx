@@ -1,7 +1,7 @@
-import type { CreditServerRole, CreditsState } from "@openbot/contracts/credits";
-import type { AppTextKey } from "@openbot/i18n";
-import { ChevronsUpDown, ServerPlushLogo, UserRound } from "@openbot/ui";
-import { SearchPicker } from "@openbot/ui/components/SearchPicker";
+import type { CreditServerRole, CreditsState } from "@codebot/contracts/credits";
+import type { AppTextKey } from "@codebot/i18n";
+import { ChevronsUpDown, ServerPlushLogo, UserRound } from "@codebot/ui";
+import { SearchPicker } from "@codebot/ui/components/SearchPicker";
 import type { JSX } from "@solidjs/web";
 import { Show } from "solid-js";
 import { useText } from "../../text";

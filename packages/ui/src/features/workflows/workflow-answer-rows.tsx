@@ -1,5 +1,5 @@
-import { parseWorkflowAnswerSpec, type WorkflowAnswerType } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import { parseWorkflowAnswerSpec, type WorkflowAnswerType } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Button,
   CircleDot,
@@ -16,7 +16,7 @@ import {
   SelectValue,
   ToggleLeft,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { type Accessor, createEffect, createSignal, For, type Setter, Show, untrack } from "solid-js";
 import { useText } from "../../text";

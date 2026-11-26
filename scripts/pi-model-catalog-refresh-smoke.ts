@@ -11,7 +11,7 @@ import { getArray, getString } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-model-catalog-refresh-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-model-catalog-refresh-smoke");
 
 interface ListCase {
   access: "full" | "workspace";
@@ -47,7 +47,7 @@ async function listModels(access: ListCase["access"]): Promise<void> {
   const client = requireProviderDriver("openrouter").createClient(
     cli,
     60_000,
-    { apiKey: () => "sk-or-v1-openbot-smoke-not-valid", customProviders: () => [], mcpServers: () => [] },
+    { apiKey: () => "sk-or-v1-codebot-smoke-not-valid", customProviders: () => [], mcpServers: () => [] },
     confinement,
   );
   clients.push(client);

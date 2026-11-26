@@ -1,4 +1,4 @@
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import { useTurns } from "../../turns";
 import { useAgents } from "../agents/agents-context";
 import { useServers } from "../servers/servers-context";

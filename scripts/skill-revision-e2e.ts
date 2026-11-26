@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import type { AgentSummary, SkillConversationEvent } from "@openbot/contracts/ipc";
+import type { AgentSummary, SkillConversationEvent } from "@codebot/contracts/ipc";
 import { Effect, Exit, Schema } from "effect";
 import { runLocalSkillTool } from "../src/backend/agent/skill-tools";
 import { isMissingFileError } from "../src/backend/file-errors";
@@ -70,7 +70,7 @@ async function writeSkill(workspace: string, folder: string, text: string): Prom
 }
 
 async function installed(workspace: string): Promise<{ version: number; texts: string[] } | null> {
-  const lock = decodeLock(await readFile(join(workspace, ".openbot/skills-lock.json"), "utf8"));
+  const lock = decodeLock(await readFile(join(workspace, ".codebot/skills-lock.json"), "utf8"));
   const entry = Object.values(lock.skills)[0];
   if (!entry) return null;
   const texts = await Promise.all(ROOTS.map((root) => readFile(join(workspace, root, SLUG, "SKILL.md"), "utf8")));
@@ -78,7 +78,7 @@ async function installed(workspace: string): Promise<{ version: number; texts: s
 }
 
 async function main(): Promise<void> {
-  const base = await mkdtemp(join(tmpdir(), "openbot-skill-revision-"));
+  const base = await mkdtemp(join(tmpdir(), "codebot-skill-revision-"));
   const callerWorkspace = join(base, "caller");
   const otherWorkspace = join(base, "other");
   await mkdir(callerWorkspace);
@@ -199,7 +199,7 @@ async function main(): Promise<void> {
 await main().catch(() => {
   report.status = "fail";
 });
-await mkdir(".openbot-build", { recursive: true });
-await writeFile(".openbot-build/skill-revision-e2e.json", `${JSON.stringify(report, null, 2)}\n`);
+await mkdir(".codebot-build", { recursive: true });
+await writeFile(".codebot-build/skill-revision-e2e.json", `${JSON.stringify(report, null, 2)}\n`);
 process.stdout.write(`${JSON.stringify({ status: report.status, cases: report.cases })}\n`);
 process.exitCode = report.status === "pass" ? 0 : 1;

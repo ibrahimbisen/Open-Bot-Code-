@@ -46,7 +46,7 @@ export const messages = {
   "error.skill.tooManySkills": "Bir ajan en fazla {limit} beceriye sahip olabilir.",
   "error.skill.ownSkillExists":
     "Bu ajanın zaten {slug} adlı kendi becerisi var. Ajandan o beceriyi yeniden adlandırmasını veya silmesini isteyin, ardından bu beceriyi yeniden ekleyin.",
-  "error.skill.managedSlug": "OpenBot her ajana kendi {slug} becerisini verir. Bu beceriye başka bir ad verin.",
+  "error.skill.managedSlug": "CodeBot her ajana kendi {slug} becerisini verir. Bu beceriye başka bir ad verin.",
   "error.skill.templateMarkdownTooLarge": "{name}: SKILL.md 64 KB'tan daha büyük. Yayımlamadan önce kısaltın.",
   "error.skill.localNoRevisions": "Yerel becerinin yayımlanmış revizyonu yok.",
   "error.skill.localNotFound": "Bu yerel beceri yok. Kimliğini yerel beceriler listesinden kontrol edin.",
@@ -62,12 +62,12 @@ export const messages = {
   "error.skill.pathSymlink": "Beceri yolları sembolik bağlantılar içeremez.",
   "error.skill.folderNotRead": "{provider}, {folder} klasörünü okumuyor. Bu klasörü {target} konumuna kopyalayın.",
   "error.skill.githubLinkInvalid": "Bir GitHub deposunun veya klasörünün bağlantısını yapıştırın.",
-  "error.skill.githubNotFound": "OpenBot {repository} deposunu açamıyor. Depo özel ya da mevcut değil.",
+  "error.skill.githubNotFound": "CodeBot {repository} deposunu açamıyor. Depo özel ya da mevcut değil.",
   "error.skill.githubNoSkills": "{folder} içinde SKILL.md yok.",
-  "error.skill.githubUnavailable": "OpenBot şu anda GitHub'ı okuyamıyor. Daha sonra yeniden deneyin.",
+  "error.skill.githubUnavailable": "CodeBot şu anda GitHub'ı okuyamıyor. Daha sonra yeniden deneyin.",
   "error.skill.githubRateLimited":
-    "GitHub, OpenBot'un hesap olmadan ne sıklıkla okuyabileceğini sınırlıyor. Bir saat sonra yeniden deneyin.",
-  "error.skill.githubTooLarge": "OpenBot, {repository} deposunun tüm dosyalarını okuyamıyor. Depo çok büyük.",
+    "GitHub, CodeBot'un hesap olmadan ne sıklıkla okuyabileceğini sınırlıyor. Bir saat sonra yeniden deneyin.",
+  "error.skill.githubTooLarge": "CodeBot, {repository} deposunun tüm dosyalarını okuyamıyor. Depo çok büyük.",
   "error.skill.githubHostTooOld": "GitHub'dan beceri eklemek için bu sunucuyu güncelleyin.",
   "error.skill.publishGithub":
     "{name} GitHub'dan geliyor. Yalnızca kendi oluşturduğunuz becerileri yayımlayabilirsiniz.",

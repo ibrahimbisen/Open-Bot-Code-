@@ -1,9 +1,9 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { CRM_EVERY, CRM_LIMITS, CRM_METHODS } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { CRM_EVERY, CRM_LIMITS, CRM_METHODS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { CrmAgentOperations } from "../crm/crm-agent-view";
-import { openBotToolFailure, openBotToolResult } from "./routine-tools";
+import { codeBotToolFailure, codeBotToolResult } from "./routine-tools";
 import { ToolOperationFailed, toolStep } from "./tool-operation";
 
 const id = z.string().min(1).max(INPUT_LIMITS.identifier);
@@ -156,19 +156,19 @@ export const handleCrmTool = Effect.fn("CrmTools.handle")(function* (
   const operation = Effect.gen(function* () {
     if (tool === "crm_find") {
       const input = yield* toolStep(() => findSchema.parse(args ?? {}));
-      return openBotToolResult(yield* crm.agentFind(agentId, input));
+      return codeBotToolResult(yield* crm.agentFind(agentId, input));
     }
     if (tool === "crm_customer") {
       const input = yield* toolStep(() => customerSchema.parse(args));
-      return openBotToolResult(yield* crm.agentCustomer(agentId, input.customerId));
+      return codeBotToolResult(yield* crm.agentCustomer(agentId, input.customerId));
     }
     if (tool === "crm_payments") {
       const input = yield* toolStep(() => paymentsSchema.parse(args));
-      return openBotToolResult(yield* crm.agentPayments(agentId, input));
+      return codeBotToolResult(yield* crm.agentPayments(agentId, input));
     }
     const input = yield* toolStep(() => proposeSchema.parse(args));
     const { proposalId } = yield* crm.agentPropose(agentId, { ...input, threadId });
-    return openBotToolResult({
+    return codeBotToolResult({
       proposalId,
       status: "pending",
       next: "An owner or admin approves or rejects it on the CRM page. Do not propose it again.",
@@ -176,6 +176,6 @@ export const handleCrmTool = Effect.fn("CrmTools.handle")(function* (
   });
 
   return yield* operation.pipe(
-    Effect.catchTag("CrmError", (failure) => Effect.succeed(openBotToolFailure(redact(failure.message)))),
+    Effect.catchTag("CrmError", (failure) => Effect.succeed(codeBotToolFailure(redact(failure.message)))),
   );
 });

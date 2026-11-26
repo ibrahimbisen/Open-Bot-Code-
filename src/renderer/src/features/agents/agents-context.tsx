@@ -1,4 +1,4 @@
-import { isKnownAgentProvider } from "@openbot/contracts/agent-providers";
+import { isKnownAgentProvider } from "@codebot/contracts/agent-providers";
 import {
   type AgentNotificationLevelsSnapshot,
   type AgentStatus,
@@ -9,12 +9,12 @@ import {
   type HiddenAgent,
   type ServerNotificationLevel,
   type UpdateAgentInput,
-} from "@openbot/contracts/ipc";
-import { AGENT_HIDDEN_WORK_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { PROVIDER_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-accounts-v1";
-import type { AgentProfile } from "@openbot/ui/data";
-import type { CreationPreference, DevelopmentCreation } from "@openbot/ui/features/agents/agent-creation-model";
-import { createFirstAgentDraft, type FirstAgentDraft } from "@openbot/ui/features/agents/FirstAgentSetup";
+} from "@codebot/contracts/ipc";
+import { AGENT_HIDDEN_WORK_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { PROVIDER_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-accounts-v1";
+import type { AgentProfile } from "@codebot/ui/data";
+import type { CreationPreference, DevelopmentCreation } from "@codebot/ui/features/agents/agent-creation-model";
+import { createFirstAgentDraft, type FirstAgentDraft } from "@codebot/ui/features/agents/FirstAgentSetup";
 import { createEffect, createMemo, createSignal, untrack } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
 import { FALLBACK_STATUS } from "../../app-defaults";

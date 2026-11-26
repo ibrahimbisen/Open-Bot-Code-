@@ -1,4 +1,4 @@
-import { VOICE_AUDIO_LIMITS } from "@openbot/contracts/ipc";
+import { VOICE_AUDIO_LIMITS } from "@codebot/contracts/ipc";
 import { currentText } from "./text";
 
 export function appendVoiceTranscript(draft: string, transcript: string): string {

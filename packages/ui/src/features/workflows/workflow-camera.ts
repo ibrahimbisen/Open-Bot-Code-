@@ -69,13 +69,13 @@ export function glideCamera(
 ): () => void {
   const duration =
     motion === "step"
-      ? rendererDuration("--openbot-duration-slow", 200)
-      : rendererDuration("--openbot-duration-overlay", 240);
+      ? rendererDuration("--codebot-duration-slow", 200)
+      : rendererDuration("--codebot-duration-overlay", 240);
   if (duration === 0 || view.width === 0) {
     apply(to, true);
     return () => {};
   }
-  const ease = curve(motion === "step" ? "--openbot-ease-out" : "--openbot-ease-in-out");
+  const ease = curve(motion === "step" ? "--codebot-ease-out" : "--codebot-ease-in-out");
   const path = cameraPath(from, to, view);
   const start = performance.now();
   let frame = 0;

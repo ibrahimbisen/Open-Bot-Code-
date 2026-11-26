@@ -4,7 +4,7 @@ import {
   type HostTurnLimit,
   type HostTurnLimits,
   type HostTurnLimitsInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Typography } from "heroui-native";
 import type { LucideIcon } from "lucide-react-native";

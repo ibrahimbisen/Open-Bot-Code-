@@ -1,4 +1,4 @@
-import { SIDEBAR_UNASSIGNED_SECTION_ID } from "@openbot/contracts/ipc";
+import { SIDEBAR_UNASSIGNED_SECTION_ID } from "@codebot/contracts/ipc";
 import { For, Match, Show, Switch } from "solid-js";
 import { useText } from "../../text";
 import { SidebarAgentRow } from "./SidebarAgentRow";

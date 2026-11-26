@@ -28,7 +28,7 @@ export function HelloStep({ motion, leaving }: { motion: OnboardingMotion; leavi
       </View>
       <Animated.View className="items-center justify-center px-8" style={[{ flex: TEXT_SHARE }, fade]}>
         <Animated.View entering={popEntering(motion, STAGGER_MS * 4)} className="items-center gap-3">
-          <Typography.Heading type="h2" align="center" accessibilityRole="header" className="tracking-openbot-tight">
+          <Typography.Heading type="h2" align="center" accessibilityRole="header" className="tracking-codebot-tight">
             {t("mobile.onboarding.hello.title")}
           </Typography.Heading>
           <Typography.Paragraph align="center" color="muted">

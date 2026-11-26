@@ -3,13 +3,13 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { AgentSummary, ConversationMessage } from "@openbot/contracts/ipc";
+import type { AgentSummary, ConversationMessage } from "@codebot/contracts/ipc";
 import { afterEach, describe, expect, it } from "vitest";
+import { CodeBotDatabase } from "./codebot-database";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 import { CRM_TABLES_AFTER_MIGRATION } from "./crm/crm-schema";
 import { runCauseEffect } from "./effect-boundary";
 import { THREAD_EVENT_COMPACTION_TABLES_AFTER_MIGRATION } from "./migrations/0065-thread-event-compaction";
-import { OpenBotDatabase } from "./openbot-database";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 const roots: string[] = [];
@@ -29,7 +29,7 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
@@ -103,7 +103,7 @@ describe("pinned thread messages migration", () => {
       const before = contents(db);
       expect(before.projection_thread_messages).toHaveLength(2);
       expect(before.projection_deleted_thread_messages).toHaveLength(1);
-      migrateOpenBotDatabase(db);
+      migrateCodeBotDatabase(db);
       expect(contents(db)).toEqual({ ...before, ...PIN_TABLES });
       expectHealthy(db);
     },
@@ -116,13 +116,13 @@ describe("pinned thread messages migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=61
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 61 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 61 failed");
     expect(contents(db)).toEqual(before);
     expect(pinTables(db)).toEqual([]);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version=61").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(contents(db)).toEqual({ ...before, ...PIN_TABLES });
     expectHealthy(db);
   });
@@ -133,9 +133,9 @@ describe("pinned thread messages migration", () => {
     seedDeletedRecord(db);
     const before = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version=70; DELETE FROM schema_migrations WHERE version=20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(pinTables(db)).toEqual([]);
   });
@@ -143,21 +143,21 @@ describe("pinned thread messages migration", () => {
   it("refuses to open a version 61 database in an older application", () => {
     const db = databaseAt(60);
     seed(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     db.prepare(
       `INSERT INTO projection_pinned_thread_messages (thread_id, message_id, pinned_at, pinned_by_kind)
        VALUES ('thread-chief', 'message-1', '2026-01-02', 'person')`,
     ).run();
     const after = contents(db);
     db.exec("INSERT INTO schema_migrations VALUES(70,'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     expect(contents(db)).toEqual(after);
   });
 
   it("refuses a pin of no thread, an empty id, a bad pinner or a second pin, and the pin goes with its thread", () => {
     const db = databaseAt(60);
     seed(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     const insert = db.prepare(`INSERT INTO projection_pinned_thread_messages
       (thread_id, message_id, pinned_at, pinned_by_kind, pinned_by_id, pinned_by_name)
       VALUES (?, ?, '2026-01-02', ?, ?, ?)`);
@@ -207,20 +207,20 @@ describe("pinned thread messages migration", () => {
 
 describe("pinned thread messages", () => {
   it("lists pins newest first over threads, keeps the pinner, hides a pin of no shown message, and a delete removes the pin", async () => {
-    const root = await mkdtemp(join(tmpdir(), "openbot-db-pins-"));
+    const root = await mkdtemp(join(tmpdir(), "codebot-db-pins-"));
     roots.push(root);
-    const database = new OpenBotDatabase(root);
+    const database = new CodeBotDatabase(root);
     await runCauseEffect(database.initialize());
     try {
       const agent = testAgent();
-      const threadId = "openbot-thread-chief";
+      const threadId = "codebot-thread-chief";
       database.replaceAgents("seed-pins", [agent], "agents.updated");
       const messages = ["first", "second", "third"].map((id, index) => message(id, index));
       database.persistConversation(
         { agentId: agent.id, threadId, activeTurnId: null, revision: 0, messages },
         "conversation.saved",
       );
-      const sideThreadId = "openbot-thread-chief-side";
+      const sideThreadId = "codebot-thread-chief-side";
       database.connection
         .prepare(
           `INSERT INTO projection_threads
@@ -266,7 +266,7 @@ describe("pinned thread messages", () => {
       expect(database.threadMessagePinner(threadId, "second")).toEqual(you);
       expect(database.pinnedThreadMessageCount(threadId)).toBe(3);
       expect(database.pinnedThreadMessageCount(sideThreadId)).toBe(1);
-      expect(ids(["openbot-thread-other"])).toEqual([]);
+      expect(ids(["codebot-thread-other"])).toEqual([]);
 
       database.unpinThreadMessage(threadId, "third");
       expect(database.threadMessagePinner(threadId, "third")).toBeNull();
@@ -322,8 +322,8 @@ function testAgent(): AgentSummary {
     notifications: true,
     model: "gpt-5.6-luna",
     reasoningEffort: "medium",
-    threadId: "openbot-thread-chief",
-    workspacePath: "/tmp/openbot-chief",
+    threadId: "codebot-thread-chief",
+    workspacePath: "/tmp/codebot-chief",
     preview: "42",
     updatedAt: "2026-08-18T10:00:01.000Z",
     avatarSeed: "chief",

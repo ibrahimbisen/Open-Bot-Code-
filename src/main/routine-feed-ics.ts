@@ -1,4 +1,4 @@
-import type { RoutineCalendar } from "@openbot/contracts/ipc";
+import type { RoutineCalendar } from "@codebot/contracts/ipc";
 
 const EVENT_DURATION = "PT15M";
 const REFRESH_INTERVAL = "PT15M";
@@ -15,7 +15,7 @@ export function routineFeedIcs(calendar: RoutineCalendar, text: RoutineFeedText,
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//OpenBot//Routines//EN",
+    "PRODID:-//CodeBot//Routines//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `NAME:${icsText(text.calendarName)}`,

@@ -1,4 +1,4 @@
-import type { HostAgentMemoryLimit, OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, HostAgentMemoryLimit } from "@codebot/contracts/ipc";
 import {
   Item,
   ItemActions,
@@ -10,11 +10,11 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 
-export type HostMemoryLimitCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getAgentMemoryLimit" | "setAgentMemoryLimit">;
+export type HostMemoryLimitCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getAgentMemoryLimit" | "setAgentMemoryLimit">;
 
 export interface ServerMemoryLimitOptions {
   calls?: HostMemoryLimitCalls;
@@ -31,7 +31,7 @@ export function ServerMemoryLimitSetting(
   },
 ) {
   const { t, errorMessage } = useText();
-  const calls = (): HostMemoryLimitCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostMemoryLimitCalls => props.calls ?? window.codebot.hostAdmin;
   const [settings, setSettings] = createSignal<HostAgentMemoryLimit | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);
   let generation = 0;

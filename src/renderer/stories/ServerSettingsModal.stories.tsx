@@ -9,10 +9,10 @@ import {
   nextBrowserProfileHue,
   parseBrowserProxyAddress,
   type ServerAuditEntry,
-} from "@openbot/contracts/ipc";
-import type { OwnerTransfer } from "@openbot/contracts/owner-transfer";
-import { sourceText } from "@openbot/i18n/source";
-import { Toaster } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import type { OwnerTransfer } from "@codebot/contracts/owner-transfer";
+import { sourceText } from "@codebot/i18n/source";
+import { Toaster } from "@codebot/ui";
 import { createSignal, createStore } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -135,7 +135,7 @@ export const LocalOnline: Story = {
   args: {
     hostStatus: {
       ...STORY_HOST_STATUS,
-      apiUrl: "https://eu-west-1.gateway.example.com/openbot/servers/team_7f3c19a2",
+      apiUrl: "https://eu-west-1.gateway.example.com/codebot/servers/team_7f3c19a2",
     },
   },
 };

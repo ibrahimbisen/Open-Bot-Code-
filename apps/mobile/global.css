@@ -3,31 +3,31 @@
 
 @import "heroui-native/styles";
 
-@import "@openbot/brand/tokens.css";
-@import "@openbot/brand/tokens-native.css";
+@import "@codebot/brand/tokens.css";
+@import "@codebot/brand/tokens-native.css";
 
 @theme inline {
-  --color-sheet: var(--openbot-bg-sheet);
-  --color-grouped: var(--openbot-bg-grouped);
-  --color-grouped-secondary: var(--openbot-text-grouped-secondary);
-  --color-grouped-border: var(--openbot-border-grouped);
-  --radius-grouped: var(--openbot-radius-grouped);
-  --color-canvas: var(--openbot-bg-native-canvas);
-  --color-sidebar: var(--openbot-bg-native-sidebar);
-  --color-control: var(--openbot-bg-control);
-  --color-control-active: var(--openbot-bg-control-active);
-  --color-raised: var(--openbot-bg-surface-raised);
-  --color-text-secondary: var(--openbot-text-secondary);
-  --color-text-dim: var(--openbot-text-dim);
-  --color-accent-text: var(--openbot-accent-text);
-  --color-success-text: var(--openbot-success-text);
-  --color-warning-text: var(--openbot-warning-text);
-  --color-danger-text: var(--openbot-danger-text);
-  --color-brand-logo: var(--openbot-logo-production);
-  --color-action: var(--openbot-action);
-  --color-action-foreground: var(--openbot-action-foreground);
-  --color-drawer-scrim: var(--openbot-drawer-scrim);
-  --color-scroll-edge-overlay: var(--openbot-scroll-edge-overlay);
+  --color-sheet: var(--codebot-bg-sheet);
+  --color-grouped: var(--codebot-bg-grouped);
+  --color-grouped-secondary: var(--codebot-text-grouped-secondary);
+  --color-grouped-border: var(--codebot-border-grouped);
+  --radius-grouped: var(--codebot-radius-grouped);
+  --color-canvas: var(--codebot-bg-native-canvas);
+  --color-sidebar: var(--codebot-bg-native-sidebar);
+  --color-control: var(--codebot-bg-control);
+  --color-control-active: var(--codebot-bg-control-active);
+  --color-raised: var(--codebot-bg-surface-raised);
+  --color-text-secondary: var(--codebot-text-secondary);
+  --color-text-dim: var(--codebot-text-dim);
+  --color-accent-text: var(--codebot-accent-text);
+  --color-success-text: var(--codebot-success-text);
+  --color-warning-text: var(--codebot-warning-text);
+  --color-danger-text: var(--codebot-danger-text);
+  --color-brand-logo: var(--codebot-logo-production);
+  --color-action: var(--codebot-action);
+  --color-action-foreground: var(--codebot-action-foreground);
+  --color-drawer-scrim: var(--codebot-drawer-scrim);
+  --color-scroll-edge-overlay: var(--codebot-scroll-edge-overlay);
 
   --text-display: 2rem;
   --text-display--line-height: 2.375rem;
@@ -42,12 +42,12 @@
   --text-caption: 0.75rem;
   --text-caption--line-height: 1rem;
 
-  --tracking-openbot-tight: var(--openbot-tracking-tight);
-  --tracking-openbot-wide: var(--openbot-tracking-wide);
+  --tracking-codebot-tight: var(--codebot-tracking-tight);
+  --tracking-codebot-wide: var(--codebot-tracking-wide);
 }
 
 @theme static {
-  --color-accent-hover: color-mix(in oklab, var(--openbot-action) 90%, var(--openbot-action-foreground) 10%);
+  --color-accent-hover: color-mix(in oklab, var(--codebot-action) 90%, var(--codebot-action-foreground) 10%);
 }
 
 @layer components {
@@ -65,43 +65,43 @@
     color-scheme: light dark;
 
     @variant dark {
-      --background: var(--openbot-bg-native-canvas);
-      --overlay: var(--openbot-bg-surface-raised);
+      --background: var(--codebot-bg-native-canvas);
+      --overlay: var(--codebot-bg-surface-raised);
     }
 
-    --foreground: var(--openbot-text-primary);
-    --surface: var(--openbot-bg-surface);
-    --surface-foreground: var(--openbot-text-primary);
-    --surface-secondary: var(--openbot-bg-control);
-    --surface-secondary-foreground: var(--openbot-text-primary);
-    --surface-tertiary: var(--openbot-bg-surface-raised);
-    --surface-tertiary-foreground: var(--openbot-text-primary);
-    --overlay-foreground: var(--openbot-text-primary);
-    --backdrop: var(--openbot-bg-overlay);
-    --muted: var(--openbot-text-muted);
-    --default: var(--openbot-bg-control);
-    --default-foreground: var(--openbot-text-primary);
-    --accent: var(--openbot-accent);
-    --accent-foreground: var(--openbot-text-on-accent);
-    --success: var(--openbot-success);
-    --success-foreground: var(--openbot-text-on-status);
-    --warning: var(--openbot-warning);
-    --warning-foreground: var(--openbot-text-on-status);
-    --danger: var(--openbot-danger);
-    --danger-foreground: var(--openbot-text-on-accent);
-    --border: var(--openbot-border);
-    --separator: var(--openbot-border-strong);
-    --focus: var(--openbot-accent);
-    --link: var(--openbot-accent-text);
-    --field-background: var(--openbot-bg-control);
-    --field-foreground: var(--openbot-text-primary);
-    --field-placeholder: var(--openbot-text-muted);
-    --field-border: var(--openbot-border-strong);
+    --foreground: var(--codebot-text-primary);
+    --surface: var(--codebot-bg-surface);
+    --surface-foreground: var(--codebot-text-primary);
+    --surface-secondary: var(--codebot-bg-control);
+    --surface-secondary-foreground: var(--codebot-text-primary);
+    --surface-tertiary: var(--codebot-bg-surface-raised);
+    --surface-tertiary-foreground: var(--codebot-text-primary);
+    --overlay-foreground: var(--codebot-text-primary);
+    --backdrop: var(--codebot-bg-overlay);
+    --muted: var(--codebot-text-muted);
+    --default: var(--codebot-bg-control);
+    --default-foreground: var(--codebot-text-primary);
+    --accent: var(--codebot-accent);
+    --accent-foreground: var(--codebot-text-on-accent);
+    --success: var(--codebot-success);
+    --success-foreground: var(--codebot-text-on-status);
+    --warning: var(--codebot-warning);
+    --warning-foreground: var(--codebot-text-on-status);
+    --danger: var(--codebot-danger);
+    --danger-foreground: var(--codebot-text-on-accent);
+    --border: var(--codebot-border);
+    --separator: var(--codebot-border-strong);
+    --focus: var(--codebot-accent);
+    --link: var(--codebot-accent-text);
+    --field-background: var(--codebot-bg-control);
+    --field-foreground: var(--codebot-text-primary);
+    --field-placeholder: var(--codebot-text-muted);
+    --field-border: var(--codebot-border-strong);
 
     --radius: 0.25rem;
     --field-radius: 0.75rem;
-    --surface-shadow: var(--openbot-shadow-card);
-    --overlay-shadow: var(--openbot-shadow-overlay);
+    --surface-shadow: var(--codebot-shadow-card);
+    --overlay-shadow: var(--codebot-shadow-overlay);
     --field-shadow: 0 0 0 0 transparent inset;
   }
 }

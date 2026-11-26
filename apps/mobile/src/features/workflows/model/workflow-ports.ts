@@ -1,4 +1,4 @@
-import { WORKFLOW_PORTS, type WorkflowNode, type WorkflowPortType, workflowMediaKind } from "@openbot/contracts/ipc";
+import { WORKFLOW_PORTS, type WorkflowNode, type WorkflowPortType, workflowMediaKind } from "@codebot/contracts/ipc";
 
 type PortNode = Pick<WorkflowNode, "kind" | "fields">;
 

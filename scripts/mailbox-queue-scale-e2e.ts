@@ -3,11 +3,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mailbox-queue-scale-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mailbox-queue-scale-e2e");
 const AGENT = "agent-a";
 const OTHER_AGENT = "agent-b";
 const SENDERS = ["sender-0", "sender-1", "sender-2", "sender-3"];
@@ -250,9 +250,9 @@ function timeQueueChanges(mailbox: MailboxStore): NonNullable<Report["timing"]> 
   };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-mailbox-queue-scale-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-mailbox-queue-scale-"));
 const path = join(root, "profile");
-const database = new OpenBotDatabase(path);
+const database = new CodeBotDatabase(path);
 try {
   const mailbox = new MailboxStore(path, join(root, "shared"), database);
   await runCauseEffect(mailbox.initialize());

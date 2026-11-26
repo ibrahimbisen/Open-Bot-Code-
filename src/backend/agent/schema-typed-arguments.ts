@@ -1,4 +1,4 @@
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 
 type TypedText = number | boolean | null | readonly unknown[] | DynamicRecord;
 

@@ -71,7 +71,7 @@ export function WorkflowEditorHeader({
 }) {
   const { t } = useText();
   const { theme } = useUniwind();
-  const foreground = String(useCSSVariable("--openbot-text-primary"));
+  const foreground = String(useCSSVariable("--codebot-text-primary"));
   const actions = useMemo(() => viewMenuActions(view, t), [view, t]);
   const onMenu = (id: string) => {
     if (id !== "view-flow" && id !== "view-list") return;

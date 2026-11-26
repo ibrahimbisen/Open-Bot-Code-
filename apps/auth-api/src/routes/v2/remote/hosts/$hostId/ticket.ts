@@ -1,5 +1,5 @@
-import { isSignalHomeId } from "@openbot/contracts/ipc-host-signal-home";
-import { isBoolean, isString } from "@openbot/contracts/runtime-values";
+import { isSignalHomeId } from "@codebot/contracts/ipc-host-signal-home";
+import { isBoolean, isString } from "@codebot/contracts/runtime-values";
 import { createFileRoute } from "@tanstack/solid-router";
 import { Effect } from "effect";
 import { runApiResponse } from "../../../../../server/effect-runtime";

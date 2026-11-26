@@ -1,14 +1,14 @@
-import { AppLogo } from "@openbot/brand";
-import type { CentralAuthState } from "@openbot/contracts/ipc";
-import { Button } from "@openbot/ui";
-import { AccountLogin } from "@openbot/ui/features/account/AccountLogin";
-import { useText } from "@openbot/ui/text";
+import { AppLogo } from "@codebot/brand";
+import type { CentralAuthState } from "@codebot/contracts/ipc";
+import { Button } from "@codebot/ui";
+import { AccountLogin } from "@codebot/ui/features/account/AccountLogin";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 import { SignInIssue, signInOutcome, signInWithWeb } from "./account";
 import { track } from "./analytics";
 import type { ExtensionSession } from "./extension-storage";
 
-const PRODUCT_NAME = "OpenBot";
+const PRODUCT_NAME = "CodeBot";
 
 interface SignInScreenProps {
   login: CentralAuthState;

@@ -1,4 +1,4 @@
-import type { BrowserViewCursor } from "@openbot/contracts/team-protocol/browser-view-v1";
+import type { BrowserViewCursor } from "@codebot/contracts/team-protocol/browser-view-v1";
 
 const CURSORS = new Map<string, BrowserViewCursor>(
   Object.entries({

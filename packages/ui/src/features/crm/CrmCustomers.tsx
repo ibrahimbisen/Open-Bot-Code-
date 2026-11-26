@@ -1,4 +1,4 @@
-import type { CrmTextField } from "@openbot/contracts/ipc";
+import type { CrmTextField } from "@codebot/contracts/ipc";
 import {
   Button,
   CalendarClock,
@@ -19,8 +19,8 @@ import {
   Tag,
   UserRound,
   UsersRound,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createMemo, For, Show } from "solid-js";
 import {
   AddFilter,

@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 27 adds what a routine does while the provider plan of its agent is spent. Frozen with the
@@ -17,7 +17,7 @@ function addRoutineLimitPolicy(db: DatabaseSync): void {
   }
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 27,
   name: "routine-limit-policy",
   // Adds a column with a constant default to two tables: no rebuild, so no foreign-key pause and no

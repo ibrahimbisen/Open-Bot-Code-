@@ -7,12 +7,12 @@ import type { Plugin } from "vite";
 import { lazyLanguageCatalogs } from "./packages/i18n/src/vite-plugin";
 import { devWorktree } from "./scripts/dev-worktree-vite-plugin";
 
-const rendererPort = readRendererPort(process.env.OPENBOT_DEV_RENDERER_PORT);
+const rendererPort = readRendererPort(process.env.CODEBOT_DEV_RENDERER_PORT);
 
 const devWatch = { exclude: ["**/node_modules/**"] };
 
-const benchBuild = process.env.OPENBOT_BENCH_BUILD === "1";
-const perfProbesDefine = { __OPENBOT_PERF_PROBES__: JSON.stringify(benchBuild) };
+const benchBuild = process.env.CODEBOT_BENCH_BUILD === "1";
+const perfProbesDefine = { __CODEBOT_PERF_PROBES__: JSON.stringify(benchBuild) };
 
 const SIGNALS_CHUNK = "signals";
 
@@ -29,14 +29,14 @@ export default defineConfig({
       benchBuildMarker(),
       externalizeDepsPlugin({
         exclude: [
-          "@openbot/brand",
-          "@openbot/contracts",
-          "@openbot/i18n",
-          "@openbot/logging",
-          "@openbot/team-client",
-          "@openbot/telemetry",
-          "@openbot/user-errors",
-          "@openbot/whatsapp",
+          "@codebot/brand",
+          "@codebot/contracts",
+          "@codebot/i18n",
+          "@codebot/logging",
+          "@codebot/team-client",
+          "@codebot/telemetry",
+          "@codebot/user-errors",
+          "@codebot/whatsapp",
         ],
       }),
     ],
@@ -57,7 +57,7 @@ export default defineConfig({
     },
   },
   preload: {
-    plugins: [externalizeDepsPlugin({ exclude: ["@openbot/contracts"] })],
+    plugins: [externalizeDepsPlugin({ exclude: ["@codebot/contracts"] })],
     build: {
       watch: devWatch,
       rollupOptions: {
@@ -112,7 +112,7 @@ export default defineConfig({
 
 function benchBuildMarker(): Plugin {
   return {
-    name: "openbot-bench-build-marker",
+    name: "codebot-bench-build-marker",
     apply: "build",
     writeBundle(options) {
       if (!benchBuild || !options.dir) return;
@@ -129,7 +129,7 @@ function readRendererPort(value: string | undefined): number | undefined {
   if (value === undefined) return undefined;
   const port = Number(value);
   if (!Number.isInteger(port) || port < 1_024 || port > 65_535) {
-    throw new Error("OPENBOT_DEV_RENDERER_PORT must be an integer from 1024 to 65535.");
+    throw new Error("CODEBOT_DEV_RENDERER_PORT must be an integer from 1024 to 65535.");
   }
   return port;
 }

@@ -1,9 +1,9 @@
-import type { AgentTemplatePreview, AgentTemplatePublication } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { isString } from "@openbot/contracts/runtime-values";
-import { AGENT_PUBLISH_CAPABILITY, AGENT_PUBLISH_ROUTES } from "@openbot/contracts/team-protocol/agent-publish-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+import type { AgentTemplatePreview, AgentTemplatePublication } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { isString } from "@codebot/contracts/runtime-values";
+import { AGENT_PUBLISH_CAPABILITY, AGENT_PUBLISH_ROUTES } from "@codebot/contracts/team-protocol/agent-publish-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { parsePublishAgentTemplate } from "../ipc/agent-template-handlers";
 import { requireString } from "../ipc/validation";

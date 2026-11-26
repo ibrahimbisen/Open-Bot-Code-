@@ -9,14 +9,14 @@ import {
   parseSetMcpAccessInput,
   type SetMcpAccessInput,
   type TeamMemberSummary,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
 import { Effect, Result, Schema, Semaphore } from "effect";
 import type { AgentLifecycleFailed } from "../backend/agent-service";
 import { isMissingFileError } from "../backend/file-errors";
 import { type PreferenceFileFailure, readPreferenceFile, writePreferenceFile } from "./preference-file";
 
-export const MCP_ACCESS_FILE = "openbot-mcp-access-v1.json";
+export const MCP_ACCESS_FILE = "codebot-mcp-access-v1.json";
 
 const CLOSED: McpServerAccess = { agents: [], everyone: "none", roles: {} };
 

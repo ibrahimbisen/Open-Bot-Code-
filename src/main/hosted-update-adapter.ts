@@ -3,12 +3,12 @@ import { writeFileSync } from "node:fs";
 import { readFile, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
-import { isNewerRelease } from "@openbot/contracts/release-version";
+import { isNewerRelease } from "@codebot/contracts/release-version";
 import type { ProgressInfo, UpdateInfo } from "electron-updater";
 import { fetchLatestLinuxRelease } from "./host-release-service";
 import type { UpdateAdapter, UpdateCancellationToken, UpdateCheckOutcome } from "./update-service";
 
-export const HOSTED_UPDATE_TRIGGER = "/etc/systemd/system/openbot-update-request.path";
+export const HOSTED_UPDATE_TRIGGER = "/etc/systemd/system/codebot-update-request.path";
 
 export interface HostedUpdatePaths {
   readonly requests: string;
@@ -16,21 +16,21 @@ export interface HostedUpdatePaths {
   readonly stagedReady: string;
 }
 
-export const HOSTED_RUNTIME_DIRECTORY = "/run/openbot";
+export const HOSTED_RUNTIME_DIRECTORY = "/run/codebot";
 
 const HOSTED_UPDATE_PATHS: HostedUpdatePaths = {
   requests: HOSTED_RUNTIME_DIRECTORY,
-  state: "/run/openbot-update.state",
-  stagedReady: "/opt/OpenBot/staged.ready",
+  state: "/run/codebot-update.state",
+  stagedReady: "/opt/CodeBot/staged.ready",
 };
 
 export const CONTAINER_UPDATE_PATHS: HostedUpdatePaths = {
-  requests: "/var/lib/openbot-update/requests",
-  state: "/var/lib/openbot-update/status/state",
-  stagedReady: "/var/lib/openbot-update/status/staged.ready",
+  requests: "/var/lib/codebot-update/requests",
+  state: "/var/lib/codebot-update/status/state",
+  stagedReady: "/var/lib/codebot-update/status/staged.ready",
 };
 
-export const CONTAINER_UPDATE_TRIGGER = "/var/lib/openbot-update/status/enabled";
+export const CONTAINER_UPDATE_TRIGGER = "/var/lib/codebot-update/status/enabled";
 
 interface HostedUpdateOptions {
   currentVersion: string;

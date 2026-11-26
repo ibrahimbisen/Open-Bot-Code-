@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Schema } from "effect";
 
-export const SEED_FILE = resolve(import.meta.dirname, "../.openbot-build/pinned-message-jump-e2e/seed.json");
+export const SEED_FILE = resolve(import.meta.dirname, "../.codebot-build/pinned-message-jump-e2e/seed.json");
 
 const SeedSchema = Schema.Struct({
   agentId: Schema.String,

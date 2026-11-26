@@ -1,9 +1,9 @@
-import type { BrowserPreview, BrowserTab } from "@openbot/contracts/ipc";
-import { Button, Maximize2, Monitor, Skeleton, X } from "@openbot/ui";
-import { PanelResizer } from "@openbot/ui/components/PanelResizer";
-import { SETTINGS_PANEL_DEFAULT } from "@openbot/ui/components/SettingsPanel";
-import { useText } from "@openbot/ui/text";
-import { holdFlag } from "@openbot/ui/utils";
+import type { BrowserPreview, BrowserTab } from "@codebot/contracts/ipc";
+import { Button, Maximize2, Monitor, Skeleton, X } from "@codebot/ui";
+import { PanelResizer } from "@codebot/ui/components/PanelResizer";
+import { SETTINGS_PANEL_DEFAULT } from "@codebot/ui/components/SettingsPanel";
+import { useText } from "@codebot/ui/text";
+import { holdFlag } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, createStore, For, onSettled, Show, untrack } from "solid-js";
 

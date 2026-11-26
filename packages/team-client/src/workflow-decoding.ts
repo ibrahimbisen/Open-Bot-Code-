@@ -42,9 +42,9 @@ import {
   type WorkflowStepSettings,
   workflowFormatIsNewer,
   workflowGraphPlaceholders,
-} from "@openbot/contracts/ipc";
-import { guardedDecoder, guardedListDecoder } from "@openbot/contracts/ipc-decoding";
-import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { guardedDecoder, guardedListDecoder } from "@codebot/contracts/ipc-decoding";
+import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
 
 type Json = DynamicRecord;
 
@@ -180,9 +180,9 @@ export function decodeRemoteHiggsfieldCredits(value: unknown): { higgsfield: Wor
   return { higgsfield: remoteCreditBalance(value.higgsfield) };
 }
 
-export function decodeRemoteCreditMediaCredits(value: unknown): { openbot: WorkflowMediaCreditBalance | null } {
+export function decodeRemoteCreditMediaCredits(value: unknown): { codebot: WorkflowMediaCreditBalance | null } {
   if (!isDynamicRecord(value)) throw new Error("Invalid remote workflow credits.");
-  return { openbot: remoteCreditBalance(value.openbot) };
+  return { codebot: remoteCreditBalance(value.codebot) };
 }
 
 function remoteAccountList<T>(value: unknown, item: (entry: unknown) => entry is T): T[] {

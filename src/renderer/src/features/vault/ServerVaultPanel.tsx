@@ -1,7 +1,7 @@
-import type { SettingsCrumb } from "@openbot/ui/features/settings/SettingsDialogShell";
-import type { NearWalletAgent } from "@openbot/ui/features/vault/VaultNearWallet";
-import { type VaultAgentChoice, VaultPanel } from "@openbot/ui/features/vault/VaultPanel";
-import { useText } from "@openbot/ui/text";
+import type { SettingsCrumb } from "@codebot/ui/features/settings/SettingsDialogShell";
+import type { NearWalletAgent } from "@codebot/ui/features/vault/VaultNearWallet";
+import { type VaultAgentChoice, VaultPanel } from "@codebot/ui/features/vault/VaultPanel";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, onSettled, Show } from "solid-js";
 import { actionToast } from "../../action-toast";
 import type { LinkAccountStore } from "./stores/link-account-store";

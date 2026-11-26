@@ -1,13 +1,13 @@
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { OPENBOT_SITE_URL, OPENBOT_X_HANDLE, type PageSocialImage, pageSocialImageMeta } from "./site-metadata";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { CODEBOT_SITE_URL, CODEBOT_X_HANDLE, type PageSocialImage, pageSocialImageMeta } from "./site-metadata";
 
 export const CHANGELOG_ROUTE = "/changelog";
-const CHANGELOG_TITLE = "OpenBot Changelog: Release Notes for Every Version";
+const CHANGELOG_TITLE = "CodeBot Changelog: Release Notes for Every Version";
 export const CHANGELOG_DESCRIPTION =
-  "Every OpenBot release, newest first: new features, improvements and fixes, with what to do after you upgrade.";
+  "Every CodeBot release, newest first: new features, improvements and fixes, with what to do after you upgrade.";
 const CHANGELOG_SOCIAL_IMAGE: PageSocialImage = {
   path: "/social/changelog.jpg",
-  alt: "Good things in the making. OpenBot agents around a paper sun",
+  alt: "Good things in the making. CodeBot agents around a paper sun",
 };
 
 export type ChangelogPlatform = "desktop" | "mobile";
@@ -211,7 +211,7 @@ export function parseInline(text: string): InlineSegment[] {
   return segments;
 }
 
-export function changelogUrl(siteUrl: string = OPENBOT_SITE_URL, platform: ChangelogPlatform = "desktop"): string {
+export function changelogUrl(siteUrl: string = CODEBOT_SITE_URL, platform: ChangelogPlatform = "desktop"): string {
   const url = new URL(CHANGELOG_ROUTE, siteUrl);
   if (platform === "mobile") url.searchParams.set("platform", platform);
   return url.toString();
@@ -226,14 +226,14 @@ export function changelogHead(siteUrl: string, platform: ChangelogPlatform = "de
       { title: CHANGELOG_TITLE },
       { name: "description", content: CHANGELOG_DESCRIPTION },
       { property: "og:type", content: "website" },
-      { property: "og:site_name", content: "OpenBot" },
+      { property: "og:site_name", content: "CodeBot" },
       { property: "og:locale", content: "en_US" },
       { property: "og:url", content: url },
       { property: "og:title", content: CHANGELOG_TITLE },
       { property: "og:description", content: CHANGELOG_DESCRIPTION },
       ...image.openGraph,
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: OPENBOT_X_HANDLE },
+      { name: "twitter:site", content: CODEBOT_X_HANDLE },
       { name: "twitter:title", content: CHANGELOG_TITLE },
       { name: "twitter:description", content: CHANGELOG_DESCRIPTION },
       ...image.twitter,

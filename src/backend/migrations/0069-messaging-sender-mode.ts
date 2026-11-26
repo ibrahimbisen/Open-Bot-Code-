@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord, isString } from "./runtime-values";
 
 export const V69_MESSAGING_SENDER_MODE_COLUMN_SQL =
@@ -14,7 +14,7 @@ function addSenderMode(db: DatabaseSync): void {
     db.exec(`ALTER TABLE projection_messaging_allowed_senders ADD COLUMN ${V69_MESSAGING_SENDER_MODE_COLUMN_SQL}`);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 69,
   name: "messaging-sender-mode",
   up: addSenderMode,

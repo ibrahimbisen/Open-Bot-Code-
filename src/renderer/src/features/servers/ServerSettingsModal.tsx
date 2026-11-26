@@ -8,10 +8,10 @@ import type {
   TeamInviteSummary,
   TeamPresenceMember,
   UpdateTeamMemberInput,
-} from "@openbot/contracts/ipc";
-import { CRM_CAPABILITY } from "@openbot/contracts/team-protocol/crm-v1";
-import type { AppTextKey } from "@openbot/i18n";
-import { classifyFailure } from "@openbot/telemetry";
+} from "@codebot/contracts/ipc";
+import { CRM_CAPABILITY } from "@codebot/contracts/team-protocol/crm-v1";
+import type { AppTextKey } from "@codebot/i18n";
+import { classifyFailure } from "@codebot/telemetry";
 import {
   Alert,
   AlertActions,
@@ -43,22 +43,22 @@ import {
   Tabs,
   Text,
   UsersRound,
-} from "@openbot/ui";
-import type { LicenseCalls } from "@openbot/ui/features/billing/license-store";
-import type { ProviderSettingsDetail } from "@openbot/ui/features/settings/ProviderSettingsPage";
+} from "@codebot/ui";
+import type { LicenseCalls } from "@codebot/ui/features/billing/license-store";
+import type { ProviderSettingsDetail } from "@codebot/ui/features/settings/ProviderSettingsPage";
 import {
   SaveBarDock,
   type SettingsCrumb,
   SettingsDialogShell,
   SettingsNavGroupLabel,
   type SettingsPagePlacement,
-} from "@openbot/ui/features/settings/SettingsDialogShell";
-import { SettingsHostedSitesTab } from "@openbot/ui/features/settings/SettingsHostedSitesTab";
+} from "@codebot/ui/features/settings/SettingsDialogShell";
+import { SettingsHostedSitesTab } from "@codebot/ui/features/settings/SettingsHostedSitesTab";
 import {
   createSettingsHostedSitesStore,
   type HostedSiteDeleteResult,
-} from "@openbot/ui/features/settings/stores/hosted-sites-store";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/settings/stores/hosted-sites-store";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { type ServerBrowserProfilesOptions, ServerBrowserProfilesPanel } from "../browser/ServerBrowserProfilesPanel";

@@ -22,7 +22,7 @@ const RESEND_MILLISECONDS = 500;
 const PROBE_TIMEOUT_MILLISECONDS = 5_000;
 const REFRESH_TIMEOUT_MILLISECONDS = 1_000;
 const CREDENTIAL_TTL_SECONDS = 60;
-const PROBE_USER = "openbot-status-probe";
+const PROBE_USER = "codebot-status-probe";
 
 export class TurnProbeError extends Schema.TaggedError<TurnProbeError>()("TurnProbeError", {
   reason: Schema.Literals(["full", "refused", "no-answer"]),

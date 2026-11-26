@@ -3,8 +3,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, defaultProviderModel } from "@openbot/contracts/ipc";
-import { teeLogLines } from "@openbot/logging";
+import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
+import { teeLogLines } from "@codebot/logging";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -14,8 +14,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/queue-restore-loop-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-queue-restore-loop-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/queue-restore-loop-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-queue-restore-loop-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const processLog = join(root, "claude.jsonl");
@@ -28,7 +28,7 @@ const LOOP_EVENTS = 200;
 const VARIANT = process.env.LOOP_VARIANT === "simple" ? "simple" : "routine";
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -36,7 +36,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { databaseRows, requiredNumberColumn, requiredStringColumn } = await import(
   "../src/backend/database/database-rows"
 );
@@ -301,7 +301,7 @@ const started = Date.now();
 const step = (name: string, detail?: unknown) => report.steps.push({ name, at: Date.now() - started, detail });
 
 await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

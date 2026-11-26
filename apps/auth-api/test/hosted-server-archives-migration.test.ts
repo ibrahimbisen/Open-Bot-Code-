@@ -39,7 +39,7 @@ function insertArchive(
       `INSERT INTO hosted_server_archives(
         object_key, server_id, region, bucket, version_id, size_bytes, sha256, wrapped_key, plan_ended_at,
         delete_after, created_at, deleted_at
-      ) VALUES (?, 'ended', 'eu', 'openbot-pool-archive-eu', 'version-1', 1000, ?, ?, 4, 1209600004, 10, ?)`,
+      ) VALUES (?, 'ended', 'eu', 'codebot-pool-archive-eu', 'version-1', 1000, ?, ?, 4, 1209600004, 10, ?)`,
     )
     .run(values.key, SHA256, values.wrappedKey, values.deletedAt);
 }

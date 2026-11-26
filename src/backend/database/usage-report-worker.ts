@@ -1,7 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
 import { parentPort, workerData } from "node:worker_threads";
-import { type HostAnalyticsInput, parseHostAnalyticsInput } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { type HostAnalyticsInput, parseHostAnalyticsInput } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { readUsageReport } from "./usage-report";
 
 const BUSY_TIMEOUT_MS = 5_000;

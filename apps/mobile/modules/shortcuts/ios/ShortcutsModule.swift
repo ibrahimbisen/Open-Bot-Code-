@@ -7,7 +7,7 @@ private let messageEvent = "onShortcutSend"
 /// while the app is open.
 public class ShortcutsModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("OpenBotShortcuts")
+    Name("CodeBotShortcuts")
 
     Events(openEvent, messageEvent)
 

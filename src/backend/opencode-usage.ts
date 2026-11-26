@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Option, Schema } from "effect";
 import { openCodeDataDirectory } from "./process-confinement";
 import {

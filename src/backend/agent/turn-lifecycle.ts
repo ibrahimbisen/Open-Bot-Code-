@@ -1,6 +1,6 @@
-import { type AgentProviderId, agentProviderName, KEY_ONLY_PROVIDERS } from "@openbot/contracts/agent-providers";
-import { isNarrationItemId } from "@openbot/contracts/conversation-narration";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { type AgentProviderId, agentProviderName, KEY_ONLY_PROVIDERS } from "@codebot/contracts/agent-providers";
+import { isNarrationItemId } from "@codebot/contracts/conversation-narration";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentEvent,
   type AgentStepActivity,
@@ -26,12 +26,12 @@ import {
   PLAN_CONTINUATION_ITEM_TYPE,
   type QueueDelivery,
   SIGN_IN_FAILURE_ITEM_TYPE_PREFIX,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, redactText } from "@openbot/logging";
-import { type CauseCode, classifyFailure, isCauseCode } from "@openbot/telemetry";
-import { userErrorMessage } from "@openbot/user-errors";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, redactText } from "@codebot/logging";
+import { type CauseCode, classifyFailure, isCauseCode } from "@codebot/telemetry";
+import { userErrorMessage } from "@codebot/user-errors";
 import { Cause, Deferred, Effect, Exit, Schedule, Schema, Scope } from "effect";
 import type { AgentClient } from "../agent-client";
 import type { AgentStore } from "../agent-store";
@@ -118,9 +118,9 @@ import {
 } from "./subagent-updates";
 import { shellReadPaths, shellWorkFolders, ThreadFileHistory } from "./thread-file-history";
 import {
+  codeBotTool,
   isNonActionableCodexWarning,
   isToolItem,
-  openBotTool,
   refusedSessionFailure,
   type ToolUsageSignal,
   toolActivity,
@@ -138,7 +138,7 @@ import { collectProviderUsage } from "./usage-collection";
 import { USAGE_LIMIT_METHOD, type UsageLimitGate } from "./usage-limit-gate";
 import { codexSandboxMode } from "./workspace-sandbox";
 
-const logger = createOpenBotLogger("turn-lifecycle");
+const logger = createCodeBotLogger("turn-lifecycle");
 const RETRY_NOTICE_ATTEMPTS = 3;
 const CAPACITY_CAUSE: CauseCode = "provider_unavailable";
 const MODEL_AT_CAPACITY = /\bmodel is at capacity\b/iu;
@@ -877,7 +877,7 @@ export class TurnLifecycle {
     const timer = setTimeout(() => {
       this.#compactionDeadlines.delete(threadId);
       if (this.#observedCompactions.get(threadId) !== turnId || !this.#runningTurns.has(turnId)) return;
-      logger.warn("A provider compaction did not end; OpenBot stops its turn.", { provider: client.provider, runMs });
+      logger.warn("A provider compaction did not end; CodeBot stops its turn.", { provider: client.provider, runMs });
       this.#holdCompactionFailure(
         turnId,
         {
@@ -899,7 +899,7 @@ export class TurnLifecycle {
   #stopCompactionLoop(agentId: string, threadId: string, turnId: string, client: AgentClient): void {
     this.#clearCompactionDeadline(threadId);
     if (this.#compactionFailures.get(turnId)?.loop) return;
-    logger.warn("A provider compacted again and again; OpenBot stops its turn.", { provider: client.provider });
+    logger.warn("A provider compacted again and again; CodeBot stops its turn.", { provider: client.provider });
     this.#holdCompactionFailure(
       turnId,
       {
@@ -1314,7 +1314,7 @@ export class TurnLifecycle {
     if (
       threadId &&
       agentId &&
-      ["turn/started", "thread/tokenUsage/updated", "openbot/usage", "model/rerouted"].includes(notification.method)
+      ["turn/started", "thread/tokenUsage/updated", "codebot/usage", "model/rerouted"].includes(notification.method)
     ) {
       const usage = this.#usageSession(agentId, threadId, source);
       if (usage) {
@@ -1615,7 +1615,7 @@ export class TurnLifecycle {
           );
         return;
       }
-      case "openbot/turn-continues": {
+      case "codebot/turn-continues": {
         const turnId = getString(params, "turnId") ?? "";
         const running = this.#runningTurns.get(turnId);
         if (!running) return;
@@ -1625,14 +1625,14 @@ export class TurnLifecycle {
           this.#noteSelfStartedOrigins(turnId, [...(this.#selfStartedOrigins.get(turnId) ?? []), origin]);
         return;
       }
-      case "openbot/unread-steers": {
+      case "codebot/unread-steers": {
         const turnId = getString(params, "turnId");
         if (!threadId || !agentId || !turnId) return;
         yield* this.#requeueUnreadSteers(agentId, threadId, turnId, getArray(params, "unreadSteers").filter(isString));
         this.#hooks.scheduleDrain(agentId);
         return;
       }
-      case "openbot/background-work": {
+      case "codebot/background-work": {
         if (!threadId || !agentId) return;
         const runs = isRecord(params) && params.running === true;
         if (runs)
@@ -1647,7 +1647,7 @@ export class TurnLifecycle {
         this.#hooks.emitRuntimeSnapshot();
         return;
       }
-      case "openbot/context-compaction": {
+      case "codebot/context-compaction": {
         if (!threadId || !agentId || this.#conversation.openClientFor(threadId) !== source) return;
         const status = getString(params, "status");
         if (status !== "running" && status !== "completed" && status !== "failed") return;
@@ -1655,7 +1655,7 @@ export class TurnLifecycle {
         this.#compaction.observeCompaction(threadId, status, "none");
         return;
       }
-      case "openbot/turn-progress": {
+      case "codebot/turn-progress": {
         const turnId = getString(params, "turnId");
         const detail = getString(params, "detail");
         if (!threadId || !agentId || !turnId || !detail || !this.#runningTurns.has(turnId)) return;
@@ -1989,7 +1989,7 @@ export class TurnLifecycle {
       !this.#hooks.mayFailOver(agentId)
     )
       return false;
-    logger.info("A model is at capacity, so OpenBot moves the turn to a backup model.", { provider, model });
+    logger.info("A model is at capacity, so CodeBot moves the turn to a backup model.", { provider, model });
     this.#turnErrors.set(turnId, message);
     this.#turnCauses.set(turnId, CAPACITY_CAUSE);
     this.#failoverTurns.set(turnId, {
@@ -2002,7 +2002,7 @@ export class TurnLifecycle {
         Effect.catch((error) =>
           Effect.sync(() => {
             if (!this.#dropCapacityHandOff(turnId) || !this.#runningTurns.has(turnId)) return;
-            logger.warn("OpenBot could not stop a turn at capacity, so the provider tries again.", { provider, error });
+            logger.warn("CodeBot could not stop a turn at capacity, so the provider tries again.", { provider, error });
             this.#hooks.emitError("agent_warning", sourceText("error.backend.providerModelAtCapacity"), agentId, {
               provider,
               model,
@@ -2119,10 +2119,10 @@ export class TurnLifecycle {
       this.#quietStops.add(turnId);
       logger.info(
         repeated
-          ? "A quiet turn called the no-update tool again; OpenBot ends it."
+          ? "A quiet turn called the no-update tool again; CodeBot ends it."
           : silentFor < quietFor
-            ? "A quiet turn did not end in time after its no-update call; OpenBot ends it."
-            : "A quiet turn sent nothing after its no-update call; OpenBot ends it.",
+            ? "A quiet turn did not end in time after its no-update call; CodeBot ends it."
+            : "A quiet turn sent nothing after its no-update call; CodeBot ends it.",
         { agentId, turnId, provider: client.provider },
       );
       Effect.runFork(client.request("turn/interrupt", { threadId, turnId }, decodeRecordResponse).pipe(Effect.ignore));
@@ -2996,7 +2996,7 @@ export class TurnLifecycle {
     threadId: string,
     provider: AgentClient["provider"],
   ) {
-    logger.warn("A provider session failed turns in a row; OpenBot opens a new one.", {
+    logger.warn("A provider session failed turns in a row; CodeBot opens a new one.", {
       provider,
       failures: SESSION_FAILURE_LIMIT,
     });
@@ -3801,7 +3801,7 @@ function noResultNote(
         : "Check what is done, then finish the rest yourself or send the teammate a narrower request.";
   return [
     "Status: blocked",
-    "Result: OpenBot note, not written by this teammate: the teammate's turn ended with no written result and no error. The requested work can be unfinished.",
+    "Result: CodeBot note, not written by this teammate: the teammate's turn ended with no written result and no error. The requested work can be unfinished.",
     `Evidence: ${evidence.length > 0 ? evidence.join(" ") : "none"}`,
     `Unblock: ${unblock}`,
   ].join("\n");
@@ -3837,22 +3837,22 @@ const NARRATION_KEEPING_TOOLS = new Set([
 function keepsNarration(item: DynamicRecord, completed: boolean): boolean {
   const threadItem = toThreadItem(item);
   if (threadItem === null) return false;
-  const tool = openBotTool(threadItem);
+  const tool = codeBotTool(threadItem);
   if (tool !== null) return NARRATION_KEEPING_TOOLS.has(tool);
   if (threadItem.type !== "toolCall" || getString(threadItem, "name") !== "execute") return false;
   if (!completed) return true;
   const calls = getArray(getRecord(getRecord(threadItem, "result"), "metadata"), "toolCalls");
-  return calls.length > 0 && calls.every((call) => NARRATION_KEEPING_TOOLS.has(codeModeOpenBotTool(call) ?? ""));
+  return calls.length > 0 && calls.every((call) => NARRATION_KEEPING_TOOLS.has(codeModeCodeBotTool(call) ?? ""));
 }
 
 const CHANNEL_RESULT_NAME = /(?:^|[._])channel_result$/u;
 const BRIDGE_TOOL = /(?:^|[._])(?:tool_call|use_tool)$/u;
-const CODE_CHANNEL_RESULT_CALL = /\bchannel_result\s*\(|["'`]openbot\.channel_result["'`]/u;
+const CODE_CHANNEL_RESULT_CALL = /\bchannel_result\s*\(|["'`]codebot\.channel_result["'`]/u;
 
 function channelNoteStep(item: DynamicRecord): "result" | "other" | null {
   const threadItem = toThreadItem(item);
   if (threadItem === null || !isToolItem(threadItem)) return null;
-  if (openBotTool(threadItem) === "channel_result") return "result";
+  if (codeBotTool(threadItem) === "channel_result") return "result";
   if (threadItem.type !== "toolCall") return "other";
   const name = getString(threadItem, "name") ?? "";
   if (name === "execute") {
@@ -3867,15 +3867,15 @@ function channelNoteStep(item: DynamicRecord): "result" | "other" | null {
   return CHANNEL_RESULT_NAME.test(called) ? "result" : "other";
 }
 
-function codeModeOpenBotTool(call: unknown): string | null {
+function codeModeCodeBotTool(call: unknown): string | null {
   const tool = getString(call, "tool");
-  const name = tool === "openbot.tool_call" ? getString(getRecord(call, "input"), "name") : tool;
-  return name?.startsWith("openbot.") ? name.slice("openbot.".length) : null;
+  const name = tool === "codebot.tool_call" ? getString(getRecord(call, "input"), "name") : tool;
+  return name?.startsWith("codebot.") ? name.slice("codebot.".length) : null;
 }
 
 function isUserReactionCall(item: DynamicRecord): boolean {
   const threadItem = toThreadItem(item);
-  return threadItem !== null && openBotTool(threadItem) === "react_to_user_message";
+  return threadItem !== null && codeBotTool(threadItem) === "react_to_user_message";
 }
 
 function isEmptyAnswer(item: { type?: unknown; phase?: unknown; text?: unknown }): boolean {
@@ -3912,7 +3912,7 @@ const ENDED_TASK_REPORT_REASON_LIMIT = 2_000;
 function endedTaskReportNote(reason: string | null, fallback: string): string {
   return [
     "Status: blocked",
-    `Result: OpenBot note, not written by this teammate: the task for this request ended, but the teammate's turn that read its result ended before the teammate answered. ${(reason ?? fallback).slice(0, ENDED_TASK_REPORT_REASON_LIMIT)}`,
+    `Result: CodeBot note, not written by this teammate: the task for this request ended, but the teammate's turn that read its result ended before the teammate answered. ${(reason ?? fallback).slice(0, ENDED_TASK_REPORT_REASON_LIMIT)}`,
     "Evidence: none",
     "Unblock: The teammate's chat has the task result. Send the request again if you still need the answer.",
   ].join("\n");

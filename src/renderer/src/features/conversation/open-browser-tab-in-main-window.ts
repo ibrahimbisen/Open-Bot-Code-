@@ -1,5 +1,5 @@
-import { classifyFailure } from "@openbot/telemetry";
-import { currentText } from "@openbot/ui/text";
+import { classifyFailure } from "@codebot/telemetry";
+import { currentText } from "@codebot/ui/text";
 import { actionToast } from "../../action-toast";
 import { conversationPort } from "./conversation-port";
 

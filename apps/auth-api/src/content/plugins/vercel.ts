@@ -28,7 +28,7 @@ export const VERCEL_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the Vercel plugin need an API key?",
       answer:
-        "No. Each user signs in to their own Vercel account through the browser and chooses the teams that agents can use. OpenBot does the sign-in itself, keeps the tokens in encrypted storage, and adds the Authorization header. The plugin catalog holds no secret.",
+        "No. Each user signs in to their own Vercel account through the browser and chooses the teams that agents can use. CodeBot does the sign-in itself, keeps the tokens in encrypted storage, and adds the Authorization header. The plugin catalog holds no secret.",
     },
     {
       question: "What can the agent change in Vercel?",
@@ -38,7 +38,7 @@ export const VERCEL_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does Vercel MCP cost anything?",
       answer:
-        "Installing the plugin in OpenBot is free. Vercel MCP is available on all Vercel plans, and Vercel's AI Product Terms apply to its use. Your Vercel plan limits still apply. Vercel charges a domain purchase to your team at the quoted price.",
+        "Installing the plugin in CodeBot is free. Vercel MCP is available on all Vercel plans, and Vercel's AI Product Terms apply to its use. Your Vercel plan limits still apply. Vercel charges a domain purchase to your team at the quoted price.",
     },
   ],
   sources: [

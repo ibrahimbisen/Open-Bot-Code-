@@ -1,8 +1,8 @@
-import { CHANNEL_CHATS_CAPABILITY, canAdministerServer, isReleasedRoutineSchedule } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { ROUTINES_ONCE_CAPABILITY, ROUTINES_ONCE_ROUTES } from "@openbot/contracts/team-protocol/routines-once-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { RoutineInputError } from "@openbot/team-client/routine-schedule";
+import { CHANNEL_CHATS_CAPABILITY, canAdministerServer, isReleasedRoutineSchedule } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { ROUTINES_ONCE_CAPABILITY, ROUTINES_ONCE_ROUTES } from "@codebot/contracts/team-protocol/routines-once-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { RoutineInputError } from "@codebot/team-client/routine-schedule";
 import type { ChannelService } from "../../backend/channel-service";
 import {
   parseCreateChannelRoutine,

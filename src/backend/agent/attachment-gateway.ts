@@ -1,9 +1,9 @@
 import { constants } from "node:fs";
 import { lstat, open, realpath } from "node:fs/promises";
 import { basename, isAbsolute } from "node:path";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentEvent, AttachmentSummary, ConversationSnapshot } from "@openbot/contracts/ipc";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentEvent, AttachmentSummary, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { Deferred, Effect, Result } from "effect";
 import {
   type AttachmentOperationError,
@@ -16,7 +16,7 @@ import type { GeneratedAttachmentSource, MailboxStore } from "../mailbox-store";
 import { isWithin, rebaseLegacyWorkspacePath, sharedPathFromInput, workspacePathFromInput } from "../workspace-paths";
 import type { ConversationRuntime } from "./conversation-runtime";
 import { type AgentLibraryFolders, placeInLibraryFolder } from "./library-folder-tools";
-import { type OpenBotToolResponse, openBotToolResult } from "./routine-tools";
+import { type CodeBotToolResponse, codeBotToolResult } from "./routine-tools";
 import { effectiveAgentFolders } from "./workspace-sandbox";
 
 export interface AttachmentGatewayHooks {
@@ -47,7 +47,7 @@ export class AttachmentGateway {
   readonly #sharedRoot: string;
   readonly #libraryFolders: AgentLibraryFolders | null;
   readonly #hooks: AttachmentGatewayHooks;
-  readonly #inFlight = new Map<string, Deferred.Deferred<OpenBotToolResponse, AttachmentOperationError>>();
+  readonly #inFlight = new Map<string, Deferred.Deferred<CodeBotToolResponse, AttachmentOperationError>>();
 
   constructor(options: AttachmentGatewayOptions) {
     this.#conversation = options.conversation;
@@ -67,7 +67,7 @@ export class AttachmentGateway {
   ) {
     const inFlight = this.#inFlight.get(messageId);
     if (inFlight) return yield* Deferred.await(inFlight);
-    const completion = Deferred.makeUnsafe<OpenBotToolResponse, AttachmentOperationError>();
+    const completion = Deferred.makeUnsafe<CodeBotToolResponse, AttachmentOperationError>();
     this.#inFlight.set(messageId, completion);
     const exit = yield* Effect.exit(this.#attachFilesToResponse(senderAgentId, params, paths, messageId, folder));
     yield* Deferred.done(completion, exit);
@@ -173,7 +173,7 @@ export class AttachmentGateway {
     return { attachments, shown };
   });
 
-  pendingCommands(): Effect.Effect<OpenBotToolResponse, AttachmentOperationError>[] {
+  pendingCommands(): Effect.Effect<CodeBotToolResponse, AttachmentOperationError>[] {
     return [...this.#inFlight.values()].map(Deferred.await);
   }
 
@@ -188,7 +188,7 @@ export class AttachmentGateway {
     paths: string[],
     messageId: string,
     folder: string | undefined,
-  ): Effect.fn.Return<OpenBotToolResponse, AttachmentOperationError> {
+  ): Effect.fn.Return<CodeBotToolResponse, AttachmentOperationError> {
     const publicThreadId = this.#conversation.publicThreadId(senderAgentId, params.threadId);
     const snapshot = this.#conversation.ensureSnapshot(senderAgentId, publicThreadId);
     const existing = snapshot.messages.find((message) => message.id === messageId);
@@ -265,7 +265,7 @@ export class AttachmentGateway {
     attachments: readonly { id: string; name: string }[],
     alreadyShown: readonly { id: string; name: string }[],
     folder: string | undefined,
-  ): Effect.fn.Return<OpenBotToolResponse, AttachmentOperationError> {
+  ): Effect.fn.Return<CodeBotToolResponse, AttachmentOperationError> {
     const placed =
       folder === undefined
         ? null
@@ -276,7 +276,7 @@ export class AttachmentGateway {
             [...attachments, ...alreadyShown].map((attachment) => attachment.id),
           );
     return yield* attachmentCall(() =>
-      openBotToolResult({
+      codeBotToolResult({
         status: "attached",
         ...(messageId === null ? {} : { messageId }),
         attachments: attachments.map((attachment) => ({ id: attachment.id, name: attachment.name })),
@@ -327,7 +327,7 @@ export class AttachmentGateway {
       ),
     );
     const normalized = value.replaceAll("\\", "/");
-    const sharedReference = ["~/OpenBot/Shared/", "OpenBot/Shared/", "Shared/"].some((prefix) =>
+    const sharedReference = ["~/CodeBot/Shared/", "CodeBot/Shared/", "Shared/"].some((prefix) =>
       normalized.startsWith(prefix),
     );
     const candidates = isAbsolute(value)
@@ -392,8 +392,8 @@ export class AttachmentGateway {
       new Error(
         `${
           scope.allowAnyReadablePath
-            ? "Upload files must exist, be regular files, and be readable by OpenBot."
-            : "Attachment files must exist inside this agent's workspace or the OpenBot shared directory."
+            ? "Upload files must exist, be regular files, and be readable by CodeBot."
+            : "Attachment files must exist inside this agent's workspace or the CodeBot shared directory."
         } Reason: ${[...new Set(reasons)].join("; ")}.`,
       ),
     );

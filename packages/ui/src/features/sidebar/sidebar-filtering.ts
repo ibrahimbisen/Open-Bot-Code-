@@ -1,4 +1,4 @@
-import type { AppFormat, AppTextKey, AppTranslate } from "@openbot/i18n";
+import type { AppFormat, AppTextKey, AppTranslate } from "@codebot/i18n";
 import type { SidebarAgentState, SidebarRoutinePhase, SidebarWaitReason } from "./sidebar-types";
 
 export const SIDEBAR_WAIT_TITLE = {

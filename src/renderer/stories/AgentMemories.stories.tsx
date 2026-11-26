@@ -1,10 +1,10 @@
-import type { AgentMemory } from "@openbot/contracts/ipc";
+import type { AgentMemory } from "@codebot/contracts/ipc";
 import { onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { AgentMemoriesSettings } from "../src/features/conversation/AgentMemoriesSettings";
 import { agentMemoriesPort } from "../src/features/conversation/memories-port";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 function memory(id: string, text: string, origin: AgentMemory["origin"], updatedAt: string): AgentMemory {
   return {
@@ -72,7 +72,7 @@ const fullMemoryList: AgentMemory[] = Array.from({ length: 64 }, (_, index) =>
 );
 
 function AgentMemoriesStory(props: { memories: AgentMemory[]; width: number; limit?: number }) {
-  const mock = createMockOpenBot({ memories: { chief: props.memories } });
+  const mock = createMockCodeBot({ memories: { chief: props.memories } });
   const port = agentMemoriesPort("chief", "Chief", props.limit ?? 200, mock.api.agent);
   onCleanup(() => mock.dispose());
 

@@ -1,13 +1,13 @@
-import type { UpdateStatus } from "@openbot/contracts/ipc";
-import { isUpdateActivePhase, isUpdateBusyPhase } from "@openbot/contracts/ipc";
-import { Button, Download, RefreshCw, Spinner } from "@openbot/ui";
+import type { UpdateStatus } from "@codebot/contracts/ipc";
+import { isUpdateActivePhase, isUpdateBusyPhase } from "@codebot/contracts/ipc";
+import { Button, Download, RefreshCw, Spinner } from "@codebot/ui";
 import { createEffect, createMemo, createSignal, For, Show, untrack } from "solid-js";
 import { createDigitRoll } from "../../digit-roll";
 import { useText } from "../../text";
 import { rendererDuration } from "../conversation/activity-timing";
 
 function islandCloseDuration(): number {
-  return rendererDuration("--openbot-duration-slow", 200) + rendererDuration("--openbot-duration-normal", 160);
+  return rendererDuration("--codebot-duration-slow", 200) + rendererDuration("--codebot-duration-normal", 160);
 }
 
 interface AccountUpdateIslandProps {

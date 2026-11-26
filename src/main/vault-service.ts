@@ -17,7 +17,7 @@ import {
   type VaultStatus,
   type VaultTwoStepCode,
   vaultItemAllows,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   normalizeTwoStepKey,
   parseTwoStepKey,
@@ -25,9 +25,9 @@ import {
   twoStepCode,
   twoStepKeySecret,
   twoStepRemainingMs,
-} from "@openbot/contracts/two-step-code";
-import { type SourceMessages, sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, registerSecretValues } from "@openbot/logging";
+} from "@codebot/contracts/two-step-code";
+import { type SourceMessages, sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, registerSecretValues } from "@codebot/logging";
 import { Effect, Semaphore } from "effect";
 import { type PasswordVault, PasswordVaultError, websiteMatchesOrigin, websiteUrl } from "../backend/password-vault";
 import type {
@@ -298,7 +298,7 @@ function replaceOrAdd<T extends { id: string }>(items: readonly T[], item: T): T
 
 export const VAULT_CSV_LIMIT = 4 * 1024 * 1024;
 
-const logger = createOpenBotLogger("vault");
+const logger = createCodeBotLogger("vault");
 
 export interface VaultServiceOptions {
   store: VaultStore;

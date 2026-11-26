@@ -28,7 +28,7 @@ const RESPONSES: ReadonlyMap<string, (value: unknown) => TeamProtocolV2Json> = n
 ]);
 
 function pathname(path: string): string {
-  return new URL(path, "http://openbot.invalid").pathname;
+  return new URL(path, "http://codebot.invalid").pathname;
 }
 
 export function isRoutineResultsRoute(path: string): boolean {

@@ -1,16 +1,16 @@
-import { type CustomServerPlan, optionalCustomServerPayment } from "@openbot/contracts/custom-server-plans";
-import { type HostKeyHandover, optionalHostKeyHandovers } from "@openbot/contracts/host-key-handover";
+import { type CustomServerPlan, optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
+import { type HostKeyHandover, optionalHostKeyHandovers } from "@codebot/contracts/host-key-handover";
 import {
+  CODEBOT_CONTROL_PLANE_ORIGIN,
+  CODEBOT_INVITE_ORIGIN,
   createInviteUrl,
   type InviteLinkOptions,
   inviteUseCount,
   isPermanentInvite,
-  OPENBOT_CONTROL_PLANE_ORIGIN,
-  OPENBOT_INVITE_ORIGIN,
   parseInviteUrl,
   selfHostedApiOrigin,
-} from "@openbot/contracts/invite-links";
-import type { MobileConnectHostBinding } from "@openbot/contracts/mobile-connect";
+} from "@codebot/contracts/invite-links";
+import type { MobileConnectHostBinding } from "@codebot/contracts/mobile-connect";
 import {
   type AcceptedOwnerTransfer,
   decodeAcceptedOwnerTransfer,
@@ -18,15 +18,15 @@ import {
   decodeOwnerTransfer,
   decodePendingOwnerTransfer,
   type OwnerTransfer,
-} from "@openbot/contracts/owner-transfer";
-import { decodeRemoteSession, decodeRemoteSessionTicket } from "@openbot/contracts/remote-control-plane";
-import { isBoolean, isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/owner-transfer";
+import { decodeRemoteSession, decodeRemoteSessionTicket } from "@codebot/contracts/remote-control-plane";
+import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import {
   optionalServerAppearanceField,
   type ServerAppearance,
-} from "@openbot/contracts/team-protocol/host-appearance-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { referenceFrom, safeReference } from "@openbot/user-errors/reference";
+} from "@codebot/contracts/team-protocol/host-appearance-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { referenceFrom, safeReference } from "@codebot/user-errors/reference";
 import { Deferred, Effect, Schema, Semaphore } from "effect";
 import { runTeamEffect } from "./effect-boundary";
 import {
@@ -483,8 +483,8 @@ export class RemoteTeamDirectoryClient {
 
   #inviteApiUrl(): string {
     const url = new URL(this.#apiUrl);
-    return this.#authentication.kind === "browser" && url.origin === OPENBOT_INVITE_ORIGIN
-      ? new URL(OPENBOT_CONTROL_PLANE_ORIGIN).toString()
+    return this.#authentication.kind === "browser" && url.origin === CODEBOT_INVITE_ORIGIN
+      ? new URL(CODEBOT_CONTROL_PLANE_ORIGIN).toString()
       : url.toString();
   }
 
@@ -633,7 +633,7 @@ export class RemoteTeamDirectoryClient {
                     ? { Authorization: `Bearer ${this.#authentication.token}` }
                     : {}),
                   ...(browser
-                    ? { "X-OpenBot-Browser": "1", "Content-Type": "application/json" }
+                    ? { "X-CodeBot-Browser": "1", "Content-Type": "application/json" }
                     : options.body
                       ? { "Content-Type": "application/json" }
                       : {}),

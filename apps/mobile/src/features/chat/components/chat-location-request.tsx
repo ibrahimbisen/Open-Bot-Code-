@@ -1,6 +1,6 @@
-import type { ConversationQuestionPrompt } from "@openbot/contracts/ipc";
-import { encodeSharedLocationAnswer } from "@openbot/contracts/team-protocol/ui-block-location-v1";
-import { type ConversationUiBlock, UI_LOCATION_FIELD_ID } from "@openbot/contracts/ui-blocks";
+import type { ConversationQuestionPrompt } from "@codebot/contracts/ipc";
+import { encodeSharedLocationAnswer } from "@codebot/contracts/team-protocol/ui-block-location-v1";
+import { type ConversationUiBlock, UI_LOCATION_FIELD_ID } from "@codebot/contracts/ui-blocks";
 import { Button, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
 import Check from "lucide-react-native/icons/check";

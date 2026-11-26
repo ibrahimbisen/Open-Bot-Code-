@@ -10,8 +10,8 @@ import {
   isHiddenAgent,
   isSidebarLayoutSnapshot,
   type SidebarLayoutSnapshot,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 
 export interface RemoteWorkspaceFrame {
   agents: ClientAgentSummary[];
@@ -26,7 +26,7 @@ export interface RemoteWorkspaceFrame {
 
 type FrameStorage = Pick<Storage, "getItem" | "setItem" | "removeItem" | "key" | "length">;
 
-const FRAME_KEY_PREFIX = "openbot:remote-frame:v1:";
+const FRAME_KEY_PREFIX = "codebot:remote-frame:v1:";
 const RECENT_AGENTS = 4;
 const FRAME_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 

@@ -1,7 +1,7 @@
 import { appendFileSync } from "node:fs";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
-import { isDynamicRecord, type DynamicRecord as RpcRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, type DynamicRecord as RpcRecord } from "@codebot/contracts/runtime-values";
 
 const sessionArgument = process.argv.indexOf("--session");
 let sessionFile =

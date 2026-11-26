@@ -4,8 +4,8 @@
 
 Checked on 2026-09-08. No production changes were made for this investigation.
 
-- SSH target: `sui-alexandria`. Compose directory: `/opt/openbot/remote`.
-- Signal container: `openbot-remote-remote-api-1`, created `2026-09-01T10:53:29.873613544Z`.
+- SSH target: `sui-alexandria`. Compose directory: `/opt/codebot/remote`.
+- Signal container: `codebot-remote-remote-api-1`, created `2026-09-01T10:53:29.873613544Z`.
 - Running image: `sha256:7f94a50aee8b89ccf16803c0b9811f6fe19a5d876d14cfeed51deb97e4eee6dd`.
 - Running `signal-service.ts` SHA-256: `b1514f74e6b2ff708c430154b793261a667b5b107c69ee6bd79e6c0fd2356efc`.
   Its client admission code rejects every different session when a host already has a connection.
@@ -15,15 +15,15 @@ Checked on 2026-09-08. No production changes were made for this investigation.
   This is version evidence, not an end-to-end compatibility result.
 - D1 records `0018_remote_device_sessions.sql` as applied at `2026-09-04 12:21:44`.
   The SELECT changed no data. Do not apply this migration again or reverse it.
-- `/opt/openbot` is not a Git checkout. The public Signal health routes do not identify the source version.
+- `/opt/codebot` is not a Git checkout. The public Signal health routes do not identify the source version.
 
 To repeat the read-only checks, run from this repository:
 
 ```sh
-ssh sui-alexandria 'docker inspect openbot-remote-remote-api-1 --format "{{.Image}} {{.Created}}"'
-ssh sui-alexandria 'docker exec openbot-remote-remote-api-1 sha256sum /app/remote/api/src/signal-service.ts'
+ssh sui-alexandria 'docker inspect codebot-remote-remote-api-1 --format "{{.Image}} {{.Created}}"'
+ssh sui-alexandria 'docker exec codebot-remote-remote-api-1 sha256sum /app/remote/api/src/signal-service.ts'
 bunx wrangler deployments list --cwd apps/auth-api --json
-bunx wrangler d1 execute openbot-auth --cwd apps/auth-api --remote \
+bunx wrangler d1 execute codebot-auth --cwd apps/auth-api --remote \
   --command "SELECT name, applied_at FROM d1_migrations WHERE name = '0018_remote_device_sessions.sql'" --json
 ```
 
@@ -37,13 +37,13 @@ CI deployment procedure. Do not infer Worker compatibility from its date alone.
 Stage the approved source on the host without replacing its configuration or key files:
 
 ```sh
-release_dir="/opt/openbot/releases/$(git rev-parse HEAD)"
+release_dir="/opt/codebot/releases/$(git rev-parse HEAD)"
 ssh sui-alexandria "mkdir -p '$release_dir'"
 git archive HEAD | ssh sui-alexandria "tar --exclude='.env*' --exclude='*/.env*' -x -C '$release_dir'"
-ssh sui-alexandria "ln -s /opt/openbot/remote/.env.production '$release_dir/remote/.env.production'"
-ssh sui-alexandria "ln -s /opt/openbot/runtime '$release_dir/runtime'"
-ssh sui-alexandria "ln -s /opt/openbot/node_modules '$release_dir/node_modules'"
-ssh sui-alexandria "ln -s /opt/openbot/remote/.env.keys '$release_dir/remote/.env.keys'"
+ssh sui-alexandria "ln -s /opt/codebot/remote/.env.production '$release_dir/remote/.env.production'"
+ssh sui-alexandria "ln -s /opt/codebot/runtime '$release_dir/runtime'"
+ssh sui-alexandria "ln -s /opt/codebot/node_modules '$release_dir/node_modules'"
+ssh sui-alexandria "ln -s /opt/codebot/remote/.env.keys '$release_dir/remote/.env.keys'"
 ```
 
 The runtime and dependency links let the existing Dotenvx wrapper run. Docker installs Signal
@@ -53,16 +53,16 @@ On `sui-alexandria`, change to that release directory. Retain the running image 
 Run only these Signal commands; `remote:update` also updates coturn and is not appropriate here.
 
 ```sh
-signal_previous_image=$(docker inspect openbot-remote-remote-api-1 --format '{{.Image}}')
-docker image tag "$signal_previous_image" openbot-remote-api:before-325
+signal_previous_image=$(docker inspect codebot-remote-remote-api-1 --format '{{.Image}}')
+docker image tag "$signal_previous_image" codebot-remote-api:before-325
 # The release directory is named after the commit. `/health/live` shows it after the start.
 source_commit=$(basename "$PWD")
 printf '%s\n' "$source_commit" | grep -Eqx '[0-9a-f]{40}' || { echo "Not in a release directory." >&2; exit 1; }
 remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p openbot-remote -f remote/compose.yaml build --build-arg "OPENBOT_SOURCE_COMMIT=$source_commit" remote-api
+  docker compose -p codebot-remote -f remote/compose.yaml build --build-arg "CODEBOT_SOURCE_COMMIT=$source_commit" remote-api
 remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p openbot-remote -f remote/compose.yaml up -d --no-build --no-deps remote-api
-docker inspect openbot-remote-remote-api-1 --format '{{.Image}} {{.State.Health.Status}}'
+  docker compose -p codebot-remote -f remote/compose.yaml up -d --no-build --no-deps remote-api
+docker inspect codebot-remote-remote-api-1 --format '{{.Image}} {{.State.Health.Status}}'
 curl --fail --silent --show-error https://signal1.openbot.run/health/ready
 curl --fail --silent --show-error https://signal1.openbot.run/health/live
 curl --fail --silent --show-error https://signal1.openbot.run/health/turn
@@ -75,7 +75,7 @@ Use `signal1.openbot.run`, not `signal.openbot.run`: the entry name can point to
 minute. The status page probes it for "Connections".
 
 `/health/live` must show the release commit. Builds made before this field existed show no `commit`;
-builds made without `OPENBOT_SOURCE_COMMIT` show `unknown`.
+builds made without `CODEBOT_SOURCE_COMMIT` show `unknown`.
 
 Wait for Docker health to become `healthy`. Check the running source for `multiplex` and record its
 checksum. Keep the previous image until the device checks below pass. Do not print container environment
@@ -89,10 +89,10 @@ and stays stopped. Build and start it after `remote-api`, with the same `--build
 
 ```sh
 remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p openbot-remote -f remote/compose.yaml build --build-arg "OPENBOT_SOURCE_COMMIT=$source_commit" capacity-report
+  docker compose -p codebot-remote -f remote/compose.yaml build --build-arg "CODEBOT_SOURCE_COMMIT=$source_commit" capacity-report
 remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p openbot-remote -f remote/compose.yaml up -d --no-build --no-deps capacity-report
-docker logs openbot-remote-capacity-report-1 2>&1 | tail -5
+  docker compose -p codebot-remote -f remote/compose.yaml up -d --no-build --no-deps capacity-report
+docker logs codebot-remote-capacity-report-1 2>&1 | tail -5
 ```
 
 A failed sample writes only `Capacity report failed.` and its source (`turn`, `signal` or `openpanel`).
@@ -109,7 +109,7 @@ restart ICE. Do it in a quiet hour, one machine at a time, and only with approva
    gets ports before the firewall allows them, the firewall drops the first packets of the peers:
 
    ```sh
-   ufw allow 16384:65535/udp comment 'OpenBot TURN relay UDP'
+   ufw allow 16384:65535/udp comment 'CodeBot TURN relay UDP'
    ```
 
    A narrower older rule, such as `49152:65535/udp`, is then not necessary. Remove it after both
@@ -117,11 +117,11 @@ restart ICE. Do it in a quiet hour, one machine at a time, and only with approva
 2. Stage the release directory as above. In it, keep the running image and build coturn:
 
    ```sh
-   docker image tag "$(docker inspect openbot-coturn --format '{{.Image}}')" openbot-remote-coturn:before-<sha>
+   docker image tag "$(docker inspect codebot-coturn --format '{{.Image}}')" codebot-remote-coturn:before-<sha>
    remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-     docker compose -p openbot-remote -f remote/compose.yaml build coturn
+     docker compose -p codebot-remote -f remote/compose.yaml build coturn
    remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-     docker compose -p openbot-remote -f remote/compose.yaml up -d --no-build --no-deps --force-recreate coturn
+     docker compose -p codebot-remote -f remote/compose.yaml up -d --no-build --no-deps --force-recreate coturn
    ```
 
    `--no-deps` keeps `acme` as it is. coturn depends on it, and without the option Compose can
@@ -129,16 +129,16 @@ restart ICE. Do it in a quiet hour, one machine at a time, and only with approva
 3. Check the configuration that coturn uses, then the relay:
 
    ```sh
-   docker exec openbot-coturn grep -E '^(min-port|max-port|total-quota)=' /tmp/openbot-turnserver.conf
+   docker exec codebot-coturn grep -E '^(min-port|max-port|total-quota)=' /tmp/codebot-turnserver.conf
    curl --fail --silent --show-error https://signal1.openbot.run/health/turn
    curl --fail --silent --show-error https://signal2.openbot.run/health/turn
    curl -s 127.0.0.1:9641/metrics | grep '^turn_total_allocations'
    ```
 
-   The allocations come back in a few minutes. Wait until `openbot_remote_turn_relay_available` is 1
+   The allocations come back in a few minutes. Wait until `codebot_remote_turn_relay_available` is 1
    for this relay on both Signals, then do the other machine.
 
-To roll back, tag `openbot-remote-coturn:before-<sha>` as `openbot-remote-coturn` and recreate coturn
+To roll back, tag `codebot-remote-coturn:before-<sha>` as `codebot-remote-coturn` and recreate coturn
 with the same `up` command.
 
 Signal replacement closes signaling WebSockets. Existing WebRTC data channels should continue while
@@ -151,9 +151,9 @@ connection; health checks alone do not prove it.
 If the new Signal fails, restore the retained image from the same release directory:
 
 ```sh
-docker image tag openbot-remote-api:before-325 openbot-remote-remote-api
+docker image tag codebot-remote-api:before-325 codebot-remote-remote-api
 remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p openbot-remote -f remote/compose.yaml up -d --no-build --no-deps --force-recreate remote-api
+  docker compose -p codebot-remote -f remote/compose.yaml up -d --no-build --no-deps --force-recreate remote-api
 ```
 
 Rollback restores the old one-session limit. It does not reverse D1 migrations or revoke device sessions.
@@ -161,7 +161,7 @@ Rollback restores the old one-session limit. It does not reverse D1 migrations o
 ## Second Signal machine
 
 The machine `signal2.openbot.run` (`65.109.88.58`, ssh as `root`) runs a second copy of Signal,
-coturn and Nginx in the Compose project `openbot-remote`, next to an IOTA validator. Since 2026-10-31
+coturn and Nginx in the Compose project `codebot-remote`, next to an IOTA validator. Since 2026-10-31
 (#4309) both machines hold rooms (see [Two active Signal machines](#two-active-signal-machines)):
 `sui-alexandria` is home `a` (`signal1.openbot.run`) and this machine is home `b`. The entry name
 `signal.openbot.run` can point to either machine, and the Worker moves it when the entry machine
@@ -173,13 +173,13 @@ second TURN relay (see [TURN relays](../remote/README.md#turn-relays)).
 - Its certificate covers `signal.openbot.run`, `turn2.openbot.run` and `signal2.openbot.run`
   (`ACME_EXTRA_DOMAINS=signal2.openbot.run`). The certificate of `sui-alexandria` covers
   `signal.openbot.run`, `signal1.openbot.run` and `turn.openbot.run`.
-- Its `/opt/openbot/remote/.env.production` is a copy of the production file with these changes:
+- Its `/opt/codebot/remote/.env.production` is a copy of the production file with these changes:
   `TURN_DOMAIN=turn2.openbot.run`, `TURN_PUBLIC_IP=65.109.88.58`, `ACME_EXTRA_DOMAINS`,
   `REMOTE_SIGNAL_PUBLIC_PORT=8091`, `TURN_EXTRA_HOSTS=turn.openbot.run`, `SIGNAL_ID=b` and
   `SIGNAL_PUBLIC_IPV4=65.109.88.58`. `REMOTE_SIGNAL_BIND_ADDRESS=127.0.0.1` comes from the production file;
   Docker ports skip ufw, so do not change it. Do not copy the production file over it.
 - The Discord, Telegram and Slack values are the same as on `sui-alexandria`. Only the entry machine
-  starts the bots; `openbot_remote_signal_entry` in `/metrics` is 1 there.
+  starts the bots; `codebot_remote_signal_entry` in `/metrics` is 1 there.
 
 - The IOTA node uses ports 8080 and 8081, so Signal listens on `127.0.0.1:8091`. Apache uses port 80.
 - Nginx uses `remote/nginx/signal.openbot.run.conf` with `signal2.openbot.run` added to `server_name`,
@@ -225,7 +225,7 @@ change, and each one needs its own approval.
    `SIGNAL_ENTRY_HOST=signal.openbot.run`. Give `signal2` the Discord, Telegram and Slack values of the
    production file: the entry rule starts the bots only on the entry machine.
 4. Deploy the same Signal commit to both machines and recreate only `remote-api`. Check
-   `openbot_remote_signal_entry` in `/metrics`: 1 on `sui-alexandria`, 0 on `signal2`.
+   `codebot_remote_signal_entry` in `/metrics`: 1 on `sui-alexandria`, 0 on `signal2`.
 5. Worker variables, after step 4:
    `REMOTE_SIGNAL_HOMES=a=wss://signal1.openbot.run/v1/signal,b=wss://signal2.openbot.run/v1/signal` and
    `REMOTE_AUTH_WEBHOOK_URLS=https://signal1.openbot.run/internal/auth-events,https://signal2.openbot.run/internal/auth-events`.
@@ -264,7 +264,7 @@ Failover drill (after approval): stop `remote-api` on `signal2`, check that a ho
 its clients connect on `signal1` within 1 minute, then start it again. Hosts stay on their new home
 until it fails, or until it is no longer near (see "Regional Signal machines"). Then do the same for `sui-alexandria` in a quiet hour, which also moves the entry:
 check that `dig signal.openbot.run` gives `65.109.88.58` within 3 minutes and that
-`openbot_remote_signal_entry` is 1 on `signal2`. To move the entry back, set the A record by hand.
+`codebot_remote_signal_entry` is 1 on `signal2`. To move the entry back, set the A record by hand.
 
 A host whose owner or admin chose a home in Server settings sends it as `preferredSignalHome`. It gets
 that home while the home answers, also when the home is far. When the chosen home stops, the host moves
@@ -282,9 +282,9 @@ home like `a` and `b`, but it never holds the entry while `a` or `b` answers.
 
 | Home | Machine | Address | Names | Place |
 | --- | --- | --- | --- | --- |
-| `us` | `openbot-signal-us` (Leaseweb VPS 12728289, SFO-12, same reference) | `23.106.44.143` | `signal-us`, `turn-us` | San Jose |
-| `au` | `openbot-signal-au` (Leaseweb VPS 12728295, SYD-12, same reference) | `23.106.243.56` | `signal-au`, `turn-au` | Sydney |
-| `sg` | `openbot-signal-sg` (Leaseweb VPS 12731038, `ap-southeast-1`, same reference) | `172.255.212.149` | `signal-sg`, `turn-sg` | Singapore |
+| `us` | `codebot-signal-us` (Leaseweb VPS 12728289, SFO-12, same reference) | `23.106.44.143` | `signal-us`, `turn-us` | San Jose |
+| `au` | `codebot-signal-au` (Leaseweb VPS 12728295, SYD-12, same reference) | `23.106.243.56` | `signal-au`, `turn-au` | Sydney |
+| `sg` | `codebot-signal-sg` (Leaseweb VPS 12731038, `ap-southeast-1`, same reference) | `172.255.212.149` | `signal-sg`, `turn-sg` | Singapore |
 
 The AU plan has a 5 TB monthly traffic pack, and the US and SG plans have 30 TB. Only the outgoing
 traffic counts against it: Leaseweb bills a VPS on its outgoing traffic only, and calculates the
@@ -303,7 +303,7 @@ Setup of each machine (Ubuntu 26.04):
    [remote/README.md](../remote/README.md). The Leaseweb 26.04 image has no GRUB package, so a new
    kernel never starts until `grub-pc` is installed.
 2. DNS only, TTL 300: `signal-<home>` and `turn-<home>` → the machine address.
-3. `/opt/openbot/remote/.env.production` is a copy of the `signal2` file with these plain values
+3. `/opt/codebot/remote/.env.production` is a copy of the `signal2` file with these plain values
    changed: `SIGNAL_ID=<home>`, `SIGNAL_PUBLIC_IPV4`, `TURN_PUBLIC_IP`,
    `TURN_DOMAIN=turn-<home>.openbot.run`, `ACME_EXTRA_DOMAINS=signal-<home>.openbot.run`,
    `REMOTE_SIGNAL_PUBLIC_PORT=8081` and an empty `TURN_EXTRA_HOSTS`, so each machine gives only its
@@ -316,9 +316,9 @@ Setup of each machine (Ubuntu 26.04):
    Encrypt blocks the name for an hour. Cloudflare serves the `openbot.run` zone, so `1.1.1.1` sees the
    record at once. This is also necessary for each renewal.
 5. Nginx: the `signal2` vhost with `server_name signal.openbot.run signal-<home>.openbot.run` and
-   `proxy_pass http://127.0.0.1:8081`, plus the `openbot-remote-nginx-reload` path and service units.
+   `proxy_pass http://127.0.0.1:8081`, plus the `codebot-remote-nginx-reload` path and service units.
 6. Check `/health/ready`, `/health/live` (the commit) and `/health/turn` on `signal-<home>`, and
-   `openbot_remote_signal_entry` 0.
+   `codebot_remote_signal_entry` 0.
 7. Worker variables: add the home to `REMOTE_SIGNAL_HOMES` after `a` and `b`, its webhook URL to
    `REMOTE_AUTH_WEBHOOK_URLS`, and its place to `REMOTE_SIGNAL_HOME_LOCATIONS`, in one deploy.
 
@@ -347,7 +347,7 @@ To revert the country rule, set `REMOTE_SIGNAL_HOME_COUNTRIES` to `""` in `apps/
 and merge; CI deploys the Worker. Each host in China moves back to the distance rule at its next
 ticket, when its new home answers `/health/ready`, and its members follow. No host or database change
 is necessary. For a faster revert, set the same empty value in the Cloudflare dashboard (Workers,
-`openbot-auth-api`, Settings, Variables). The CI deploy uses `--keep-vars`, but a value in
+`codebot-auth-api`, Settings, Variables). The CI deploy uses `--keep-vars`, but a value in
 `wrangler.jsonc` replaces the dashboard value, so each later push to `main` puts the rule back until
 the empty value is merged.
 

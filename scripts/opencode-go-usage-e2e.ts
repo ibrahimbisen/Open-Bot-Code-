@@ -7,7 +7,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { readOpenCodeGoUsage } from "../src/backend/opencode-usage";
 import type { AccountRateLimitsReadResult } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-go-usage-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-go-usage-e2e");
 const USAGE_URL = "https://opencode.ai/zen/go/v1/usage";
 const RESETS_AT = "2026-11-01T10:00:00.000Z";
 
@@ -37,7 +37,7 @@ interface Report {
 }
 
 const report: Report = { passed: false };
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-go-usage-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-go-usage-e2e-"));
 const dataDirectory = join(root, "data", "opencode");
 const authFile = join(dataDirectory, "auth.json");
 const databaseFile = join(dataDirectory, "opencode.db");

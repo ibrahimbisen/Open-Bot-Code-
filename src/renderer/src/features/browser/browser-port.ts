@@ -1,8 +1,8 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface BrowserPort {
   browser: Pick<
-    OpenBotDesktopApi["browser"],
+    CodeBotDesktopApi["browser"],
     | "activate"
     | "answerPermission"
     | "answerHttpSignIn"
@@ -31,5 +31,5 @@ export interface BrowserPort {
 }
 
 export function browserPort(): BrowserPort {
-  return window.openbot;
+  return window.codebot;
 }

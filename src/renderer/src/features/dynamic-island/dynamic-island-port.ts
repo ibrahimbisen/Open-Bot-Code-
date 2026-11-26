@@ -1,9 +1,9 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface DynamicIslandPort {
-  agent: Pick<OpenBotDesktopApi["agent"], "acknowledgeFailedTurn" | "onScopedEvent">;
+  agent: Pick<CodeBotDesktopApi["agent"], "acknowledgeFailedTurn" | "onScopedEvent">;
   dynamicIsland: Pick<
-    OpenBotDesktopApi["dynamicIsland"],
+    CodeBotDesktopApi["dynamicIsland"],
     | "getPreference"
     | "getPresentation"
     | "onAction"
@@ -19,5 +19,5 @@ export interface DynamicIslandPort {
 }
 
 export function dynamicIslandPort(): DynamicIslandPort {
-  return window.openbot;
+  return window.codebot;
 }

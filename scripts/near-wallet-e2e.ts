@@ -9,8 +9,8 @@ import {
   parseNearRuleInput,
   parseNearWalletCreateInput,
   parseNearWalletStatus,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { z } from "zod";
 import type { NearPaymentPlan, NearPaymentRequest, NearPaymentResult } from "../src/backend/near-wallet";
@@ -34,7 +34,7 @@ import {
   withDeadline,
 } from "./near-wallet-fake-api";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/near-wallet-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/near-wallet-e2e");
 const AGENT_A = "agent-a";
 const AGENT_B = "agent-b";
 const DOMAIN = "api.example.com";
@@ -194,7 +194,7 @@ const SEND_ATTEMPTS = 3;
 
 async function main(): Promise<void> {
   await mkdir(OUT, { recursive: true });
-  const dir = await mkdtemp(join(tmpdir(), "openbot-near-wallet-e2e-"));
+  const dir = await mkdtemp(join(tmpdir(), "codebot-near-wallet-e2e-"));
   const storePath = join(dir, "near-wallet.json");
   const api = new FakeAgentApi();
   await api.start();
@@ -350,7 +350,7 @@ async function main(): Promise<void> {
       assert.equal(result.status, "paid");
       assert.equal(transfers.length, 1);
       const transfer = transfers[0];
-      assert.match(transfer?.idempotencyKey ?? "", /^openbot-[0-9a-f-]{36}$/u);
+      assert.match(transfer?.idempotencyKey ?? "", /^codebot-[0-9a-f-]{36}$/u);
       assert.equal(transfer?.grantToken, "<grant-token>");
       assert.equal(transfer?.apiKey, "<partner-key>");
       assert.deepEqual(transfer?.body, { asset: USDC, amount: "1500000", recipient: MERCHANT });

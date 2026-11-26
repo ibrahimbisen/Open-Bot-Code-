@@ -1,8 +1,8 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface SpeechPort {
   voice: Pick<
-    OpenBotDesktopApi["voice"],
+    CodeBotDesktopApi["voice"],
     | "getSpeechSettings"
     | "setSpeechSettings"
     | "getSpeechModelStatus"
@@ -15,9 +15,9 @@ export interface SpeechPort {
     | "getServer"
     | "onServerSettings"
   >;
-  agent: Pick<OpenBotDesktopApi["agent"], "readConversationPage" | "discardDraftAttachment">;
+  agent: Pick<CodeBotDesktopApi["agent"], "readConversationPage" | "discardDraftAttachment">;
 }
 
 export function speechPort(): SpeechPort {
-  return window.openbot;
+  return window.codebot;
 }

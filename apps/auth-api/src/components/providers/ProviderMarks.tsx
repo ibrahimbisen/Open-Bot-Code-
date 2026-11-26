@@ -1,4 +1,4 @@
-import { AppLogo, ProviderLogo } from "@openbot/brand";
+import { AppLogo, ProviderLogo } from "@codebot/brand";
 import { Show } from "solid-js";
 import type { ProviderPage } from "../../content/providers/provider-page";
 import { LandingIcon } from "../landing/LandingIcon";
@@ -9,7 +9,7 @@ export function ProviderMarks(props: { page: Pick<ProviderPage, "provider" | "na
       <span class="compare-mark">
         <AppLogo variant="production" animation={props.small ? "none" : "blink"} class="compare-mark-logo" />
         <Show when={!props.small}>
-          <span class="compare-mark-name">OpenBot</span>
+          <span class="compare-mark-name">CodeBot</span>
         </Show>
       </span>
       <span class="compare-vs">runs</span>

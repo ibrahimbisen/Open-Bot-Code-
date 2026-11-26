@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { startAcpAuthentication } from "../src/backend/acp-sign-in";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-sign-in-errors-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-sign-in-errors-e2e");
 const TIMEOUT_MS = 1_500;
 
 const FAKE_AGENT = `
@@ -45,7 +45,7 @@ interface CaseReport {
   passed: boolean;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-sign-in-errors-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-sign-in-errors-e2e-"));
 const report: { passed: boolean; cases: CaseReport[]; error?: string } = { passed: false, cases: [] };
 
 async function signIn(fake: string, mode: string): Promise<string | null> {

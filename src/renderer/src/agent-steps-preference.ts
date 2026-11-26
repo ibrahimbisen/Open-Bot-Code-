@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-const SHOW_AGENT_STEPS_STORAGE_KEY = "openbot:show-agent-steps";
+const SHOW_AGENT_STEPS_STORAGE_KEY = "codebot:show-agent-steps";
 
 let unsavedPreference: boolean | undefined;
 

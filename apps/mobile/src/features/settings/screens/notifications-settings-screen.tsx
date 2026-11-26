@@ -159,7 +159,7 @@ export function NotificationsSettingsScreen() {
             <SettingsPicker
               value={preference.sound}
               options={[
-                { value: "openbot", label: t("mobile.settings.notifications.sound.openbot") },
+                { value: "codebot", label: t("mobile.settings.notifications.sound.codebot") },
                 { value: "warm", label: t("mobile.settings.notifications.sound.warm") },
                 { value: "mech", label: t("mobile.settings.notifications.sound.mech") },
                 { value: "bubble", label: t("mobile.settings.notifications.sound.bubble") },

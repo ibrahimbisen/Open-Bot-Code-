@@ -1,5 +1,5 @@
-import { disconnectedPasswordManager, type PasswordManagerStatus } from "@openbot/contracts/ipc";
-import { ProtonPassConnectorPanel } from "@openbot/ui/features/settings/ProtonPassConnectorPanel";
+import { disconnectedPasswordManager, type PasswordManagerStatus } from "@codebot/contracts/ipc";
+import { ProtonPassConnectorPanel } from "@codebot/ui/features/settings/ProtonPassConnectorPanel";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { SettledArgs } from "./settled-args";
@@ -32,7 +32,7 @@ const args = (status: Partial<PasswordManagerStatus>, hostName?: string) => ({
 
 const CONNECTED: Partial<PasswordManagerStatus> = {
   state: "connected",
-  vaultNames: ["Shared with OpenBot"],
+  vaultNames: ["Shared with CodeBot"],
   loginCount: 12,
   expiresAt: NEXT_YEAR,
 };

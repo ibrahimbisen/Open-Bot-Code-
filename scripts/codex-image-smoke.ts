@@ -6,11 +6,11 @@ import { decodeGeneratedImage, generatedImageName } from "../src/backend/agent/i
 import { resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { getRecord, getString, isRecord } from "../src/backend/protocol";
-import { makeCodexHome, makeGitWorkspace, openbotConfig, removeRun, startCodexAgent } from "./codex-agent-harness";
+import { codebotConfig, makeCodexHome, makeGitWorkspace, removeRun, startCodexAgent } from "./codex-agent-harness";
 
 const argument = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
 const MODEL = argument("model") ?? "gpt-6-luna";
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-image-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-image-smoke");
 const PROMPT =
   "Generate one square image of a red apple on a white table with your image generation tool. Then reply DONE.";
 
@@ -31,7 +31,7 @@ const report: {
   error?: string;
 } = { passed: false, model: MODEL, items: [] };
 
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-codex-image-smoke-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-codex-image-smoke-")));
 const workspace = join(root, "ws");
 await makeGitWorkspace(workspace);
 const home = await makeCodexHome(join(root, "home"));
@@ -55,7 +55,7 @@ agent.client.on("notification", (notification) => {
 });
 
 try {
-  const thread = await agent.startThread(workspace, MODEL, openbotConfig(agent.read));
+  const thread = await agent.startThread(workspace, MODEL, codebotConfig(agent.read));
   await agent.runTurn(thread.id, PROMPT, 300_000);
   const done = completed.image;
   if (!done) throw new Error("Codex sent no completed imageGeneration item.");

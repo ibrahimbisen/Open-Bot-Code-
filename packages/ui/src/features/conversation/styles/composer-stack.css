@@ -1,12 +1,12 @@
 .composer-stack {
-  --composer-stack-inset: var(--openbot-space-3);
-  --composer-stack-duration: var(--openbot-duration-overlay);
+  --composer-stack-inset: var(--codebot-space-3);
+  --composer-stack-duration: var(--codebot-duration-overlay);
 
   border: 0 solid transparent;
   background: transparent;
   transition:
-    border-color var(--composer-stack-duration) var(--openbot-ease-out),
-    background-color var(--composer-stack-duration) var(--openbot-ease-out);
+    border-color var(--composer-stack-duration) var(--codebot-ease-out),
+    background-color var(--composer-stack-duration) var(--codebot-ease-out);
 }
 
 @media (max-width: 620px) {
@@ -23,9 +23,9 @@
   overflow: hidden;
   margin: 0 var(--composer-stack-inset) calc(-1 * var(--composer-stack-overlap));
   border-width: 1px;
-  border-color: var(--openbot-queue-border);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-queue-surface);
+  border-color: var(--codebot-queue-border);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-queue-surface);
   padding-bottom: var(--composer-stack-overlap);
 }
 
@@ -33,7 +33,7 @@
   z-index: auto;
   margin: -1px 0 0;
   border: 0;
-  border-top: 1px solid var(--openbot-queue-border);
+  border-top: 1px solid var(--codebot-queue-border);
   border-radius: 0;
   box-shadow: none;
 }
@@ -50,7 +50,7 @@
   .composer-stack:has(> .context-compaction-notice[data-leaving]):not(
     :has(> :not(.agent-queue-slot, [data-leaving]), > .agent-queue-slot > .agent-queue-slot-inner > *)
   ) {
-    animation: context-compaction-notice-out var(--openbot-duration-toast-exit) var(--openbot-ease-in-out) forwards;
+    animation: context-compaction-notice-out var(--codebot-duration-toast-exit) var(--codebot-ease-in-out) forwards;
   }
 }
 
@@ -58,7 +58,7 @@
   --stack-row-height: 29px;
   --stack-row-gutter: 5px;
   --stack-row-inset: 13px;
-  --stack-row-glyph: var(--openbot-icon-sm);
+  --stack-row-glyph: var(--codebot-icon-sm);
   --stack-row-gap: 7px;
 }
 
@@ -70,12 +70,12 @@
 }
 
 .composer-stack :is(.task-list-title, .awaiting-replies-text, .open-waits-row-note) {
-  font-size: var(--openbot-text-lg);
+  font-size: var(--codebot-text-lg);
   line-height: 20px;
 }
 
 .composer-stack .task-list-count {
-  font-size: var(--openbot-text-sm);
+  font-size: var(--codebot-text-sm);
 }
 
 .composer-stack .task-list-items {
@@ -97,7 +97,7 @@
 }
 
 .composer-stack .awaiting-replies-avatar {
-  margin-inline: calc((var(--stack-row-glyph) - var(--openbot-icon-md)) / 2);
+  margin-inline: calc((var(--stack-row-glyph) - var(--codebot-icon-md)) / 2);
 }
 
 .composer-stack .composer-notice {
@@ -106,16 +106,16 @@
 }
 
 .composer-stack .composer-notice-icon {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
-  margin-inline: calc((var(--stack-row-glyph) - var(--openbot-icon-md)) / 2);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
+  margin-inline: calc((var(--stack-row-glyph) - var(--codebot-icon-md)) / 2);
 }
 
 .composer-stack .composer-notice,
 .composer-stack .composer-notice:not(:has(.ui-button)) {
   --notice-inset: 6px;
 
-  min-height: calc(var(--openbot-control-xs) + 2 * var(--notice-inset) + 1px);
+  min-height: calc(var(--codebot-control-xs) + 2 * var(--notice-inset) + 1px);
 }
 
 .composer-stack .composer-notice-copy {
@@ -125,28 +125,28 @@
 
 .composer-stack .composer-notice-copy :is(strong, p) {
   display: inline;
-  font-size: var(--openbot-text-lg);
+  font-size: var(--codebot-text-lg);
   line-height: 20px;
 }
 
 .composer-stack .composer-notice-copy strong {
-  margin-inline-end: var(--openbot-space-1-5);
+  margin-inline-end: var(--codebot-space-1-5);
 }
 
 .composer-stack .composer-notice .ui-button {
-  height: var(--openbot-control-xs);
+  height: var(--codebot-control-xs);
   min-height: 0;
-  padding-inline: var(--openbot-space-2);
-  font-size: var(--openbot-text-md);
+  padding-inline: var(--codebot-space-2);
+  font-size: var(--codebot-text-md);
 }
 
 .composer-stack .composer-notice .composer-notice-dismiss {
-  width: var(--openbot-control-xs);
+  width: var(--codebot-control-xs);
   padding: 0;
 }
 
 .composer-stack .context-compaction-notice-copy {
-  font-size: var(--openbot-text-lg);
+  font-size: var(--codebot-text-lg);
   line-height: 20px;
 }
 
@@ -175,8 +175,8 @@
   grid-template-rows: 1fr;
   margin-top: -1px;
   transition:
-    grid-template-rows var(--composer-stack-duration) var(--openbot-ease-out),
-    margin-top var(--composer-stack-duration) var(--openbot-ease-out);
+    grid-template-rows var(--composer-stack-duration) var(--codebot-ease-out),
+    margin-top var(--composer-stack-duration) var(--codebot-ease-out);
 }
 
 .composer-stack-card[data-open="false"] {
@@ -194,7 +194,7 @@
 .composer-stack-card-inner {
   min-height: 0;
   overflow: hidden;
-  transition: opacity var(--composer-stack-duration) var(--openbot-ease-out);
+  transition: opacity var(--composer-stack-duration) var(--codebot-ease-out);
 }
 
 .composer-stack-card[data-open="false"] > .composer-stack-card-inner {
@@ -214,8 +214,8 @@
 
 .composer-stack > .agent-queue-slot {
   transition:
-    grid-template-rows var(--openbot-duration-overlay) var(--openbot-ease-out),
-    margin-top var(--openbot-duration-overlay) var(--openbot-ease-out);
+    grid-template-rows var(--codebot-duration-overlay) var(--codebot-ease-out),
+    margin-top var(--codebot-duration-overlay) var(--codebot-ease-out);
 }
 
 .composer-stack > .agent-queue-slot[data-open="true"] {
@@ -270,10 +270,10 @@
   display: inline-flex;
   height: 20px;
   margin-top: 0;
-  margin-inline-start: var(--openbot-space-1-5);
+  margin-inline-start: var(--codebot-space-1-5);
   vertical-align: top;
 }
 
 .composer-stack .task-list-donut-track {
-  stroke: var(--openbot-text-muted);
+  stroke: var(--codebot-text-muted);
 }

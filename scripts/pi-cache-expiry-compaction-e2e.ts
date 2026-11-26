@@ -1,14 +1,14 @@
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { PromptCacheTtl } from "@openbot/contracts/ipc";
+import type { PromptCacheTtl } from "@codebot/contracts/ipc";
 import type { AgentClient } from "../src/backend/agent-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AppServerNotification, getRecord, getString } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-cache-expiry-compaction-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-cache-expiry-compaction-e2e");
 const HOUR_MS = 60 * 60_000;
 const COMPACTED_TOKENS = 19_400;
 
@@ -30,7 +30,7 @@ const report: { passed: boolean; cases: CaseReport[]; failures: string[]; error?
   cases: [],
   failures: [],
 };
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-cache-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-cache-e2e-"));
 const clients: AgentClient[] = [];
 
 function waitForUsage(client: AgentClient, thread: string): Promise<number> {

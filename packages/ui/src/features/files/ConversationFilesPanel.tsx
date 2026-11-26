@@ -1,6 +1,6 @@
-import { Button, buttonVariants, ChevronDown, Folder, X } from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
-import { useText } from "@openbot/ui/text";
+import { Button, buttonVariants, ChevronDown, Folder, X } from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { onSettled, Show } from "solid-js";
 import { createScrollFades } from "../../components/createScrollFades";

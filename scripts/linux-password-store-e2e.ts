@@ -5,11 +5,11 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { withoutElectronRuntimeFlags } from "./electron-spawn-env";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "linux-password-store-e2e");
+const OUT = join(ROOT, ".codebot-build", "linux-password-store-e2e");
 const READY_TIMEOUT_MS = 30_000;
 const electronPath = join(
   ROOT,
@@ -63,7 +63,7 @@ interface Result {
 }
 
 await mkdir(OUT, { recursive: true });
-const root = await mkdtemp(join(tmpdir(), "openbot-linux-password-store-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-linux-password-store-"));
 const bundle = join(root, "linux-password-store-electron.mjs");
 const results: Result[] = [];
 let passed = false;
@@ -98,7 +98,7 @@ process.exit(passed ? 0 : 1);
 async function launch(index: number, item: Case): Promise<Result> {
   const base = withoutElectronRuntimeFlags(process.env);
   for (const name of DESKTOP_VARIABLES) delete base[name];
-  base.DBUS_SESSION_BUS_ADDRESS = "unix:path=/nonexistent/openbot-e2e-bus";
+  base.DBUS_SESSION_BUS_ADDRESS = "unix:path=/nonexistent/codebot-e2e-bus";
   const readyFile = join(root, `ready-${index}.json`);
   const log = openSync(join(OUT, `electron-${index}.log`), "w");
   const child = spawn(

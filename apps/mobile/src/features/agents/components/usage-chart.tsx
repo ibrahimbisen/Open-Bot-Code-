@@ -30,10 +30,10 @@ export interface UsageChartSeries {
 }
 
 export function useUsageSeriesColor(): (provider: string) => string {
-  const codex = String(useCSSVariable("--openbot-chart-series-codex"));
-  const claude = String(useCSSVariable("--openbot-chart-series-claude"));
-  const grok = String(useCSSVariable("--openbot-chart-series-grok"));
-  const other = String(useCSSVariable("--openbot-chart-series-other"));
+  const codex = String(useCSSVariable("--codebot-chart-series-codex"));
+  const claude = String(useCSSVariable("--codebot-chart-series-claude"));
+  const grok = String(useCSSVariable("--codebot-chart-series-grok"));
+  const other = String(useCSSVariable("--codebot-chart-series-other"));
   return useCallback(
     (provider: string) => {
       const colors: Readonly<Record<string, string | undefined>> = { codex, claude, grok };
@@ -202,8 +202,8 @@ export function UsageChart({
   label: string;
   value: string;
 }) {
-  const gridColor = String(useCSSVariable("--openbot-border-strong"));
-  const mutedColor = String(useCSSVariable("--openbot-text-muted"));
+  const gridColor = String(useCSSVariable("--codebot-border-strong"));
+  const mutedColor = String(useCSSVariable("--codebot-text-muted"));
   const [width, setWidth] = useState(0);
   const plotWidth = Math.max(0, width - AXIS_WIDTH);
   const max = Math.max(0, ...series.flatMap((item) => item.values.map((day) => day ?? 0)));

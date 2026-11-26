@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // The table as migration 47 created it. Frozen: migration 47 runs it, and a change here would change
 // what that shipped migration does.
@@ -45,7 +45,7 @@ const AGENT_THREAD_MIGRATION_SQL = `
   DROP TABLE projection_agent_tasks;
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 47,
   name: "agent-threads",
   // Copies every task into the side-thread table and drops the task table. No table is rebuilt and the

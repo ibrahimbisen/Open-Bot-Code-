@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { agentProviderDescriptor } from "@openbot/contracts/agent-providers";
+import { agentProviderDescriptor } from "@codebot/contracts/agent-providers";
 import type {
   AgentAdminSettings,
   AgentApproval,
@@ -8,7 +8,7 @@ import type {
   ChannelMessage,
   ChannelPage,
   ChannelTask,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { ChannelClient, connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
 interface SeenPrompt {
@@ -85,17 +85,17 @@ try {
   const [a, b] = agents;
   assert.ok(a && b);
 
-  const admin = await page.evaluate((id) => window.openbot.agent.getAgentAdminSettings(id), a.id);
+  const admin = await page.evaluate((id) => window.codebot.agent.getAgentAdminSettings(id), a.id);
   restore = { agent: a, admin };
   await client.update(a.id, { quickAcknowledgement: true, computerUse: true });
   await page.evaluate(
-    (id) => window.openbot.agent.updateAgentAdminSettings({ agentId: id, access: "full", autoApprove: true }),
+    (id) => window.codebot.agent.updateAgentAdminSettings({ agentId: id, access: "full", autoApprove: true }),
     a.id,
   );
   await page.evaluate(() => {
     const events: { prompts: SeenPrompt[]; approvals: AgentApproval[] } = { prompts: [], approvals: [] };
     window.channelToolsE2e = events;
-    window.openbot.agent.onEvent((event) => {
+    window.codebot.agent.onEvent((event) => {
       if (event.type === "prompt")
         events.prompts.push({
           requestId: event.requestId,
@@ -137,7 +137,7 @@ try {
     () => client.read(channel.id),
     (current) => repliesAfter(current, a.id, sequence).some((message) => message.message.uiBlock !== undefined),
   );
-  await page.evaluate((input) => window.openbot.agent.respondToPrompt(input), {
+  await page.evaluate((input) => window.codebot.agent.respondToPrompt(input), {
     requestId: colorPrompt.requestId,
     answers: answersFor(colorPrompt, /blue/i),
   });
@@ -161,7 +161,7 @@ try {
   );
   const planPrompt = await nextPrompt(a.id, prompts, "the plan card arrives");
   const answered = await page
-    .evaluate((input) => window.openbot.agent.respondToPrompt(input), {
+    .evaluate((input) => window.codebot.agent.respondToPrompt(input), {
       requestId: planPrompt.requestId,
       answers: answersFor(planPrompt, null),
     })
@@ -192,7 +192,7 @@ try {
   const approval = events.approvals.slice(approvals).find((candidate) => candidate.agentId === a.id);
   assert.ok(approval);
   await page.evaluate(
-    (requestId) => window.openbot.agent.respondToApproval({ requestId, decision: "decline" }),
+    (requestId) => window.codebot.agent.respondToApproval({ requestId, decision: "decline" }),
     approval.requestId,
   );
   await waitFor(page, "the capture turn ends", () => client.read(channel.id), ended);
@@ -209,14 +209,14 @@ try {
     "Remember the code word HERON. Reply with OK only. Do not use tools.",
     "the other member replies",
   );
-  const tasksBefore = (await page.evaluate((id) => window.openbot.agent.listTasks(id), a.id)).tasks.length;
+  const tasksBefore = (await page.evaluate((id) => window.codebot.agent.listTasks(id), a.id)).tasks.length;
   const history = await ask(
     channel.id,
     a.id,
     `Call the channel_history tool and find the code word that I gave to ${b.name}. Then call the start_task tool with the title E2E and the brief "Reply ok". Reply in this form only: WORD=<the code word> TASK=<the result of start_task>.`,
     "the history turn ends",
   );
-  const tasksAfter = (await page.evaluate((id) => window.openbot.agent.listTasks(id), a.id)).tasks.length;
+  const tasksAfter = (await page.evaluate((id) => window.codebot.agent.listTasks(id), a.id)).tasks.length;
   const historyReply = history.replies.at(-1)?.message.text ?? "";
   report.history = { reply: historyReply, tasksStarted: tasksAfter - tasksBefore };
   assert.match(historyReply, /heron/i, "channel_history did not find the code word.");
@@ -258,7 +258,7 @@ try {
       })
       .catch(() => undefined);
     await page
-      .evaluate((input) => window.openbot.agent.updateAgentAdminSettings(input), {
+      .evaluate((input) => window.codebot.agent.updateAgentAdminSettings(input), {
         agentId: agent.id,
         access: admin.access,
         autoApprove: admin.autoApprove,

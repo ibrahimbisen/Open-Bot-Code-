@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { isAppLanguage } from "@openbot/contracts/app-language";
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { en, TRANSLATED_LOCALES, type TranslatedLocale, translateFor } from "@openbot/i18n";
-import { type AppLanguage, appLanguageOption } from "@openbot/i18n/languages";
-import { createOpenBotLogger } from "@openbot/logging";
-import { userErrorMessage } from "@openbot/user-errors";
+import { isAppLanguage } from "@codebot/contracts/app-language";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import { en, TRANSLATED_LOCALES, type TranslatedLocale, translateFor } from "@codebot/i18n";
+import { type AppLanguage, appLanguageOption } from "@codebot/i18n/languages";
+import { createCodeBotLogger } from "@codebot/logging";
+import { userErrorMessage } from "@codebot/user-errors";
 import type { Page } from "playwright-core";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
@@ -14,11 +14,11 @@ import { type FitProblem, measureFit } from "./i18n-fit-probe";
 
 declare global {
   interface Window {
-    openbot: OpenBotDesktopApi;
+    codebot: CodeBotDesktopApi;
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/i18n-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/i18n-e2e");
 const LOCALES = TRANSLATED_LOCALES.filter((locale) => locale !== "en");
 const KEYS = new Set(Object.keys(en));
 const PLACEHOLDER = /\{[a-zA-Z]\w*\}/g;
@@ -35,14 +35,14 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("i18n-e2e");
+const logger = createCodeBotLogger("i18n-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,
 });
 
 async function savedLanguage(page: Page): Promise<AppLanguage> {
-  const preference = await page.evaluate(() => window.openbot.getAppLanguagePreference());
+  const preference = await page.evaluate(() => window.codebot.getAppLanguagePreference());
   assert.ok(isAppLanguage(preference.language));
   return preference.language;
 }
@@ -92,7 +92,7 @@ async function newFitProblems(page: Page, english: readonly FitProblem[]): Promi
 async function hostError(page: Page): Promise<string> {
   const message = await page.evaluate(async () => {
     try {
-      await window.openbot.skills.setEnabled({ agentId: "i18n-e2e-missing-agent", skillId: "none", enabled: true });
+      await window.codebot.skills.setEnabled({ agentId: "i18n-e2e-missing-agent", skillId: "none", enabled: true });
       return null;
     } catch (error) {
       return error instanceof Error ? error.message : String(error);
@@ -108,7 +108,7 @@ const original = await savedLanguage(page);
 const results = [];
 let shown: TranslatedLocale = "en";
 try {
-  if (original !== "en") await page.evaluate(() => window.openbot.setAppLanguagePreference({ language: "en" }));
+  if (original !== "en") await page.evaluate(() => window.codebot.setAppLanguagePreference({ language: "en" }));
   await page.waitForFunction(() => document.documentElement.lang === "en");
   await openSettings(page, "en");
   const englishSettings = await page.evaluate(measureFit, "body");
@@ -140,7 +140,7 @@ try {
     assert.equal(errorShown, t("error.skill.chooseLocalAgent"), `The host error is not translated to ${locale}.`);
   }
 } finally {
-  await page.evaluate((language) => window.openbot.setAppLanguagePreference({ language }), original);
+  await page.evaluate((language) => window.codebot.setAppLanguagePreference({ language }), original);
   writeFileSync(resolve(OUT, "report.json"), `${JSON.stringify({ original, results }, null, 2)}\n`);
   await session.close();
 }

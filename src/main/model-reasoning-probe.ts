@@ -1,4 +1,4 @@
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 import { readLimitedBody } from "../backend/limited-body";
 import type { CustomProviderConfig } from "../backend/opencode-config";

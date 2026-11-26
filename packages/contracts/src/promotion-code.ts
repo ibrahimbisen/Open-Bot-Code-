@@ -2,7 +2,7 @@ import { isDynamicRecord, isNumber, isString } from "./runtime-values";
 
 export const PROMOTION_CODE_PARAM = "promo";
 
-export const PROMOTION_CODE_STORAGE_KEY = "openbot.promotion-code.v1";
+export const PROMOTION_CODE_STORAGE_KEY = "codebot.promotion-code.v1";
 export const PROMOTION_CODE_MAX_AGE_DAYS = 30;
 
 const PROMOTION_CODE = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/u;

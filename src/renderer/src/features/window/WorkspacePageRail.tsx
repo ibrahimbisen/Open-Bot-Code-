@@ -1,11 +1,11 @@
-import { isUpdateActivePhase } from "@openbot/contracts/ipc";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
-import { CRM_CAPABILITY } from "@openbot/contracts/team-protocol/crm-v1";
-import { creditsRailWallet } from "@openbot/ui/features/credits/credits-store";
-import { RailMoveCreditsDialog } from "@openbot/ui/features/credits/MoveCreditsDialog";
-import { ServerMenu } from "@openbot/ui/features/servers/ServerMenu";
-import { PageRail, type PageRailPage } from "@openbot/ui/features/window/PageRail";
-import { useText } from "@openbot/ui/text";
+import { isUpdateActivePhase } from "@codebot/contracts/ipc";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
+import { CRM_CAPABILITY } from "@codebot/contracts/team-protocol/crm-v1";
+import { creditsRailWallet } from "@codebot/ui/features/credits/credits-store";
+import { RailMoveCreditsDialog } from "@codebot/ui/features/credits/MoveCreditsDialog";
+import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
+import { PageRail, type PageRailPage } from "@codebot/ui/features/window/PageRail";
+import { useText } from "@codebot/ui/text";
 import { createSignal, Show } from "solid-js";
 import { appPort } from "../../app-port";
 import { useLayout } from "../../layout";
@@ -88,10 +88,10 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
   const creditAgents = createCreditAgentsRail({
     server: activeServer,
     shown: () => windowPage.creditsAvailable(),
-    calls: window.openbot.hostAdmin,
+    calls: window.codebot.hostAdmin,
     asks: {
-      readMuted: (serverId) => window.openbot.agent.readCreditsAskMuted(serverId),
-      setMuted: (muted, serverId) => window.openbot.agent.setCreditsAskMuted({ muted }, serverId),
+      readMuted: (serverId) => window.codebot.agent.readCreditsAskMuted(serverId),
+      setMuted: (muted, serverId) => window.codebot.agent.setCreditsAskMuted({ muted }, serverId),
     },
   });
   function crmConnectorsAction(): ((button: HTMLElement) => void) | undefined {

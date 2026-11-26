@@ -25,7 +25,7 @@ import {
   type BrowserWindowModel,
   type BrowserWindowTabDetails,
   isAvatarColor,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   decodeList,
   decodeRecord,
@@ -33,8 +33,8 @@ import {
   requiredBoolean,
   requiredNumber,
   requiredString,
-} from "@openbot/contracts/ipc-decoding";
-import { type DynamicRecord, isBoolean, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc-decoding";
+import { type DynamicRecord, isBoolean, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
 
 const CONTROL_PHASES = ["acting", "waiting"] as const;
 const DIALOG_TYPES = ["alert", "confirm"] as const;

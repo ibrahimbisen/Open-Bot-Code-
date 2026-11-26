@@ -1,4 +1,4 @@
-import { inviteUseCount, isPermanentInvite } from "@openbot/contracts/invite-links";
+import { inviteUseCount, isPermanentInvite } from "@codebot/contracts/invite-links";
 import type {
   InvitePreview,
   InviteSummary,
@@ -6,10 +6,10 @@ import type {
   TeamMemberSummary,
   TeamPresenceSnapshot,
   TeamRole,
-} from "@openbot/contracts/ipc";
-import { isTeamRealtimeEvent } from "@openbot/contracts/ipc";
-import { decodeRecord, nullableString, requiredBoolean, requiredString } from "@openbot/contracts/ipc-decoding";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isTeamRealtimeEvent } from "@codebot/contracts/ipc";
+import { decodeRecord, nullableString, requiredBoolean, requiredString } from "@codebot/contracts/ipc-decoding";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 
 export function decodeJoinResult(value: unknown): { member: { role: TeamRole }; sessionToken: string } {
   const record = decodeRecord(value, "join response");

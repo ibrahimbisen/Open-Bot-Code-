@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import { Socket } from "node:net";
 import { isAbsolute } from "node:path";
 import type { Readable } from "node:stream";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Exit, Schema, Semaphore } from "effect";
 import { CentralAuthOperationError } from "./central-auth-effects";
 import { decodeRemoteMembers, type RemoteMemberRecord } from "./central-auth-records";
@@ -12,12 +12,12 @@ import { RemoteWorkflowError } from "./remote-service-effects";
 import type { TeamStore } from "./team-store";
 
 export const LOCAL_SERVER_OWNER_USERNAME = "owner";
-export const LOCAL_SERVER_READY_PREFIX = "OPENBOT_LOCAL_SERVER_READY ";
-export const LOCAL_SERVER_MEMBERS_REQUEST = "OPENBOT_LOCAL_SERVER_REQUEST members";
-export const LOCAL_SERVER_WORKING_PREFIX = "OPENBOT_LOCAL_SERVER_WORKING ";
+export const LOCAL_SERVER_READY_PREFIX = "CODEBOT_LOCAL_SERVER_READY ";
+export const LOCAL_SERVER_MEMBERS_REQUEST = "CODEBOT_LOCAL_SERVER_REQUEST members";
+export const LOCAL_SERVER_WORKING_PREFIX = "CODEBOT_LOCAL_SERVER_WORKING ";
 const LOCAL_SERVER_WORKING_DELAY_MS = 100;
 const LOCAL_SERVER_MEMBERS_TIMEOUT_MS = 30_000;
-const LOCAL_SERVER_MARKETPLACE_REQUEST_PREFIX = "OPENBOT_LOCAL_SERVER_REQUEST marketplace ";
+const LOCAL_SERVER_MARKETPLACE_REQUEST_PREFIX = "CODEBOT_LOCAL_SERVER_REQUEST marketplace ";
 const LOCAL_SERVER_MARKETPLACE_TIMEOUT_MS = 60_000;
 
 export const LOCAL_SERVER_CONTROL_FD = 3;
@@ -36,11 +36,11 @@ export function openLocalServerControl(
 }
 
 export const LOCAL_SERVER_ENVIRONMENT = {
-  child: "OPENBOT_LOCAL_SERVER_CHILD",
-  agentRoot: "OPENBOT_LOCAL_SERVER_ROOT",
-  name: "OPENBOT_LOCAL_SERVER_NAME",
-  secret: "OPENBOT_LOCAL_SERVER_SECRET",
-  runtimeRoot: "OPENBOT_LOCAL_SERVER_RUNTIMES",
+  child: "CODEBOT_LOCAL_SERVER_CHILD",
+  agentRoot: "CODEBOT_LOCAL_SERVER_ROOT",
+  name: "CODEBOT_LOCAL_SERVER_NAME",
+  secret: "CODEBOT_LOCAL_SERVER_SECRET",
+  runtimeRoot: "CODEBOT_LOCAL_SERVER_RUNTIMES",
 } as const;
 
 export interface LocalServerChildEnvironment {

@@ -4,15 +4,15 @@ import { existsSync, mkdirSync, rmSync, statfsSync, statSync, writeFileSync } fr
 import { join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import { DatabaseSync } from "node:sqlite";
-import type { ConversationMessage } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
 import { Duration, Effect } from "effect";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase, type ThreadEventCompactionBatch } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase, type ThreadEventCompactionBatch } from "../src/backend/openbot-database";
 import { compactThreadEvents } from "../src/backend/thread-event-compaction-run";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/thread-event-compaction-large");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/thread-event-compaction-large");
 const GIB = 1024 ** 3;
 const KILL_AFTER_BATCHES = 30;
 const BASE = Date.UTC(2026, 3, 1);
@@ -59,7 +59,7 @@ interface ChildResult {
 }
 
 async function runCompactionChild(root: string, pauseMs: number): Promise<ChildResult> {
-  const database = new OpenBotDatabase(root);
+  const database = new CodeBotDatabase(root);
   await runCauseEffect(database.initialize());
   const batchTimes: number[] = [];
   let slowestBatch = { index: -1, events: 0, rewritten: 0, bytesBefore: 0 };
@@ -124,7 +124,7 @@ mkdirSync(temp, { recursive: true });
 if (freeBytes(OUT) < targetBytes * 2.5) {
   throw new Error(`This run needs ${((targetBytes * 2.5) / GIB).toFixed(1)} GB of free disk in ${OUT}.`);
 }
-const databasePath = join(root, "openbot.db");
+const databasePath = join(root, "codebot.db");
 
 const FILL = 'Lorem ipsum dolor sit amet, 界 "quoted" \\ path/to/file.ts:12 '.repeat(40);
 
@@ -152,7 +152,7 @@ interface Generated {
 
 async function generate(): Promise<Generated> {
   const started = performance.now();
-  const database = new OpenBotDatabase(root);
+  const database = new CodeBotDatabase(root);
   const agentStore = new AgentStore(root, home, database);
   await runCauseEffect(agentStore.initialize());
   const agent = await runCauseEffect(agentStore.getOrCreate("compaction-agent", "Compaction", "Compaction"));
@@ -320,7 +320,7 @@ function eventRowsHash(db: DatabaseSync): string {
 }
 
 async function replayHashes(): Promise<Map<string, string>> {
-  const database = new OpenBotDatabase(root);
+  const database = new CodeBotDatabase(root);
   await runCauseEffect(database.initialize());
   const db = database.connection;
   const hashes = new Map<string, string>();

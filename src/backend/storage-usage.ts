@@ -1,7 +1,7 @@
 import { lstat, readdir, realpath, rm, statfs } from "node:fs/promises";
 import { join } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentStorageRow,
   CLEARABLE_STORAGE_CATEGORIES,
@@ -14,9 +14,9 @@ import {
   type StorageDisk,
   type StorageUsage,
   type StoredFileRow,
-} from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Exit, Fiber, Result, Scope, Semaphore } from "effect";
 import {
   type StoragePlacement,

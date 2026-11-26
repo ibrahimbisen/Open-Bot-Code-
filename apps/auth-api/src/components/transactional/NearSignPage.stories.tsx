@@ -1,4 +1,4 @@
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import type { JSX } from "@solidjs/web";
 import { createRootRoute, createRoute, createRouter, RouterContextProvider } from "@tanstack/solid-router";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -83,7 +83,7 @@ export const CreatePasskeyCancelled: Story = {
 };
 
 export const PasskeyCreated: Story = {
-  args: { state: { step: "done", request: REGISTER, returnUrl: "openbot://near-signature?nonce=story" } },
+  args: { state: { step: "done", request: REGISTER, returnUrl: "codebot://near-signature?nonce=story" } },
 };
 
 export const CheckBackup: Story = {

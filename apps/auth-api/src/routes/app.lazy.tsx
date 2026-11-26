@@ -1,4 +1,4 @@
-import { AppLoadingShell } from "@openbot/ui/features/account/AppLoadingShell";
+import { AppLoadingShell } from "@codebot/ui/features/account/AppLoadingShell";
 import { Dynamic } from "@solidjs/web";
 import { createLazyFileRoute } from "@tanstack/solid-router";
 import { type Component, createSignal, flush, lazy, onSettled, Show } from "solid-js";
@@ -7,7 +7,7 @@ import { showSavedAppearance } from "../../../../src/renderer/src/features/web-c
 import { markSoftwareRendering } from "../../../../src/renderer/src/features/web-client/web-software-rendering";
 import "../../../../src/renderer/src/features/web-client/web-client.css";
 
-const loadWebApp = () => import("@openbot/renderer-web");
+const loadWebApp = () => import("@codebot/renderer-web");
 const WebApp = lazy(() =>
   loadWebApp().then((module) =>
     module
@@ -25,7 +25,7 @@ function BrowserAppPage() {
   onSettled(() => markSoftwareRendering());
   onSettled(() => {
     void loadWebApp();
-    void import("@openbot/ui/features/account/AppLoadingScreen")
+    void import("@codebot/ui/features/account/AppLoadingScreen")
       .then((module) => {
         setCrew(() => module.AppLoadingScreen);
         flush();

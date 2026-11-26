@@ -1,4 +1,4 @@
-import { type ChatWindowTarget, LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
+import { type ChatWindowTarget, LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
 import type { JSX } from "@solidjs/web";
 import { type ParentProps, Show, untrack } from "solid-js";
 import { AnsweredPromptsProvider } from "./answered-prompts";

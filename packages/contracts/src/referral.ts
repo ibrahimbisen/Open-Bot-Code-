@@ -8,7 +8,7 @@ const REFERRAL_MINIMUM_USD = 2000;
 export const REFERRAL_PAGE_SIZE = 20;
 
 export const REFERRAL_CODE_PARAM = "ref";
-export const REFERRAL_CODE_STORAGE_KEY = "openbot.referral-code.v1";
+export const REFERRAL_CODE_STORAGE_KEY = "codebot.referral-code.v1";
 export const REFERRAL_CODE_MAX_AGE_DAYS = 30;
 
 const REFERRAL_CODE = /^[a-hjkmnp-z2-9]{8}$/u;

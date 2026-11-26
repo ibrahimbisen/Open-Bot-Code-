@@ -35,11 +35,11 @@ export interface ComposerContextMeter {
 
 export const ComposerContextRing = memo(function ComposerContextRing({ meter }: { meter: ComposerContextMeter }) {
   const [dim, secondary, warning, danger, accent] = useCSSVariable([
-    "--openbot-text-dim",
-    "--openbot-text-secondary",
-    "--openbot-warning",
-    "--openbot-danger",
-    "--openbot-accent",
+    "--codebot-text-dim",
+    "--codebot-text-secondary",
+    "--codebot-warning",
+    "--codebot-danger",
+    "--codebot-accent",
   ]);
   const reducedMotion = useReducedMotion();
   const color = meter.compacting

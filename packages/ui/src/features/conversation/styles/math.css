@@ -13,5 +13,5 @@
 
 .message-math-display .katex-display {
   margin: 0;
-  padding: var(--openbot-space-1) 0;
+  padding: var(--codebot-space-1) 0;
 }

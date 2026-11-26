@@ -8,7 +8,7 @@ import type {
   InstallMarketplaceAgentInput,
   InstallMarketplaceAgentResult,
   MarketplaceAgentDetail,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect, Exit, Schema } from "effect";
 import { type AgentMarketplaceFailure, AgentMarketplaceService } from "../src/main/agent-marketplace-service";
 import { CentralAuthOperationError } from "../src/main/central-auth-effects";
@@ -145,7 +145,7 @@ async function scenario(
   options: ScenarioOptions,
   check: (state: ScenarioState, input: InstallMarketplaceAgentInput) => Promise<void>,
 ): Promise<void> {
-  const workspace = await mkdtemp(join(tmpdir(), "openbot-agent-receipt-"));
+  const workspace = await mkdtemp(join(tmpdir(), "codebot-agent-receipt-"));
   const agents = new Map<string, AgentSummary>();
   const routines = new Map<string, RoutineInput>();
   const skillInstalls: string[] = [];
@@ -375,7 +375,7 @@ await scenario("receipt interruption", { receiptInterrupt: true }, async (state)
 });
 
 report.status = report.cases.every((item) => item.status === "pass") ? "pass" : "fail";
-await mkdir(".openbot-build", { recursive: true });
-await writeFile(".openbot-build/agent-install-receipt-e2e.json", `${JSON.stringify(report, null, 2)}\n`);
+await mkdir(".codebot-build", { recursive: true });
+await writeFile(".codebot-build/agent-install-receipt-e2e.json", `${JSON.stringify(report, null, 2)}\n`);
 process.stdout.write(`${JSON.stringify(report)}\n`);
 process.exitCode = report.status === "pass" ? 0 : 1;

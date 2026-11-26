@@ -7,11 +7,11 @@ import { performance } from "node:perf_hooks";
 import { Effect } from "effect";
 import { AgentStore } from "../src/backend/agent-store";
 import { claudeHistoryReader } from "../src/backend/claude-history";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { importProviderHistory } from "../src/backend/provider-history-import";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-history-resume-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-history-resume-e2e");
 const TURNS = 200;
 const SESSION = "11111111-2222-4333-8444-555555555555";
 const PROJECT = "-tmp-resume-project";
@@ -94,11 +94,11 @@ function turns(prefix: string, count: number): string {
 }
 
 async function run(): Promise<void> {
-  const root = await mkdtemp(join(tmpdir(), "openbot-claude-history-resume-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-claude-history-resume-"));
   const projectDirectory = join(root, "claude", "projects", PROJECT);
   mkdirSync(projectDirectory, { recursive: true });
   const transcript = join(projectDirectory, `${SESSION}.jsonl`);
-  const database = new OpenBotDatabase(join(root, "state"));
+  const database = new CodeBotDatabase(join(root, "state"));
   try {
     const agentStore = new AgentStore(join(root, "state"), join(root, "home"), database);
     await runCauseEffect(agentStore.initialize());
@@ -159,7 +159,7 @@ async function run(): Promise<void> {
     appendFileSync(transcript, turns("n", 5));
     const added = await start("five new turns");
     assert.equal(added.sentTurns, 6, "the newest earlier turn and the five new turns are sent");
-    assert.ok(answers().includes("Answer n4"), "a turn made while OpenBot was closed imports");
+    assert.ok(answers().includes("Answer n4"), "a turn made while CodeBot was closed imports");
     assert.equal(added.chatMessages, TURNS + 5);
 
     parent = `a-t${TURNS - 10}-final`;

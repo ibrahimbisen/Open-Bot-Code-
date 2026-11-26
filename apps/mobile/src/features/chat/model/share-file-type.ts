@@ -1,4 +1,4 @@
-import { attachmentFileExtension } from "@openbot/contracts/attachment-files";
+import { attachmentFileExtension } from "@codebot/contracts/attachment-files";
 import { Platform } from "react-native";
 
 export function shareTypeOptions(uri: string, mimeType: string): { mimeType?: string } {

@@ -1,7 +1,7 @@
-import type { MessagingConnectionState } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
-import { jidNormalizedUser, proto, type WAMessage } from "@openbot/whatsapp/baileys";
+import type { MessagingConnectionState } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
+import { jidNormalizedUser, proto, type WAMessage } from "@codebot/whatsapp/baileys";
 import { Effect } from "effect";
 import type { InboundMessage, MessagingTransport, TransportSink } from "../messaging-types";
 import {
@@ -17,7 +17,7 @@ import { WhatsAppSelfChatLimit } from "./whatsapp-loop-guard";
 import type { WhatsAppConnectionHandle, WhatsAppRuntime } from "./whatsapp-runtime";
 import type { WhatsAppSessionState } from "./whatsapp-session";
 
-const logger = createOpenBotLogger("whatsapp");
+const logger = createCodeBotLogger("whatsapp");
 
 const RECENT_MESSAGES = 2_000;
 const DEBOUNCE_MS = 1_500;
@@ -62,7 +62,7 @@ export class WhatsAppTransport implements MessagingTransport {
   #unsubscribe: Array<() => void> = [];
   #prune: ReturnType<typeof setInterval> | null = null;
   readonly #selfChatLimit = new WhatsAppSelfChatLimit();
-  #toldOtherOpenBot = false;
+  #toldOtherCodeBot = false;
 
   constructor(options: WhatsAppTransportOptions) {
     this.#runtime = options.runtime;
@@ -155,9 +155,9 @@ export class WhatsAppTransport implements MessagingTransport {
     }
     if (!event || !this.#sink) return;
     if (event.type === "pairing") return this.#pair(event);
-    if (event.type === "otherOpenBot") {
-      if (this.#toldOtherOpenBot) return;
-      this.#toldOtherOpenBot = await this.#tell(event.chatJid, "status.messaging.whatsappOtherOpenBot");
+    if (event.type === "otherCodeBot") {
+      if (this.#toldOtherCodeBot) return;
+      this.#toldOtherCodeBot = await this.#tell(event.chatJid, "status.messaging.whatsappOtherCodeBot");
       return;
     }
     if (event.type === "action") {
@@ -246,7 +246,7 @@ export class WhatsAppTransport implements MessagingTransport {
     );
   }
 
-  #tell(chatJid: string, key: "status.messaging.whatsappOtherOpenBot" | "status.messaging.whatsappPaused") {
+  #tell(chatJid: string, key: "status.messaging.whatsappOtherCodeBot" | "status.messaging.whatsappPaused") {
     return Effect.runPromise(
       this.#handle.session.send(chatJid, { text: sourceText(key) }).pipe(
         Effect.as(true),

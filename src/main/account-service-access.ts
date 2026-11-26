@@ -1,5 +1,5 @@
 import { join } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { app, net } from "electron";
 import { CentralAuthManager, readCentralAuthApiUrl, readMobileConnectApiUrl } from "./central-auth-manager";
 import type { CompanySignInBrowser } from "./company-sign-in-browser";
@@ -10,7 +10,7 @@ import {
   type SecretStorageCipher,
 } from "./secret-storage-cipher";
 
-const CENTRAL_AUTH_FILE = "openbot-central-auth-v1.bin";
+const CENTRAL_AUTH_FILE = "codebot-central-auth-v1.bin";
 
 let userDataSecretStorage: SecretStorage | null = null;
 
@@ -44,7 +44,7 @@ async function accountServiceFetch(input: string | URL | Request, init?: Request
 
 export function centralAuthApiUrl(): string {
   return readCentralAuthApiUrl(
-    process.env.OPENBOT_AUTH_API_URL,
+    process.env.CODEBOT_AUTH_API_URL,
     app.isPackaged ? "https://api.openbot.run" : "http://127.0.0.1:3100",
   );
 }
@@ -56,7 +56,7 @@ export function createCentralAuthManager(options: {
   const apiUrl = centralAuthApiUrl();
   return new CentralAuthManager({
     apiUrl,
-    mobileConnectApiUrl: readMobileConnectApiUrl(process.env.OPENBOT_MOBILE_AUTH_API_URL, apiUrl),
+    mobileConnectApiUrl: readMobileConnectApiUrl(process.env.CODEBOT_MOBILE_AUTH_API_URL, apiUrl),
     storagePath: join(app.getPath("userData"), CENTRAL_AUTH_FILE),
     fetch: accountServiceFetch,
     ...safeStorageCipher("error.app.macSecureStorageUnavailable"),

@@ -1,6 +1,6 @@
-import { feedbackSentIssue } from "@openbot/contracts/feedback";
-import { serverInstallEvent } from "@openbot/contracts/hosted-servers";
-import type { ConversationMessage, ConversationSearchPage, QueueDeliveryStatus } from "@openbot/contracts/ipc";
+import { feedbackSentIssue } from "@codebot/contracts/feedback";
+import { serverInstallEvent } from "@codebot/contracts/hosted-servers";
+import type { ConversationMessage, ConversationSearchPage, QueueDeliveryStatus } from "@codebot/contracts/ipc";
 import {
   AGENT_INSTRUCTIONS_CHANGE_ITEM_TYPE,
   AGENT_WELCOME_ITEM_TYPE,
@@ -25,11 +25,11 @@ import {
   signInFailureProvider,
   skillConversationEvent,
   skillSuggestionEvent,
-} from "@openbot/contracts/ipc";
-import { sourceText as englishSourceText } from "@openbot/i18n/source";
-import { cleanAgentMessageText } from "@openbot/team-client/agent-message-text";
+} from "@codebot/contracts/ipc";
+import { sourceText as englishSourceText } from "@codebot/i18n/source";
+import { cleanAgentMessageText } from "@codebot/team-client/agent-message-text";
 
-export { toAgentProfile } from "@openbot/ui/features/agents/agent-profile";
+export { toAgentProfile } from "@codebot/ui/features/agents/agent-profile";
 
 import type {
   AgentDeliveryMarkerStatus,
@@ -38,10 +38,10 @@ import type {
   AgentProfile,
   ChatActionMarkerModel,
   ComposerThreadMessageMatch,
-} from "@openbot/ui/data";
-import { formatChatTimestamp } from "@openbot/ui/features/conversation/chat-timestamp";
-import type { TaskListItem } from "@openbot/ui/features/conversation/TaskList";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/ui/data";
+import { formatChatTimestamp } from "@codebot/ui/features/conversation/chat-timestamp";
+import type { TaskListItem } from "@codebot/ui/features/conversation/TaskList";
+import { currentText } from "@codebot/ui/text";
 import { isRoutineEventItem } from "./features/conversation/conversation-read-state";
 
 function feedbackSentTitle(text: string): string {

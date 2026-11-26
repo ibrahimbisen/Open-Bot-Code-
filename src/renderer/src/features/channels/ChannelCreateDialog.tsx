@@ -1,4 +1,4 @@
-import type { ChannelDraft } from "@openbot/contracts/ipc";
+import type { ChannelDraft } from "@codebot/contracts/ipc";
 import {
   Alert,
   AlertDescription,
@@ -12,10 +12,10 @@ import {
   Search,
   UsersRound,
   X,
-} from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { ChannelMemberRow } from "@openbot/ui/features/channels/ChannelMemberRow";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { ChannelMemberRow } from "@codebot/ui/features/channels/ChannelMemberRow";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, createStore, For, onSettled, Show, snapshot } from "solid-js";
 import { useChannels } from "./channels-context";
 import { emptyChannelDraft, matchesAgentSearch, toggleChannelMember } from "./channels-draft";

@@ -1,8 +1,8 @@
 import { createSignal } from "solid-js";
 
-export const NO_BLUR_ATTRIBUTE = "data-openbot-no-blur";
+export const NO_BLUR_ATTRIBUTE = "data-codebot-no-blur";
 
-export const STILL_FACES_ATTRIBUTE = "data-openbot-still-faces";
+export const STILL_FACES_ATTRIBUTE = "data-codebot-still-faces";
 
 function read(): boolean {
   return document.documentElement.hasAttribute(STILL_FACES_ATTRIBUTE);

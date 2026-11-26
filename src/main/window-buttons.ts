@@ -1,4 +1,4 @@
-import type { LayoutDirection } from "@openbot/i18n";
+import type { LayoutDirection } from "@codebot/i18n";
 import { app, type BrowserWindow } from "electron";
 
 export const WINDOW_BUTTON_INSET = { x: 12, y: 13 } as const;

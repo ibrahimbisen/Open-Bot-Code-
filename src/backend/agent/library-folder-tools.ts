@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   LIBRARY_FOLDER_LIMITS,
   type LibraryFolder,
@@ -8,7 +8,7 @@ import {
   libraryFolderPath,
   libraryFolderTree,
   type StoredFileWorkflow,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { LibraryFoldersStore } from "../library-folders-store";
@@ -112,7 +112,7 @@ function ownFolder(own: readonly LibraryFolder[], path: string): LibraryFolder {
 }
 
 function refusalReason(cause: unknown): string {
-  return cause instanceof Error && !("code" in cause) ? cause.message : "OpenBot could not save the Library folders.";
+  return cause instanceof Error && !("code" in cause) ? cause.message : "CodeBot could not save the Library folders.";
 }
 
 export function placeInLibraryFolder(
@@ -122,7 +122,7 @@ export function placeInLibraryFolder(
   fileIds: readonly string[],
 ): Effect.Effect<AttachedLibraryFolder> {
   const notPlaced = (reason: string): AttachedLibraryFolder => ({ placed: false, reason });
-  if (!store) return Effect.succeed(notPlaced("Library folders are not available on this OpenBot."));
+  if (!store) return Effect.succeed(notPlaced("Library folders are not available on this CodeBot."));
   let names: string[];
   try {
     names = folderPathNames(folder);

@@ -9,7 +9,7 @@ export function AIAgentWorkflows() {
       </p>
 
       <p>
-        In OpenBot, you can set up a small team of agents to help with those jobs. One checks the facts, another writes,
+        In CodeBot, you can set up a small team of agents to help with those jobs. One checks the facts, another writes,
         and a third reviews the result. You can keep using that team for new tasks and ask it to reuse the research you
         have already approved.
       </p>
@@ -24,7 +24,7 @@ export function AIAgentWorkflows() {
       <h3>Give each agent a job</h3>
 
       <p>
-        One possible setup uses four agents, all on the same OpenBot computer or server. Choose a name for each and
+        One possible setup uses four agents, all on the same CodeBot computer or server. Choose a name for each and
         describe its job in its instructions:
       </p>
 
@@ -71,7 +71,7 @@ export function AIAgentWorkflows() {
       <h3>Keep the project files together</h3>
 
       <p>
-        Ask the Coordinator to create a project folder in OpenBot's shared folder on that computer or server. Use it for
+        Ask the Coordinator to create a project folder in CodeBot's shared folder on that computer or server. Use it for
         your task description, research, draft and review notes.
       </p>
 
@@ -221,7 +221,7 @@ export function AIAgentWorkflows() {
       </p>
 
       <p>
-        Once you are happy with the process, you can set it up on OpenBot's Workflows page. Choose which agent handles
+        Once you are happy with the process, you can set it up on CodeBot's Workflows page. Choose which agent handles
         each step, pass its result to the next step, and add an <strong>Approval</strong> step wherever you want the
         process to wait for your decision. A workflow can run on a schedule. For a single task repeated by one agent,
         use a scheduled routine.
@@ -229,7 +229,7 @@ export function AIAgentWorkflows() {
 
       <p>
         Try the full process with your own files and accounts before scheduling it. The computer or server running
-        OpenBot needs to be available when the work runs.
+        CodeBot needs to be available when the work runs.
       </p>
 
       <p>

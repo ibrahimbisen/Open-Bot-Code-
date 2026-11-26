@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 
 const CONNECTION_STOPS = new Set([
   sourceText("error.remote.appInBackground"),

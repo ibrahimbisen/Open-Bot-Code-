@@ -5,11 +5,11 @@ import {
   type ProviderAdminDesktopApi,
   relayCallbackQuery,
   relayPageUrl,
-} from "@openbot/contracts/ipc";
-import type { ProviderAccountRelay } from "@openbot/contracts/team-protocol/provider-account-relays";
-import type { providerSignInRelay } from "@openbot/contracts/team-protocol/provider-sign-in-relays";
-import { sourceText } from "@openbot/i18n/source";
-import { runTeamEffect } from "@openbot/team-client";
+} from "@codebot/contracts/ipc";
+import type { ProviderAccountRelay } from "@codebot/contracts/team-protocol/provider-account-relays";
+import type { providerSignInRelay } from "@codebot/contracts/team-protocol/provider-sign-in-relays";
+import { sourceText } from "@codebot/i18n/source";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   cancelProviderSignInRelay,
   completeSignInRelay,
@@ -17,8 +17,8 @@ import {
   startProviderAccountSignInRelay,
   startProviderSignInRelay,
   type TeamAdminRequestError,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 
 const POLL_MS = 1_000;

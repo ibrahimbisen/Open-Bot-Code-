@@ -1,6 +1,6 @@
-import { buttonVariants, Check, ChevronDown, DropdownMenu, MessageCirclePlus, MessageSquare } from "@openbot/ui";
-import { sidebarMessageTime } from "@openbot/ui/features/sidebar/sidebar-filtering";
-import { useText } from "@openbot/ui/text";
+import { buttonVariants, Check, ChevronDown, DropdownMenu, MessageCirclePlus, MessageSquare } from "@codebot/ui";
+import { sidebarMessageTime } from "@codebot/ui/features/sidebar/sidebar-filtering";
+import { useText } from "@codebot/ui/text";
 import { For, Show } from "solid-js";
 import { ThreadStatusMark } from "../conversation/threads/ThreadStatusMark";
 import { ThreadTitle } from "../conversation/threads/ThreadTitle";

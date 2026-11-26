@@ -6,9 +6,9 @@ import {
   type WorkflowStepSettings,
   type WorkflowStepSource,
   workflowMediaOptions,
-} from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
-import { Button, CopyButton, Popover, Skeleton, SlidersHorizontal } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
+import { Button, CopyButton, Popover, Skeleton, SlidersHorizontal } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createStore, For, Match, Show, Switch } from "solid-js";
 import { useText } from "../../text";

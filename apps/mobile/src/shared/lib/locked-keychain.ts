@@ -1,7 +1,7 @@
 import * as SecureStore from "expo-secure-store";
 
 const OPTIONS: SecureStore.SecureStoreOptions = {
-  keychainService: "openbot.after-first-unlock",
+  keychainService: "codebot.after-first-unlock",
   keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
 };
 

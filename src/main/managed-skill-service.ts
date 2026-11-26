@@ -1,9 +1,9 @@
 import { lstat, mkdir, readdir, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve, sep } from "node:path";
-import { agentProviderDescriptor, MANAGED_SKILL_FOLDERS } from "@openbot/contracts/agent-providers";
-import type { AgentSummary, InstalledSkill } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { agentProviderDescriptor, MANAGED_SKILL_FOLDERS } from "@codebot/contracts/agent-providers";
+import type { AgentSummary, InstalledSkill } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Result, Schema } from "effect";
 import { parse as parseYaml } from "yaml";
 import { causeHelpers } from "../backend/effect-boundary";
@@ -11,9 +11,9 @@ import { isMissingFileError } from "../backend/file-errors";
 import { SKILL_OWNERSHIP_MARKER } from "../backend/home-skills";
 import { isPathInside } from "../backend/path-containment";
 
-const MANAGED_SKILL_SLUG = "openbot-site-hosting";
-export const SKILL_CREATOR_SKILL_SLUG = "openbot-skill-creator";
-export const DATA_SKILL_SLUG = "openbot-data";
+const MANAGED_SKILL_SLUG = "codebot-site-hosting";
+export const SKILL_CREATOR_SKILL_SLUG = "codebot-skill-creator";
+export const DATA_SKILL_SLUG = "codebot-data";
 export const MANAGED_SKILL_SLUGS: ReadonlySet<string> = new Set([
   MANAGED_SKILL_SLUG,
   SKILL_CREATOR_SKILL_SLUG,
@@ -21,7 +21,7 @@ export const MANAGED_SKILL_SLUGS: ReadonlySet<string> = new Set([
 ]);
 export const OWNERSHIP_MARKER = SKILL_OWNERSHIP_MARKER;
 
-const logger = createOpenBotLogger("managed-skill-service");
+const logger = createCodeBotLogger("managed-skill-service");
 
 interface SyncTargetsResult {
   collisions: string[];
@@ -34,10 +34,10 @@ export class ManagedSkillService {
   constructor(
     private readonly sourcePath: string,
     private readonly reportCollision: (target: string) => void = (target) => {
-      logger.warn(`OpenBot preserved an unowned managed-skill collision at ${target}.`);
+      logger.warn(`CodeBot preserved an unowned managed-skill collision at ${target}.`);
     },
     private readonly reportFailure: (target: string, error: unknown) => void = (target, error) => {
-      logger.error(`OpenBot could not synchronize the managed skill at ${target}.`, toLogValue(error));
+      logger.error(`CodeBot could not synchronize the managed skill at ${target}.`, toLogValue(error));
     },
     private readonly slug = MANAGED_SKILL_SLUG,
   ) {}
@@ -119,7 +119,7 @@ const syncTarget = Effect.fn("ManagedSkill.syncTarget")(function* (
   content: string,
   slug: string,
 ): Effect.fn.Return<"synced" | "collision", ManagedSkillFailure> {
-  const ownershipContent = `${JSON.stringify({ managedBy: "openbot", slug, version: 1 })}\n`;
+  const ownershipContent = `${JSON.stringify({ managedBy: "codebot", slug, version: 1 })}\n`;
   const parent = dirname(target);
   yield* ensureSafeDirectory(workspaceRoot, parent);
   const marker = join(parent, OWNERSHIP_MARKER);
@@ -254,7 +254,7 @@ export const listManagedSkillsForChat = Effect.fn("ManagedSkill.listForChat")(fu
         yield* rejectSymlink(file);
         if (
           (yield* optionalText(marker)) !==
-          `${JSON.stringify({ managedBy: "openbot", slug: entry.name, version: 1 })}\n`
+          `${JSON.stringify({ managedBy: "codebot", slug: entry.name, version: 1 })}\n`
         )
           return;
         const content = yield* managedIO(() => readFile(file, "utf8"));

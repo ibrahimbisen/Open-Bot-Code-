@@ -1,4 +1,4 @@
-import { decodePasswordManagerStatus, type PasswordManagerStatus } from "@openbot/contracts/ipc";
+import { decodePasswordManagerStatus, type PasswordManagerStatus } from "@codebot/contracts/ipc";
 
 export function decodePasswordManagerResponse(value: unknown): PasswordManagerStatus {
   const status = decodePasswordManagerStatus(value);

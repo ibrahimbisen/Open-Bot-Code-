@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
-import type { HostReleaseStatus, UpdateStatus } from "@openbot/contracts/ipc";
-import { isNewerRelease, isValidSemver } from "@openbot/contracts/release-version";
+import type { HostReleaseStatus, UpdateStatus } from "@codebot/contracts/ipc";
+import { isNewerRelease, isValidSemver } from "@codebot/contracts/release-version";
 import { Deferred, Effect, Exit, Schema } from "effect";
 import { parse } from "yaml";
 
@@ -18,17 +18,17 @@ function releaseTarget(platform: NodeJS.Platform, arch: string): ReleaseTarget |
   if (platform === "linux")
     return {
       feed: arch === "arm64" ? "latest-linux-arm64.yml" : "latest-linux.yml",
-      asset: (version) => `OpenBot-${version}-${arch === "x64" ? "x86_64" : "arm64"}.AppImage`,
+      asset: (version) => `CodeBot-${version}-${arch === "x64" ? "x86_64" : "arm64"}.AppImage`,
     };
   if (platform === "darwin")
     return {
       feed: "latest-mac.yml",
-      asset: (version) => `OpenBot-${version}-${arch}.zip`,
+      asset: (version) => `CodeBot-${version}-${arch}.zip`,
     };
   if (platform === "win32" && arch === "x64")
     return {
       feed: "latest.yml",
-      asset: (version) => `OpenBot-${version}-x64.exe`,
+      asset: (version) => `CodeBot-${version}-x64.exe`,
     };
   return null;
 }
@@ -46,7 +46,7 @@ interface HostReleaseOptions {
 
 export const readInstallationMode = Effect.fn("HostRelease.readInstallationMode")(function* () {
   return yield* Effect.tryPromise({
-    try: (signal) => readFile("/opt/OpenBot/hosted/mode", { encoding: "utf8", signal }),
+    try: (signal) => readFile("/opt/CodeBot/hosted/mode", { encoding: "utf8", signal }),
     catch: () => new ReleaseCheckFailed(),
   }).pipe(
     Effect.map((value) => value.trim()),
@@ -82,7 +82,7 @@ export class HostReleaseService {
     if (this.#options.platform === "linux") {
       if (this.#options.updateStatus().phase !== "unsupported") return "self-update";
       if (this.#options.installationMode === "container") return "container";
-      if (this.#options.environment.OPENBOT_HOSTED_SERVER === "1") return "hosted";
+      if (this.#options.environment.CODEBOT_HOSTED_SERVER === "1") return "hosted";
       if (this.#options.installationMode === "self") return "system";
     }
     return this.#options.updateStatus().phase === "unsupported" ? "manual" : "self-update";

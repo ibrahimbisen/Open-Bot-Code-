@@ -1,5 +1,5 @@
-import type { ProviderApiKeyStatus } from "@openbot/contracts/ipc";
-import { OpenCodeKeyDialog, type ProviderKeyApi } from "@openbot/ui/features/settings/OpenCodeKeyDialog";
+import type { ProviderApiKeyStatus } from "@codebot/contracts/ipc";
+import { OpenCodeKeyDialog, type ProviderKeyApi } from "@codebot/ui/features/settings/OpenCodeKeyDialog";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

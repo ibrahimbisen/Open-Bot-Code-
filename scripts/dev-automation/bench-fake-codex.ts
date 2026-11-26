@@ -96,12 +96,12 @@ if (process.argv.includes("--version")) {
   process.stdout.write("codex-cli 0.160.1\\n");
   process.exit(0);
 }
-const LOG = process.env.OPENBOT_BENCH_CODEX_LOG;
-const DELTA_MS = Number(process.env.OPENBOT_BENCH_CODEX_DELTA_MS || "50");
-const DELTAS = Number(process.env.OPENBOT_BENCH_CODEX_DELTAS || "400");
-const MARKDOWN = process.env.OPENBOT_BENCH_CODEX_CORPUS === "markdown";
-const REASONING = process.env.OPENBOT_BENCH_CODEX_REASONING === "1";
-const COMMANDS = process.env.OPENBOT_BENCH_CODEX_COMMANDS === "1";
+const LOG = process.env.CODEBOT_BENCH_CODEX_LOG;
+const DELTA_MS = Number(process.env.CODEBOT_BENCH_CODEX_DELTA_MS || "50");
+const DELTAS = Number(process.env.CODEBOT_BENCH_CODEX_DELTAS || "400");
+const MARKDOWN = process.env.CODEBOT_BENCH_CODEX_CORPUS === "markdown";
+const REASONING = process.env.CODEBOT_BENCH_CODEX_REASONING === "1";
+const COMMANDS = process.env.CODEBOT_BENCH_CODEX_COMMANDS === "1";
 const REASONING_DELTAS = 40;
 const COMMAND_COUNT = 5;
 const COMMAND_OUTPUT_DELTAS = 4;
@@ -215,7 +215,7 @@ const answer = (message) => {
   const params = message.params || {};
   switch (message.method) {
     case "initialize":
-      sideProcess = (params.clientInfo || {}).name === "openbot-profile";
+      sideProcess = (params.clientInfo || {}).name === "codebot-profile";
       return write({ id: message.id, result: {} });
     case "account/read": return write({ id: message.id, result: { account: { type: "chatgpt", email: "codex@example.com" } } });
     case "account/rateLimits/read": return write({ id: message.id, result: { rateLimits: { limitId: "codex", primary: null, secondary: null }, rateLimitsByLimitId: null } });
@@ -277,14 +277,14 @@ export async function writeFakeCodex(directory: string, options: FakeCodexOption
   return {
     logPath,
     environment: {
-      OPENBOT_CODEX_PATH: path,
+      CODEBOT_CODEX_PATH: path,
       CODEX_HOME: join(directory, "codex-home"),
-      OPENBOT_BENCH_CODEX_LOG: logPath,
-      OPENBOT_BENCH_CODEX_DELTA_MS: String(options.deltaMs),
-      OPENBOT_BENCH_CODEX_DELTAS: String(options.deltas),
-      OPENBOT_BENCH_CODEX_CORPUS: options.corpus ?? "words",
-      OPENBOT_BENCH_CODEX_REASONING: options.reasoning ? "1" : "0",
-      OPENBOT_BENCH_CODEX_COMMANDS: options.commands ? "1" : "0",
+      CODEBOT_BENCH_CODEX_LOG: logPath,
+      CODEBOT_BENCH_CODEX_DELTA_MS: String(options.deltaMs),
+      CODEBOT_BENCH_CODEX_DELTAS: String(options.deltas),
+      CODEBOT_BENCH_CODEX_CORPUS: options.corpus ?? "words",
+      CODEBOT_BENCH_CODEX_REASONING: options.reasoning ? "1" : "0",
+      CODEBOT_BENCH_CODEX_COMMANDS: options.commands ? "1" : "0",
     },
   };
 }

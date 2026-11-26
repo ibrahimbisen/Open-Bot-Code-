@@ -3,20 +3,20 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentBrowserProfile } from "@openbot/contracts/ipc";
+import type { AgentBrowserProfile } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
 import { BrowserProfileStore } from "../src/backend/browser-profiles/browser-profile-store";
 import { BrowserProxyStore } from "../src/backend/browser-profiles/browser-proxy-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { type BrowserProfileService, createBrowserProfileService } from "../src/main/browser-profile-service";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/browser-profile-agents-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-browser-profile-agents-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/browser-profile-agents-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-browser-profile-agents-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 mkdirSync(home, { recursive: true });
@@ -55,14 +55,14 @@ const agentBrowser: AgentBrowserHost = {
 };
 
 interface Host {
-  database: OpenBotDatabase;
+  database: CodeBotDatabase;
   store: AgentStore;
   agents: AgentService;
   profiles: BrowserProfileService;
 }
 
 async function startHost(): Promise<Host> {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   await runCauseEffect(store.initialize());

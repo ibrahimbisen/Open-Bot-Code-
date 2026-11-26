@@ -8,10 +8,10 @@ import type {
   VoiceLiveEvent,
   VoiceLiveSession,
   VoiceLiveStart,
-} from "@openbot/contracts/ipc";
-import { speechTextFromMarkdown } from "@openbot/contracts/speech-text";
-import { isFixedSourceText, matchingSourceKeys, sourceText, sourceTextValues } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { speechTextFromMarkdown } from "@codebot/contracts/speech-text";
+import { isFixedSourceText, matchingSourceKeys, sourceText, sourceTextValues } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Deferred, Effect, Fiber, Schema, Semaphore } from "effect";
 import type { AgentClient } from "../agent-client";
 import {
@@ -37,7 +37,7 @@ const UNAUTHORIZED = /\bstatus 401\b|\b401 Unauthorized\b/;
 const CALL_NOT_FOUND = /\bstatus 404\b[\s\S]*\/realtime\/calls\b/;
 const FORBIDDEN = /^(?=[\s\S]*\brealtime\b)[\s\S]*(?:\bstatus 403\b|\b403 Forbidden\b)/;
 const ASK_TOOL = "ask_agent";
-const ASK_NAMESPACE = "openbot";
+const ASK_NAMESPACE = "codebot";
 const RELAY_VERBATIM_BYTES = 600;
 const RELAY_SUMMARY_WORDS = 150;
 const LONG_ANSWER_MARK = "[long answer]";
@@ -98,7 +98,7 @@ const requestWords = (text: string) =>
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
 
-const logger = createOpenBotLogger("live-voice");
+const logger = createCodeBotLogger("live-voice");
 
 class LiveVoiceFailed extends Schema.TaggedError<LiveVoiceFailed>()("LiveVoiceFailed", {
   cause: Schema.Defect(),
@@ -272,7 +272,7 @@ export class LiveVoice {
               {
                 type: "namespace",
                 name: ASK_NAMESPACE,
-                description: "OpenBot, which runs the agent.",
+                description: "CodeBot, which runs the agent.",
                 tools: [
                   {
                     type: "function",

@@ -1,4 +1,4 @@
-import { chatVisualReply } from "@openbot/contracts/chat-visual";
+import { chatVisualReply } from "@codebot/contracts/chat-visual";
 import type {
   AgentApproval,
   AgentDockBackupModel,
@@ -7,7 +7,7 @@ import type {
   AgentDockUsageLimit,
   BrowserTab,
   LocalBrowserSecretResponse,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AppWindow,
   ArrowUp,
@@ -23,7 +23,7 @@ import {
   PinOff,
   Plus,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createMemo, For, onCleanup, Show } from "solid-js";
 import { createScrollFades } from "../../components/createScrollFades";
 import { QuestionPromptBubble } from "../../components/QuestionPromptBubble";

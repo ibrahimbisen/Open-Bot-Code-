@@ -1,5 +1,5 @@
-import { parseReferralPageRequest } from "@openbot/contracts/referral";
-import { sourceText } from "@openbot/i18n/source";
+import { parseReferralPageRequest } from "@codebot/contracts/referral";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { ReferralDesktopService } from "../referral-service";
 import { type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";

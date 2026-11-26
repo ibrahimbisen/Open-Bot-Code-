@@ -1,4 +1,4 @@
-import type { WorkflowRunDetail, WorkflowRunStatus, WorkflowStep, WorkflowStepStatus } from "@openbot/contracts/ipc";
+import type { WorkflowRunDetail, WorkflowRunStatus, WorkflowStep, WorkflowStepStatus } from "@codebot/contracts/ipc";
 
 export interface WorkflowRunView {
   runs: readonly WorkflowRunDetail[];

@@ -1,5 +1,5 @@
-import type { AgentExchangeSummary } from "@openbot/contracts/ipc";
-import type { MobileTranslate } from "@openbot/i18n/mobile";
+import type { AgentExchangeSummary } from "@codebot/contracts/ipc";
+import type { MobileTranslate } from "@codebot/i18n/mobile";
 import { Link } from "expo-router";
 import type { LucideIcon } from "lucide-react-native";
 import ChevronRight from "lucide-react-native/icons/chevron-right";

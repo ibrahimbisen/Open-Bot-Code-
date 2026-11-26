@@ -1,11 +1,11 @@
 import {
+  type CodeBotDesktopApi,
   cloudSpeechModel,
   DEFAULT_SPEECH_SETTINGS,
   DEFAULT_VOICE_SETTINGS,
   type DictationKeyProvider,
   ELEVENLABS_VOICE_MODEL_ID,
   isLocalVoiceModelId,
-  type OpenBotDesktopApi,
   SPEECH_MODEL_ID,
   type SpeechKeyProvider,
   type SpeechModelStatus,
@@ -20,7 +20,7 @@ import {
   type VoiceServerSettings,
   type VoiceSettings,
   type VoiceStreamTranscript,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { clone, type Listener, type MockRuntime } from "./mock-support";
 
 export interface MockVoiceOptions {
@@ -47,7 +47,7 @@ const MOCK_SPEECH_ONLY_MODELS: VoiceServerModels = {
 function probeMockServer(address: string, apiKey: string | null): VoiceServerProbe {
   const url = new URL(address);
   if (url.hostname.includes("offline"))
-    return { ok: false, field: "address", message: `OpenBot could not connect to ${url.host}.` };
+    return { ok: false, field: "address", message: `CodeBot could not connect to ${url.host}.` };
   if (apiKey === "wrong") return { ok: false, field: "apiKey", message: `${url.host} refused the API key.` };
   return { ok: true, models: clone(url.port === "8880" ? MOCK_SPEECH_ONLY_MODELS : MOCK_SERVER_MODELS) };
 }
@@ -157,7 +157,7 @@ export function createMockVoice(options: MockVoiceOptions, { emit, schedule }: M
     }
   };
 
-  const voice: OpenBotDesktopApi["voice"] = {
+  const voice: CodeBotDesktopApi["voice"] = {
     getModelStatus: async () => status(settings.modelId),
     getModelStatuses: async () => VOICE_MODEL_IDS.map(status),
     prepareModel: () => download(settings.modelId),

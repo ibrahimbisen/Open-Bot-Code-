@@ -3,15 +3,15 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, rmSync, statfsSync, statSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { Duration, Effect } from "effect";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase, type ProviderHistoryCompactionBatch } from "../src/backend/codebot-database";
 import { compactedItemJson } from "../src/backend/database/provider-history-store";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase, type ProviderHistoryCompactionBatch } from "../src/backend/openbot-database";
 import { compactImportedProviderHistory } from "../src/backend/provider-history-import";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-history-compaction-large");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-history-compaction-large");
 const GIB = 1024 ** 3;
 const MIB = 1024 ** 2;
 const BIG_ITEM_BYTES = 11 * MIB;
@@ -56,7 +56,7 @@ interface ChildResult {
 }
 
 async function runCompactionChild(root: string, pauseMs: number): Promise<ChildResult> {
-  const database = new OpenBotDatabase(root);
+  const database = new CodeBotDatabase(root);
   await runCauseEffect(database.initialize());
   const batchTimes: number[] = [];
   let slowestBatch = { index: -1, rows: 0, bytes: 0 };
@@ -105,7 +105,7 @@ const neededBytes = targetBytes * (vacuum ? 3.5 : 2);
 if (freeBytes(OUT) < neededBytes) {
   throw new Error(`This run needs ${(neededBytes / GIB).toFixed(1)} GB of free disk in ${OUT}.`);
 }
-const databasePath = join(root, "openbot.db");
+const databasePath = join(root, "codebot.db");
 
 type Group = "codexImported" | "claudeImported" | "codexFailed" | "grok";
 
@@ -171,7 +171,7 @@ interface Generated {
 
 async function generate(): Promise<Generated> {
   const started = performance.now();
-  const database = new OpenBotDatabase(root);
+  const database = new CodeBotDatabase(root);
   const agentStore = new AgentStore(root, home, database);
   await runCauseEffect(agentStore.initialize());
   const agent = await runCauseEffect(agentStore.getOrCreate("compaction-agent", "Compaction", "Compaction"));

@@ -1,4 +1,4 @@
-import { type AgentProviderStatus, DEFAULT_PROVIDER_ACCOUNT_ID } from "@openbot/contracts/ipc";
+import { type AgentProviderStatus, DEFAULT_PROVIDER_ACCOUNT_ID } from "@codebot/contracts/ipc";
 
 export type CodexLiveAccess = "ready" | "signIn";
 

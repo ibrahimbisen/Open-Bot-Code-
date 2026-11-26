@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration v38, frozen. Migration 47 moves every task to `projection_agent_threads` and drops this
 // table, so the latest schema no longer has it.
@@ -31,7 +31,7 @@ const AGENT_TASK_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS agent_tasks_agent ON projection_agent_tasks(agent_id, created_at DESC);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 38,
   name: "agent-tasks",
   // Only creates tables, so no foreign-key pause and no vacuum. No agent has a task yet, so every

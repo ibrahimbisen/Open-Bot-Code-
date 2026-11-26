@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   isRoutineSchedule,
   ROUTINE_LIMIT_POLICIES,
@@ -9,10 +9,10 @@ import {
   type RoutineMissedPolicy,
   type RoutineRunPlace,
   type RoutineSchedule,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { RoutineInputError } from "@openbot/team-client/routine-schedule";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { RoutineInputError } from "@codebot/team-client/routine-schedule";
 import { isRecord } from "../protocol";
 import { routineScheduleZodSchema } from "../routine-tool-schema";
 
@@ -117,7 +117,7 @@ export function localTimezone(): string {
   }
 }
 
-export interface OpenBotToolResponse {
+export interface CodeBotToolResponse {
   success: boolean;
   contentItems: Array<{ type: "inputText"; text: string }>;
 }
@@ -139,14 +139,14 @@ export function routineListInstruction(instruction: string) {
   } as const;
 }
 
-export function openBotToolResult(value: unknown): OpenBotToolResponse {
+export function codeBotToolResult(value: unknown): CodeBotToolResponse {
   return {
     success: true,
     contentItems: [{ type: "inputText", text: JSON.stringify(value) }],
   };
 }
 
-export function openBotToolFailure(message: string, details?: Readonly<Record<string, number>>): OpenBotToolResponse {
+export function codeBotToolFailure(message: string, details?: Readonly<Record<string, number>>): CodeBotToolResponse {
   return {
     success: false,
     contentItems: [{ type: "inputText", text: JSON.stringify({ ...details, error: message }) }],

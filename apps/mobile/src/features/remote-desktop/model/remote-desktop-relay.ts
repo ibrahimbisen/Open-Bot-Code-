@@ -1,11 +1,11 @@
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import {
   decodeRemoteDesktopSignalBinary,
   decodeRemoteDesktopSignalControl,
   encodeRemoteDesktopSignalBinary,
   encodeRemoteDesktopSignalControl,
-} from "@openbot/contracts/team-protocol/remote-stream-v1";
-import { base64ToBytes, bytesToBase64 } from "@openbot/team-client/base64";
+} from "@codebot/contracts/team-protocol/remote-stream-v1";
+import { base64ToBytes, bytesToBase64 } from "@codebot/team-client/base64";
 
 export type RemoteDesktopRelayCommand =
   | { type: "open"; streamId: string; path: string }

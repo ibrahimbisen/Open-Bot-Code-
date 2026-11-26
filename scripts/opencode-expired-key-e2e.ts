@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import type { AgentClient } from "../src/backend/agent-client";
 import type { AgentCliInfo } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -11,7 +11,7 @@ import type { CustomProviderConfig } from "../src/backend/opencode-config";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-expired-key-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-expired-key-e2e");
 
 interface LogEntry {
   event: "spawn" | "load" | "prompt";
@@ -37,7 +37,7 @@ interface Report {
   sameGoKey?: { error: string };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-expired-key-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-expired-key-e2e-"));
 const log = join(root, "opencode.jsonl");
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
@@ -104,7 +104,7 @@ try {
   assert.equal((await runTurn(third, ownThread)).error, null, "The turn on the user's own key succeeds.");
   const own = await readJsonl<LogEntry>(log);
   const spawn = own.find((entry) => entry.event === "spawn");
-  assert.equal(spawn?.configKey, null, "With no stored key, OpenBot sends no key in the config.");
+  assert.equal(spawn?.configKey, null, "With no stored key, CodeBot sends no key in the config.");
   const ownPrompt = own.find((entry) => entry.event === "prompt");
   assert.equal(ownPrompt?.key, "own", "The user's own key is used.");
   report.noStoredKey = { configKey: spawn?.configKey ?? null, key: ownPrompt?.key ?? null };
@@ -241,7 +241,7 @@ try {
   assert.equal(
     ownGo,
     sourceText("error.provider.opencodeOwnGoKeyRefused"),
-    "A Go key in OpenCode's own store is named as the refused key, not the key saved in OpenBot (#15988).",
+    "A Go key in OpenCode's own store is named as the refused key, not the key saved in CodeBot (#15988).",
   );
   report.ownGoKey = { error: ownGo };
   await runCauseEffect(ninth.stop());

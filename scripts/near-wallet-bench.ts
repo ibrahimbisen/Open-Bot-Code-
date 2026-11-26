@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { type NearWalletStatus, parseNearRuleInput, parseNearWalletCreateInput } from "@codebot/contracts/ipc";
 import { createAgentApi } from "@near-intents-agent-api/sdk";
-import { type NearWalletStatus, parseNearRuleInput, parseNearWalletCreateInput } from "@openbot/contracts/ipc";
 import { Effect, Result } from "effect";
 import { z } from "zod";
 import type { NearPaymentRequest } from "../src/backend/near-wallet";
@@ -20,7 +20,7 @@ import {
   withDeadline,
 } from "./near-wallet-fake-api";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/near-wallet-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/near-wallet-bench");
 const AGENT = "bench-agent";
 const DOMAIN = "api.example.com";
 const MERCHANT = "merchant.near";
@@ -161,7 +161,7 @@ function payment(requestId: string, amount: string): NearPaymentRequest {
 }
 
 async function devnet(delays: number[]) {
-  const dir = await mkdtemp(join(tmpdir(), "openbot-near-wallet-bench-"));
+  const dir = await mkdtemp(join(tmpdir(), "codebot-near-wallet-bench-"));
   const api = new FakeAgentApi();
   const calls: Call[] = [];
   const operations: Operation[] = [];

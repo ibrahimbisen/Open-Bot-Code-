@@ -11,7 +11,7 @@ import {
   writeSync,
 } from "node:fs";
 import { dirname } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { app, safeStorage } from "electron";
 import { isMissingFileError } from "../backend/file-errors";
 
@@ -22,7 +22,7 @@ const KEY_BYTES = 32;
 const IV_BYTES = 12;
 const TAG_BYTES = 16;
 
-const logger = createOpenBotLogger("secret-storage");
+const logger = createCodeBotLogger("secret-storage");
 
 export interface SecretStorageCipher {
   canPersist: () => boolean;
@@ -90,7 +90,7 @@ export function createSecretStorage(options: { keyPath: string; platform?: NodeJ
     const created = readKey();
     if (!created) throw new Error("The secret storage key file was not made.");
     madeKeyFile = true;
-    logger.warn("The system keyring did not keep the secrets. OpenBot keeps new secrets in its own key file.", {
+    logger.warn("The system keyring did not keep the secrets. CodeBot keeps new secrets in its own key file.", {
       reason,
       backend: safeStorage.getSelectedStorageBackend(),
     });

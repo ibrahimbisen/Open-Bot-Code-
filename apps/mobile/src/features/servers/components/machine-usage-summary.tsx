@@ -1,4 +1,4 @@
-import { hostedPlanMachineMetrics } from "@openbot/contracts/hosted-servers";
+import { hostedPlanMachineMetrics } from "@codebot/contracts/hosted-servers";
 import {
   DEFAULT_MACHINE_ALERT_SETTINGS,
   type MachineMetric,
@@ -7,8 +7,8 @@ import {
   machineAlertLevel,
   machineMetricPercent,
   machineMetricTone,
-} from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
@@ -179,9 +179,9 @@ function MachineMetricRing({
   tone: MachineMetricTone;
 }) {
   const [muted, warning, danger] = useCSSVariable([
-    "--openbot-text-grouped-secondary",
-    "--openbot-warning",
-    "--openbot-danger",
+    "--codebot-text-grouped-secondary",
+    "--codebot-warning",
+    "--codebot-danger",
   ]);
   const color = String(tone === "danger" ? danger : tone === "warning" ? warning : muted);
   const track = String(useThemeColor("foreground"));

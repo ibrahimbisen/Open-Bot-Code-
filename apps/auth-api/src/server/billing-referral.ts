@@ -1,20 +1,20 @@
-import { BILLING_CURRENCIES, type BillingCurrency, isBillingAmount } from "@openbot/contracts/billing";
+import { BILLING_CURRENCIES, type BillingCurrency, isBillingAmount } from "@codebot/contracts/billing";
 import {
   convertReferralAmount,
   REFERRAL_SHARE_PERCENT,
   type ReferralMoney,
   referralMinimum,
   referralShare,
-} from "@openbot/contracts/referral";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/referral";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { Effect, Option, Schema } from "effect";
 import { type BillingError, BillingOperationError, billingCall, stripeFailure, stripeRequest } from "./billing-errors";
 import { type PaymentReversal, paymentReversal, withoutTax } from "./billing-sales";
 import type { Referrals } from "./referrals";
 import type { StripeClient, StripeEvent, StripeRequestError, StripeTransportError } from "./stripe-client";
 
-const REFERRAL_COUPON_ID = `openbot-invite-${REFERRAL_SHARE_PERCENT}`;
-const FIRST_PAYMENT_COUPON_ID = `openbot-invite-${REFERRAL_SHARE_PERCENT}-first`;
+const REFERRAL_COUPON_ID = `codebot-invite-${REFERRAL_SHARE_PERCENT}`;
+const FIRST_PAYMENT_COUPON_ID = `codebot-invite-${REFERRAL_SHARE_PERCENT}-first`;
 const PART_DAYS = 30;
 const PART_MS = PART_DAYS * 86_400_000;
 const MAX_PARTS = 12;
@@ -486,7 +486,7 @@ export class BillingReferral {
             currency: credit.currency,
             description: `Invite credit: ${REFERRAL_SHARE_PERCENT}% of a payment of a friend`,
           },
-          `openbot-invite-credit-${credit.invoice_id}`,
+          `codebot-invite-credit-${credit.invoice_id}`,
         ),
       );
     }
@@ -592,7 +592,7 @@ export class BillingReferral {
           currency: credit.currency,
           description: "Invite credit taken back: the payment of the friend was refunded",
         },
-        `openbot-invite-reversal-${reversal.objectId}`,
+        `codebot-invite-reversal-${reversal.objectId}`,
       ),
     );
     yield* billingCall(() =>
@@ -686,7 +686,7 @@ export class BillingReferral {
             currency: part.currency,
             description: "Invite credit taken back: the payment of the friend was refunded",
           },
-          `openbot-invite-reversal-${row.reversal_id}`,
+          `codebot-invite-reversal-${row.reversal_id}`,
         ),
       );
       yield* billingCall(() =>

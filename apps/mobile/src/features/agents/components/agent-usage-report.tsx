@@ -5,8 +5,8 @@ import {
   agentProviderName,
   analyticsTokens,
   isAgentProvider,
-} from "@openbot/contracts/ipc";
-import { usageSeries, usageTotalSeries } from "@openbot/team-client/usage-series";
+} from "@codebot/contracts/ipc";
+import { usageSeries, usageTotalSeries } from "@codebot/team-client/usage-series";
 import { Typography } from "heroui-native";
 import { type ReactNode, useMemo, useState } from "react";
 import { View } from "react-native";

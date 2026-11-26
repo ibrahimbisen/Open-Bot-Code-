@@ -1,16 +1,16 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import { CHAT_BACKDROP_ITEM_TYPE } from "@openbot/contracts/chat-visual";
-import { translateFor } from "@openbot/i18n";
+import { CHAT_BACKDROP_ITEM_TYPE } from "@codebot/contracts/chat-visual";
+import { translateFor } from "@codebot/i18n";
 import type { Page } from "playwright-core";
 import { argument, ChannelClient, connectChannelE2e, queueBusy, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-backdrop-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-backdrop-e2e");
 const UI_WAIT_MS = 30_000;
-const CHOICE_KEY = "openbot:chat-backdrop";
-const DATABASE = "openbot-backdrops";
+const CHOICE_KEY = "codebot:chat-backdrop";
+const DATABASE = "codebot-backdrops";
 const STORE = "backdrops";
-const CHANGED_CHANNEL = "openbot:custom-backdrops";
+const CHANGED_CHANNEL = "codebot:custom-backdrops";
 
 const scene = (mark: string, color: string) =>
   `<!doctype html><html><body style="margin:0;height:100vh;background:${color}"><div id="scene" data-scene="${mark}" hidden></div></body></html>`;
@@ -18,7 +18,7 @@ const FIRST = { title: "Teal field", mark: "one", html: scene("one", "teal") };
 const BUBBLES = { yours: "#7c3aed", agents: "#f59e0b" };
 const SECOND = { title: "Plum field", mark: "two", html: scene("two", "plum"), bubbles: BUBBLES };
 const prompt = (page: { title: string; html: string; bubbles?: typeof BUBBLES }) =>
-  `Call the openbot set_backdrop tool once with the title "${page.title}" and exactly this HTML, with no change: ${page.html} ${
+  `Call the codebot set_backdrop tool once with the title "${page.title}" and exactly this HTML, with no change: ${page.html} ${
     page.bubbles ? `Give it the bubbles ${JSON.stringify(page.bubbles)}.` : "Give it no bubbles."
   } Then reply with DONE only.`;
 const english = translateFor("en");
@@ -148,7 +148,7 @@ async function shot(label: string): Promise<void> {
 
 async function askOwnChat(agentId: string, text: string, label: string): Promise<string> {
   const before = new Set(
-    (await desktop.evaluate((id) => window.openbot.agent.readConversation(id), agentId)).messages.map(
+    (await desktop.evaluate((id) => window.codebot.agent.readConversation(id), agentId)).messages.map(
       (message) => message.id,
     ),
   );
@@ -156,7 +156,7 @@ async function askOwnChat(agentId: string, text: string, label: string): Promise
   const conversation = await waitFor(
     desktop,
     label,
-    () => desktop.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+    () => desktop.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
     (snapshot) =>
       snapshot.messages.some((message) => !before.has(message.id) && message.itemType === CHAT_BACKDROP_ITEM_TYPE),
   );

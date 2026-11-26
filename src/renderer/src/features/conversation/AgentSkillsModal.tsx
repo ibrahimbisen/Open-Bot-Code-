@@ -3,11 +3,11 @@ import {
   agentProviderDescriptor,
   isKnownAgentProvider,
   MANAGED_SKILL_FOLDERS,
-} from "@openbot/contracts/agent-providers";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { FilePreview, InstalledSkill, MarketplaceSkillDetail } from "@openbot/contracts/ipc";
-import { assignedSkillCount, isFolderSkill, isSkillEnabled, userAssignedSkills } from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/agent-providers";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { FilePreview, InstalledSkill, MarketplaceSkillDetail } from "@codebot/contracts/ipc";
+import { assignedSkillCount, isFolderSkill, isSkillEnabled, userAssignedSkills } from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
 import {
   Button,
   ChevronRight,
@@ -21,11 +21,11 @@ import {
   Switch,
   Trash2,
   X,
-} from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { SkillGlyph } from "@openbot/ui/features/conversation/SkillGlyph";
-import { SkillLibraryToolbar } from "@openbot/ui/features/conversation/SkillLibraryToolbar";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { SkillGlyph } from "@codebot/ui/features/conversation/SkillGlyph";
+import { SkillLibraryToolbar } from "@codebot/ui/features/conversation/SkillLibraryToolbar";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, For, onSettled, Show, untrack } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
 import { SkillPreview } from "../../components/SkillPreview";
@@ -714,7 +714,7 @@ function SkillMoreMenu(props: {
 
 function hostSkillPaths(skill: InstalledSkill, provider: AgentProviderRef): string[] {
   if (isFolderSkill(skill)) return [`${skill.location}/SKILL.md`];
-  if (!isSkillEnabled(skill)) return [`.openbot/skills-disabled/${skill.slug}/SKILL.md`];
+  if (!isSkillEnabled(skill)) return [`.codebot/skills-disabled/${skill.slug}/SKILL.md`];
   return installedSkillFolders(provider).map((folder) => `${folder}/${skill.slug}/SKILL.md`);
 }
 

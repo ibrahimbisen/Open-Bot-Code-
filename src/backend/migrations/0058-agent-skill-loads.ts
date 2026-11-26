@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v58 and the separate new-database schema. IF NOT EXISTS throughout.
 //
@@ -26,7 +26,7 @@ export const AGENT_SKILL_LOADS_SCHEMA_SQL = `
   CREATE INDEX IF NOT EXISTS agent_usage_skill_loads_occurred ON agent_usage_skill_loads(occurred_at);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 58,
   name: "agent-skill-loads",
   // Only creates a table and its indexes, so no foreign-key pause and no vacuum. No skill load was

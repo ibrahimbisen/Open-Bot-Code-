@@ -1,7 +1,7 @@
 import {
   BROWSER_HTTP_SIGN_IN_PASSWORD_LIMIT,
   BROWSER_HTTP_SIGN_IN_USERNAME_LIMIT,
-} from "@openbot/contracts/team-protocol/browser-http-sign-in-v1";
+} from "@codebot/contracts/team-protocol/browser-http-sign-in-v1";
 import { Button, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
 import LogIn from "lucide-react-native/icons/log-in";

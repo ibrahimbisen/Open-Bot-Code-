@@ -46,7 +46,7 @@ async function pinArtifact(fetchImpl: typeof fetch, target: CuaDriverTarget, ver
   const descriptor = CUA_DRIVER_TARGETS[target];
   const asset = `cua-driver-rs-${version}-${descriptor.assetSuffix}`;
   const archiveBytes = await download(fetchImpl, `${REPOSITORY}/releases/download/${tag}/${asset}`);
-  const temporaryRoot = await mkdtemp(join(tmpdir(), "openbot-cua-driver-pin-"));
+  const temporaryRoot = await mkdtemp(join(tmpdir(), "codebot-cua-driver-pin-"));
   try {
     const archive = join(temporaryRoot, asset);
     const extracted = join(temporaryRoot, "extracted");
@@ -67,7 +67,7 @@ async function pinArtifact(fetchImpl: typeof fetch, target: CuaDriverTarget, ver
 }
 
 async function download(fetchImpl: typeof fetch, url: string): Promise<Buffer> {
-  const response = await fetchImpl(url, { headers: { "User-Agent": "OpenBot-runtime-pin" }, redirect: "follow" });
+  const response = await fetchImpl(url, { headers: { "User-Agent": "CodeBot-runtime-pin" }, redirect: "follow" });
   if (!response.ok) throw new Error(`${url} answered HTTP ${response.status}.`);
   return Buffer.from(await response.arrayBuffer());
 }

@@ -1,4 +1,4 @@
-import { currentText } from "@openbot/ui/text";
+import { currentText } from "@codebot/ui/text";
 
 export async function writeClipboardText(text: string): Promise<void> {
   try {

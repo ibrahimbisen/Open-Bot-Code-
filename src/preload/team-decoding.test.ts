@@ -18,7 +18,7 @@ import type {
   TeamMemberSummary,
   TeamPresenceSnapshot,
   TeamSessionSummary,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { describe, expect, it } from "vitest";
 import {
   decodeDirectConversation,
@@ -95,7 +95,7 @@ const teamInvite = {
   useCount: 0,
 } satisfies TeamInviteSummary;
 
-const invite = { ...teamInvite, inviteUrl: "openbot://join/invite-1" } satisfies InviteSummary;
+const invite = { ...teamInvite, inviteUrl: "codebot://join/invite-1" } satisfies InviteSummary;
 
 const session = {
   id: "session-1",
@@ -274,8 +274,8 @@ describe("team decoders", () => {
     ["custom server that waits for payment", decodeServer, { ...remoteServer, paymentRequired: true }],
     ["custom server with its plan", decodeServer, { ...remoteServer, paymentRequired: true, customPlan }],
     ["invite preview", decodeInvitePreview, invitePreview],
-    ["invite link", decodeInviteUrl, "openbot://join/invite-1"],
-    ["pending invite", decodePendingInvite, "openbot://join/invite-1"],
+    ["invite link", decodeInviteUrl, "codebot://join/invite-1"],
+    ["pending invite", decodePendingInvite, "codebot://join/invite-1"],
     ["missing pending invite", decodePendingInvite, null],
     [
       "server presence",

@@ -1,4 +1,4 @@
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { ComputerUsePermissionHelpWindowController } from "../computer-use-permission-help-window";
 import type { CuaDriverRuntime } from "../cua-driver-runtime";
@@ -6,7 +6,7 @@ import { MAC_PERMISSION_URLS } from "../mac-permission-urls";
 import { parseMacPermission } from "./app-inputs";
 import { eventHandler, handler, type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";
 
-const logger = createOpenBotLogger("computer-use");
+const logger = createCodeBotLogger("computer-use");
 
 export interface ComputerUseIpcDependencies {
   cuaDriver: Pick<CuaDriverRuntime, "state">;

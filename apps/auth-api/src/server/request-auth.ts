@@ -1,8 +1,8 @@
 import { env, waitUntil } from "cloudflare:workers";
-import { CREDIT_MEDIA_HOST_HEADER, CREDIT_MEDIA_HOST_TOKEN_HEADER } from "@openbot/contracts/credit-media";
-import { FEEDBACK_REPOSITORY } from "@openbot/contracts/feedback";
-import { HOSTING_DEVELOPER_KEY_HEADER } from "@openbot/contracts/hosted-servers";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { CREDIT_MEDIA_HOST_HEADER, CREDIT_MEDIA_HOST_TOKEN_HEADER } from "@codebot/contracts/credit-media";
+import { FEEDBACK_REPOSITORY } from "@codebot/contracts/feedback";
+import { HOSTING_DEVELOPER_KEY_HEADER } from "@codebot/contracts/hosted-servers";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { type AccountAnalytics, createAccountAnalytics } from "./account-analytics";
 import { AccountAttribution } from "./account-attribution";
@@ -299,7 +299,7 @@ export function requestGitHubInstallationTokens(): GitHubInstallationTokens {
   const clientId = bindings.GITHUB_APP_CLIENT_ID?.trim();
   const privateKey = bindings.GITHUB_APP_PRIVATE_KEY?.trim();
   if (!clientId || !privateKey) {
-    throw new GitHubInstallationTokensError(503, "github_app_unavailable", "The OpenBot GitHub App is not configured.");
+    throw new GitHubInstallationTokensError(503, "github_app_unavailable", "The CodeBot GitHub App is not configured.");
   }
   const key = `${clientId}\u0000${privateKey}`;
   if (githubInstallationTokens?.key !== key) {
@@ -315,7 +315,7 @@ export const enforceGitHubTokenRateLimit = Effect.fn("GitHub.enforceTokenRateLim
   const result = yield* Effect.tryPromise({
     try: () => requireWorkerBindings(env).GITHUB_TOKEN_RATE_LIMITER.limit({ key: `ip:${sourceIp}` }),
     catch: () =>
-      new GitHubInstallationTokensError(503, "github_app_unavailable", "The OpenBot GitHub App is unavailable."),
+      new GitHubInstallationTokensError(503, "github_app_unavailable", "The CodeBot GitHub App is unavailable."),
   });
   if (!result.success) {
     return yield* new GitHubInstallationTokensError(
@@ -346,7 +346,7 @@ export function requestFeedbackOwner(userId: string) {
   const privateKey = requireWorkerBindings(env).GITHUB_APP_PRIVATE_KEY?.trim();
   if (!privateKey)
     return Effect.fail(
-      new GitHubInstallationTokensError(503, "github_app_unavailable", "The OpenBot GitHub App is not configured."),
+      new GitHubInstallationTokensError(503, "github_app_unavailable", "The CodeBot GitHub App is not configured."),
     );
   return feedbackOwner(privateKey, userId);
 }
@@ -564,8 +564,8 @@ export function verifyRemoteServiceRequest(request: Request, body: string) {
   return verifyRemoteServiceSignature(
     secret,
     body,
-    request.headers.get("OpenBot-Timestamp") ?? "",
-    request.headers.get("OpenBot-Signature") ?? "",
+    request.headers.get("CodeBot-Timestamp") ?? "",
+    request.headers.get("CodeBot-Signature") ?? "",
   );
 }
 

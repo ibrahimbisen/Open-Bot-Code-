@@ -269,18 +269,18 @@ STOP: none.
 
 | # | Item | State |
 |---|---|---|
-| 16 | The `openbot.workflow` file: codec, sanitizer, assets | DONE (#14875) |
+| 16 | The `codebot.workflow` file: codec, sanitizer, assets | DONE (#14875) |
 | 17 | Export and import on desktop, web client and joined servers | DONE (#14875) |
 | 18 | Paste between servers and instance transfer use the codec | DONE (#14875) |
 
-### 16. The `openbot.workflow` file
+### 16. The `codebot.workflow` file
 
 Evidence: no per-workflow file. Patterns to reuse: `src/main/instance-transfer-manifest.ts:22-23`
 (`format`, `version`, Effect `Schema`, "newer" error at `:229`), `packages/contracts/src/ipc-agent-templates.ts`
 (1 MB cap, `Problem` type), `src/main/agent-template-service.ts:400-417` (`assertNoSecrets`).
 `redactText` catches only known patterns (`packages/logging/src/index.ts:14-33`).
 
-Change: pure codec in `packages/contracts`: `format: "openbot.workflow"`, `version`, the graph
+Change: pure codec in `packages/contracts`: `format: "codebot.workflow"`, `version`, the graph
 format, `minAppVersion`. Portable references from the registry (item 7): agents and channels by name
 and key, connections as "needs link", `account` cleared, the resolved timezone written. Assets as
 base64 (D4). Export refuses a secret in a text field and lists the fields (D3). Import never trusts
@@ -326,7 +326,7 @@ table opens, saves and runs on the current host with no loss. A newer graph roun
 older-format client with no loss. Export, import on a second dev host, export again: same file.
 Extend `scripts/workflow-answers-e2e.ts` with branches, joins, loops, skipped sources, retries after
 a spec change, one-step runs, number and list edges, and the Team API path. Writes a JSON report
-under `.openbot-build/`.
+under `.codebot-build/`.
 
 ## Format history (input for item 19)
 

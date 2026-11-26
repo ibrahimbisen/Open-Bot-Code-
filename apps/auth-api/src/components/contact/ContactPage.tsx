@@ -1,18 +1,18 @@
-import { normalizeEmailAddress } from "@openbot/contracts/validation";
+import { normalizeEmailAddress } from "@codebot/contracts/validation";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createUniqueId, For, onSettled, Show } from "solid-js";
 import { landingAnalytics } from "../../lib/analytics";
 import { CONTACT_EMAIL, CONTACT_LIMITS, CONTACT_ROUTE, CONTACT_TOPICS } from "../../lib/contact";
-import { EXTERNAL_LINK_REL, OPENBOT_LINKS } from "../../lib/landing-links";
+import { CODEBOT_LINKS, EXTERNAL_LINK_REL } from "../../lib/landing-links";
 import { LandingFooter } from "../landing/LandingFooter";
 import { LandingIcon } from "../landing/LandingIcon";
 import { SiteHeader } from "../landing/SiteHeader";
 import type { ContactPageText } from "./contact-page-text";
 
 const CONTACT_CHANNELS = [
-  { id: "discord", label: "Discord", href: OPENBOT_LINKS.discord },
-  { id: "github", label: "GitHub", href: `${OPENBOT_LINKS.repository}/issues/new/choose` },
-  { id: "x", label: "X", href: OPENBOT_LINKS.x },
+  { id: "discord", label: "Discord", href: CODEBOT_LINKS.discord },
+  { id: "github", label: "GitHub", href: `${CODEBOT_LINKS.repository}/issues/new/choose` },
+  { id: "x", label: "X", href: CODEBOT_LINKS.x },
 ] as const;
 
 type ContactStatus = "idle" | "sending" | "sent" | "failed" | "limited";
@@ -166,7 +166,7 @@ function SubmitRow(props: { status: ContactStatus; text: ContactPageText }) {
         fallback={
           <p class="contact-privacy">
             {props.text.privacy}{" "}
-            <a href={OPENBOT_LINKS.privacy} target="_blank" rel={EXTERNAL_LINK_REL}>
+            <a href={CODEBOT_LINKS.privacy} target="_blank" rel={EXTERNAL_LINK_REL}>
               {props.text.privacyLink}
             </a>
           </p>

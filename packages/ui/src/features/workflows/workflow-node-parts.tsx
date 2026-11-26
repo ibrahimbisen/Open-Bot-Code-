@@ -1,12 +1,12 @@
-import type { ProviderLogoVariant } from "@openbot/brand";
-import { isKnownAgentProvider } from "@openbot/contracts/agent-providers";
+import type { ProviderLogoVariant } from "@codebot/brand";
+import { isKnownAgentProvider } from "@codebot/contracts/agent-providers";
 import {
   isAgentProviderRef,
   parseWorkflowAnswerSpec,
   WORKFLOW_ANSWER_FIELD,
   WORKFLOW_STEP_NAME_FIELD,
-} from "@openbot/contracts/ipc";
-import type { AppFormat, AppTextKey, AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppFormat, AppTextKey, AppTranslate } from "@codebot/i18n";
 import {
   Button,
   buttonVariants,
@@ -35,7 +35,7 @@ import {
   Trash2,
   TriangleAlert,
   Type,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { children, createEffect, createSignal, createStore, For, onCleanup, onSettled, Show, untrack } from "solid-js";
 import type { AgentProfile } from "../../data";
@@ -1031,7 +1031,7 @@ export const translated = <T extends string>(t: AppTranslate, choices: readonly 
   choices.map((choice) => ({ value: choice.value, label: t(choice.label) }));
 
 export const colorVar = (color: CanvasColor) =>
-  color === "ink" ? "var(--openbot-text-primary)" : `var(--openbot-file-${color})`;
+  color === "ink" ? "var(--codebot-text-primary)" : `var(--codebot-file-${color})`;
 
 export function Swatch(props: { color: CanvasColor }) {
   return <span class="wfn-swatch" style={{ "--wfn-swatch": colorVar(props.color) }} />;

@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // The actor column is part of the primary key, so the table is rebuilt rather than altered. There are no
@@ -33,7 +33,7 @@ function migrateReactionsForAgentActors(db: DatabaseSync): void {
   `);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 12,
   name: "reactions-agent-actors",
   up: migrateReactionsForAgentActors,

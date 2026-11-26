@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -14,21 +14,21 @@ function databaseAt(version: number): DatabaseSync {
   db.exec(`CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);
     CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
   return db;
 }
 
 const posixUuid = "1b4e28ba-2fa1-41d2-883f-0016d3cca427";
 const windowsUuid = "6fa459ea-ee8a-4ca4-894e-db77e160355e";
-const posixWorkspace = `/Users/user/OpenBot/Bots/bot-${posixUuid}`;
-const windowsWorkspace = `C:\\Users\\user\\OpenBot\\Bots\\bot-${windowsUuid}`;
+const posixWorkspace = `/Users/user/CodeBot/Bots/bot-${posixUuid}`;
+const windowsWorkspace = `C:\\Users\\user\\CodeBot\\Bots\\bot-${windowsUuid}`;
 
 const quotedPaths = [
   `${posixWorkspace}/notes.md`,
   `${windowsWorkspace}\\plan.md`,
-  "/Users/user/OpenBot/Botsy/keep.md",
-  "/Users/user/Projects/OpenBot/Bots/repo/README.md",
+  "/Users/user/CodeBot/Botsy/keep.md",
+  "/Users/user/Projects/CodeBot/Bots/repo/README.md",
 ];
 
 function seed(db: DatabaseSync): void {
@@ -45,17 +45,17 @@ function seed(db: DatabaseSync): void {
   );
   agent.run(
     "chief",
-    "openbot-thread-chief",
+    "codebot-thread-chief",
     2,
-    JSON.stringify({ id: "chief", workspacePath: "/Users/user/OpenBot/Bots/chief" }),
+    JSON.stringify({ id: "chief", workspacePath: "/Users/user/CodeBot/Bots/chief" }),
   );
   db.exec(`INSERT INTO projection_threads
       (thread_id, agent_id, title, active_turn_id, created_at, updated_at, last_event_sequence)
-    VALUES ('openbot-thread-chief', 'chief', 'Chief', NULL, '2026-03-01T09:00:00.000Z', '2026-03-01T09:00:00.000Z', 1)`);
+    VALUES ('codebot-thread-chief', 'chief', 'Chief', NULL, '2026-03-01T09:00:00.000Z', '2026-03-01T09:00:00.000Z', 1)`);
   db.prepare(
     `INSERT INTO projection_thread_messages (thread_id, message_id, turn_id, author, status, item_type, created_at,
        ordinal, message_json, last_event_sequence)
-     VALUES ('openbot-thread-chief', 'message-1', NULL, 'user', 'completed', NULL, '2026-03-01T09:00:00.000Z', 0, ?, 1)`,
+     VALUES ('codebot-thread-chief', 'message-1', NULL, 'user', 'completed', NULL, '2026-03-01T09:00:00.000Z', 0, ?, 1)`,
   ).run(JSON.stringify({ id: "message-1", text: quotedPaths.join("\n") }));
   db.prepare(
     `INSERT INTO projection_attachments
@@ -86,31 +86,31 @@ function workspacePaths(db: DatabaseSync) {
 }
 
 describe("agent workspace root migration", () => {
-  it("moves each stored root from OpenBot/Bots to OpenBot/Agents once, in every form", () => {
+  it("moves each stored root from CodeBot/Bots to CodeBot/Agents once, in every form", () => {
     const db = databaseAt(12);
     seed(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
 
     const posixAgent = `agent-${posixUuid}`;
     const windowsAgent = `agent-${windowsUuid}`;
     expect(workspacePaths(db)).toEqual([
-      { agent_id: posixAgent, path: `/Users/user/OpenBot/Agents/${posixAgent}` },
-      { agent_id: windowsAgent, path: `C:\\Users\\user\\OpenBot\\Agents\\${windowsAgent}` },
-      { agent_id: "chief", path: "/Users/user/OpenBot/Agents/chief" },
+      { agent_id: posixAgent, path: `/Users/user/CodeBot/Agents/${posixAgent}` },
+      { agent_id: windowsAgent, path: `C:\\Users\\user\\CodeBot\\Agents\\${windowsAgent}` },
+      { agent_id: "chief", path: "/Users/user/CodeBot/Agents/chief" },
     ]);
     const message = db
       .prepare("SELECT json_extract(message_json, '$.text') AS text FROM projection_thread_messages")
       .get();
     expect(String(message?.text).split("\n")).toEqual([
-      `/Users/user/OpenBot/Agents/${posixAgent}/notes.md`,
-      `C:\\Users\\user\\OpenBot\\Agents\\${windowsAgent}\\plan.md`,
-      "/Users/user/OpenBot/Botsy/keep.md",
-      "/Users/user/Projects/OpenBot/Bots/repo/README.md",
+      `/Users/user/CodeBot/Agents/${posixAgent}/notes.md`,
+      `C:\\Users\\user\\CodeBot\\Agents\\${windowsAgent}\\plan.md`,
+      "/Users/user/CodeBot/Botsy/keep.md",
+      "/Users/user/Projects/CodeBot/Bots/repo/README.md",
     ]);
     expect(contents(db).attachments).toEqual([
-      { owner_id: windowsAgent, path: `C:\\Users\\user\\OpenBot\\Agents\\${windowsAgent}\\plan.md` },
+      { owner_id: windowsAgent, path: `C:\\Users\\user\\CodeBot\\Agents\\${windowsAgent}\\plan.md` },
     ]);
-    expect(contents(db).outbox).toEqual([{ path: `/Users/user/OpenBot/Agents/${posixAgent}/old.md` }]);
+    expect(contents(db).outbox).toEqual([{ path: `/Users/user/CodeBot/Agents/${posixAgent}/old.md` }]);
     expect(db.prepare("SELECT MAX(version) AS version FROM schema_migrations").get()).toEqual({ version: 69 });
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
     expect(db.prepare("PRAGMA foreign_key_check").all()).toEqual([]);
@@ -123,17 +123,17 @@ describe("agent workspace root migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version = 13
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 13 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 13 failed");
     expect(contents(db)).toEqual(before);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 13").all()).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
 
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(workspacePaths(db)).toEqual([
-      { agent_id: `agent-${posixUuid}`, path: `/Users/user/OpenBot/Agents/agent-${posixUuid}` },
-      { agent_id: `agent-${windowsUuid}`, path: `C:\\Users\\user\\OpenBot\\Agents\\agent-${windowsUuid}` },
-      { agent_id: "chief", path: "/Users/user/OpenBot/Agents/chief" },
+      { agent_id: `agent-${posixUuid}`, path: `/Users/user/CodeBot/Agents/agent-${posixUuid}` },
+      { agent_id: `agent-${windowsUuid}`, path: `C:\\Users\\user\\CodeBot\\Agents\\agent-${windowsUuid}` },
+      { agent_id: "chief", path: "/Users/user/CodeBot/Agents/chief" },
     ]);
   });
 });

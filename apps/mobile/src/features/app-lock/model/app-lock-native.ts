@@ -12,7 +12,7 @@ declare class AppLockModule extends NativeModule {
   derivePin(pin: string, saltHex: string, iterations: number): Promise<string>;
 }
 
-const native = requireOptionalNativeModule<AppLockModule>("OpenBotAppLock");
+const native = requireOptionalNativeModule<AppLockModule>("CodeBotAppLock");
 
 let fallbackAwaySince: number | null = null;
 if (!native) {

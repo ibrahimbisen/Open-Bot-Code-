@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import { matchingSourceKeys, sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import { matchingSourceKeys, sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { testMcpServer } from "../src/backend/mcp-probe";
 
@@ -70,7 +70,7 @@ function stdioConfig(path: string, mode: string): McpServerConfig {
   };
 }
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-mcp-exit-"));
+const directory = await mkdtemp(join(tmpdir(), "codebot-mcp-exit-"));
 try {
   const server = join(directory, "server.mjs");
   await writeFile(server, SERVER);
@@ -117,8 +117,8 @@ try {
     color: color.error,
     slow: { ...slow, ms: slowMs },
   };
-  const out = resolve(".openbot-build/mcp-stdio-exit-output-e2e.json");
-  await mkdir(resolve(".openbot-build"), { recursive: true });
+  const out = resolve(".codebot-build/mcp-stdio-exit-output-e2e.json");
+  await mkdir(resolve(".codebot-build"), { recursive: true });
   await writeFile(out, `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\nPASS - ${out}\n`);
 } finally {

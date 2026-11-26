@@ -1,10 +1,10 @@
-import type { BillingDetails } from "@openbot/contracts/billing-details";
-import type { LicenseDesktopApi } from "@openbot/contracts/ipc";
-import { type License, type LicensePlan, type LicenseState, licenseMonthlyAmount } from "@openbot/contracts/license";
-import { BillingPanel } from "@openbot/ui/features/billing/BillingPanel";
-import { createBillingStore } from "@openbot/ui/features/billing/billing-store";
-import { LicenseSection } from "@openbot/ui/features/billing/LicenseSection";
-import { createLicenseStore } from "@openbot/ui/features/billing/license-store";
+import type { BillingDetails } from "@codebot/contracts/billing-details";
+import type { LicenseDesktopApi } from "@codebot/contracts/ipc";
+import { type License, type LicensePlan, type LicenseState, licenseMonthlyAmount } from "@codebot/contracts/license";
+import { BillingPanel } from "@codebot/ui/features/billing/BillingPanel";
+import { createBillingStore } from "@codebot/ui/features/billing/billing-store";
+import { LicenseSection } from "@codebot/ui/features/billing/LicenseSection";
+import { createLicenseStore } from "@codebot/ui/features/billing/license-store";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { createMockBilling, previewBillingServers } from "../src/preview/mock-billing";
 import { createMockLicense, previewLicenseUsers } from "../src/preview/mock-license";

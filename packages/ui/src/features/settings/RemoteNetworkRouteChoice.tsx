@@ -1,5 +1,5 @@
-import { isRemoteNetworkRoute, type RemoteNetworkRoute } from "@openbot/contracts/ipc";
-import { Badge, RadioGroup } from "@openbot/ui";
+import { isRemoteNetworkRoute, type RemoteNetworkRoute } from "@codebot/contracts/ipc";
+import { Badge, RadioGroup } from "@codebot/ui";
 import { Show } from "solid-js";
 import { useText } from "../../text";
 
@@ -22,17 +22,17 @@ export function RemoteNetworkRouteChoice(props: RemoteNetworkRouteChoiceProps) {
         if (isRemoteNetworkRoute(value)) props.onChange(value);
       }}
     >
-      <RadioGroup.Item class="settings-mobile-route-option" value="openbot">
+      <RadioGroup.Item class="settings-mobile-route-option" value="codebot">
         <RadioGroup.ItemInput />
         <RadioGroup.ItemControl class="settings-mobile-route-card">
           <span class="settings-mobile-route-dot" aria-hidden="true" />
           <span class="settings-mobile-route-text">
             <RadioGroup.ItemLabel class="settings-mobile-route-name">
-              {t("settings.mobileConnect.route.openbot.title")}
-              <Badge variant="info-light">{t("settings.mobileConnect.route.openbot.badge")}</Badge>
+              {t("settings.mobileConnect.route.codebot.title")}
+              <Badge variant="info-light">{t("settings.mobileConnect.route.codebot.badge")}</Badge>
             </RadioGroup.ItemLabel>
             <RadioGroup.ItemDescription class="settings-mobile-route-hint">
-              {t("settings.mobileConnect.route.openbot.description")}
+              {t("settings.mobileConnect.route.codebot.description")}
             </RadioGroup.ItemDescription>
           </span>
         </RadioGroup.ItemControl>

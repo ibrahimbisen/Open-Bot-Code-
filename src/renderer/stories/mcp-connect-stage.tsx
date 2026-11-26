@@ -1,9 +1,9 @@
-import type { McpServerConfig, McpTestResult } from "@openbot/contracts/ipc";
-import type { McpKeyFlow } from "@openbot/contracts/mcp-connect-flows";
-import { Button, Text } from "@openbot/ui";
-import type { McpConnectSubject } from "@openbot/ui/features/settings/McpConnectShell";
-import type { MarketplacePluginApp } from "@openbot/ui/features/settings/marketplace-plugins";
-import { holdFlag } from "@openbot/ui/utils";
+import type { McpServerConfig, McpTestResult } from "@codebot/contracts/ipc";
+import type { McpKeyFlow } from "@codebot/contracts/mcp-connect-flows";
+import { Button, Text } from "@codebot/ui";
+import type { McpConnectSubject } from "@codebot/ui/features/settings/McpConnectShell";
+import type { MarketplacePluginApp } from "@codebot/ui/features/settings/marketplace-plugins";
+import { holdFlag } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createSignal, onCleanup, Show } from "solid-js";
 import { createPluginAppConfig } from "../src/features/settings/marketplace-plugin-catalog";

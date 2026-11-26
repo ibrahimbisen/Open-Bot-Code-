@@ -34,7 +34,7 @@ const ROOT = resolve(import.meta.dirname, "..");
 const MOBILE = join(ROOT, "apps", "mobile");
 const BIN = join(ROOT, "node_modules", ".bin");
 const WORKFLOW = "mobile-ota.yml";
-const DEFAULT_BUCKET = "openbot-mobile-updates";
+const DEFAULT_BUCKET = "codebot-mobile-updates";
 const PROBE_TIMEOUT_MS = 120_000;
 const PROBE_INTERVAL_MS = 5_000;
 const RUNTIME_INPUTS = [
@@ -325,7 +325,7 @@ async function commandPublish(options: Options) {
   let served = true;
   for (const check of checks) {
     const scope: UpdateScope = { channel, platform: check.platform, runtimeVersion: check.runtimeVersion };
-    const directory = await mkdtemp(join(tmpdir(), `openbot-ota-${check.platform}-`));
+    const directory = await mkdtemp(join(tmpdir(), `codebot-ota-${check.platform}-`));
     try {
       out(`Exporting the ${check.platform} bundle...`);
       await exportBundle(check.platform, channel, directory);
@@ -448,7 +448,7 @@ interface BinarySettings {
 }
 
 async function iosSettings(archive: string, config: AppConfig, channel: string, certificate: string) {
-  const directory = await mkdtemp(join(tmpdir(), "openbot-ipa-"));
+  const directory = await mkdtemp(join(tmpdir(), "codebot-ipa-"));
   try {
     const read = async (pattern: RegExp, name: string) => {
       const path = join(directory, name);

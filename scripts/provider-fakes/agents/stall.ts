@@ -48,7 +48,7 @@ function restore(request: AcpRequest, peer: AcpPeer): void {
 
 function promptText(params: AcpParams): string {
   const text = (params.prompt ?? []).map((block) => block.text ?? "").join("");
-  return text.replace(/^[\s\S]*<\/openbot-developer-instructions>/u, "");
+  return text.replace(/^[\s\S]*<\/codebot-developer-instructions>/u, "");
 }
 
 serveFakeAcpAgent(

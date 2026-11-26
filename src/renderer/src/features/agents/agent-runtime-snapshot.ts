@@ -1,7 +1,7 @@
-import type { AgentApproval, AgentEvent, AgentRuntimePrompt, AgentRuntimeSnapshot } from "@openbot/contracts/ipc";
-import { cleanAgentMessageText } from "@openbot/team-client/agent-message-text";
-import { keepWholeApprovals, reconcilePendingRequests } from "@openbot/team-client/runtime-attention";
-import type { AgentMessage } from "@openbot/ui/data";
+import type { AgentApproval, AgentEvent, AgentRuntimePrompt, AgentRuntimeSnapshot } from "@codebot/contracts/ipc";
+import { cleanAgentMessageText } from "@codebot/team-client/agent-message-text";
+import { keepWholeApprovals, reconcilePendingRequests } from "@codebot/team-client/runtime-attention";
+import type { AgentMessage } from "@codebot/ui/data";
 import { createStoredMessage } from "../../app-stored-values";
 import { promptRequestKey } from "../conversation/conversation-keys";
 

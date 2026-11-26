@@ -23,7 +23,7 @@ export function withChannelSeenSubtasks(
   projected: TeamProtocolV2Json,
   source: unknown,
 ): TeamProtocolV2Json {
-  if (new URL(path, "http://openbot.invalid").pathname !== CHANNEL_ROUTES.read) return projected;
+  if (new URL(path, "http://codebot.invalid").pathname !== CHANNEL_ROUTES.read) return projected;
   if (!isDynamicRecord(projected) || !Array.isArray(projected.tasks) || !isDynamicRecord(source)) return projected;
   const tasks = source.tasks;
   if (!Array.isArray(tasks)) return projected;

@@ -17,16 +17,16 @@ import {
   parseBillingLookupKey,
   storageTierGb,
   storageTierOf,
-} from "@openbot/contracts/billing";
-import { type BillingDetailsRequest, VAT_TAX_RATE } from "@openbot/contracts/billing-details";
+} from "@codebot/contracts/billing";
+import { type BillingDetailsRequest, VAT_TAX_RATE } from "@codebot/contracts/billing-details";
 import {
   CREDIT_METADATA,
   CREDIT_METADATA_KIND,
   type CreditCheckoutRequest,
   creditLookupKey,
   creditStops,
-} from "@openbot/contracts/credits";
-import { DEFAULT_TEAM_MEMBER_LIMIT } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/credits";
+import { DEFAULT_TEAM_MEMBER_LIMIT } from "@codebot/contracts/input-limits";
 import {
   LICENSE_INCLUDED_USERS,
   LICENSE_LOOKUP_KEYS,
@@ -46,8 +46,8 @@ import {
   licensePeriodAmount,
   licensePlanPrice,
   ORDER_METADATA,
-} from "@openbot/contracts/license";
-import { referralShare } from "@openbot/contracts/referral";
+} from "@codebot/contracts/license";
+import { referralShare } from "@codebot/contracts/referral";
 import { type Browser, chromium } from "playwright-core";
 import { z } from "zod";
 import { readLocalRuntimeVars } from "../apps/auth-api/src/server/runtime-env";
@@ -55,7 +55,7 @@ import { EARLY_START_METADATA, STRIPE_API_VERSION, VAT_METADATA } from "../apps/
 import { developmentChildEnvironment, loadSharedDevelopmentEnvironment } from "./development-environment";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REPORT = join(ROOT, ".openbot-build", "stripe-flows-e2e.json");
+const REPORT = join(ROOT, ".codebot-build", "stripe-flows-e2e.json");
 const SCENARIOS = [
   "renewal",
   "failed-renewal",
@@ -105,11 +105,11 @@ const STARTER_BUNDLE_MONTH: LicensePlan = { tier: "starter", interval: "month", 
 const TEAM_MONTH: LicensePlan = { tier: "team", interval: "month", bundle: false };
 const TEAM_BUNDLE_MONTH: LicensePlan = { tier: "team", interval: "month", bundle: true };
 const TEAM_YEAR: LicensePlan = { tier: "team", interval: "year", bundle: false };
-const WELCOME_EMAIL_CLAIM_PREFIX = "openbot_welcome_email:";
+const WELCOME_EMAIL_CLAIM_PREFIX = "codebot_welcome_email:";
 const LICENSE_EMAIL_CLAIM_PREFIXES = {
-  welcome: "openbot_license_email:",
-  payment_failed: "openbot_license_payment_failed:",
-  ended: "openbot_license_ended:",
+  welcome: "codebot_license_email:",
+  payment_failed: "codebot_license_payment_failed:",
+  ended: "codebot_license_ended:",
 } as const;
 type LicenseEmailKind = keyof typeof LICENSE_EMAIL_CLAIM_PREFIXES;
 
@@ -373,7 +373,7 @@ const REMOTE_D1 = process.argv.includes("--remote-d1");
 const REAL_CHECKOUT = process.argv.includes("--checkout");
 
 function d1<T>(sql: string, schema: z.ZodType<T>): T[] {
-  const target = REMOTE_D1 ? ["openbot-auth-test", "--remote", "--env", "test"] : ["openbot-auth", "--local"];
+  const target = REMOTE_D1 ? ["codebot-auth-test", "--remote", "--env", "test"] : ["codebot-auth", "--local"];
   const env = developmentChildEnvironment(process.env, "app");
   if (REMOTE_D1) delete env.CLOUDFLARE_API_TOKEN;
   const result = spawnSync(
@@ -440,7 +440,7 @@ class Account {
     );
     const clock = await stripe("POST", "/v1/test_helpers/test_clocks", idSchema, {
       frozen_time: String(Math.floor(now / 1_000)),
-      name: `openbot ${this.scenario}`,
+      name: `codebot ${this.scenario}`,
     });
     this.clock = clock.id;
     const customer = await stripe("POST", "/v1/customers", idSchema, {
@@ -448,7 +448,7 @@ class Account {
       test_clock: this.clock,
       payment_method: "pm_card_visa",
       "invoice_settings[default_payment_method]": "pm_card_visa",
-      "metadata[openbot_user_id]": this.id,
+      "metadata[codebot_user_id]": this.id,
       "address[country]": "PL",
     });
     this.customer = customer.id;
@@ -470,8 +470,8 @@ class Account {
     const response = await fetch(`${this.api}/api/browser/${path}`, {
       method,
       headers: {
-        Cookie: `__Host-openbot-web=${token}`,
-        ...(method === "GET" ? {} : { Origin: this.api, "X-OpenBot-Browser": "1", "Content-Type": "application/json" }),
+        Cookie: `__Host-codebot-web=${token}`,
+        ...(method === "GET" ? {} : { Origin: this.api, "X-CodeBot-Browser": "1", "Content-Type": "application/json" }),
         ...headers,
       },
       ...(body ? { body: JSON.stringify(body) } : {}),
@@ -567,8 +567,8 @@ class Account {
       customer: this.customer,
       "items[0][price]": await priceId("standard", "month"),
       currency: "eur",
-      "metadata[openbot_user_id]": this.id,
-      "metadata[openbot_server_id]": serverId,
+      "metadata[codebot_user_id]": this.id,
+      "metadata[codebot_server_id]": serverId,
       payment_behavior: "error_if_incomplete",
     });
     return subscription.id;
@@ -598,7 +598,7 @@ class Account {
       "items[0][price]": await licensePriceId(plan),
       "items[0][quantity]": String(users),
       currency,
-      "metadata[openbot_user_id]": this.id,
+      "metadata[codebot_user_id]": this.id,
       [`metadata[${LICENSE_METADATA.kind}]`]: LICENSE_METADATA_KIND,
       [`metadata[${LICENSE_METADATA.tier}]`]: plan.tier,
       [`metadata[${LICENSE_METADATA.interval}]`]: plan.interval,
@@ -626,8 +626,8 @@ class Account {
             [`metadata[${ORDER_METADATA.licenseTrialEnd}]`]: String(Math.floor(trialEnd / 1_000)),
           }),
       currency: "eur",
-      "metadata[openbot_user_id]": this.id,
-      "metadata[openbot_server_id]": serverId,
+      "metadata[codebot_user_id]": this.id,
+      "metadata[codebot_server_id]": serverId,
       payment_behavior: "error_if_incomplete",
     });
     return created.id;
@@ -767,7 +767,7 @@ async function payCheckout(
     try {
       await Promise.race([framed.waitFor(), radio.waitFor(), page.locator("#cardNumber").waitFor()]);
     } catch (error) {
-      await page.screenshot({ path: join(ROOT, ".openbot-build", `failed-${screenshot}`), fullPage: true });
+      await page.screenshot({ path: join(ROOT, ".codebot-build", `failed-${screenshot}`), fullPage: true });
       throw error;
     }
     const embedded = await framed.isVisible();
@@ -820,7 +820,7 @@ async function payCheckout(
     if ((await save.count()) && (await save.isChecked())) await save.dispatchEvent("click");
     const terms = form.locator(id.terms);
     if ((await terms.count()) && !(await terms.isChecked())) await terms.dispatchEvent("click");
-    await page.screenshot({ path: join(ROOT, ".openbot-build", screenshot) });
+    await page.screenshot({ path: join(ROOT, ".codebot-build", screenshot) });
     await form.getByTestId(id.submit).dispatchEvent("click");
     await page.waitForURL((current) => current.origin === returnOrigin, { timeout: 90_000 });
     return new URL(page.url()).pathname;
@@ -870,7 +870,7 @@ async function connectWeb(account: Account, serverId: string, name: string, scre
   const context = await (await browser()).newContext();
   try {
     await context.addCookies([
-      { name: "__Host-openbot-web", value: account.token, url: `${account.api}/`, secure: true, httpOnly: true },
+      { name: "__Host-codebot-web", value: account.token, url: `${account.api}/`, secure: true, httpOnly: true },
     ]);
     await context.addInitScript(PEER_TRACE);
     const page = await context.newPage();
@@ -881,7 +881,7 @@ async function connectWeb(account: Account, serverId: string, name: string, scre
     const start = Date.now();
     await page.goto(`${account.api}/app`);
     const fail = async (error: unknown) => {
-      await page.screenshot({ path: join(ROOT, ".openbot-build", `failed-${screenshot}`), fullPage: true });
+      await page.screenshot({ path: join(ROOT, ".codebot-build", `failed-${screenshot}`), fullPage: true });
       const snapshot = await page.locator("body").ariaSnapshot();
       process.stdout.write(`page: ${page.url()}\n${snapshot}\nconsole:\n${consoleLines.join("\n")}\n`);
       throw error;
@@ -898,7 +898,7 @@ async function connectWeb(account: Account, serverId: string, name: string, scre
       120_000,
     ).catch(fail);
     const connectedAt = Date.now();
-    await page.screenshot({ path: join(ROOT, ".openbot-build", screenshot) });
+    await page.screenshot({ path: join(ROOT, ".codebot-build", screenshot) });
     const reported = await waitFor(
       "activity report",
       async () => {
@@ -932,7 +932,7 @@ async function connectWeb(account: Account, serverId: string, name: string, scre
 
 const priceIds = new Map<string, string>();
 function priceId(plan: string, interval: string): Promise<string> {
-  return priceIdByLookupKey(`openbot_${plan}_${interval}`);
+  return priceIdByLookupKey(`codebot_${plan}_${interval}`);
 }
 
 function licensePriceId(plan: LicensePlan): Promise<string> {
@@ -1033,7 +1033,7 @@ async function waitFor<T>(label: string, check: () => Promise<T | null | undefin
   throw new Error(`Timed out: ${label} (last: ${last})`);
 }
 
-const INVITE_COUPON = "openbot-invite-10-first";
+const INVITE_COUPON = "codebot-invite-10-first";
 const inviteSessionSchema = z.object({
   discounts: z.array(z.object({ coupon: z.union([z.string(), z.object({ id: z.string() })]).nullable() })).nullable(),
 });
@@ -1188,7 +1188,7 @@ async function openLicensePages(account: Account) {
     status: "open",
     limit: "100",
   });
-  return listed.data.filter((session) => session.metadata?.openbot_kind === "license").map((session) => session.id);
+  return listed.data.filter((session) => session.metadata?.codebot_kind === "license").map((session) => session.id);
 }
 
 async function expireCheckout(url: string) {
@@ -1282,8 +1282,8 @@ type CheckoutView = z.infer<typeof checkoutLinesSchema>;
 function vatView(session: CheckoutView | null) {
   return (
     session && {
-      country: session.metadata?.openbot_vat_country ?? null,
-      treatment: session.metadata?.openbot_vat_treatment ?? null,
+      country: session.metadata?.codebot_vat_country ?? null,
+      treatment: session.metadata?.codebot_vat_treatment ?? null,
       subtotal: session.amount_subtotal,
       tax: session.total_details?.amount_tax ?? null,
     }
@@ -1351,7 +1351,7 @@ async function brazilPromotionLink(account: Account, suffix: string) {
     duration: "once",
     name: `E2E Brazil link ${suffix}`,
     ...Object.fromEntries(
-      BILLING_PLAN_IDS.flatMap((plan) => [`openbot_${plan}`, `openbot_storage_${plan}`]).map((product, index) => [
+      BILLING_PLAN_IDS.flatMap((plan) => [`codebot_${plan}`, `codebot_storage_${plan}`]).map((product, index) => [
         `applies_to[products][${index}]`,
         product,
       ]),
@@ -2140,7 +2140,7 @@ const scenarios: Record<Scenario, (account: Account) => Promise<void>> = {
       );
     const serviceActive = async (sandboxId: string) => {
       const response = await boat("POST", `/sandboxes/${sandboxId}/commands`, {
-        command: "systemctl is-active openbot.service; sudo -n journalctl -u openbot.service --no-pager -n 30 -o cat",
+        command: "systemctl is-active codebot.service; sudo -n journalctl -u codebot.service --no-pager -n 30 -o cat",
         timeoutSeconds: 60,
       });
       return commandSchema.safeParse(response.body).data?.stdout ?? "";
@@ -2180,24 +2180,24 @@ const scenarios: Record<Scenario, (account: Account) => Promise<void>> = {
       );
       record(
         "boat",
-        "OpenBot in the VM redeems its claim and publishes the host with the server name",
+        "CodeBot in the VM redeems its claim and publishes the host with the server name",
         host.host_name === name,
         host,
       );
       const output = await serviceActive(sandboxId);
-      record("boat", "openbot.service is active in the VM", output.startsWith("active"), output.split("\n"));
+      record("boat", "codebot.service is active in the VM", output.startsWith("active"), output.split("\n"));
       const restart = await boat("POST", `/sandboxes/${sandboxId}/commands`, {
         command: [
-          'test -s "$HOME/.config/OpenBot/openbot-central-auth-v1.bin" || { echo "no stored session"; exit 1; }',
-          "sudo -n systemctl restart openbot.service",
-          "id=$(systemctl show -p InvocationID --value openbot.service)",
+          'test -s "$HOME/.config/CodeBot/codebot-central-auth-v1.bin" || { echo "no stored session"; exit 1; }',
+          "sudo -n systemctl restart codebot.service",
+          "id=$(systemctl show -p InvocationID --value codebot.service)",
           "for _ in $(seq 1 30); do",
           '  if sudo -n journalctl "_SYSTEMD_INVOCATION_ID=$id" -o cat --no-pager | grep -q "could not sign in"; then',
           '    echo "sign-in failed"; exit 1',
           "  fi",
           "  sleep 2",
           "done",
-          "systemctl is-active openbot.service",
+          "systemctl is-active codebot.service",
         ].join("\n"),
         timeoutSeconds: 120,
       });
@@ -2951,14 +2951,14 @@ const scenarios: Record<Scenario, (account: Account) => Promise<void>> = {
       "the 8 license keys are the released Team monthly key and 7 new keys, and none is a server plan key",
       keys.join(",") ===
         [
-          "openbot_license_starter_month",
-          "openbot_license_starter_bundle_month",
-          "openbot_license_starter_year",
-          "openbot_license_starter_bundle_year",
-          "openbot_license_month",
-          "openbot_license_bundle_month",
-          "openbot_license_year",
-          "openbot_license_bundle_year",
+          "codebot_license_starter_month",
+          "codebot_license_starter_bundle_month",
+          "codebot_license_starter_year",
+          "codebot_license_starter_bundle_year",
+          "codebot_license_month",
+          "codebot_license_bundle_month",
+          "codebot_license_year",
+          "codebot_license_bundle_year",
         ].join(",") && parsed.every((entry) => entry.parsed === null),
       { keys, parsed },
     );
@@ -3120,7 +3120,7 @@ const scenarios: Record<Scenario, (account: Account) => Promise<void>> = {
     const created = createdSchema.safeParse(opened.body).data;
     const session = created?.checkoutUrl ? await licenseSession(created.checkoutUrl) : null;
     const lines = session?.line_items.data ?? [];
-    const serverLine = lines.find((line) => line.price.lookup_key === "openbot_standard_month");
+    const serverLine = lines.find((line) => line.price.lookup_key === "codebot_standard_month");
     const licenseLine = lines.find((line) => line.price.lookup_key === licenseLookupKey(TEAM_BUNDLE_MONTH));
     record(
       "order-bundle",
@@ -3341,7 +3341,7 @@ const scenarios: Record<Scenario, (account: Account) => Promise<void>> = {
         "items[0][quantity]": "7",
         currency: "eur",
         "discounts[0][coupon]": INVITE_COUPON,
-        "metadata[openbot_user_id]": account.id,
+        "metadata[codebot_user_id]": account.id,
         [`metadata[${LICENSE_METADATA.kind}]`]: LICENSE_METADATA_KIND,
         [`metadata[${LICENSE_METADATA.tier}]`]: TEAM_YEAR.tier,
         [`metadata[${LICENSE_METADATA.interval}]`]: TEAM_YEAR.interval,
@@ -3946,7 +3946,7 @@ const scenarios: Record<Scenario, (account: Account) => Promise<void>> = {
       "a Standard server with a Team order of 4 users: one Checkout page with the server Price only, and the order with the trial end in its metadata",
       opened.status === 201 &&
         lines.length === 1 &&
-        lines[0]?.price.lookup_key === "openbot_standard_month" &&
+        lines[0]?.price.lookup_key === "codebot_standard_month" &&
         metadata[ORDER_METADATA.licenseTier] === "team" &&
         metadata[ORDER_METADATA.licenseUsers] === String(order.users) &&
         metadata[ORDER_METADATA.licenseInterval] === "month" &&
@@ -4410,7 +4410,7 @@ async function main(args: string[]) {
   if (chrome) await (await chrome).close();
   for (const clock of clocks)
     await stripe("DELETE", `/v1/test_helpers/test_clocks/${clock}`, idSchema).catch(() => null);
-  mkdirSync(join(ROOT, ".openbot-build"), { recursive: true });
+  mkdirSync(join(ROOT, ".codebot-build"), { recursive: true });
   const kept = previousSteps().filter((step) => !run.includes(step.scenario));
   writeFileSync(
     REPORT,

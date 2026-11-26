@@ -1,9 +1,9 @@
-import { attachmentMimeTypeForName } from "@openbot/contracts/attachment-files";
-import { chatVisualReply } from "@openbot/contracts/chat-visual";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
-import type { AgentMessage } from "@openbot/ui/data";
-import { customBackdropChoice, messageHtmlBackdropPage } from "@openbot/ui/features/conversation/chat-backdrop";
-import { useText } from "@openbot/ui/text";
+import { attachmentMimeTypeForName } from "@codebot/contracts/attachment-files";
+import { chatVisualReply } from "@codebot/contracts/chat-visual";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
+import type { AgentMessage } from "@codebot/ui/data";
+import { customBackdropChoice, messageHtmlBackdropPage } from "@codebot/ui/features/conversation/chat-backdrop";
+import { useText } from "@codebot/ui/text";
 import { createEffect } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { showNewAgentBackdrop } from "../../agent-backdrops";

@@ -3,12 +3,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { WorkflowGraph, WorkflowNode, WorkflowRunDetail } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { WorkflowGraph, WorkflowNode, WorkflowRunDetail } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { MessagingDiscordMention, MessagingDiscordSend } from "../src/backend/messaging/messaging-threads";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { EXTERNAL_EVENT_START } from "../src/backend/webhook-trigger";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
@@ -16,7 +16,7 @@ import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-discord-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-discord-e2e");
 const CONNECTION = "messaging-discord-e2e";
 const CHANNEL = "110000000000000001";
 const WAIT_MS = 5_000;
@@ -81,8 +81,8 @@ const mentionOf = (text: string): MessagingDiscordMention => {
   };
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-discord-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-discord-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {

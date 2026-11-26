@@ -2,9 +2,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import type { BillingPlanId } from "@openbot/contracts/billing";
-import { HOSTED_PLAN_SIZE } from "@openbot/contracts/hosted-servers";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import type { BillingPlanId } from "@codebot/contracts/billing";
+import { HOSTED_PLAN_SIZE } from "@codebot/contracts/hosted-servers";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Result } from "effect";
 import {
   ACCOUNT_ANALYTICS_SCHEMA_VERSION,
@@ -16,7 +16,7 @@ import { HostedServerService } from "../src/server/hosted-server-service";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "hosted-pool-assignment-e2e");
+const OUT = join(ROOT, ".codebot-build", "hosted-pool-assignment-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const ALERT_URL = "https://alerts.example/webhook";
 const OWNER = {
@@ -71,11 +71,11 @@ async function purchaseStartsOnThePoolOrOnBoat() {
     const method = init.method ?? "GET";
     if (method === "POST" && path === "/sandboxes") {
       const body = JSON.parse(String(init.body));
-      const serverId = String(body.env.OPENBOT_HOSTED_HOST_ID);
+      const serverId = String(body.env.CODEBOT_HOSTED_HOST_ID);
       created.push({
         serverId,
         from: String(body.from),
-        claim: String(body.env.OPENBOT_HOSTED_CLAIM),
+        claim: String(body.env.CODEBOT_HOSTED_CLAIM),
         type: String(body.type),
       });
       return Response.json({ ok: true, sandbox: { id: `bx_${serverId}`, state: "provisioning" } });
@@ -431,7 +431,7 @@ async function purchaseStartsOnThePoolOrOnBoat() {
   const session = first.state === "assigned" ? await Effect.runPromise(service.redeemClaim(first.claim)) : null;
   const signedIn = row("usd-1");
   check(
-    "the sign-in of OpenBot sets the server to running on its machine",
+    "the sign-in of CodeBot sets the server to running on its machine",
     session?.hostId === "usd-1" &&
       session.user.id === OWNER.id &&
       signedIn?.observed_state === "running" &&

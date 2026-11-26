@@ -1,4 +1,4 @@
-import type { AgentTask, AgentTaskReadState } from "@openbot/contracts/ipc";
+import type { AgentTask, AgentTaskReadState } from "@codebot/contracts/ipc";
 import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef } from "react";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";

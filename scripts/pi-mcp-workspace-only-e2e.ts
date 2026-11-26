@@ -3,7 +3,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
 import { visibleDynamicTools } from "../src/backend/agent/tool-catalog";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolvePiCli } from "../src/backend/cli";
@@ -12,7 +12,7 @@ import type { CustomProviderConfig } from "../src/backend/opencode-config";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-mcp-workspace-only-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-mcp-workspace-only-e2e");
 const NL = String.fromCharCode(10);
 const TOOL = "ping_fixture";
 if (process.platform !== "darwin") throw new Error("The Workspace only sandbox runs on macOS only.");
@@ -69,7 +69,7 @@ interface Report {
 }
 
 const report: Report = { passed: false, requests: [] };
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-mcp-workspace-only-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-mcp-workspace-only-e2e-"));
 const clients: AgentClient[] = [];
 
 async function body(request: IncomingMessage): Promise<ChatRequest> {

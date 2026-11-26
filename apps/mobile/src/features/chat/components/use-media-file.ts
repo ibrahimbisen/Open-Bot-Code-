@@ -1,5 +1,5 @@
-import { attachmentFileExtension } from "@openbot/contracts/attachment-files";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
+import { attachmentFileExtension } from "@codebot/contracts/attachment-files";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
 import { hashKey, type QueryClient, type QueryKey, useQuery } from "@tanstack/react-query";
 import { Directory, File, Paths } from "expo-file-system";
 import { useMemo } from "react";

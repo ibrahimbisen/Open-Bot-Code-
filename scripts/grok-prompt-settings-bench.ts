@@ -16,7 +16,7 @@ import {
 } from "./grok-live-harness";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/grok-prompt-settings-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-prompt-settings-bench");
 const REPLY_PROMPT = "Reply with the single word OK. Do not use any tool.";
 const TASK_PROMPT =
   "Read notes.md and count.txt with the read_file tool. Then reply with one line: the title of notes.md and the number in count.txt.";
@@ -28,7 +28,7 @@ interface Variant {
   env?: Record<string, string>;
 }
 
-const OPENBOT_SETTINGS: Record<string, TomlValue> = {
+const CODEBOT_SETTINGS: Record<string, TomlValue> = {
   "features.feedback": true,
   "workflows.enabled": true,
   "features.turn_summary": true,
@@ -47,7 +47,7 @@ const REFERENCES: Variant[] = [
 
 const VARIANTS: Variant[] = [
   { name: "current" },
-  { name: "without-openbot-settings", config: OPENBOT_SETTINGS },
+  { name: "without-codebot-settings", config: CODEBOT_SETTINGS },
   ...REFERENCES,
 ];
 
@@ -90,7 +90,7 @@ const sum = (requests: GrokRequest[]) => requests.reduce((total, request) => tot
 
 for (const userSetup of setups) {
   for (const variant of variants) {
-    const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-grok-prompt-bench-")));
+    const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-grok-prompt-bench-")));
     const run: RunReport = {
       variant: variant.name,
       userSetup,

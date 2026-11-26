@@ -21,7 +21,7 @@ const SITES = {
 
 function Settings(props: { linked: boolean; canShare?: boolean; sites?: boolean }) {
   installStoryChrome({
-    "openbot.analytics.v1": { enabled: props.linked, at: 0 },
+    "codebot.analytics.v1": { enabled: props.linked, at: 0 },
     ...(props.sites === false ? {} : { [SITES_KEY]: SITES }),
   });
   return (

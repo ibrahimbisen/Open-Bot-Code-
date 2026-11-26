@@ -1,4 +1,4 @@
-import { agentProviderName, isAgentProvider } from "@openbot/contracts/ipc";
+import { agentProviderName, isAgentProvider } from "@codebot/contracts/ipc";
 import {
   type HeatLevel,
   heatLevel,
@@ -6,7 +6,7 @@ import {
   heatmapWeeks,
   type ProfileDay,
   type ProfileStats,
-} from "@openbot/team-client/profile-stats";
+} from "@codebot/team-client/profile-stats";
 import { Button, Typography } from "heroui-native";
 import { useMemo, useRef, useState } from "react";
 import { type GestureResponderEvent, Pressable, ScrollView, type ScrollViewInstance, View } from "react-native";
@@ -122,8 +122,8 @@ function ProfileHeatmap({
 }) {
   const { t, format } = useText();
   const dates = useProfileDates();
-  const accent = String(useCSSVariable("--openbot-accent"));
-  const empty = String(useCSSVariable("--openbot-border-grouped"));
+  const accent = String(useCSSVariable("--codebot-accent"));
+  const empty = String(useCSSVariable("--codebot-border-grouped"));
   const scroll = useRef<ScrollViewInstance>(null);
   const [selected, setSelected] = useState<ProfileDay | null>(null);
   const model = useMemo(() => {

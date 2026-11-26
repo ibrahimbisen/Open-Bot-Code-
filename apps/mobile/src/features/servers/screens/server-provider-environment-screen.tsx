@@ -5,7 +5,7 @@ import {
   type ProviderEnvironmentProvider,
   type ProviderEnvironmentVariableInput,
   providerEnvironmentProblem,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
@@ -73,7 +73,7 @@ function EnvironmentForm({
 }) {
   const { t, errorMessage } = useText();
   const { theme } = useUniwind();
-  const accent = useCSSVariable("--openbot-accent");
+  const accent = useCSSVariable("--codebot-accent");
   const queryScope = useQueryScope();
   const queryClient = useQueryClient();
   const queryKey = queryKeys.providerEnvironment(queryScope, serverId, provider);

@@ -1,4 +1,4 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
+import type { ServerSummary } from "@codebot/contracts/ipc";
 import { onSettled, untrack } from "solid-js";
 
 const NEW_SERVER_RETRY_MS = 5_000;

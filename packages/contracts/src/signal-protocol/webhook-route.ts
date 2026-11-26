@@ -1,10 +1,10 @@
-export const WEBHOOK_ROUTE_AUDIENCE = "openbot-webhook-route";
+export const WEBHOOK_ROUTE_AUDIENCE = "codebot-webhook-route";
 
 export const WEBHOOK_EVENTS_PATH = "/v1/webhooks";
 
-export const WEBHOOK_TIMESTAMP_HEADER = "x-openbot-timestamp";
-export const WEBHOOK_DELIVERY_ID_HEADER = "x-openbot-delivery-id";
-export const WEBHOOK_SIGNATURE_HEADER = "x-openbot-signature";
+export const WEBHOOK_TIMESTAMP_HEADER = "x-codebot-timestamp";
+export const WEBHOOK_DELIVERY_ID_HEADER = "x-codebot-delivery-id";
+export const WEBHOOK_SIGNATURE_HEADER = "x-codebot-signature";
 
 export const WEBHOOK_MAX_CLOCK_SKEW_SECONDS = 5 * 60;
 

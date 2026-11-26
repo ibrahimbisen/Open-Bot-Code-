@@ -1,5 +1,5 @@
-import { canAdministerServer, libraryFolderPath, type StoredFileRow } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import { canAdministerServer, libraryFolderPath, type StoredFileRow } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import {
   FILE_TYPE_FILTER_VALUES,
   type FileType,
@@ -7,7 +7,7 @@ import {
   fileTypeCounts,
   fileTypeOf,
   queryFiles,
-} from "@openbot/team-client/stored-files";
+} from "@codebot/team-client/stored-files";
 import { router, useLocalSearchParams } from "expo-router";
 import { Chip, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
@@ -489,9 +489,9 @@ function FileCard({
 }) {
   const { t } = useText();
   const [control, iconColor, iconBackground] = useCSSVariable([
-    "--openbot-bg-control",
-    "--openbot-file-default",
-    "--openbot-file-default-soft",
+    "--codebot-bg-control",
+    "--codebot-file-default",
+    "--codebot-file-default-soft",
   ]);
   const Icon = TYPE_ICON[fileTypeOf(file)];
   const large = width > LARGE_CARD_SIZE && height > LARGE_CARD_SIZE;

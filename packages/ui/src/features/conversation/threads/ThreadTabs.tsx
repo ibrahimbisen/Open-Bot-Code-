@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   Archive,
   ArrowRightToLine,
@@ -10,8 +10,8 @@ import {
   SlidingTabs,
   Trash2,
   X,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, For, flush, onSettled, Show } from "solid-js";
 import { modelPickerFit } from "../model-picker-fit";

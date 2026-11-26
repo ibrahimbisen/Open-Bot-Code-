@@ -37,7 +37,7 @@ export function withStorageWorkflowFiles(
   projected: TeamProtocolV2Json,
   source: unknown,
 ): TeamProtocolV2Json {
-  if (new URL(path, "http://openbot.invalid").pathname !== STORAGE_ROUTES.usage) return projected;
+  if (new URL(path, "http://codebot.invalid").pathname !== STORAGE_ROUTES.usage) return projected;
   if (!isDynamicRecord(projected) || !isDynamicRecord(source)) return projected;
   const files = projected.files;
   const sourceFiles = source.files;

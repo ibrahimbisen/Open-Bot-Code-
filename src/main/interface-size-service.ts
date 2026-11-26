@@ -3,13 +3,13 @@ import {
   type AppInterfaceSizePreference,
   DEFAULT_APP_INTERFACE_SIZE,
   isAppInterfaceSize,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Semaphore } from "effect";
 import { type PreferenceFileFailure, readPreferenceFile, writePreferenceFile } from "./preference-file";
 
-const logger = createOpenBotLogger("interface-size");
+const logger = createCodeBotLogger("interface-size");
 
 const DEFAULT_PREFERENCE: AppInterfaceSizePreference = { percent: DEFAULT_APP_INTERFACE_SIZE };
 

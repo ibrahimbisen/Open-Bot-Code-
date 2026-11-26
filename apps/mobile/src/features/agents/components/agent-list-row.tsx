@@ -1,4 +1,4 @@
-import { markdownPreviewText } from "@openbot/contracts/markdown-preview-text";
+import { markdownPreviewText } from "@codebot/contracts/markdown-preview-text";
 import { Link } from "expo-router";
 import { Typography } from "heroui-native";
 import { memo, useMemo, useState } from "react";

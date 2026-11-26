@@ -11,7 +11,7 @@ const TONE_CLASS = {
 } as const;
 
 export function TrailingValue({ value, tone }: { value: string; tone?: keyof typeof TONE_CLASS }) {
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   return (
     <View className="min-w-0 shrink flex-row items-center gap-1">
       <Typography.Paragraph numberOfLines={1} className={tone ? TONE_CLASS[tone] : "shrink text-grouped-secondary"}>

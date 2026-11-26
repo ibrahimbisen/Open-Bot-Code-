@@ -1,6 +1,6 @@
-import type { ProviderCodeLoginStart } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { classifyUserError } from "@openbot/user-errors";
+import type { ProviderCodeLoginStart } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { classifyUserError } from "@codebot/user-errors";
 import { Deferred, Effect, Result, Schema } from "effect";
 import type { AgentClient } from "./../agent-client";
 import { type CodexCliInfo, resolveCodexCli, resolveInstalledFirst } from "./../cli";
@@ -19,7 +19,7 @@ import { ProviderSignInError, signInReason } from "../provider-client-effects";
 import { recordRestartActivity } from "../restart-activity";
 
 const CODEX_LOGIN_TIMEOUT_MS = 10 * 60_000;
-const UNVERIFIED_MESSAGE = "OpenBot could not verify the ChatGPT connection. Try again.";
+const UNVERIFIED_MESSAGE = "CodeBot could not verify the ChatGPT connection. Try again.";
 
 interface PendingCodexLogin {
   client: AgentClient;
@@ -89,7 +89,7 @@ export class CodexLoginFlow {
         this.#track(client, cli, login.loginId);
         const opened = yield* Effect.result(loginIo(() => openExternal(login.authUrl)));
         if (Result.isFailure(opened)) {
-          yield* this.cancel("OpenBot could not open the ChatGPT connection page.");
+          yield* this.cancel("CodeBot could not open the ChatGPT connection page.");
           return yield* new CodexLoginFailed({ cause: new Error(sourceText("error.provider.chatgptPageFailed")) });
         }
       }),
@@ -349,7 +349,7 @@ function initializeLoginClient(client: AgentClient): Effect.Effect<void, CodexLo
       .request(
         "initialize",
         {
-          clientInfo: { name: "openbot", title: "OpenBot", version: "0.1.0" },
+          clientInfo: { name: "codebot", title: "CodeBot", version: "0.1.0" },
           capabilities: { experimentalApi: true, mcpServerOpenaiFormElicitation: true },
         },
         decodeRecordResponse,

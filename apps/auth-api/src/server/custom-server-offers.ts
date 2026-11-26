@@ -3,9 +3,9 @@ import {
   type CustomServerCheckout,
   type CustomServerPlan,
   parseCustomServerPlan,
-} from "@openbot/contracts/custom-server-plans";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/custom-server-plans";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { BillingError, type BillingOperationError, billingCall } from "./billing-errors";
 import type { BillingReturnTarget, BillingService } from "./billing-service";

@@ -1,4 +1,4 @@
-import { Bot, Button, CheckCheck, ContextMenu, FolderPlus, Hash } from "@openbot/ui";
+import { Bot, Button, CheckCheck, ContextMenu, FolderPlus, Hash } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import { SidebarChannelRow } from "./SidebarChannelRow";

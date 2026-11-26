@@ -1,4 +1,4 @@
-import { CLAUDE_PATH, CODEX_PATH, CURSOR_PATH, DEVIN_PATH } from "@openbot/brand/provider-logo-shape";
+import { CLAUDE_PATH, CODEX_PATH, CURSOR_PATH, DEVIN_PATH } from "@codebot/brand/provider-logo-shape";
 
 export type RivalMarkName =
   | "antigravity"

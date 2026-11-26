@@ -1,4 +1,4 @@
-import { isString } from "@openbot/contracts/runtime-values";
+import { isString } from "@codebot/contracts/runtime-values";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 
@@ -23,7 +23,7 @@ interface DrawerToolLayout {
   hidden: DrawerToolId[];
 }
 
-const key = "openbot.mobile.drawer-tools.v1";
+const key = "codebot.mobile.drawer-tools.v1";
 
 export function isDrawerToolId(value: unknown): value is DrawerToolId {
   return DRAWER_TOOL_IDS.some((id) => id === value);

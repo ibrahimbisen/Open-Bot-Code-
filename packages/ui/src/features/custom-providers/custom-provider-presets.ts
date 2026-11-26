@@ -1,4 +1,4 @@
-import { DEFAULT_MODEL_SERVERS, type DefaultModelServerId, detectedModelServerKey } from "@openbot/contracts/ipc";
+import { DEFAULT_MODEL_SERVERS, type DefaultModelServerId, detectedModelServerKey } from "@codebot/contracts/ipc";
 import type { DetectedProvider, ProviderDetection } from "./detected-providers";
 
 export type CustomProviderPresetId = "ollama" | "lmstudio" | "openai-compatible" | "acp";

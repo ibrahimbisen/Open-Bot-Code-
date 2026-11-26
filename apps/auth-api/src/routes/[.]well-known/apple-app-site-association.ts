@@ -5,15 +5,15 @@ const APPLE_APP_SITE_ASSOCIATION = {
     apps: [],
     details: [
       {
-        appID: "ZTRDTUL87R.app.openbot.desktop",
+        appID: "ZTRDTUL87R.app.codebot.desktop",
         paths: ["/join"],
       },
       {
-        appID: "ZTRDTUL87R.run.openbot.mobile",
+        appID: "ZTRDTUL87R.run.codebot.mobile",
         paths: ["/join", "/agents/*"],
       },
       {
-        appID: "8A47NKRZSJ.run.openbot.mobile",
+        appID: "8A47NKRZSJ.run.codebot.mobile",
         paths: ["/join", "/agents/*"],
       },
     ],

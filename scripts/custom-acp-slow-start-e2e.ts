@@ -10,7 +10,7 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/custom-acp-slow-start-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-acp-slow-start-e2e");
 const READ_LIMIT_MS = 1_000;
 const SESSION_DELAY_MS = 2_500;
 const EVENT_GUARD_MS = 30_000;
@@ -36,7 +36,7 @@ interface Report {
   diagnostics?: string[];
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-custom-acp-slow-start-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-custom-acp-slow-start-e2e-"));
 const clients: AgentClient[] = [];
 const report: Report = { passed: false };
 

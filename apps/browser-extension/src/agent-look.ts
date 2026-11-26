@@ -1,6 +1,6 @@
-import { avatarHeadColor } from "@openbot/brand/bloub-avatar";
-import type { AvatarColor, ClientAgentSummary } from "@openbot/contracts/ipc";
-import type { AppFormat } from "@openbot/i18n";
+import { avatarHeadColor } from "@codebot/brand/bloub-avatar";
+import type { AvatarColor, ClientAgentSummary } from "@codebot/contracts/ipc";
+import type { AppFormat } from "@codebot/i18n";
 
 export function avatarAgent(agent: ClientAgentSummary, color: AvatarColor | undefined) {
   return { avatarSeed: agent.avatarSeed, avatarHue: agent.avatarHue, avatarColor: color ?? null, avatarUrl: null };

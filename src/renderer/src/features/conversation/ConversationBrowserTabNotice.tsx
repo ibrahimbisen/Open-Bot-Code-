@@ -1,9 +1,9 @@
-import type { BrowserTab } from "@openbot/contracts/ipc";
-import { Button } from "@openbot/ui";
-import { useBrowserTabTitle } from "@openbot/ui/features/browser/BrowserTabIcon";
-import { ComposerNotice } from "@openbot/ui/features/conversation/ComposerNotice";
-import { ComposerStackCard } from "@openbot/ui/features/conversation/ComposerStackCard";
-import { useText } from "@openbot/ui/text";
+import type { BrowserTab } from "@codebot/contracts/ipc";
+import { Button } from "@codebot/ui";
+import { useBrowserTabTitle } from "@codebot/ui/features/browser/BrowserTabIcon";
+import { ComposerNotice } from "@codebot/ui/features/conversation/ComposerNotice";
+import { ComposerStackCard } from "@codebot/ui/features/conversation/ComposerStackCard";
+import { useText } from "@codebot/ui/text";
 import { usePlatform } from "../../platform";
 import { useConversationViewScope } from "./conversation-scope";
 import { openBrowserTabInMainWindow } from "./open-browser-tab-in-main-window";

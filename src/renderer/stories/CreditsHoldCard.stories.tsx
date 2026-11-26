@@ -1,7 +1,7 @@
-import type { AgentApproval, CreditsHold, CreditsHoldAction } from "@openbot/contracts/ipc";
-import { Toaster } from "@openbot/ui";
-import { ApprovalCard } from "@openbot/ui/features/conversation/ConversationPrompts";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
+import type { AgentApproval, CreditsHold, CreditsHoldAction } from "@codebot/contracts/ipc";
+import { Toaster } from "@codebot/ui";
+import { ApprovalCard } from "@codebot/ui/features/conversation/ConversationPrompts";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { STORY_AGENTS } from "./fixtures";

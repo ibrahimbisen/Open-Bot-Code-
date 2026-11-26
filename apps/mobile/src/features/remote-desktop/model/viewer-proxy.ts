@@ -1,7 +1,7 @@
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
-import { base64ToBytes, bytesToBase64 } from "@openbot/team-client/base64";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { base64ToBytes, bytesToBase64 } from "@codebot/team-client/base64";
 import * as Crypto from "expo-crypto";
 import type {
   RemoteDesktopConnection,
@@ -73,7 +73,7 @@ function rewriteNamespace(base64: string, prefix: string): string {
 function decodeViewerState(body: string): ViewerReport | null {
   try {
     const value = JSON.parse(body);
-    if (!isDynamicRecord(value) || value.source !== "openbot-moonlight" || value.type !== "viewer-state") return null;
+    if (!isDynamicRecord(value) || value.source !== "codebot-moonlight" || value.type !== "viewer-state") return null;
     const state = value.state;
     if (state !== "connecting" && state !== "connected" && state !== "error") return null;
     const route = value.transport === "p2p" || value.transport === "relay" ? value.transport : null;

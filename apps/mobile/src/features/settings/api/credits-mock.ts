@@ -6,7 +6,7 @@ import {
   type CreditTransferRequest,
   creditsFromTenths,
   creditTenths,
-} from "@openbot/contracts/credits";
+} from "@codebot/contracts/credits";
 import { currentText } from "@/shared/lib/text";
 
 const MINUTE_MS = 60_000;
@@ -112,8 +112,8 @@ function seedEntries(book: CreditLedger): void {
     });
   entries.push(
     { id: entryId(book), kind: "purchase", at: now - DAY_MS, credits: 999.9, actor: "you" },
-    { id: entryId(book), kind: "free", at: now - 3 * DAY_MS, credits: 100.5, actor: "openbot" },
-    { id: entryId(book), kind: "expired", at: now - 10 * DAY_MS, credits: -49.8, actor: "openbot" },
+    { id: entryId(book), kind: "free", at: now - 3 * DAY_MS, credits: 100.5, actor: "codebot" },
+    { id: entryId(book), kind: "expired", at: now - 10 * DAY_MS, credits: -49.8, actor: "codebot" },
   );
   book.entries.push(...entries);
 }

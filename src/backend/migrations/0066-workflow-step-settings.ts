@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord, isString } from "./runtime-values";
 
 export const V66_WORKFLOW_STEP_SETTINGS_COLUMN_SQL =
@@ -23,7 +23,7 @@ function addWorkflowStepSettings(db: DatabaseSync): void {
     if (!existing.has(column.name)) db.exec(`ALTER TABLE workflow_steps ADD COLUMN ${column.sql}`);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 66,
   name: "workflow-step-settings",
   up: addWorkflowStepSettings,

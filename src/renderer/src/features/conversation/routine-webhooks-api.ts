@@ -1,4 +1,4 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
+import type { ServerSummary } from "@codebot/contracts/ipc";
 import type {
   AgentWebhookSecret,
   EventActivity,
@@ -14,8 +14,8 @@ import type {
   SetWebhookSecretInput,
   WebhookSecret,
   WebhookTestResult,
-} from "@openbot/contracts/ipc-events";
-import { runTeamEffect } from "@openbot/team-client";
+} from "@codebot/contracts/ipc-events";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   deleteEventRoutine,
   getEventStatus,
@@ -28,8 +28,8 @@ import {
   sendEventRoutineTestEvent,
   setEventRoutineSecret,
   testEventRoutine,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 import {
   remoteRoutineRecovery,
@@ -79,7 +79,7 @@ export function desktopEventRoutinesApi(
   senderSecret = false,
   agentSecret = false,
 ): EventRoutinesApi {
-  const events = window.openbot.events;
+  const events = window.codebot.events;
   return {
     ...(recovery ? { listRuns: (input: ListEventRoutineRunsInput) => events.listRoutineRuns(input, serverId) } : {}),
     ...(tests ? { sendTestEvent: (input: EventRoutineRef) => events.sendTestEvent(input, serverId) } : {}),

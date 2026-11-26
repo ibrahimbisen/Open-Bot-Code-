@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v46 and the separate new-database schema. IF NOT EXISTS throughout, because
 // this text is both the migration and the tail of the latest schema.
@@ -201,7 +201,7 @@ export const WORKFLOW_SCHEMA_SQL = `
 // The run source line of `WORKFLOW_SCHEMA_SQL`. The latest schema replaces it with the line of migration 53.
 export const V46_WORKFLOW_RUN_SOURCE_SQL = "source TEXT NOT NULL CHECK(source IN ('manual', 'schedule', 'webhook')),";
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 46,
   name: "workflows",
   // Only creates tables, so no foreign-key pause and no vacuum. No one has a workflow yet, and agents,

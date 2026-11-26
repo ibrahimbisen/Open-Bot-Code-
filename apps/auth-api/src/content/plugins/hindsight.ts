@@ -23,7 +23,7 @@ export const HINDSIGHT_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the Hindsight plugin need an API key?",
       answer:
-        "No. Select Connect and sign in to Hindsight Cloud in the browser. You choose the organization that OpenBot can use, and only an Owner or an Admin of the organization can approve. To use a key, select Use an API key instead, and type a key from the Connect page of Hindsight Cloud. Keys start with hsk_. OpenBot keeps the key in encrypted storage.",
+        "No. Select Connect and sign in to Hindsight Cloud in the browser. You choose the organization that CodeBot can use, and only an Owner or an Admin of the organization can approve. To use a key, select Use an API key instead, and type a key from the Connect page of Hindsight Cloud. Keys start with hsk_. CodeBot keeps the key in encrypted storage.",
     },
     {
       question: "Which memory bank does the agent use?",

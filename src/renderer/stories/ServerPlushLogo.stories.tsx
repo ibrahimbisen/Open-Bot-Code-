@@ -1,6 +1,6 @@
-import { AVATAR_COLOR_CHOICES, type ServerPlushColor, serverPlushColor } from "@openbot/brand/bloub-avatar";
-import { isServerAppearanceColor, SERVER_APPEARANCE_SHAPES } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import { Heading, ServerPlushLogo, Text } from "@openbot/ui";
+import { AVATAR_COLOR_CHOICES, type ServerPlushColor, serverPlushColor } from "@codebot/brand/bloub-avatar";
+import { isServerAppearanceColor, SERVER_APPEARANCE_SHAPES } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import { Heading, ServerPlushLogo, Text } from "@codebot/ui";
 import { For } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
@@ -31,7 +31,7 @@ export const Gallery: Story = {
   render: () => (
     <main
       class="min-h-screen p-8"
-      style={{ background: "var(--openbot-bg-canvas)", color: "var(--openbot-text-primary)" }}
+      style={{ background: "var(--codebot-bg-canvas)", color: "var(--codebot-text-primary)" }}
     >
       <div class="mx-auto grid max-w-5xl gap-6">
         <header class="grid gap-2">
@@ -44,7 +44,7 @@ export const Gallery: Story = {
             {(item) => (
               <article
                 class="grid justify-items-center gap-4 rounded-2xl p-5"
-                style={{ background: "var(--openbot-bg-surface)", "box-shadow": "0 0 0 1px var(--openbot-border)" }}
+                style={{ background: "var(--codebot-bg-surface)", "box-shadow": "0 0 0 1px var(--codebot-border)" }}
               >
                 <ServerPlushLogo seed={item.seed} class="[--server-plush-logo-size:96px]" />
                 <div class="flex items-center gap-3">
@@ -73,7 +73,7 @@ export const Shapes: Story = {
   render: () => (
     <main
       class="min-h-screen p-8"
-      style={{ background: "var(--openbot-bg-canvas)", color: "var(--openbot-text-primary)" }}
+      style={{ background: "var(--codebot-bg-canvas)", color: "var(--codebot-text-primary)" }}
     >
       <div class="grid gap-3">
         <For each={SERVER_APPEARANCE_SHAPES}>

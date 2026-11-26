@@ -3,16 +3,16 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
-import type { AgentProviderId } from "@openbot/contracts/agent-providers";
-import { sourceText } from "@openbot/i18n/source";
-import { teeLogLines } from "@openbot/logging";
+import type { AgentProviderId } from "@codebot/contracts/agent-providers";
+import { sourceText } from "@codebot/i18n/source";
+import { teeLogLines } from "@codebot/logging";
 import { resolvePiCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { INSTALL_RECORD } from "../src/main/provider-runtime-descriptors";
 import { ProviderRuntimeManager } from "../src/main/provider-runtime-manager";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-start-failure-e2e");
-const PRINTED = "openbot-e2e-printed-text";
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-start-failure-e2e");
+const PRINTED = "codebot-e2e-printed-text";
 const VERSION = "999.0.0";
 
 interface Report {
@@ -23,7 +23,7 @@ interface Report {
   error?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-start-failure-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-start-failure-e2e-"));
 const report: Report = { passed: false };
 const logLines: string[] = [];
 const stopTee = teeLogLines(["provider-runtime"], (line) => {
@@ -101,7 +101,7 @@ try {
       managedUnreadable: managedText,
       installed: sourceText("error.provider.nativeNotStarted", { provider: "Pi" }),
     },
-    "OpenBot's copy names a step in the app, and the user's own Pi is named as theirs",
+    "CodeBot's copy names a step in the app, and the user's own Pi is named as theirs",
   );
 
   report.logLines = logLines;

@@ -9,7 +9,7 @@ import { resolveCodexCli } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { decodeRecordResponse, getRecord, getString } from "../src/backend/protocol";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-prompt-trim-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-prompt-trim-e2e");
 const NL = String.fromCharCode(10);
 const DEADLINE_MS = 60_000;
 
@@ -111,7 +111,7 @@ await rm(OUT, { recursive: true, force: true });
 await mkdir(OUT, { recursive: true });
 const cli = await runCauseEffect(resolveCodexCli());
 const model = await startFakeModel();
-const root = await mkdtemp(join(tmpdir(), "openbot-codex-trim-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-codex-trim-e2e-"));
 const results: Record<string, Recorded | undefined> = {};
 const report: {
   passed: boolean;
@@ -148,7 +148,7 @@ try {
       await runCauseEffect(
         client.request(
           "initialize",
-          { clientInfo: { name: "openbot_e2e", title: "OpenBot E2E", version: "0.0.0" }, capabilities: {} },
+          { clientInfo: { name: "codebot_e2e", title: "CodeBot E2E", version: "0.0.0" }, capabilities: {} },
           decodeRecordResponse,
         ),
       );

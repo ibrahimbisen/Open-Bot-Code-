@@ -11,7 +11,7 @@ import { createCustomAgentChanges } from "../src/main/custom-agent-changes";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { stopClients, xorCipher } from "./provider-fakes/host";
 
-const INTERPRETER = "openbot-login-path-node";
+const INTERPRETER = "codebot-login-path-node";
 
 const FAKE_AGENT = `#!/usr/bin/env ${INTERPRETER}
 const NL = String.fromCharCode(10);
@@ -42,10 +42,10 @@ function handle(message) {
 setInterval(() => {}, 1000);
 `;
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/custom-acp-agent-login-path-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-acp-agent-login-path-e2e");
 const report: { passed: boolean; check?: unknown; models?: unknown; error?: string } = { passed: false };
 
-const root = await mkdtemp(join(tmpdir(), "openbot-login-path-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-login-path-e2e-"));
 const clients: AgentClient[] = [];
 let passed = false;
 

@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { lstat, mkdir, mkdtemp, readFile, rm, stat, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { AgentEvent, ConversationSnapshot } from "@openbot/contracts/ipc";
-import { type UiBlockSpec, uiBlockAnswersFromResponse } from "@openbot/contracts/ui-blocks";
-import { redactText } from "@openbot/logging";
+import type { AgentEvent, ConversationSnapshot } from "@codebot/contracts/ipc";
+import { type UiBlockSpec, uiBlockAnswersFromResponse } from "@codebot/contracts/ui-blocks";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { AttentionRegistry, type PromptResponder } from "../src/backend/agent/attention-registry";
 import {
@@ -15,14 +15,14 @@ import {
 } from "../src/backend/agent/prompts";
 import { AgentApiKeys } from "../src/backend/agent-api-keys";
 import { CodexAppServerClient } from "../src/backend/app-server-client";
+import { requestApiKeyToolSchema } from "../src/backend/codebot-tools";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { requestApiKeyToolSchema } from "../src/backend/openbot-tools";
 import type { RequestId } from "../src/backend/protocol";
 import { decodeVaultSaveInput } from "../src/main/vault-inputs";
 import { VaultService } from "../src/main/vault-service";
 import { VaultStore } from "../src/main/vault-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-api-keys-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-api-keys-e2e");
 const AGENT = "agent-1";
 const THREAD = "thread-1";
 const KEY = "e2e-key-value-4be1c0d7";
@@ -58,14 +58,14 @@ interface AgentAnswer {
 }
 
 function agentAnswer(raw: string | undefined): AgentAnswer {
-  assert.ok(raw, "OpenBot did not answer the agent");
+  assert.ok(raw, "CodeBot did not answer the agent");
   const parsed: { contentItems?: Array<{ text?: string }> } = JSON.parse(raw);
   const text = parsed.contentItems?.[0]?.text;
   assert.ok(text, "the answer has no text");
   return JSON.parse(text);
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-api-keys-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-api-keys-e2e-"));
 const apiKeys = new AgentApiKeys(join(root, "agent-api-keys"));
 const client = new RecordingClient("/nonexistent/codex");
 const snapshot: ConversationSnapshot = {
@@ -96,7 +96,7 @@ const registry = new AttentionRegistry({ ...registryHost, apiKeys });
 
 async function vaultRegistry(name: string) {
   const vault = new VaultService({
-    store: new VaultStore(join(root, `openbot-vault-${name}.json`), REVERSING_CIPHER),
+    store: new VaultStore(join(root, `codebot-vault-${name}.json`), REVERSING_CIPHER),
     canPersist: () => true,
   });
   await Effect.runPromise(vault.load());
@@ -240,7 +240,7 @@ try {
     assert.deepEqual(names, ["OPENAI_API_KEY"]);
   });
 
-  await step("a key saved before a restart is masked once OpenBot registers the saved keys", async () => {
+  await step("a key saved before a restart is masked once CodeBot registers the saved keys", async () => {
     const earlier = "e2e-key-saved-before-restart-91d2";
     await mkdir(join(root, "agent-api-keys", "agent-2"), { recursive: true, mode: 0o700 });
     await writeFile(join(root, "agent-api-keys", "agent-2", "ANTHROPIC_API_KEY"), earlier, { mode: 0o600 });
@@ -269,7 +269,7 @@ try {
       const handPlacedKey = join(vaultFolder, "GOOGLE_SA_E2E_JSON");
       await writeFile(handPlacedKey, "e2e-hand-placed-service-account");
       const vault = new VaultService({
-        store: new VaultStore(join(root, "openbot-vault-v1.json"), REVERSING_CIPHER),
+        store: new VaultStore(join(root, "codebot-vault-v1.json"), REVERSING_CIPHER),
         canPersist: () => true,
       });
       await Effect.runPromise(vault.load());
@@ -416,7 +416,7 @@ try {
       const handPlaced = join(vaultFolder, AGENT, "AuthKey_E2E.p8");
       const handPlacedAgentKey = join(vaultFolder, AGENT, "APP_STORE_E2E_KEY");
       const stoppedWrite = join(vaultFolder, AGENT, "GITHUB_TOKEN.0f8e6a52-3c1d-4b7e-9a20-5d6c7b8e9f10.tmp");
-      const stoppedRecord = join(vaultFolder, AGENT, ".openbot-keys.0f8e6a52-3c1d-4b7e-9a20-5d6c7b8e9f10.tmp");
+      const stoppedRecord = join(vaultFolder, AGENT, ".codebot-keys.0f8e6a52-3c1d-4b7e-9a20-5d6c7b8e9f10.tmp");
       await writeFile(handPlaced, "e2e-hand-placed-private-key");
       await writeFile(handPlacedAgentKey, "e2e-hand-placed-agent-key");
       await mkdir(join(vaultFolder, AGENT, "notes"));
@@ -441,7 +441,7 @@ try {
         "the key for every agent comes back after the agent's own key goes",
       );
       assert.equal(await Effect.runPromise(keys.remove("agent-3", "OPENAI_API_KEY")), false);
-      await writeFile(join(root, "openbot-vault-v1.json"), "not json");
+      await writeFile(join(root, "codebot-vault-v1.json"), "not json");
       await Effect.runPromise(vault.load());
       await Effect.runPromise(keys.syncVault());
       await assert.rejects(stat(join(vaultFolder, AGENT, "OPENAI_API_KEY")));
@@ -467,7 +467,7 @@ try {
     await mkdir(folder, { recursive: true, mode: 0o700 });
     await writeFile(oldPath, `${KEY}\n`, { mode: 0o600 });
     const vault = new VaultService({
-      store: new VaultStore(join(root, "openbot-vault-copied.json"), REVERSING_CIPHER),
+      store: new VaultStore(join(root, "codebot-vault-copied.json"), REVERSING_CIPHER),
       canPersist: () => true,
     });
     await Effect.runPromise(vault.load());
@@ -501,7 +501,7 @@ try {
     await Effect.runPromise(keys.syncVault());
     assert.equal(vault.items.apiKeys("agent-5").find((key) => key.name === "OPENAI_API_KEY")?.value, NEW_KEY);
     await rm(oldPath);
-    await rm(join(folder, ".openbot-keys"));
+    await rm(join(folder, ".codebot-keys"));
     const stoppedCopy = `${oldPath}.0f8e6a52-3c1d-4b7e-9a20-5d6c7b8e9f10.tmp`;
     await writeFile(stoppedCopy, "e2e-partial");
     await Effect.runPromise(keys.syncVault());
@@ -536,7 +536,7 @@ try {
     );
     await synced;
     await assert.rejects(stat(join(folder, "SENTRY_TOKEN")));
-    await writeFile(join(root, "openbot-vault-copied.json"), "not json");
+    await writeFile(join(root, "codebot-vault-copied.json"), "not json");
     await Effect.runPromise(vault.load());
     await Effect.runPromise(keys.syncVault());
     await assert.rejects(stat(oldPath));
@@ -548,7 +548,7 @@ try {
   });
 
   await step("logins, cards and contacts for chosen agents reach only those agents", async () => {
-    const path = join(root, "openbot-vault-scope.json");
+    const path = join(root, "codebot-vault-scope.json");
     const open = async () => {
       const vault = new VaultService({ store: new VaultStore(path, REVERSING_CIPHER), canPersist: () => true });
       await Effect.runPromise(vault.load());
@@ -697,7 +697,7 @@ try {
 
   await step("a new password for another subdomain adds a login and keeps the saved one", async () => {
     const vault = new VaultService({
-      store: new VaultStore(join(root, "openbot-vault-subdomains.json"), REVERSING_CIPHER),
+      store: new VaultStore(join(root, "codebot-vault-subdomains.json"), REVERSING_CIPHER),
       canPersist: () => true,
     });
     await Effect.runPromise(vault.load());
@@ -865,7 +865,7 @@ try {
     );
     const respond = (answers: Record<string, string[]>, responder?: PromptResponder) =>
       runCauseEffect(unreadRegistry.respondToPrompt({ requestId: id, answers }, responder));
-    const unreadable = /OpenBot could not read the API key/;
+    const unreadable = /CodeBot could not read the API key/;
     await assert.rejects(
       respond({ [API_KEY_FIELD_ID]: [KEY], [API_KEY_SCOPE_FIELD_ID]: ["Todos os agentes"] }, MEMBER),
       unreadable,

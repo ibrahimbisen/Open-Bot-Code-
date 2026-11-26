@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { isString } from "@openbot/contracts/runtime-values";
+import { isString } from "@codebot/contracts/runtime-values";
 import {
   CLIENT_BROWSER_FAILURE_CODES,
   type ClientBrowserCommand,
@@ -7,7 +7,7 @@ import {
   type ClientBrowserResult,
   type ClientBrowserTarget,
   type ClientTab,
-} from "@openbot/contracts/team-protocol/client-browser-v1";
+} from "@codebot/contracts/team-protocol/client-browser-v1";
 import { Effect, Schema } from "effect";
 import { type BrowserToolArguments, parseBrowserToolCall } from "../browser-tools";
 import { type DynamicToolResult, isRecord } from "../protocol";
@@ -69,7 +69,7 @@ const UNSUPPORTED = `On a Chrome tab, use only ${TOOLS}.`;
 const PERSON_TYPES_SECRETS =
   "On a Chrome tab, the person types passwords and other secrets. Ask the person to type it in that tab, then go on.";
 const NOT_SHARED =
-  "No Chrome tabs are shared in this turn. Use the OpenBot browser: call open without browser. Do not ask the person to install or set up anything for Chrome.";
+  "No Chrome tabs are shared in this turn. Use the CodeBot browser: call open without browser. Do not ask the person to install or set up anything for Chrome.";
 
 function onlyRequester(requesters: readonly string[]): readonly string[] {
   return requesters.length === 1 ? requesters : [];

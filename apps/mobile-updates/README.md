@@ -1,4 +1,4 @@
-# OpenBot mobile update server
+# CodeBot mobile update server
 
 This Worker gives the mobile app its over-the-air updates at `https://updates.openbot.run`. It
 answers the [Expo Updates protocol](https://docs.expo.dev/technical-specs/expo-updates-1/), version
@@ -20,7 +20,7 @@ combination of these three values, and the server keeps one pointer for each bin
 
 ## Bucket
 
-The private R2 bucket `openbot-mobile-updates` (binding `UPDATES`) has three kinds of objects.
+The private R2 bucket `codebot-mobile-updates` (binding `UPDATES`) has three kinds of objects.
 `src/protocol.ts` defines them, and `scripts/mobile-ota-lib.ts` writes them.
 
 | Key | Content |
@@ -71,7 +71,7 @@ bun run test:mobile-ota
 
 `test:mobile-ota` (`scripts/mobile-ota-e2e.ts` in this folder) runs the Worker code on a local R2
 bucket with the real publish commands, then asks for updates as a phone does. It writes
-`.openbot-build/mobile-ota-e2e/report.json`. Under Bun, the local bucket cannot stream an object
+`.codebot-build/mobile-ota-e2e/report.json`. Under Bun, the local bucket cannot stream an object
 body, so the script reads each object as a whole. The deployed Worker streams.
 
 ## Deployment
@@ -82,8 +82,8 @@ on `main`. It runs the two checks first, and then asks the deployed server for t
 
 One-time setup:
 
-1. `bun run updates:bucket:create` makes the bucket `openbot-mobile-updates`. Make
-   `openbot-mobile-updates-test` in the same way for `wrangler dev`.
+1. `bun run updates:bucket:create` makes the bucket `codebot-mobile-updates`. Make
+   `codebot-mobile-updates-test` in the same way for `wrangler dev`.
 2. The route `updates.openbot.run` is a custom domain of the Worker. The first deploy makes its DNS
    record.
 3. In the `cloudflare-production` environment of the repository, add the secret
@@ -91,7 +91,7 @@ One-time setup:
    for the account and **Workers Routes Write** for the zone `openbot.run`. A deploy needs no more,
    and the token cannot read or write a bucket. Cloudflare has no permission for one Worker only,
    so the token can deploy each Worker of the account: keep it in this environment only. Do not use
-   the token of the account Worker. The token in Cloudflare is `openbot-mobile-updates-deploy`.
+   the token of the account Worker. The token in Cloudflare is `codebot-mobile-updates-deploy`.
 4. The publish workflow needs its own credentials. See
    [the mobile README](../mobile/README.md#one-time-setup-of-over-the-air-updates).
 

@@ -1,10 +1,10 @@
 import { readFile, rename, writeFile } from "node:fs/promises";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Option, Result, Schema, Semaphore } from "effect";
 import type { AgentClient, AgentProvider } from "../agent-client";
 import { isCodexThreadInUse, isMissingProviderSessionError } from "./thread-items";
 
-const logger = createOpenBotLogger("codex-archive-retries");
+const logger = createCodeBotLogger("codex-archive-retries");
 
 const PendingArchivesFile = Schema.fromJsonString(Schema.Record(Schema.String, Schema.NullOr(Schema.String)));
 

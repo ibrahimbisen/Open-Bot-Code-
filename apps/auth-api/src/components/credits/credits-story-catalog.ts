@@ -1,4 +1,4 @@
-import type { CreditMediaModel } from "@openbot/contracts/credit-media";
+import type { CreditMediaModel } from "@codebot/contracts/credit-media";
 
 export const STORY_CATALOG: readonly CreditMediaModel[] = [
   {

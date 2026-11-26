@@ -3,8 +3,8 @@ import {
   type MediaApprovalCreditsSetting,
   type MediaApprovalCreditsUpdate,
   parseMediaApprovalCreditsSetting,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { PreferenceStore } from "./preference-file";
 

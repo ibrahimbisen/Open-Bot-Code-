@@ -26,7 +26,7 @@ export {
 } from "./provider-aware-codec";
 
 export const TEAM_PROTOCOL_V8Base = 8;
-export const TEAM_PROTOCOL_V8Base_WEBSOCKET = "openbot-team-v8";
+export const TEAM_PROTOCOL_V8Base_WEBSOCKET = "codebot-team-v8";
 
 export const decodeTeamProtocolSupportV8Base = (value: unknown) =>
   decodeTeamProtocolSupportProviderAware(value, TEAM_PROTOCOL_CAPABILITY_LIMITS[8]);

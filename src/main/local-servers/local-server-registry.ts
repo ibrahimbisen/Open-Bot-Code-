@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Schema, Semaphore } from "effect";
 import {
   isEmptyStoredFile,
@@ -8,7 +8,7 @@ import {
   writeJsonFileAtomically,
 } from "../../backend/atomic-json-file";
 
-export const LOCAL_SERVERS_FILE = "openbot-local-servers-v1.json";
+export const LOCAL_SERVERS_FILE = "codebot-local-servers-v1.json";
 
 const folderId = Schema.String.check(
   Schema.isPattern(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u),

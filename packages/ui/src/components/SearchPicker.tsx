@@ -1,6 +1,6 @@
-import { ActiveCurrentRow, Check, Combobox, Popover, Search } from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { ContentExitMotion } from "@openbot/ui/menu-motion";
+import { ActiveCurrentRow, Check, Combobox, Popover, Search } from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { ContentExitMotion } from "@codebot/ui/menu-motion";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, onCleanup, Show } from "solid-js";
 import { cx } from "../utils";
@@ -11,7 +11,7 @@ type PickerAlign = "start" | "end";
 
 function roomBelow(trigger: HTMLElement | undefined): boolean {
   if (!trigger) return true;
-  const row = Number.parseFloat(getComputedStyle(trigger).getPropertyValue("--openbot-control-md")) || 32;
+  const row = Number.parseFloat(getComputedStyle(trigger).getPropertyValue("--codebot-control-md")) || 32;
   return window.innerHeight - trigger.getBoundingClientRect().bottom >= 5 * row;
 }
 

@@ -4,19 +4,19 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { AgentEvent, AgentSummary } from "@openbot/contracts/ipc";
-import { LIVE_ACTIVITY_PUSH_ROUTES } from "@openbot/contracts/team-protocol/live-activity-push-v1";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { AgentEvent, AgentSummary } from "@codebot/contracts/ipc";
+import { LIVE_ACTIVITY_PUSH_ROUTES } from "@codebot/contracts/team-protocol/live-activity-push-v1";
+import { createCodeBotLogger } from "@codebot/logging";
 import { plugin } from "bun";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/live-activity-server-mute-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/live-activity-server-mute-e2e");
 const MOBILE_SRC = resolve(import.meta.dirname, "../apps/mobile/src");
 const WAIT_TIMEOUT_MS = 10_000;
 const TIMED_MUTE_MS = 1_500;
 const PUSH_TOKEN = "e2e-activity-push-token";
 const SERVER_A = "server-a";
 const SERVER_B = "server-b";
-const logger = createOpenBotLogger("live-activity-server-mute-e2e");
+const logger = createCodeBotLogger("live-activity-server-mute-e2e");
 const require = createRequire(import.meta.url);
 
 interface ActivityRecord {

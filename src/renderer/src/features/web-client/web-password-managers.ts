@@ -1,12 +1,12 @@
-import type { PasswordManagerId, PasswordManagerStatus } from "@openbot/contracts/ipc";
-import { runTeamEffect } from "@openbot/team-client";
+import type { PasswordManagerId, PasswordManagerStatus } from "@codebot/contracts/ipc";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   connectPasswordManager,
   listPasswordManagers,
   passwordManagerRequest,
   type TeamAdminRequestError,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 import { type PasswordManagerPort, polledPasswordManagerPort } from "../connectors/password-manager-port";
 

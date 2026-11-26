@@ -1,5 +1,5 @@
-import { ConfirmDialog } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { ConfirmDialog } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 
 export function StandingApprovalConfirmation(props: {
   open: boolean;

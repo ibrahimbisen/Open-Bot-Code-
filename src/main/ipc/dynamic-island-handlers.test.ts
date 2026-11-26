@@ -5,7 +5,7 @@ import {
   type DynamicIslandAction,
   type DynamicIslandPreference,
   IDLE_DYNAMIC_ISLAND_PRESENTATION,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { dynamicIslandIpcHandlers } from "./dynamic-island-handlers";
@@ -38,7 +38,7 @@ const PREFERENCE: DynamicIslandPreference = {
   newServersVisible: true,
 };
 
-function event(senderId: number, url = "openbot-app://app/helper.html?surface=dynamic-island") {
+function event(senderId: number, url = "codebot-app://app/helper.html?surface=dynamic-island") {
   return { senderFrame: { url }, sender: { id: senderId } };
 }
 

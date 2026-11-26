@@ -1,4 +1,4 @@
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppTextKey } from "@codebot/i18n";
 
 const RESTART_REASON_LABELS: Record<string, AppTextKey> = {
   "agent-turn": "server.update.reason.agentTurn",

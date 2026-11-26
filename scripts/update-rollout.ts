@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { parse } from "yaml";
 import { z } from "zod";
 import { readScriptArguments } from "./script-arguments";
@@ -101,7 +101,7 @@ function assertReleaseManifests(paths: readonly string[]): void {
 }
 
 if (import.meta.main) {
-  const logger = createOpenBotLogger("update-rollout");
+  const logger = createCodeBotLogger("update-rollout");
   const parsed = readScriptArguments({
     usage: USAGE,
     options: {

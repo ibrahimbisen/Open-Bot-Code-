@@ -5,11 +5,11 @@ import {
   type XPageRules,
   type XPost,
   type XReplyPayload,
-} from "@openbot/contracts/browser-extension-x";
+} from "@codebot/contracts/browser-extension-x";
 import { decodeXRules, decodeXStatus, X_MESSAGE, type XRequest, type XStatus } from "./x-messages";
 
-const STATE = "data-openbot-x";
-const PASS = "data-openbot-x-pass";
+const STATE = "data-codebot-x";
+const PASS = "data-codebot-x-pass";
 const READY_MS = 30_000;
 const NOT_READY_MS = 5_000;
 const BUTTON_DEPTH = 40;
@@ -90,13 +90,13 @@ async function ask<T>(message: XRequest, decode: (value: unknown) => T): Promise
 }
 
 function note(text: string) {
-  if (__OPENBOT_X_NOTES__) console.info(`[OpenBot] ${text}`);
+  if (__CODEBOT_X_NOTES__) console.info(`[CodeBot] ${text}`);
 }
 
 function explain(reason: string) {
   if (reason === logged) return;
   logged = reason;
-  note(reason ? `The reply button stays as X made it: ${reason}` : "The reply button has the OpenBot look.");
+  note(reason ? `The reply button stays as X made it: ${reason}` : "The reply button has the CodeBot look.");
 }
 
 function refreshStatus() {

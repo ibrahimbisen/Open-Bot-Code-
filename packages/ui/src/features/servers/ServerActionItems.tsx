@@ -1,6 +1,6 @@
-import { canAdministerServer, type ServerNotificationLevel, type ServerSummary } from "@openbot/contracts/ipc";
-import type { AppFormat, AppTextKey, AppTranslate } from "@openbot/i18n";
-import { Bell, BellOff, ChevronRight, type ContextMenu, EyeOff, LogOut, RotateCcw, Trash2 } from "@openbot/ui";
+import { canAdministerServer, type ServerNotificationLevel, type ServerSummary } from "@codebot/contracts/ipc";
+import type { AppFormat, AppTextKey, AppTranslate } from "@codebot/i18n";
+import { Bell, BellOff, ChevronRight, type ContextMenu, EyeOff, LogOut, RotateCcw, Trash2 } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 
@@ -83,7 +83,7 @@ export function ServerActionItems(
     Boolean(props.onRestart) &&
     props.server.kind === "remote" &&
     canAdministerServer(props.server.role) &&
-    !(props.server.hostedSleep === "waking" && props.server.hostedStart?.step !== "openbot") &&
+    !(props.server.hostedSleep === "waking" && props.server.hostedStart?.step !== "codebot") &&
     (accountRestartsServer(props.server) || Boolean(props.canRestart?.(props.server.id)));
   const canHide = () => Boolean(props.onHide) && Boolean(props.canHide?.(props.server.id));
   const Menu = props.menu;

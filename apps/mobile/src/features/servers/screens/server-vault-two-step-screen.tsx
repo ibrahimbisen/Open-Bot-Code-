@@ -1,4 +1,4 @@
-import { parseTwoStepKey, TWO_STEP_KEY_LIMIT } from "@openbot/contracts/two-step-code";
+import { parseTwoStepKey, TWO_STEP_KEY_LIMIT } from "@codebot/contracts/two-step-code";
 import { scanFromURLAsync } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { router, Stack, useLocalSearchParams } from "expo-router";
@@ -26,7 +26,7 @@ import { useText } from "@/shared/lib/text";
 const EXAMPLE_KEY = "JBSW Y3DP EHPK 3PXP";
 
 function SetupIntro({ text }: { text: string }) {
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   return (
     <View className="items-center gap-3 px-4">
       <View
@@ -68,7 +68,7 @@ export function ServerVaultTwoStepScreen() {
   const setKeyText = useTwoStepSetup((state) => state.setKeyText);
   const [error, setError] = useState<string | null>(null);
   const [reading, setReading] = useState(false);
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const startedFor = useRef(formId);
   useEffect(
     () => () => {

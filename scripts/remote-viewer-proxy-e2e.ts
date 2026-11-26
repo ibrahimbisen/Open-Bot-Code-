@@ -4,12 +4,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { request } from "node:http";
 import { connect } from "node:net";
 import { join, resolve } from "node:path";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import { Effect } from "effect";
 import { RemoteViewerProxy } from "../src/main/remote-viewer-proxy";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build/remote-viewer-proxy-e2e");
+const OUT = join(ROOT, ".codebot-build/remote-viewer-proxy-e2e");
 const SESSION = "session-1";
 const VIEWER = TEAM_API_ROUTES.remoteScreen.viewer(SESSION);
 

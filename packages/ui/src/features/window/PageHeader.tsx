@@ -1,5 +1,5 @@
-import { ArrowLeft, Button, ChevronRight, IconButton } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { ArrowLeft, Button, ChevronRight, IconButton } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { For, onSettled, Show, untrack } from "solid-js";
 

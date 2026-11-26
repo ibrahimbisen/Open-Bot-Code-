@@ -4,7 +4,7 @@ import { Effect } from "effect";
 import { AccountActivityReporter, HostAccountActivity } from "../src/main/account-activity-reporter";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "account-activity-reporter-e2e");
+const OUT = join(ROOT, ".codebot-build", "account-activity-reporter-e2e");
 const NOON_23RD = Date.parse("2026-11-23T11:00:00Z");
 const LATE_23RD = Date.parse("2026-11-23T22:58:00Z");
 const EARLY_24TH = Date.parse("2026-11-23T23:01:00Z");

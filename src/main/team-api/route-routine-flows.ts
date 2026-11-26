@@ -3,17 +3,17 @@ import {
   isReleasedRoutineSchedule,
   type RoutineFlowCanvas,
   type RoutineFlowStep,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   ROUTINE_FLOW_STOP_CAPABILITY,
   ROUTINE_FLOW_STOP_ROUTES,
-} from "@openbot/contracts/team-protocol/routine-flow-stop-v1";
+} from "@codebot/contracts/team-protocol/routine-flow-stop-v1";
 import {
   ROUTINE_FLOW_STEP_TEXT_LIMIT,
   ROUTINE_FLOWS_CAPABILITY,
   ROUTINE_FLOWS_ROUTES,
-} from "@openbot/contracts/team-protocol/routine-flows-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/routine-flows-v1";
+import { sourceText } from "@codebot/i18n/source";
 import type { Effect } from "effect";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import { RoutineFlowError } from "../../backend/routine-flows/routine-flow-store";

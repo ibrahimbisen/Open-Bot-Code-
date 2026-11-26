@@ -12,13 +12,13 @@ type SwitchAccessibilityProps = {
   "aria-describedby"?: string | undefined;
 };
 
-type OpenBotSwitchProps = SwitchAccessibilityProps & {
+type CodeBotSwitchProps = SwitchAccessibilityProps & {
   class?: JSX.HTMLAttributes<HTMLElement>["class"];
   size?: SwitchSize;
 };
 
 export type SwitchProps<T extends ValidComponent = "div"> = PolymorphicProps<T, SwitchPrimitive.SwitchRootProps<T>> &
-  OpenBotSwitchProps &
+  CodeBotSwitchProps &
   Partial<Pick<ComponentProps<T>, "class">>;
 
 const SWITCH_DRAG_THRESHOLD_PX = 3;

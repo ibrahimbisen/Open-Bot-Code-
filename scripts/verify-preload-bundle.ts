@@ -8,8 +8,8 @@ import {
   IPC_GROUP_PATHS,
   type IpcEndpoint,
   type IpcGroupName,
-} from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 
 const HAND_WRITTEN_METHODS: ReadonlyMap<string, IpcEndpoint | null> = new Map<string, IpcEndpoint | null>([
   ["agent.onAttachmentImport", null],
@@ -45,7 +45,7 @@ interface PreloadRun {
   readonly mainWorldScripts: unknown[];
 }
 
-const logger = createOpenBotLogger("verify-preload-bundle");
+const logger = createCodeBotLogger("verify-preload-bundle");
 const failures: string[] = [];
 
 const main = runPreload("index.cjs");
@@ -55,17 +55,17 @@ for (const [path, endpoint] of HAND_WRITTEN_METHODS) {
 }
 const exposed = new Map<string, BridgeMethod>();
 for (const world of main.worlds.keys()) {
-  if (world !== "openbot") failures.push(`index.cjs exposes window.${world}; only window.openbot is allowed.`);
+  if (world !== "codebot") failures.push(`index.cjs exposes window.${world}; only window.codebot is allowed.`);
 }
-if (main.worlds.has("openbot")) collectMethods(main.worlds.get("openbot"), "", exposed);
-else failures.push("index.cjs does not expose window.openbot.");
+if (main.worlds.has("codebot")) collectMethods(main.worlds.get("codebot"), "", exposed);
+else failures.push("index.cjs does not expose window.codebot.");
 for (const path of exposed.keys()) {
   if (!expected.has(path) && !HAND_WRITTEN_METHODS.has(path)) {
-    failures.push(`window.openbot.${path} is exposed, but no endpoint names it.`);
+    failures.push(`window.codebot.${path} is exposed, but no endpoint names it.`);
   }
 }
 for (const path of [...expected.keys(), ...HAND_WRITTEN_METHODS.keys()]) {
-  if (!exposed.has(path)) failures.push(`window.openbot.${path} is not exposed.`);
+  if (!exposed.has(path)) failures.push(`window.codebot.${path} is not exposed.`);
 }
 for (const [path, endpoint] of expected) {
   const method = exposed.get(path);
@@ -175,7 +175,7 @@ function collectMethods(value: unknown, path: string, into: Map<string, BridgeMe
     return;
   }
   if (!isPlainObject(value)) {
-    failures.push(`window.openbot${path ? `.${path}` : ""} is not a function or a method group.`);
+    failures.push(`window.codebot${path ? `.${path}` : ""} is not a function or a method group.`);
     return;
   }
   for (const [key, child] of Object.entries(value)) collectMethods(child, path ? `${path}.${key}` : key, into);
@@ -186,7 +186,7 @@ function checkCall(run: PreloadRun, path: string, method: BridgeMethod, expected
   try {
     method(() => undefined);
   } catch (error) {
-    failures.push(`window.openbot.${path} threw: ${error instanceof Error ? error.message : String(error)}.`);
+    failures.push(`window.codebot.${path} threw: ${error instanceof Error ? error.message : String(error)}.`);
     return;
   }
   const sent = run.calls.slice(start);
@@ -195,7 +195,7 @@ function checkCall(run: PreloadRun, path: string, method: BridgeMethod, expected
   const operationMatches = expected.kind === "request" ? call?.method === "invoke" : call?.method !== "invoke";
   if (call?.channel !== expected.channel || !operationMatches) {
     const used = sent.map((c) => `${c.method} ${c.channel}`).join(", ") || "no channel";
-    failures.push(`window.openbot.${path} must call ${operation} on ${expected.channel}; it used: ${used}.`);
+    failures.push(`window.codebot.${path} must call ${operation} on ${expected.channel}; it used: ${used}.`);
   }
 }
 

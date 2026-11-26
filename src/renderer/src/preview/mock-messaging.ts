@@ -9,8 +9,8 @@ import {
   type WhatsAppAccount,
   type WhatsAppGroup,
   type WhatsAppLinkState,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { clone } from "./mock-support";
 
 type WorkspacePlatform = Exclude<MessagingPlatform, "telegram" | "whatsapp">;
@@ -109,7 +109,7 @@ export function createMockMessaging(orchestrator: () => string): MessagingDeskto
   let linkedNumbers = 0;
   let link: { state: WhatsAppLinkState; input: StartWhatsAppLinkInput; reads: number } | null = null;
   const previewQr = (rotation: number) =>
-    `2@openbot-preview-${linkedNumbers + 1}-${rotation},openbot-preview-noise-key,openbot-preview-identity-key,preview`;
+    `2@codebot-preview-${linkedNumbers + 1}-${rotation},codebot-preview-noise-key,codebot-preview-identity-key,preview`;
   const changeNumber = (workspaceId: string, update: Partial<MessagingConnection>) => {
     const current = numbers.get(workspaceId);
     if (!current) throw new Error(sourceText("error.messaging.whatsappNotConnected"));

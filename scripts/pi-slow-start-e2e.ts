@@ -8,8 +8,8 @@ import { ModelCatalog } from "../src/backend/agent/model-catalog";
 import { ProviderRuntime } from "../src/backend/agent/provider-runtime";
 import type { AgentClient, AgentProvider } from "../src/backend/agent-client";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { getRecord, getString } from "../src/backend/protocol";
 import {
   BUILT_IN_PROVIDER_DRIVERS,
@@ -18,7 +18,7 @@ import {
 } from "../src/backend/provider-drivers";
 import { installFakeAgent, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-slow-start-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-slow-start-e2e");
 
 interface CatalogCase {
   timedOut: boolean;
@@ -42,7 +42,7 @@ interface Report {
   failure?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-slow-start-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-slow-start-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 
@@ -52,7 +52,7 @@ async function openRouterClient(name: string, env: Record<string, string>, reque
   const client = requireProviderDriver("openrouter").createClient(
     { executable, version: "1.5.2", source: "managed" },
     requestTimeoutMs,
-    { apiKey: () => "sk-or-v1-openbot-e2e-not-valid", customProviders: () => [], mcpServers: () => [] },
+    { apiKey: () => "sk-or-v1-codebot-e2e-not-valid", customProviders: () => [], mcpServers: () => [] },
   );
   clients.push(client);
   client.start();
@@ -88,11 +88,11 @@ async function readOverlappingPasses(requestTimeoutMs: number): Promise<NonNulla
   const gate = join(root, "runtime", "gate");
   const model = join(root, "runtime", "model");
   const piDirectory = join(root, "runtime", "pi-agent");
-  const names = ["OPENBOT_PI_PATH", "PI_CODING_AGENT_DIR"] as const;
+  const names = ["CODEBOT_PI_PATH", "PI_CODING_AGENT_DIR"] as const;
   const saved = names.map((name) => [name, process.env[name]] as const);
   const listeners = new Set<() => void>();
   const shownErrors: string[] = [];
-  let database: OpenBotDatabase | null = null;
+  let database: CodeBotDatabase | null = null;
   let providers: ProviderRuntime | null = null;
   try {
     await installFakeAgent(pi, "pi-slow-start", { FAKE_GATE_FILE: gate, FAKE_MODEL_FILE: model });
@@ -100,10 +100,10 @@ async function readOverlappingPasses(requestTimeoutMs: number): Promise<NonNulla
     await writeFile(join(piDirectory, "auth.json"), JSON.stringify({ openrouter: { type: "api_key", key: "fake" } }));
     await writeFile(model, "fake/before");
     await writeFile(gate, "");
-    process.env.OPENBOT_PI_PATH = pi;
+    process.env.CODEBOT_PI_PATH = pi;
     process.env.PI_CODING_AGENT_DIR = piDirectory;
     const profile = join(root, "runtime", "profile");
-    database = new OpenBotDatabase(profile);
+    database = new CodeBotDatabase(profile);
     const store = new AgentStore(profile, join(root, "runtime", "home"), database);
     const runtime = new ProviderRuntime({
       offProviders: BUILT_IN_PROVIDER_DRIVERS.map((driver) => driver.id).filter((id) => id !== "pi"),

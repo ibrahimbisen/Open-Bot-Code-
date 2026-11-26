@@ -1,4 +1,4 @@
-import type { AgentIpcRequest } from "@openbot/contracts/ipc";
+import type { AgentIpcRequest } from "@codebot/contracts/ipc";
 import type { PayloadDecoder } from "../trusted-ipc";
 import { agentRequest, agentScope } from "./agent-inputs";
 import { type BoundHandler, payloadHandler } from "./define-ipc-group";

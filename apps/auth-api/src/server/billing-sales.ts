@@ -6,10 +6,10 @@ import {
   type BillingInterval,
   type BillingPlanId,
   isBillingAmount,
-} from "@openbot/contracts/billing";
-import { HOSTED_SERVER_ENTRY_POINTS, type HostedServerEntryPoint } from "@openbot/contracts/hosted-servers";
-import { LICENSE_METADATA, LICENSE_METADATA_KIND, LICENSE_PRODUCT_ID } from "@openbot/contracts/license";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/billing";
+import { HOSTED_SERVER_ENTRY_POINTS, type HostedServerEntryPoint } from "@codebot/contracts/hosted-servers";
+import { LICENSE_METADATA, LICENSE_METADATA_KIND, LICENSE_PRODUCT_ID } from "@codebot/contracts/license";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { Effect, Schema } from "effect";
 import {
   type BillingProduct,
@@ -451,8 +451,8 @@ export class BillingSales {
         .first<CheckoutRow>(),
     );
     const metadata = recordValue(object.metadata);
-    const userId = row?.user_id ?? safeId(metadata?.openbot_user_id);
-    const serverId = row?.server_id ?? safeId(metadata?.openbot_server_id);
+    const userId = row?.user_id ?? safeId(metadata?.codebot_user_id);
+    const serverId = row?.server_id ?? safeId(metadata?.codebot_server_id);
     if (row) {
       yield* d1(this.#database, () =>
         this.#database
@@ -508,8 +508,8 @@ export class BillingSales {
         .first<CheckoutRow>(),
     );
     const metadata = recordValue(object.metadata);
-    const userId = row?.user_id ?? safeId(metadata?.openbot_user_id);
-    const serverId = row?.server_id ?? safeId(metadata?.openbot_server_id);
+    const userId = row?.user_id ?? safeId(metadata?.codebot_user_id);
+    const serverId = row?.server_id ?? safeId(metadata?.codebot_server_id);
     if (row) {
       yield* d1(this.#database, () =>
         this.#database
@@ -584,8 +584,8 @@ export class BillingSales {
           : null;
     const product: BillingProduct = license ? "license" : "server";
     const metadata = recordValue(object.metadata);
-    const userId = synced?.userId ?? stored?.user_id ?? license?.userId ?? safeId(metadata?.openbot_user_id);
-    const serverId = license ? null : (stored?.server_id ?? safeId(metadata?.openbot_server_id));
+    const userId = synced?.userId ?? stored?.user_id ?? license?.userId ?? safeId(metadata?.codebot_user_id);
+    const serverId = license ? null : (stored?.server_id ?? safeId(metadata?.codebot_server_id));
     const plan = license ? undefined : (syncedPlan?.plan ?? stored?.plan);
     const interval = license ? license.interval : (syncedPlan?.interval ?? stored?.interval);
     const currency =
@@ -1124,9 +1124,9 @@ function validCheckout(input: BillingSalesCheckout): boolean {
 function validReturnUrl(value: string): boolean {
   if (!value || value.length > 1024 || hasControlCharacter(value)) return false;
   if (!value.startsWith("/")) return false;
-  const parsed = new URL(value, "https://openbot.invalid");
+  const parsed = new URL(value, "https://codebot.invalid");
   return (
-    parsed.origin === "https://openbot.invalid" &&
+    parsed.origin === "https://codebot.invalid" &&
     (parsed.pathname === "/app" || parsed.pathname === "/billing/return") &&
     !parsed.username &&
     !parsed.password

@@ -1,16 +1,16 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import type { RemoteNetworkRoute } from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+import type { RemoteNetworkRoute } from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { type Browser, chromium, type Page } from "playwright-core";
 import { isPrivateNetworkAddress } from "../src/renderer/src/features/team/team-webrtc-private-network";
 import { argument, connectChannelE2e, WAIT_MS, waitFor, writeReport } from "./channel-e2e-support";
 
 const NAME = "remote-network-route-e2e";
-const OUT = resolve(import.meta.dirname, `../.openbot-build/${NAME}`);
+const OUT = resolve(import.meta.dirname, `../.codebot-build/${NAME}`);
 const UI_WAIT_MS = 30_000;
-const DEV_HOST_EMAIL = "openbot-dev-host@example.com";
+const DEV_HOST_EMAIL = "codebot-dev-host@example.com";
 const english = translateFor("en");
 const api = (argument("api") ?? "http://localhost:3100").replace(/\/$/, "");
 const browserExecutable = argument("browser-executable");
@@ -24,7 +24,7 @@ interface PeerState {
 
 interface Report {
   routeBefore?: RemoteNetworkRoute;
-  openbot?: PeerState;
+  codebot?: PeerState;
   firstPeerAfterChange?: RTCPeerConnectionState;
   private?: PeerState;
   webPeers?: RTCPeerConnectionState[];
@@ -49,7 +49,7 @@ let web: Page | null = null;
 const literal = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const routes = desktop.getByRole("radiogroup", { name: english("settings.mobileConnect.route.title") });
 const routeNames = {
-  openbot: new RegExp(`^${literal(english("settings.mobileConnect.route.openbot.title"))}`),
+  codebot: new RegExp(`^${literal(english("settings.mobileConnect.route.codebot.title"))}`),
   private: new RegExp(`^${literal(english("settings.mobileConnect.route.private.title"))}`),
 } satisfies Record<RemoteNetworkRoute, RegExp>;
 
@@ -84,7 +84,7 @@ async function selectRoute(route: RemoteNetworkRoute): Promise<void> {
   await waitFor(
     desktop,
     `main saves the ${route} route`,
-    () => desktop.evaluate(() => window.openbot.getRemoteNetworkRoute()),
+    () => desktop.evaluate(() => window.codebot.getRemoteNetworkRoute()),
     (state) => state.route === route,
     UI_WAIT_MS,
   );
@@ -138,9 +138,9 @@ async function connectedPeer(page: Page, fromIndex: number): Promise<PeerState> 
 }
 
 try {
-  report.routeBefore = (await desktop.evaluate(() => window.openbot.getRemoteNetworkRoute())).route;
+  report.routeBefore = (await desktop.evaluate(() => window.codebot.getRemoteNetworkRoute())).route;
   await openRoutes();
-  await selectRoute("openbot");
+  await selectRoute("codebot");
 
   browser = await chromium.launch(browserExecutable ? { executablePath: browserExecutable } : { channel: "chrome" });
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -158,7 +158,7 @@ try {
   web = await context.newPage();
   web.on("pageerror", (error) => report.pageErrors.web.push(error.stack ?? error.message));
   await signIn(web);
-  report.openbot = await connectedPeer(web, 0);
+  report.codebot = await connectedPeer(web, 0);
 
   await selectRoute("private");
   mkdirSync(OUT, { recursive: true });
@@ -166,12 +166,12 @@ try {
   await routes.screenshot({ path: shot });
   report.screenshots.push(shot);
 
-  report.private = await connectedPeer(web, report.openbot.index + 1);
+  report.private = await connectedPeer(web, report.codebot.index + 1);
   report.firstPeerAfterChange = await web.evaluate(
     (at) => window.__routeE2ePeers?.[at]?.connectionState ?? "closed",
-    report.openbot.index,
+    report.codebot.index,
   );
-  assert.equal(report.firstPeerAfterChange, "closed", "The host kept the peer that connected through OpenBot.");
+  assert.equal(report.firstPeerAfterChange, "closed", "The host kept the peer that connected through CodeBot.");
   assert.ok(report.private.hostCandidates.length > 0, "The host sent no candidates on the private route.");
   for (const candidate of report.private.hostCandidates) {
     const [type, address = ""] = candidate.split(" ");
@@ -202,7 +202,7 @@ try {
   await browser?.close().catch(() => undefined);
   const before = report.routeBefore;
   if (before)
-    await desktop.evaluate((route) => window.openbot.setRemoteNetworkRoute({ route }), before).catch(() => undefined);
+    await desktop.evaluate((route) => window.codebot.setRemoteNetworkRoute({ route }), before).catch(() => undefined);
   writeReport(NAME, report);
   await session.close();
 }

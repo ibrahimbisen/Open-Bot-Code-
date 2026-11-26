@@ -9,14 +9,14 @@ import {
   CONVERSATION_MEMORY_CHANGES_ITEM_TYPE,
   type SkillConversationEvent,
   type SkillLearningMode,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { LearnedSkillDraft, SkillLearner } from "../src/backend/agent/skill-learning";
 import type { LocalSkillTools } from "../src/backend/agent/skill-tools";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/memory-review-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-memory-review-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/memory-review-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-memory-review-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -35,7 +35,7 @@ const REVIEW_SKILLS = [
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -43,7 +43,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { USER_BROWSING_RETENTION_MS, UserBrowsingLog } = await import("../src/backend/user-browsing-log");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 interface FakeCall {
   tool: "remember" | "search_memories" | "revise_skill";
@@ -81,7 +81,7 @@ const callNext = (turn) => {
   if (!call) return setTimeout(() => finish(turn, "Done."), 5);
   const id = "tool-" + turn.turnId + "-" + turn.calls.length;
   waiting.set(id, turn);
-  write({ id, method: "item/tool/call", params: { threadId: turn.threadId, turnId: turn.turnId, callId: "call-" + id, namespace: "openbot", tool: call.tool, arguments: call.arguments } });
+  write({ id, method: "item/tool/call", params: { threadId: turn.threadId, turnId: turn.turnId, callId: "call-" + id, namespace: "codebot", tool: call.tool, arguments: call.arguments } });
 };
 const answer = (message) => {
   const params = message.params || {};
@@ -290,12 +290,12 @@ let reviewInterval = 20;
 let skillLearningMode: SkillLearningMode = "ask";
 let skillsFull = false;
 const events: AgentEvent[] = [];
-const browsingFile = join(userData, "openbot-browsing-steps-v1.json");
+const browsingFile = join(userData, "codebot-browsing-steps-v1.json");
 let browsingNow = Date.now();
 const userBrowsing = new UserBrowsingLog(browsingFile, () => browsingNow);
 
 function open() {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const service = new AgentService({

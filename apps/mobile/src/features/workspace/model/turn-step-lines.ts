@@ -1,4 +1,4 @@
-import type { ConversationMessage } from "@openbot/contracts/ipc";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
 
 export interface TurnStepLine {
   id: string;

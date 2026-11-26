@@ -8,11 +8,11 @@ import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, xorCipher } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/acp-instructions-once-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-instructions-once-e2e");
 const MODES = ["context", "silent", "memory"] as const;
 type Mode = (typeof MODES)[number];
 
-const INSTRUCTIONS = "You are a teammate in OpenBot. Memory: the user likes short answers.";
+const INSTRUCTIONS = "You are a teammate in CodeBot. Memory: the user likes short answers.";
 const CHANGED = `${INSTRUCTIONS} Memory: the user works in Kraków.`;
 
 interface Prompt {
@@ -34,7 +34,7 @@ interface Report {
   agents: Partial<Record<Mode, { steps: Step[]; prompts: Prompt[] }>>;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-acp-instructions-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-acp-instructions-e2e-"));
 const report: Report = { passed: false, agents: {} };
 const clients: AgentClient[] = [];
 
@@ -197,7 +197,7 @@ try {
     check("memory", steps, prompts);
     const contextOf = (text: string) => prompts.find((prompt) => prompt.text === text)?.context ?? [];
     const full = contextOf("one")[0] ?? "";
-    assert.ok(full.startsWith("<openbot_saved_memories>"), "memory: the first prompt has all memories.");
+    assert.ok(full.startsWith("<codebot_saved_memories>"), "memory: the first prompt has all memories.");
     assert.ok(
       full.includes("short answers") && !full.includes("Kraków"),
       "memory: the first block has the first list.",
@@ -205,7 +205,7 @@ try {
     assert.deepEqual(contextOf("two"), [], "memory: an unchanged list sends no block.");
     const [update = "", ...others] = contextOf("three");
     assert.equal(others.length, 0, "memory: the edit sends one block.");
-    assert.ok(update.startsWith("<openbot_saved_memories_update>"), "memory: the edit sends an update block.");
+    assert.ok(update.startsWith("<codebot_saved_memories_update>"), "memory: the edit sends an update block.");
     assert.ok(
       update.includes("Kraków") && !update.includes("short answers"),
       "memory: the update has only the change.",
@@ -213,12 +213,12 @@ try {
     assert.deepEqual(contextOf("four"), [], "memory: the update is sent once.");
     assert.deepEqual(contextOf("/review"), [], "memory: a slash command gets no blocks.");
     assert.ok(
-      contextOf("after-command")[0]?.startsWith("<openbot_saved_memories>"),
+      contextOf("after-command")[0]?.startsWith("<codebot_saved_memories>"),
       "memory: the prompt after a slash command has all memories.",
     );
     const again = contextOf("five")[0] ?? "";
     assert.ok(
-      again.startsWith("<openbot_saved_memories>") && again.includes("short answers") && again.includes("Kraków"),
+      again.startsWith("<codebot_saved_memories>") && again.includes("short answers") && again.includes("Kraków"),
       "memory: after a compaction, the prompt has all memories again.",
     );
   }

@@ -1,4 +1,4 @@
-import type { CreditMediaModel } from "@openbot/contracts/credit-media";
+import type { CreditMediaModel } from "@codebot/contracts/credit-media";
 import { createServerFn } from "@tanstack/solid-start";
 
 export const readCreditsCatalog = createServerFn({ method: "GET" }).handler(

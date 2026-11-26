@@ -1,5 +1,5 @@
-import { isInstallerProvider } from "@openbot/contracts/agent-providers";
-import { isAgentProvider, type ProviderRuntimeSnapshot, providerDisplayName } from "@openbot/contracts/ipc";
+import { isInstallerProvider } from "@codebot/contracts/agent-providers";
+import { isAgentProvider, type ProviderRuntimeSnapshot, providerDisplayName } from "@codebot/contracts/ipc";
 import { router, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import CircleArrowUp from "lucide-react-native/icons/circle-arrow-up";
@@ -188,7 +188,7 @@ export function ServerProvidersScreen() {
 
 function CustomProvidersSection({ serverId, admin }: { serverId: string; admin: ProviderAdmin }) {
   const { t, errorMessage } = useText();
-  const [muted, accent] = useCSSVariable(["--openbot-text-grouped-secondary", "--openbot-accent"]);
+  const [muted, accent] = useCSSVariable(["--codebot-text-grouped-secondary", "--codebot-accent"]);
   const { list } = useServerCustomProviders(serverId, admin);
   const open = (customProviderId?: string) =>
     router.push({
@@ -256,7 +256,7 @@ function CustomProvidersSection({ serverId, admin }: { serverId: string; admin: 
 
 function AgentsSection({ serverId, admin }: { serverId: string; admin: ProviderAdmin }) {
   const { t, errorMessage } = useText();
-  const accent = useCSSVariable("--openbot-accent");
+  const accent = useCSSVariable("--codebot-accent");
   const { list } = useServerCustomAgents(serverId, admin);
   return (
     <SettingsSection

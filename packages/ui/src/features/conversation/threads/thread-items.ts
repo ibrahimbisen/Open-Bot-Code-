@@ -1,5 +1,5 @@
-import type { AgentTask } from "@openbot/contracts/ipc";
-import type { SidebarWaitReason } from "@openbot/ui/features/sidebar/sidebar-types";
+import type { AgentTask } from "@codebot/contracts/ipc";
+import type { SidebarWaitReason } from "@codebot/ui/features/sidebar/sidebar-types";
 import { DRAFT_THREAD_ID, MAIN_THREAD_ID, type ThreadItem, type ThreadStatus } from "./thread-types";
 
 export function agentTaskThreadStatus(task: AgentTask, waitsFor: SidebarWaitReason | undefined): ThreadStatus {

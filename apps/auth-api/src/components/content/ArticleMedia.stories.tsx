@@ -1,21 +1,21 @@
-import { AppLogo } from "@openbot/brand";
+import { AppLogo } from "@codebot/brand";
 import type { JSX } from "@solidjs/web";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import "../../styles.css";
 import "./ArticleMedia.stories.css";
-import aChannel from "../../content/guides/media/openbot-101/a-channel.webp";
-import aThread from "../../content/guides/media/openbot-101/a-thread.webp";
-import pickAModel from "../../content/guides/media/openbot-101/pick-a-model.webp";
+import aChannel from "../../content/guides/media/codebot-101/a-channel.webp";
+import aThread from "../../content/guides/media/codebot-101/a-thread.webp";
+import pickAModel from "../../content/guides/media/codebot-101/pick-a-model.webp";
 import { formatArticleDate } from "../../lib/content-collection";
 import { GUIDES_COLLECTION } from "../../lib/guides";
-import { EXTERNAL_LINK_REL, OPENBOT_LINKS } from "../../lib/landing-links";
+import { CODEBOT_LINKS, EXTERNAL_LINK_REL } from "../../lib/landing-links";
 import { Button } from "../ui/button";
 import { ArticleGradient } from "./ArticleGradient";
 import { ArticleImage } from "./ArticleMedia";
 
-const ARTICLE_TITLE = "How to Use OpenBot: Set Up Your First AI Agent";
-const GUIDE = GUIDES_COLLECTION.articles.find((article) => article.slug === "openbot-101");
-if (!GUIDE) throw new Error("The openbot-101 guide must be in the guides registry.");
+const ARTICLE_TITLE = "How to Use CodeBot: Set Up Your First AI Agent";
+const GUIDE = GUIDES_COLLECTION.articles.find((article) => article.slug === "codebot-101");
+if (!GUIDE) throw new Error("The codebot-101 guide must be in the guides registry.");
 
 const meta = {
   title: "Site/Article media",
@@ -27,13 +27,13 @@ type Story = StoryObj<typeof meta>;
 function StoryHeader() {
   return (
     <header class="landing-header">
-      <a class="landing-brand" href="/" aria-label="OpenBot home">
+      <a class="landing-brand" href="/" aria-label="CodeBot home">
         <AppLogo variant="production" class="landing-brand-logo" />
-        <span>OpenBot</span>
+        <span>CodeBot</span>
       </a>
       <div class="site-header-actions">
         <Button
-          href={OPENBOT_LINKS.contact}
+          href={CODEBOT_LINKS.contact}
           target="_blank"
           rel={EXTERNAL_LINK_REL}
           variant="secondary"
@@ -99,7 +99,7 @@ export const InTheArticle: Story = {
           </div>
           <div class="post-prose">
             <p>
-              I built OpenBot because I wanted teammates, not chats. A chat window forgets. A teammate keeps the folder
+              I built CodeBot because I wanted teammates, not chats. A chat window forgets. A teammate keeps the folder
               it works in, the history of what it did, and a name you can call it by.
             </p>
             <p>
@@ -126,7 +126,7 @@ export const InTheArticle: Story = {
             <h2>Install it, then connect a provider</h2>
             <p>
               Take the installer from GitHub Releases. Then give it a provider. In onboarding, in Settings or in the
-              model picker, select a provider and press Download: OpenBot installs and pins its own managed copy of that
+              model picker, select a provider and press Download: CodeBot installs and pins its own managed copy of that
               command-line tool.
             </p>
             <ArticleImage
@@ -209,8 +209,8 @@ export const ColourFamilies: Story = {
   render: () => (
     <ProseColumn>
       {[
-        "How to Use OpenBot: Set Up Your First AI Agent",
-        "What Is OpenBot? Models, Providers and Agents Explained",
+        "How to Use CodeBot: Set Up Your First AI Agent",
+        "What Is CodeBot? Models, Providers and Agents Explained",
         "One agent, many providers",
         "Run the team server yourself",
       ].map((title) => (

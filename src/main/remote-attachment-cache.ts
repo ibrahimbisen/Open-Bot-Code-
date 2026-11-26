@@ -1,4 +1,4 @@
-import { playableMediaKind } from "@openbot/contracts/attachment-files";
+import { playableMediaKind } from "@codebot/contracts/attachment-files";
 import { Deferred, Effect, Semaphore } from "effect";
 import type { RemoteWorkflowError } from "./remote-service-effects";
 

@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { join } from "node:path";
 import { Effect } from "effect";
 
-const RESTART_MARKER = "OPENBOT_WINDOWS_PACKAGE_RESTART";
+const RESTART_MARKER = "CODEBOT_WINDOWS_PACKAGE_RESTART";
 
 export const restartOutsideWindowsPackage = Effect.fn("restartOutsideWindowsPackage")(function* (
   environment: NodeJS.ProcessEnv,
@@ -13,8 +13,8 @@ export const restartOutsideWindowsPackage = Effect.fn("restartOutsideWindowsPack
   delete environment[RESTART_MARKER];
   if (process.platform !== "win32" || !process.windowsStore || restarted) return false;
   const [link, ...rest] = argv.slice(1);
-  const shellOpensInOpenBot = (value: string) => /^openbot:/i.test(value) && !value.includes(",") && isLink(value);
-  if (rest.length > 0 || (link !== undefined && !shellOpensInOpenBot(link))) return false;
+  const shellOpensInCodeBot = (value: string) => /^codebot:/i.test(value) && !value.includes(",") && isLink(value);
+  if (rest.length > 0 || (link !== undefined && !shellOpensInCodeBot(link))) return false;
   const target = link ?? process.execPath;
   const explorer = join(environment.SystemRoot ?? environment.windir ?? "C:\\Windows", "explorer.exe");
   return yield* Effect.callback<boolean>((resume) => {

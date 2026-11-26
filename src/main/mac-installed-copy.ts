@@ -2,13 +2,13 @@ import { execFile } from "node:child_process";
 import { homedir } from "node:os";
 import { basename, join } from "node:path";
 import { promisify } from "node:util";
-import { isNewerRelease } from "@openbot/contracts/release-version";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { isNewerRelease } from "@codebot/contracts/release-version";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Schema } from "effect";
 import type { App } from "electron";
 import { causeHelpers } from "../backend/effect-boundary";
 
-const logger = createOpenBotLogger("mac-installed-copy");
+const logger = createCodeBotLogger("mac-installed-copy");
 
 const TOOL_TIMEOUT_MS = 60_000;
 const QUARANTINE_ATTRIBUTE = "com.apple.quarantine";
@@ -67,7 +67,7 @@ function prepareInstalledCopy(runningBundle: string, currentVersion: string): Ef
       const usable = yield* isSameAppAtLeastAsNew(copyPath, requirement, currentVersion).pipe(
         Effect.catch((error) =>
           Effect.sync(() => {
-            logger.info("An OpenBot copy cannot be used to install the update.", toLogValue(error.cause));
+            logger.info("An CodeBot copy cannot be used to install the update.", toLogValue(error.cause));
             return false;
           }),
         ),
@@ -78,7 +78,7 @@ function prepareInstalledCopy(runningBundle: string, currentVersion: string): Ef
   }).pipe(
     Effect.catch((error) =>
       Effect.sync(() => {
-        logger.warn("The installed OpenBot copy could not be checked.", toLogValue(error.cause));
+        logger.warn("The installed CodeBot copy could not be checked.", toLogValue(error.cause));
         return null;
       }),
     ),
@@ -93,7 +93,7 @@ export function restartFromInstalledCopy(
   return prepareInstalledCopy(runningBundle, currentVersion).pipe(
     Effect.map((copyPath) => {
       if (!copyPath) return false;
-      logger.info("OpenBot restarts from its installed copy to install the update.");
+      logger.info("CodeBot restarts from its installed copy to install the update.");
       app.relaunch({
         execPath: join(copyPath, "Contents", "MacOS", basename(app.getPath("exe"))),
         args: process.argv.slice(1),

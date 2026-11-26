@@ -11,7 +11,7 @@ import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/p
 import { grokEnvironment, makeGitWorkspace, makeGrokHome, startGrokProxy } from "./grok-live-harness";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/grok-media-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-media-smoke");
 const MODEL = process.argv.find((arg) => arg.startsWith("--model="))?.slice("--model=".length) ?? "grok-4.7-build-fast";
 const TASK = [
   "Do these two steps in order.",
@@ -46,7 +46,7 @@ const report: Report = { passed: false, model: MODEL, items: [], files: [] };
 const proxy = await startGrokProxy();
 const saved = { ...process.env };
 const clients: AgentClient[] = [];
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-grok-media-smoke-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-grok-media-smoke-")));
 
 function signature(bytes: Buffer): "png" | "jpeg" | "webp" | "mp4" | "unknown" {
   if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "png";

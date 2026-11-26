@@ -1,7 +1,7 @@
-import { Button, Download, Trash2 } from "@openbot/ui";
-import { contentIn, MorphPill } from "@openbot/ui/morph-pill";
-import { useText } from "@openbot/ui/text";
-import { prefersReducedMotion } from "@openbot/ui/utils";
+import { Button, Download, Trash2 } from "@codebot/ui";
+import { contentIn, MorphPill } from "@codebot/ui/morph-pill";
+import { useText } from "@codebot/ui/text";
+import { prefersReducedMotion } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createMemo, Match, Show, Switch } from "solid-js";
 

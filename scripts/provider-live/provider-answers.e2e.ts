@@ -14,7 +14,7 @@ test("the agent answers a message", async ({ app, screen, browser }) => {
   const agentId = await browser.evaluate(
     async (input) =>
       (
-        await window.openbot.agent.createAgent({
+        await window.codebot.agent.createAgent({
           name: input.name,
           description: "Answers one test message.",
           avatarSeed: `live-${input.provider}`,
@@ -38,7 +38,7 @@ test("the agent answers a message", async ({ app, screen, browser }) => {
     throw error;
   } finally {
     await browser
-      .evaluate((id) => window.openbot.agent.deleteAgent(id).then(() => null), agentId)
+      .evaluate((id) => window.codebot.agent.deleteAgent(id).then(() => null), agentId)
       .catch(() => undefined);
   }
 });

@@ -1,6 +1,6 @@
-import type { AvatarMood } from "@openbot/brand/bloub-avatar-motion";
-import type { AgentApproval, QueueSnapshot } from "@openbot/contracts/ipc";
-import { isAgentWorking } from "@openbot/ui/features/sidebar/sidebar-agent-states";
+import type { AvatarMood } from "@codebot/brand/bloub-avatar-motion";
+import type { AgentApproval, QueueSnapshot } from "@codebot/contracts/ipc";
+import { isAgentWorking } from "@codebot/ui/features/sidebar/sidebar-agent-states";
 
 export interface AgentAvatarMoodsInput {
   agentIds: readonly string[];

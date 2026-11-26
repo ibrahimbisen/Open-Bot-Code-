@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 export class MailboxDeliveryGate {
   readonly #blockedAgents = new Set<string>();
   readonly #versions = new Map<string, number>();

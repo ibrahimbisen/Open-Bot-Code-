@@ -1,4 +1,4 @@
-import { McpSignInCard } from "@openbot/ui/features/conversation/McpSignInCard";
+import { McpSignInCard } from "@codebot/ui/features/conversation/McpSignInCard";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
@@ -6,7 +6,7 @@ const meta = {
   title: "Conversation/MCP sign-in",
   component: McpSignInCard,
   render: (args) => (
-    <main style={{ width: "min(560px, 100vw)", padding: "var(--openbot-space-4)" }}>
+    <main style={{ width: "min(560px, 100vw)", padding: "var(--codebot-space-4)" }}>
       <McpSignInCard {...args} />
     </main>
   ),
@@ -14,7 +14,7 @@ const meta = {
     name: "example",
     address: "https://example.com/mcp",
     state: "sign-in",
-    unavailableText: "Sign in to example in OpenBot on your computer, in Marketplace, Apps, example.",
+    unavailableText: "Sign in to example in CodeBot on your computer, in Marketplace, Apps, example.",
     notNeededText: "example works now without a sign-in.",
     onSignIn: fn(),
     onContinue: fn(),

@@ -1,4 +1,4 @@
-import type { AgentPromptResolution, ConversationQuestionPrompt } from "@openbot/contracts/ipc";
+import type { AgentPromptResolution, ConversationQuestionPrompt } from "@codebot/contracts/ipc";
 import {
   type ConversationUiBlock,
   UI_BLOCK_LIMITS,
@@ -16,7 +16,7 @@ import {
   uiBlockAnswersFromResponse,
   uiConfirmAnswersWithPreview,
   uiConfirmPreviewEditable,
-} from "@openbot/contracts/ui-blocks";
+} from "@codebot/contracts/ui-blocks";
 import { router } from "expo-router";
 import { Button, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
@@ -76,7 +76,7 @@ export function choiceBlockOf(prompt: ConversationQuestionPrompt, uiBlock: Conve
 }
 
 export function QuestionText({ question, variant }: { question: string; variant: "title" | "body" | "secondary" }) {
-  const secondaryColor = useCSSVariable("--openbot-text-secondary");
+  const secondaryColor = useCSSVariable("--codebot-text-secondary");
   return (
     <ChatMarkdown
       body={question}
@@ -91,7 +91,7 @@ export function QuestionText({ question, variant }: { question: string; variant:
 }
 
 export function QuestionDetail({ detail }: { detail: string }) {
-  const secondaryColor = useCSSVariable("--openbot-text-secondary");
+  const secondaryColor = useCSSVariable("--codebot-text-secondary");
   return <ChatMarkdown body={detail} color={String(secondaryColor)} compact finished />;
 }
 

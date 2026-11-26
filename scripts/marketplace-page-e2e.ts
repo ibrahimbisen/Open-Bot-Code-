@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/marketplace-page-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/marketplace-page-e2e");
 const instances = readDevInstanceRecords().filter(
   (record) => record.service === "app" && resolve(record.projectRoot) === resolve(process.cwd()),
 );
@@ -18,7 +18,7 @@ assertMutationAllowed({
   instanceNamed: true,
   target: instance.instanceId,
 });
-const logger = createOpenBotLogger("marketplace-page-e2e");
+const logger = createCodeBotLogger("marketplace-page-e2e");
 const session = await connectToDevApp(instance.remoteDebuggingPort, logger, {
   expectedRendererPort: instance.rendererPort,
   ownerPid: instance.pid,

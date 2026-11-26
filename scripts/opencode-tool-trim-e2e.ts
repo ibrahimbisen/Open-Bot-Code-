@@ -4,7 +4,7 @@ import { join, resolve } from "node:path";
 import { codeModeCatalog, OPENCODE_MODEL, startOpenCodeHarness } from "./opencode-agent-harness";
 import { runTurn, startThread } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-tool-trim-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-tool-trim-e2e");
 const NL = "\n";
 const DENIED = [
   "session_move",

@@ -15,7 +15,7 @@
 
 ## Why this matters
 
-The plugin catalog source generates renderer, Worker, mobile, and offline snapshot modules. The generator already supports `--check`, but CI does not run it. A stale generated file can make different OpenBot surfaces show different plugins or install metadata while all current checks pass.
+The plugin catalog source generates renderer, Worker, mobile, and offline snapshot modules. The generator already supports `--check`, but CI does not run it. A stale generated file can make different CodeBot surfaces show different plugins or install metadata while all current checks pass.
 
 ## Current state
 

@@ -1,5 +1,5 @@
-import type { AgentAccessLevel, TeamRole } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { AgentAccessLevel, TeamRole } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 
 export const SERVER_ROLE_KEYS = {
   owner: "mobile.server.role.owner",

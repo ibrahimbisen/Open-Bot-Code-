@@ -1,10 +1,10 @@
-import { type BillingPlanId, serverStorageGb } from "@openbot/contracts/billing";
+import { type BillingPlanId, serverStorageGb } from "@codebot/contracts/billing";
 import {
   HOSTED_SERVER_SIZES,
   type HostedServerState,
   type HostedServerSummary,
-} from "@openbot/contracts/hosted-servers";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/hosted-servers";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Badge,
   Button,
@@ -22,7 +22,7 @@ import {
   SettingsSection,
   Text,
   Trash2,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import type { SettingsHostedServersStore } from "./stores/hosted-servers-store";

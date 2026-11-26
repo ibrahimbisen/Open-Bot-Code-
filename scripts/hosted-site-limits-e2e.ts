@@ -3,12 +3,12 @@ import { createHash, randomBytes } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { HOSTED_SITE_HOST_ID_HEADER, HOSTED_SITE_HOST_TOKEN_HEADER } from "@openbot/contracts/hosted-sites";
+import { HOSTED_SITE_HOST_ID_HEADER, HOSTED_SITE_HOST_TOKEN_HEADER } from "@codebot/contracts/hosted-sites";
 import { z } from "zod";
 import { developmentChildEnvironment } from "./development-environment";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const REPORT = join(ROOT, ".openbot-build", "hosted-site-limits-e2e.json");
+const REPORT = join(ROOT, ".codebot-build", "hosted-site-limits-e2e.json");
 const DAY = 86_400_000;
 const SCENARIOS = [
   "free-pool",
@@ -35,7 +35,7 @@ const errorSchema = z.object({ error: z.object({ code: z.string(), message: z.st
 function d1<T>(sql: string, schema: z.ZodType<T>): T[] {
   const result = spawnSync(
     join(ROOT, "node_modules/.bin/wrangler"),
-    ["d1", "execute", "openbot-auth", "--local", "--json", "--command", sql],
+    ["d1", "execute", "codebot-auth", "--local", "--json", "--command", sql],
     { cwd: join(ROOT, "apps/auth-api"), encoding: "utf8", env: developmentChildEnvironment(process.env, "app") },
   );
   if (result.status !== 0) {

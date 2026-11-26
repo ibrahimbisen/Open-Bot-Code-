@@ -2,7 +2,7 @@ import {
   CHANNEL_ROUTING_EVENT_ITEM_TYPE_PREFIX,
   type ChannelMessage,
   SETTING_LINK_ITEM_TYPE_PREFIX,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 const NOT_COUNTED_ITEM_TYPES: ReadonlySet<string> = new Set([
   "plan",

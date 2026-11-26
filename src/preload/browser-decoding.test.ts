@@ -8,7 +8,7 @@ import type {
   BrowserTabAgent,
   BrowserWindowEvent,
   BrowserWindowModel,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { describe, expect, it } from "vitest";
 import {
   decodeBrowserBounds,

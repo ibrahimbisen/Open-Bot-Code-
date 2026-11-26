@@ -2,8 +2,8 @@ import {
   DISCONNECTED_ONEPASSWORD_CONNECTOR,
   type OnePasswordConnectorStatus,
   type OnePasswordSetup,
-} from "@openbot/contracts/ipc";
-import { OnePasswordConnectorPanel } from "@openbot/ui/features/settings/OnePasswordConnectorPanel";
+} from "@codebot/contracts/ipc";
+import { OnePasswordConnectorPanel } from "@codebot/ui/features/settings/OnePasswordConnectorPanel";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { SettledArgs } from "./settled-args";
@@ -59,16 +59,16 @@ export const ChooseAccount: Story = {
 };
 
 export const Connected: Story = {
-  args: args({ state: "connected", setup: READY, vaultNames: ["Shared with OpenBot"], loginCount: 3 }),
+  args: args({ state: "connected", setup: READY, vaultNames: ["Shared with CodeBot"], loginCount: 3 }),
 };
 
 export const ConnectedLoading: Story = {
-  args: args({ state: "connected", setup: READY, vaultNames: ["Shared with OpenBot"], loginCount: null }),
+  args: args({ state: "connected", setup: READY, vaultNames: ["Shared with CodeBot"], loginCount: null }),
 };
 
 export const InstallFailed: Story = {
   args: args({
-    error: "OpenBot could not install the 1Password CLI. Check the connection to the internet, then try again.",
+    error: "CodeBot could not install the 1Password CLI. Check the connection to the internet, then try again.",
   }),
 };
 
@@ -80,7 +80,7 @@ export const HostTokenRejected: Story = {
 
 export const HostConnected: Story = {
   args: {
-    ...args({ state: "connected", vaultNames: ["Shared with OpenBot"], loginCount: 3 }),
+    ...args({ state: "connected", vaultNames: ["Shared with CodeBot"], loginCount: 3 }),
     hostName: "Studio",
   },
 };

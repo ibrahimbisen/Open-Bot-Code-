@@ -17,9 +17,9 @@ export type DevelopmentCommandRunner = (
 
 export const supportedBunVersion = "1.4.2";
 
-const INSTALL_STAMP = join("node_modules", ".openbot-install-stamp");
+const INSTALL_STAMP = join("node_modules", ".codebot-install-stamp");
 const LOCAL_D1_STATE = join("apps", "auth-api", ".wrangler", "state", "v3", "d1");
-const MIGRATION_STAMP = join(LOCAL_D1_STATE, ".openbot-migrate-local-stamp");
+const MIGRATION_STAMP = join(LOCAL_D1_STATE, ".codebot-migrate-local-stamp");
 const MIGRATIONS_DIRECTORY = join("apps", "auth-api", "migrations");
 
 export interface DevelopmentPreparationInput {
@@ -146,7 +146,7 @@ export function prepareDevelopmentWorktree(input: DevelopmentPreparationInput = 
 
   run(executable, ["run", "dev:seed", "--if-missing"], {
     ...options,
-    env: { ...process.env, OPENBOT_DEV_INSTANCE_ID: instanceId },
+    env: { ...process.env, CODEBOT_DEV_INSTANCE_ID: instanceId },
   });
   run(executable, ["run", "marketplace:seed:local"], options);
   return stateOutcome;
@@ -192,7 +192,7 @@ export function assertSupportedBunVersion(version: string): void {
   if (version === supportedBunVersion) return;
 
   throw new Error(
-    `Unsupported Bun ${version}. OpenBot development requires stable Bun ${supportedBunVersion}. Install the exact version with the command in https://github.com/nightly-labs/openbot#development, then retry.`,
+    `Unsupported Bun ${version}. CodeBot development requires stable Bun ${supportedBunVersion}. Install the exact version with the command in https://github.com/nightly-labs/openbot#development, then retry.`,
   );
 }
 

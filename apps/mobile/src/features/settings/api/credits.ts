@@ -4,7 +4,7 @@ import {
   type CreditTransferRequest,
   parseCreditActivity,
   parseCreditsState,
-} from "@openbot/contracts/credits";
+} from "@codebot/contracts/credits";
 import { type MobileSession, requestMobileAccount } from "@/features/auth/api/mobile-auth";
 import { mockCreditActivity, mockCreditsState, mockMoveCredits } from "@/features/settings/api/credits-mock";
 import { devMockCredits } from "@/shared/lib/dev-feature-overrides";

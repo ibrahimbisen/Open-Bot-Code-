@@ -5,11 +5,11 @@ import { Effect, Result } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { ProviderRuntime } from "../src/backend/agent/provider-runtime";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-update-only-copy-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-update-only-copy-e2e");
 const NEWER = "1.5.4";
 
 const fakeAgy = (version: string) => `#!/usr/bin/env node
@@ -54,7 +54,7 @@ interface Report {
   error?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-update-only-copy-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-update-only-copy-e2e-"));
 const log = join(root, "agy.log");
 const failFlag = join(root, "fail");
 const report: Report = { passed: false };
@@ -67,7 +67,7 @@ await mkdir(join(root, "agy", NEWER, "bin"), { recursive: true });
 await writeFile(newerExecutable, fakeAgy(NEWER));
 await chmod(newerExecutable, 0o755);
 
-const store = new AgentStore(join(root, "profile"), join(root, "home"), new OpenBotDatabase(join(root, "profile")));
+const store = new AgentStore(join(root, "profile"), join(root, "home"), new CodeBotDatabase(join(root, "profile")));
 const providers = new ProviderRuntime({
   offProviders: BUILT_IN_PROVIDER_DRIVERS.map((driver) => driver.id).filter((id) => id !== "antigravity"),
   conversation: new ConversationRuntime(

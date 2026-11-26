@@ -1,4 +1,4 @@
-import { Badge, DropdownMenu, Folder, Inbox, SlidersHorizontal, SlidingTabs } from "@openbot/ui";
+import { Badge, DropdownMenu, Folder, Inbox, SlidersHorizontal, SlidingTabs } from "@codebot/ui";
 import { createEffect, createSignal, For, type ParentProps, Show } from "solid-js";
 import { useText } from "../../text";
 import { MenuMark } from "./SidebarFilterMenu";

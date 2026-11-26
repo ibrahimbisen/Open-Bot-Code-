@@ -1,10 +1,10 @@
-import { AppLogo } from "@openbot/brand";
-import { SocialNetworkMark } from "@openbot/ui/features/social-follow/social-marks";
-import { SOCIAL_NETWORKS, type SocialNetworkId } from "@openbot/ui/features/social-follow/social-networks";
+import { AppLogo } from "@codebot/brand";
+import { SocialNetworkMark } from "@codebot/ui/features/social-follow/social-marks";
+import { SOCIAL_NETWORKS, type SocialNetworkId } from "@codebot/ui/features/social-follow/social-networks";
 import type { JSX } from "@solidjs/web";
 import { Link } from "@tanstack/solid-router";
 import { For, Show } from "solid-js";
-import { EXTERNAL_LINK_REL, FOOTER_COLUMNS, type FooterLink, OPENBOT_LINKS } from "../../lib/landing-links";
+import { CODEBOT_LINKS, EXTERNAL_LINK_REL, FOOTER_COLUMNS, type FooterLink } from "../../lib/landing-links";
 import { localizedPath } from "../../lib/site-paths";
 import { createLandingReveal } from "./createLandingReveal";
 import { LandingIcon } from "./LandingIcon";
@@ -40,12 +40,12 @@ function pathMark(path: string) {
 }
 
 const SOCIALS: readonly FooterSocial[] = [
-  { label: "GitHub", href: OPENBOT_LINKS.repository, Mark: pathMark(GITHUB_MARK_PATH) },
-  { label: "X", href: OPENBOT_LINKS.x, Mark: () => <SocialNetworkMark network="x" /> },
-  { label: "Discord", href: OPENBOT_LINKS.discord, Mark: pathMark(DISCORD_MARK_PATH) },
+  { label: "GitHub", href: CODEBOT_LINKS.repository, Mark: pathMark(GITHUB_MARK_PATH) },
+  { label: "X", href: CODEBOT_LINKS.x, Mark: () => <SocialNetworkMark network="x" /> },
+  { label: "Discord", href: CODEBOT_LINKS.discord, Mark: pathMark(DISCORD_MARK_PATH) },
   ...OTHER_NETWORKS.map((network) => ({
     label: SOCIAL_NETWORKS[network].name,
-    href: OPENBOT_LINKS[network],
+    href: CODEBOT_LINKS[network],
     Mark: () => <SocialNetworkMark network={network} />,
   })),
 ];
@@ -69,7 +69,7 @@ export function LandingFooter() {
               aria-label={chrome().text.home}
             >
               <AppLogo variant="production" class="landing-footer-logo" />
-              <span>OpenBot</span>
+              <span>CodeBot</span>
             </Link>
 
             <p class="landing-footer-description">{text().description}</p>

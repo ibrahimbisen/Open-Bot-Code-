@@ -1,4 +1,4 @@
-import type { ConnectorMessagingPlatform } from "@openbot/contracts/ipc";
+import type { ConnectorMessagingPlatform } from "@codebot/contracts/ipc";
 import { useQuery } from "@tanstack/react-query";
 import { useIsFocused } from "expo-router";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";

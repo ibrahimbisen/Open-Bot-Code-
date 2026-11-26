@@ -1,5 +1,5 @@
-import type { NearDepositAddress, NearDepositAsset } from "@openbot/contracts/ipc";
-import { Button, CopyButton, Label, QrCode, SearchSelect, Spinner, Text } from "@openbot/ui";
+import type { NearDepositAddress, NearDepositAsset } from "@codebot/contracts/ipc";
+import { Button, CopyButton, Label, QrCode, SearchSelect, Spinner, Text } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, createUniqueId, Show } from "solid-js";
 import { useText } from "../../text";

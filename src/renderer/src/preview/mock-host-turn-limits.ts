@@ -4,7 +4,7 @@ import {
   type HostTurnLimits,
   type HostTurnLimitsInput,
   parseHostTurnLimitsInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export function createMockHostTurnLimits(
   changed: () => void,

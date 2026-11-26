@@ -1,5 +1,5 @@
-import type { ConnectorMessagingPlatform, MessagingConnection } from "@openbot/contracts/ipc";
-import type { AppMobileMessages, MobileTextKey } from "@openbot/i18n/mobile";
+import type { ConnectorMessagingPlatform, MessagingConnection } from "@codebot/contracts/ipc";
+import type { AppMobileMessages, MobileTextKey } from "@codebot/i18n/mobile";
 
 export const MOBILE_CONNECTOR_IDS = [
   "slack",
@@ -163,8 +163,8 @@ export function platformPage(platform: keyof typeof PAGE_HOSTS, address: string 
 }
 
 export const MESSAGING_INSTALL_RETURN = {
-  slack: "openbot://slack-workspace",
-  discord: "openbot://discord-guild",
+  slack: "codebot://slack-workspace",
+  discord: "codebot://discord-guild",
 } as const satisfies Record<WorkspacePlatform, string>;
 
 export function isMessagingInstallReturn(path: string): boolean {

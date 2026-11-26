@@ -1,5 +1,5 @@
 import { randomInt } from "node:crypto";
-import { MESSAGING_LIMITS, type WhatsAppPairingRequest } from "@openbot/contracts/ipc";
+import { MESSAGING_LIMITS, type WhatsAppPairingRequest } from "@codebot/contracts/ipc";
 
 const PAIRING_REQUEST_TTL_MS = 60 * 60 * 1000;
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";

@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 
 export type DocumentColorScheme = "light" | "dark";
 
-const ATTRIBUTE = "data-openbot-color-scheme";
+const ATTRIBUTE = "data-codebot-color-scheme";
 
 function read(): DocumentColorScheme {
   return document.documentElement.getAttribute(ATTRIBUTE) === "light" ? "light" : "dark";

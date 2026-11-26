@@ -12,7 +12,7 @@ import { createWorkerHandler } from "../src/server/worker-handler";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "hosted-operator-pool-e2e");
+const OUT = join(ROOT, ".codebot-build", "hosted-operator-pool-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const OWNER = { id: "owner", email: "owner@example.test" };
 const MINUTE = 60_000;
@@ -172,7 +172,7 @@ async function run() {
         status: stored.status,
         currency: "eur",
         cancel_at_period_end: false,
-        metadata: { openbot_user_id: OWNER.id, openbot_server_id: String(stored.server_id) },
+        metadata: { codebot_user_id: OWNER.id, codebot_server_id: String(stored.server_id) },
         items: {
           data: [
             {
@@ -180,7 +180,7 @@ async function run() {
               current_period_end: Math.floor((t0 - DAY) / 1000),
               price: {
                 id: "price_standard",
-                lookup_key: "openbot_standard_month",
+                lookup_key: "codebot_standard_month",
                 metadata: {},
                 currency: "eur",
                 unit_amount: 2900,

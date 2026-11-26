@@ -1,8 +1,8 @@
-import type { AgentModelId, AgentProviderId, HostDefaultProvider, OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { AgentModelId, AgentProviderId, CodeBotDesktopApi, HostDefaultProvider } from "@codebot/contracts/ipc";
 import { createEffect, createSignal, untrack } from "solid-js";
 
 type HostDefaultProviderCalls = Pick<
-  OpenBotDesktopApi["providerAdmin"],
+  CodeBotDesktopApi["providerAdmin"],
   "hostDefaultProvider" | "setHostDefaultProvider"
 >;
 
@@ -21,7 +21,7 @@ export interface HostDefaultProviderSetting extends HostDefaultProvider {
 export function createHostDefaultProvider(
   source: () => HostDefaultProviderSource | undefined,
 ): () => HostDefaultProviderSetting | undefined {
-  const calls = (): HostDefaultProviderCalls => source()?.calls ?? window.openbot.providerAdmin;
+  const calls = (): HostDefaultProviderCalls => source()?.calls ?? window.codebot.providerAdmin;
   const [value, setValue] = createSignal<HostDefaultProvider | null>(null);
   let generation = 0;
 

@@ -3,13 +3,13 @@
 }
 
 .marketplace-suggestion .marketplace-suggestion-icon {
-  width: var(--openbot-control-lg);
-  height: var(--openbot-control-lg);
+  width: var(--codebot-control-lg);
+  height: var(--codebot-control-lg);
   flex: none;
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-md);
-  background: var(--openbot-bg-surface-raised);
-  color: var(--openbot-text-primary);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-md);
+  background: var(--codebot-bg-surface-raised);
+  color: var(--codebot-text-primary);
 }
 
 .marketplace-suggestion .marketplace-suggestion-icon img {
@@ -48,9 +48,9 @@
 
 .marketplace-suggestion-question {
   margin: 0;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   overflow-wrap: anywhere;
 }
 
@@ -67,15 +67,15 @@
 .marketplace-suggestion .marketplace-suggestion-button.ui-button[data-state="connected"],
 .marketplace-suggestion .marketplace-suggestion-button.ui-button[data-state="connected"]:hover {
   border-color: transparent;
-  background: var(--openbot-success);
-  color: var(--openbot-text-on-light);
+  background: var(--codebot-success);
+  color: var(--codebot-text-on-light);
   cursor: default;
 }
 
-:root[data-openbot-color-scheme="light"]
+:root[data-codebot-color-scheme="light"]
   .marketplace-suggestion
   .marketplace-suggestion-button.ui-button[data-state="connected"] {
-  background: var(--openbot-success-text);
+  background: var(--codebot-success-text);
 }
 
 .marketplace-suggestion-stage {
@@ -89,7 +89,7 @@
   display: inline-flex;
   grid-area: 1 / 1;
   align-items: center;
-  gap: var(--openbot-space-1-5);
+  gap: var(--codebot-space-1-5);
   white-space: nowrap;
 }
 
@@ -99,14 +99,14 @@
 }
 
 .marketplace-suggestion-layer > svg {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
 }
 
 .marketplace-suggestion-spinner {
   display: inline-flex;
   width: 0;
-  margin-inline-end: calc(-1 * var(--openbot-space-1-5));
+  margin-inline-end: calc(-1 * var(--codebot-space-1-5));
   opacity: 0;
 }
 
@@ -119,7 +119,7 @@
 .marketplace-suggestion-controls[data-state="connected"] .marketplace-suggestion-dismiss {
   width: 0;
   min-width: 0;
-  margin-inline-start: calc(-1 * var(--openbot-space-2));
+  margin-inline-start: calc(-1 * var(--codebot-space-2));
   overflow: hidden;
   border-width: 0;
   padding: 0;
@@ -129,24 +129,24 @@
 
 .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-button.ui-button {
   transition:
-    background-color var(--openbot-duration-slow) var(--openbot-ease-out),
-    color var(--openbot-duration-slow) var(--openbot-ease-out),
-    opacity var(--openbot-duration-normal) var(--openbot-ease-out);
+    background-color var(--codebot-duration-slow) var(--codebot-ease-out),
+    color var(--codebot-duration-slow) var(--codebot-ease-out),
+    opacity var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-layer {
-  transition: opacity var(--openbot-duration-normal) var(--openbot-ease-out);
+  transition: opacity var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-stage {
-    transition: width var(--openbot-duration-slow) var(--openbot-ease-out);
+    transition: width var(--codebot-duration-slow) var(--codebot-ease-out);
   }
 
   .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-layer {
     transition:
-      opacity var(--openbot-duration-normal) var(--openbot-ease-out),
-      transform var(--openbot-duration-slow) var(--openbot-ease-out);
+      opacity var(--codebot-duration-normal) var(--codebot-ease-out),
+      transform var(--codebot-duration-slow) var(--codebot-ease-out);
   }
 
   .marketplace-suggestion-button[data-state="connected"] [data-layer="start"] {
@@ -160,7 +160,7 @@
   .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-layer > svg path {
     stroke-dasharray: 24 24;
     stroke-dashoffset: -24;
-    transition: stroke-dashoffset var(--openbot-duration-overlay) var(--openbot-ease-out) var(--openbot-duration-fast);
+    transition: stroke-dashoffset var(--codebot-duration-overlay) var(--codebot-ease-out) var(--codebot-duration-fast);
   }
 
   .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-button[data-state="connected"] svg path {
@@ -170,8 +170,8 @@
   .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-spinner {
     transform: scale(0.6);
     transition:
-      opacity var(--openbot-duration-normal) var(--openbot-ease-out),
-      transform var(--openbot-duration-normal) var(--openbot-ease-out);
+      opacity var(--codebot-duration-normal) var(--codebot-ease-out),
+      transform var(--codebot-duration-normal) var(--codebot-ease-out);
   }
 
   .marketplace-suggestion-controls[data-motion]
@@ -182,35 +182,35 @@
 
   .marketplace-suggestion-controls[data-motion] .marketplace-suggestion-dismiss {
     transition:
-      opacity var(--openbot-duration-fast) var(--openbot-ease-out),
-      width var(--openbot-duration-slow) var(--openbot-ease-out),
-      margin var(--openbot-duration-slow) var(--openbot-ease-out),
-      visibility 0s linear var(--openbot-duration-slow);
+      opacity var(--codebot-duration-fast) var(--codebot-ease-out),
+      width var(--codebot-duration-slow) var(--codebot-ease-out),
+      margin var(--codebot-duration-slow) var(--codebot-ease-out),
+      visibility 0s linear var(--codebot-duration-slow);
   }
 }
 
 .marketplace-suggestion-unavailable {
   display: flex;
   margin: 0;
-  gap: var(--openbot-space-2);
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  gap: var(--codebot-space-2);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .marketplace-suggestion-unavailable svg {
-  width: var(--openbot-icon-sm);
-  height: var(--openbot-icon-sm);
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
   flex: 0 0 auto;
-  margin-top: var(--openbot-space-0-5);
-  color: var(--openbot-text-muted);
+  margin-top: var(--codebot-space-0-5);
+  color: var(--codebot-text-muted);
 }
 
 .marketplace-suggestion-dismissed {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-2);
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  gap: var(--codebot-space-2);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }

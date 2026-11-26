@@ -3,7 +3,7 @@ import { createWriteStream } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 import { promisify } from "node:util";
-import type { Logger } from "@openbot/logging";
+import type { Logger } from "@codebot/logging";
 import type { Browser, CDPSession, Page } from "playwright-core";
 import {
   collectDescendants,

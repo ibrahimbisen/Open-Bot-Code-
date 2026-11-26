@@ -7,31 +7,31 @@ import {
   type WorkflowMediaPriceRequest,
   type WorkflowMediaUnavailableModel,
   workflowCatalogMediaModel,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY,
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-credit-media-unavailable-v1";
+} from "@codebot/contracts/team-protocol/workflows-credit-media-unavailable-v1";
 import {
   WORKFLOWS_CREDIT_MEDIA_CAPABILITY,
   WORKFLOWS_CREDIT_MEDIA_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-credit-media-v1";
+} from "@codebot/contracts/team-protocol/workflows-credit-media-v1";
 import {
   WORKFLOWS_MEDIA_CATALOG_CAPABILITY,
   WORKFLOWS_MEDIA_CATALOG_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-catalog-v1";
+} from "@codebot/contracts/team-protocol/workflows-media-catalog-v1";
 import {
   WORKFLOWS_MEDIA_CATALOG_V2_CAPABILITY,
   WORKFLOWS_MEDIA_CATALOG_V2_ROUTES,
-} from "@openbot/contracts/team-protocol/workflows-media-catalog-v2";
-import { WORKFLOWS_MEDIA_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-media-v1";
-import { WORKFLOWS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-v1";
+} from "@codebot/contracts/team-protocol/workflows-media-catalog-v2";
+import { WORKFLOWS_MEDIA_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-media-v1";
+import { WORKFLOWS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-v1";
 import {
   decodeRemoteCreditMediaCredits,
   decodeRemoteWorkflowMediaCatalog,
   decodeRemoteWorkflowMediaPrice,
   decodeRemoteWorkflowMediaUnavailable,
-} from "@openbot/team-client/workflow-decoding";
+} from "@codebot/team-client/workflow-decoding";
 import type { WorkspaceRequest } from "@/features/workspace/context/host-request-actions";
 import {
   hasCapability,
@@ -100,7 +100,7 @@ export async function loadWorkflowMediaModels({
     const ids = new Set(live.map((model) => model.id));
     return [...live, ...WORKFLOW_MEDIA_MODELS.filter((model) => model.provider === provider && !ids.has(model.id))];
   });
-  return { models: [...listed(credit, "openbot"), ...fixed, ...service], unavailable, partial };
+  return { models: [...listed(credit, "codebot"), ...fixed, ...service], unavailable, partial };
 }
 
 export async function loadWorkflowMediaPrice({
@@ -150,5 +150,5 @@ export async function loadWorkflowCreditBalance({
     {},
     serverId,
   );
-  return credits.openbot?.available ?? null;
+  return credits.codebot?.available ?? null;
 }

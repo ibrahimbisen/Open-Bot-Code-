@@ -1,14 +1,14 @@
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import {
   BROWSER_HTTP_SIGN_IN_CAPABILITY,
   BROWSER_HTTP_SIGN_IN_ROUTES,
   decodeBrowserHttpSignInSnapshot,
-} from "@openbot/contracts/team-protocol/browser-http-sign-in-v1";
+} from "@codebot/contracts/team-protocol/browser-http-sign-in-v1";
 import {
   BROWSER_PERMISSIONS_CAPABILITY,
   BROWSER_PERMISSIONS_ROUTES,
   decodeBrowserPermissionsSnapshot,
-} from "@openbot/contracts/team-protocol/browser-permissions-v1";
+} from "@codebot/contracts/team-protocol/browser-permissions-v1";
 import {
   TEAM_BROWSER_VIEW_CLIPBOARD_CAPABILITY,
   TEAM_BROWSER_VIEW_CONTEXT_MENU_CAPABILITY,
@@ -17,8 +17,8 @@ import {
   TEAM_BROWSER_VIEW_FRAME_POINT_CAPABILITY,
   TEAM_BROWSER_VIEW_PAGE_COPY_CAPABILITY,
   TEAM_BROWSER_VIEW_VIEWPORT_CAPABILITY,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
-import { TEAM_BROWSER_NAVIGATION_CAPABILITY } from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
+import { TEAM_BROWSER_NAVIGATION_CAPABILITY } from "@codebot/contracts/team-protocol/current";
 import {
   decodeMobileBrowserTab,
   decodeMobileBrowserTabs,

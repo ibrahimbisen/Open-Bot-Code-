@@ -1,4 +1,4 @@
-import { canAdministerServer } from "@openbot/contracts/ipc";
+import { canAdministerServer } from "@codebot/contracts/ipc";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -20,7 +20,7 @@ import { useText } from "@/shared/lib/text";
 
 export function ServerMcpServerAgentsScreen() {
   const { t, errorMessage } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const { serverId, mcpServerId } = useLocalSearchParams<{ serverId: string; mcpServerId: string }>();
   const mcp = useServerMcp(serverId);
   const saved = mcp.list.data?.find((config) => config.id === mcpServerId);

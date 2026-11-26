@@ -1,4 +1,3 @@
-import type { ExpressionId } from "@norbert_bodziony/bloub";
 import {
   AVATAR_EXPRESSIONS,
   type AvatarStyle,
@@ -7,7 +6,8 @@ import {
   bloubAvatarProfile,
   SUPPORTED_AVATAR_SILHOUETTES,
   type SupportedAvatarSilhouetteId,
-} from "@openbot/brand/bloub-avatar";
+} from "@codebot/brand/bloub-avatar";
+import type { ExpressionId } from "@norbert_bodziony/bloub";
 import * as Crypto from "expo-crypto";
 
 interface AvatarCandidates {

@@ -1,6 +1,6 @@
-import type { MarketplaceAgentSummary, MarketplaceSkillSummary } from "@openbot/contracts/ipc";
-import { MarketplaceHomeCache } from "@openbot/ui/features/marketplace/marketplace-listing";
-import { currentText } from "@openbot/ui/text";
+import type { MarketplaceAgentSummary, MarketplaceSkillSummary } from "@codebot/contracts/ipc";
+import { MarketplaceHomeCache } from "@codebot/ui/features/marketplace/marketplace-listing";
+import { currentText } from "@codebot/ui/text";
 import type { MarketplaceCalls } from "./marketplace-calls";
 
 const skillHomeCaches = new WeakMap<

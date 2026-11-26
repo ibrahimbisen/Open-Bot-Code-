@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { Effect, Option, Schema } from "effect";
 
 export const UPDATE_HANDOVER_FILE = "update-handover.json";
-const SHIPIT_JOB_LABEL = "app.openbot.desktop.ShipIt";
+const SHIPIT_JOB_LABEL = "app.codebot.desktop.ShipIt";
 const HANDOVER_MAX_AGE_MS = 10 * 60 * 1_000;
 const LOG_TAIL_BYTES = 64 * 1024;
 const SHIPIT_INSTALL_REQUEST = "Detected this as an install request";

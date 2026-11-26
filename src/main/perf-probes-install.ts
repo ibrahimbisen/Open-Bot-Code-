@@ -229,7 +229,7 @@ function rendererRole(contents: WebContents): string {
   try {
     const url = new URL(contents.getURL());
     const page = url.pathname.slice(url.pathname.lastIndexOf("/") + 1).replace(/\.html$/u, "");
-    if (url.protocol === "openbot-app:" || url.hostname === "localhost") {
+    if (url.protocol === "codebot-app:" || url.hostname === "localhost") {
       role = url.searchParams.get("window") === "chat" ? "chat" : page || "app";
       if (role === "index") role = "app";
     } else {
@@ -392,9 +392,9 @@ function explain(limit = EXPLAIN_LIMIT) {
 type UtilityKind = "utility.database" | "utility.network" | "utility.voice" | "utility.other";
 
 function utilityKind(service: string): UtilityKind {
-  if (service === "OpenBot databases") return "utility.database";
+  if (service === "CodeBot databases") return "utility.database";
   if (service.includes("NetworkService") || service === "Network Service") return "utility.network";
-  if (service.startsWith("OpenBot ")) return "utility.voice";
+  if (service.startsWith("CodeBot ")) return "utility.voice";
   return "utility.other";
 }
 
@@ -422,5 +422,5 @@ export function installPerfProbes(): void {
   patchTimers();
   loopDelay.enable();
   setPerfProbeSink(sink);
-  Object.assign(globalThis, { __openbotPerfProbes: { reset, snapshot, explain, processKinds } });
+  Object.assign(globalThis, { __codebotPerfProbes: { reset, snapshot, explain, processKinds } });
 }

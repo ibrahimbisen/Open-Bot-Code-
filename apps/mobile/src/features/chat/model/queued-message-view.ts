@@ -1,5 +1,5 @@
-import type { QueueDelivery } from "@openbot/contracts/ipc";
-import type { MobileTranslate } from "@openbot/i18n/mobile";
+import type { QueueDelivery } from "@codebot/contracts/ipc";
+import type { MobileTranslate } from "@codebot/i18n/mobile";
 
 export function queuedMessagePreview(delivery: QueueDelivery, t: MobileTranslate): string {
   if (delivery.sender.kind === "routine") return t("mobile.chat.queue.routine", { name: delivery.sender.routineName });

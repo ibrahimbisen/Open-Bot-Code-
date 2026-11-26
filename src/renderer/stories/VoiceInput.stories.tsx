@@ -1,6 +1,6 @@
-import { Button, Heading } from "@openbot/ui";
-import type { VoicePhase } from "@openbot/ui/features/conversation/VoiceRecordingMorph";
-import { currentText } from "@openbot/ui/text";
+import { Button, Heading } from "@codebot/ui";
+import type { VoicePhase } from "@codebot/ui/features/conversation/VoiceRecordingMorph";
+import { currentText } from "@codebot/ui/text";
 import { createSignal, For, onCleanup, onSettled } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { createConversationController } from "../src/features/conversation/Conversation";
@@ -18,7 +18,7 @@ import type { ConversationProps } from "../src/features/conversation/conversatio
 import { VOICE_LEVEL_COUNT } from "../src/features/conversation/stores/voice-store";
 import { CONVERSATION_STORY_ARGS, StoryAppProviders } from "./conversation-story-support";
 import { STORY_AGENT_STATUS } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 const SPEECH_LEVELS = Array.from({ length: VOICE_LEVEL_COUNT }, (_, index) =>
   Math.max(0, Math.sin(index * 0.9) * 0.5 + Math.sin(index * 2.3) * 0.3),
@@ -110,18 +110,18 @@ function VoiceInputComposer(props: { state: VoiceInputState }) {
   );
 }
 
-function useMockOpenBot() {
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot();
-  window.openbot = mock.api;
+function useMockCodeBot() {
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot();
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
 }
 
 function VoiceInputStates() {
-  useMockOpenBot();
+  useMockCodeBot();
   return (
     <main class="foundation-story">
       <StoryAppProviders>
@@ -182,7 +182,7 @@ function VoiceMorphLoop() {
 }
 
 function VoiceMorph() {
-  useMockOpenBot();
+  useMockCodeBot();
   return (
     <main class="foundation-story">
       <StoryAppProviders>

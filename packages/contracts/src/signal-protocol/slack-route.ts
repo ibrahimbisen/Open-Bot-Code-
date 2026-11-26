@@ -1,4 +1,4 @@
-export const SLACK_ROUTE_AUDIENCE = "openbot-slack-route";
+export const SLACK_ROUTE_AUDIENCE = "codebot-slack-route";
 
 export const SLACK_EVENTS_PATH = "/v1/slack/events";
 

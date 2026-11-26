@@ -34,17 +34,17 @@ import type {
   TeamPresenceSnapshot,
   TeamSessionSummary,
   UpdateStatus,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   CONVERSATION_PLAN_ITEM_TYPE,
   conversationPlanText,
   isAgentStatus,
   isForeignProviderId,
   isKnownAgentProvider,
-} from "@openbot/contracts/ipc";
-import type { AgentProfile } from "@openbot/ui/data";
-import type { AgentRuntimeSettings } from "@openbot/ui/features/conversation/AgentSettingsPanel";
-import type { MarketplacePluginDetail } from "@openbot/ui/features/settings/marketplace-plugins";
+} from "@codebot/contracts/ipc";
+import type { AgentProfile } from "@codebot/ui/data";
+import type { AgentRuntimeSettings } from "@codebot/ui/features/conversation/AgentSettingsPanel";
+import type { MarketplacePluginDetail } from "@codebot/ui/features/settings/marketplace-plugins";
 import type { McpServerConfig } from "../features/servers/mcp-servers";
 
 const STORY_NOW = "2026-08-19T10:00:00.000Z";
@@ -61,7 +61,7 @@ export const STORY_AGENT_SUMMARIES: ClientAgentSummary[] = [
     reasoningEffort: "medium",
     access: "full",
     threadId: "thread-chief",
-    workspacePath: "/mock/OpenBot/Agents/chief",
+    workspacePath: "/mock/CodeBot/Agents/chief",
     preview: "I pulled together the latest project notes and next steps.",
     updatedAt: STORY_NOW,
     avatarSeed: "chief",
@@ -79,7 +79,7 @@ export const STORY_AGENT_SUMMARIES: ClientAgentSummary[] = [
     reasoningEffort: "high",
     access: "full",
     threadId: "thread-research",
-    workspacePath: "/mock/OpenBot/Agents/research",
+    workspacePath: "/mock/CodeBot/Agents/research",
     preview: "Three useful sources are ready for your review.",
     updatedAt: "2026-08-18T16:32:00.000Z",
     avatarSeed: "research",
@@ -97,7 +97,7 @@ export const STORY_AGENT_SUMMARIES: ClientAgentSummary[] = [
     reasoningEffort: "medium",
     access: "workspace",
     threadId: "thread-sales",
-    workspacePath: "/mock/OpenBot/Agents/sales",
+    workspacePath: "/mock/CodeBot/Agents/sales",
     preview: "The follow-up draft is ready to send.",
     updatedAt: "2026-08-17T09:20:00.000Z",
     avatarSeed: "sales-outbound",
@@ -642,7 +642,7 @@ export const STORY_SERVERS: [ServerSummary, ...ServerSummary[]] = [
   },
   {
     id: "team",
-    name: "OpenBot team",
+    name: "CodeBot team",
     logoUrl: null,
     notificationsMuted: false,
     notificationsMutedUntil: null,
@@ -676,7 +676,7 @@ export const STORY_SERVERS: [ServerSummary, ...ServerSummary[]] = [
 export const STORY_BROWSER_TABS: BrowserTab[] = [
   {
     id: "browser-tab-docs",
-    title: "OpenBot documentation",
+    title: "CodeBot documentation",
     url: "https://openbot.run/docs",
     loading: false,
     ownerThreadId: "thread-chief",
@@ -712,7 +712,7 @@ export const STORY_HOST_STATUS: HostStatus = {
   configured: true,
   enabledOnLaunch: true,
   serverId: "team",
-  serverName: "OpenBot team",
+  serverName: "CodeBot team",
   logoUrl: null,
   appearance: null,
   apiUrl: "https://team.example.com",
@@ -880,7 +880,7 @@ export const STORY_UPDATE_STATUS: UpdateStatus = {
 };
 
 export const STORY_APP_INFO = {
-  name: "OpenBot",
+  name: "CodeBot",
   version: "0.1.11",
   platform: "darwin" as const,
   variant: "production" as const,
@@ -899,7 +899,7 @@ export const STORY_MARKETPLACE_SKILLS: MarketplaceSkillSummary[] = [
     name: "Release notes",
     description: "Turns a range of commits into a changelog a reader outside the team can follow.",
     category: "documents",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 4,
     installs: 1_284,
     featured: true,
@@ -955,7 +955,7 @@ export const STORY_MARKETPLACE_SKILLS: MarketplaceSkillSummary[] = [
     name: "Source check",
     description: "Follows every citation in a draft and flags the ones that do not say what is claimed.",
     category: "research",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 3,
     installs: 209,
     featured: false,
@@ -1019,10 +1019,10 @@ export const STORY_MARKETPLACE_SKILL_DETAILS: Record<string, MarketplaceSkillDet
 export const STORY_INSTALLED_SKILLS: Record<string, InstalledSkill[]> = {
   chief: [
     {
-      skillId: "openbot-skill-creator",
-      slug: "openbot-skill-creator",
-      name: "openbot-skill-creator",
-      description: "Create or revise a reusable local OpenBot skill.",
+      skillId: "codebot-skill-creator",
+      slug: "codebot-skill-creator",
+      name: "codebot-skill-creator",
+      description: "Create or revise a reusable local CodeBot skill.",
       installedVersion: 1,
       availableVersion: 1,
       state: "installed",
@@ -1030,9 +1030,9 @@ export const STORY_INSTALLED_SKILLS: Record<string, InstalledSkill[]> = {
       origin: "managed",
     },
     {
-      skillId: "openbot-site-hosting",
-      slug: "openbot-site-hosting",
-      name: "openbot-site-hosting",
+      skillId: "codebot-site-hosting",
+      slug: "codebot-site-hosting",
+      name: "codebot-site-hosting",
       installedVersion: 1,
       availableVersion: 1,
       state: "installed",
@@ -1093,7 +1093,7 @@ export const STORY_MCP_SERVERS: McpServerConfig[] = [
     transport: "stdio",
     enabled: true,
     command: "openai-dev-mcp",
-    args: ["serve-sqlite", "--database", "./openbot.db"],
+    args: ["serve-sqlite", "--database", "./codebot.db"],
     env: [{ key: "SQLITE_READONLY", value: "1" }],
     envPassthrough: ["HOME"],
     workingDirectory: "~/code",
@@ -1199,7 +1199,7 @@ export const STORY_MARKETPLACE_AGENTS: MarketplaceAgentSummary[] = [
     name: "Release Manager",
     title: "Ships the release",
     description: "Cuts the tag, writes the notes, and watches the rollout until it is green.",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 6,
     installs: 731,
     featured: true,
@@ -1397,7 +1397,7 @@ export const STORY_MARKETPLACE_AGENTS: MarketplaceAgentSummary[] = [
     name: "Contract Reader",
     title: "Finds the clause that matters",
     description: "Reads a long agreement and reports the dates, the duties, and the ways out.",
-    creatorName: "OpenBot",
+    creatorName: "CodeBot",
     version: 3,
     installs: 245,
     featured: false,

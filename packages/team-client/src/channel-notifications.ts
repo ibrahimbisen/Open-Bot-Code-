@@ -3,8 +3,8 @@ import type {
   ChannelSummary,
   ClientAgentSummary,
   ServerNotificationLevel,
-} from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
 import { type AgentNotificationChannel, agentNotificationLevel, plainPreview } from "./agent-notifications";
 
 export interface ChannelNotificationContent {

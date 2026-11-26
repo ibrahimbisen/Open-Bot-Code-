@@ -1,4 +1,4 @@
-import { runTeamEffect } from "@openbot/team-client";
+import { runTeamEffect } from "@codebot/team-client";
 import { Effect } from "effect";
 
 export function runTeamRequest<A>(operation: Effect.Effect<A, { readonly cause: unknown }>): Promise<A> {

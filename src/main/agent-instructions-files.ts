@@ -1,5 +1,5 @@
-import type { AgentInstructionsFile, SaveAgentInstructionsInput } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentInstructionsFile, SaveAgentInstructionsInput } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import {
   type AgentInstructionsFileFailed,

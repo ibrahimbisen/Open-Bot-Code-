@@ -1,11 +1,11 @@
-import type { SkillSuggestionEvent } from "@openbot/contracts/ipc";
-import { toast } from "@openbot/ui";
-import type { AgentMessage } from "@openbot/ui/data";
+import type { SkillSuggestionEvent } from "@codebot/contracts/ipc";
+import { toast } from "@codebot/ui";
+import type { AgentMessage } from "@codebot/ui/data";
 import {
   MarketplaceSuggestionCard,
   type MarketplaceSuggestionSkillAction,
-} from "@openbot/ui/features/conversation/MarketplaceSuggestionCard";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/MarketplaceSuggestionCard";
+import { useText } from "@codebot/ui/text";
 import { createSignal } from "solid-js";
 import { dismissMarketplaceSuggestion, marketplaceSuggestionDismissed } from "./marketplace-suggestion-dismissals";
 

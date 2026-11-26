@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, IconButton } from "@openbot/ui";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp, IconButton } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createStore, onCleanup, onSettled, Show, untrack } from "solid-js";
 import { useText } from "../text";

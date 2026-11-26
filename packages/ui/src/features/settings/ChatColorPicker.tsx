@@ -1,6 +1,6 @@
-import { CHAT_COLOR_PRESETS as CHAT_COLORS, type ChatColorPresetId } from "@openbot/brand/chat-colors";
-import { type AvatarColor, isAvatarColor } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import { CHAT_COLOR_PRESETS as CHAT_COLORS, type ChatColorPresetId } from "@codebot/brand/chat-colors";
+import { type AvatarColor, isAvatarColor } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import { createMemo } from "solid-js";
 import { AVATAR_COLOR_CHOICES } from "../../bloub-avatar";
 import { ColorPicker } from "../../color-picker";

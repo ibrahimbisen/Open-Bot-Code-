@@ -1,4 +1,4 @@
-html body [data-openbot-x] {
+html body [data-codebot-x] {
   position: relative;
   isolation: isolate;
   overflow: visible;
@@ -27,11 +27,11 @@ html body [data-openbot-x] {
     box-shadow 300ms ease;
 }
 
-html body [data-openbot-x] * {
+html body [data-codebot-x] * {
   color: rgb(255 255 255);
 }
 
-html body [data-openbot-x]::before {
+html body [data-codebot-x]::before {
   content: "";
   width: 18px;
   height: 18px;
@@ -43,17 +43,17 @@ html body [data-openbot-x]::before {
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.25));
 }
 
-html body [data-openbot-x="armed"] {
+html body [data-codebot-x="armed"] {
   animation:
-    openbot-x-tint 720ms cubic-bezier(0.4, 0, 0.2, 1) both,
-    openbot-x-drift 3.2s 720ms ease-in-out infinite alternate;
+    codebot-x-tint 720ms cubic-bezier(0.4, 0, 0.2, 1) both,
+    codebot-x-drift 3.2s 720ms ease-in-out infinite alternate;
 }
 
-html body [data-openbot-x="armed"]::before {
-  animation: openbot-x-grow 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+html body [data-codebot-x="armed"]::before {
+  animation: codebot-x-grow 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-html body [data-openbot-x="armed"]::after {
+html body [data-codebot-x="armed"]::after {
   content: "";
   position: absolute;
   inset: -3px;
@@ -61,36 +61,36 @@ html body [data-openbot-x="armed"]::after {
   border: 1.5px solid rgb(236 72 153 / 0.6);
   border-radius: inherit;
   pointer-events: none;
-  animation: openbot-x-ring 2.4s 720ms ease-out infinite both;
+  animation: codebot-x-ring 2.4s 720ms ease-out infinite both;
 }
 
-html body [data-openbot-x="armed"]:active {
+html body [data-codebot-x="armed"]:active {
   transform: scale(0.96);
 }
 
-html body [data-openbot-x="leaving"] {
-  animation: openbot-x-untint 220ms cubic-bezier(0.4, 0, 1, 1) both;
+html body [data-codebot-x="leaving"] {
+  animation: codebot-x-untint 220ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
-html body [data-openbot-x="leaving"]::before {
-  animation: openbot-x-shrink 220ms cubic-bezier(0.4, 0, 1, 1) both;
+html body [data-codebot-x="leaving"]::before {
+  animation: codebot-x-shrink 220ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
-@keyframes openbot-x-tint {
+@keyframes codebot-x-tint {
   from {
     background-position: 0% 0;
     box-shadow: 0 0 0 0 rgb(236 72 153 / 0);
   }
 }
 
-@keyframes openbot-x-untint {
+@keyframes codebot-x-untint {
   to {
     background-position: 0% 0;
     box-shadow: 0 0 0 0 rgb(236 72 153 / 0);
   }
 }
 
-@keyframes openbot-x-drift {
+@keyframes codebot-x-drift {
   from {
     background-position: 100% 0;
   }
@@ -99,7 +99,7 @@ html body [data-openbot-x="leaving"]::before {
   }
 }
 
-@keyframes openbot-x-grow {
+@keyframes codebot-x-grow {
   from {
     width: 0;
     margin-inline: 0;
@@ -111,7 +111,7 @@ html body [data-openbot-x="leaving"]::before {
   }
 }
 
-@keyframes openbot-x-shrink {
+@keyframes codebot-x-shrink {
   to {
     width: 0;
     margin-inline: 0;
@@ -120,7 +120,7 @@ html body [data-openbot-x="leaving"]::before {
   }
 }
 
-@keyframes openbot-x-ring {
+@keyframes codebot-x-ring {
   from {
     opacity: 0;
     transform: scale(1);
@@ -136,9 +136,9 @@ html body [data-openbot-x="leaving"]::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html body [data-openbot-x],
-  html body [data-openbot-x]::before,
-  html body [data-openbot-x]::after {
+  html body [data-codebot-x],
+  html body [data-codebot-x]::before,
+  html body [data-codebot-x]::after {
     animation: none;
   }
 }

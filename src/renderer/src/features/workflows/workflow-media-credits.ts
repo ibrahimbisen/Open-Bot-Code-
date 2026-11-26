@@ -2,8 +2,8 @@ import type {
   WorkflowCatalogProvider,
   WorkflowMediaCredits,
   WorkflowMediaServiceAccount,
-} from "@openbot/contracts/ipc";
-import type { MediaCreditsRailRow } from "@openbot/ui/features/window/PageRail";
+} from "@codebot/contracts/ipc";
+import type { MediaCreditsRailRow } from "@codebot/ui/features/window/PageRail";
 import { createEffect, createSignal, onCleanup, untrack } from "solid-js";
 
 const MEDIA_SERVICE_NAMES: Readonly<Record<WorkflowCatalogProvider, string>> = {

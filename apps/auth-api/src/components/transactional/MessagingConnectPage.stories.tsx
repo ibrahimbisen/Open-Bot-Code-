@@ -1,4 +1,4 @@
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import type { JSX } from "@solidjs/web";
 import { createRootRoute, createRoute, createRouter, RouterContextProvider } from "@tanstack/solid-router";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -35,8 +35,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const SlackReturnToOpenBot: Story = {
-  args: { openUrl: "openbot://slack-workspace?nonce=example&grant=example" },
+export const SlackReturnToCodeBot: Story = {
+  args: { openUrl: "codebot://slack-workspace?nonce=example&grant=example" },
 };
 
 export const SlackInBrowserClient: Story = {
@@ -59,8 +59,8 @@ export const SlackUnknownError: Story = {
   args: { failure: "slack_something_new" },
 };
 
-export const DiscordReturnToOpenBot: Story = {
-  args: { provider: "discord", text: DISCORD_TEXT, openUrl: "openbot://discord-guild?nonce=example&grant=example" },
+export const DiscordReturnToCodeBot: Story = {
+  args: { provider: "discord", text: DISCORD_TEXT, openUrl: "codebot://discord-guild?nonce=example&grant=example" },
 };
 
 export const DiscordGuildTaken: Story = {

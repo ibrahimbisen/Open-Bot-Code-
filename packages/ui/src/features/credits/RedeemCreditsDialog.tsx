@@ -5,8 +5,8 @@ import {
   formatCreditCode,
   isCreditCode,
   normalizeCreditCode,
-} from "@openbot/contracts/credits";
-import { Button, Confetti, Dialog, IconButton, Input, X } from "@openbot/ui";
+} from "@codebot/contracts/credits";
+import { Button, Confetti, Dialog, IconButton, Input, X } from "@codebot/ui";
 import { type JSX, Portal } from "@solidjs/web";
 import { createSignal, createStore, For, onSettled, Show, untrack } from "solid-js";
 import { RollingPrice } from "../../rolling-price";

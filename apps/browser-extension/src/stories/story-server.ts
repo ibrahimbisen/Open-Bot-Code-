@@ -8,12 +8,12 @@ import {
   type ClientAgentSummary,
   type ConversationMessage,
   type SidebarLayoutSnapshot,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { CHANNEL_ROUTES } from "@openbot/contracts/team-protocol/channels-v1";
-import { AGENT_WELCOME_CAPABILITY, TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { SIDEBAR_PINS_CAPABILITY, SIDEBAR_PINS_ROUTES } from "@openbot/contracts/team-protocol/sidebar-pins-v1";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { CHANNEL_ROUTES } from "@codebot/contracts/team-protocol/channels-v1";
+import { AGENT_WELCOME_CAPABILITY, TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { SIDEBAR_PINS_CAPABILITY, SIDEBAR_PINS_ROUTES } from "@codebot/contracts/team-protocol/sidebar-pins-v1";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import type { HostFile } from "../attachment-media";
 import { createWorkspace, type Workspace } from "../workspace";
 
@@ -32,7 +32,7 @@ export function agent(
     reasoningEffort: "medium",
     access: "full",
     threadId: `thread-${fields.id}`,
-    workspacePath: `/srv/openbot/Agents/${fields.id}`,
+    workspacePath: `/srv/codebot/Agents/${fields.id}`,
     preview: "",
     updatedAt: EARLIER,
     avatarSeed: fields.id,

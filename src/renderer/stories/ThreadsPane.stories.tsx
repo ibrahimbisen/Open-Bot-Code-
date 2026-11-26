@@ -1,10 +1,10 @@
-import { ThreadsPane } from "@openbot/ui/features/conversation/threads/ThreadsPane";
+import { ThreadsPane } from "@codebot/ui/features/conversation/threads/ThreadsPane";
 import {
   DRAFT_THREAD_ID,
   MAIN_THREAD_ID,
   type ThreadItem,
   type ThreadStatus,
-} from "@openbot/ui/features/conversation/threads/thread-types";
+} from "@codebot/ui/features/conversation/threads/thread-types";
 import { createStore } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";

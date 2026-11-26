@@ -1,6 +1,6 @@
-import { WORKFLOWS_CAPABILITY } from "@openbot/contracts/team-protocol/workflows-v1";
-import { Spinner } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { WORKFLOWS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-v1";
+import { Spinner } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { Show } from "solid-js";
 import { useTurns } from "../../turns";
 import { useAuth } from "../account/account-context";

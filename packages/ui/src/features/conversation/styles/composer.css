@@ -1,7 +1,7 @@
 .composer-wrap {
   position: relative;
   flex: 0 0 auto;
-  padding: 0 var(--openbot-space-1-5) var(--openbot-space-1-5);
+  padding: 0 var(--codebot-space-1-5) var(--codebot-space-1-5);
 }
 
 .team-typing-dots {
@@ -13,20 +13,20 @@
 .team-typing-dots i {
   width: 3px;
   height: 3px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-success);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-success);
   animation: typing-dot-pulse 900ms ease-in-out infinite;
 }
 
 .team-typing-dots i:nth-child(2) {
-  animation-delay: var(--openbot-duration-fast);
+  animation-delay: var(--codebot-duration-fast);
 }
 
 .team-typing-dots i:nth-child(3) {
-  animation-delay: var(--openbot-duration-overlay);
+  animation-delay: var(--codebot-duration-overlay);
 }
 
-:root[data-openbot-ambient-motion-paused]
+:root[data-codebot-ambient-motion-paused]
   :is(
     .agent-row-thinking-dots i,
     .agent-activity-shine,
@@ -43,7 +43,7 @@
   animation-play-state: paused;
 }
 
-:root[data-openbot-ambient-motion-paused] .task-list-title[data-showing="task"] .task-list-title-task-text {
+:root[data-codebot-ambient-motion-paused] .task-list-title[data-showing="task"] .task-list-title-task-text {
   animation-play-state: running, paused;
 }
 
@@ -97,12 +97,12 @@
   align-items: center;
   gap: 10px;
   margin: 0 10px 6px;
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-lg);
-  background: var(--openbot-bg-control);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-lg);
+  background: var(--codebot-bg-control);
   padding-block: 6px;
   padding-inline: 12px 8px;
-  box-shadow: 0 7px 22px var(--openbot-shadow-popover-ambient);
+  box-shadow: 0 7px 22px var(--codebot-shadow-popover-ambient);
 }
 
 .composer-reply-preview > div {
@@ -112,15 +112,15 @@
 
 .composer-reply-preview > div > span {
   display: block;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   font-weight: 550;
   line-height: 14px;
 }
 
 .composer-reply-preview .message-reply-quote {
   margin: 1px 0 0;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .composer-reply-preview > button {
@@ -130,14 +130,14 @@
   flex: 0 0 auto;
   place-items: center;
   border: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: transparent;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .composer-reply-preview > button:hover {
-  background: var(--openbot-border);
-  color: var(--openbot-text-secondary);
+  background: var(--codebot-border);
+  color: var(--codebot-text-secondary);
 }
 
 .composer {
@@ -186,13 +186,13 @@
   min-height: 96px;
   gap: 4px;
   margin: 0 auto;
-  border: 1px solid var(--openbot-border-strong);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-bg-surface);
+  border: 1px solid var(--codebot-border-strong);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-bg-surface);
   padding: 10px;
   box-shadow: none;
   transition:
-    border-color var(--openbot-duration-hover) var(--openbot-ease-out),
+    border-color var(--codebot-duration-hover) var(--codebot-ease-out),
     border-radius var(--composer-resize-duration) var(--composer-resize-ease),
     height var(--composer-resize-duration) var(--composer-resize-ease);
 }
@@ -216,11 +216,11 @@
 }
 
 .composer:focus-within {
-  border-color: var(--openbot-text-dim);
+  border-color: var(--codebot-text-dim);
 }
 
 .composer:has(.composer-editor-surface[aria-disabled="true"]) {
-  border-color: var(--openbot-border);
+  border-color: var(--codebot-border);
 }
 
 .composer button:disabled,
@@ -237,20 +237,20 @@
   flex: 0 0 auto;
   place-items: center;
   border: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 
   padding: 0;
-  background: var(--openbot-hover);
-  color: var(--openbot-text-muted);
+  background: var(--codebot-hover);
+  color: var(--codebot-text-muted);
   transition:
-    background-color var(--openbot-duration-hover) var(--openbot-ease-out),
-    color var(--openbot-duration-hover) var(--openbot-ease-out),
-    transform var(--openbot-duration-fast) var(--openbot-ease-out);
+    background-color var(--codebot-duration-hover) var(--codebot-ease-out),
+    color var(--codebot-duration-hover) var(--codebot-ease-out),
+    transform var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .composer-button:hover {
-  background: var(--openbot-border);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-border);
+  color: var(--codebot-text-primary);
 }
 
 .composer-primary-actions {
@@ -260,8 +260,8 @@
 }
 
 .voice-model-progress {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   white-space: nowrap;
 }
 
@@ -324,14 +324,14 @@
   position: absolute;
   top: 12px;
   height: 28px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-text-primary);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-text-primary);
 }
 
 .voice-morph-bar {
   inset-inline-end: 46px;
   width: 28px;
-  transition: width var(--voice-morph-exit-duration) var(--openbot-ease-out);
+  transition: width var(--voice-morph-exit-duration) var(--codebot-ease-out);
 }
 
 .voice-morph-send-blob,
@@ -345,7 +345,7 @@
 .voice-morph-finish-blob {
   transform: scale(0.5);
   transition:
-    transform var(--voice-morph-exit-duration) var(--openbot-ease-out),
+    transform var(--voice-morph-exit-duration) var(--codebot-ease-out),
     opacity 0s linear var(--voice-morph-exit-duration);
 }
 
@@ -380,7 +380,7 @@
   width: 28px;
   height: 28px;
   justify-content: flex-end;
-  transition: width var(--voice-morph-exit-duration) var(--openbot-ease-out);
+  transition: width var(--voice-morph-exit-duration) var(--codebot-ease-out);
 }
 
 .voice-morph[data-recording] .voice-morph-slot {
@@ -404,8 +404,8 @@
   overflow: hidden;
   padding-block: 0;
   padding-inline: 12px 3px;
-  color: var(--openbot-text-secondary);
-  animation: voice-morph-content-in var(--openbot-duration-slow) var(--openbot-ease-out) var(--openbot-duration-fast)
+  color: var(--codebot-text-secondary);
+  animation: voice-morph-content-in var(--codebot-duration-slow) var(--codebot-ease-out) var(--codebot-duration-fast)
     both;
 }
 
@@ -414,18 +414,18 @@
 }
 
 .voice-recording-status[data-tone="warning"] {
-  color: var(--openbot-warning-text);
+  color: var(--codebot-warning-text);
 }
 
 .voice-recording-remaining {
   flex: 0 0 auto;
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
   font-variant-numeric: tabular-nums;
 }
 
 .voice-recording-status[data-tone="warning"] .voice-recording-remaining {
-  color: var(--openbot-warning-text);
+  color: var(--codebot-warning-text);
 }
 
 .voice-waveform {
@@ -451,7 +451,7 @@
   width: 3px;
   height: calc(3px + var(--voice-level, 0) * 15px);
   flex: 0 0 auto;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: currentColor;
 }
 
@@ -463,28 +463,28 @@
   flex: 0 0 auto;
   place-items: center;
   border: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   padding: 0;
   background: transparent;
   transition:
-    background-color var(--openbot-duration-hover) var(--openbot-ease-out),
-    color var(--openbot-duration-hover) var(--openbot-ease-out),
-    transform var(--openbot-duration-fast) var(--openbot-ease-out);
+    background-color var(--codebot-duration-hover) var(--codebot-ease-out),
+    color var(--codebot-duration-hover) var(--codebot-ease-out),
+    transform var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .voice-recording-cancel {
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
 }
 
 .voice-recording-finish {
-  color: var(--openbot-bg-sidebar);
-  animation: voice-morph-content-in var(--openbot-duration-slow) var(--openbot-ease-out) var(--openbot-duration-overlay)
+  color: var(--codebot-bg-sidebar);
+  animation: voice-morph-content-in var(--codebot-duration-slow) var(--codebot-ease-out) var(--codebot-duration-overlay)
     both;
 }
 
 .voice-morph .voice-recording-cancel:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--openbot-text-primary) 10%, transparent);
-  color: var(--openbot-text-primary);
+  background: color-mix(in srgb, var(--codebot-text-primary) 10%, transparent);
+  color: var(--codebot-text-primary);
 }
 
 .voice-recording-cancel:active,
@@ -518,8 +518,8 @@
 }
 
 .dictation-button:hover:not(:disabled) {
-  background: var(--openbot-border);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-border);
+  color: var(--codebot-text-primary);
 }
 
 .composer-button svg,
@@ -534,20 +534,20 @@
 }
 
 .voice-button {
-  background: var(--openbot-text-primary);
-  color: var(--openbot-bg-sidebar);
+  background: var(--codebot-text-primary);
+  color: var(--codebot-bg-sidebar);
 }
 
 .voice-button-active {
-  background: var(--openbot-text-primary);
-  color: var(--openbot-bg-sidebar);
+  background: var(--codebot-text-primary);
+  color: var(--codebot-bg-sidebar);
 }
 
 .voice-button:hover:not(:disabled),
 .voice-button.ui-button:hover:not(:disabled),
 .voice-morph .voice-recording-finish:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--openbot-text-primary) 84%, var(--openbot-bg-sidebar));
-  color: var(--openbot-bg-sidebar);
+  background: color-mix(in srgb, var(--codebot-text-primary) 84%, var(--codebot-bg-sidebar));
+  color: var(--codebot-bg-sidebar);
 }
 
 .composer-input-label,
@@ -654,10 +654,10 @@
   outline: 0;
   background: transparent;
   padding: 2px 4px 8px;
-  caret-color: var(--openbot-text-primary);
-  color: var(--openbot-text-primary);
+  caret-color: var(--codebot-text-primary);
+  color: var(--codebot-text-primary);
   cursor: text;
-  font-size: var(--openbot-text-lg);
+  font-size: var(--codebot-text-lg);
   line-height: 20px;
   white-space: pre-wrap;
   word-break: break-word;
@@ -683,12 +683,12 @@
 }
 
 .composer-dictation-word {
-  animation: composer-dictation-word-in var(--openbot-duration-slow) var(--openbot-ease-out) both;
-  transition: color var(--openbot-duration-slow) var(--openbot-ease-out);
+  animation: composer-dictation-word-in var(--codebot-duration-slow) var(--codebot-ease-out) both;
+  transition: color var(--codebot-duration-slow) var(--codebot-ease-out);
 }
 
 .composer-dictation-word[data-interim] {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
 }
 
 .composer-dictation-caret {
@@ -696,8 +696,8 @@
   width: 2px;
   height: 16px;
   margin-inline-start: 2px;
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-accent);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-accent);
   vertical-align: -3px;
   animation: composer-dictation-caret 1s ease-in-out infinite;
 }
@@ -731,8 +731,8 @@
   position: absolute;
   top: 2px;
   inset-inline-start: 4px;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-lg);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-lg);
   line-height: 20px;
   pointer-events: none;
   user-select: none;
@@ -775,10 +775,10 @@
 }
 
 .composer-mention-token.composer-tag-unavailable {
-  border: 1px dashed var(--openbot-border-strong);
+  border: 1px dashed var(--codebot-border-strong);
   background: transparent;
-  padding-inline-start: var(--openbot-space-1-5);
-  color: var(--openbot-text-muted);
+  padding-inline-start: var(--codebot-space-1-5);
+  color: var(--codebot-text-muted);
 }
 
 .composer-file-reference {
@@ -788,24 +788,24 @@
 }
 
 .composer-file-reference-image {
-  width: var(--openbot-space-4);
-  height: var(--openbot-space-4);
+  width: var(--codebot-space-4);
+  height: var(--codebot-space-4);
   flex: none;
-  border-radius: var(--openbot-radius-sm);
+  border-radius: var(--codebot-radius-sm);
   object-fit: cover;
 }
 
 .composer-file-reference-size {
   flex: none;
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-regular);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-regular);
   font-variant-numeric: tabular-nums;
 }
 
 .mention-picker {
   --mention-picker-overlap: 24px;
-  --mention-picker-side-inset: calc(var(--openbot-space-1-5) + 12px);
+  --mention-picker-side-inset: calc(var(--codebot-space-1-5) + 12px);
   --mention-picker-row-height: 29px;
   --mention-picker-gutter: 5px;
   --mention-picker-visible-rows: 7;
@@ -815,14 +815,14 @@
   right: var(--mention-picker-side-inset);
   bottom: calc(var(--mention-picker-bottom, 0px) - var(--mention-picker-overlap));
   left: var(--mention-picker-side-inset);
-  border: 1px solid var(--openbot-queue-border);
-  border-radius: var(--openbot-radius-card);
-  background: var(--openbot-queue-surface);
+  border: 1px solid var(--codebot-queue-border);
+  border-radius: var(--codebot-radius-card);
+  background: var(--codebot-queue-surface);
   padding-bottom: var(--mention-picker-overlap);
-  color: var(--openbot-queue-text);
+  color: var(--codebot-queue-text);
   box-shadow: none;
   transform-origin: bottom center;
-  animation: mention-picker-in var(--openbot-duration-normal) cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: mention-picker-in var(--codebot-duration-normal) cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
 .composer-wrap {
@@ -842,7 +842,7 @@
 
 .mention-picker-list {
   --mention-picker-title-height: 24px;
-  --mention-picker-section-gap: var(--openbot-space-1);
+  --mention-picker-section-gap: var(--codebot-space-1);
 
   position: relative;
   display: grid;
@@ -868,7 +868,7 @@
   padding: var(--mention-picker-gutter);
   overscroll-behavior: contain;
   scrollbar-width: none;
-  scroll-padding-block: var(--openbot-space-4);
+  scroll-padding-block: var(--codebot-space-4);
 
   transition: none;
 }
@@ -879,9 +879,9 @@
   align-items: flex-end;
   justify-content: space-between;
   padding: 0 8px 4px;
-  color: var(--openbot-queue-action);
-  font-size: var(--openbot-text-sm);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-queue-action);
+  font-size: var(--codebot-text-sm);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .mention-picker-section-count {
@@ -897,12 +897,12 @@
   top: 0;
   right: var(--mention-picker-gutter);
   left: var(--mention-picker-gutter);
-  border-radius: var(--openbot-radius-md);
-  background: var(--openbot-hover);
+  border-radius: var(--codebot-radius-md);
+  background: var(--codebot-hover);
   pointer-events: none;
   transition:
-    transform var(--openbot-duration-fast) var(--openbot-ease-out),
-    height var(--openbot-duration-fast) var(--openbot-ease-out);
+    transform var(--codebot-duration-fast) var(--codebot-ease-out),
+    height var(--codebot-duration-fast) var(--codebot-ease-out);
 }
 
 .mention-picker-highlight[data-instant] {
@@ -926,7 +926,7 @@
 
 .mention-picker[data-leaving] {
   pointer-events: none;
-  animation: mention-picker-out var(--openbot-duration-fast) var(--openbot-ease-out) both;
+  animation: mention-picker-out var(--codebot-duration-fast) var(--codebot-ease-out) both;
 }
 
 .mention-picker[data-leaving] * {
@@ -949,21 +949,21 @@
   align-items: center;
   gap: 7px;
   border: 0;
-  border-radius: var(--openbot-radius-md);
+  border-radius: var(--codebot-radius-md);
   background: transparent;
   padding: 0 8px;
-  color: var(--openbot-queue-text);
+  color: var(--codebot-queue-text);
   text-align: start;
 }
 
 .mention-picker-file-option .attachment-reference-visual {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   margin-inline: -1px;
 }
 
 .mention-picker-option[data-entering] {
-  animation: mention-picker-row-in var(--openbot-duration-fast) var(--openbot-ease-out) both;
+  animation: mention-picker-row-in var(--codebot-duration-fast) var(--codebot-ease-out) both;
 }
 
 @keyframes mention-picker-row-in {
@@ -975,19 +975,19 @@
 .mention-picker-option .agent-avatar {
   --agent-avatar-optical-offset: -2px;
 
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   margin-inline: -1px;
 }
 
 .mention-picker-skill-icon {
   display: grid;
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
   flex: 0 0 auto;
   place-items: center;
   margin-inline: -1px;
-  color: var(--openbot-queue-action);
+  color: var(--codebot-queue-action);
 }
 
 .mention-picker-skill-icon > svg {
@@ -1001,7 +1001,7 @@
   max-width: 50%;
   flex: 0 1 auto;
   overflow: hidden;
-  font-size: var(--openbot-text-lg);
+  font-size: var(--codebot-text-lg);
   font-weight: 500;
   line-height: 20px;
   text-overflow: ellipsis;
@@ -1012,18 +1012,18 @@
   min-width: 0;
   flex: 1 1 0;
   overflow: hidden;
-  color: var(--openbot-queue-action);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-queue-action);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .mention-picker-slug {
   flex: 0 0 auto;
-  color: var(--openbot-queue-action);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-queue-action);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
   white-space: nowrap;
 }
 
@@ -1033,9 +1033,9 @@
   align-items: center;
   margin: 0;
   padding: 0 calc(var(--mention-picker-gutter) + 8px);
-  color: var(--openbot-queue-action);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  color: var(--codebot-queue-action);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .mention-picker-problems {
@@ -1047,31 +1047,31 @@
 
 .mention-picker-skill-problem {
   margin: 0;
-  padding: var(--openbot-space-1) calc(var(--mention-picker-gutter) + 8px);
-  color: var(--openbot-queue-action);
-  font-size: var(--openbot-text-sm);
-  line-height: var(--openbot-leading-sm);
+  padding: var(--codebot-space-1) calc(var(--mention-picker-gutter) + 8px);
+  color: var(--codebot-queue-action);
+  font-size: var(--codebot-text-sm);
+  line-height: var(--codebot-leading-sm);
 }
 
 .mention-picker-option[data-filtering] {
-  --mention-picker-name-color: var(--openbot-queue-action);
+  --mention-picker-name-color: var(--codebot-queue-action);
 }
 
 .mention-picker-match {
   background: transparent;
-  color: var(--openbot-text-primary);
-  font-weight: var(--openbot-weight-medium);
+  color: var(--codebot-text-primary);
+  font-weight: var(--codebot-weight-medium);
 }
 
 .mention-picker-badge {
   margin-inline-start: auto;
   flex: 0 0 auto;
-  color: var(--openbot-queue-action);
+  color: var(--codebot-queue-action);
 }
 
 .mention-picker-badge > svg {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
 }
 
 .composer-attachments {
@@ -1097,9 +1097,9 @@
   width: 52px;
   height: 52px;
   flex: 0 0 auto;
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-lg);
-  background: var(--openbot-bg-control);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-lg);
+  background: var(--codebot-bg-control);
   padding: 0;
 }
 
@@ -1108,9 +1108,9 @@
   max-width: 100%;
   height: 52px;
   gap: 10px;
-  border: 1px solid var(--openbot-border);
-  border-radius: var(--openbot-radius-lg);
-  background: var(--openbot-bg-control);
+  border: 1px solid var(--codebot-border);
+  border-radius: var(--codebot-radius-lg);
+  background: var(--codebot-bg-control);
   padding-block: 7px;
   padding-inline: 8px 12px;
 }
@@ -1130,15 +1130,15 @@
 }
 
 .composer-attachment-copy strong {
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
   font-weight: 500;
   line-height: 16px;
 }
 
 .composer-attachment-copy small {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
   line-height: 14px;
 }
 
@@ -1149,10 +1149,10 @@
   overflow: hidden;
   flex: 0 0 auto;
   place-items: center;
-  border-radius: var(--openbot-radius-md);
-  background: var(--file-reference-soft, var(--openbot-hover));
-  color: var(--file-reference-color, var(--openbot-text-muted));
-  font-size: var(--openbot-text-sm);
+  border-radius: var(--codebot-radius-md);
+  background: var(--file-reference-soft, var(--codebot-hover));
+  color: var(--file-reference-color, var(--codebot-text-muted));
+  font-size: var(--codebot-text-sm);
   font-weight: 700;
   line-height: 1;
 }
@@ -1160,7 +1160,7 @@
 .composer-attachment[data-kind="image"] .composer-attachment-preview {
   width: 100%;
   height: 100%;
-  border-radius: var(--openbot-radius-media-preview);
+  border-radius: var(--codebot-radius-media-preview);
 }
 
 .composer-attachment-preview img {
@@ -1191,11 +1191,11 @@
 }
 
 .composer-attachment[data-upload="failed"] {
-  border-color: var(--openbot-danger);
+  border-color: var(--codebot-danger);
 }
 
 .composer-attachment[data-upload="failed"] .composer-attachment-copy small {
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 .composer-upload-ring {
@@ -1205,17 +1205,17 @@
 .composer-upload-failed-icon {
   width: 18px;
   height: 18px;
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 .composer-upload-retry {
   flex: none;
   margin-inline-end: -4px;
-  color: var(--openbot-danger-text);
+  color: var(--codebot-danger-text);
 }
 
 .ui-action-menu [role="menuitem"] > svg.composer-add-record {
-  color: var(--openbot-danger);
+  color: var(--codebot-danger);
 }
 
 .ui-action-menu [role="menuitem"] > svg.composer-add-record circle:last-of-type {
@@ -1225,7 +1225,7 @@
 }
 
 .composer[data-compact][data-multiline] {
-  border-radius: var(--openbot-radius-card);
+  border-radius: var(--codebot-radius-card);
 }
 
 .composer[data-rows-resizing] {

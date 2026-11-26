@@ -1,5 +1,5 @@
-import { agentStepActivity } from "@openbot/contracts/ipc";
-import type { WorkflowAgentProgress } from "@openbot/ui/features/workflows/workflow-board";
+import { agentStepActivity } from "@codebot/contracts/ipc";
+import type { WorkflowAgentProgress } from "@codebot/ui/features/workflows/workflow-board";
 import type { TurnStepLines } from "../conversation/turn-step-lines";
 
 interface TurnProgress {

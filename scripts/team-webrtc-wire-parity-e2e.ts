@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build/team-webrtc-wire-parity-e2e");
+const OUT = join(ROOT, ".codebot-build/team-webrtc-wire-parity-e2e");
 const beforeRef = process.argv.find((argument) => argument.startsWith("--before="))?.slice("--before=".length);
 
 type Outcome = { ok: unknown } | { error: string };
@@ -298,7 +298,7 @@ async function runCorpus(source: string): Promise<Record<string, Outcome>> {
 }
 
 function isBodylessRoute(method: string, path: string): boolean {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   return (
     method === "GET" ||
     method === "DELETE" ||

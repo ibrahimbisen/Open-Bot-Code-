@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto";
 import { EventEmitter } from "node:events";
-import { CUSTOM_AGENT_DEFAULT_MODEL, customAgentIdOfModel } from "@openbot/contracts/agent-providers";
-import { type AgentSessionSettingsSnapshot, type AgentSessionSettingValue, isAgentModel } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { CUSTOM_AGENT_DEFAULT_MODEL, customAgentIdOfModel } from "@codebot/contracts/agent-providers";
+import { type AgentSessionSettingsSnapshot, type AgentSessionSettingValue, isAgentModel } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Deferred, Effect, Exit, Option, Result } from "effect";
 import { assertAgentArgs, assertWindowsScriptArgs, resolveAgentCommand } from "./acp-agent-command";
 import { ACP_SESSION_PROCESS_START_TIMEOUT_MS, type AcpHistoryPersistence, withStartModels } from "./acp-client";
@@ -82,7 +82,7 @@ interface StartModelsRead {
   outwaited: boolean;
 }
 
-export const CUSTOM_AGENT_MODELS_LISTED = "openbot/customAgentModels/listed";
+export const CUSTOM_AGENT_MODELS_LISTED = "codebot/customAgentModels/listed";
 
 function sessionAgent(value: string): string | null {
   const colon = value.indexOf(":");

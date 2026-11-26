@@ -5,7 +5,7 @@ import type {
   TelegramCallMethod,
   TelegramCallParams,
   TelegramCallResult,
-} from "@openbot/contracts/signal-protocol/telegram-route";
+} from "@codebot/contracts/signal-protocol/telegram-route";
 import { Effect } from "effect";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import {
@@ -15,7 +15,7 @@ import {
 } from "../src/backend/messaging/messaging-types";
 import { telegramDriver } from "../src/backend/messaging/telegram/telegram-driver";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/messaging-telegram-mentions-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/messaging-telegram-mentions-e2e");
 const BOT = "7000000001";
 const CHAT = "-1001234567890";
 const WORD_JOINER = "⁠";
@@ -113,7 +113,7 @@ function parseModeOf(call: Call | undefined): string | undefined {
 }
 
 const adapter = telegramDriver({ ingress }).createAdapter(
-  { botId: BOT, chatId: CHAT, botUsername: "openbot_e2e_bot", chatTitle: "E2E group" },
+  { botId: BOT, chatId: CHAT, botUsername: "codebot_e2e_bot", chatTitle: "E2E group" },
   { connectionId: "telegram-e2e", rateLimited: () => {} },
 );
 const target = { platformChannelId: CHAT, replyThreadId: null };

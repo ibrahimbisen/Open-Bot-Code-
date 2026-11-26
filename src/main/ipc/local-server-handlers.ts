@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { LocalServers } from "../local-servers/local-servers";
 import { type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";

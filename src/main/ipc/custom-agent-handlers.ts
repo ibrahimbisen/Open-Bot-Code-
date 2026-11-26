@@ -3,9 +3,9 @@ import {
   type CustomAgentSummary,
   isCustomAgentResult,
   isCustomAgentSummary,
-} from "@openbot/contracts/ipc";
-import { CUSTOM_AGENTS_CAPABILITY, CUSTOM_AGENTS_ROUTES } from "@openbot/contracts/team-protocol/custom-agents-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { CUSTOM_AGENTS_CAPABILITY, CUSTOM_AGENTS_ROUTES } from "@codebot/contracts/team-protocol/custom-agents-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Semaphore } from "effect";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { CustomAgentChanges } from "../custom-agent-changes";

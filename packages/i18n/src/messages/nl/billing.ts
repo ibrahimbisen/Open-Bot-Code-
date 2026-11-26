@@ -157,5 +157,5 @@ export const messages = {
   "billing.credits.explainer.allPrices": "Alle {count} modellen",
   "billing.credits.explainer.next": "Volgende",
   "billing.credits.explainer.gotIt": "Begrepen",
-  "billing.credits.explainer.place": "OpenBot",
+  "billing.credits.explainer.place": "CodeBot",
 } as const satisfies PartialTranslation<typeof source>;

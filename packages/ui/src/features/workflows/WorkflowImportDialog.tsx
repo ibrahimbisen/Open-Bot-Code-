@@ -6,8 +6,8 @@ import {
   type WorkflowGraph,
   workflowFileAssetBytes,
   workflowFromFile,
-} from "@openbot/contracts/ipc";
-import { ConfirmDialog, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Upload } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import { ConfirmDialog, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Upload } from "@codebot/ui";
 import { createSignal, createStore, For, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { workflowAppLabel, workflowStepLabel } from "./workflow-file-text";

@@ -6,13 +6,13 @@ import {
   type CreditMediaJob,
   type CreditMediaModel,
   parseCreditMediaJobRequest,
-} from "@openbot/contracts/credit-media";
+} from "@codebot/contracts/credit-media";
 import { Effect, Result } from "effect";
 import { CreditMediaWorkflows } from "../src/backend/workflows/credit-media";
 import { CentralAuthOperationError } from "../src/main/central-auth-effects";
 import { createCreditMediaGateway } from "../src/main/credit-media-gateway";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/credit-media-payer-switch-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/credit-media-payer-switch-e2e");
 const HOST_ID = "host-1";
 const SERVER = `server:${HOST_ID}`;
 const PERSONAL = "personal";
@@ -172,7 +172,7 @@ async function generate(serverWallet: boolean, jobId: string) {
         jobId,
         earlierJobIds: [],
         kind: "image",
-        model: `openbot-${MODEL.id}`,
+        model: `codebot-${MODEL.id}`,
         prompt: "A red boat",
         specs: { aspect: "1:1", duration: 0, resolution: null, transparent: false, size: null, options: [] },
         images: [],

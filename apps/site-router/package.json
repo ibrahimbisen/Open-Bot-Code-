@@ -1,10 +1,10 @@
 {
-  "name": "@openbot/site-router",
+  "name": "@codebot/site-router",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@openbot/contracts": "workspace:*",
+    "@codebot/contracts": "workspace:*",
     "effect": "catalog:"
   },
   "scripts": {

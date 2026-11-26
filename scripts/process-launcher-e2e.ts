@@ -2,10 +2,10 @@ import { spawn } from "node:child_process";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 
-const logger = createOpenBotLogger("process-launcher-e2e");
-const OUTPUT = resolve(".openbot-build/process-launcher-e2e");
+const logger = createCodeBotLogger("process-launcher-e2e");
+const OUTPUT = resolve(".codebot-build/process-launcher-e2e");
 const BUNDLE = join(OUTPUT, "bundle");
 const REPORT = join(OUTPUT, "report.json");
 const ELECTRON = String(createRequire(import.meta.url)("electron"));

@@ -1,4 +1,4 @@
-import { type McpServerConfig, mcpConfigErrors, normalizeMcpConfig } from "@openbot/contracts/ipc";
+import { type McpServerConfig, mcpConfigErrors, normalizeMcpConfig } from "@codebot/contracts/ipc";
 
 export type McpServerDraft = Omit<McpServerConfig, "id" | "enabled">;
 

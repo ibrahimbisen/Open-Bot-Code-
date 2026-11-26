@@ -9,7 +9,7 @@ import { type AppServerNotification, getRecord, getString, isRecord } from "../s
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-background-turn-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-background-turn-e2e");
 const WAIT_MS = 60_000;
 
 interface Event {
@@ -32,7 +32,7 @@ interface Report {
   events: Record<string, Event[]>;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-background-turn-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-background-turn-e2e-"));
 const release = join(root, "release");
 const log = join(root, "fake.jsonl");
 const report: Report = { passed: false, events: {} };

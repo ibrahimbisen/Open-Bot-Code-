@@ -1,4 +1,4 @@
-import type { VaultState } from "@openbot/contracts/ipc";
+import type { VaultState } from "@codebot/contracts/ipc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import { useLockedMutation } from "@/features/servers/model/use-locked-action";

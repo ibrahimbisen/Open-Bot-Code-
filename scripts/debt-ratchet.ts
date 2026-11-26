@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 
 type Baseline = Record<string, Record<string, number>>;
 
@@ -17,7 +17,7 @@ export function runDebtRatchet(ratchet: DebtRatchet): void {
   const { baselinePath, noun } = ratchet;
   const write = process.argv.includes("--write");
   const added = process.argv.flatMap((argument) => (argument.startsWith("--add=") ? [argument.slice(6)] : []));
-  const logger = createOpenBotLogger(ratchet.script.replace(":", "-"));
+  const logger = createCodeBotLogger(ratchet.script.replace(":", "-"));
 
   const baseline = readBaseline(baselinePath);
   for (const name of added) {

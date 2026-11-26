@@ -10,7 +10,7 @@ export function ChatSolidSurfaceProvider({ surface, children }: PropsWithChildre
 
 export function useSolidChatFill(share: number): string | undefined {
   const surface = useContext(SolidSurfaceContext);
-  const control = String(useCSSVariable("--openbot-bg-control") ?? "");
+  const control = String(useCSSVariable("--codebot-bg-control") ?? "");
   if (surface === undefined) return undefined;
   return mixColor(surface, control, share) ?? control;
 }

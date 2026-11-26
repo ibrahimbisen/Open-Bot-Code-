@@ -1,4 +1,4 @@
-import type { ProviderAdminDesktopApi, ProviderRuntimeSnapshot, ProviderRuntimeStatus } from "@openbot/contracts/ipc";
+import type { ProviderAdminDesktopApi, ProviderRuntimeSnapshot, ProviderRuntimeStatus } from "@codebot/contracts/ipc";
 import type { ProviderRuntimeSource } from "./provider-runtime-store";
 
 const POLL_MS = 1000;

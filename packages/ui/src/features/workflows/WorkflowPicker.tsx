@@ -1,4 +1,4 @@
-import { Check, DropdownMenu, Input, Search } from "@openbot/ui";
+import { Check, DropdownMenu, Input, Search } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, For, onCleanup, Show } from "solid-js";
 import { createScrollFades } from "../../components/createScrollFades";

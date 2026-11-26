@@ -43,7 +43,7 @@ Messages use `AgentService.sendMessage` and its persisted retry keys. The attent
 each pending object an opaque local handle. Responses match that handle and agent together; an
 expired handle cannot answer a later provider request. Pending details are not trimmed to the UI
 snapshot budget. The HTTP boundary redacts outgoing values. Browser takeovers and secret questions
-are notices only and direct the person to OpenBot. Messages and routine runs share the rate limit.
+are notices only and direct the person to CodeBot. Messages and routine runs share the rate limit.
 
 ## Scheduled routine changes
 
@@ -102,7 +102,7 @@ call. A file, an image or a question keeps the whole turn in the chat. So the re
 agent that the user does not see its written answer, and to ask the user with `ask_user`, whose
 question card keeps the turn shown (#11012). The tool still accepts a
 request: before the reply it answers that the agent must send the result first, but only when the
-missing reply is all that keeps the turn from a quiet end. When the agent sends no reply, OpenBot
+missing reply is all that keeps the turn from a quiet end. When the agent sends no reply, CodeBot
 sends the turn's answer to the teammate as its result when the turn ends (`#relayAgentResult`). The
 teammate then has the answer, so the turn ends quiet too (#8021). The turn completion makes this
 decision with the same check as the relay (`#sendsResult`), and reads the answer before the quiet end
@@ -121,7 +121,7 @@ answers it names those turns (`continues` on `turn/started`). A task that a suba
 its own subagent (`parent_task_id`) counts for the turn that started that subagent. When each of them ended quiet, the
 turn can end quiet in the same way: the no-update tool accepts the call, and its text answers become
 quiet answers (#10847). Work that ends while that turn runs goes to it too
-(`openbot/turn-continues`). Work of a person's request, or of an unknown turn, keeps the answer in
+(`codebot/turn-continues`). Work of a person's request, or of an unknown turn, keeps the answer in
 the chat. That answer is the first one after the request. Work that a turn of the provider's own
 started can end quiet too, so a watcher that a person started and that wakes again does not post each
 time; a result that the agent writes without the no-update call still shows (#11090). On the first
@@ -186,7 +186,7 @@ thread. The routine settings show a switch for it on this computer's host, and o
 the optional `routine-run-place-v1` capability (`packages/contracts/src/team-protocol/routine-run-place-v1.ts`,
 host route `routeRoutineRunPlace` in `src/main/team-api/route-routine-run-place.ts`). The released
 routine routes and the `events-v1` and `routine-recovery-v1` routes do not carry `runIn`, so the remote
-adapters (main IPC for desktop, `@openbot/team-client` for `/app`) read the places on their own list
+adapters (main IPC for desktop, `@codebot/team-client` for `/app`) read the places on their own list
 route and send a change to the set route after the save. Any member reads the places of an agent that
 they can see; a change needs manage access. The host saves the stored record again with only the new
 place, for schedule and webhook routines. A save without `runIn`, or to a host without the capability,
@@ -234,7 +234,7 @@ scheduled run that drives a desktop app has no person to continue the step in th
 routine thread and the chat of one agent can then drive the screen at the same time, as two agents
 can. A channel thread keeps Computer Use too (see [channels](channels-and-messaging.md)). Only
 `start_task` tasks and branches run without it. The runs of a routine thread also keep the tools of
-the chat that side threads do not have: `OpenBotToolRouter` does not count a routine thread as an
+the chat that side threads do not have: `CodeBotToolRouter` does not count a routine thread as an
 execution thread, so a run can call `await_event` and `start_task`. A side thread that the user
 opened can call `await_event` too, but not `start_task`. A thread that the agent started cannot. A wait keeps no thread column: `AgentWaits`
 finds the side thread from the mailbox message of the wait's request. `RoutineScheduler` sends a run
@@ -268,7 +268,7 @@ the chat. A restart during a run marks the run interrupted: the session is not s
 computer as an iCalendar feed (`src/main/routine-feed-ics.ts`) for Server Settings > Routines. It
 runs only after the user makes a feed URL, and binds `127.0.0.1`. The URL is
 `/routines/<token>.ics`, with an optional `?agent=<id>`: a calendar app cannot send a header, so the
-token is in the path. `<userData>/openbot-routine-feed-v1.json` keeps the token, encrypted with the
+token is in the path. `<userData>/codebot-routine-feed-v1.json` keeps the token, encrypted with the
 secret storage cipher, and the port, so the URL stays the same after a restart. When the port is not
 free, the listener takes a new one and saves it. **New URL** replaces the token, and **Turn off**
 deletes the file. A wrong token gets 404. A request with an `Origin` header or a foreign `Host`
@@ -282,7 +282,7 @@ iCloud, cannot read it.
 ## Routine flows
 
 A routine flow hands the answer of an agent routine on to other agents. The host keeps the flows,
-and agents change them with their `openbot` tools. The desktop and the web client have no routine
+and agents change them with their `codebot` tools. The desktop and the web client have no routine
 canvas: the Routines view of the sidebar was removed. The host still serves the optional
 `routine-flows-v1` and `routine-flow-stop-v1` routes (see [Routine flows](servers.md#routine-flows))
 to clients in the support window that still show the canvas. The agent event `routine-flows-changed`
@@ -312,7 +312,7 @@ names the agent whose flows changed.
 - The canvas route gives routines of every trigger kind (`routine-flow-routines.ts`). A webhook
   routine carries its endpoint, event type and filters. Webhook config stays on the events API
   (`events-v1`), as in the routine settings.
-- Agents read and change flows with the `openbot` tools `list_routine_flows`, `connect_routine_agents`
+- Agents read and change flows with the `codebot` tools `list_routine_flows`, `connect_routine_agents`
   and `disconnect_routine_agents` (`routine-flow-tools.ts`). `RoutineFlows` is built after the agent
   service, so the tool router reads it through a getter.
 
@@ -329,7 +329,7 @@ changed, on this computer and on a joined host.
   the document, catalogs, run state and callbacks as props. Edits stay local for fast drags and
   undo, and the canvas gives the new document after each history step.
   `src/renderer/src/features/workflows/` holds `WorkflowsPage.tsx`, `workflows-port.ts` (the port
-  over `window.openbot.workflows`) and `workflows-controller.ts`. The controller is the same for the
+  over `window.codebot.workflows`) and `workflows-controller.ts`. The controller is the same for the
   page and the stories. It saves the graph 400 ms after the last edit, one save at a time on its
   base revision. A failed save keeps the edit for the next save. A change from another device, a
   conflict or a restore loads the graph again, and undo on the canvas gets the edits back.
@@ -368,7 +368,7 @@ changed, on this computer and on a joined host.
   the time zone of the trigger, the same "Local time of this run" line that a routine prompt has.
   A manual run of a schedule trigger gives its start time. A webhook trigger has a route of its own owner kind (`workflow`); see
   [Route lifecycle](events.md#route-lifecycle).
-- A GitHub trigger starts a run for each event of the OpenBot GitHub App that matches it
+- A GitHub trigger starts a run for each event of the CodeBot GitHub App that matches it
   (`github-matching.ts`); see [Workflow GitHub triggers](events.md#workflow-github-triggers). A
   GitHub run blocks only its own issue or pull request: a second event for the same item waits, and
   events for other items run at the same time. Schedule and webhook triggers keep one open run per
@@ -378,7 +378,7 @@ changed, on this computer and on a joined host.
   each change, so a restart does not post a comment, review or issue again. When a Discord mention
   started the run, a new issue or a comment links the files of the mention and of the message that it
   replies to (`discordTriggerFiles` in `discord-matching.ts`). GitHub has no attachment API for an App
-  token, so `attachFiles` in `github-rest.ts` commits them, before the change is recorded as sent, with the Git Data API to the orphan `openbot-attachments` branch, which has no workflow files
+  token, so `attachFiles` in `github-rest.ts` commits them, before the change is recorded as sent, with the Git Data API to the orphan `codebot-attachments` branch, which has no workflow files
   and so starts no Actions. A file that it cannot copy keeps its Discord link, which expires.
 - Typed answers (`ipc-workflow-answers.ts` in the contracts, `workflow-answers.ts` in the backend) are
   plain text in `node.fields`, so the wire and the database do not change, and a client that does not
@@ -419,7 +419,7 @@ changed, on this computer and on a joined host.
   failed or were stopped, or skipped after a failure (`stepAnswerGap`). A field that a skipped
   branch did not give stays empty. In a check, a missing value makes every test false except
   `not name`. In a model or agent text, a text value comes in JSON quotes and a list comes as a JSON array,
-  because they can hold text from outside OpenBot, also when a model or an agent copies webhook text
+  because they can hold text from outside CodeBot, also when a model or an agent copies webhook text
   into its answer. An approval question is for a person, so it gets plain text. In a check, a quote
   starts only at the start of a value, so `it's` is a word. A step reads the answers of the connected steps before it, through conditions and
   approvals, in run order (`workflowAnswerSources`); an output shows them as `name: value` lines.
@@ -458,9 +458,9 @@ changed, on this computer and on a joined host.
   channel ids become keys and then new ids, connections and file ids are cleared, and a value that
   follows the trigger stays. Each workflow in the file has its graph `format`. Import keeps a step of
   an unknown kind as a locked note with its fields, drops the edges that this version cannot read, and
-  warns that the workflow needs a newer OpenBot. Each workflow goes through `parseCreateWorkflow` (the
+  warns that the workflow needs a newer CodeBot. Each workflow goes through `parseCreateWorkflow` (the
   1 MB limit) and is created paused.
-- Agents use workflows with six `openbot` tools (`workflow-tools.ts`): `list_workflows`,
+- Agents use workflows with six `codebot` tools (`workflow-tools.ts`): `list_workflows`,
   `read_workflow`, `edit_workflow`, `delete_workflow`, `run_workflow` and `read_workflow_runs`. They
   are not in the visible set, so before `tool_search` finds them they cost only their names. A search
   word `workflow` or `workflows` gives the schemas of all six, and no other schema or guidance, so one
@@ -518,7 +518,7 @@ optional `crm-v1` capability (see [CRM](servers.md#crm)). The agent event `crm-c
 customer; a client reads the CRM again.
 
 The CRM is an experimental feature. An owner or admin turns it on in Server Settings > Experimental;
-the switch is off by default and is kept in `openbot-crm-v1.json` in the user data folder
+the switch is off by default and is kept in `codebot-crm-v1.json` in the user data folder
 (`src/main/crm-preference-store.ts`). While it is off, the clients hide the CRM, the CRM tools refuse
 each agent call with `error.crm.off`, and the payment source sync does not run. The data stays. The
 tools stay in the tool list, so the prompt does not change with the switch. The instance transfer
@@ -537,7 +537,7 @@ does not move the switch.
   writes one activity row for each customer that it changes, and calls `changed()` once. A customer
   update names the `revision` that it read; a stale one gets `{ ok: false, conflict: "revision" }`
   and writes nothing.
-- Agents use four `openbot` tools (`agent/crm-tool.ts`): `crm_find`, `crm_customer`,
+- Agents use four `codebot` tools (`agent/crm-tool.ts`): `crm_find`, `crm_customer`,
   `crm_payments` and `crm_propose`. They are not in the visible set. Only agents that an owner or
   admin let in (`crm_agent_access`) get answers. A turn from a remote member is refused, and so is a
   turn in an external chat (Slack, Telegram, Discord) or a channel thread, whose readers can be people
@@ -620,7 +620,7 @@ A new agent starts with a setup message from `agentWelcomeMessage`
 (`packages/contracts/src/agent-welcome.ts`), not with a message from the user. The chat does not show
 it; until the welcome turn starts, the queue snapshot reports `welcome: true` and the chat shows the
 agent's working line. The agent writes in the app language, or in the language of its profile. Its welcome is the text
-of one question (`AskUserQuestion` on Claude, `openbot.ask_user` on other providers) with three first
+of one question (`AskUserQuestion` on Claude, `codebot.ask_user` on other providers) with three first
 tasks and free text. The answered question card keeps that text, so the welcome stays in the chat
 after the answer; text written before a question goes back into the turn's steps. When the iPhone
 onboarding has a first task, the setup message asks only for a welcome, and the task follows as the
@@ -740,7 +740,7 @@ that name the task still find it. A mailbox message with a `taskId` belongs to t
 lane does not count toward the task limit. At most `limit` task turns of one agent run at the same
 time. `agentTaskLimit` gives the limit: the agent's local `taskLimit` setting (1 to
 `AGENT_TASK_LIMIT_MAX`, 4, in `agent_json`), else the host default. The host default is the
-`agentTaskLimit` of `HostTurnLimitsPreferenceStore` (`openbot-host-turn-limits-v1.json`, 1 to
+`agentTaskLimit` of `HostTurnLimitsPreferenceStore` (`codebot-host-turn-limits-v1.json`, 1 to
 `HOST_AGENT_TASK_LIMIT_MAX`, 64), else `AGENT_TASK_LIMIT_DEFAULT` (4). Desktop and web agent settings do
 not show the agent's own limit; Server Settings > General sets the host default. Mobile and older
 desktop apps still read and set the agent's own limit on `agent-task-limit-v1`, and the host keeps it.
@@ -758,14 +758,14 @@ The chat header shows a tab for the main thread and one for each open side threa
 menu of all threads with an "Archived" group (`packages/ui/src/features/conversation/threads/`). The
 user starts a side thread with "+" (a draft tab that becomes a thread with its first message) or moves
 a queued message to one ("Run in new thread"). Which tabs are open, their order and the open tab are
-kept per device in `localStorage` (`openbot:thread-tabs:v1`, server id → agent id); closing a tab
+kept per device in `localStorage` (`codebot:thread-tabs:v1`, server id → agent id); closing a tab
 does not change the thread. Archive is the task close; opening or sending to an archived thread
 restores it. Rename sets a `user` title, which later messages do not change. Delete hides the thread
 at once and shows an Undo toast; when the toast ends, `AgentService.deleteTask` cancels the queued
 messages and deletes the thread with its conversation, attachments, event history and provider
 session. It refuses a thread with a running turn. The main thread has no archive, rename or delete.
 
-An agent reads its other conversations with `openbot.history_search` and `openbot.history_read`
+An agent reads its other conversations with `codebot.history_search` and `codebot.history_read`
 (`src/backend/agent/history-tools.ts`). Memory keeps facts, not a log of work, so these tools answer
 "what did we do today?". `history_search` without `query` lists the own chat (`taskId` `main`) and the
 side threads, open and archived, with activity since `after` (`24h`, `7d`, a date or an ISO time),
@@ -775,7 +775,7 @@ threads, and gives each match from another conversation its `taskId` (`searchAll
 continues only the current conversation. With `query` or with `history_read`, a `taskId` names one
 conversation; a `taskId` without `query` reads that conversation's newest messages. Models often skip the tool
 description, so the search of all conversations makes their first call work. Each conversation is
-readable only after its latest context reset. The router (`openbot-tool-router.ts`) allows a
+readable only after its latest context reset. The router (`codebot-tool-router.ts`) allows a
 `taskId`, the list and the search of all conversations only from the own chat or a side thread of the
 same agent: a messaging chat, where other people write, searches only itself, and a channel gets no
 history.
@@ -796,7 +796,7 @@ each branch under its source. The branch has no provider session, so its first t
 its own transcript, with a note that workspace files were not rolled back. A branch counts toward the
 open-thread limit.
 
-The agent starts a side thread with the `start_task` OpenBot tool, up to 8 open tasks. On desktop and
+The agent starts a side thread with the `start_task` CodeBot tool, up to 8 open tasks. On desktop and
 the web, it opens as a tab of the agent and does not take focus. An agent has at most 50
 open tasks (`INPUT_LIMITS.agentTasks`, the size of the task list), so each open task stays visible. A message to a
 running task waits in the task, or steers the turn when the agent's busy-message mode is "steer"
@@ -902,7 +902,7 @@ agents of the active server and opens a task beside the list in `AgentThreadView
 The panel archives, restores and opens the task in the chat. A read there marks the thread read. A running
 task that waits for an approval, a question or a browser takeover goes to Needs you; the chat answers a
 question or takeover, so the panel links there. The Tasks page and the phone share the section and title
-rules in `@openbot/team-client/agent-tasks`.
+rules in `@codebot/team-client/agent-tasks`.
 On the phone, the server drawer opens the Tasks screen (`apps/mobile/src/app/(app)/server-tasks.tsx`) when
 the host serves the capability. A task opens as a full screen (`apps/mobile/src/app/(app)/task/[taskId].tsx`)
 with the message list and header of the agent's chat, the task actions in place of the browser
@@ -915,10 +915,10 @@ instead, as on desktop: a finished task stays with its result until the person c
 opens the task.
 
 Shared writes: each task thread owns its own browser tabs and tab queue. Computer Use is an MCP
-server that the provider starts, so OpenBot cannot queue its calls; `ThreadLifecycle` starts a task
+server that the provider starts, so CodeBot cannot queue its calls; `ThreadLifecycle` starts a task
 session without it, and the instructions send desktop work to the agent's own chat. A routine thread
 is the exception (see above). Tasks share the
-workspace, and OpenBot does not lock files; the `start_task` guidance warns the agent about this.
+workspace, and CodeBot does not lock files; the `start_task` guidance warns the agent about this.
 
 A provider, account or custom-agent change that a user or an agent asks for while a turn, a task or
 a queued message waits is stored on the agent as `pendingRuntime`. The running work keeps its
@@ -968,12 +968,12 @@ the user can ask for a detailed coordination report.
 
 An agent does not refuse a task, or say that it has no access to a service, before it tries each
 path. When the task is outside its profile, or names a service that a teammate may own, it calls
-`openbot.list_agents` first and delegates to a teammate whose name, title or description covers
+`codebot.list_agents` first and delegates to a teammate whose name, title or description covers
 the work. In a channel task it delegates only to a channel member. MCP servers are host-global, so
 a specialist teammate differs only by its profile, skills and memories. Otherwise the agent uses its
 connected MCP servers, its skills, the embedded browser and Computer Use.
 
-A sign-in page does not stop it: it calls `openbot_browser.request_takeover`. The request shows in
+A sign-in page does not stop it: it calls `codebot_browser.request_takeover`. The request shows in
 the agent's conversation, and in the dynamic island when the agent's notifications are on, also for
 delegated work. A routine run reports the sign-in instead, because nobody may answer; a requester in
 a routine run says so in the delegated message. The tool returns only after the user answers, which
@@ -992,7 +992,7 @@ the tools. Full access answers it, as for other built-in tool approvals. `save_m
 before it saves (`inspectMcpServer`, the silent Test): a server that does not answer is not saved; a
 server that needs an OAuth sign-in or a key is saved. `save_mcp_server` takes the headers of an http
 server that the user gave in the conversation, such as `Authorization: Bearer <token>`: each one sets or
-replaces the header of that name, and an empty value removes it. OpenBot registers the value of each
+replaces the header of that name, and an empty value removes it. CodeBot registers the value of each
 header with a secret name before it parses the call, so logs mask it, and a failure masks every new
 value. A key value needs the same source as `save_api_key`: never an external chat, in a channel only a
 key that the local user wrote in the request of the task, and elsewhere only a person's message. The
@@ -1020,7 +1020,7 @@ checked unless a tool result or a reply shows it. When nothing works, the agent 
 and the one action that unblocks it; for a service with a plugin, that action is to install or
 enable the plugin. It can offer to create a specialist teammate, but it creates one only after the user agrees.
 
-An agent that delegates work can follow and stop it. `openbot.list_agents` reports each agent's
+An agent that delegates work can follow and stop it. `codebot.list_agents` reports each agent's
 description to 300 characters (`read_agent` returns all of it), its
 `status` (a starting delivery and a context compaction count as `working`), `queuedMessages`
 (channel work excluded), `turnStartedAt`, `waitingFor`, and `lastActivityAt`. A turn that waits for
@@ -1029,8 +1029,8 @@ a person's approval, answer or browser takeover stays open, so its agent stays `
 turn of the agent, such as a channel turn, can still work. A detached question holds no turn, so it
 does not count. `turnStartedAt` and `lastActivityAt` come from the provider
 notifications that `TurnLifecycle` sees; they are in memory only, so after a restart
-`lastActivityAt` falls back to the newest message for the agent. OpenBot does not record which
-files a turn changed. `openbot.interrupt_agent` (`src/backend/agent/agent-interrupt-tool.ts`)
+`lastActivityAt` falls back to the newest message for the agent. CodeBot does not record which
+files a turn changed. `codebot.interrupt_agent` (`src/backend/agent/agent-interrupt-tool.ts`)
 refuses the caller itself, a channel turn, and a turn that any delivery other than the caller's
 started, so an agent cannot stop work from the user, a routine, or another agent. It cancels the
 caller's queued requests to the target before it sends `turn/interrupt`, because the interrupted
@@ -1056,7 +1056,7 @@ for a sub-agent result. The later answer stays in the chat. A turn whose results
 (`restartedResult`, #12039) ends quietly too (#14330) when each result was `running` in a provider turn
 before the restart (`restartedTurnId`): the requester can have taken them in that turn, and the turn note tells it
 to check its earlier work. A result that was only `starting`, also a steer that the provider did not confirm, keeps the retry and
-the error. An OpenBot note for a failed request does
+the error. An CodeBot note for a failed request does
 not count as an earlier answer, so the first real result after it still fails as above. The error waits for the end
 of the turn, also with no backup model. A backup model then runs the turn again, as for a provider
 error. With no backup, a turn that only teammate results started runs once more on the same model.
@@ -1095,7 +1095,7 @@ reads the host's default from `agent-host-settings-v1`, so a host on an older ve
 "queue" default. A provider that cannot steer natively (an ACP agent with no steer request of its
 own) queues the message in both modes. OpenCode steers through its `_session/steering` ACP extension
 (`steerAcpSession` in `src/backend/acp-session-steering.ts`). Only OpenCode 2.3.0 and later have it,
-and the copy that OpenBot installs can be older (2.3.0-2.3.2 are blocked, #13640). So the `opencode`
+and the copy that CodeBot installs can be older (2.3.0-2.3.2 are blocked, #13640). So the `opencode`
 descriptor has `steer: "reported"`: the catalog keeps the `steersTurns` of the `model/list` answer on
 each OpenCode model, and `agentSteersTurns` reads it for the whole OpenCode process. An OpenCode
 without the extension shows the agent settings warning and "Send now", and its messages wait in the
@@ -1107,7 +1107,7 @@ the prompt ended, is listed in `unreadSteers` of `turn/completed` (not after a s
 puts those deliveries back in the queue with `restoreUnsteered`, so they run in the next turn and
 the sender gets no "blocked" note (#15062). A channel steer sends a channel message id, not a
 delivery id, so this does not cover it. OpenCode can still give its kept copy to a later prompt, as
-it does after a manual resend; over ACP, OpenBot cannot take that copy back. `scripts/opencode-late-steer-e2e.ts` checks both orders
+it does after a manual resend; over ACP, CodeBot cannot take that copy back. `scripts/opencode-late-steer-e2e.ts` checks both orders
 of the race and that a read steer does not run again. Antigravity and Devin steer with
 a second `session/prompt` (`AcpFlavor.steerByPromptSince` for Antigravity 1.5.0 and later,
 `steerByPromptCapability` for a Devin CLI that reports `cognition.ai/midTurnPrompts`, because Devin
@@ -1121,12 +1121,12 @@ of the whole turn. `scripts/antigravity-steer-e2e.ts` and
 `scripts/devin-steer-e2e.ts` check these paths.
 
 Antigravity ends its prompt while a command that it moved to the background still runs
-(`AcpFlavor.wakesAfterPromptEnds`), and OpenBot keeps the turn open. When the command ends, a current
+(`AcpFlavor.wakesAfterPromptEnds`), and CodeBot keeps the turn open. When the command ends, a current
 CLI reports it and replies by itself, with no prompt open. That reply is the rest of the turn: it ends
 `ACP_OWN_REPLY_SETTLE_MS` (3 s) after its `usage_update`, or after `ACP_OWN_REPLY_QUIET_MS` (2 minutes)
 with no update. Only a command step can stay open: when the reply starts a new background command,
 the turn waits for that command in the same way.
-OpenBot sends the background wake prompt only when the session changed and no update came within
+CodeBot sends the background wake prompt only when the session changed and no update came within
 `ACP_OWN_REPLY_WAIT_MS` (30 s), as an older CLI needs, or when the CLI reported the command end but did
 not reply within `ACP_OWN_REPLY_QUIET_MS`. Before, it always sent the prompt, and the CLI answered it
 again, so the chat showed the same answer twice in one message (#16149).
@@ -1156,7 +1156,7 @@ A host before it does not advertise the capability, so the client keeps "Send no
 a steer, a `promptRequired` answer and an agent without the extension.
 
 A steered message joins work that the model already does, and a model that gets it as plain user
-text can drop that work. `QueueControls.steer` therefore puts the `<openbot_steer>` block
+text can drop that work. `QueueControls.steer` therefore puts the `<codebot_steer>` block
 (`steerNote` in `src/backend/agent/developer-instructions.ts`) in front of a message from the person
 or a teammate: the message adds to the current work, a question gets a short answer first, a
 correction applies from this point, and the unfinished work continues unless the message stops it.
@@ -1183,7 +1183,7 @@ steer with `priority: "now"`. Claude Code then stops the turn (`terminal_reason`
 it moves a running shell command to the background and stops other tools, a subagent included, and
 starts a new turn with the steer. The aborted result does not list the steer's uuid
 (`untakenSteerIds`), so the client closes the open tool calls, aborts its open host tool calls
-(`hostToolCalls`, so the host removes their approval cards), and keeps the OpenBot turn open. The
+(`hostToolCalls`, so the host removes their approval cards), and keeps the CodeBot turn open. The
 result of the steer's turn completes it. A stop from the person (`stopRequested`) still ends the turn
 as interrupted. While a question, an elicitation, a write approval, or a browser sign-in or secret card
 (`request_takeover`, `submit_secret`) waits for the person (`personRequests`), the steer has no
@@ -1209,9 +1209,9 @@ steer in a turn of its own (`moveSteerToTurn`). Until a result or a `command_lif
 limit does not close the thread before Claude answers it (#16361). A result that lists no uuids, or a
 stop, clears the list. When the thread closes with a steer that is still unread, `restoreUnsteered` puts
 the message back in the queue: through `unreadSteers` of `turn/completed` when the closing turn holds the
-steer, so the failed turn does not mark it failed, otherwise through `openbot/unread-steers`.
+steer, so the failed turn does not mark it failed, otherwise through `codebot/unread-steers`.
 `scripts/claude-steer-idle-release-e2e.ts` checks both paths. When the turn ends as interrupted before a reply (a
-stop, or an exit of the provider process), the sender gets an OpenBot note (`MailboxStore.answerFailedRequest`), and does not wait for a result that
+stop, or an exit of the provider process), the sender gets an CodeBot note (`MailboxStore.answerFailedRequest`), and does not wait for a result that
 never comes. Routine runs, channel work and messages from Slack, Telegram or
 WhatsApp do not steer automatically: each starts a turn of its own. A question back (a reply that
 expects a reply) asks for no `send_message` reply, so it stays queued and its own turn's answer goes
@@ -1260,15 +1260,15 @@ These are manual model evaluations, separate from the fake-provider lifecycle re
 ## Prompt-driven agent profiles
 
 Users create and edit agent profiles by asking an agent in the normal desktop or mobile
-conversation. `openbot.create_agent` creates a persistent teammate with instructions and a first
-task; `openbot.update_profile` changes an existing agent's name, title, instructions, generated
+conversation. `codebot.create_agent` creates a persistent teammate with instructions and a first
+task; `codebot.update_profile` changes an existing agent's name, title, instructions, generated
 or custom avatar, provider, model, reasoning effort, account, backup models, access, Computer Use, or notifications. `avatarPath` accepts a local PNG, JPEG, or WebP file up to 512 KB, with relative
 paths resolved from the calling agent’s workspace. The agent uses its available tools to resize or
-compress a copy when needed. OpenBot validates the prepared file before profile changes and copies
+compress a copy when needed. CodeBot validates the prepared file before profile changes and copies
 it into managed avatar storage. Generated avatar settings remove the custom image. Both run through
 the existing agent service and validate arguments before changing state.
-`openbot.create_agent` also accepts an optional `provider`, `model` and `reasoningEffort`. The
-read-only `openbot.list_models` returns the models of each provider that the model picker shows, with
+`codebot.create_agent` also accepts an optional `provider`, `model` and `reasoningEffort`. The
+read-only `codebot.list_models` returns the models of each provider that the model picker shows, with
 their reasoning efforts and the default model for a request that names only a provider. With no
 `query`, a provider lists its default model, the models that local agents use as their model or as a
 backup model, then its first catalog models up to 8 models in total; `omittedModels` counts the
@@ -1279,31 +1279,31 @@ that can hold more than one account also lists its accounts, with the provider's
 (`default`) first: the id, the name the user gave it (or null), and the state. It never lists the
 account email, credentials or account folders. `update_profile` takes the
 agent's `providerAccountId` and its `backupModels` (`automatic` and an `order` of provider, model
-and account), the same choices that the settings page offers. OpenBot checks each backup model and
+and account), the same choices that the settings page offers. CodeBot checks each backup model and
 account against the lists before it writes, and the agent service checks the primary account; an
 account change, like a provider change, waits until the agent is idle. These changes apply at once,
 as the other profile fields do. `read_agent` and the `update_profile` result return the account,
 the backup models and `usageLimitReturn`, the model that the agent left for a usage limit or a provider error (`cause: "provider-error"`). A spent credit balance
 that names no reset sets no `usageLimitReturn`, so the agent does not go back to it by itself. An unknown
-model or an unsupported effort is an error that names the valid values; OpenBot checks them before
+model or an unsupported effort is an error that names the valid values; CodeBot checks them before
 it creates the agent. Without a provider and a model, the new agent starts on the calling agent's
 provider, model and reasoning effort, so a team that one agent creates runs where that agent runs.
 When the caller's provider no longer lists its model, the new agent starts on the user's default.
 When that provider lists no model now, or the caller is a custom agent, the call fails and asks the
 caller to try again or to name a model: an empty or partial list is no proof that the model is gone (#11033).
 Creation stays this small. The calling agent then configures the new agent, or any other local
-agent, with the same tools that act on itself. `openbot.read_agent` returns one agent's setup:
+agent, with the same tools that act on itself. `codebot.read_agent` returns one agent's setup:
 profile, runtime, access, Computer Use, notifications, auto-approve, installed skills, routines,
 and the names and transports of the MCP servers it gets. It does not return MCP commands,
 environment values, URLs, or headers, because they can hold secrets. `install_local_skill`,
 `set_skill_enabled`, `uninstall_skill`, and the routine tools take an optional `agentId`; without
 it they act on the caller. `uninstall_skill` never removes skill files that the user changed.
-`openbot.update_agents` gives several agents the same provider, model, reasoning effort, access,
+`codebot.update_agents` gives several agents the same provider, model, reasoning effort, access,
 Computer Use, or notifications setting in one call. Each agent gets the checks of `update_profile`
 and its own `updateAgent` write, in order. A failure for one agent does not stop or undo the others,
 and the result reports `ok` with the new settings, or the error, for each agent id. A provider or
 model that is not listed fails the whole call before any write.
-`openbot.delete_agent` deletes up to 20 other local agents in one call, with their chats and files,
+`codebot.delete_agent` deletes up to 20 other local agents in one call, with their chats and files,
 through the same steps as the app's Delete agent: `AgentService.deleteAgent`, then the sidebar and
 Library places. A deletion cannot be undone, so the tool asks the owner on one owner-only card
 that names the agents, also when the agent has Full access, and a member cannot answer it. Only a
@@ -1316,8 +1316,8 @@ accept it deletes the agents one after the other and reports `ok` or the error f
 the sidebar or Library cleanup fails after an agent is deleted, the tool logs it and reports the
 agent as deleted; the next start removes the places of agents that are gone. `scripts/agent-delete-tool-e2e.ts`
 checks these rules.
-`openbot.set_commit_co_author` turns off, or on again, the `commitCoAuthor` agent default: the
-OpenBot co-author trailer that the developer instructions tell each agent to add to its git commits.
+`codebot.set_commit_co_author` turns off, or on again, the `commitCoAuthor` agent default: the
+CodeBot co-author trailer that the developer instructions tell each agent to add to its git commits.
 It writes through the same `AgentDefaultsSettings.update` as Server settings › Agent defaults and the
 `agent-defaults-v1` host route, so every agent gets the change. The setting applies to every agent,
 so the tool asks the owner on one owner-only card, also when the agent has Full access. Only a
@@ -1332,7 +1332,7 @@ the access and Computer Use limits of the agent that creates it, so a Workspace-
 get around its sandbox through a teammate. There is no creation step for skills or routines in
 the UI.
 The other providers receive the dynamic tool definitions; Claude exposes the same operations through
-its SDK MCP bridge. `src/backend/openbot-tools.ts` owns the tool names, descriptions, and Zod
+its SDK MCP bridge. `src/backend/codebot-tools.ts` owns the tool names, descriptions, and Zod
 argument shapes used by both declarations. It reuses the profile, section, and routine schemas.
 Claude uses the SDK’s `AskUserQuestion` flow instead of the `ask_user` MCP tool.
 There is no separate prompt-generation button or review dialog.
@@ -1356,26 +1356,26 @@ chat events of every agent; the web client reads only the open chat. The page pl
 frame of a custom backdrop and gets no input.
 
 The optional `bubbles` argument (`yours`, `agents`: `#rrggbb`) goes in the page as
-`<meta name="openbot-bubbles" content="yours=#…; agents=#…">` (`withChatBackdropBubbles`), so each
+`<meta name="codebot-bubbles" content="yours=#…; agents=#…">` (`withChatBackdropBubbles`), so each
 client gets the colors with the page file and the protocol does not change. `WindowBackdrop` reads
 them with `chatBackdropBubbles` while that page shows and sets them in
 `features/window/backdrop-bubbles.tsx`; the render root gives them to `ChatMessageRow` through the
-`BackdropBubbles` context of `@openbot/ui`. They replace the chat color of the reader's own bubbles
+`BackdropBubbles` context of `@codebot/ui`. They replace the chat color of the reader's own bubbles
 and of agent bubbles, not the saved agent `chatColor`. A built-in scene or a picture has no bubble
 colors.
 
 `html_render` publishes a visual reply: an HTML page that shows above the agent's reply. On desktop
 and in the web client, a button on the page opens it as a file tab of the side panel too. The router
 stores the page as a generated `text/html` attachment and adds an assistant message with the item
-type `visual-reply:<height>` and the page title as its text (`@openbot/contracts/chat-visual`). A
+type `visual-reply:<height>` and the page title as its text (`@codebot/contracts/chat-visual`). A
 client that does not know the item type shows the title and the file. A visual message is not
 readable: unread counts, latest-message previews and mobile read state skip it. The desktop serves
-the page on `openbot-visual:` (`openbot-remote-visual:` for a remote host) with
+the page on `codebot-visual:` (`codebot-remote-visual:` for a remote host) with
 `Content-Security-Policy: sandbox allow-scripts allow-forms` and the frame script, and the frame has
 the same sandbox without `allow-same-origin`. The page runs its scripts and can load files from the
 network, but it has an opaque origin, gets no permission, and talks to the app only with the checked
 messages of `parseChatVisualMessage`: its height, its theme, its display mode, a link, a message, its
-context, the selected text, an image and an app shortcut. The frame script gives the page `window.openbotPage`
+context, the selected text, an image and an app shortcut. The frame script gives the page `window.codebotPage`
 (`sendMessage`, `setContext`, `requestFullscreen`, `exitFullscreen`, `displayMode`) over the MCP Apps
 methods `ui/message`, `ui/update-model-context` and `ui/request-display-mode`. A link, a message, the
 context, an image, full screen and a shortcut need the frame to have the focus and the user's
@@ -1403,7 +1403,7 @@ without the native module shows the page with no scripts. `html_preview` lets th
 process draws it in a hidden window with its own in-memory session (`ChatVisualPreviewer`)
 and returns a PNG, the content height and the console lines. The file preview shows an HTML file in
 the same frame. On desktop, a shared or workspace HTML file preview gives the client a temporary
-`openbot-visual://preview/<token>` page URL beside its bytes. `FilePreviewPages` keeps only local HTML
+`codebot-visual://preview/<token>` page URL beside its bytes. `FilePreviewPages` keeps only local HTML
 that already passed the existing file-access checks, in a bounded in-memory registry. The page
 protocol accepts only an opaque token, never a file path, and uses the same sandbox response as
 HTML attachments. The server-owned preview state releases its page on replacement, close or
@@ -1426,7 +1426,7 @@ Unchanged fingerprints resume the existing session. Pending history handoffs are
 the replacement is bound, reloaded after restart, and removed after a turn accepts the handoff.
 
 The same handoff carries a chat to another provider after a provider switch. It holds the user and
-assistant messages after the last context-reset marker, with attachment names only. OpenBot stores
+assistant messages after the last context-reset marker, with attachment names only. CodeBot stores
 no tool steps, so the work log comes from the providers. At the switch, before the old sessions are
 retired, `ThreadLifecycle.readWorkSteps` reads each active session with the provider history read
 through the client that holds it, with a 10-second limit. The switch then checks again that no turn started.
@@ -1506,7 +1506,7 @@ for teammates and the Team API; it keeps its meaning and its 2,000-character lim
 
 Server Settings > Import moves agents from a `.zip` export into the local host, or into a remote host
 that serves `agent-import-v2` or `agent-import-v1` (see [Agent import from a joined server](servers.md#agent-import-from-a-joined-server)).
-The format is `openbot-import.json` plus `agents/<key>/`
+The format is `codebot-import.json` plus `agents/<key>/`
 folders. `resources/agent-import/grok-bot/SKILL.md` writes it and `src/main/agent-import-manifest.ts`
 reads it; both are a product contract, so add only optional fields and raise `version` for a change
 of meaning. The renderer never names a path: `agent-import:choose` opens the dialog in main, and
@@ -1528,7 +1528,7 @@ memory step fails is deleted. Step 1 offers two ways to add the export agent: it
 
 ## Instance transfer
 
-Server settings > Transfer moves a server's agents and server settings to another OpenBot server with
+Server settings > Transfer moves a server's agents and server settings to another CodeBot server with
 one `.zip` file. It is a separate format from the Grok Bot agent import. The first screen offers "Export
 from this server" and "Import into this server". The section shows for this computer's server, and for a
 joined server with `instance-transfer-v1` when the user is an owner or admin (see
@@ -1536,9 +1536,9 @@ joined server with `instance-transfer-v1` when the user is an owner or admin (se
 client does not show it; the phone shows it for a joined server. App preferences, the default model and
 the providers that are off belong to the app, not to a server, so they are not in the file.
 
-The file has `openbot-transfer.json` at its root, `agents/<key>/` folders (`avatar.<ext>`,
-`skills/<slug>/` and `workspace/`), and `shared/` for `~/OpenBot/Shared`. The manifest is
-`{ format: "openbot-instance-transfer", version: 1, source, agents, settings, shared, signedIn }`.
+The file has `codebot-transfer.json` at its root, `agents/<key>/` folders (`avatar.<ext>`,
+`skills/<slug>/` and `workspace/`), and `shared/` for `~/CodeBot/Shared`. The manifest is
+`{ format: "codebot-instance-transfer", version: 1, source, agents, settings, shared, signedIn }`.
 `src/main/instance-transfer-manifest.ts` writes and reads it with Effect `Schema`; it is a contract
 between app versions, so add only optional fields and raise `version` for a change of meaning. A file
 with a higher `version` is refused. An invalid agent is left out with a warning and the others are
@@ -1549,8 +1549,8 @@ colour is in the optional `avatarColor` field, and an older app draws the neares
 and reasoning effort, notifications and busy-message mode, its routines (schedule, limit and missed
 policies; one-time routines are in the optional `oneTimeRoutines` field, so an older app skips them and
 keeps the agent), its memories (with the essential or searchable choice the user made) and the skill folders
-in `.agents/skills` and `.claude/skills` that OpenBot does not manage. Workspace files are optional
-and leave out `.openbot/`, the skill folders, links, and every path `isUnsafeArchivePath` refuses
+in `.agents/skills` and `.claude/skills` that CodeBot does not manage. Workspace files are optional
+and leave out `.codebot/`, the skill folders, links, and every path `isUnsafeArchivePath` refuses
 (`.git`, `node_modules`, `.env*`, private keys, nested archives). Server settings are optional: MCP servers,
 custom model providers, custom ACP agents (as a warning, see below), sidebar sections and routine flows
 between exported agents. A custom provider model keeps its optional `contextWindow`, `maxOutput`,
@@ -1619,7 +1619,7 @@ and the user adds it again after checking it. The models of an added provider ar
 model discovery, and the provider has no key until the user enters it. So an agent on such a model starts
 on the default model, and a warning asks the user to choose it again when the provider is ready. Then it creates each selected agent through
 `AgentService` and the local skill library. Files go to the workspace root, and a name that is already
-there is saved beside it. Like the export, the import never writes `.openbot/` or the skill folders. An agent whose step fails is deleted with the skill revisions it published,
+there is saved beside it. Like the export, the import never writes `.codebot/` or the skill folders. An agent whose step fails is deleted with the skill revisions it published,
 and the others continue. A model that this computer does not offer, or whose provider is off, leaves
 the agent on the default model with a warning. Last, it adds MCP servers whose name is new, turned off, because a file can name any command, creates
 missing sidebar sections by name and assigns the new agents, connects routine flows with the new
@@ -1645,7 +1645,7 @@ refuses `blob:` images. The Worker accepts only a PNG of that size, stores it in
 as the page's `og:image`, so a post on X shows the agent. `openbot.run/agents/<id>` is a public
 card page, tinted with the avatar colour. The Bloub library uses browser-only APIs when its module
 loads, so the page loads the avatar and its colour in the browser after hydration. Its button opens
-`openbot://agents/<id>`, the third renderer link kind in
+`codebot://agents/<id>`, the third renderer link kind in
 `src/main/deep-link-router.ts`. The app then shows the template in `AgentTemplateInstallDialog`;
 like a plugin link, the link itself installs nothing. The page's fallback line also links
 `/app?agent=<id>`, where the browser client shows the same preview. In the same way, the invitation

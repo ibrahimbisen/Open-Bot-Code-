@@ -5,11 +5,11 @@ import { createServer, type IncomingMessage, type ServerResponse } from "node:ht
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/opencode-token-stream-e2e");
-const binary = process.argv[2] ?? process.env.OPENBOT_OPENCODE_PATH;
-if (!binary) throw new Error("Give the OpenCode binary as the first argument or in OPENBOT_OPENCODE_PATH.");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-token-stream-e2e");
+const binary = process.argv[2] ?? process.env.CODEBOT_OPENCODE_PATH;
+if (!binary) throw new Error("Give the OpenCode binary as the first argument or in CODEBOT_OPENCODE_PATH.");
 
-const root = await mkdtemp(join(tmpdir(), "openbot-opencode-token-stream-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-opencode-token-stream-"));
 const home = join(root, "home");
 mkdirSync(home, { recursive: true });
 process.env.HOME = home;

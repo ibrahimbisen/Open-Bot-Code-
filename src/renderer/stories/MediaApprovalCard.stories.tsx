@@ -1,7 +1,7 @@
-import type { CreditMediaGenerationKind, CreditMediaModel } from "@openbot/contracts/credit-media";
-import type { AgentApproval, MediaApprovalOffer } from "@openbot/contracts/ipc";
-import { ApprovalCard } from "@openbot/ui/features/conversation/ConversationPrompts";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
+import type { CreditMediaGenerationKind, CreditMediaModel } from "@codebot/contracts/credit-media";
+import type { AgentApproval, MediaApprovalOffer } from "@codebot/contracts/ipc";
+import { ApprovalCard } from "@codebot/ui/features/conversation/ConversationPrompts";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

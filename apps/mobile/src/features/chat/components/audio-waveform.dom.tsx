@@ -1,6 +1,6 @@
 "use dom";
 
-import { base64ToBytes } from "@openbot/team-client/base64";
+import { base64ToBytes } from "@codebot/team-client/base64";
 import { useEffect, useRef } from "react";
 import type { WaveformJob, WaveformResult } from "../model/audio-waveforms";
 

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import type { ConversationSnapshot } from "@openbot/contracts/ipc";
+import type { ConversationSnapshot } from "@codebot/contracts/ipc";
 import { argument, connectChannelE2e, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
 const agentArgument = argument("agent");
@@ -26,12 +26,12 @@ const session = await connectChannelE2e("cross-chat-history-e2e");
 const { page } = session;
 
 const bridge = {
-  agents: () => page.evaluate(() => window.openbot.agent.listAgents()),
-  main: (): Promise<ConversationSnapshot> => page.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+  agents: () => page.evaluate(() => window.codebot.agent.listAgents()),
+  main: (): Promise<ConversationSnapshot> => page.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
   side: (taskId: string): Promise<ConversationSnapshot> =>
-    page.evaluate((input) => window.openbot.agent.readTask(input), { agentId, taskId }),
+    page.evaluate((input) => window.codebot.agent.readTask(input), { agentId, taskId }),
   send: (text: string, taskId?: string) =>
-    page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+    page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
       agentId,
       text,
       ...(taskId ? { taskId } : {}),
@@ -59,7 +59,7 @@ try {
   await bridge.send(chatSeed);
   await waitFor(page, "own chat replies", bridge.main, (snapshot) => repliesAfter(snapshot, chatSeed).length > 0);
   const task = await page.evaluate(
-    (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+    (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
     { agentId, text: `The thread code word is ${words.thread}. ${SHORT_PROMPT}` },
   );
   taskId = task.id;
@@ -98,8 +98,8 @@ try {
 } finally {
   if (taskId) {
     const input = { agentId, taskId };
-    await page.evaluate((value) => window.openbot.agent.stopTask(value), input).catch(() => undefined);
-    await page.evaluate((value) => window.openbot.agent.deleteTask(value), input).catch(() => undefined);
+    await page.evaluate((value) => window.codebot.agent.stopTask(value), input).catch(() => undefined);
+    await page.evaluate((value) => window.codebot.agent.deleteTask(value), input).catch(() => undefined);
   }
   writeReport("cross-chat-history-e2e", report);
   await session.close();

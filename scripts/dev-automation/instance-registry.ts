@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { isDynamicRecord, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
 import { devRuntimeDirectory } from "../../src/main/development-runtime-directory";
 import {
   assertRegistryDirectoryOwnership,

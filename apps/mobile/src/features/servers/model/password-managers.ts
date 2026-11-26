@@ -1,4 +1,4 @@
-import type { PasswordManagerId, PasswordManagerStatus } from "@openbot/contracts/ipc";
+import type { PasswordManagerId, PasswordManagerStatus } from "@codebot/contracts/ipc";
 
 const MOBILE_PASSWORD_MANAGER_IDS = ["protonpass"] as const satisfies readonly PasswordManagerId[];
 

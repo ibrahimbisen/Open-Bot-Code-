@@ -1,5 +1,5 @@
-import { agentProviderName, decodeHostProviderAccounts, isAccountUsage } from "@openbot/contracts/ipc";
-import { CLAUDE_API_KEY_ACCOUNT_ID } from "@openbot/contracts/team-protocol/claude-api-key-v1";
+import { agentProviderName, decodeHostProviderAccounts, isAccountUsage } from "@codebot/contracts/ipc";
+import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
 import {
   type PlanLimitListedWindow,
   type PlanLimitRow,
@@ -7,7 +7,7 @@ import {
   type PlanLimitWindow,
   planLimitRows,
   planLimitWindowKind,
-} from "@openbot/team-client/plan-limits";
+} from "@codebot/team-client/plan-limits";
 import { useQuery } from "@tanstack/react-query";
 import { File, Paths } from "expo-file-system";
 import { useEffect, useMemo } from "react";

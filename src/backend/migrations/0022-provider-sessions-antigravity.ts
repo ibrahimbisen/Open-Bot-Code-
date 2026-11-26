@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 import { widenProviderSessionsCheck } from "./0017-provider-sessions-opencode";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration 22 adds the Antigravity provider. This list is frozen with the migration: do not derive it
 // from `AGENT_PROVIDERS`, because a shipped migration must always write the same table.
@@ -12,7 +12,7 @@ function migrateProviderSessionsForAntigravity(db: DatabaseSync): void {
   widenProviderSessionsCheck(db, "'antigravity'", V22_PROVIDER_SESSIONS_CHECK_SQL, "projection_provider_sessions_v22");
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 22,
   name: "provider-sessions-antigravity",
   // The same table rebuild as migration 17, so foreign keys stay off for the same reason: with them

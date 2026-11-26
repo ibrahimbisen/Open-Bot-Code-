@@ -4,13 +4,13 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { crc32 } from "node:zlib";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Exit } from "effect";
 import lockValue from "../native-runtime.lock.json";
 import { providerRuntimeDescriptor } from "../src/main/provider-runtime-descriptors";
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 
-const REPORT = join(".openbot-build", "antigravity-windows-zip-e2e.json");
+const REPORT = join(".codebot-build", "antigravity-windows-zip-e2e.json");
 const ZIP_LOCAL = 0x04034b50;
 const ZIP_END = 0x06054b50;
 const ZIP_CENTRAL = 0x02014b50;
@@ -87,7 +87,7 @@ const flag = process.argv.indexOf("--archive");
 const lockedPath = flag >= 0 ? process.argv[flag + 1] : undefined;
 if (flag >= 0) assert.ok(lockedPath, "--archive needs the path of the zip");
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-zip-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-zip-"));
 try {
   const program = Buffer.from("antigravity.exe from a zip with no Unix type\n");
   const typeless = join(root, "typeless.zip");
@@ -116,7 +116,7 @@ try {
   }
 
   const report = { typelessEntryStaged: true, linkTypeRefused: true, locked };
-  await mkdir(".openbot-build", { recursive: true });
+  await mkdir(".codebot-build", { recursive: true });
   await writeFile(REPORT, `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 } finally {

@@ -1,13 +1,13 @@
-import { parseExportInstanceInput } from "@openbot/contracts/ipc";
+import { parseExportInstanceInput } from "@codebot/contracts/ipc";
 import {
   INSTANCE_TRANSFER_CHUNKS_CAPABILITY,
   INSTANCE_TRANSFER_CHUNKS_ROUTES,
-} from "@openbot/contracts/team-protocol/instance-transfer-chunks-v1";
+} from "@codebot/contracts/team-protocol/instance-transfer-chunks-v1";
 import {
   INSTANCE_TRANSFER_FULL_COPY_CAPABILITY,
   INSTANCE_TRANSFER_FULL_COPY_ROUTES,
-} from "@openbot/contracts/team-protocol/instance-transfer-full-copy-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/instance-transfer-full-copy-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { TeamApiInstanceTransfer } from "./dependencies";
 import { HttpError } from "./http-error";
@@ -99,7 +99,7 @@ export async function routeInstanceTransferChunks(
         (size) => ({
           "Content-Type": "application/octet-stream",
           "Content-Length": String(size),
-          "Content-Disposition": `attachment; filename*=UTF-8''openbot-transfer-${index}.part`,
+          "Content-Disposition": `attachment; filename*=UTF-8''codebot-transfer-${index}.part`,
           "X-Content-Type-Options": "nosniff",
         }),
         { start: part.start, length: part.length },

@@ -1,5 +1,5 @@
-import type { AppTextKey } from "@openbot/i18n";
-import { Bot, Button, Image, Plus, Send, Sparkles, Zap } from "@openbot/ui";
+import type { AppTextKey } from "@codebot/i18n";
+import { Bot, Button, Image, Plus, Send, Sparkles, Zap } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, For, onSettled, Show } from "solid-js";
 import { useText } from "../../text";

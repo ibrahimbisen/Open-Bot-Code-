@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AcpAgentPreset,
   type CheckCustomAgentInput,
@@ -9,8 +9,8 @@ import {
   isCustomAgentUsagePrompt,
   isNewCustomAgentId,
   type SaveCustomAgentInput,
-} from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
 import { currentText } from "../../text";
 
 export interface CustomAcpEnvDraft {

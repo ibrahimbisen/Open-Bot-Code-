@@ -1,5 +1,5 @@
-import type { ComputerUseCoveredArea } from "@openbot/contracts/ipc";
-import { useText } from "@openbot/ui/text";
+import type { ComputerUseCoveredArea } from "@codebot/contracts/ipc";
+import { useText } from "@codebot/ui/text";
 
 export interface ComputerUseWindowHighlightProps {
   windowTitle: string;

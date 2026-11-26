@@ -1,10 +1,10 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import type { ProviderClaudeUserSetup } from "@openbot/ui/features/settings/ProviderSettingsPage";
-import { useText } from "@openbot/ui/text";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
+import type { ProviderClaudeUserSetup } from "@codebot/ui/features/settings/ProviderSettingsPage";
+import { useText } from "@codebot/ui/text";
 import { createHostSetting } from "./host-setting-state";
 
 export type HostClaudeUserSetupCalls = Pick<
-  OpenBotDesktopApi["hostAdmin"],
+  CodeBotDesktopApi["hostAdmin"],
   "getClaudeUserSetup" | "setClaudeUserSetup"
 >;
 
@@ -22,7 +22,7 @@ export function createProviderClaudeUserSetup(
   status: () => unknown,
 ): () => ProviderClaudeUserSetup | undefined {
   const { t } = useText();
-  const calls = (): HostClaudeUserSetupCalls => source()?.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostClaudeUserSetupCalls => source()?.calls ?? window.codebot.hostAdmin;
   const setting = createHostSetting<boolean, boolean>({
     serverId: () => source()?.serverId,
     status,

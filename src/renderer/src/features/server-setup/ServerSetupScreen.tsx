@@ -1,8 +1,8 @@
-import { AppLogo } from "@openbot/brand";
-import type { AppVariant, CentralAuthIssue, CentralAuthState } from "@openbot/contracts/ipc";
-import { Button } from "@openbot/ui";
-import { AccountLogin } from "@openbot/ui/features/account/AccountLogin";
-import { useText } from "@openbot/ui/text";
+import { AppLogo } from "@codebot/brand";
+import type { AppVariant, CentralAuthIssue, CentralAuthState } from "@codebot/contracts/ipc";
+import { Button } from "@codebot/ui";
+import { AccountLogin } from "@codebot/ui/features/account/AccountLogin";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createStore, onCleanup, onSettled, Show } from "solid-js";
 import {
   NO_ANSWER,
@@ -16,8 +16,8 @@ import {
 } from "./server-setup-port";
 
 const APP_URL = "https://openbot.run/app";
-const PRODUCT_NAME = "OpenBot";
-const DEFAULT_SERVER_NAME = "OpenBot";
+const PRODUCT_NAME = "CodeBot";
+const DEFAULT_SERVER_NAME = "CodeBot";
 const STATUS_POLL_MS = 2_000;
 const ERROR_POLL_MS = 10_000;
 

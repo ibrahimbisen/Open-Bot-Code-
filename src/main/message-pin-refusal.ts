@@ -1,5 +1,5 @@
-import type { PinnedMessagesSnapshot } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { PinnedMessagesSnapshot } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { MessagePinRefused } from "../backend/message-pins";
 

@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { realpathSync } from "node:fs";
 import { basename, dirname, isAbsolute, join, normalize, sep } from "node:path";
-import { chatTagReferences, leadingAddress } from "@openbot/contracts/chat-tag-references";
-import { isNarrationItemId } from "@openbot/contracts/conversation-narration";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { chatTagReferences, leadingAddress } from "@codebot/contracts/chat-tag-references";
+import { isNarrationItemId } from "@codebot/contracts/conversation-narration";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AgentAccessLevel,
   type AgentEvent,
@@ -36,11 +36,11 @@ import {
   ROUTINE_QUIET_ANSWER_ITEM_TYPE,
   settingLinkEvent,
   type UpdateChannelMemoryInput,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { isFixedSourceText, matchingSourceKeys, type SourceMessages, sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
-import type { CauseCode } from "@openbot/telemetry";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { isFixedSourceText, matchingSourceKeys, type SourceMessages, sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
+import type { CauseCode } from "@codebot/telemetry";
 import { Deferred, Effect, Exit, Fiber, Result, Schema, Scope } from "effect";
 import { isTextAnswer } from "./agent/routine-quiet-runs";
 import { setChannelFolderSource } from "./agent/workspace-sandbox";
@@ -74,12 +74,12 @@ import {
 import { ChannelMemoryStore } from "./channel-memory-store";
 import { CHANNEL_REPLY_ID_PREFIX, channelReplyExpectedResult, checkChannelReply, isReplyTask } from "./channel-replies";
 import { type ChannelAssignment, type ChannelContext, ChannelStore } from "./channel-store";
+import type { CodeBotDatabase } from "./codebot-database";
 import type { DeliveryContext, MailboxStore } from "./mailbox-store";
 import { type MessageDeleteAccess, MessageDeleteRefused } from "./message-delete";
-import type { OpenBotDatabase } from "./openbot-database";
 import { extractJsonObject, StructuredOutputError } from "./structured-output";
 
-const logger = createOpenBotLogger("channel-service");
+const logger = createCodeBotLogger("channel-service");
 
 export interface ChannelHooks {
   agents(): AgentSummary[];
@@ -219,7 +219,7 @@ export class ChannelService {
   readonly #resumedDeliveries = new Set<string>();
 
   constructor(
-    database: OpenBotDatabase,
+    database: CodeBotDatabase,
     readonly mailbox: MailboxStore,
     readonly images: ChannelImages,
     readonly hooks: ChannelHooks,

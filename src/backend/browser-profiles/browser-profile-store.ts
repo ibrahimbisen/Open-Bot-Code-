@@ -1,8 +1,8 @@
 import { randomBytes } from "node:crypto";
-import { type AvatarHue, isAvatarHue } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import { type AvatarHue, isAvatarHue } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
+import type { CodeBotDatabase } from "../codebot-database";
 import { databaseRows, requiredNumberColumn, requiredStringColumn } from "../database/database-rows";
-import type { OpenBotDatabase } from "../openbot-database";
 
 export interface BrowserProfileRecord {
   id: string;
@@ -11,9 +11,9 @@ export interface BrowserProfileRecord {
 }
 
 export class BrowserProfileStore {
-  readonly #database: OpenBotDatabase;
+  readonly #database: CodeBotDatabase;
 
-  constructor(database: OpenBotDatabase) {
+  constructor(database: CodeBotDatabase) {
     this.#database = database;
   }
 

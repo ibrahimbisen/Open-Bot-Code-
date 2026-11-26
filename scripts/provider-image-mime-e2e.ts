@@ -3,8 +3,8 @@ import { createHash } from "node:crypto";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { sourceText } from "@codebot/i18n/source";
 import { EXPECTED_SCHEMA_FINGERPRINT } from "@muse-code/sdk";
-import { sourceText } from "@openbot/i18n/source";
 import type { AgentClient } from "../src/backend/agent-client";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MuseAgentClient } from "../src/backend/muse-client";
@@ -12,8 +12,8 @@ import { PiAgentClient } from "../src/backend/pi-client";
 import { type AppServerNotification, getString, isRecord } from "../src/backend/protocol";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 
-const out = resolve(import.meta.dirname, "../.openbot-build/provider-image-mime-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-image-mime-"));
+const out = resolve(import.meta.dirname, "../.codebot-build/provider-image-mime-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-image-mime-"));
 const consumers = ["acp", "muse", "pi"] as const;
 type Consumer = (typeof consumers)[number];
 

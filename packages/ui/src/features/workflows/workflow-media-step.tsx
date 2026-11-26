@@ -23,10 +23,10 @@ import {
   workflowMediaResolutions,
   workflowMediaSpecs,
   workflowVideoDurations,
-} from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import type { AppTextKey } from "@openbot/i18n";
-import { Play } from "@openbot/ui";
+} from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import type { AppTextKey } from "@codebot/i18n";
+import { Play } from "@codebot/ui";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { CreditIcon } from "../credits/CreditIcon";
@@ -323,7 +323,7 @@ export function useMediaStep(id: string, defaults: { prompt?: string | undefined
     const credits = price();
     return credits === null ? null : credits * batch();
   };
-  const balance = () => (model()?.provider === "openbot" ? board.catalogs().creditBalance : undefined);
+  const balance = () => (model()?.provider === "codebot" ? board.catalogs().creditBalance : undefined);
   const exceeds = (credits: number | null) => {
     const available = balance();
     return typeof available === "number" && credits !== null && credits > available;

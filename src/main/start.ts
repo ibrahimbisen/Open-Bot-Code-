@@ -1,4 +1,4 @@
-import { resolveLocale, translateFor } from "@openbot/i18n";
+import { resolveLocale, translateFor } from "@codebot/i18n";
 import { app, dialog, shell } from "electron";
 import { DOWNLOAD_URL } from "./download-url";
 
@@ -11,7 +11,7 @@ function isDamagedInstallation(error: unknown): boolean {
 
 function runsAsServer(): boolean {
   return (
-    process.platform === "linux" && (process.env.OPENBOT_SERVER === "1" || process.env.OPENBOT_HOSTED_SERVER === "1")
+    process.platform === "linux" && (process.env.CODEBOT_SERVER === "1" || process.env.CODEBOT_HOSTED_SERVER === "1")
   );
 }
 
@@ -32,7 +32,7 @@ async function showDamagedInstallation(): Promise<void> {
   if (response === 0) await shell.openExternal(DOWNLOAD_URL);
 }
 
-if (__OPENBOT_PERF_PROBES__ && !app.isPackaged && process.env.OPENBOT_PERF_PROBES === "1") {
+if (__CODEBOT_PERF_PROBES__ && !app.isPackaged && process.env.CODEBOT_PERF_PROBES === "1") {
   const { installPerfProbes } = await import("./perf-probes-install");
   installPerfProbes();
 }
@@ -41,7 +41,7 @@ try {
   await import("./index");
 } catch (error) {
   if (!isDamagedInstallation(error)) throw error;
-  report("OpenBot cannot start: a program file is damaged or missing.", error);
+  report("CodeBot cannot start: a program file is damaged or missing.", error);
   if (runsAsServer()) {
     app.exit(1);
   } else {

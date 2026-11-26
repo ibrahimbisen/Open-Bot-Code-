@@ -4,8 +4,8 @@ import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import type { RequestOptions } from "node:http";
 import { join, resolve } from "node:path";
-import type { UpdateStatus } from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { UpdateStatus } from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { AppUpdater } from "electron-updater/out/AppUpdater";
 import { parseUpdateInfo } from "electron-updater/out/providers/Provider";
@@ -23,9 +23,9 @@ import {
   type UpdateManifest,
 } from "./update-rollout";
 
-const logger = createOpenBotLogger("update-rollout-e2e");
+const logger = createCodeBotLogger("update-rollout-e2e");
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build/update-rollout-e2e");
+const OUT = join(ROOT, ".codebot-build/update-rollout-e2e");
 const RELEASE_TAG = "v0.67.0";
 const VERSION = RELEASE_TAG.slice(1);
 const INSTALLS = 2000;
@@ -34,7 +34,7 @@ class ProbeUpdater extends AppUpdater {
   constructor(userData: string, version: string, platform: NodeJS.Platform) {
     super(null, {
       version,
-      name: "OpenBot",
+      name: "CodeBot",
       isPackaged: true,
       appUpdateConfigPath: join(userData, "app-update.yml"),
       userDataPath: userData,

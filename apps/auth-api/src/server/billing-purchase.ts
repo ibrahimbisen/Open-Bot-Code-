@@ -1,14 +1,14 @@
-import type { BillingCurrency, BillingInterval, BillingPlanId } from "@openbot/contracts/billing";
-import type { LicenseTier } from "@openbot/contracts/license";
+import type { BillingCurrency, BillingInterval, BillingPlanId } from "@codebot/contracts/billing";
+import type { LicenseTier } from "@codebot/contracts/license";
 import { Effect } from "effect";
 import type { BillingAction, PlanEndReason } from "./account-analytics";
 import { billingCall } from "./billing-errors";
 import { type StripeSubscription, subscriptionPeriodEnd } from "./stripe-client";
 
 const CLAIM_PREFIX = {
-  started: "openbot_purchase:",
-  ended: "openbot_purchase_end:",
-  cancel: "openbot_purchase_cancel:",
+  started: "codebot_purchase:",
+  ended: "codebot_purchase_end:",
+  cancel: "codebot_purchase_cancel:",
 } as const;
 
 export type PurchaseEvent = "started" | "cancel_scheduled" | "cancel_withdrawn" | "ended";

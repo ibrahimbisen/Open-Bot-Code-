@@ -3,8 +3,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, agentProviderDescriptor } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { AGENT_PROVIDERS, agentProviderDescriptor } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -13,8 +13,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import { installFakeAgent } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-empty-answer-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-pi-empty-answer-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-empty-answer-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-pi-empty-answer-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const piDirectory = join(root, "pi-agent");
@@ -27,7 +27,7 @@ const NO_ANSWER = sourceText("error.provider.acpNoAnswer", { provider: DISPLAY_N
 const NO_ANSWER_AFTER_STEPS = sourceText("error.provider.noAnswerAfterSteps", { provider: DISPLAY_NAME });
 
 process.env.HOME = home;
-process.env.OPENBOT_PI_PATH = executable;
+process.env.CODEBOT_PI_PATH = executable;
 process.env.PI_CODING_AGENT_DIR = piDirectory;
 mkdirSync(home, { recursive: true });
 mkdirSync(piDirectory, { recursive: true });
@@ -37,7 +37,7 @@ const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { requireProviderDriver } = await import("../src/backend/provider-drivers");
 
 interface ClientEvents {
@@ -159,7 +159,7 @@ const prompts = (): string[] =>
         })
     : [];
 
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

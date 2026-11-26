@@ -1,4 +1,4 @@
-import type { CrmEvery, CrmMethod, CrmPayment, CrmProposal, CrmSource, CrmTag } from "@openbot/contracts/ipc";
+import type { CrmEvery, CrmMethod, CrmPayment, CrmProposal, CrmSource, CrmTag } from "@codebot/contracts/ipc";
 import type { MockCrmCustomer, MockCrmSeed } from "../src/preview/mock-crm";
 
 const DAY = 86_400_000;

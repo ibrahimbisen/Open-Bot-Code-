@@ -11,27 +11,27 @@ import type {
   AgentTurnCompletedEvent,
   ConversationPage,
   ConversationSnapshot,
-} from "@openbot/contracts/ipc";
-import type { LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
+} from "@codebot/contracts/ipc";
+import type { LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
 import {
   TEAM_BOOTSTRAP_CAPABILITIES,
   TEAM_CURRENT_CAPABILITIES,
   TEAM_PROTOCOL_V9_ONLY_CAPABILITIES,
   teamCapabilitiesForProtocol,
-} from "@openbot/contracts/team-protocol/current";
-import { optionalRouteCodec } from "@openbot/contracts/team-protocol/optional-routes";
+} from "@codebot/contracts/team-protocol/current";
+import { optionalRouteCodec } from "@codebot/contracts/team-protocol/optional-routes";
 import {
   PUSH_NOTIFICATION_THREADS_CAPABILITY,
   PUSH_NOTIFICATION_THREADS_ROUTES,
-} from "@openbot/contracts/team-protocol/push-notification-threads-v1";
-import { createOpenBotLogger } from "@openbot/logging";
-import { type AgentLiveActivityProps, readLiveActivityLink } from "@openbot/team-client/live-activity-props";
+} from "@codebot/contracts/team-protocol/push-notification-threads-v1";
+import { createCodeBotLogger } from "@codebot/logging";
+import { type AgentLiveActivityProps, readLiveActivityLink } from "@codebot/team-client/live-activity-props";
 import {
   encodeLiveActivityBytes,
   LIVE_ACTIVITY_SECRET_BYTES,
   liveActivityKeys,
-} from "@openbot/team-client/live-activity-seal";
-import { type PushNotificationContent, pushNotificationKeys } from "@openbot/team-client/push-notification-seal";
+} from "@codebot/team-client/live-activity-seal";
+import { type PushNotificationContent, pushNotificationKeys } from "@codebot/team-client/push-notification-seal";
 import { Effect } from "effect";
 import {
   liveActivityRoute,
@@ -51,7 +51,7 @@ import { LiveActivityPushService } from "../src/main/live-activity-push";
 import { PushNotificationStore } from "../src/main/push-notification-store";
 import { type NotificationRelayRequest, PushNotificationService } from "../src/main/push-notifications";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/thread-notifications-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/thread-notifications-e2e");
 const STEP_DEADLINE_MS = 20_000;
 const MEMBER = "fixture-member";
 const SERVER = "fixture-server";
@@ -69,7 +69,7 @@ const MAIN_WORK_TURN = "fixture-main-work-turn";
 const NEW_PHONE = "new-phone-session";
 const OLD_PHONE = "old-phone-session";
 const IPHONE = "iphone-session";
-const logger = createOpenBotLogger("thread-notifications-e2e");
+const logger = createCodeBotLogger("thread-notifications-e2e");
 const readOptions = {
   excludeRoutineEvents: true,
   excludeRoutineRunEvents: true,
@@ -207,7 +207,7 @@ const liveActivity = new LiveActivityPushService({
   randomBytes: (size) => new Uint8Array(randomBytes(size)),
 });
 
-const directory = mkdtempSync(join(tmpdir(), "openbot-thread-notifications-"));
+const directory = mkdtempSync(join(tmpdir(), "codebot-thread-notifications-"));
 const storePath = join(directory, "push-notifications.json");
 const store = new PushNotificationStore(storePath);
 
@@ -568,7 +568,7 @@ try {
         level: "all",
         mutedUntil: null,
         preview: true,
-        sound: "openbot",
+        sound: "codebot",
         liveActivityStartedAt: null,
       },
     },
@@ -644,7 +644,7 @@ try {
       "shows the work of the agent's own chat",
       (props) => props.mode === "working" && props.tapUrl !== side.tapUrl,
     );
-    assert.equal(chat.tapUrl, `openbot://live-activity?${new URLSearchParams({ server: SERVER, agent: AGENT })}`);
+    assert.equal(chat.tapUrl, `codebot://live-activity?${new URLSearchParams({ server: SERVER, agent: AGENT })}`);
     state.workTurn = null;
     return { side: side.tapUrl, chat: chat.tapUrl };
   });
@@ -676,7 +676,7 @@ try {
     resetLiveActivityActions();
     const openedTargets: (OutsideTarget | null)[] = [];
     const chatOpened: boolean[] = [];
-    const link = `openbot://live-activity?${new URLSearchParams({ server: SERVER, agent: AGENT, thread: SIDE_THREAD })}`;
+    const link = `codebot://live-activity?${new URLSearchParams({ server: SERVER, agent: AGENT, thread: SIDE_THREAD })}`;
     assert.equal(liveActivityRoute(link, true), `/chat/${AGENT}?serverId=${SERVER}`);
     const stop = setLiveActivityNavigator((opened, routeOpenedChat) => {
       openedTargets.push(opened);
@@ -687,7 +687,7 @@ try {
     assert.equal(liveActivityRoute(link, false), null);
     assert.deepEqual(openedTargets, [target(SIDE_THREAD), target(SIDE_THREAD)]);
     assert.deepEqual(chatOpened, [true, false]);
-    const plain = `openbot://live-activity?${new URLSearchParams({ server: SERVER, agent: AGENT })}`;
+    const plain = `codebot://live-activity?${new URLSearchParams({ server: SERVER, agent: AGENT })}`;
     assert.equal(liveActivityRoute(plain, true), `/chat/${AGENT}?serverId=${SERVER}`);
     assert.equal(liveActivityRoute(plain, false), null);
     assert.deepEqual(openedTargets.at(-1), target(null));

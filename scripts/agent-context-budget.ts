@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { type AgentModelOption, type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@openbot/contracts/ipc";
+import { type AgentModelOption, type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@codebot/contracts/ipc";
 import { developerInstructions } from "../src/backend/agent/developer-instructions";
 import { listModelsPayload } from "../src/backend/agent/model-tools";
 import { BUILTIN_TOOL_CATALOG, visibleDynamicTools } from "../src/backend/agent/tool-catalog";
@@ -8,7 +8,7 @@ import { toolGuidance } from "../src/backend/agent/tool-guidance";
 import { runDebtRatchet } from "./debt-ratchet";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/agent-context-budget");
+const OUT = resolve(ROOT, ".codebot-build/agent-context-budget");
 
 const agent: AgentSummary = {
   id: "agent-1",

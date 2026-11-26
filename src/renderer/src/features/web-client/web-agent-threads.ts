@@ -1,32 +1,32 @@
-import type { ConversationSnapshot } from "@openbot/contracts/ipc";
-import { guardedDecoder } from "@openbot/contracts/ipc-decoding";
-import { AGENT_ARCHIVED_THREADS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-archived-threads-v1";
-import { AGENT_QUEUE_TASK_CAPABILITY } from "@openbot/contracts/team-protocol/agent-queue-task-v1";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
+import type { ConversationSnapshot } from "@codebot/contracts/ipc";
+import { guardedDecoder } from "@codebot/contracts/ipc-decoding";
+import { AGENT_ARCHIVED_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-archived-threads-v1";
+import { AGENT_QUEUE_TASK_CAPABILITY } from "@codebot/contracts/team-protocol/agent-queue-task-v1";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
 import {
   AGENT_THREAD_BRANCHES_CAPABILITY,
   withAgentThreadBranches,
-} from "@openbot/contracts/team-protocol/agent-thread-branches-v1";
-import { AGENT_THREAD_FILES_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-files-v1";
-import { AGENT_THREAD_PAGES_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-pages-v1";
+} from "@codebot/contracts/team-protocol/agent-thread-branches-v1";
+import { AGENT_THREAD_FILES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-files-v1";
+import { AGENT_THREAD_PAGES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-pages-v1";
 import {
   AGENT_THREAD_QUEUE_CAPABILITY,
   AGENT_THREAD_QUEUE_ROUTES,
   isAgentThreadQueues,
   withAgentThreadQueues,
-} from "@openbot/contracts/team-protocol/agent-thread-queue-v1";
-import { AGENT_THREAD_READS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-reads-v1";
-import { AGENT_THREAD_REPLIES_CAPABILITY } from "@openbot/contracts/team-protocol/agent-thread-replies-v1";
+} from "@codebot/contracts/team-protocol/agent-thread-queue-v1";
+import { AGENT_THREAD_READS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
+import { AGENT_THREAD_REPLIES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-thread-replies-v1";
 import {
   AGENT_THREAD_REQUESTS_CAPABILITY,
   AGENT_THREAD_REQUESTS_ROUTES,
   isAgentThreadRequests,
   withAgentThreadRequests,
-} from "@openbot/contracts/team-protocol/agent-thread-requests-v1";
-import { AGENT_THREADS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-threads-v1";
-import { MESSAGE_DELETE_CAPABILITY, MESSAGE_DELETE_ROUTES } from "@openbot/contracts/team-protocol/message-delete-v1";
-import { MESSAGE_PINS_CAPABILITY } from "@openbot/contracts/team-protocol/message-pins-v1";
-import { runTeamEffect } from "@openbot/team-client";
+} from "@codebot/contracts/team-protocol/agent-thread-requests-v1";
+import { AGENT_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-threads-v1";
+import { MESSAGE_DELETE_CAPABILITY, MESSAGE_DELETE_ROUTES } from "@codebot/contracts/team-protocol/message-delete-v1";
+import { MESSAGE_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/message-pins-v1";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   agentTaskControl,
   branchAgentThread,
@@ -46,7 +46,7 @@ import {
   steerQueuedMessage,
   type TeamApiRequest,
   type TeamRequestError,
-} from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-api-requests";
 import { Effect } from "effect";
 import { onCleanup, untrack } from "solid-js";
 import type { AgentTasksPort } from "../agent-tasks/agent-tasks-port";

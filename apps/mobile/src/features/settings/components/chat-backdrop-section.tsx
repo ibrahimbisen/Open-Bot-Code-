@@ -1,5 +1,5 @@
-import { CHAT_BACKDROP_SCENES, type ChatBackdropScene } from "@openbot/brand/chat-backdrop-scenes";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import { CHAT_BACKDROP_SCENES, type ChatBackdropScene } from "@codebot/brand/chat-backdrop-scenes";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { File } from "expo-file-system";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
@@ -65,7 +65,7 @@ export function ChatBackdropSection({ dark }: { dark: boolean }) {
   const photo = useChatBackdrop((state) => state.photo);
   const seeThrough = useMessageColor((state) => state.seeThrough);
   const messageColorReady = useMessageColor((state) => state.ready);
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const [error, setError] = useState<string | null>(null);
 
   const fail = () => {

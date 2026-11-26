@@ -1,5 +1,5 @@
-import { CHAT_COLOR_PRESETS } from "@openbot/brand/chat-colors";
-import { type AvatarColor, isAvatarColor } from "@openbot/contracts/ipc";
+import { CHAT_COLOR_PRESETS } from "@codebot/brand/chat-colors";
+import { type AvatarColor, isAvatarColor } from "@codebot/contracts/ipc";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { storedFields } from "./stored-fields";
@@ -15,8 +15,8 @@ export interface MessageColorValue {
   seeThrough: boolean;
 }
 
-const key = "openbot.mobile.message-color.v1";
-const agentColorKey = "openbot.mobile.agent-color-messages.v1";
+const key = "codebot.mobile.message-color.v1";
+const agentColorKey = "codebot.mobile.agent-color-messages.v1";
 
 const DEFAULT_CUSTOM_MESSAGE_COLOR: AvatarColor =
   CHAT_COLOR_PRESETS.find((preset) => preset.id === "blue")?.value ?? "#4699fe";

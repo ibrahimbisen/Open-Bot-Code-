@@ -9,8 +9,8 @@ import {
   parseCreditCheckoutUrl,
   parseCreditRedeemResult,
   parseCreditsState,
-} from "@openbot/contracts/credits";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credits";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, type Layer } from "effect";
 import {
   type AccountRequestClient,

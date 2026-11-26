@@ -2,9 +2,9 @@ import { readFileSync, realpathSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
 import type { ClientSideConnection, ContentBlock, InitializeResponse } from "@agentclientprotocol/sdk";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { type DynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { type DynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { parse as parseToml } from "smol-toml";
 import { AcpAgentClient, type AcpHistoryPersistence } from "./acp-client";
@@ -82,12 +82,12 @@ export class GrokAgentClient extends AcpAgentClient {
             ]
           : profileGeneration
             ? ["--tools=", "--deny", "*", "--no-subagents", "--disable-web-search"]
-            : // Grok asks OpenBot before a tool that needs approval, and the agent's access decides.
+            : // Grok asks CodeBot before a tool that needs approval, and the agent's access decides.
               ["--permission-mode", "default"]),
         "agent",
         "stdio",
       ],
-      env: { GROK_OAUTH2_REFERRER: "openbot" },
+      env: { GROK_OAUTH2_REFERRER: "codebot" },
       extraEnv: () => {
         const environment = { ...agentEnvironment?.() };
         const merged = { ...process.env, ...environment };

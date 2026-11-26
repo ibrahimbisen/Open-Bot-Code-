@@ -1,4 +1,4 @@
-import { base64ToBytes } from "@openbot/team-client/base64";
+import { base64ToBytes } from "@codebot/team-client/base64";
 import { onCleanup } from "solid-js";
 
 export function createWebFileSaver(): (file: { name: string; base64: string } | { name: string; blob: Blob }) => void {

@@ -4,20 +4,20 @@ import { access, lstat, open, realpath, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, delimiter, dirname, extname, isAbsolute, join, posix, resolve, win32 } from "node:path";
 import { promisify, stripVTControlCharacters } from "node:util";
-import { olderVersion } from "@openbot/contracts/cli-version";
-import { type AgentProviderId, agentProviderName } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { olderVersion } from "@codebot/contracts/cli-version";
+import { type AgentProviderId, agentProviderName } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Deferred, Effect, Fiber, Option, Result, type Scope } from "effect";
 import { providerCheckTimeoutMs } from "./disk-restore";
 import type { SignInRegion } from "./kimi-region";
 import { type ProviderClientOperationError, providerCall, providerFailure } from "./provider-client-effects";
 
-export { compareReleases, isVersion, olderVersion } from "@openbot/contracts/cli-version";
+export { compareReleases, isVersion, olderVersion } from "@codebot/contracts/cli-version";
 
 const execFileAsync = promisify(execFile);
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 const loggedStartFailures = new Set<string>();
 const MINIMUM_CODEX_VERSION = [0, 156, 0] as const;
 const MINIMUM_CLAUDE_VERSION = [2, 1, 232] as const;
@@ -972,7 +972,7 @@ function cliCommandName(provider: AgentProviderId): string {
 }
 
 export function configuredCliPath(provider: AgentProviderId): string | null {
-  return process.env[`OPENBOT_${provider.toUpperCase()}_PATH`]?.trim() || null;
+  return process.env[`CODEBOT_${provider.toUpperCase()}_PATH`]?.trim() || null;
 }
 
 const cliCandidates = Effect.fn("Cli.candidates")(function* (

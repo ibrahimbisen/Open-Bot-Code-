@@ -1,11 +1,11 @@
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Option, Schema } from "effect";
 import { openCodeDatabasePath, readOpenCodeDatabase } from "./opencode-usage";
 
-const logger = createOpenBotLogger("opencode-agent-defaults");
+const logger = createCodeBotLogger("opencode-agent-defaults");
 
 type OpenCodeAction = "allow" | "ask" | "deny";
 
@@ -32,9 +32,9 @@ const WEB_SEARCH_ANSWER_KEY = "websearch:provider";
 
 const GLOBAL_CONFIG_FILES = ["config.json", "opencode.json", "opencode.jsonc"] as const;
 
-const DEFAULTS_FILE = "openbot-agent-defaults.json";
+const DEFAULTS_FILE = "codebot-agent-defaults.json";
 
-const APPROVAL_DEFAULTS_FILE = "openbot-agent-approval-defaults.json";
+const APPROVAL_DEFAULTS_FILE = "codebot-agent-approval-defaults.json";
 
 interface UserRules {
   readonly tools: string[];
@@ -163,7 +163,7 @@ function readUserRules(env: NodeJS.ProcessEnv, home: string): UserRules | null {
       const config = decodeUserConfig(stripJsonc(text));
       if (Option.isNone(config)) {
         if (!warnedFiles.has(file))
-          logger.warn("OpenBot could not read an OpenCode config file, so it adds no prompt rules.", { file: name });
+          logger.warn("CodeBot could not read an OpenCode config file, so it adds no prompt rules.", { file: name });
         warnedFiles.add(file);
         return null;
       }
@@ -193,7 +193,7 @@ function hasWebSearchAnswer(env: NodeJS.ProcessEnv, home: string): boolean | nul
       return database.prepare("SELECT 1 FROM kv WHERE key = ?").get(WEB_SEARCH_ANSWER_KEY) !== undefined;
     });
   } catch (cause) {
-    logger.warn("OpenBot could not read OpenCode's web search answer.", toLogValue(cause));
+    logger.warn("CodeBot could not read OpenCode's web search answer.", toLogValue(cause));
     return null;
   }
 }
@@ -262,7 +262,7 @@ export function openCodeAgentDefaultsEnv(
       renameSync(temporary, file);
     }
   } catch (cause) {
-    logger.warn("OpenBot could not write its OpenCode prompt rules.", toLogValue(cause));
+    logger.warn("CodeBot could not write its OpenCode prompt rules.", toLogValue(cause));
     return {};
   }
   return { OPENCODE_CONFIG: file };

@@ -1,4 +1,4 @@
-import { Button, buttonVariants, Input, ItemActions, ItemGroup, Plus, Textarea } from "@openbot/ui";
+import { Button, buttonVariants, Input, ItemActions, ItemGroup, Plus, Textarea } from "@codebot/ui";
 import {
   SettingsField,
   SettingsLinkGroup,
@@ -6,16 +6,16 @@ import {
   SettingsPanel,
   SettingsPanelContent,
   SettingsPanelHeader,
-} from "@openbot/ui/components/SettingsPanel";
-import { ChannelContextActions } from "@openbot/ui/features/channels/ChannelContextActions";
-import { ChannelMemberRow } from "@openbot/ui/features/channels/ChannelMemberRow";
+} from "@codebot/ui/components/SettingsPanel";
+import { ChannelContextActions } from "@codebot/ui/features/channels/ChannelContextActions";
+import { ChannelMemberRow } from "@codebot/ui/features/channels/ChannelMemberRow";
 import { onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { saveSidePanelWidth } from "../src/components/side-panel-width";
 import AgentSettingsPanel from "../src/features/conversation/AgentSettingsPanel";
 import { STORY_AGENT, STORY_AGENT_STATUS, STORY_AGENTS, STORY_MODELS, storyRuntimeSettings } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 const members = STORY_AGENTS.slice(0, 4);
 
@@ -93,12 +93,12 @@ function ChannelPanelStory(props: { title: string; body: () => ReturnType<typeof
 }
 
 function AgentPanelStory() {
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot({});
-  window.openbot = mock.api;
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot({});
+  window.codebot = mock.api;
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
   return (
     <main class="conversation-panel agent-memories-story-stage" style="--settings-panel-width: 296px">

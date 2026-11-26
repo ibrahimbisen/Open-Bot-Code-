@@ -51,8 +51,8 @@ export function RoutineResultDestinationSection({
   const workspace = useMobileWorkspaceActions();
   const client = useQueryClient();
   const queryScope = useQueryScope();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);

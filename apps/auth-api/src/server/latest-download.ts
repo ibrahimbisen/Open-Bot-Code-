@@ -1,6 +1,6 @@
 import { Effect, Schema } from "effect";
 import { androidApkRelease, androidApkVersion } from "../lib/android-apk";
-import { OPENBOT_LINKS } from "../lib/landing-links";
+import { CODEBOT_LINKS } from "../lib/landing-links";
 
 export type AvailableDownloadPlatform = "linux" | "macos" | "windows";
 
@@ -71,7 +71,7 @@ export function androidApkResponse(): Response {
 
 function fallbackToReleases(platform: AvailableDownloadPlatform, reason: string): Response {
   console.warn(`latest-download: serving the releases page for ${platform} (${reason})`);
-  return redirect(OPENBOT_LINKS.releases);
+  return redirect(CODEBOT_LINKS.releases);
 }
 
 class DownloadManifestError extends Schema.TaggedError<DownloadManifestError>()("DownloadManifestError", {}) {}

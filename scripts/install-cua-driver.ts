@@ -1,7 +1,7 @@
 import { chmod, copyFile, lstat, mkdir, mkdtemp, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { extractCuaDriverArchive } from "./cua-driver-archive";
 import {
   CUA_DRIVER_LICENSE_FILE,
@@ -17,7 +17,7 @@ import {
 import { sha256 } from "./remote-desktop-runtime-release";
 import { download, isCurrentInstallation } from "./runtime-install";
 
-const logger = createOpenBotLogger("install-cua-driver");
+const logger = createCodeBotLogger("install-cua-driver");
 
 export async function installCuaDriver(
   input: { sourceRoot?: string; outputRoot?: string; target?: CuaDriverTarget; fetchImpl?: typeof fetch } = {},
@@ -46,7 +46,7 @@ export async function installCuaDriver(
   const licenseBytes = await download(fetchImpl, cuaDriverLicenseUrl(lock), "cua-driver license");
   if (sha256(licenseBytes) !== lock.licenseSha256) throw new Error("The cua-driver licence checksum is invalid.");
 
-  const temporaryRoot = await mkdtemp(join(tmpdir(), "openbot-cua-driver-install-"));
+  const temporaryRoot = await mkdtemp(join(tmpdir(), "codebot-cua-driver-install-"));
   const staging = join(dirname(outputRoot), `.${basename(outputRoot)}.installing`);
   try {
     const archive = join(temporaryRoot, artifact.asset);

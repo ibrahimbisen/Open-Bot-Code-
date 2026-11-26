@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 /**
  * Durable provider history state.
@@ -49,7 +49,7 @@ export const PROVIDER_HISTORY_SCHEMA_SQL = `
     ON provider_history_staging(session_id, imported, turn_id, item_index);
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 29,
   name: "provider-history",
   // Provider history is additive durable import state. Existing conversation projections and

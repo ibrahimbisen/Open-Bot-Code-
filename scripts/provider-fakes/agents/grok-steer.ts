@@ -36,7 +36,7 @@ serveFakeAcpAgent(
       const text = (request.params.prompt ?? [])
         .map((block) => block.text ?? "")
         .join("")
-        .replace(/^[\s\S]*<\/openbot-developer-instructions>/u, "")
+        .replace(/^[\s\S]*<\/codebot-developer-instructions>/u, "")
         .trim();
       logEntry({ event: "prompt", sessionId, text });
       if (text !== "work") {

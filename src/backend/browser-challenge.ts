@@ -1,5 +1,5 @@
-import type { BrowserChallenge } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import type { BrowserChallenge } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect, Option } from "effect";
 import type { WebContents } from "electron";
 import {
@@ -261,7 +261,7 @@ export function describeChallenge(
       vendor: clearedVendor,
       status: "cleared",
       waitedMs,
-      next: "The security check passed while OpenBot waited. Continue with this snapshot.",
+      next: "The security check passed while CodeBot waited. Continue with this snapshot.",
     };
   return undefined;
 }

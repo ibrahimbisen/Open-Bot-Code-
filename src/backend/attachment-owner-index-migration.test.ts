@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { DatabaseSync } from "node:sqlite";
 import { afterEach, describe, expect, it } from "vitest";
-import { migrateOpenBotDatabase } from "./openbot-database-schema";
+import { migrateCodeBotDatabase } from "./codebot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -14,7 +14,7 @@ function databaseAt(version: number): DatabaseSync {
   db.exec(`CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL);
     CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
   return db;
 }
@@ -23,9 +23,9 @@ function seedAttachments(db: DatabaseSync): void {
   db.exec(`INSERT INTO projection_attachments
       (attachment_id, owner_kind, owner_id, name, path, metadata_json, created_at, last_event_sequence)
     VALUES
-      ('openbot-thread-chief:message-1:file-1', 'thread-message', 'openbot-thread-chief:message-1', 'notes.md', '',
+      ('codebot-thread-chief:message-1:file-1', 'thread-message', 'codebot-thread-chief:message-1', 'notes.md', '',
         '{"id":"file-1","name":"notes.md"}', '2026-10-01T10:00:00.000Z', 3),
-      ('openbot-thread-chief:message-2:file-2', 'thread-message', 'openbot-thread-chief:message-2', 'plot.png', '',
+      ('codebot-thread-chief:message-2:file-2', 'thread-message', 'codebot-thread-chief:message-2', 'plot.png', '',
         '{"id":"file-2","name":"plot.png"}', '2026-10-01T10:01:00.000Z', 4),
       ('draft-1', 'draft', 'agent-chief', 'draft.txt', '/drafts/draft.txt',
         '{"id":"draft-1"}', '2026-10-01T10:02:00.000Z', 5),
@@ -56,7 +56,7 @@ describe("attachment owner index migration", () => {
     const db = databaseAt(version);
     seedAttachments(db);
     const before = attachments(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(attachments(db)).toEqual(before);
     expect(ownerIndexColumns(db)).toEqual(["owner_kind", "owner_id"]);
     expectHealthy(db);
@@ -68,12 +68,12 @@ describe("attachment owner index migration", () => {
     const before = attachments(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version = 41
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 41 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 41 failed");
     expect(ownerIndexColumns(db)).toEqual([]);
     expect(attachments(db)).toEqual(before);
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 41").all()).toEqual([]);
     db.exec("DROP TRIGGER fail_marker");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(attachments(db)).toEqual(before);
     expect(ownerIndexColumns(db)).toEqual(["owner_kind", "owner_id"]);
     expectHealthy(db);
@@ -84,11 +84,11 @@ describe("attachment owner index migration", () => {
     seedAttachments(db);
     const before = attachments(db);
     db.exec("CREATE TABLE attachments_owner (conflict TEXT)");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 41 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 41 failed");
     expect(db.prepare("SELECT version FROM schema_migrations WHERE version = 41").all()).toEqual([]);
     expect(attachments(db)).toEqual(before);
     db.exec("DROP TABLE attachments_owner");
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(attachments(db)).toEqual(before);
     expect(ownerIndexColumns(db)).toEqual(["owner_kind", "owner_id"]);
     expectHealthy(db);
@@ -99,9 +99,9 @@ describe("attachment owner index migration", () => {
     seedAttachments(db);
     const before = attachments(db);
     db.exec("INSERT INTO schema_migrations VALUES(70, 'now')");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("newer than this application supports");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("newer than this application supports");
     db.exec("DELETE FROM schema_migrations WHERE version = 70; DELETE FROM schema_migrations WHERE version = 20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(attachments(db)).toEqual(before);
     expect(ownerIndexColumns(db)).toEqual([]);
   });

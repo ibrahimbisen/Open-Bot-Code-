@@ -13,7 +13,7 @@ import {
   type CreditMediaUnavailableModel,
   creditMediaCost,
   creditMediaRequiredInput,
-} from "@openbot/contracts/credit-media";
+} from "@codebot/contracts/credit-media";
 import {
   WORKFLOW_CREDIT_MODEL_PREFIX,
   WORKFLOW_MEDIA_ASPECTS,
@@ -26,9 +26,9 @@ import {
   type WorkflowMediaKind,
   type WorkflowMediaPriceRequest,
   type WorkflowMediaSpecs,
-} from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Duration, Effect, Schema, Semaphore } from "effect";
 import { type McpMediaDependencies, type McpMediaFailed, mediaFail, mediaFailed } from "./mcp-media";
 import type { MediaPictureRole } from "./workflow-walk";
@@ -137,7 +137,7 @@ export function creditWorkflowModel(model: CreditMediaModel): WorkflowMediaCatal
   const defaultDuration = durations.find((value) => value === model.defaultDuration);
   return {
     id: creditWorkflowModelId(model.id),
-    provider: "openbot",
+    provider: "codebot",
     providerModel: model.id,
     name: creditWorkflowModelName(model),
     maker: model.maker,
@@ -513,7 +513,7 @@ export class CreditMediaWorkflows {
       .store({
         bytes: made.bytes,
         kind: request.kind,
-        name: `openbot-${request.kind}.${extension}`,
+        name: `codebot-${request.kind}.${extension}`,
         mimeType: made.mimeType,
       })
       .pipe(Effect.mapError(() => mediaFailed()));

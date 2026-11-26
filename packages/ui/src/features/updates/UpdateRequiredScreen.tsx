@@ -1,5 +1,5 @@
-import { AppLogo, type AppLogoVariant } from "@openbot/brand";
-import type { UpdateStatus } from "@openbot/contracts/ipc";
+import { AppLogo, type AppLogoVariant } from "@codebot/brand";
+import type { UpdateStatus } from "@codebot/contracts/ipc";
 import { createSignal, Show } from "solid-js";
 import { Button } from "../../button";
 import { TriangleAlert } from "../../icons";
@@ -8,7 +8,7 @@ import { useText } from "../../text";
 import { restartReasonKey } from "./restart-reasons";
 import { presentUpdateStatus } from "./update-status";
 
-const PRODUCT_NAME = "OpenBot";
+const PRODUCT_NAME = "CodeBot";
 
 export interface UpdateRequiredScreenProps {
   status: UpdateStatus;

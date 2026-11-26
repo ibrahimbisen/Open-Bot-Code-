@@ -4,17 +4,17 @@ import { mkdtemp } from "node:fs/promises";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { CentralAuthState, HostStatus } from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { CentralAuthState, HostStatus } from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { chromium, type Page } from "playwright-core";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { ServerMode, type ServerModeOptions } from "../src/main/server-mode";
 import { ServerSetupPage } from "../src/main/server-setup-page";
 
-const logger = createOpenBotLogger("server-setup-page-e2e");
+const logger = createCodeBotLogger("server-setup-page-e2e");
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".openbot-build/server-setup-page-e2e");
+const OUT = resolve(ROOT, ".codebot-build/server-setup-page-e2e");
 const browserExecutable = process.argv.find((value) => value.startsWith("--browser-executable="))?.split("=")[1];
 const rendererRoot = resolve(
   process.argv.find((value) => value.startsWith("--renderer="))?.split("=")[1] ?? join(ROOT, "out/renderer"),
@@ -27,7 +27,7 @@ const EMAIL = "owner@example.com";
 const CODE = "K7PQ-R2MX";
 const WRONG_CODE = "22222222";
 const CHALLENGE = "challenge-e2e";
-const SERVER_NAME = "OpenBot";
+const SERVER_NAME = "CodeBot";
 
 let account: CentralAuthState = { status: "signed_out" };
 let session = false;
@@ -124,7 +124,7 @@ const host: ServerModeOptions["host"] = {
   refreshRegistration: () => Effect.void,
 };
 
-const runtime = await mkdtemp(join(tmpdir(), "openbot-setup-page-"));
+const runtime = await mkdtemp(join(tmpdir(), "codebot-setup-page-"));
 const serverMode = new ServerMode({
   environment: { controlSocketPath: join(runtime, "control.sock"), setupPagePort: null },
   version: "0.0.0-e2e",
@@ -178,19 +178,19 @@ try {
   const refusals = {
     noHeader: (await fetch(`${origin}/api/status`)).status,
     crossSite: (
-      await fetch(`${origin}/api/status`, { headers: { "x-openbot-setup": "1", "sec-fetch-site": "cross-site" } })
+      await fetch(`${origin}/api/status`, { headers: { "x-codebot-setup": "1", "sec-fetch-site": "cross-site" } })
     ).status,
     textPlainPost: (
       await fetch(`${origin}/api/login/start`, {
         method: "POST",
-        headers: { "x-openbot-setup": "1", "content-type": "text/plain" },
+        headers: { "x-codebot-setup": "1", "content-type": "text/plain" },
         body: `email=${EMAIL}`,
       })
     ).status,
-    logout: (await fetch(`${origin}/api/logout`, { method: "POST", headers: { "x-openbot-setup": "1" } })).status,
-    claim: (await fetch(`${origin}/api/login/claim`, { method: "POST", headers: { "x-openbot-setup": "1" } })).status,
+    logout: (await fetch(`${origin}/api/logout`, { method: "POST", headers: { "x-codebot-setup": "1" } })).status,
+    claim: (await fetch(`${origin}/api/login/claim`, { method: "POST", headers: { "x-codebot-setup": "1" } })).status,
     mobileConnect: (
-      await fetch(`${origin}/api/mobile-connect`, { method: "POST", headers: { "x-openbot-setup": "1" } })
+      await fetch(`${origin}/api/mobile-connect`, { method: "POST", headers: { "x-codebot-setup": "1" } })
     ).status,
     pathEscape: (await fetch(`${origin}/assets/..%2F..%2Fpackage.json`)).status,
     sourceFile: (await fetch(`${origin}/index.html`)).status,
@@ -222,7 +222,7 @@ try {
       }
     });
     await tab.goto(`${origin}/`);
-    await tab.getByRole("heading", { name: "Sign in to OpenBot" }).waitFor();
+    await tab.getByRole("heading", { name: "Sign in to CodeBot" }).waitFor();
     await tab.getByLabel("Email").fill(EMAIL);
     await settledScreenshot(tab, join(OUT, "1-email.png"));
     await tab.getByRole("button", { name: "Send sign-in code" }).click();
@@ -246,7 +246,7 @@ try {
     await codeInput.fill(CODE.replace("-", ""));
     await tab.getByRole("heading", { name: `${SERVER_NAME} is online` }).waitFor({ timeout: 30_000 });
     await tab.getByText(`Signed in as ${EMAIL}`).waitFor();
-    const appLink = await tab.getByRole("link", { name: "Open OpenBot" }).getAttribute("href");
+    const appLink = await tab.getByRole("link", { name: "Open CodeBot" }).getAttribute("href");
     assert.equal(appLink, "https://openbot.run/app");
     await settledScreenshot(tab, join(OUT, "3-online.png"));
     assert.equal(hostStatus.serverName, SERVER_NAME);
@@ -328,7 +328,7 @@ try {
 function postForm(path: string, fields: Record<string, string>): Promise<Response> {
   return fetch(`${origin}${path}`, {
     method: "POST",
-    headers: { "x-openbot-setup": "1", "content-type": "application/x-www-form-urlencoded" },
+    headers: { "x-codebot-setup": "1", "content-type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams(fields).toString(),
   });
 }

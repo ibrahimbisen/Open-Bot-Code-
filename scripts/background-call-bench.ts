@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { Options } from "@anthropic-ai/claude-agent-sdk";
-import { type AgentModelOption, agentProviderDescriptor, isReasoningEffort } from "@openbot/contracts/ipc";
+import { type AgentModelOption, agentProviderDescriptor, isReasoningEffort } from "@codebot/contracts/ipc";
 import { withBackgroundEffort } from "../src/backend/agent/background-model";
 import { generateTextWithoutTools, startToolless, stopToolless } from "../src/backend/agent/profile-generation";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -18,7 +18,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AppServerNotification, getArray, getRecord, getString, isRecord } from "../src/backend/protocol";
 import { observedQuery } from "./claude-agent-harness";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/background-call-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/background-call-bench");
 const TIMEOUT_MS = 120_000;
 const CHAT = [
   "[m1] Ana: We ship the garden planner on Friday. The tomato bed stays by the south wall.",

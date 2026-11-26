@@ -1,8 +1,8 @@
 import "./store-scene.css";
-import { ArrowLeft, ArrowRight, Lock, PanelRight, Pin, Plus, Puzzle, Search, Star, X } from "@openbot/ui";
+import { ArrowLeft, ArrowRight, Lock, PanelRight, Pin, Plus, Puzzle, Search, Star, X } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Show } from "solid-js";
-import openBotIcon from "../../public/icons/icon-32.png";
+import codeBotIcon from "../../public/icons/icon-32.png";
 
 export interface SceneTab {
   title: string;
@@ -25,7 +25,7 @@ export function BrowserScene(props: { tabs: SceneTab[]; url: string; page: JSX.E
             <i />
           </span>
           <Show when={shared().length > 0}>
-            <span class="scene-group">OpenBot</span>
+            <span class="scene-group">CodeBot</span>
             <For each={shared()}>{(tab) => <Tab tab={tab} />}</For>
           </Show>
           <For each={others()}>{(tab) => <Tab tab={tab} />}</For>
@@ -40,7 +40,7 @@ export function BrowserScene(props: { tabs: SceneTab[]; url: string; page: JSX.E
             <Star size={14} class="scene-star" />
           </div>
           <Puzzle size={16} />
-          <img src={openBotIcon} alt="" class="scene-ext-icon" />
+          <img src={codeBotIcon} alt="" class="scene-ext-icon" />
           <PanelRight size={16} />
           <span class="scene-profile">S</span>
         </div>
@@ -48,8 +48,8 @@ export function BrowserScene(props: { tabs: SceneTab[]; url: string; page: JSX.E
           <div class="scene-page">{props.page}</div>
           <aside class="scene-side">
             <div class="scene-side-head">
-              <img src={openBotIcon} alt="" />
-              <span>OpenBot</span>
+              <img src={codeBotIcon} alt="" />
+              <span>CodeBot</span>
               <Pin size={14} class="scene-side-pin" />
               <X size={15} />
             </div>

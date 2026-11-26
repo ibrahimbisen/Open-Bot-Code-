@@ -12,7 +12,7 @@ export function withAgentTaskUiBlocks(
   projected: TeamProtocolV2Json,
   source: unknown,
 ): TeamProtocolV2Json {
-  return new URL(path, "http://openbot.invalid").pathname === AGENT_TASKS_ROUTES.read
+  return new URL(path, "http://codebot.invalid").pathname === AGENT_TASKS_ROUTES.read
     ? withConversationUiBlocks(projected, source)
     : projected;
 }

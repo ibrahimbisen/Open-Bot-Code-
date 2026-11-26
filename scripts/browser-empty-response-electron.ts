@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:net";
 import { dirname, join } from "node:path";
-import { sourceText } from "@openbot/i18n/source";
-import { redactText } from "@openbot/logging";
+import { sourceText } from "@codebot/i18n/source";
+import { redactText } from "@codebot/logging";
 import { app, BrowserWindow, session } from "electron";
 import { BrowserHost } from "../src/backend/browser-host";
 import { runCauseEffect } from "../src/backend/effect-boundary";
@@ -17,7 +17,7 @@ const fixtureRoot = argument("fixture-root");
 const reportPath = argument("report-path");
 const runId = argument("run-id");
 
-const SHARED_PARTITION = "persist:openbot-browser";
+const SHARED_PARTITION = "persist:codebot-browser";
 const proxyOrSiteText = sourceText("error.backend.browserSystemProxyOrSiteClosed");
 
 const cases: string[] = [];
@@ -71,7 +71,7 @@ async function main(): Promise<void> {
     observed.proxyHttpsOpen = httpsOpen;
     assert.equal(httpsOpen, proxyOrSiteText, `An HTTPS open through a closing proxy gave: ${httpsOpen}`);
     recordCases("https-open-through-closing-proxy-names-proxy");
-    const httpOpen = await failureText(() => runCauseEffect(host.open("http://openbot-proxy-check.example/")));
+    const httpOpen = await failureText(() => runCauseEffect(host.open("http://codebot-proxy-check.example/")));
     observed.proxyHttpOpen = httpOpen;
     assert.equal(httpOpen, proxyOrSiteText, `An HTTP open through a closing proxy gave: ${httpOpen}`);
     recordCases("http-open-through-closing-proxy-names-proxy");

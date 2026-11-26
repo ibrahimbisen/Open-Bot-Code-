@@ -1,4 +1,4 @@
-import type { WorkflowBranch, WorkflowEdge, WorkflowGraph, WorkflowNode } from "@openbot/contracts/ipc";
+import type { WorkflowBranch, WorkflowEdge, WorkflowGraph, WorkflowNode } from "@codebot/contracts/ipc";
 import { ADD_KEYS, type AddKey, addFields, addKind, isFeederKind } from "./workflow-add";
 import { edgeTypeFor, linkType } from "./workflow-ports";
 

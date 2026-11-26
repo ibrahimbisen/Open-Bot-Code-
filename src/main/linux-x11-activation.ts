@@ -1,9 +1,9 @@
 import { createRequire } from "node:module";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type { BrowserWindow } from "electron";
 import type * as Koffi from "koffi";
 
-const logger = createOpenBotLogger("linux-x11-activation");
+const logger = createCodeBotLogger("linux-x11-activation");
 const requireModule = createRequire(import.meta.url);
 
 const X11_CLIENT_MESSAGE_EVENT = 33;
@@ -32,7 +32,7 @@ function loadXlibOnce(): Xlib | null {
   try {
     const koffi: typeof Koffi = requireModule("koffi");
     const library = koffi.load("libX11.so.6");
-    const clientMessage = koffi.struct("OpenBotXClientMessageEvent", {
+    const clientMessage = koffi.struct("CodeBotXClientMessageEvent", {
       type: "int",
       serial: "unsigned long",
       send_event: "int",
@@ -42,7 +42,7 @@ function loadXlibOnce(): Xlib | null {
       format: "int",
       data: koffi.array("long", 5),
     });
-    const event = koffi.union("OpenBotXEvent", {
+    const event = koffi.union("CodeBotXEvent", {
       xclient: clientMessage,
       pad: koffi.array("long", X_EVENT_SIZE_IN_LONGS),
     });

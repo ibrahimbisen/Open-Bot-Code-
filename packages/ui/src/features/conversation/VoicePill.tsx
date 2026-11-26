@@ -1,9 +1,9 @@
-import type { AppTextKey } from "@openbot/i18n";
-import { AudioLines, Button, Hand, LabelTooltip, LabelTooltipTrigger, Mic, MicOff, SlidingTabs, X } from "@openbot/ui";
-import type { AgentProfile } from "@openbot/ui/data";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { StopIcon } from "@openbot/ui/features/conversation/ConversationIcons";
-import { VoiceWaveform } from "@openbot/ui/features/conversation/VoiceRecordingMorph";
+import type { AppTextKey } from "@codebot/i18n";
+import { AudioLines, Button, Hand, LabelTooltip, LabelTooltipTrigger, Mic, MicOff, SlidingTabs, X } from "@codebot/ui";
+import type { AgentProfile } from "@codebot/ui/data";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { StopIcon } from "@codebot/ui/features/conversation/ConversationIcons";
+import { VoiceWaveform } from "@codebot/ui/features/conversation/VoiceRecordingMorph";
 import {
   createMotion,
   GooFilter,
@@ -14,9 +14,9 @@ import {
   SNAPPY,
   SOFT,
   stagedCurve,
-} from "@openbot/ui/liquid";
-import { useText } from "@openbot/ui/text";
-import { clamp, mix } from "@openbot/ui/utils";
+} from "@codebot/ui/liquid";
+import { useText } from "@codebot/ui/text";
+import { clamp, mix } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createUniqueId, For, onSettled, Show, untrack } from "solid-js";
 import { TalkKeyCaps } from "./TalkKeyCaps";

@@ -55,7 +55,7 @@ interface PlushDrawKit {
 }
 
 declare global {
-  var openbotPlushDrawKit: PlushDrawKit | undefined;
+  var codebotPlushDrawKit: PlushDrawKit | undefined;
 }
 
 function makeDrawKit(): PlushDrawKit {
@@ -100,10 +100,10 @@ function makeDrawKit(): PlushDrawKit {
 
 function drawKit(): PlushDrawKit {
   "worklet";
-  let kit = globalThis.openbotPlushDrawKit;
+  let kit = globalThis.codebotPlushDrawKit;
   if (!kit) {
     kit = makeDrawKit();
-    globalThis.openbotPlushDrawKit = kit;
+    globalThis.codebotPlushDrawKit = kit;
   }
   return kit;
 }

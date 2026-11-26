@@ -5,7 +5,7 @@ import {
   HOST_KEY_HANDOVER_LIMIT,
   type HostKeyHandover,
   hostKeyHandoverStatement,
-} from "@openbot/contracts/host-key-handover";
+} from "@codebot/contracts/host-key-handover";
 import { Effect } from "effect";
 import { encodeBase64Url } from "../src/server/crypto";
 import { RemoteControlPlane } from "../src/server/remote-control-plane";
@@ -13,7 +13,7 @@ import type { AuthUser } from "../src/server/types";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "host-key-handover-e2e");
+const OUT = join(ROOT, ".codebot-build", "host-key-handover-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const HOST_ID = "host-1";
 const OWNER: AuthUser = {

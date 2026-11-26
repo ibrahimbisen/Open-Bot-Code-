@@ -1,7 +1,7 @@
-import { agentProviderDescriptor, type ManagedProviderId } from "@openbot/contracts/agent-providers";
-import { CLEARABLE_STORAGE_CATEGORIES, type ClearableStorageCategory } from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import type { AppFormat, AppTextKey, AppTranslate } from "@openbot/i18n";
+import { agentProviderDescriptor, type ManagedProviderId } from "@codebot/contracts/agent-providers";
+import { CLEARABLE_STORAGE_CATEGORIES, type ClearableStorageCategory } from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import type { AppFormat, AppTextKey, AppTranslate } from "@codebot/i18n";
 import {
   Button,
   ChevronRight,
@@ -11,10 +11,10 @@ import {
   RefreshCw,
   Skeleton,
   TriangleAlert,
-} from "@openbot/ui";
-import { SettingsBackIcon } from "@openbot/ui/components/SettingsPanel";
-import type { AgentProfile } from "@openbot/ui/data";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { SettingsBackIcon } from "@codebot/ui/components/SettingsPanel";
+import type { AgentProfile } from "@codebot/ui/data";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, createUniqueId, For, Show } from "solid-js";
 import { AgentAvatar } from "../agents/AgentAvatar";
@@ -135,7 +135,7 @@ export function StorageOverview(props: StorageOverviewProps) {
           <div class="storage-summary-heading">
             <div>
               <h3 id={`${headingId}-summary`} class="storage-summary-label">
-                {t("files.storage.openBotOn", { host: props.hostName })}
+                {t("files.storage.codeBotOn", { host: props.hostName })}
               </h3>
               <Show
                 when={props.state !== "scanning" || total() > 0}

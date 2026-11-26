@@ -1,10 +1,10 @@
-appId: app.openbot.desktop
-productName: OpenBot
+appId: app.codebot.desktop
+productName: CodeBot
 copyright: Copyright © 2026 Synthetify Labs spółka z ograniczoną odpowiedzialnością
 protocols:
-  - name: OpenBot invitations
+  - name: CodeBot invitations
     schemes:
-      - openbot
+      - codebot
 asar: true
 artifactName: ${productName}-${version}-${arch}.${ext}
 electronUpdaterCompatibility: ">=2.16"
@@ -21,7 +21,7 @@ electronFuses:
 publish:
   provider: github
   owner: nightly-labs
-  repo: openbot
+  repo: codebot
 files:
   - out/**/*
   - package.json
@@ -101,7 +101,7 @@ mac:
       to: icons/tray
       filter:
         - "*.png"
-    - from: .openbot-build/voice/runtime
+    - from: .codebot-build/voice/runtime
       to: voice/runtime
     - from: build/remote-desktop-runtime
       to: remote-desktop-runtime
@@ -115,16 +115,16 @@ mac:
   extendInfo:
     CFBundleIconName: Icon
     ElectronTeamID: ZTRDTUL87R
-    NSMicrophoneUsageDescription: OpenBot uses the microphone to transcribe voice prompts locally on this Mac.
-    NSLocationUsageDescription: OpenBot shares the location of this Mac with a page in the OpenBot browser only when you allow it.
-    NSLocationWhenInUseUsageDescription: OpenBot shares the location of this Mac with a page in the OpenBot browser only when you allow it.
-    NSScreenCaptureUsageDescription: OpenBot captures the screen so an agent can see the app windows you ask it to control.
-    NSAppleEventsUsageDescription: OpenBot sends Automation events so an agent can control the apps you ask it to control.
-    NSCalendarsFullAccessUsageDescription: OpenBot lets the commands that an agent runs read and change your calendar events.
-    NSCalendarsWriteOnlyAccessUsageDescription: OpenBot lets the commands that an agent runs add events to your calendars.
-    NSCalendarsUsageDescription: OpenBot lets the commands that an agent runs use your calendars.
-    NSRemindersFullAccessUsageDescription: OpenBot lets the commands that an agent runs read and change your reminders.
-    NSRemindersUsageDescription: OpenBot lets the commands that an agent runs use your reminders.
+    NSMicrophoneUsageDescription: CodeBot uses the microphone to transcribe voice prompts locally on this Mac.
+    NSLocationUsageDescription: CodeBot shares the location of this Mac with a page in the CodeBot browser only when you allow it.
+    NSLocationWhenInUseUsageDescription: CodeBot shares the location of this Mac with a page in the CodeBot browser only when you allow it.
+    NSScreenCaptureUsageDescription: CodeBot captures the screen so an agent can see the app windows you ask it to control.
+    NSAppleEventsUsageDescription: CodeBot sends Automation events so an agent can control the apps you ask it to control.
+    NSCalendarsFullAccessUsageDescription: CodeBot lets the commands that an agent runs read and change your calendar events.
+    NSCalendarsWriteOnlyAccessUsageDescription: CodeBot lets the commands that an agent runs add events to your calendars.
+    NSCalendarsUsageDescription: CodeBot lets the commands that an agent runs use your calendars.
+    NSRemindersFullAccessUsageDescription: CodeBot lets the commands that an agent runs read and change your reminders.
+    NSRemindersUsageDescription: CodeBot lets the commands that an agent runs use your reminders.
     NSUserActivityTypes:
       - NSUserActivityTypeBrowsingWeb
   target:
@@ -133,7 +133,7 @@ mac:
 win:
   icon: build/icon-production.ico
   extraResources:
-    - from: .openbot-build/voice/runtime
+    - from: .codebot-build/voice/runtime
       to: voice/runtime
     - from: build/remote-desktop-runtime
       to: remote-desktop-runtime
@@ -151,14 +151,14 @@ linux:
   icon: build/icon-production.png
   synopsis: A local-first multi-agent desktop workspace.
   extraResources:
-    - from: build/linux/openbot.apparmor
-      to: linux/openbot.apparmor
+    - from: build/linux/codebot.apparmor
+      to: linux/codebot.apparmor
     - from: scripts/hosting
       to: hosting
       filter:
         - "**/*"
         - "!*.ts"
-    - from: .openbot-build/voice/runtime
+    - from: .codebot-build/voice/runtime
       to: voice/runtime
     - from: build/remote-desktop-runtime
       to: remote-desktop-runtime

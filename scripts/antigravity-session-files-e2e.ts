@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AgentModelOption, isAgentModel } from "@openbot/contracts/ipc";
+import { type AgentModelOption, isAgentModel } from "@codebot/contracts/ipc";
 import { generateTextWithoutTools } from "../src/backend/agent/profile-generation";
 import type { AgentClient } from "../src/backend/agent-client";
 import { resolveAntigravityCli } from "../src/backend/cli";
@@ -11,7 +11,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-session-files-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-session-files-e2e");
 const VERSION = "1.5.4";
 const MODEL = "gemini-fake";
 
@@ -86,7 +86,7 @@ interface Report {
   error?: string;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-session-files-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-session-files-e2e-"));
 const geminiHome = join(root, "home", ".gemini");
 const appData = join(geminiHome, "antigravity-acp");
 const logPath = join(root, "agy.jsonl");
@@ -95,7 +95,7 @@ const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 process.env.GEMINI_HOME = geminiHome;
 process.env.FAKE_AGY_LOG = logPath;
-delete process.env.OPENBOT_ANTIGRAVITY_PATH;
+delete process.env.CODEBOT_ANTIGRAVITY_PATH;
 
 const sessionFiles = (sessionId: string) => [
   join(appData, "conversations", `${sessionId}.db`),

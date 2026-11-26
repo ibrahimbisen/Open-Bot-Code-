@@ -1,11 +1,11 @@
-import { emptyAnalyticsTotals, type HostAnalytics, type MachineMetrics } from "@openbot/contracts/ipc";
-import { UsageMachineMeter } from "@openbot/ui/features/usage/UsageMachineMeter";
+import { emptyAnalyticsTotals, type HostAnalytics, type MachineMetrics } from "@codebot/contracts/ipc";
+import { UsageMachineMeter } from "@codebot/ui/features/usage/UsageMachineMeter";
 import { onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { AgentUsagePanel } from "../src/features/usage/AgentUsagePanel";
 import { mockHostAnalytics } from "../src/preview/mock-agent-analytics";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 function UsageStory(props: {
   state: "ready" | "empty" | "partial" | "loading" | "error" | "unsupported" | "large" | "small" | "long";
@@ -13,9 +13,9 @@ function UsageStory(props: {
   agentId?: string;
   machine?: "normal" | "high";
 }) {
-  const previous = window.openbot;
-  const mock = createMockOpenBot();
-  window.openbot = mock.api;
+  const previous = window.codebot;
+  const mock = createMockCodeBot();
+  window.codebot = mock.api;
   mock.api.agent.getHostAnalytics = async (input) => {
     if (props.state === "error") throw new Error("Host is offline.");
     if (props.state === "unsupported") return null;
@@ -52,7 +52,7 @@ function UsageStory(props: {
   };
   onCleanup(() => {
     mock.dispose();
-    if (window.openbot === mock.api) window.openbot = previous;
+    if (window.codebot === mock.api) window.codebot = previous;
   });
   const machine = () => {
     const load = props.machine;
@@ -64,7 +64,7 @@ function UsageStory(props: {
         width: props.narrow ? "390px" : "100%",
         height: "900px",
         overflow: "hidden",
-        background: "var(--openbot-bg-canvas)",
+        background: "var(--codebot-bg-canvas)",
       }}
     >
       <AgentUsagePanel

@@ -1,5 +1,5 @@
-import type { RoutineSchedule } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+import type { RoutineSchedule } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   addCalendarDays,
   addCalendarMonths,
@@ -11,7 +11,7 @@ import {
   calendarMonthStart,
   calendarWeekStart,
   clockChangeDay,
-} from "@openbot/team-client/routine-calendar-dates";
+} from "@codebot/team-client/routine-calendar-dates";
 import {
   Alert,
   AlertActions,
@@ -27,8 +27,8 @@ import {
   Skeleton,
   SlidingTabs,
   X,
-} from "@openbot/ui";
-import { PageHeader, type PageHeaderFrame } from "@openbot/ui/features/window/PageHeader";
+} from "@codebot/ui";
+import { PageHeader, type PageHeaderFrame } from "@codebot/ui/features/window/PageHeader";
 import { createMemo, createSignal, createStore, For, Match, onSettled, Show, Switch, untrack } from "solid-js";
 import type { AgentProfile } from "../../data";
 import { useText } from "../../text";

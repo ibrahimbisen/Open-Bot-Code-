@@ -13,8 +13,8 @@ import {
   isCrmSettings,
   isCrmSourceConnectInput,
   isCrmSourceInput,
-} from "@openbot/contracts/ipc";
-import { registerSecretValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { registerSecretValue } from "@codebot/logging";
 
 export function parseCrmCustomerPage(value: unknown): CrmCustomerPageInput {
   if (!isCrmCustomerPageInput(value)) throw new Error("Invalid CRM customers request.");

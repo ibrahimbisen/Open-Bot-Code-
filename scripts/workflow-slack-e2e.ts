@@ -3,12 +3,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { WorkflowGraph, WorkflowNode, WorkflowRunDetail } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { WorkflowGraph, WorkflowNode, WorkflowRunDetail } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { MessagingSlackMention, MessagingSlackSend } from "../src/backend/messaging/messaging-threads";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { EXTERNAL_EVENT_START } from "../src/backend/webhook-trigger";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
@@ -16,7 +16,7 @@ import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-slack-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-slack-e2e");
 const CONNECTION = "messaging-slack-e2e";
 const CHANNEL = "C0E2E00001";
 const OTHER_CHANNEL = "C0E2E00002";
@@ -91,8 +91,8 @@ const mentionOf = (text: string, options: { channelId?: string; messageId?: stri
   } satisfies MessagingSlackMention;
 };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-slack-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-slack-"));
+const database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {

@@ -1,4 +1,4 @@
-import { Button, IconButton, X } from "@openbot/ui";
+import { Button, IconButton, X } from "@codebot/ui";
 import { useText } from "../../text";
 import { DiscordMark, XMark } from "../settings/brand-marks";
 

@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
 import { migrateProviderSessionsForOpencode } from "./0017-provider-sessions-opencode";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Shared by migration v19 and the separate new-database schema. A separate constant, and a new
 // version rather than an edit to CHANNEL_SCHEMA_SQL: a database that already ran 18 - every
@@ -79,7 +79,7 @@ function migrateChannelSettings(db: DatabaseSync): void {
   db.exec(CHANNEL_SETTINGS_SCHEMA_SQL);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 19,
   name: "channel-settings",
   // The pre-merge channel branch used versions 17 and 18 for channel storage and settings. Those

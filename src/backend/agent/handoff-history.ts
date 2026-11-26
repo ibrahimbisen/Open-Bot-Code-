@@ -1,7 +1,7 @@
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import type { ConversationMessage } from "@openbot/contracts/ipc";
-import { redactSecrets, redactText } from "@openbot/logging";
-import type { OpenBotDatabase } from "../openbot-database";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
+import { redactSecrets, redactText } from "@codebot/logging";
+import type { CodeBotDatabase } from "../codebot-database";
 import { HANDOFF_END, HANDOFF_START, renderHandoffMessage } from "./delivery-content";
 
 const HANDOFF_CHARACTERS = 32_000;
@@ -11,7 +11,7 @@ const HEADER_CHARACTERS = 2_000;
 const RECENT_CHARACTERS = 24_000;
 const ROUTINE_HANDOFF_CHARACTERS = 8_000;
 const ROUTINE_MESSAGE_CHARACTERS = 2_000;
-type HistoryRow = ReturnType<OpenBotDatabase["readAgentHistory"]>["messages"][number];
+type HistoryRow = ReturnType<CodeBotDatabase["readAgentHistory"]>["messages"][number];
 
 function splitsPair(text: string, index: number): boolean {
   const before = text.charCodeAt(index - 1);
@@ -34,7 +34,7 @@ function render(message: ConversationMessage, names: ReadonlyMap<string, string>
 }
 
 export function readHandoffHistory(
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   agentId: string,
   threadId: string,
   names: ReadonlyMap<string, string>,
@@ -66,7 +66,7 @@ export function readHandoffHistory(
 }
 
 export function hasEarlierChat(
-  database: OpenBotDatabase,
+  database: CodeBotDatabase,
   agentId: string,
   threadId: string,
   resetMessageId: string | null,
@@ -81,7 +81,7 @@ export function hasEarlierChat(
 const BRANCH_NOTE =
   "This conversation is a branch: a copy of an earlier conversation up to one message. Workspace files were not rolled back, so they can include changes from after that message.";
 const NEW_CHAT_NOTE =
-  "A new chat started. Messages from before it are not in your context. Do not bring them up yourself. When the user refers to earlier work, find it with openbot.history_search.";
+  "A new chat started. Messages from before it are not in your context. Do not bring them up yourself. When the user refers to earlier work, find it with codebot.history_search.";
 const NEW_CHAT_ONLY_HISTORY = [HANDOFF_START, NEW_CHAT_NOTE].join("\n\n");
 
 export function renderProviderHandoff(
@@ -96,7 +96,7 @@ export function renderProviderHandoff(
     "Previous conversation excerpts. Current profile and developer instructions take precedence. Do not repeat completed work.",
     ...(options.branch ? [BRANCH_NOTE] : []),
     ...(options.earlierChat ? [NEW_CHAT_NOTE] : []),
-    "Omitted details remain available: discover openbot.history_search and openbot.history_read. They read all messages of each of your chats. Excerpts are not a complete summary.",
+    "Omitted details remain available: discover codebot.history_search and codebot.history_read. They read all messages of each of your chats. Excerpts are not a complete summary.",
     "--- recent messages ---",
   ].join("\n");
   const stepLines: string[] = [];
@@ -190,7 +190,7 @@ export function renderRoutineHandoff(
     HANDOFF_START,
     "This routine run has its own session. These are the newest messages of your conversation. Do not repeat completed work.",
     "When a newer message shows that what the routine task asks for is done, has changed, or is not possible, do not repeat the outdated request or steps. Unless the user asked to stop or skip it, still give a requested reminder, and say that newer result in it.",
-    "Omitted details remain available: discover openbot.history_search and openbot.history_read.",
+    "Omitted details remain available: discover codebot.history_search and codebot.history_read.",
   ].join("\n");
   const runsHeader = "--- earlier runs of this routine (its own thread) ---";
   const chatHeader = "--- recent messages ---";

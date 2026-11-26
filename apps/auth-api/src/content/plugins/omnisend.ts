@@ -27,7 +27,7 @@ export const OMNISEND_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the Omnisend plugin need an API key?",
       answer:
-        "Yes. Create an API key in Omnisend at app.omnisend.com/integrations/api-keys, then enter it when you connect the app. OpenBot keeps the key in encrypted storage and sends it in the X-Api-Key header. The plugin catalog holds no secret. Omnisend's browser sign-in does not accept OpenBot yet.",
+        "Yes. Create an API key in Omnisend at app.omnisend.com/integrations/api-keys, then enter it when you connect the app. CodeBot keeps the key in encrypted storage and sends it in the X-Api-Key header. The plugin catalog holds no secret. Omnisend's browser sign-in does not accept CodeBot yet.",
     },
     {
       question: "What can the agent do with the key?",
@@ -42,7 +42,7 @@ export const OMNISEND_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "What data does Omnisend get?",
       answer:
-        "Your workspaces, conversations and files stay on the computer that runs OpenBot. Omnisend gets the requests that the agent sends, such as a report query or a campaign update. The tools work on the brand of the API key.",
+        "Your workspaces, conversations and files stay on the computer that runs CodeBot. Omnisend gets the requests that the agent sends, such as a report query or a campaign update. The tools work on the brand of the API key.",
     },
   ],
   sources: [

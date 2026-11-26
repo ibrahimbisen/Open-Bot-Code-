@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import { chmod, mkdir, mkdtemp, readdir, readFile, readlink, rm, stat, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@openbot/contracts/ipc";
+import { type AgentSummary, DEFAULT_AGENT_DEFAULTS } from "@codebot/contracts/ipc";
 import { displayMessageReferences } from "../src/backend/agent/delivery-content";
 import { developerInstructions } from "../src/backend/agent/developer-instructions";
 import { ClaudeAgentClient } from "../src/backend/claude-client";
@@ -12,14 +12,14 @@ import { listHomeSkills } from "../src/backend/home-skills";
 import { listHomeFolderSkills } from "../src/main/skill-folder-discovery";
 
 const SIGN_IN_TOKEN = "e2e-sign-in-token";
-const OUT = resolve(import.meta.dirname, "../.openbot-build/home-agent-skills-e2e");
-const ROOT_VARIABLE = "OPENBOT_HOME_SKILLS_E2E_ROOT";
+const OUT = resolve(import.meta.dirname, "../.codebot-build/home-agent-skills-e2e");
+const ROOT_VARIABLE = "CODEBOT_HOME_SKILLS_E2E_ROOT";
 
 if (!process.env[ROOT_VARIABLE]) {
-  const root = await mkdtemp(join(tmpdir(), "openbot-home-skills-e2e-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-home-skills-e2e-"));
   const child = spawnSync(process.execPath, [import.meta.filename], {
     stdio: "inherit",
-    env: { ...process.env, HOME: join(root, "home"), OPENBOT_REAL_HOME: process.env.HOME ?? "", [ROOT_VARIABLE]: root },
+    env: { ...process.env, HOME: join(root, "home"), CODEBOT_REAL_HOME: process.env.HOME ?? "", [ROOT_VARIABLE]: root },
   });
   await rm(root, { recursive: true, force: true });
   process.exit(child.status ?? 1);
@@ -37,7 +37,7 @@ interface Report {
   error?: string;
 }
 const report: Report = { passed: false, checks: {} };
-const realHome = process.env.OPENBOT_REAL_HOME;
+const realHome = process.env.CODEBOT_REAL_HOME;
 const root = process.env[ROOT_VARIABLE] ?? "";
 const clients: ClaudeAgentClient[] = [];
 

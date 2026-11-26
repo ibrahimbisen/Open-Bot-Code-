@@ -1,5 +1,5 @@
-import type { BrowserPreview } from "@openbot/contracts/ipc";
-import SharedBrowserPreviewSidebar from "@openbot/ui/features/conversation/BrowserPreviewSidebar";
+import type { BrowserPreview } from "@codebot/contracts/ipc";
+import SharedBrowserPreviewSidebar from "@codebot/ui/features/conversation/BrowserPreviewSidebar";
 import type { ComponentProps } from "@solidjs/web";
 import { readSidePanelWidth, resetSidePanelWidth, saveSidePanelWidth } from "../../components/side-panel-width";
 import { conversationPort } from "./conversation-port";

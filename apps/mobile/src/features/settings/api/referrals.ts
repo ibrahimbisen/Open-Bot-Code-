@@ -1,4 +1,4 @@
-import { parseReferralState, type ReferralState } from "@openbot/contracts/referral";
+import { parseReferralState, type ReferralState } from "@codebot/contracts/referral";
 import { type MobileSession, requestMobileAccount } from "@/features/auth/api/mobile-auth";
 import { currentText } from "@/shared/lib/text";
 

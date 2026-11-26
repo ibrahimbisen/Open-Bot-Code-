@@ -1,13 +1,13 @@
-import type { OpenBotDesktopApi, PromptCacheTtl } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, PromptCacheTtl } from "@codebot/contracts/ipc";
 import type {
   ProviderCacheExpiryCompaction,
   ProviderPromptCache,
-} from "@openbot/ui/features/settings/ProviderSettingsPage";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/settings/ProviderSettingsPage";
+import { useText } from "@codebot/ui/text";
 import { createHostSetting } from "./host-setting-state";
 
 export type HostPromptCacheTtlCalls = Pick<
-  OpenBotDesktopApi["hostAdmin"],
+  CodeBotDesktopApi["hostAdmin"],
   "getPromptCacheTtl" | "setPromptCacheTtl" | "getCacheExpiryCompaction" | "setCacheExpiryCompaction"
 >;
 
@@ -26,7 +26,7 @@ export function createProviderPromptCache(
   status: () => unknown,
 ): () => ProviderPromptCache | undefined {
   const { t } = useText();
-  const calls = (): HostPromptCacheTtlCalls => source()?.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostPromptCacheTtlCalls => source()?.calls ?? window.codebot.hostAdmin;
   const setting = createHostSetting<PromptCacheTtl, PromptCacheTtl>({
     serverId: () => source()?.serverId,
     status,

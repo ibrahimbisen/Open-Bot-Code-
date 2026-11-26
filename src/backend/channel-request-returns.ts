@@ -1,4 +1,4 @@
-import type { ChannelMessage, ChannelTask, ChannelTaskState } from "@openbot/contracts/ipc";
+import type { ChannelMessage, ChannelTask, ChannelTaskState } from "@codebot/contracts/ipc";
 import { Cause, Effect } from "effect";
 import { isTaskAnswer } from "./channel-history";
 import {
@@ -172,7 +172,7 @@ function returnKey(task: ChannelTask): string {
 }
 
 function returnText(task: ChannelTask, channelId: string, channelName: string, answer: ChannelMessage | null): string {
-  const origin = `Channel: ${channelName} (${channelId}). This answers your openbot.send_to_channel request.`;
+  const origin = `Channel: ${channelName} (${channelId}). This answers your codebot.send_to_channel request.`;
   if (task.state === "completed")
     return [
       origin,
@@ -183,13 +183,13 @@ function returnText(task: ChannelTask, channelId: string, channelName: string, a
     return [
       origin,
       "Status: paused",
-      `Result: OpenBot note, not written by this member: the channel task stopped before it finished. ${reason}`.trim(),
+      `Result: CodeBot note, not written by this member: the channel task stopped before it finished. ${reason}`.trim(),
       "Next: Do not send the request again. A person can continue the task in the channel, and its result then comes back here.",
     ].join("\n");
   return [
     origin,
     "Status: blocked",
-    `Result: OpenBot note, not written by this member: the channel task ${task.state === "failed" ? "failed" : "was cancelled"} before it finished. ${reason}`.trim(),
+    `Result: CodeBot note, not written by this member: the channel task ${task.state === "failed" ? "failed" : "was cancelled"} before it finished. ${reason}`.trim(),
     "Unblock: Read the channel, then send the request again if you still need the result.",
   ].join("\n");
 }

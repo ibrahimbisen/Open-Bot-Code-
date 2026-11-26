@@ -12,8 +12,8 @@ class FixtureProcessTimeout extends Error {}
 const FREEZE_CASES = 11;
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const buildRoot = await mkdtemp(join(tmpdir(), "openbot-idle-freeze-"));
-const reportPath = join(projectRoot, ".openbot-build/browser-idle-freeze-e2e/report.json");
+const buildRoot = await mkdtemp(join(tmpdir(), "codebot-idle-freeze-"));
+const reportPath = join(projectRoot, ".codebot-build/browser-idle-freeze-e2e/report.json");
 const runId = randomUUID();
 let sourceSha: string | undefined;
 try {

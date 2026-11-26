@@ -4,29 +4,29 @@ export const messages = defineMessages("error.agent", {
   "error.agent.historyUnavailable":
     "History is unavailable for this request. Read recent history again, or use channel_history for channel work.",
   "error.agent.historyArgumentsInvalid":
-    "Incorrect history arguments: {detail} Correct the arguments and try again. openbot.tool_describe gives the schema.",
+    "Incorrect history arguments: {detail} Correct the arguments and try again. codebot.tool_describe gives the schema.",
   "error.agent.toolRequestInvalid":
     "Invalid tool discovery arguments. Use the declared schema and an original qualified tool name.",
   "error.agent.toolCallArgumentsNotObject":
     "The tool did not run. In tool_call, arguments must be a JSON object, not text. Send the call again with arguments as an object.",
   "error.agent.toolCallDiscoveryTool":
-    "The tool did not run. tool_call cannot run openbot.tool_search or openbot.tool_describe. Call them directly, with the same arguments.",
+    "The tool did not run. tool_call cannot run codebot.tool_search or codebot.tool_describe. Call them directly, with the same arguments.",
   "error.agent.toolCallEnvelopeKeys":
     "The tool did not run. tool_call takes only name and arguments. Put the arguments of the tool in arguments, as an object, and send the call again.",
   "error.agent.toolCallMissingName":
-    "The tool did not run. The tool_call has no name. Put the qualified name that tool_search gives in name, such as openbot.history_read, and send the call again.",
+    "The tool did not run. The tool_call has no name. Put the qualified name that tool_search gives in name, such as codebot.history_read, and send the call again.",
   "error.agent.toolCallUnknownTool":
-    "The tool did not run. tool_call found no tool with this name. Use the exact qualified name that tool_search gives, such as openbot_browser.snapshot.",
+    "The tool did not run. tool_call found no tool with this name. Use the exact qualified name that tool_search gives, such as codebot_browser.snapshot.",
   "error.agent.toolCallUnknownToolSuggest":
     "The tool did not run. tool_call found no tool with this name. The qualified name is possibly {name}. If it is, send the call again with that name.",
   "error.agent.toolCallNullValue":
     "The tool did not run. {name} needs an object or a list at {paths}, but each of these list items arrived as null. Send the call again and give each of these items as a string that holds its JSON.",
   "error.agent.toolDescribeUnknownNames":
-    "tool_describe found no OpenBot tool named {names}. It describes only the OpenBot and browser tools that openbot.tool_search lists, not MCP tools.",
+    "tool_describe found no CodeBot tool named {names}. It describes only the CodeBot and browser tools that codebot.tool_search lists, not MCP tools.",
   "error.agent.toolDescribeDiscoveryNames":
     "Call {names} directly. tool_describe does not describe the discovery tools.",
   "error.agent.routineScheduleArgumentsInvalid":
-    "The routine schedule is invalid: {detail} Correct the schedule and try again. openbot.tool_describe gives the schema.",
+    "The routine schedule is invalid: {detail} Correct the schedule and try again. codebot.tool_describe gives the schema.",
   "error.agent.approvalWhileDeleting": "Cannot grant approval while the agent is being deleted.",
   "error.agent.accessLocalOnly": "Agent access can only be changed on the computer that runs the agent.",
   "error.agent.duplicateCleanupFailed": "Agent duplication failed and the incomplete copy could not be removed.",
@@ -42,7 +42,7 @@ export const messages = defineMessages("error.agent", {
   "error.agent.gone": "This agent no longer exists.",
   "error.agent.instructionsTooLarge": "The instructions file is too large to open here. Shorten it in a text editor.",
   "error.agent.instructionsOutside":
-    "The instructions file links to a place outside the agent's workspace, so OpenBot does not open it.",
+    "The instructions file links to a place outside the agent's workspace, so CodeBot does not open it.",
   "error.agent.instructionsReadFailed": "Could not read the instructions file.",
   "error.agent.instructionsSaveFailed": "Could not save the instructions file.",
   "error.agent.profileGenerationBusy": "Profile generation is busy. Try again shortly.",
@@ -96,16 +96,16 @@ export const messages = defineMessages("error.agent", {
   "error.agent.hostLimit": "A host can have up to {limit} agents.",
   "error.agent.changedWhileDuplicating": "The agent changed while it was being duplicated. Try again.",
   "error.agent.duplicatedAgentGone": "The duplicated agent no longer exists.",
-  "error.agent.stateCorrupt": "Agent state is corrupt or from a newer OpenBot version; refusing to overwrite it.",
-  "error.agent.oldRoleField": "Stored agent profiles use the old role field; update the data before starting OpenBot.",
+  "error.agent.stateCorrupt": "Agent state is corrupt or from a newer CodeBot version; refusing to overwrite it.",
+  "error.agent.oldRoleField": "Stored agent profiles use the old role field; update the data before starting CodeBot.",
   "error.agent.duplicateIds": "Agent state contains duplicate agent ids; refusing to overwrite it.",
-  "error.agent.copyNameFailed": "OpenBot could not create a unique agent copy name.",
+  "error.agent.copyNameFailed": "CodeBot could not create a unique agent copy name.",
   "error.agent.endpointRemoved": "The endpoint this agent used was removed. Choose another model for it.",
   "error.agent.turnStalled":
-    "{provider} stopped responding, so OpenBot ended this turn. Send the message again, or choose another model.",
+    "{provider} stopped responding, so CodeBot ended this turn. Send the message again, or choose another model.",
   "error.agent.promptCancelled": "{provider} cancelled this message before it started. Send the message again.",
   "error.agent.toolLoopStopped":
-    "{provider} repeated a failed step many times, so OpenBot stopped this turn. Send the message again, or choose another model.",
+    "{provider} repeated a failed step many times, so CodeBot stopped this turn. Send the message again, or choose another model.",
   "error.agent.answerCutOff":
     "The agent stopped before it finished its answer, so the answer is not complete. Send the message again.",
   "error.agent.compactionConnectionLost":
@@ -113,7 +113,7 @@ export const messages = defineMessages("error.agent", {
   "error.agent.compactionConnectionLostAddress":
     "The connection stopped while the agent compacted its context, so the task stopped. Check your internet connection. Also make sure that {variable} under Variables in the {provider} settings is the API address of your model service, which often ends in /v1. Then send a message.",
   "error.agent.compactionLoopStopped":
-    "{provider} compacted the context again and again, and each time it stayed too full to continue, so OpenBot stopped this turn. Turn off the MCP servers or computer use that this agent does not need, then send a message. If you or the agent changed when {provider} compacts, undo that change.",
+    "{provider} compacted the context again and again, and each time it stayed too full to continue, so CodeBot stopped this turn. Turn off the MCP servers or computer use that this agent does not need, then send a message. If you or the agent changed when {provider} compacts, undo that change.",
   "error.agent.selectedGone": "The selected agent no longer exists.",
   "error.agent.profileEndpointsChanged": "The custom endpoints changed while this was generating. Try again.",
   "error.agent.profileInvalid": "The provider returned an invalid profile. Try revising your prompt.",
@@ -129,19 +129,19 @@ export const messages = defineMessages("error.agent", {
   "error.agent.stopBeforeDelete": "Stop the agent and cancel its queued messages before deleting it.",
   "error.agent.deleteIncomplete": "The agent data could not be removed completely. Retry deleting the agent.",
   "error.agent.deleteFolderInUse":
-    "Work of another agent still uses this agent's folder. Delete this agent again when that work ends, or after you restart OpenBot.",
+    "Work of another agent still uses this agent's folder. Delete this agent again when that work ends, or after you restart CodeBot.",
   "error.agent.deleteFolderLocked":
     "Another program still uses this agent's folder, for example a program that the agent started. Close that program or restart the computer that this agent runs on, then delete the agent again.",
   "error.agent.deleteWhenFolderFree":
-    "Work of another agent still uses this agent's folder. OpenBot deletes this agent when that work ends.",
+    "Work of another agent still uses this agent's folder. CodeBot deletes this agent when that work ends.",
   "error.agent.duplicationBusy": "This agent is already being duplicated.",
   "error.agent.waitBeforeDuplicate": "Wait for the agent to finish and clear its queue before duplicating it.",
   "error.agent.saveOtherAgent": "This save belongs to another agent.",
   "error.agent.savedGone": "The saved agent no longer exists.",
   "error.agent.storedProfileUnreadable":
-    'A stored agent profile has an unreadable "{field}" value; update the data before starting OpenBot.',
+    'A stored agent profile has an unreadable "{field}" value; update the data before starting CodeBot.',
   "error.agent.storedProfileUnreadableId":
-    'Stored agent profile {id} has an unreadable "{field}" value; update the data before starting OpenBot.',
+    'Stored agent profile {id} has an unreadable "{field}" value; update the data before starting CodeBot.',
   "error.agent.queueEditRejected": "Queue edit rejected: {reason}",
   "error.agent.computerUseLocalOnly": "Computer Use can only be changed on the computer that runs the agent.",
   "error.agent.automationLocalOnly": "Local scripts can only be allowed on the computer that runs the agent.",
@@ -172,7 +172,7 @@ export const messages = defineMessages("error.agent", {
   "error.agent.lowMemoryServer":
     "This server is low on memory. Your message waits in the queue and starts when memory is free.",
   "error.agent.workspaceOnlyToolMissing":
-    "Workspace only needs {tool}, which OpenBot did not find. Install it, or choose Full access in the agent settings.",
+    "Workspace only needs {tool}, which CodeBot did not find. Install it, or choose Full access in the agent settings.",
   "error.agent.codexSandboxUnavailable":
     "Workspace only needs the Codex sandbox, which Codex cannot start on this computer, so the agent's commands fail. Choose Ask first or Full access in the agent settings.",
   "error.agent.claudeSandboxUnavailable":
@@ -188,7 +188,7 @@ export const messages = defineMessages("error.agent", {
     "Screen capture does not work in a Slack, Discord or Telegram conversation, because other people get its files.",
   "error.agent.screenCaptureDeclined": "The user did not allow this screen capture. Nothing was captured.",
   "error.agent.creditMediaDeclined": "The user did not allow this generation. No credits were spent.",
-  "error.agent.creditMediaNotSaved": "The file was made, but OpenBot could not save it in the chat.",
+  "error.agent.creditMediaNotSaved": "The file was made, but CodeBot could not save it in the chat.",
   "error.agent.mcpServerDeclined": "The user did not allow this MCP server change. Nothing changed.",
   "error.agent.mcpToolDeclined": "The user did not allow this MCP tool call. The tool did not run.",
   "error.agent.mcpServerNotSaved": "The MCP server did not answer, so it was not saved. {error}",
@@ -197,9 +197,9 @@ export const messages = defineMessages("error.agent", {
   "error.agent.mcpServerHeadersNeedHttp":
     "The MCP server {name} runs a local command, so it takes no headers. Ask the user to enter its keys in Marketplace, Apps, {name}.",
   "error.agent.mcpServerHeadersNeedPerson":
-    "Only the user of this OpenBot, in a chat with you, can give the keys of the MCP server {name}. Ask the user to enter them in Marketplace, Apps, {name}.",
+    "Only the user of this CodeBot, in a chat with you, can give the keys of the MCP server {name}. Ask the user to enter them in Marketplace, Apps, {name}.",
   "error.agent.mcpServerBuiltIn":
-    "{name} is part of OpenBot, so the MCP tools cannot test, turn on or off, or remove it. The user controls it on the computer that runs OpenBot: the GitHub connection in Marketplace, Apps, GitHub, and Computer Use in Settings, Computer Use.",
+    "{name} is part of CodeBot, so the MCP tools cannot test, turn on or off, or remove it. The user controls it on the computer that runs CodeBot: the GitHub connection in Marketplace, Apps, GitHub, and Computer Use in Settings, Computer Use.",
   "error.agent.mcpServerUnknown": "No MCP server is named {name}. Call list_mcp_servers for the names.",
   "error.agent.screenCaptureWindowMissing":
     "That window is not open now. Call list_capture_sources to get the current window ids.",
@@ -208,9 +208,9 @@ export const messages = defineMessages("error.agent", {
   "error.agent.screenCaptureRegionOutside":
     "The region is not inside one display. Use desktop points inside the bounds of one display from list_capture_sources.",
   "error.agent.screenCapturePermissionMissing":
-    "OpenBot does not have the Screen Recording permission. Ask the user to open System Settings > Privacy & Security > Screen & System Audio Recording, turn on OpenBot, then quit and open OpenBot again.",
+    "CodeBot does not have the Screen Recording permission. Ask the user to open System Settings > Privacy & Security > Screen & System Audio Recording, turn on CodeBot, then quit and open CodeBot again.",
   "error.agent.screenCaptureListPermission":
-    "OpenBot does not have the Screen Recording permission yet, so it cannot list the windows. To capture a display, call capture_screen with target screen. The user approves the capture first, and then macOS can ask the user for the permission.",
+    "CodeBot does not have the Screen Recording permission yet, so it cannot list the windows. To capture a display, call capture_screen with target screen. The user approves the capture first, and then macOS can ask the user for the permission.",
   "error.agent.screenCaptureEmptyWindows":
     "Windows gave an empty image. Ask the user to unlock the computer and close protected content. A policy of the organization can also stop screen capture.",
   "error.agent.screenCaptureFailed": "The screen capture failed. Try again.",

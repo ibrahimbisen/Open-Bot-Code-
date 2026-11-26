@@ -4,16 +4,16 @@ import {
   type BillingServerPlan,
   billingListPrices,
   storageTierGb,
-} from "@openbot/contracts/billing";
+} from "@codebot/contracts/billing";
 import {
   HOSTED_PLAN_SIZE,
   type HostedServerCatalog,
   type HostedServerState,
   type HostedServerSummary,
-} from "@openbot/contracts/hosted-servers";
-import type { HostedServersDesktopApi } from "@openbot/contracts/ipc";
+} from "@codebot/contracts/hosted-servers";
+import type { HostedServersDesktopApi } from "@codebot/contracts/ipc";
 
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 
 const CREATED_AT = "2026-09-20T09:30:00.000Z";
 const MOCK_STEP_MS = 4_000;

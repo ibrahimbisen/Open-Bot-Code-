@@ -1,16 +1,16 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Result } from "effect";
 import { z } from "zod";
 import type { DynamicToolCallParams } from "../protocol";
 import type { ToolApprovalDecision } from "./attention-registry";
 import { profileToolErrorMessage } from "./profile-tools";
-import { type OpenBotToolResponse, openBotToolFailure, openBotToolResult } from "./routine-tools";
+import { type CodeBotToolResponse, codeBotToolFailure, codeBotToolResult } from "./routine-tools";
 import { ToolOperationFailed } from "./tool-operation";
 
-const logger = createOpenBotLogger("delete-agent-tool");
+const logger = createCodeBotLogger("delete-agent-tool");
 
 const DELETE_AGENT_LIMIT = 20;
 
@@ -46,15 +46,15 @@ export const handleDeleteAgentTool = Effect.fn("DeleteAgentTool.handle")(
     params: DynamicToolCallParams,
     senderAgentId: string,
     options: DeleteAgentToolOptions,
-  ): Effect.fn.Return<OpenBotToolResponse, ToolOperationFailed> {
+  ): Effect.fn.Return<CodeBotToolResponse, ToolOperationFailed> {
     const { agentIds } = deleteAgentToolSchema.parse(params.arguments, { reportInput: true });
     if (agentIds.includes(senderAgentId))
-      return openBotToolFailure(
+      return codeBotToolFailure(
         "You cannot delete yourself. Remove your id and retry for the others. To delete you, the user opens your menu in the sidebar and selects Delete agent.",
       );
     if (!options.requestedByPerson)
-      return openBotToolFailure(
-        "Only a person's message, in your OpenBot chat or a thread they opened, can delete an agent. Do not retry in this turn: tell the user to send the request there as a new message, or to delete the agent from its menu in the sidebar.",
+      return codeBotToolFailure(
+        "Only a person's message, in your CodeBot chat or a thread they opened, can delete an agent. Do not retry in this turn: tell the user to send the request there as a new message, or to delete the agent from its menu in the sidebar.",
       );
     const agents = options.listAgents();
     const targets = agentIds.map((agentId) => {
@@ -73,7 +73,7 @@ export const handleDeleteAgentTool = Effect.fn("DeleteAgentTool.handle")(
         });
     }
     if (busy.length > 0)
-      return openBotToolFailure(
+      return codeBotToolFailure(
         `No agent was deleted, and no card was shown. These agents cannot be deleted now: ${JSON.stringify(busy)}. Tell the user, or retry without them.`,
       );
 
@@ -81,9 +81,9 @@ export const handleDeleteAgentTool = Effect.fn("DeleteAgentTool.handle")(
       sourceText("status.agent.deleteAgents", { agents: targets.map((agent) => cardLabel(agent, agents)).join(", ") }),
     );
     if (decision === "cancel")
-      return openBotToolResult({ status: "cancelled", next: "Nobody answered the card, so no agent was deleted." });
+      return codeBotToolResult({ status: "cancelled", next: "Nobody answered the card, so no agent was deleted." });
     if (decision !== "accept")
-      return openBotToolResult({
+      return codeBotToolResult({
         status: "declined",
         next: "The user selected Deny, so no agent was deleted. Do not delete them another way, and do not ask again for this request.",
       });
@@ -100,7 +100,7 @@ export const handleDeleteAgentTool = Effect.fn("DeleteAgentTool.handle")(
       results.push({ agentId: agent.id, name: agent.name, ok: false, error });
     }
     const count = results.filter((result) => result.ok).length;
-    return openBotToolResult({
+    return codeBotToolResult({
       status: "deleted",
       deleted: count,
       failed: results.length - count,

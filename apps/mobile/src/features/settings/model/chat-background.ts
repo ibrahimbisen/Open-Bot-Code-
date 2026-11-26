@@ -1,5 +1,5 @@
-import { type ChatBackgroundScheme, readableChatBackground } from "@openbot/brand/chat-colors";
-import { type AvatarColor, isAvatarColor } from "@openbot/contracts/ipc";
+import { type ChatBackgroundScheme, readableChatBackground } from "@codebot/brand/chat-colors";
+import { type AvatarColor, isAvatarColor } from "@codebot/contracts/ipc";
 import * as SecureStore from "expo-secure-store";
 import { useUniwind } from "uniwind";
 import { create } from "zustand";
@@ -7,7 +7,7 @@ import { storedFields } from "./stored-fields";
 
 export type ChatBackgroundValue = Record<ChatBackgroundScheme, AvatarColor | null>;
 
-const key = "openbot.mobile.chat-background.v1";
+const key = "codebot.mobile.chat-background.v1";
 
 export const useChatBackground = create<ChatBackgroundValue & { ready: boolean }>(() => ({
   light: null,

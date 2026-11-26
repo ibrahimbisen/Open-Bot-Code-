@@ -1,8 +1,8 @@
-import { agentProviderName, PICKER_PROVIDERS } from "@openbot/contracts/agent-providers";
-import type { AgentProviderId } from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { MoreProvidersDialog } from "@openbot/ui/components/MoreProvidersDialog";
-import { useText } from "@openbot/ui/text";
+import { agentProviderName, PICKER_PROVIDERS } from "@codebot/contracts/agent-providers";
+import type { AgentProviderId } from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { MoreProvidersDialog } from "@codebot/ui/components/MoreProvidersDialog";
+import { useText } from "@codebot/ui/text";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

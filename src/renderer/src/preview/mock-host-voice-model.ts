@@ -3,7 +3,7 @@ import {
   type HostVoiceModel,
   type HostVoiceModelChange,
   LOCAL_VOICE_MODEL_IDS,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export function createMockHostVoiceModel(): Pick<HostAdminDesktopApi, "getVoiceModel" | "changeVoiceModel"> {
   const state: HostVoiceModel = {

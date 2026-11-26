@@ -7,7 +7,7 @@ index 12d3a6b5595b5fffa44b07b93af35b184a525fb6..a358ef7ab9c820ca88bd0b44b7ffc672
  	const y = createMemo(() => props.position.split("-")[0]);
  	const x = createMemo(() => props.position.split("-")[1]);
 -	const heightIndex = createMemo(() => Math.max(0, props.heights.findIndex((height) => height.toastId === props.toast.id)));
-+	// OpenBot patch: stack in list order, not mount order. Toasts raised in one tick mount together and
++	// CodeBot patch: stack in list order, not mount order. Toasts raised in one tick mount together and
 +	// each prepends its height, so `heights` came out reversed and a toast past `visibleToasts` held an
 +	// empty slot between the visible ones. A toast being removed has no height and takes no slot.
 +	const measuredToasts = createMemo(() => props.toasts.filter((toast) => props.heights.some((height) => height.toastId === toast.id)));
@@ -48,7 +48,7 @@ index bcfb2471e96a1671f54da966e0e3bb9a63e4de89..b3a1f2ed66702515df759a6d1522a4cb
  	const y = createMemo(() => props.position.split("-")[0]);
  	const x = createMemo(() => props.position.split("-")[1]);
 -	const heightIndex = createMemo(() => Math.max(0, props.heights.findIndex((height) => height.toastId === props.toast.id)));
-+	// OpenBot patch: stack in list order, not mount order. Toasts raised in one tick mount together and
++	// CodeBot patch: stack in list order, not mount order. Toasts raised in one tick mount together and
 +	// each prepends its height, so `heights` came out reversed and a toast past `visibleToasts` held an
 +	// empty slot between the visible ones. A toast being removed has no height and takes no slot.
 +	const measuredToasts = createMemo(() => props.toasts.filter((toast) => props.heights.some((height) => height.toastId === toast.id)));

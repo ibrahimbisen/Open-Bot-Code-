@@ -3,14 +3,14 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
+import type { ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { AgentStore } from "../src/backend/agent-store";
 import { AgentThreadStore } from "../src/backend/agent-threads/agent-thread-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/side-thread-cache-eviction-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/side-thread-cache-eviction-e2e");
 const SIDE_THREAD_MESSAGES = 20;
 const FILLER_THREADS = 10;
 const FILLER_MESSAGES = 7;
@@ -46,8 +46,8 @@ function message(prefix: string, index: number, text: string, author: "user" | "
 const nextMillisecond = () => new Promise((done) => setTimeout(done, 2));
 
 async function runCase(name: CaseName, result: CaseReport): Promise<void> {
-  const root = await mkdtemp(join(tmpdir(), "openbot-side-thread-eviction-"));
-  const database = new OpenBotDatabase(join(root, "state"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-side-thread-eviction-"));
+  const database = new CodeBotDatabase(join(root, "state"));
   const store = new AgentStore(join(root, "state"), join(root, "home"), database);
   const published: ConversationSnapshot[] = [];
   const conversation = new ConversationRuntime(

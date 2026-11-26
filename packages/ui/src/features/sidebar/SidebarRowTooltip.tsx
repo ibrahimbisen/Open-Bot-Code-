@@ -1,4 +1,4 @@
-import { Tooltip } from "@openbot/ui";
+import { Tooltip } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, Show } from "solid-js";
 

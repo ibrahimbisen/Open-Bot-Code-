@@ -24,12 +24,12 @@ export function isTeamWebRtcBodylessRoute(method: string, path: string): boolean
 
 export function isTeamWebRtcRemoteViewerRoute(path: string): boolean {
   return /^\/v1\/remote-screen\/sessions\/[A-Za-z0-9-]+\/(?:viewer|authorize|viewer-state|moonlight(?:\/.*)?)$/u.test(
-    new URL(path, "http://openbot.invalid").pathname,
+    new URL(path, "http://codebot.invalid").pathname,
   );
 }
 
 export function isTeamWebRtcNoBodyRoute(method: string, path: string): boolean {
-  const pathname = new URL(path, "http://openbot.invalid").pathname;
+  const pathname = new URL(path, "http://codebot.invalid").pathname;
   if (method === "GET") {
     if (
       new Set([
@@ -83,7 +83,7 @@ export function isTeamWebRtcNoBodyRoute(method: string, path: string): boolean {
 function isRoutineTestRequest(method: string, path: string): boolean {
   return (
     method === "POST" &&
-    /^\/v1\/agents\/[^/]+\/routines\/[^/]+\/test$/u.test(new URL(path, "http://openbot.invalid").pathname)
+    /^\/v1\/agents\/[^/]+\/routines\/[^/]+\/test$/u.test(new URL(path, "http://codebot.invalid").pathname)
   );
 }
 

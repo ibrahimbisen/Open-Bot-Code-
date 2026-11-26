@@ -1,10 +1,10 @@
 import { readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { isNewerRelease } from "@openbot/contracts/release-version";
+import { isNewerRelease } from "@codebot/contracts/release-version";
 import { Effect, Option, Schema } from "effect";
 import { countCrashDumps } from "./run-marker";
 
-export const START_ATTEMPTS_FILE = "openbot-start-attempts-v1.json";
+export const START_ATTEMPTS_FILE = "codebot-start-attempts-v1.json";
 const START_FAILURE_LIMIT = 3;
 
 const StartFailure = Schema.Literals(["error", "exception", "crash"]);
@@ -199,8 +199,8 @@ function classify(record: StartAttemptsRecord, options: StartAttemptsOptions): E
 type ForcedStartFailure = "crash" | "hang";
 
 export function takeForcedStartFailure(environment: NodeJS.ProcessEnv, isPackaged: boolean): ForcedStartFailure | null {
-  const value = environment.OPENBOT_E2E_FORCE_START_FAILURE;
-  delete environment.OPENBOT_E2E_FORCE_START_FAILURE;
+  const value = environment.CODEBOT_E2E_FORCE_START_FAILURE;
+  delete environment.CODEBOT_E2E_FORCE_START_FAILURE;
   if (isPackaged) return null;
   return value === "crash" || value === "hang" ? value : null;
 }
@@ -208,8 +208,8 @@ export function takeForcedStartFailure(environment: NodeJS.ProcessEnv, isPackage
 type ForcedRendererStop = "first-load" | "recovery";
 
 export function takeForcedRendererStop(environment: NodeJS.ProcessEnv, isPackaged: boolean): ForcedRendererStop | null {
-  const value = environment.OPENBOT_E2E_STOP_RENDERER;
-  delete environment.OPENBOT_E2E_STOP_RENDERER;
+  const value = environment.CODEBOT_E2E_STOP_RENDERER;
+  delete environment.CODEBOT_E2E_STOP_RENDERER;
   if (isPackaged) return null;
   return value === "first-load" || value === "recovery" ? value : null;
 }

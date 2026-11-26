@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { dirname, join } from "node:path";
-import type { AgentEvent, BrowserTab } from "@openbot/contracts/ipc";
-import { redactText } from "@openbot/logging";
+import type { AgentEvent, BrowserTab } from "@codebot/contracts/ipc";
+import { redactText } from "@codebot/logging";
 import { Effect, Exit } from "effect";
 import { app, BrowserWindow, type WebContents, webContents } from "electron";
 import { z } from "zod";
@@ -108,7 +108,7 @@ async function main(): Promise<void> {
     });
     const host = browser;
     const params = (tool: string, args: DynamicToolCallParams["arguments"]): DynamicToolCallParams => ({
-      namespace: "openbot_browser",
+      namespace: "codebot_browser",
       tool,
       arguments: args,
       ownerAgentId: "fixture-agent",

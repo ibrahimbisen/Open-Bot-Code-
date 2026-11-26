@@ -2,8 +2,8 @@ import { Effect } from "effect";
 import { constantTimeEqual, deriveSecret, hmacSha256, randomToken } from "./crypto";
 import { GitHubInstallationTokensError } from "./github-installation-tokens";
 
-const MARK = /\n<!-- openbot-feedback-owner:([A-Za-z0-9_-]{22})\.([A-Za-z0-9_-]{43}) -->\s*$/u;
-const KEY_LABEL = "openbot/feedback-owner/v1";
+const MARK = /\n<!-- codebot-feedback-owner:([A-Za-z0-9_-]{22})\.([A-Za-z0-9_-]{43}) -->\s*$/u;
+const KEY_LABEL = "codebot/feedback-owner/v1";
 
 const unavailable = () => new GitHubInstallationTokensError(503, "feedback_unavailable", "Feedback is not available.");
 
@@ -13,7 +13,7 @@ export const feedbackOwner = Effect.fn("FeedbackOwner.create")(function* (secret
   return {
     mark: Effect.fn("FeedbackOwner.mark")(function* (body: string) {
       const nonce = randomToken(16);
-      return `${body}\n\n<!-- openbot-feedback-owner:${nonce}.${yield* hash(nonce)} -->`;
+      return `${body}\n\n<!-- codebot-feedback-owner:${nonce}.${yield* hash(nonce)} -->`;
     }),
     sentBy: Effect.fn("FeedbackOwner.sentBy")(function* (body: string) {
       const found = MARK.exec(body.replace(/\r\n/gu, "\n"));

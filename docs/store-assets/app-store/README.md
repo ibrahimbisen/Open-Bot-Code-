@@ -1,9 +1,9 @@
 # App Store screenshots
 
-Screenshots for the OpenBot listing in the App Store.
+Screenshots for the CodeBot listing in the App Store.
 
 - Format: 24-bit PNG without an alpha channel.
-- Source: Figma file "OpenBOT-AI", page "Sandbox", frames named `App_Store` and `iPad_Store`.
+- Source: Figma file "CodeBOT-AI", page "Sandbox", frames named `App_Store` and `iPad_Store`.
 
 The screens use sample data.
 

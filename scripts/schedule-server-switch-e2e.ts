@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { chromium, type Page } from "playwright-core";
 
 declare global {
@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/schedule-server-switch-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/schedule-server-switch-e2e");
 const t = translateFor("en");
 const storybook = process.argv.find((arg) => arg.startsWith("--storybook="))?.slice("--storybook=".length);
 assert.ok(storybook, "Pass --storybook=<url> with the URL that `bun run storybook` reports.");
@@ -51,7 +51,7 @@ try {
   await page.goto(`${storybook}/iframe.html?id=app--playground&viewMode=story`);
   await page.getByRole("button", { name: t("app.rail.schedule"), exact: true }).waitFor();
   await page.evaluate(() => {
-    const agent = window.openbot.agent;
+    const agent = window.codebot.agent;
     window.scheduleCalendarRequests = [];
     agent.routineCalendar = async (_input, server) => {
       const serverId = typeof server === "string" ? server : "local";
@@ -73,7 +73,7 @@ try {
     };
   });
 
-  const servers = await page.evaluate(() => window.openbot.servers.list());
+  const servers = await page.evaluate(() => window.codebot.servers.list());
   const from = servers.find((server) => server.active);
   const to = servers.find((server) => !server.active && server.state === "online");
   assert.ok(from && to, "The preview needs an active server and another online server.");

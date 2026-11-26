@@ -1,7 +1,7 @@
-import { parseAgentTemplateUrl } from "@openbot/contracts/agent-template-links";
-import { type InviteLinkOptions, parseInviteUrl } from "@openbot/contracts/invite-links";
-import { type MarketplaceListingLink, parseMarketplaceUrl } from "@openbot/contracts/marketplace-links";
-import { parsePluginUrl } from "@openbot/contracts/plugin-links";
+import { parseAgentTemplateUrl } from "@codebot/contracts/agent-template-links";
+import { type InviteLinkOptions, parseInviteUrl } from "@codebot/contracts/invite-links";
+import { type MarketplaceListingLink, parseMarketplaceUrl } from "@codebot/contracts/marketplace-links";
+import { parsePluginUrl } from "@codebot/contracts/plugin-links";
 
 export type DeepLink =
   | { kind: "invite"; url: string }
@@ -13,7 +13,7 @@ export type DeepLink =
   | { kind: "discord-guild"; nonce: string; grant: string }
   | { kind: "near-signature"; nonce: string; data: string };
 
-export const MCP_OAUTH_REDIRECT_URL = "openbot://mcp-auth";
+export const MCP_OAUTH_REDIRECT_URL = "codebot://mcp-auth";
 
 const MCP_OAUTH_HOST = "mcp-auth";
 const SLACK_WORKSPACE_HOST = "slack-workspace";
@@ -48,7 +48,7 @@ function parseSlackUrl(value: string): DeepLink | null {
   } catch {
     return null;
   }
-  if (url.protocol !== "openbot:") return null;
+  if (url.protocol !== "codebot:") return null;
   if (url.hostname === SLACK_WORKSPACE_HOST) {
     const nonce = url.searchParams.get("nonce");
     const grant = url.searchParams.get("grant");
@@ -74,7 +74,7 @@ function parseMcpAuthUrl(value: string): DeepLink | null {
   } catch {
     return null;
   }
-  if (url.protocol !== "openbot:" || url.hostname !== MCP_OAUTH_HOST) return null;
+  if (url.protocol !== "codebot:" || url.hostname !== MCP_OAUTH_HOST) return null;
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   if (!code || !state) return null;

@@ -14,16 +14,16 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename, dirname, extname, isAbsolute, join, relative } from "node:path";
-import { attachmentMimeTypeForName, isSupportedAttachmentName } from "@openbot/contracts/attachment-files";
-import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { attachmentMimeTypeForName, isSupportedAttachmentName } from "@codebot/contracts/attachment-files";
+import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AttachmentDataInput,
   AttachmentKind,
   AttachmentPreviewKind,
   AttachmentSummary,
   QueueDelivery,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { isHeldTargetError } from "./atomic-json-file";
 import { type AttachmentOperationError, attachmentCall, attachmentFailure, attachmentSync } from "./attachment-effects";
@@ -33,7 +33,7 @@ import { isWithin } from "./workspace-paths";
 const MAX_ATTACHMENTS = INPUT_LIMITS.attachments;
 const MAX_FILE_BYTES = ATTACHMENT_LIMITS.fileBytes;
 const MAX_TOTAL_BYTES = ATTACHMENT_LIMITS.totalBytes;
-const TRANSFER_MANIFEST_FILE = ".openbot-transfer.json";
+const TRANSFER_MANIFEST_FILE = ".codebot-transfer.json";
 const HELD_TRANSFER_WAITS_MS: readonly number[] = [10, 50, 100, 250, 500, 1000, 1000];
 
 export interface StoredAttachment extends AttachmentSummary {
@@ -757,7 +757,7 @@ const heifSafeFileMimeType = Effect.fn("Attachments.heifSafeFileMimeType")(funct
 });
 
 function attachmentPreviewUrl(id: string): string {
-  return `openbot-attachment://file/${id}`;
+  return `codebot-attachment://file/${id}`;
 }
 
 export function toAttachmentSummary(attachment: StoredAttachment): AttachmentSummary {

@@ -3,7 +3,7 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 import { Effect } from "effect";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { MessagingCredentialStore } from "./messaging-credential-store";
@@ -17,7 +17,7 @@ let directory: string;
 let path: string;
 
 beforeEach(async () => {
-  directory = await mkdtemp(join(tmpdir(), "openbot-messaging-credentials-"));
+  directory = await mkdtemp(join(tmpdir(), "codebot-messaging-credentials-"));
   path = join(directory, "messaging-credentials.json");
 });
 

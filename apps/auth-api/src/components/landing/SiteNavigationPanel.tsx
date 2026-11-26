@@ -1,4 +1,4 @@
-import { AppLogo } from "@openbot/brand";
+import { AppLogo } from "@codebot/brand";
 import { Link } from "@tanstack/solid-router";
 import { For, Match, Show, Switch } from "solid-js";
 import { articleGradient, articleGradientCss } from "../../lib/article-gradient";

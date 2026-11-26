@@ -1,31 +1,31 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 import type { CompanySignInCalls } from "./features/servers/ServerCompanySignInSection";
 
 export interface AppPort {
-  getAppInfo: OpenBotDesktopApi["getAppInfo"];
-  getAppAppearancePreference: OpenBotDesktopApi["getAppAppearancePreference"];
-  getAppInterfaceSizePreference: OpenBotDesktopApi["getAppInterfaceSizePreference"];
-  getAppLanguagePreference: OpenBotDesktopApi["getAppLanguagePreference"];
-  getAppLogoColorPreference: OpenBotDesktopApi["getAppLogoColorPreference"];
-  listInstalledFonts: OpenBotDesktopApi["listInstalledFonts"];
-  onAppAppearancePreference: OpenBotDesktopApi["onAppAppearancePreference"];
-  onAppInterfaceSizePreference: OpenBotDesktopApi["onAppInterfaceSizePreference"];
-  onAppLanguagePreference: OpenBotDesktopApi["onAppLanguagePreference"];
-  onAppLogoColorPreference: OpenBotDesktopApi["onAppLogoColorPreference"];
-  openExternal: OpenBotDesktopApi["openExternal"];
-  getSentMessageStats: OpenBotDesktopApi["getSentMessageStats"];
-  reportRendererTiming: OpenBotDesktopApi["reportRendererTiming"];
-  openUrl: OpenBotDesktopApi["openUrl"];
-  openChatWindow: OpenBotDesktopApi["openChatWindow"];
-  getChatWindows: OpenBotDesktopApi["getChatWindows"];
-  onChatWindows: OpenBotDesktopApi["onChatWindows"];
-  onQuitShortcutHint: OpenBotDesktopApi["onQuitShortcutHint"];
-  setAppAppearancePreference: OpenBotDesktopApi["setAppAppearancePreference"];
-  setAppInterfaceSizePreference: OpenBotDesktopApi["setAppInterfaceSizePreference"];
-  setAppLanguagePreference: OpenBotDesktopApi["setAppLanguagePreference"];
-  setAppLogoColorPreference: OpenBotDesktopApi["setAppLogoColorPreference"];
+  getAppInfo: CodeBotDesktopApi["getAppInfo"];
+  getAppAppearancePreference: CodeBotDesktopApi["getAppAppearancePreference"];
+  getAppInterfaceSizePreference: CodeBotDesktopApi["getAppInterfaceSizePreference"];
+  getAppLanguagePreference: CodeBotDesktopApi["getAppLanguagePreference"];
+  getAppLogoColorPreference: CodeBotDesktopApi["getAppLogoColorPreference"];
+  listInstalledFonts: CodeBotDesktopApi["listInstalledFonts"];
+  onAppAppearancePreference: CodeBotDesktopApi["onAppAppearancePreference"];
+  onAppInterfaceSizePreference: CodeBotDesktopApi["onAppInterfaceSizePreference"];
+  onAppLanguagePreference: CodeBotDesktopApi["onAppLanguagePreference"];
+  onAppLogoColorPreference: CodeBotDesktopApi["onAppLogoColorPreference"];
+  openExternal: CodeBotDesktopApi["openExternal"];
+  getSentMessageStats: CodeBotDesktopApi["getSentMessageStats"];
+  reportRendererTiming: CodeBotDesktopApi["reportRendererTiming"];
+  openUrl: CodeBotDesktopApi["openUrl"];
+  openChatWindow: CodeBotDesktopApi["openChatWindow"];
+  getChatWindows: CodeBotDesktopApi["getChatWindows"];
+  onChatWindows: CodeBotDesktopApi["onChatWindows"];
+  onQuitShortcutHint: CodeBotDesktopApi["onQuitShortcutHint"];
+  setAppAppearancePreference: CodeBotDesktopApi["setAppAppearancePreference"];
+  setAppInterfaceSizePreference: CodeBotDesktopApi["setAppInterfaceSizePreference"];
+  setAppLanguagePreference: CodeBotDesktopApi["setAppLanguagePreference"];
+  setAppLogoColorPreference: CodeBotDesktopApi["setAppLogoColorPreference"];
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     | "readConversationPage"
     | "searchConversationMessages"
     | "searchConversationFiles"
@@ -33,29 +33,29 @@ export interface AppPort {
     | "listAgents"
     | "onScopedEvent"
   >;
-  agentTemplates: Pick<OpenBotDesktopApi["agentTemplates"], "onOpenLink" | "takePendingLink">;
-  acpRegistry: OpenBotDesktopApi["acpRegistry"];
-  hostedSites: OpenBotDesktopApi["hostedSites"];
-  billing: OpenBotDesktopApi["billing"];
-  credits: OpenBotDesktopApi["credits"];
-  referral: OpenBotDesktopApi["referral"];
-  license: OpenBotDesktopApi["license"];
+  agentTemplates: Pick<CodeBotDesktopApi["agentTemplates"], "onOpenLink" | "takePendingLink">;
+  acpRegistry: CodeBotDesktopApi["acpRegistry"];
+  hostedSites: CodeBotDesktopApi["hostedSites"];
+  billing: CodeBotDesktopApi["billing"];
+  credits: CodeBotDesktopApi["credits"];
+  referral: CodeBotDesktopApi["referral"];
+  license: CodeBotDesktopApi["license"];
   auth: CompanySignInCalls &
     Pick<
-      OpenBotDesktopApi["auth"],
+      CodeBotDesktopApi["auth"],
       "listOwnerTransfers" | "acceptOwnerTransfer" | "declineOwnerTransfer" | "onOwnerTransfersChanged"
     >;
-  hostedServers: OpenBotDesktopApi["hostedServers"];
-  routineFeed: OpenBotDesktopApi["routineFeed"];
-  events: OpenBotDesktopApi["events"];
-  plugins: Pick<OpenBotDesktopApi["plugins"], "onOpenListing" | "takePendingListing">;
-  marketplace: Pick<OpenBotDesktopApi["marketplace"], "onOpenListing" | "takePendingListing">;
+  hostedServers: CodeBotDesktopApi["hostedServers"];
+  routineFeed: CodeBotDesktopApi["routineFeed"];
+  events: CodeBotDesktopApi["events"];
+  plugins: Pick<CodeBotDesktopApi["plugins"], "onOpenListing" | "takePendingListing">;
+  marketplace: Pick<CodeBotDesktopApi["marketplace"], "onOpenListing" | "takePendingListing">;
   servers: Pick<
-    OpenBotDesktopApi["servers"],
+    CodeBotDesktopApi["servers"],
     "onInvite" | "takePendingInvite" | "getOwnerTransfer" | "startOwnerTransfer" | "cancelOwnerTransfer"
   >;
 }
 
 export function appPort(): AppPort {
-  return window.openbot;
+  return window.codebot;
 }

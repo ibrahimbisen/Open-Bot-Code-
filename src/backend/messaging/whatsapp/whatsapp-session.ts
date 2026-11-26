@@ -1,5 +1,5 @@
-import { createOpenBotLogger } from "@openbot/logging";
-import type { WhatsAppAuthStore } from "@openbot/whatsapp/auth-store";
+import { createCodeBotLogger } from "@codebot/logging";
+import type { WhatsAppAuthStore } from "@codebot/whatsapp/auth-store";
 import {
   type AnyMessageContent,
   type BaileysEventMap,
@@ -22,12 +22,12 @@ import {
   type WAMessage,
   type WAMessageKey,
   type WAVersion,
-} from "@openbot/whatsapp/baileys";
+} from "@codebot/whatsapp/baileys";
 import { Effect } from "effect";
 import { MessagingAdapterError, WhatsAppRefusedError } from "../messaging-types";
 import type { WhatsAppUpsertWindow } from "./whatsapp-events";
 
-const logger = createOpenBotLogger("whatsapp");
+const logger = createCodeBotLogger("whatsapp");
 
 export interface WhatsAppSocket {
   ev: { on<T extends keyof BaileysEventMap>(event: T, listener: (arg: BaileysEventMap[T]) => void): void };
@@ -63,7 +63,7 @@ export interface WhatsAppAck {
 
 export const MESSAGE_ACK = "CB:ack,class:message";
 
-export const NODE_HANDLING = "openbot:node";
+export const NODE_HANDLING = "codebot:node";
 
 export type WhatsAppSocketFactory = (config: UserFacingSocketConfig) => WhatsAppSocket;
 
@@ -175,7 +175,7 @@ export class WhatsAppSession {
   #socket: WhatsAppSocket | null = null;
   #state: WhatsAppSessionState = "stopped";
   #started = false;
-  #browserName = "OpenBot";
+  #browserName = "CodeBot";
   #attempt = 0;
   #restartedOnce = false;
   #codeShown = false;
@@ -241,7 +241,7 @@ export class WhatsAppSession {
     if (this.#started) return;
     this.#started = true;
     this.#historySent = this.#store.linked;
-    this.#browserName = options.codeLink ? "Chrome" : "OpenBot";
+    this.#browserName = options.codeLink ? "Chrome" : "CodeBot";
     this.#attempt = 0;
     this.#stalls = [];
     this.#setState("connecting");

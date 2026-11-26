@@ -19,7 +19,7 @@ import {
   Tabs,
   Tooltip,
   Trash2,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import { createSignal } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";

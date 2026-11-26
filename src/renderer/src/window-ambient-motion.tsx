@@ -1,4 +1,4 @@
-import { AMBIENT_MOTION_PAUSED_ATTRIBUTE, AmbientMotion } from "@openbot/ui/ambient-motion";
+import { AMBIENT_MOTION_PAUSED_ATTRIBUTE, AmbientMotion } from "@codebot/ui/ambient-motion";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, onSettled } from "solid-js";
 import { usePlatform } from "./platform";

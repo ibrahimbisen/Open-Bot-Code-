@@ -42,7 +42,7 @@ async function registerPasskey(challenge: string, userId: string, userName: stri
   const credential = await navigator.credentials.create({
     publicKey: {
       challenge: base64urlToBytes(challenge),
-      rp: { id: location.hostname, name: "OpenBot" },
+      rp: { id: location.hostname, name: "CodeBot" },
       user: { id: base64urlToBytes(userId), name: userName, displayName: userName },
       pubKeyCredParams: [{ type: "public-key", alg: ES256 }],
       authenticatorSelection: { userVerification: "required", residentKey: "required" },

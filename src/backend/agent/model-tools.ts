@@ -9,15 +9,15 @@ import type {
   CustomProviderHarness,
   ProviderAccountStatus,
   UpdateAgentInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AGENT_PROVIDERS,
   composedCustomModelId,
   DEFAULT_PROVIDER_ACCOUNT_ID,
   defaultProviderModel,
   sameAgentModelChoice,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import type { AgentProvider } from "../agent-client";
 import { isEncodedModelOf } from "../encoded-model-id";
 import { AgentSettingsRefused } from "./agent-settings-refused";

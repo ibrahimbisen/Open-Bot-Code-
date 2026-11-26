@@ -1,16 +1,16 @@
-import { attachmentReferenceIds } from "@openbot/contracts/attachment-references";
-import { serializeChatTagReference } from "@openbot/contracts/chat-tag-references";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { attachmentReferenceIds } from "@codebot/contracts/attachment-references";
+import { serializeChatTagReference } from "@codebot/contracts/chat-tag-references";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type DraftAttachment,
   isAttachmentSummary,
   type MarketplaceSkillDetail,
   SKILL_CREATION_REQUEST,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { decodeQueueEditRequest, type QueueEditRequest } from "@openbot/contracts/team-protocol/queue-edit-v1";
-import { skillExamplePrompt } from "@openbot/ui/components/SkillPreview";
-import type { ComposerSelection } from "@openbot/ui/features/conversation/ComposerEditor";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { decodeQueueEditRequest, type QueueEditRequest } from "@codebot/contracts/team-protocol/queue-edit-v1";
+import { skillExamplePrompt } from "@codebot/ui/components/SkillPreview";
+import type { ComposerSelection } from "@codebot/ui/features/conversation/ComposerEditor";
 import type { ComposerDraft } from "./conversation-types";
 
 export const EMPTY_DRAFT: ComposerDraft = {
@@ -50,7 +50,7 @@ function appendDraftLine(draft: ComposerDraft, line: string): ComposerDraft {
   return { ...draft, text: draft.text ? `${draft.text}\n${line}` : line };
 }
 
-export const QUEUE_EDIT_STORAGE_KEY = "openbot:queue-edit";
+export const QUEUE_EDIT_STORAGE_KEY = "codebot:queue-edit";
 type StoredQueueSave = Extract<QueueEditRequest, { action: "save" }>;
 export interface StoredQueueEdit {
   agentId: string;
@@ -158,7 +158,7 @@ export function queueEditChanged(
   );
 }
 
-export const THREAD_QUEUE_EDIT_STORAGE_KEY = "openbot:thread-queue-edit";
+export const THREAD_QUEUE_EDIT_STORAGE_KEY = "codebot:thread-queue-edit";
 export interface StoredThreadQueueEdit extends StoredQueueEdit {
   taskId: string;
   draftKey: string;

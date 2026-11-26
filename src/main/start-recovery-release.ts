@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { isValidSemver } from "@openbot/contracts/release-version";
+import { isValidSemver } from "@codebot/contracts/release-version";
 import { Effect, Schema } from "effect";
 import { RELEASED_SCHEMA_VERSIONS } from "./released-schema-versions";
 import type { StartAttemptsSummary } from "./start-attempts";
@@ -11,7 +11,7 @@ class DatabaseSchemaReadFailure extends Schema.TaggedError<DatabaseSchemaReadFai
 }) {}
 
 export function readDatabaseSchemaVersion(userDataPath: string): number | null {
-  const path = join(userDataPath, "openbot.db");
+  const path = join(userDataPath, "codebot.db");
   return Effect.runSync(
     Effect.try({
       try: () => {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const HOSTED_UPSELL_KEY_PREFIX = "openbot:hosted-server-upsell:v1:";
+const HOSTED_UPSELL_KEY_PREFIX = "codebot:hosted-server-upsell:v1:";
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MODAL_LIMIT = 1;
 const NOTICE_SNOOZE_DAYS = [7, 14, 30] as const;

@@ -3,18 +3,18 @@ import { chmod, mkdir, mkdtemp, readFile, rm, stat, writeFile } from "node:fs/pr
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { ProviderAccountStatus } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { ProviderAccountStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Cause, Effect, Exit } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { ProviderAccountStore } from "../src/backend/agent/provider-account-store";
 import { ProviderRuntime } from "../src/backend/agent/provider-runtime";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-accounts-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-accounts-e2e");
 const SAVED_KEY = "fake-gemini-key-for-the-first-account";
 const GOOGLE_PAGE = "https://accounts.google.com/o/oauth2/auth?client_id=fake&state=fake&prompt=consent";
 const GOOGLE_PAGE_WITH_CHOOSER =
@@ -22,7 +22,7 @@ const GOOGLE_PAGE_WITH_CHOOSER =
 const PROJECT = "fake-account-project";
 const TOKEN_FILE = "antigravity-oauth-token";
 const LEGACY_TOKEN_FILE = "acp_token.json";
-const MARKER = "openbot-token-imported";
+const MARKER = "codebot-token-imported";
 const SAME_EMAIL = "same.person@example.com";
 
 const fakeAntigravity = (version: string) => `#!/usr/bin/env node
@@ -56,8 +56,8 @@ const write = (message) => process.stdout.write(JSON.stringify({ jsonrpc: "2.0",
 function openPage(id) {
   const first = (process.env.PATH || "").split(path.delimiter)[0] || "";
   const program = path.join(first, process.platform === "darwin" ? "open" : "xdg-open");
-  if (!path.basename(first).startsWith("openbot-sign-in-") || !fs.existsSync(program)) {
-    write({ id, error: { code: -32603, message: "OpenBot's open command is not first on PATH." } });
+  if (!path.basename(first).startsWith("codebot-sign-in-") || !fs.existsSync(program)) {
+    write({ id, error: { code: -32603, message: "CodeBot's open command is not first on PATH." } });
     return false;
   }
   require("node:child_process").execFileSync(program, ["${GOOGLE_PAGE}"]);
@@ -180,7 +180,7 @@ interface Report {
   sameLogin?: { ownEmailAtStart: string | null; error: string; stored: number; rows: number };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-accounts-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-accounts-e2e-"));
 const log = join(root, "agy.jsonl");
 const approve = join(root, "approve");
 const defaultHome = join(root, "default-gemini");
@@ -188,13 +188,13 @@ const defaultData = join(defaultHome, "antigravity-acp");
 const report: Report = { passed: false };
 const savedEnvironment = {
   GEMINI_HOME: process.env.GEMINI_HOME,
-  OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL: process.env.OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL,
+  CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL: process.env.CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL,
 };
 process.env.FAKE_AGY_LOG = log;
 process.env.FAKE_AGY_APPROVE = approve;
 process.env.FAKE_AGY_FREE_HOME = defaultHome;
 process.env.GEMINI_HOME = defaultHome;
-delete process.env.OPENBOT_ANTIGRAVITY_PATH;
+delete process.env.CODEBOT_ANTIGRAVITY_PATH;
 
 const quotaCalls: QuotaCall[] = [];
 let usageFails = false;
@@ -232,7 +232,7 @@ const quotaServer = createServer((request, response) => {
 await new Promise<void>((done) => quotaServer.listen(0, "127.0.0.1", done));
 const quotaAddress = quotaServer.address();
 assert.ok(quotaAddress !== null && typeof quotaAddress === "object");
-process.env.OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${quotaAddress.port}/v1internal`;
+process.env.CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${quotaAddress.port}/v1internal`;
 
 async function entries(): Promise<LogEntry[]> {
   const text = await readFile(log, "utf8").catch(() => "");
@@ -270,7 +270,7 @@ async function legacyFolder(folder: string, refreshToken: string, signIn?: strin
   return legacy;
 }
 
-const database = new OpenBotDatabase(join(root, "profile"));
+const database = new CodeBotDatabase(join(root, "profile"));
 const agents = new AgentStore(join(root, "profile"), join(root, "home"), database);
 
 const busyAgents = new Set<string>();
@@ -335,7 +335,7 @@ function startedIn(entry: LogEntry, home: string): boolean {
     geminiDir !== undefined &&
     geminiDir === home &&
     entry.argv.includes("--app-data-dir=antigravity-acp") &&
-    entry.wsl === "OpenBot"
+    entry.wsl === "CodeBot"
   );
 }
 

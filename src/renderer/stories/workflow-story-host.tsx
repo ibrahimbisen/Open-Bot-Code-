@@ -5,19 +5,19 @@ import {
   WORKFLOW_TRIGGER_TYPES,
   type WorkflowRunPage,
   type WorkflowVersion,
-} from "@openbot/contracts/ipc";
-import { accountUsageProviderRows } from "@openbot/ui/features/account/account-usage-view";
-import { Sidebar } from "@openbot/ui/features/sidebar/Sidebar";
-import { HelpMenu } from "@openbot/ui/features/updates/HelpMenu";
-import { PageRail, type PageRailPage } from "@openbot/ui/features/window/PageRail";
-import { WorkflowCanvas } from "@openbot/ui/features/workflows/WorkflowCanvas";
+} from "@codebot/contracts/ipc";
+import { accountUsageProviderRows } from "@codebot/ui/features/account/account-usage-view";
+import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
+import { HelpMenu } from "@codebot/ui/features/updates/HelpMenu";
+import { PageRail, type PageRailPage } from "@codebot/ui/features/window/PageRail";
+import { WorkflowCanvas } from "@codebot/ui/features/workflows/WorkflowCanvas";
 import {
   WORKFLOW_FEATURES_V1,
   type WorkflowCatalogs,
   type WorkflowFeatures,
-} from "@openbot/ui/features/workflows/workflow-model";
-import type { WorkflowPresence } from "@openbot/ui/features/workflows/workflow-presence";
-import type { WorkflowRunView } from "@openbot/ui/features/workflows/workflow-run-view";
+} from "@codebot/ui/features/workflows/workflow-model";
+import type { WorkflowPresence } from "@codebot/ui/features/workflows/workflow-presence";
+import type { WorkflowRunView } from "@codebot/ui/features/workflows/workflow-run-view";
 import type { JSX } from "@solidjs/web";
 import { createSignal, Show, untrack } from "solid-js";
 import { fn } from "storybook/test";

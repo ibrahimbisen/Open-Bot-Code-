@@ -8,17 +8,17 @@ import {
   type AgentEvent,
   defaultProviderModel,
   PLAN_CONTINUATION_ITEM_TYPE,
-} from "@openbot/contracts/ipc";
-import { teeLogLines } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { teeLogLines } from "@codebot/logging";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/finish-check-live-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/finish-check-live-bench");
 const REQUEST_TIMEOUT_MS = 15 * 60_000;
 const argument = (name: string) => process.argv.find((value) => value.startsWith(`--${name}=`))?.slice(name.length + 3);
 const runCount = Math.max(1, Number(argument("runs") ?? 1) || 1);
@@ -254,11 +254,11 @@ teeLogLines(["agent-service"], (line) => {
 });
 
 async function runTask(task: Task, mode: Mode): Promise<Run> {
-  const root = await mkdtemp(join(tmpdir(), "openbot-finish-live-"));
+  const root = await mkdtemp(join(tmpdir(), "codebot-finish-live-"));
   const userData = join(root, "user-data");
   const home = join(root, "home");
   mkdirSync(home, { recursive: true });
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const service = new AgentService({

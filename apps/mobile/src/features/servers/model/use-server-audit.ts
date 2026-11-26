@@ -1,5 +1,5 @@
-import type { AgentAccessLevel, ServerAuditChange, ServerAuditEntry, ServerAuditName } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import type { AgentAccessLevel, ServerAuditChange, ServerAuditEntry, ServerAuditName } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import { AGENT_ACCESS_LEVEL_KEYS, SERVER_ROLE_LABEL_KEYS } from "@/features/servers/model/server-role";

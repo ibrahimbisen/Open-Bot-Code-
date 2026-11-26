@@ -3,8 +3,8 @@ import {
   type MarketplaceSkillSort,
   SKILL_CATEGORIES,
   type SkillCategory,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import { createEffect, createStore, onCleanup, untrack } from "solid-js";
 import { currentText } from "../../text";
 

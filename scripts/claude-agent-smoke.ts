@@ -10,7 +10,7 @@ import { makeGitWorkspace, messageNames, observedQuery, removeRun, startClaudeAg
 const argument = (name: string) => process.argv.find((arg) => arg.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
 const userSetup = argument("setup") === "on";
 const MODEL = argument("model") ?? "claude-haiku-5-5";
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-agent-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-agent-smoke");
 
 const TURNS: Array<{ step: string; prompt: string; expect: string[] }> = [
   {
@@ -51,7 +51,7 @@ const TURNS: Array<{ step: string; prompt: string; expect: string[] }> = [
   },
 ];
 
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-claude-smoke-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-claude-smoke-")));
 const workspace = join(root, "ws");
 mkdirSync(workspace);
 const git = await makeGitWorkspace(workspace, true);

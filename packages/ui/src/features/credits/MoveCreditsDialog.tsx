@@ -4,8 +4,8 @@ import {
   type CreditTransferDirection,
   creditsFromTenths,
   creditTenths,
-} from "@openbot/contracts/credits";
-import { ArrowLeftRight, Button, Dialog, IconButton, Input, ServerPlushLogo, X } from "@openbot/ui";
+} from "@codebot/contracts/credits";
+import { ArrowLeftRight, Button, Dialog, IconButton, Input, ServerPlushLogo, X } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createSignal, Show, untrack } from "solid-js";
 import { useText } from "../../text";

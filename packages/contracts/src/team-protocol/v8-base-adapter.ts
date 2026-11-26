@@ -282,7 +282,7 @@ export function decodeTeamProtocolV8BaseCurrentHttpResponse(
 }
 
 function isAgentStatusRoute(method: string, path: string): boolean {
-  return method === "GET" && new URL(path, "http://openbot.invalid").pathname === "/v1/agents/status";
+  return method === "GET" && new URL(path, "http://codebot.invalid").pathname === "/v1/agents/status";
 }
 
 function withProviderDisplayNames(status: TeamProtocolV8BaseJsonValue): TeamProtocolV8BaseJsonValue {
@@ -298,7 +298,7 @@ function withProviderDisplayNames(status: TeamProtocolV8BaseJsonValue): TeamProt
 }
 
 function isInstalledSkillsRoute(method: string, path: string): boolean {
-  return method === "GET" && /^\/v1\/agents\/[^/]+\/skills$/u.test(new URL(path, "http://openbot.invalid").pathname);
+  return method === "GET" && /^\/v1\/agents\/[^/]+\/skills$/u.test(new URL(path, "http://codebot.invalid").pathname);
 }
 
 function toWireAgentKeysForRequestPath(path: string, value: TeamProtocolV8BaseJsonValue): TeamProtocolV8BaseJsonValue {

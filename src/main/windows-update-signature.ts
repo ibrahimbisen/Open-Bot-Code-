@@ -12,7 +12,7 @@ import { Effect, Schema } from "effect";
  */
 
 const VERIFY_TIMEOUT_MS = 60_000;
-const FILE_ENV = "OPENBOT_UPDATE_SIGNATURE_FILE";
+const FILE_ENV = "CODEBOT_UPDATE_SIGNATURE_FILE";
 
 class SignatureCheckFailed extends Schema.TaggedError<SignatureCheckFailed>()("SignatureCheckFailed", {
   reason: Schema.String,
@@ -134,7 +134,7 @@ export const verifyWindowsUpdateSignature = Effect.fn("verifyWindowsUpdateSignat
 
 /**
  * `parseDn` of builder-util-runtime 9.7.0 (`rfc2253Parser.ts`, MIT, Copyright (c) 2015 Loopline
- * Systems), the parser that electron-updater 6.8.11 matches publisher names with. OpenBot does not
+ * Systems), the parser that electron-updater 6.8.11 matches publisher names with. CodeBot does not
  * depend on builder-util-runtime directly.
  */
 function parseDn(text: string): Map<string, string> {

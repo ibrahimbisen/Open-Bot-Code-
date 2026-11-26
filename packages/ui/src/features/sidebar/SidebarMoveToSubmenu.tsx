@@ -1,4 +1,4 @@
-import { Check, ChevronRight, ContextMenu, Folder, FolderInput, FolderPlus } from "@openbot/ui";
+import { Check, ChevronRight, ContextMenu, Folder, FolderInput, FolderPlus } from "@codebot/ui";
 import { For, Show } from "solid-js";
 import { useText } from "../../text";
 import { useSidebarScope } from "./sidebar-scope";

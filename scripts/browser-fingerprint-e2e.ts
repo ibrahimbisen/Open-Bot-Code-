@@ -12,8 +12,8 @@ class FixtureProcessTimeout extends Error {}
 const FINGERPRINT_CASES = 20;
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const buildRoot = await mkdtemp(join(tmpdir(), "openbot-fingerprint-"));
-const reportPath = join(projectRoot, ".openbot-build/browser-fingerprint-e2e/report.json");
+const buildRoot = await mkdtemp(join(tmpdir(), "codebot-fingerprint-"));
+const reportPath = join(projectRoot, ".codebot-build/browser-fingerprint-e2e/report.json");
 const runId = randomUUID();
 let sourceSha: string | undefined;
 try {

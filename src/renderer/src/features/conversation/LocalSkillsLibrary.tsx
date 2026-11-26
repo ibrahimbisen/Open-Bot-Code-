@@ -1,8 +1,8 @@
-import type { InstalledSkill, MarketplaceSkillDetail } from "@openbot/contracts/ipc";
-import { Button, ErrorReference, Switch } from "@openbot/ui";
-import { SkillGlyph } from "@openbot/ui/features/conversation/SkillGlyph";
-import { useText } from "@openbot/ui/text";
-import { errorReference } from "@openbot/user-errors";
+import type { InstalledSkill, MarketplaceSkillDetail } from "@codebot/contracts/ipc";
+import { Button, ErrorReference, Switch } from "@codebot/ui";
+import { SkillGlyph } from "@codebot/ui/features/conversation/SkillGlyph";
+import { useText } from "@codebot/ui/text";
+import { errorReference } from "@codebot/user-errors";
 import { createEffect, createSignal, createStore, For, onSettled, Show } from "solid-js";
 import { SkillPreview } from "../../components/SkillPreview";
 import { skillsPort } from "../../skills-port";

@@ -1,9 +1,9 @@
-import { type FileQuoteTarget, fileQuoteId } from "@openbot/contracts/chat-tag-references";
-import type { AgentProfile } from "@openbot/ui/data";
+import { type FileQuoteTarget, fileQuoteId } from "@codebot/contracts/chat-tag-references";
+import type { AgentProfile } from "@codebot/ui/data";
 import { findChatSearchMatches } from "./chat-search";
 import type { SidebarFilePreview } from "./conversation-types";
 
-const QUOTE_HIGHLIGHT = "openbot-quote-target";
+const QUOTE_HIGHLIGHT = "codebot-quote-target";
 
 let releaseHighlight: AbortController | undefined;
 let stopFileQuoteWatch: (() => void) | undefined;

@@ -3,7 +3,7 @@ import {
   BROWSER_PROFILE_LIMIT,
   type BrowserProfileSummary,
   sameAgentBrowserProfile,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { router, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -64,7 +64,7 @@ export function AgentBrowserProfileRow({ agent }: { agent: MobileAgent }) {
 
 export function AgentBrowserProfileScreen() {
   const { t, errorMessage } = useText();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const label = useChoiceLabel();
   const { agentId, serverId } = useLocalSearchParams<{ agentId: string; serverId: string }>();
   const agentProfile = useAgentBrowserProfile(serverId, agentId);

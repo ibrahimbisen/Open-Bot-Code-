@@ -70,7 +70,7 @@ import { Route as MarketplaceAppsRouteImport } from './routes/marketplace/apps'
 import { Route as NearSignRouteImport } from './routes/near/sign'
 import { Route as NewsIndexRouteImport } from './routes/news/index'
 import { Route as NewsSlugRouteImport } from './routes/news/$slug'
-import { Route as NewsOpenbotVsGrokbotRouteImport } from './routes/news/openbot-vs-grokbot'
+import { Route as NewsCodebotVsGrokbotRouteImport } from './routes/news/codebot-vs-grokbot'
 import { Route as NewsRssDotxmlRouteImport } from './routes/news/rss[.]xml'
 import { Route as OauthMcpCallbackRouteImport } from './routes/oauth/mcp-callback'
 import { Route as OauthMcpClientDotjsonRouteImport } from './routes/oauth/mcp-client[.]json'
@@ -130,7 +130,7 @@ import { Route as DownloadPlatformLatestRouteImport } from './routes/download/$p
 import { Route as MarketplaceAgentsAgentIdRouteImport } from './routes/marketplace/agents/$agentId'
 import { Route as MarketplaceSkillsIndexRouteImport } from './routes/marketplace/skills/index'
 import { Route as MarketplaceSkillsSlugRouteImport } from './routes/marketplace/skills/$slug'
-import { Route as NewsOgOpenbotVsGrokbotDotpngRouteImport } from './routes/news/og/openbot-vs-grokbot[.]png'
+import { Route as NewsOgCodebotVsGrokbotDotpngRouteImport } from './routes/news/og/codebot-vs-grokbot[.]png'
 import { Route as PluginsIconSlugRouteImport } from './routes/plugins/icon/$slug'
 import { Route as V1AgentTemplatesIndexRouteImport } from './routes/v1/agent-templates/index'
 import { Route as V1AgentTemplatesTemplateIdRouteImport } from './routes/v1/agent-templates/$templateId'
@@ -598,9 +598,9 @@ const NewsSlugRoute = NewsSlugRouteImport.update({
   path: '/news/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsOpenbotVsGrokbotRoute = NewsOpenbotVsGrokbotRouteImport.update({
-  id: '/news/openbot-vs-grokbot',
-  path: '/news/openbot-vs-grokbot',
+const NewsCodebotVsGrokbotRoute = NewsCodebotVsGrokbotRouteImport.update({
+  id: '/news/codebot-vs-grokbot',
+  path: '/news/codebot-vs-grokbot',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NewsRssDotxmlRoute = NewsRssDotxmlRouteImport.update({
@@ -899,10 +899,10 @@ const MarketplaceSkillsSlugRoute = MarketplaceSkillsSlugRouteImport.update({
   path: '/marketplace/skills/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NewsOgOpenbotVsGrokbotDotpngRoute =
-  NewsOgOpenbotVsGrokbotDotpngRouteImport.update({
-    id: '/news/og/openbot-vs-grokbot.png',
-    path: '/news/og/openbot-vs-grokbot.png',
+const NewsOgCodebotVsGrokbotDotpngRoute =
+  NewsOgCodebotVsGrokbotDotpngRouteImport.update({
+    id: '/news/og/codebot-vs-grokbot.png',
+    path: '/news/og/codebot-vs-grokbot.png',
     getParentRoute: () => rootRouteImport,
   } as any)
 const PluginsIconSlugRoute = PluginsIconSlugRouteImport.update({
@@ -1854,7 +1854,7 @@ export interface FileRoutesByFullPath {
   '/marketplace/apps': typeof MarketplaceAppsRoute
   '/near/sign': typeof NearSignRoute
   '/news/$slug': typeof NewsSlugRoute
-  '/news/openbot-vs-grokbot': typeof NewsOpenbotVsGrokbotRoute
+  '/news/codebot-vs-grokbot': typeof NewsCodebotVsGrokbotRoute
   '/news/rss.xml': typeof NewsRssDotxmlRoute
   '/oauth/mcp-callback': typeof OauthMcpCallbackRoute
   '/oauth/mcp-client.json': typeof OauthMcpClientDotjsonRoute
@@ -1919,7 +1919,7 @@ export interface FileRoutesByFullPath {
   '/download/$platform/latest': typeof DownloadPlatformLatestRoute
   '/marketplace/agents/$agentId': typeof MarketplaceAgentsAgentIdRoute
   '/marketplace/skills/$slug': typeof MarketplaceSkillsSlugRoute
-  '/news/og/openbot-vs-grokbot.png': typeof NewsOgOpenbotVsGrokbotDotpngRoute
+  '/news/og/codebot-vs-grokbot.png': typeof NewsOgCodebotVsGrokbotDotpngRoute
   '/plugins/icon/$slug': typeof PluginsIconSlugRoute
   '/v1/agent-templates/$templateId': typeof V1AgentTemplatesTemplateIdRouteWithChildren
   '/v1/agent-templates/mine': typeof V1AgentTemplatesMineRoute
@@ -2138,7 +2138,7 @@ export interface FileRoutesByTo {
   '/marketplace/apps': typeof MarketplaceAppsRoute
   '/near/sign': typeof NearSignRoute
   '/news/$slug': typeof NewsSlugRoute
-  '/news/openbot-vs-grokbot': typeof NewsOpenbotVsGrokbotRoute
+  '/news/codebot-vs-grokbot': typeof NewsCodebotVsGrokbotRoute
   '/news/rss.xml': typeof NewsRssDotxmlRoute
   '/oauth/mcp-callback': typeof OauthMcpCallbackRoute
   '/oauth/mcp-client.json': typeof OauthMcpClientDotjsonRoute
@@ -2203,7 +2203,7 @@ export interface FileRoutesByTo {
   '/download/$platform/latest': typeof DownloadPlatformLatestRoute
   '/marketplace/agents/$agentId': typeof MarketplaceAgentsAgentIdRoute
   '/marketplace/skills/$slug': typeof MarketplaceSkillsSlugRoute
-  '/news/og/openbot-vs-grokbot.png': typeof NewsOgOpenbotVsGrokbotDotpngRoute
+  '/news/og/codebot-vs-grokbot.png': typeof NewsOgCodebotVsGrokbotDotpngRoute
   '/plugins/icon/$slug': typeof PluginsIconSlugRoute
   '/v1/agent-templates/$templateId': typeof V1AgentTemplatesTemplateIdRouteWithChildren
   '/v1/agent-templates/mine': typeof V1AgentTemplatesMineRoute
@@ -2426,7 +2426,7 @@ export interface FileRoutesById {
   '/marketplace/apps': typeof MarketplaceAppsRoute
   '/near/sign': typeof NearSignRoute
   '/news/$slug': typeof NewsSlugRoute
-  '/news/openbot-vs-grokbot': typeof NewsOpenbotVsGrokbotRoute
+  '/news/codebot-vs-grokbot': typeof NewsCodebotVsGrokbotRoute
   '/news/rss.xml': typeof NewsRssDotxmlRoute
   '/oauth/mcp-callback': typeof OauthMcpCallbackRoute
   '/oauth/mcp-client.json': typeof OauthMcpClientDotjsonRoute
@@ -2492,7 +2492,7 @@ export interface FileRoutesById {
   '/download/$platform_/latest': typeof DownloadPlatformLatestRoute
   '/marketplace/agents/$agentId': typeof MarketplaceAgentsAgentIdRoute
   '/marketplace/skills/$slug': typeof MarketplaceSkillsSlugRoute
-  '/news/og/openbot-vs-grokbot.png': typeof NewsOgOpenbotVsGrokbotDotpngRoute
+  '/news/og/codebot-vs-grokbot.png': typeof NewsOgCodebotVsGrokbotDotpngRoute
   '/plugins/icon/$slug': typeof PluginsIconSlugRoute
   '/v1/agent-templates/$templateId': typeof V1AgentTemplatesTemplateIdRouteWithChildren
   '/v1/agent-templates/mine': typeof V1AgentTemplatesMineRoute
@@ -2713,7 +2713,7 @@ export interface FileRouteTypes {
     | '/marketplace/apps'
     | '/near/sign'
     | '/news/$slug'
-    | '/news/openbot-vs-grokbot'
+    | '/news/codebot-vs-grokbot'
     | '/news/rss.xml'
     | '/oauth/mcp-callback'
     | '/oauth/mcp-client.json'
@@ -2778,7 +2778,7 @@ export interface FileRouteTypes {
     | '/download/$platform/latest'
     | '/marketplace/agents/$agentId'
     | '/marketplace/skills/$slug'
-    | '/news/og/openbot-vs-grokbot.png'
+    | '/news/og/codebot-vs-grokbot.png'
     | '/plugins/icon/$slug'
     | '/v1/agent-templates/$templateId'
     | '/v1/agent-templates/mine'
@@ -2997,7 +2997,7 @@ export interface FileRouteTypes {
     | '/marketplace/apps'
     | '/near/sign'
     | '/news/$slug'
-    | '/news/openbot-vs-grokbot'
+    | '/news/codebot-vs-grokbot'
     | '/news/rss.xml'
     | '/oauth/mcp-callback'
     | '/oauth/mcp-client.json'
@@ -3062,7 +3062,7 @@ export interface FileRouteTypes {
     | '/download/$platform/latest'
     | '/marketplace/agents/$agentId'
     | '/marketplace/skills/$slug'
-    | '/news/og/openbot-vs-grokbot.png'
+    | '/news/og/codebot-vs-grokbot.png'
     | '/plugins/icon/$slug'
     | '/v1/agent-templates/$templateId'
     | '/v1/agent-templates/mine'
@@ -3284,7 +3284,7 @@ export interface FileRouteTypes {
     | '/marketplace/apps'
     | '/near/sign'
     | '/news/$slug'
-    | '/news/openbot-vs-grokbot'
+    | '/news/codebot-vs-grokbot'
     | '/news/rss.xml'
     | '/oauth/mcp-callback'
     | '/oauth/mcp-client.json'
@@ -3350,7 +3350,7 @@ export interface FileRouteTypes {
     | '/download/$platform_/latest'
     | '/marketplace/agents/$agentId'
     | '/marketplace/skills/$slug'
-    | '/news/og/openbot-vs-grokbot.png'
+    | '/news/og/codebot-vs-grokbot.png'
     | '/plugins/icon/$slug'
     | '/v1/agent-templates/$templateId'
     | '/v1/agent-templates/mine'
@@ -3556,7 +3556,7 @@ export interface RootRouteChildren {
   MarketplaceAppsRoute: typeof MarketplaceAppsRoute
   NearSignRoute: typeof NearSignRoute
   NewsSlugRoute: typeof NewsSlugRoute
-  NewsOpenbotVsGrokbotRoute: typeof NewsOpenbotVsGrokbotRoute
+  NewsCodebotVsGrokbotRoute: typeof NewsCodebotVsGrokbotRoute
   NewsRssDotxmlRoute: typeof NewsRssDotxmlRoute
   OauthMcpCallbackRoute: typeof OauthMcpCallbackRoute
   OauthMcpClientDotjsonRoute: typeof OauthMcpClientDotjsonRoute
@@ -3579,7 +3579,7 @@ export interface RootRouteChildren {
   DownloadPlatformLatestRoute: typeof DownloadPlatformLatestRoute
   MarketplaceAgentsAgentIdRoute: typeof MarketplaceAgentsAgentIdRoute
   MarketplaceSkillsSlugRoute: typeof MarketplaceSkillsSlugRoute
-  NewsOgOpenbotVsGrokbotDotpngRoute: typeof NewsOgOpenbotVsGrokbotDotpngRoute
+  NewsOgCodebotVsGrokbotDotpngRoute: typeof NewsOgCodebotVsGrokbotDotpngRoute
   PluginsIconSlugRoute: typeof PluginsIconSlugRoute
   V1AgentTemplatesTemplateIdRoute: typeof V1AgentTemplatesTemplateIdRouteWithChildren
   V1AgentTemplatesMineRoute: typeof V1AgentTemplatesMineRoute
@@ -4139,11 +4139,11 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof NewsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/news/openbot-vs-grokbot': {
-      id: '/news/openbot-vs-grokbot'
-      path: '/news/openbot-vs-grokbot'
-      fullPath: '/news/openbot-vs-grokbot'
-      preLoaderRoute: typeof NewsOpenbotVsGrokbotRouteImport
+    '/news/codebot-vs-grokbot': {
+      id: '/news/codebot-vs-grokbot'
+      path: '/news/codebot-vs-grokbot'
+      fullPath: '/news/codebot-vs-grokbot'
+      preLoaderRoute: typeof NewsCodebotVsGrokbotRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/news/rss.xml': {
@@ -4559,11 +4559,11 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof MarketplaceSkillsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/news/og/openbot-vs-grokbot.png': {
-      id: '/news/og/openbot-vs-grokbot.png'
-      path: '/news/og/openbot-vs-grokbot.png'
-      fullPath: '/news/og/openbot-vs-grokbot.png'
-      preLoaderRoute: typeof NewsOgOpenbotVsGrokbotDotpngRouteImport
+    '/news/og/codebot-vs-grokbot.png': {
+      id: '/news/og/codebot-vs-grokbot.png'
+      path: '/news/og/codebot-vs-grokbot.png'
+      fullPath: '/news/og/codebot-vs-grokbot.png'
+      preLoaderRoute: typeof NewsOgCodebotVsGrokbotDotpngRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/plugins/icon/$slug': {
@@ -6089,7 +6089,7 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceAppsRoute: MarketplaceAppsRoute,
   NearSignRoute: NearSignRoute,
   NewsSlugRoute: NewsSlugRoute,
-  NewsOpenbotVsGrokbotRoute: NewsOpenbotVsGrokbotRoute,
+  NewsCodebotVsGrokbotRoute: NewsCodebotVsGrokbotRoute,
   NewsRssDotxmlRoute: NewsRssDotxmlRoute,
   OauthMcpCallbackRoute: OauthMcpCallbackRoute,
   OauthMcpClientDotjsonRoute: OauthMcpClientDotjsonRoute,
@@ -6112,7 +6112,7 @@ const rootRouteChildren: RootRouteChildren = {
   DownloadPlatformLatestRoute: DownloadPlatformLatestRoute,
   MarketplaceAgentsAgentIdRoute: MarketplaceAgentsAgentIdRoute,
   MarketplaceSkillsSlugRoute: MarketplaceSkillsSlugRoute,
-  NewsOgOpenbotVsGrokbotDotpngRoute: NewsOgOpenbotVsGrokbotDotpngRoute,
+  NewsOgCodebotVsGrokbotDotpngRoute: NewsOgCodebotVsGrokbotDotpngRoute,
   PluginsIconSlugRoute: PluginsIconSlugRoute,
   V1AgentTemplatesTemplateIdRoute: V1AgentTemplatesTemplateIdRouteWithChildren,
   V1AgentTemplatesMineRoute: V1AgentTemplatesMineRoute,

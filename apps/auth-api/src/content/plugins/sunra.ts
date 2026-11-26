@@ -23,7 +23,7 @@ export const SUNRA_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the Sunra plugin need an API key?",
       answer:
-        "No. You sign in to your own Sunra account in the browser and allow access. The server uses OAuth 2.1 with PKCE. OpenBot keeps the tokens in encrypted storage and adds the Authorization header. The agent does not see your password.",
+        "No. You sign in to your own Sunra account in the browser and allow access. The server uses OAuth 2.1 with PKCE. CodeBot keeps the tokens in encrypted storage and adds the Authorization header. The agent does not see your password.",
     },
     {
       question: "Does it cost anything?",
@@ -43,7 +43,7 @@ export const SUNRA_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "What does Sunra receive?",
       answer:
-        "Sunra gets the prompts, images and other files that the agent sends to it. Your workspaces, conversations and files stay on the computer that runs OpenBot.",
+        "Sunra gets the prompts, images and other files that the agent sends to it. Your workspaces, conversations and files stay on the computer that runs CodeBot.",
     },
   ],
   sources: [

@@ -1,6 +1,6 @@
-import type { RoutineCalendarOwner } from "@openbot/contracts/ipc";
-import type { AppTranslate } from "@openbot/i18n";
-import { buildRoutineCalendar, type RoutineCalendarSource } from "@openbot/team-client/routine-calendar";
+import type { RoutineCalendarOwner } from "@codebot/contracts/ipc";
+import type { AppTranslate } from "@codebot/i18n";
+import { buildRoutineCalendar, type RoutineCalendarSource } from "@codebot/team-client/routine-calendar";
 import { Effect } from "effect";
 import type { AgentService } from "../backend/agent-service";
 import { routineFeedIcs } from "./routine-feed-ics";

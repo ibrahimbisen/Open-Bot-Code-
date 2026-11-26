@@ -5,7 +5,7 @@ import {
   type SpeechSettings,
   type SpeechVoice,
   type XaiSpeechVoice,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 const FEMALE_LIVE_VOICE: CodexLiveVoice = "juniper";
 const MALE_LIVE_VOICE: CodexLiveVoice = "cove";

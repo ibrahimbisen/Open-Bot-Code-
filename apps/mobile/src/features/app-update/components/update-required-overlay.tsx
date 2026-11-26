@@ -1,4 +1,4 @@
-import { isBelowMinimumVersion } from "@openbot/contracts/app-minimum-version";
+import { isBelowMinimumVersion } from "@codebot/contracts/app-minimum-version";
 import { Button, Typography } from "heroui-native";
 import { useState } from "react";
 import { BackHandler, Modal, StyleSheet, View } from "react-native";

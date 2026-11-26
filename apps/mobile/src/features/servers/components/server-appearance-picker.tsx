@@ -1,10 +1,10 @@
-import { AVATAR_COLOR_CHOICES } from "@openbot/brand/bloub-avatar";
+import { AVATAR_COLOR_CHOICES } from "@codebot/brand/bloub-avatar";
 import {
   isServerAppearanceColor,
   SERVER_APPEARANCE_SHAPES,
   type ServerAppearance,
   type ServerAppearanceShape,
-} from "@openbot/contracts/team-protocol/host-appearance-v1";
+} from "@codebot/contracts/team-protocol/host-appearance-v1";
 import { Image } from "expo-image";
 import { Typography } from "heroui-native";
 import { useState } from "react";

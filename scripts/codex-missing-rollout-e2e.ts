@@ -2,12 +2,12 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-missing-rollout-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-codex-rollout-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-missing-rollout-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-codex-rollout-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const logPath = join(root, "protocol.jsonl");
@@ -17,9 +17,9 @@ const defaultHome = join(home, ".codex");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = defaultHome;
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
-process.env.OPENBOT_FAKE_CODEX_LOG = logPath;
-process.env.OPENBOT_FAKE_CODEX_CONTROL = controlPath;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_FAKE_CODEX_LOG = logPath;
+process.env.CODEBOT_FAKE_CODEX_CONTROL = controlPath;
 mkdirSync(defaultHome, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -27,7 +27,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ProviderAccountStore } = await import("../src/backend/agent/provider-account-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const FAKE_CODEX = `#!/usr/bin/env node
 const fs = require("node:fs");
@@ -40,8 +40,8 @@ const codexHome = process.env.CODEX_HOME;
 const rolloutsPath = path.join(codexHome, "fake-rollouts.json");
 const rollouts = () => { try { return JSON.parse(fs.readFileSync(rolloutsPath, "utf8")); } catch { return []; } };
 const hasRollout = (threadId) => rollouts().some((turn) => turn.threadId === threadId);
-const control = () => { try { return JSON.parse(fs.readFileSync(process.env.OPENBOT_FAKE_CODEX_CONTROL, "utf8")); } catch { return {}; } };
-const log = (entry) => fs.appendFileSync(process.env.OPENBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, codexHome, ...entry }) + "\\n");
+const control = () => { try { return JSON.parse(fs.readFileSync(process.env.CODEBOT_FAKE_CODEX_CONTROL, "utf8")); } catch { return {}; } };
+const log = (entry) => fs.appendFileSync(process.env.CODEBOT_FAKE_CODEX_LOG, JSON.stringify({ pid: process.pid, codexHome, ...entry }) + "\\n");
 log({ start: true });
 const config = { config: { mcp_servers: {} }, layers: [{ name: { type: "user", file: "/fake/.codex/config.toml", profile: null }, version: "1", config: { mcp_servers: {} } }] };
 const loaded = new Set();
@@ -192,11 +192,11 @@ async function waitFor<T>(label: string, read: () => T | null | undefined | fals
 }
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const accountsPath = join(userData, "openbot-provider-accounts-v1.json");
+const accountsPath = join(userData, "codebot-provider-accounts-v1.json");
 const accountsRoot = join(userData, "provider-accounts");
 
 async function startApp() {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const providerAccounts = new ProviderAccountStore(accountsPath, accountsRoot);

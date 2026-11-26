@@ -3,9 +3,9 @@ import {
   type McpAccessLevel,
   type McpServerConfig,
   type TeamMemberSummary,
-} from "@openbot/contracts/ipc";
-import { MCP_MEMBER_ACCESS_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { MCP_MEMBER_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { sourceText } from "@codebot/i18n/source";
 import { mcpOAuthAccountKey } from "../../backend/mcp-oauth-provider";
 import type { TeamApiMcpServerOwners } from "./dependencies";
 import { HttpError } from "./http-error";

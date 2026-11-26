@@ -1,6 +1,6 @@
+import { type InstalledSkill, SKILL_CREATION_REQUEST } from "@codebot/contracts/ipc";
+import type { MobileTranslate } from "@codebot/i18n/mobile";
 import { Host } from "@expo/ui";
-import { type InstalledSkill, SKILL_CREATION_REQUEST } from "@openbot/contracts/ipc";
-import type { MobileTranslate } from "@openbot/i18n/mobile";
 import { type QueryKey, useQueryClient } from "@tanstack/react-query";
 import { Stack, useNavigation } from "expo-router";
 import { StackActions } from "expo-router/react-navigation";

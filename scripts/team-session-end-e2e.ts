@@ -2,13 +2,13 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { IncomingMessage, ServerResponse } from "node:http";
 import { Socket } from "node:net";
 import { join, resolve } from "node:path";
-import type { TeamMemberSummary, TeamSessionSummary } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
+import type { TeamMemberSummary, TeamSessionSummary } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import { Effect } from "effect";
 import type { TeamApiRequestContext } from "../src/main/team-api/request-context";
 import { routeTeam, type TeamRouteDependencies } from "../src/main/team-api/route-team";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/team-session-end-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/team-session-end-e2e");
 const ORIGIN = "https://host.test";
 
 const checks: { name: string; passed: boolean; detail?: unknown }[] = [];

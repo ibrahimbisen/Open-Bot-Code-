@@ -2,7 +2,7 @@ import {
   CONVERSATION_PLAN_ITEM_TYPE,
   CONVERSATION_SUBAGENTS_ITEM_TYPE,
   type ConversationMessage,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { type ChatMessage, sortedConversationMessages } from "./chat-messages";
 
 const ROW_PREFIXES = ["exchange:", "context-reset:", "routine:"];

@@ -1,9 +1,9 @@
-import type { AppAppearance } from "@openbot/contracts/app-appearance";
+import type { AppAppearance } from "@codebot/contracts/app-appearance";
 
 const LIGHT_QUERY = "(prefers-color-scheme: light)";
 
 function applyColorScheme(scheme: "light" | "dark"): void {
-  document.documentElement.dataset.openbotColorScheme = scheme;
+  document.documentElement.dataset.codebotColorScheme = scheme;
 }
 
 export function syncColorScheme(choice: () => AppAppearance) {
@@ -18,7 +18,7 @@ export function syncColorScheme(choice: () => AppAppearance) {
     refresh,
     stop() {
       query.removeEventListener("change", refresh);
-      delete document.documentElement.dataset.openbotColorScheme;
+      delete document.documentElement.dataset.codebotColorScheme;
     },
   };
 }

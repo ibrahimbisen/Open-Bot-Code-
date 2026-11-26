@@ -1,13 +1,13 @@
-import type { OnePasswordConnectorStatus, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { CodeBotDesktopApi, OnePasswordConnectorStatus } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 
 export type OnePasswordConnectorPort = Omit<
-  OpenBotDesktopApi["onePasswordConnector"],
+  CodeBotDesktopApi["onePasswordConnector"],
   "hostStatus" | "hostConnectWithToken" | "hostDisconnect"
 >;
 
 export function onePasswordConnectorPort(): OnePasswordConnectorPort {
-  return window.openbot.onePasswordConnector;
+  return window.codebot.onePasswordConnector;
 }
 
 export type HostOnePasswordActions = Pick<OnePasswordConnectorPort, "status" | "connectWithToken" | "disconnect">;
@@ -69,7 +69,7 @@ export function hostOnePasswordConnectorPort(serverId: () => string | undefined)
     if (!id) throw new Error(sourceText("error.team.connectorsUnsupported"));
     return id;
   };
-  const api = () => window.openbot.onePasswordConnector;
+  const api = () => window.codebot.onePasswordConnector;
   return polledOnePasswordConnectorPort({
     status: async () => api().hostStatus(server()),
     connectWithToken: async (token) => api().hostConnectWithToken({ token }, server()),

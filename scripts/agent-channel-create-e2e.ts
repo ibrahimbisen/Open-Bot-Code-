@@ -4,14 +4,14 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentEvent } from "@openbot/contracts/ipc";
-import { uiBlockAnswersFromResponse } from "@openbot/contracts/ui-blocks";
+import { AGENT_PROVIDERS, type AgentEvent } from "@codebot/contracts/ipc";
+import { uiBlockAnswersFromResponse } from "@codebot/contracts/ui-blocks";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-channel-create-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-channel-create-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-channel-create-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-channel-create-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -19,7 +19,7 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -27,7 +27,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { handleChannelAgentTool } = await import("../src/backend/agent/channel-agent-tools");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { API_KEY_FIELD_ID, API_KEY_SCOPE_FIELD_ID, apiKeyFormSpec } = await import("../src/backend/agent/prompts");
 const { AgentApiKeys } = await import("../src/backend/agent-api-keys");
 const { VaultService } = await import("../src/main/vault-service");
@@ -98,9 +98,9 @@ const answer = (message) => {
           threadId: params.threadId,
           turnId,
           callId: "call-" + turnId,
-          namespace: "openbot",
+          namespace: "codebot",
           tool: "tool_call",
-          arguments: { name: "openbot." + __tool, arguments: args },
+          arguments: { name: "codebot." + __tool, arguments: args },
         },
       });
     }
@@ -216,14 +216,14 @@ function pass(name: string, condition: boolean, detail?: string) {
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
 const vault = new VaultService({
-  store: new VaultStore(join(root, "openbot-vault.json"), {
+  store: new VaultStore(join(root, "codebot-vault.json"), {
     encrypt: (value: string) => Buffer.from(value, "utf8").reverse(),
     decrypt: (value: Buffer) => Buffer.from(value).reverse().toString("utf8"),
   }),
   canPersist: () => true,
 });
 await Effect.runPromise(vault.load());
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -728,7 +728,7 @@ try {
     threadId: "retry-thread",
     turnId: "retry-turn",
     callId: "retry-call",
-    namespace: "openbot",
+    namespace: "codebot",
     tool: "create_channel",
     arguments: { name: "retry", memberAgentIds: [lead.id, writer.id], icon: { name: "star", hue: 55 } },
   };

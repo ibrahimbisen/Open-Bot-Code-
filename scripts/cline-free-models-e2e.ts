@@ -10,7 +10,7 @@ import { decodeModelListResponse, type ModelListResponse } from "../src/backend/
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cline-free-models-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cline-free-models-e2e");
 
 const RECOMMENDED = {
   recommended: [{ id: "anthropic/claude-sonnet-5.5", name: "claude-sonnet-5.5", description: "", tags: ["NEW"] }],
@@ -41,7 +41,7 @@ interface Report {
   ended?: string[];
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-cline-free-models-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-cline-free-models-e2e-"));
 const log = join(root, "cline.jsonl");
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
@@ -100,7 +100,7 @@ try {
     ],
     "The picker lists the CLI's models, then Cline's ClinePass and valid free models.",
   );
-  assert.ok(requests.length > 0, "OpenBot reads Cline's recommended models.");
+  assert.ok(requests.length > 0, "CodeBot reads Cline's recommended models.");
   for (const request of requests) {
     assert.deepEqual(request.headers, { accept: "application/json" }, "The request sends no account data.");
     assert.equal(request.credentials, null, "The request sends no credentials.");

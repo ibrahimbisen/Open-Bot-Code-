@@ -1,7 +1,7 @@
-import { type ChatBackdropBubbles, chatBackdropBubbles } from "@openbot/contracts/chat-visual";
-import { ChatBackdrop } from "@openbot/ui/features/conversation/ChatBackdrop";
-import { CustomBackdrop, type CustomBackdropSource } from "@openbot/ui/features/conversation/CustomBackdrop";
-import { customBackdropId, isChatBackdropScene } from "@openbot/ui/features/conversation/chat-backdrop";
+import { type ChatBackdropBubbles, chatBackdropBubbles } from "@codebot/contracts/chat-visual";
+import { ChatBackdrop } from "@codebot/ui/features/conversation/ChatBackdrop";
+import { CustomBackdrop, type CustomBackdropSource } from "@codebot/ui/features/conversation/CustomBackdrop";
+import { customBackdropId, isChatBackdropScene } from "@codebot/ui/features/conversation/chat-backdrop";
 import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 import { useChatBackdrop } from "../../chat-backdrop-preference";
 import { hideChatBackgroundForBackdrop } from "../../chat-background";

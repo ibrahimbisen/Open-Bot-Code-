@@ -4,15 +4,15 @@ import {
   DEFAULT_QUIT_GUARD,
   QUIT_GUARDS,
   type QuitGuard,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord, isOneOf } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord, isOneOf } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Result, Semaphore } from "effect";
 import { isMissingFileError } from "../backend/file-errors";
 import type { LoginItem, LoginItemFailure } from "./login-item";
 import { type PreferenceFileFailure, readPreferenceFile, writePreferenceFile } from "./preference-file";
 
-const logger = createOpenBotLogger("app-behavior");
+const logger = createCodeBotLogger("app-behavior");
 
 export class AppBehaviorService {
   readonly #path: string;

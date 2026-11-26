@@ -1,4 +1,4 @@
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Archive,
   ArrowDown,
@@ -29,15 +29,15 @@ import {
   Ungroup,
   Workflow,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import {
   AttachmentReferenceVisual,
   attachmentReferenceTone,
-} from "@openbot/ui/features/conversation/AttachmentReference";
-import { ComputerIcon } from "@openbot/ui/features/conversation/ConversationIcons";
-import { TabShape } from "@openbot/ui/features/conversation/TabShape";
-import { type ThreadItem, threadBusy } from "@openbot/ui/features/conversation/threads/thread-types";
-import { type TextValue, useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/conversation/AttachmentReference";
+import { ComputerIcon } from "@codebot/ui/features/conversation/ConversationIcons";
+import { TabShape } from "@codebot/ui/features/conversation/TabShape";
+import { type ThreadItem, threadBusy } from "@codebot/ui/features/conversation/threads/thread-types";
+import { type TextValue, useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, For, flush, onSettled, Show, untrack } from "solid-js";
 import { createTabRow } from "../../components/createTabRow";

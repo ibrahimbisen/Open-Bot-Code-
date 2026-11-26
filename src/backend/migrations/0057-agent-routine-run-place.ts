@@ -1,5 +1,5 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 import { isDynamicRecord } from "./runtime-values";
 
 // Migration 57 adds where the runs of an agent routine run: in the agent's chat, or in the routine's own
@@ -15,7 +15,7 @@ function addAgentRoutineRunPlace(db: DatabaseSync): void {
   db.exec(`ALTER TABLE projection_agent_routines ADD COLUMN ${V57_AGENT_ROUTINE_RUN_IN_COLUMN_SQL}`);
 }
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 57,
   name: "agent-routine-run-place",
   // Adds one column with a constant default: no rebuild, so no foreign-key pause and no vacuum. Every

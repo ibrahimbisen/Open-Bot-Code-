@@ -1,9 +1,9 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import { assignedSkillCount } from "@openbot/contracts/ipc";
-import { Badge, Button, Checkbox, Dialog, IconButton, Input, Plus, Search, Text, X } from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { useText } from "@openbot/ui/text";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import { assignedSkillCount } from "@codebot/contracts/ipc";
+import { Badge, Button, Checkbox, Dialog, IconButton, Input, Plus, Search, Text, X } from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createSignal, createStore, createUniqueId, For, onCleanup, onSettled, Show, untrack } from "solid-js";
 import { SkillMark } from "./MarketplaceParts";

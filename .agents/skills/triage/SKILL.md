@@ -12,7 +12,7 @@ behavior, do not build it: assess it and score it (Step 2a).
 
 ## Who we build for
 
-Most OpenBot users are casual users, not developers. A casual user does
+Most CodeBot users are casual users, not developers. A casual user does
 not read logs, open a terminal, edit a config file, write JSON, set up a
 webhook, or know provider names. They use the app through its windows,
 buttons, and chat. Judge each issue by what this user sees and can do:
@@ -71,7 +71,7 @@ Issue labels do not change this workflow. Labels such as `from-x`, `from-app` an
    - **Expected**: what the reporter expects.
    - **Surface**: desktop renderer, main process, backend, mobile, public
      web, Signal, Team API, provider, or plugin.
-   - **Version**: the OpenBot version or commit, and the provider CLI version.
+   - **Version**: the CodeBot version or commit, and the provider CLI version.
    - **Reporter**: a casual user or a developer, from the words and the
      data in the issue. A casual user often describes the screen, not the
      cause. Read the symptom as what the app shows them.
@@ -97,7 +97,7 @@ an issue, a `path:line`, or a command output.
 | `already fixed` | A commit on `origin/main` that fixes it, or that adds the requested feature, from `git log origin/main --grep` or `git log -S`. Give the first release tag that holds it: `git tag --contains <sha> --list 'v*' --sort=v:refname \| head -n 1`. |
 | `works as intended` | The code, a test, or a doc that defines the current behavior as correct, **and** a casual user can understand the behavior and continue without help. When the behavior is correct but confusing (a silent failure, a technical error text, a control that they cannot find, a dead end), the verdict is `valid`: the bug is the UX. For a feature request: the feature exists, a casual user can find and use it, and it was in the release that the reporter used. Show where it is. |
 | `out of scope` | A product constraint or a non-negotiable rule in `AGENTS.md` that the requested change breaks. Example: chats or files that leave the user's computer, or a change to a released Team API meaning. |
-| `environment` | The cause is outside OpenBot: provider CLI version, OS setting, network, or a third-party service, **and** the app tells the user what happened and what to do. When the app fails silently or shows only a technical error, the missing guidance is `valid`. |
+| `environment` | The cause is outside CodeBot: provider CLI version, OS setting, network, or a third-party service, **and** the app tells the user what happened and what to do. When the app fails silently or shows only a technical error, the missing guidance is `valid`. |
 | `feature request` | The issue asks for new behavior, not a fix for broken behavior. Go to Step 2a. |
 | `needs info` | The data that is missing, and why you cannot get it from the code or the history. |
 | `valid` | None of the above holds. Continue to Step 2b. |
@@ -113,7 +113,7 @@ Step 2a, and assess only the parts that are missing.
 
 ## Step 2a — Assess a feature request
 
-Do not implement the feature in this skill. Decide if it makes OpenBot
+Do not implement the feature in this skill. Decide if it makes CodeBot
 better, and how important it is. Each finding needs evidence. Do not
 score from the reporter's tone or from how sure the request sounds.
 
@@ -125,10 +125,10 @@ Write, in one line each:
 - **Need**: the problem under the request. A request often names one
   solution. Assess the need, not the named solution.
 - **Today**: what the user can do now, and since which release
-  (`git tag --contains`). Search the `@openbot/i18n` catalog
+  (`git tag --contains`). Search the `@codebot/i18n` catalog
   (`packages/i18n/src/messages/en`), settings, workflows, webhooks, agent
   tools, and `marketplace/production-catalog`. Text that starts with `/`
-  goes to the provider; OpenBot has no local slash commands. Give
+  goes to the provider; CodeBot has no local slash commands. Give
   `path:line` for each match.
 - **Casual path**: how a casual user gets to **Today**: the clicks, from
   the main window. When **Today** needs a terminal, a config file, JSON,
@@ -207,7 +207,7 @@ of evidence.
   not add cost.
 
 **Value score** = Impact + Reach + Fit + UX + Cost, from 0 to 15. It answers
-"does this make OpenBot better for its cost".
+"does this make CodeBot better for its cost".
 
 **Priority** answers "how important is it now":
 
@@ -270,7 +270,7 @@ impact also sets the bar for the fix in Step 4.
 Find the root cause, not only the place where the symptom shows.
 
 1. Find the code path from the symptom. Start from the UI text (an
-   `@openbot/i18n` key), the IPC channel, the error code, or the log line
+   `@codebot/i18n` key), the IPC channel, the error code, or the log line
    in the issue. Use an `Explore` agent for a broad search.
 2. Write the hypothesis in one sentence: "X fails because Y at `path:line`".
 3. Prove it. Use the cheapest proof that is conclusive:
@@ -319,7 +319,7 @@ Otherwise, continue:
      new toggle to explain a bad flow.
    When this needs a UI design decision, stop and ask (see the list above).
 2. Obey `AGENTS.md`: non-negotiable rules, Effect rules, shared UI,
-   `@openbot/i18n` text, and terms.
+   `@codebot/i18n` text, and terms.
 3. Add a test only when `AGENTS.md` asks for one: data loss, released
    protocol, trust boundary, secret leak, or a bug that came back. A
    migration always needs its tests. Delete temporary tests from Step 3

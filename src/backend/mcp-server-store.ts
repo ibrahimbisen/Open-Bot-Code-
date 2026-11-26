@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   createMcpServerId,
   isMcpKeyValue,
@@ -8,14 +8,14 @@ import {
   type McpServerConfig,
   mcpConfigErrors,
   normalizeMcpConfig,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, type Logger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, type Logger } from "@codebot/logging";
+import type { CodeBotDatabase } from "./codebot-database";
 import { databaseRow, databaseRows, requiredNumberColumn, requiredStringColumn } from "./database/database-rows";
 import { withTransaction } from "./database/sqlite-transaction";
 import { registerMcpSecretValues } from "./mcp-redaction";
-import type { OpenBotDatabase } from "./openbot-database";
 
 export class McpServerError extends Error {}
 
@@ -44,8 +44,8 @@ export class McpServerStore {
   private readonly reported = new Set<string>();
 
   constructor(
-    private readonly database: OpenBotDatabase,
-    private readonly logger: Pick<Logger, "warn"> = createOpenBotLogger("mcp-server-store"),
+    private readonly database: CodeBotDatabase,
+    private readonly logger: Pick<Logger, "warn"> = createCodeBotLogger("mcp-server-store"),
   ) {}
 
   list(): McpServerConfig[] {

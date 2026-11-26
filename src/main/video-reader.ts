@@ -4,8 +4,8 @@ import { chmod, mkdir, mkdtemp, readdir, readFile, rename, rm, stat, writeFile }
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
-import { VOICE_AUDIO_LIMITS } from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+import { VOICE_AUDIO_LIMITS } from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Option, Schema, Semaphore } from "effect";
 import { BrowserWindow, session as electronSession, net, type Session } from "electron";
 import {
@@ -20,7 +20,7 @@ import { fileResponse } from "./file-response";
 import { downloadArchive } from "./onepassword-cli-installer";
 import type { RuntimeTarget } from "./provider-runtime-descriptors";
 
-const logger = createOpenBotLogger("video-reader");
+const logger = createCodeBotLogger("video-reader");
 const execFileAsync = promisify(execFile);
 
 const YT_DLP_VERSION = "2026.10.26";
@@ -35,8 +35,8 @@ const YT_DLP_RELEASES: Record<RuntimeTarget, { name: string; sha256: string }> =
   "win32-x64": { name: "yt-dlp.exe", sha256: "f5389d3698ecde4ef06f4e6b1ce0294fe9ac1396228c8990b8d3416d6d177a7d" },
 };
 
-const VIDEO_PARTITION = "openbot-video-reader";
-const VIDEO_SCHEME = "openbot-video";
+const VIDEO_PARTITION = "codebot-video-reader";
+const VIDEO_SCHEME = "codebot-video";
 const READ_TIMEOUT = "15 minutes";
 const INFO_TIMEOUT_MS = 2 * 60_000;
 const DOWNLOAD_TIMEOUT_MS = 8 * 60_000;
@@ -52,7 +52,7 @@ const MAX_DESCRIPTION_LENGTH = 4_000;
 const MAX_REASON_LENGTH = 300;
 const SAMPLE_RATE = VOICE_AUDIO_LIMITS.sampleRate;
 
-const DECODER_SCRIPT = `window.openbotVideo = {
+const DECODER_SCRIPT = `window.codebotVideo = {
   async frames(url, count, knownDuration, longSide) {
     const response = await fetch(url);
     if (!response.ok) throw new Error("The video file did not load.");
@@ -63,7 +63,7 @@ const DECODER_SCRIPT = `window.openbotVideo = {
       video.preload = "auto";
       await new Promise((resolve, reject) => {
         video.onloadeddata = resolve;
-        video.onerror = () => reject(new Error("OpenBot cannot decode the picture of this video."));
+        video.onerror = () => reject(new Error("CodeBot cannot decode the picture of this video."));
         video.src = source;
       });
       const duration = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : knownDuration;
@@ -162,12 +162,12 @@ function ytDlpReason(error: unknown): string {
     .split(/\r?\n/u)
     .reverse()
     .find((entry) => entry.startsWith("ERROR:"));
-  if (!line) return "OpenBot could not get the video from this link.";
+  if (!line) return "CodeBot could not get the video from this link.";
   if (YOUTUBE_BOT_CHECK.test(line)) {
-    return "YouTube does not let this computer download its videos: it asks for a sign-in to show that this is not a bot. This often happens on a server. Open the video page with openbot_browser to read it.";
+    return "YouTube does not let this computer download its videos: it asks for a sign-in to show that this is not a bot. This often happens on a server. Open the video page with codebot_browser to read it.";
   }
   const message = line.replace(/^ERROR:\s*(\[[^\]]*\]\s*)?([^:\s]+:\s+)?/u, "").trim();
-  return `OpenBot could not get the video: ${message}`;
+  return `CodeBot could not get the video: ${message}`;
 }
 
 const Info = Schema.Record(Schema.String, Schema.Unknown);
@@ -377,8 +377,8 @@ export class VideoReader implements VideoReaderHost {
     return yield* this.#lock.withPermit(
       Effect.acquireUseRelease(
         Effect.tryPromise({
-          try: () => mkdtemp(join(tmpdir(), "openbot-video-")),
-          catch: () => failure("OpenBot could not make a temporary folder for the video."),
+          try: () => mkdtemp(join(tmpdir(), "codebot-video-")),
+          catch: () => failure("CodeBot could not make a temporary folder for the video."),
         }),
         (directory) => this.#readInto(directory, request),
         (directory) => Effect.promise(() => rm(directory, { recursive: true, force: true }).catch(() => undefined)),
@@ -413,13 +413,13 @@ export class VideoReader implements VideoReaderHost {
       });
     const { stdout } = yield* run(["--dump-single-json", "--", request.url], INFO_TIMEOUT_MS);
     const decodedInfo = decodeInfo(stdout);
-    if (Option.isNone(decodedInfo)) return yield* failure("OpenBot could not read the details of the video.");
+    if (Option.isNone(decodedInfo)) return yield* failure("CodeBot could not read the details of the video.");
     const info = decodedInfo.value;
     if (info._type === "playlist") return yield* failure("This link is a list of videos. Give the link of one video.");
     const infoPath = join(directory, "info.json");
     yield* Effect.tryPromise({
       try: () => writeFile(infoPath, stdout, { mode: 0o600 }),
-      catch: () => failure("OpenBot could not save the details of the video."),
+      catch: () => failure("CodeBot could not save the details of the video."),
     });
     const captions = yield* this.#captions(run, info, infoPath, directory);
     const decoded: Decoded = !captions
@@ -478,7 +478,7 @@ export class VideoReader implements VideoReaderHost {
     );
     const files = yield* Effect.tryPromise({
       try: () => readdir(directory),
-      catch: () => failure("OpenBot could not find the downloaded video."),
+      catch: () => failure("CodeBot could not find the downloaded video."),
     });
     const fileOf = (prefix: string) => {
       const name = files.find((file) => file.startsWith(prefix));
@@ -531,7 +531,7 @@ export class VideoReader implements VideoReaderHost {
 
   readonly #ytDlp = Effect.fn("VideoReader.ytDlp")(function* (this: VideoReader) {
     const { target, runtimeDirectory } = this.#options;
-    if (!target) return yield* failure("OpenBot cannot read videos on this computer.");
+    if (!target) return yield* failure("CodeBot cannot read videos on this computer.");
     const release = YT_DLP_RELEASES[target];
     const folder = join(runtimeDirectory, YT_DLP_VERSION);
     const executable = join(folder, target === "win32-x64" ? "yt-dlp.exe" : "yt-dlp");
@@ -543,7 +543,7 @@ export class VideoReader implements VideoReaderHost {
     logger.info(`Installing yt-dlp ${YT_DLP_VERSION} for video reading.`);
     const staging = join(folder, `.download-${randomBytes(8).toString("hex")}`);
     const unavailable =
-      "OpenBot could not download its video tool from github.com. Make sure that this computer can open github.com, then try again.";
+      "CodeBot could not download its video tool from github.com. Make sure that this computer can open github.com, then try again.";
     return yield* Effect.tryPromise({
       try: async (signal) => {
         await mkdir(folder, { recursive: true });
@@ -634,7 +634,7 @@ export class VideoReader implements VideoReaderHost {
           this.#media.set(token, media);
           return { token, window };
         },
-        catch: () => failure("OpenBot could not open a window to decode the video."),
+        catch: () => failure("CodeBot could not open a window to decode the video."),
       }),
       ({ token, window }) => this.#decodeIn(window, token, media, frameCount, knownDuration),
       ({ token, window }) =>
@@ -672,18 +672,18 @@ export class VideoReader implements VideoReaderHost {
       );
     yield* Effect.tryPromise({
       try: () => contents.loadURL(`${origin}/page`),
-      catch: () => failure("OpenBot could not open its video decoder."),
+      catch: () => failure("CodeBot could not open its video decoder."),
     });
-    yield* script(DECODER_SCRIPT, Schema.Literal(true), "OpenBot could not open its video decoder.");
+    yield* script(DECODER_SCRIPT, Schema.Literal(true), "CodeBot could not open its video decoder.");
 
     let duration = knownDuration;
     let frames: VideoReading["frames"] = [];
     let framesNote: string | null = null;
     if (media.video && frameCount > 0) {
       const result = yield* script(
-        `openbotVideo.frames(${JSON.stringify(`${origin}/video`)}, ${frameCount}, ${knownDuration ?? 0}, ${FRAME_LONG_SIDE})`,
+        `codebotVideo.frames(${JSON.stringify(`${origin}/video`)}, ${frameCount}, ${knownDuration ?? 0}, ${FRAME_LONG_SIDE})`,
         FramesResult,
-        "OpenBot cannot decode the picture of this video.",
+        "CodeBot cannot decode the picture of this video.",
       ).pipe(Effect.catchTag("VideoReadFailed", (error) => Effect.succeed(error)));
       if (result instanceof VideoReadFailed) framesNote = result.reason;
       else {
@@ -698,24 +698,24 @@ export class VideoReader implements VideoReaderHost {
       transcriptNote = "The video has no sound.";
     } else {
       const decoded = yield* script(
-        `openbotVideo.sound(${JSON.stringify(`${origin}/audio`)}, ${SAMPLE_RATE}, ${MAX_TRANSCRIPT_SECONDS})`,
+        `codebotVideo.sound(${JSON.stringify(`${origin}/audio`)}, ${SAMPLE_RATE}, ${MAX_TRANSCRIPT_SECONDS})`,
         Schema.Number,
-        "OpenBot cannot decode the sound of this video.",
+        "CodeBot cannot decode the sound of this video.",
       ).pipe(Effect.catchTag("VideoReadFailed", (error) => Effect.succeed(error)));
       if (decoded instanceof VideoReadFailed) transcriptNote = decoded.reason;
       const samples = decoded instanceof VideoReadFailed ? 0 : decoded;
       if (samples === 0 && (knownDuration ?? 0) > MAX_DECODE_SECONDS)
         transcriptNote =
-          "The video is too long for OpenBot to decode its sound, and OpenBot found no captions for it. The video page can show a transcript.";
-      if (samples === 0 && !transcriptNote) transcriptNote = "The video has no sound that OpenBot can decode.";
+          "The video is too long for CodeBot to decode its sound, and CodeBot found no captions for it. The video page can show a transcript.";
+      if (samples === 0 && !transcriptNote) transcriptNote = "The video has no sound that CodeBot can decode.";
       duration ??= samples / SAMPLE_RATE;
       const heard = Math.min(samples, MAX_TRANSCRIPT_SECONDS * SAMPLE_RATE);
       const partLength = TRANSCRIPT_PART_SECONDS * SAMPLE_RATE;
       for (let start = 0; start < heard; start += partLength) {
         const encoded = yield* script(
-          `openbotVideo.part(${start}, ${partLength})`,
+          `codebotVideo.part(${start}, ${partLength})`,
           Schema.String,
-          "OpenBot cannot decode the sound of this video.",
+          "CodeBot cannot decode the sound of this video.",
         ).pipe(Effect.catchTag("VideoReadFailed", (error) => Effect.succeed(error)));
         if (encoded instanceof VideoReadFailed) {
           transcriptNote = encoded.reason;

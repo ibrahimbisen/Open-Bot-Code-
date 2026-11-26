@@ -1,4 +1,4 @@
-import { DEFAULT_RESPONSE_STYLE, type HostAdminDesktopApi, type HostPersonality } from "@openbot/contracts/ipc";
+import { DEFAULT_RESPONSE_STYLE, type HostAdminDesktopApi, type HostPersonality } from "@codebot/contracts/ipc";
 
 export function createMockHostPersonality(): Pick<HostAdminDesktopApi, "getPersonality" | "setPersonality"> {
   const personality: HostPersonality = { responseStyle: DEFAULT_RESPONSE_STYLE };

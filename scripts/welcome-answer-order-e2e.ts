@@ -4,9 +4,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { agentWelcomeMessage } from "@openbot/contracts/agent-welcome";
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
-import { AGENT_PROVIDERS, AGENT_WELCOME_ITEM_TYPE, defaultProviderModel } from "@openbot/contracts/ipc";
+import { agentWelcomeMessage } from "@codebot/contracts/agent-welcome";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
+import { AGENT_PROVIDERS, AGENT_WELCOME_ITEM_TYPE, defaultProviderModel } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -15,8 +15,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/welcome-answer-order-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-welcome-answer-order-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/welcome-answer-order-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-welcome-answer-order-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const claudeConfig = join(home, ".claude");
@@ -29,7 +29,7 @@ const REPLY = "Here is a week with three long walks.";
 const SHOWN_ORDER = [`Question: ${QUESTION}`, ANSWER, REPLY];
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = claudeConfig;
 mkdirSync(claudeConfig, { recursive: true });
 
@@ -38,7 +38,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
 const fs = require("node:fs");
@@ -240,7 +240,7 @@ const standInEvents = () =>
     : [];
 
 await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({

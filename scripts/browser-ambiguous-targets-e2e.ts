@@ -12,8 +12,8 @@ class FixtureProcessTimeout extends Error {}
 const AMBIGUOUS_TARGET_CASES = 11;
 
 const projectRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const buildRoot = await mkdtemp(join(tmpdir(), "openbot-ambiguous-targets-"));
-const reportPath = join(projectRoot, ".openbot-build/browser-ambiguous-targets-e2e/report.json");
+const buildRoot = await mkdtemp(join(tmpdir(), "codebot-ambiguous-targets-"));
+const reportPath = join(projectRoot, ".codebot-build/browser-ambiguous-targets-e2e/report.json");
 const runId = randomUUID();
 let sourceSha: string | undefined;
 try {

@@ -1,5 +1,5 @@
-import type { ServerSummary } from "@openbot/contracts/ipc";
-import { LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
+import type { ServerSummary } from "@codebot/contracts/ipc";
+import { LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
 import type { RemoteServerConnectionStatus } from "./remote-server-connection-status";
 import type { StoredRemoteServerView } from "./remote-server-store";
 import { remoteServerLogoUrl } from "./remote-server-urls";

@@ -1,12 +1,12 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   BrowserTab,
   BrowserWindowAction,
   BrowserWindowModel,
   BrowserWindowTabDetails,
   ServerSummary,
-} from "@openbot/contracts/ipc";
-import type { BrowserHistoryEntry } from "@openbot/ui/features/browser/browser-suggestions";
+} from "@codebot/contracts/ipc";
+import type { BrowserHistoryEntry } from "@codebot/ui/features/browser/browser-suggestions";
 import { createEffect, onCleanup, snapshot } from "solid-js";
 import { serverSupportsCapability } from "../servers/server-capabilities";
 import type { BrowserPort } from "./browser-port";

@@ -3,8 +3,8 @@ import type {
   HostedServerSleep,
   HostedServerStart,
   HostedServerStartStep,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
 import { createEffect, createMemo, createSignal, onCleanup, Show, untrack } from "solid-js";
 import { Button, IconButton } from "../../button";
 import { ErrorReference } from "../../error-reference";
@@ -17,7 +17,7 @@ import { ServerStatusDialog } from "./ServerStatusDialog";
 const START_STEP_TEXT = {
   machine: "server.hosted.detail.start.boot",
   restore: "server.hosted.detail.start.restore",
-  openbot: "server.hosted.detail.start.app",
+  codebot: "server.hosted.detail.start.app",
   provider_limit: "server.connection.providerLimit",
 } as const satisfies Record<HostedServerStartStep, AppTextKey>;
 

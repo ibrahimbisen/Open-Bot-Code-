@@ -6,9 +6,9 @@ import {
   creditModelCharge,
   isCreditCode,
   normalizeCreditCode,
-} from "@openbot/contracts/credits";
-import type { CreditsDesktopApi } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/credits";
+import type { CreditsDesktopApi } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 
 const MINUTE_MS = 60 * 1_000;
 const PREVIEW_CODE_CREDITS = 500;
@@ -55,9 +55,9 @@ function previewCreditActivity(): CreditActivityEntry[] {
     { id: "move:1:in", kind: "move", at: now - DAY_MS, credits: 200, actor: "you", serverId: "team" },
     { id: "purchase:1", kind: "purchase", at: now - DAY_MS - HOUR_MS, credits: 1_000, actor: "you" },
     generation("hold:6", 2 * DAY_MS, "chatgpt-image-2", { actor: "you" }),
-    { id: "grant:1", kind: "free", at: now - 3 * DAY_MS, credits: 50, actor: "openbot" },
+    { id: "grant:1", kind: "free", at: now - 3 * DAY_MS, credits: 50, actor: "codebot" },
     generation("hold:7", 4 * DAY_MS, "veo-3.1-fast", { actor: "member", actorName: "Tom", serverId: "team" }),
-    { id: "expiry:1", kind: "expired", at: now - 5 * DAY_MS, credits: -12, actor: "openbot" },
+    { id: "expiry:1", kind: "expired", at: now - 5 * DAY_MS, credits: -12, actor: "codebot" },
     { id: "refund:1", kind: "refund", at: now - 9 * DAY_MS, credits: -500, actor: "you", serverId: "team" },
     { id: "purchase:2", kind: "purchase", at: now - 10 * DAY_MS, credits: 2_500, actor: "you", serverId: "team" },
   ];
@@ -73,7 +73,7 @@ function previewCreditsState(): CreditsState {
     servers: [
       {
         serverId: "team",
-        name: "OpenBot team",
+        name: "CodeBot team",
         role: "owner",
         balance: 1_799.5,
         expiring: { credits: 30, expiresAt: Date.now() + 12 * DAY_MS },

@@ -1,4 +1,4 @@
-import { type CreditServerWallet, creditsFromTenths, creditTenths } from "@openbot/contracts/credits";
+import { type CreditServerWallet, creditsFromTenths, creditTenths } from "@codebot/contracts/credits";
 import { router, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import ArrowUpDown from "lucide-react-native/icons/arrow-up-down";
@@ -131,11 +131,11 @@ function MoveCreditsForm({ personal, wallet }: { personal: number; wallet: Credi
   const reducedMotion = useReducedMotion();
   const server = useMobileWorkspaceSelector((current) => current.servers.find((item) => item.id === wallet.serverId));
   const [foreground, muted, danger, grouped, starFill] = useCSSVariable([
-    "--openbot-text-primary",
-    "--openbot-text-grouped-secondary",
-    "--openbot-danger-text",
-    "--openbot-bg-grouped",
-    "--openbot-credit-star-fill",
+    "--codebot-text-primary",
+    "--codebot-text-grouped-secondary",
+    "--codebot-danger-text",
+    "--codebot-bg-grouped",
+    "--codebot-credit-star-fill",
   ]);
   const [toServer, setToServer] = useState(() => personal > 0 || wallet.balance <= 0);
   const [turns, setTurns] = useState(0);

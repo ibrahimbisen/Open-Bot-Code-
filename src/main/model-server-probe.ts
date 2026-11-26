@@ -1,14 +1,14 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { CustomProviderHeader, CustomProviderInputKind, DetectedModel } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { CustomProviderHeader, CustomProviderInputKind, DetectedModel } from "@codebot/contracts/ipc";
 import {
   CUSTOM_PROVIDER_INPUT_KINDS,
   CUSTOM_PROVIDER_REASONING_EFFORTS,
   isCustomProviderContextWindow,
   isCustomProviderMaxOutput,
   PROVIDER_DETECTION_LIMITS,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Layer, Schema } from "effect";
 import { readLimitedBody } from "../backend/limited-body";
 
@@ -123,7 +123,7 @@ export class ModelServerProbe extends Context.Service<
   {
     probe(target: ModelServerTarget, timeoutMs: number): Effect.Effect<DetectedModel[], ProbeError>;
   }
->()("openbot/main/ModelServerProbe") {
+>()("codebot/main/ModelServerProbe") {
   static readonly layer = Layer.succeed(ModelServerProbe, { probe: probeModels });
 }
 

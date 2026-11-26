@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 
-const STARTUP_ANIMATION_STORAGE_KEY = "openbot:startup-animation";
+const STARTUP_ANIMATION_STORAGE_KEY = "codebot:startup-animation";
 
 function readStartupAnimation(): boolean {
   try {

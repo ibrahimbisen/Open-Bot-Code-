@@ -5,7 +5,7 @@ import {
   type WhatsAppOverview,
   type WhatsAppPairingRequest,
   type WhatsAppSender,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
@@ -68,7 +68,7 @@ export function WhatsAppConnectorPage({
   const text = useText();
   const { t, errorMessage } = text;
   const { theme } = useUniwind();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const {
     disconnectWhatsAppNumber,
     reconnectWhatsAppNumber,

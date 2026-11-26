@@ -1,6 +1,6 @@
-import type { RoutineSchedule, WorkflowNodeKind } from "@openbot/contracts/ipc";
-import type { AppMessages, AppTranslate } from "@openbot/i18n";
-import { Button, Plus } from "@openbot/ui";
+import type { RoutineSchedule, WorkflowNodeKind } from "@codebot/contracts/ipc";
+import type { AppMessages, AppTranslate } from "@codebot/i18n";
+import { Button, Plus } from "@codebot/ui";
 import { For } from "solid-js";
 import { useText } from "../../text";
 import type { WfnFields } from "./workflow-board";

@@ -1,5 +1,5 @@
 import { type ParseArgsOptionsConfig, parseArgs } from "node:util";
-import { redactText } from "@openbot/logging";
+import { redactText } from "@codebot/logging";
 
 const HELP_OPTION = { help: { type: "boolean", short: "h" } } as const satisfies ParseArgsOptionsConfig;
 

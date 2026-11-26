@@ -12,8 +12,8 @@ import {
   decodeTeamProtocolV3CurrentHttpRequest,
   TEAM_PROTOCOL_V1,
   TEAM_PROTOCOL_V3,
-} from "@openbot/contracts/team-protocol";
-import { TEAM_PROTOCOL_CAPABILITY_LIMITS } from "@openbot/contracts/team-protocol/capability-limits";
+} from "@codebot/contracts/team-protocol";
+import { TEAM_PROTOCOL_CAPABILITY_LIMITS } from "@codebot/contracts/team-protocol/capability-limits";
 import { decodeTeamProtocolV4BaseCurrentHttpRequest } from "../packages/contracts/src/team-protocol/v4-base-adapter";
 import { decodeTeamProtocolV5BaseCurrentHttpRequest } from "../packages/contracts/src/team-protocol/v5-base-adapter";
 import {
@@ -36,7 +36,7 @@ import {
 
 const ROOT = resolve(import.meta.dirname, "..");
 const FIXTURE_PATH = resolve(ROOT, "packages/contracts/src/team-protocol/fixtures/decoder-edge-cases.json");
-const REPORT_PATH = resolve(ROOT, ".openbot-build/team-protocol-decoder-e2e/report.json");
+const REPORT_PATH = resolve(ROOT, ".codebot-build/team-protocol-decoder-e2e/report.json");
 const fixture = JSON.parse(await readFile(FIXTURE_PATH, "utf8"));
 
 const steps: { name: string; passed: boolean; error?: string }[] = [];
@@ -147,7 +147,7 @@ step("capability and absent lists enforce released limits", () => {
   );
 });
 
-await mkdir(resolve(ROOT, ".openbot-build/team-protocol-decoder-e2e"), { recursive: true });
+await mkdir(resolve(ROOT, ".codebot-build/team-protocol-decoder-e2e"), { recursive: true });
 const failed = steps.filter((entry) => !entry.passed);
 await writeFile(REPORT_PATH, `${JSON.stringify({ passed: failed.length === 0, steps }, null, 2)}\n`);
 for (const entry of failed) process.stderr.write(`FAIL ${entry.name}: ${entry.error}\n`);

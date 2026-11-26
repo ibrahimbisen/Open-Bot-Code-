@@ -1,6 +1,6 @@
-import type { AgentProviderId } from "@openbot/contracts/agent-providers";
-import { CopyAgentsDialog, type CopyAgentsServer } from "@openbot/ui/features/transfer/CopyAgentsDialog";
-import { InstanceTransferView } from "@openbot/ui/features/transfer/InstanceTransferView";
+import type { AgentProviderId } from "@codebot/contracts/agent-providers";
+import { CopyAgentsDialog, type CopyAgentsServer } from "@codebot/ui/features/transfer/CopyAgentsDialog";
+import { InstanceTransferView } from "@codebot/ui/features/transfer/InstanceTransferView";
 import { createSignal, Show, untrack } from "solid-js";
 import { createServerCopyStore, type ServerCopyCalls } from "./server-copy-store";
 import { createServerTransferStore, type ServerTransferCalls } from "./server-transfer-store";
@@ -20,7 +20,7 @@ export interface ServerTransferOptions {
 }
 
 export function ServerTransferPanel(props: ServerTransferOptions & { serverId: string }) {
-  const store = createServerTransferStore(props.serverId, props.calls ?? window.openbot.instanceTransfer);
+  const store = createServerTransferStore(props.serverId, props.calls ?? window.codebot.instanceTransfer);
   const [copyOpen, setCopyOpen] = createSignal(false);
   const openCopy = () => (props.copy ? () => setCopyOpen(true) : undefined);
   function openCopyOptions() {
@@ -66,7 +66,7 @@ function ServerCopy(props: { serverId: string; options: ServerCopyOptions; onClo
   const store = createServerCopyStore(
     untrack(() => props.serverId),
     () => props.options.servers,
-    untrack(() => props.options.calls) ?? window.openbot.instanceTransfer,
+    untrack(() => props.options.calls) ?? window.codebot.instanceTransfer,
   );
   const openServer = () => {
     const toId = store.state.toId;

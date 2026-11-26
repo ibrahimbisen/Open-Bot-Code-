@@ -2,8 +2,8 @@ import {
   expandAttachmentReferences,
   removeAttachmentReferences,
   serializeAttachmentReference,
-} from "@openbot/contracts/attachment-references";
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+} from "@codebot/contracts/attachment-references";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentApproval,
   AgentTask,
@@ -14,21 +14,21 @@ import type {
   ConversationSnapshot,
   DraftAttachment,
   ResponseStyle,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey } from "@openbot/i18n";
-import { plainTaskTitle, taskApproval } from "@openbot/team-client/agent-tasks";
-import { retryOperationIds } from "@openbot/team-client/retry-operation-id";
-import type { AgentMessage, AgentProfile } from "@openbot/ui/data";
-import type { AgentTaskWait } from "@openbot/ui/features/conversation/AgentTasks";
-import type { AttachmentDownloads, AttachmentMediaSource } from "@openbot/ui/features/conversation/AttachmentCards";
-import type { ComposerPasteResult, ComposerSelection } from "@openbot/ui/features/conversation/ComposerEditor";
-import type { MediaApprovalControls } from "@openbot/ui/features/conversation/MediaApprovalCard";
-import type { SendShortcut } from "@openbot/ui/features/conversation/send-shortcut";
-import { AgentThreadView, type AgentThreadVoice } from "@openbot/ui/features/conversation/threads/AgentThreadView";
-import { TaskAnswerCard, TaskPanel } from "@openbot/ui/features/tasks/TaskPanel";
-import { TASKS_SIDE_DEFAULT, TASKS_SIDE_MIN, TasksPage, type TasksVoice } from "@openbot/ui/features/tasks/TasksPage";
-import { currentText } from "@openbot/ui/text";
-import { appendVoiceTranscript } from "@openbot/ui/voice-recording";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey } from "@codebot/i18n";
+import { plainTaskTitle, taskApproval } from "@codebot/team-client/agent-tasks";
+import { retryOperationIds } from "@codebot/team-client/retry-operation-id";
+import type { AgentMessage, AgentProfile } from "@codebot/ui/data";
+import type { AgentTaskWait } from "@codebot/ui/features/conversation/AgentTasks";
+import type { AttachmentDownloads, AttachmentMediaSource } from "@codebot/ui/features/conversation/AttachmentCards";
+import type { ComposerPasteResult, ComposerSelection } from "@codebot/ui/features/conversation/ComposerEditor";
+import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
+import type { SendShortcut } from "@codebot/ui/features/conversation/send-shortcut";
+import { AgentThreadView, type AgentThreadVoice } from "@codebot/ui/features/conversation/threads/AgentThreadView";
+import { TaskAnswerCard, TaskPanel } from "@codebot/ui/features/tasks/TaskPanel";
+import { TASKS_SIDE_DEFAULT, TASKS_SIDE_MIN, TasksPage, type TasksVoice } from "@codebot/ui/features/tasks/TasksPage";
+import { currentText } from "@codebot/ui/text";
+import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
 import type { JSX } from "@solidjs/web";
 import {
   createEffect,
@@ -59,8 +59,8 @@ import { createPageHeaderFrame } from "../window/page-header-frame";
 import type { TaskEvent, TasksSource } from "./tasks-port";
 
 const UNDO_MS = 6_000;
-const TASK_AGENT_STORAGE_KEY = "openbot:task-agent:v1";
-const TASK_PANEL_WIDTH_STORAGE_KEY = "openbot:task-panel-width";
+const TASK_AGENT_STORAGE_KEY = "codebot:task-agent:v1";
+const TASK_PANEL_WIDTH_STORAGE_KEY = "codebot:task-panel-width";
 
 export interface TasksVoiceControls {
   serverId: () => string;

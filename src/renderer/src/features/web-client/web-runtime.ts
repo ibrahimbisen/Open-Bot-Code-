@@ -2,8 +2,8 @@ import {
   assertSupportedAttachmentName,
   isSupportedAttachmentNameFor,
   rasterImageMimeType,
-} from "@openbot/contracts/attachment-files";
-import { isAvatarMimeType } from "@openbot/contracts/avatar-images";
+} from "@codebot/contracts/attachment-files";
+import { isAvatarMimeType } from "@codebot/contracts/avatar-images";
 import type {
   AccountUsage,
   AgentApproval,
@@ -69,7 +69,7 @@ import type {
   UpdateAgentInput,
   UpdateQueuedMessageInput,
   WorkspaceDirectory,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   canAdministerServer,
   DEFAULT_PROVIDER_ACCOUNT_ID,
@@ -99,58 +99,58 @@ import {
   withSteeringModels,
   withUsageCredits,
   withWorkspaceOnlyLimit,
-} from "@openbot/contracts/ipc";
-import { guardedListDecoder, optionalHistoryExtent, requiredString } from "@openbot/contracts/ipc-decoding";
-import type { AcceptedOwnerTransfer, OwnerTransfer } from "@openbot/contracts/owner-transfer";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES, WORKSPACE_FILE_EXACT_PATH_QUERY } from "@openbot/contracts/team-api-routes";
+} from "@codebot/contracts/ipc";
+import { guardedListDecoder, optionalHistoryExtent, requiredString } from "@codebot/contracts/ipc-decoding";
+import type { AcceptedOwnerTransfer, OwnerTransfer } from "@codebot/contracts/owner-transfer";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES, WORKSPACE_FILE_EXACT_PATH_QUERY } from "@codebot/contracts/team-api-routes";
 import {
   AGENT_ACTIVE_QUEUES_ROUTES,
   type AgentActiveQueues,
   decodeAgentActiveQueues,
-} from "@openbot/contracts/team-protocol/agent-active-queues-v1";
-import { AGENT_COLORS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-colors-v1";
-import { AGENT_CREATE_OPERATION_CAPABILITY } from "@openbot/contracts/team-protocol/agent-create-operation-v1";
+} from "@codebot/contracts/team-protocol/agent-active-queues-v1";
+import { AGENT_COLORS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-colors-v1";
+import { AGENT_CREATE_OPERATION_CAPABILITY } from "@codebot/contracts/team-protocol/agent-create-operation-v1";
 import {
   AGENT_FAST_MODE_CAPABILITY,
   AGENT_FAST_MODE_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-fast-mode-v1";
-import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-notification-levels-v1";
+} from "@codebot/contracts/team-protocol/agent-fast-mode-v1";
+import { AGENT_NOTIFICATION_LEVELS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-notification-levels-v1";
 import {
   AGENT_PENDING_RUNTIME_CAPABILITY,
   AGENT_PENDING_RUNTIME_ROUTES,
   pendingRuntimeUpdateBody,
-} from "@openbot/contracts/team-protocol/agent-pending-runtime-v1";
-import { AGENT_SPEED_CAPABILITY, AGENT_SPEED_ROUTES } from "@openbot/contracts/team-protocol/agent-speed-v1";
+} from "@codebot/contracts/team-protocol/agent-pending-runtime-v1";
+import { AGENT_SPEED_CAPABILITY, AGENT_SPEED_ROUTES } from "@codebot/contracts/team-protocol/agent-speed-v1";
 import {
   AGENT_USAGE_LIMIT_CAPABILITY,
   AGENT_USAGE_LIMIT_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-usage-limit-v1";
+} from "@codebot/contracts/team-protocol/agent-usage-limit-v1";
 import {
   AGENT_WAITS_CAPABILITY,
   AGENT_WAITS_ROUTES,
   decodeAgentWaitsResponse,
-} from "@openbot/contracts/team-protocol/agent-waits-v1";
+} from "@codebot/contracts/team-protocol/agent-waits-v1";
 import {
   BROWSER_HTTP_SIGN_IN_CAPABILITY,
   BROWSER_HTTP_SIGN_IN_ROUTES,
   decodeBrowserHttpSignInSnapshot,
-} from "@openbot/contracts/team-protocol/browser-http-sign-in-v1";
+} from "@codebot/contracts/team-protocol/browser-http-sign-in-v1";
 import {
   BROWSER_PAGE_STATE_CAPABILITY,
   BROWSER_PAGE_STATE_ROUTES,
   decodeBrowserPageStateSnapshot,
-} from "@openbot/contracts/team-protocol/browser-page-state-v1";
+} from "@codebot/contracts/team-protocol/browser-page-state-v1";
 import {
   BROWSER_TEACH_CAPABILITY,
   BROWSER_TEACH_ROUTES,
   decodeBrowserTeachSteps,
-} from "@openbot/contracts/team-protocol/browser-teach-v1";
+} from "@codebot/contracts/team-protocol/browser-teach-v1";
 import {
   BROWSER_USER_CONTROL_CAPABILITY,
   BROWSER_USER_CONTROL_ROUTES,
   decodeBrowserUserControlSnapshot,
-} from "@openbot/contracts/team-protocol/browser-user-control-v1";
+} from "@codebot/contracts/team-protocol/browser-user-control-v1";
 import {
   decodeBrowserViewInputValue,
   TEAM_BROWSER_VIEW_CLIPBOARD_CAPABILITY,
@@ -158,107 +158,107 @@ import {
   TEAM_BROWSER_VIEW_FRAME_POINT_CAPABILITY,
   TEAM_BROWSER_VIEW_FRAME_SIZE_CAPABILITY,
   TEAM_BROWSER_VIEW_PAGE_COPY_CAPABILITY,
-} from "@openbot/contracts/team-protocol/browser-view-v1";
+} from "@codebot/contracts/team-protocol/browser-view-v1";
 import {
   CHANNEL_COMPACT_AVAILABILITY_CAPABILITY,
   CHANNEL_COMPACT_AVAILABILITY_ROUTE,
   type ChannelCompactAvailability,
   decodeChannelCompactAvailability,
-} from "@openbot/contracts/team-protocol/channel-compact-availability-v1";
+} from "@codebot/contracts/team-protocol/channel-compact-availability-v1";
 import {
   CHANNEL_PICTURE_CAPABILITY,
   CHANNEL_PICTURE_ROUTES,
-} from "@openbot/contracts/team-protocol/channel-picture-v1";
-import { CHAT_COLORS_CAPABILITY } from "@openbot/contracts/team-protocol/chat-colors-v1";
-import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@openbot/contracts/team-protocol/chat-history-v1";
+} from "@codebot/contracts/team-protocol/channel-picture-v1";
+import { CHAT_COLORS_CAPABILITY } from "@codebot/contracts/team-protocol/chat-colors-v1";
+import { CHAT_HISTORY_CAPABILITY, CHAT_HISTORY_ROUTES } from "@codebot/contracts/team-protocol/chat-history-v1";
 import {
   CONTEXT_COMPACT_CAPABILITY,
   CONTEXT_COMPACT_ROUTES,
-} from "@openbot/contracts/team-protocol/context-compact-v1";
+} from "@codebot/contracts/team-protocol/context-compact-v1";
 import {
   CONVERSATION_FILE_SEARCH_CAPABILITY,
   CONVERSATION_FILE_SEARCH_PAGE_LIMIT,
   CONVERSATION_FILE_SEARCH_ROUTES,
   decodeConversationFileSearchResponse,
-} from "@openbot/contracts/team-protocol/conversation-file-search-v1";
+} from "@codebot/contracts/team-protocol/conversation-file-search-v1";
 import {
   CONVERSATION_UNREAD_FROM_CAPABILITY,
   CONVERSATION_UNREAD_FROM_ROUTE,
-} from "@openbot/contracts/team-protocol/conversation-unread-from-v1";
-import { TEAM_BROWSER_NAVIGATION_CAPABILITY, TEAM_WEB_CLIENT_PROTOCOL } from "@openbot/contracts/team-protocol/current";
-import { FOCUS_USE_ROUTES } from "@openbot/contracts/team-protocol/focus-use-v1";
+} from "@codebot/contracts/team-protocol/conversation-unread-from-v1";
+import { TEAM_BROWSER_NAVIGATION_CAPABILITY, TEAM_WEB_CLIENT_PROTOCOL } from "@codebot/contracts/team-protocol/current";
+import { FOCUS_USE_ROUTES } from "@codebot/contracts/team-protocol/focus-use-v1";
 import {
   decodeCreditsHoldResponse,
   decodeMediaApprovalReadResponse,
   MEDIA_APPROVAL_CHOICE_CAPABILITY,
   MEDIA_APPROVAL_CHOICE_ROUTES,
-} from "@openbot/contracts/team-protocol/media-approval-choice-v1";
-import { MESSAGE_DELETE_CAPABILITY, MESSAGE_DELETE_ROUTES } from "@openbot/contracts/team-protocol/message-delete-v1";
+} from "@codebot/contracts/team-protocol/media-approval-choice-v1";
+import { MESSAGE_DELETE_CAPABILITY, MESSAGE_DELETE_ROUTES } from "@codebot/contracts/team-protocol/message-delete-v1";
 import {
   decodeMessagePinsResponse,
   MESSAGE_PINS_CAPABILITY,
   MESSAGE_PINS_ROUTES,
-} from "@openbot/contracts/team-protocol/message-pins-v1";
-import { MODEL_STEERING_CAPABILITY, MODEL_STEERING_ROUTES } from "@openbot/contracts/team-protocol/model-steering-v1";
+} from "@codebot/contracts/team-protocol/message-pins-v1";
+import { MODEL_STEERING_CAPABILITY, MODEL_STEERING_ROUTES } from "@codebot/contracts/team-protocol/model-steering-v1";
 import {
   MODEL_VISIBILITY_KEPT_CAPABILITY,
   MODEL_VISIBILITY_KEPT_ROUTES,
-} from "@openbot/contracts/team-protocol/model-visibility-kept-v1";
+} from "@codebot/contracts/team-protocol/model-visibility-kept-v1";
 import {
   MODEL_VISIBILITY_CAPABILITY,
   MODEL_VISIBILITY_ROUTES,
-} from "@openbot/contracts/team-protocol/model-visibility-v1";
+} from "@codebot/contracts/team-protocol/model-visibility-v1";
 import {
   decodePendingApprovalResponse,
   PENDING_APPROVAL_CAPABILITY,
   PENDING_APPROVAL_ROUTES,
-} from "@openbot/contracts/team-protocol/pending-approval-v1";
+} from "@codebot/contracts/team-protocol/pending-approval-v1";
 import {
   decodePendingPromptsResponse,
   PENDING_PROMPTS_CAPABILITY,
   PENDING_PROMPTS_ROUTES,
-} from "@openbot/contracts/team-protocol/pending-prompts-v1";
-import { PROVIDER_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-accounts-v1";
+} from "@codebot/contracts/team-protocol/pending-prompts-v1";
+import { PROVIDER_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-accounts-v1";
 import {
   PROVIDER_MODEL_SOURCE_CAPABILITY,
   PROVIDER_MODEL_SOURCE_ROUTES,
-} from "@openbot/contracts/team-protocol/provider-model-source-v1";
-import { ROUTINES_ONCE_CAPABILITY } from "@openbot/contracts/team-protocol/routines-once-v1";
+} from "@codebot/contracts/team-protocol/provider-model-source-v1";
+import { ROUTINES_ONCE_CAPABILITY } from "@codebot/contracts/team-protocol/routines-once-v1";
 import {
   decodeServerSafeModeReason,
   SERVER_SAFE_MODE_CAPABILITY,
   SERVER_SAFE_MODE_ROUTES,
   type ServerSafeModeReason,
-} from "@openbot/contracts/team-protocol/server-safe-mode-v1";
+} from "@codebot/contracts/team-protocol/server-safe-mode-v1";
 import {
   SIDEBAR_FOLDERS_CAPABILITY,
   SIDEBAR_FOLDERS_ROUTES,
-} from "@openbot/contracts/team-protocol/sidebar-folders-v1";
+} from "@codebot/contracts/team-protocol/sidebar-folders-v1";
 import {
   decodeThreadMessageSearchResponse,
   THREAD_MESSAGE_SEARCH_CAPABILITY,
   THREAD_MESSAGE_SEARCH_PAGE_LIMIT,
   THREAD_MESSAGE_SEARCH_ROUTES,
-} from "@openbot/contracts/team-protocol/thread-message-search-v1";
-import { USAGE_CREDITS_CAPABILITY, USAGE_CREDITS_ROUTES } from "@openbot/contracts/team-protocol/usage-credits-v1";
-import type { TeamProtocolSupportV1 } from "@openbot/contracts/team-protocol/v1";
-import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
+} from "@codebot/contracts/team-protocol/thread-message-search-v1";
+import { USAGE_CREDITS_CAPABILITY, USAGE_CREDITS_ROUTES } from "@codebot/contracts/team-protocol/usage-credits-v1";
+import type { TeamProtocolSupportV1 } from "@codebot/contracts/team-protocol/v1";
+import { TEAM_PROTOCOL_V2_MAX_FILE_BYTES, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
 import {
   WORKSPACE_DIRECTORY_CAPABILITY,
   WORKSPACE_DIRECTORY_ROUTES,
-} from "@openbot/contracts/team-protocol/workspace-directory-v1";
-import { WORKSPACE_ONLY_PROCESS_LIMIT_CAPABILITY } from "@openbot/contracts/team-protocol/workspace-only-process-limit-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { bytesToBase64 } from "@openbot/team-client/base64";
-import { createRemoteBrowserView, type RemoteBrowserView } from "@openbot/team-client/browser-view";
-import { verifyEd25519Base64Url } from "@openbot/team-client/ed25519";
+} from "@codebot/contracts/team-protocol/workspace-directory-v1";
+import { WORKSPACE_ONLY_PROCESS_LIMIT_CAPABILITY } from "@codebot/contracts/team-protocol/workspace-only-process-limit-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { bytesToBase64 } from "@codebot/team-client/base64";
+import { createRemoteBrowserView, type RemoteBrowserView } from "@codebot/team-client/browser-view";
+import { verifyEd25519Base64Url } from "@codebot/team-client/ed25519";
 import {
   RemoteDirectoryError,
   RemoteTeamDirectoryClient,
   type RemoteTeamHost,
   type RemoteTeamInvite,
   type RemoteTeamMember,
-} from "@openbot/team-client/remote-directory";
+} from "@codebot/team-client/remote-directory";
 import {
   createRemoteTeamPeer,
   type RemoteDownloadWatch,
@@ -267,9 +267,9 @@ import {
   type RemoteTeamCommandResult,
   type RemoteTeamConnectionUpdate,
   type RemoteTeamPeerActions,
-} from "@openbot/team-client/remote-peer";
-import { remoteWorkspaceReadTimeout } from "@openbot/team-client/remote-recovery";
-import { retryOperationIds } from "@openbot/team-client/retry-operation-id";
+} from "@codebot/team-client/remote-peer";
+import { remoteWorkspaceReadTimeout } from "@codebot/team-client/remote-recovery";
+import { retryOperationIds } from "@codebot/team-client/retry-operation-id";
 import {
   listAgentNotificationLevels,
   listHiddenAgents,
@@ -284,7 +284,7 @@ import {
   setAgentProviderAccount,
   setOwnServerNotificationLevel,
   setSidebarPins,
-} from "@openbot/team-client/team-admin-requests";
+} from "@codebot/team-client/team-admin-requests";
 import {
   cancelQueuedMessage,
   deleteAgent,
@@ -299,11 +299,11 @@ import {
   teamChannelsApi,
   updateQueuedMessage,
   uploadAttachmentDraft,
-} from "@openbot/team-client/team-api-requests";
-import type { BrowserViewRuntime } from "@openbot/ui/features/browser/BrowserLiveView";
-import { currentText } from "@openbot/ui/text";
-import { toast } from "@openbot/ui/toast";
-import { referenceFrom } from "@openbot/user-errors";
+} from "@codebot/team-client/team-api-requests";
+import type { BrowserViewRuntime } from "@codebot/ui/features/browser/BrowserLiveView";
+import { currentText } from "@codebot/ui/text";
+import { toast } from "@codebot/ui/toast";
+import { referenceFrom } from "@codebot/user-errors";
 import { Effect } from "effect";
 import type { ServerAdminPort } from "../servers/servers-port";
 import { readWebHostCompatibility } from "./web-host-compatibility";
@@ -571,7 +571,7 @@ function writePageCopy(text: string): void {
 }
 
 function hostProtocolKey(accountId: string, hostId: string): string {
-  return `openbot.web.host-protocol:${accountId}:${hostId}`;
+  return `codebot.web.host-protocol:${accountId}:${hostId}`;
 }
 
 function savedHostProtocol(accountId: string, hostId: string): number | undefined {
@@ -580,7 +580,7 @@ function savedHostProtocol(accountId: string, hostId: string): number | undefine
 }
 
 function pinWebHostKey(accountId: string, host: RemoteTeamHost): void {
-  const key = `openbot.web.host-key:${accountId}:${host.hostId}`;
+  const key = `codebot.web.host-key:${accountId}:${host.hostId}`;
   const pinned = localStorage.getItem(key);
   if (pinned && pinned !== host.devicePublicKey) throw new WebHostConnectionError("identity_changed");
   localStorage.setItem(key, host.devicePublicKey);
@@ -603,8 +603,8 @@ export function createWebWorkspaceRuntime(
     inviteLinks: { allowLocalDevelopmentApiUrl: import.meta.env.DEV },
     verifyHostKeySignature: verifyEd25519Base64Url,
     hostKeys: {
-      get: async (id) => localStorage.getItem(`openbot.web.host-key:${accountId}:${id}`),
-      set: async (id, key) => localStorage.setItem(`openbot.web.host-key:${accountId}:${id}`, key),
+      get: async (id) => localStorage.getItem(`codebot.web.host-key:${accountId}:${id}`),
+      set: async (id, key) => localStorage.setItem(`codebot.web.host-key:${accountId}:${id}`, key),
     },
   });
   let sessionsEnded = false;
@@ -996,14 +996,14 @@ export function createWebWorkspaceRuntime(
   }
   async function withChannelPicture<T extends Channel>(channel: T): Promise<T> {
     const source = channel.imageUrl;
-    if (!source?.startsWith("openbot-avatar:")) return channel;
+    if (!source?.startsWith("codebot-avatar:")) return channel;
     return { ...channel, imageUrl: await readChannelPicture(channel.id, source) };
   }
   function withKnownChannelPictures<T extends Channel>(list: T[]): T[] {
     const started: Promise<string | null>[] = [];
     const listed = list.map((channel) => {
       const source = channel.imageUrl;
-      if (!source?.startsWith("openbot-avatar:")) return channel;
+      if (!source?.startsWith("codebot-avatar:")) return channel;
       const entry = channelPicture(channel.id, source);
       if (entry?.started) started.push(entry.picture.read);
       return { ...channel, imageUrl: entry?.picture.url ?? null };
@@ -1365,7 +1365,7 @@ export function createWebWorkspaceRuntime(
       const response = await accountFetch(`/api/browser/v2/remote/hosts/${encodeURIComponent(hostId)}`, {
         method: "DELETE",
         credentials: "same-origin",
-        headers: { "X-OpenBot-Browser": "1", "Content-Type": "application/json" },
+        headers: { "X-CodeBot-Browser": "1", "Content-Type": "application/json" },
         signal: AbortSignal.timeout(15_000),
       });
       if (!response.ok) throw new Error(currentText().t("server.settings.actionFailed"));

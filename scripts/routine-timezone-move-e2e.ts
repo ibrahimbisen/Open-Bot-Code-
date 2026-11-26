@@ -4,7 +4,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { Routine, RoutineSchedule } from "@openbot/contracts/ipc";
+import type { Routine, RoutineSchedule } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { ConversationRuntime } from "../src/backend/agent/conversation-runtime";
 import { RoutineScheduler } from "../src/backend/agent/routine-scheduler";
@@ -12,21 +12,21 @@ import { AgentRoutineStore } from "../src/backend/agent-routine-store";
 import { AgentStore } from "../src/backend/agent-store";
 import { AgentWaitStore } from "../src/backend/agent-waits/agent-wait-store";
 import { AgentWaits } from "../src/backend/agent-waits/agent-waits";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { RoutineTimer } from "../src/backend/routine-timer";
 import { parseSaveEventRoutine } from "../src/main/host-events-inputs";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = join(ROOT, ".openbot-build", "routine-timezone-move-e2e");
+const OUT = join(ROOT, ".codebot-build", "routine-timezone-move-e2e");
 const STEP_DEADLINE_MS = 15_000;
 const FROM = "Africa/Cairo";
 const TO = "Europe/Istanbul";
 const at = (day: string, time: string) => new Date(`2031-03-${day}T${time}:00.000Z`);
 
-const root = await mkdtemp(join(tmpdir(), "openbot-routine-timezone-"));
-const database = new OpenBotDatabase(join(root, "state"));
+const root = await mkdtemp(join(tmpdir(), "codebot-routine-timezone-"));
+const database = new CodeBotDatabase(join(root, "state"));
 const store = new AgentStore(join(root, "state"), join(root, "home"), database);
 const mailbox = new MailboxStore(join(root, "state"), store.sharedRoot, database);
 const conversation = new ConversationRuntime(

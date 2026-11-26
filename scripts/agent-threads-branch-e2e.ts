@@ -1,18 +1,18 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { agentProviderDescriptor, isAgentProvider } from "@openbot/contracts/agent-providers";
+import { agentProviderDescriptor, isAgentProvider } from "@codebot/contracts/agent-providers";
 import type {
   AgentTask,
   AgentTasksSnapshot,
   ConversationMessage,
   ConversationSnapshot,
   QueueSnapshot,
-} from "@openbot/contracts/ipc";
-import { translateFor } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { translateFor } from "@codebot/i18n";
 import { argument, connectChannelE2e, LONG_PROMPT, SHORT_PROMPT, waitFor, writeReport } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-threads-branch-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-threads-branch-e2e");
 mkdirSync(OUT, { recursive: true });
 const UI_WAIT_MS = 15_000;
 const SECOND_PROMPT = "Reply with the single word done. Do not use tools.";
@@ -64,15 +64,15 @@ const branchPoints = (title: string) =>
     .filter({ has: page.getByRole("button", { name: english("chat.actions.branch"), exact: true }) });
 
 function listTasks(): Promise<AgentTasksSnapshot> {
-  return page.evaluate((id) => window.openbot.agent.listTasks(id), agentId);
+  return page.evaluate((id) => window.codebot.agent.listTasks(id), agentId);
 }
 
 function readTask(taskId: string): Promise<ConversationSnapshot> {
-  return page.evaluate((input) => window.openbot.agent.readTask(input), { agentId, taskId });
+  return page.evaluate((input) => window.codebot.agent.readTask(input), { agentId, taskId });
 }
 
 function listQueue(): Promise<QueueSnapshot> {
-  return page.evaluate((id) => window.openbot.agent.listQueue(id), agentId);
+  return page.evaluate((id) => window.codebot.agent.listQueue(id), agentId);
 }
 
 function task(taskId: string): Promise<AgentTask | undefined> {
@@ -84,7 +84,7 @@ function waitForTask(label: string, taskId: string, ready: (task: AgentTask | un
 }
 
 function branch(taskId: string | null, messageId: string, requestId: string): Promise<AgentTask> {
-  return page.evaluate((input) => window.openbot.agent.branchTask(input), { agentId, taskId, messageId, requestId });
+  return page.evaluate((input) => window.codebot.agent.branchTask(input), { agentId, taskId, messageId, requestId });
 }
 
 function turnEnds(messages: readonly ConversationMessage[]): ConversationMessage[] {
@@ -136,7 +136,7 @@ async function openThread(title: string): Promise<void> {
 }
 
 const agent = await page.evaluate(async (id) => {
-  const found = (await window.openbot.agent.listAgents()).find((candidate) => candidate.id === id);
+  const found = (await window.codebot.agent.listAgents()).find((candidate) => candidate.id === id);
   if (!found) throw new Error(`Unknown agent: ${id}`);
   return { name: found.name, provider: found.provider };
 }, agentId);
@@ -153,17 +153,17 @@ try {
   await openAgent(agent.name);
 
   const source = await page.evaluate(
-    (input) => window.openbot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
+    (input) => window.codebot.agent.startTask({ ...input, clientMessageId: crypto.randomUUID() }),
     { agentId, text: SHORT_PROMPT },
   );
   started.push(source.id);
   await waitForTask("the first turn ends", source.id, (current) => current?.state === "idle");
-  await page.evaluate((input) => window.openbot.agent.renameTask(input), {
+  await page.evaluate((input) => window.codebot.agent.renameTask(input), {
     agentId,
     taskId: source.id,
     title: sourceTitle,
   });
-  await page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+  await page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
     agentId,
     taskId: source.id,
     text: SECOND_PROMPT,
@@ -255,7 +255,7 @@ try {
   assert.deepEqual(report.threadMenu.order, titles, "The thread menu nests the branches.");
 
   await openThread(sourceTitle);
-  await page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+  await page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
     agentId,
     taskId: source.id,
     text: LONG_PROMPT,
@@ -279,20 +279,20 @@ try {
     (error: unknown) => (error instanceof Error ? error.message : String(error)),
   );
   report.whileRunning = { buttonDisabled, menuItemDisabled, refused: refusal !== "", error: refusal };
-  await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId: source.id });
+  await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId: source.id });
   await waitForTask("the long turn stops", source.id, (current) => current?.state === "idle");
   assert.ok(buttonDisabled, "The branch button is off while a turn runs.");
   assert.ok(menuItemDisabled, "Branch from here is off while a turn runs.");
   assert.ok(refusal.includes(english("error.backend.branchSourceBusy")), "The host refuses a running source.");
 
-  await page.evaluate((input) => window.openbot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
+  await page.evaluate((input) => window.codebot.agent.sendMessage({ ...input, clientMessageId: crypto.randomUUID() }), {
     agentId,
     text: SHORT_PROMPT,
   });
   const ownChat = await waitFor(
     page,
     "the own chat's turn ends",
-    () => page.evaluate((id) => window.openbot.agent.readConversation(id), agentId),
+    () => page.evaluate((id) => window.codebot.agent.readConversation(id), agentId),
     (snapshot) => snapshot.activeTurnId === null && snapshot.messages.at(-1)?.author !== "user",
   );
   const ownEnd = turnEnds(ownChat.messages).at(-1);
@@ -308,7 +308,7 @@ try {
   assert.equal(ownBranch.branch?.sourceTaskId, null);
   assert.ok(SHORT_PROMPT.startsWith(ownBranch.title.replace(/…$/, "")), "The title is the last user message.");
 
-  await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId: source.id });
+  await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId: source.id });
   await waitForTask("the source is deleted", source.id, (current) => current === undefined);
   started.splice(started.indexOf(source.id), 1);
   await openThread(branched.title);
@@ -328,12 +328,12 @@ try {
   for (const delivery of (await listQueue().catch(() => null))?.deliveries ?? [])
     if (delivery.turnId && (delivery.status === "starting" || delivery.status === "running"))
       await page
-        .evaluate((input) => window.openbot.agent.interrupt(input), { agentId, turnId: delivery.turnId })
+        .evaluate((input) => window.codebot.agent.interrupt(input), { agentId, turnId: delivery.turnId })
         .catch(() => undefined);
   for (const taskId of new Set(started)) {
-    await page.evaluate((input) => window.openbot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.stopTask(input), { agentId, taskId }).catch(() => undefined);
     await waitForTask("the cleanup stop", taskId, (current) => current?.state !== "running").catch(() => undefined);
-    await page.evaluate((input) => window.openbot.agent.deleteTask(input), { agentId, taskId }).catch(() => undefined);
+    await page.evaluate((input) => window.codebot.agent.deleteTask(input), { agentId, taskId }).catch(() => undefined);
   }
   writeReport("agent-threads-branch-e2e", report);
   await session.close();

@@ -5,7 +5,7 @@ import type {
   WorkflowFieldValue,
   WorkflowGraph,
   WorkflowNode,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import * as Crypto from "expo-crypto";
 import { create } from "zustand";
 import { type AddKey, addFields, addKind } from "./workflow-add";

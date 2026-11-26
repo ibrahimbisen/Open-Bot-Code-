@@ -3,21 +3,21 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { ChannelMessage, WorkflowGraph, WorkflowNode, WorkflowStep } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { ChannelMessage, WorkflowGraph, WorkflowNode, WorkflowStep } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { ChannelImages } from "../src/backend/channel-images";
 import { ChannelService } from "../src/backend/channel-service";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-channel-output-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-channel-output-e2e");
 const CHANNEL = "channel-e2e";
 const ARCHIVED = "channel-e2e-archived";
 const OWNER = { id: "member-e2e", name: "Owner" };
@@ -46,8 +46,8 @@ const graphOf = (text: string, output: WorkflowNode["fields"]): WorkflowGraph =>
   strokes: [],
 });
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-channel-output-"));
-let database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-channel-output-"));
+let database = new CodeBotDatabase(directory);
 let channels: ChannelService | null = null;
 let service: WorkflowsHandle | null = null;
 
@@ -217,7 +217,7 @@ try {
   const posted = await outputStep(opened.workflows, run.id);
   const notesBefore = notesOf(opened.channels).length;
   await close();
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   await Effect.runPromise(database.initialize());
   database.connection
     .prepare("UPDATE workflow_steps SET status = 'running', ended_at = NULL, output = NULL WHERE step_id = ?")
@@ -226,7 +226,7 @@ try {
     .prepare("UPDATE workflow_runs SET status = 'running', ended_at = NULL WHERE run_id = ?")
     .run(run.id);
   database.close();
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   opened = await open();
   await runCauseEffect(opened.workflows.sweep());
   step = await outputStep(opened.workflows, run.id);

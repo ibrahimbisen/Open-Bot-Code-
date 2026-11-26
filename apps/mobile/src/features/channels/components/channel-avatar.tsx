@@ -1,5 +1,5 @@
-import { avatarHueSwatch } from "@openbot/brand/bloub-avatar";
-import type { AvatarHue, ChannelIconName, ChannelSummary } from "@openbot/contracts/ipc";
+import { avatarHueSwatch } from "@codebot/brand/bloub-avatar";
+import type { AvatarHue, ChannelIconName, ChannelSummary } from "@codebot/contracts/ipc";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Typography } from "heroui-native";

@@ -37,7 +37,7 @@ struct ShortcutDirectory: Decodable {
   /// The app's accent color, as `#rrggbb`.
   let accent: String
 
-  private static let appGroup = "group.run.openbot.mobile"
+  private static let appGroup = "group.run.codebot.mobile"
   private static let directoryFile = "shortcuts.json"
   /// `src/features/share/model/share-extension.ts` writes this file and this folder.
   private static let shareDirectoryFile = "share-extension.json"
@@ -94,12 +94,12 @@ struct ShortcutSession: Decodable {
 
   /// Nil when there is no session, or it is for another account than the directory.
   static func read(for directory: ShortcutDirectory) -> ShortcutSession? {
-    guard let accessGroup = Bundle.main.object(forInfoDictionaryKey: "OpenBotShareKeychainGroup") as? String else {
+    guard let accessGroup = Bundle.main.object(forInfoDictionaryKey: "CodeBotShareKeychainGroup") as? String else {
       return nil
     }
     let query: [String: Any] = [
       kSecClass as String: kSecClassGenericPassword,
-      kSecAttrService as String: "openbot.share-extension",
+      kSecAttrService as String: "codebot.share-extension",
       kSecAttrAccount as String: "session",
       kSecAttrAccessGroup as String: accessGroup,
       kSecReturnData as String: true,
@@ -120,13 +120,13 @@ enum ShortcutText {
   static let fallback: [String: String] = [
     "mobile.settings.shortcuts.card.agents": "Agents",
     "mobile.settings.shortcuts.card.noAgents": "No agents yet",
-    "mobile.settings.shortcuts.card.setUp.title": "Open OpenBot to set up shortcuts",
-    "mobile.settings.shortcuts.card.setUp.action": "Open OpenBot",
+    "mobile.settings.shortcuts.card.setUp.title": "Open CodeBot to set up shortcuts",
+    "mobile.settings.shortcuts.card.setUp.action": "Open CodeBot",
     "mobile.settings.shortcuts.card.noAgent.title": "Choose an agent for shortcuts",
     "mobile.settings.shortcuts.card.noAgent.detail": "Shortcuts send to one agent.",
     "mobile.settings.shortcuts.card.noAgent.action": "Choose agent",
-    "mobile.settings.shortcuts.card.locked.title": "OpenBot is locked",
-    "mobile.settings.shortcuts.card.locked.action": "Open OpenBot",
+    "mobile.settings.shortcuts.card.locked.title": "CodeBot is locked",
+    "mobile.settings.shortcuts.card.locked.action": "Open CodeBot",
     "mobile.settings.shortcuts.card.message": "Message {name}",
     "mobile.settings.shortcuts.card.messagePrompt": "Message to {name}",
   ]

@@ -1,5 +1,5 @@
 import { hostname } from "node:os";
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Schema } from "effect";
 import { z } from "zod";
 import { LinkOperationError, linkCall, linkDecode } from "./link-effects";
@@ -7,7 +7,7 @@ import { LinkOperationError, linkCall, linkDecode } from "./link-effects";
 const LINK_AUTH_URL = "https://login.link.com";
 export const LINK_API_URL = "https://api.link.com";
 const LINK_CLIENT_ID = "lwlpk_U7Qy7ThG69STZk";
-const LINK_CLIENT_HINT = "OpenBot";
+const LINK_CLIENT_HINT = "CodeBot";
 const LINK_SCOPE = "userinfo:read payment_methods.agentic";
 const DEVICE_GRANT = "urn:ietf:params:oauth:grant-type:device_code";
 const SLOW_DOWN_MS = 5_000;

@@ -1,8 +1,8 @@
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Result } from "effect";
 import { type PasswordVault, PasswordVaultError, type VaultLogin } from "./password-vault";
 
-const logger = createOpenBotLogger("password-vault");
+const logger = createCodeBotLogger("password-vault");
 
 export interface PasswordVaultSource {
   prefix: string;

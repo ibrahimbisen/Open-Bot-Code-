@@ -3,7 +3,7 @@
   .agent-row-agent-status-routine-failed,
   .agent-row-agent-status-waiting
 ) {
-  --sidebar-felt-ring: var(--agent-avatar-outline, var(--openbot-bg-sidebar));
+  --sidebar-felt-ring: var(--agent-avatar-outline, var(--codebot-bg-sidebar));
   --sidebar-felt-ring-width: 3.5px;
   --sidebar-felt-ring-border: 3px;
   --sidebar-felt-box: 16px;
@@ -15,19 +15,19 @@
   height: calc(var(--sidebar-felt-box) + 2 * var(--sidebar-felt-ring-border));
   isolation: isolate;
   border: var(--sidebar-felt-ring-border) solid var(--sidebar-felt-ring);
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: var(--sidebar-felt-under) padding-box;
   box-shadow: 0 0 0 calc(var(--sidebar-felt-ring-width) - var(--sidebar-felt-ring-border)) var(--sidebar-felt-ring);
 }
 
 .agent-row-agent-status-unread {
-  --sidebar-felt-under: linear-gradient(to bottom, var(--openbot-felt-plum-top), var(--openbot-felt-plum-bottom));
+  --sidebar-felt-under: linear-gradient(to bottom, var(--codebot-felt-plum-top), var(--codebot-felt-plum-bottom));
   --felt-box: var(--sidebar-felt-box);
 
   overflow: clip;
   padding: 0 3px;
-  color: var(--openbot-felt-cream);
-  font-size: var(--openbot-text-lg);
+  color: var(--codebot-felt-cream);
+  font-size: var(--codebot-text-lg);
   line-height: 16px;
 }
 
@@ -40,8 +40,8 @@
 .agent-row-agent-status.agent-row-agent-status-routine-failed {
   --sidebar-felt-under: linear-gradient(
     to bottom,
-    var(--openbot-felt-raspberry-top),
-    var(--openbot-felt-raspberry-bottom)
+    var(--codebot-felt-raspberry-top),
+    var(--codebot-felt-raspberry-bottom)
   );
 
   inset-inline-end: calc(-1px - var(--sidebar-felt-ring-border));
@@ -64,11 +64,11 @@
 
 .agent-row-agent-status.agent-row-agent-status-waiting {
   --sidebar-felt-box: 18px;
-  --sidebar-felt-under: linear-gradient(to bottom, var(--openbot-felt-amber-top), var(--openbot-felt-amber-bottom));
+  --sidebar-felt-under: linear-gradient(to bottom, var(--codebot-felt-amber-top), var(--codebot-felt-amber-bottom));
   --felt-box: var(--sidebar-felt-box);
 
   width: calc(var(--sidebar-felt-box) + 2 * var(--sidebar-felt-ring-border));
-  color: var(--openbot-felt-cream);
+  color: var(--codebot-felt-cream);
 }
 
 .agent-row-agent-status-waiting svg {
@@ -103,7 +103,7 @@
     .agent-row-agent-status-routine-failed,
     .agent-row-agent-status-waiting
   ).agent-row-agent-status-entering {
-    animation: sidebar-felt-in var(--openbot-duration-slow) cubic-bezier(0.2, 0, 0, 1) both;
+    animation: sidebar-felt-in var(--codebot-duration-slow) cubic-bezier(0.2, 0, 0, 1) both;
   }
 
   .agent-row-agent-status-unread.agent-row-agent-status-bumping {
@@ -118,7 +118,7 @@
     .agent-row-agent-status-unread,
     .agent-row-agent-status-routine-failed
   ).agent-row-agent-status-leaving {
-    animation: sidebar-felt-out var(--openbot-duration-overlay) cubic-bezier(0.5, 0, 0.75, 0) both;
+    animation: sidebar-felt-out var(--codebot-duration-overlay) cubic-bezier(0.5, 0, 0.75, 0) both;
   }
 
   .agent-row-unread-count.agent-row-unread-count-roll-in {

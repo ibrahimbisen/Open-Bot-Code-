@@ -1,18 +1,18 @@
-import { AppLogo } from "@openbot/brand";
-import type { MarketplaceAgentSummary } from "@openbot/contracts/ipc";
-import { ShieldCheck } from "@openbot/ui/icons";
+import { AppLogo } from "@codebot/brand";
+import type { MarketplaceAgentSummary } from "@codebot/contracts/ipc";
+import { ShieldCheck } from "@codebot/ui/icons";
 import type { JSX } from "@solidjs/web";
 import { createSignal, Loading, lazy, onSettled, Show } from "solid-js";
 import { isVerifiedAgent } from "./marketplace-prototype-fixtures";
 
 const AgentAvatar = lazy(() =>
-  import("@openbot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
+  import("@codebot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
 );
 
 const SHARE_HOST = "openbot.run";
 
 function shareTitle(agent: MarketplaceAgentSummary): string {
-  return `${agent.name} — OpenBot agent`;
+  return `${agent.name} — CodeBot agent`;
 }
 
 export function ShareCard(props: { agent: MarketplaceAgentSummary }): JSX.Element {
@@ -21,7 +21,7 @@ export function ShareCard(props: { agent: MarketplaceAgentSummary }): JSX.Elemen
       <CardAvatar agent={props.agent} />
       <span class="marketplace-share-brand">
         <AppLogo variant="production" class="marketplace-share-logo" />
-        OpenBot
+        CodeBot
       </span>
       <span class="marketplace-share-copy">
         <span class="marketplace-share-name">
@@ -86,7 +86,7 @@ export function MessagesFrame(props: { agent: MarketplaceAgentSummary }): JSX.El
 export function SlackFrame(props: { agent: MarketplaceAgentSummary }): JSX.Element {
   return (
     <figure class="marketplace-share-slack">
-      <span class="marketplace-share-slack-site">OpenBot</span>
+      <span class="marketplace-share-slack-site">CodeBot</span>
       <span class="marketplace-share-slack-title">{shareTitle(props.agent)}</span>
       <span class="marketplace-share-slack-description">{props.agent.title}</span>
       <div class="marketplace-share-slack-media">

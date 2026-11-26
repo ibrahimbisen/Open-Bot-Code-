@@ -19,37 +19,37 @@ export const ServerLibrary = lazy(() =>
   import("./features/files/ServerLibrary").then((module) => ({ default: module.ServerLibrary })),
 );
 export const AccountLogin = lazy(() =>
-  import("@openbot/ui/features/account/AccountLogin").then((module) => ({ default: module.AccountLogin })),
+  import("@codebot/ui/features/account/AccountLogin").then((module) => ({ default: module.AccountLogin })),
 );
 export const DirectConversation = lazy(() =>
-  import("@openbot/ui/features/conversation/DirectConversation").then((module) => ({
+  import("@codebot/ui/features/conversation/DirectConversation").then((module) => ({
     default: module.DirectConversation,
   })),
 );
 export const GlobalSearch = lazy(() =>
-  import("@openbot/ui/components/GlobalSearch").then((module) => ({ default: module.GlobalSearch })),
+  import("@codebot/ui/components/GlobalSearch").then((module) => ({ default: module.GlobalSearch })),
 );
 export const InitialSetup = lazy(() =>
   import("./features/onboarding/InitialSetup").then((module) => ({ default: module.InitialSetup })),
 );
 export const AddServerDialog = lazy(() =>
-  import("@openbot/ui/features/servers/AddServerDialog").then((module) => ({ default: module.AddServerDialog })),
+  import("@codebot/ui/features/servers/AddServerDialog").then((module) => ({ default: module.AddServerDialog })),
 );
 export const HostedPricingPage = lazy(() =>
-  import("@openbot/ui/features/servers/HostedPricingPage").then((module) => ({ default: module.HostedPricingPage })),
+  import("@codebot/ui/features/servers/HostedPricingPage").then((module) => ({ default: module.HostedPricingPage })),
 );
 export const CreateLocalServerDialog = lazy(() =>
-  import("@openbot/ui/features/servers/CreateLocalServerDialog").then((module) => ({
+  import("@codebot/ui/features/servers/CreateLocalServerDialog").then((module) => ({
     default: module.CreateLocalServerDialog,
   })),
 );
 export const InstallServerDialog = lazy(() =>
-  import("@openbot/ui/features/servers/InstallServerDialog").then((module) => ({
+  import("@codebot/ui/features/servers/InstallServerDialog").then((module) => ({
     default: module.InstallServerDialog,
   })),
 );
 export const JoinServerDialog = lazy(() =>
-  import("@openbot/ui/features/servers/JoinServerDialog").then((module) => ({ default: module.JoinServerDialog })),
+  import("@codebot/ui/features/servers/JoinServerDialog").then((module) => ({ default: module.JoinServerDialog })),
 );
 export const FirstRunFlow = lazy(() =>
   import("./features/onboarding/FirstRunFlow").then((module) => ({ default: module.FirstRunFlow })),
@@ -58,7 +58,7 @@ export const LanguageStep = lazy(() =>
   import("./features/onboarding/LanguageStep").then((module) => ({ default: module.LanguageStep })),
 );
 export const RemoteDesktopWorkspace = lazy(() =>
-  import("@openbot/ui/features/remote-desktop/RemoteDesktopWorkspace").then((module) => ({
+  import("@codebot/ui/features/remote-desktop/RemoteDesktopWorkspace").then((module) => ({
     default: module.RemoteDesktopWorkspace,
   })),
 );

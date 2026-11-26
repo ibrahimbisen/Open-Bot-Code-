@@ -5,9 +5,9 @@ import type {
   BrowserDockFrame,
   BrowserDockGlass,
   BrowserDockPresentation,
-} from "@openbot/contracts/ipc";
-import { BROWSER_DOCK_LIMITS, BROWSER_DOCK_OVERLAY_WIDTH, IPC_ENDPOINTS } from "@openbot/contracts/ipc";
-import { createOpenBotLogger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { BROWSER_DOCK_LIMITS, BROWSER_DOCK_OVERLAY_WIDTH, IPC_ENDPOINTS } from "@codebot/contracts/ipc";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Schema, Semaphore } from "effect";
 import { type BrowserWindow, type Input, type Rectangle, View, type WebContents, WebContentsView } from "electron";
 import type { BrowserMainPage } from "../backend/browser-host";
@@ -16,7 +16,7 @@ import { onTilingLinuxDesktop } from "./linux-tiling-desktop";
 import { sendToRenderer } from "./renderer-ipc";
 import { isTrustedRendererUrl } from "./trusted-renderer";
 
-const logger = createOpenBotLogger("browser-dock-overlay");
+const logger = createCodeBotLogger("browser-dock-overlay");
 
 const INITIAL_HEIGHT = 160;
 const SHRINK_DELAY_MS = 500;

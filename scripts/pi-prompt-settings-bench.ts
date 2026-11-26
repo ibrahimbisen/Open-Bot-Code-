@@ -10,7 +10,7 @@ import { type AppServerNotification, getRecord, getString } from "../src/backend
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { stopClients } from "./provider-fakes/host";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/pi-prompt-settings-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-prompt-settings-bench");
 const REPLY_PROMPT = "Reply with the single word OK. Do not use any tool.";
 const TASK_PROMPT =
   "Read notes.md and count.txt. Then reply with one line: the title of notes.md and the number in count.txt. " +
@@ -54,27 +54,27 @@ const DOCS_EXTENSION = String.raw`export default function (pi) {
 
 const DEFERRED = (...tools: string[]): BridgeChange => ({
   toolExposure: Object.fromEntries(tools.map((tool) => [tool, "deferred" as const])),
-  description: "OpenBot",
+  description: "CodeBot",
 });
 
 const VARIANTS: Variant[] = [
   { name: "current" },
   { name: "with-pi-docs-section", extension: DOCS_EXTENSION },
-  { name: "with-all-openbot-tools", bridge: { toolExposure: null } },
+  { name: "with-all-codebot-tools", bridge: { toolExposure: null } },
   { name: "before", extension: DOCS_EXTENSION, bridge: { toolExposure: null } },
   { name: "no-llama-cpp", settings: { extensions: ["-builtin:llama.cpp"] } },
   { name: "no-codemode", settings: { extensions: ["-builtin:codemode"] } },
   { name: "no-tool-search", settings: { extensions: ["-builtin:tool-search"] } },
   { name: "no-prompt-templates", flags: ["--no-prompt-templates"] },
   { name: "no-skills", flags: ["--no-skills"] },
-  { name: "two-openbot-tools-deferred", bridge: DEFERRED("request_api_key", "suggest_marketplace_app") },
+  { name: "two-codebot-tools-deferred", bridge: DEFERRED("request_api_key", "suggest_marketplace_app") },
   { name: "ask-ui-deferred-too", bridge: DEFERRED("ask_ui", "request_api_key", "suggest_marketplace_app") },
-  { name: "all-openbot-tools-deferred", bridge: { exposure: "deferred", toolExposure: null, description: "OpenBot" } },
+  { name: "all-codebot-tools-deferred", bridge: { exposure: "deferred", toolExposure: null, description: "CodeBot" } },
 ];
 
 const MEASURE_EXTENSION = `import { appendFileSync } from "node:fs";
 export default function (pi) {
-  const file = process.env.OPENBOT_BENCH_MEASURE_FILE;
+  const file = process.env.CODEBOT_BENCH_MEASURE_FILE;
   if (!file) return;
   const write = (record) => appendFileSync(file, JSON.stringify(record) + "\\n");
   pi.on("before_provider_request", (event) => {
@@ -136,7 +136,7 @@ const KEY = process.env.INCEPTION_API_KEY?.trim();
 if (!KEY) throw new Error("Set INCEPTION_API_KEY to an Inception key.");
 delete process.env.INCEPTION_API_KEY;
 
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-pi-prompt-bench-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-pi-prompt-bench-")));
 const cli = await runCauseEffect(resolvePiCli({ bundledExecutable: process.env.PI_CLI }));
 const report: { cli: { executable: string; version: string }; model: string; tokensUsed: number; runs: RunReport[] } = {
   cli: { executable: cli.executable, version: cli.version },
@@ -146,13 +146,13 @@ const report: { cli: { executable: string; version: string }; model: string; tok
 };
 
 function git(cwd: string, ...args: string[]): void {
-  execFileSync("git", ["-c", "user.name=OpenBot", "-c", "user.email=e2e@openbot.invalid", ...args], { cwd });
+  execFileSync("git", ["-c", "user.name=CodeBot", "-c", "user.email=e2e@codebot.invalid", ...args], { cwd });
 }
 
 const quote = (value: string) => `'${value.replaceAll("'", `'\\''`)}'`;
 
 const BRIDGE_SCRIPT = `const changes = JSON.parse(process.argv[2]);
-const servers = JSON.parse(process.env.OPENBOT_PI_MCP_SERVERS || "[]").map((server) => {
+const servers = JSON.parse(process.env.CODEBOT_PI_MCP_SERVERS || "[]").map((server) => {
   if (server.config.exposure !== "direct") return server;
   const config = { ...server.config, ...changes };
   for (const key of Object.keys(config)) if (config[key] === null) delete config[key];
@@ -168,7 +168,7 @@ async function wrapper(folder: string, extra: string[], bridge?: BridgeChange): 
   if (bridge) {
     const script = join(folder, "bridge.mjs");
     await writeFile(script, BRIDGE_SCRIPT);
-    change = `OPENBOT_PI_MCP_SERVERS=$(${quote(process.execPath)} ${quote(script)} ${quote(JSON.stringify(bridge))})\nexport OPENBOT_PI_MCP_SERVERS\n`;
+    change = `CODEBOT_PI_MCP_SERVERS=$(${quote(process.execPath)} ${quote(script)} ${quote(JSON.stringify(bridge))})\nexport CODEBOT_PI_MCP_SERVERS\n`;
   }
   await writeFile(
     path,
@@ -261,7 +261,7 @@ for (const variant of variants) {
   };
   const runTurn = async (step: string, prompt: string) => {
     const file = join(folder, `${step}.jsonl`);
-    process.env.OPENBOT_BENCH_MEASURE_FILE = file;
+    process.env.CODEBOT_BENCH_MEASURE_FILE = file;
     const threadId = await runCauseEffect(
       client.request(
         "thread/start",

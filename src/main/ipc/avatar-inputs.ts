@@ -1,7 +1,7 @@
-import { isAvatarMimeType, isValidAvatarImage } from "@openbot/contracts/avatar-images";
-import type { AvatarImageInput } from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { isAvatarMimeType, isValidAvatarImage } from "@codebot/contracts/avatar-images";
+import type { AvatarImageInput } from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { isObject } from "./validation";
 
 export function parseAvatarImage(value: unknown): AvatarImageInput | null {

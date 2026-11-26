@@ -1,6 +1,6 @@
 ---
 name: custom-server-plan
-description: Show, set, change or remove the paid plan (the paywall) of a custom OpenBot server that runs already. Use when asked to make a customer pay for their custom or enterprise server, to add, change or remove the plan, price or paywall of such a server, or to see whether it pays.
+description: Show, set, change or remove the paid plan (the paywall) of a custom CodeBot server that runs already. Use when asked to make a customer pay for their custom or enterprise server, to add, change or remove the plan, price or paywall of such a server, or to see whether it pays.
 ---
 
 # Custom server plan
@@ -26,7 +26,7 @@ the setup.
 
 ## Steps
 
-1. Get the OpenBot server ID (`host_id` in D1, the last line of the `custom` command). It is not the
+1. Get the CodeBot server ID (`host_id` in D1, the last line of the `custom` command). It is not the
    VPS ID. Ask for it when it is missing.
 2. Run `custom-plan <server ID>` with no other flag. Report the current plan and the subscription
    status.

@@ -1,6 +1,6 @@
-import { NEAR_RULE_DAILY_USD, type NearPendingPayment, type NearWalletStatus } from "@openbot/contracts/ipc";
-import { classifyFailure } from "@openbot/telemetry";
-import { Button, toast } from "@openbot/ui";
+import { NEAR_RULE_DAILY_USD, type NearPendingPayment, type NearWalletStatus } from "@codebot/contracts/ipc";
+import { classifyFailure } from "@codebot/telemetry";
+import { Button, toast } from "@codebot/ui";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 import { UiBlockCard } from "../conversation/ui-blocks/UiBlockCard";

@@ -3,11 +3,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { AgentService } from "../src/backend/agent-service";
 import { AgentStore } from "../src/backend/agent-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
 import { type MessagingCredentials, MessagingService } from "../src/backend/messaging/messaging-service";
@@ -18,12 +19,11 @@ import type {
   TransportSink,
 } from "../src/backend/messaging/messaging-types";
 import { slackInboundMessage } from "../src/backend/messaging/slack/slack-events";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/messaging-slack-ping-reply-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/messaging-slack-ping-reply-e2e");
 const REPORT = join(OUT, "report.json");
-const root = await mkdtemp(join(tmpdir(), "openbot-slack-ping-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-slack-ping-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const WORKSPACE = "T-ping-e2e";
@@ -189,14 +189,14 @@ function event(type: "message" | "app_mention", user: string, threadTs: string, 
 }
 
 function deliver(message: ReturnType<typeof event>): string {
-  assert.ok(message, "The Slack event parser dropped a message that addresses OpenBot.");
+  assert.ok(message, "The Slack event parser dropped a message that addresses CodeBot.");
   assert.ok(sink, "The Slack transport did not start.");
   sink.message(message);
   return message.dedupKey;
 }
 
 const credentials = memoryCredentials();
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
@@ -282,7 +282,7 @@ try {
     dropped = deliver(event("message", OTHER, thread, "nice"));
     assert.equal(delivery(dropped), null, "A reply of a person who was not pinged reached an agent.");
     assert.equal(agents.messaging.store.linkByKey(record.connectionId, CHANNEL, thread), null);
-    assert.deepEqual(calls.slice(before), [], "OpenBot answered a reply that does not address it.");
+    assert.deepEqual(calls.slice(before), [], "CodeBot answered a reply that does not address it.");
     return { ignored: true };
   });
 
@@ -295,7 +295,7 @@ try {
     assert.equal(link.agentId, orchestrator.agentId, "The reply did not go to the Slack Orchestrator.");
     const origin = mailbox.messagingOrigin(queued.delivery.id);
     assert.deepEqual(origin?.replyTo, {
-      authorName: "OpenBot, a post by your teammate Research",
+      authorName: "CodeBot, a post by your teammate Research",
       text: `<@${PINGED}> which logo do we ship: A or B?`,
       sentAt: origin?.replyTo?.sentAt,
     });
@@ -309,7 +309,7 @@ try {
     const before = calls.length;
     const ignored = deliver(event("message", OTHER, thread, "Agreed, B."));
     assert.equal(delivery(ignored), null, "A reply of a person who was not pinged reached the linked thread.");
-    assert.deepEqual(calls.slice(before), [], "OpenBot answered a reply that does not address it.");
+    assert.deepEqual(calls.slice(before), [], "CodeBot answered a reply that does not address it.");
     const again = deliver(event("message", PINGED, thread, "Also make it bigger."));
     const queued = await waitFor("the delivery of the pinged person's second reply", () => delivery(again));
     const origin = mailbox.messagingOrigin(queued.delivery.id);
@@ -335,7 +335,7 @@ try {
     return { replyTo: origin?.replyTo?.authorName };
   });
 
-  await step("a thread reply that mentions OpenBot is left to its app_mention event", async () => {
+  await step("a thread reply that mentions CodeBot is left to its app_mention event", async () => {
     assert.equal(event("message", PINGED, thread, `<@${BOT}> also make it bigger`), null);
     assert.ok(event("app_mention", PINGED, thread, `<@${BOT}> also make it bigger`));
     return { messageEvent: null, appMention: "kept" };

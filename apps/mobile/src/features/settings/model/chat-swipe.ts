@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { writesInOrder } from "@/shared/lib/writes-in-order";
 
-const key = "openbot.mobile.chatSwipe.v1";
+const key = "codebot.mobile.chatSwipe.v1";
 
 const CHAT_SWIPE_ACTIONS = ["question", "threads", "browser", "off"] as const;
 export type ChatSwipeAction = (typeof CHAT_SWIPE_ACTIONS)[number];
@@ -30,7 +30,7 @@ export function saveChatSwipePreference(action: ChatSwipeAction): Promise<void> 
   return write(() => action);
 }
 
-const pullKey = "openbot.mobile.chatPullInfo.v1";
+const pullKey = "codebot.mobile.chatPullInfo.v1";
 
 export const useChatPullPreference = create<{ enabled: boolean; ready: boolean }>(() => ({
   enabled: true,

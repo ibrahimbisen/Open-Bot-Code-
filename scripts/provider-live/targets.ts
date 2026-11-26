@@ -1,5 +1,5 @@
 import { join, resolve } from "node:path";
-import type { AgentProviderId } from "@openbot/contracts/agent-providers";
+import type { AgentProviderId } from "@codebot/contracts/agent-providers";
 
 export const PROJECT_ROOT = resolve(import.meta.dirname, "../..");
 export const RENDERER_HOST = "127.0.0.1";
@@ -12,11 +12,11 @@ export function isLiveProvider(value: unknown): value is LiveProvider {
   return [...LIVE_PROVIDERS, ...BENCH_PROVIDERS].some((provider) => provider === value);
 }
 
-export const BENCH_ENV = "OPENBOT_PROVIDER_LIVE_BENCH";
+export const BENCH_ENV = "CODEBOT_PROVIDER_LIVE_BENCH";
 export const BENCH_TAG = "bench";
 
 export function profilePath(provider: LiveProvider): string {
-  const base = process.env.OPENBOT_PROVIDER_LIVE_DIR || join(PROJECT_ROOT, ".openbot-build", "provider-live");
+  const base = process.env.CODEBOT_PROVIDER_LIVE_DIR || join(PROJECT_ROOT, ".codebot-build", "provider-live");
   return join(base, provider, "profile");
 }
 

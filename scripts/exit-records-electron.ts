@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { app, BrowserWindow, crashReporter } from "electron";
 import { startMainLog } from "../src/main/provider-log";
@@ -21,7 +21,7 @@ app.setPath("userData", userDataPath);
 const logs = join(userDataPath, "logs");
 startMainLog(logs);
 crashReporter.start({ uploadToServer: false });
-const logger = createOpenBotLogger("main");
+const logger = createCodeBotLogger("main");
 
 void app.whenReady().then(async () => {
   const trace = new TraceFile({ directory: logs });

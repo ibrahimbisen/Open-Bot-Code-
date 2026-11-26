@@ -1,7 +1,7 @@
-import { SIGNAL_NO_READY_CLOSE_CODE } from "@openbot/contracts/signal-protocol/messages";
-import { ticketNamesSignalHome, ticketSignalHome } from "@openbot/contracts/signal-protocol/ticket";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import { SIGNAL_NO_READY_CLOSE_CODE } from "@codebot/contracts/signal-protocol/messages";
+import { ticketNamesSignalHome, ticketSignalHome } from "@codebot/contracts/signal-protocol/ticket";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Context, Deferred, Effect, Exit, Fiber, Layer, ManagedRuntime, Scope } from "effect";
 import { RemoteWorkflowError } from "./remote-service-effects";
 import type { TeamWebRtcBridge } from "./team-webrtc-bridge";
@@ -20,7 +20,7 @@ interface TeamWebRtcHostGatewayOptions extends TeamWebRtcHostPeerOptions {
   signalHomeAnswers?: (home: string) => Effect.Effect<boolean>;
 }
 
-const logger = createOpenBotLogger("team-webrtc-host");
+const logger = createCodeBotLogger("team-webrtc-host");
 
 const SIGNAL_MOVE_AFTER_MS = 20_000;
 const SIGNAL_MOVE_LIMIT_MS = 10 * 60_000;
@@ -34,7 +34,7 @@ class HostSignal extends Context.Service<
     connect(peerId: string, signalUrl: string, token: string): Effect.Effect<void, RemoteWorkflowError>;
     disconnect(peerId: string): Effect.Effect<void, RemoteWorkflowError>;
   }
->()("openbot/main/HostSignal") {
+>()("codebot/main/HostSignal") {
   static layer(
     bridge: TeamWebRtcBridge,
     scope: Scope.Scope,

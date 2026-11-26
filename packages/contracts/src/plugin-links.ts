@@ -1,6 +1,6 @@
-export const OPENBOT_PLUGIN_ORIGIN = "https://openbot.run";
-export const OPENBOT_PLUGIN_PATH_PREFIX = "/plugins/";
-export const OPENBOT_PLUGIN_HOST = "plugins";
+export const CODEBOT_PLUGIN_ORIGIN = "https://openbot.run";
+export const CODEBOT_PLUGIN_PATH_PREFIX = "/plugins/";
+export const CODEBOT_PLUGIN_HOST = "plugins";
 export const WEB_APP_PLUGIN_PARAM = "plugin";
 
 const PLUGIN_SLUG_PATTERN = /^[a-z0-9][a-z0-9-]{0,62}$/u;
@@ -11,7 +11,7 @@ export function isPluginSlug(value: string): boolean {
 
 export function createPluginShareUrl(slug: string): string {
   assertPluginSlug(slug);
-  return `${OPENBOT_PLUGIN_ORIGIN}${OPENBOT_PLUGIN_PATH_PREFIX}${slug}`;
+  return `${CODEBOT_PLUGIN_ORIGIN}${CODEBOT_PLUGIN_PATH_PREFIX}${slug}`;
 }
 
 export function createWebAppPluginPath(slug: string): string {
@@ -24,9 +24,9 @@ export function pluginSlugFromWebAppSearch(search: string): string | null {
   return slug !== null && isPluginSlug(slug) ? slug : null;
 }
 
-export function createOpenBotPluginUrl(slug: string): string {
+export function createCodeBotPluginUrl(slug: string): string {
   assertPluginSlug(slug);
-  return `openbot://${OPENBOT_PLUGIN_HOST}/${slug}`;
+  return `codebot://${CODEBOT_PLUGIN_HOST}/${slug}`;
 }
 
 export function pluginLinkText(url: string): string {
@@ -43,14 +43,14 @@ export function parsePluginUrl(value: string): string {
   try {
     url = new URL(value);
   } catch {
-    throw new Error("The OpenBot plugin link is invalid.");
+    throw new Error("The CodeBot plugin link is invalid.");
   }
 
   const canonical =
     url.protocol === "https:" &&
-    url.origin === OPENBOT_PLUGIN_ORIGIN &&
-    url.pathname.startsWith(OPENBOT_PLUGIN_PATH_PREFIX);
-  const customScheme = url.protocol === "openbot:" && url.hostname === OPENBOT_PLUGIN_HOST;
+    url.origin === CODEBOT_PLUGIN_ORIGIN &&
+    url.pathname.startsWith(CODEBOT_PLUGIN_PATH_PREFIX);
+  const customScheme = url.protocol === "codebot:" && url.hostname === CODEBOT_PLUGIN_HOST;
   if (
     (!canonical && !customScheme) ||
     url.username !== "" ||
@@ -59,13 +59,13 @@ export function parsePluginUrl(value: string): string {
     url.search !== "" ||
     url.hash !== ""
   ) {
-    throw new Error("The OpenBot plugin link is invalid.");
+    throw new Error("The CodeBot plugin link is invalid.");
   }
 
-  const rest = canonical ? url.pathname.slice(OPENBOT_PLUGIN_PATH_PREFIX.length) : url.pathname.replace(/^\//u, "");
+  const rest = canonical ? url.pathname.slice(CODEBOT_PLUGIN_PATH_PREFIX.length) : url.pathname.replace(/^\//u, "");
   const segments = rest.split("/");
   if (segments.length !== 1) {
-    throw new Error("The OpenBot plugin link is invalid.");
+    throw new Error("The CodeBot plugin link is invalid.");
   }
 
   const slug = segments[0] ?? "";
@@ -84,6 +84,6 @@ export function isPluginUrl(value: string): boolean {
 
 function assertPluginSlug(slug: string): void {
   if (!isPluginSlug(slug)) {
-    throw new Error("The OpenBot plugin link is invalid.");
+    throw new Error("The CodeBot plugin link is invalid.");
   }
 }

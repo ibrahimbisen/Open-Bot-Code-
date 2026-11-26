@@ -1,4 +1,4 @@
-import { CheckCheck, ContextMenu, EyeOff } from "@openbot/ui";
+import { CheckCheck, ContextMenu, EyeOff } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { For, Match, Show, Switch } from "solid-js";
 import { useText } from "../../text";

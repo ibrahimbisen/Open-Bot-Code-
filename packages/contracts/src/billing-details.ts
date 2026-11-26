@@ -281,7 +281,7 @@ export const EU_VAT_COUNTRIES: readonly string[] = [
 
 export const VAT_SELLER_COUNTRY = "PL";
 
-export const VAT_TAX_RATE = { metadataKey: "openbot_vat", metadataValue: "pl_standard", percentage: 23 } as const;
+export const VAT_TAX_RATE = { metadataKey: "codebot_vat", metadataValue: "pl_standard", percentage: 23 } as const;
 
 const BILLING_COUNTRY_SET = new Set(BILLING_COUNTRIES);
 const EU_VAT_COUNTRY_SET = new Set(EU_VAT_COUNTRIES);

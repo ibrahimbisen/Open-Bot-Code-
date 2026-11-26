@@ -122,7 +122,7 @@ async function run() {
   const kill = { ...(await waitDone), killAccepted, killedFlag: waitChild.killed };
 
   const missing = await settle(
-    launcher.launch({ command: "/openbot-missing/program", args: [], env: { ...process.env } }),
+    launcher.launch({ command: "/codebot-missing/program", args: [], env: { ...process.env } }),
   );
 
   const large = await settle(launcher.launch(nodeProgram(LARGE_OUTPUT_PROGRAM)));

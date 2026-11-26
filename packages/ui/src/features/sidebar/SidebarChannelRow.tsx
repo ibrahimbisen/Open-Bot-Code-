@@ -1,6 +1,6 @@
-import { coordinatorText } from "@openbot/contracts/coordinator-text";
-import type { ChannelSummary } from "@openbot/contracts/ipc";
-import { Badge, buttonVariants, ContextMenu } from "@openbot/ui";
+import { coordinatorText } from "@codebot/contracts/coordinator-text";
+import type { ChannelSummary } from "@codebot/contracts/ipc";
+import { Badge, buttonVariants, ContextMenu } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal, Show } from "solid-js";
 import { useText } from "../../text";

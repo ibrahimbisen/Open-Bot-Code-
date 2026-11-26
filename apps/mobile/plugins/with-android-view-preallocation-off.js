@@ -20,7 +20,7 @@ function addViewPreallocationOff(contents) {
   return mergeContents({
     src: contents,
     newSrc: forceViewPreallocationOff,
-    tag: "openbot-view-preallocation-off",
+    tag: "codebot-view-preallocation-off",
     anchor: /^\s*loadReactNative\(this\)\s*$/,
     offset: 1,
     comment: "//",

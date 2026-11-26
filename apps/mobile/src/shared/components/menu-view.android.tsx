@@ -273,11 +273,11 @@ function OpenedMenu({
   takePendingOpen,
 }: OpenedMenuProps) {
   const tokens = useCSSVariable([
-    "--openbot-text-primary",
-    "--openbot-text-muted",
-    "--openbot-danger-text",
-    "--openbot-border-grouped",
-    "--openbot-bg-control-active",
+    "--codebot-text-primary",
+    "--codebot-text-muted",
+    "--codebot-danger-text",
+    "--codebot-border-grouped",
+    "--codebot-bg-control-active",
   ]);
   const colors: MenuColors = {
     text: String(tokens[0]),

@@ -1,15 +1,15 @@
-import type { OpenBotDesktopApi, ServerAuditEntry } from "@openbot/contracts/ipc";
-import { SERVER_AUDIT_CAPABILITY } from "@openbot/contracts/team-protocol/server-audit-v1";
-import { Alert, AlertContent, AlertDescription } from "@openbot/ui";
-import { ServerAuditLogPanel } from "@openbot/ui/features/servers/ServerAuditLog";
-import type { RoleAgent } from "@openbot/ui/features/servers/ServerRoles";
-import { useText } from "@openbot/ui/text";
+import type { CodeBotDesktopApi, ServerAuditEntry } from "@codebot/contracts/ipc";
+import { SERVER_AUDIT_CAPABILITY } from "@codebot/contracts/team-protocol/server-audit-v1";
+import { Alert, AlertContent, AlertDescription } from "@codebot/ui";
+import { ServerAuditLogPanel } from "@codebot/ui/features/servers/ServerAuditLog";
+import type { RoleAgent } from "@codebot/ui/features/servers/ServerRoles";
+import { useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createStore, Show, untrack } from "solid-js";
 import { serverCanAdminister } from "./server-capabilities";
 import type { ServerSettingsSectionHost } from "./server-settings-section";
 
-export type HostServerAuditCalls = Pick<OpenBotDesktopApi["hostAdmin"], "getAuditLog">;
+export type HostServerAuditCalls = Pick<CodeBotDesktopApi["hostAdmin"], "getAuditLog">;
 
 export interface ServerAuditOptions {
   calls?: HostServerAuditCalls;
@@ -31,7 +31,7 @@ export interface ServerAuditSection {
 export function createServerAuditSection(host: ServerSettingsSectionHost, visible: () => boolean): ServerAuditSection {
   const { t, errorMessage } = useText();
   const { props, configured, actionsAvailable } = host;
-  const calls = (): HostServerAuditCalls => props.serverAudit?.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostServerAuditCalls => props.serverAudit?.calls ?? window.codebot.hostAdmin;
   const [state, setState] = createStore<AuditState>({ entries: null, agents: [], loadError: null });
   let generation = 0;
 

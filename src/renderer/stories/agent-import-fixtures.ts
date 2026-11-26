@@ -1,4 +1,4 @@
-import type { AgentImportPreview, HermesImportPreview } from "@openbot/contracts/ipc";
+import type { AgentImportPreview, HermesImportPreview } from "@codebot/contracts/ipc";
 
 const MB = 1024 ** 2;
 
@@ -75,19 +75,19 @@ export const AGENT_IMPORT_WARNINGS = [
 ];
 
 export const AGENT_IMPORT_SKILL = `---
-name: openbot-export
-description: Export the user's Grok Bot agents into one .zip file that OpenBot imports.
+name: codebot-export
+description: Export the user's Grok Bot agents into one .zip file that CodeBot imports.
 ---
 
-# Export agents for OpenBot
+# Export agents for CodeBot
 `;
 
 export const HERMES_EXPORT_SKILL = `---
-name: openbot-export
-description: Export the user's Hermes Agent profiles into one .zip file that OpenBot imports.
+name: codebot-export
+description: Export the user's Hermes Agent profiles into one .zip file that CodeBot imports.
 ---
 
-# Export Hermes profiles for OpenBot
+# Export Hermes profiles for CodeBot
 `;
 
 export const HERMES_IMPORT_PREVIEW: HermesImportPreview = {

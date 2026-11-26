@@ -1,8 +1,8 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AgentEvent, AgentWait, AgentWaitsSnapshot } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AgentEvent, AgentWait, AgentWaitsSnapshot } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { z } from "zod";
-import { type OpenBotToolResponse, openBotToolFailure, openBotToolResult } from "../agent/routine-tools";
+import { type CodeBotToolResponse, codeBotToolFailure, codeBotToolResult } from "../agent/routine-tools";
 import type { MailboxStore } from "../mailbox-store";
 import type { DynamicToolCallParams } from "../protocol";
 import { AgentWaitError, AgentWaitLimitError, type AgentWaitStore } from "./agent-wait-store";
@@ -111,37 +111,37 @@ export class AgentWaits {
     return this.#store.wokenBy(deliveryId);
   }
 
-  handleTool(params: DynamicToolCallParams, caller: AgentWaitCaller): OpenBotToolResponse | null {
+  handleTool(params: DynamicToolCallParams, caller: AgentWaitCaller): CodeBotToolResponse | null {
     try {
       if (params.tool === AWAIT_EVENT_TOOL) return this.#awaitEvent(params, caller);
       if (params.tool === CLOSE_WAIT_TOOL) return this.#closeWait(params, caller);
       if (params.tool === LIST_WAITS_TOOL) return this.#listWaits(params, caller);
       return null;
     } catch (error) {
-      if (error instanceof AgentWaitError) return openBotToolFailure(error.message);
+      if (error instanceof AgentWaitError) return codeBotToolFailure(error.message);
       throw error;
     }
   }
 
-  #awaitEvent(params: DynamicToolCallParams, caller: AgentWaitCaller): OpenBotToolResponse {
+  #awaitEvent(params: DynamicToolCallParams, caller: AgentWaitCaller): CodeBotToolResponse {
     const parsed = awaitEventToolSchema.safeParse(params.arguments);
-    if (!parsed.success) return openBotToolFailure(sourceText("error.backend.agentWaitNoteRequired"));
+    if (!parsed.success) return codeBotToolFailure(sourceText("error.backend.agentWaitNoteRequired"));
     const { note, routineId } = parsed.data;
-    if (caller.inExecutionThread) return openBotToolFailure(sourceText("error.backend.agentWaitOwnChatOnly"));
+    if (caller.inExecutionThread) return codeBotToolFailure(sourceText("error.backend.agentWaitOwnChatOnly"));
     const deliveries = this.#mailbox.findDeliveriesByTurn(caller.agentId, params.turnId);
     const continued = deliveries.flatMap((context) => this.#store.wokenBy(context.delivery.id));
     if (continued.length > 0)
-      return openBotToolResult({
+      return codeBotToolResult({
         waitIds: continued.map((wait) => wait.id),
         note: "This run continues these open waits. To wait again, leave them open and end your turn. Open a new wait only for a different request.",
       });
     const request =
       deliveries.findLast((context) => context.delivery.sender.kind === "user") ?? deliveries.at(0) ?? null;
-    if (!request) return openBotToolFailure(sourceText("error.backend.agentWaitNoRequest"));
+    if (!request) return codeBotToolFailure(sourceText("error.backend.agentWaitNoRequest"));
     if (routineId && !this.#hooks.ownsRoutine(caller.agentId, routineId))
-      return openBotToolFailure(sourceText("error.backend.agentWaitRoutineGone"));
+      return codeBotToolFailure(sourceText("error.backend.agentWaitRoutineGone"));
     if (!this.#hooks.hasRoutine(caller.agentId))
-      return openBotToolFailure(sourceText("error.backend.agentWaitNoRoutine"));
+      return codeBotToolFailure(sourceText("error.backend.agentWaitNoRoutine"));
     let wait: AgentWait;
     try {
       wait = this.#store.open({
@@ -168,38 +168,38 @@ export class AgentWaits {
     }
     this.#changed(caller.agentId);
     const openWaits = this.#store.count(caller.agentId);
-    return openBotToolResult({
+    return codeBotToolResult({
       waitId: wait.id,
       openWaits,
       limit: INPUT_LIMITS.agentWaits,
       ...(openWaits >= INPUT_LIMITS.agentWaits - NEAR_LIMIT_MARGIN
         ? {
-            nearLimit: `You are close to the limit of open waits. Call openbot.${LIST_WAITS_TOOL} and close the waits whose request is done.`,
+            nearLimit: `You are close to the limit of open waits. Call codebot.${LIST_WAITS_TOOL} and close the waits whose request is done.`,
           }
         : {}),
       wakes: wait.routineId
         ? `The next run of routine ${wait.routineId} wakes this wait, or a script event that names it.`
         : "The next run of any of your routines wakes this wait, or a script event that names it.",
       scriptEvent: `A local script names the wait with "waitId": "${wait.id}" next to "payload" in the body of its routine run request.`,
-      next: "Say in one short sentence what you wait for, then end your turn. The run that wakes the wait repeats the request and your note in the chat where you opened the wait. Close the wait with openbot.close_wait when the request is done.",
+      next: "Say in one short sentence what you wait for, then end your turn. The run that wakes the wait repeats the request and your note in the chat where you opened the wait. Close the wait with codebot.close_wait when the request is done.",
     });
   }
 
-  #closeWait(params: DynamicToolCallParams, caller: AgentWaitCaller): OpenBotToolResponse {
+  #closeWait(params: DynamicToolCallParams, caller: AgentWaitCaller): CodeBotToolResponse {
     const parsed = closeWaitToolSchema.safeParse(params.arguments);
-    if (!parsed.success) return openBotToolFailure(z.prettifyError(parsed.error));
+    if (!parsed.success) return codeBotToolFailure(z.prettifyError(parsed.error));
     const agentId = this.#waitOwner(parsed.data.agentId, caller);
     if (!this.#store.delete(agentId, parsed.data.waitId))
-      return openBotToolFailure(sourceText("error.backend.agentWaitGone"));
+      return codeBotToolFailure(sourceText("error.backend.agentWaitGone"));
     this.#changed(agentId);
-    return openBotToolResult({ closed: parsed.data.waitId });
+    return codeBotToolResult({ closed: parsed.data.waitId });
   }
 
-  #listWaits(params: DynamicToolCallParams, caller: AgentWaitCaller): OpenBotToolResponse {
+  #listWaits(params: DynamicToolCallParams, caller: AgentWaitCaller): CodeBotToolResponse {
     const parsed = listWaitsToolSchema.safeParse(params.arguments ?? {});
-    if (!parsed.success) return openBotToolFailure(z.prettifyError(parsed.error));
+    if (!parsed.success) return codeBotToolFailure(z.prettifyError(parsed.error));
     const agentId = this.#waitOwner(parsed.data.agentId, caller);
-    return openBotToolResult({
+    return codeBotToolResult({
       agentId,
       limit: INPUT_LIMITS.agentWaits,
       waits: this.#store.list(agentId).map(waitSummary),
@@ -252,7 +252,7 @@ export function wokenWaitsPromptText(waits: readonly AgentWait[]): string | null
   if (waits.length === 0) return null;
   return [
     "--- open waits that this run wakes ---",
-    `You opened these waits with openbot.${AWAIT_EVENT_TOOL}. Continue each request with what this run brings. When a request is done, or can no longer be done, tell the user and call openbot.${CLOSE_WAIT_TOOL} with its wait id. To wait for the next run again, leave the wait open.`,
+    `You opened these waits with codebot.${AWAIT_EVENT_TOOL}. Continue each request with what this run brings. When a request is done, or can no longer be done, tell the user and call codebot.${CLOSE_WAIT_TOOL} with its wait id. To wait for the next run again, leave the wait open.`,
     ...waits.flatMap((wait) => [
       "",
       `Wait ID: ${wait.id}`,

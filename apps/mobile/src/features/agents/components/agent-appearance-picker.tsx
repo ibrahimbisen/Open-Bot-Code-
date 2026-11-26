@@ -1,4 +1,3 @@
-import type { ExpressionId } from "@norbert_bodziony/bloub";
 import {
   AVATAR_COLOR_CHOICES,
   AVATAR_EXPRESSIONS,
@@ -13,9 +12,10 @@ import {
   isAvatarColorChoice,
   SUPPORTED_AVATAR_SILHOUETTES,
   type SupportedAvatarSilhouetteId,
-} from "@openbot/brand/bloub-avatar";
-import type { AvatarColor, AvatarHue } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/brand/bloub-avatar";
+import type { AvatarColor, AvatarHue } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
+import type { ExpressionId } from "@norbert_bodziony/bloub";
 import { Button, Typography } from "heroui-native";
 import { useThemeColor } from "heroui-native/hooks";
 import RotateCcw from "lucide-react-native/icons/rotate-ccw";

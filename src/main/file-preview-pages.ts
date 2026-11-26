@@ -1,9 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { realpath } from "node:fs/promises";
 import { extname, join, relative, sep } from "node:path";
-import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@openbot/contracts/chat-visual";
-import { ATTACHMENT_LIMITS } from "@openbot/contracts/input-limits";
-import { isFilePreviewPageUrl } from "@openbot/contracts/ipc";
+import { CHAT_VISUAL_PAGE_LIMIT, isChatVisualMimeType } from "@codebot/contracts/chat-visual";
+import { ATTACHMENT_LIMITS } from "@codebot/contracts/input-limits";
+import { isFilePreviewPageUrl } from "@codebot/contracts/ipc";
 import { runCauseEffect } from "../backend/effect-boundary";
 import { isPathInside } from "../backend/path-containment";
 import { attachmentDocumentHeaders, chatVisualResponse } from "./chat-visual-protocol";
@@ -74,7 +74,7 @@ export class FilePreviewPages {
       this.#pages.size >= this.capacity
     )
       return undefined;
-    const address = `openbot-visual://preview/${randomUUID()}`;
+    const address = `codebot-visual://preview/${randomUUID()}`;
     this.#pages.set(address, { bytes: bytes.slice(), pdf: isPdfMimeType(mimeType), ...(folder ? { folder } : {}) });
     return address;
   }

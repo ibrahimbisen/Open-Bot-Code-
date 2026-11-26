@@ -1,4 +1,4 @@
-import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   AVATAR_HUES,
   type AvatarHue,
@@ -20,13 +20,13 @@ import {
   type BrowserWindowModel,
   type BrowserWindowTabDetails,
   isAvatarColor,
-} from "@openbot/contracts/ipc";
-import { isBoolean, isNumber, isOneOf, isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isBoolean, isNumber, isOneOf, isString } from "@codebot/contracts/runtime-values";
 import {
   BROWSER_HTTP_SIGN_IN_PASSWORD_LIMIT,
   BROWSER_HTTP_SIGN_IN_USERNAME_LIMIT,
-} from "@openbot/contracts/team-protocol/browser-http-sign-in-v1";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/browser-http-sign-in-v1";
+import { sourceText } from "@codebot/i18n/source";
 import { decodeBrowserTabs } from "../remote-device-decoding";
 import { isObject, requireString } from "./validation";
 

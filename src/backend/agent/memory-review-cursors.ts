@@ -1,9 +1,9 @@
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect, Schema, Semaphore } from "effect";
 import { writeJsonFileAtomically } from "../atomic-json-file";
 import { readVersionedJsonFile, type VersionedJsonFormat } from "../versioned-json-store";
 
-const logger = createOpenBotLogger("memory-review");
+const logger = createCodeBotLogger("memory-review");
 
 const StoredMemoryReviewCursors = Schema.Struct({
   version: Schema.Literal(1),

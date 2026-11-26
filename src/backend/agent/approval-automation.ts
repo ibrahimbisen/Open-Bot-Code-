@@ -1,4 +1,4 @@
-import type { AgentApproval, ApprovalAutomationPreference } from "@openbot/contracts/ipc";
+import type { AgentApproval, ApprovalAutomationPreference } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 
 export interface ApprovalAutomationPolicy {

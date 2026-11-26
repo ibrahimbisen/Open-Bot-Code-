@@ -1,4 +1,4 @@
-import type { InstalledSkill } from "@openbot/contracts/ipc";
+import type { InstalledSkill } from "@codebot/contracts/ipc";
 import { onCleanup } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -10,7 +10,7 @@ import {
   STORY_MODELS,
   storyRuntimeSettings,
 } from "./fixtures";
-import { createMockOpenBot } from "./mock-openbot";
+import { createMockCodeBot } from "./mock-codebot";
 
 const storyAgent = STORY_AGENT;
 
@@ -19,13 +19,13 @@ function AgentSkillsStory(props: {
   skillsMode?: "mutable" | "readonly" | "hidden";
   onAddFromMarketplace?: (agentId: string) => void;
 }) {
-  const previousApi = window.openbot;
-  const mock = createMockOpenBot({ installedSkills: { chief: props.skills } });
-  window.openbot = mock.api;
+  const previousApi = window.codebot;
+  const mock = createMockCodeBot({ installedSkills: { chief: props.skills } });
+  window.codebot = mock.api;
 
   onCleanup(() => {
     mock.dispose();
-    window.openbot = previousApi;
+    window.codebot = previousApi;
   });
 
   return (

@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, Button, CopyButton, Field, Input, ShieldCheck, Text } from "@openbot/ui";
+import { Alert, AlertDescription, Button, CopyButton, Field, Input, ShieldCheck, Text } from "@codebot/ui";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 import BrowserLiveView, { type BrowserViewRuntime } from "../browser/BrowserLiveView";

@@ -7,14 +7,14 @@ import type {
   TeamPresenceMember,
   TeamPresenceSnapshot,
   UpdateTeamMemberInput,
-} from "@openbot/contracts/ipc";
-import { runTeamEffect } from "@openbot/team-client";
+} from "@codebot/contracts/ipc";
+import { runTeamEffect } from "@codebot/team-client";
 import {
   rotateHostKey as rotateHostKeyRequest,
   setHostAppearance,
   updateHostIdentity,
-} from "@openbot/team-client/team-admin-requests";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/team-admin-requests";
+import { currentText } from "@codebot/ui/text";
 import { Effect } from "effect";
 import { createEffect, createStore, untrack } from "solid-js";
 import { serverCanAdminister, serverRoleCanAdminister, serverRotatesHostKey } from "../servers/server-capabilities";

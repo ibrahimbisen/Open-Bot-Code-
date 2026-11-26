@@ -13,6 +13,7 @@ import { type BrowserUserControlEvent, browserUserControlEvent } from "./browser
 import { type ChannelEvent, channelEvent } from "./channels-v1";
 import { type ChatColorsEvent, chatColorsEvent } from "./chat-colors-v1";
 import { type ClientBrowserCommandEvent, clientBrowserCommandEvent } from "./client-browser-v1";
+import { type CodeBotCreditsEvent, codeBotCreditsEvent } from "./codebot-credits-events-v1";
 import { type CrmEvent, crmEvent } from "./crm-v1";
 import { type HostAppearanceEvent, hostAppearanceEvent } from "./host-appearance-v1";
 import { type HostTurnLimitsEvent, hostTurnLimitsEvent } from "./host-turn-limits-events-v1";
@@ -21,7 +22,6 @@ import { type LibraryFoldersEvent, libraryFoldersEvent } from "./library-folders
 import { type LiveVoiceEvent, liveVoiceEvent } from "./live-voice-v1";
 import { type MachineAlertEvent, machineAlertEvent } from "./machine-resources-v1";
 import { type MessagePinsEvent, messagePinsEvent } from "./message-pins-v1";
-import { type OpenBotCreditsEvent, openBotCreditsEvent } from "./openbot-credits-events-v1";
 import { type QuietTurnCompletedEvent, quietTurnEvent } from "./quiet-turn-v1";
 import { type RoutineFlowsEvent, routineFlowsEvent } from "./routine-flows-v1";
 import { type SidebarFoldersEvent, sidebarFoldersEvent } from "./sidebar-folders-v1";
@@ -54,7 +54,7 @@ export type OptionalTeamEvent =
   | LiveVoiceEvent
   | MachineAlertEvent
   | MessagePinsEvent
-  | OpenBotCreditsEvent
+  | CodeBotCreditsEvent
   | SidebarPinsEvent
   | SidebarFoldersEvent
   | SkillsEvent
@@ -93,7 +93,7 @@ export function optionalTeamEvent(value: unknown, options?: OptionalTeamEventOpt
     liveVoiceEvent(value) ??
     machineAlertEvent(value) ??
     messagePinsEvent(value) ??
-    openBotCreditsEvent(value) ??
+    codeBotCreditsEvent(value) ??
     sidebarPinsEvent(value) ??
     sidebarFoldersEvent(value) ??
     skillsEvent(value) ??

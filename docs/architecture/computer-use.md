@@ -2,15 +2,15 @@
 
 ## Computer Use
 
-Computer Use is `cua-driver`, a third-party MIT binary, and OpenBot owns how it runs.
+Computer Use is `cua-driver`, a third-party MIT binary, and CodeBot owns how it runs.
 `cua-driver-runtime.ts` in the main process starts one long-lived `serve` daemon and holds it; each
 provider CLI spawns its own short-lived `cua-driver mcp --socket` proxy against that daemon. All
 screen capture, accessibility reads, and input posting happen inside the daemon, so the proxy's own
 identity does not matter.
 
 The daemon is spawned directly, and never through `open(1)` or `NSWorkspace`. macOS finds the
-responsible process by walking up the launch chain, so a direct spawn puts OpenBot at the top of it
-and the user grants Screen Recording and Accessibility to OpenBot rather than to somebody else's
+responsible process by walking up the launch chain, so a direct spawn puts CodeBot at the top of it
+and the user grants Screen Recording and Accessibility to CodeBot rather than to somebody else's
 helper. `CUA_DRIVER_EMBEDDED=1` tells the driver to stay on that path instead of relaunching itself
 as its own application. Anything that launches the daemon another way breaks the attribution, which
 is the reason the earlier Codex helper was replaced.
@@ -43,7 +43,7 @@ with no error. Codex staleness needs no separate signal, because
 session. `onMcpServerChanged` is what refreshes the agent runtimes, which deactivates every
 stored provider session: the next turn starts a new one, which keeps the public thread and loses
 what the provider held privately. So it reports two moments only — the entry appearing on a start a
-user asked for, and the daemon dying under OpenBot. It is quiet for a grant given while the daemon
+user asked for, and the daemon dying under CodeBot. It is quiet for a grant given while the daemon
 serves, which changes the state and not the tool set; for the startup warm-up, which settles the
 entry the stored sessions already had; and for the stop at teardown, which happens at order 55,
 before the agent service at 110, and would otherwise deactivate on every quit the sessions the next
@@ -58,25 +58,25 @@ the other native runtimes rather than managed like a provider CLI. The pinned fi
 allowlist: `scripts/install-cua-driver.ts` copies only the named paths and checks each digest, so an
 upstream layout change fails the build instead of shipping a surprise file. Each installer carries
 only its own target. On macOS `mac.signIgnore` keeps the vendor's Developer ID signature, because
-re-signing under OpenBot's inherited entitlements would drop the Automation entitlement the driver
+re-signing under CodeBot's inherited entitlements would drop the Automation entitlement the driver
 needs. A packaged build reads the copy under `resources/cua-driver` and nothing else, because the release
 is pinned and signed against that build and an environment variable must not decide which program
 drives the user's desktop; a release without the binary reports no driver. In a checkout
 `resolveCuaDriver` also reads an override, an install directory and `PATH`, so a developer can point
-`OPENBOT_CUA_DRIVER_PATH` at another build.
+`CODEBOT_CUA_DRIVER_PATH` at another build.
 
-OpenBot draws the agent cursor in its own per-display overlays for every display layout. The
+CodeBot draws the agent cursor in its own per-display overlays for every display layout. The
 runtime starts `serve` with `--no-overlay`. The driver's overlay covers only the main display and
-cannot follow a display connected after startup. Keeping cursor ownership in OpenBot lets the
+cannot follow a display connected after startup. Keeping cursor ownership in CodeBot lets the
 highlight controller add, resize, and remove display overlays without restarting the daemon or
 changing provider sessions. The tap removes the driver's own cursor tools (`set_agent_cursor_*`
 and `get_agent_cursor_state`) from the tool list: with `--no-overlay` they change nothing on the
-screen, and on macOS they refuse. `move_cursor` stays, because OpenBot draws its cursor at the
+screen, and on macOS they refuse. `move_cursor` stays, because CodeBot draws its cursor at the
 point of that call. A `click` or a `scroll` aimed at a window names a pixel of that window's last
 `get_window_state` screenshot, not a desktop point. The tap keeps the `screenshot_width` of each
 window from that answer and saves it with the point when the click passes. The cursor goes to the
 window's top-left corner plus the point times the window width divided by that screenshot width,
-as the driver computes it. A click that OpenBot cannot place (no `window_id`, a point in a `zoom`
+as the driver computes it. A click that CodeBot cannot place (no `window_id`, a point in a `zoom`
 image, or no screenshot width yet) removes the cursor. A window that is not in `list_windows` gets
 no cursor.
 The driver tells agents to act through `run_steps`, which runs its steps inside the daemon, so the
@@ -98,7 +98,7 @@ On a Linux desktop where the driver uses its X11 routes (an X11 session, or XWay
 `CUA_DRIVER_RS_ENABLE_WAYLAND`) and no separate agent display is set, the tap sends every input
 call in the foreground. Background input on X11 adds an XInput2 master pointer and keyboard that
 driver 0.52.9 keeps until the X server exits, and while it exists Chromium and Electron windows,
-OpenBot included, get no keys from the user's keyboard (#15359, upstream trycua/cua#7930). The tap
+CodeBot included, get no keys from the user's keyboard (#15359, upstream trycua/cua#7930). The tap
 reads which tools take `delivery_mode` from the tool list, sets `delivery_mode: "foreground"` on
 calls to those tools and on each `run_steps` step that names a mode, and leaves a request line that
 it cannot parse, or that is too long, unchanged. It also removes `parallel_mouse_drag` from the
@@ -126,14 +126,14 @@ the rule can go.
 ### Agent display on a server
 
 A self-hosted server and the container start two Xvfb displays, and name the agent display in
-`OPENBOT_AGENT_DISPLAY`. The agent display has a white root (Xvfb `-wr`), because remote desktop
+`CODEBOT_AGENT_DISPLAY`. The agent display has a white root (Xvfb `-wr`), because remote desktop
 shows a black root as if no video came. `xsetroot` gives it an arrow pointer, because the default
 "×" of an empty display looks like an error, and `-noreset` keeps the arrow.
 
-`scripts/hosting/openbot-desktop` starts Openbox on the agent display, with the configuration and
+`scripts/hosting/codebot-desktop` starts Openbox on the agent display, with the configuration and
 the flat light theme in `scripts/hosting/desktop/`. Before Openbox starts, `hsetroot` draws the
-background: the dark color of the app (`#1a1a1a`) with the OpenBot logo (`desktop/openbot-logo.png`,
-the lilac logo with a light name from `@openbot/brand`) in the center, at each display size. Without
+background: the dark color of the app (`#1a1a1a`) with the CodeBot logo (`desktop/codebot-logo.png`,
+the lilac logo with a light name from `@codebot/brand`) in the center, at each display size. Without
 `hsetroot`, the white root stays, because a dark screen with no logo looks like no video.
 
 Windows get title bars, and a click focuses and raises a window. A right-click on the empty screen or
@@ -152,35 +152,35 @@ Openbox and the menu programs get the OOM value (500) and the nice value (10) of
 a build in that terminal does not take memory or CPU from main. The menu labels are in the Openbox
 configuration and are not translated.
 
-A boat hosted server names its desktop `:0`, and OpenBot
+A boat hosted server names its desktop `:0`, and CodeBot
 runs on an Xvfb display. Electron keeps its own `DISPLAY`: the built-in browser draws its tabs in
-the OpenBot window, and under Xvfb a hidden view gives no capture and no clicks, so OpenBot cannot
+the CodeBot window, and under Xvfb a hidden view gives no capture and no clicks, so CodeBot cannot
 only hide its window. On Linux, `agent-display.ts` sets `DISPLAY` to the agent display for the
 driver daemon, for Sunshine, and in `agentEnvironment` for every agent process. The driver and
 Sunshine open the display that `DISPLAY` names, so a screenshot, an input event and the remote
 desktop stream all use the agent display, and a program that an agent starts opens there. The
-per-display overlays are OpenBot windows, so with an agent display they are not started: nothing
+per-display overlays are CodeBot windows, so with an agent display they are not started: nothing
 draws the agent cursor or the rim there. `capture_screen` and `list_capture_sources` use Electron's
-`desktopCapturer`, which sees only the OpenBot display, so with an agent display they are not
+`desktopCapturer`, which sees only the CodeBot display, so with an agent display they are not
 available, and agents take screenshots with the driver.
 
-`openbot.service` holds the Xvfb displays too, and a stop signals each process of the unit at the
-same time. An Xvfb that stops first ends OpenBot before it closes its database. So the unit's
-`ExecStop` runs `openbot-hosted-server --stop`: it sends `SIGTERM` to OpenBot only, whose PID the
-script writes to `$XDG_RUNTIME_DIR/openbot.pid`, and waits for it. Then it waits at most 10 s for
+`codebot.service` holds the Xvfb displays too, and a stop signals each process of the unit at the
+same time. An Xvfb that stops first ends CodeBot before it closes its database. So the unit's
+`ExecStop` runs `codebot-hosted-server --stop`: it sends `SIGTERM` to CodeBot only, whose PID the
+script writes to `$XDG_RUNTIME_DIR/codebot.pid`, and waits for it. Then it waits at most 10 s for
 the main process of the unit, so that `xvfb-run` completes its `xauth remove`. An `xauth` that the
 stop signal ended left the `~/.Xauthority-c` lock, and each later start failed after 20 to 40 s.
 The start also removes these lock files when no `xauth` of the user runs. The container does not
-need this: tini signals only OpenBot.
+need this: tini signals only CodeBot.
 
 Because the driver draws no cursor, its motion styles do not apply. The renderer plays the driver's
 `adaptive` style itself (`agent-cursor-motion.ts`, a port of the driver's `trajectory.rs`): a Fitts
 min-jerk glide, or a wide swoop for a move over 900 points. The tap does not delay a request, so the
 cursor shows where an action went, from 180 ms to about 1.1 s after the driver acts.
 
-On macOS the daemon gets `CUA_DRIVER_KEEP_DISPLAY_AWAKE=0`, and OpenBot keeps the display awake
+On macOS the daemon gets `CUA_DRIVER_KEEP_DISPLAY_AWAKE=0`, and CodeBot keeps the display awake
 itself. The tap starts before the daemon, and the daemon gets the variable only when the tap listens:
-without the tap, provider calls go to the daemon directly and OpenBot cannot see them, so the
+without the tap, provider calls go to the daemon directly and CodeBot cannot see them, so the
 driver's guard stays on. The driver's own guard holds `PreventUserIdleDisplaySleep` until 600 s after the last tool
 call, and `end_session` counts as a call, so the display stayed on for up to 10 minutes after the
 agent stopped, against the user's display sleep setting. The tap reports each provider tool call.
@@ -189,12 +189,12 @@ agent stopped, against the user's display sleep setting. The tap reports each pr
 without `continues` releases it when no turn runs, so the hold stays between the turns of one task, and it is always released 600 s after the last call, as the driver's
 guard was. A call outside a turn, such as background provider work, thus keeps the driver's hold
 time, and the display never stays on longer than before. The guard exists because display sleep locks the
-session, and a locked session gives Computer Use no windows and no input. OpenBot's own
+session, and a locked session gives Computer Use no windows and no input. CodeBot's own
 `list_windows` reads for the highlight go to the daemon socket, not to the tap, so they take no hold.
 
-Every copy OpenBot starts gets `CUA_DRIVER_RS_TELEMETRY_ENABLED=0` and
-`CUA_DRIVER_RS_UPDATE_CHECK=0`. OpenBot ships the driver, so its vendor analytics are not something
-a user chose, and OpenBot pins the version, so a release check could only offer an update OpenBot
+Every copy CodeBot starts gets `CUA_DRIVER_RS_TELEMETRY_ENABLED=0` and
+`CUA_DRIVER_RS_UPDATE_CHECK=0`. CodeBot ships the driver, so its vendor analytics are not something
+a user chose, and CodeBot pins the version, so a release check could only offer an update CodeBot
 would refuse.
 
 ## Remote desktop permission checks and live tests
@@ -217,9 +217,9 @@ A local video-only test can run without native diagnostics. Its viewer iframe is
 
 A paste in the viewer puts the member's text on the host's clipboard, and then presses the host's
 paste keys. Moonlight sends Cmd+V or Ctrl+V as keys and cancels them, so the browser fires no paste
-event and the host pastes its own clipboard. The gateway adds `openbot-paste.js` to Moonlight's
+event and the host pastes its own clipboard. The gateway adds `codebot-paste.js` to Moonlight's
 `stream.html`. The script keeps the member's paste key from Moonlight, reads the paste event, and
-posts the text to `moonlight/openbot-clipboard`. Both routes are under `moonlight/` because the
+posts the text to `moonlight/codebot-clipboard`. Both routes are under `moonlight/` because the
 released Team API adapters forward only that family of viewer routes. The same viewer cookie or
 WebRTC session check protects them, and the clipboard route refuses a request from another site.
 At the paste event, the script presses the host's paste modifier, Cmd for a macOS host or Ctrl for
@@ -327,11 +327,11 @@ only its loopback address, and cannot call the app. The app calls the page with 
   display of 120 Hz or more. The script also puts the app's background in place of Moonlight's blue
   page, which is a `body::before` layer, and hides Moonlight's stats overlay.
 - Connection stats is a sheet. While it is open, the page posts Moonlight's stats once a second to
-  `moonlight/openbot-phone-stats`. The proxy answers that one path itself and sends it to no host,
+  `moonlight/codebot-phone-stats`. The proxy answers that one path itself and sends it to no host,
   so the page gets no other way to reach the app. Moonlight's WebRTC values named "…Ms" are running
   totals in seconds, so the sheet shows the time per frame from the change between two samples. Copy
   in the sheet's header copies the shown values and Moonlight's raw values.
-  OpenBot's patch hides Moonlight's sidebar, so the app adds a key bar above the phone keyboard.
+  CodeBot's patch hides Moonlight's sidebar, so the app adds a key bar above the phone keyboard.
 - Typing sends `keydown` and `keyup` of a US keyboard to the document, as the paste script does.
   Sunshine on macOS does not type text ("Unicode input not yet implemented for MacOS"), so only a
   character with no key goes through Moonlight's `sendText`, which Windows and Linux hosts type.
@@ -356,16 +356,16 @@ only its loopback address, and cannot call the app. The app calls the page with 
 
 Codex saves an “Always allow” tool decision only when the MCP server is in a file-backed
 configuration layer. A thread configuration alone does not satisfy this check. Before starting or
-resuming a thread with Computer Use, OpenBot registers `computer_use` in the Codex user
+resuming a thread with Computer Use, CodeBot registers `computer_use` in the Codex user
 configuration through `config/batchWrite`. The new entry contains only a placeholder command
-(`openbot-mcp`) and `enabled = false`. The write uses the user layer's version, and an existing entry is left unchanged.
-OpenBot does not save the driver socket, environment, or credentials in that entry.
+(`codebot-mcp`) and `enabled = false`. The write uses the user layer's version, and an existing entry is left unchanged.
+CodeBot does not save the driver socket, environment, or credentials in that entry.
 
 The thread configuration enables the running driver and supplies its current command, arguments,
 and environment. It also carries the saved per-tool settings, including `set_value.approval_mode`.
 Saved tool settings are also in the session fingerprint. When an approval changes, the next turn
 replaces a loaded provider session that holds the old policy.
-An agent with Full access does not ask: OpenBot accepts each Computer Use tool consent once and
+An agent with Full access does not ask: CodeBot accepts each Computer Use tool consent once and
 saves nothing, as it does for other MCP tools. A Workspace only or Ask first agent shows the card,
 and Codex keeps "Always allow" per tool and per provider account.
 When Computer Use is off for the agent or the driver is unavailable, the thread keeps the saved
@@ -380,7 +380,7 @@ Codex loads its bundled Computer Use plugins by default (`computer-use@openai-bu
 Use sets `plugins.<id>.enabled = false` for both in the thread configuration: an agent with the
 setting off, or a task thread beside the agent's own chat. Routine and channel threads keep the
 agent's setting. The thread value wins over the
-user's own Codex file. Codex (0.160 to 0.170) does not read `features.computer_use`, so OpenBot does not use it.
+user's own Codex file. Codex (0.160 to 0.170) does not read `features.computer_use`, so CodeBot does not use it.
 A loaded session keeps the plugins of its start, so the session fingerprint has a value for a
 session without Computer Use. The next turn replaces a session from before, and a session whose
 setting changed, with the usual handoff.
@@ -388,7 +388,7 @@ setting changed, with the usual handoff.
 Every Codex session also sets `plugins.<id>.enabled = false` for Codex's bundled browser plugins
 (`browser`, `chrome`, `chrome-dev` and `chrome-internal`, all `@openai-bundled`). These plugins need a
 browser access host that only the ChatGPT desktop app gives to the sessions that it starts. In an
-OpenBot session, each call fails with "The browser access host is unavailable" (openai/codex#57641).
-Agents use the OpenBot browser, or the user's Chrome through the OpenBot extension. The value does
+CodeBot session, each call fails with "The browser access host is unavailable" (openai/codex#57641).
+Agents use the CodeBot browser, or the user's Chrome through the CodeBot extension. The value does
 not change, so it is not in the session fingerprint: a resumed session gets it, and no session is
 replaced.

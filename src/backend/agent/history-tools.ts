@@ -1,19 +1,19 @@
-import { chatVisualReply } from "@openbot/contracts/chat-visual";
+import { chatVisualReply } from "@codebot/contracts/chat-visual";
 import {
   CONVERSATION_TRACE_STEP_LIMIT,
   type ConversationMessage,
   type ConversationTurnTrace,
   ROUTINE_QUIET_ANSWER_ITEM_TYPE,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { redactSecrets } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { redactSecrets } from "@codebot/logging";
 import { Effect } from "effect";
 import { z } from "zod";
 import type { AgentStore } from "../agent-store";
 import type { AgentThreadRecord, ThreadListPosition } from "../agent-threads/agent-thread-store";
 import { HistoryReferenceUnavailable } from "../database/agent-history-queries";
 import type { ProviderSession } from "../database/provider-sessions";
-import { openBotToolResult } from "./routine-tools";
+import { codeBotToolResult } from "./routine-tools";
 import { type ToolOperationFailed, toolStep } from "./tool-operation";
 
 export const MAIN_CHAT_TASK_ID = "main";
@@ -321,7 +321,7 @@ export class HistoryTools {
     let more = listed.more;
     const answer = () => {
       const last = page.at(-1)?.record;
-      return openBotToolResult({
+      return codeBotToolResult({
         now: new Date(now).toISOString(),
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
         threads: [...(main ? [main] : []), ...page.map((item) => item.entry).filter(shown)].sort((left, right) =>
@@ -346,7 +346,7 @@ export class HistoryTools {
   }).bind(this);
 
   readonly call = (agentId: string, threadId: string, tool: string, args: unknown) =>
-    this.#page(agentId, threadId, tool, args).pipe(Effect.map(openBotToolResult));
+    this.#page(agentId, threadId, tool, args).pipe(Effect.map(codeBotToolResult));
 
   readonly searchAll = Effect.fn("HistoryTools.searchAll")(function* (
     this: HistoryTools,
@@ -399,7 +399,7 @@ export class HistoryTools {
         );
       }
       let cut = false;
-      while (JSON.stringify(openBotToolResult(result)).length > SEARCH_ALL_CHARACTERS && result.messages.length > 1) {
+      while (JSON.stringify(codeBotToolResult(result)).length > SEARCH_ALL_CHARACTERS && result.messages.length > 1) {
         result.messages.pop();
         cut = true;
       }
@@ -409,7 +409,7 @@ export class HistoryTools {
       }
     }
     if (result.messages.length === 0 && !result.more) result.next = `${NO_MATCH_HINT} ${result.next}`;
-    return openBotToolResult(result);
+    return codeBotToolResult(result);
   }).bind(this);
 
   #conversations(
@@ -573,7 +573,7 @@ export class HistoryTools {
       }
       result.messages.push(entry);
       result.nextCursor = nextCursor(message.id);
-      if (JSON.stringify(openBotToolResult(result)).length > maximum) {
+      if (JSON.stringify(codeBotToolResult(result)).length > maximum) {
         if (result.messages.length > 1) {
           result.messages.pop();
           result.nextCursor = nextCursor(result.messages.at(-1)?.messageId ?? message.id);
@@ -589,7 +589,7 @@ export class HistoryTools {
           const mid = Math.ceil((low + high) / 2);
           entry.text = original.slice(0, mid);
           entry.nextOffset = offset + mid;
-          if (JSON.stringify(openBotToolResult(result)).length <= maximum) low = mid;
+          if (JSON.stringify(codeBotToolResult(result)).length <= maximum) low = mid;
           else high = mid - 1;
         }
         entry.text = original.slice(0, low);
@@ -615,7 +615,7 @@ export class HistoryTools {
       )
         throw new Error(sourceText("error.agent.historyUnavailable"));
     }
-    if (JSON.stringify(openBotToolResult(result)).length > maximum)
+    if (JSON.stringify(codeBotToolResult(result)).length > maximum)
       throw new Error(sourceText("error.agent.historyUnavailable"));
     return result;
   }).bind(this);

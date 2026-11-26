@@ -1,4 +1,4 @@
-import { Mic, Square } from "@openbot/ui";
+import { Mic, Square } from "@codebot/ui";
 import { createSignal, For, onSettled } from "solid-js";
 
 const WAVE_BAR = 3;

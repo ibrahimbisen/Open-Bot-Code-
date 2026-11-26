@@ -8,8 +8,8 @@ import {
   type VaultItemSummary,
   type VaultLoginSummary,
   type VaultSaveInput,
-} from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import type { MobileText } from "@/shared/lib/text";
 
 export function vaultLoginTitle(login: Pick<VaultLoginSummary, "website">): string {

@@ -1,17 +1,17 @@
-import { sortConversationMessages } from "@openbot/contracts/conversation-order";
+import { sortConversationMessages } from "@codebot/contracts/conversation-order";
 import type {
   AgentExchangeSummary,
   AgentProviderId,
   ConversationMessage,
   ConversationSnapshot,
   QueueDelivery,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   AGENT_EXCHANGE_ITEM_TYPE,
   mergeImageGenerationInfo,
   ROUTINE_QUIET_ANSWER_ITEM_TYPE,
-} from "@openbot/contracts/ipc";
-import { isString } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isString } from "@codebot/contracts/runtime-values";
 import { displayMessageReferences, type TeammatePrompt, teammatePrompts } from "./agent/delivery-content";
 import {
   imageGenerationAspectRatio,
@@ -430,7 +430,7 @@ function isClaudeReasoning(message: ConversationMessage): boolean {
   return message.author === "assistant" && message.itemType === "commentary" && message.id.endsWith(":reasoning");
 }
 
-export const LOST_BACKGROUND_WORK_TAG = "openbot_lost_background_work";
+export const LOST_BACKGROUND_WORK_TAG = "codebot_lost_background_work";
 
 export function isClaudeTaskNotification(text: string): boolean {
   return text.startsWith("<task-notification>") || text.startsWith(`<${LOST_BACKGROUND_WORK_TAG}>`);

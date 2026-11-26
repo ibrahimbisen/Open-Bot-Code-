@@ -1,6 +1,6 @@
-import type { McpSignInAppState, SaveMcpSignInAppInput } from "@openbot/contracts/ipc";
-import { Button, CopyButton, Field, Input, SettingsSection, Text, Trash2 } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import type { McpSignInAppState, SaveMcpSignInAppInput } from "@codebot/contracts/ipc";
+import { Button, CopyButton, Field, Input, SettingsSection, Text, Trash2 } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createStore, Show } from "solid-js";
 
 export interface McpPanelSignInApp {

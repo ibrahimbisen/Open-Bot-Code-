@@ -1,10 +1,10 @@
-import type { ChannelSummary, ClientAgentSummary } from "@openbot/contracts/ipc";
-import type { RemoteTeamHost } from "@openbot/team-client/remote-directory";
-import { Bot, Check, ChevronDown, ChevronRight, FolderPlus, Hash, LogOut, Plus, Search, Settings } from "@openbot/ui";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { ChannelAvatar } from "@openbot/ui/features/channels/ChannelAvatar";
-import { ServerPlushLogo } from "@openbot/ui/server-plush-logo";
-import { useText } from "@openbot/ui/text";
+import type { ChannelSummary, ClientAgentSummary } from "@codebot/contracts/ipc";
+import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
+import { Bot, Check, ChevronDown, ChevronRight, FolderPlus, Hash, LogOut, Plus, Search, Settings } from "@codebot/ui";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { ChannelAvatar } from "@codebot/ui/features/channels/ChannelAvatar";
+import { ServerPlushLogo } from "@codebot/ui/server-plush-logo";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createSignal, For, onSettled, Show } from "solid-js";
 import { avatarAgent, byRecent, composerAgents, rowTime } from "./agent-look";
 import { createMenuPresence } from "./menu-presence";

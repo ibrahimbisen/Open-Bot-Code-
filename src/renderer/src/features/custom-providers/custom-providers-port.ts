@@ -1,14 +1,14 @@
-import type { CustomProvidersDesktopApi, OpenBotDesktopApi, ProviderAdminDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, CustomProvidersDesktopApi, ProviderAdminDesktopApi } from "@codebot/contracts/ipc";
 import type { ProviderDetectionCalls } from "./stores/provider-detection-store";
 
 export interface CustomProvidersPort {
-  customProviders: OpenBotDesktopApi["customProviders"];
+  customProviders: CodeBotDesktopApi["customProviders"];
 }
 
 export type CustomProvidersEndpointApi = CustomProvidersDesktopApi;
 
 export function customProvidersPort(): CustomProvidersPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export function hostCustomProvidersApi(
@@ -24,11 +24,11 @@ export function hostCustomProvidersApi(
 }
 
 interface ProviderDetectionPort {
-  providerDetection: OpenBotDesktopApi["providerDetection"];
+  providerDetection: CodeBotDesktopApi["providerDetection"];
 }
 
 function providerDetectionPort(): ProviderDetectionPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export function desktopProviderDetectionCalls(serverId: string): ProviderDetectionCalls {

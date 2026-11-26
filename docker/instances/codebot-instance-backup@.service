@@ -1,0 +1,8 @@
+[Unit]
+Description=Back up CodeBot instance %i
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/codebot-docker/instances/codebot-instance backup %i --verify
+TimeoutStartSec=6h

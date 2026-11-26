@@ -15,7 +15,7 @@ import {
   type WhatsAppGroupList,
   type WhatsAppLinkState,
   type WhatsAppOverview,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 export function decodeAddOrchestratorReply(value: unknown): AddMessagingOrchestratorResult {
   if (!isAddMessagingOrchestratorResult(value)) throw new Error("Invalid messaging orchestrator response.");

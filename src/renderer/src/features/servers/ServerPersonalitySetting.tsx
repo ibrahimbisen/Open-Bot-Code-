@@ -1,4 +1,4 @@
-import { type HostPersonality, RESPONSE_STYLES, type ResponseStyle } from "@openbot/contracts/ipc";
+import { type HostPersonality, RESPONSE_STYLES, type ResponseStyle } from "@codebot/contracts/ipc";
 import {
   Item,
   ItemActions,
@@ -10,8 +10,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { type HostPersonalityCalls, rememberServerPersonality } from "./server-personality";
 
@@ -28,7 +28,7 @@ export function ServerPersonalitySetting(
   },
 ) {
   const { t, errorMessage } = useText();
-  const calls = (): HostPersonalityCalls => props.calls ?? window.openbot.hostAdmin;
+  const calls = (): HostPersonalityCalls => props.calls ?? window.codebot.hostAdmin;
   const [settings, setSettings] = createSignal<HostPersonality | null>(null);
   const [loadError, setLoadError] = createSignal<string | null>(null);
   let generation = 0;

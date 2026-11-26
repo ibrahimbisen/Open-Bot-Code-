@@ -1,1 +1,1 @@
-declare const __OPENBOT_PERF_PROBES__: boolean;
+declare const __CODEBOT_PERF_PROBES__: boolean;

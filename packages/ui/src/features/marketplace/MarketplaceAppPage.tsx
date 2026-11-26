@@ -1,8 +1,8 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { McpServerConfig } from "@openbot/contracts/ipc";
-import { mcpFlowFields } from "@openbot/contracts/mcp-connect-flows";
-import { pluginLinkText } from "@openbot/contracts/plugin-links";
-import type { AppTextKey } from "@openbot/i18n";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { McpServerConfig } from "@codebot/contracts/ipc";
+import { mcpFlowFields } from "@codebot/contracts/mcp-connect-flows";
+import { pluginLinkText } from "@codebot/contracts/plugin-links";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Alert,
   AlertContent,
@@ -32,8 +32,8 @@ import {
   Text,
   Trash2,
   TriangleAlert,
-} from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createSignal, For, Match, Show, Switch } from "solid-js";
 import { ProviderAccountRenameField } from "../../components/ProviderAccountList";
 import { type ConnectorDetail, ConnectorDetailPanel, connectorDescription } from "../connectors/ConnectorDetailPanel";

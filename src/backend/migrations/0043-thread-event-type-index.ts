@@ -1,4 +1,4 @@
-import type { OpenBotMigration } from "./migration";
+import type { CodeBotMigration } from "./migration";
 
 // Migration 43 indexes thread events by type. Each stream flush looks up the earlier streamed-message
 // events of its thread by type, which without it reads every earlier event of the thread (#2278). Only
@@ -8,7 +8,7 @@ export const V43_THREAD_EVENT_TYPE_INDEX_SQL = `
     ON orchestration_events(aggregate_id, event_type, sequence) WHERE aggregate_type = 'thread';
 `;
 
-export const migration: OpenBotMigration = {
+export const migration: CodeBotMigration = {
   version: 43,
   name: "thread-event-type-index",
   // Only creates an index, so no foreign-key pause and no vacuum.

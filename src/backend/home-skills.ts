@@ -1,13 +1,13 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { HOME_SKILL_ID_PREFIX } from "@openbot/contracts/ipc";
+import { HOME_SKILL_ID_PREFIX } from "@codebot/contracts/ipc";
 import { Effect, Option, Schema } from "effect";
 import { readSkillFrontmatter } from "./skill-frontmatter";
 
 export const HOME_SKILL_FOLDER = ".agents/skills";
 const MAX_HOME_SKILLS = 200;
-export const SKILL_OWNERSHIP_MARKER = ".openbot-managed.json";
+export const SKILL_OWNERSHIP_MARKER = ".codebot-managed.json";
 const MAX_SKILL_FILE_BYTES = 256 * 1024;
 
 export interface HomeSkill {
@@ -56,7 +56,7 @@ export const skillFolderNames = Effect.fn("HomeSkills.folderNames")(function* (d
 export const userSkillFolderNames = Effect.fn("HomeSkills.userFolderNames")(function* (directory: string) {
   const names: string[] = [];
   for (const name of yield* skillFolderNames(directory)) {
-    if (name.includes(".openbot-")) continue;
+    if (name.includes(".codebot-")) continue;
     const marker = yield* optionalRead(() => stat(join(directory, name, SKILL_OWNERSHIP_MARKER)));
     if (Option.isNone(marker)) names.push(name);
   }

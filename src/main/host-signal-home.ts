@@ -1,11 +1,11 @@
-import { type HostSignalHomeSettings, isSignalHomeId } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+import { type HostSignalHomeSettings, isSignalHomeId } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Schema } from "effect";
 import { PreferenceStore, readPreferenceFile } from "./preference-file";
 import { signalHttpOrigin } from "./telegram-files";
 
-export const SIGNAL_HOME_PREFERENCE_FILE = "openbot-signal-home-v1.json";
+export const SIGNAL_HOME_PREFERENCE_FILE = "codebot-signal-home-v1.json";
 
 const LATENCY_SAMPLES = 3;
 const LATENCY_TIMEOUT_MS = 3_000;

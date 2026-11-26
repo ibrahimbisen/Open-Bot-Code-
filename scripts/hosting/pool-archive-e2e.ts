@@ -4,8 +4,8 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
-import { MANAGED_RUNTIME_PROVIDERS } from "@openbot/contracts/agent-providers";
-import { createOpenBotLogger } from "@openbot/logging";
+import { MANAGED_RUNTIME_PROVIDERS } from "@codebot/contracts/agent-providers";
+import { createCodeBotLogger } from "@codebot/logging";
 import { z } from "zod";
 import {
   abortUpload,
@@ -25,7 +25,7 @@ import {
 } from "./pool-archive";
 import { hostingCopy, MACHINE_HOSTING, prepareScript } from "./pool-machine";
 
-const logger = createOpenBotLogger("pool-archive-e2e");
+const logger = createCodeBotLogger("pool-archive-e2e");
 const LEASEWEB_API = "https://api.leaseweb.com/publicCloud/v1/vps";
 const LEASEWEB_ACCOUNTS = ["NL", "DE", "US", "AU", "SG"];
 const IMAGE = "UBUNTU_26_04_64BIT";
@@ -33,20 +33,20 @@ const AUTH_API = "https://openbot-auth-api-test.internal9671.workers.dev";
 const TEST_REFERENCE = /^pool-test-\d{2}$/u;
 const WAIT_MS = 15 * 60_000;
 const DOWNLOAD_URL_SECONDS = 60 * 60;
-const LEFT_BEHIND = "ls -d /var/tmp/openbot-restore.* /run/openbot-restore-key.* 2>/dev/null | wc -l";
+const LEFT_BEHIND = "ls -d /var/tmp/codebot-restore.* /run/codebot-restore-key.* 2>/dev/null | wc -l";
 
 const SEEDED_CACHES = [
   ".cache/e2e/models.json",
   ".npm/_npx/e2e/package.json",
-  ".config/OpenBot/Cache/Cache_Data/e2e",
-  ".config/OpenBot/Partitions/openbot-browser/Cache/Cache_Data/e2e",
-  ".config/OpenBot/Partitions/openbot-browser/Code Cache/js/e2e",
-  ".config/OpenBot/provider-runtimes/claude/linux-x64/e2e/bin/claude",
-  ".config/OpenBot/provider-runtimes/.downloads/claude-linux-x64-e2e.partial",
+  ".config/CodeBot/Cache/Cache_Data/e2e",
+  ".config/CodeBot/Partitions/codebot-browser/Cache/Cache_Data/e2e",
+  ".config/CodeBot/Partitions/codebot-browser/Code Cache/js/e2e",
+  ".config/CodeBot/provider-runtimes/claude/linux-x64/e2e/bin/claude",
+  ".config/CodeBot/provider-runtimes/.downloads/claude-linux-x64-e2e.partial",
 ];
 const SEEDED_KEPT = [
-  ".config/OpenBot/Partitions/openbot-browser/Service Worker/CacheStorage/e2e",
-  ".config/OpenBot/provider-runtimes/bun/e2e",
+  ".config/CodeBot/Partitions/codebot-browser/Service Worker/CacheStorage/e2e",
+  ".config/CodeBot/provider-runtimes/bun/e2e",
 ];
 const CACHE_NAMES = [
   "Cache",
@@ -61,16 +61,16 @@ const CACHE_NAMES = [
   "component_crx_cache",
   "extensions_crx_cache",
 ];
-const NOT_ARCHIVED = ` home/user/(\\.cache|\\.npm/_npx|\\.config/OpenBot/(Partitions/[^/]+/)?(${CACHE_NAMES.join("|")})|\\.config/OpenBot/provider-runtimes/(\\.downloads|${MANAGED_RUNTIME_PROVIDERS.join("|")}))(/| |$)`;
+const NOT_ARCHIVED = ` home/user/(\\.cache|\\.npm/_npx|\\.config/CodeBot/(Partitions/[^/]+/)?(${CACHE_NAMES.join("|")})|\\.config/CodeBot/provider-runtimes/(\\.downloads|${MANAGED_RUNTIME_PROVIDERS.join("|")}))(/| |$)`;
 
 const FACTS = `
 set -euo pipefail
 export LC_ALL=C
 cd /
 {
-find home/user srv/openbot-hosted -xdev ! -name '.Xauthority*' ! -path 'home/user/.boat*' -type f -print0 | sort -z | xargs -0 sha256sum | sed 's/^/sha256 /'
-find home/user srv/openbot-hosted -xdev ! -name '.Xauthority*' ! -path 'home/user/.boat*' -printf 'entry %y %m %u:%g %p\\n' | sort
-find home/user srv/openbot-hosted -xdev ! -path 'home/user/.boat*' -type l -printf 'link %p -> %l\\n' | sort
+find home/user srv/codebot-hosted -xdev ! -name '.Xauthority*' ! -path 'home/user/.boat*' -type f -print0 | sort -z | xargs -0 sha256sum | sed 's/^/sha256 /'
+find home/user srv/codebot-hosted -xdev ! -name '.Xauthority*' ! -path 'home/user/.boat*' -printf 'entry %y %m %u:%g %p\\n' | sort
+find home/user srv/codebot-hosted -xdev ! -path 'home/user/.boat*' -type l -printf 'link %p -> %l\\n' | sort
 if command -v crontab >/dev/null; then echo "crontab $(crontab -u user -l 2>/dev/null | sha256sum | cut -c1-64)"; fi
 } | grep -v -E '${NOT_ARCHIVED}'
 `;
@@ -86,15 +86,15 @@ for path in ${SEEDED_KEPT.map((path) => `"${path}"`).join(" ")}; do [ -s "$path"
 
 const SEED = (hostId: string, extraGb: number) => `
 set -euo pipefail
-runuser -u user -- env HOME=/home/user OPENBOT_HOSTED_HOST_ID=${hostId} OPENBOT_HOSTED_CLAIM=e2e_claim_that_is_not_valid \\
-  /opt/OpenBot/hosted/openbot-hosted-env
-systemctl enable --now openbot.service
+runuser -u user -- env HOME=/home/user CODEBOT_HOSTED_HOST_ID=${hostId} CODEBOT_HOSTED_CLAIM=e2e_claim_that_is_not_valid \\
+  /opt/CodeBot/hosted/codebot-hosted-env
+systemctl enable --now codebot.service
 for _ in $(seq 1 180); do
-  [ -s /home/user/.config/OpenBot/openbot.db ] && [ -s /srv/openbot-hosted/keyrings/login.keyring ] &&
-    [ -s /home/user/.config/openbot-hosted/keyring-password ] && break
+  [ -s /home/user/.config/CodeBot/codebot.db ] && [ -s /srv/codebot-hosted/keyrings/login.keyring ] &&
+    [ -s /home/user/.config/codebot-hosted/keyring-password ] && break
   sleep 1
 done
-[ -s /home/user/.config/OpenBot/openbot.db ] || { journalctl -u openbot.service -n 30 --no-pager >&2; exit 1; }
+[ -s /home/user/.config/CodeBot/codebot.db ] || { journalctl -u codebot.service -n 30 --no-pager >&2; exit 1; }
 runuser -u user -- bash -c 'set -e; cd ~
 mkdir -p projects/e2e .local/bin
 head -c 1048576 /dev/urandom >projects/e2e/data.bin
@@ -112,10 +112,10 @@ echo seeded
 
 const RUNS = `
 for _ in $(seq 1 120); do
-  if systemctl is-active --quiet openbot.service && pgrep -u user -x openbot >/dev/null; then echo runs; exit 0; fi
+  if systemctl is-active --quiet codebot.service && pgrep -u user -x codebot >/dev/null; then echo runs; exit 0; fi
   sleep 1
 done
-echo "does not run: $(systemctl is-active openbot.service)"
+echo "does not run: $(systemctl is-active codebot.service)"
 `;
 
 interface Vps {
@@ -191,7 +191,7 @@ function remote(machine: Vps, command: string, options: { input?: string; passwo
   const env = { ...process.env };
   let askpass: string | undefined;
   if (options.password !== undefined) {
-    askpass = mkdtempSync(join(tmpdir(), "openbot-askpass-"));
+    askpass = mkdtempSync(join(tmpdir(), "codebot-askpass-"));
     writeFileSync(join(askpass, "password"), options.password, { mode: 0o600 });
     writeFileSync(join(askpass, "askpass"), `#!/bin/sh\nexec cat '${join(askpass, "password")}'\n`, { mode: 0o700 });
     Object.assign(env, { SSH_ASKPASS: join(askpass, "askpass"), SSH_ASKPASS_REQUIRE: "force", DISPLAY: "none" });
@@ -270,7 +270,7 @@ async function newestRelease() {
   );
   const release = releaseSchema.parse(body);
   const version = release.tag_name.replace(/^v/u, "");
-  const asset = release.assets.find((item) => item.name === `OpenBot-${version}-x86_64.AppImage`);
+  const asset = release.assets.find((item) => item.name === `CodeBot-${version}-x86_64.AppImage`);
   const sha256 = asset?.digest?.replace(/^sha256:/u, "") ?? "";
   if (!asset || !/^[0-9a-f]{64}$/u.test(sha256)) throw new Error(`Release ${version} has no AppImage with a SHA-256.`);
   return { version, url: asset.browser_download_url, sha256 };
@@ -332,7 +332,7 @@ async function main() {
     );
   }
   const release = await newestRelease();
-  const report = join(process.cwd(), ".openbot-build", `pool-archive-e2e-${extraGb}gb.json`);
+  const report = join(process.cwd(), ".codebot-build", `pool-archive-e2e-${extraGb}gb.json`);
   const steps: Step[] = [];
   const checks: Check[] = [];
   const step = async <T>(name: string, run: () => Promise<T> | T) => {
@@ -363,9 +363,9 @@ async function main() {
     await step("run a server with customer files", () =>
       remote(machine, "bash -s", { input: SEED(randomUUID(), extraGb) }),
     );
-    const before = (await step("check that OpenBot runs", () => remote(machine, "bash -s", { input: RUNS }).trim()))
+    const before = (await step("check that CodeBot runs", () => remote(machine, "bash -s", { input: RUNS }).trim()))
       .result;
-    checks.push({ name: "OpenBot runs before the archive", pass: before === "runs", detail: before });
+    checks.push({ name: "CodeBot runs before the archive", pass: before === "runs", detail: before });
     serverBytes = Number(remote(machine, SERVER_BYTES).trim());
 
     uploadId = (await step("start the B2 upload", () => startUpload(b2, objectKey))).result;
@@ -406,7 +406,7 @@ async function main() {
     await step("reinstall and prepare the machine again", () => preparePool(machine, release, keys));
     const empty = remote(
       machine,
-      "test ! -e /home/user/.config/OpenBot && test ! -e /srv/openbot-hosted/keyrings && echo empty || echo data",
+      "test ! -e /home/user/.config/CodeBot && test ! -e /srv/codebot-hosted/keyrings && echo empty || echo data",
     ).trim();
     checks.push({ name: "the reinstall erased the server", pass: empty === "empty", detail: empty });
 
@@ -415,7 +415,7 @@ async function main() {
     const wrongSum = archiveSha256.replace(/^./u, (first) => (first === "0" ? "1" : "0"));
     const refused = remote(
       machine,
-      `bash ${MACHINE_HOSTING}/move-from-boat.sh restore ${wrongSum} >/dev/null 2>&1 && echo restored || echo refused; test -e /home/user/.config/OpenBot && echo data || echo empty; ${LEFT_BEHIND}`,
+      `bash ${MACHINE_HOSTING}/move-from-boat.sh restore ${wrongSum} >/dev/null 2>&1 && echo restored || echo refused; test -e /home/user/.config/CodeBot && echo data || echo empty; ${LEFT_BEHIND}`,
       { input: download() },
     )
       .trim()
@@ -453,7 +453,7 @@ async function main() {
 
     await step("start", () => remote(machine, `bash ${MACHINE_HOSTING}/move-from-boat.sh start`));
     const after = remote(machine, "bash -s", { input: RUNS }).trim();
-    checks.push({ name: "OpenBot runs after the import", pass: after === "runs", detail: after });
+    checks.push({ name: "CodeBot runs after the import", pass: after === "runs", detail: after });
 
     await step("delete the archive in B2", async () => {
       const answer = await deleteArchive(b2, objectKey, versionId);

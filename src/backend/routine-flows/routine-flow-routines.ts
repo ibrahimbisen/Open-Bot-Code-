@@ -1,4 +1,4 @@
-import type { RoutineFlowRoutineInfo } from "@openbot/contracts/ipc";
+import type { RoutineFlowRoutineInfo } from "@codebot/contracts/ipc";
 import type { AgentRoutineStore } from "../agent-routine-store";
 import type { OwnedRoutineRecord } from "../routine-store";
 import type { RoutineFlowsDependencies } from "./routine-flows";

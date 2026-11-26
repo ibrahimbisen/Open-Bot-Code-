@@ -5,14 +5,14 @@
 }
 
 .referral-page {
-  --referral-tone: var(--openbot-price-accent);
-  --referral-tone-soft: color-mix(in srgb, var(--openbot-price-accent) 16%, transparent);
+  --referral-tone: var(--codebot-price-accent);
+  --referral-tone-soft: color-mix(in srgb, var(--codebot-price-accent) 16%, transparent);
   --referral-violet: #a46cf5;
   --referral-sky: #5ac8fa;
-  --referral-line: color-mix(in srgb, var(--openbot-text-primary) 9%, transparent);
-  --referral-dash: color-mix(in srgb, var(--openbot-text-primary) 18%, transparent);
+  --referral-line: color-mix(in srgb, var(--codebot-text-primary) 9%, transparent);
+  --referral-dash: color-mix(in srgb, var(--codebot-text-primary) 18%, transparent);
   overflow-x: clip;
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
 }
 
 .referral-hero {
@@ -71,7 +71,7 @@
   height: var(--referral-pair-size);
   flex: 0 0 auto;
   border-radius: 50%;
-  outline: 3px solid var(--openbot-bg-app, #1a1a1a);
+  outline: 3px solid var(--codebot-bg-app, #1a1a1a);
 }
 
 .referral-pair-initial {
@@ -88,7 +88,7 @@
   display: grid;
   place-items: center;
   margin-inline-start: calc(var(--referral-pair-size) * -0.22);
-  background: var(--openbot-bg-surface-raised);
+  background: var(--codebot-bg-surface-raised);
 }
 
 .referral-pair-logo[data-alone="true"] {
@@ -113,9 +113,9 @@
   margin: 0 0 28px;
   padding: 4px 16px 4px 4px;
   border: 1px solid transparent;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background:
-    linear-gradient(var(--openbot-bg-surface), var(--openbot-bg-surface)) padding-box,
+    linear-gradient(var(--codebot-bg-surface), var(--codebot-bg-surface)) padding-box,
     linear-gradient(
       100deg,
       color-mix(in srgb, var(--referral-tone) 60%, transparent),
@@ -123,12 +123,12 @@
       color-mix(in srgb, var(--referral-violet) 55%, transparent)
     )
     border-box;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font-size: 14px;
 }
 
 .referral-from strong {
-  color: var(--openbot-text-primary);
+  color: var(--codebot-text-primary);
   font-weight: 600;
 }
 
@@ -168,7 +168,7 @@
 
 .referral-offer-sub {
   margin-top: 10px;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font-size: clamp(28px, 3.2vw, 42px);
   font-weight: 500;
   letter-spacing: -0.045em;
@@ -178,7 +178,7 @@
 .referral-lead {
   max-width: 500px;
   margin: 24px 0 0;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font-size: clamp(16px, 1.6vw, 18px);
   line-height: 1.55;
   text-wrap: pretty;
@@ -302,7 +302,7 @@
   align-items: center;
   gap: 8px;
   padding: 4px 12px;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: rgb(255 255 255 / 0.1);
   font-size: 13px;
   font-weight: 500;
@@ -359,7 +359,7 @@
 }
 
 .referral-card-code code {
-  font-family: var(--openbot-font-mono);
+  font-family: var(--codebot-font-mono);
   font-size: clamp(19px, 2.2vw, 24px);
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -371,7 +371,7 @@
   gap: 6px;
   padding: 8px 15px 8px 12px;
   border: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: #fff;
   color: #1a0f1f;
   font: inherit;
@@ -430,7 +430,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -472,7 +472,7 @@
 
 .referral-prices-head p {
   margin: 10px 0 0;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font-size: 15px;
 }
 
@@ -481,8 +481,8 @@
   flex: 0 0 auto;
   margin: 0;
   padding: 4px;
-  border: 1px solid var(--openbot-glass-border);
-  border-radius: var(--openbot-radius-pill);
+  border: 1px solid var(--codebot-glass-border);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .referral-interval-option {
@@ -491,9 +491,9 @@
   gap: 8px;
   padding: 8px 16px;
   border: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: transparent;
-  color: var(--openbot-text-secondary);
+  color: var(--codebot-text-secondary);
   font: inherit;
   font-size: 14px;
   cursor: pointer;
@@ -503,13 +503,13 @@
 }
 
 .referral-interval-option[aria-pressed="true"] {
-  background: var(--openbot-surface-light);
-  color: var(--openbot-text-on-light);
+  background: var(--codebot-surface-light);
+  color: var(--codebot-text-on-light);
 }
 
 .referral-interval-chip {
   padding: 2px 7px;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   background: var(--referral-tone-soft);
   color: #ffb8d9;
   font-size: 12px;
@@ -535,7 +535,7 @@
   border-radius: 24px;
   background:
     radial-gradient(70% 50% at 0% 0%, var(--referral-tone-soft), transparent 70%) padding-box,
-    linear-gradient(var(--openbot-bg-surface), var(--openbot-bg-surface)) padding-box,
+    linear-gradient(var(--codebot-bg-surface), var(--codebot-bg-surface)) padding-box,
     linear-gradient(
       160deg,
       color-mix(in srgb, var(--referral-tone) 55%, transparent),
@@ -550,7 +550,7 @@
   background:
     radial-gradient(70% 50% at 100% 0%, color-mix(in srgb, var(--referral-violet) 14%, transparent), transparent 70%)
     padding-box,
-    linear-gradient(var(--openbot-bg-surface), var(--openbot-bg-surface)) padding-box,
+    linear-gradient(var(--codebot-bg-surface), var(--codebot-bg-surface)) padding-box,
     linear-gradient(
       200deg,
       color-mix(in srgb, var(--referral-violet) 55%, transparent),
@@ -597,7 +597,7 @@
 
 .referral-group-head p {
   margin: 4px 0 0;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -619,7 +619,7 @@
 }
 
 .referral-price-row:hover {
-  background: color-mix(in srgb, var(--openbot-text-primary) 3%, transparent);
+  background: color-mix(in srgb, var(--codebot-text-primary) 3%, transparent);
 }
 
 .referral-price-row + .referral-price-row {
@@ -634,7 +634,7 @@
 
 .referral-price-detail {
   margin: 3px 0 0;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-size: 13px;
 }
 
@@ -651,7 +651,7 @@
 }
 
 .referral-price-value s {
-  color: var(--openbot-text-dim);
+  color: var(--codebot-text-dim);
   font-size: 14px;
 }
 
@@ -667,13 +667,13 @@
 
 .referral-price-value span {
   grid-column: 1 / -1;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-size: 12px;
 }
 
 .referral-prices-note {
   margin: 14px 4px 0;
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   font-size: 13px;
 }
 

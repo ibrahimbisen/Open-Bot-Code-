@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { hermesHome } from "./process-confinement";
 
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 
 export interface HermesAgentSettings {
   readonly coding_context?: "auto" | "focus" | "on" | "off";
@@ -39,7 +39,7 @@ export function hermesSettingsEnvironment(
       renameSync(temporary, path);
     }
   } catch (error) {
-    logger.warn("OpenBot could not write the Hermes settings.", { error: String(error) });
+    logger.warn("CodeBot could not write the Hermes settings.", { error: String(error) });
     return {};
   }
   return { HERMES_MANAGED_DIR: folder };

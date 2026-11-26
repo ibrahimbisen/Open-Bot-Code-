@@ -1,11 +1,11 @@
 import { connect, type Socket } from "node:net";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { CuaDriverFailure } from "./cua-driver-effects";
 
 const REQUEST_TIMEOUT_MS = 2_000;
 const MAX_RESPONSE_BYTES = 4_194_304;
-const SESSION_ID = "openbot-highlight";
+const SESSION_ID = "codebot-highlight";
 export const HIGHLIGHT_OWNER_SHORT_ID = SESSION_ID.slice(-8);
 
 interface DaemonReadRequest {

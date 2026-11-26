@@ -2,16 +2,16 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  min-width: var(--openbot-space-8);
-  height: var(--openbot-space-8);
-  color: var(--openbot-text-muted);
+  min-width: var(--codebot-space-8);
+  height: var(--codebot-space-8);
+  color: var(--codebot-text-muted);
 }
 .channel-avatar .agent-avatar {
   position: relative;
-  width: var(--openbot-space-8);
-  height: var(--openbot-space-8);
+  width: var(--codebot-space-8);
+  height: var(--codebot-space-8);
   flex-shrink: 0;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
 }
 
 .channel-avatar-cluster {
@@ -42,7 +42,7 @@
 }
 
 .channel-avatar:where(:not(.channel-avatar-cluster)) .agent-avatar + .agent-avatar {
-  margin-inline-start: calc(-1 * var(--openbot-space-4));
+  margin-inline-start: calc(-1 * var(--codebot-space-4));
 }
 
 .channel-avatar-cluster > :only-child {
@@ -81,13 +81,13 @@
   isolation: isolate;
   padding-inline: 4px;
   place-items: center;
-  border-radius: var(--openbot-radius-pill);
+  border-radius: var(--codebot-radius-pill);
   outline: var(--channel-avatar-ring-outline) solid var(--agent-avatar-outline, transparent);
   box-shadow: 0 0 0 var(--agent-avatar-outline-width) var(--agent-avatar-outline, transparent);
-  background: linear-gradient(to bottom, var(--openbot-felt-plum-top), var(--openbot-felt-plum-bottom));
-  color: var(--openbot-felt-cream);
+  background: linear-gradient(to bottom, var(--codebot-felt-plum-top), var(--codebot-felt-plum-bottom));
+  color: var(--codebot-felt-cream);
 
-  font-size: var(--openbot-text-sm);
+  font-size: var(--codebot-text-sm);
   line-height: 1;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0;
@@ -96,7 +96,7 @@
 :is(.channel-avatar-count, .agent-row-unread-count) {
   font-weight: 800;
   paint-order: stroke fill;
-  -webkit-text-stroke: 0.7px var(--openbot-felt-cream-stroke);
+  -webkit-text-stroke: 0.7px var(--codebot-felt-cream-stroke);
 }
 
 :is(.channel-avatar-count, .agent-row-agent-status-unread, .agent-row-agent-status-waiting)::before {
@@ -135,7 +135,7 @@
     filter: url("#sidebar-plush-ring-hover");
   }
 }
-:root[data-openbot-color-scheme="light"]
+:root[data-codebot-color-scheme="light"]
   .sidebar
   .agent-row-active
   .channel-avatar-cluster
@@ -151,9 +151,9 @@
 }
 
 .channel-avatar-picture {
-  width: var(--channel-avatar-size, var(--openbot-space-8));
-  min-width: var(--channel-avatar-size, var(--openbot-space-8));
-  height: var(--channel-avatar-size, var(--openbot-space-8));
+  width: var(--channel-avatar-size, var(--codebot-space-8));
+  min-width: var(--channel-avatar-size, var(--codebot-space-8));
+  height: var(--channel-avatar-size, var(--codebot-space-8));
 }
 .channel-picture {
   display: grid;
@@ -162,9 +162,9 @@
   height: 100%;
   place-items: center;
   overflow: hidden;
-  border-radius: var(--openbot-radius-sm);
-  background: color-mix(in oklab, var(--channel-picture-hue) 26%, var(--openbot-bg-control));
-  color: color-mix(in oklab, var(--channel-picture-hue) 78%, var(--openbot-text-primary));
+  border-radius: var(--codebot-radius-sm);
+  background: color-mix(in oklab, var(--channel-picture-hue) 26%, var(--codebot-bg-control));
+  color: color-mix(in oklab, var(--channel-picture-hue) 78%, var(--codebot-text-primary));
 }
 .channel-picture > svg {
   width: 55%;
@@ -172,7 +172,7 @@
 }
 .channel-picture-image {
   object-fit: cover;
-  background: var(--openbot-bg-control);
+  background: var(--codebot-bg-control);
 }
 .channel-icon-grid .channel-picture {
   width: 32px;
@@ -183,17 +183,17 @@
   height: 18px;
 }
 .channel-avatar-cluster .channel-picture {
-  border-radius: var(--openbot-radius-lg);
+  border-radius: var(--codebot-radius-lg);
 }
 .channel-picture-trigger .channel-picture {
-  border-radius: var(--openbot-radius-xl);
+  border-radius: var(--codebot-radius-xl);
 }
 .channel-picture-editor .avatar-image-upload-preview .channel-picture {
   width: 100%;
   height: 100%;
 }
 .agent-row.sidebar-pinned-row .channel-avatar-cluster .channel-picture {
-  border-radius: var(--openbot-radius-xl);
+  border-radius: var(--codebot-radius-xl);
 }
 
 .channel-picture-trigger {
@@ -207,7 +207,7 @@
   padding: 0;
   place-items: center;
   border: 0;
-  border-radius: var(--openbot-radius-xl);
+  border-radius: var(--codebot-radius-xl);
   background: transparent;
 }
 .channel-picture-trigger:hover {
@@ -215,7 +215,7 @@
 }
 
 .channel-picture-editor .avatar-image-upload-preview {
-  border-radius: var(--openbot-radius-md);
+  border-radius: var(--codebot-radius-md);
 }
 .channel-picture-editor .channel-icon-grid {
   grid-template-columns: repeat(5, minmax(0, 1fr));

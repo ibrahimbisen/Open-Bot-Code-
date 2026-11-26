@@ -24,7 +24,7 @@ export const HIGGSFIELD_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the Higgsfield plugin need an API key?",
       answer:
-        "No. You sign in to your own Higgsfield account in the browser and allow access. OpenBot keeps the tokens in encrypted storage and adds the Authorization header. The agent does not see your password.",
+        "No. You sign in to your own Higgsfield account in the browser and allow access. CodeBot keeps the tokens in encrypted storage and adds the Authorization header. The agent does not see your password.",
     },
     {
       question: "Does it cost anything?",
@@ -34,7 +34,7 @@ export const HIGGSFIELD_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "What does Higgsfield receive?",
       answer:
-        "Higgsfield gets the prompts, images and videos that the agent sends to it. You are responsible for what an agent generates through your account. Your workspaces, conversations and files stay on the computer that runs OpenBot.",
+        "Higgsfield gets the prompts, images and videos that the agent sends to it. You are responsible for what an agent generates through your account. Your workspaces, conversations and files stay on the computer that runs CodeBot.",
     },
   ],
   sources: [

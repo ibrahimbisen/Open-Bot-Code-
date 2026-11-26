@@ -2,7 +2,7 @@
 
 > **Executor instructions**: Follow this plan step by step. If a STOP condition occurs, stop and report.
 >
-> **Drift check**: `git diff --stat 20d1cd63d9..HEAD -- src/backend/channel-store.ts src/backend/openbot-database-schema-history.json scripts`.
+> **Drift check**: `git diff --stat 20d1cd63d9..HEAD -- src/backend/channel-store.ts src/backend/codebot-database-schema-history.json scripts`.
 
 ## Status
 
@@ -22,7 +22,7 @@
 - `src/backend/channel-store.ts:289-309` selects each channel and runs correlated subqueries for the latest shown message, running tasks, and open tasks.
 - `src/backend/channel-store.ts:327-355` maps rows and calls `#unreadCount` once per channel.
 - `src/backend/channel-store.ts:234-255` runs `UNREAD_COUNT_SQL` when the cache is cold.
-- `src/backend/openbot-database-schema-history.json:64-73` records channel-message, channel-task, and channel-assignment indexes, while task state remains inside JSON.
+- `src/backend/codebot-database-schema-history.json:64-73` records channel-message, channel-task, and channel-assignment indexes, while task state remains inside JSON.
 
 ## Commands you will need
 
@@ -54,7 +54,7 @@
 
 Build a realistic fixture with many channels, messages, tasks, members, and read markers. Record `ChannelStore.list` output and timing. Use `EXPLAIN QUERY PLAN` for the current latest-message, task, and unread queries.
 
-**Verify**: the benchmark writes a repeatable JSON artifact under `.openbot-build/` containing row counts, elapsed time, and query-plan text.
+**Verify**: the benchmark writes a repeatable JSON artifact under `.codebot-build/` containing row counts, elapsed time, and query-plan text.
 
 ### Step 2: Replace per-channel aggregates with batched queries
 

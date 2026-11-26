@@ -1,4 +1,4 @@
-import type { NearDepositAsset } from "@openbot/contracts/ipc";
+import type { NearDepositAsset } from "@codebot/contracts/ipc";
 
 export const STORY_DEPOSIT_ASSETS: NearDepositAsset[] = [
   { assetId: "nep141:wrap.near", symbol: "wNEAR", blockchain: "near" },

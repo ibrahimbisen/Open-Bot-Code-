@@ -3,10 +3,10 @@ import type {
   StartWhatsAppLinkInput,
   WhatsAppLinkState,
   WhatsAppOverview,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
-import { WHATSAPP_LINK_IDLE } from "@openbot/ui/features/settings/WhatsAppIntegrationPanel";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
+import { WHATSAPP_LINK_IDLE } from "@codebot/ui/features/settings/WhatsAppIntegrationPanel";
+import { currentText } from "@codebot/ui/text";
 import { createSignal, onCleanup, untrack } from "solid-js";
 import {
   type ConnectorAnalyticsAction,
@@ -35,7 +35,7 @@ export type WhatsAppPort = Pick<
   | "setWhatsAppSenderReadOnly"
 >;
 
-export const whatsappPort = (): WhatsAppPort => window.openbot.messaging;
+export const whatsappPort = (): WhatsAppPort => window.codebot.messaging;
 
 export type HostWhatsAppApi = Pick<
   MessagingDesktopApi,
@@ -59,7 +59,7 @@ export type HostWhatsAppApi = Pick<
 
 export function hostWhatsAppPort(
   serverId: () => string | undefined,
-  host: () => HostWhatsAppApi = () => window.openbot.messaging,
+  host: () => HostWhatsAppApi = () => window.codebot.messaging,
 ): WhatsAppPort {
   const call = <T>(method: (api: HostWhatsAppApi, serverId: string) => Promise<T>) => {
     const id = serverId();

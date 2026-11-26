@@ -4,16 +4,16 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AgentSummary, CHANNEL_PARALLEL_LIMIT, type ChannelTask } from "@openbot/contracts/ipc";
+import { type AgentSummary, CHANNEL_PARALLEL_LIMIT, type ChannelTask } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { ChannelImages } from "../src/backend/channel-images";
 import { ChannelService } from "../src/backend/channel-service";
 import type { ChannelAssignment } from "../src/backend/channel-store";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { MailboxStore } from "../src/backend/mailbox-store";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/channel-person-first-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/channel-person-first-e2e");
 const PERSON = { id: "member-e2e", name: "Owner" };
 const WAIT_MS = 5_000;
 
@@ -46,8 +46,8 @@ const lead = agent("agent-lead", "Chief of Staff");
 const workers = [agent("agent-one", "Ana"), agent("agent-two", "Ben"), agent("agent-three", "Cleo")];
 const agents = [lead, ...workers];
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-channel-person-first-"));
-const database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-channel-person-first-"));
+const database = new CodeBotDatabase(directory);
 let channels: ChannelService | null = null;
 
 const active = (assignment: ChannelAssignment) =>

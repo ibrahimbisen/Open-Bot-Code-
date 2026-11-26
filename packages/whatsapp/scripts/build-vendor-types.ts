@@ -6,7 +6,7 @@ import { typeCheckerScript } from "../../../scripts/type-checker";
 
 const PACKAGE = resolve(import.meta.dirname, "..");
 const TYPES = join(PACKAGE, "vendor/baileys/types");
-const out = mkdtempSync(join(tmpdir(), "openbot-baileys-types-"));
+const out = mkdtempSync(join(tmpdir(), "codebot-baileys-types-"));
 
 try {
   const result = spawnSync(

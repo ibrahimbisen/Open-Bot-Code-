@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { serializeChatTagReference } from "@openbot/contracts/chat-tag-references";
+import { serializeChatTagReference } from "@codebot/contracts/chat-tag-references";
 import { chromium, type Locator } from "playwright-core";
 import { mentionDraft } from "../apps/mobile/src/features/chat/model/chat-mentions";
 import { applyMarkdownListEdit, markdownListReturn } from "../apps/mobile/src/features/chat/model/composer-lists";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/composer-markdown-lists-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/composer-markdown-lists-e2e");
 const storybook = process.argv.find((arg) => arg.startsWith("--storybook="))?.slice("--storybook=".length);
 const browserExecutable = process.argv
   .find((arg) => arg.startsWith("--browser-executable="))

@@ -1,23 +1,23 @@
-import { NOTIFICATION_SOUNDS, type NotificationSound } from "@openbot/contracts/notification-relay";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import { NOTIFICATION_SOUNDS, type NotificationSound } from "@codebot/contracts/notification-relay";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import * as Notifications from "expo-notifications";
 import { currentText } from "@/shared/lib/text";
 
 export function androidChannelId(sound: NotificationSound | null): string {
-  if (sound === null || sound === "default") return `openbot.sound.${sound ?? "none"}`;
-  return `openbot.sound.${sound}.v2`;
+  if (sound === null || sound === "default") return `codebot.sound.${sound ?? "none"}`;
+  return `codebot.sound.${sound}.v2`;
 }
 
 const SOUND_FILES: Readonly<Record<Exclude<NotificationSound, "default">, string>> = {
-  openbot: "openbot_task.wav",
-  warm: "openbot_warm.wav",
-  mech: "openbot_mech.wav",
-  bubble: "openbot_bubble.wav",
-  press: "openbot_press.wav",
+  codebot: "codebot_task.wav",
+  warm: "codebot_warm.wav",
+  mech: "codebot_mech.wav",
+  bubble: "codebot_bubble.wav",
+  press: "codebot_press.wav",
 };
 
 const SOUND_LABELS = {
-  openbot: "mobile.settings.notifications.sound.openbot",
+  codebot: "mobile.settings.notifications.sound.codebot",
   warm: "mobile.settings.notifications.sound.warm",
   mech: "mobile.settings.notifications.sound.mech",
   bubble: "mobile.settings.notifications.sound.bubble",
@@ -28,7 +28,7 @@ const SOUND_LABELS = {
 export async function createAndroidChannels(): Promise<void> {
   const { t } = currentText();
   for (const sound of Object.keys(SOUND_FILES)) {
-    await Notifications.deleteNotificationChannelAsync(`openbot.sound.${sound}`);
+    await Notifications.deleteNotificationChannelAsync(`codebot.sound.${sound}`);
   }
   for (const sound of NOTIFICATION_SOUNDS) {
     await Notifications.setNotificationChannelAsync(androidChannelId(sound), {

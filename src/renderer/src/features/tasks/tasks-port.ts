@@ -5,7 +5,7 @@ import type {
   AgentTasksSnapshot,
   ConversationSnapshot,
   StartAgentTaskInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { noteAgentRequest } from "../../agent-requests";
 
 export type TaskEvent = Extract<
@@ -37,25 +37,25 @@ export interface TasksSource {
 
 export function desktopTasksSource(): TasksSource {
   return {
-    list: (agentId, serverId) => window.openbot.agent.listTasks(agentId, serverId),
-    read: (input, serverId) => window.openbot.agent.readTask(input, serverId),
+    list: (agentId, serverId) => window.codebot.agent.listTasks(agentId, serverId),
+    read: (input, serverId) => window.codebot.agent.readTask(input, serverId),
     start: (input, serverId) => {
       noteAgentRequest(serverId, input.agentId);
-      return window.openbot.agent.startTask(input, serverId);
+      return window.codebot.agent.startTask(input, serverId);
     },
     send: (input, serverId) => {
       noteAgentRequest(serverId, input.agentId);
-      return window.openbot.agent.sendMessage(input, serverId);
+      return window.codebot.agent.sendMessage(input, serverId);
     },
-    stop: (input, serverId) => window.openbot.agent.stopTask(input, serverId),
-    close: (input, serverId) => window.openbot.agent.closeTask(input, serverId),
-    reopen: (input, serverId) => window.openbot.agent.reopenTask(input, serverId),
+    stop: (input, serverId) => window.codebot.agent.stopTask(input, serverId),
+    close: (input, serverId) => window.codebot.agent.closeTask(input, serverId),
+    reopen: (input, serverId) => window.codebot.agent.reopenTask(input, serverId),
     onEvent(serverId, apply, reload) {
-      const unsubscribe = window.openbot.agent.onScopedEvent((scoped) => {
+      const unsubscribe = window.codebot.agent.onScopedEvent((scoped) => {
         if (scoped.serverId === serverId && isTaskEvent(scoped.event)) apply(scoped.event);
       });
       let online = true;
-      const reconnect = window.openbot.servers.onEvent((servers) => {
+      const reconnect = window.codebot.servers.onEvent((servers) => {
         const now = servers.some((server) => server.id === serverId && server.state === "online");
         if (now && !online) reload();
         online = now;

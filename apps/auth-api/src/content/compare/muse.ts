@@ -1,11 +1,11 @@
-import { OPENBOT_LINKS } from "../../lib/landing-links";
-import { type Comparison, OPENBOT_TEXT } from "./comparison";
+import { CODEBOT_LINKS } from "../../lib/landing-links";
+import { CODEBOT_TEXT, type Comparison } from "./comparison";
 
 export const MUSE_COMPARISON: Comparison = {
   rival: { name: "Muse", mark: "muse" },
   answer:
-    "For most people who want agents for their work, OpenBot is the better choice: your agents use the AI plans you already pay for, such as ChatGPT, Claude, Gemini or Grok, or your own model. They run on your own computer, and the app is free. Choose Muse if you want one personal assistant from Meta that runs on Meta's cloud and helps with email and purchases.",
-  chooseOpenBot: [
+    "For most people who want agents for their work, CodeBot is the better choice: your agents use the AI plans you already pay for, such as ChatGPT, Claude, Gemini or Grok, or your own model. They run on your own computer, and the app is free. Choose Muse if you want one personal assistant from Meta that runs on Meta's cloud and helps with email and purchases.",
+  chooseCodeBot: [
     "You already pay for ChatGPT, Claude, Gemini, Grok, Cursor, Cline or Muse Code, or you run your own model.",
     "Your files and chats must stay on your own computer, not on Meta's cloud.",
     "You want a team of agents that give work to each other, not one assistant.",
@@ -22,169 +22,169 @@ export const MUSE_COMPARISON: Comparison = {
     {
       icon: "cpu",
       topic: "Models and plans",
-      openbot: OPENBOT_TEXT.models,
+      codebot: CODEBOT_TEXT.models,
       rival: "Muse Spark, Meta's own model. Meta states no choice of other models.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "laptop",
       topic: "Where agents work",
-      openbot: "On the computer that runs OpenBot.",
+      codebot: "On the computer that runs CodeBot.",
       rival:
         "On a dedicated cloud computer that Meta hosts, the Muse Secure VM. With your permission, Muse for Mac can also use the apps on your Mac.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "cloud",
       topic: "When your computer is off",
-      openbot: OPENBOT_TEXT.offline,
+      codebot: CODEBOT_TEXT.offline,
       rival: "Muse keeps working after you close the app. You keep no computer on.",
     },
     {
       icon: "phone",
       topic: "Remote access",
-      openbot: OPENBOT_TEXT.remote,
+      codebot: CODEBOT_TEXT.remote,
       rival: "You reach Muse through its apps, the web and WhatsApp. Your data stays on your cloud computer at Meta.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "refresh",
       topic: "Backup models",
-      openbot: OPENBOT_TEXT.backupModels,
+      codebot: CODEBOT_TEXT.backupModels,
       rival:
         "Muse uses only Muse Spark, Meta's own model. At the usage limit, you upgrade or wait for the limit to reset. Meta states no backup model.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "key",
       topic: "Logins and payments",
-      openbot: OPENBOT_TEXT.logins,
+      codebot: CODEBOT_TEXT.logins,
       rival:
         "Muse keeps your logins in a store that the agent cannot read. At checkout, it makes a one-time card number, so the agent and the shop never see your card. You approve each purchase.",
     },
     {
       icon: "mic",
       topic: "Voice",
-      openbot: OPENBOT_TEXT.voice,
+      codebot: CODEBOT_TEXT.voice,
       rival:
         "Meta showed a Muse that you talk to in real time, but gives no date. Meta states no voice mode in the Muse app today.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "contact",
       topic: "Chat apps",
-      openbot: OPENBOT_TEXT.chatApps,
+      codebot: CODEBOT_TEXT.chatApps,
       rival: "WhatsApp. Meta states no other chat app.",
     },
     {
       icon: "users",
       topic: "Teams",
-      openbot:
+      codebot:
         "Many agents, each with its own job. They give work to each other in shared channels, and coworkers can join one team host. Roles set which agents each member can view, chat with or manage.",
       rival: "One personal agent, with side chats for separate topics. Meta states no team or multi-agent features.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "lock",
       topic: "Your data",
-      openbot:
+      codebot:
         "Workspaces, chats and files stay in a database on your computer. The provider you choose gets the requests you send.",
       rival:
         "Your data and the sign-ins of connected services are on your cloud computer at Meta. By default, Meta can use your Muse conversations to train its AI models; you can turn this off.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "tag",
       topic: "Price and account",
-      openbot:
+      codebot:
         "Free for noncommercial use; commercial use needs a license. Your agents use the plans you already pay for.",
       rival:
         "Free with a weekly usage limit. Power costs $20 a month and Maximum $100 a month. Needs an account, and is for people aged 18 or more in the US and Canada.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "globe",
       topic: "Where you can use it",
-      openbot: OPENBOT_TEXT.regions,
+      codebot: CODEBOT_TEXT.regions,
       rival:
         "Only in the US and Canada, for people 18 and over. Meta says Muse comes to more markets, but gives no countries or dates.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       icon: "devices",
       topic: "Apps",
-      openbot: OPENBOT_TEXT.apps,
+      codebot: CODEBOT_TEXT.apps,
       rival:
         "iPhone, Android, Mac, the web and WhatsApp. Meta's AI glasses are next. A Windows or Linux app: not stated by Meta.",
     },
     {
       icon: "code",
       topic: "Source code",
-      openbot: "On GitHub, under the PolyForm Noncommercial License 1.0.0.",
+      codebot: "On GitHub, under the PolyForm Noncommercial License 1.0.0.",
       rival: "Not stated by Meta.",
-      better: "openbot",
+      better: "codebot",
     },
   ],
   intro:
-    "Both products give you an AI agent that does the work, not only answers: it keeps a memory, works on long tasks and comes back to you. The difference is who the agent works for, where it runs, and which model does the thinking. Muse is one personal assistant on Meta's cloud. OpenBot is a team of agents on your own computer, with the AI plans you choose.",
+    "Both products give you an AI agent that does the work, not only answers: it keeps a memory, works on long tasks and comes back to you. The difference is who the agent works for, where it runs, and which model does the thinking. Muse is one personal assistant on Meta's cloud. CodeBot is a team of agents on your own computer, with the AI plans you choose.",
   sections: [
     {
       title: "Models and the plans you pay for",
-      openbot: OPENBOT_TEXT.plansSection,
+      codebot: CODEBOT_TEXT.plansSection,
       rival:
         "Muse runs on Muse Spark, Meta's own model, and Meta states no way to use a different one. You pay Meta for use: Muse is free with a weekly limit, and the Power and Maximum plans give more Muse tokens each week. A plan that you already pay for at another AI company does not apply.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       title: "Where the work happens",
-      openbot: OPENBOT_TEXT.workSection,
+      codebot: CODEBOT_TEXT.workSection,
       rival:
         "Each Muse lives on its own cloud computer, the Muse Secure VM: a Linux computer with a browser and storage that Meta hosts. Your data and the sign-ins of the services you connect are kept there. Muse keeps working after you close the app. With your permission, Muse for Mac can also use the apps on your Mac.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       title: "Phones and remote access",
-      openbot: OPENBOT_TEXT.phonesSection,
+      codebot: CODEBOT_TEXT.phonesSection,
       rival:
         "Muse has apps for iPhone and Android, a web app, a Mac app, and a chat in WhatsApp. Meta says Muse comes to its AI glasses in the coming months. Muse itself and your data stay on your cloud computer at Meta.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       title: "One assistant or a team",
-      openbot:
-        "In OpenBot, each agent has a name, a job and its own workspace. A lead agent can give parts of a task to other agents in a shared channel. You follow their work and step in when a decision needs you. For a team of people, one computer runs the host and the others join it; the chats and files stay on the host. Roles set which agents each member can view, chat with or manage.",
+      codebot:
+        "In CodeBot, each agent has a name, a job and its own workspace. A lead agent can give parts of a task to other agents in a shared channel. You follow their work and step in when a decision needs you. For a team of people, one computer runs the host and the others join it; the chats and files stay on the host. Roles set which agents each member can view, chat with or manage.",
       rival:
         "Muse is one personal agent for each person. Side chats keep separate topics apart. Meta describes no way to run several agents, to let agents work together, or to share an agent with coworkers.",
-      better: "openbot",
+      better: "codebot",
     },
     {
       title: "Data and privacy",
-      openbot:
-        "OpenBot keeps workspaces, conversations, attachments and browser data in a SQLite database on the computer that runs it. OpenBot keeps no other copy. On a hosted OpenBot server, the database is on that server in the EU. An account holds only your profile, team memberships, invitations, sign-in sessions and the settings that let devices find each other.",
+      codebot:
+        "CodeBot keeps workspaces, conversations, attachments and browser data in a SQLite database on the computer that runs it. CodeBot keeps no other copy. On a hosted CodeBot server, the database is on that server in the EU. An account holds only your profile, team memberships, invitations, sign-in sessions and the settings that let devices find each other.",
       rival:
         "Muse keeps your data on your cloud computer at Meta. A separate agent, Sentinel, must approve each action through a connected service and all network traffic, and Muse asks you before sensitive actions such as an email or a purchase. By default, Meta can use your conversations to train its models; you can turn this off in Settings. Meta says it does not give Muse conversations or VM data to its ad systems. A Confidential VM that stops Meta from reading the data in your VM is planned for later in 2026.",
-      better: "openbot",
+      better: "codebot",
     },
   ],
   faq: [
     {
-      question: "Is OpenBot an alternative to Meta's Muse?",
+      question: "Is CodeBot an alternative to Meta's Muse?",
       answer:
-        "Yes, if you want your agents on your own computer. Both give you AI agents that do the work and remember it. OpenBot runs a team of agents on your computer with the AI plans you choose. Muse is one personal agent on a cloud computer that Meta hosts, with Meta's own model.",
+        "Yes, if you want your agents on your own computer. Both give you AI agents that do the work and remember it. CodeBot runs a team of agents on your computer with the AI plans you choose. Muse is one personal agent on a cloud computer that Meta hosts, with Meta's own model.",
     },
     {
-      question: "Why choose OpenBot over Muse?",
+      question: "Why choose CodeBot over Muse?",
       answer:
-        "Your agents use the AI plans you already pay for, such as ChatGPT, Claude, Gemini or Grok, or your own model. OpenBot keeps your workspaces, chats and files on your own computer, it runs a team of agents instead of one, and it has desktop apps for macOS, Windows and Linux with no country limit. The app is free, and its source code is on GitHub. Muse is the better fit when you want a personal assistant with no computer to keep on.",
+        "Your agents use the AI plans you already pay for, such as ChatGPT, Claude, Gemini or Grok, or your own model. CodeBot keeps your workspaces, chats and files on your own computer, it runs a team of agents instead of one, and it has desktop apps for macOS, Windows and Linux with no country limit. The app is free, and its source code is on GitHub. Muse is the better fit when you want a personal assistant with no computer to keep on.",
     },
     {
-      question: "Can I use my ChatGPT, Claude or Gemini subscription with OpenBot?",
-      answer: OPENBOT_TEXT.plansFaq,
+      question: "Can I use my ChatGPT, Claude or Gemini subscription with CodeBot?",
+      answer: CODEBOT_TEXT.plansFaq,
     },
     {
-      question: "Can OpenBot run Muse?",
+      question: "Can CodeBot run Muse?",
       answer:
-        "OpenBot runs Muse Code, Meta's coding agent, as the provider of an agent. Sign in with your Meta account or save a Meta API key, and the agent uses Meta's Muse Spark models next to your other agents. The Muse app, Meta's personal agent on this page, is a separate product, and OpenBot does not run it.",
+        "CodeBot runs Muse Code, Meta's coding agent, as the provider of an agent. Sign in with your Meta account or save a Meta API key, and the agent uses Meta's Muse Spark models next to your other agents. The Muse app, Meta's personal agent on this page, is a separate product, and CodeBot does not run it.",
     },
     {
       question: "Which model does Muse use?",
@@ -199,27 +199,27 @@ export const MUSE_COMPARISON: Comparison = {
     {
       question: "Does Meta train its models on my Muse chats?",
       answer:
-        "By default, Meta can use your Muse conversations to train and improve its AI models. You can turn this off in the Muse settings. Meta says it does not give Muse conversations or VM data to its ad systems. OpenBot keeps your chats on your computer, and only the provider you choose gets the requests your agents send.",
+        "By default, Meta can use your Muse conversations to train and improve its AI models. You can turn this off in the Muse settings. Meta says it does not give Muse conversations or VM data to its ad systems. CodeBot keeps your chats on your computer, and only the provider you choose gets the requests your agents send.",
     },
     {
-      question: "Do my chats leave my computer with OpenBot?",
+      question: "Do my chats leave my computer with CodeBot?",
       answer:
-        "OpenBot keeps workspaces, conversations and files in a database on the computer that runs it, and OpenBot holds no copy. The provider you choose still gets the requests that your agents send to it.",
+        "CodeBot keeps workspaces, conversations and files in a database on the computer that runs it, and CodeBot holds no copy. The provider you choose still gets the requests that your agents send to it.",
     },
     {
       question: "Do agents keep working when my laptop is closed?",
       answer:
-        "Yes, with both. With OpenBot, run it on a desktop or a server that stays on, or on a hosted OpenBot server, and connect from your laptop or phone. Only that computer must stay on. Muse keeps working on its cloud computer after you close the app.",
+        "Yes, with both. With CodeBot, run it on a desktop or a server that stays on, or on a hosted CodeBot server, and connect from your laptop or phone. Only that computer must stay on. Muse keeps working on its cloud computer after you close the app.",
     },
     {
       question: "Can I use Muse in Europe?",
       answer:
-        "Not for now. Meta offers Muse in the US and Canada, to people aged 18 or more, and says it is working to bring Muse to more markets, with no countries or dates. OpenBot has no country limit: it runs on your computer in any country, hosted OpenBot servers run in the EU, and each provider tool follows its own availability.",
+        "Not for now. Meta offers Muse in the US and Canada, to people aged 18 or more, and says it is working to bring Muse to more markets, with no countries or dates. CodeBot has no country limit: it runs on your computer in any country, hosted CodeBot servers run in the EU, and each provider tool follows its own availability.",
     },
     {
-      question: "How much do OpenBot and Muse cost?",
+      question: "How much do CodeBot and Muse cost?",
       answer:
-        "OpenBot is free for noncommercial use, and commercial use needs a separate license. Each provider tool uses its own plan or API key. Muse is free with a weekly usage limit. The Power plan costs $20 a month for 500 million Muse tokens a week, and the Maximum plan costs $100 a month for 3 billion.",
+        "CodeBot is free for noncommercial use, and commercial use needs a separate license. Each provider tool uses its own plan or API key. Muse is free with a weekly usage limit. The Power plan costs $20 a month for 500 million Muse tokens a week, and the Maximum plan costs $100 a month for 3 billion.",
     },
   ],
   sources: [
@@ -239,8 +239,8 @@ export const MUSE_COMPARISON: Comparison = {
     { label: "Muse Privacy Policy", url: "https://muse.ai/privacy" },
     { label: "Muse Terms", url: "https://muse.ai/terms" },
     { label: "Muse product page", url: "https://ai.meta.com/muse/" },
-    { label: "OpenBot privacy notes", url: OPENBOT_LINKS.privacy },
-    { label: "OpenBot source code", url: OPENBOT_LINKS.repository },
+    { label: "CodeBot privacy notes", url: CODEBOT_LINKS.privacy },
+    { label: "CodeBot source code", url: CODEBOT_LINKS.repository },
   ],
   checkedAt: "2026-10-02",
 };

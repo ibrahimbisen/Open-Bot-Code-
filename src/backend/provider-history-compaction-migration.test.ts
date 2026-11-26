@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { DatabaseSync, type SQLOutputValue } from "node:sqlite";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { LATEST_SCHEMA_VERSION, migrateCodeBotDatabase, NewerDatabaseError } from "./codebot-database-schema";
 import { releasedDatabaseCases } from "./migration-harness";
 import { migration as compactionMigration } from "./migrations/0064-provider-history-compaction";
 import type * as Registry from "./migrations/registry";
-import { LATEST_SCHEMA_VERSION, migrateOpenBotDatabase, NewerDatabaseError } from "./openbot-database-schema";
 
 const databases: DatabaseSync[] = [];
 afterEach(() => {
@@ -27,13 +27,13 @@ function databaseAt(version: number): DatabaseSync {
 function migrateUpTo(db: DatabaseSync, version: number): void {
   db.exec(`CREATE TEMP TRIGGER stop_at_version BEFORE INSERT ON schema_migrations WHEN new.version > ${version}
     BEGIN SELECT RAISE(ABORT, 'fixture stop'); END;`);
-  expect(() => migrateOpenBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
+  expect(() => migrateCodeBotDatabase(db)).toThrow(`migration to version ${version + 1} failed`);
   db.exec("DROP TRIGGER stop_at_version");
 }
 
 function migrateToCompactionMarker(db: DatabaseSync): void {
   if (LATEST_SCHEMA_VERSION > 64) migrateUpTo(db, 64);
-  else migrateOpenBotDatabase(db);
+  else migrateCodeBotDatabase(db);
 }
 
 function seed(db: DatabaseSync, version: number): void {
@@ -107,7 +107,7 @@ describe("provider history compaction marker migration", () => {
     const before = contents(db);
     db.exec(`CREATE TEMP TRIGGER fail_marker BEFORE INSERT ON schema_migrations WHEN new.version=64
       BEGIN SELECT RAISE(ABORT, 'late failure'); END;`);
-    expect(() => migrateOpenBotDatabase(db)).toThrow("migration to version 64 failed");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("migration to version 64 failed");
     expect(contents(db)).toEqual(before);
     expect(markers(db)).toEqual([]);
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 });
@@ -122,10 +122,10 @@ describe("provider history compaction marker migration", () => {
     seed(db, 63);
     const before = contents(db);
     db.prepare("INSERT INTO schema_migrations VALUES(?, 'now')").run(LATEST_SCHEMA_VERSION + 1);
-    expect(() => migrateOpenBotDatabase(db)).toThrow(NewerDatabaseError);
+    expect(() => migrateCodeBotDatabase(db)).toThrow(NewerDatabaseError);
     db.prepare("DELETE FROM schema_migrations WHERE version = ?").run(LATEST_SCHEMA_VERSION + 1);
     db.exec("DELETE FROM schema_migrations WHERE version=20");
-    expect(() => migrateOpenBotDatabase(db)).toThrow("missing version 20");
+    expect(() => migrateCodeBotDatabase(db)).toThrow("missing version 20");
     expect(contents(db)).toEqual(before);
     expect(markers(db)).toEqual([]);
   });
@@ -141,7 +141,7 @@ describe("provider history compaction marker migration", () => {
 
     const db = databaseAt(63);
     seed(db, 63);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     db.prepare("UPDATE provider_history_staging SET item_json = ?").run(JSON.stringify(`sha256:${"0".repeat(64)}`));
     const after = contents(db);
 
@@ -150,16 +150,16 @@ describe("provider history compaction marker migration", () => {
       const registry = await importOriginal<typeof Registry>();
       return { ...registry, MIGRATIONS: registry.MIGRATIONS.filter((entry) => entry.version <= olderNewest) };
     });
-    const older = await import("./openbot-database-schema");
+    const older = await import("./codebot-database-schema");
     expect(older.LATEST_SCHEMA_VERSION).toBe(olderNewest);
-    expect(() => older.migrateOpenBotDatabase(db)).toThrow(older.NewerDatabaseError);
+    expect(() => older.migrateCodeBotDatabase(db)).toThrow(older.NewerDatabaseError);
     expect(contents(db)).toEqual(after);
   });
 
   it("stamps the marker on a new database", () => {
     const db = new DatabaseSync(":memory:");
     databases.push(db);
-    migrateOpenBotDatabase(db);
+    migrateCodeBotDatabase(db);
     expect(markers(db)).toEqual([{ version: 64 }]);
     expectHealthy(db, LATEST_SCHEMA_VERSION);
   });

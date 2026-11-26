@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
-import type { ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import type { ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { CONVERSATION_UPDATED, GENERATED_UPDATE_COMMAND } from "./conversation-writer";
 import { type DatabaseCore, deleteReceiptsOf } from "./database-core";
 import { databaseRow, objectValue, requiredNumberColumn, requiredStringColumn } from "./database-rows";

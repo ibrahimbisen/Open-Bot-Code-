@@ -8,7 +8,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { getString } from "../src/backend/protocol";
 import { makeGitWorkspace, observedQuery, removeRun, startClaudeAgent } from "./claude-agent-harness";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/claude-mcp-cache-bench");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-mcp-cache-bench");
 const SERVER = resolve(import.meta.dirname, "claude-mcp-cache-bench-server.ts");
 const PROMPT = "Reply with the single word OK. Do not use any tool.";
 const MODEL = "claude-haiku-5-5";
@@ -84,7 +84,7 @@ if (debugDirectory) mkdirSync(debugDirectory, { recursive: true });
 const scenarios = onlyScenario ? SCENARIOS.filter((scenario) => scenario.name === onlyScenario) : SCENARIOS;
 if (scenarios.length === 0) throw new Error(`Unknown scenario: ${onlyScenario}`);
 
-const root = await realpath(await mkdtemp(join(tmpdir(), "openbot-claude-mcp-cache-bench-")));
+const root = await realpath(await mkdtemp(join(tmpdir(), "codebot-claude-mcp-cache-bench-")));
 const cli = await runCauseEffect(resolveClaudeCli());
 const runReports: RunReport[] = [];
 const report = {

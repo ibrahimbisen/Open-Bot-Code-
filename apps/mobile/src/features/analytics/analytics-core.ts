@@ -1,6 +1,6 @@
-import type { CentralAuthUser } from "@openbot/contracts/ipc";
-import { normalizeEmailAddress } from "@openbot/contracts/validation";
-import { classifyFailure, type Operation, type ReportQueue, safeProperties } from "@openbot/telemetry";
+import type { CentralAuthUser } from "@codebot/contracts/ipc";
+import { normalizeEmailAddress } from "@codebot/contracts/validation";
+import { classifyFailure, type Operation, type ReportQueue, safeProperties } from "@codebot/telemetry";
 import { Effect } from "effect";
 import { type MobileEventName, type MobileEventProperties, type SafeProperties, sanitizeMobileEvent } from "./events";
 

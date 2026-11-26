@@ -49,7 +49,7 @@
 }
 
 .t-input {
-  transition: border-color var(--openbot-duration-normal) ease-out;
+  transition: border-color var(--codebot-duration-normal) ease-out;
   will-change: transform;
 }
 .t-input.is-error {

@@ -5,15 +5,15 @@ import { chmod, copyFile, mkdir, mkdtemp, open, readdir, readFile, rm, stat, wri
 import { tmpdir } from "node:os";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { AgentSummary } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { AgentSummary } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { type AgentImportAgents, AgentImportService } from "../src/main/agent-import-service";
 import { LocalSkillLibrary } from "../src/main/local-skill-library";
 
 const run = Effect.runPromise;
-const root = await mkdtemp(join(tmpdir(), "openbot-import-large-"));
-const reportPath = join(dirname(fileURLToPath(import.meta.url)), "..", ".openbot-build", "agent-import-large-e2e.json");
+const root = await mkdtemp(join(tmpdir(), "codebot-import-large-"));
+const reportPath = join(dirname(fileURLToPath(import.meta.url)), "..", ".codebot-build", "agent-import-large-e2e.json");
 const GiB = 1024 ** 3;
 const MiB = 1024 ** 2;
 const MANY_FILES = 70_000;
@@ -107,7 +107,7 @@ function service(freeDiskBytes?: (path: string) => Effect.Effect<number | null>)
 
 function manifest(key: string, options: { skill?: boolean } = {}): string {
   return JSON.stringify({
-    format: "openbot-agent-import",
+    format: "codebot-agent-import",
     version: 1,
     source: { app: "grok-bot", exportedAt: "2026-11-09T10:00:00Z" },
     agents: [
@@ -172,7 +172,7 @@ try {
   const files = join(source, "agents/alpha/files");
   await mkdir(join(files, "notes/deep"), { recursive: true });
   await mkdir(join(source, "agents/alpha/skills/notes"), { recursive: true });
-  await writeFile(join(source, "openbot-import.json"), manifest("alpha", { skill: true }));
+  await writeFile(join(source, "codebot-import.json"), manifest("alpha", { skill: true }));
   await writeFile(
     join(source, "agents/alpha/skills/notes/SKILL.md"),
     "---\nname: notes\ndescription: Keep notes.\n---\nKeep short notes.\n",
@@ -215,7 +215,7 @@ try {
   python(
     `import sys, zipfile
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
-    z.writestr("openbot-import.json", sys.argv[2])
+    z.writestr("codebot-import.json", sys.argv[2])
     for i in range(int(sys.argv[3])):
         z.writestr(f"agents/many/files/part-{i // 1000:03}/{i:05}.txt", f"file {i}\\n")
 `,
@@ -243,7 +243,7 @@ with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
     `import sys, zipfile
 chunk = bytes(64 * 1024 * 1024)
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
-    z.writestr("openbot-import.json", sys.argv[2])
+    z.writestr("codebot-import.json", sys.argv[2])
     with z.open("agents/huge/files/disk.img", "w", force_zip64=True) as f:
         left = int(sys.argv[3])
         while left:
@@ -276,7 +276,7 @@ with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
     `import sys, zipfile
 chunk = bytes(64 * 1024 * 1024)
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
-    z.writestr("openbot-import.json", sys.argv[2])
+    z.writestr("codebot-import.json", sys.argv[2])
     with z.open("agents/big/files/big.img", "w") as f:
         left = int(sys.argv[3])
         while left:
@@ -347,7 +347,7 @@ with open(sys.argv[1], "r+b") as f:
   python(
     `import sys, zipfile
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
-    z.writestr("openbot-import.json", sys.argv[2])
+    z.writestr("codebot-import.json", sys.argv[2])
     z.writestr("agents/count/files/a.txt", "a\\n")
     z.writestr("agents/count/files/b.txt", "b\\n")
 data = bytearray(open(sys.argv[1], "rb").read())
@@ -370,8 +370,8 @@ open(sys.argv[1], "wb").write(data)
   python(
     `import sys, zipfile
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
-    z.writestr("openbot-import.json", sys.argv[2])
-    z.writestr("agents/broken/files/text.txt", "OpenBot " * 10000)
+    z.writestr("codebot-import.json", sys.argv[2])
+    z.writestr("agents/broken/files/text.txt", "CodeBot " * 10000)
     z.writestr("agents/broken/files/ok.txt", "ok\\n")
 info = zipfile.ZipFile(sys.argv[1]).getinfo("agents/broken/files/text.txt")
 with open(sys.argv[1], "r+b") as f:

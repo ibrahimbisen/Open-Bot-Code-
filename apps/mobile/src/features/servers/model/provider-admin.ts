@@ -1,4 +1,4 @@
-import { providerCliSource } from "@openbot/contracts/cli-version";
+import { providerCliSource } from "@codebot/contracts/cli-version";
 import {
   type AcpRegistryEntry,
   type AcpRegistryInstallInput,
@@ -46,68 +46,68 @@ import {
   type SaveCustomProviderInput,
   type SignInRelayStatus,
   type UpdateCustomProviderInput,
-} from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { ACP_REGISTRY_CAPABILITY, ACP_REGISTRY_ROUTES } from "@openbot/contracts/team-protocol/acp-registry-v1";
-import { ANTIGRAVITY_CODE_SIGN_IN_CAPABILITY } from "@openbot/contracts/team-protocol/antigravity-code-sign-in-v1";
-import { CACHE_EXPIRY_COMPACTION_CAPABILITY } from "@openbot/contracts/team-protocol/cache-expiry-compaction-v1";
-import { CLAUDE_API_KEY_CAPABILITY } from "@openbot/contracts/team-protocol/claude-api-key-v1";
-import { CLAUDE_COMPACT_WINDOW_CAPABILITY } from "@openbot/contracts/team-protocol/claude-compact-window-v1";
-import { CODEX_API_KEY_CAPABILITY } from "@openbot/contracts/team-protocol/codex-api-key-v1";
-import { CUSTOM_AGENTS_CAPABILITY } from "@openbot/contracts/team-protocol/custom-agents-v1";
+} from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { ACP_REGISTRY_CAPABILITY, ACP_REGISTRY_ROUTES } from "@codebot/contracts/team-protocol/acp-registry-v1";
+import { ANTIGRAVITY_CODE_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/antigravity-code-sign-in-v1";
+import { CACHE_EXPIRY_COMPACTION_CAPABILITY } from "@codebot/contracts/team-protocol/cache-expiry-compaction-v1";
+import { CLAUDE_API_KEY_CAPABILITY } from "@codebot/contracts/team-protocol/claude-api-key-v1";
+import { CLAUDE_COMPACT_WINDOW_CAPABILITY } from "@codebot/contracts/team-protocol/claude-compact-window-v1";
+import { CODEX_API_KEY_CAPABILITY } from "@codebot/contracts/team-protocol/codex-api-key-v1";
+import { CUSTOM_AGENTS_CAPABILITY } from "@codebot/contracts/team-protocol/custom-agents-v1";
 import {
   CUSTOM_PROVIDER_EDIT_CAPABILITY,
   CUSTOM_PROVIDER_EDIT_ROUTES,
-} from "@openbot/contracts/team-protocol/custom-provider-edit-v1";
+} from "@codebot/contracts/team-protocol/custom-provider-edit-v1";
 import {
   CUSTOM_PROVIDER_HARNESS_CAPABILITY,
   CUSTOM_PROVIDER_HARNESS_ROUTES,
-} from "@openbot/contracts/team-protocol/custom-provider-harness-v1";
-import { LIVE_VOICE_ACCOUNT_CAPABILITY } from "@openbot/contracts/team-protocol/live-voice-account-v1";
-import { MISTRAL_CODE_SIGN_IN_CAPABILITY } from "@openbot/contracts/team-protocol/mistral-code-sign-in-v1";
-import { MODEL_VISIBILITY_CAPABILITY } from "@openbot/contracts/team-protocol/model-visibility-v1";
+} from "@codebot/contracts/team-protocol/custom-provider-harness-v1";
+import { LIVE_VOICE_ACCOUNT_CAPABILITY } from "@codebot/contracts/team-protocol/live-voice-account-v1";
+import { MISTRAL_CODE_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/mistral-code-sign-in-v1";
+import { MODEL_VISIBILITY_CAPABILITY } from "@codebot/contracts/team-protocol/model-visibility-v1";
 import {
   PROMPT_CACHE_TTL_CAPABILITY,
   PROMPT_CACHE_TTL_PI_CAPABILITY,
-} from "@openbot/contracts/team-protocol/prompt-cache-ttl-v1";
-import { PROVIDER_ACCOUNT_CODE_CAPABILITY } from "@openbot/contracts/team-protocol/provider-account-code-v1";
-import { PROVIDER_ACCOUNT_KEYS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-account-keys-v1";
-import { PROVIDER_ACCOUNT_POOL_CAPABILITY } from "@openbot/contracts/team-protocol/provider-account-pool-v1";
-import { providerAccountRelay } from "@openbot/contracts/team-protocol/provider-account-relays";
-import { PROVIDER_ACCOUNTS_CAPABILITY } from "@openbot/contracts/team-protocol/provider-accounts-v1";
-import { PROVIDER_DEFAULT_CAPABILITY } from "@openbot/contracts/team-protocol/provider-default-v1";
-import { PROVIDER_ENVIRONMENT_CAPABILITY } from "@openbot/contracts/team-protocol/provider-environment-v1";
-import { providerSignInRelay } from "@openbot/contracts/team-protocol/provider-sign-in-relays";
-import { PROVIDER_SIGN_OUT_CAPABILITY } from "@openbot/contracts/team-protocol/provider-sign-out-v1";
-import { PROVIDER_USAGE_RESET_CAPABILITY } from "@openbot/contracts/team-protocol/provider-usage-reset-v1";
+} from "@codebot/contracts/team-protocol/prompt-cache-ttl-v1";
+import { PROVIDER_ACCOUNT_CODE_CAPABILITY } from "@codebot/contracts/team-protocol/provider-account-code-v1";
+import { PROVIDER_ACCOUNT_KEYS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-account-keys-v1";
+import { PROVIDER_ACCOUNT_POOL_CAPABILITY } from "@codebot/contracts/team-protocol/provider-account-pool-v1";
+import { providerAccountRelay } from "@codebot/contracts/team-protocol/provider-account-relays";
+import { PROVIDER_ACCOUNTS_CAPABILITY } from "@codebot/contracts/team-protocol/provider-accounts-v1";
+import { PROVIDER_DEFAULT_CAPABILITY } from "@codebot/contracts/team-protocol/provider-default-v1";
+import { PROVIDER_ENVIRONMENT_CAPABILITY } from "@codebot/contracts/team-protocol/provider-environment-v1";
+import { providerSignInRelay } from "@codebot/contracts/team-protocol/provider-sign-in-relays";
+import { PROVIDER_SIGN_OUT_CAPABILITY } from "@codebot/contracts/team-protocol/provider-sign-out-v1";
+import { PROVIDER_USAGE_RESET_CAPABILITY } from "@codebot/contracts/team-protocol/provider-usage-reset-v1";
 import {
   PROVIDERS_ADMIN_CODE_SIGN_IN_PROVIDERS,
   PROVIDERS_ADMIN_ROUTES,
-} from "@openbot/contracts/team-protocol/providers-v1";
+} from "@codebot/contracts/team-protocol/providers-v1";
 import {
   PROVIDERS_RUNTIMES_V2_CAPABILITY,
   PROVIDERS_RUNTIMES_V2_ROUTES,
-} from "@openbot/contracts/team-protocol/providers-v2";
+} from "@codebot/contracts/team-protocol/providers-v2";
 import {
   PROVIDERS_SIGN_IN_V3_CAPABILITY,
   PROVIDERS_SIGN_IN_V3_PROVIDERS,
   PROVIDERS_SIGN_IN_V3_ROUTES,
-} from "@openbot/contracts/team-protocol/providers-v3";
+} from "@codebot/contracts/team-protocol/providers-v3";
 import {
   PROVIDERS_V4_CAPABILITY,
   PROVIDERS_V4_ROUTES,
   PROVIDERS_V4_RUNTIME_PROVIDERS,
   PROVIDERS_V4_SIGN_IN_PROVIDERS,
-} from "@openbot/contracts/team-protocol/providers-v4";
+} from "@codebot/contracts/team-protocol/providers-v4";
 import {
   PROVIDERS_V5_CAPABILITY,
   PROVIDERS_V5_ROUTES,
   PROVIDERS_V5_RUNTIME_PROVIDERS,
-} from "@openbot/contracts/team-protocol/providers-v5";
-import { PROVIDERS_V8_CAPABILITY, PROVIDERS_V8_ROUTES } from "@openbot/contracts/team-protocol/providers-v8";
-import { SIGN_IN_RELAY_PROVIDERS } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+} from "@codebot/contracts/team-protocol/providers-v5";
+import { PROVIDERS_V8_CAPABILITY, PROVIDERS_V8_ROUTES } from "@codebot/contracts/team-protocol/providers-v8";
+import { SIGN_IN_RELAY_PROVIDERS } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import {
   cancelProviderAccountCodeLogin,
   cancelProviderCodeLogin,
@@ -157,8 +157,8 @@ import {
   submitProviderAccountCodeLogin,
   submitProviderCodeLogin,
   updateCustomProvider,
-} from "@openbot/team-client/team-admin-requests";
-import type { TeamApiRequest } from "@openbot/team-client/team-api-requests";
+} from "@codebot/team-client/team-admin-requests";
+import type { TeamApiRequest } from "@codebot/team-client/team-api-requests";
 import { runTeamRequest } from "@/features/workspace/model/team-request";
 import { currentText } from "@/shared/lib/text";
 

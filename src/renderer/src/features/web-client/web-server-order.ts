@@ -5,7 +5,7 @@ type ServerOrderStorage = Pick<Storage, "getItem" | "setItem">;
 const serverOrderSchema = z.array(z.string().trim().min(1));
 
 function serverOrderKey(accountId: string): string {
-  return `openbot.web.server-order:${accountId}`;
+  return `codebot.web.server-order:${accountId}`;
 }
 
 export function readWebServerOrder(accountId: string, storage: ServerOrderStorage = window.localStorage): string[] {

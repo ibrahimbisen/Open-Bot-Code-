@@ -2,7 +2,7 @@
   --agent-dock-strip-near: 0;
 
   position: fixed;
-  z-index: calc(var(--openbot-layer-dropdown) - 1);
+  z-index: calc(var(--codebot-layer-dropdown) - 1);
   top: 50%;
   right: 0;
   width: calc(var(--agent-dock-strip-width) + 22px * var(--agent-dock-strip-near));
@@ -13,21 +13,21 @@
   padding: 0;
   overflow: hidden;
   border: 0;
-  border-radius: var(--openbot-radius-pill) 0 0 var(--openbot-radius-pill);
-  background: var(--window-solid-frame, var(--openbot-bg-frame));
+  border-radius: var(--codebot-radius-pill) 0 0 var(--codebot-radius-pill);
+  background: var(--window-solid-frame, var(--codebot-bg-frame));
   opacity: 0;
   pointer-events: none;
   transform: translateY(-50%);
   transition:
-    width var(--openbot-duration-fast) var(--openbot-ease-out),
-    height var(--openbot-duration-fast) var(--openbot-ease-out),
-    opacity var(--openbot-duration-fast) var(--openbot-ease-out) var(--openbot-duration-fast);
+    width var(--codebot-duration-fast) var(--codebot-ease-out),
+    height var(--codebot-duration-fast) var(--codebot-ease-out),
+    opacity var(--codebot-duration-fast) var(--codebot-ease-out) var(--codebot-duration-fast);
 }
 
 .agent-dock-strip[data-side="left"] {
   right: auto;
   left: 0;
-  border-radius: 0 var(--openbot-radius-pill) var(--openbot-radius-pill) 0;
+  border-radius: 0 var(--codebot-radius-pill) var(--codebot-radius-pill) 0;
 }
 
 .agent-dock-strip[data-shown] {
@@ -35,17 +35,17 @@
   pointer-events: auto;
   cursor: pointer;
   transition:
-    width var(--openbot-duration-fast) var(--openbot-ease-out),
-    height var(--openbot-duration-fast) var(--openbot-ease-out),
-    opacity var(--openbot-duration-fast) var(--openbot-ease-out) var(--openbot-duration-normal);
+    width var(--codebot-duration-fast) var(--codebot-ease-out),
+    height var(--codebot-duration-fast) var(--codebot-ease-out),
+    opacity var(--codebot-duration-fast) var(--codebot-ease-out) var(--codebot-duration-normal);
 }
 
 .agent-dock-strip:hover:not(:disabled):not([data-disabled]) {
-  background: var(--window-solid-frame, var(--openbot-bg-frame));
+  background: var(--window-solid-frame, var(--codebot-bg-frame));
 }
 
 .agent-dock-strip:focus-visible {
-  outline: 1px solid var(--openbot-border-focus);
+  outline: 1px solid var(--codebot-border-focus);
   outline-offset: 1px;
   box-shadow: none;
 }
@@ -54,11 +54,11 @@
   position: absolute;
   inset: 0 -4px;
   content: "";
-  background: var(--openbot-wash-front);
+  background: var(--codebot-wash-front);
   opacity: 0;
   pointer-events: none;
   translate: 0 110%;
-  transition: opacity var(--openbot-duration-normal) var(--openbot-ease-out);
+  transition: opacity var(--codebot-duration-normal) var(--codebot-ease-out);
 }
 
 .agent-dock-strip[data-asks]::after {

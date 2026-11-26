@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export type SidebarTabsByServer = Record<string, string[]>;
 
-const SIDEBAR_TABS_STORAGE_KEY = "openbot:sidebar-tabs:v1";
+const SIDEBAR_TABS_STORAGE_KEY = "codebot:sidebar-tabs:v1";
 
 type SidebarTabsStorage = Pick<Storage, "getItem" | "setItem">;
 

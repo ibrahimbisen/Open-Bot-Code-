@@ -1,11 +1,11 @@
 import { readFileSync } from "node:fs";
 import { isDeepStrictEqual } from "node:util";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 
 const MAY_DIFFER = new Set(["main", "compatibility_date", "compatibility_flags", "configPath", "userConfigPath"]);
 
-const logger = createOpenBotLogger("check-preview-worker-config");
+const logger = createCodeBotLogger("check-preview-worker-config");
 const [trustedPath, untrustedPath] = process.argv.slice(2);
 if (!trustedPath || !untrustedPath) {
   throw new Error(

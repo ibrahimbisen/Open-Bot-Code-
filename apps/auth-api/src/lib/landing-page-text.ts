@@ -1,9 +1,9 @@
-import type { ProviderLogoVariant } from "@openbot/brand";
-import type { AppTranslate } from "@openbot/i18n";
+import type { ProviderLogoVariant } from "@codebot/brand";
+import type { AppTranslate } from "@codebot/i18n";
 import { DOWNLOAD_PLATFORMS, type DownloadPlatform } from "./download-platforms";
 import { ADA, CLAUDE_CODE, type LandingFeatureId, type LandingTeamsOfferId, LINUS } from "./landing-content";
 import type { LandingQuestion } from "./landing-faq";
-import { OPENBOT_LINKS } from "./landing-links";
+import { CODEBOT_LINKS } from "./landing-links";
 import type { MobilePlatform } from "./mobile-apps";
 import { referralPageText } from "./referral-page-text";
 import { slot, slotted } from "./text-slots";
@@ -91,7 +91,7 @@ function questions(t: AppTranslate): LandingQuestion[] {
     {
       question: t("sitePage.landing.faq.source.question"),
       answer: t("sitePage.landing.faq.source.answer"),
-      link: { label: t("sitePage.landing.faq.source.link"), href: OPENBOT_LINKS.repository },
+      link: { label: t("sitePage.landing.faq.source.link"), href: CODEBOT_LINKS.repository },
     },
     { question: t("sitePage.landing.faq.plans.question"), answer: t("sitePage.landing.faq.plans.answer") },
     { question: t("sitePage.landing.faq.models.question"), answer: t("sitePage.landing.faq.models.answer") },

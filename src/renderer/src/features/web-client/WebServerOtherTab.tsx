@@ -1,6 +1,6 @@
-import { AppLogo } from "@openbot/brand";
-import { Button, Heading, Text } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { AppLogo } from "@codebot/brand";
+import { Button, Heading, Text } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 
 export function WebServerOtherTab(props: { name: string; busy: boolean; onUseHere: () => void }) {
   const { t } = useText();

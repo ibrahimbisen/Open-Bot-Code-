@@ -1,4 +1,4 @@
-import { workflowGitHubTriggerRepositoryFields } from "@openbot/contracts/ipc";
+import { workflowGitHubTriggerRepositoryFields } from "@codebot/contracts/ipc";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import Check from "lucide-react-native/icons/check";
@@ -34,7 +34,7 @@ const withValues = (options: readonly string[], values: readonly string[]) => [
 export function WorkflowGitHubPickScreen() {
   const { t } = useText();
   const { theme } = useUniwind();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const params = useLocalSearchParams<{ nodeId: string; field: string }>();
   const field: GitHubPickField = FIELDS.find((name) => name === params.field) ?? "repository";
   const draft = useWorkflowDraft((state) => state.draft);

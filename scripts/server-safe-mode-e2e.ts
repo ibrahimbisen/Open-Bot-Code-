@@ -25,7 +25,7 @@ import {
   TEAM_PROTOCOL_VERSION_HEADER,
   type TeamProtocolV2Json,
   teamProtocolV2AuthenticationTranscript,
-} from "@openbot/contracts/team-protocol";
+} from "@codebot/contracts/team-protocol";
 import {
   expandTeamCapabilitiesV10,
   readTeamHostCompatibility,
@@ -35,26 +35,26 @@ import {
   teamCapabilityHeaders,
   teamCapabilityLists,
   teamWebRtcClientProtocol,
-} from "@openbot/contracts/team-protocol/current";
+} from "@codebot/contracts/team-protocol/current";
 import {
   decodeServerSafeModeReason,
   SERVER_SAFE_MODE_CAPABILITY,
   SERVER_SAFE_MODE_ROUTES,
   type ServerSafeModeReason,
-} from "@openbot/contracts/team-protocol/server-safe-mode-v1";
-import { teamSideRouteCodec } from "@openbot/contracts/team-protocol/side-routes";
-import { TEAM_PROTOCOL_V9 } from "@openbot/contracts/team-protocol/v9";
-import { encodeTeamProtocolV9WebRtcHttpRequest } from "@openbot/contracts/team-protocol/v9-webrtc-adapter";
-import { decodeTeamProtocolSupportV10, TEAM_PROTOCOL_V10 } from "@openbot/contracts/team-protocol/v10";
-import { decodeTeamProtocolV10WebRtcHttpResponse } from "@openbot/contracts/team-protocol/v10-webrtc-adapter";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/server-safe-mode-v1";
+import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes";
+import { TEAM_PROTOCOL_V9 } from "@codebot/contracts/team-protocol/v9";
+import { encodeTeamProtocolV9WebRtcHttpRequest } from "@codebot/contracts/team-protocol/v9-webrtc-adapter";
+import { decodeTeamProtocolSupportV10, TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { decodeTeamProtocolV10WebRtcHttpResponse } from "@codebot/contracts/team-protocol/v10-webrtc-adapter";
+import { sourceText } from "@codebot/i18n/source";
 import { plugin } from "bun";
 import { Effect, Exit } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import type { TeamWebRtcChannel } from "../src/main/team-webrtc-bridge";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/server-safe-mode-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/server-safe-mode-e2e");
 const HOST_VERSION = "0.0.0-e2e";
 const CLIENT_VERSION = "0.74.0";
 const STEP_DEADLINE_MS = 30_000;
@@ -278,8 +278,8 @@ function upgradeStatus(port: number, token: string): Promise<string> {
 }
 
 const HOSTING = resolve(import.meta.dirname, "hosting");
-const START = "systemctl start --no-block openbot.service";
-const STOP = "systemctl stop openbot.service";
+const START = "systemctl start --no-block codebot.service";
+const STOP = "systemctl stop codebot.service";
 
 interface CheckCase {
   name: string;
@@ -362,7 +362,7 @@ function runCheck(entry: CheckCase): { calls: string[]; exitCode: number } {
       "check",
     ].join("\n");
     const result = Bun.spawnSync(
-      ["bash", "-c", script, "server-safe-mode-e2e", join(HOSTING, "openbot-hosted-update"), stamp, calls, marker],
+      ["bash", "-c", script, "server-safe-mode-e2e", join(HOSTING, "codebot-hosted-update"), stamp, calls, marker],
       {
         env: {
           PATH: process.env.PATH ?? "",
@@ -378,7 +378,7 @@ function runCheck(entry: CheckCase): { calls: string[]; exitCode: number } {
   }
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-server-safe-mode-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-server-safe-mode-"));
 const userData = join(root, "user-data");
 const reason: ServerSafeModeReason = { reason: "newer_database", appVersion: HOST_VERSION, haltedAt: Date.now() };
 report.reason = reason;
@@ -387,7 +387,7 @@ const peers: InstanceType<typeof TeamWebRtcHostPeer>[] = [];
 
 try {
   mkdirSync(userData, { recursive: true });
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   await runCauseEffect(database.initialize());
   const databaseFile = relative(userData, database.path);
   database.close();
@@ -773,7 +773,7 @@ try {
     return { files: Object.keys(after).sort() };
   });
 
-  await step("openbot-hosted-update check: the marker of the safe mode starts OpenBot again", async () => {
+  await step("codebot-hosted-update check: the marker of the safe mode starts CodeBot again", async () => {
     const results: { name: string; calls: string[]; exitCode: number }[] = [];
     for (const entry of CHECK_CASES) {
       const result = runCheck(entry);

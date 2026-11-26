@@ -5,8 +5,8 @@ import {
   type ChatVisualAppearance,
   chatVisualAppTheme,
   chatVisualFrameUrl,
-} from "@openbot/contracts/chat-visual";
-import { redactText } from "@openbot/logging";
+} from "@codebot/contracts/chat-visual";
+import { redactText } from "@codebot/logging";
 import { Effect, Semaphore } from "effect";
 import { BrowserWindow, session as electronSession, type NativeImage, type Session } from "electron";
 import {
@@ -18,7 +18,7 @@ import {
 import { chatVisualResponse } from "./chat-visual-protocol";
 import { usesX11Windows } from "./linux-wayland-output";
 
-const PREVIEW_PARTITION = "openbot-visual-preview";
+const PREVIEW_PARTITION = "codebot-visual-preview";
 const PREVIEW_HOST = "preview";
 const PREVIEW_TIMEOUT = "20 seconds";
 const INITIAL_HEIGHT = 600;
@@ -64,7 +64,7 @@ export class ChatVisualPreviewer implements ChatVisualPreviewHost {
   #previewSession(): Session {
     if (this.#session) return this.#session;
     const session = electronSession.fromPartition(PREVIEW_PARTITION);
-    session.protocol.handle("openbot-visual", (request) => {
+    session.protocol.handle("codebot-visual", (request) => {
       const url = new URL(request.url);
       const page = url.hostname === PREVIEW_HOST ? this.#pages.get(url.pathname.slice(1)) : undefined;
       return page
@@ -109,7 +109,7 @@ export class ChatVisualPreviewer implements ChatVisualPreviewHost {
             this.#pages.set(token, { bytes: new TextEncoder().encode(request.html), appearance: request.appearance });
             return { token, window };
           },
-          catch: () => previewFailure("OpenBot could not open a window to draw the page."),
+          catch: () => previewFailure("CodeBot could not open a window to draw the page."),
         }),
         ({ token, window }) => this.#draw(window, token, request),
         ({ token, window }) =>
@@ -138,7 +138,7 @@ export class ChatVisualPreviewer implements ChatVisualPreviewHost {
     contents.on("will-navigate", (event) => event.preventDefault());
     contents.on("will-redirect", (event) => event.preventDefault());
     const theme = chatVisualAppTheme(request.appearance);
-    const pageUrl = `openbot-visual://${PREVIEW_HOST}/${token}`;
+    const pageUrl = `codebot-visual://${PREVIEW_HOST}/${token}`;
     const load = (url: string) =>
       Effect.gen(function* () {
         yield* Effect.tryPromise({
@@ -171,7 +171,7 @@ export class ChatVisualPreviewer implements ChatVisualPreviewHost {
       }
       const image = yield* Effect.tryPromise({
         try: () => contents.capturePage(),
-        catch: () => previewFailure("OpenBot could not capture the page."),
+        catch: () => previewFailure("CodeBot could not capture the page."),
       });
       const imageUrl = yield* Effect.try({
         try: () => boundedPng(image),

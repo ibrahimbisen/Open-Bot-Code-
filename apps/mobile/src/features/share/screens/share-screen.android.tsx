@@ -1,4 +1,4 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { useNavigation } from "expo-router";
 import { StackActions } from "expo-router/react-navigation";
 import { Typography } from "heroui-native";
@@ -249,7 +249,7 @@ function ServerHeader({
   onToggle: (server: MobileServer, open: boolean) => void;
 }) {
   const { format } = useText();
-  const muted = String(useCSSVariable("--openbot-text-grouped-secondary"));
+  const muted = String(useCSSVariable("--codebot-text-grouped-secondary"));
   const Chevron = open ? ChevronDown : ChevronRight;
   return (
     <SettingsRow

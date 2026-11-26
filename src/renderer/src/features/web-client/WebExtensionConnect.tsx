@@ -1,8 +1,8 @@
-import { AppLogo } from "@openbot/brand";
-import type { AppVariant } from "@openbot/contracts/ipc";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { Button } from "@openbot/ui";
-import { useText } from "@openbot/ui/text";
+import { AppLogo } from "@codebot/brand";
+import type { AppVariant } from "@codebot/contracts/ipc";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { Button } from "@codebot/ui";
+import { useText } from "@codebot/ui/text";
 import { createSignal, onSettled, Show } from "solid-js";
 import {
   answerExtensionTab,
@@ -13,7 +13,7 @@ import {
   rememberExtensionAllowed,
 } from "./web-extension-connect";
 
-const PRODUCT_NAME = "OpenBot";
+const PRODUCT_NAME = "CodeBot";
 
 interface WebExtensionConnectProps {
   variant: AppVariant;
@@ -37,7 +37,7 @@ export function WebExtensionConnect(props: WebExtensionConnectProps) {
         method: "POST",
         credentials: "same-origin",
         cache: "no-store",
-        headers: { "Content-Type": "application/json", "X-OpenBot-Browser": "1" },
+        headers: { "Content-Type": "application/json", "X-CodeBot-Browser": "1" },
         body: JSON.stringify({ extensionId: props.request.extensionId, clientChallenge: props.request.challenge }),
       });
       const value = await response.json().catch(() => null);

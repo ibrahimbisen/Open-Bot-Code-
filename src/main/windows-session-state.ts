@@ -1,8 +1,8 @@
 import { createRequire } from "node:module";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type * as Koffi from "koffi";
 
-const logger = createOpenBotLogger("windows-session-state");
+const logger = createCodeBotLogger("windows-session-state");
 const requireModule = createRequire(import.meta.url);
 
 const WTS_CURRENT_SESSION = 0xffff_ffff;

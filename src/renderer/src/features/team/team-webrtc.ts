@@ -1,16 +1,16 @@
-import { isString } from "@openbot/contracts/runtime-values";
-import { decodeSignalServerMessage } from "@openbot/contracts/signal-protocol/decode";
+import { isString } from "@codebot/contracts/runtime-values";
+import { decodeSignalServerMessage } from "@codebot/contracts/signal-protocol/decode";
 import {
   SIGNAL_NO_READY_CLOSE_CODE,
   SIGNAL_PROTOCOL_VERSION,
   SIGNAL_TURN_REFRESH_INTERVAL_MS,
   type SignalClientMessage,
   type SignalServerMessage,
-} from "@openbot/contracts/signal-protocol/messages";
-import { BROWSER_EGRESS_CHANNEL } from "@openbot/contracts/team-protocol/browser-egress-v1";
-import { TEAM_PROTOCOL_V2_CHANNELS } from "@openbot/contracts/team-protocol/v2";
-import { sourceText } from "@openbot/i18n/source";
-import { iceCandidateRoute } from "@openbot/team-client/ice-diagnostics";
+} from "@codebot/contracts/signal-protocol/messages";
+import { BROWSER_EGRESS_CHANNEL } from "@codebot/contracts/team-protocol/browser-egress-v1";
+import { TEAM_PROTOCOL_V2_CHANNELS } from "@codebot/contracts/team-protocol/v2";
+import { sourceText } from "@codebot/i18n/source";
+import { iceCandidateRoute } from "@codebot/team-client/ice-diagnostics";
 import { encodeTeamWebRtcPayload, TeamWebRtcPayloadDecoder } from "./team-webrtc-framing";
 import { isPrivateNetworkCandidate, privateNetworkSdp } from "./team-webrtc-private-network";
 
@@ -132,7 +132,7 @@ const maximumIceRestarts = 10;
 let mainPort: MessagePort;
 
 const receiveMainPort = (event: MessageEvent): void => {
-  if (event.source !== window || event.data !== "openbot-team-webrtc-port") return;
+  if (event.source !== window || event.data !== "codebot-team-webrtc-port") return;
   const port = event.ports[0];
   if (!port) throw new Error("The Team WebRTC message port is missing.");
   window.removeEventListener("message", receiveMainPort);
@@ -700,7 +700,7 @@ function createDataChannel(
   connection: RTCPeerConnection,
   channel: "rpc" | "events" | "files" | "desktop",
 ): void {
-  const label = channel === "desktop" ? "openbot.remote-desktop.signal.v1" : TEAM_PROTOCOL_V2_CHANNELS[channel];
+  const label = channel === "desktop" ? "codebot.remote-desktop.signal.v1" : TEAM_PROTOCOL_V2_CHANNELS[channel];
   bindDataChannel(state, channel, connection.createDataChannel(label, { ordered: true }));
 }
 
@@ -1122,7 +1122,7 @@ function channelKind(label: string): "rpc" | "events" | "files" | "desktop" | nu
   if (label === TEAM_PROTOCOL_V2_CHANNELS.rpc) return "rpc";
   if (label === TEAM_PROTOCOL_V2_CHANNELS.events) return "events";
   if (label === TEAM_PROTOCOL_V2_CHANNELS.files) return "files";
-  if (label === "openbot.remote-desktop.signal.v1") return "desktop";
+  if (label === "codebot.remote-desktop.signal.v1") return "desktop";
   return null;
 }
 

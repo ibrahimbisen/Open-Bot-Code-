@@ -1,6 +1,6 @@
-import type { AgentProviderId } from "@openbot/contracts/agent-providers";
-import type { QueueDeliveryStatus, WithdrawFeedbackStatus } from "@openbot/contracts/ipc";
-import type { AppFormat, AppTextKey, AppTranslate } from "@openbot/i18n";
+import type { AgentProviderId } from "@codebot/contracts/agent-providers";
+import type { QueueDeliveryStatus, WithdrawFeedbackStatus } from "@codebot/contracts/ipc";
+import type { AppFormat, AppTextKey, AppTranslate } from "@codebot/i18n";
 import {
   Button,
   CalendarClock,
@@ -20,7 +20,7 @@ import {
   Puzzle,
   TriangleAlert,
   X,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import { Dynamic } from "@solidjs/web";
 import { createSignal, createUniqueId, For, Show, untrack } from "solid-js";

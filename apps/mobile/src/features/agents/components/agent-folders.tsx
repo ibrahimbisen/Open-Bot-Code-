@@ -12,7 +12,7 @@ import {
   agentPermissionLevel,
   agentProviderDescriptor,
   typedHostFolder,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { keepPreviousData, type UseQueryResult, useQuery, useQueryClient } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, Typography } from "heroui-native";

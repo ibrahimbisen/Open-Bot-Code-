@@ -12,8 +12,8 @@ import {
   type WorkflowMediaKind,
   type WorkflowMediaMode,
   type WorkflowMediaOption,
-} from "@openbot/contracts/ipc";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 
 export interface HiggsfieldPlan {
   referenceRole: string | null;

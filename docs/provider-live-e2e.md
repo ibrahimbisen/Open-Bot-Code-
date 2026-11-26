@@ -12,8 +12,8 @@ The runner is the [e2e](https://e2e.com/docs) framework. The files are in `scrip
 1. `scripts/provider-live-e2e.ts` starts the local account service when this worktree has none,
    builds the desktop app, and runs `e2e run`.
 2. e2e starts one app for each provider (`start-app.ts`), all at the same time. Each app has its own
-   profile in `.openbot-build/provider-live/<provider>/profile` and its own DevTools port.
-   `OPENBOT_PROVIDER_LIVE_DIR` names another folder for the profiles; CI sets it to a folder outside
+   profile in `.codebot-build/provider-live/<provider>/profile` and its own DevTools port.
+   `CODEBOT_PROVIDER_LIVE_DIR` names another folder for the profiles; CI sets it to a folder outside
    the checkout, because other jobs of the runner clean the checkout.
 3. `provider-answers.e2e.ts` runs one time for each app. It waits until the provider is available,
    makes an agent on a low-cost model (`LIVE_MODELS` in `targets.ts`), types a message in the chat,
@@ -38,11 +38,11 @@ card:
 - the tag of the latest release of a public GitHub repository;
 - the Bitcoin price from CoinGecko;
 - the subject of the newest email in Gmail. This task runs only when
-  `~/.config/openbot/test-google-account.storage.json` exists. The test sets that session of the
-  team's test Google account in the OpenBot browser first. On a Mac where the Mail app is set up, an
+  `~/.config/codebot/test-google-account.storage.json` exists. The test sets that session of the
+  team's test Google account in the CodeBot browser first. On a Mac where the Mail app is set up, an
   agent can also read the developer's own mail, and the report then holds it.
 
-Each task writes `.openbot-build/provider-live-bench/<provider>-<task>.json` with the steps of the
+Each task writes `.codebot-build/provider-live-bench/<provider>-<task>.json` with the steps of the
 turn, the answer, the connect cards and the expected value. A turn that waits for the user, such as
 for a sign-in card, stops after 90 seconds with no change.
 
@@ -67,7 +67,7 @@ e2e has no Electron engine. Its web engine connects to a browser on a DevTools a
 (`web({ connect })`), and three parts of `start-app.ts` make the app fit it:
 
 - **HTTP renderer.** The web engine opens only `http(s)` addresses, and the built app loads
-  `openbot-app://`. The script serves `out/renderer` on loopback and gives the address to the app in
+  `codebot-app://`. The script serves `out/renderer` on loopback and gives the address to the app in
   `ELECTRON_RENDERER_URL`. The main process and the preload are the built ones.
 - **Only the main window.** Electron cannot make a browser context, so the config sets
   `reconnectEndpoint`; e2e then uses the first page of the app. The app also has helper windows (the
@@ -81,9 +81,9 @@ they need a model of their own.
 
 ## The account
 
-The app needs an account. It starts with `OPENBOT_DEV_REMOTE_ROLE=host`, which signs a development
+The app needs an account. It starts with `CODEBOT_DEV_REMOTE_ROLE=host`, which signs a development
 account in on the local account service, as `bun run dev` does. Each app names its own account in
-`OPENBOT_DEV_HOST_EMAIL` (`openbot-live-<provider>@example.com`), and the profile stays between runs
+`CODEBOT_DEV_HOST_EMAIL` (`codebot-live-<provider>@example.com`), and the profile stays between runs
 because it holds that sign-in: the account service permits 5 sign-ins for one email in 15 minutes,
 with a wait of up to 60 seconds between two.
 

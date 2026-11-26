@@ -1,6 +1,6 @@
-import type { ConversationMessage, ConversationSnapshot } from "@openbot/contracts/ipc";
-import { mergeImageGenerationInfo } from "@openbot/contracts/ipc";
-import { type DynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import type { ConversationMessage, ConversationSnapshot } from "@codebot/contracts/ipc";
+import { mergeImageGenerationInfo } from "@codebot/contracts/ipc";
+import { type DynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { keptUnsavedImage } from "./conversation-writer";
 import { objectValue } from "./database-rows";
 import { currentConversationMessage } from "./legacy-conversation-message";

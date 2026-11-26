@@ -13,9 +13,9 @@ import {
   DEFAULT_PROVIDER_ACCOUNT_ID,
   defaultProviderModel,
   MODEL_SWITCH_ITEM_TYPES,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -24,8 +24,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/backup-model-failover-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-backup-model-failover-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/backup-model-failover-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-backup-model-failover-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const turnLog = join(root, "claude-turns.jsonl");
@@ -48,9 +48,9 @@ const REFUSED_REQUEST =
 const MODEL_NOT_OFFERED = `There's an issue with the selected model (${PRIMARY}). It may not exist or you may not have access to it.`;
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = join(home, ".claude");
-process.env.OPENBOT_CODEX_PATH = codexExecutable;
+process.env.CODEBOT_CODEX_PATH = codexExecutable;
 process.env.CODEX_HOME = join(home, ".codex");
 mkdirSync(home, { recursive: true });
 
@@ -60,7 +60,7 @@ const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { CodexAppServerClient } = await import("../src/backend/app-server-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { importProviderHistory } = await import("../src/backend/provider-history-import");
 
 const STAND_IN_CLAUDE = `#!/usr/bin/env node
@@ -558,7 +558,7 @@ interface CodexTurn {
 await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
 await writeFile(codexExecutable, STAND_IN_CODEX, { mode: 0o755 });
 failing([]);
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const clients: ClaudeStandIn[] = [];
 const events: AgentEvent[] = [];
 
@@ -627,7 +627,7 @@ async function callTool(tool: string, args: unknown) {
   client.emit("request", {
     id,
     method: "item/tool/call",
-    params: { threadId: thread, turnId: "e2e-turn", callId: id, namespace: "openbot", tool, arguments: args },
+    params: { threadId: thread, turnId: "e2e-turn", callId: id, namespace: "codebot", tool, arguments: args },
   });
   const answer = await waitFor(`${tool} to answer`, () => client.toolAnswers.get(id));
   assert.ok(isDynamicRecord(answer) && Array.isArray(answer.contentItems), `${tool} answers with content.`);

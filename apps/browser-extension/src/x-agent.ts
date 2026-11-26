@@ -1,10 +1,10 @@
-import { X_AGENT_LISTING_ID, type XReplyPayload } from "@openbot/contracts/browser-extension-x";
-import { isQueuedMessageReceipt } from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_TASKS_CAPABILITY } from "@openbot/contracts/team-protocol/agent-tasks-v1";
-import { runTeamEffect } from "@openbot/team-client";
-import { startAgentTask, type TeamApiRequest } from "@openbot/team-client/team-api-requests";
-import { currentText } from "@openbot/ui/text";
+import { X_AGENT_LISTING_ID, type XReplyPayload } from "@codebot/contracts/browser-extension-x";
+import { isQueuedMessageReceipt } from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
+import { runTeamEffect } from "@codebot/team-client";
+import { startAgentTask, type TeamApiRequest } from "@codebot/team-client/team-api-requests";
+import { currentText } from "@codebot/ui/text";
 import { saveXChat } from "./extension-storage";
 import { decodeAgents } from "./workspace";
 import type { XLabels, XSendResult, XStatusAnswer } from "./x-messages";

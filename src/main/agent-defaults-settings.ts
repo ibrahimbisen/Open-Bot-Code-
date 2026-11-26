@@ -4,8 +4,8 @@ import {
   agentDefaultChoiceValues,
   type SetAgentDefaultChoiceInput,
   type UpdateAgentDefaultsInput,
-} from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Schema, Semaphore } from "effect";
 import type { AgentService } from "../backend/agent-service";
 import { causeHelpers } from "../backend/effect-boundary";

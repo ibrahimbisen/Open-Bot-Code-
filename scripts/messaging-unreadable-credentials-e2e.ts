@@ -7,9 +7,9 @@ import { Effect } from "effect";
 import { z } from "zod";
 import { MessagingCredentialStore } from "../src/main/messaging-credential-store";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/messaging-unreadable-credentials-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-messaging-unreadable-"));
-const path = join(root, "openbot-messaging-credentials-v1.json");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/messaging-unreadable-credentials-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-messaging-unreadable-"));
+const path = join(root, "codebot-messaging-credentials-v1.json");
 
 const savedKeyring = {
   encrypt: (value: string) => Buffer.from(value, "utf8").reverse(),

@@ -4,10 +4,10 @@ import type {
   BrowserLiveViewDialog,
   BrowserLiveViewEvent,
   BrowserTab,
-} from "@openbot/contracts/ipc";
-import { BrowserDock } from "@openbot/ui/features/browser/BrowserDock";
-import BrowserFullView from "@openbot/ui/features/browser/BrowserFullView";
-import type { BrowserViewRuntime } from "@openbot/ui/features/browser/BrowserLiveView";
+} from "@codebot/contracts/ipc";
+import { BrowserDock } from "@codebot/ui/features/browser/BrowserDock";
+import BrowserFullView from "@codebot/ui/features/browser/BrowserFullView";
+import type { BrowserViewRuntime } from "@codebot/ui/features/browser/BrowserLiveView";
 import { createSignal } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -17,7 +17,7 @@ const chief = requireFixture(STORY_AGENTS[0], "Story agent 0");
 
 const tab: BrowserTab = {
   id: "tab-docs",
-  title: "OpenBot documentation",
+  title: "CodeBot documentation",
   url: "https://openbot.run/docs",
   loading: false,
   ownerThreadId: "thread-chief",
@@ -59,8 +59,8 @@ const meta = {
     tabs,
     activeTab: tab,
     history: [
-      { url: "https://openbot.run/docs", title: "OpenBot documentation", visits: 3 },
-      { url: "https://openbot.run/docs/browser", title: "Browser · OpenBot documentation", visits: 1 },
+      { url: "https://openbot.run/docs", title: "CodeBot documentation", visits: 3 },
+      { url: "https://openbot.run/docs/browser", title: "Browser · CodeBot documentation", visits: 1 },
     ],
     canReopen: true,
     controlForTab: () => undefined,
@@ -193,7 +193,7 @@ export const AgentNeedsApproval: Story = {
             turnId: "turn-1",
             kind: "command",
             command: "curl -s https://trattoria-roma.example/api/slots > slots.json",
-            cwd: "~/OpenBot/Agents/chief",
+            cwd: "~/CodeBot/Agents/chief",
             reason: "Save the free tables to a file in the workspace.",
             grantRoot: null,
             permissions: null,
@@ -276,9 +276,9 @@ function remoteLiveViewRuntime(
       const context = canvas.getContext("2d");
       const theme = getComputedStyle(document.documentElement);
       if (context) {
-        context.fillStyle = theme.getPropertyValue("--openbot-bg-surface");
+        context.fillStyle = theme.getPropertyValue("--codebot-bg-surface");
         context.fillRect(0, 0, width, height);
-        context.fillStyle = theme.getPropertyValue("--openbot-text-primary");
+        context.fillStyle = theme.getPropertyValue("--codebot-text-primary");
         context.font = "48px sans-serif";
         context.fillText("Page on the host", 64, 128);
       }

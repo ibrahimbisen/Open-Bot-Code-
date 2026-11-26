@@ -14,9 +14,9 @@ description: "Turn a design frame into a spec a developer can build from: compon
 ## Inputs
 
 1. **The frame.** In this order:
-   - The tools of an installed Figma plugin; `openbot.tool_search` does not list them. Read the frame, its
+   - The tools of an installed Figma plugin; `codebot.tool_search` does not list them. Read the frame, its
      components, styles and variables.
-   - A signed-in Figma tab in `openbot_browser`. Call `openbot_browser.list_tabs` first. Read values from the
+   - A signed-in Figma tab in `codebot_browser`. Call `codebot_browser.list_tabs` first. Read values from the
      inspect panel.
    - A screenshot or export. Values from an image are estimates. Mark them "est."
    - If no Figma plugin is installed and Figma would help, suggest one with `suggest_marketplace_app`.

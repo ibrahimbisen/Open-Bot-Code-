@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { isDynamicRecord, isNumber, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { chromium, type Page } from "playwright-core";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/web-client-conversation-trim-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/web-client-conversation-trim-e2e");
 const STORY = "web-workspace--long-conversation";
 const SCROLL_ROUNDS = 40;
 
@@ -22,18 +22,18 @@ function check(name: string, passed: boolean, detail?: unknown) {
 const report: { passed: boolean; checks: typeof checks; error?: string } = { passed: false, checks };
 
 async function idle(page: Page): Promise<void> {
-  await page.evaluate("globalThis.openbotWebBench.idle()");
+  await page.evaluate("globalThis.codebotWebBench.idle()");
 }
 
 async function olderReads(page: Page): Promise<number> {
-  const calls = await page.evaluate("({ ...globalThis.openbotWebBench.calls })");
+  const calls = await page.evaluate("({ ...globalThis.codebotWebBench.calls })");
   assert.ok(isDynamicRecord(calls), "The bench call counts are not an object.");
   const value = calls.conversationOlder;
   return isNumber(value) ? value : 0;
 }
 
 async function agentName(page: Page, key: "open" | "other"): Promise<string> {
-  const name = await page.evaluate(`globalThis.openbotWebBench.agentNames.${key}`);
+  const name = await page.evaluate(`globalThis.codebotWebBench.agentNames.${key}`);
   assert.ok(isString(name) && name.length > 0, `The bench has no ${key} agent name.`);
   return name;
 }
@@ -79,8 +79,8 @@ const browser = await chromium.launch(
 try {
   const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   await page.goto(`${storybook}/iframe.html?id=${STORY}&viewMode=story`);
-  await page.waitForFunction("globalThis.openbotWebBench !== undefined", undefined, { timeout: 300_000 });
-  await page.evaluate("globalThis.openbotWebBench.ready");
+  await page.waitForFunction("globalThis.codebotWebBench !== undefined", undefined, { timeout: 300_000 });
+  await page.evaluate("globalThis.codebotWebBench.ready");
   await page.getByText("Question 158:").first().waitFor({ timeout: 120_000 });
   await idle(page);
   const open = await agentName(page, "open");
@@ -96,7 +96,7 @@ try {
   await page.getByText("Question 158:").first().waitFor({ timeout: 60_000 });
   await idle(page);
 
-  await page.evaluate("globalThis.openbotWebBench.resetCalls()");
+  await page.evaluate("globalThis.codebotWebBench.resetCalls()");
   const second = await scrollToTop(page, ["Question 100:"]);
   const secondOlderReads = await olderReads(page);
   mkdirSync(OUT, { recursive: true });
@@ -109,7 +109,7 @@ try {
 
   await openAgent(page, other);
   await openAgent(page, open);
-  await page.evaluate('globalThis.openbotWebBench.append(60, "Later")');
+  await page.evaluate('globalThis.codebotWebBench.append(60, "Later")');
   await openAgent(page, other);
   await page.getByText("Later 59:").first().waitFor({ timeout: 60_000 });
   await idle(page);

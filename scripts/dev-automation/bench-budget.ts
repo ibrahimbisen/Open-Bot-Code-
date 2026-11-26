@@ -1,4 +1,4 @@
-import { isDynamicRecord, isNumber } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isNumber } from "@codebot/contracts/runtime-values";
 import type { BenchReport } from "./bench-stats";
 
 export type PerfBudget = Map<string, Map<string, number>>;

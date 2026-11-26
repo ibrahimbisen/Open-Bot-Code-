@@ -1,4 +1,4 @@
-import type { ChannelSummary, SidebarSection } from "@openbot/contracts/ipc";
+import type { ChannelSummary, SidebarSection } from "@codebot/contracts/ipc";
 import { createMemo, createStore } from "solid-js";
 import { currentText } from "../../../text";
 import type { SidebarProps } from "../sidebar-types";

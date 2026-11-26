@@ -5,15 +5,15 @@ import {
   relayCallbackQuery,
   relayPageUrl,
   type SignInRelayStatus,
-} from "@openbot/contracts/ipc";
-import { SIGN_IN_RELAY_ROUTES } from "@openbot/contracts/team-protocol/sign-in-relay-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import { SIGN_IN_RELAY_ROUTES } from "@codebot/contracts/team-protocol/sign-in-relay-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Deferred, Duration, Effect } from "effect";
 import type { LanguageService } from "./language-service";
 import { type LoopbackCallbackServer, startLoopbackCallbackServer } from "./loopback-callback-server";
 
-const logger = createOpenBotLogger("sign-in-relay-client");
+const logger = createCodeBotLogger("sign-in-relay-client");
 
 const POLL = Duration.seconds(1);
 
@@ -203,7 +203,7 @@ export class SignInRelayClient {
       Effect.as(true),
       Effect.catch((error) =>
         Effect.sync(() => {
-          logger.warn("OpenBot could not open a relayed sign-in page:", toLogValue(error.cause));
+          logger.warn("CodeBot could not open a relayed sign-in page:", toLogValue(error.cause));
           return false;
         }),
       ),
@@ -237,7 +237,7 @@ export class SignInRelayClient {
           : { status: 400, message: "error.mcp.redirectNoSignIn" };
       },
     }).catch((error: unknown) => {
-      logger.warn("OpenBot could not listen for a relayed sign-in, so only a pasted address works:", toLogValue(error));
+      logger.warn("CodeBot could not listen for a relayed sign-in, so only a pasted address works:", toLogValue(error));
       return null;
     });
     const shared: SharedListener = { id, users: 0, server };

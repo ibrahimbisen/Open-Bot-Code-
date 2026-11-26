@@ -9,8 +9,8 @@ import {
   type WorkflowPortType,
   workflowGraphProblem,
   workflowLoopEdges,
-} from "@openbot/contracts/ipc";
-import { isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/ipc";
+import { isOneOf } from "@codebot/contracts/runtime-values";
 import { ADD_KEYS, type AddKey, addFields, addKind, isFeederKind } from "./workflow-add";
 import { edgeTypeFor, linkType } from "./workflow-ports";
 

@@ -16,7 +16,7 @@ function invalid(): never {
 }
 
 export function withChannelTaskWaits(path: string, projected: TeamProtocolV2Json, source: unknown): TeamProtocolV2Json {
-  if (new URL(path, "http://openbot.invalid").pathname !== CHANNEL_ROUTES.read) return projected;
+  if (new URL(path, "http://codebot.invalid").pathname !== CHANNEL_ROUTES.read) return projected;
   if (!isDynamicRecord(projected) || !isDynamicRecord(source) || source.waits === undefined) return projected;
   const tasks = Array.isArray(projected.tasks)
     ? projected.tasks.flatMap((task) => (isDynamicRecord(task) ? [task] : []))

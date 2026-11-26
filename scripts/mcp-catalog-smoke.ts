@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import {
   discoverAuthorizationServerMetadata,
   discoverOAuthProtectedResourceMetadata,
@@ -9,15 +10,14 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import type { FetchLike, Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { LATEST_PROTOCOL_VERSION } from "@modelcontextprotocol/sdk/types.js";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { secureOAuthFetch } from "../src/backend/mcp-oauth-provider";
 import { hostAddresses, isPublicAddress, systemAddressLookup } from "../src/backend/network-address";
 import { defaultPluginCatalogPaths, loadPluginCatalog, type PluginApp } from "./build-plugin-catalog";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/mcp-catalog-smoke");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/mcp-catalog-smoke");
 const TIMEOUT_MS = 20_000;
-const logger = createOpenBotLogger("mcp-catalog-smoke");
+const logger = createCodeBotLogger("mcp-catalog-smoke");
 
 type Kind = "open" | "link";
 
@@ -107,7 +107,7 @@ function asTransport(inner: {
 }
 
 async function checkOpen(url: string, requests: string[]): Promise<OpenDetails> {
-  const client = new Client({ name: "openbot-catalog-smoke", version: "1.0.0" });
+  const client = new Client({ name: "codebot-catalog-smoke", version: "1.0.0" });
   const transport = asTransport(
     new StreamableHTTPClientTransport(new URL(url), {
       fetch: recording((input, init) => fetch(input, init), url, requests),
@@ -138,7 +138,7 @@ async function checkLink(url: string, requests: string[]): Promise<LinkDetails> 
       params: {
         protocolVersion: LATEST_PROTOCOL_VERSION,
         capabilities: {},
-        clientInfo: { name: "openbot-catalog-smoke", version: "1.0.0" },
+        clientInfo: { name: "codebot-catalog-smoke", version: "1.0.0" },
       },
     }),
     signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -226,7 +226,7 @@ async function main(): Promise<void> {
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   logger.info("Wrote the catalog report.", {
-    path: ".openbot-build/mcp-catalog-smoke/report.json",
+    path: ".codebot-build/mcp-catalog-smoke/report.json",
     checked: checked.length,
     skipped: skipped.length,
     failed,

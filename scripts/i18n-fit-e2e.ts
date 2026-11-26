@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { type AppTextKey, en, TRANSLATED_LOCALES, type TranslatedLocale, translateFor } from "@openbot/i18n";
-import { createOpenBotLogger } from "@openbot/logging";
+import { type AppTextKey, en, TRANSLATED_LOCALES, type TranslatedLocale, translateFor } from "@codebot/i18n";
+import { createCodeBotLogger } from "@codebot/logging";
 import { type Browser, chromium, type Page } from "playwright-core";
 import { type FitProblem, measureFit } from "./i18n-fit-probe";
 
-const logger = createOpenBotLogger("i18n-fit-e2e");
+const logger = createCodeBotLogger("i18n-fit-e2e");
 
 interface StorybookPreview {
   onUpdateGlobals(update: { globals: { locale: string } }): Promise<void>;
@@ -24,7 +24,7 @@ function option(name: string): string | undefined {
 
 const outName = option("out") ?? "i18n-fit";
 assert.match(outName, /^\w[\w.-]*$/, "--out takes a folder name, not a path.");
-const OUT = resolve(import.meta.dirname, "../.openbot-build", outName);
+const OUT = resolve(import.meta.dirname, "../.codebot-build", outName);
 const SHOTS = resolve(OUT, "screenshots");
 
 const storybook = option("storybook")?.replace(/\/$/, "");

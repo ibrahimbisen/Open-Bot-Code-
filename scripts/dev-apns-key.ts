@@ -1,11 +1,11 @@
 import { readFileSync } from "node:fs";
 import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createCodeBotLogger } from "@codebot/logging";
 import { set } from "@dotenvx/dotenvx";
-import { createOpenBotLogger } from "@openbot/logging";
 import { setDevelopmentOverrides } from "./development-secrets";
 
-const logger = createOpenBotLogger("dev-apns-key");
+const logger = createCodeBotLogger("dev-apns-key");
 
 if (import.meta.main) {
   const args = process.argv.slice(2);

@@ -9,9 +9,9 @@ import {
   fitAgentTaskTitle,
   isChannelMessage,
   isConversationMessage,
-} from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import type {
   AgentHistoryTransferFailed,

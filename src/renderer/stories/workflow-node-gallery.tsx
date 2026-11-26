@@ -7,9 +7,9 @@ import {
   type WfnResult,
   type WfnRunStatus,
   type WorkflowAgentProgress,
-} from "@openbot/ui/features/workflows/workflow-board";
-import type { WorkflowGitHubCanvas } from "@openbot/ui/features/workflows/workflow-github";
-import type { WorkflowCatalogs } from "@openbot/ui/features/workflows/workflow-model";
+} from "@codebot/ui/features/workflows/workflow-board";
+import type { WorkflowGitHubCanvas } from "@codebot/ui/features/workflows/workflow-github";
+import type { WorkflowCatalogs } from "@codebot/ui/features/workflows/workflow-model";
 import type { JSX } from "@solidjs/web";
 import { createStore, onCleanup, untrack } from "solid-js";
 import { STEP_ANSWER, STORY_CATALOGS, STORY_IMAGES, STORY_SEED } from "./workflow-story-data";

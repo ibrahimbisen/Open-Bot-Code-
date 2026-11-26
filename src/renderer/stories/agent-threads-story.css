@@ -14,6 +14,6 @@
   position: relative;
   width: 360px;
   height: 100vh;
-  border-inline-start: 1px solid var(--openbot-border);
+  border-inline-start: 1px solid var(--codebot-border);
   margin-inline-start: auto;
 }

@@ -1,8 +1,8 @@
 import { randomBytes } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { dirname, join } from "node:path";
-import type { HostKeyHandover } from "@openbot/contracts/host-key-handover";
-import { createInviteUrl, selfHostedApiOrigin } from "@openbot/contracts/invite-links";
+import type { HostKeyHandover } from "@codebot/contracts/host-key-handover";
+import { createInviteUrl, selfHostedApiOrigin } from "@codebot/contracts/invite-links";
 import type {
   AgentEvent,
   AgentTaskReadState,
@@ -40,7 +40,7 @@ import type {
   TeamSessionSummary,
   UpdateHostIdentityInput,
   UpdateTeamMemberInput,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   type AgentAccessLevel,
   agentAccessRank,
@@ -52,12 +52,12 @@ import {
   type ServerAuditName,
   SIGNED_OUT_CHANNEL_MEMBER_ID,
   type WorkflowGraph,
-} from "@openbot/contracts/ipc";
-import type { LiveActivityRelayPush } from "@openbot/contracts/live-activity-relay";
-import type { ServerAppearance } from "@openbot/contracts/team-protocol/host-appearance-v1";
-import type { HostRestartState } from "@openbot/contracts/team-protocol/host-update-v1";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import type { LiveActivityRelayPush } from "@codebot/contracts/live-activity-relay";
+import type { ServerAppearance } from "@codebot/contracts/team-protocol/host-appearance-v1";
+import type { HostRestartState } from "@codebot/contracts/team-protocol/host-update-v1";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import {
   Cause,
   Context,
@@ -113,9 +113,9 @@ import type { TeamWebRtcBridge } from "./team-webrtc-bridge";
 import { TeamWebRtcHostGateway } from "./team-webrtc-host-gateway";
 import { windowsSessionDisconnected } from "./windows-session-state";
 
-export const DEVELOPMENT_REMOTE_CLIENT_USERNAME = "openbot-dev-client";
+export const DEVELOPMENT_REMOTE_CLIENT_USERNAME = "codebot-dev-client";
 
-const logger = createOpenBotLogger("host-service");
+const logger = createCodeBotLogger("host-service");
 const REMOTE_CONTROL_QUESTION_MS = 30_000;
 
 interface HostEvents {
@@ -308,7 +308,7 @@ class HostApiRuntime extends Context.Service<
   {
     start(): Effect.Effect<number, RemoteWorkflowError>;
   }
->()("openbot/main/HostApiRuntime") {}
+>()("codebot/main/HostApiRuntime") {}
 
 export class HostService extends EventEmitter<HostEvents> {
   readonly #options: Required<Pick<HostServiceOptions, "localDevelopmentHost">> &
@@ -349,10 +349,10 @@ export class HostService extends EventEmitter<HostEvents> {
       platform: options.platform ?? normalizeRemoteDesktopPlatform(process.platform),
       unattended: options.unattended ?? false,
       runtimePaths: options.remoteDesktopRuntimePaths ?? null,
-      runtimeStateDirectory: options.remoteDesktopStateDirectory ?? ".openbot-remote-desktop",
+      runtimeStateDirectory: options.remoteDesktopStateDirectory ?? ".codebot-remote-desktop",
       getRuntimeCredentials:
         options.getRemoteDesktopRuntimeCredentials ??
-        (() => Effect.succeed({ username: "openbot", password: "development-runtime-not-for-release" })),
+        (() => Effect.succeed({ username: "codebot", password: "development-runtime-not-for-release" })),
       ...(options.getRemoteDesktopDisplays ? { getDisplays: options.getRemoteDesktopDisplays } : {}),
       getDisplayScreenOrigin: options.getRemoteDesktopDisplayScreenOrigin,
       sessionDisconnected: windowsSessionDisconnected,
@@ -567,7 +567,7 @@ export class HostService extends EventEmitter<HostEvents> {
           bridge: options.teamWebRtcBridge,
           store: options.store,
           appVersion: options.appVersion,
-          transferDirectory: join(options.logDirectory ?? ".openbot-remote", "transfers"),
+          transferDirectory: join(options.logDirectory ?? ".codebot-remote", "transfers"),
           renewSignal: (hostId, failedSignalUrl) =>
             Effect.gen(function* () {
               const issueTicket = options.issueRemoteHostTicket;
@@ -1002,7 +1002,7 @@ export class HostService extends EventEmitter<HostEvents> {
   readonly register = Effect.fn("HostService.register")(function* (this: HostService) {
     if (this.#boundAccountId !== this.#signedInAccountId()) return;
     if (!this.#options.store.configured) {
-      yield* this.configure({ serverName: "OpenBot" }, true);
+      yield* this.configure({ serverName: "CodeBot" }, true);
       return;
     }
     const register = this.#options.registerRemoteHost;
@@ -1172,7 +1172,7 @@ export class HostService extends EventEmitter<HostEvents> {
     function* (this: HostService): Effect.fn.Return<HostStatus, RemoteWorkflowError, HostApiRuntime> {
       if (!this.#options.store.configured)
         return yield* new RemoteWorkflowError({
-          cause: new Error("Name this OpenBot before starting local development."),
+          cause: new Error("Name this CodeBot before starting local development."),
         });
       if (this.#status.phase === "online") return this.getStatus();
       const apiPort = yield* HostApiRuntime.use((api) => api.start());
@@ -1256,7 +1256,7 @@ export class HostService extends EventEmitter<HostEvents> {
       if (!identity || !apiUrl)
         return yield* new RemoteWorkflowError({ cause: new Error("The local development host is not ready.") });
       const username = DEVELOPMENT_REMOTE_CLIENT_USERNAME;
-      const password = "openbot-local-development-client";
+      const password = "codebot-local-development-client";
       const authenticated = yield* this.#options.store.login(username, password).pipe(
         Effect.catch(() =>
           Effect.gen({ self: this }, function* () {
@@ -2166,7 +2166,7 @@ function initialHostStatus(identity: TeamIdentity | null, unattended: boolean): 
 }
 
 function serverLogoUrl(version: string): string {
-  return `openbot-server-logo://local/logo?v=${encodeURIComponent(version)}`;
+  return `codebot-server-logo://local/logo?v=${encodeURIComponent(version)}`;
 }
 
 function normalizeRemoteDesktopPlatform(platform: NodeJS.Platform): "darwin" | "win32" | "linux" {

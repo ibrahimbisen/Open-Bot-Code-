@@ -19,9 +19,9 @@ import {
 } from "./ipc-workflows";
 import { type DynamicRecord, isDynamicRecord, isOneOf, isString } from "./runtime-values";
 
-export const WORKFLOW_FILE_FORMAT = "openbot.workflow";
+export const WORKFLOW_FILE_FORMAT = "codebot.workflow";
 export const WORKFLOW_FILE_VERSION = 1;
-export const WORKFLOW_FILE_EXTENSION = "openbot-workflow.json";
+export const WORKFLOW_FILE_EXTENSION = "codebot-workflow.json";
 export const WORKFLOW_FILE_MAX_BYTES =
   2 * INPUT_LIMITS.workflowGraphBytes + Math.ceil((ATTACHMENT_LIMITS.totalBytes * 4) / 3) + 64 * 1024;
 

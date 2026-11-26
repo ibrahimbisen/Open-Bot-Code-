@@ -1,6 +1,6 @@
-import { Bubble, BubbleContent, type BubbleVariant } from "@openbot/ui";
-import type { AgentMessage } from "@openbot/ui/data";
-import { MessageBody } from "@openbot/ui/features/conversation/MessageRendering";
+import { Bubble, BubbleContent, type BubbleVariant } from "@codebot/ui";
+import type { AgentMessage } from "@codebot/ui/data";
+import { MessageBody } from "@codebot/ui/features/conversation/MessageRendering";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import { STORY_AGENTS, STORY_ATTACHMENTS, STORY_REPLY_QUOTE_BODY } from "./fixtures";
@@ -197,8 +197,8 @@ export const WorkspaceFileLinks: Story = {
       body: [
         "Pliki:",
         "",
-        "- [page.tsx](/Users/test/OpenBot/Agents/builder/app/page.tsx)",
-        "- [globals.css](/Users/test/OpenBot/Agents/builder/app/globals.css)",
+        "- [page.tsx](/Users/test/CodeBot/Agents/builder/app/page.tsx)",
+        "- [globals.css](/Users/test/CodeBot/Agents/builder/app/globals.css)",
         "",
         "Gotowe: [otwórz tablicę Lutra w HTML](< lutra-brand-board.html >)",
       ].join("\n"),
@@ -338,7 +338,7 @@ export const DataTableLongText: Story = {
         "| --- | --- | --- | --- |",
         "| Migrate | Research | Copy every workspace to the new layout, then confirm that each conversation still opens with its attachments and its full history. | https://openbot.run/docs/guides/workspaces/migrating-an-existing-workspace-to-the-new-layout |",
         "| Verify | Review | Run the checks on a clean profile and compare the results with the previous release before you approve the change. | `bun run test:desktop -- src/renderer/src/features/conversation/MessageRendering.test.tsx` |",
-        "| Ship | Release | Write the release notes. | `OPENBOT_RELEASE_CHANNEL_OVERRIDE_FOR_INTERNAL_TESTING_ONLY` |",
+        "| Ship | Release | Write the release notes. | `CODEBOT_RELEASE_CHANNEL_OVERRIDE_FOR_INTERNAL_TESTING_ONLY` |",
       ].join("\n"),
       status: undefined,
       attachments: [],
@@ -404,8 +404,8 @@ const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
 const BANNER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200"><rect width="480" height="200" fill="#f6a62f"/><circle cx="100" cy="100" r="60" fill="#12141a"/><rect x="190" y="80" width="240" height="40" rx="8" fill="#12141a"/></svg>`;
 const svgDataUrl = (svg: string) => `data:image/svg+xml;base64,${btoa(svg)}`;
 const NAMED_IMAGES: Record<string, string> = {
-  "/data/OpenBot/Shared/demo/maczeciarz/logo.svg": svgDataUrl(LOGO_SVG),
-  "/data/OpenBot/Shared/demo/maczeciarz/banner.svg": svgDataUrl(BANNER_SVG),
+  "/data/CodeBot/Shared/demo/maczeciarz/logo.svg": svgDataUrl(LOGO_SVG),
+  "/data/CodeBot/Shared/demo/maczeciarz/banner.svg": svgDataUrl(BANNER_SVG),
 };
 const loadNamedImage: Parameters<typeof MessageBody>[0]["loadImageFile"] = (file) =>
   Promise.resolve(NAMED_IMAGES[file.path] ?? null);
@@ -415,7 +415,7 @@ export const NamedImageFile: Story = {
     message: {
       ...message,
       id: "named-image-file",
-      body: "Done. Logo delivered to Boss:\n\n- `/data/OpenBot/Shared/demo/maczeciarz/logo.svg` — machete icon and wordmark.",
+      body: "Done. Logo delivered to Boss:\n\n- `/data/CodeBot/Shared/demo/maczeciarz/logo.svg` — machete icon and wordmark.",
       attachments: [],
     },
     onOpenSharedFile: fn(),
@@ -429,7 +429,7 @@ export const NamedImageFiles: Story = {
     message: {
       ...message,
       id: "named-image-files",
-      body: "Status: done\nResult: logo and banner are in the shared folder.\nEvidence: `/data/OpenBot/Shared/demo/maczeciarz/logo.svg`, `/data/OpenBot/Shared/demo/maczeciarz/banner.svg`, `/data/OpenBot/Shared/demo/maczeciarz/missing.png`",
+      body: "Status: done\nResult: logo and banner are in the shared folder.\nEvidence: `/data/CodeBot/Shared/demo/maczeciarz/logo.svg`, `/data/CodeBot/Shared/demo/maczeciarz/banner.svg`, `/data/CodeBot/Shared/demo/maczeciarz/missing.png`",
       attachments: [],
     },
     onOpenSharedFile: fn(),

@@ -1,5 +1,5 @@
-import { avatarHeadColor } from "@openbot/brand/bloub-avatar";
-import type { ConversationMessage } from "@openbot/contracts/ipc";
+import { avatarHeadColor } from "@codebot/brand/bloub-avatar";
+import type { ConversationMessage } from "@codebot/contracts/ipc";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { useIsFocused, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";

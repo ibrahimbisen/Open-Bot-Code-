@@ -1,5 +1,5 @@
-import { sameCustomProviderOrigin, type VoiceServerModels, type VoiceServerRoutes } from "@openbot/contracts/ipc";
-import { fitVoiceServerRoutes, shortVoiceServerModel } from "@openbot/contracts/voice-server";
+import { sameCustomProviderOrigin, type VoiceServerModels, type VoiceServerRoutes } from "@codebot/contracts/ipc";
+import { fitVoiceServerRoutes, shortVoiceServerModel } from "@codebot/contracts/voice-server";
 import { router } from "expo-router";
 import { usePreventRemove } from "expo-router/react-navigation";
 import { Typography } from "heroui-native";
@@ -58,7 +58,7 @@ function ChoiceRows({
   format: (value: string) => string;
   onChoose: (value: string) => void;
 }) {
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   return options.map((option) => (
     <SettingsRow
       key={option}

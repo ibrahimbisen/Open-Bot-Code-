@@ -3,8 +3,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { copyFile, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type AgentSummary } from "@openbot/contracts/ipc";
-import type { DynamicRecord } from "@openbot/contracts/runtime-values";
+import { AGENT_PROVIDERS, type AgentSummary } from "@codebot/contracts/ipc";
+import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import type { z } from "zod";
 import type {
@@ -21,8 +21,8 @@ type ProfileToolArgs = z.input<typeof updateProfileToolSchema> &
   z.input<typeof listModelsToolSchema> &
   Pick<z.input<typeof updateAgentsToolSchema>, "agentIds">;
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/agent-profile-accounts-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-profile-accounts-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/agent-profile-accounts-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-profile-accounts-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const accountsRoot = join(root, "provider-accounts");
@@ -31,7 +31,7 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
@@ -39,7 +39,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ProviderAccountStore } = await import("../src/backend/agent/provider-account-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { NO_PROVIDER_CREDENTIALS } = await import("../src/backend/provider-drivers");
 
 const CALL_MARK = "PROFILE-CALL";
@@ -119,9 +119,9 @@ const answer = (message) => {
           threadId: params.threadId,
           turnId,
           callId: "call-" + turnId,
-          namespace: "openbot",
+          namespace: "codebot",
           tool: "tool_call",
-          arguments: { name: "openbot." + __tool, arguments: args },
+          arguments: { name: "codebot." + __tool, arguments: args },
         },
       });
     }
@@ -248,12 +248,12 @@ function pass(name: string, condition: boolean, detail?: string) {
 }
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const accounts = new ProviderAccountStore(join(userData, "openbot-provider-accounts-v1.json"), accountsRoot);
+const accounts = new ProviderAccountStore(join(userData, "codebot-provider-accounts-v1.json"), accountsRoot);
 await runCauseEffect(accounts.load());
 const second = await runCauseEffect(accounts.create("codex"));
 assert.ok(second, "The second Codex account was not created.");
 await runCauseEffect(accounts.rename("codex", second.id, "Team B"));
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const agents = new AgentService({
@@ -658,7 +658,7 @@ try {
   await runCauseEffect(accounts.setPool("codex", null));
 
   await runCauseEffect(accounts.setLiveVoiceAccount(second.id));
-  const reloaded = new ProviderAccountStore(join(userData, "openbot-provider-accounts-v1.json"), accountsRoot);
+  const reloaded = new ProviderAccountStore(join(userData, "codebot-provider-accounts-v1.json"), accountsRoot);
   await runCauseEffect(reloaded.load());
   const saved = reloaded.liveVoiceAccount();
   const removable = await runCauseEffect(accounts.create("codex"));

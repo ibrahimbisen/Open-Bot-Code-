@@ -1,14 +1,14 @@
-import { type CreditMediaModel, type CreditMediaPrice, creditMediaPrice } from "@openbot/contracts/credit-media";
+import { type CreditMediaModel, type CreditMediaPrice, creditMediaPrice } from "@codebot/contracts/credit-media";
 import {
   CREDIT_MEDIA_KINDS,
   CREDIT_MODEL_COSTS,
   CREDIT_MODEL_MAKERS,
   type CreditMediaKind,
   type CreditModelMaker,
-} from "@openbot/contracts/credits";
-import { CreditIcon } from "@openbot/ui/features/credits/CreditIcon";
-import { creditModelMakerNamed, MakerLogo } from "@openbot/ui/features/credits/MakerLogo";
-import { Search } from "@openbot/ui/icons";
+} from "@codebot/contracts/credits";
+import { CreditIcon } from "@codebot/ui/features/credits/CreditIcon";
+import { creditModelMakerNamed, MakerLogo } from "@codebot/ui/features/credits/MakerLogo";
+import { Search } from "@codebot/ui/icons";
 import { createMemo, createSignal, For, onSettled, Show } from "solid-js";
 import { landingAnalytics } from "../../lib/analytics";
 import { CREDITS_ROUTE } from "../../lib/credits-page";

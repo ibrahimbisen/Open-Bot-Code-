@@ -5,7 +5,7 @@ import { useText } from "@/shared/lib/text";
 
 export default function TurnThinkingLayout() {
   const { t } = useText();
-  const background = String(useCSSVariable("--openbot-bg-sheet"));
+  const background = String(useCSSVariable("--codebot-bg-sheet"));
   return (
     <Stack screenOptions={sheetStackOptions(background)}>
       <Stack.Screen name="index" options={{ title: t("mobile.app.route.thinking") }} />

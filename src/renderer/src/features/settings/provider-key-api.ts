@@ -1,17 +1,17 @@
-import type { ProviderAdminDesktopApi } from "@openbot/contracts/ipc";
-import type { ProviderKeyApi } from "@openbot/ui/features/settings/OpenCodeKeyDialog";
+import type { ProviderAdminDesktopApi } from "@codebot/contracts/ipc";
+import type { ProviderKeyApi } from "@codebot/ui/features/settings/OpenCodeKeyDialog";
 
 export const providerKeyApi: ProviderKeyApi = {
-  getProviderApiKeyState: (provider) => window.openbot.getProviderApiKeyState(provider),
-  setProviderApiKey: (input) => window.openbot.setProviderApiKey(input),
-  clearProviderApiKey: (provider) => window.openbot.clearProviderApiKey(provider),
-  openExternal: (destination) => window.openbot.openExternal(destination),
+  getProviderApiKeyState: (provider) => window.codebot.getProviderApiKeyState(provider),
+  setProviderApiKey: (input) => window.codebot.setProviderApiKey(input),
+  clearProviderApiKey: (provider) => window.codebot.clearProviderApiKey(provider),
+  openExternal: (destination) => window.codebot.openExternal(destination),
 };
 
 export function hostProviderKeyApi(
   admin: () => ProviderAdminDesktopApi,
   serverId: string,
-  openExternal: ProviderKeyApi["openExternal"] = (destination) => window.openbot.openExternal(destination),
+  openExternal: ProviderKeyApi["openExternal"] = (destination) => window.codebot.openExternal(destination),
 ): ProviderKeyApi {
   return {
     onHost: true,

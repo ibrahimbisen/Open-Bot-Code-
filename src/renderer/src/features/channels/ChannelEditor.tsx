@@ -1,5 +1,5 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { Channel, ChannelBrowser, ChannelDraft, ChannelIcon } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { Channel, ChannelBrowser, ChannelDraft, ChannelIcon } from "@codebot/contracts/ipc";
 import {
   Button,
   buttonVariants,
@@ -18,18 +18,18 @@ import {
   SelectValue,
   SwitchField,
   Tooltip,
-} from "@openbot/ui";
-import { createScrollFades } from "@openbot/ui/components/createScrollFades";
-import { ResizableTextarea } from "@openbot/ui/components/ResizableTextarea";
-import { SettingsField, SettingsLinkGroup, SettingsLinkRow } from "@openbot/ui/components/SettingsPanel";
-import { AgentAvatar } from "@openbot/ui/features/agents/AgentAvatar";
-import { InstructionsLimit, instructionsTooLong } from "@openbot/ui/features/agents/InstructionsLimit";
-import { ChannelContextActions } from "@openbot/ui/features/channels/ChannelContextActions";
-import { type ChannelFolders, ChannelFoldersRow } from "@openbot/ui/features/channels/ChannelFolders";
-import { ChannelMemberRow } from "@openbot/ui/features/channels/ChannelMemberRow";
-import { ChannelPictureEditor } from "@openbot/ui/features/channels/ChannelPictureEditor";
-import { ContentExitMotion } from "@openbot/ui/menu-motion";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { createScrollFades } from "@codebot/ui/components/createScrollFades";
+import { ResizableTextarea } from "@codebot/ui/components/ResizableTextarea";
+import { SettingsField, SettingsLinkGroup, SettingsLinkRow } from "@codebot/ui/components/SettingsPanel";
+import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
+import { InstructionsLimit, instructionsTooLong } from "@codebot/ui/features/agents/InstructionsLimit";
+import { ChannelContextActions } from "@codebot/ui/features/channels/ChannelContextActions";
+import { type ChannelFolders, ChannelFoldersRow } from "@codebot/ui/features/channels/ChannelFolders";
+import { ChannelMemberRow } from "@codebot/ui/features/channels/ChannelMemberRow";
+import { ChannelPictureEditor } from "@codebot/ui/features/channels/ChannelPictureEditor";
+import { ContentExitMotion } from "@codebot/ui/menu-motion";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, createStore, For, onSettled, Show } from "solid-js";
 import { useChannels } from "./channels-context";
 import { matchesAgentSearch, toggleChannelMember } from "./channels-draft";

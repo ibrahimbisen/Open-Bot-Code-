@@ -5,7 +5,7 @@ import {
   type ProviderRuntimeSnapshot,
   type TeamPresenceSnapshot,
   type UpdateStatus,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 
 const NO_PROVIDER_RUNTIME = { phase: "not-downloaded", progress: null, message: null, version: null } as const;
 

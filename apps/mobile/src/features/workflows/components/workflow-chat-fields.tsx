@@ -11,7 +11,7 @@ import {
   WORKFLOW_TELEGRAM_TRIGGER_CHAT,
   WORKFLOW_UNLINKED_CONNECTION,
   type WorkflowNode,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { Typography } from "heroui-native";
 import { useUniwind } from "uniwind";
 import { SettingsNote, SettingsRow, SettingsSection } from "@/features/settings/components/settings-content";

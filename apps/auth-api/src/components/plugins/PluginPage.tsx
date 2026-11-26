@@ -1,4 +1,4 @@
-import { createOpenBotPluginUrl, createWebAppPluginPath, pluginLinkText } from "@openbot/contracts/plugin-links";
+import { createCodeBotPluginUrl, createWebAppPluginPath, pluginLinkText } from "@codebot/contracts/plugin-links";
 import type { JSX } from "@solidjs/web";
 import { Link } from "@tanstack/solid-router";
 import { For, onSettled, Show } from "solid-js";
@@ -81,8 +81,8 @@ function PluginConnectStep(props: { step: SitePluginConnectStep; appCount: numbe
       <Show when={props.step.kind === "link"}>
         <h3 class="provider-step-title">{prefix()}Sign in</h3>
         <p class="provider-step-text">
-          Press Connect and finish the sign-in in your browser. OpenBot keeps the token on the computer that runs
-          OpenBot. You can disconnect at any time.
+          Press Connect and finish the sign-in in your browser. CodeBot keeps the token on the computer that runs
+          CodeBot. You can disconnect at any time.
         </p>
       </Show>
       <Show when={props.step.kind === "key" ? props.step : undefined}>
@@ -92,8 +92,8 @@ function PluginConnectStep(props: { step: SitePluginConnectStep; appCount: numbe
               {prefix()}Add your {step().fields.length > 1 ? "details" : step().fields[0]?.label}
             </h3>
             <p class="provider-step-text">
-              Press Connect and enter {step().fields.length > 1 ? "these values" : "this value"}. OpenBot keeps{" "}
-              {step().fields.length > 1 ? "them" : "it"} on the computer that runs OpenBot.
+              Press Connect and enter {step().fields.length > 1 ? "these values" : "this value"}. CodeBot keeps{" "}
+              {step().fields.length > 1 ? "them" : "it"} on the computer that runs CodeBot.
             </p>
             <ul class="plugin-connect-fields">
               <For each={step().fields}>
@@ -117,7 +117,7 @@ function PluginConnectStep(props: { step: SitePluginConnectStep; appCount: numbe
               {prefix()}Set up the {step().label}
             </h3>
             <p class="provider-step-text">
-              The server runs on the computer that runs OpenBot, so it needs the {step().label} first.
+              The server runs on the computer that runs CodeBot, so it needs the {step().label} first.
             </p>
             <ol class="plugin-connect-fields">
               <For each={step().steps}>{(line) => <li>{line}</li>}</For>
@@ -179,10 +179,10 @@ export function PluginPage(props: PluginPageProps) {
                 </div>
               </div>
               <PluginOpenButtons
-                href={createOpenBotPluginUrl(props.plugin.slug)}
+                href={createCodeBotPluginUrl(props.plugin.slug)}
                 browserHref={createWebAppPluginPath(props.plugin.slug)}
-                label="Open in OpenBot"
-                downloadCopy={`${props.plugin.name} installs from inside OpenBot. Get the app, then open this plugin from its Apps tab.`}
+                label="Open in CodeBot"
+                downloadCopy={`${props.plugin.name} installs from inside CodeBot. Get the app, then open this plugin from its Apps tab.`}
               />
             </div>
           </header>
@@ -212,12 +212,12 @@ export function PluginPage(props: PluginPageProps) {
               )}
             </Show>
 
-            <PluginTextSection id="plugin-connect-title" title={`How to connect ${props.plugin.name} to OpenBot`}>
+            <PluginTextSection id="plugin-connect-title" title={`How to connect ${props.plugin.name} to CodeBot`}>
               <ol class="provider-steps plugin-connect">
                 <li class="provider-step">
-                  <h3 class="provider-step-title">Open {props.plugin.name} in OpenBot</h3>
+                  <h3 class="provider-step-title">Open {props.plugin.name} in CodeBot</h3>
                   <p class="provider-step-text">
-                    Press Open in OpenBot on this page, or find {props.plugin.name} in the app's Apps tab. Get the app
+                    Press Open in CodeBot on this page, or find {props.plugin.name} in the app's Apps tab. Get the app
                     first if it is not on this computer.
                   </p>
                 </li>
@@ -227,7 +227,7 @@ export function PluginPage(props: PluginPageProps) {
                 <li class="provider-step">
                   <h3 class="provider-step-title">Give an agent a task</h3>
                   <p class="provider-step-text">
-                    {connectSteps().length === 0 ? `OpenBot asks for no sign-in or key for ${props.plugin.name}. ` : ""}
+                    {connectSteps().length === 0 ? `CodeBot asks for no sign-in or key for ${props.plugin.name}. ` : ""}
                     Ask an agent for work that needs {props.plugin.name}
                     {props.plugin.prompts.length > 0 ? ", such as one of the example prompts below" : ""}. The agent
                     uses the plugin's tools to do it.

@@ -1,10 +1,10 @@
-import { parseSaveAgentInstructionsInput } from "@openbot/contracts/ipc";
+import { parseSaveAgentInstructionsInput } from "@codebot/contracts/ipc";
 import {
   AGENT_INSTRUCTIONS_CAPABILITY,
   AGENT_INSTRUCTIONS_ROUTES,
-} from "@openbot/contracts/team-protocol/agent-instructions-v1";
-import type { TeamCurrentCapability } from "@openbot/contracts/team-protocol/current";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/team-protocol/agent-instructions-v1";
+import type { TeamCurrentCapability } from "@codebot/contracts/team-protocol/current";
+import { sourceText } from "@codebot/i18n/source";
 import type { Effect } from "effect";
 import { shell } from "electron";
 import { runCauseEffect } from "../../backend/effect-boundary";

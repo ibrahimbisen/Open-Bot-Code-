@@ -2,10 +2,10 @@ import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { EventEmitter } from "node:events";
 import { StringDecoder } from "node:string_decoder";
-import type { KeyOnlyProviderId } from "@openbot/contracts/agent-providers";
-import { type DynamicRecord, isDynamicRecord } from "@openbot/contracts/runtime-values";
-import { sourceText } from "@openbot/i18n/source";
-import { createOpenBotLogger } from "@openbot/logging";
+import type { KeyOnlyProviderId } from "@codebot/contracts/agent-providers";
+import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
+import { sourceText } from "@codebot/i18n/source";
+import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
 import { RequestTimeoutError } from "./agent-client";
 import type { SpawnTarget } from "./process-confinement";
@@ -22,7 +22,7 @@ import { stopWindowsProcessTree } from "./windows-process-tree";
 const PI_RECORD_LIMIT_BYTES = 256 * 1024 * 1024;
 
 export const PI_REQUEST_TIMEOUT_MS = 30_000;
-const logger = createOpenBotLogger("provider-runtime");
+const logger = createCodeBotLogger("provider-runtime");
 
 function piRecord(line: string): DynamicRecord | null {
   let value: unknown;
@@ -116,7 +116,7 @@ export class PiRpc extends EventEmitter<{ record: [DynamicRecord]; diagnostic: [
           if (record) this.#record(record);
           else if (line.trim() && !skippedLine) {
             skippedLine = true;
-            logger.warn("Pi wrote a stdout line that is not an RPC record. OpenBot skips such lines.", {
+            logger.warn("Pi wrote a stdout line that is not an RPC record. CodeBot skips such lines.", {
               provider: this.provider,
               length: line.length,
             });

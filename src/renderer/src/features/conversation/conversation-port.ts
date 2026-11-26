@@ -1,9 +1,9 @@
-import type { DeleteSharedTableInput, OpenBotDesktopApi, SharedTable } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi, DeleteSharedTableInput, SharedTable } from "@codebot/contracts/ipc";
 
 export interface ConversationPort {
-  dynamicIsland: Pick<OpenBotDesktopApi["dynamicIsland"], "openBrowserTakeover">;
+  dynamicIsland: Pick<CodeBotDesktopApi["dynamicIsland"], "openBrowserTakeover">;
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     | "addPreviewPage"
     | "readAgentSessionSettings"
     | "listAgentNotificationLevels"
@@ -28,7 +28,7 @@ export interface ConversationPort {
     | "withdrawFeedback"
   >;
   browser: Pick<
-    OpenBotDesktopApi["browser"],
+    CodeBotDesktopApi["browser"],
     | "capturePreview"
     | "closeWindow"
     | "finishLocalSignIn"
@@ -40,7 +40,7 @@ export interface ConversationPort {
     | "stopLiveView"
   >;
   servers: Pick<
-    OpenBotDesktopApi["servers"],
+    CodeBotDesktopApi["servers"],
     | "listDirectThreads"
     | "markDirectRead"
     | "onDirectMessage"
@@ -49,13 +49,13 @@ export interface ConversationPort {
     | "sendDirectMessage"
     | "setDirectTyping"
   >;
-  storage: Pick<OpenBotDesktopApi["storage"], "openLocation">;
-  hostAdmin: Pick<OpenBotDesktopApi["hostAdmin"], "getAgentAccess">;
-  browserDock: Pick<OpenBotDesktopApi["browserDock"], "publishPresentation" | "onAction" | "onShown">;
+  storage: Pick<CodeBotDesktopApi["storage"], "openLocation">;
+  hostAdmin: Pick<CodeBotDesktopApi["hostAdmin"], "getAgentAccess">;
+  browserDock: Pick<CodeBotDesktopApi["browserDock"], "publishPresentation" | "onAction" | "onShown">;
 }
 
 export function conversationPort(): ConversationPort {
-  return window.openbot;
+  return window.codebot;
 }
 
 export function releaseFilePreviewPage(pageUrl: string | undefined): void {

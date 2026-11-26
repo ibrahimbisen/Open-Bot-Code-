@@ -1,10 +1,10 @@
-import type { WfnPoint } from "@openbot/ui/features/workflows/workflow-board";
+import type { WfnPoint } from "@codebot/ui/features/workflows/workflow-board";
 import {
   peersOf,
   WORKFLOW_PRESENCE_FEED_INTERVAL,
   type WorkflowPeerSpot,
   type WorkflowPresence,
-} from "@openbot/ui/features/workflows/workflow-presence";
+} from "@codebot/ui/features/workflows/workflow-presence";
 import { createStore, onCleanup } from "solid-js";
 import { STORY_PRESENCE } from "../src/preview/fixtures";
 

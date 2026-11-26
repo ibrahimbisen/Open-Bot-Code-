@@ -17,7 +17,7 @@ import { AgentDatabaseSupervisor } from "./agent-database-supervisor";
 import { AgentTables } from "./agent-tables";
 
 const HOST = resolve(import.meta.dirname, "agent-database-host.ts");
-const NEWER = "A newer version of OpenBot made the shared tables file";
+const NEWER = "A newer version of CodeBot made the shared tables file";
 
 let root = "";
 const children: ChildProcess[] = [];
@@ -98,7 +98,7 @@ async function stopHosts(): Promise<void> {
 }
 
 beforeAll(async () => {
-  root = await mkdtemp(join(tmpdir(), "openbot-agent-database-version-"));
+  root = await mkdtemp(join(tmpdir(), "codebot-agent-database-version-"));
 });
 
 afterEach(stopHosts);

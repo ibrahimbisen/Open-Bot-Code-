@@ -13,11 +13,11 @@ import {
   type ProviderModelSourceEntry,
   type TeamMemberSummary,
   withModelSources,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_USAGE_LIMIT_ROUTES, type AgentUsageLimits } from "@openbot/contracts/team-protocol/agent-usage-limit-v1";
-import { AGENT_WAITS_ROUTES, decodeAgentWaitsResponse } from "@openbot/contracts/team-protocol/agent-waits-v1";
-import { PROVIDER_MODEL_SOURCE_ROUTES } from "@openbot/contracts/team-protocol/provider-model-source-v1";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_USAGE_LIMIT_ROUTES, type AgentUsageLimits } from "@codebot/contracts/team-protocol/agent-usage-limit-v1";
+import { AGENT_WAITS_ROUTES, decodeAgentWaitsResponse } from "@codebot/contracts/team-protocol/agent-waits-v1";
+import { PROVIDER_MODEL_SOURCE_ROUTES } from "@codebot/contracts/team-protocol/provider-model-source-v1";
 import { Deferred, Effect, Result } from "effect";
 import { decodeAgentSummaries, decodeQueueSnapshot, decodeRemoteAgentUsageLimits } from "./remote-agent-decoding";
 import { decodeConversationPageFromHost } from "./remote-conversation-decoding";

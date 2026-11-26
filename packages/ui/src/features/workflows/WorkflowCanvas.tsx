@@ -19,8 +19,8 @@ import {
   type WorkflowVersionKind,
   workflowFieldsWithoutIds,
   workflowStepFields,
-} from "@openbot/contracts/ipc";
-import type { AppTextKey, AppTranslate } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import type { AppTextKey, AppTranslate } from "@codebot/i18n";
 import {
   BringToFront,
   Button,
@@ -59,7 +59,7 @@ import {
   toast,
   Undo2,
   Ungroup,
-} from "@openbot/ui";
+} from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
 import {
   createEffect,

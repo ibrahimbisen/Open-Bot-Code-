@@ -1,6 +1,6 @@
-import type { CreateAgentInput } from "@openbot/contracts/ipc";
-import { createAgentInitialMessage } from "@openbot/ui/features/agents/agent-initial-message";
-import type { FirstAgentDraft } from "@openbot/ui/features/agents/FirstAgentSetup";
+import type { CreateAgentInput } from "@codebot/contracts/ipc";
+import { createAgentInitialMessage } from "@codebot/ui/features/agents/agent-initial-message";
+import type { FirstAgentDraft } from "@codebot/ui/features/agents/FirstAgentSetup";
 
 export type NewAgentDraft = Pick<FirstAgentDraft, "name" | "purpose" | "avatarSeed" | "avatarHue" | "avatarColor"> &
   Partial<Pick<FirstAgentDraft, "provider" | "model" | "reasoningEffort" | "providerAccountId">>;

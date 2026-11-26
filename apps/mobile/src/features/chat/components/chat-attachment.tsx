@@ -1,11 +1,11 @@
-import { playableMediaKind } from "@openbot/contracts/attachment-files";
+import { playableMediaKind } from "@codebot/contracts/attachment-files";
 import {
   CHAT_VISUAL_DEFAULT_HEIGHT,
   CHAT_VISUAL_PAGE_LIMIT,
   chatVisualFrameHeight,
   isChatVisualMimeType,
-} from "@openbot/contracts/chat-visual";
-import type { AttachmentSummary } from "@openbot/contracts/ipc";
+} from "@codebot/contracts/chat-visual";
+import type { AttachmentSummary } from "@codebot/contracts/ipc";
 import { requireOptionalNativeModule } from "expo";
 import { File } from "expo-file-system";
 import { Image } from "expo-image";

@@ -1,12 +1,12 @@
-import { canAdministerServer, type RoutineSchedule, type WorkflowTriggerType } from "@openbot/contracts/ipc";
-import type { MobileTextKey } from "@openbot/i18n/mobile";
+import { canAdministerServer, type RoutineSchedule, type WorkflowTriggerType } from "@codebot/contracts/ipc";
+import type { MobileTextKey } from "@codebot/i18n/mobile";
 import {
   type RoutineScheduleDraft,
   routineDraftProblemCode,
   routineScheduleFromDraft,
   routineScheduleToDraft,
   switchDraftKind,
-} from "@openbot/team-client/routine-schedule-draft";
+} from "@codebot/team-client/routine-schedule-draft";
 import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
@@ -97,7 +97,7 @@ const TRIGGER_DEFAULTS: Partial<Record<WorkflowTriggerType, Record<string, strin
 export function WorkflowTriggerScreen() {
   const { t } = useText();
   const { nodeId } = useLocalSearchParams<{ nodeId: string }>();
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const draft = useWorkflowDraft((state) => state.draft);
   const { setFields, setSchedule, setTriggerProblem } = useWorkflowDraft.getState();
   const node = draft?.graph.nodes.find((item) => item.id === nodeId);

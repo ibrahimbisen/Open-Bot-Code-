@@ -16,7 +16,7 @@ import type {
   AgentDatabaseValue,
 } from "./agent-database-protocol";
 
-const METADATA_TABLE = "openbot_metadata";
+const METADATA_TABLE = "codebot_metadata";
 
 const SCHEMA_VERSION = 1;
 
@@ -141,7 +141,7 @@ function checkSchemaVersion(database: DatabaseSync, mode: AgentDatabaseMode): vo
   if (version > SCHEMA_VERSION) {
     throw new HostFailure(
       "newer-schema",
-      `A newer version of OpenBot made the shared tables file (schema ${version}; this version reads ${SCHEMA_VERSION}). Nothing was read or changed. Install the newer version of OpenBot to use the shared tables.`,
+      `A newer version of CodeBot made the shared tables file (schema ${version}; this version reads ${SCHEMA_VERSION}). Nothing was read or changed. Install the newer version of CodeBot to use the shared tables.`,
     );
   }
   if (mode === "write" && version < SCHEMA_VERSION) database.exec(`PRAGMA user_version = ${SCHEMA_VERSION}`);
@@ -256,7 +256,7 @@ function toFailure(error: unknown, request: AgentDatabaseStatement): AgentDataba
     return {
       kind: "sqlite",
       message:
-        "Nothing was saved, because OpenBot does not have permission to change the shared tables file or its Data folder. The user account that runs OpenBot needs permission to change that folder and the files in it.",
+        "Nothing was saved, because CodeBot does not have permission to change the shared tables file or its Data folder. The user account that runs CodeBot needs permission to change that folder and the files in it.",
       sqliteCode: code,
     };
   }
@@ -351,7 +351,7 @@ function reopenWritable(request: AgentDatabaseStatement): Effect.Effect<void> {
 class AgentDatabaseHost extends Context.Service<
   AgentDatabaseHost,
   { execute(request: AgentDatabaseRequest): Effect.Effect<AgentDatabaseRows, HostFailure> }
->()("openbot/agent-data/AgentDatabaseHost") {
+>()("codebot/agent-data/AgentDatabaseHost") {
   static readonly layer = Layer.effect(
     AgentDatabaseHost,
     Effect.gen(function* () {

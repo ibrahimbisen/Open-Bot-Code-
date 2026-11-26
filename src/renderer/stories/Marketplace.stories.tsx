@@ -1,5 +1,5 @@
-import { X_APP_ID } from "@openbot/ui/features/marketplace/marketplace-model";
-import type { MarketplaceNavigation } from "@openbot/ui/features/marketplace/marketplace-view";
+import { X_APP_ID } from "@codebot/ui/features/marketplace/marketplace-model";
+import type { MarketplaceNavigation } from "@codebot/ui/features/marketplace/marketplace-view";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 import {
   STORY_MARKETPLACE_AGENTS,

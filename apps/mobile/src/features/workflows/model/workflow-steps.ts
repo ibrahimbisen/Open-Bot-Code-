@@ -9,16 +9,16 @@ import type {
   WorkflowTelegramAction,
   WorkflowTriggerType,
   WorkflowVersionKind,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import {
   WORKFLOW_DISCORD_ACTIONS,
   WORKFLOW_GITHUB_ACTIONS,
   WORKFLOW_SLACK_ACTIONS,
   WORKFLOW_TELEGRAM_ACTIONS,
   WORKFLOW_TRIGGER_TYPES,
-} from "@openbot/contracts/ipc";
-import type { MobileTextKey, MobileTranslate } from "@openbot/i18n/mobile";
-import { type RoutineDraftKind, routineScheduleToDraft } from "@openbot/team-client/routine-schedule-draft";
+} from "@codebot/contracts/ipc";
+import type { MobileTextKey, MobileTranslate } from "@codebot/i18n/mobile";
+import { type RoutineDraftKind, routineScheduleToDraft } from "@codebot/team-client/routine-schedule-draft";
 import type { MobileAgent } from "@/features/workspace/model/workspace-types";
 import type { AddKey } from "./workflow-add";
 import {

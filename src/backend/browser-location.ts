@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { BrowserPermissionRequest } from "@openbot/contracts/ipc";
+import type { BrowserPermissionRequest } from "@codebot/contracts/ipc";
 
 type Answer = (granted: boolean) => void;
 

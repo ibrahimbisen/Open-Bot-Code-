@@ -1,4 +1,4 @@
-import type { AgentApproval, AgentRuntimeApproval } from "@openbot/contracts/ipc";
+import type { AgentApproval, AgentRuntimeApproval } from "@codebot/contracts/ipc";
 
 export function reconcilePendingRequests<Item extends { requestId: string | number; agentId: string }>(
   current: readonly Item[],

@@ -3,9 +3,9 @@ import type {
   DynamicIslandAgentIdentity,
   DynamicIslandPresentation,
   DynamicIslandPromptItem,
-} from "@openbot/contracts/ipc";
-import type { DynamicIslandViewState } from "@openbot/ui";
-import { OpenBotDynamicIsland } from "@openbot/ui/features/dynamic-island/OpenBotDynamicIsland";
+} from "@codebot/contracts/ipc";
+import type { DynamicIslandViewState } from "@codebot/ui";
+import { CodeBotDynamicIsland } from "@codebot/ui/features/dynamic-island/CodeBotDynamicIsland";
 import type { JSX } from "@solidjs/web";
 import { createMemo, createSignal } from "solid-js";
 import { fn } from "storybook/test";
@@ -38,7 +38,7 @@ function DynamicIslandDemo(props: DynamicIslandDemoProps): JSX.Element {
     <DynamicIslandDisplayComparison
       defaultState={props.defaultState}
       renderIsland={(preview) => (
-        <OpenBotDynamicIsland
+        <CodeBotDynamicIsland
           presentation={presentation()}
           state={preview.state()}
           displayMode={preview.displayMode}
@@ -99,7 +99,7 @@ function presentationFor(
         approval: {
           kind: "command",
           command: "bun install --frozen-lockfile",
-          cwd: "~/Projects/openbot",
+          cwd: "~/Projects/codebot",
           reason: "Install the locked dependencies before running the test suite.",
           grantRoot: null,
           permissions: null,
@@ -313,7 +313,7 @@ export const OpenChatReturnsToIdle: Story = {
       renderIsland={(preview) => {
         const [presentation, setPresentation] = createSignal(presentationFor("chat", "standard", "single"));
         return (
-          <OpenBotDynamicIsland
+          <CodeBotDynamicIsland
             presentation={presentation()}
             state={preview.state()}
             displayMode={preview.displayMode}

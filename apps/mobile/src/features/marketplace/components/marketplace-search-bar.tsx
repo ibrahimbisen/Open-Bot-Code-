@@ -56,7 +56,7 @@ export function MarketplaceSearchBar({
   const liquidGlass = useLiquidGlass();
   const reduced = useReducedMotion();
   const [foreground, muted, fieldBackground] = useThemeColor(["foreground", "muted", "default"]);
-  const accent = String(useCSSVariable("--openbot-accent-text"));
+  const accent = String(useCSSVariable("--codebot-accent-text"));
   const { height: fieldHeight, bottomGap } = useBottomFieldMetrics();
   const { height: keyboardHeight } = useReanimatedKeyboardAnimation();
   const barStyle = useAnimatedStyle(() => ({

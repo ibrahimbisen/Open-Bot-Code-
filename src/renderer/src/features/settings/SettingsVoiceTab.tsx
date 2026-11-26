@@ -29,9 +29,9 @@ import {
   WHISPER_LANGUAGES,
   type WhisperLanguage,
   XAI_SPEECH_VOICES,
-} from "@openbot/contracts/ipc";
-import { shortVoiceServerModel, voiceServerHost } from "@openbot/contracts/voice-server";
-import type { AppTextKey } from "@openbot/i18n";
+} from "@codebot/contracts/ipc";
+import { shortVoiceServerModel, voiceServerHost } from "@codebot/contracts/voice-server";
+import type { AppTextKey } from "@codebot/i18n";
 import {
   Button,
   Item,
@@ -49,9 +49,9 @@ import {
   SettingsSection,
   Square,
   SwitchField,
-} from "@openbot/ui";
-import { TalkKeyRecorder } from "@openbot/ui/features/settings/TalkKeyRecorder";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui";
+import { TalkKeyRecorder } from "@codebot/ui/features/settings/TalkKeyRecorder";
+import { useText } from "@codebot/ui/text";
 import { createMemo, createSignal, Show } from "solid-js";
 import { setVoiceTalkKey, useVoiceTalkKey } from "../conversation/voice-talk-key";
 import type { CodexLiveAccess } from "../speech/codex-live-access";

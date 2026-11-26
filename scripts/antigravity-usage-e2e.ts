@@ -3,7 +3,7 @@ import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises
 import { createServer, type IncomingMessage } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { type AccountUsage, isAccountUsage, usageGroupForModel, usageQuotaForModel } from "@openbot/contracts/ipc";
+import { type AccountUsage, isAccountUsage, usageGroupForModel, usageQuotaForModel } from "@codebot/contracts/ipc";
 import { normalizeAccountUsage } from "../src/backend/agent/account-usage";
 import type { AgentClient } from "../src/backend/agent-client";
 import { type AgentCliInfo, resolveAntigravityCli } from "../src/backend/cli";
@@ -15,7 +15,7 @@ import {
   requireProviderDriver,
 } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/antigravity-usage-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-usage-e2e");
 const VERSION = "1.5.4";
 const ACCESS_TOKEN = "fake-access-token";
 const PROJECT = "fake-companion-project-123";
@@ -191,7 +191,7 @@ interface Report {
   missingProject?: UsageCase;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-antigravity-usage-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-antigravity-usage-e2e-"));
 const log = join(root, "agy.jsonl");
 const geminiHome = join(root, "gemini");
 const tokenFile = join(geminiHome, "antigravity-acp", "antigravity-oauth-token");
@@ -202,7 +202,7 @@ const service: QuotaService = { status: 200, project: PROJECT, quota: GOOGLE_QUO
 const quotaRequests: QuotaRequest[] = [];
 process.env.FAKE_AGY_LOG = log;
 process.env.GEMINI_HOME = geminiHome;
-delete process.env.OPENBOT_ANTIGRAVITY_PATH;
+delete process.env.CODEBOT_ANTIGRAVITY_PATH;
 
 async function body(request: IncomingMessage): Promise<string> {
   let text = "";
@@ -235,7 +235,7 @@ const server = createServer((request, response) => {
 await new Promise<void>((done) => server.listen(0, "127.0.0.1", done));
 const quotaAddress = server.address();
 assert.ok(quotaAddress !== null && typeof quotaAddress === "object");
-process.env.OPENBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${quotaAddress.port}/v1internal`;
+process.env.CODEBOT_DEV_ANTIGRAVITY_CODE_ASSIST_URL = `http://127.0.0.1:${quotaAddress.port}/v1internal`;
 
 async function readLog(): Promise<LogEntry[]> {
   const text = await readFile(log, "utf8").catch(() => "");

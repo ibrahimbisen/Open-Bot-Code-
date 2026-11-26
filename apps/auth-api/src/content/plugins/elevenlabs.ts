@@ -24,7 +24,7 @@ export const ELEVENLABS_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "Does the ElevenLabs plugin need an API key?",
       answer:
-        "No. You sign in to your own ElevenLabs account in the browser and allow access. OpenBot keeps the tokens in encrypted storage and adds the Authorization header. The agent does not see your password.",
+        "No. You sign in to your own ElevenLabs account in the browser and allow access. CodeBot keeps the tokens in encrypted storage and adds the Authorization header. The agent does not see your password.",
     },
     {
       question: "Does it cost anything?",
@@ -33,7 +33,7 @@ export const ELEVENLABS_PLUGIN_GUIDE: PluginGuide = {
     {
       question: "What does ElevenLabs receive?",
       answer:
-        "ElevenLabs gets the text and the requests that the agent sends to it. Your workspaces, conversations and files stay on the computer that runs OpenBot.",
+        "ElevenLabs gets the text and the requests that the agent sends to it. Your workspaces, conversations and files stay on the computer that runs CodeBot.",
     },
   ],
   sources: [

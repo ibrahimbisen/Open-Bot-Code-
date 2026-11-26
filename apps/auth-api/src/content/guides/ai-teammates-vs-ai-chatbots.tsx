@@ -5,7 +5,7 @@ export function AITeammatesVsAIChatbots() {
     <>
       <p>
         A chat is enough when you need a quick explanation or a second opinion on a paragraph. When the same project
-        needs research, writing and review, it helps to give each part a clear owner. In OpenBot, you can give agents
+        needs research, writing and review, it helps to give each part a clear owner. In CodeBot, you can give agents
         their own roles and pass work between them.
       </p>
 
@@ -23,7 +23,7 @@ export function AITeammatesVsAIChatbots() {
 
       <p>
         If the same agent can handle the whole job and you can easily review its work, keep the setup simple. An ongoing
-        project can also start with one OpenBot agent that keeps its{" "}
+        project can also start with one CodeBot agent that keeps its{" "}
         <Link to="/guides/$slug" params={{ slug: "ai-workspace-vs-chat" }}>
           conversation and workspace
         </Link>{" "}
@@ -38,7 +38,7 @@ export function AITeammatesVsAIChatbots() {
         result.
       </p>
 
-      <p>Here is one way to divide that work in OpenBot:</p>
+      <p>Here is one way to divide that work in CodeBot:</p>
 
       <ol>
         <li>
@@ -63,7 +63,7 @@ export function AITeammatesVsAIChatbots() {
       <h2>Give the next agent a usable handoff</h2>
 
       <p>
-        OpenBot agents can message each other and attach files. Agents on the same OpenBot computer or server can also
+        CodeBot agents can message each other and attach files. Agents on the same CodeBot computer or server can also
         use its shared folder. A channel gives participating agents a shared conversation for the task.
       </p>
 

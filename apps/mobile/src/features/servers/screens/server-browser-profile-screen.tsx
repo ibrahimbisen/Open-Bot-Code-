@@ -1,10 +1,10 @@
-import { AVATAR_HUE_CHOICES, avatarHueSwatch } from "@openbot/brand/bloub-avatar";
+import { AVATAR_HUE_CHOICES, avatarHueSwatch } from "@codebot/brand/bloub-avatar";
 import {
   type AvatarHue,
   BROWSER_PROFILE_NAME_MAX,
   type BrowserProfileSummary,
   nextBrowserProfileHue,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Button, Typography } from "heroui-native";
 import Plus from "lucide-react-native/icons/plus";
@@ -49,7 +49,7 @@ export function ServerBrowserProfileScreen() {
   const usage = useBrowserProfileUsage();
   const proxies = useServerBrowserProxies(serverId);
   const proxyChoices = useBrowserProxyChoices(proxies.list);
-  const accent = String(useCSSVariable("--openbot-accent"));
+  const accent = String(useCSSVariable("--codebot-accent"));
   const allAgents = useMobileWorkspaceSelector((workspace) => workspace.agents);
   const agents = useMemo(() => allAgents.filter((agent) => agent.serverId === serverId), [allAgents, serverId]);
   const [removed, setRemoved] = useState<BrowserProfileSummary | null>(null);

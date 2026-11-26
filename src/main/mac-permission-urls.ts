@@ -1,4 +1,4 @@
-import type { MacPermissionId } from "@openbot/contracts/ipc";
+import type { MacPermissionId } from "@codebot/contracts/ipc";
 
 export const MAC_PERMISSION_URLS: Record<MacPermissionId, string> = {
   "screen-recording": "x-apple.systempreferences:com.apple.settings.PrivacySecurity.extension?Privacy_ScreenCapture",

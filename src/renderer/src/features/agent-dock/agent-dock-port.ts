@@ -1,10 +1,10 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface AgentDockPort {
-  agentDock: OpenBotDesktopApi["agentDock"];
-  agent: Pick<OpenBotDesktopApi["agent"], "respondToBrowserSecret">;
+  agentDock: CodeBotDesktopApi["agentDock"];
+  agent: Pick<CodeBotDesktopApi["agent"], "respondToBrowserSecret">;
 }
 
 export function agentDockPort(): AgentDockPort {
-  return window.openbot;
+  return window.codebot;
 }

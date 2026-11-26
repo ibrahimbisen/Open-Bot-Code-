@@ -10,7 +10,7 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AccountRateLimitsReadResult, decodeAccountRateLimitsReadResult } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/cursor-usage-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-usage-e2e");
 const FAKE_TOKEN = "fake-cursor-access-token";
 const USAGE_PATH = "/aiserver.v1.DashboardService/GetCurrentPeriodUsage";
 const PLAN_INFO_PATH = "/aiserver.v1.DashboardService/GetPlanInfo";
@@ -71,7 +71,7 @@ interface Report {
   noSignIn?: UsageCase;
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-cursor-usage-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-cursor-usage-e2e-"));
 const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 interface Answer {

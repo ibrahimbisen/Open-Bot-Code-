@@ -1,15 +1,15 @@
-import { isKnownAgentProvider } from "@openbot/contracts/agent-providers";
-import type { AccountUsage, AgentStatus, ClientAgentModelOption, CustomProviderSummary } from "@openbot/contracts/ipc";
-import { AGENT_WELCOME_CAPABILITY, TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@openbot/contracts/team-protocol/current";
-import { type CreationPreference, resolveCreationModel } from "@openbot/ui/features/agents/agent-creation-model";
-import { createAgentInitialMessage } from "@openbot/ui/features/agents/agent-initial-message";
+import { isKnownAgentProvider } from "@codebot/contracts/agent-providers";
+import type { AccountUsage, AgentStatus, ClientAgentModelOption, CustomProviderSummary } from "@codebot/contracts/ipc";
+import { AGENT_WELCOME_CAPABILITY, TEAM_AGENT_CREATE_MODEL_CAPABILITY } from "@codebot/contracts/team-protocol/current";
+import { type CreationPreference, resolveCreationModel } from "@codebot/ui/features/agents/agent-creation-model";
+import { createAgentInitialMessage } from "@codebot/ui/features/agents/agent-initial-message";
 import {
   createFirstAgentDraft,
   FIRST_AGENT_SUGGESTIONS,
   type FirstAgentDraft,
   FirstAgentSetup,
-} from "@openbot/ui/features/agents/FirstAgentSetup";
-import { useText } from "@openbot/ui/text";
+} from "@codebot/ui/features/agents/FirstAgentSetup";
+import { useText } from "@codebot/ui/text";
 import { createEffect, createStore, onSettled } from "solid-js";
 import type { WebWorkspaceRuntime } from "./web-runtime";
 

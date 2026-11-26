@@ -2,13 +2,13 @@ import { readdirSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import { HostedServerService } from "../src/server/hosted-server-service";
 import { sqliteD1 } from "./sqlite-d1";
 
 const ROOT = resolve(import.meta.dirname, "../../..");
-const OUT = join(ROOT, ".openbot-build", "hosted-failing-stop-e2e");
+const OUT = join(ROOT, ".codebot-build", "hosted-failing-stop-e2e");
 const MIGRATIONS = join(ROOT, "apps", "auth-api", "migrations");
 const SERVER_ID = "server-1";
 const SANDBOX_ID = "bx_1";
@@ -21,7 +21,7 @@ const OWNER = {
   analyticsEnabled: null,
   chatColor: null,
 };
-const FLAG = "/run/openbot-pre-stop";
+const FLAG = "/run/codebot-pre-stop";
 const MINUTE = 60_000;
 const NOW = Date.UTC(2026, 10, 5, 21);
 const WARNING = "Hosted server stop is failing.";
@@ -166,7 +166,7 @@ function failedStopStart(commands: { body: unknown }[]) {
   return (
     commands.length === 1 &&
     text.startsWith(`if find ${FLAG} -mmin +5 `) &&
-    text.includes("sudo -n systemctl start --no-block openbot.service")
+    text.includes("sudo -n systemctl start --no-block codebot.service")
   );
 }
 

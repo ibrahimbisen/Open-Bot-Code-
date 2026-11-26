@@ -1,11 +1,11 @@
-import { SETTINGS_PANEL_DEFAULT, SETTINGS_PANEL_MAX } from "@openbot/ui/components/SettingsPanel";
+import { SETTINGS_PANEL_DEFAULT, SETTINGS_PANEL_MAX } from "@codebot/ui/components/SettingsPanel";
 import { createSignal } from "solid-js";
 import { savePanelWidth } from "./panel-width-storage";
 
 export const SIDE_PANEL_DEFAULT = SETTINGS_PANEL_DEFAULT;
 
-const SIDE_PANEL_STORAGE_KEY = "openbot:side-panel-width";
-const SETTINGS_PANEL_STORAGE_KEY = "openbot:settings-panel-width";
+const SIDE_PANEL_STORAGE_KEY = "codebot:side-panel-width";
+const SETTINGS_PANEL_STORAGE_KEY = "codebot:settings-panel-width";
 
 export function readSidePanelWidth(): number {
   const stored = Number.parseFloat(

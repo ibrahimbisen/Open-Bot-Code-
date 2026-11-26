@@ -1,4 +1,4 @@
-import type { HostPhase } from "@openbot/contracts/ipc";
+import type { HostPhase } from "@codebot/contracts/ipc";
 import { Deferred, Effect } from "effect";
 import { runCauseEffect } from "../backend/effect-boundary";
 import type { RemoteWorkflowError } from "./remote-service-effects";

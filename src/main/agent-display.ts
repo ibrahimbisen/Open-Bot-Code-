@@ -2,7 +2,7 @@ export function agentDisplayEnvironment(
   platform: NodeJS.Platform,
   environment: NodeJS.ProcessEnv = process.env,
 ): Readonly<Record<string, string>> {
-  const display = platform === "linux" ? environment.OPENBOT_AGENT_DISPLAY : undefined;
+  const display = platform === "linux" ? environment.CODEBOT_AGENT_DISPLAY : undefined;
   return display ? { DISPLAY: display } : {};
 }
 

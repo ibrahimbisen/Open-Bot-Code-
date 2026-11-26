@@ -4,21 +4,21 @@
   box-sizing: border-box;
   min-width: 0;
   max-width: 100%;
-  height: var(--openbot-space-6);
+  height: var(--codebot-space-6);
   align-items: center;
   justify-content: flex-start;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
   margin: 0;
   overflow: hidden;
   border: 0;
-  border-radius: var(--openbot-radius-sm);
-  background: var(--openbot-border);
-  padding-block: var(--openbot-space-1);
-  padding-inline: var(--openbot-space-1) var(--openbot-space-1-5);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-sm);
+  border-radius: var(--codebot-radius-sm);
+  background: var(--codebot-border);
+  padding-block: var(--codebot-space-1);
+  padding-inline: var(--codebot-space-1) var(--codebot-space-1-5);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-sm);
   font-weight: 500;
-  line-height: var(--openbot-space-4);
+  line-height: var(--codebot-space-4);
   vertical-align: middle;
   white-space: nowrap;
   text-decoration: none;
@@ -27,8 +27,8 @@
 .reference-chip[data-kind="mcp"],
 .reference-chip[data-kind="plugin"],
 .reference-chip[data-kind="skill"] {
-  background: var(--openbot-accent-soft);
-  color: var(--openbot-accent-text);
+  background: var(--codebot-accent-soft);
+  color: var(--codebot-accent-text);
 }
 
 .reference-chip:is([data-kind="tab"], [data-kind="thread"]) {
@@ -42,18 +42,18 @@
 
 .reference-chip[data-kind="agent"]:hover,
 button.reference-chip:is([data-kind="quote"], [data-kind="tab"], [data-kind="thread"]):hover {
-  background: var(--openbot-border-strong);
-  color: var(--openbot-text-primary);
+  background: var(--codebot-border-strong);
+  color: var(--codebot-text-primary);
 }
 
 .reference-chip .reference-chip-icon {
   display: inline-grid;
-  width: var(--openbot-space-4);
-  height: var(--openbot-space-4);
-  flex: 0 0 var(--openbot-space-4);
+  width: var(--codebot-space-4);
+  height: var(--codebot-space-4);
+  flex: 0 0 var(--codebot-space-4);
   place-items: center;
   overflow: hidden;
-  border-radius: var(--openbot-radius-xs);
+  border-radius: var(--codebot-radius-xs);
   color: inherit;
 }
 
@@ -65,9 +65,9 @@ button.reference-chip:is([data-kind="quote"], [data-kind="tab"], [data-kind="thr
 }
 
 :is(.message-reference-chip, .composer-mention-token) .reference-chip-icon > svg.lucide {
-  width: var(--openbot-icon-xs);
-  height: var(--openbot-icon-xs);
-  stroke-width: var(--openbot-icon-stroke);
+  width: var(--codebot-icon-xs);
+  height: var(--codebot-icon-xs);
+  stroke-width: var(--codebot-icon-stroke);
 }
 
 .reference-chip-name {

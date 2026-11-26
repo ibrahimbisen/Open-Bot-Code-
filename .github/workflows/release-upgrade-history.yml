@@ -2,7 +2,7 @@ name: Release upgrade history
 
 # Once a week, and on demand, checks that the newest public release starts on the data of two old
 # releases: the oldest public release with a database (v0.1.14) and the newest release that is at
-# least 60 days old. No copy of openbot.db is made before an upgrade, so an install that skipped many
+# least 60 days old. No copy of codebot.db is made before an upgrade, so an install that skipped many
 # releases must still upgrade. The release workflow tests only the release before it; these runs take
 # time that a release must not wait for, so they are here.
 #
@@ -81,7 +81,7 @@ jobs:
         env:
           TAG: ${{ steps.latest.outputs.tag }}
         run: |
-          name="OpenBot-${TAG#v}-arm64.zip"
+          name="CodeBot-${TAG#v}-arm64.zip"
           directory="$RUNNER_TEMP/newest"
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir "$directory" \
             --pattern "$name" --pattern SHA256SUMS.txt
@@ -99,7 +99,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: release-upgrade-history-${{ strategy.job-index }}
-          path: .openbot-build/release-upgrade-e2e/report.json
+          path: .codebot-build/release-upgrade-e2e/report.json
           if-no-files-found: ignore
 
   large-database:
@@ -131,5 +131,5 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: migration-large-db
-          path: .openbot-build/migration-large-db/report.json
+          path: .codebot-build/migration-large-db/report.json
           if-no-files-found: ignore

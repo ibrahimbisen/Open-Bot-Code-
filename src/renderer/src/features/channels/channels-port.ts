@@ -1,5 +1,5 @@
-import type { AttachmentSummary, FilePreview, OpenBotDesktopApi } from "@openbot/contracts/ipc";
-import type { AttachmentMediaSource } from "@openbot/ui/features/conversation/AttachmentCards";
+import type { AttachmentSummary, CodeBotDesktopApi, FilePreview } from "@codebot/contracts/ipc";
+import type { AttachmentMediaSource } from "@codebot/ui/features/conversation/AttachmentCards";
 import type { ChannelMemoriesApi } from "../conversation/memories-port";
 import type { EventRoutinesApi } from "../conversation/routine-webhooks-api";
 import type { ChannelRoutinesApi } from "../conversation/routines-port";
@@ -7,7 +7,7 @@ import type { ChannelFoldersApi } from "./channel-folders-port";
 
 export interface ChannelsPort {
   agent: Pick<
-    OpenBotDesktopApi["agent"],
+    CodeBotDesktopApi["agent"],
     | "channelCommand"
     | "chooseAttachments"
     | "listChannels"
@@ -20,35 +20,35 @@ export interface ChannelsPort {
   > &
     ChannelMemoriesApi &
     ChannelRoutinesApi &
-    Partial<Pick<OpenBotDesktopApi["agent"], "discardDraftAttachment" | "downloadAttachments">> &
-    Partial<Pick<OpenBotDesktopApi["agent"], "deleteChannelMessage">> &
-    Partial<Pick<OpenBotDesktopApi["agent"], "setChannelImage">> &
+    Partial<Pick<CodeBotDesktopApi["agent"], "discardDraftAttachment" | "downloadAttachments">> &
+    Partial<Pick<CodeBotDesktopApi["agent"], "deleteChannelMessage">> &
+    Partial<Pick<CodeBotDesktopApi["agent"], "setChannelImage">> &
     Partial<
       Pick<
-        OpenBotDesktopApi["agent"],
+        CodeBotDesktopApi["agent"],
         "readMediaApproval" | "respondToMediaApproval" | "respondToCreditsHold" | "setCreditsAskMuted"
       >
     > &
-    Partial<ChannelFoldersApi & Pick<OpenBotDesktopApi["agent"], "chooseChannelFolder">> &
+    Partial<ChannelFoldersApi & Pick<CodeBotDesktopApi["agent"], "chooseChannelFolder">> &
     Partial<
       Pick<
-        OpenBotDesktopApi["agent"],
+        CodeBotDesktopApi["agent"],
         "clearChannelContext" | "compactChannelContext" | "channelCompactAvailability" | "deleteChannelHistory"
       >
     >;
   eventRoutines?: EventRoutinesApi | undefined;
-  browser: Pick<OpenBotDesktopApi["browser"], "capturePreview">;
-  openUrl: OpenBotDesktopApi["openUrl"];
+  browser: Pick<CodeBotDesktopApi["browser"], "capturePreview">;
+  openUrl: CodeBotDesktopApi["openUrl"];
   fileActions: "native" | "browser";
   previewAttachment?: (attachment: AttachmentSummary) => Promise<FilePreview>;
   attachmentMedia?: AttachmentMediaSource;
   visualPage?: (attachment: AttachmentSummary) => Promise<string>;
   importAttachments?: (files: File[]) => Promise<AttachmentSummary[]>;
-  onAttachmentImport?: OpenBotDesktopApi["agent"]["onAttachmentImport"];
+  onAttachmentImport?: CodeBotDesktopApi["agent"]["onAttachmentImport"];
 }
 
 export function channelsPort(): ChannelsPort {
-  const api = window.openbot;
+  const api = window.codebot;
   return {
     agent: api.agent,
     browser: api.browser,

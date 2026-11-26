@@ -3,19 +3,19 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { WorkflowGraph, WorkflowNode, WorkflowStep } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import type { WorkflowGraph, WorkflowNode, WorkflowStep } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
+import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import type { MessagingPostFailure } from "../src/backend/messaging/messaging-threads";
-import { OpenBotDatabase } from "../src/backend/openbot-database";
 import { WorkflowGitHubStore } from "../src/backend/workflows/workflow-github-store";
 import { WorkflowRunStore } from "../src/backend/workflows/workflow-run-store";
 import { WorkflowStore } from "../src/backend/workflows/workflow-store";
 import { workflowScheduleDueAt } from "../src/backend/workflows/workflow-triggers";
 import { createWorkflows, type WorkflowsHandle } from "../src/backend/workflows/workflows";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/workflow-output-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/workflow-output-e2e");
 const CONNECTION = "messaging-e2e";
 const PLACE = "C0123";
 const WAIT_MS = 5_000;
@@ -46,8 +46,8 @@ const graphOf = (text: string, output: WorkflowNode["fields"]): WorkflowGraph =>
 });
 const toPlace = { connectionId: CONNECTION, placeId: PLACE };
 
-const directory = await mkdtemp(join(tmpdir(), "openbot-workflow-output-"));
-let database = new OpenBotDatabase(directory);
+const directory = await mkdtemp(join(tmpdir(), "codebot-workflow-output-"));
+let database = new CodeBotDatabase(directory);
 let service: WorkflowsHandle | null = null;
 
 async function open() {
@@ -251,7 +251,7 @@ try {
   const waitingRun = await runOnce(workflows, quiet);
   const waiting = await outputStep(workflows, waitingRun.id, ended);
   await close();
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   await Effect.runPromise(database.initialize());
   database.connection
     .prepare("UPDATE workflow_steps SET status = 'running', ended_at = NULL, output = NULL WHERE step_id = ?")
@@ -267,7 +267,7 @@ try {
     .run(waiting.id, CONNECTION, PLACE, now, now);
   database.connection.prepare("UPDATE workflow_output_deliveries SET status = 'sending' WHERE step_id = ?").run(cut.id);
   database.close();
-  database = new OpenBotDatabase(directory);
+  database = new CodeBotDatabase(directory);
   answer = "posted";
   const postsRestart = report.posts.length;
   workflows = await open();

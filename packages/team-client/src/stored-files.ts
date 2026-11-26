@@ -1,4 +1,4 @@
-import type { AttachmentSummary, StoredFileRow } from "@openbot/contracts/ipc";
+import type { AttachmentSummary, StoredFileRow } from "@codebot/contracts/ipc";
 
 export type FileType = "images" | "documents" | "code" | "spreadsheets" | "media" | "other";
 export type FileTypeFilter = "all" | FileType;

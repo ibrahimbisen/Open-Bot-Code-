@@ -6,8 +6,8 @@ import {
   type FirstTouchSourcePlatform,
   firstTouchDay,
   rememberFirstTouch,
-} from "@openbot/contracts/first-touch";
-import { isBoolean, isOneOf } from "@openbot/contracts/runtime-values";
+} from "@codebot/contracts/first-touch";
+import { isBoolean, isOneOf } from "@codebot/contracts/runtime-values";
 import { OpenPanel, OpenPanelBase, type OpenPanelOptions, type TrackProperties } from "@openpanel/web";
 import { BRAND_ROUTE } from "./brand-page";
 import { CLA_ROUTE } from "./cla";
@@ -18,11 +18,11 @@ import { type CollectionId, type ContentCollection, findArticle } from "./conten
 import { DOWNLOAD_PLATFORM_ORDER, type DownloadPlatform } from "./download-platforms";
 import { DPA_ROUTE } from "./dpa";
 import {
-  OPENBOT_ALTERNATE_DOWNLOAD_LINKS,
-  OPENBOT_ANDROID_APK_LINK,
-  OPENBOT_DOWNLOAD_LINKS,
-  OPENBOT_DOWNLOAD_PAGE_LINKS,
-  OPENBOT_LINKS,
+  CODEBOT_ALTERNATE_DOWNLOAD_LINKS,
+  CODEBOT_ANDROID_APK_LINK,
+  CODEBOT_DOWNLOAD_LINKS,
+  CODEBOT_DOWNLOAD_PAGE_LINKS,
+  CODEBOT_LINKS,
 } from "./landing-links";
 import { MARKETPLACE_TAB_ROUTES } from "./marketplace-routes";
 import { MOBILE_APPS } from "./mobile-apps";
@@ -131,7 +131,7 @@ type LandingDestination =
   | "claude";
 
 type CollectionIndexRoute = ContentCollection["indexRoute"];
-type DownloadPagePath = (typeof OPENBOT_DOWNLOAD_PAGE_LINKS)[keyof typeof OPENBOT_DOWNLOAD_PAGE_LINKS];
+type DownloadPagePath = (typeof CODEBOT_DOWNLOAD_PAGE_LINKS)[keyof typeof CODEBOT_DOWNLOAD_PAGE_LINKS];
 type MarketplaceTabPath = (typeof MARKETPLACE_TAB_ROUTES)[keyof typeof MARKETPLACE_TAB_ROUTES];
 export type LandingScreenPath =
   | "/"
@@ -163,7 +163,7 @@ const FIXED_SCREEN_PATHS = [
   COMMERCIAL_LICENSE_ROUTE,
   DPA_ROUTE,
   CLA_ROUTE,
-  ...Object.values(OPENBOT_DOWNLOAD_PAGE_LINKS),
+  ...Object.values(CODEBOT_DOWNLOAD_PAGE_LINKS),
   ...Object.values(MARKETPLACE_TAB_ROUTES),
   "/news",
   "/guides",
@@ -211,22 +211,22 @@ function createOpenPanelClient(options: OpenPanelOptions): OpenPanelClient {
 }
 
 const DOWNLOAD_PLATFORMS_BY_HREF = new Map<string, LandingDownloadPlatform>([
-  [OPENBOT_DOWNLOAD_LINKS.macos, "macos"],
-  [OPENBOT_DOWNLOAD_LINKS.windows, "windows"],
-  [OPENBOT_DOWNLOAD_LINKS.linux, "linux"],
-  [OPENBOT_ALTERNATE_DOWNLOAD_LINKS.macos, "macos"],
-  [OPENBOT_ALTERNATE_DOWNLOAD_LINKS.linux, "linux"],
+  [CODEBOT_DOWNLOAD_LINKS.macos, "macos"],
+  [CODEBOT_DOWNLOAD_LINKS.windows, "windows"],
+  [CODEBOT_DOWNLOAD_LINKS.linux, "linux"],
+  [CODEBOT_ALTERNATE_DOWNLOAD_LINKS.macos, "macos"],
+  [CODEBOT_ALTERNATE_DOWNLOAD_LINKS.linux, "linux"],
   [MOBILE_APPS.ios.href, "ios"],
   [MOBILE_APPS.android.href, "android"],
-  [OPENBOT_ANDROID_APK_LINK, "android"],
+  [CODEBOT_ANDROID_APK_LINK, "android"],
 ]);
 
 const LINK_DESTINATIONS = new Map<string, LandingDestination>([
-  [OPENBOT_LINKS.download, "download_section"],
-  ...Object.values(OPENBOT_DOWNLOAD_PAGE_LINKS).map((path) => [path, "download_page"] as const),
-  [OPENBOT_LINKS.news, "news"],
-  [OPENBOT_LINKS.guides, "guides"],
-  [OPENBOT_LINKS.contact, "contact"],
+  [CODEBOT_LINKS.download, "download_section"],
+  ...Object.values(CODEBOT_DOWNLOAD_PAGE_LINKS).map((path) => [path, "download_page"] as const),
+  [CODEBOT_LINKS.news, "news"],
+  [CODEBOT_LINKS.guides, "guides"],
+  [CODEBOT_LINKS.contact, "contact"],
   [TEAMS_ROUTE, "teams"],
   [PRICING_ROUTE, "pricing"],
   ...TRANSLATED_SITE_LOCALES.flatMap((locale) => [
@@ -234,26 +234,26 @@ const LINK_DESTINATIONS = new Map<string, LandingDestination>([
     [localizedPagePath(locale, "/teams"), "teams"] as const,
     [localizedPagePath(locale, "/pricing"), "pricing"] as const,
   ]),
-  [OPENBOT_LINKS.x, "x"],
-  [OPENBOT_LINKS.threads, "threads"],
-  [OPENBOT_LINKS.linkedin, "linkedin"],
-  [OPENBOT_LINKS.reddit, "reddit"],
-  [OPENBOT_LINKS.instagram, "instagram"],
-  [OPENBOT_LINKS.tiktok, "tiktok"],
-  [OPENBOT_LINKS.facebook, "facebook"],
-  [OPENBOT_LINKS.discord, "discord"],
-  [OPENBOT_LINKS.repository, "repository"],
-  [OPENBOT_LINKS.releases, "releases"],
-  [OPENBOT_LINKS.changelog, "releases"],
-  [OPENBOT_LINKS.license, "license"],
-  [OPENBOT_LINKS.privacy, "privacy"],
+  [CODEBOT_LINKS.x, "x"],
+  [CODEBOT_LINKS.threads, "threads"],
+  [CODEBOT_LINKS.linkedin, "linkedin"],
+  [CODEBOT_LINKS.reddit, "reddit"],
+  [CODEBOT_LINKS.instagram, "instagram"],
+  [CODEBOT_LINKS.tiktok, "tiktok"],
+  [CODEBOT_LINKS.facebook, "facebook"],
+  [CODEBOT_LINKS.discord, "discord"],
+  [CODEBOT_LINKS.repository, "repository"],
+  [CODEBOT_LINKS.releases, "releases"],
+  [CODEBOT_LINKS.changelog, "releases"],
+  [CODEBOT_LINKS.license, "license"],
+  [CODEBOT_LINKS.privacy, "privacy"],
   [PRIVACY_POLICY_ROUTE, "privacy"],
-  [OPENBOT_LINKS.documentation, "documentation"],
-  [OPENBOT_LINKS.troubleshooting, "troubleshooting"],
-  [OPENBOT_LINKS.architecture, "architecture"],
-  [OPENBOT_LINKS.contributing, "contributing"],
-  [OPENBOT_LINKS.codex, "codex"],
-  [OPENBOT_LINKS.claude, "claude"],
+  [CODEBOT_LINKS.documentation, "documentation"],
+  [CODEBOT_LINKS.troubleshooting, "troubleshooting"],
+  [CODEBOT_LINKS.architecture, "architecture"],
+  [CODEBOT_LINKS.contributing, "contributing"],
+  [CODEBOT_LINKS.codex, "codex"],
+  [CODEBOT_LINKS.claude, "claude"],
 ]);
 
 const EVENT_PROPERTY_ALLOWLIST = {
@@ -331,12 +331,12 @@ class LandingAnalytics {
     const handleClick = (event: MouseEvent) => {
       const target = event.target;
       const link = target instanceof Element ? target.closest<HTMLAnchorElement>("a[href]") : null;
-      if (link?.getAttribute("href")?.startsWith("openbot://")) {
+      if (link?.getAttribute("href")?.startsWith("codebot://")) {
         this.#track("join_page_action", { action: "open_app" });
         return;
       }
       const href = link?.getAttribute("href");
-      const platform = DOWNLOAD_PLATFORM_ORDER.find((id) => OPENBOT_DOWNLOAD_LINKS[id] === href);
+      const platform = DOWNLOAD_PLATFORM_ORDER.find((id) => CODEBOT_DOWNLOAD_LINKS[id] === href);
       if (platform) this.#track("join_page_action", { action: "download", platform });
     };
     return this.#replaceClickListener(document, handleClick, "/join");

@@ -1,4 +1,4 @@
-import type { BrowserDiagnosticEntry, BrowserSiteMemory, BrowserSnapshot, BrowserTarget } from "@openbot/contracts/ipc";
+import type { BrowserDiagnosticEntry, BrowserSiteMemory, BrowserSnapshot, BrowserTarget } from "@codebot/contracts/ipc";
 import { Context, Deferred, Effect, Fiber, Option, Result } from "effect";
 import type { BrowserDialog, BrowserDialogOwner, BrowserPageStatus, SnapshotReadResult } from "./browser-cdp";
 import {
@@ -27,21 +27,21 @@ const OPERATION_DEADLINE_BACKSTOP_MS = 250;
 const SILENT_PAGE_ADVICE =
   "The page does not answer because a script on it keeps running. Reload the tab with navigate direction=reload, which ends the stuck page first, or close the tab.";
 
-export const BrowserToolHold = Context.Reference<(tabId: string) => boolean>("openbot/BrowserToolHold", {
+export const BrowserToolHold = Context.Reference<(tabId: string) => boolean>("codebot/BrowserToolHold", {
   defaultValue: () => () => false,
 });
 
-export const BrowserToolQueueWait = Context.Reference<number | undefined>("openbot/BrowserToolQueueWait", {
+export const BrowserToolQueueWait = Context.Reference<number | undefined>("codebot/BrowserToolQueueWait", {
   defaultValue: () => undefined,
 });
 
-export const BrowserDialogTurn = Context.Reference<BrowserDialogOwner | undefined>("openbot/BrowserDialogTurn", {
+export const BrowserDialogTurn = Context.Reference<BrowserDialogOwner | undefined>("codebot/BrowserDialogTurn", {
   defaultValue: () => undefined,
 });
 
 export const BrowserSiteMemories = Context.Reference<
   { turnId: string; recall: (hostname: string) => BrowserSiteMemory[] } | undefined
->("openbot/BrowserSiteMemories", { defaultValue: () => undefined });
+>("codebot/BrowserSiteMemories", { defaultValue: () => undefined });
 
 export interface DialogTabResult {
   tabId: string;

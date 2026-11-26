@@ -3,13 +3,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS } from "@openbot/contracts/ipc";
-import { sourceText } from "@openbot/i18n/source";
+import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/codex-app-auto-review-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-app-auto-review-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/codex-app-auto-review-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-app-auto-review-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const fakeCodex = join(root, "codex");
@@ -17,14 +17,14 @@ const fakeLog = join(root, "codex.jsonl");
 
 process.env.HOME = home;
 process.env.CODEX_HOME = join(home, ".codex");
-process.env.OPENBOT_CODEX_PATH = fakeCodex;
+process.env.CODEBOT_CODEX_PATH = fakeCodex;
 mkdirSync(home, { recursive: true });
 
 const { AgentService } = await import("../src/backend/agent-service");
 const { AgentStore } = await import("../src/backend/agent-store");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { SidebarLayoutStore } = await import("../src/backend/sidebar-layout-store");
 const { LibraryFoldersStore } = await import("../src/backend/library-folders-store");
 
@@ -182,7 +182,7 @@ const report: {
 } = { cases: [], checks: [], passed: false };
 
 await writeFile(fakeCodex, FAKE_CODEX, { mode: 0o755 });
-const database = new OpenBotDatabase(userData);
+const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
 const sidebar = new SidebarLayoutStore(join(userData, "sidebar-layout.json"));
@@ -259,7 +259,7 @@ try {
 
   const fromResult = await runCase("refusal-result", agent.id, "full");
   pass(
-    "The refusal in the tool result gives one notice with the OpenBot text",
+    "The refusal in the tool result gives one notice with the CodeBot text",
     fromResult.length === 1 && fromResult[0]?.message === NOTICE,
     JSON.stringify(fromResult),
   );

@@ -2,12 +2,12 @@ import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
-import type { ManagedProviderId } from "@openbot/contracts/agent-providers";
-import type { ProviderRuntimeSnapshot } from "@openbot/contracts/ipc";
+import type { ManagedProviderId } from "@codebot/contracts/agent-providers";
+import type { ProviderRuntimeSnapshot } from "@codebot/contracts/ipc";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { ProviderRuntimeManager } from "../src/main/provider-runtime-manager";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/provider-update-automatic-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-update-automatic-e2e");
 const WAIT_MS = 15_000;
 const OLD_VERSION = "0.0.1";
 const MANAGED: ManagedProviderId = "opencode";
@@ -27,7 +27,7 @@ interface Report {
   cancelled?: { phases: Record<string, string[]>; offer: string | null };
 }
 
-const root = await mkdtemp(join(tmpdir(), "openbot-provider-update-automatic-e2e-"));
+const root = await mkdtemp(join(tmpdir(), "codebot-provider-update-automatic-e2e-"));
 const report: Report = { passed: false };
 let offTurnedOn = false;
 

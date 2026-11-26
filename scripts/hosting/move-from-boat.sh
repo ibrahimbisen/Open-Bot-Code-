@@ -5,16 +5,16 @@ umask 077
 
 SERVICE_USER=user
 USER_HOME=/home/$SERVICE_USER
-KEYRING_HOME=/srv/openbot-hosted
+KEYRING_HOME=/srv/codebot-hosted
 MANIFEST=$KEYRING_HOME/move-manifest
-IMPORT_STATE=/var/lib/openbot-move-import
-OFFER=/etc/openbot-pool
-OFFER_INSTALL=/usr/local/lib/openbot-pool
-DATABASE=$USER_HOME/.config/OpenBot/openbot.db
+IMPORT_STATE=/var/lib/codebot-move-import
+OFFER=/etc/codebot-pool
+OFFER_INSTALL=/usr/local/lib/codebot-pool
+DATABASE=$USER_HOME/.config/CodeBot/codebot.db
 CHECKED=(
   "$DATABASE"
-  "$USER_HOME/OpenBot/Shared/Data/agent-data.db"
-  "$USER_HOME/.config/openbot-hosted/keyring-password"
+  "$USER_HOME/CodeBot/Shared/Data/agent-data.db"
+  "$USER_HOME/.config/codebot-hosted/keyring-password"
   "$KEYRING_HOME/keyrings/login.keyring"
 )
 EXCLUDED=(
@@ -36,13 +36,13 @@ for browser in $BROWSER_HOMES; do
   done
 done
 for cache in "${BROWSER_CACHES[@]}"; do
-  EXCLUDED+=("--exclude=./home/$SERVICE_USER/.config/OpenBot/$cache"
-    "--exclude=./home/$SERVICE_USER/.config/OpenBot/Partitions/*/$cache")
+  EXCLUDED+=("--exclude=./home/$SERVICE_USER/.config/CodeBot/$cache"
+    "--exclude=./home/$SERVICE_USER/.config/CodeBot/Partitions/*/$cache")
 done
 MANAGED_PROVIDERS="codex claude grok opencode antigravity cursor cline kimi devin copilot mistral pi muse"
-EXCLUDED+=("--exclude=./home/$SERVICE_USER/.config/OpenBot/provider-runtimes/.downloads")
+EXCLUDED+=("--exclude=./home/$SERVICE_USER/.config/CodeBot/provider-runtimes/.downloads")
 for provider in $MANAGED_PROVIDERS; do
-  EXCLUDED+=("--exclude=./home/$SERVICE_USER/.config/OpenBot/provider-runtimes/$provider")
+  EXCLUDED+=("--exclude=./home/$SERVICE_USER/.config/CodeBot/provider-runtimes/$provider")
 done
 unset browser cache provider
 BASE_IMAGES=" c4ed68db-513f-4b6d-a61a-64b99b0c2a2c 5f37c910-7706-423d-b524-5c66b09885d2
@@ -54,7 +54,7 @@ BASE_IMAGES=" c4ed68db-513f-4b6d-a61a-64b99b0c2a2c 5f37c910-7706-423d-b524-5c66b
   f27f3eeb-e2f4-4d96-9619-d72f13e35dd7 f48f0fb0-3c59-43b4-b447-f69aa4080ea9 f7702e0a-1a08-481c-b8d1-54c52cc43712
   fba0e34a-35a6-453a-b95d-ba4a2eda10db "
 BASE_OPT=" actions-runner ascii ascii-agent ascii-baremetal-setup cmake-3.31.3-linux-x86_64 containerd cursor-agent
-  google gradle-8.12 kimi-code kotlinc moonlight-web OpenBot prime-agent sbt scala3 scala3-3.3.8
+  google gradle-8.12 kimi-code kotlinc moonlight-web CodeBot prime-agent sbt scala3 scala3-3.3.8
   scrcpy-linux-x86_64-v3.1 "
 BASE_LOCAL=" bin cargo etc games go include lib lib64 libexec man rustup sbin share src "
 BASE_LIB=" ascii ascii-harnesses hermes-agent node_modules pkgconfig python3.12 R ruby "
@@ -62,7 +62,7 @@ BASE_NPM=" @anthropic-ai/claude-code @earendil-works/pi-coding-agent @openai/cod
 BASE_BIN=" agent ariana-fswatch ascii-binderfs-add ascii-desktop ascii-desktop-session ascii-proclog
   ascii-record-desktop ascii-setup-binder-devices boat box bun bundle bundler bunx cargo cargo-clippy cargo-fmt
   claude clippy-driver cmake codex composer cpack ctest cua-driver cursor-agent deno erb gem go gofmt gradle
-  hermes hermes-acp hermes-agent irb kimi kotlin kotlinc minitest node npm npx openbot openclaw opencode pi
+  hermes hermes-acp hermes-agent irb kimi kotlin kotlinc minitest node npm npx codebot openclaw opencode pi
   pnpm pnpx poetry prime-agent racc rake rbs rdbg rdoc ri ruby rust-analyzer rustc rustfmt rustup sbt scala
   scalac scaladoc scrcpy scrcpy-server start-agents-server stop-agents-server sync-docker-firewall
   syntax_suggest test-unit typeprof uv vibe vibe-acp "
@@ -92,16 +92,16 @@ checksums() {
   done
 }
 
-openbot_runs() {
-  systemctl is-active --quiet openbot.service || pgrep -u "$SERVICE_USER" -x openbot >/dev/null
+codebot_runs() {
+  systemctl is-active --quiet codebot.service || pgrep -u "$SERVICE_USER" -x codebot >/dev/null
 }
 
 installed_version() {
-  sed -n 's/^X-AppImage-Version=//p' /opt/OpenBot/app/*.desktop 2>/dev/null | head -n 1
+  sed -n 's/^X-AppImage-Version=//p' /opt/CodeBot/app/*.desktop 2>/dev/null | head -n 1
 }
 
 is_hosted_install() {
-  [ "$(cat /opt/OpenBot/hosted/service-user 2>/dev/null)" = "$SERVICE_USER" ] && [ ! -e /opt/OpenBot/hosted/mode ]
+  [ "$(cat /opt/CodeBot/hosted/service-user 2>/dev/null)" = "$SERVICE_USER" ] && [ ! -e /opt/CodeBot/hosted/mode ]
 }
 
 system_clis() {
@@ -294,13 +294,13 @@ customer_units() {
     /etc/systemd/system/*.path; do
     [ -f "$file" ] && [ ! -L "$file" ] || continue
     name=${file##*/}
-    case $name in openbot* | ascii-* | ariana-* | sunshine* | moonlight-web* | ufw-docker-sync*) continue ;; esac
+    case $name in codebot* | ascii-* | ariana-* | sunshine* | moonlight-web* | ufw-docker-sync*) continue ;; esac
     dpkg -S "$file" >/dev/null 2>&1 || echo "$name"
   done
   for file in /etc/systemd/system/*.wants/*@?*; do
     [ -L "$file" ] || continue
     name=${file##*/}
-    case $name in getty@* | serial-getty@* | autovt@* | wg-quick@wg0.service | openbot* | ascii-* | ariana-* | sunshine*)
+    case $name in getty@* | serial-getty@* | autovt@* | wg-quick@wg0.service | codebot* | ascii-* | ariana-* | sunshine*)
       continue
       ;;
     esac
@@ -352,8 +352,8 @@ import_state() {
   sed -n '1p' "$IMPORT_STATE" 2>/dev/null || true
 }
 
-openbot_is_off() {
-  ! systemctl is-enabled --quiet openbot.service 2>/dev/null && ! openbot_runs
+codebot_is_off() {
+  ! systemctl is-enabled --quiet codebot.service 2>/dev/null && ! codebot_runs
 }
 
 database_is_unchanged() {
@@ -364,8 +364,8 @@ database_is_unchanged() {
 
 stop_offer() {
   rm -f "$OFFER/token"
-  if [ -z "${OPENBOT_POOL_RESTORE:-}" ] && [ -e /etc/systemd/system/openbot-pool-wait.service ]; then
-    systemctl disable --quiet --now openbot-pool-wait.service
+  if [ -z "${CODEBOT_POOL_RESTORE:-}" ] && [ -e /etc/systemd/system/codebot-pool-wait.service ]; then
+    systemctl disable --quiet --now codebot-pool-wait.service
   fi
 }
 
@@ -380,28 +380,28 @@ offer() {
   local host=$1 source token
   [[ $host =~ ^leaseweb:[0-9]{1,20}$ ]] || fail "The machine ID is not valid."
   source=$(cd "$(dirname "$0")" && pwd)
-  [ -f "$source/openbot-pool-wait" ] && [ -f "$source/openbot-pool-wait.service" ] ||
+  [ -f "$source/codebot-pool-wait" ] && [ -f "$source/codebot-pool-wait.service" ] ||
     fail "Run this file from a copy of scripts/hosting."
   IFS= read -r token || true
   [[ $token =~ ^[A-Za-z0-9_-]{32,128}$ ]] || fail "Standard input has no token."
   stop_offer
   is_hosted_install || fail "This machine is not prepared. Run \"$0 prepare\" first."
-  openbot_is_off || fail "OpenBot is enabled or runs on this machine. It is not a prepared pool server."
-  [ ! -e "$USER_HOME/.config/OpenBot" ] && [ ! -e "$USER_HOME/.config/openbot-hosted" ] &&
+  codebot_is_off || fail "CodeBot is enabled or runs on this machine. It is not a prepared pool server."
+  [ ! -e "$USER_HOME/.config/CodeBot" ] && [ ! -e "$USER_HOME/.config/codebot-hosted" ] &&
     [ ! -e "$KEYRING_HOME/keyrings" ] && [ ! -e "$IMPORT_STATE" ] ||
     fail "This machine has the data of a server. It cannot take a new one."
-  grep -q '^OPENBOT_AUTH_API_URL=https://' /opt/OpenBot/hosted/openbot.env ||
+  grep -q '^CODEBOT_AUTH_API_URL=https://' /opt/CodeBot/hosted/codebot.env ||
     fail "This machine names no account service."
   install -d -m 0755 "$OFFER_INSTALL"
-  install -m 0755 "$source/openbot-pool-wait" "$OFFER_INSTALL/openbot-pool-wait"
+  install -m 0755 "$source/codebot-pool-wait" "$OFFER_INSTALL/codebot-pool-wait"
   install -m 0755 "$0" "$OFFER_INSTALL/move-from-boat.sh"
-  install -m 0644 "$source/openbot-pool-wait.service" /etc/systemd/system/openbot-pool-wait.service
+  install -m 0644 "$source/codebot-pool-wait.service" /etc/systemd/system/codebot-pool-wait.service
   install -d -m 0700 "$OFFER"
   printf '%s\n' "$host" >"$OFFER/host"
   printf '%s\n' "$token" >"$OFFER/token"
   systemctl daemon-reload
-  systemctl enable --quiet openbot-pool-wait.service
-  systemctl restart openbot-pool-wait.service
+  systemctl enable --quiet codebot-pool-wait.service
+  systemctl restart codebot-pool-wait.service
   echo "Machine $host waits for the server of a new customer."
 }
 
@@ -414,7 +414,7 @@ prepare() {
     fail "The user and group IDs must be numbers above 0."
   source=$(cd "$(dirname "$0")" && pwd)
   [ -f "$source/provision.sh" ] || fail "Run this file from a copy of scripts/hosting."
-  [ ! -e /opt/OpenBot ] || fail "OpenBot is installed on this machine. Use a free pool server."
+  [ ! -e /opt/CodeBot ] || fail "CodeBot is installed on this machine. Use a free pool server."
   [ ! -e "$USER_HOME" ] && [ ! -e "$KEYRING_HOME" ] ||
     fail "This machine has data in $USER_HOME or $KEYRING_HOME."
   ! id "$SERVICE_USER" >/dev/null 2>&1 || fail "This machine has a user $SERVICE_USER."
@@ -427,16 +427,16 @@ prepare() {
   hostnamectl set-hostname "$hostname"
   groupadd --gid "$gid" "$SERVICE_USER"
   useradd --uid "$uid" --gid "$gid" --create-home --home-dir "$USER_HOME" --shell /bin/bash "$SERVICE_USER"
-  copy=$(mktemp -d /run/openbot-move.XXXXXX)
+  copy=$(mktemp -d /run/codebot-move.XXXXXX)
   # shellcheck disable=SC2064
   trap "rm -rf '$copy'" EXIT
   cp -R "$source/." "$copy/"
   chmod -R u=rwX,go=rX "$copy"
   bash "$copy/provision.sh" "$SERVICE_USER" "$appimage_url" "$appimage_sha256" "$auth_api_url"
   is_hosted_install || fail "The install is not a hosted server of the user $SERVICE_USER."
-  systemctl disable --quiet openbot.service
-  if openbot_runs; then fail "OpenBot runs. Stop it."; fi
-  echo "Installed OpenBot $(installed_version) on $hostname for the user $SERVICE_USER ($uid:$gid). It is disabled."
+  systemctl disable --quiet codebot.service
+  if codebot_runs; then fail "CodeBot runs. Stop it."; fi
+  echo "Installed CodeBot $(installed_version) on $hostname for the user $SERVICE_USER ($uid:$gid). It is disabled."
   echo "Next: run leaseweb-bootstrap.sh, restart this machine one time, and then export the sandbox."
 }
 
@@ -447,18 +447,18 @@ upgrade() {
   [ -f "$source/provision.sh" ] || fail "Run this file from a copy of scripts/hosting."
   stop_offer
   is_hosted_install || fail "This machine is not prepared. Run \"$0 prepare\" first."
-  [ ! -e "$USER_HOME/.config/OpenBot" ] && [ ! -e "$KEYRING_HOME/keyrings" ] && [ ! -e "$IMPORT_STATE" ] ||
+  [ ! -e "$USER_HOME/.config/CodeBot" ] && [ ! -e "$KEYRING_HOME/keyrings" ] && [ ! -e "$IMPORT_STATE" ] ||
     fail "This machine has the data of a server. Do not upgrade it here."
-  if openbot_runs; then fail "OpenBot runs. Stop it."; fi
-  copy=$(mktemp -d /run/openbot-move.XXXXXX)
+  if codebot_runs; then fail "CodeBot runs. Stop it."; fi
+  copy=$(mktemp -d /run/codebot-move.XXXXXX)
   # shellcheck disable=SC2064
   trap "rm -rf '$copy'" EXIT
   cp -R "$source/." "$copy/"
   chmod -R u=rwX,go=rX "$copy"
   bash "$copy/provision.sh" "$SERVICE_USER" "$1" "$2" "$3"
-  systemctl disable --quiet openbot.service
-  if openbot_runs; then fail "OpenBot runs. Stop it."; fi
-  echo "Installed OpenBot $(installed_version). It is disabled."
+  systemctl disable --quiet codebot.service
+  if codebot_runs; then fail "CodeBot runs. Stop it."; fi
+  echo "Installed CodeBot $(installed_version). It is disabled."
 }
 
 packages() {
@@ -493,8 +493,8 @@ export_data() {
   fi
   id "$SERVICE_USER" >/dev/null 2>&1 || fail "This machine has no user $SERVICE_USER. It is not a boat sandbox."
   is_hosted_install || fail "This machine is not a hosted server of the user $SERVICE_USER."
-  [ -s "$USER_HOME/.config/OpenBot/openbot.db" ] || fail "The home of $SERVICE_USER has no OpenBot database."
-  [ -s "$USER_HOME/.config/openbot-hosted/keyring-password" ] && [ -s "$KEYRING_HOME/keyrings/login.keyring" ] ||
+  [ -s "$USER_HOME/.config/CodeBot/codebot.db" ] || fail "The home of $SERVICE_USER has no CodeBot database."
+  [ -s "$USER_HOME/.config/codebot-hosted/keyring-password" ] && [ -s "$KEYRING_HOME/keyrings/login.keyring" ] ||
     fail "The server keyring or its password file is missing. The server could not sign in after the move."
   local waited=0
   while [ -e /var/lib/ascii-lazy/active ] && [ ! -e /var/lib/ascii-lazy/hydration-done ]; do
@@ -505,12 +505,12 @@ export_data() {
   done
   [ "$waited" -eq 0 ] || find "$USER_HOME" -xdev -printf '' 2>/dev/null || true
   version=$(installed_version)
-  [ -n "$version" ] || fail "The version of the installed OpenBot is not known."
+  [ -n "$version" ] || fail "The version of the installed CodeBot is not known."
 
-  touch /run/openbot-pre-stop
-  systemctl stop openbot-pre-stop-restart.timer 2>/dev/null || true
-  systemctl stop openbot.service
-  if openbot_runs; then fail "OpenBot still runs. Nothing was archived."; fi
+  touch /run/codebot-pre-stop
+  systemctl stop codebot-pre-stop-restart.timer 2>/dev/null || true
+  systemctl stop codebot.service
+  if codebot_runs; then fail "CodeBot still runs. Nothing was archived."; fi
 
   local tree trees="" members=() commands name notes
   while read -r tree; do
@@ -564,12 +564,12 @@ export_data() {
       "${excluded[@]}" "./${MANIFEST#/}" "./${USER_HOME#/}" "./${KEYRING_HOME#/}" "${members[@]}" || created=$?
   fi
   [ "$created" -eq 0 ] ||
-    fail "The archive is not complete. OpenBot stays stopped. Delete $copy and run the export again."
-  if openbot_runs; then fail "OpenBot started during the archive. Delete $copy and run the export again."; fi
+    fail "The archive is not complete. CodeBot stays stopped. Delete $copy and run the export again."
+  if codebot_runs; then fail "CodeBot started during the archive. Delete $copy and run the export again."; fi
   if [ "$archive" = - ]; then
-    echo "Archived OpenBot $version to standard output."
+    echo "Archived CodeBot $version to standard output."
   else
-    echo "Archived OpenBot $version to $archive ($(du -h "$archive" | cut -f1))."
+    echo "Archived CodeBot $version to $archive ($(du -h "$archive" | cut -f1))."
   fi
   if [ -n "$trees" ]; then
     echo "The archive has these directories that the customer added outside the home:"
@@ -579,7 +579,7 @@ export_data() {
   if ! listed "$(cat "$USER_HOME/.base-image-version" 2>/dev/null)" "$BASE_IMAGES"; then
     echo "This sandbox has a boat image that the lists of this script do not know. Make sure that the directories above are not from the image."
   fi
-  echo "OpenBot stays stopped until this sandbox stops. Do not start it here after the VPS runs."
+  echo "CodeBot stays stopped until this sandbox stops. Do not start it here after the VPS runs."
 }
 
 restore_commands() {
@@ -698,16 +698,16 @@ add_node_command() {
   # shellcheck disable=SC2016
   runuser -u "$SERVICE_USER" -- bash -c 'umask 022 && cat >"$1" && chmod 0755 "$1"' _ "$node" <<'EOF'
 #!/bin/bash
-# The move from boat added this command. It starts the Bun of OpenBot as Node.
-bun=$(printf '%s\n' "$HOME"/.config/OpenBot/provider-runtimes/bun/*/*/bin/bun | sort -V | tail -n 1)
+# The move from boat added this command. It starts the Bun of CodeBot as Node.
+bun=$(printf '%s\n' "$HOME"/.config/CodeBot/provider-runtimes/bun/*/*/bin/bun | sort -V | tail -n 1)
 if [ ! -x "$bun" ]; then
-  echo "node: OpenBot has not downloaded Bun. OpenBot downloads it when an MCP server is on." >&2
+  echo "node: CodeBot has not downloaded Bun. CodeBot downloads it when an MCP server is on." >&2
   exit 127
 fi
 exec -a node "$bun" "$@"
 EOF
-  if ! compgen -G "$USER_HOME/.config/OpenBot/provider-runtimes/bun/*/*/bin/bun" >/dev/null; then
-    echo "The moved npm commands need Bun, and OpenBot did not download Bun in the sandbox. OpenBot downloads it when an MCP server is on."
+  if ! compgen -G "$USER_HOME/.config/CodeBot/provider-runtimes/bun/*/*/bin/bun" >/dev/null; then
+    echo "The moved npm commands need Bun, and CodeBot did not download Bun in the sandbox. CodeBot downloads it when an MCP server is on."
   fi
 }
 
@@ -790,10 +790,10 @@ import_data() {
   local archive=$1 folder manifest version installed sums clis groups missing line trees present members group
   stop_offer
   is_hosted_install || fail "This machine is not prepared. Run \"$0 prepare\" first."
-  openbot_is_off || fail "OpenBot is enabled or runs on this machine. It is not a prepared pool server."
+  codebot_is_off || fail "CodeBot is enabled or runs on this machine. It is not a prepared pool server."
   [ ! -e "$IMPORT_STATE" ] ||
     fail "An import did not get to its start on this machine. Run \"$0 discard $(hostname)\", then run the import again."
-  [ ! -e "$USER_HOME/.config/OpenBot" ] && [ ! -e "$KEYRING_HOME/keyrings" ] ||
+  [ ! -e "$USER_HOME/.config/CodeBot" ] && [ ! -e "$KEYRING_HOME/keyrings" ] ||
     fail "This machine has the data of a server."
   shift
   for folder in "$@"; do
@@ -810,7 +810,7 @@ import_data() {
   installed=$(installed_version)
   if [ "$installed" != "$version" ] &&
     [ "$(printf '%s\n%s\n' "$installed" "$version" | sort -V | tail -n 1)" = "$version" ]; then
-    fail "This machine has OpenBot ${installed:-of no known version}, and the sandbox had $version. Install $version or newer."
+    fail "This machine has CodeBot ${installed:-of no known version}, and the sandbox had $version. Install $version or newer."
   fi
 
   trees="" present=""
@@ -843,20 +843,20 @@ import_data() {
     fail "The archive was not restored. Run \"$0 discard $(hostname)\", then run the import again."
   rm -f "$MANIFEST"
   sha256sum --check --quiet <<<"$sums" ||
-    fail "A restored file is not the file of the sandbox. Do not start OpenBot. Run \"$0 discard $(hostname)\"."
-  if openbot_runs; then fail "OpenBot runs, and the import is not complete. Stop it."; fi
+    fail "A restored file is not the file of the sandbox. Do not start CodeBot. Run \"$0 discard $(hostname)\"."
+  if codebot_runs; then fail "CodeBot runs, and the import is not complete. Stop it."; fi
   restore_commands "$manifest"
   remove_boat_config || echo "The boat configuration was not removed from the home."
   install_packages_of "$manifest"
   if grep -q '^/usr/local/lib/node_modules/' <<<"$trees" && ! command -v node >/dev/null; then add_node_command; fi
-  if openbot_runs; then fail "OpenBot runs, and the import is not complete. Stop it."; fi
+  if codebot_runs; then fail "CodeBot runs, and the import is not complete. Stop it."; fi
   {
     echo imported
     printf 'database=%s\n' "$(sha256sum "$DATABASE" | cut -d' ' -f1)"
     printf '%s' "$trees" | sed 's/^/tree=/'
     for folder in "$@"; do echo "folder=$folder"; done
   } >"$IMPORT_STATE"
-  echo "Restored the server of OpenBot $version. This machine has OpenBot $installed, and it does not run."
+  echo "Restored the server of CodeBot $version. This machine has CodeBot $installed, and it does not run."
   echo "Next: when the row of the server names this machine and the sandbox is stopped, run: $0 start"
   echo "Delete $archive on each machine that has a copy."
   if [ -n "$present" ]; then
@@ -881,7 +881,7 @@ import_data() {
   done <<<"$clis"
   if [ -n "$missing" ]; then
     printf 'The sandbox had these commands from npm, and this machine does not have them:\n%s' "$missing"
-    echo "At start, OpenBot downloads the CLI of each provider that an agent uses. The customer downloads the CLI of another provider in OpenBot."
+    echo "At start, CodeBot downloads the CLI of each provider that an agent uses. The customer downloads the CLI of another provider in CodeBot."
   fi
   groups=$(sed -n 's/^group=//p' <<<"$manifest" | grep -E '^[a-z_][a-z0-9_-]*$' || true)
   missing=""
@@ -899,11 +899,11 @@ start() {
   is_hosted_install || fail "This machine is not prepared. Run \"$0 prepare\" first."
   [ "$(import_state)" = imported ] ||
     fail "This machine has no complete import that waits for its start."
-  openbot_is_off || fail "OpenBot is enabled or runs on this machine."
-  database_is_unchanged || fail "The database is not the file that the import checked. Do not start OpenBot."
+  codebot_is_off || fail "CodeBot is enabled or runs on this machine."
+  database_is_unchanged || fail "The database is not the file that the import checked. Do not start CodeBot."
   rm -f "$IMPORT_STATE"
-  systemctl enable --now openbot.service
-  echo "OpenBot $(installed_version) is enabled and started. The host is online when its first sign-in ends."
+  systemctl enable --now codebot.service
+  echo "CodeBot $(installed_version) is enabled and started. The host is online when its first sign-in ends."
 }
 
 discard() {
@@ -914,7 +914,7 @@ discard() {
   state=$(import_state)
   [ "$state" = importing ] || [ "$state" = imported ] ||
     fail "This machine has no import that waits for its start. To erase a server that ran here, reinstall the machine."
-  openbot_is_off || fail "OpenBot is enabled or runs on this machine. Nothing was removed."
+  codebot_is_off || fail "CodeBot is enabled or runs on this machine. Nothing was removed."
   if [ "$state" = imported ] && ! database_is_unchanged; then
     fail "The database changed after the import. Nothing was removed. To erase this server, reinstall the machine."
   fi
@@ -944,9 +944,9 @@ restore() {
   [[ $url =~ ^https://[A-Za-z0-9.-]+/[^[:space:]]+$ ]] || fail "Standard input has no archive URL."
   command -v age >/dev/null || fail "This machine has no age. Run leaseweb-bootstrap.sh again."
   is_hosted_install || fail "This machine is not prepared. Run \"$0 prepare\" first."
-  openbot_is_off || fail "OpenBot is enabled or runs on this machine. It is not a prepared pool server."
-  dir=$(mktemp -d /var/tmp/openbot-restore.XXXXXX)
-  key=$(mktemp /run/openbot-restore-key.XXXXXX)
+  codebot_is_off || fail "CodeBot is enabled or runs on this machine. It is not a prepared pool server."
+  dir=$(mktemp -d /var/tmp/codebot-restore.XXXXXX)
+  key=$(mktemp /run/codebot-restore-key.XXXXXX)
   trap "rm -rf '$dir' '$key'" EXIT
   printf '%s\n' "$identity" >"$key"
   unset identity

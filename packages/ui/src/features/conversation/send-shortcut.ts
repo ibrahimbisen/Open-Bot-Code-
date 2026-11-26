@@ -1,4 +1,4 @@
-import type { AppTextKey } from "@openbot/i18n";
+import type { AppTextKey } from "@codebot/i18n";
 
 export type SendShortcutMode = "enter" | "mod-enter";
 

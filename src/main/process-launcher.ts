@@ -2,7 +2,7 @@ import { type ChildProcess, spawn } from "node:child_process";
 import { EventEmitter } from "node:events";
 import { join } from "node:path";
 import { PassThrough } from "node:stream";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { utilityProcess } from "electron";
 import type { LaunchedProcess, ProcessLaunchOptions } from "../backend/process-launch";
 import {
@@ -11,7 +11,7 @@ import {
   type ProcessLauncherRequest,
 } from "./process-launcher-protocol";
 
-const logger = createOpenBotLogger("process-launcher");
+const logger = createCodeBotLogger("process-launcher");
 
 const MAX_FAILED_HOST_STARTS = 3;
 
@@ -24,7 +24,7 @@ export interface ProcessLauncherHost {
 
 export function forkProcessLauncherHost(hostPath = join(__dirname, "process-launcher-host.js")): ProcessLauncherHost {
   const child = utilityProcess.fork(hostPath, [], {
-    serviceName: "OpenBot process launcher",
+    serviceName: "CodeBot process launcher",
     stdio: "ignore",
   });
   return {

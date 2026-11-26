@@ -22,8 +22,8 @@ import type {
   UpdateHostIdentityInput,
   VoiceLiveEvent,
   VoiceTranscriptionResult,
-} from "@openbot/contracts/ipc";
-import type { Logger } from "@openbot/logging";
+} from "@codebot/contracts/ipc";
+import type { Logger } from "@codebot/logging";
 import type { Effect } from "effect";
 import type { AgentService } from "../../backend/agent-service";
 import type { BrowserHost } from "../../backend/browser-host";

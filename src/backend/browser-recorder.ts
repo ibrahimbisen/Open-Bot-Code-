@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { type FileHandle, mkdir, open, rm } from "node:fs/promises";
 import { join } from "node:path";
-import type { BrowserEnvironment, BrowserRecordingArtifact } from "@openbot/contracts/ipc";
+import type { BrowserEnvironment, BrowserRecordingArtifact } from "@codebot/contracts/ipc";
 import { Deferred, Effect, Result, Schema, Semaphore } from "effect";
 import { BrowserWindow, type WebContents } from "electron";
 import { type BrowserOperationError, browserCall, browserFailure, browserSync } from "./browser-effects";
@@ -20,7 +20,7 @@ const recorderResultSchema = Schema.Struct({
   error: Schema.optional(Schema.NullOr(Schema.String)),
 });
 const recorderStartErrorSchema = Schema.Struct({
-  __openbotRecorderError: Schema.Literal(true),
+  __codebotRecorderError: Schema.Literal(true),
   name: Schema.String,
   message: Schema.String,
 });
@@ -116,7 +116,7 @@ export class BrowserRecorder {
       const startedAt = Date.now();
       const path = join(
         this.#downloadsRoot,
-        `openbot-browser-${new Date(startedAt).toISOString().replace(/[:.]/g, "-")}-${randomUUID().slice(0, 8)}.webm`,
+        `codebot-browser-${new Date(startedAt).toISOString().replace(/[:.]/g, "-")}-${randomUUID().slice(0, 8)}.webm`,
       );
       let retained = false;
       let openedWindow: BrowserWindow | undefined;
@@ -124,7 +124,7 @@ export class BrowserRecorder {
         browserCall(() => open(path, "wx", 0o600)),
         (file) =>
           Effect.gen({ self: this }, function* () {
-            const recorderPartition = `openbot-recorder-${randomUUID()}`;
+            const recorderPartition = `codebot-recorder-${randomUUID()}`;
             const recorderWindow = yield* Effect.gen({ self: this }, function* () {
               return yield* browserSync(
                 () =>
@@ -180,8 +180,8 @@ export class BrowserRecorder {
               void runCauseEffect(this.#discardSession(session, false)).catch(() => undefined);
             });
             recorderWindow.webContents.on("page-title-updated", (_event, title) => {
-              if (!title.startsWith("openbot-recorder:stopped:")) return;
-              const reason = title.slice("openbot-recorder:stopped:".length);
+              if (!title.startsWith("codebot-recorder:stopped:")) return;
+              const reason = title.slice("codebot-recorder:stopped:".length);
               session.stoppedReason = parseStoppedReason(reason);
               this.#onStateChanged(tabId, false);
               if (session.discarding || session.finalizing) return;
@@ -203,7 +203,7 @@ export class BrowserRecorder {
                     return new Response("Unable to save recording chunk.", { status: 500 });
                   }
                 }
-                return new Response("<!doctype html><title>openbot-recorder:ready</title>", {
+                return new Response("<!doctype html><title>codebot-recorder:ready</title>", {
                   headers: {
                     "content-type": "text/html; charset=utf-8",
                     "content-security-policy": "default-src 'none'; connect-src 'self'",
@@ -472,7 +472,7 @@ function startScript(sourceId: string, maxRecordingMs: number, frameSize: Record
       stream.getTracks().forEach(track => track.stop());
       const reason = state.error ? 'error' : (state.reason || 'requested');
       const result = { durationMs: Math.round(performance.now() - state.startedAt), reason, error: state.error };
-      document.title = 'openbot-recorder:stopped:' + reason;
+      document.title = 'codebot-recorder:stopped:' + reason;
       resolve(result);
     }, { once: true }));
     recorder.addEventListener('dataavailable', event => {
@@ -487,19 +487,19 @@ function startScript(sourceId: string, maxRecordingMs: number, frameSize: Record
       });
       if (state.bytes >= STOP_BYTES) state.stop('size-limit');
     });
-    globalThis.__openbotRecorder = state;
+    globalThis.__codebotRecorder = state;
     stage = 'start'; recorder.start(1000);
     setTimeout(() => state.stop('duration-limit'), MAX_MS);
     return true;
     } catch (error) {
-      return { __openbotRecorderError: true, name: String(error?.name || 'Error'), message: stage + ': ' + String(error?.message || error) };
+      return { __codebotRecorderError: true, name: String(error?.name || 'Error'), message: stage + ': ' + String(error?.message || error) };
     }
   })()`;
 }
 
 function stopScript(reason: BrowserRecordingArtifact["stoppedReason"]): string {
   return `(async () => {
-    const state = globalThis.__openbotRecorder;
+    const state = globalThis.__codebotRecorder;
     if (!state) throw new Error('Recorder is not initialized.');
     state.stop(${JSON.stringify(reason)});
     return state.stopped;

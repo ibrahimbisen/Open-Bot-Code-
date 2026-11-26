@@ -14,7 +14,7 @@ private let defaultIcon = "default"
 /// the main queue.
 public class AppIconModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("OpenBotAppIcon")
+    Name("CodeBotAppIcon")
 
     /// The ID of the variant on the home screen, or nil when the phone cannot change the icon.
     AsyncFunction("getIcon") { () -> String? in

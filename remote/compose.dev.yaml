@@ -1,4 +1,4 @@
-name: openbot-remote-dev
+name: codebot-remote-dev
 
 services:
   remote-api:

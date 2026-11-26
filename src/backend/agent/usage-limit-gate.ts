@@ -1,12 +1,12 @@
-import { INPUT_LIMITS } from "@openbot/contracts/input-limits";
-import type { AccountUsage, AgentEvent, AgentRuntimeSnapshot } from "@openbot/contracts/ipc";
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
+import type { AccountUsage, AgentEvent, AgentRuntimeSnapshot } from "@codebot/contracts/ipc";
 import { Effect, Exit, Schema, Scope } from "effect";
 import type { AgentProvider } from "../agent-client";
 import type { AgentStore } from "../agent-store";
 import { causeHelpers } from "../effect-boundary";
 import { agentProviderAccount as accountOf, providerForAgent } from "./thread-items";
 
-export const USAGE_LIMIT_METHOD = "openbot/usageLimit";
+export const USAGE_LIMIT_METHOD = "codebot/usageLimit";
 
 const USAGE_LIMIT_RECHECK_MS = 15 * 60_000;
 

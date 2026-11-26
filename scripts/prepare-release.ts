@@ -1,6 +1,6 @@
 import { readFile, rm, writeFile } from "node:fs/promises";
-import { isDynamicRecord, isOneOf, isString } from "@openbot/contracts/runtime-values";
-import { createOpenBotLogger } from "@openbot/logging";
+import { isDynamicRecord, isOneOf, isString } from "@codebot/contracts/runtime-values";
+import { createCodeBotLogger } from "@codebot/logging";
 import {
   assembleSection,
   FRAGMENT_DIR,
@@ -13,7 +13,7 @@ import {
   UNRELEASED,
 } from "./release-notes";
 
-const logger = createOpenBotLogger("prepare-release");
+const logger = createCodeBotLogger("prepare-release");
 
 type Increment = "major" | "minor" | "patch";
 
@@ -28,7 +28,7 @@ interface ReleaseTarget {
 }
 
 const DESKTOP: ReleaseTarget = {
-  name: "OpenBot",
+  name: "CodeBot",
   changelog: "CHANGELOG.md",
   fragmentDir: FRAGMENT_DIR,
   versionFiles: ["package.json"],
@@ -37,7 +37,7 @@ const DESKTOP: ReleaseTarget = {
 };
 
 const MOBILE: ReleaseTarget = {
-  name: "OpenBot mobile",
+  name: "CodeBot mobile",
   changelog: MOBILE_CHANGELOG,
   fragmentDir: MOBILE_FRAGMENT_DIR,
   versionFiles: MOBILE_VERSION_FILES,

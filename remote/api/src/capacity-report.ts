@@ -6,9 +6,9 @@ const SAMPLE_INTERVAL_MILLISECONDS = 5 * 60 * 1_000;
 const FETCH_TIMEOUT_MILLISECONDS = 5_000;
 const WEBHOOK_ANSWER_STATUSES = ["200", "202", "400", "401", "404", "413", "415", "429", "503"] as const;
 const WEBHOOK_COUNTERS = [
-  ["webhook_waits", "openbot_remote_webhook_waits_total"],
-  ["webhook_wait_ms", "openbot_remote_webhook_wait_milliseconds_total"],
-  ["webhook_slow_waits", "openbot_remote_webhook_slow_waits_total"],
+  ["webhook_waits", "codebot_remote_webhook_waits_total"],
+  ["webhook_wait_ms", "codebot_remote_webhook_wait_milliseconds_total"],
+  ["webhook_slow_waits", "codebot_remote_webhook_slow_waits_total"],
 ] as const;
 const ALLOCATION_TYPES = new Map([
   ["UDP", "udp"],
@@ -44,7 +44,7 @@ function samples(page: string, name: string): Sample[] {
 function webhookCounters(page: string): Map<string, number> {
   const counters = new Map<string, number>();
   for (const status of WEBHOOK_ANSWER_STATUSES) counters.set(`webhook_answers_${status}`, 0);
-  for (const sample of samples(page, "openbot_remote_webhook_answers_total")) {
+  for (const sample of samples(page, "codebot_remote_webhook_answers_total")) {
     const key = `webhook_answers_${sample.status}`;
     if (counters.has(key)) counters.set(key, sample.value);
   }
@@ -53,7 +53,7 @@ function webhookCounters(page: string): Map<string, number> {
 }
 
 function webhookInterval(page: string, previous: Map<string, number>, current: Map<string, number>) {
-  if (!page.includes("openbot_remote_webhook_answers_total")) return {};
+  if (!page.includes("codebot_remote_webhook_answers_total")) return {};
   const restarted = [...current].some(([key, value]) => value < (previous.get(key) ?? 0));
   const delta = (key: string) => (current.get(key) ?? 0) - (restarted ? 0 : (previous.get(key) ?? 0));
   const properties: Record<string, number> = {};
@@ -183,8 +183,8 @@ const report = Effect.fn("CapacityReport.report")(function* (
     event_schema_version: SCHEMA_VERSION,
     turn_host: config.turnHost,
     turn_allocations: total(turn, "turn_total_allocations"),
-    signal_sockets: total(signal, "openbot_remote_signal_sockets"),
-    signal_peer_connections: total(signal, "openbot_remote_peer_connections"),
+    signal_sockets: total(signal, "codebot_remote_signal_sockets"),
+    signal_peer_connections: total(signal, "codebot_remote_peer_connections"),
   };
   const counters = webhookCounters(signal);
   const previous = base.webhook;

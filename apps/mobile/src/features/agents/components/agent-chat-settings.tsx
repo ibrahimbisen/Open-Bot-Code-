@@ -1,4 +1,4 @@
-import { agentNotificationLevelMap } from "@openbot/contracts/ipc";
+import { agentNotificationLevelMap } from "@codebot/contracts/ipc";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
 import Bell from "lucide-react-native/icons/bell";

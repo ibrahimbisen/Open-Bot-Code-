@@ -1,4 +1,4 @@
-import type { RemoteWorkspacePreferences } from "@openbot/team-client";
+import type { RemoteWorkspacePreferences } from "@codebot/team-client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { supportLog, supportLogValue } from "@/features/support/model/support-log";

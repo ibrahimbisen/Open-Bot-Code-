@@ -1,12 +1,12 @@
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { parseBrowserToolCall } from "../browser-tools";
 import type { DynamicToolResult } from "../protocol";
 
-const logger = createOpenBotLogger("browser-screenshot-file");
+const logger = createCodeBotLogger("browser-screenshot-file");
 
 export const saveBrowserScreenshot = Effect.fn("saveBrowserScreenshot")(function* (
   workspacePath: () => string,
@@ -28,7 +28,7 @@ export const saveBrowserScreenshot = Effect.fn("saveBrowserScreenshot")(function
     await writeFile(path, Buffer.from(data ?? "", "base64"), { flag: "wx", mode: 0o600 });
     return withNote(
       result,
-      `Saved as ${path}. To show it to the user, pass this path to openbot.attach_files_to_response.`,
+      `Saved as ${path}. To show it to the user, pass this path to codebot.attach_files_to_response.`,
     );
   }).pipe(
     Effect.catch((failure) =>

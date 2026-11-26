@@ -1,5 +1,5 @@
-import type { AgentApproval } from "@openbot/contracts/ipc";
-import { sourceText as englishSourceText } from "@openbot/i18n/source";
+import type { AgentApproval } from "@codebot/contracts/ipc";
+import { sourceText as englishSourceText } from "@codebot/i18n/source";
 
 export interface FeedbackApproval {
   kind: "bug" | "idea";

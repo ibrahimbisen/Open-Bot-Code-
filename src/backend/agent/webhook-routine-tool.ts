@@ -1,15 +1,15 @@
-import type { RoutineLimitPolicy, RoutineRunPlace } from "@openbot/contracts/ipc";
-import { type EventFilter, type EventRoutine, isEventFilter } from "@openbot/contracts/ipc-events";
-import { type DynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { WEBHOOK_DELIVERY_BODY_BYTES_LIMIT } from "@openbot/contracts/signal-protocol/messages";
+import type { RoutineLimitPolicy, RoutineRunPlace } from "@codebot/contracts/ipc";
+import { type EventFilter, type EventRoutine, isEventFilter } from "@codebot/contracts/ipc-events";
+import { type DynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { WEBHOOK_DELIVERY_BODY_BYTES_LIMIT } from "@codebot/contracts/signal-protocol/messages";
 import {
   WEBHOOK_DELIVERY_ID_HEADER,
   WEBHOOK_MAX_CLOCK_SKEW_SECONDS,
   WEBHOOK_SIGNATURE_HEADER,
   WEBHOOK_TIMESTAMP_HEADER,
-} from "@openbot/contracts/signal-protocol/webhook-route";
-import { createOpenBotLogger } from "@openbot/logging";
-import { RoutineInputError } from "@openbot/team-client/routine-schedule";
+} from "@codebot/contracts/signal-protocol/webhook-route";
+import { createCodeBotLogger } from "@codebot/logging";
+import { RoutineInputError } from "@codebot/team-client/routine-schedule";
 import { Effect } from "effect";
 import type { RoutineOperationFailed } from "./routine-scheduler";
 
@@ -101,7 +101,7 @@ export function webhookSecretKeyName(routineId: string): string {
   return `WEBHOOK_SECRET_${routineId.replaceAll("-", "").toUpperCase()}`;
 }
 
-const logger = createOpenBotLogger("webhook-routine");
+const logger = createCodeBotLogger("webhook-routine");
 
 export interface WebhookSecretKeys {
   has(agentId: string, name: string): Effect.Effect<boolean, unknown>;

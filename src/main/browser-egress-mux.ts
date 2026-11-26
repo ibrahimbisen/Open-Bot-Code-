@@ -9,7 +9,7 @@ import {
   decodeBrowserEgressData,
   encodeBrowserEgressControl,
   encodeBrowserEgressData,
-} from "@openbot/contracts/team-protocol/browser-egress-v1";
+} from "@codebot/contracts/team-protocol/browser-egress-v1";
 
 export type BrowserEgressFrame = string | ArrayBuffer;
 

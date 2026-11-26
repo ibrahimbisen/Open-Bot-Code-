@@ -1,5 +1,4 @@
-import { sha256 } from "@noble/hashes/sha2.js";
-import type { FeedbackPhone } from "@openbot/contracts/feedback";
+import type { FeedbackPhone } from "@codebot/contracts/feedback";
 import {
   type AgentApproval,
   type AgentImportPreview,
@@ -18,6 +17,7 @@ import {
   BROWSER_SECRET_RESPONSE_PATH,
   type BranchAgentTaskInput,
   type CancelQueuedMessageInput,
+  type CodeBotDesktopApi,
   type ConversationSnapshot,
   decodeChannel,
   decodeChannelMemories,
@@ -56,7 +56,6 @@ import {
   type ListArchivedAgentTasksInput,
   type LocalBrowserSecretResponse,
   type MarkAgentTaskReadInput,
-  type OpenBotDesktopApi,
   type PinnedMessagesSnapshot,
   type QueuedMessageReceipt,
   type ReadAgentTaskAroundInput,
@@ -75,71 +74,72 @@ import {
   type StartAgentTaskInput,
   type SteerQueuedMessageInput,
   type UpdateQueuedMessageInput,
-} from "@openbot/contracts/ipc";
-import { guardedDecoder, guardedListDecoder } from "@openbot/contracts/ipc-decoding";
-import { isDynamicRecord, isString } from "@openbot/contracts/runtime-values";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { AGENT_ARCHIVED_THREADS_ROUTES } from "@openbot/contracts/team-protocol/agent-archived-threads-v1";
-import { AGENT_IMPORT_ROUTES, AGENT_IMPORT_UPLOAD_BYTES } from "@openbot/contracts/team-protocol/agent-import-v1";
+} from "@codebot/contracts/ipc";
+import { guardedDecoder, guardedListDecoder } from "@codebot/contracts/ipc-decoding";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { AGENT_ARCHIVED_THREADS_ROUTES } from "@codebot/contracts/team-protocol/agent-archived-threads-v1";
+import { AGENT_IMPORT_ROUTES, AGENT_IMPORT_UPLOAD_BYTES } from "@codebot/contracts/team-protocol/agent-import-v1";
 import {
   AGENT_IMPORT_V2_CHUNK_BYTES,
   AGENT_IMPORT_V2_ROUTES,
   agentImportV2ChunkPath,
-} from "@openbot/contracts/team-protocol/agent-import-v2";
+} from "@codebot/contracts/team-protocol/agent-import-v2";
 import {
   AGENT_MEMORIES_PAGE_ROUTE,
   AGENT_MEMORIES_PAGE_SIZE,
   AGENT_MEMORY_INCLUSION_ROUTE,
   AGENT_MEMORY_SELECTION_PAGE_ROUTE,
-} from "@openbot/contracts/team-protocol/agent-memories-v1";
-import { AGENT_QUEUE_TASK_ROUTES } from "@openbot/contracts/team-protocol/agent-queue-task-v1";
-import { AGENT_TASKS_ROUTES } from "@openbot/contracts/team-protocol/agent-tasks-v1";
+} from "@codebot/contracts/team-protocol/agent-memories-v1";
+import { AGENT_QUEUE_TASK_ROUTES } from "@codebot/contracts/team-protocol/agent-queue-task-v1";
+import { AGENT_TASKS_ROUTES } from "@codebot/contracts/team-protocol/agent-tasks-v1";
 import {
   AGENT_THREAD_BRANCHES_ROUTES,
   type AgentThreadBranchLink,
   isAgentThreadBranchLinks,
-} from "@openbot/contracts/team-protocol/agent-thread-branches-v1";
-import { AGENT_THREAD_FILES_ROUTES } from "@openbot/contracts/team-protocol/agent-thread-files-v1";
-import { AGENT_THREAD_PAGES_ROUTES } from "@openbot/contracts/team-protocol/agent-thread-pages-v1";
-import { AGENT_THREAD_READS_ROUTES } from "@openbot/contracts/team-protocol/agent-thread-reads-v1";
-import { AGENT_THREAD_REPLIES_ROUTES } from "@openbot/contracts/team-protocol/agent-thread-replies-v1";
-import { AGENT_THREADS_ROUTES } from "@openbot/contracts/team-protocol/agent-threads-v1";
-import { BROWSER_SECRET_VAULT_ROUTES } from "@openbot/contracts/team-protocol/browser-secret-vault-v1";
-import { CHANNEL_ROUTES } from "@openbot/contracts/team-protocol/channels-v1";
-import { CONTEXT_RESET_ROUTES } from "@openbot/contracts/team-protocol/context-reset-v1";
+} from "@codebot/contracts/team-protocol/agent-thread-branches-v1";
+import { AGENT_THREAD_FILES_ROUTES } from "@codebot/contracts/team-protocol/agent-thread-files-v1";
+import { AGENT_THREAD_PAGES_ROUTES } from "@codebot/contracts/team-protocol/agent-thread-pages-v1";
+import { AGENT_THREAD_READS_ROUTES } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
+import { AGENT_THREAD_REPLIES_ROUTES } from "@codebot/contracts/team-protocol/agent-thread-replies-v1";
+import { AGENT_THREADS_ROUTES } from "@codebot/contracts/team-protocol/agent-threads-v1";
+import { BROWSER_SECRET_VAULT_ROUTES } from "@codebot/contracts/team-protocol/browser-secret-vault-v1";
+import { CHANNEL_ROUTES } from "@codebot/contracts/team-protocol/channels-v1";
+import { CONTEXT_RESET_ROUTES } from "@codebot/contracts/team-protocol/context-reset-v1";
 import {
   INSTANCE_TRANSFER_CHUNK_BYTES,
   INSTANCE_TRANSFER_CHUNKS_ROUTES,
-} from "@openbot/contracts/team-protocol/instance-transfer-chunks-v1";
-import { INSTANCE_TRANSFER_FULL_COPY_ROUTES } from "@openbot/contracts/team-protocol/instance-transfer-full-copy-v1";
+} from "@codebot/contracts/team-protocol/instance-transfer-chunks-v1";
+import { INSTANCE_TRANSFER_FULL_COPY_ROUTES } from "@codebot/contracts/team-protocol/instance-transfer-full-copy-v1";
 import {
   INSTANCE_TRANSFER_REMOTE_BYTES,
   INSTANCE_TRANSFER_ROUTES,
-} from "@openbot/contracts/team-protocol/instance-transfer-v1";
+} from "@codebot/contracts/team-protocol/instance-transfer-v1";
 import {
   decodeLiveVoiceSessionResponse,
   LIVE_VOICE_ROUTES,
   type LiveVoiceSessionResponse,
   type LiveVoiceStartRequest,
-} from "@openbot/contracts/team-protocol/live-voice-v1";
-import { decodeMessagePinsResponse, MESSAGE_PINS_ROUTES } from "@openbot/contracts/team-protocol/message-pins-v1";
+} from "@codebot/contracts/team-protocol/live-voice-v1";
+import { decodeMessagePinsResponse, MESSAGE_PINS_ROUTES } from "@codebot/contracts/team-protocol/message-pins-v1";
 import {
   decodePendingApprovalResponse,
   PENDING_APPROVAL_ROUTES,
-} from "@openbot/contracts/team-protocol/pending-approval-v1";
-import { PHONE_FEEDBACK_ROUTES } from "@openbot/contracts/team-protocol/phone-feedback-v1";
+} from "@codebot/contracts/team-protocol/pending-approval-v1";
+import { PHONE_FEEDBACK_ROUTES } from "@codebot/contracts/team-protocol/phone-feedback-v1";
 import {
   decodeRoutinePauseReasons,
   ROUTINE_PAUSE_REASONS_ROUTES,
   type RoutinePauseReasonEntry,
-} from "@openbot/contracts/team-protocol/routine-pause-reasons-v1";
+} from "@codebot/contracts/team-protocol/routine-pause-reasons-v1";
 import {
   decodeRoutineRunPlace,
   decodeRoutineRunPlaces,
   ROUTINE_RUN_PLACE_ROUTES,
   type RoutineRunPlaceEntry,
-} from "@openbot/contracts/team-protocol/routine-run-place-v1";
-import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@openbot/contracts/team-protocol/v2";
+} from "@codebot/contracts/team-protocol/routine-run-place-v1";
+import { decodeTeamProtocolV2Json, type TeamProtocolV2Json } from "@codebot/contracts/team-protocol/v2";
+import { sha256 } from "@noble/hashes/sha2.js";
 import { Effect, Schema } from "effect";
 import { base64ToBytes, bytesToBase64 } from "./base64";
 import type { RemoteFileUpload } from "./file-upload";
@@ -835,7 +835,7 @@ export const respondToBrowserSecret = Effect.fn("TeamClient.respondToBrowserSecr
 });
 
 export type TeamChannelsApi = Pick<
-  OpenBotDesktopApi["agent"],
+  CodeBotDesktopApi["agent"],
   | "listChannels"
   | "readChannel"
   | "channelCommand"
@@ -908,7 +908,7 @@ const decodeRoutines = guardedListDecoder(isRoutine, "routine list");
 const decodeRoutineRuns = guardedListDecoder(isRoutineRun, "routine run list");
 
 export type TeamAgentRoutinesApi = Pick<
-  OpenBotDesktopApi["agent"],
+  CodeBotDesktopApi["agent"],
   "listRoutines" | "createRoutine" | "updateRoutine" | "deleteRoutine" | "testRoutine" | "listRoutineRuns"
 >;
 

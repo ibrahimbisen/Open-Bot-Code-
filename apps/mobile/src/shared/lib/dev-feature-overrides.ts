@@ -1,4 +1,4 @@
-import type { MobileFeature } from "@openbot/contracts/mobile-features";
+import type { MobileFeature } from "@codebot/contracts/mobile-features";
 
 const DEV_FEATURE_OVERRIDES: Readonly<Record<MobileFeature, boolean | null>> = {
   cloudServers: null,

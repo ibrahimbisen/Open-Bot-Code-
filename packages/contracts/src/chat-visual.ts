@@ -8,7 +8,7 @@ export const CHAT_VISUAL_MIN_HEIGHT = 80;
 export const CHAT_VISUAL_MAX_HEIGHT = 2000;
 export const CHAT_VISUAL_DEFAULT_HEIGHT = 240;
 
-export const CHAT_VISUAL_THEME_FRAGMENT = "openbot-theme=";
+export const CHAT_VISUAL_THEME_FRAGMENT = "codebot-theme=";
 
 export const CHAT_VISUAL_SIZE_CHANGED = "ui/notifications/size-changed";
 export const CHAT_VISUAL_HOST_CONTEXT_CHANGED = "ui/notifications/host-context-changed";
@@ -16,10 +16,10 @@ export const CHAT_VISUAL_OPEN_LINK = "ui/open-link";
 export const CHAT_VISUAL_REQUEST_DISPLAY_MODE = "ui/request-display-mode";
 export const CHAT_VISUAL_MESSAGE = "ui/message";
 export const CHAT_VISUAL_UPDATE_MODEL_CONTEXT = "ui/update-model-context";
-export const CHAT_VISUAL_OPEN_IMAGE = "openbot/notifications/open-image";
-export const CHAT_VISUAL_KEY_DOWN = "openbot/notifications/keydown";
-export const CHAT_VISUAL_SELECTION_CHANGED = "openbot/notifications/selection-changed";
-export const CHAT_VISUAL_FOCUSED = "openbot/notifications/focused";
+export const CHAT_VISUAL_OPEN_IMAGE = "codebot/notifications/open-image";
+export const CHAT_VISUAL_KEY_DOWN = "codebot/notifications/keydown";
+export const CHAT_VISUAL_SELECTION_CHANGED = "codebot/notifications/selection-changed";
+export const CHAT_VISUAL_FOCUSED = "codebot/notifications/focused";
 
 export type ChatVisualDisplayMode = "inline" | "fullscreen";
 const DISPLAY_MODES: readonly ChatVisualDisplayMode[] = ["inline", "fullscreen"];
@@ -71,8 +71,8 @@ export interface ChatBackdropBubbles {
   agents?: AvatarColor;
 }
 
-const BUBBLES_META_NAME = "openbot-bubbles";
-const BUBBLES_META_PATTERN = /<meta\b[^>]*\bname\s*=\s*["']openbot-bubbles["'][^>]*>/iu;
+const BUBBLES_META_NAME = "codebot-bubbles";
+const BUBBLES_META_PATTERN = /<meta\b[^>]*\bname\s*=\s*["']codebot-bubbles["'][^>]*>/iu;
 const META_CONTENT_PATTERN = /\bcontent\s*=\s*(?:"([^"]*)"|'([^']*)')/iu;
 const DOCTYPE_PATTERN = /^\s*<!doctype\b[^>]*>/iu;
 
@@ -106,8 +106,8 @@ function withLeadingMeta(page: string, tag: string): string {
   return doctype === undefined ? `${tag}${page}` : `${doctype}${tag}${page.slice(doctype.length)}`;
 }
 
-const REQUESTERS_META_NAME = "openbot-backdrop-for";
-const REQUESTERS_META_SOURCE = String.raw`<meta\b[^>]*\bname\s*=\s*["']openbot-backdrop-for["'][^>]*>`;
+const REQUESTERS_META_NAME = "codebot-backdrop-for";
+const REQUESTERS_META_SOURCE = String.raw`<meta\b[^>]*\bname\s*=\s*["']codebot-backdrop-for["'][^>]*>`;
 const REQUESTER_ID_PATTERN = /^[\w.:@-]+$/u;
 
 function isRequesterId(value: string): boolean {
@@ -377,7 +377,7 @@ pending.delete(data.id);
 if(data.error)waiting.reject(new Error(String(data.error.message||"Refused")));else waiting.resolve(data.result);
 });
 const text=(value)=>value===undefined||value===null||value===""?[]:[{type:"text",text:String(value)}];
-window.openbotPage=Object.freeze({
+window.codebotPage=Object.freeze({
 sendMessage:(value)=>request("${CHAT_VISUAL_MESSAGE}",{role:"user",content:text(value)}),
 setContext:(value)=>request("${CHAT_VISUAL_UPDATE_MODEL_CONTEXT}",{content:text(value)}),
 requestFullscreen:()=>request("${CHAT_VISUAL_REQUEST_DISPLAY_MODE}",{mode:"fullscreen"}),
@@ -502,9 +502,9 @@ function preamble(options: ChatVisualDocumentOptions): string {
   return [
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    `<style id="openbot-visual-base">${BASE_STYLE}${themeStyle(options)}</style>`,
+    `<style id="codebot-visual-base">${BASE_STYLE}${themeStyle(options)}</style>`,
     options.head ?? "",
-    options.bootstrap === false ? "" : `<script id="openbot-visual-bootstrap">${BOOTSTRAP}</script>`,
+    options.bootstrap === false ? "" : `<script id="codebot-visual-bootstrap">${BOOTSTRAP}</script>`,
   ].join("");
 }
 

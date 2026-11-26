@@ -4,27 +4,27 @@
 
 .sidebar-wait-tooltip,
 .sidebar-name-tooltip {
-  z-index: var(--openbot-layer-tooltip);
+  z-index: var(--codebot-layer-tooltip);
   display: grid;
   max-width: min(260px, calc(100vw - 16px));
   gap: 2px;
-  border: 1px solid var(--openbot-border-strong);
-  border-radius: var(--openbot-radius-sm);
-  background: var(--openbot-bg-surface-raised);
-  box-shadow: var(--openbot-shadow-raised);
-  padding: var(--openbot-space-2) var(--openbot-space-3);
-  color: var(--openbot-text-primary);
-  font-size: var(--openbot-text-md);
-  line-height: var(--openbot-leading-md);
+  border: 1px solid var(--codebot-border-strong);
+  border-radius: var(--codebot-radius-sm);
+  background: var(--codebot-bg-surface-raised);
+  box-shadow: var(--codebot-shadow-raised);
+  padding: var(--codebot-space-2) var(--codebot-space-3);
+  color: var(--codebot-text-primary);
+  font-size: var(--codebot-text-md);
+  line-height: var(--codebot-leading-md);
   pointer-events: none;
 }
 
 .sidebar-wait-tooltip-title {
   display: inline-flex;
   align-items: center;
-  gap: var(--openbot-space-1);
-  color: var(--openbot-warning-text);
-  font-weight: var(--openbot-weight-semibold);
+  gap: var(--codebot-space-1);
+  color: var(--codebot-warning-text);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .sidebar-wait-tooltip-title svg {
@@ -41,8 +41,8 @@
 }
 
 .sidebar-wait-tooltip-hint {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }
 
 .sidebar-name-tooltip {
@@ -54,11 +54,11 @@
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: var(--openbot-space-2);
+  gap: var(--codebot-space-2);
 }
 
 .sidebar-name-tooltip-name {
-  font-weight: var(--openbot-weight-semibold);
+  font-weight: var(--codebot-weight-semibold);
 }
 
 .sidebar-name-tooltip-preview {
@@ -66,11 +66,11 @@
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  color: var(--openbot-text-secondary);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-secondary);
+  font-size: var(--codebot-text-sm);
 }
 
 .sidebar-name-tooltip-detail {
-  color: var(--openbot-text-muted);
-  font-size: var(--openbot-text-sm);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
 }

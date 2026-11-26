@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { createOpenBotLogger } from "@openbot/logging";
+import { createCodeBotLogger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { argument } from "./channel-e2e-support";
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
@@ -9,16 +9,16 @@ import { type DevInstanceRecord, readDevInstanceRecords } from "./dev-automation
 
 const NAME = "workflow-duplicate-references";
 const ROOT = resolve(import.meta.dirname, "..");
-const HOST_NAME = "OpenBot Local Dev Host";
+const HOST_NAME = "CodeBot Local Dev Host";
 const PICTURE_SIDE = 64;
 const REFERENCES = 2;
 const SOURCE = "image-original";
 const WAIT_MS = 60_000;
-const logger = createOpenBotLogger(NAME);
+const logger = createCodeBotLogger(NAME);
 
 const clients = (argument("clients") ?? "local").split(",").filter(Boolean);
 const allowMutations = process.argv.includes("--allow-mutations");
-const outDir = join(ROOT, ".openbot-build", NAME);
+const outDir = join(ROOT, ".codebot-build", NAME);
 
 interface SavedEdge {
   from: string;
@@ -70,9 +70,9 @@ async function makePicture(host: Page, name: string): Promise<string> {
       context.fillRect(0, 0, side, side);
       const blob = await canvas.convertToBlob({ type: "image/png" });
       const bytes = new Uint8Array(await blob.arrayBuffer());
-      const [draft] = await window.openbot.agent.importAttachmentData([{ name, mimeType: "image/png", bytes }]);
+      const [draft] = await window.codebot.agent.importAttachmentData([{ name, mimeType: "image/png", bytes }]);
       if (!draft) throw new Error("The host kept no draft.");
-      return window.openbot.workflows.keepPicture(draft.id);
+      return window.codebot.workflows.keepPicture(draft.id);
     },
     { name, side: PICTURE_SIDE },
   );
@@ -101,7 +101,7 @@ async function seedWorkflow(host: Page, title: string) {
     to: SOURCE,
     type: "image" as const,
   }));
-  const created = await host.evaluate((input) => window.openbot.workflows.create(input), {
+  const created = await host.evaluate((input) => window.codebot.workflows.create(input), {
     title,
     graph: { nodes: [...assets, image], edges, strokes: [] },
   });
@@ -139,7 +139,7 @@ async function savedEdges(host: Page, workflowId: string) {
     async ({ workflowId, source, wait }) => {
       const deadline = Date.now() + wait;
       while (Date.now() < deadline) {
-        const detail = await window.openbot.workflows.get(workflowId);
+        const detail = await window.codebot.workflows.get(workflowId);
         const copy = detail.graph.nodes.find((node) => node.kind === "image" && node.id !== source);
         if (copy) {
           const edges: SavedEdge[] = detail.graph.edges.map((edge) => ({

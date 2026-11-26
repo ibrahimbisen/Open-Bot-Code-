@@ -1,5 +1,5 @@
 .server-install-card-status[data-step="expired"] {
-  color: var(--openbot-warning);
+  color: var(--codebot-warning);
 }
 
 .server-install-card-status-text {
@@ -7,8 +7,8 @@
 }
 
 .server-install-card-tile {
-  --server-install-size: var(--openbot-control-lg);
-  --server-install-radius: var(--openbot-radius-md);
+  --server-install-size: var(--codebot-control-lg);
+  --server-install-radius: var(--codebot-radius-md);
   --server-install-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   display: grid;
@@ -21,13 +21,13 @@
 
 .server-install-card-tile[data-step="expired"] {
   box-sizing: border-box;
-  border: 1px solid var(--openbot-border);
-  background: var(--openbot-bg-surface-raised);
+  border: 1px solid var(--codebot-border);
+  background: var(--codebot-bg-surface-raised);
 }
 
 .server-install-card-tile > svg {
-  width: var(--openbot-icon-md);
-  height: var(--openbot-icon-md);
+  width: var(--codebot-icon-md);
+  height: var(--codebot-icon-md);
 }
 
 .server-install-card-tile[data-step] .server-install-card-face {
@@ -58,12 +58,12 @@
 }
 
 .server-install-card-tile:is([data-step="starting"], [data-step="connected"], [data-step="offline"]) .ui-plush-eye {
-  animation: ui-plush-squint 220ms var(--openbot-ease-out) forwards;
+  animation: ui-plush-squint 220ms var(--codebot-ease-out) forwards;
 }
 
 .server-install-card-tile:is([data-step="starting"], [data-step="connected"], [data-step="offline"])
   .server-install-card-loader {
-  animation: server-install-pop-out 420ms var(--openbot-ease-out) 200ms forwards;
+  animation: server-install-pop-out 420ms var(--codebot-ease-out) 200ms forwards;
 }
 
 .server-install-card-tile[data-step="starting"] .server-install-card-logo {
@@ -87,19 +87,19 @@
   height: 18px;
   box-sizing: border-box;
   place-items: center;
-  border: 2px solid var(--openbot-bg-surface);
-  border-radius: var(--openbot-radius-pill);
-  background: var(--openbot-bg-surface-raised);
-  color: var(--openbot-text-muted);
+  border: 2px solid var(--codebot-bg-surface);
+  border-radius: var(--codebot-radius-pill);
+  background: var(--codebot-bg-surface-raised);
+  color: var(--codebot-text-muted);
   transition:
-    background-color var(--openbot-duration-normal) var(--openbot-ease-out),
-    color var(--openbot-duration-normal) var(--openbot-ease-out);
+    background-color var(--codebot-duration-normal) var(--codebot-ease-out),
+    color var(--codebot-duration-normal) var(--codebot-ease-out);
   animation: server-install-badge-in 360ms var(--server-install-spring) 640ms backwards;
 }
 
 .server-install-card-badge[data-step="connected"] {
-  background: var(--openbot-success);
-  color: var(--openbot-bg-surface);
+  background: var(--codebot-success);
+  color: var(--codebot-bg-surface);
 }
 
 .server-install-card-badge > svg {
@@ -109,12 +109,12 @@
 
 .server-install-card-check * {
   stroke-dasharray: 20;
-  animation: server-install-draw 360ms var(--openbot-ease-out) 80ms backwards;
+  animation: server-install-draw 360ms var(--codebot-ease-out) 80ms backwards;
 }
 
 .server-install-card-status-text,
 .server-install-card-action {
-  animation: server-install-text-in var(--openbot-duration-slow) var(--openbot-ease-out);
+  animation: server-install-text-in var(--codebot-duration-slow) var(--codebot-ease-out);
 }
 
 .server-install-card-tile[data-revealed][data-step] .server-install-card-face,

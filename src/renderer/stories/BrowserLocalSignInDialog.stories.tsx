@@ -1,4 +1,4 @@
-import BrowserLocalSignInDialog from "@openbot/ui/features/browser/BrowserLocalSignInDialog";
+import BrowserLocalSignInDialog from "@codebot/ui/features/browser/BrowserLocalSignInDialog";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 

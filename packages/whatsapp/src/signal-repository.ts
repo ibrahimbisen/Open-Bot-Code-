@@ -13,7 +13,7 @@ import {
   type SignalKeyStoreWithTransaction,
   type SignalRepositoryWithLIDStore,
   type SocketConfig,
-} from "@openbot/whatsapp/baileys";
+} from "@codebot/whatsapp/baileys";
 import { addressToString, jidToAddress, senderKeyName } from "./signal/address";
 import { bytesEqual } from "./signal/crypto";
 import { generateKeyPair, withKeyType } from "./signal/curve";
@@ -44,7 +44,7 @@ import {
 
 type ILogger = SocketConfig["logger"];
 
-export function makeOpenBotSignalRepository(
+export function makeCodeBotSignalRepository(
   auth: SignalAuthState,
   logger: ILogger,
   pnToLIDFunc?: (jids: string[]) => Promise<LIDMapping[] | undefined>,

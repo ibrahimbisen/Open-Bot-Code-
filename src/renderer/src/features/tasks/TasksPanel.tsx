@@ -1,6 +1,6 @@
-import { type AgentApproval, LOCAL_SERVER_ID } from "@openbot/contracts/ipc";
-import { currentText } from "@openbot/ui/text";
-import { appendVoiceTranscript } from "@openbot/ui/voice-recording";
+import { type AgentApproval, LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
+import { currentText } from "@codebot/ui/text";
+import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
 import { createEffect, createSignal, onCleanup } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { appPort } from "../../app-port";
@@ -45,15 +45,15 @@ export function TasksPanel(props: TasksPanelProps) {
   const { servers } = useServers();
   const responseStyle = createServerResponseStyle(
     () => servers().find((server) => server.id === props.serverId),
-    window.openbot.hostAdmin,
+    window.codebot.hostAdmin,
   );
 
   const attachmentFiles = createAttachmentDownloads({
     serverId: () => props.serverId,
     calls: () => ({
-      open: (input) => window.openbot.agent.openAttachment(input, props.serverId),
-      stop: (attachmentId) => window.openbot.agent.stopAttachmentDownload(attachmentId, props.serverId),
-      subscribe: window.openbot.agent.onAttachmentDownload,
+      open: (input) => window.codebot.agent.openAttachment(input, props.serverId),
+      stop: (attachmentId) => window.codebot.agent.stopAttachmentDownload(attachmentId, props.serverId),
+      subscribe: window.codebot.agent.onAttachmentDownload,
     }),
     target: () => undefined,
     onError: (error) => {
@@ -83,8 +83,8 @@ export function TasksPanel(props: TasksPanelProps) {
       downloads={attachmentFiles.downloads}
       files={{
         accepted: threads.filesAccepted,
-        import: (data, serverId) => window.openbot.agent.importAttachmentData(data, serverId),
-        discard: (id, serverId) => window.openbot.agent.discardDraftAttachment(id, serverId),
+        import: (data, serverId) => window.codebot.agent.importAttachmentData(data, serverId),
+        discard: (id, serverId) => window.codebot.agent.discardDraftAttachment(id, serverId),
       }}
       approvals={approvals()}
       waitsForAnswer={(task) => pendingPrompts()[attentionKey(task.agentId, task.threadId)] !== undefined}

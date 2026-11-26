@@ -1,14 +1,14 @@
-import type { CentralAuthUser } from "@openbot/contracts/ipc";
+import type { CentralAuthUser } from "@codebot/contracts/ipc";
 import {
   heatLevel,
   heatmapMonths,
   heatmapWeeks,
   type ProfileDay,
   type ProfileStats,
-} from "@openbot/team-client/profile-stats";
-import { userInitials } from "@openbot/ui";
-import { usageCompact } from "@openbot/ui/features/usage/usage-format";
-import { currentText } from "@openbot/ui/text";
+} from "@codebot/team-client/profile-stats";
+import { userInitials } from "@codebot/ui";
+import { usageCompact } from "@codebot/ui/features/usage/usage-format";
+import { currentText } from "@codebot/ui/text";
 import { drawLogo, ellipsize, FONT } from "../agent-templates/agent-template-card";
 
 const WIDTH = 1200;
@@ -62,14 +62,14 @@ function shareColors(): ShareColors {
     return value;
   };
   return {
-    surface: token("--openbot-paper"),
-    text: token("--openbot-paper-text"),
-    muted: token("--openbot-paper-text-muted"),
-    border: token("--openbot-paper-border"),
-    accent: token("--openbot-accent"),
-    accentSoft: token("--openbot-accent-soft"),
-    logo: token("--openbot-logo-production"),
-    logoEye: token("--openbot-logo-production-eye"),
+    surface: token("--codebot-paper"),
+    text: token("--codebot-paper-text"),
+    muted: token("--codebot-paper-text-muted"),
+    border: token("--codebot-paper-border"),
+    accent: token("--codebot-accent"),
+    accentSoft: token("--codebot-accent-soft"),
+    logo: token("--codebot-logo-production"),
+    logoEye: token("--codebot-logo-production-eye"),
   };
 }
 

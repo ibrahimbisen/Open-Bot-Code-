@@ -13,8 +13,8 @@ import type { TeamStore } from "./team-store";
 export type DevelopmentRemoteRole = "host" | "client";
 export type DevelopmentClientTransport = "http" | "webrtc";
 
-const DEVELOPMENT_HOST_EMAIL = "openbot-dev-host@example.com";
-const DEVELOPMENT_CLIENT_EMAIL = "openbot-dev-client@example.com";
+const DEVELOPMENT_HOST_EMAIL = "codebot-dev-host@example.com";
+const DEVELOPMENT_CLIENT_EMAIL = "codebot-dev-client@example.com";
 
 export function readDevelopmentClientTransport(value: string | undefined): DevelopmentClientTransport {
   return value === "webrtc" ? "webrtc" : "http";
@@ -66,7 +66,7 @@ export const applyDevelopmentRemoteAccount = Effect.fn("DevelopmentRemote.applyA
   const user = yield* ensureDevelopmentAccount(centralAuth, email);
   yield* teamStore.activateAccount(user);
   if (role === "host" && !teamStore.configured) {
-    yield* teamStore.configureWithAccount("OpenBot Local Dev Host", user);
+    yield* teamStore.configureWithAccount("CodeBot Local Dev Host", user);
   }
   if (role === "client" && !setupCompleted) {
     yield* writeSetupState(setupFile, { preferredProvider: "codex", preferredModel: null }).pipe(toRemoteWorkflowError);

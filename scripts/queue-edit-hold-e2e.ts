@@ -4,8 +4,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, defaultProviderModel } from "@openbot/contracts/ipc";
-import { isDynamicRecord } from "@openbot/contracts/runtime-values";
+import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { AgentClient, DiagnosticOrigin } from "../src/backend/agent-client";
@@ -15,8 +15,8 @@ import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecode
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/queue-edit-hold-e2e");
-const root = await mkdtemp(join(tmpdir(), "openbot-queue-edit-hold-"));
+const OUT = resolve(import.meta.dirname, "../.codebot-build/queue-edit-hold-e2e");
+const root = await mkdtemp(join(tmpdir(), "codebot-queue-edit-hold-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const processLog = join(root, "claude.jsonl");
@@ -24,7 +24,7 @@ const claudeExecutable = join(root, "claude");
 const CLAUDE_MODEL = defaultProviderModel("claude");
 
 process.env.HOME = home;
-process.env.OPENBOT_CLAUDE_PATH = claudeExecutable;
+process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 
 let clockOffset = 0;
@@ -55,7 +55,7 @@ const { AgentStore } = await import("../src/backend/agent-store");
 const { ClaudeAgentClient } = await import("../src/backend/claude-client");
 const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore, QUEUE_EDIT_HOLD_MS } = await import("../src/backend/mailbox-store");
-const { OpenBotDatabase } = await import("../src/backend/openbot-database");
+const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 holdWakeDelay = QUEUE_EDIT_HOLD_MS + 1_000;
 
 const STAND_IN_CLAUDE = `#!${process.execPath}
@@ -249,7 +249,7 @@ const report: Report = { steps: [], passed: false };
 const step = (name: string, detail?: unknown) => report.steps.push({ name, detail });
 
 function open() {
-  const database = new OpenBotDatabase(userData);
+  const database = new CodeBotDatabase(userData);
   const store = new AgentStore(userData, home, database);
   const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
   const agents = new AgentService({

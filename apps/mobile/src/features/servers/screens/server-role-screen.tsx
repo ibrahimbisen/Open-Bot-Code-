@@ -3,7 +3,7 @@ import {
   AGENT_ACCESS_ROLE_NAME_LIMIT,
   type AgentAccessLevel,
   agentAccessRank,
-} from "@openbot/contracts/ipc";
+} from "@codebot/contracts/ipc";
 import { router, useLocalSearchParams } from "expo-router";
 import { Typography } from "heroui-native";
 import { useRef, useState } from "react";

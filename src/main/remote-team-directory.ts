@@ -1,12 +1,12 @@
-import { createInviteUrl, selfHostedApiOrigin } from "@openbot/contracts/invite-links";
+import { createInviteUrl, selfHostedApiOrigin } from "@codebot/contracts/invite-links";
 import type {
   InviteSummary,
   TeamInviteSummary,
   TeamMemberSummary,
   UpdateTeamMemberInput,
-} from "@openbot/contracts/ipc";
-import { TEAM_API_ROUTES } from "@openbot/contracts/team-api-routes";
-import { sourceText } from "@openbot/i18n/source";
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import type { CentralAuthOperationError } from "./central-auth-effects";
 import type { RemoteInviteRecord, RemoteMemberRecord } from "./central-auth-records";

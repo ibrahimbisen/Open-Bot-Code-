@@ -1,11 +1,11 @@
-import { createOpenBotLogger, toLogValue } from "@openbot/logging";
+import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import type { WebContents } from "electron";
 
 export const CONSENT_WORLD = 1_019;
 
 const WATCH_MS = 15_000;
 
-const logger = createOpenBotLogger("browser-consent");
+const logger = createCodeBotLogger("browser-consent");
 
 const REJECT_SELECTORS = [
   "#onetrust-reject-all-handler",
@@ -43,8 +43,8 @@ const COOKIE_TEXT = /cookie|ciasteczk/iu;
 const CONSENT_NAME = /cookie|consent|gdpr|cmp/iu;
 
 const CONSENT_SCRIPT = String.raw`(() => {
-  if (globalThis.__openbotConsent) return;
-  globalThis.__openbotConsent = true;
+  if (globalThis.__codebotConsent) return;
+  globalThis.__codebotConsent = true;
   const selectors = ${JSON.stringify(REJECT_SELECTORS)};
   const rejectLabel = new RegExp(${JSON.stringify(REJECT_LABEL.source)}, "u");
   const cookieText = new RegExp(${JSON.stringify(COOKIE_TEXT.source)}, "iu");
@@ -149,11 +149,11 @@ const CONSENT_SCRIPT = String.raw`(() => {
   };
   const stop = () => {
     done = true;
-    globalThis.__openbotConsent = "stopped";
+    globalThis.__codebotConsent = "stopped";
     clearTimeout(timer);
     observer.disconnect();
   };
-  globalThis.__openbotConsentStop = stop;
+  globalThis.__codebotConsentStop = stop;
   function scan() {
     timer = 0;
     if (done) return;
@@ -179,6 +179,6 @@ export function refuseCookieBanners(contents: WebContents): void {
 export function stopCookieBanners(contents: WebContents): void {
   if (contents.isDestroyed()) return;
   void contents
-    .executeJavaScriptInIsolatedWorld(CONSENT_WORLD, [{ code: "globalThis.__openbotConsentStop?.()" }])
+    .executeJavaScriptInIsolatedWorld(CONSENT_WORLD, [{ code: "globalThis.__codebotConsentStop?.()" }])
     .catch(() => undefined);
 }

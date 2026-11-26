@@ -1,4 +1,4 @@
-import { sourceText } from "@openbot/i18n/source";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result, Schema } from "effect";
 import { z } from "zod";
 import { GitHubOperationError, githubCall, githubDecode } from "./github-effects";

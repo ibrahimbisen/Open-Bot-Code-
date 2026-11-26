@@ -9,7 +9,7 @@ export function AIAgentProductivity() {
       </p>
 
       <p>
-        The next week, those same explanations can become part of the work again. A persistent OpenBot agent gives you a
+        The next week, those same explanations can become part of the work again. A persistent CodeBot agent gives you a
         place to keep the instructions and project files for the next update. Whether that improves productivity depends
         on how well it uses them and how much checking the result still needs.
       </p>
@@ -22,7 +22,7 @@ export function AIAgentProductivity() {
       </p>
 
       <p>
-        Give one OpenBot agent that responsibility. Ask it to save the format, the current project brief and the last
+        Give one CodeBot agent that responsibility. Ask it to save the format, the current project brief and the last
         update you accepted. Keep links to the project notes or issues it should use for fresh information.
       </p>
 
@@ -81,7 +81,7 @@ export function AIAgentProductivity() {
       <h2>Keep current information easy to find</h2>
 
       <p>
-        OpenBot keeps an agent's workspace files and stored conversations across restarts. You can return to the same
+        CodeBot keeps an agent's workspace files and stored conversations across restarts. You can return to the same
         agent for the next update and point it to the files that matter.
       </p>
 
@@ -104,7 +104,7 @@ export function AIAgentProductivity() {
       </p>
 
       <p>
-        Give that agent the files and context it needs. Agents on the same OpenBot computer or server can use the shared
+        Give that agent the files and context it needs. Agents on the same CodeBot computer or server can use the shared
         folder or send files with a message. A handoff does not automatically include the first agent's private
         conversation or memories.
       </p>
@@ -117,7 +117,7 @@ export function AIAgentProductivity() {
       <h2>Keep the project when you change models</h2>
 
       <p>
-        Changing an OpenBot agent's AI provider keeps the agent and its workspace files. Its saved conversation also
+        Changing an CodeBot agent's AI provider keeps the agent and its workspace files. Its saved conversation also
         stays available. The new provider receives selected parts of that history and can retrieve more when needed.
       </p>
 

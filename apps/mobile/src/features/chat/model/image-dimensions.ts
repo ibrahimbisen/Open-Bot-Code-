@@ -1,4 +1,4 @@
-import { base64ToBytes } from "@openbot/team-client/base64";
+import { base64ToBytes } from "@codebot/team-client/base64";
 
 export interface ImageDimensions {
   width: number;

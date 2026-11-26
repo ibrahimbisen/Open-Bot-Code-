@@ -1,4 +1,4 @@
-import { ChatVisual } from "@openbot/ui/features/conversation/ChatVisual";
+import { ChatVisual } from "@codebot/ui/features/conversation/ChatVisual";
 import { createEffect, createSignal, For } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
@@ -61,7 +61,7 @@ const meta = {
   argTypes: { html: { control: false } },
   parameters: { layout: "fullscreen" },
   render: (args) => (
-    <main style={{ width: "min(656px, 100vw)", padding: "var(--openbot-space-6)" }}>
+    <main style={{ width: "min(656px, 100vw)", padding: "var(--codebot-space-6)" }}>
       <VisualStage {...args} />
     </main>
   ),
@@ -123,9 +123,9 @@ export const PhoneWidth: Story = {
     <main
       style={{
         width: "360px",
-        padding: "var(--openbot-space-4)",
+        padding: "var(--codebot-space-4)",
         display: "grid",
-        gap: "var(--openbot-space-6)",
+        gap: "var(--codebot-space-6)",
       }}
     >
       <For each={VISUALS}>

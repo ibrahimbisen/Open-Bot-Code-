@@ -7,7 +7,7 @@ import {
   useMotionPreferences,
 } from "./motion";
 
-const key = "openbot.mobile.motion.v1";
+const key = "codebot.mobile.motion.v1";
 
 function storedValue(): string {
   const state = useMotionPreferences.getState();

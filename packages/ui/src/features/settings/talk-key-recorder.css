@@ -1,7 +1,7 @@
 .talk-key-recorder {
   display: flex;
   align-items: center;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .talk-key-recorder-button {
@@ -10,10 +10,10 @@
 
 .talk-key-recorder-caps {
   display: inline-flex;
-  gap: var(--openbot-space-1);
+  gap: var(--codebot-space-1);
 }
 
 .talk-key-recorder-prompt {
-  color: var(--openbot-text-muted);
+  color: var(--codebot-text-muted);
   white-space: nowrap;
 }

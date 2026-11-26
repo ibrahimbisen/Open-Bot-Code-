@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { resolve } from "node:path";
-import { translateFor } from "@openbot/i18n";
+import { translateFor } from "@codebot/i18n";
 import { type Browser, chromium, type Locator, type Page } from "playwright-core";
 import {
   argument,
@@ -12,9 +12,9 @@ import {
   writeReport,
 } from "./channel-e2e-support";
 
-const OUT = resolve(import.meta.dirname, "../.openbot-build/web-channel-chat-e2e");
+const OUT = resolve(import.meta.dirname, "../.codebot-build/web-channel-chat-e2e");
 const UI_WAIT_MS = 30_000;
-const DEV_HOST_EMAIL = "openbot-dev-host@example.com";
+const DEV_HOST_EMAIL = "codebot-dev-host@example.com";
 const VISUAL_PROMPT =
   "Call the html_render tool once with a small HTML page that shows the word OTTER in a heading. Then reply with DONE only.";
 const english = translateFor("en");

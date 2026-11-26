@@ -1,14 +1,14 @@
-import type { OpenBotDesktopApi } from "@openbot/contracts/ipc";
+import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 
 export interface OnboardingPort {
-  getSetupState: OpenBotDesktopApi["getSetupState"];
-  saveSetup: OpenBotDesktopApi["saveSetup"];
-  onSetupState: OpenBotDesktopApi["onSetupState"];
-  servers: Pick<OpenBotDesktopApi["servers"], "previewInvite">;
-  openUrl: OpenBotDesktopApi["openUrl"];
-  getAnalyticsDefault: OpenBotDesktopApi["getAnalyticsDefault"];
+  getSetupState: CodeBotDesktopApi["getSetupState"];
+  saveSetup: CodeBotDesktopApi["saveSetup"];
+  onSetupState: CodeBotDesktopApi["onSetupState"];
+  servers: Pick<CodeBotDesktopApi["servers"], "previewInvite">;
+  openUrl: CodeBotDesktopApi["openUrl"];
+  getAnalyticsDefault: CodeBotDesktopApi["getAnalyticsDefault"];
 }
 
 export function onboardingPort(): OnboardingPort {
-  return window.openbot;
+  return window.codebot;
 }
