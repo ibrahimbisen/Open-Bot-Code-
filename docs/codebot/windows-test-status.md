@@ -16,7 +16,7 @@ Result values: `pass`, `fail` (with the exact reason), `not run yet`, `not run` 
 | --- | --- | --- |
 | `bun run test:desktop` | pass | 103 files, 2298 tests. See [Vitest corrections](#vitest-corrections). |
 | `bun run knip:check` | fail, not a Windows problem | The 18 unused files, 9 unused exports and 1 unused type that only Windows reported are gone: see [knip corrections](#knip-corrections). One finding stays: `src/backend/projects/project-context.ts` is an unused file. Commit `ce1b138cc` on `main` added it and no module imports it yet, so each platform reports it. With that file moved away, knip exits with code 0 on Windows. The 7 configuration hints are not errors. |
-| `bun run check:agent-context` | not run yet | |
+| `bun run check:agent-context` | pass | `instructions.claude` 16939 and `instructions.codex` 17144 bytes, the same as the baseline. See [Agent context correction](#agent-context-correction). |
 
 ## Vitest corrections
 
@@ -40,6 +40,16 @@ exist. knip then reported the 7 page modules, and each file and export that only
 modules to the electron-vite plugin as its entries. POSIX: the plugin finds the same modules by
 itself, so the result does not change. The entries belong to the plugin, not to the workspace `entry`
 list, so knip does not report them as redundant on POSIX.
+
+## Agent context correction
+
+`developerInstructions()` read `process.platform` for three texts: the rule for a long job, the
+Computer Use rules and the automation command. The baseline in `tools/agent-context/budget.json` comes
+from Linux, so the check measured 512 bytes more on Windows, and it would measure more on macOS too.
+
+`developerInstructions()` now has a `platform` option, with `process.platform` as the default, so the
+product text does not change. The fixture of `scripts/agent-context-budget.ts` sets it to `linux`. The
+baseline did not change. The text that only Windows or macOS gets is not in the counts, as before in CI.
 
 ## Provider fakes E2E
 

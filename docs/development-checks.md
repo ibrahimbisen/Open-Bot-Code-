@@ -405,7 +405,10 @@ baseline. Do not name the script `typecheck:*`:
 counts in `tools/agent-context/budget.json`. It uses the same rules as the type debt ratchet
 (`scripts/debt-ratchet.ts`): more bytes fail, and fewer bytes fail until `--write` lowers the
 baseline. A raise is a hand edit that a reviewer sees. The fixture agent has no memories, teammates,
-skills, or connected vault, so the counts measure only CodeBot's own text:
+skills, or connected vault, so the counts measure only CodeBot's own text. The fixture also sets the
+`platform` option of `developerInstructions()` to `linux`, so the counts are the same on Windows,
+macOS and Linux. The text that the instructions have only on Windows or macOS (the long-job rule, the
+Computer Use rules and the automation command) is not in the counts:
 
 - `instructions.claude` and `instructions.codex`: `developerInstructions()` with the options of each
   provider.
