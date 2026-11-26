@@ -163,6 +163,8 @@ const AGENT_FILES_REMOVAL = { recursive: true, force: true, maxRetries: 10, retr
 
 const HELD_COPIED_FOLDER_WAITS_MS: readonly number[] = [10, 50, 100, 250, 500, 1000, 1000, 2000, 2000, 3000];
 
+export type NewAgentInput = Omit<CreateAgentInput, "initialMessage"> & { projectId?: string };
+
 export class AgentStore {
   readonly #statePath: string;
   readonly #agentsRoot: string;
@@ -307,13 +309,13 @@ export class AgentStore {
     return this.#state.agents.some((agent) => agent.id === id);
   }
 
-  createAgent(input: Omit<CreateAgentInput, "initialMessage">, profileOperationId?: string) {
+  createAgent(input: NewAgentInput, profileOperationId?: string) {
     return this.#creationQueue.withPermit(this.#createAgent(input, profileOperationId));
   }
 
   #createAgent = Effect.fn("AgentStore.createAgent")(function* (
     this: AgentStore,
-    input: Omit<CreateAgentInput, "initialMessage">,
+    input: NewAgentInput,
     profileOperationId?: string,
   ): Effect.fn.Return<AgentSummary, StoredStateFailure> {
     try {
@@ -329,6 +331,7 @@ export class AgentStore {
       record.avatarSeed = input.avatarSeed;
       record.avatarHue = input.avatarHue;
       applyAvatarColor(record, input.avatarHue, input.avatarColor);
+      if (input.projectId !== undefined) record.projectId = input.projectId;
       if (profileOperationId) yield* this.#profileCreationRecovery.begin(record.id, profileOperationId);
       yield* storedIO(() => mkdir(record.workspacePath, { recursive: true, mode: 0o700 }));
       this.#state.agents.unshift(record);
@@ -1892,6 +1895,7 @@ function isStoredAgent(value: unknown): value is PersistedStoredAgent {
     (record.pendingRuntime === undefined || isAgentPendingRuntime(record.pendingRuntime)) &&
     (record.pinnedAccountId === undefined || isProviderAccountId(record.pinnedAccountId)) &&
     (record.hiddenAt === undefined || isHiddenAt(record.hiddenAt)) &&
+    (record.projectId === undefined || isString(record.projectId)) &&
     isAvatarSeed(record.avatarSeed) &&
     (record.avatarHue === null || isAvatarHue(record.avatarHue)) &&
     (record.avatarColor === undefined || isAvatarColor(record.avatarColor)) &&
@@ -2062,6 +2066,7 @@ function readStoredAgent(value: unknown): ReadStoredAgent | UnreadableStoredAgen
     ...(pendingRuntime === undefined ? {} : { pendingRuntime }),
     ...(pinnedAccountId === undefined ? {} : { pinnedAccountId }),
     ...(hiddenAt === undefined ? {} : { hiddenAt }),
+    ...(isString(value.projectId) && value.projectId.length > 0 ? { projectId: value.projectId } : {}),
     ...(sessionSettingOverrides === undefined ? {} : { sessionSettingOverrides }),
     ...(sessionSettingResets === undefined ? {} : { sessionSettingResets }),
     ...(marketplaceSource === undefined ? {} : { marketplaceSource }),

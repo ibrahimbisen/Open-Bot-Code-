@@ -4,6 +4,7 @@ import { isAbsolute } from "node:path";
 import { type AgentSummary, workspaceAccessEnforced } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import { isPathInside } from "../path-containment";
+import { agentProjectContext } from "../projects/project-context";
 
 type SandboxedAgent = Pick<AgentSummary, "id" | "access" | "additionalFolders" | "provider" | "workspacePath">;
 
@@ -27,8 +28,13 @@ export function setChannelFolderSource(source: (agentId: string) => readonly str
   channelFoldersOf = source;
 }
 
+export function agentWorkingDirectory(agent: Pick<AgentSummary, "id" | "workspacePath">): string {
+  return agentProjectContext(agent.id)?.mainFolder ?? agent.workspacePath;
+}
+
 export function effectiveAgentFolders(agent: FolderAgent): string[] {
-  const own = agent.additionalFolders ?? [];
+  const project = agentProjectContext(agent.id);
+  const own = project ? [...project.folders] : (agent.additionalFolders ?? []);
   return [...own, ...channelFoldersOf(agent.id).filter((folder) => !own.includes(folder))];
 }
 

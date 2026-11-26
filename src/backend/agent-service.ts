@@ -436,6 +436,18 @@ interface AgentServiceEvents {
   workflowRun: [end: WorkflowRunEnd];
   creditMedia: [report: CreditMediaReport];
   liveVoice: [event: VoiceLiveEvent, memberId: string | null];
+  taskRead: [agentId: string, taskId: string, unreadCount: number];
+}
+
+export interface ProjectAgentCreation {
+  projectId: string;
+  name: string;
+  role: string;
+  provider?: AgentProvider;
+  model?: string;
+  reasoningEffort?: AgentReasoningEffort;
+  providerAccountId?: string;
+  avatarSeed: string;
 }
 
 export interface AgentServiceOptions {
@@ -6789,10 +6801,91 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     options?: ConversationMarkerExclusions,
   ): AgentTaskReadState {
     const task = this.#tasks.require(input.agentId, input.taskId);
-    return {
+    const state = {
       taskId: task.taskId,
       ...this.#reader.markThreadRead(memberId, task.threadId, input.throughMessageId, options),
     };
+    this.emit("taskRead", task.agentId, task.taskId, state.unreadCount);
+    return state;
+  }
+
+  attentionThreadIds(): Set<string> {
+    const attention = this.#attention.runtimeAttention();
+    return new Set([
+      ...attention.pendingPrompts.filter((prompt) => prompt.detached !== true).map((prompt) => prompt.threadId),
+      ...attention.pendingApprovals.map((approval) => approval.threadId),
+      ...attention.pendingBrowserTakeovers.map((takeover) => takeover.threadId),
+    ]);
+  }
+
+  taskReadStates(
+    memberId: string,
+    threadIds: readonly string[],
+    options?: ConversationMarkerExclusions,
+  ): Map<string, ConversationReadState> {
+    return new Map(threadIds.map((threadId) => [threadId, this.#reader.readThread(memberId, threadId, options)]));
+  }
+
+  readonly createProjectAgent = Effect.fn("AgentService.createProjectAgent")(function* (
+    this: AgentService,
+    input: ProjectAgentCreation,
+  ): Effect.fn.Return<AgentSummary, AgentLifecycleFailed> {
+    let agent = yield* this.#store
+      .createAgent({
+        name: input.name,
+        description: "",
+        avatarSeed: input.avatarSeed,
+        avatarHue: null,
+        projectId: input.projectId,
+      })
+      .pipe(
+        Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "create agent", cause: failure.cause })),
+      );
+    const result = yield* Effect.result(
+      Effect.gen({ self: this }, function* () {
+        yield* this.#prepareAgentWorkspace(agent);
+        agent = yield* this.#assignNewAgentModel(
+          agent,
+          {
+            name: input.name,
+            description: "",
+            avatarSeed: input.avatarSeed,
+            avatarHue: null,
+            ...(input.provider ? { provider: input.provider } : {}),
+            ...(input.model ? { model: input.model } : {}),
+            ...(input.reasoningEffort ? { reasoningEffort: input.reasoningEffort } : {}),
+            ...(input.providerAccountId ? { providerAccountId: input.providerAccountId } : {}),
+          },
+          false,
+          true,
+        );
+        agent = yield* this.#store
+          .updateAgent({ agentId: agent.id, title: input.role })
+          .pipe(
+            Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "create agent", cause: failure.cause })),
+          );
+        yield* this.#store
+          .ensureThreadId(agent.id)
+          .pipe(
+            Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "create agent", cause: failure.cause })),
+          );
+        return this.#store.get(agent.id) ?? agent;
+      }).pipe(
+        Effect.catchDefect((cause) => Effect.fail(new AgentLifecycleFailed({ operation: "create agent", cause }))),
+      ),
+    );
+    if (Result.isFailure(result)) {
+      yield* Effect.result(this.#removal.deleteData(agent));
+      this.#emit({ type: "agents-changed", agents: this.listAgents() });
+      return yield* result.failure;
+    }
+    this.#emit({ type: "agents-changed", agents: this.listAgents() });
+    return result.success;
+  }, Effect.uninterruptible).bind(this);
+
+  agentProjectChanged(agentIds: readonly string[]): void {
+    for (const agentId of agentIds) this.#conversation.unloadAgentThreads(agentId);
+    this.#emit({ type: "agents-changed", agents: this.listAgents() });
   }
 
   readonly deleteTask = Effect.fn("AgentService.deleteTask")(function* (
@@ -7057,7 +7150,13 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     yield* lifecycleStep("validate message recipient", validateRecipient);
     const taskId = input.taskId;
     const task = taskId
-      ? yield* lifecycleStep("find message task", () => this.#tasks.requireOpen(agent.id, taskId))
+      ? yield* lifecycleStep("find message task", () => {
+          if (agent.projectId !== undefined && this.#tasks.has(agent.id, taskId)) {
+            const known = this.#tasks.require(agent.id, taskId);
+            if (known.closedAt !== null) this.#tasks.reopen(known);
+          }
+          return this.#tasks.requireOpen(agent.id, taskId);
+        })
       : null;
     const receipt = yield* this.#mailbox
       .enqueue({

@@ -88,6 +88,7 @@ import {
   promptInstructionsFile,
 } from "./workspace-instructions";
 import {
+  agentWorkingDirectory,
   type CodexApprovalPolicy,
   checkAgentFolders,
   codexApprovalPolicy,
@@ -648,7 +649,7 @@ export class ThreadLifecycle {
       ...config,
       model: agent.model,
       effort: agent.reasoningEffort,
-      cwd: agent.workspacePath,
+      cwd: agentWorkingDirectory(agent),
       runtimeWorkspaceRoots: workspaceWritableRoots(agent, this.#store.sharedRoot),
       approvalPolicy: this.approvalPolicy(agent),
       approvalsReviewer: "user",
@@ -1303,7 +1304,7 @@ export class ThreadLifecycle {
       threadId: externalThreadId,
       model: agent.model,
       effort: agent.reasoningEffort,
-      cwd: agent.workspacePath,
+      cwd: agentWorkingDirectory(agent),
       runtimeWorkspaceRoots: workspaceWritableRoots(agent, this.#store.sharedRoot),
       approvalPolicy: this.approvalPolicy(agent),
       approvalsReviewer: "user",

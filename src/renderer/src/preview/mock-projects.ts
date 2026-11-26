@@ -174,7 +174,7 @@ export interface MockProjects {
 
 type ProjectErrorKey = Exclude<
   Extract<keyof SourceMessages, `error.project.${string}`>,
-  "error.project.limit" | "error.project.agentLimit"
+  "error.project.limit" | "error.project.agentLimit" | "error.project.mainFolderMissing"
 >;
 
 function fail(key: ProjectErrorKey): never {

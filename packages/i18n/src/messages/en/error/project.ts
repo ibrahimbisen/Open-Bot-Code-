@@ -14,4 +14,8 @@ export const messages = defineMessages("error.project", {
   "error.project.agentNameRequired": "Give the agent a name.",
   "error.project.chatNotFound": "This chat no longer exists.",
   "error.project.cursorInvalid": "This part of the chat list is no longer valid. Load the chats again.",
+  "error.project.folderMissing": "This folder does not exist.",
+  "error.project.folderProtected": "CodeBot cannot use this folder. Choose a different folder.",
+  "error.project.mainFolderMissing":
+    "The main folder of this project is missing: {path}. Restore the folder or choose a new main folder.",
 });

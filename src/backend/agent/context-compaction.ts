@@ -17,6 +17,7 @@ import { CacheExpiryCompaction } from "./cache-expiry-compaction";
 import type { FailureContext } from "./failure-signal";
 import type { ProviderPort } from "./provider-runtime";
 import type { ThreadOperationFailed } from "./thread-lifecycle";
+import { agentWorkingDirectory } from "./workspace-sandbox";
 
 interface ThreadContextBudget {
   usedTokens: number;
@@ -532,7 +533,7 @@ export class ContextCompaction {
           return client
             .request(
               "thread/compact/start",
-              runsInRequest ? { threadId, cwd: agent.workspacePath } : { threadId },
+              runsInRequest ? { threadId, cwd: agentWorkingDirectory(agent) } : { threadId },
               decodeRecordResponse,
               runsInRequest ? this.#runTimeoutMs : undefined,
             )

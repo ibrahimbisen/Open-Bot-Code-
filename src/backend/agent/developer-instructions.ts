@@ -26,6 +26,8 @@ import { automationRunCommand } from "../automation-command";
 import type { HomeSkill } from "../home-skills";
 import { PASSWORD_MANAGER_BRAND_NAMES } from "../password-vault";
 import { COMPUTER_USE_GUIDE_URI, piComputerUseGuideStep } from "../pi-mcp-names";
+import { agentProjectContext } from "../projects/project-context";
+import { projectInstructionLines, projectWorkingDirectoryText } from "../projects/project-prompt";
 import { ROUTINE_NO_UPDATE_MARKER, ROUTINE_NO_UPDATE_TOOL } from "./routine-quiet-runs";
 import type { PromptInstructionsFile } from "./workspace-instructions";
 import { existingAgentFolders, workspaceExcludedFolders } from "./workspace-sandbox";
@@ -408,7 +410,8 @@ export function developerInstructions(
       description: agent.description.trim(),
     }),
   );
-  const folders = existingAgentFolders(agent);
+  const project = agentProjectContext(agent.id);
+  const folders = existingAgentFolders(agent).filter((folder) => folder !== project?.mainFolder);
   const excluded = workspaceExcludedFolders(agent);
   const instructionsFileName = options.instructionsFileName ?? "AGENTS.md";
   const style = options.responseStyle ?? DEFAULT_RESPONSE_STYLE;
@@ -510,11 +513,16 @@ export function developerInstructions(
       : options.sectionTeammates
         ? sectionTeammateInstructions(options.sectionTeammates)
         : []),
-    `Your working directory, for your own persistent files, is ${agent.workspacePath}. The shared directory, for files that other CodeBot agents need, is ${sharedRoot}. You can change files and run commands in both.${
+    `${
+      project
+        ? projectWorkingDirectoryText(project, agent.workspacePath)
+        : `Your working directory, for your own persistent files, is ${agent.workspacePath}.`
+    } The shared directory, for files that other CodeBot agents need, is ${sharedRoot}. You can change files and run commands in both.${
       options.workspaceSkills?.length
         ? ` Your workspace skills, each at ${join(agent.workspacePath, ".agents", "skills", "<name>", "SKILL.md")}: ${options.workspaceSkills.slice(0, MAX_HOME_SKILLS_IN_INSTRUCTIONS).join(", ")}.`
         : ""
     }`,
+    ...(project ? projectInstructionLines(project) : []),
     ...(folders.length
       ? [
           `The user also gave you these folders to work in: ${folders.join(", ")}. You can change files and run commands in them. They belong to the user: keep your own files in your working directory.`,

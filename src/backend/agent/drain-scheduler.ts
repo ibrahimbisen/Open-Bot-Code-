@@ -65,7 +65,12 @@ import type { ThreadLifecycle } from "./thread-lifecycle";
 import type { DeliveryStart } from "./turn-lifecycle";
 import { TurnSlots } from "./turn-slots";
 import type { UsageLimitGate } from "./usage-limit-gate";
-import { checkAgentFolders, codexSandboxPolicy, workspaceWritableRoots } from "./workspace-sandbox";
+import {
+  agentWorkingDirectory,
+  checkAgentFolders,
+  codexSandboxPolicy,
+  workspaceWritableRoots,
+} from "./workspace-sandbox";
 
 export const REMOVED_ENDPOINT_MESSAGE = sourceText("error.agent.endpointRemoved");
 
@@ -1100,7 +1105,7 @@ export class DrainScheduler {
                   (!delivery.replyToMessageId || this.#mailbox.followsUpOwnAnswer(delivery)),
                 wakeAfterCommands: inOwnChat(providerThreadId),
                 input: inputForThread(providerThreadId),
-                cwd: agent.workspacePath,
+                cwd: agentWorkingDirectory(agent),
                 runtimeWorkspaceRoots: workspaceWritableRoots(agent, this.#store.sharedRoot),
                 approvalPolicy: this.#threads.approvalPolicy(agent),
                 approvalsReviewer: "user",
