@@ -240,6 +240,7 @@ import {
   STORY_USAGE,
   withStoryForeignProvider,
 } from "./fixtures";
+import { createMockAdvancedFeatures } from "./mock-advanced-features";
 import { mockAgentAnalytics, mockHostAnalytics } from "./mock-agent-analytics";
 import { createMockAuth, type MockAuthOptions } from "./mock-auth";
 import { createMockBilling, previewBillingServers } from "./mock-billing";
@@ -3703,6 +3704,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       restartHost: async () => {},
       ...createMockHostUpdate(options),
       ...createMockHostTimezone(),
+      ...createMockAdvancedFeatures(),
       ...createMockHostSignalHome(),
       ...createMockHostVoiceModel(),
       ...hostTurnLimits,

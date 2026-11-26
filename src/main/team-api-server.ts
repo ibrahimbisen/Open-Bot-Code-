@@ -32,6 +32,7 @@ import {
 import { isString } from "@codebot/contracts/runtime-values";
 import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import { ACP_REGISTRY_CAPABILITY } from "@codebot/contracts/team-protocol/acp-registry-v1";
+import { ADVANCED_FEATURES_CAPABILITY } from "@codebot/contracts/team-protocol/advanced-features-v1";
 import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-active-queues-v1";
 import { AGENT_ARCHIVED_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-archived-threads-v1";
@@ -382,6 +383,7 @@ import {
   stringField,
 } from "./team-api/request-helpers";
 import { routeAcpRegistry } from "./team-api/route-acp-registry";
+import { routeAdvancedFeatures } from "./team-api/route-advanced-features";
 import { routeAgentAccess } from "./team-api/route-agent-access";
 import { routeAgentActiveQueues } from "./team-api/route-agent-active-queues";
 import {
@@ -1387,6 +1389,7 @@ export class TeamApiServer {
       if ((await routeClaudeUserSetup(context, this.#options.admin)) === "handled") return;
       if ((await routeClaudeCompactWindow(context, this.#options.admin)) === "handled") return;
       if ((await routeCacheExpiryCompaction(context, this.#options.admin)) === "handled") return;
+      if ((await routeAdvancedFeatures(context, this.#options.admin)) === "handled") return;
       if ((await routeMediaApprovalCredits(context, this.#options.admin)) === "handled") return;
       if ((await routeProviderEnvironment(context, this.#options.admin)) === "handled") return;
       if ((await routeProviderDetection(context, this.#options.admin)) === "handled") return;
@@ -2960,6 +2963,7 @@ export class TeamApiServer {
         if (capability === CLAUDE_USER_SETUP_CAPABILITY) return this.#options.admin?.claudeUserSetup !== undefined;
         if (capability === CLAUDE_COMPACT_WINDOW_CAPABILITY)
           return this.#options.admin?.claudeCompactWindow !== undefined;
+        if (capability === ADVANCED_FEATURES_CAPABILITY) return this.#options.admin?.advancedFeatures !== undefined;
         if (capability === CACHE_EXPIRY_COMPACTION_CAPABILITY)
           return this.#options.admin?.cacheExpiryCompaction !== undefined;
         if (capability === MEDIA_APPROVAL_CREDITS_CAPABILITY)

@@ -320,6 +320,7 @@
     "./team-protocol/host-key-rotation-v1": "./src/team-protocol/host-key-rotation-v1.ts",
     "./team-protocol/local-servers-v1": "./src/team-protocol/local-servers-v1.ts",
     "./team-protocol/host-signal-home-v1": "./src/team-protocol/host-signal-home-v1.ts",
+    "./team-protocol/advanced-features-v1": "./src/team-protocol/advanced-features-v1.ts",
     "./team-protocol/host-timezone-v1": "./src/team-protocol/host-timezone-v1.ts",
     "./team-protocol/ui-block-location-v1": "./src/team-protocol/ui-block-location-v1.ts",
     "./team-protocol/host-turn-limits-events-v1": "./src/team-protocol/host-turn-limits-events-v1.ts",

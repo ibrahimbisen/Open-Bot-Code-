@@ -7,6 +7,7 @@ import { CHANNEL_TOOL_DEFINITIONS } from "../channel-tools";
 import { CODEBOT_DYNAMIC_TOOLS, CODEBOT_TOOL_DEFINITIONS } from "../codebot-tools";
 import type { DynamicToolNamespace } from "../local-mcp-bridge";
 import { type DynamicToolCallParams, isRecord, qualifiedToolName } from "../protocol";
+import { advancedFeaturesKey, toolHiddenByAdvancedFeature, withoutHiddenTools } from "./advanced-feature-gate";
 import { advertisedJsonSchema } from "./advertised-json-schema";
 import { nullStructuredItemPaths, withSchemaTypes } from "./schema-typed-arguments";
 import { toolGuidance } from "./tool-guidance";
@@ -75,8 +76,23 @@ const OWN_WEB_SEARCH_CATALOG = BUILTIN_TOOL_CATALOG.filter(
   (tool) => tool.name !== `${CODEBOT_DYNAMIC_TOOLS.name}.web_search`,
 );
 
+const gatedCatalogs = new Map<string, typeof BUILTIN_TOOL_CATALOG>();
+
+function gatedCatalog(base: typeof BUILTIN_TOOL_CATALOG, id: string): typeof BUILTIN_TOOL_CATALOG {
+  const key = `${id}:${advancedFeaturesKey()}`;
+  const known = gatedCatalogs.get(key);
+  if (known) return known;
+  const next = base.filter(
+    (entry) => entry.namespace !== CODEBOT_DYNAMIC_TOOLS.name || !toolHiddenByAdvancedFeature(entry.tool),
+  );
+  gatedCatalogs.set(key, next);
+  return next;
+}
+
 function catalogFor(provider: AgentProviderId) {
-  return OWN_WEB_SEARCH_PROVIDERS.has(provider) ? OWN_WEB_SEARCH_CATALOG : BUILTIN_TOOL_CATALOG;
+  return OWN_WEB_SEARCH_PROVIDERS.has(provider)
+    ? gatedCatalog(OWN_WEB_SEARCH_CATALOG, "own")
+    : gatedCatalog(BUILTIN_TOOL_CATALOG, "all");
 }
 
 function catalogNames(catalog: typeof BUILTIN_TOOL_CATALOG): string {
@@ -117,7 +133,7 @@ const TOOL_SEARCH_DESCRIPTION =
 
 function toolDefinitions(catalog: typeof BUILTIN_TOOL_CATALOG) {
   return [
-    ...CODEBOT_TOOL_DEFINITIONS.filter((tool) => DIRECT_NAMES.has(tool.name)),
+    ...withoutHiddenTools(CODEBOT_TOOL_DEFINITIONS).filter((tool) => DIRECT_NAMES.has(tool.name)),
     {
       name: "tool_search",
       description: `${TOOL_SEARCH_DESCRIPTION} Catalog: ${catalogNames(catalog)}`,
@@ -154,15 +170,6 @@ function dynamicTools(definitions: ReturnType<typeof toolDefinitions>) {
   ];
 }
 
-const ALL_TOOL_DEFINITIONS = toolDefinitions(BUILTIN_TOOL_CATALOG);
-const OWN_WEB_SEARCH_TOOL_DEFINITIONS = toolDefinitions(OWN_WEB_SEARCH_CATALOG);
-const ALL_DYNAMIC_TOOLS = dynamicTools(ALL_TOOL_DEFINITIONS);
-const OWN_WEB_SEARCH_DYNAMIC_TOOLS = dynamicTools(OWN_WEB_SEARCH_TOOL_DEFINITIONS);
-const KIMI_DYNAMIC_TOOLS = dynamicTools(
-  visibleToolDefinitions("kimi").map((definition) =>
-    definition.name === "tool_call" ? { ...definition, shape: kimiCallShape } : definition,
-  ),
-);
 const ANTIGRAVITY_DISCOVERY_TOOLS: DynamicToolNamespace["tools"] = [
   {
     type: "function",
@@ -192,29 +199,63 @@ const ANTIGRAVITY_DISCOVERY_TOOLS: DynamicToolNamespace["tools"] = [
   },
 ];
 
-const ANTIGRAVITY_DYNAMIC_TOOLS = dynamicTools(toolDefinitions(catalogFor("antigravity"))).map((namespace) =>
-  namespace.name === CODEBOT_DYNAMIC_TOOLS.name
-    ? {
-        ...namespace,
-        tools: namespace.tools.map(
-          (tool) => ANTIGRAVITY_DISCOVERY_TOOLS.find((compact) => compact.name === tool.name) ?? tool,
-        ),
-      }
-    : namespace,
-);
+function antigravityTools() {
+  return dynamicTools(toolDefinitions(catalogFor("antigravity"))).map((namespace) =>
+    namespace.name === CODEBOT_DYNAMIC_TOOLS.name
+      ? {
+          ...namespace,
+          tools: namespace.tools.map(
+            (tool) => ANTIGRAVITY_DISCOVERY_TOOLS.find((compact) => compact.name === tool.name) ?? tool,
+          ),
+        }
+      : namespace,
+  );
+}
+
+interface ToolSet {
+  definitions: ReturnType<typeof toolDefinitions>;
+  dynamic: ReturnType<typeof dynamicTools>;
+  kimi: ReturnType<typeof dynamicTools>;
+  antigravity: ReturnType<typeof antigravityTools>;
+}
+
+const toolSets = new Map<string, ToolSet>();
+
+function toolSet(own: boolean): ToolSet {
+  const key = `${own ? "own" : "all"}:${advancedFeaturesKey()}`;
+  const known = toolSets.get(key);
+  if (known) return known;
+  const definitions = toolDefinitions(
+    gatedCatalog(own ? OWN_WEB_SEARCH_CATALOG : BUILTIN_TOOL_CATALOG, own ? "own" : "all"),
+  );
+  const ownDefinitions = own ? definitions : toolDefinitions(gatedCatalog(OWN_WEB_SEARCH_CATALOG, "own"));
+  const next: ToolSet = {
+    definitions,
+    dynamic: dynamicTools(definitions),
+    kimi: dynamicTools(
+      ownDefinitions.map((definition) =>
+        definition.name === "tool_call" ? { ...definition, shape: kimiCallShape } : definition,
+      ),
+    ),
+    antigravity: antigravityTools(),
+  };
+  toolSets.set(key, next);
+  return next;
+}
 
 export function toolCatalogNames(provider: AgentProviderId): string {
   return catalogNames(catalogFor(provider));
 }
 
 export function visibleToolDefinitions(provider: AgentProviderId) {
-  return OWN_WEB_SEARCH_PROVIDERS.has(provider) ? OWN_WEB_SEARCH_TOOL_DEFINITIONS : ALL_TOOL_DEFINITIONS;
+  return toolSet(OWN_WEB_SEARCH_PROVIDERS.has(provider)).definitions;
 }
 
 export function visibleDynamicTools(provider: AgentProviderId) {
-  if (provider === "kimi") return KIMI_DYNAMIC_TOOLS;
-  if (provider === "antigravity") return ANTIGRAVITY_DYNAMIC_TOOLS;
-  return OWN_WEB_SEARCH_PROVIDERS.has(provider) ? OWN_WEB_SEARCH_DYNAMIC_TOOLS : ALL_DYNAMIC_TOOLS;
+  const set = toolSet(OWN_WEB_SEARCH_PROVIDERS.has(provider));
+  if (provider === "kimi") return set.kimi;
+  if (provider === "antigravity") return set.antigravity;
+  return set.dynamic;
 }
 
 function mcpCatalogTools(catalog: typeof BUILTIN_TOOL_CATALOG): Map<string, DynamicToolNamespace["tools"][number]> {
@@ -264,7 +305,9 @@ const CHANNEL_TOOL_NAMES: ReadonlySet<string> = new Set(
 export function withChannelTools(namespaces: readonly DynamicToolNamespace[]): DynamicToolNamespace[] {
   const tools = mcpCatalogs.get(BUILTIN_TOOL_CATALOG) ?? mcpCatalogTools(BUILTIN_TOOL_CATALOG);
   mcpCatalogs.set(BUILTIN_TOOL_CATALOG, tools);
-  const channelTools = [...tools].flatMap(([name, tool]) => (CHANNEL_TOOL_NAMES.has(name) ? [tool] : []));
+  const channelTools = [...tools].flatMap(([name, tool]) =>
+    CHANNEL_TOOL_NAMES.has(name) && !toolHiddenByAdvancedFeature(tool.name) ? [tool] : [],
+  );
   return namespaces.map((namespace) => {
     if (namespace.name !== CODEBOT_DYNAMIC_TOOLS.name) return namespace;
     const names = new Set(namespace.tools.map((tool) => tool.name));

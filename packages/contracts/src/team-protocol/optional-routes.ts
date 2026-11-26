@@ -1,5 +1,6 @@
 import { ACP_REGISTRY_CODECS } from "./acp-registry-v1";
 import type { OptionalRouteCodec } from "./admin-wire";
+import { ADVANCED_FEATURES_CODECS } from "./advanced-features-v1";
 import { AGENT_ACCESS_CODECS } from "./agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_CODECS } from "./agent-active-queues-v1";
 import { AGENT_ADMIN_CODECS } from "./agent-admin-v1";
@@ -218,6 +219,7 @@ const CODECS: ReadonlyMap<string, OptionalRouteCodec> = new Map([
   ...HOST_ADMIN_CODECS,
   ...HOST_UPDATE_CODECS,
   ...HOST_TIMEZONE_CODECS,
+  ...ADVANCED_FEATURES_CODECS,
   ...HOST_VOICE_MODEL_CODECS,
   ...HOST_SIGNAL_HOME_CODECS,
   ...HOST_TURN_LIMITS_CODECS,
