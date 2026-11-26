@@ -25,6 +25,4 @@ export const messages = defineMessages("error.localServer", {
   "error.localServer.gpuKeyOtherOrigin":
     "The API key can go to the GPU status URL only when that URL has the same origin as the base URL.",
   "error.localServer.scanHostInvalid": "Enter a host name, an IP address, or an http or https address.",
-  "error.localServer.notSaved": "This local server is not saved.",
-  "error.localServer.remoteUnsupported": "This server does not report the status of its local model servers yet.",
 });
