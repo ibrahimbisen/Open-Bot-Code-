@@ -81,23 +81,9 @@ Wait for Docker health to become `healthy`. Check the running source for `multip
 checksum. Keep the previous image until the device checks below pass. Do not print container environment
 variables, resume tokens, tickets, or raw connection logs.
 
-The capacity reporter (`capacity-report`) uses the Signal image and sends `signal_capacity`
-(ANALYTICS.md) every 5 minutes. It reads the coturn metrics on `127.0.0.1:9641` and the Signal metrics
-on `127.0.0.1:9642`. It needs `OPENPANEL_CLIENT_ID` and `OPENPANEL_CLIENT_SECRET` in the host
-`.env.production`, the server client of `apps/auth-api/.env.production`; without them it exits at start
-and stays stopped. Build and start it after `remote-api`, with the same `--build-arg`:
-
-```sh
-remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p codebot-remote -f remote/compose.yaml build --build-arg "CODEBOT_SOURCE_COMMIT=$source_commit" capacity-report
-remote/bin/dotenvx run --overload -f remote/.env.production -fk remote/.env.keys -- \
-  docker compose -p codebot-remote -f remote/compose.yaml up -d --no-build --no-deps capacity-report
-docker logs codebot-remote-capacity-report-1 2>&1 | tail -5
-```
-
-A failed sample writes only `Capacity report failed.` and its source (`turn`, `signal` or `openpanel`).
-The reporter also reads `/proc/net/route` and `/proc/net/dev` of the host network for the public
-traffic. When it cannot read them, the event has no traffic values and the sample does not fail.
+The Signal service sends no capacity report and no other telemetry. To see the load, read the coturn
+metrics on `127.0.0.1:9641` and the Signal metrics on `127.0.0.1:9642` (with `REMOTE_METRICS_TOKEN`)
+on the machine.
 
 ### coturn configuration update
 
@@ -293,8 +279,7 @@ surcharge at the end of each month
 does not say whether the month is the calendar month or starts on the contract date. TURN relay
 traffic goes out too, so it counts. To see the traffic, use `leaseweb-pool.ts traffic` (in and out of
 each VPS this month, from the Leaseweb metrics, and the part of its pack that out used; see
-[hosted servers](hosted-servers.md#leaseweb-references)), or add up `network_out_bytes` of
-`signal_capacity` (ANALYTICS.md) by `turn_host`. On 2026-11-18 the two gave the same numbers for AU.
+[hosted servers](hosted-servers.md#leaseweb-references)).
 
 Setup of each machine (Ubuntu 26.04):
 
@@ -309,8 +294,8 @@ Setup of each machine (Ubuntu 26.04):
    `REMOTE_SIGNAL_PUBLIC_PORT=8081` and an empty `TURN_EXTRA_HOSTS`, so each machine gives only its
    own relay. `SIGNAL_DOMAIN` and `SIGNAL_ENTRY_HOST` stay `signal.openbot.run`: the certificate also
    names the entry, so the machine can take the entry after a failover.
-4. Stage the same Signal commit as on `signal1` and `signal2`, build `remote-api`, `capacity-report`
-   and `coturn`, and start the project. Before the start, set `{"dns": ["1.1.1.1", "1.0.0.1"]}` in
+4. Stage the same Signal commit as on `signal1` and `signal2`, build `remote-api` and `coturn`, and
+   start the project. Before the start, set `{"dns": ["1.1.1.1", "1.0.0.1"]}` in
    `/etc/docker/daemon.json` and restart Docker. The Leaseweb resolver keeps the NXDOMAIN answer for
    the challenge name for 30 minutes, so each certificate attempt fails, and after 5 failures Let's
    Encrypt blocks the name for an hour. Cloudflare serves the `openbot.run` zone, so `1.1.1.1` sees the

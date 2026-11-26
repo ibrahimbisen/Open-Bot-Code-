@@ -293,8 +293,8 @@ allocations of one relay: 16384-65535 gives 49,152 ports, and `total-quota` (40,
 A browser allocates for each network interface and for each TURN URL (UDP, TCP and TLS), on both
 peers, also when the connection does not use the relay. Production had about 4 allocations for each
 peer connection. When the relay is full, coturn refuses each new allocation with 486, and every
-connection that needs a relay fails. The `signal_capacity` analytics event shows the allocations of
-each relay every 5 minutes.
+connection that needs a relay fails. The coturn metrics on `127.0.0.1:9641/metrics`
+(`turn_total_allocations`) show the allocations of the relay on that machine.
 
 Production uses `turn2.openbot.run` on the second Signal machine as the second relay; see
 [the deployment procedure](../docs/remote-session-deployment.md#second-signal-machine).

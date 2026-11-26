@@ -108,30 +108,5 @@ services:
       timeout: 5s
       retries: 3
 
-  capacity-report:
-    build:
-      context: ..
-      dockerfile: remote/api/Dockerfile
-      args:
-        CODEBOT_SOURCE_COMMIT: ${CODEBOT_SOURCE_COMMIT:-unknown}
-    restart: on-failure
-    network_mode: host
-    entrypoint: ["bun", "src/capacity-report.ts"]
-    depends_on:
-      - remote-api
-      - coturn
-    environment:
-      OPENPANEL_CLIENT_ID: ${OPENPANEL_CLIENT_ID:-}
-      OPENPANEL_CLIENT_SECRET: ${OPENPANEL_CLIENT_SECRET:-}
-      REMOTE_METRICS_TOKEN: ${REMOTE_METRICS_TOKEN:?REMOTE_METRICS_TOKEN is required}
-      TURN_DOMAIN: ${TURN_DOMAIN}
-    healthcheck:
-      disable: true
-    read_only: true
-    tmpfs:
-      - /tmp:size=16m,mode=1777
-    security_opt:
-      - no-new-privileges:true
-
 volumes:
   acme-data:
