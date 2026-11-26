@@ -25,7 +25,7 @@ import {
 } from "@codebot/contracts/ipc";
 import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import type { AgentProfile } from "@codebot/ui/data";
-import { createEffect, createMemo, createSignal, untrack } from "solid-js";
+import { createEffect, createMemo, createSignal, flush, untrack } from "solid-js";
 import type { AgentTasks } from "../agent-tasks/agent-tasks-state";
 import { chatActivityOf } from "./project-activity";
 import type { EngineProjectsPort } from "./projects-port";
@@ -169,6 +169,7 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Engine
     const next = update(untrack(state));
     writeStoredState(serverId, next);
     setState(next);
+    flush();
   }
 
   const projects = createMemo((): StoredProject[] => {

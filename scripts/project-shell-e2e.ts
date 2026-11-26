@@ -15,6 +15,7 @@ interface Check {
 const checks: Check[] = [];
 const SCREENS = resolve(import.meta.dirname, "../.codebot-build/w12/screens");
 const WAIT_MS = 60_000;
+const RUN = `E2E${Date.now().toString(36).slice(-4)}`;
 const argument = (name: string) =>
   process.argv.find((entry) => entry.startsWith(`--${name}=`))?.slice(`--${name}=`.length);
 const screenshotsOnly = process.argv.includes("--screens-only");
@@ -113,7 +114,7 @@ async function createProject(
   const dialog = page.getByRole("dialog");
   await dialog.getByLabel("Main folder").fill(folder);
   await dialog.getByLabel("Name", { exact: true }).fill(name);
-  await dialog.getByRole("radio", { name: new RegExp(`^${level}`) }).check({ force: true });
+  await dialog.getByText(level, { exact: true }).click();
   await dialog.getByRole("button", { name: "Create project" }).click();
   await projectButton(page, name).waitFor({ state: "visible", timeout: WAIT_MS });
 }
@@ -166,10 +167,10 @@ async function main(): Promise<void> {
       await step("create five projects with different access levels", async () => {
         const levels = ["Normal", "Strict", "Open", "Normal", "Strict"] as const;
         for (const [index, level] of levels.entries()) {
-          await createProject(page, `E2E Project ${index + 1}`, folders[index] ?? "", level);
+          await createProject(page, `${RUN} Project ${index + 1}`, folders[index] ?? "", level);
         }
         for (const [index, level] of levels.entries()) {
-          const badge = projectButton(page, `E2E Project ${index + 1}`).locator(".project-access-badge");
+          const badge = projectButton(page, `${RUN} Project ${index + 1}`).locator(".project-access-badge");
           const label = await badge.getAttribute("aria-label");
           assert.equal(label, `Access level: ${level}`);
         }
@@ -177,7 +178,7 @@ async function main(): Promise<void> {
       });
 
       await step("open three chats in one project and see them in the history list", async () => {
-        await projectButton(page, "E2E Project 1").click();
+        await projectButton(page, `${RUN} Project 1`).click();
         for (const text of ["First question", "Second question", "Third question"]) {
           await column(page).getByRole("button", { name: "New chat" }).click();
           await panels(page).first().waitFor({ state: "visible", timeout: WAIT_MS });
@@ -208,7 +209,146 @@ async function main(): Promise<void> {
       return titles.join(" | ");
     });
 
-    screens.push(await shot(page, "01-project-shell-dark-1280x800"));
+    const firstName = `${RUN} Project 1`;
+
+    await step("status dot of a project follows its chats", async () => {
+      const state = await until(
+        page,
+        "status dot settled",
+        () => activityOf(page, firstName),
+        (value) => value === "done" || value === "idle",
+      );
+      return `state ${state}`;
+    });
+
+    await step("left bar expands the recent chats of a project", async () => {
+      await leftBar(page)
+        .getByRole("button", { name: `Show the recent chats of ${firstName}`, exact: true })
+        .click();
+      const list = leftBar(page).getByRole("list", { name: `Recent chats of ${firstName}` });
+      await list.waitFor({ state: "visible", timeout: WAIT_MS });
+      const count = await list.locator("button").count();
+      assert.ok(count >= 3, `only ${count} recent chats`);
+      await leftBar(page)
+        .getByRole("button", { name: `Hide the recent chats of ${firstName}`, exact: true })
+        .click();
+      return `${count} recent chats`;
+    });
+
+    await step("search narrows the chat list", async () => {
+      const search = column(page).getByRole("searchbox").or(column(page).getByPlaceholder("Search chats"));
+      await search.first().fill("Second");
+      await until(
+        page,
+        "one result",
+        () => column(page).locator(".project-chat-row").count(),
+        (count) => count === 1,
+      );
+      await search.first().fill("");
+      await until(
+        page,
+        "all chats back",
+        () => column(page).locator(".project-chat-row").count(),
+        (count) => count >= 3,
+      );
+    });
+
+    await step("archive and restore a chat", async () => {
+      await column(page).getByRole("button", { name: "Actions for Second question" }).click();
+      await page.getByRole("menuitem", { name: "Archive", exact: true }).click();
+      await until(
+        page,
+        "chat leaves the list",
+        () => column(page).locator(".project-chat-row").count(),
+        (count) => count === 2,
+      );
+      await column(page).getByRole("button", { name: "Show archived chats" }).click();
+      await column(page).getByRole("button", { name: "Actions for Second question" }).click();
+      await page.getByRole("menuitem", { name: "Restore", exact: true }).click();
+      await column(page).getByRole("button", { name: "Show archived chats" }).click();
+      await until(
+        page,
+        "chat is back",
+        () => column(page).locator(".project-chat-row").count(),
+        (count) => count === 3,
+      );
+    });
+
+    await step("dock splits, maximizes and closes panels", async () => {
+      const before = await panels(page).count();
+      await page.getByRole("button", { name: "Split right" }).first().click();
+      await until(
+        page,
+        "extra panel",
+        () => panels(page).count(),
+        (count) => count === before + 1,
+      );
+      await page.getByRole("button", { name: "Maximize the panel" }).first().click();
+      await page.getByRole("button", { name: "Restore the panel size" }).first().waitFor({ timeout: WAIT_MS });
+      await page.getByRole("button", { name: "Restore the panel size" }).first().click();
+      await page.getByRole("button", { name: "Close the panel" }).last().click();
+      await until(
+        page,
+        "panel closed",
+        () => panels(page).count(),
+        (count) => count === before,
+      );
+      return `${before} panels`;
+    });
+
+    await step("panel layout is restored after a reload", async () => {
+      await page.getByRole("button", { name: "Split down" }).first().click();
+      const count = await until(
+        page,
+        "split done",
+        () => panels(page).count(),
+        (value) => value >= 2,
+      );
+      await page.waitForTimeout(1200);
+      await page.reload();
+      await leftBar(page).waitFor({ state: "visible", timeout: WAIT_MS });
+      await closeBlockingDialogs(page);
+      await projectButton(page, firstName).click();
+      await until(
+        page,
+        "layout restored",
+        () => panels(page).count(),
+        (value) => value === count,
+      );
+      return `${count} panels`;
+    });
+
+    await step("project settings change the access level", async () => {
+      await column(page).getByRole("button", { name: "Project settings" }).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.waitFor({ state: "visible", timeout: WAIT_MS });
+      await dialog.getByText("Open", { exact: true }).first().click();
+      await dialog.getByRole("button", { name: "Save", exact: true }).click();
+      await until(
+        page,
+        "badge shows Open",
+        () => projectButton(page, firstName).locator(".project-access-badge").getAttribute("aria-label"),
+        (label) => label === "Access level: Open",
+      );
+      await closeBlockingDialogs(page);
+    });
+
+    await step("screenshots in both themes and two window sizes", async () => {
+      for (const [width, height] of [
+        [1280, 800],
+        [960, 640],
+      ] as const) {
+        await setViewport(page, width, height);
+        for (const theme of ["dark", "light"] as const) {
+          await setTheme(page, theme);
+          screens.push(await shot(page, `project-shell-${theme}-${width}x${height}`));
+        }
+      }
+      await clearViewport(page);
+      await setTheme(page, "dark");
+      return `${screens.length} screenshots`;
+    });
+
     process.stdout.write(`screens: ${screens.join(", ")}\n`);
   } finally {
     await session.close();
