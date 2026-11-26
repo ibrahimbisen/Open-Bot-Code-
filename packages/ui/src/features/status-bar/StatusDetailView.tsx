@@ -269,7 +269,7 @@ function MetricsLine(props: { status: LocalModelServerStatus }) {
     const metric = (id: string) => props.status.metrics.find((entry) => entry.id === id)?.value;
     const parts: string[] = [];
     const cache = metric("kvCacheUsage");
-    if (cache !== undefined) parts.push(t("statusBar.machine.kvCache", { percent: format.percent(cache) }));
+    if (cache !== undefined) parts.push(t("statusBar.machine.kvCache", { percent: format.percent(cache / 100) }));
     const running = metric("requestsRunning");
     const waiting = metric("requestsWaiting");
     if (running !== undefined || waiting !== undefined)

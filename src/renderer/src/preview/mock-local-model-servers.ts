@@ -51,7 +51,7 @@ export const LOCAL_MODEL_SERVER_FIXTURES: readonly LocalModelServerStatus[] = [
     gpuFormat: "json",
     modelMemoryBytes: 95 * BYTES_PER_GIB,
     metrics: [
-      { id: "kvCacheUsage", source: "vllm", value: 0.41 },
+      { id: "kvCacheUsage", source: "vllm", value: 41 },
       { id: "requestsRunning", source: "vllm", value: 3 },
       { id: "requestsWaiting", source: "vllm", value: 0 },
     ],

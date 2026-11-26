@@ -100,8 +100,7 @@ function MachineRow(props: { entry: StatusMachineEntry }) {
     const gpu = props.entry.gpu;
     if (gpu.utilizationPercent !== null)
       parts.push(t("statusBar.machine.gpu", { percent: format.percent(gpu.utilizationPercent / 100) }));
-    if (gpu.memoryUsedBytes !== null && gpu.memoryTotalBytes !== null)
-      parts.push(format.fileSizeAmount(gpu.memoryUsedBytes, gpu.memoryTotalBytes));
+    if (gpu.memoryUsedBytes !== null && gpu.memoryTotalBytes !== null) parts.push(format.fileSize(gpu.memoryUsedBytes));
     if (props.entry.loadedCount !== null) parts.push(t("statusBar.machine.models", { count: props.entry.loadedCount }));
     return parts.length > 0 ? parts.join(" · ") : t("statusBar.machine.online");
   };
