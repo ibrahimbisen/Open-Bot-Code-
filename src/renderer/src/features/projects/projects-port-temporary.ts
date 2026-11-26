@@ -3,11 +3,22 @@ import {
   type AgentTask,
   type ClientAgentSummary,
   DEFAULT_PROJECT_ACCESS_LEVEL,
+  emptyProjectActivity,
   isAvatarColor,
   isProjectAccessLevel,
   isProjectRuntime,
+  PROJECT_LIMITS,
+  type ProjectActivity,
+  type ProjectActivityState,
+  type ProjectAgent,
+  type ProjectAgentInput,
+  type ProjectChat,
+  type ProjectChatRef,
+  type ProjectDetail,
   type ProjectRuntime,
   type ProjectSummary,
+  projectActivityState,
+  projectFolders,
   SIDEBAR_UNASSIGNED_SECTION_ID,
   type SidebarLayoutSnapshot,
   type UpdateAgentInput,
@@ -16,20 +27,12 @@ import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import type { AgentProfile } from "@codebot/ui/data";
 import { createEffect, createMemo, createSignal, untrack } from "solid-js";
 import type { AgentTasks } from "../agent-tasks/agent-tasks-state";
-import { projectActivityOf } from "./project-activity";
-import {
-  type ProjectActivity,
-  type ProjectAgent,
-  type ProjectAgentDraft,
-  type ProjectChat,
-  type ProjectChatRef,
-  type ProjectsChangeEvent,
-  type ProjectsPort,
-  projectChatKey,
-} from "./projects-port";
+import { chatActivityOf } from "./project-activity";
+import type { EngineProjectsPort } from "./projects-port";
 
-const STORAGE_KEY = "codebot:projects-temporary:v1";
-const DERIVED_CREATED_AT = Date.UTC(2000, 0, 1);
+const STORAGE_KEY = "codebot:projects-temporary:v2";
+const DERIVED_CREATED_AT = new Date(Date.UTC(2000, 0, 1)).toISOString();
+const FALLBACK_RUNTIME: ProjectRuntime = { provider: "codex", model: "", reasoningEffort: "medium" };
 
 type ProjectSource = "created" | "section" | "agent";
 
@@ -38,15 +41,13 @@ interface StoredProject extends ProjectSummary {
   sourceId: string | null;
 }
 
-interface StoredChatFlags {
-  pinned?: boolean;
-  runtime?: ProjectRuntime;
-}
-
 interface StoredState {
   projects: StoredProject[];
-  chats: Record<string, StoredChatFlags>;
+  pinned: string[];
+  seen: Record<string, string>;
 }
+
+const EMPTY_STATE: StoredState = { projects: [], pinned: [], seen: {} };
 
 export interface TemporaryProjectsDeps {
   serverId: string;
@@ -54,10 +55,8 @@ export interface TemporaryProjectsDeps {
   agentsSettled: () => boolean;
   sidebarLayout: () => SidebarLayoutSnapshot;
   tasks: AgentTasks;
-  hiddenChatIds: () => ReadonlySet<string>;
   reloadKey: () => unknown;
   waitsForInput: (task: AgentTask) => boolean;
-  seen: (task: AgentTask) => boolean;
   addAgent: (agent: ClientAgentSummary) => void;
   updateAgent: (agentId: string, updates: Omit<UpdateAgentInput, "agentId">) => Promise<void>;
   deleteAgent: (agentId: string) => Promise<void>;
@@ -70,10 +69,10 @@ function isStringList(value: unknown): value is string[] {
 function storedProject(value: unknown): StoredProject | null {
   if (!isDynamicRecord(value) || !isString(value.id) || !isString(value.name) || !isString(value.mainFolder))
     return null;
-  const source = value.source === "section" || value.source === "agent" ? value.source : "created";
+  const now = new Date().toISOString();
   return {
     id: value.id,
-    source,
+    source: value.source === "section" || value.source === "agent" ? value.source : "created",
     sourceId: isString(value.sourceId) ? value.sourceId : null,
     name: value.name,
     color: isAvatarColor(value.color) ? value.color : null,
@@ -85,43 +84,32 @@ function storedProject(value: unknown): StoredProject | null {
     instructions: isString(value.instructions) ? value.instructions : "",
     agentIds: isStringList(value.agentIds) ? value.agentIds : [],
     ownerId: null,
-    createdAt: isString(value.createdAt) ? value.createdAt : new Date().toISOString(),
-    updatedAt: isString(value.updatedAt) ? value.updatedAt : new Date().toISOString(),
+    createdAt: isString(value.createdAt) ? value.createdAt : now,
+    updatedAt: isString(value.updatedAt) ? value.updatedAt : now,
     archivedAt: isString(value.archivedAt) ? value.archivedAt : null,
   };
 }
 
-function storedChatFlags(value: unknown): StoredChatFlags | null {
-  if (!isDynamicRecord(value)) return null;
-  const flags: StoredChatFlags = {};
-  if (value.pinned === true) flags.pinned = true;
-  if (isProjectRuntime(value.runtime)) flags.runtime = value.runtime;
-  return flags.pinned || flags.runtime ? flags : null;
-}
-
 function storedStateOf(all: unknown, serverId: string): StoredState {
   const stored = isDynamicRecord(all) ? all[serverId] : undefined;
-  if (!isDynamicRecord(stored)) return { projects: [], chats: {} };
+  if (!isDynamicRecord(stored)) return EMPTY_STATE;
   const projects = Array.isArray(stored.projects)
     ? stored.projects.flatMap((entry) => {
         const project = storedProject(entry);
         return project ? [project] : [];
       })
     : [];
-  const chats: Record<string, StoredChatFlags> = {};
-  if (isDynamicRecord(stored.chats))
-    for (const [key, value] of Object.entries(stored.chats)) {
-      const flags = storedChatFlags(value);
-      if (flags) chats[key] = flags;
-    }
-  return { projects, chats };
+  const seen = isDynamicRecord(stored.seen)
+    ? Object.fromEntries(Object.entries(stored.seen).flatMap(([key, value]) => (isString(value) ? [[key, value]] : [])))
+    : {};
+  return { projects, pinned: isStringList(stored.pinned) ? stored.pinned : [], seen };
 }
 
 function readStoredState(serverId: string): StoredState {
   try {
     return storedStateOf(JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "{}"), serverId);
   } catch {
-    return { projects: [], chats: {} };
+    return EMPTY_STATE;
   }
 }
 
@@ -136,17 +124,16 @@ function writeStoredState(serverId: string, state: StoredState): void {
   } catch {}
 }
 
-function agentRuntime(agent: AgentProfile): ProjectRuntime | null {
-  if (!isKnownAgentProvider(agent.provider)) return null;
+function agentRuntime(agent: AgentProfile): ProjectRuntime {
   return {
-    provider: agent.provider,
+    provider: isKnownAgentProvider(agent.provider) ? agent.provider : FALLBACK_RUNTIME.provider,
     model: agent.model,
     reasoningEffort: agent.reasoningEffort,
     ...(agent.providerAccountId ? { providerAccountId: agent.providerAccountId } : {}),
   };
 }
 
-function runtimeUpdate(runtime: ProjectRuntime): Omit<UpdateAgentInput, "agentId"> {
+function runtimeFields(runtime: ProjectRuntime) {
   return {
     provider: runtime.provider,
     model: runtime.model,
@@ -160,20 +147,23 @@ function summaryOf(project: StoredProject): ProjectSummary {
   return { ...summary, additionalFolders: [...summary.additionalFolders], agentIds: [...summary.agentIds] };
 }
 
-function newestFirst(left: AgentTask, right: AgentTask): number {
-  return right.updatedAt.localeCompare(left.updatedAt) || left.id.localeCompare(right.id);
+function newestFirst(left: ProjectChat, right: ProjectChat): number {
+  return right.updatedAt.localeCompare(left.updatedAt) || left.taskId.localeCompare(right.taskId);
 }
 
-export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): ProjectsPort {
+function cursorOffset(cursor: string | undefined): number {
+  const offset = cursor?.startsWith("offset:") ? Number(cursor.slice(7)) : 0;
+  return Number.isSafeInteger(offset) && offset >= 0 ? offset : 0;
+}
+
+export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): EngineProjectsPort {
   const { serverId, tasks } = deps;
   const agentApi = () => window.codebot.agent;
   const [state, setState] = createSignal<StoredState>(readStoredState(serverId));
   const [reserved, setReserved] = createSignal<ReadonlySet<string>>(new Set());
-  const listeners = new Set<(event: ProjectsChangeEvent) => void>();
-
-  function emit(event: ProjectsChangeEvent): void {
-    for (const listener of [...listeners]) listener(event);
-  }
+  const changedListeners = new Set<Parameters<EngineProjectsPort["onChanged"]>[0]>();
+  const chatListeners = new Set<Parameters<EngineProjectsPort["onChatsChanged"]>[0]>();
+  const activityListeners = new Set<Parameters<EngineProjectsPort["onActivityChanged"]>[0]>();
 
   function save(update: (current: StoredState) => StoredState): void {
     const next = update(untrack(state));
@@ -185,17 +175,17 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
     const agents = deps.agents();
     const known = new Set(agents.map((agent) => agent.id));
     const layout = deps.sidebarLayout();
-    const sections = new Map(layout.sections.map((section) => [section.id, section]));
+    const sections = new Set(layout.sections.map((section) => section.id));
     const sectionOf = (agentId: string): string | null => {
       const sectionId = layout.agentAssignments[agentId];
       return sectionId && sectionId !== SIDEBAR_UNASSIGNED_SECTION_ID && sections.has(sectionId) ? sectionId : null;
     };
     const stored = state().projects;
     const claimed = new Set([...stored.flatMap((project) => project.agentIds), ...reserved()]);
-    const free = agents.filter((agent) => !claimed.has(agent.id));
     const bySection = new Map<string, AgentProfile[]>();
     const single: AgentProfile[] = [];
-    for (const agent of free) {
+    for (const agent of agents) {
+      if (claimed.has(agent.id)) continue;
       const sectionId = sectionOf(agent.id);
       if (sectionId === null) single.push(agent);
       else bySection.set(sectionId, [...(bySection.get(sectionId) ?? []), agent]);
@@ -208,7 +198,6 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
         agentIds: [...project.agentIds.filter((id) => known.has(id)), ...adopted.map((agent) => agent.id)],
       };
     });
-    const derivedAt = new Date(DERIVED_CREATED_AT).toISOString();
     const derived = (
       source: ProjectSource,
       sourceId: string,
@@ -217,7 +206,7 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
     ): StoredProject => {
       const first = members[0];
       return {
-        id: `${source}:${sourceId}`,
+        id: `${source}-${sourceId}`,
         source,
         sourceId,
         name,
@@ -230,8 +219,8 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
         instructions: "",
         agentIds: members.map((agent) => agent.id),
         ownerId: null,
-        createdAt: derivedAt,
-        updatedAt: derivedAt,
+        createdAt: DERIVED_CREATED_AT,
+        updatedAt: DERIVED_CREATED_AT,
         archivedAt: null,
       };
     };
@@ -251,54 +240,105 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
     return found;
   }
 
-  function change(projectId: string, update: (current: StoredProject) => StoredProject): ProjectSummary {
-    const current = project(projectId);
-    const next = { ...update(current), updatedAt: new Date().toISOString() };
+  function change(projectId: string, update: (current: StoredProject) => StoredProject): StoredProject {
+    const next = { ...update(project(projectId)), updatedAt: new Date().toISOString() };
     save((stored) => ({
       ...stored,
       projects: stored.projects.some((entry) => entry.id === projectId)
         ? stored.projects.map((entry) => (entry.id === projectId ? next : entry))
         : [...stored.projects, next],
     }));
-    return summaryOf(next);
+    return next;
   }
 
-  function projectTasks(entry: StoredProject): AgentTask[] {
-    const hidden = deps.hiddenChatIds();
-    return entry.agentIds.flatMap((agentId) =>
-      (tasks.snapshot(agentId)?.tasks ?? []).filter((task) => !hidden.has(task.id)),
-    );
+  function projectOfAgent(agentId: string): StoredProject {
+    const found = untrack(projects).find((entry) => entry.agentIds.includes(agentId));
+    if (!found) throw new Error(`Unknown project agent ${agentId}`);
+    return found;
   }
 
-  function chatOf(entry: StoredProject, task: AgentTask): ProjectChat {
-    const flags = state().chats[projectChatKey({ agentId: task.agentId, chatId: task.id })];
+  function activityOf(task: AgentTask): ProjectActivityState {
+    return chatActivityOf(task, {
+      waitsForInput: deps.waitsForInput(task),
+      unread: tasks.unreadCount(task),
+      seen: state().seen[task.id] === task.updatedAt,
+    });
+  }
+
+  function chatOf(projectId: string, task: AgentTask): ProjectChat {
     return {
-      projectId: entry.id,
+      projectId,
       agentId: task.agentId,
-      chatId: task.id,
-      task,
+      taskId: task.id,
+      threadId: task.threadId,
+      title: task.title,
+      state: task.state === "closed" ? "idle" : task.state,
+      activity: activityOf(task),
+      hold: task.hold,
+      error: task.outcome === "failed" ? task.error : null,
+      unreadCount: tasks.unreadCount(task),
       archived: task.state === "closed",
-      pinned: flags?.pinned === true,
-      runtime: flags?.runtime ?? null,
+      pinned: state().pinned.includes(task.id),
+      runtime: null,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
     };
   }
 
-  function setChatFlags(ref: ProjectChatRef, update: (flags: StoredChatFlags) => StoredChatFlags): void {
-    const key = projectChatKey(ref);
-    save((stored) => {
-      const next = update(stored.chats[key] ?? {});
-      const chats = { ...stored.chats };
-      if (next.pinned || next.runtime) chats[key] = next;
-      else delete chats[key];
-      return { ...stored, chats };
-    });
-    emit({ type: "chats-changed", projectId: ref.projectId });
+  function projectChats(entry: StoredProject): ProjectChat[] {
+    return entry.agentIds.flatMap((agentId) =>
+      (tasks.snapshot(agentId)?.tasks ?? []).map((task) => chatOf(entry.id, task)),
+    );
+  }
+
+  function findTask(ref: ProjectChatRef): AgentTask {
+    const task = untrack(() => tasks.snapshot(ref.agentId)?.tasks.find((entry) => entry.id === ref.taskId));
+    if (!task) throw new Error(`Unknown chat ${ref.taskId}`);
+    return task;
   }
 
   async function loadMissingTasks(agentIds: readonly string[]): Promise<void> {
     await Promise.all(
       agentIds.filter((agentId) => !tasks.snapshot(agentId)).map((agentId) => tasks.loadTasks(agentId)),
     );
+  }
+
+  async function agentOf(projectId: string, agent: AgentProfile): Promise<ProjectAgent> {
+    const instructions = await agentApi()
+      .readAgentInstructions(agent.id, serverId)
+      .then(
+        (file) => file.text,
+        () => "",
+      );
+    return {
+      id: agent.id,
+      projectId,
+      name: agent.name,
+      role: agent.title,
+      instructions: instructions.slice(0, PROJECT_LIMITS.agentInstructions),
+      runtime: agentRuntime(agent),
+      avatarSeed: agent.avatarSeed,
+      avatarHue: agent.avatarHue,
+      avatarColor: agent.avatarColor ?? null,
+      chatCount: untrack(() => tasks.snapshot(agent.id)?.tasks.length ?? 0),
+    };
+  }
+
+  async function detail(projectId: string): Promise<ProjectDetail> {
+    const entry = project(projectId);
+    const agents = untrack(deps.agents);
+    return {
+      project: summaryOf(entry),
+      agents: await Promise.all(
+        entry.agentIds.flatMap((agentId) => {
+          const agent = agents.find((candidate) => candidate.id === agentId);
+          return agent ? [agentOf(projectId, agent)] : [];
+        }),
+      ),
+      folders: projectFolders(entry)
+        .filter((path) => path !== "")
+        .map((path) => ({ path, main: path === entry.mainFolder, found: true })),
+    };
   }
 
   async function saveInstructions(agentId: string, text: string): Promise<void> {
@@ -312,38 +352,28 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
   }
 
   async function createProjectAgent(
-    projectName: string,
-    draft: ProjectAgentDraft,
-    fallback: ProjectRuntime | null,
-    folders: readonly string[],
-    color: ProjectSummary["color"],
+    entry: Pick<StoredProject, "name" | "defaultRuntime" | "color" | "mainFolder" | "additionalFolders">,
+    input: ProjectAgentInput,
   ): Promise<string> {
-    const role = draft.role.trim();
-    const runtime = draft.runtime ?? fallback;
+    const role = input.role.trim();
+    const runtime = input.runtime ?? entry.defaultRuntime;
     const created = await agentApi().createAgent(
       {
-        name: draft.name.trim() || role,
+        name: input.name.trim() || role || entry.name,
         description: role,
         avatarSeed: crypto.randomUUID(),
         avatarHue: null,
-        avatarColor: color,
-        initialMessage: `You are the ${role} of the project "${projectName}". Wait for the first chat.`,
-        ...(runtime
-          ? {
-              provider: runtime.provider,
-              model: runtime.model,
-              reasoningEffort: runtime.reasoningEffort,
-              ...(runtime.providerAccountId ? { providerAccountId: runtime.providerAccountId } : {}),
-            }
-          : {}),
+        avatarColor: entry.color,
+        initialMessage: `You are the ${role || "agent"} of the project "${entry.name}". Wait for the first chat.`,
+        ...(runtime ? runtimeFields(runtime) : {}),
       },
       serverId,
     );
     setReserved((current) => new Set(current).add(created.id));
     deps.addAgent(created);
-    await deps.updateAgent(created.id, { title: role });
-    await addFolders(created.id, folders);
-    if (draft.instructions.trim()) await saveInstructions(created.id, draft.instructions);
+    if (role) await deps.updateAgent(created.id, { title: role });
+    await addFolders(created.id, projectFolders(entry));
+    if (input.instructions?.trim()) await saveInstructions(created.id, input.instructions);
     return created.id;
   }
 
@@ -355,25 +385,13 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
     });
   }
 
+  const summaries = createMemo(() => projects().map(summaryOf));
   createEffect(
-    () =>
-      JSON.stringify(
-        projects().map((entry) => [
-          entry.id,
-          entry.name,
-          entry.color,
-          entry.mainFolder,
-          entry.additionalFolders,
-          entry.accessLevel,
-          entry.defaultRuntime,
-          entry.replyRule,
-          entry.instructions,
-          entry.agentIds,
-          entry.archivedAt,
-        ]),
-      ),
+    () => JSON.stringify(summaries()),
     (_signature, previous) => {
-      if (previous !== undefined) emit({ type: "projects-changed" });
+      if (previous === undefined) return;
+      const event = { serverId, projectId: null, projects: untrack(summaries) };
+      for (const listener of [...changedListeners]) listener(event);
     },
   );
 
@@ -391,92 +409,89 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
     },
   );
 
-  const chatSignatures = createMemo(() => {
-    const flags = state().chats;
-    return new Map(
-      projects().map((entry) => [
-        entry.id,
-        JSON.stringify(
-          projectTasks(entry).map((task) => [
-            task.id,
-            task.title,
-            task.state,
-            task.outcome,
-            task.updatedAt,
-            flags[projectChatKey({ agentId: task.agentId, chatId: task.id })] ?? null,
-          ]),
-        ),
-      ]),
-    );
-  });
-  createEffect(chatSignatures, (next, previous) => {
-    if (!previous) return;
-    for (const [projectId, signature] of next)
-      if (previous.get(projectId) !== signature) emit({ type: "chats-changed", projectId });
-  });
-
-  const activities = createMemo(
-    (): Record<string, ProjectActivity> =>
-      Object.fromEntries(
+  const chatsByProject = createMemo(
+    () =>
+      new Map(
         projects().map((entry) => [
           entry.id,
-          projectActivityOf({
-            tasks: projectTasks(entry),
-            waitsForInput: deps.waitsForInput,
-            unread: tasks.unreadCount,
-            seen: deps.seen,
-          }),
+          new Map(projectChats(entry).map((chat) => [chat.taskId, { chat, signature: JSON.stringify(chat) }])),
         ]),
       ),
   );
+  createEffect(chatsByProject, (next, previous) => {
+    if (!previous) return;
+    for (const [projectId, chats] of next) {
+      const before = previous.get(projectId);
+      const changed = [...chats.values()].filter(
+        (entry) => before?.get(entry.chat.taskId)?.signature !== entry.signature,
+      );
+      const removedTaskIds = [...(before?.keys() ?? [])].filter((taskId) => !chats.has(taskId));
+      if (changed.length + removedTaskIds.length === 0) continue;
+      const event = { serverId, projectId, chats: changed.map((entry) => entry.chat), removedTaskIds };
+      for (const listener of [...chatListeners]) listener(event);
+    }
+  });
+
+  const activity = createMemo((): ProjectActivity[] =>
+    [...chatsByProject()].map(([projectId, chats]) => {
+      const states = [...chats.values()].map((entry) => entry.chat.activity);
+      const count = (kind: ProjectActivityState) => states.filter((candidate) => candidate === kind).length;
+      return {
+        ...emptyProjectActivity(projectId),
+        state: projectActivityState(states),
+        working: count("working"),
+        done: count("done"),
+        needsInput: count("needs-input"),
+        error: count("error"),
+      };
+    }),
+  );
   createEffect(
-    () => JSON.stringify(activities()),
+    () => JSON.stringify(activity()),
     (_signature, previous) => {
-      if (previous !== undefined) emit({ type: "activity-changed" });
+      if (previous === undefined) return;
+      const event = { serverId, activity: untrack(activity) };
+      for (const listener of [...activityListeners]) listener(event);
     },
   );
 
   return {
-    list: async () => untrack(projects).map(summaryOf),
+    list: async () => untrack(summaries),
+
+    get: (projectId) => detail(projectId),
 
     create: async (input) => {
       const now = new Date().toISOString();
-      const folders = [input.mainFolder, ...input.additionalFolders];
-      const agentId = await createProjectAgent(
-        input.name,
-        input.firstAgent,
-        input.defaultRuntime,
-        folders,
-        input.color,
-      );
       const created: StoredProject = {
-        id: `project:${crypto.randomUUID()}`,
+        id: `project-${crypto.randomUUID()}`,
         source: "created",
         sourceId: null,
         name: input.name.trim(),
-        color: input.color,
+        color: input.color ?? null,
         mainFolder: input.mainFolder,
-        additionalFolders: input.additionalFolders.filter((folder) => folder !== input.mainFolder),
-        accessLevel: input.accessLevel,
-        defaultRuntime: input.defaultRuntime,
-        replyRule: null,
-        instructions: "",
-        agentIds: [agentId],
+        additionalFolders: (input.additionalFolders ?? []).filter((folder) => folder !== input.mainFolder),
+        accessLevel: input.accessLevel ?? DEFAULT_PROJECT_ACCESS_LEVEL,
+        defaultRuntime: input.defaultRuntime ?? null,
+        replyRule: input.replyRule ?? null,
+        instructions: input.instructions ?? "",
+        agentIds: [],
         ownerId: null,
         createdAt: now,
         updatedAt: now,
         archivedAt: null,
       };
+      const agents = input.agents?.length ? input.agents : [{ name: created.name, role: "" }];
+      for (const agent of agents) created.agentIds.push(await createProjectAgent(created, agent));
       save((stored) => ({ ...stored, projects: [...stored.projects, created] }));
-      release(agentId);
-      return summaryOf(created);
+      for (const agentId of created.agentIds) release(agentId);
+      return detail(created.id);
     },
 
     update: async (input) => {
       const current = project(input.projectId);
       if (input.mainFolder !== undefined && input.mainFolder !== current.mainFolder)
         for (const agentId of current.agentIds) await addFolders(agentId, [input.mainFolder]);
-      return change(input.projectId, (entry) => ({
+      change(input.projectId, (entry) => ({
         ...entry,
         ...(input.name === undefined ? {} : { name: input.name.trim() }),
         ...(input.color === undefined ? {} : { color: input.color }),
@@ -486,182 +501,169 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Projec
         ...(input.replyRule === undefined ? {} : { replyRule: input.replyRule }),
         ...(input.instructions === undefined ? {} : { instructions: input.instructions }),
       }));
+      return detail(input.projectId);
     },
 
-    setArchived: async ({ projectId, archived }) =>
-      change(projectId, (entry) => ({ ...entry, archivedAt: archived ? new Date().toISOString() : null })),
+    archive: async (projectId) =>
+      summaryOf(change(projectId, (entry) => ({ ...entry, archivedAt: new Date().toISOString() }))),
 
-    remove: async (projectId) => {
+    restore: async (projectId) => summaryOf(change(projectId, (entry) => ({ ...entry, archivedAt: null }))),
+
+    delete: async (projectId) => {
       const current = project(projectId);
       for (const agentId of current.agentIds) await deps.deleteAgent(agentId);
-      save((stored) => ({
-        projects: stored.projects.filter((entry) => entry.id !== projectId),
-        chats: Object.fromEntries(
-          Object.entries(stored.chats).filter(
-            ([key]) => !current.agentIds.some((agentId) => key.startsWith(`${agentId}\u0000`)),
-          ),
-        ),
-      }));
+      save((stored) => ({ ...stored, projects: stored.projects.filter((entry) => entry.id !== projectId) }));
     },
 
-    chooseFolder: () => window.codebot.hostedSites.chooseDirectory(),
+    chooseFolder: async () => {
+      const path = await window.codebot.hostedSites.chooseDirectory();
+      return path === null ? { outcome: "cancelled" } : { outcome: "chosen", path };
+    },
 
-    addFolder: async ({ projectId, folder }) => {
+    addFolder: async ({ projectId, path }) => {
       const current = project(projectId);
-      for (const agentId of current.agentIds) await addFolders(agentId, [folder]);
-      return change(projectId, (entry) => ({
+      const covered = projectFolders(current).find((folder) => folder === path);
+      if (covered) return { outcome: "covered", path, folder: covered, detail: await detail(projectId) };
+      for (const agentId of current.agentIds) await addFolders(agentId, [path]);
+      change(projectId, (entry) => ({ ...entry, additionalFolders: [...entry.additionalFolders, path] }));
+      return { outcome: "added", path, replaced: [], detail: await detail(projectId) };
+    },
+
+    removeFolder: async ({ projectId, path }) => {
+      const current = project(projectId);
+      if (path === current.mainFolder)
+        return { outcome: "refused", path, refusal: "main", detail: await detail(projectId) };
+      for (const agentId of current.agentIds) await agentApi().removeAgentFolder({ agentId, path }, serverId);
+      change(projectId, (entry) => ({
         ...entry,
-        additionalFolders:
-          folder === entry.mainFolder || entry.additionalFolders.includes(folder)
-            ? entry.additionalFolders
-            : [...entry.additionalFolders, folder],
+        additionalFolders: entry.additionalFolders.filter((folder) => folder !== path),
       }));
+      return { outcome: "removed", path, detail: await detail(projectId) };
     },
 
-    removeFolder: async ({ projectId, folder }) => {
-      const current = project(projectId);
-      for (const agentId of current.agentIds) await agentApi().removeAgentFolder({ agentId, path: folder }, serverId);
-      return change(projectId, (entry) => ({
-        ...entry,
-        additionalFolders: entry.additionalFolders.filter((path) => path !== folder),
-      }));
-    },
-
-    listAgents: async (projectId) => {
-      const current = project(projectId);
-      const agents = untrack(deps.agents);
-      return Promise.all(
-        current.agentIds.flatMap((agentId) => {
-          const agent = agents.find((entry) => entry.id === agentId);
-          if (!agent) return [];
-          return [
-            agentApi()
-              .readAgentInstructions(agentId, serverId)
-              .then(
-                (file) => file.text,
-                () => "",
-              )
-              .then(
-                (instructions): ProjectAgent => ({
-                  id: agent.id,
-                  projectId,
-                  name: agent.name,
-                  role: agent.title || agent.name,
-                  instructions,
-                  runtime: agentRuntime(agent),
-                }),
-              ),
-          ];
-        }),
-      );
-    },
-
-    createAgent: async (input) => {
-      const current = project(input.projectId);
-      const agentId = await createProjectAgent(
-        current.name,
-        input,
-        current.defaultRuntime,
-        [current.mainFolder, ...current.additionalFolders],
-        current.color,
-      );
-      const next = change(input.projectId, (entry) => ({ ...entry, agentIds: [...entry.agentIds, agentId] }));
+    createAgent: async ({ projectId, ...input }) => {
+      const agentId = await createProjectAgent(project(projectId), input);
+      change(projectId, (entry) => ({ ...entry, agentIds: [...entry.agentIds, agentId] }));
       release(agentId);
-      return next;
+      return detail(projectId);
     },
 
     updateAgent: async (input) => {
       const updates: Omit<UpdateAgentInput, "agentId"> = {
         ...(input.name === undefined ? {} : { name: input.name.trim() }),
         ...(input.role === undefined ? {} : { title: input.role.trim() }),
-        ...(input.runtime ? runtimeUpdate(input.runtime) : {}),
+        ...(input.runtime ? runtimeFields(input.runtime) : {}),
       };
       if (Object.keys(updates).length > 0) await deps.updateAgent(input.agentId, updates);
       if (input.instructions !== undefined) await saveInstructions(input.agentId, input.instructions);
+      return detail(input.projectId);
     },
 
     removeAgent: async ({ projectId, agentId }) => {
       await deps.deleteAgent(agentId);
-      return change(projectId, (entry) => ({ ...entry, agentIds: entry.agentIds.filter((id) => id !== agentId) }));
+      change(projectId, (entry) => ({ ...entry, agentIds: entry.agentIds.filter((id) => id !== agentId) }));
+      return detail(projectId);
     },
 
-    listChats: async ({ projectId, archived, limit }) => {
-      const current = project(projectId);
+    listChats: async (input) => {
+      const current = project(input.projectId);
       await loadMissingTasks(current.agentIds);
-      const all = untrack(() => projectTasks(project(projectId)))
-        .filter((task) => (task.state === "closed") === archived)
+      const filter = input.archived ?? "exclude";
+      const all = untrack(() => projectChats(project(input.projectId)))
+        .filter((chat) => filter === "include" || chat.archived === (filter === "only"))
         .sort(newestFirst);
+      const offset = cursorOffset(input.cursor);
+      const limit = input.limit ?? 50;
       let older = false;
-      if (archived && all.length < limit)
+      if (filter !== "exclude" && offset + limit >= all.length)
         for (const agentId of current.agentIds) {
           const more = untrack(() => tasks.olderArchived(agentId));
           if (!more) continue;
           older = true;
           if (!more.loading) tasks.loadArchivedPage(agentId);
         }
+      const next = offset + limit;
       return {
-        chats: untrack(() => all.slice(0, limit).map((task) => chatOf(current, task))),
-        hasMore: older || all.length > limit,
+        chats: all.slice(offset, next),
+        nextCursor: next < all.length || older ? `offset:${Math.min(next, all.length)}` : null,
       };
     },
 
-    searchChats: async ({ projectId, query, limit }) => {
-      const text = query.trim().toLowerCase();
+    getChat: async (ref) => untrack(() => chatOf(projectOfAgent(ref.agentId).id, findTask(ref))),
+
+    searchChats: async (input) => {
+      const text = input.query.trim().toLowerCase();
       const scope = untrack(projects).filter((entry) =>
-        projectId === null ? entry.archivedAt === null : entry.id === projectId,
+        input.projectId === undefined ? entry.archivedAt === null : entry.id === input.projectId,
       );
       await loadMissingTasks(scope.flatMap((entry) => entry.agentIds));
-      return untrack(() =>
-        scope
-          .flatMap((entry) => projectTasks(entry).map((task) => chatOf(entry, task)))
-          .filter((chat) => !text || chat.task.title.toLowerCase().includes(text))
-          .sort((left, right) => newestFirst(left.task, right.task))
-          .slice(0, limit),
-      );
+      const matches = untrack(() => scope.flatMap(projectChats))
+        .filter((chat) => chat.title.toLowerCase().includes(text))
+        .sort(newestFirst);
+      const offset = cursorOffset(input.cursor);
+      const next = offset + (input.limit ?? 50);
+      return {
+        matches: matches.slice(offset, next).map((chat) => ({
+          chat,
+          kind: "title",
+          messageId: null,
+          excerpt: chat.title.slice(0, PROJECT_LIMITS.searchExcerpt),
+          createdAt: chat.updatedAt,
+        })),
+        nextCursor: next < matches.length ? `offset:${next}` : null,
+      };
     },
 
     startChat: async (input) => {
-      const current = project(input.projectId);
+      project(input.projectId);
       const task = await agentApi().startTask(
         {
           agentId: input.agentId,
           text: input.text,
-          ...(input.attachmentDraftIds.length ? { attachmentDraftIds: input.attachmentDraftIds } : {}),
-          clientMessageId: crypto.randomUUID(),
+          ...(input.attachmentDraftIds?.length ? { attachmentDraftIds: input.attachmentDraftIds } : {}),
+          clientMessageId: input.clientMessageId ?? crypto.randomUUID(),
         },
         serverId,
       );
       await tasks.loadTasks(input.agentId);
-      const ref = { projectId: input.projectId, agentId: input.agentId, chatId: task.id };
-      if (input.runtime)
-        setChatFlags(ref, (flags) => ({ ...flags, ...(input.runtime ? { runtime: input.runtime } : {}) }));
-      return untrack(() => chatOf(current, task));
+      return untrack(() => chatOf(input.projectId, task));
     },
 
-    setChatArchived: async ({ agentId, chatId, archived }) => {
-      if (archived) await agentApi().closeTask({ agentId, taskId: chatId }, serverId);
-      else await agentApi().reopenTask({ agentId, taskId: chatId }, serverId);
+    setChatArchived: async ({ agentId, taskId, archived }) => {
+      if (archived) await agentApi().closeTask({ agentId, taskId }, serverId);
+      else await agentApi().reopenTask({ agentId, taskId }, serverId);
+      await tasks.loadTasks(agentId);
+      return untrack(() => chatOf(projectOfAgent(agentId).id, findTask({ agentId, taskId })));
     },
 
-    setChatPinned: async (input) => {
-      setChatFlags(input, (flags) => {
-        const { pinned: _pinned, ...rest } = flags;
-        return input.pinned ? { ...rest, pinned: true } : rest;
-      });
+    setChatPinned: async ({ agentId, taskId, pinned }) => {
+      save((stored) => ({
+        ...stored,
+        pinned: pinned ? [...new Set([...stored.pinned, taskId])] : stored.pinned.filter((id) => id !== taskId),
+      }));
+      return untrack(() => chatOf(projectOfAgent(agentId).id, findTask({ agentId, taskId })));
     },
 
-    setChatRuntime: async (input) => {
-      setChatFlags(input, (flags) => {
-        const { runtime: _runtime, ...rest } = flags;
-        return input.runtime ? { ...rest, runtime: input.runtime } : rest;
-      });
+    markChatShown: async (input) => {
+      const task = untrack(() => tasks.snapshot(input.agentId)?.tasks.find((entry) => entry.id === input.taskId));
+      if (task && untrack(state).seen[task.id] !== task.updatedAt)
+        save((stored) => ({ ...stored, seen: { ...stored.seen, [task.id]: task.updatedAt } }));
+      tasks.markTaskRead(input.agentId, input.taskId, input.throughMessageId);
     },
 
-    activity: async () => untrack(activities),
+    listActivity: async () => untrack(activity),
 
-    onChange: (listener) => {
-      listeners.add(listener);
-      return () => listeners.delete(listener);
+    onChanged: (listener) => {
+      changedListeners.add(listener);
+      return () => changedListeners.delete(listener);
+    },
+    onChatsChanged: (listener) => {
+      chatListeners.add(listener);
+      return () => chatListeners.delete(listener);
+    },
+    onActivityChanged: (listener) => {
+      activityListeners.add(listener);
+      return () => activityListeners.delete(listener);
     },
   };
 }
