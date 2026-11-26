@@ -36,7 +36,7 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | ID | Requirement | W | Status | Proof |
 | --- | --- | --- | --- | --- |
 | 3.1 | Fork latest OpenBot main | W00 | done | Upstream `main` HEAD on 2026-11-25 was `100c60e89`; `git status` of the copied download against it showed no difference |
-| 3.2 | Product name CodeBot in all user-facing text | W00 | in progress | Mechanical rename `3377172d0` (73,264 replacements, 154 paths). Open: icons and logo, and the lines that `bun run check:branding` lists |
+| 3.2 | Product name CodeBot in all user-facing text | W00 | in progress | Mechanical rename `3377172d0` (73,264 replacements, 154 paths). New icon set and logo from `scripts/codebot/generate-brand-icons.ts` (files in `build/`). Open: mobile icons (W18), and the lines that `bun run check:branding` lists |
 | 3.3 | CodeBot bundle ID and app ID, side-by-side install | W00 | in progress | `electron-builder.yml`: `appId: app.codebot.desktop`, scheme `codebot`. Open: install test of a packaged build |
 | 3.4 | Data folder ~/CodeBot, userData CodeBot | W00 | in progress | Rename `3377172d0` (`src/backend/agent-store.ts`, `src/main/index.ts`). Open: a run that shows the folders |
 | 3.5 | Keep copyright notice, LICENSE, NOTICE | W00 | done | `git diff openbot-baseline main -- LICENSE NOTICE` is empty; `electron-builder.yml` keeps the copyright line |
@@ -280,7 +280,13 @@ Newest entry first. Each entry says what is merged in `main`, what runs, and whe
   W02b, W03, W04, W06 and W18 remove them.
 - Baseline RAM and CPU: not measured yet. `dev:bench` and `dev:memory` do not run on Windows in
   upstream (they call POSIX `ps`); package W01 corrects the harness first.
+- New CodeBot icon and logo (two code brackets on a blue square): `build/icon-*`, `build/logo-colors/`,
+  the tray icon, the DMG background, `packages/brand/src/app-logo-shape.ts`. The macOS icon catalog
+  `Assets.car` of upstream is removed (it cannot be made on Windows); `scripts/compile-macos-icon.ts`
+  makes a new one on a Mac. The upstream Apple team ID and the universal-link domain are removed from
+  the mac packaging files.
 - Work in progress, one worktree and branch for each package under `_wt/`: `w01-measure`,
   `w20-wintests`, `w02a-analytics`, `w02b-cloud`, `w03-account-service`, `w06-updates`,
-  `w07-projects-engine`, `w08-slash`, `w11-explorer`, `w12-shell`. A usage limit stopped all build
-  agents soon after their start; only `w20-wintests` had uncommitted changes. All were started again.
+  `w07-projects-engine`, `w08-slash`, `w11-explorer`, `w12-shell`, `w09-lock`, `w10-replies`,
+  `w13-status`. A usage limit stopped all build agents soon after their start; only `w20-wintests` had
+  uncommitted changes. All were started again.
