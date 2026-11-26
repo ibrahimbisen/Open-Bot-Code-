@@ -1,4 +1,4 @@
-import { canPreviewAttachment } from "@codebot/contracts/ipc";
+import { canPreviewAttachment, LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import { classifyFailure } from "@codebot/telemetry";
 import { Input } from "@codebot/ui";
@@ -18,6 +18,7 @@ import { useCompactMessageActions } from "../../compact-message-actions-preferen
 import { usePlatform } from "../../platform";
 import { deviceQuoteShortcut, deviceSendShortcut } from "../../send-shortcut-preference";
 import { remoteAgentError } from "../agents/agent-error-text";
+import { createSlashCommandsFor } from "../slash-commands/slash-commands-source";
 import { useThreadVisualReplyCard } from "./ChatVisualReply";
 import { ConversationBrowserLocation } from "./ConversationBrowserLocation";
 import { ConversationBrowserTakeover } from "./ConversationBrowserTakeover";
@@ -212,6 +213,11 @@ export function ConversationThread() {
     const focus = threads.focusMessage;
     return focus && focus.taskId === threads.open?.id ? focus : undefined;
   };
+  const slash = createSlashCommandsFor(() => {
+    const agentId = props.agent?.id;
+    const taskId = props.threads?.open?.id;
+    return agentId && taskId ? { agentId, taskId, serverId: props.server?.id ?? LOCAL_SERVER_ID } : undefined;
+  });
   const mcpSignInCard = useThreadMcpSignInCard(
     (body) => props.threads?.onSend(body, [], null) ?? Promise.resolve(false),
   );
@@ -264,6 +270,8 @@ export function ConversationThread() {
             messages={shownMessages()}
             skills={installedSkills()}
             skillsLoadFailed={installedSkillsLoadFailed()}
+            slashCommands={slash.commands()}
+            onSlashScreen={slash.openScreen}
             mcpServers={mcpServers()}
             browserTabs={taggableBrowserTabs()}
             threads={taggableThreads()}

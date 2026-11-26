@@ -71,6 +71,7 @@ import type { HostProviderSettings } from "./features/settings/ProviderSettingsS
 import { useSettings } from "./features/settings/settings-context";
 import { settingsPort } from "./features/settings/settings-port";
 import { useSidebar } from "./features/sidebar/sidebar-context";
+import { SlashScreenHost } from "./features/slash-commands/SlashScreenHost";
 import { codexLiveAccess as codexLiveAccessOf } from "./features/speech/codex-live-access";
 import { useUpdates } from "./features/updates/updates-context";
 import { useWhatsNew } from "./features/updates/whats-new-context";
@@ -109,6 +110,7 @@ export function WorkspaceOverlays(props: AccountProps) {
   return (
     <>
       <SharedAgentInstall />
+      <SlashScreenHost />
       <JoinServer account={props.account} />
       <AddServer />
       <CreateLocalServer />

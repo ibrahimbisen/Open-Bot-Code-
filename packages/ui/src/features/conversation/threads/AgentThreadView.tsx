@@ -8,6 +8,8 @@ import type {
   InstalledSkill,
   QueueDelivery,
   ResponseStyle,
+  SlashCommandEntry,
+  SlashCommandScreen,
 } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import { isAgentTaskActive } from "@codebot/team-client/agent-tasks";
@@ -185,6 +187,8 @@ export interface AgentThreadViewProps {
   messages: readonly AgentMessage[];
   skills?: InstalledSkill[] | undefined;
   skillsLoadFailed?: boolean | undefined;
+  slashCommands?: SlashCommandEntry[] | undefined;
+  onSlashScreen?: ((screen: SlashCommandScreen) => void) | undefined;
   mcpServers?: ComposerMcpServer[] | undefined;
   browserTabs?: ComposerBrowserTab[] | undefined;
   threads?: ComposerThread[] | undefined;
@@ -1155,6 +1159,8 @@ export function AgentThreadView(props: AgentThreadViewProps) {
               agents={props.agents}
               skills={props.skills}
               skillsLoadFailed={props.skillsLoadFailed}
+              slashCommands={props.slashCommands}
+              onSlashScreen={props.onSlashScreen}
               mcpServers={props.mcpServers}
               browserTabs={props.browserTabs}
               threads={otherThreads()}
