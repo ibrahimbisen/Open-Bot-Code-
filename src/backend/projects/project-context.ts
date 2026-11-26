@@ -1,4 +1,4 @@
-import type { ProjectAccessLevel } from "@codebot/contracts/ipc";
+import type { ProjectAccessLevel, ProjectRuntime } from "@codebot/contracts/ipc";
 
 export interface AgentProjectContext {
   projectId: string;
@@ -20,4 +20,16 @@ export function setAgentProjectContextSource(source: AgentProjectContextSource):
 
 export function agentProjectContext(agentId: string): AgentProjectContext | null {
   return contextOf(agentId);
+}
+
+type ChatRuntimeSource = (agentId: string, taskId: string) => ProjectRuntime | null;
+
+let chatRuntimeOf: ChatRuntimeSource = () => null;
+
+export function setChatRuntimeSource(source: ChatRuntimeSource): void {
+  chatRuntimeOf = source;
+}
+
+export function chatRuntimeOverride(agentId: string, taskId: string): ProjectRuntime | null {
+  return chatRuntimeOf(agentId, taskId);
 }

@@ -32,6 +32,7 @@ import {
   type SearchProjectChatsInput,
   type SetProjectChatArchivedInput,
   type SetProjectChatPinnedInput,
+  type SetProjectChatRuntimeInput,
   type StartProjectChatInput,
   type UpdateProjectAgentInput,
   type UpdateProjectInput,
@@ -45,7 +46,7 @@ import type { AgentService } from "../agent-service";
 import type { CodeBotDatabase } from "../codebot-database";
 import { runCauseEffect } from "../effect-boundary";
 import { ProjectChatQueries, type ProjectChatRow, searchExcerpt } from "./project-chat-queries";
-import { setAgentProjectContextSource } from "./project-context";
+import { setAgentProjectContextSource, setChatRuntimeSource } from "./project-context";
 import {
   type ProjectOperations,
   type ProjectServiceEvent,
@@ -130,6 +131,7 @@ function fail(
     | "error.project.agentNotFound"
     | "error.project.agentNameRequired"
     | "error.project.chatNotFound"
+    | "error.project.runtimeProviderMismatch"
     | "error.project.folderMissing"
     | "error.project.folderProtected",
 ): never {
@@ -159,6 +161,7 @@ export class ProjectService implements ProjectOperations {
     this.#queries = new ProjectChatQueries({ database: options.database });
     for (const project of this.#store.list()) this.#projects.set(project.id, project);
     setAgentProjectContextSource((agentId) => this.#contextOf(agentId));
+    setChatRuntimeSource((agentId, taskId) => this.#queries.chat(agentId, taskId)?.settings.runtime ?? null);
   }
 
   start(): Effect.Effect<void, never> {
@@ -181,6 +184,7 @@ export class ProjectService implements ProjectOperations {
     this.#options.agents.off("event", this.#onEvent);
     this.#options.agents.off("taskRead", this.#onRead);
     setAgentProjectContextSource(() => null);
+    setChatRuntimeSource(() => null);
   }
 
   async reconcile(): Promise<void> {
@@ -728,7 +732,8 @@ export class ProjectService implements ProjectOperations {
   startChat(input: StartProjectChatInput, sender: ConversationMessageSender | undefined) {
     return Effect.gen({ self: this }, function* () {
       const project = yield* projectStep(() => this.#requireActive(input.projectId));
-      yield* projectStep(() => this.#requireAgent({ projectId: project.id, agentId: input.agentId }));
+      const { agent } = yield* projectStep(() => this.#requireAgent({ projectId: project.id, agentId: input.agentId }));
+      if (input.runtime) yield* projectStep(() => this.#requireSameProvider(agent, input.runtime ?? null));
       yield* projectIo(async () => {
         if (!(await isDirectory(project.mainFolder)))
           throw new Error(sourceText("error.project.mainFolderMissing", { path: project.mainFolder }));
@@ -744,7 +749,28 @@ export class ProjectService implements ProjectOperations {
           sender,
         ),
       );
+      if (input.runtime) {
+        const runtime = input.runtime;
+        yield* projectStep(() => this.#store.setChat(task.threadId, { runtime }));
+      }
       return yield* projectStep(() => this.getChat({ agentId: task.agentId, taskId: task.id }));
+    });
+  }
+
+  #requireSameProvider(agent: AgentSummary, runtime: ProjectRuntime | null): void {
+    if (runtime && runtime.provider !== providerForAgent(agent)) fail("error.project.runtimeProviderMismatch");
+  }
+
+  setChatRuntime(input: SetProjectChatRuntimeInput) {
+    return Effect.gen({ self: this }, function* () {
+      const { project, row } = yield* projectStep(() => this.#requireChatRow(input));
+      const { agent } = yield* projectStep(() => this.#requireAgent({ projectId: project.id, agentId: input.agentId }));
+      yield* projectStep(() => this.#requireSameProvider(agent, input.runtime));
+      return yield* projectStep(() => {
+        this.#setChat(row, { runtime: input.runtime });
+        this.#emitChat(project, row.threadId);
+        return this.getChat(input);
+      });
     });
   }
 

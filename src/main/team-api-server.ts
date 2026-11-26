@@ -264,6 +264,7 @@ import { MODEL_STEERING_CAPABILITY } from "@codebot/contracts/team-protocol/mode
 import { MODEL_VISIBILITY_KEPT_CAPABILITY } from "@codebot/contracts/team-protocol/model-visibility-kept-v1";
 import { type OptionalTeamEvent, optionalTeamEvent } from "@codebot/contracts/team-protocol/optional-events";
 import { OWNER_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/owner-transfer-v1";
+import { PROJECTS_V1_CAPABILITY } from "@codebot/contracts/team-protocol/projects-v1";
 import {
   TEAM_PROMPT_DETAIL_CAPABILITY,
   withPromptQuestionDetails,
@@ -488,6 +489,7 @@ import { routePasswordManagers } from "./team-api/route-password-managers";
 import { routePendingApproval } from "./team-api/route-pending-approval";
 import { routePendingPrompts } from "./team-api/route-pending-prompts";
 import { routePhoneFeedback } from "./team-api/route-phone-feedback";
+import { routeProjects } from "./team-api/route-projects";
 import { routePromptCacheTtl } from "./team-api/route-prompt-cache-ttl";
 import {
   routeLiveVoiceAccount,
@@ -1469,6 +1471,7 @@ export class TeamApiServer {
       )
         return;
       if ((await routeCrm(context, this.#options.crm)) === "handled") return;
+      if ((await routeProjects(context, this.#options.projects)) === "handled") return;
       if ((await this.#routeEvents(context)) === "handled") return;
       if ((await routeAgentImport(context, this.#options.agentImport, newAgentHidden)) === "handled") return;
       if ((await routeHermesImport(context, this.#options.hermesImport, newAgentHidden)) === "handled") return;
@@ -2997,6 +3000,7 @@ export class TeamApiServer {
         if (capability === WORKFLOW_FOLDERS_CAPABILITY)
           return this.#options.workflows !== undefined && this.#options.workflowFolders !== undefined;
         if (capability === CRM_CAPABILITY) return this.#options.crm !== undefined;
+        if (capability === PROJECTS_V1_CAPABILITY) return this.#options.projects !== undefined;
         if (capability === WORKFLOWS_GITHUB_CAPABILITY) return this.#options.workflows?.github !== undefined;
         if (capability === WORKFLOWS_MEDIA_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_SUNRA_CAPABILITY) return this.#options.workflows !== undefined;

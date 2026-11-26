@@ -17,6 +17,7 @@ import type {
   SearchProjectChatsInput,
   SetProjectChatArchivedInput,
   SetProjectChatPinnedInput,
+  SetProjectChatRuntimeInput,
   StartProjectChatInput,
   UpdateProjectAgentInput,
   UpdateProjectInput,
@@ -59,6 +60,7 @@ export interface ProjectOperations {
   ): Effect.Effect<ProjectChat, ProjectFailed>;
   setChatArchived(input: SetProjectChatArchivedInput): Effect.Effect<ProjectChat, ProjectFailed>;
   setChatPinned(input: SetProjectChatPinnedInput): ProjectChat;
+  setChatRuntime(input: SetProjectChatRuntimeInput): Effect.Effect<ProjectChat, ProjectFailed>;
   listActivity(): ProjectActivity[];
   subscribe(listener: (event: ProjectServiceEvent) => void): () => void;
 }

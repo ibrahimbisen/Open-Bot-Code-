@@ -17,6 +17,7 @@ import {
   type SearchProjectChatsInput,
   type SetProjectChatArchivedInput,
   type SetProjectChatPinnedInput,
+  type SetProjectChatRuntimeInput,
   type StartProjectChatInput,
   type UpdateProjectAgentInput,
   type UpdateProjectInput,
@@ -209,7 +210,11 @@ export function parseProjectChatRef(value: unknown): ProjectChatRef {
 
 export function parseStartProjectChat(value: unknown): StartProjectChatInput {
   if (!isObject(value)) throw new Error("Invalid project chat request.");
-  return { projectId: parseProjectId(value.projectId), ...parseStartAgentTask(value) };
+  return {
+    projectId: parseProjectId(value.projectId),
+    ...parseStartAgentTask(value),
+    ...(value.runtime === undefined ? {} : { runtime: runtime(value.runtime) }),
+  };
 }
 
 export function parseSetProjectChatArchived(value: unknown): SetProjectChatArchivedInput {
@@ -222,4 +227,10 @@ export function parseSetProjectChatPinned(value: unknown): SetProjectChatPinnedI
   const chat = parseProjectChatRef(value);
   if (!isObject(value) || !isBoolean(value.pinned)) throw new Error("pinned must be a boolean.");
   return { ...chat, pinned: value.pinned };
+}
+
+export function parseSetProjectChatRuntime(value: unknown): SetProjectChatRuntimeInput {
+  const chat = parseProjectChatRef(value);
+  if (!isObject(value) || value.runtime === undefined) throw new Error("runtime is required.");
+  return { ...chat, runtime: value.runtime === null ? null : runtime(value.runtime) };
 }

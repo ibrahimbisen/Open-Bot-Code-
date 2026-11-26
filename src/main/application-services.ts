@@ -3429,6 +3429,7 @@ export async function createApplicationServices({
       files: workflowFiles,
     },
     crm,
+    projects,
     hiddenAgents: service,
     routineRunPlaces: service.routineRecords,
     agentNotificationLevels,

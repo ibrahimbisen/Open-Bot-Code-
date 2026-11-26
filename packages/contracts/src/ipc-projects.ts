@@ -391,6 +391,7 @@ export interface StartProjectChatInput {
   text: string;
   attachmentDraftIds?: string[];
   clientMessageId?: string;
+  runtime?: ProjectRuntime;
 }
 
 export interface ProjectChatRef {
@@ -404,6 +405,10 @@ export interface SetProjectChatArchivedInput extends ProjectChatRef {
 
 export interface SetProjectChatPinnedInput extends ProjectChatRef {
   pinned: boolean;
+}
+
+export interface SetProjectChatRuntimeInput extends ProjectChatRef {
+  runtime: ProjectRuntime | null;
 }
 
 export interface ProjectActivity {

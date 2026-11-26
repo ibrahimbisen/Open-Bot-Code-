@@ -148,6 +148,7 @@ interface ChatFlags {
   pinned: boolean;
   needsInput: boolean;
   failureUnseen: boolean;
+  runtime: ProjectRuntime | null;
 }
 
 export interface MockProjectsHost {
@@ -204,7 +205,13 @@ export function createMockProjects(seeds: readonly MockProjectSeed[], host: Mock
   const flagsOf = (taskId: string): ChatFlags => {
     const existing = flags.get(taskId);
     if (existing) return existing;
-    const created = { archived: false, pinned: false, needsInput: false, failureUnseen: false };
+    const created: ChatFlags = {
+      archived: false,
+      pinned: false,
+      needsInput: false,
+      failureUnseen: false,
+      runtime: null,
+    };
     flags.set(taskId, created);
     return created;
   };
@@ -246,7 +253,7 @@ export function createMockProjects(seeds: readonly MockProjectSeed[], host: Mock
       unreadCount: host.unread(task.id),
       archived: chat.archived,
       pinned: chat.pinned,
-      runtime: null,
+      runtime: chat.runtime,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
     };
@@ -656,6 +663,7 @@ export function createMockProjects(seeds: readonly MockProjectSeed[], host: Mock
       if (!project.agentIds.includes(input.agentId)) fail("error.project.agentNotFound");
       const task = host.newTask(input.agentId, input.text.slice(0, INPUT_LIMITS.messageText));
       known.set(task.id, { agentId: task.agentId, state: task.state });
+      if (input.runtime) flagsOf(task.id).runtime = input.runtime;
       host.runTurn(task, input.text);
       return clone(chatOf(project, task));
     },
@@ -671,6 +679,12 @@ export function createMockProjects(seeds: readonly MockProjectSeed[], host: Mock
     setChatPinned: async ({ agentId, taskId, pinned }) => {
       const { project, task } = findChat(agentId, taskId);
       flagsOf(taskId).pinned = pinned;
+      emitChats(project, [task]);
+      return clone(chatOf(project, task));
+    },
+    setChatRuntime: async ({ agentId, taskId, runtime }) => {
+      const { project, task } = findChat(agentId, taskId);
+      flagsOf(taskId).runtime = runtime;
       emitChats(project, [task]);
       return clone(chatOf(project, task));
     },

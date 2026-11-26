@@ -160,6 +160,7 @@ import { PASSWORD_MANAGERS_CAPABILITY } from "./password-managers-v1";
 import { PENDING_APPROVAL_CAPABILITY } from "./pending-approval-v1";
 import { PENDING_PROMPTS_CAPABILITY } from "./pending-prompts-v1";
 import { PHONE_FEEDBACK_CAPABILITY } from "./phone-feedback-v1";
+import { PROJECTS_V1_CAPABILITY } from "./projects-v1";
 import { PROMPT_CACHE_TTL_CAPABILITY, PROMPT_CACHE_TTL_PI_CAPABILITY } from "./prompt-cache-ttl-v1";
 import { TEAM_PROMPT_DETAIL_CAPABILITY } from "./prompt-detail-v1";
 import { TEAM_PROMPT_MULTI_SELECT_CAPABILITY } from "./prompt-multi-select-v1";
@@ -435,6 +436,7 @@ export {
   PASSWORD_MANAGERS_CAPABILITY,
   PENDING_APPROVAL_CAPABILITY,
   PHONE_FEEDBACK_CAPABILITY,
+  PROJECTS_V1_CAPABILITY,
   PROMPT_CACHE_TTL_CAPABILITY,
   PROMPT_CACHE_TTL_PI_CAPABILITY,
   PROVIDER_ACCOUNT_RELAY_CAPABILITY,
@@ -876,6 +878,7 @@ const TEAM_CAPABILITY_REGISTRY = [
   [TEAM_BROWSER_VIEW_DIALOG_CAPABILITY, V10],
   [BROWSER_HTTP_SIGN_IN_CAPABILITY, V10],
   [CHANNEL_COMPACT_AVAILABILITY_CAPABILITY, V10],
+  [PROJECTS_V1_CAPABILITY, V10],
 ] as const satisfies readonly (readonly [string, TeamCapabilityPlacement])[];
 
 export const TEAM_CURRENT_CAPABILITIES = TEAM_CAPABILITY_REGISTRY.map(([capability]) => capability);

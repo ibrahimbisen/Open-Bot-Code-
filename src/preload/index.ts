@@ -1004,6 +1004,7 @@ const codebotApi: CodeBotDesktopApi = {
     startChat: decodeProjectChat,
     setChatArchived: decodeProjectChat,
     setChatPinned: decodeProjectChat,
+    setChatRuntime: decodeProjectChat,
     listActivity: decodeProjectActivityList,
     changed: decodeProjectsChangedEvent,
     chatsChanged: decodeProjectChatsChangedEvent,
