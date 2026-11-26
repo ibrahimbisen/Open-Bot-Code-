@@ -547,6 +547,7 @@ import type {
   RemoteNetworkRouteState,
   RemoteSessionReusePreference,
 } from "./ipc-remote-sessions";
+import type { ReplyRuleSettings, TurnStepDetails, TurnStepDetailsInput } from "./ipc-replies";
 import type {
   ResendRoutineResultInput,
   RoutineResultConnectionOption,
@@ -2112,6 +2113,12 @@ export const IPC_ENDPOINTS = {
     disconnect: request<string, void>()("remote-desktop:disconnect"),
     event: event<RemoteDesktopSession[]>()("remote-desktop:event"),
   },
+
+  replies: {
+    getRule: scopedQuery<ReplyRuleSettings>()("replies:get-rule"),
+    setRule: scopedRequest<ReplyRuleSettings, ReplyRuleSettings>()("replies:set-rule"),
+    readTurnSteps: scopedRequest<TurnStepDetailsInput, TurnStepDetails>()("replies:read-turn-steps"),
+  },
 } as const;
 
 export type IpcEndpoints = typeof IPC_ENDPOINTS;
@@ -2183,6 +2190,7 @@ export const IPC_GROUP_PATHS = {
   host: "host",
   events: "events",
   remoteDesktop: "remoteDesktop",
+  replies: "replies",
 } as const satisfies { readonly [Group in keyof IpcEndpoints]: string | null };
 
 export type IpcGroupName = keyof IpcEndpoints;

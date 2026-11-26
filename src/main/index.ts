@@ -119,6 +119,7 @@ import { providerAdminIpcHandlers } from "./ipc/provider-admin-handlers";
 import { providerDetectionIpcHandlers } from "./ipc/provider-detection-handlers";
 import { providerIpcHandlers } from "./ipc/provider-handlers";
 import { referralIpcHandlers } from "./ipc/referral-handlers";
+import { replyIpcHandlers } from "./ipc/reply-handlers";
 import { routineFeedIpcHandlers } from "./ipc/routine-feed-handlers";
 import { routineIpcHandlers } from "./ipc/routine-handlers";
 import { routineResultIpcHandlers } from "./ipc/routine-result-handlers";
@@ -764,6 +765,7 @@ function registerIpcHandlers({
   serverTimezone,
   hostTurnLimits,
   serverPersonality,
+  replyRule,
   promptCacheTtl,
   claudeUserSetup,
   cacheExpiryCompaction,
@@ -1008,6 +1010,7 @@ function registerIpcHandlers({
       takePendingListing: () => takePendingDeepLink("marketplace")?.link ?? null,
     }),
     ...memoryIpcHandlers({ service, remoteServers }),
+    ...replyIpcHandlers({ replyRule, service, remoteServers }),
     ...sharedTableIpcHandlers({ service, remoteServers }),
     ...routineIpcHandlers({ service, remoteServers }),
     ...workflowIpcHandlers({

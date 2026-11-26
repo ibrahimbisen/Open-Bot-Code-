@@ -195,6 +195,7 @@ import {
   sameCustomProviderOrigin,
   savedCustomModelId,
   type TeamPresenceSnapshot,
+  type TurnStepDetails,
   type UpdateAgentInput,
   type UpdatePreference,
   type UpdateQueuedMessageInput,
@@ -265,6 +266,7 @@ import { createMockOnePasswordConnector } from "./mock-onepassword-connector";
 import { createMockPasswordManagers } from "./mock-password-managers";
 import { createMockProviderRuntimes, type MockProviderRuntimeOptions } from "./mock-provider-runtimes";
 import { createMockReferral } from "./mock-referral";
+import { createMockReplies } from "./mock-replies";
 import { mockRoutineCalendar } from "./mock-routine-calendar";
 import { createMockRoutineFeed } from "./mock-routine-feed";
 import { type MockRoutineResultsOptions, mockRoutineResults } from "./mock-routine-results";
@@ -299,6 +301,7 @@ export interface MockCodeBotOptions
   queues?: Record<string, QueueDelivery[]>;
   tasks?: Record<string, AgentTask[]>;
   taskConversations?: Record<string, ConversationSnapshot>;
+  turnStepDetails?: TurnStepDetails[];
   pinnedMessages?: Record<string, (string | { messageId: string; pinnedBy: MessagePinner })[]>;
   taskUnread?: Record<string, number>;
   updateStatus?: UpdateStatus;
@@ -3941,6 +3944,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       onUploadProgress: () => () => undefined,
     },
     remoteDesktop: mockTeam.remoteDesktop,
+    replies: createMockReplies(options.turnStepDetails).api,
   };
 
   return {

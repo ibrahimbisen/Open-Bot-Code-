@@ -96,6 +96,7 @@ export * from "./ipc-provider-environment";
 export * from "./ipc-queue";
 export * from "./ipc-remote-desktop-setup";
 export * from "./ipc-remote-sessions";
+export * from "./ipc-replies";
 export * from "./ipc-routine-flows";
 export * from "./ipc-routine-results";
 export * from "./ipc-routines";

@@ -11,6 +11,8 @@ import {
   type ConversationTurnTrace,
 } from "@codebot/contracts/ipc";
 import { redactText } from "@codebot/logging";
+import { mergeTraceTargets } from "./trace-step-facts";
+import type { StepInputParts } from "./turn-step-details";
 
 export interface ToolOutcome {
   tool: string | null;
@@ -21,13 +23,21 @@ interface RunningTrace {
   startedAt: string;
   steps: Map<string, ConversationTraceStep>;
   outcomes: Map<string, ToolOutcome>;
+  stepInputs: Map<string, StepInputParts>;
+  detailBytes: number;
 }
 
 export class TurnTraces {
   readonly #turns = new Map<string, RunningTrace>();
 
   begin(turnId: string, startedAt: string): void {
-    this.#turns.set(turnId, { startedAt, steps: new Map(), outcomes: new Map() });
+    this.#turns.set(turnId, {
+      startedAt,
+      steps: new Map(),
+      outcomes: new Map(),
+      stepInputs: new Map(),
+      detailBytes: 0,
+    });
   }
 
   observe(
@@ -43,6 +53,8 @@ export class TurnTraces {
       error?: string | null;
       tool?: string | null;
       result?: string | null;
+      activity?: string | null;
+      targets?: readonly string[] | null;
     },
   ): void {
     const trace = this.#turns.get(turnId);
@@ -63,6 +75,8 @@ export class TurnTraces {
     if (kind === "tool" && step.recipientAgentIds === undefined && event.recipientAgentIds?.length)
       step.recipientAgentIds = [...event.recipientAgentIds];
     if (kind === "tool" && step.error === undefined && event.error) step.error = event.error;
+    if (kind === "tool" && step.activity === undefined && event.activity) step.activity = event.activity;
+    if (kind === "tool" && event.targets?.length) step.targets = mergeTraceTargets(step.targets, event.targets);
     if (event.completed && step.endedAt === null) step.endedAt = now;
     if (event.completed && event.failed) step.failed = true;
     if (step.kind === "tool" && (event.tool || event.result)) {
@@ -72,6 +86,30 @@ export class TurnTraces {
         result: event.result ?? outcome?.result ?? null,
       });
     }
+  }
+
+  hasStepInput(turnId: string, itemId: string): boolean {
+    return this.#turns.get(turnId)?.stepInputs.has(itemId) === true;
+  }
+
+  keepStepInput(turnId: string, itemId: string, parts: StepInputParts): void {
+    const trace = this.#turns.get(turnId);
+    if (!trace?.steps.has(itemId)) return;
+    if (parts.input === undefined && parts.diffs === undefined) return;
+    trace.stepInputs.set(itemId, { ...trace.stepInputs.get(itemId), ...parts });
+  }
+
+  takeStepInput(turnId: string, itemId: string): { started: StepInputParts | undefined; usedBytes: number } | null {
+    const trace = this.#turns.get(turnId);
+    if (!trace?.steps.has(itemId)) return null;
+    const started = trace.stepInputs.get(itemId);
+    trace.stepInputs.delete(itemId);
+    return { started, usedBytes: trace.detailBytes };
+  }
+
+  addDetailBytes(turnId: string, bytes: number): void {
+    const trace = this.#turns.get(turnId);
+    if (trace) trace.detailBytes += bytes;
   }
 
   toolOutcomes(turnId: string): ReadonlyMap<string, ToolOutcome> {

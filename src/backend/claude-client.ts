@@ -55,6 +55,7 @@ import {
 } from "./agent/plan-updates";
 import { isBalanceDiagnostic, isPlanLimitDiagnostic, isSpentBalanceDiagnostic } from "./agent/provider-diagnostics";
 import { ROUTINE_NO_UPDATE_TOOL } from "./agent/routine-quiet-runs";
+import { STEP_DETAIL_INPUT_KEY, STEP_DETAIL_RESULT_KEY } from "./agent/step-detail-keys";
 import {
   endSubagentTurn,
   foldClaudeSubagentCall,
@@ -2404,6 +2405,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
           call.input,
           isError ? text : null,
           isError ? null : text,
+          isError ? undefined : message.tool_use_result,
         );
         if (
           isError &&
@@ -2599,6 +2601,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     input?: unknown,
     failure: string | null = null,
     output: string | null = null,
+    result?: unknown,
   ): void {
     const turn = runtime.activeTurn;
     if (!turn) return;
@@ -2637,6 +2640,8 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
             ? { description: input.description.slice(0, TOOL_DESCRIPTION_LIMIT) }
             : {}),
           ...(completed ? {} : claudeStepTarget(name, input)),
+          ...(completed || input === undefined ? {} : { [STEP_DETAIL_INPUT_KEY]: input }),
+          ...(completed && result !== undefined ? { [STEP_DETAIL_RESULT_KEY]: result } : {}),
           ...(name === "Bash" && isRecord(input) && typeof input.command === "string"
             ? { command: input.command.slice(0, INPUT_LIMITS.messageText) }
             : {}),

@@ -67,6 +67,7 @@ import {
   mcpProviderFailureKind,
 } from "./agent/provider-diagnostics";
 import { ROUTINE_NO_UPDATE_TOOL } from "./agent/routine-quiet-runs";
+import { STEP_DETAIL_CONTENT_KEY } from "./agent/step-detail-keys";
 import {
   endSubagentTurn,
   newSubagentState,
@@ -3749,7 +3750,9 @@ export class AcpAgentClient extends EventEmitter<ClientEvents> {
           threadId: thread.id,
           turnId: turn.id,
           filePaths: update.locations?.map((location) => location.path),
-          item: shown,
+          item: update.content?.some((entry) => entry.type === "diff")
+            ? { ...shown, [STEP_DETAIL_CONTENT_KEY]: update.content }
+            : shown,
         },
       });
       if (reported === "completed" || reported === "failed") {

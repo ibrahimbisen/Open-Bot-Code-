@@ -344,6 +344,7 @@ import {
   decodePasswordManagerResponses,
 } from "./password-manager-decoding";
 import { decodeProviderRuntimeSnapshot } from "./provider-runtime";
+import { decodeReplyRuleFromMain, decodeTurnStepDetailsFromMain } from "./reply-decoding";
 import {
   decodeRoutineResultDeliveries,
   decodeRoutineResultDestination,
@@ -1756,6 +1757,11 @@ const codebotApi: CodeBotDesktopApi = {
     selectDisplay: decodeVoid,
     disconnect: decodeVoid,
     event: decodeRemoteDesktopSessions,
+  }),
+  replies: bridgeGroup(IPC_ENDPOINTS.replies, {
+    getRule: decodeReplyRuleFromMain,
+    setRule: decodeReplyRuleFromMain,
+    readTurnSteps: decodeTurnStepDetailsFromMain,
   }),
 };
 

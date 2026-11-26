@@ -3,8 +3,8 @@
     "catalog.descriptions": 45622,
     "catalog.schemas": 82779,
     "guidance": 27187,
-    "instructions.claude": 16939,
-    "instructions.codex": 17144,
+    "instructions.claude": 16726,
+    "instructions.codex": 16931,
     "list-models.fixture": 2430,
     "visible-tools": 20018
   }
