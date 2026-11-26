@@ -1,6 +1,6 @@
 import { readdir, realpath, stat } from "node:fs/promises";
 import { homedir, userInfo } from "node:os";
-import { dirname, join, parse, resolve } from "node:path";
+import { dirname, join, parse, resolve, sep } from "node:path";
 import {
   AGENT_FOLDER_BROWSE_LIMIT,
   AGENT_FOLDER_LIMIT,
@@ -29,8 +29,11 @@ export async function isDirectory(path: string): Promise<boolean> {
   return (await stat(path).catch(() => null))?.isDirectory() === true;
 }
 
+const BARE_DRIVE = /^[A-Za-z]:$/u;
+
 export async function realFolder(path: string): Promise<string> {
-  return realpath(path).catch(() => resolve(path));
+  const real = await realpath(path).catch(() => resolve(path));
+  return BARE_DRIVE.test(real) ? `${real}${sep}` : real;
 }
 
 async function subfolders(folder: string): Promise<string[] | null> {
