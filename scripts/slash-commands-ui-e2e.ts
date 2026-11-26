@@ -32,6 +32,7 @@ async function shot(label: string): Promise<void> {
 
 const marker = crypto.randomUUID().replace(/-/g, "").slice(0, 6);
 const agentName = `Slash ${marker}`;
+await page.evaluate(() => window.codebot.setProviderApiKey({ provider: "claude", key: "sk-ant-recorder-not-a-key" }));
 const agent = await page.evaluate(
   (name) =>
     window.codebot.agent.createAgent({
