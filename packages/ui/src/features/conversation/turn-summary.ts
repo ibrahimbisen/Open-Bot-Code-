@@ -1,5 +1,5 @@
 import { type ConversationTraceActivity, traceStepActivity } from "@codebot/contracts/ipc";
-import type { TextValue } from "../../text";
+import type { AppFormat, AppTranslate } from "@codebot/i18n";
 
 export interface TurnSummaryStep {
   activity?: string | undefined;
@@ -43,7 +43,12 @@ export function turnActivityCounts(steps: readonly TurnSummaryStep[]): TurnActiv
   return counts;
 }
 
-export function turnSummaryLine(counts: TurnActivityCounts, text: TextValue): string {
+export interface TurnSummaryText {
+  t: AppTranslate;
+  format: Pick<AppFormat, "list">;
+}
+
+export function turnSummaryLine(counts: TurnActivityCounts, text: TurnSummaryText): string {
   const parts = SUMMARY_ORDER.flatMap((activity) => {
     const count = counts[activity];
     return count ? [text.t(SUMMARY_KEYS[activity], { count })] : [];
