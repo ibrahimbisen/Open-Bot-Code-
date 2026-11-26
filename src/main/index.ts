@@ -103,6 +103,7 @@ import { hostedSiteIpcHandlers } from "./ipc/hosted-site-handlers";
 import { instanceTransferIpcHandlers } from "./ipc/instance-transfer-handlers";
 import { licenseIpcHandlers } from "./ipc/license-handlers";
 import { linkAccountIpcHandlers } from "./ipc/link-account-handlers";
+import { localModelServersIpcHandlers } from "./ipc/local-model-servers-handlers";
 import { localServerIpcHandlers } from "./ipc/local-server-handlers";
 import { macAutomationIpcHandlers } from "./ipc/mac-automation-handlers";
 import { marketplaceAgentIpcHandlers } from "./ipc/marketplace-agent-handlers";
@@ -808,6 +809,8 @@ function registerIpcHandlers({
   acpRegistry,
   providerDetection,
   providerDetectionSettings,
+  localModelServerMonitor,
+  customProviders,
   marketplaceAgents,
   agentTemplates,
   agentImport,
@@ -953,6 +956,7 @@ function registerIpcHandlers({
     ...customProviderIpcHandlers(customProviderChanges),
     ...customAgentIpcHandlers({ changes: customAgentChanges, remoteServers }),
     ...acpRegistryIpcHandlers(acpRegistry, remoteServers),
+    ...localModelServersIpcHandlers({ monitor: localModelServerMonitor, customProviders }),
     ...providerDetectionIpcHandlers({
       detection: providerDetection,
       settings: providerDetectionSettings,
