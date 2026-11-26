@@ -9,6 +9,7 @@ import {
   codeBotDatabaseNeedsMigration,
   migrateCodeBotDatabase,
 } from "../codebot-database-schema";
+import { migrateProjectTables } from "../projects/project-schema";
 import { storedIO, storedSync } from "../stored-state-effects";
 import { databaseRow, errorCode, requiredNumberColumn, requiredStringColumn } from "./database-rows";
 import { withTransaction } from "./sqlite-transaction";
@@ -193,6 +194,7 @@ export class DatabaseCore {
 
   #migrate(closedCleanly: boolean): void {
     migrateCodeBotDatabase(this.connection, { closedCleanly });
+    migrateProjectTables(this.connection);
   }
 }
 

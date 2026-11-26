@@ -13,4 +13,5 @@ export const messages = defineMessages("error.project", {
   "error.project.agentNotFound": "This agent is not part of the project.",
   "error.project.agentNameRequired": "Give the agent a name.",
   "error.project.chatNotFound": "This chat no longer exists.",
+  "error.project.cursorInvalid": "This part of the chat list is no longer valid. Load the chats again.",
 });
