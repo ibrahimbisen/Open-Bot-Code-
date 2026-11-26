@@ -1058,4 +1058,4 @@ Live Activity, voice, agent template and opt-out events, `entry_point` on pairin
 `usage_viewed`. The generation comes from `ANALYTICS_GENERATIONS.mobile` in `@codebot/telemetry`.
 The file queue holds at most 1,000 reports, 1 MiB, and seven days, and sends only after a local
 write succeeds. Foreground and host reconnection trigger retries. Opt-out and account changes
-clear this queue. See [the analytics contract](../../ANALYTICS.md#reliable-error-reports).
+clear this queue.
