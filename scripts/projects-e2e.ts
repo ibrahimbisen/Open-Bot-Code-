@@ -3,10 +3,67 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { mkdtemp, realpath, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import { AGENT_PROVIDERS, type ProjectActivity, type ProjectChat, type ProjectDetail } from "@codebot/contracts/ipc";
+import {
+  AGENT_PROVIDERS,
+  isProjectActivityList,
+  isProjectChat,
+  isProjectChatSearchPage,
+  isProjectChatsPage,
+  isProjectDetail,
+  isProjectFolderChange,
+  isProjectSummary,
+  isProjectSummaryList,
+  type ProjectActivity,
+  type ProjectChat,
+  type ProjectDetail,
+} from "@codebot/contracts/ipc";
+import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import {
+  TEAM_APP_VERSION_HEADER,
+  TEAM_CAPABILITIES_HEADER,
+  TEAM_PROTOCOL_VERSION_HEADER,
+} from "@codebot/contracts/team-protocol";
+import { encodeTeamCapabilitiesV10, teamCapabilitiesForProtocol } from "@codebot/contracts/team-protocol/current";
+import {
+  PROJECTS_V1_CAPABILITY,
+  PROJECTS_V1_CODECS,
+  PROJECTS_V1_ROUTES,
+} from "@codebot/contracts/team-protocol/projects-v1";
+import { TEAM_ABSENT_CAPABILITIES_HEADER, TEAM_PROTOCOL_V10 } from "@codebot/contracts/team-protocol/v10";
+import { sourceText } from "@codebot/i18n/source";
+import { plugin } from "bun";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import type { ProjectServiceEvent } from "../src/backend/projects/project-operations";
+import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
+
+plugin({
+  name: "projects-e2e-electron-boundary",
+  setup(build) {
+    class Inert {}
+    build.module("electron", () => ({
+      loader: "object",
+      exports: {
+        app: { getPath: () => tmpdir(), getVersion: () => "0.0.0-e2e", isPackaged: false, on: () => undefined },
+        BrowserWindow: Object.assign(class extends Inert {}, { getAllWindows: () => [] }),
+        MessageChannelMain: class extends Inert {},
+        Notification: Object.assign(class extends Inert {}, { isSupported: () => false }),
+        clipboard: {},
+        dialog: {},
+        ipcMain: { handle: () => undefined, removeHandler: () => undefined, on: () => undefined },
+        nativeImage: {},
+        net: {},
+        powerMonitor: { on: () => undefined },
+        safeStorage: { isEncryptionAvailable: () => false },
+        screen: {},
+        session: {},
+        shell: { openExternal: async () => undefined },
+        systemPreferences: {},
+        webContents: { getAllWebContents: () => [] },
+      },
+    }));
+  },
+});
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/projects-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-projects-"));
@@ -99,6 +156,9 @@ const answer = (message) => {
       }, 20);
       return;
     }
+    case "thread/compact/start":
+      log({ method: "thread/compact/start", pid: process.pid, params });
+      return write({ id: message.id, result: {} });
     case "turn/interrupt": {
       write({ id: message.id, result: {} });
       return write({ method: "turn/completed", params: { threadId: params.threadId, turn: { id: params.turnId, status: "interrupted" } } });
@@ -151,6 +211,9 @@ const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { SidebarLayoutStore } = await import("../src/backend/sidebar-layout-store");
 const { ProjectService } = await import("../src/backend/projects/project-service");
+const { TeamApiServer } = await import("../src/main/team-api-server");
+const { AGENT_ACCESS_FILE, AgentAccessStore } = await import("../src/main/agent-access-store");
+const { TeamStore } = await import("../src/main/team-store");
 
 interface Check {
   name: string;
@@ -560,6 +623,418 @@ try {
       activityEvents.some((event) => event.activity.filter((entry) => entry.state === "working").length === 5),
     activityEvents.length,
   );
+
+  const modelProject = await run(
+    projects.create(
+      {
+        name: "Model switch",
+        mainFolder: await makeRepo("models"),
+        agents: [{ name: "Switcher", role: "Any" }],
+      },
+      null,
+    ),
+  );
+  const switcher = nth(modelProject.agents, 0);
+  const marked = (marker: string) =>
+    fakeEntries().filter((entry) => entry.method === "turn/start" && entry.text?.includes(marker));
+  const defaultChat = await startChat(modelProject, 0, "Default model [m-default]");
+  await until("the default chat ends", () => chatOf(defaultChat.agentId, defaultChat.taskId).state === "idle");
+  const chosen = {
+    provider: switcher.runtime.provider,
+    model: "gpt-6-sol",
+    reasoningEffort: switcher.runtime.reasoningEffort,
+  };
+  const chosenChat = await run(
+    projects.startChat(
+      { projectId: modelProject.project.id, agentId: switcher.id, text: "Chosen model [m-chosen]", runtime: chosen },
+      sender,
+    ),
+  );
+  await until("the chosen chat ends", () => chatOf(chosenChat.agentId, chosenChat.taskId).state === "idle");
+  pass(
+    "A chat started with a model uses it, and a chat without one uses the model of its agent",
+    marked("[m-default]")[0]?.params.model === switcher.runtime.model &&
+      marked("[m-chosen]")[0]?.params.model === "gpt-6-sol" &&
+      chatOf(chosenChat.agentId, chosenChat.taskId).runtime?.model === "gpt-6-sol" &&
+      chatOf(defaultChat.agentId, defaultChat.taskId).runtime === null,
+    { default: marked("[m-default]")[0]?.params.model, chosen: marked("[m-chosen]")[0]?.params.model },
+  );
+  const local = { ...chosen, model: "local-llama-3" };
+  await run(projects.setChatRuntime({ agentId: defaultChat.agentId, taskId: defaultChat.taskId, runtime: local }));
+  await run(
+    agents.sendMessage(
+      { agentId: defaultChat.agentId, taskId: defaultChat.taskId, text: "Second turn [m-local]" },
+      sender,
+    ),
+  );
+  await until("the second turn runs", () => marked("[m-local]").length === 1);
+  pass(
+    "The model of a chat can change later, a local model id passes through, and the next turn uses it",
+    marked("[m-local]")[0]?.params.model === "local-llama-3" &&
+      marked("[m-local]")[0]?.params.threadId === marked("[m-default]")[0]?.params.threadId,
+    marked("[m-local]")[0]?.params.model,
+  );
+  await until("the second turn ends", () => chatOf(defaultChat.agentId, defaultChat.taskId).state === "idle");
+  await run(projects.setChatRuntime({ agentId: defaultChat.agentId, taskId: defaultChat.taskId, runtime: null }));
+  await run(
+    agents.sendMessage(
+      { agentId: defaultChat.agentId, taskId: defaultChat.taskId, text: "Third turn [m-back]" },
+      sender,
+    ),
+  );
+  await until("the third turn runs", () => marked("[m-back]").length === 1);
+  pass(
+    "Clearing the model of a chat goes back to the model of the agent",
+    marked("[m-back]")[0]?.params.model === switcher.runtime.model,
+  );
+  const otherProvider = AGENT_PROVIDERS.find((provider) => provider !== switcher.runtime.provider);
+  assert.ok(otherProvider);
+  const refused = await Effect.runPromise(
+    Effect.result(
+      projects.setChatRuntime({
+        agentId: defaultChat.agentId,
+        taskId: defaultChat.taskId,
+        runtime: { ...chosen, provider: otherProvider },
+      }),
+    ),
+  );
+  pass(
+    "A model of another provider is refused with a clear message",
+    refused._tag === "Failure" &&
+      refused.failure.cause instanceof Error &&
+      refused.failure.cause.message === sourceText("error.project.runtimeProviderMismatch"),
+    refused._tag === "Failure" ? String(refused.failure.cause) : "accepted",
+  );
+
+  const compactChat = await startChat(modelProject, 0, "Long work [c-start]");
+  await until("the chat to compact ends", () => chatOf(compactChat.agentId, compactChat.taskId).state === "idle");
+  await run(agents.compactTaskContext({ agentId: compactChat.agentId, taskId: compactChat.taskId }));
+  const compactStart = await waitFor("the compact request", () =>
+    fakeEntries().find((entry) => entry.method === "thread/compact/start"),
+  );
+  pass(
+    "Context compaction of a project chat runs on the provider thread of that chat",
+    compactStart.params.threadId === marked("[c-start]")[0]?.params.threadId,
+    compactStart.params,
+  );
+
+  const parking = await run(
+    projects.create(
+      {
+        name: "Many chats",
+        mainFolder: await makeRepo("many"),
+        agents: [{ name: "Counter", role: "Any" }],
+      },
+      null,
+    ),
+  );
+  const crowd: ProjectChat[] = [];
+  for (let index = 0; index < 50; index += 1) {
+    const chat = await startChat(parking, 0, `Chat number ${index} [k-${index}]`);
+    crowd.push(chat);
+    await until(`chat ${index} ends`, () => chatOf(chat.agentId, chat.taskId).state === "idle");
+  }
+  const openCount = (agentId: string) =>
+    agents.listTasks(agentId).tasks.filter((task) => task.state !== "closed").length;
+  const counter = nth(parking.agents, 0);
+  const fiftyFirst = await startChat(parking, 0, "The fifty-first chat [k-last]");
+  await until("the fifty-first chat ends", () => chatOf(fiftyFirst.agentId, fiftyFirst.taskId).state === "idle");
+  const oldest = nth(crowd, 0);
+  const isOpen = (taskId: string) => agents.listTasks(counter.id).tasks.some((task) => task.id === taskId);
+  const isParked = (taskId: string) =>
+    JSON.stringify(agents.listArchivedTasks({ agentId: counter.id, before: null })).includes(taskId);
+  const parkedView = projects.listChats({ projectId: parking.project.id, archived: "include", limit: 100 }).chats;
+  pass(
+    "The fifty-first chat opens, the oldest idle chat is parked, and the parked chat stays in the history",
+    openCount(counter.id) === 50 &&
+      !isOpen(oldest.taskId) &&
+      isParked(oldest.taskId) &&
+      parkedView.some((chat) => chat.taskId === oldest.taskId && !chat.archived) &&
+      projects.listChats({ projectId: parking.project.id, limit: 100 }).chats.length === 51,
+    {
+      open: openCount(counter.id),
+      parked: isParked(oldest.taskId),
+      inView: parkedView.some((chat) => chat.taskId === oldest.taskId && !chat.archived),
+      total: projects.listChats({ projectId: parking.project.id, limit: 100 }).chats.length,
+      includeTotal: parkedView.length,
+    },
+  );
+  await run(
+    agents.sendMessage({ agentId: oldest.agentId, taskId: oldest.taskId, text: "Back again [k-again]" }, sender),
+  );
+  await until("the parked chat runs again", () =>
+    fakeEntries().some((entry) => entry.method === "turn/start" && entry.text?.includes("[k-again]")),
+  );
+  await until("the parked chat ends", () => chatOf(oldest.agentId, oldest.taskId).state === "idle");
+  pass(
+    "A message in a parked chat opens it again and the open count stays at the limit",
+    isOpen(oldest.taskId) && openCount(counter.id) === 50,
+    { open: openCount(counter.id) },
+  );
+
+  const teamDir = join(root, "team");
+  mkdirSync(teamDir, { recursive: true });
+  const OWNER = { username: "owner-user", password: "owner-password-123" };
+  const MEMBER = { username: "member-user", password: "member-password-123" };
+  const team = new TeamStore(join(teamDir, "codebot-team-server-v2.json"));
+  const access = new AgentAccessStore(join(teamDir, AGENT_ACCESS_FILE));
+  await run(team.initialize());
+  assert.equal(await run(access.load()), true, "The roles file did not load.");
+  await run(team.configure("E2E Host", OWNER.username, OWNER.password));
+  const stubBrowser: TeamApiBrowser = {
+    listTabs: () => [],
+    getControlState: () => ({ sessions: [] }),
+    open: unused,
+    activate: unused,
+    navigate: unused,
+    reload: unused,
+    stop: unused,
+    answerPermission: unused,
+    takeUserControl: unused,
+    startTeach: unused,
+    stopTeach: () => [],
+    releaseUserControl: () => {},
+    releaseUserControlHeldBy: () => {},
+    releaseUserControlRefused: () => {},
+    close: unused,
+    capturePreview: unused,
+    setVisible: unused,
+    getDisplayState: () => ({ tabs: [], activeTabId: null }),
+    loadUrl: unused,
+    isPrivate: () => false,
+    startView: unused,
+    dispatchViewInput: unused,
+    copyViewSelection: unused,
+    answerViewDialog: unused,
+    importSignIn: unused,
+    answerHttpSignIn: unused,
+  };
+  const server = new TeamApiServer({
+    store: team,
+    agents,
+    mailbox,
+    browser: stubBrowser,
+    sidebarLayout: sidebar,
+    appVersion: "0.0.0-e2e",
+    hiddenAgents: agents,
+    agentAccess: access,
+    projects,
+  });
+  const port = await Effect.runPromise(server.start());
+  try {
+    const capabilityHeaders = (protocol: number, capabilities: readonly string[]): Record<string, string> => {
+      if (protocol < TEAM_PROTOCOL_V10) return { [TEAM_CAPABILITIES_HEADER]: capabilities.join(",") };
+      const lists = encodeTeamCapabilitiesV10(capabilities);
+      return {
+        [TEAM_CAPABILITIES_HEADER]: lists.capabilities.join(","),
+        [TEAM_ABSENT_CAPABILITIES_HEADER]: lists.absent.join(","),
+      };
+    };
+    const call = async (
+      method: string,
+      path: string,
+      input: { token?: string; body?: unknown; capabilities?: readonly string[]; protocol?: number } = {},
+    ): Promise<{ status: number; body: unknown }> => {
+      const protocol = input.protocol ?? TEAM_PROTOCOL_V10;
+      const headers: Record<string, string> = {
+        Accept: "application/json",
+        [TEAM_PROTOCOL_VERSION_HEADER]: String(protocol),
+        [TEAM_APP_VERSION_HEADER]: "0.0.0-e2e",
+        ...capabilityHeaders(protocol, input.capabilities ?? teamCapabilitiesForProtocol(protocol)),
+      };
+      if (input.body !== undefined) headers["Content-Type"] = "application/json";
+      if (input.token) headers.Authorization = `Bearer ${input.token}`;
+      const response = await fetch(`http://127.0.0.1:${port}${path}`, {
+        method,
+        headers,
+        body: input.body === undefined ? null : JSON.stringify(input.body),
+      });
+      const text = await response.text();
+      return { status: response.status, body: text ? JSON.parse(text) : null };
+    };
+    const login = async (credentials: { username: string; password: string }) => {
+      const response = await call("POST", TEAM_API_ROUTES.auth.login, { body: credentials });
+      assert.equal(response.status, 200, `Sign-in returned ${response.status}.`);
+      const body = response.body;
+      const token = typeof body === "object" && body !== null && "sessionToken" in body ? body.sessionToken : null;
+      assert.equal(typeof token, "string");
+      return String(token);
+    };
+    const ownerToken = await login(OWNER);
+    const wire = async (
+      path: string,
+      token: string,
+      input?: unknown,
+      capabilities?: readonly string[],
+    ): Promise<{ status: number; body: unknown }> => {
+      const body = input === undefined ? {} : { input };
+      const codec = PROJECTS_V1_CODECS.get(path);
+      assert.ok(codec, `No projects-v1 codec for ${path}.`);
+      codec.request(body);
+      const response = await call("POST", path, {
+        token,
+        body,
+        ...(capabilities ? { capabilities } : {}),
+      });
+      codec.response(response.status, response.body);
+      return response;
+    };
+    const ok = async <T>(path: string, input: unknown, guard: (value: unknown) => value is T): Promise<T> => {
+      const response = await wire(path, ownerToken, input);
+      assert.equal(
+        response.status,
+        200,
+        `${path} returned ${response.status}: ${JSON.stringify(response.body).slice(0, 300)}`,
+      );
+      assert.ok(guard(response.body), `${path} returned a body that the client decoder refuses.`);
+      return response.body;
+    };
+
+    const member = await (async () => {
+      const invite = await run(team.createInvite("member"));
+      const joined = await call("POST", TEAM_API_ROUTES.join.server, {
+        body: { inviteToken: invite.token, ...MEMBER },
+      });
+      assert.equal(joined.status, 201, `Join returned ${joined.status}.`);
+      return login(MEMBER);
+    })();
+
+    const compatibility = await call("GET", TEAM_API_ROUTES.compatibility, { protocol: TEAM_PROTOCOL_V10 });
+    const served = JSON.stringify(compatibility.body);
+    pass(
+      "The host reports the projects-v1 capability to a protocol 10 client",
+      compatibility.status === 200 && served.includes(PROJECTS_V1_CAPABILITY),
+      { status: compatibility.status, body: served.slice(0, 300) },
+    );
+
+    const refusedMember = await wire(PROJECTS_V1_ROUTES.list, member);
+    const withoutCapability = await wire(
+      PROJECTS_V1_ROUTES.list,
+      ownerToken,
+      undefined,
+      teamCapabilitiesForProtocol(TEAM_PROTOCOL_V10).filter((capability) => capability !== PROJECTS_V1_CAPABILITY),
+    );
+    const viaGet = await call("GET", PROJECTS_V1_ROUTES.list, { token: ownerToken });
+    pass(
+      "A member gets 403, a client without the capability gets 400, and a GET gets 404",
+      refusedMember.status === 403 &&
+        withoutCapability.status === 400 &&
+        JSON.stringify(withoutCapability.body).includes(sourceText("error.project.serverTooOld")) &&
+        viaGet.status === 404,
+      [refusedMember.status, withoutCapability.status, viaGet.status],
+    );
+
+    const remoteFolder = await makeRepo("remote-main");
+    const remoteExtra = await makeRepo("remote-extra");
+    const createdRemote = await ok(
+      PROJECTS_V1_ROUTES.create,
+      { name: "Remote project", mainFolder: remoteFolder, agents: [{ name: "Rem", role: "Any" }] },
+      isProjectDetail,
+    );
+    const listedRemote = await ok(PROJECTS_V1_ROUTES.list, undefined, isProjectSummaryList);
+    const gotRemote = await ok(PROJECTS_V1_ROUTES.get, createdRemote.project.id, isProjectDetail);
+    pass(
+      "Over the Team API a project is created, listed and read, and each body passes the client decoder",
+      listedRemote.some((project) => project.id === createdRemote.project.id) &&
+        gotRemote.folders[0]?.path === remoteFolder &&
+        gotRemote.agents.length === 1,
+      createdRemote.project.id,
+    );
+    const renamedRemote = await ok(
+      PROJECTS_V1_ROUTES.update,
+      { projectId: createdRemote.project.id, name: "Remote renamed" },
+      isProjectDetail,
+    );
+    const addedFolder = await ok(
+      PROJECTS_V1_ROUTES.addFolder,
+      { projectId: createdRemote.project.id, path: remoteExtra },
+      isProjectFolderChange,
+    );
+    const extraAgent = await ok(
+      PROJECTS_V1_ROUTES.createAgent,
+      { projectId: createdRemote.project.id, name: "Second", role: "Tests" },
+      isProjectDetail,
+    );
+    pass(
+      "Over the Team API a project is renamed, gets a second folder and a second agent",
+      renamedRemote.project.name === "Remote renamed" &&
+        addedFolder.outcome === "added" &&
+        extraAgent.agents.length === 2,
+      { outcome: addedFolder.outcome, agents: extraAgent.agents.length },
+    );
+    const remoteAgent = nth(extraAgent.agents, 0);
+    const remoteChat = await ok(
+      PROJECTS_V1_ROUTES.startChat,
+      { projectId: createdRemote.project.id, agentId: remoteAgent.id, text: "Remote chat [t-remote]" },
+      isProjectChat,
+    );
+    await until("the remote chat ends", () => chatOf(remoteChat.agentId, remoteChat.taskId).state === "idle");
+    const remoteTurn = fakeEntries().find(
+      (entry) => entry.method === "turn/start" && entry.text?.includes("[t-remote]"),
+    );
+    pass(
+      "A chat started over the Team API runs in the main folder of the project",
+      remoteTurn !== undefined && resolve(String(remoteTurn.params.cwd)) === resolve(remoteFolder),
+      remoteTurn?.params.cwd,
+    );
+    const chatsPage = await ok(
+      PROJECTS_V1_ROUTES.listChats,
+      { projectId: createdRemote.project.id },
+      isProjectChatsPage,
+    );
+    const searchPage = await ok(
+      PROJECTS_V1_ROUTES.searchChats,
+      { query: "remote chat", projectId: createdRemote.project.id },
+      isProjectChatSearchPage,
+    );
+    const withRuntime = await ok(
+      PROJECTS_V1_ROUTES.setChatRuntime,
+      {
+        agentId: remoteChat.agentId,
+        taskId: remoteChat.taskId,
+        runtime: { ...remoteAgent.runtime, model: "gpt-6-sol" },
+      },
+      isProjectChat,
+    );
+    const pinnedRemote = await ok(
+      PROJECTS_V1_ROUTES.setChatPinned,
+      { agentId: remoteChat.agentId, taskId: remoteChat.taskId, pinned: true },
+      isProjectChat,
+    );
+    const archivedRemote = await ok(
+      PROJECTS_V1_ROUTES.setChatArchived,
+      { agentId: remoteChat.agentId, taskId: remoteChat.taskId, archived: true },
+      isProjectChat,
+    );
+    const activityRemote = await ok(PROJECTS_V1_ROUTES.listActivity, undefined, isProjectActivityList);
+    pass(
+      "Over the Team API chats are listed, searched, given a model, pinned and archived, and the activity lists the project",
+      chatsPage.chats.length === 1 &&
+        searchPage.matches.length > 0 &&
+        withRuntime.runtime?.model === "gpt-6-sol" &&
+        pinnedRemote.pinned &&
+        archivedRemote.archived &&
+        activityRemote.some((entry) => entry.projectId === createdRemote.project.id),
+    );
+    const bad = await wire(PROJECTS_V1_ROUTES.get, ownerToken, "no-such-project");
+    pass(
+      "An unknown project answers 400 with the translated message",
+      bad.status === 400 && JSON.stringify(bad.body).includes(sourceText("error.project.notFound")),
+      bad.body,
+    );
+    const archivedProject = await ok(PROJECTS_V1_ROUTES.archive, createdRemote.project.id, isProjectSummary);
+    const restoredProject = await ok(PROJECTS_V1_ROUTES.restore, createdRemote.project.id, isProjectSummary);
+    const deleted = await wire(PROJECTS_V1_ROUTES.delete, ownerToken, createdRemote.project.id);
+    pass(
+      "Over the Team API a project is archived, restored and deleted",
+      archivedProject.archivedAt !== null &&
+        restoredProject.archivedAt === null &&
+        deleted.status === 200 &&
+        projects.find(createdRemote.project.id) === null,
+    );
+  } finally {
+    await Effect.runPromise(server.stop()).catch(() => undefined);
+  }
 
   report.passed = true;
 } catch (error) {
