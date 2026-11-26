@@ -1,11 +1,12 @@
 import { type FSWatcher, watch } from "node:fs";
-import { mkdir, readdir, readFile, stat } from "node:fs/promises";
+import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   APP_THEME_PALETTE_COLOR_PATTERN,
   type AppThemePalette,
   isAppThemePaletteId,
 } from "@codebot/contracts/app-appearance";
+import { BUILT_IN_THEME_PALETTES } from "@codebot/contracts/app-theme-defaults";
 import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect, Option, Schema } from "effect";
 
@@ -39,6 +40,10 @@ const ThemePaletteFile = Schema.Struct({
     danger: color,
   }),
 });
+
+const SEEDED_MARKER_FILE = ".seeded.json";
+
+const decodeSeededIds = Schema.decodeUnknownOption(Schema.fromJsonString(Schema.Array(Schema.String)));
 
 const decodeThemePaletteFile = Schema.decodeUnknownOption(Schema.fromJsonString(ThemePaletteFile));
 
@@ -91,4 +96,34 @@ export const watchThemePalettes = Effect.fn("ThemePaletteFiles.watch")(function*
     watcher.close();
   });
   return () => watcher.close();
+});
+
+export const seedThemePalettes = Effect.fn("ThemePaletteFiles.seed")(function* (directory: string) {
+  yield* Effect.tryPromise(async () => {
+    await mkdir(directory, { recursive: true });
+    const markerPath = join(directory, SEEDED_MARKER_FILE);
+    const seeded = new Set(
+      await readFile(markerPath, "utf8").then(
+        (text) => Option.getOrElse(decodeSeededIds(text), (): readonly string[] => []),
+        (): readonly string[] => [],
+      ),
+    );
+    const missing = BUILT_IN_THEME_PALETTES.filter((palette) => !seeded.has(palette.id));
+    if (missing.length === 0) return;
+    for (const palette of missing) {
+      const file = { name: palette.name, appearance: palette.scheme, colors: palette.colors };
+      await writeFile(join(directory, `${palette.id}.json`), `${JSON.stringify(file, null, 2)}\n`, {
+        encoding: "utf8",
+        flag: "wx",
+      }).catch((error: NodeJS.ErrnoException) => {
+        if (error.code !== "EEXIST") throw error;
+      });
+      seeded.add(palette.id);
+    }
+    await writeFile(markerPath, `${JSON.stringify([...seeded].sort())}\n`, "utf8");
+  }).pipe(
+    Effect.catch((error) =>
+      Effect.sync(() => logger.warn("Could not write the built-in theme palette files.", { error: toLogValue(error) })),
+    ),
+  );
 });
