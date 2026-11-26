@@ -1,6 +1,8 @@
 import { defineMessages } from "../../message";
 
 export const messages = defineMessages("project", {
+  "project.dialog.chooseMainFolder": "Choose the main folder of the project",
+  "project.dialog.addFolder": "Add a folder to {project}",
   "project.leftBar.label": "Projects",
   "project.leftBar.collapse": "Collapse the project bar",
   "project.leftBar.expand": "Expand the project bar",
