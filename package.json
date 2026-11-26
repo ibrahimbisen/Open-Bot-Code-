@@ -653,6 +653,7 @@
     "axe-core": "4.14.0",
     "class-variance-authority": "catalog:",
     "cuelume": "0.2.8",
+    "dockview-core": "7.0.4",
     "e2e": "0.23.0",
     "electron": "45.3.0",
     "electron-builder": "26.18.0",
