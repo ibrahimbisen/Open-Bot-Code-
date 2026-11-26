@@ -38,7 +38,6 @@ export interface AppPort {
   hostedSites: CodeBotDesktopApi["hostedSites"];
   billing: CodeBotDesktopApi["billing"];
   credits: CodeBotDesktopApi["credits"];
-  referral: CodeBotDesktopApi["referral"];
   license: CodeBotDesktopApi["license"];
   auth: CompanySignInCalls &
     Pick<

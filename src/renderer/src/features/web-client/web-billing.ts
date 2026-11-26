@@ -14,13 +14,11 @@ import {
   parsePricingOrder,
 } from "@codebot/contracts/license";
 import { readPromotionCode } from "@codebot/contracts/promotion-code";
-import { parseReferralState } from "@codebot/contracts/referral";
 import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import type { BillingDetailsCalls } from "@codebot/ui/features/billing/BillingDetailsFields";
 import type { BillingCalls } from "@codebot/ui/features/billing/billing-store";
 import type { LicenseCalls } from "@codebot/ui/features/billing/license-store";
 import type { CreditsCalls } from "@codebot/ui/features/credits/credits-store";
-import type { ReferralCalls } from "@codebot/ui/features/referral/referral-store";
 import { currentText } from "@codebot/ui/text";
 
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -115,18 +113,6 @@ export function createWebCreditsCalls(
       const result = await request("v1/me/credits/redeem", parseCreditRedeemResult, JSON.stringify(redeem));
       if (!result) throw new Error(currentText().sourceText("error.billing.invalidResponse"));
       return result;
-    },
-  };
-}
-
-export function createWebReferralCalls(accountFetch: typeof fetch): ReferralCalls {
-  const request = browserRequest(accountFetch);
-  return {
-    async getState(page) {
-      const query = new URLSearchParams({ filter: page.filter, page: String(page.page) });
-      const state = await request(`v1/me/referrals?${query.toString()}`, parseReferralState);
-      if (!state) throw new Error(currentText().sourceText("error.billing.invalidResponse"));
-      return state;
     },
   };
 }

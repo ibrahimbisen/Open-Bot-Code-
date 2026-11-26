@@ -118,7 +118,6 @@ import { pluginIpcHandlers } from "./ipc/plugin-handlers";
 import { providerAdminIpcHandlers } from "./ipc/provider-admin-handlers";
 import { providerDetectionIpcHandlers } from "./ipc/provider-detection-handlers";
 import { providerIpcHandlers } from "./ipc/provider-handlers";
-import { referralIpcHandlers } from "./ipc/referral-handlers";
 import { routineFeedIpcHandlers } from "./ipc/routine-feed-handlers";
 import { routineIpcHandlers } from "./ipc/routine-handlers";
 import { routineResultIpcHandlers } from "./ipc/routine-result-handlers";
@@ -796,7 +795,6 @@ function registerIpcHandlers({
   passwordManagers,
   vault,
   billing,
-  referral,
   license,
   credits,
   hostedServers,
@@ -943,7 +941,6 @@ function registerIpcHandlers({
     ...passwordManagersIpcHandlers({ passwordManagers, remoteServers, openExternal: openLink }),
     ...vaultIpcHandlers({ vault, getMainWindow: getDialogParent, translate: language.translate, remoteServers }),
     ...billingIpcHandlers({ billing }),
-    ...referralIpcHandlers({ referral }),
     ...licenseIpcHandlers({ license }),
     ...creditsIpcHandlers({ credits }),
     ...routineFeedIpcHandlers({ routineFeed }),

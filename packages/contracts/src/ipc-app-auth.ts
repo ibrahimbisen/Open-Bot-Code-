@@ -290,7 +290,6 @@ export function decodeTestCompanySignInResult(value: unknown): TestCompanySignIn
 export interface VerifyEmailCodeInput {
   challengeId: string;
   code: string;
-  referralCode?: string;
 }
 
 export type MacPermissionId = "screen-recording" | "accessibility";

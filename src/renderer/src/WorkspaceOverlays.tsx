@@ -1089,7 +1089,6 @@ function AppSettings(props: AccountProps) {
         onRevokeAccountSession={auth.revokeAccountSession}
         onSignOut={platform.landingPreview ? undefined : auth.logoutCentralAccount}
         billingApi={appPort().billing}
-        referralApi={appPort().referral}
         licenseApi={appPort().license}
         creditsApi={appPort().credits}
         onCreditsChange={windowPage.adoptCredits}

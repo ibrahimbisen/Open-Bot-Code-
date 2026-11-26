@@ -415,7 +415,6 @@ import { ProviderRuntimeManager, providerRuntimeRoot, runtimeTarget } from "./pr
 import { ProviderUseSettingsStore } from "./provider-use-settings-store";
 import { PushNotificationStore } from "./push-notification-store";
 import { DESKTOP_USE_MS } from "./push-notifications";
-import { ReferralDesktopService } from "./referral-service";
 import { RelayedMessagingInstalls } from "./relayed-messaging-installs";
 import { decodeQueuedMessageReceipt, decodeRemoteAgentTask } from "./remote-agent-decoding";
 import { RemoteConnectTrace } from "./remote-connect-trace";
@@ -780,7 +779,6 @@ export interface ApplicationServices {
   skills: SkillMarketplaceService;
   hostedSites: HostedSiteDesktopService;
   billing: BillingDesktopService;
-  referral: ReferralDesktopService;
   license: LicenseDesktopService;
   credits: CreditsDesktopService;
   hostedServers: HostedServerDesktopService;
@@ -1333,7 +1331,6 @@ export async function createApplicationServices({
     return hostId ? centralAuth.hostSiteCredential(hostId) : null;
   });
   const billing = new BillingDesktopService(centralAuth, openLink);
-  const referral = new ReferralDesktopService(centralAuth, openLink);
   const license = new LicenseDesktopService(centralAuth, openLink);
   const credits = new CreditsDesktopService(centralAuth, openLink);
   const hostedServers = new HostedServerDesktopService(
@@ -4575,7 +4572,6 @@ export async function createApplicationServices({
     skills,
     hostedSites,
     billing,
-    referral,
     license,
     credits,
     hostedServers,

@@ -171,7 +171,6 @@ import {
 } from "@codebot/contracts/marketplace-links";
 import { decodeOwnerTransfer, type OwnerTransfer } from "@codebot/contracts/owner-transfer";
 import { isPluginSlug } from "@codebot/contracts/plugin-links";
-import { parseReferralState, type ReferralState } from "@codebot/contracts/referral";
 import {
   type DynamicRecord,
   isBoolean,
@@ -793,12 +792,6 @@ export function decodeBillingDetails(value: unknown): BillingDetails {
   const details = parseBillingDetails(value);
   if (!details) throw new Error("Invalid billing details response.");
   return details;
-}
-
-export function decodeReferralState(value: unknown): ReferralState {
-  const state = parseReferralState(value);
-  if (!state) throw new Error("Invalid referral state response.");
-  return state;
 }
 
 export function decodeCreditsState(value: unknown): CreditsState {
