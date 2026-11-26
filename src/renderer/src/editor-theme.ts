@@ -29,6 +29,30 @@ function mix(color: string, other: string, percentOther: number): string {
   return `#${channel(a.r + (b.r - a.r) * weight)}${channel(a.g + (b.g - a.g) * weight)}${channel(a.b + (b.b - a.b) * weight)}`;
 }
 
+function luminance(color: string): number {
+  const { r, g, b } = parseHex(color);
+  const [red = 0, green = 0, blue = 0] = [r, g, b].map((value) => {
+    const scaled = value / 255;
+    return scaled <= 0.03928 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+}
+
+export function contrastRatio(first: string, second: string): number {
+  const [light = 0, dark = 0] = [luminance(first), luminance(second)].sort((a, b) => b - a);
+  return (light + 0.05) / (dark + 0.05);
+}
+
+const MIN_SYNTAX_CONTRAST = 4.5;
+
+function readable(color: string, background: string): string {
+  const target = luminance(background) > 0.4 ? "#000000" : "#ffffff";
+  let adjusted = color;
+  for (let step = 1; step <= 20 && contrastRatio(adjusted, background) < MIN_SYNTAX_CONTRAST; step += 1)
+    adjusted = mix(color, target, step * 5);
+  return adjusted;
+}
+
 function alpha(color: string, percent: number): string {
   return `${color.slice(0, 7)}${channel((percent / 100) * 255)}`;
 }
@@ -62,6 +86,7 @@ export interface EditorTokens {
 }
 
 export function editorTokens({ colors }: AppThemePalette): EditorTokens {
+  const code = (color: string) => readable(color, colors.canvas);
   return {
     background: colors.canvas,
     foreground: colors.text,
@@ -79,15 +104,15 @@ export function editorTokens({ colors }: AppThemePalette): EditorTokens {
     removedBackground: alpha(colors.danger, 20),
     error: colors.danger,
     warning: colors.warning,
-    syntaxComment: colors.textMuted,
-    syntaxKeyword: colors.accent,
-    syntaxString: colors.success,
-    syntaxNumber: colors.warning,
-    syntaxType: mix(colors.warning, colors.text, 30),
-    syntaxFunction: mix(colors.accent, colors.text, 30),
-    syntaxVariable: colors.text,
-    syntaxOperator: mix(colors.text, colors.textMuted, 40),
-    syntaxRegexp: mix(colors.danger, colors.text, 20),
+    syntaxComment: code(colors.textMuted),
+    syntaxKeyword: code(colors.accent),
+    syntaxString: code(colors.success),
+    syntaxNumber: code(colors.warning),
+    syntaxType: code(mix(colors.warning, colors.text, 30)),
+    syntaxFunction: code(mix(colors.accent, colors.text, 30)),
+    syntaxVariable: code(colors.text),
+    syntaxOperator: code(mix(colors.text, colors.textMuted, 40)),
+    syntaxRegexp: code(mix(colors.danger, colors.text, 20)),
   };
 }
 

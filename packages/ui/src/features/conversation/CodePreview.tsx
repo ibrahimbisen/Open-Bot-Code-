@@ -4,7 +4,7 @@ import { prefersReducedMotion } from "@codebot/ui/utils";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, Match, onSettled, Show, Switch } from "solid-js";
 import { ScrollEdges } from "../../components/ScrollEdges";
-import { documentColorScheme } from "../../document-color-scheme";
+import { documentColorScheme, documentThemeStamp } from "../../document-color-scheme";
 import { useText } from "../../text";
 import { CodeBlock } from "./CodeBlock";
 import { CloseIcon } from "./ConversationIcons";
@@ -38,6 +38,7 @@ export function CodePreview(props: {
   createEffect(
     () => {
       diagramAttempt();
+      documentThemeStamp();
       return props.kind === "mermaid" && !props.streaming
         ? { source: props.block.code, scheme: documentColorScheme() }
         : null;
