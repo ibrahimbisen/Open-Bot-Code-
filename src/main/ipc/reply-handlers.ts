@@ -1,6 +1,4 @@
 import {
-  decodeReplyRuleSettings,
-  decodeTurnStepDetails,
   REPLY_ROUTES,
   REPLY_RULE_CAPABILITY,
   type ReplyRuleSettings,
@@ -12,6 +10,7 @@ import type { AgentService } from "../../backend/agent-service";
 import { runCauseEffect } from "../../backend/effect-boundary";
 import type { ResponseDecoder } from "../../backend/protocol";
 import type { RemoteServerManager } from "../remote-server-manager";
+import { decodeReplyRuleFromHost, decodeTurnStepDetailsFromHost } from "../reply-decoding";
 import { parseReplyRuleSettings, type ReplyRulePreferenceStore } from "../reply-rule-preference-store";
 import type { IpcGroupHandlers } from "./define-ipc-group";
 import { scopedHandler, scopedQueryHandler } from "./scoped-handler";
@@ -49,17 +48,23 @@ export function replyIpcHandlers({
     replies: {
       getRule: scopedQueryHandler({
         local: () => replyRule.get(),
-        remote: (serverId) => remote(serverId, REPLY_RULE_CAPABILITY, REPLY_ROUTES.rule, decodeReplyRuleSettings, {}),
+        remote: (serverId) => remote(serverId, REPLY_RULE_CAPABILITY, REPLY_ROUTES.rule, decodeReplyRuleFromHost, {}),
       }),
       setRule: scopedHandler(parseReplyRuleSettings, {
         local: (settings) => runCauseEffect(replyRule.set(settings)),
         remote: (settings, serverId) =>
-          remote(serverId, REPLY_RULE_CAPABILITY, REPLY_ROUTES.updateRule, decodeReplyRuleSettings, settings),
+          remote(serverId, REPLY_RULE_CAPABILITY, REPLY_ROUTES.updateRule, decodeReplyRuleFromHost, settings),
       }),
       readTurnSteps: scopedHandler(parseTurnStepDetailsInput, {
         local: ({ agentId, turnId }): TurnStepDetails => service.readTurnStepDetails(agentId, turnId),
         remote: (input, serverId) =>
-          remote(serverId, TURN_STEP_DETAILS_CAPABILITY, REPLY_ROUTES.turnStepDetails, decodeTurnStepDetails, input),
+          remote(
+            serverId,
+            TURN_STEP_DETAILS_CAPABILITY,
+            REPLY_ROUTES.turnStepDetails,
+            decodeTurnStepDetailsFromHost,
+            input,
+          ),
       }),
     },
   };
