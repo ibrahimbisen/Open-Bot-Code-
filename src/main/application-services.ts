@@ -51,8 +51,6 @@ import { sourceText } from "@codebot/i18n/source";
 import { createCodeBotLogger, redactSecrets, registerSecretValue, toLogValue } from "@codebot/logging";
 import { REMOTE_ACCOUNT_CHECK_INTERVAL_MS } from "@codebot/team-client";
 import { installRemoteSyncProfileSink } from "@codebot/team-client/sync-profile";
-import { ANALYTICS_GENERATIONS, openPanelTransport, ReportQueue } from "@codebot/telemetry";
-import { fileReportStorage } from "@codebot/telemetry/node";
 import { makeWASocket } from "@codebot/whatsapp/baileys";
 import { makeCodeBotSignalRepository } from "@codebot/whatsapp/signal-repository";
 import { Effect, Fiber, Schema } from "effect";
@@ -138,7 +136,6 @@ import {
   type WorkflowsHandle,
   workflowNoticeEvent,
 } from "../backend/workflows/workflows";
-import { ACCOUNT_ACTIVITY_PATH, HostAccountActivity } from "./account-activity-reporter";
 import { centralAuthApiUrl, createCentralAuthManager, safeStorageCipher } from "./account-service-access";
 import { type AcpRegistry, createAcpRegistry } from "./acp-registry";
 import { AGENT_ACCESS_FILE, AgentAccessStore } from "./agent-access-store";
@@ -166,12 +163,7 @@ import {
 import { AgentNotificationLevelStore, OWNER_NOTIFICATION_KEY } from "./agent-notification-level-store";
 import { AgentTemplateService } from "./agent-template-service";
 import { HostAnalytics } from "./analytics";
-import { readAnalyticsInstallId } from "./analytics-install-id";
-import { analyticsInventoryDayStore, collectAnalyticsInventory } from "./analytics-inventory";
-import { catalogPluginSlug, isReportedMcpServerName, loadCatalogPluginServers } from "./analytics-plugin-catalog";
-import { AnalyticsPreferenceService } from "./analytics-preference-service";
-import { readAnalyticsPreference, saveAnalyticsDefault } from "./analytics-preference-store";
-import { providerAuthKind } from "./analytics-provider-auth";
+import { catalogPluginSlug, loadCatalogPluginServers } from "./analytics-plugin-catalog";
 import { AppBehaviorService } from "./app-behavior-service";
 import { AppearanceService } from "./appearance-service";
 import { ApprovalAutomation, readApprovalAutomation } from "./approval-automation-store";
@@ -445,7 +437,6 @@ import { ResourceMonitor } from "./resource-monitor";
 import { StatementTimings } from "./resource-summary";
 import { RoutineFeedServer } from "./routine-feed-server";
 import { clearRoutineHold, ROUTINE_HOLD_FILE, takeRoutineHold, writeRoutineHold } from "./routine-hold-file";
-import type { UncleanExitProperties } from "./run-marker";
 import { ScreenCapturer } from "./screen-capture";
 import type { SecretStorageCipher } from "./secret-storage-cipher";
 import { SERVER_AUDIT_FILE, ServerAuditStore, serverAuditNames } from "./server-audit-store";
@@ -525,9 +516,6 @@ import { sizeWorkflowPicture } from "./workflow-picture-size";
 
 const logger = createCodeBotLogger("application-services");
 const SETUP_FILE = "codebot-setup-v2.json";
-const ANALYTICS_PREFERENCE_FILE = "codebot-analytics-preference-v1.json";
-const ANALYTICS_INVENTORY_FILE = "codebot-analytics-inventory-v1.json";
-const ANALYTICS_INSTALL_ID_FILE = "codebot-analytics-install-id-v1.json";
 const APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v3.json";
 const V2_APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v2.json";
 const ROUTINE_FEED_FILE = "codebot-routine-feed-v1.json";
@@ -647,7 +635,6 @@ const TEARDOWN_ORDER = {
   processLauncher: 110.25,
   cuaDriver: 110.5,
   mcpOAuth: 111,
-  analytics: 112,
   centralAuth: 115,
   trace: 120,
   providerLog: 121,
@@ -661,7 +648,6 @@ export interface ApplicationServiceContext {
   windows: MainWindowController;
   appIconPath: string;
   appVariant: AppVariant;
-  analyticsCaptureUrl: string | null;
   developmentRemoteRole: DevelopmentRemoteRole | null;
   developmentTestClientEnabled: boolean;
   hostedServer: HostedServerEnvironment | null;
@@ -670,7 +656,6 @@ export interface ApplicationServiceContext {
   localServerChild: LocalServerChildEnvironment | null;
   localServerControl: Readable | null;
   systemTimezone: () => string;
-  previousUncleanExit: UncleanExitProperties | null;
   macHapticFeedback: MacHapticFeedback;
   teardown: TeardownRegistry;
   forwardCentralAuth: (state: CentralAuthState) => void;
@@ -724,8 +709,6 @@ export interface ApplicationServices {
   idleRestart: IdleRestart;
   requiredUpdate: RequiredUpdate | null;
   setupFile: string;
-  analyticsPreferences: AnalyticsPreferenceService;
-  analyticsInstallId: string | null;
   updatePreferenceFile: string;
   approvalAutomation: ApprovalAutomation;
   agentAdminSettings: AgentAdminSettingsService;
@@ -1036,7 +1019,6 @@ export async function createApplicationServices({
   windows,
   appIconPath,
   appVariant,
-  analyticsCaptureUrl,
   developmentRemoteRole,
   developmentTestClientEnabled,
   hostedServer,
@@ -1045,7 +1027,6 @@ export async function createApplicationServices({
   localServerChild,
   localServerControl,
   systemTimezone,
-  previousUncleanExit,
   macHapticFeedback,
   teardown,
   forwardCentralAuth,
@@ -1507,7 +1488,6 @@ export async function createApplicationServices({
   });
   browser.onChanged((tabs, activeTabId) => forwardBrowserDisplayState(LOCAL_SERVER_ID, { tabs, activeTabId }));
   const setupFile = join(app.getPath("userData"), SETUP_FILE);
-  const analyticsPreferenceFile = join(app.getPath("userData"), ANALYTICS_PREFERENCE_FILE);
   const updatePreferenceFile = join(app.getPath("userData"), UPDATE_PREFERENCE_FILE);
   const routineHoldFile = join(app.getPath("userData"), ROUTINE_HOLD_FILE);
   const logoColor = new LogoColorService({ path: join(app.getPath("userData"), LOGO_COLOR_PREFERENCE_FILE) });
@@ -1647,9 +1627,6 @@ export async function createApplicationServices({
     runCauseEffect(mcpAccessStore.load()),
     runCauseEffect(loadPreferences),
   ]);
-  const analyticsPreference = await Effect.runPromise(
-    readAnalyticsPreference(analyticsPreferenceFile, setupState.completed),
-  );
   teardown.push(TEARDOWN_ORDER.themePalettes, "the theme palette watch", palettesWatch);
   if (!rolesLoaded)
     logger.warn("The roles file did not load. Members get no access to agents until an admin saves the roles.");
@@ -3310,32 +3287,7 @@ export async function createApplicationServices({
   };
   const remoteDesktopRuntimeCredentials = { username: "codebot", password: randomBytes(32).toString("base64url") };
   const attachmentPreviews = new AttachmentPreviews(join(app.getPath("userData"), "attachment-previews"));
-  const resolveHostOwner = () => {
-    const state = centralAuth.getState();
-    if (state.status !== "signed_in") return null;
-    const storedOwner = teamStore.getOwnerAnalyticsIdentity();
-    if (storedOwner) return storedOwner.id === state.user.id ? storedOwner : null;
-    const ownerEmail = teamStore.getOwnerEmail();
-    return !teamStore.configured || ownerEmail?.trim().toLowerCase() === state.user.email.trim().toLowerCase()
-      ? state.user
-      : null;
-  };
-  const accountActivity = new HostAccountActivity({
-    analyticsOn: analyticsPreference.enabled,
-    resolveOwner: resolveHostOwner,
-    memberAccountId: (memberId) => teamStore.getMemberAccountId(memberId),
-    send: (accounts) =>
-      centralAuth.requestAuthorized(
-        ACCOUNT_ACTIVITY_PATH,
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accounts }) },
-        (value) => value,
-      ),
-  });
-  service.on("event", (event) => {
-    if (event.type === "turn-started") accountActivity.turnStarted();
-  });
   const host = new HostService({
-    onMemberUse: (memberId) => accountActivity.memberUsed(memberId),
     appVersion: app.getVersion(),
     store: teamStore,
     agents: service,
@@ -3502,9 +3454,7 @@ export async function createApplicationServices({
             })),
           ),
         set: (input) =>
-          readSetupState(setupFile).pipe(
-            Effect.flatMap((before) => saveAnalyticsDefault(analyticsPreferenceFile, before.completed)),
-            Effect.flatMap(() => writeSetupState(setupFile, input)),
+          writeSetupState(setupFile, input).pipe(
             Effect.tap(() => service.setPreferredProvider(input.preferredProvider, input.preferredModel)),
             Effect.tap((state) =>
               Effect.sync(() => {
@@ -3695,33 +3645,7 @@ export async function createApplicationServices({
   } else if (signedInState.status === "signed_out") {
     await runCauseEffect(host.applySignedInAccount(null));
   }
-  const analyticsPlatform = process.platform;
-  if (analyticsPlatform !== "darwin" && analyticsPlatform !== "win32" && analyticsPlatform !== "linux") {
-    throw new Error(`Unsupported analytics platform: ${analyticsPlatform}`);
-  }
   performance.mark("codebot:services.remote-desktop");
-  const analyticsEnabled = (app.isPackaged && appVariant === "production") || analyticsCaptureUrl !== null;
-  const analyticsInstallId = analyticsEnabled
-    ? await Effect.runPromise(
-        readAnalyticsInstallId(join(app.getPath("userData"), ANALYTICS_INSTALL_ID_FILE), Date.now()),
-      )
-    : null;
-  const failureReports = analyticsEnabled
-    ? new ReportQueue(
-        fileReportStorage(join(app.getPath("userData"), "codebot-error-reports-v1.json")),
-        openPanelTransport({
-          clientId: "6c989975-87ef-4f0c-857e-ab449a65b5c2",
-          origin: "codebot-app://app",
-          ...(analyticsCaptureUrl ? { endpoint: `${analyticsCaptureUrl}/track` } : {}),
-        }),
-        {
-          surface: "desktop_host",
-          app_version: app.getVersion(),
-          platform: analyticsPlatform,
-          event_schema_version: ANALYTICS_GENERATIONS.desktop_host,
-        },
-      )
-    : undefined;
   const trace = new TraceFile({ directory: join(app.getPath("userData"), "logs") });
   teardown.push(TEARDOWN_ORDER.trace, "the trace file", () => Effect.runPromise(trace.close()));
   const resourceMonitor = new ResourceMonitor({
@@ -3738,75 +3662,7 @@ export async function createApplicationServices({
     Effect.runPromise(resourceMonitor.close()),
   );
   service.on("event", (event) => resourceMonitor.observeAgentEvent(event));
-  const analytics = new HostAnalytics({
-    ...(failureReports ? { reports: failureReports } : {}),
-    enabled: analyticsEnabled,
-    ...(analyticsCaptureUrl ? { apiUrl: analyticsCaptureUrl } : {}),
-    trackingEnabled: analyticsPreference.enabled,
-    installId: analyticsInstallId,
-    appVersion: app.getVersion(),
-    platform: analyticsPlatform,
-    resolveOwner: resolveHostOwner,
-    resolveAgent: (agentId) => service.listAgents().find((agent) => agent.id === agentId) ?? null,
-    resolveProviderAuth: (agent) =>
-      providerAuthKind(agent, {
-        account: (provider) => service.getProviderAccountKind(provider),
-        hasApiKey: (provider) => providerCredentials.status(provider) === "saved",
-        customProviderIds: () => customProviders.list().map((provider) => provider.id),
-        envKey: (name) => Boolean(process.env[name]?.trim()),
-      }),
-    resolveTurnUsage: (agentId, turnId, since) => service.getTurnUsage(agentId, turnId, since),
-    resolveTurnTiming: (turnId) => service.takeTurnTiming(turnId),
-    resolveMcpServer: (name) => {
-      const configs = service.listMcpServers().filter((server) => isReportedMcpServerName(server.name, name));
-      if (configs.length === 0) return null;
-      const slugs = new Set(configs.map((config) => catalogPluginSlug(config, catalogPluginServers, homedir())));
-      const [slug] = slugs;
-      return { slug: slugs.size === 1 && slug ? slug : null };
-    },
-    resolveRoutineRun: (agentId, routineId, runId) => {
-      const run = service.listRoutineRuns({ agentId, routineId }).find((item) => item.id === runId);
-      const routine = service.routineRecords.get({ kind: "agent", id: agentId }, routineId);
-      if (!run || !routine) return null;
-      return {
-        runKind: run.kind,
-        runSource: run.source ?? null,
-        triggerType: routine.trigger.kind === "webhook" ? "webhook" : routine.trigger.schedule.kind,
-      };
-    },
-    resolveInventory: () =>
-      collectAnalyticsInventory({
-        agents: () => service.listAgents(),
-        routines: (agentId) => service.listRoutines(agentId),
-        enabledWebhookRoutineCount: (agentId) =>
-          service.routineRecords
-            .list({ kind: "agent", id: agentId })
-            .filter((routine) => routine.active && routine.trigger.kind === "webhook").length,
-        webhookRouteCount: () => service.routineRecords.routes.list().length,
-        workflowCount: () => workflowStore.list().length,
-        skills: (agentId) => skills.listInstalledForChatTags(agentId),
-        mcpServers: () => service.listMcpServers(),
-        pluginSlug: (config) => catalogPluginSlug(config, catalogPluginServers, homedir()),
-        computerUseEnabled: () => cuaDriver.mcpServerForProviders() !== null,
-      }),
-    inventoryDay: analyticsInventoryDayStore(join(app.getPath("userData"), ANALYTICS_INVENTORY_FILE)),
-    resources: resourceMonitor,
-    uncleanExit: previousUncleanExit,
-  });
-  teardown.push(TEARDOWN_ORDER.analytics, "host analytics", () => Effect.runPromise(analytics.close()));
-  const analyticsPreferences = new AnalyticsPreferenceService({
-    path: analyticsPreferenceFile,
-    account: centralAuth,
-    setTrackingEnabled: (enabled) => {
-      accountActivity.setAnalyticsOn(enabled);
-      analytics.setTrackingEnabled(enabled);
-    },
-    followed: (enabled) => {
-      for (const window of BrowserWindow.getAllWindows())
-        sendToRenderer(window, IPC_ENDPOINTS.app.analyticsPreference, { enabled });
-    },
-  });
-  analytics.flushPending();
+  const analytics = new HostAnalytics();
   service.on("failure", (failure) => analytics.handleFailure(failure));
   reportWebhookDelivery = (report) => analytics.handleWebhookDelivery(report);
   resourceMonitor.start(
@@ -4514,8 +4370,6 @@ export async function createApplicationServices({
     browserView,
     updater,
     setupFile,
-    analyticsPreferences,
-    analyticsInstallId,
     updatePreferenceFile,
     approvalAutomation,
     agentAdminSettings,

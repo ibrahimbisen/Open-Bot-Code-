@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { existsSync, mkdirSync, openSync, readFileSync, writeFileSync } from "node:fs";
-import { createServer, type IncomingMessage, type Server } from "node:http";
 import { homedir } from "node:os";
 import { join, resolve } from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
@@ -12,24 +11,14 @@ import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const OUT = join(ROOT, ".codebot-build/unclean-exit-e2e");
-const portFlag = process.argv.find((argument) => argument.startsWith("--capture-port="));
-const CAPTURE_PORT = Number(portFlag?.slice("--capture-port=".length) ?? 47321);
 const START_TIMEOUT_MS = 240_000;
-const EVENT_TIMEOUT_MS = 60_000;
+const LOG_TIMEOUT_MS = 60_000;
+const SIGN_OF_LIFE_TIMEOUT_MS = 180_000;
 const UNCLEAN_LINE = "The previous run did not quit cleanly";
 
 if (process.platform !== "darwin") throw new Error("This check reads the macOS user data folder.");
 mkdirSync(OUT, { recursive: true });
 
-const openPanelBody = z.object({
-  type: z.string(),
-  payload: z.object({ name: z.string().optional(), properties: z.record(z.string(), z.unknown()).optional() }),
-});
-interface Captured {
-  run: number;
-  name: string | null;
-  properties: z.infer<typeof openPanelBody>["payload"]["properties"] & {};
-}
 const runMarkerFile = z.object({
   version: z.literal(1),
   appVersion: z.string(),
@@ -48,56 +37,14 @@ interface RunReport {
   marker?: RunMarkerFile | null;
   uncleanLogLines?: number;
   uncleanLogLine?: string | null;
-  captureEvents?: Captured[];
-  capturedEventNames?: (string | null)[];
 }
 interface Report {
   startedAt: string;
-  capturePort: number;
   runs: RunReport[];
   passed?: boolean;
   error?: string;
   finishedAt?: string;
 }
-const captured: Captured[] = [];
-let currentRun = 0;
-
-async function readBody(request: IncomingMessage): Promise<string> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of request) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-  return Buffer.concat(chunks).toString("utf8");
-}
-
-async function listenOnLoopback(port: number): Promise<Server[]> {
-  const servers: Server[] = [];
-  for (const host of ["127.0.0.1", "::1"]) {
-    const server = createServer((request, response) => {
-      if (request.method === "OPTIONS") {
-        response.writeHead(204, { "access-control-allow-origin": "*", "access-control-allow-headers": "*" }).end();
-        return;
-      }
-      void readBody(request).then((body) => {
-        const parsed = openPanelBody.safeParse(body ? JSON.parse(body) : null);
-        if (parsed.success) {
-          const { type, payload } = parsed.data;
-          captured.push({
-            run: currentRun,
-            name: type === "track" ? (payload.name ?? null) : type,
-            properties: payload.properties ?? {},
-          });
-        }
-        response.writeHead(200, { "access-control-allow-origin": "*", "content-type": "application/json" }).end("{}");
-      });
-    });
-    await new Promise<void>((done, fail) => {
-      server.once("error", fail);
-      server.listen(port, host, () => done());
-    });
-    servers.push(server);
-  }
-  return servers;
-}
-
 async function waitFor<T>(what: string, read: () => T | null | undefined, timeoutMs: number): Promise<T> {
   const deadline = Date.now() + timeoutMs;
   for (;;) {
@@ -147,10 +94,7 @@ function electronMainPid(supervisorPid: number): number | null {
   return mains.length === 1 ? (mains[0]?.pid ?? null) : null;
 }
 
-const environment: NodeJS.ProcessEnv = {
-  ...process.env,
-  CODEBOT_ANALYTICS_CAPTURE_URL: `http://localhost:${CAPTURE_PORT}`,
-};
+const environment: NodeJS.ProcessEnv = { ...process.env };
 delete environment.ELECTRON_RUN_AS_NODE;
 
 interface Started {
@@ -160,7 +104,6 @@ interface Started {
 }
 
 async function startStack(run: number): Promise<Started> {
-  currentRun = run;
   assert.equal(ownAppRecord(), null, "This worktree already runs a dev stack. Stop it first.");
   const log = openSync(join(OUT, `dev-run-${run}.log`), "w");
   const spawnedAt = Date.now();
@@ -209,8 +152,7 @@ function devStop(): void {
   execFileSync("bun", ["run", "dev:stop"], { cwd: ROOT, env: environment, stdio: "inherit" });
 }
 
-const capture = await listenOnLoopback(CAPTURE_PORT);
-const report: Report = { startedAt: new Date().toISOString(), capturePort: CAPTURE_PORT, runs: [] };
+const report: Report = { startedAt: new Date().toISOString(), runs: [] };
 let failure: unknown = null;
 try {
   const first = await startStack(1);
@@ -233,31 +175,17 @@ try {
       const text = mainLog(second.userData).slice(logBefore);
       return text.includes(UNCLEAN_LINE) ? text : null;
     },
-    EVENT_TIMEOUT_MS,
+    LOG_TIMEOUT_MS,
   );
-  const uncleanEvents = () => captured.filter((event) => event.run === 2 && event.name === "system_unclean_exit");
-  const sent = await waitFor(
-    "a system_unclean_exit event",
-    () => (uncleanEvents().length > 0 ? uncleanEvents() : null),
-    EVENT_TIMEOUT_MS,
-  );
-  await waitFor(
-    "the desktop_app_opened event of run 2",
-    () => captured.find((event) => event.run === 2 && event.name === "desktop_app_opened"),
-    EVENT_TIMEOUT_MS,
-  ).catch(() => null);
+  const uncleanLogLine = secondLog.split("\n").find((line) => line.includes(UNCLEAN_LINE)) ?? null;
   report.runs.push({
     run: 2,
     electronPid: second.electronPid,
     uncleanLogLines: countLines(secondLog, UNCLEAN_LINE),
-    uncleanLogLine: secondLog.split("\n").find((line) => line.includes(UNCLEAN_LINE)) ?? null,
-    captureEvents: uncleanEvents(),
-    capturedEventNames: captured.filter((event) => event.run === 2).map((event) => event.name),
+    uncleanLogLine,
   });
   assert.equal(countLines(secondLog, UNCLEAN_LINE), 1, "Run 2 logs the unclean exit once.");
-  assert.equal(uncleanEvents().length, 1, "Run 2 sends the unclean exit once.");
-  assert.equal(sent[0]?.properties.phase, "running", "A kill of the main process has the running phase.");
-  assert.equal(sent[0]?.properties.host_kind, "desktop", "The dev app is a desktop host.");
+  assert.match(uncleanLogLine ?? "", /\(running, /u, "A kill of the main process has the running phase.");
 
   process.kill(second.electronPid, "SIGTERM");
   await waitFor("the end of the quit Electron process", () => (isAlive(second.electronPid) ? null : true), 60_000);
@@ -271,30 +199,25 @@ try {
   const logBeforeThird = mainLog(second.userData).length;
   const third = await startStack(3);
   await waitFor(
-    "the desktop_app_opened event of run 3",
-    () => captured.find((event) => event.run === 3 && event.name === "desktop_app_opened"),
-    EVENT_TIMEOUT_MS,
-  ).catch(() => null);
+    "the first sign of life of run 3",
+    () => {
+      const marker = readMarker(third.userData);
+      return marker && marker.heartbeatAt > marker.startedAt ? marker : null;
+    },
+    SIGN_OF_LIFE_TIMEOUT_MS,
+  );
   const thirdLog = mainLog(third.userData).slice(logBeforeThird);
   report.runs.push({
     run: 3,
     electronPid: third.electronPid,
     marker: cleanMarker,
     uncleanLogLines: countLines(thirdLog, UNCLEAN_LINE),
-    captureEvents: captured.filter((event) => event.run === 3 && event.name === "system_unclean_exit"),
-    capturedEventNames: captured.filter((event) => event.run === 3).map((event) => event.name),
   });
   assert.equal(countLines(thirdLog, UNCLEAN_LINE), 0, "Run 3 logs no unclean exit.");
-  assert.equal(
-    captured.filter((event) => event.run === 3 && event.name === "system_unclean_exit").length,
-    0,
-    "Run 3 sends no unclean exit.",
-  );
 } catch (error) {
   failure = error;
 } finally {
   if (ownAppRecord()) devStop();
-  for (const server of capture) server.close();
 }
 report.passed = failure === null;
 if (failure) report.error = failure instanceof Error ? failure.message : String(failure);

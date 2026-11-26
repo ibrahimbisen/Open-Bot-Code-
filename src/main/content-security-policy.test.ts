@@ -2,13 +2,29 @@ import { describe, expect, it } from "vitest";
 import { buildContentSecurityPolicy, readSelfHostedSignalOrigin } from "./content-security-policy";
 
 describe("buildContentSecurityPolicy", () => {
-  it("allows the production analytics endpoint", () => {
-    const policy = buildContentSecurityPolicy(true);
+  it("allows no analytics endpoint in a packaged app", () => {
+    const connect = buildContentSecurityPolicy(true)
+      .split("; ")
+      .find((directive) => directive.startsWith("connect-src "));
 
-    expect(policy).toContain(
-      "connect-src 'self' codebot-attachment: codebot-remote-attachment: https://analytics.openbot.run ws://127.0.0.1:* wss://*.openbot.run",
+    expect(connect).toBe(
+      "connect-src 'self' codebot-attachment: codebot-remote-attachment: ws://127.0.0.1:* wss://*.openbot.run",
     );
-    expect(policy.split("; ").find((directive) => directive.startsWith("connect-src "))).not.toContain("localhost");
+    expect(connect).not.toContain("analytics");
+    expect(connect).not.toContain("localhost");
+  });
+
+  it.each([true, false])("allows no https: source in connect-src when packaged=%s", (packaged) => {
+    const connect = buildContentSecurityPolicy(
+      packaged,
+      "ws://192.168.1.143:3101/v1/signal",
+      "wss://signal.example.com",
+    )
+      .split("; ")
+      .find((directive) => directive.startsWith("connect-src "));
+
+    expect(connect).not.toContain("https:");
+    expect(connect).not.toContain("analytics");
   });
 
   it.each([true, false])("allows loopback viewer frames when packaged=%s", (packaged) => {

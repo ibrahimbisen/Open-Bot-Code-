@@ -168,7 +168,6 @@ import type {
   UpdateAgentInput,
 } from "./ipc-agents";
 import type {
-  AnalyticsPreference,
   AppInfo,
   AppSetupState,
   BackgroundProcess,
@@ -192,7 +191,6 @@ import type {
   RendererTimingReport,
   SaveSetupInput,
   SentMessageStats,
-  SetAnalyticsPreferenceInput,
   SetCompanySignInEnabledInput,
   TestCompanySignInInput,
   TestCompanySignInResult,
@@ -790,10 +788,6 @@ export const IPC_ENDPOINTS = {
     getSetupState: request<undefined, AppSetupState>()("app:get-setup-state"),
     saveSetup: request<SaveSetupInput, AppSetupState>()("app:save-setup"),
     setupState: event<AppSetupState>()("app:setup-state"),
-    getAnalyticsPreference: request<undefined, AnalyticsPreference>()("app:get-analytics-preference"),
-    getAnalyticsDefault: request<undefined, AnalyticsPreference>()("app:get-analytics-default"),
-    analyticsPreference: event<AnalyticsPreference>()("app:analytics-preference"),
-    setAnalyticsPreference: request<SetAnalyticsPreferenceInput, AnalyticsPreference>()("app:set-analytics-preference"),
     reportRendererTiming: request<RendererTimingReport, void>()("app:report-renderer-timing"),
     getApprovalAutomation: request<undefined, ApprovalAutomationPreference>()("app:get-approval-automation"),
     approvalAutomation: event<ApprovalAutomationPreference>()("app:approval-automation"),

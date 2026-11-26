@@ -57,7 +57,6 @@ import { requestNotificationPermission, showRetainedNotification } from "./deskt
 import {
   developmentUserDataName,
   developmentWorktreeColor,
-  readAnalyticsCaptureUrl,
   readDevelopmentInstanceId,
   readDevelopmentProfile,
   readDevelopmentRemoteDebuggingPort,
@@ -301,7 +300,6 @@ const inviteLinkOptions = {
 const developmentRemoteDebuggingPort = !app.isPackaged
   ? readDevelopmentRemoteDebuggingPort(process.env.CODEBOT_DEV_REMOTE_DEBUGGING_PORT)
   : null;
-const analyticsCaptureUrl = !app.isPackaged ? readAnalyticsCaptureUrl(process.env.CODEBOT_ANALYTICS_CAPTURE_URL) : null;
 app.commandLine.appendSwitch("disable-features", "FedCm");
 if (developmentRemoteDebuggingPort) {
   app.commandLine.appendSwitch("remote-debugging-port", developmentRemoteDebuggingPort);
@@ -480,7 +478,6 @@ protocol.registerSchemesAsPrivileged([
 let services: ApplicationServices | null = null;
 let activeRemotePrincipalId: string | null = null;
 let centralAuthGeneration = 0;
-let activeAnalyticsPrincipalId: string | null = null;
 let previousCentralAuthStatus: CentralAuthState["status"] | null = null;
 const remoteAccountGate = Semaphore.makeUnsafe(1);
 const macHapticFeedback = new MacHapticFeedback();
@@ -732,8 +729,6 @@ function registerIpcHandlers({
   browserView,
   updater,
   setupFile,
-  analyticsPreferences,
-  analyticsInstallId,
   updatePreferenceFile,
   requestedUpdate,
   idleRestart,
@@ -844,7 +839,6 @@ function registerIpcHandlers({
       browser,
       updater,
       setupFile,
-      analyticsPreferences,
       approvalAutomation,
       busyMessageMode,
       agentDefaults,
@@ -863,8 +857,6 @@ function registerIpcHandlers({
       interfaceSize,
       initializeAgent: () => runCauseEffect(agentInitialization.start()),
       appVariant,
-      analyticsCaptureUrl,
-      analyticsInstallId,
       dynamicIslandAvailable: dynamicIsland.available,
       getMainWindow: getDialogParent,
       isMainWindow: (sender) => {
@@ -1254,14 +1246,6 @@ function forwardCentralAuth(state: CentralAuthState): void {
     previousCentralAuthStatus === "error" ||
     previousCentralAuthStatus === "signed_in";
   previousCentralAuthStatus = state.status;
-  if (state.status === "signed_in") {
-    if (activeAnalyticsPrincipalId && activeAnalyticsPrincipalId !== state.user.id) services?.analytics.clear();
-    activeAnalyticsPrincipalId = state.user.id;
-    services?.analyticsPreferences.followAccount(state.user);
-  } else if (state.status === "signed_out") {
-    if (activeAnalyticsPrincipalId) services?.analytics.clear();
-    activeAnalyticsPrincipalId = null;
-  }
   services?.host.unbindChangedAccount(state.status === "signed_in" ? state.user : null);
   const generation = ++centralAuthGeneration;
   void runCauseEffect(
@@ -1305,7 +1289,6 @@ function forwardCentralAuth(state: CentralAuthState): void {
             host.unbindChangedAccount(null);
             return;
           }
-          services?.analytics.flushPending();
         }
         if (services)
           yield* services.remoteServers
@@ -1538,7 +1521,6 @@ if (!hasSingleInstanceLock) {
         windows,
         appIconPath,
         appVariant,
-        analyticsCaptureUrl,
         developmentRemoteRole,
         developmentTestClientEnabled,
         hostedServer,
@@ -1547,7 +1529,6 @@ if (!hasSingleInstanceLock) {
         localServerChild,
         localServerControl,
         systemTimezone,
-        previousUncleanExit,
         macHapticFeedback,
         teardown,
         forwardCentralAuth,
@@ -1568,7 +1549,6 @@ if (!hasSingleInstanceLock) {
         teardown.push(0, "app archive watch", watchAppArchive(process.resourcesPath, built.language.translate));
       }
       const appliedAccount = built.appliedAccount;
-      activeAnalyticsPrincipalId = centralAuthPrincipalId(appliedAccount);
       activeRemotePrincipalId = centralAuthPrincipalId(appliedAccount);
       const currentAccount = built.centralAuth.getState();
       if (currentAccount.status === "signed_out" && !localServerChild)
@@ -1578,8 +1558,6 @@ if (!hasSingleInstanceLock) {
         centralAuthPrincipalId(currentAccount) !== centralAuthPrincipalId(appliedAccount)
       ) {
         forwardCentralAuth(currentAccount);
-      } else if (currentAccount.status === "signed_in") {
-        built.analyticsPreferences.followAccount(currentAccount.user);
       }
       const {
         service,
