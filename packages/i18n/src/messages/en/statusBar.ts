@@ -1,14 +1,11 @@
 import { defineMessages } from "../../message";
 
 export const messages = defineMessages("statusBar", {
-  "statusBar.region": "Status",
   "statusBar.open": "Open status details. {summary}",
   "statusBar.summary.limits": { one: "{count} provider with limits", other: "{count} providers with limits" },
   "statusBar.summary.machines": "{online} of {total} local machines online",
   "statusBar.limit.fiveHour": "5h",
   "statusBar.limit.weekly": "Week",
-  "statusBar.limit.fiveHourName": "5-hour limit",
-  "statusBar.limit.weeklyName": "Weekly limit",
   "statusBar.limit.left": "{percent} left",
   "statusBar.limit.leftOf": "{name}: {percent} left",
   "statusBar.limit.resets": "Resets {time}",
@@ -20,7 +17,6 @@ export const messages = defineMessages("statusBar", {
   "statusBar.machine.gpuMemory": "{used} of {total}",
   "statusBar.machine.models": { one: "{count} model loaded", other: "{count} models loaded" },
   "statusBar.machine.noModels": "No model loaded",
-  "statusBar.machine.modelsUnknown": "Models not reported",
   "statusBar.machine.response": "Answers in {ms} ms",
   "statusBar.machine.checked": "Checked {time}",
   "statusBar.machine.lastOnline": "Last online {time}",
@@ -31,7 +27,6 @@ export const messages = defineMessages("statusBar", {
   "statusBar.machine.gpuLoad": "Load",
   "statusBar.machine.gpuMemoryLabel": "Memory",
   "statusBar.machine.loadedModels": "Loaded models",
-  "statusBar.machine.modelSize": "{size}",
   "statusBar.machine.kvCache": "KV cache {percent}",
   "statusBar.machine.requests": "{running} running, {waiting} waiting",
   "statusBar.machine.kind.ollama": "Ollama",
