@@ -161,7 +161,13 @@ const answer = (message) => {
     }
     case "thread/compact/start":
       log({ method: "thread/compact/start", pid: process.pid, params });
-      return write({ id: message.id, result: {} });
+      write({ id: message.id, result: {} });
+      return setTimeout(() => {
+        const turnId = "compact-" + Date.now();
+        write({ method: "turn/started", params: { threadId: params.threadId, turn: { id: turnId, status: "inProgress" } } });
+        write({ method: "item/completed", params: { threadId: params.threadId, turnId, item: { type: "contextCompaction", id: "item-" + turnId } } });
+        write({ method: "turn/completed", params: { threadId: params.threadId, turn: { id: turnId, status: "completed" } } });
+      }, 30);
     case "turn/interrupt": {
       write({ id: message.id, result: {} });
       return write({ method: "turn/completed", params: { threadId: params.threadId, turn: { id: params.turnId, status: "interrupted" } } });
@@ -719,6 +725,20 @@ try {
     "Context compaction of a project chat runs on the provider thread of that chat",
     compactStart.params.threadId === marked("[c-start]")[0]?.params.threadId,
     compactStart.params,
+  );
+  await until("the compaction cycle finishes", () => chatOf(compactChat.agentId, compactChat.taskId).state === "idle");
+  await run(
+    agents.sendMessage(
+      { agentId: compactChat.agentId, taskId: compactChat.taskId, text: "After compaction [c-after]" },
+      sender,
+    ),
+  );
+  await until("the turn after compaction runs", () => marked("[c-after]").length === 1);
+  await until("the turn after compaction ends", () => chatOf(compactChat.agentId, compactChat.taskId).state === "idle");
+  pass(
+    "A project chat survives the full compaction cycle and keeps its provider thread",
+    marked("[c-after]")[0]?.params.threadId === marked("[c-start]")[0]?.params.threadId,
+    marked("[c-after]")[0]?.params.threadId,
   );
 
   const parking = await run(
