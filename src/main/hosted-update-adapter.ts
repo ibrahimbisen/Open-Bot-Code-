@@ -35,6 +35,7 @@ export const CONTAINER_UPDATE_TRIGGER = "/var/lib/codebot-update/status/enabled"
 interface HostedUpdateOptions {
   currentVersion: string;
   arch: string;
+  feedUrl: () => string | null;
   fetch?: typeof fetch;
   paths?: HostedUpdatePaths;
   pollIntervalMs?: number;
@@ -72,9 +73,12 @@ export class HostedUpdateAdapter implements UpdateAdapter {
     return this;
   }
 
-  async checkForUpdates(): Promise<UpdateCheckOutcome> {
+  async checkForUpdates(): Promise<UpdateCheckOutcome | null> {
+    const feedUrl = this.#options.feedUrl();
+    if (feedUrl === null) return null;
     const version = await fetchLatestLinuxRelease(
       this.#options.arch,
+      feedUrl,
       this.#options.fetch ?? fetch,
       AbortSignal.timeout(15_000),
     );

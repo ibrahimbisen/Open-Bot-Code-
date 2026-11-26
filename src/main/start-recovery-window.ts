@@ -3,7 +3,7 @@ import { localeDirection } from "@codebot/i18n";
 import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { app, BrowserWindow, dialog, nativeTheme, session, shell } from "electron";
 import { runCauseEffect } from "../backend/effect-boundary";
-import { DOWNLOAD_URL, RELEASES_URL } from "./download-url";
+import { openDownload } from "./download-url";
 import { exportStartDiagnostics } from "./maintenance-service";
 import type { StartAttemptsSummary } from "./start-attempts";
 import { recoveryPlushSvg } from "./start-recovery-plush";
@@ -225,10 +225,7 @@ async function runAction(
 ): Promise<Notice | null> {
   try {
     if (action === "previous-version" || action === "latest-version") {
-      await shell.openExternal(
-        previousRelease ? `${RELEASES_URL}/tag/v${encodeURIComponent(previousRelease)}` : DOWNLOAD_URL,
-      );
-      return null;
+      return (await openDownload(previousRelease)) ? null : "actionFailed";
     }
     if (action === "open-data-folder") {
       const failure = await shell.openPath(app.getPath("userData"));

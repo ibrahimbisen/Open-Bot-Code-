@@ -13,6 +13,7 @@ import {
   GROK_BOT_EXPORT_URL,
 } from "@codebot/contracts/ipc";
 import type { AppTranslate } from "@codebot/i18n";
+import { sourceText } from "@codebot/i18n/source";
 import { analyticsOnByDefault } from "@codebot/telemetry";
 import { Effect } from "effect";
 import { app, type BrowserWindow, dialog, type OpenDialogOptions, type WebContents } from "electron";
@@ -66,7 +67,10 @@ function draftPost(translate: AppTranslate): string {
   return encodeURIComponent(translate("app.socialFollow.draftPost", { site: "openbot.run" }));
 }
 
-const EXTERNAL_DESTINATIONS: Record<ExternalDestination, string | ((translate: AppTranslate) => string)> = {
+const EXTERNAL_DESTINATIONS: Record<
+  Exclude<ExternalDestination, "download">,
+  string | ((translate: AppTranslate) => string)
+> = {
   "agent-setup": "https://github.com/nightly-labs/openbot/blob/main/docs/TROUBLESHOOTING.md",
   "opencode-install": "https://opencode.ai/docs/",
   "opencode-auth": "https://opencode.ai/auth",
@@ -96,12 +100,11 @@ const EXTERNAL_DESTINATIONS: Record<ExternalDestination, string | ((translate: A
   "tiktok-post": "https://www.tiktok.com/upload",
   "grok-bot-export": GROK_BOT_EXPORT_URL,
   "hosted-server-contact": HOSTED_SERVER_CONTACT_URL,
-  download: DOWNLOAD_URL,
   "mac-screen-recording": MAC_PERMISSION_URLS["screen-recording"],
 };
 
 import { runCauseEffect } from "../../backend/effect-boundary";
-import { DOWNLOAD_URL } from "../download-url";
+import { downloadUrl } from "../download-url";
 import { openHttpLink } from "../message-link-relay";
 import type { ResourceMonitor } from "../resource-monitor";
 import type { StartupTiming } from "../startup-timing";
@@ -277,7 +280,12 @@ export function appIpcHandlers({
         await initializeAgent();
         return state;
       }),
-      openExternal: payloadHandler(parseExternalDestination, (parsed) => {
+      openExternal: payloadHandler(parseExternalDestination, async (parsed) => {
+        if (parsed === "download") {
+          const installer = await downloadUrl();
+          if (installer === null) throw new Error(sourceText("error.appUpdate.noServer"));
+          return openLink(installer);
+        }
         const target = EXTERNAL_DESTINATIONS[parsed];
         return openLink(typeof target === "string" ? target : target(language.translate));
       }),

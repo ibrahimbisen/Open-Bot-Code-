@@ -12,7 +12,7 @@ import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-runtime-blocked-e2e");
 const WAIT_MS = 15_000;
 const BLOCKED_VERSION = "2.3.2";
-const BLOCKLIST_URL = "https://raw.githubusercontent.com/nightly-labs/openbot/main/provider-runtime-blocklist.json";
+const BLOCKLIST_URL = "https://updates.example.test/codebot/provider-runtime-blocklist.json";
 const LICENSE = "fake OpenCode license\n";
 
 interface Scenario {
@@ -31,6 +31,8 @@ interface Report {
   };
   notBlocked?: Scenario;
   userCli?: Scenario;
+  bundledList?: Scenario & { listRequests: number };
+  noUpdateServer?: Scenario & { listRequests: number };
 }
 
 const root = await mkdtemp(join(tmpdir(), "codebot-provider-runtime-blocked-e2e-"));
@@ -56,10 +58,14 @@ function lockFor(target: OpencodeTarget) {
   return lock;
 }
 
-function blocklistFetch(blocked: string[]) {
+let listRequests = 0;
+
+function blocklistFetch(blocked: string[] | null) {
   return async (input: string | URL | Request) => {
     const url = input instanceof Request ? input.url : String(input);
     if (url !== BLOCKLIST_URL) throw new TypeError("fetch failed");
+    listRequests += 1;
+    if (blocked === null) return new Response("Not found", { status: 404 });
     return new Response(JSON.stringify({ schemaVersion: 1, blocked: { opencode: blocked } }), {
       headers: { "content-type": "application/json" },
     });
@@ -109,7 +115,14 @@ async function exists(path: string): Promise<boolean> {
 
 const managers: ProviderRuntimeManager[] = [];
 
-async function startManager(name: string, blocked: string[]) {
+async function startManager(
+  name: string,
+  blocked: string[] | null,
+  bundled: string[] = [],
+  remoteUrl: string | null = BLOCKLIST_URL,
+) {
+  const bundledPath = join(root, `${name}-bundled-blocklist.json`);
+  await writeFile(bundledPath, JSON.stringify({ schemaVersion: 1, blocked: { opencode: bundled } }));
   const probe = new ProviderRuntimeManager({ root: join(root, name), isProviderOn: () => false });
   const pinnedExecutable = probe.executablePath("opencode");
   assert.ok(pinnedExecutable, "this platform has a managed OpenCode");
@@ -126,6 +139,7 @@ async function startManager(name: string, blocked: string[]) {
       isProviderOn: (provider) => provider === "opencode",
       lock: lockFor(target),
       fetchImpl: blocklistFetch(blocked),
+      blocklist: { bundledPath, remoteUrl: () => remoteUrl },
     });
     managers.push(manager);
     await runCauseEffect(manager.initialize());
@@ -200,6 +214,33 @@ try {
     blockedCopyKept: await exists(userCli.blockedRoot),
   };
   assert.equal(report.userCli.versionAfter, BLOCKED_VERSION, "CodeBot leaves OpenCode alone next to a user's CLI");
+
+  for (const [name, remoteUrl] of [
+    ["bundledList", BLOCKLIST_URL],
+    ["noUpdateServer", null],
+  ] as const) {
+    listRequests = 0;
+    const bundled = await startManager(name, null, [BLOCKED_VERSION], remoteUrl);
+    const bundledBefore = version(bundled.manager);
+    const bundledMovedBack = nextStatus(
+      bundled.manager,
+      `the move back to the pinned OpenCode (${name})`,
+      (snapshot) =>
+        snapshot.providers.opencode.phase === "ready" && snapshot.providers.opencode.version === pinnedVersion,
+    );
+    bundled.manager.startUpdateChecks();
+    await bundledMovedBack;
+    await runCauseEffect(bundled.manager.downloadAndWait("opencode"));
+    report[name] = {
+      versionBefore: bundledBefore,
+      versionAfter: version(bundled.manager),
+      blockedCopyKept: await exists(bundled.blockedRoot),
+      listRequests,
+    };
+    assert.equal(report[name]?.versionAfter, pinnedVersion, `${name}: the list in the application blocks the version`);
+  }
+  assert.ok((report.bundledList?.listRequests ?? 0) > 0, "the update server is asked for a newer list");
+  assert.equal(report.noUpdateServer?.listRequests, 0, "no update server URL: no request for a list");
 
   report.passed = true;
 } finally {

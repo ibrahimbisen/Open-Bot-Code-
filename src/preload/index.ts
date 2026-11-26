@@ -255,6 +255,7 @@ import {
   decodeVoid,
   decodeWorkflowNotificationOpenedEvent,
 } from "./app-decoding";
+import { decodeAppUpdateFeed } from "./app-update-decoding";
 import { decodeBackgroundProcesses } from "./background-process-decoding";
 import {
   decodeBrowserBounds,
@@ -1654,6 +1655,10 @@ const codebotApi: CodeBotDesktopApi = {
     restartNow: decodeUpdateStatus,
     event: decodeUpdateStatus,
     preference: decodeUpdatePreference,
+  }),
+  appUpdate: bridgeGroup(IPC_ENDPOINTS.appUpdate, {
+    getFeed: decodeAppUpdateFeed,
+    setFeedUrl: decodeAppUpdateFeed,
   }),
   notifications: bridgeGroup(IPC_ENDPOINTS.notifications, {
     getPreference: decodeNotificationPreference,

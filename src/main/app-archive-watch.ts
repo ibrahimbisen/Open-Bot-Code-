@@ -6,8 +6,8 @@ import { promisify } from "node:util";
 import type { AppTranslate } from "@codebot/i18n";
 import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Option, Schema } from "effect";
-import { dialog, shell } from "electron";
-import { DOWNLOAD_URL } from "./download-url";
+import { dialog } from "electron";
+import { hasDownloadSource, openDownload } from "./download-url";
 
 const logger = createCodeBotLogger("app-archive");
 const SETTLE_MS = 2_000;
@@ -58,15 +58,16 @@ async function readPlistHash(resourcesPath: string): Promise<string | null> {
 }
 
 async function showArchiveChanged(translate: AppTranslate): Promise<void> {
+  const download = hasDownloadSource() ? [translate("startup.archiveChangedDownload")] : [];
   const { response } = await dialog.showMessageBox({
     type: "warning",
     message: translate("startup.archiveChangedTitle"),
     detail: translate("startup.archiveChangedBody"),
-    buttons: [translate("startup.archiveChangedDownload"), translate("common.close")],
+    buttons: [...download, translate("common.close")],
     defaultId: 0,
-    cancelId: 1,
+    cancelId: download.length,
   });
-  if (response === 0) await shell.openExternal(DOWNLOAD_URL);
+  if (response < download.length) await openDownload();
 }
 
 export function watchAppArchive(resourcesPath: string, translate: AppTranslate): () => void {
