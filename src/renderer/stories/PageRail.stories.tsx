@@ -1,7 +1,4 @@
-import type { CreditsState } from "@codebot/contracts/credits";
 import { accountUsageProviderRows } from "@codebot/ui/features/account/account-usage-view";
-import { creditsRailWallet } from "@codebot/ui/features/credits/credits-store";
-import { RailMoveCreditsDialog } from "@codebot/ui/features/credits/MoveCreditsDialog";
 import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
 import { HelpMenu } from "@codebot/ui/features/updates/HelpMenu";
 import {
@@ -14,10 +11,9 @@ import {
   type PageRailProps,
 } from "@codebot/ui/features/window/PageRail";
 import { useText } from "@codebot/ui/text";
-import { createSignal, Show } from "solid-js";
+import { createSignal } from "solid-js";
 import { fn } from "storybook/test";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
-import { createMockCredits } from "../src/preview/mock-credits";
 import { STORY_SERVERS } from "./fixtures";
 
 const nowSeconds = Math.floor(Date.now() / 1_000);
@@ -144,20 +140,12 @@ function RailPreview(props: {
   customAgentUsage?: readonly CustomAgentUsageRailRow[];
   usageRows?: PageRailProps["usageRows"];
   mediaCredits?: readonly MediaCreditsRailRow[];
-  creditBalance?: number | undefined;
-  creditAgents?: boolean;
-  creditAsk?: boolean;
-  creditMove?: boolean;
-  creditWalletName?: string | undefined;
-  onCreditMove?: () => void;
   hiddenItems?: readonly PageRailHideableItem[];
   crm?: boolean;
 }) {
   const { t } = useText();
   const [current, setCurrent] = createSignal<PageRailPage | null>("agents");
   const [pinned, setPinned] = createSignal<readonly PageRailPinnablePage[]>(props.crm ? ["usage", "crm"] : ["usage"]);
-  const [creditAgents, setCreditAgents] = createSignal(props.creditAgents);
-  const [creditAsk, setCreditAsk] = createSignal(props.creditAsk);
   const [hidden, setHidden] = createSignal<readonly PageRailHideableItem[]>(props.hiddenItems ?? []);
   function crmAction(): (() => void) | undefined {
     if (!props.crm) return undefined;
@@ -166,10 +154,6 @@ function RailPreview(props: {
   function crmConnectorsAction(): (() => void) | undefined {
     if (!props.crm) return undefined;
     return () => setCurrent("crm");
-  }
-  function creditsAction(): (() => void) | undefined {
-    if (props.creditBalance === undefined) return undefined;
-    return () => setCurrent("credits");
   }
   return (
     <div class="app-window" style={{ height: "100vh" }}>
@@ -190,14 +174,6 @@ function RailPreview(props: {
           onUsage={() => setCurrent("usage")}
           onCrm={crmAction()}
           onCrmConnectors={crmConnectorsAction()}
-          onCredits={creditsAction()}
-          creditBalance={props.creditBalance}
-          creditAgents={creditAgents()}
-          onCreditAgentsChange={creditAgents() === undefined ? undefined : setCreditAgents}
-          creditAsk={creditAsk()}
-          onCreditAskChange={creditAsk() === undefined ? undefined : setCreditAsk}
-          creditWalletName={props.creditWalletName}
-          onCreditMove={props.onCreditMove ?? (props.creditMove ? fn() : undefined)}
           hiddenItems={hidden()}
           onHiddenChange={(item, hide) =>
             setHidden((items) => (hide ? [...items, item] : items.filter((other) => other !== item)))
@@ -235,38 +211,6 @@ function RailPreview(props: {
         />
       </div>
     </div>
-  );
-}
-
-function CreditMovePreview(props: { personal: number; server: number }) {
-  const calls = createMockCredits({
-    balance: props.personal,
-    servers: [{ serverId: "team", name: "CodeBot team", role: "owner", balance: props.server }],
-  });
-  const [state, setState] = createSignal<CreditsState | null>(null);
-  const [moving, setMoving] = createSignal(false);
-  void calls.getState().then(setState);
-  const wallet = () => creditsRailWallet(state(), { kind: "remote", id: "team" }, null);
-  return (
-    <>
-      <RailPreview
-        creditBalance={wallet()?.balance}
-        creditWalletName={wallet()?.name ?? undefined}
-        creditAgents
-        creditAsk
-        onCreditMove={() => setMoving(true)}
-      />
-      <Show when={moving() ? wallet()?.movable : null}>
-        {(server) => (
-          <RailMoveCreditsDialog
-            calls={() => calls}
-            server={server()}
-            onChange={setState}
-            onClose={() => setMoving(false)}
-          />
-        )}
-      </Show>
-    </>
   );
 }
 
@@ -309,48 +253,8 @@ export const DesktopLogo: Story = {
   args: { logo: { variant: "production" } },
 };
 
-export const Credits: Story = {
-  args: { creditBalance: 1250 },
-};
-
-export const CreditsAdmin: Story = {
-  args: {
-    creditBalance: 1250,
-    creditAgents: true,
-    creditAsk: true,
-    creditMove: true,
-    creditWalletName: "Studio server",
-  },
-};
-
-export const CreditsMember: Story = {
-  args: { creditBalance: 1250, creditAsk: false },
-};
-
-export const CreditsHundredThousand: Story = {
-  args: {
-    creditBalance: 100_000,
-    creditAgents: true,
-    creditAsk: true,
-    creditMove: true,
-    creditWalletName: "CodeBot team",
-  },
-};
-
-export const CreditsMove: Story = {
-  render: () => <CreditMovePreview personal={100_000} server={1_799.5} />,
-};
-
-export const CreditsAgentsOff: Story = {
-  args: { creditBalance: 1250, creditAgents: false },
-};
-
-export const CreditsLarge: Story = {
-  args: { creditBalance: 48_250.5, creditAgents: true },
-};
-
 export const HiddenItems: Story = {
-  args: { creditBalance: 1250, hiddenItems: ["marketplace", "help"] },
+  args: { hiddenItems: ["marketplace", "help"] },
 };
 
 export const MediaCreditsQuota: Story = {

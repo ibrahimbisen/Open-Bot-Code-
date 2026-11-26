@@ -3,9 +3,7 @@ import type { AppTextKey } from "@codebot/i18n";
 import type { AgentSettingLinkId } from "@codebot/ui/features/conversation/agent-setting-links";
 import { type SettingsTab, settingsTabShown } from "./settings-tabs";
 
-type CreditsSettingLinkId = "credits.explainer";
-
-export type AppSettingLinkId = Exclude<SettingLinkId, AgentSettingLinkId | CreditsSettingLinkId>;
+export type AppSettingLinkId = Exclude<SettingLinkId, AgentSettingLinkId>;
 
 export interface AppSettingLinkTarget {
   tab: SettingsTab;

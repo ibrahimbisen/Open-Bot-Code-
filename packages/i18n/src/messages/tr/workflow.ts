@@ -59,8 +59,6 @@ export const messages = {
   "workflow.node.locked": "Kilitli",
   "workflow.node.missingInput": "Bu adımı çalıştırmak için bir giriş bağlayın.",
   "workflow.node.run": "Çalıştır",
-  "workflow.node.runPriceLabel": "Çalıştır. Kredi cinsinden fiyat: {credits}",
-  "workflow.node.retryPriceLabel": "Yeniden dene. Kredi fiyatı: {credits}",
   "workflow.node.running": "Çalışıyor",
   "workflow.node.waiting": "Kuyrukta",
   "workflow.node.stop": "Durdur",

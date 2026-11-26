@@ -3,7 +3,6 @@ import type { AppTextKey } from "@codebot/i18n";
 import {
   Bell,
   CircleArrowDown,
-  CreditCard,
   Keyboard,
   Mic,
   MousePointer2,
@@ -11,7 +10,6 @@ import {
   PanelRight,
   PanelTop,
   Power,
-  Server,
   Settings,
   Smartphone,
   UserRound,
@@ -29,10 +27,8 @@ export type SettingsTab =
   | "agent-dock"
   | "computer-use"
   | "profile"
-  | "billing"
   | "mobile-connect"
-  | "updates"
-  | "hosted-servers";
+  | "updates";
 
 type SettingsRow = {
   titleKey: AppTextKey;
@@ -152,14 +148,6 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
     ],
   },
   {
-    value: "billing",
-    titleKey: "settings.tab.billing.title",
-    descriptionKey: "settings.tab.billing.description",
-    icon: CreditCard,
-    group: "settings.sections.group.account",
-    rows: [],
-  },
-  {
     value: "mobile-connect",
     titleKey: "settings.tab.mobileConnect.title",
     descriptionKey: "settings.tab.mobileConnect.description",
@@ -252,13 +240,6 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
       { titleKey: "settings.updates.managed.title", descriptionKey: "settings.updates.managed.description" },
     ],
   },
-  {
-    value: "hosted-servers",
-    titleKey: "settings.tab.hostedServers.title",
-    descriptionKey: "settings.tab.hostedServers.description",
-    icon: Server,
-    rows: [],
-  },
 ];
 
 export function navItem(tab: SettingsTab): SettingsNavItem {
@@ -271,7 +252,6 @@ export function settingsTabShown(
   tab: SettingsTab,
   window: { platform: AppInfo["platform"] | undefined; chatWindow: boolean },
 ): boolean {
-  if (tab === "hosted-servers") return false;
   if (tab === "dynamic-island") return dynamicIslandSettingsShown(window.platform, window.chatWindow);
   if (tab === "agent-dock") return window.platform !== undefined && !window.chatWindow;
   return true;

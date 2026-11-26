@@ -59,8 +59,6 @@ export const messages = {
   "workflow.node.locked": "已锁定",
   "workflow.node.missingInput": "连接一个输入后才能运行该步骤。",
   "workflow.node.run": "运行",
-  "workflow.node.runPriceLabel": "运行。价格（积分）：{credits}",
-  "workflow.node.retryPriceLabel": "重试。价格（积分）：{credits}",
   "workflow.node.running": "运行中",
   "workflow.node.waiting": "排队中",
   "workflow.node.stop": "停止",

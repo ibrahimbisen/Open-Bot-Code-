@@ -27,12 +27,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Сделать снимок главного экрана и отправить изображение модели агента.",
   "status.agent.screenCaptureChannel":
     "Изображение появится в канале {channel}, и его увидит каждый участник этого сервера, который читает канал.",
-  "status.agent.creditImageApproval": "Создать изображение с помощью {model}. Стоимость в кредитах: {credits}.",
-  "status.agent.creditVideoApproval": "Создать видео с помощью {model}. Стоимость в кредитах: {credits}.",
-  "status.agent.creditMediaChannel":
-    "Результат появится в канале {channel}, и его увидит каждый участник этого сервера, который читает канал.",
-  "status.agent.creditsHoldBalance": "Будет потрачено кредитов: {credits}. Баланс: {balance}.",
-  "status.agent.creditsHoldAgentsOff": "Агенты на этом сервере не могут использовать кредиты.",
   "status.agent.screenCapturePermissionNext": "Затем macOS может попросить вас разрешить CodeBot запись экрана.",
   "status.agent.screenCaptureDisplay": "Сделать снимок дисплея {name} и отправить изображение модели агента.",
   "status.agent.screenCaptureWindow": "Сделать снимок окна {name} и отправить изображение модели агента.",
@@ -68,20 +62,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "Удалить рабочий процесс {title} вместе с его запусками и версиями. Его открытые шаги остановятся.",
   "status.agent.deleteAgents": "Удалить {agents} вместе с их чатами и файлами. Это нельзя отменить.",
-  "status.agent.nearSignatureReceived": "CodeBot получил подпись. Эту вкладку можно закрыть.",
-  "status.agent.nearSignatureUnknown": "CodeBot не ждёт эту подпись. Начните её заново в CodeBot.",
-  "status.agent.nearPayment":
-    "Заплатить {amount} {symbol} получателю {recipient} из криптокошелька, для {domain}: {reason}",
-  "status.agent.nearSummaryCreate":
-    "Все агенты могут платить до {amount} USD в день. Это можно изменить позже в CodeBot.",
-  "status.agent.nearSummaryGrant":
-    "Разрешить этому приложению CodeBot платить из кошелька {days} дней в рамках ваших правил.",
-  "status.agent.nearSummaryBudget": "Изменить дневной бюджет кошелька на {amount} USD.",
-  "status.agent.nearSummaryAutoPay":
-    "Разрешить CodeBot платить без вашей подписи, когда это позволяет правило платежей. О других платежах вас по-прежнему спросят в чате.",
-  "status.agent.nearSummaryPayment": "Одобрить платёж {amount} получателю {recipient}.",
-  "status.agent.nearSummaryFreeze": "Агенты не смогут платить из этого кошелька, пока вы не возобновите платежи.",
-  "status.agent.nearSummaryUnfreeze": "Агенты снова смогут платить из этого кошелька в рамках ваших правил.",
   "status.agent.screenCaptureProgress": "Запрос снимка экрана…",
   "status.agent.screenCaptureReviewing": "Просмотр снимка экрана…",
   "status.agent.browserOpening": "Открытие веб-страницы…",
@@ -89,7 +69,6 @@ export const messages = {
   "status.agent.browserClicking": "Нажатие на веб-странице…",
   "status.agent.browserTyping": "Ввод на веб-странице…",
   "status.agent.browserActing": "Работа с веб-страницей…",
-  "status.agent.browserPaying": "Отправка платежа…",
   "status.agent.browserReviewing": "Просмотр веб-страницы…",
   "status.agent.memoriesSearching": "Поиск в памяти…",
   "status.agent.chatsSearching": "Поиск в прошлых чатах…",

@@ -9,7 +9,6 @@ import {
   withChatBackdropRequesters,
 } from "@codebot/contracts/chat-visual";
 import { sortConversationMessages } from "@codebot/contracts/conversation-order";
-import { CREDIT_MEDIA_INPUT_LIMIT_BYTES, CREDIT_MEDIA_INPUT_TYPES } from "@codebot/contracts/credit-media";
 import {
   BUG_REPORT_AREAS,
   BUG_REPORT_SEVERITIES,
@@ -166,13 +165,6 @@ import type { ChatVisualPreviewHost } from "./chat-visual-preview";
 import { type ClientBrowser, isClientBrowserCall, runClientBrowserTool, withClientTabs } from "./client-browser-tools";
 import { handleSetCommitCoAuthorTool, type SetCommitCoAuthor } from "./commit-co-author-tool";
 import type { ConversationRuntime } from "./conversation-runtime";
-import {
-  CREDIT_MEDIA_TOOL_NAMES,
-  type CreditMediaShown,
-  CreditMediaToolInputFailed,
-  type CreditMediaTools,
-  LIST_MEDIA_MODELS_TOOL,
-} from "./credit-media-tools";
 import { CRM_TOOL_NAMES, handleCrmTool } from "./crm-tool";
 import { handleDataTool } from "./data-tools";
 import { handleDeleteAgentTool } from "./delete-agent-tool";
@@ -185,8 +177,6 @@ import {
 import type { DrainScheduler } from "./drain-scheduler";
 import type { FeedbackWithdrawal } from "./feedback-withdrawal";
 import { HistoryTools, historyCursorThread, isHistoryBrowse, MAIN_CHAT_TASK_ID } from "./history-tools";
-import type { HostedSiteCoordinator } from "./hosted-site-coordinator";
-import { isHostedSiteMutationTool } from "./hosted-site-events";
 import { type ImageFitter, READ_IMAGE_MAX_FILE_BYTES, readImageToolSchema } from "./image-reader";
 import {
   type AgentLibraryFolders,
@@ -498,7 +488,6 @@ export interface CodeBotToolRouterOptions {
   attachments: AttachmentGateway;
   channels: ChannelService;
   messaging: MessagingThreads;
-  hostedSites: HostedSiteCoordinator;
   routines: RoutineScheduler;
   memories: AgentMemories;
   waits: AgentWaits;
@@ -518,7 +507,6 @@ export interface CodeBotToolRouterOptions {
   screenCapture?: ScreenCaptureHost | null | undefined;
   videoReader?: VideoReaderHost | null | undefined;
   fitImage?: ImageFitter | null | undefined;
-  creditMediaTools?: CreditMediaTools | null | undefined;
   avatarDecoder?: AvatarImageDecoder | null | undefined;
   mcpServers?: AgentMcpServers | null | undefined;
   marketplaceAppServer?: ((appId: string) => MarketplaceAppServer | null) | undefined;
@@ -556,7 +544,6 @@ export class CodeBotToolRouter {
   readonly #attachments: AttachmentGateway;
   readonly #channels: ChannelService;
   readonly #messaging: MessagingThreads;
-  readonly #hostedSites: HostedSiteCoordinator;
   readonly #routines: RoutineScheduler;
   readonly #memories: AgentMemories;
   readonly #waits: AgentWaits;
@@ -576,7 +563,6 @@ export class CodeBotToolRouter {
   readonly #screenCapture: ScreenCaptureHost | null;
   readonly #videoReader: VideoReaderHost | null;
   readonly #fitImage: ImageFitter | null;
-  readonly #creditMediaTools: CreditMediaTools | null;
   readonly #avatarDecoder: AvatarImageDecoder | null;
   readonly #mcpServers: AgentMcpServers | null;
   readonly #marketplaceAppServer: (appId: string) => MarketplaceAppServer | null;
@@ -628,7 +614,6 @@ export class CodeBotToolRouter {
     this.#attachments = options.attachments;
     this.#channels = options.channels;
     this.#messaging = options.messaging;
-    this.#hostedSites = options.hostedSites;
     this.#routines = options.routines;
     this.#memories = options.memories;
     this.#waits = options.waits;
@@ -648,7 +633,6 @@ export class CodeBotToolRouter {
     this.#screenCapture = options.screenCapture ?? null;
     this.#videoReader = options.videoReader ?? null;
     this.#fitImage = options.fitImage ?? null;
-    this.#creditMediaTools = options.creditMediaTools ?? null;
     this.#avatarDecoder = options.avatarDecoder ?? null;
     this.#mcpServers = options.mcpServers ?? null;
     this.#marketplaceAppServer = options.marketplaceAppServer ?? (() => null);
@@ -932,15 +916,6 @@ export class CodeBotToolRouter {
               if (result && client.running) client.respond(toolRequest.id, result);
               return;
             }
-            if (toolRequest.params.tool === "request_near_payment") {
-              const result = yield* this.#attention.requestNearPayment(client, toolRequest, {
-                ...toolRequest.params,
-                threadId: this.#conversation.publicThreadId(agentId, toolRequest.params.threadId),
-                ownerAgentId: agentId,
-              });
-              if (client.running && !toolRequest.signal?.aborted) client.respond(toolRequest.id, result);
-              return;
-            }
             const params = {
               ...toolRequest.params,
               threadId: this.#conversation.publicThreadId(agentId, toolRequest.params.threadId),
@@ -972,14 +947,10 @@ export class CodeBotToolRouter {
                   );
                 case "delete_vault_item":
                   return yield* this.#attention.deleteVaultItem(params);
-                case "request_link_payment":
-                  return yield* this.#attention.requestLinkPayment(params);
                 default: {
-                  const linkVault = yield* this.#attention.linkCardVault(client, toolRequest, params);
-                  if (linkVault && !("secret" in linkVault)) return linkVault;
                   const result = yield* this.#browser.handleDynamicTool(params, {
                     onUserControl: userControl,
-                    cardVault: linkVault ?? this.#attention.cardVault(client, toolRequest, params),
+                    cardVault: this.#attention.cardVault(client, toolRequest, params),
                   });
                   if (params.tool === "list_tabs")
                     return withClientTabs(result, this.#clientBrowser, this.#chromeRequesters(agentId, params.turnId));
@@ -1012,15 +983,6 @@ export class CodeBotToolRouter {
               this.#acknowledgeRequest(client, toolRequest, toolRequest.params);
               return;
             }
-            if (isHostedSiteMutationTool(toolRequest.params.tool)) {
-              yield* this.#attention.surfaceHostedSiteApproval(
-                client,
-                toolRequest,
-                toolRequest.params,
-                toolRequest.params.tool,
-              );
-              return;
-            }
             if (toolRequest.params.tool === "capture_screen" || toolRequest.params.tool === "list_capture_sources") {
               const result = yield* this.#screenCaptureTool(client, toolRequest, toolRequest.params);
               if (!toolRequest.signal?.aborted && client.running) client.respond(toolRequest.id, result);
@@ -1034,16 +996,6 @@ export class CodeBotToolRouter {
             if (API_KEY_TOOLS.has(toolRequest.params.tool)) {
               const result = yield* this.#apiKeyTool(client, toolRequest, toolRequest.params);
               if (result && !toolRequest.signal?.aborted && client.running) client.respond(toolRequest.id, result);
-              return;
-            }
-            if (CREDIT_MEDIA_TOOL_NAMES.has(toolRequest.params.tool)) {
-              if (toolRequest.signal?.aborted) return;
-              const result = yield* this.#creditMediaTool(client, toolRequest, toolRequest.params).pipe(
-                Effect.raceFirst(requestAborted(toolRequest.signal)),
-              );
-              if (!result.success)
-                this.#rememberToolFailure(toolRequest.params.threadId, toolRequest.params.tool, result);
-              if (!toolRequest.signal?.aborted && client.running) client.respond(toolRequest.id, result);
               return;
             }
             if (isMcpServerTool(toolRequest.params.tool)) {
@@ -2118,12 +2070,6 @@ export class CodeBotToolRouter {
       return yield* this.#readImage(senderAgentId, params);
     }
 
-    if (params.tool === "list_sites") {
-      return codeBotToolResult(yield* this.#hostedSites.listSites());
-    }
-
-    if (isHostedSiteMutationTool(params.tool)) throw new Error("Hosted site changes require user approval.");
-
     if (params.tool === "attach_files_to_response") {
       const args = params.arguments;
       if (!isRecord(args) || !Array.isArray(args.paths)) throw new Error("paths must be an array of local files.");
@@ -2659,13 +2605,11 @@ export class CodeBotToolRouter {
         status: "shown",
         setting: shown,
         next:
-          setting === "credits.explainer"
-            ? "The card is in the chat. Its Open button shows a short explainer of CodeBot credits, on the desktop app and the web client. In one or two sentences, answer the user's question about credits. Do not describe the card."
-            : SETTING_LINK_SCOPES[setting] !== "agent"
-              ? "The card is in the chat. On the CodeBot desktop app, its Open button shows the row in CodeBot Settings of the computer that shows the chat; the web client shows only where it is. In one or two sentences, tell the user what the setting does and what to choose there. Do not describe the card."
-              : this.#channels.store.channelForThread(executionThreadId)
-                ? "The card is in the channel. In a channel it has no Open button: the user opens the row in your agent settings from their own chat with you. In one or two sentences, tell the user what the setting does and what to choose there. Do not describe the card."
-                : "The card is in the chat. Its Open button shows the row in your agent settings in the side panel. In one or two sentences, tell the user what the setting does and what to choose there. Do not describe the card.",
+          SETTING_LINK_SCOPES[setting] !== "agent"
+            ? "The card is in the chat. On the CodeBot desktop app, its Open button shows the row in CodeBot Settings of the computer that shows the chat; the web client shows only where it is. In one or two sentences, tell the user what the setting does and what to choose there. Do not describe the card."
+            : this.#channels.store.channelForThread(executionThreadId)
+              ? "The card is in the channel. In a channel it has no Open button: the user opens the row in your agent settings from their own chat with you. In one or two sentences, tell the user what the setting does and what to choose there. Do not describe the card."
+              : "The card is in the chat. Its Open button shows the row in your agent settings in the side panel. In one or two sentences, tell the user what the setting does and what to choose there. Do not describe the card.",
       });
     }
 
@@ -3012,114 +2956,6 @@ export class CodeBotToolRouter {
     if (Result.isFailure(image)) return captureFailure(image.failure);
     return yield* this.#showCapture(agent.id, threadId, params, messageId, image.success);
   });
-
-  readonly #creditMediaTool = Effect.fn("CodeBotToolRouter.creditMediaTool")(function* (
-    this: CodeBotToolRouter,
-    client: AgentClient,
-    request: AppServerRequest,
-    params: DynamicToolCallParams,
-  ) {
-    const agentId = this.#conversation.agentForThread(params.threadId);
-    const tools = this.#creditMediaTools;
-    if (!agentId || !tools) return codeBotToolFailure(sourceText("error.billing.mediaSignInRequired"));
-    const threadId = this.#conversation.publicThreadId(agentId, params.threadId);
-    const messageId = responseAttachmentMessageId(params.threadId, params.turnId, params.callId);
-    if (
-      params.tool !== LIST_MEDIA_MODELS_TOOL &&
-      this.#conversation.ensureSnapshot(agentId, threadId).messages.some(({ id }) => id === messageId)
-    )
-      return codeBotToolResult({ status: "shown", messageId });
-    const channelId = this.#channels.store.channelForThread(threadId);
-    const approval = (reason: string) => ({
-      requestId: request.id,
-      agentId,
-      threadId,
-      turnId: params.turnId,
-      kind: "permissions" as const,
-      command: null,
-      cwd: null,
-      reason: channelId
-        ? `${reason} ${sourceText("status.agent.creditMediaChannel", { channel: this.#channels.store.get(channelId).name })}`
-        : reason,
-      grantRoot: null,
-      permissions: null,
-    });
-    return yield* tools.handle({
-      agentId,
-      turnId: params.turnId,
-      tool: params.tool,
-      arguments: params.arguments,
-      readInputs: (paths) => this.#readCreditMediaInputs(agentId, paths),
-      approve: (reason, offer) =>
-        this.#attention.awaitMediaApproval(client, request, approval(reason), offer).pipe(
-          Effect.map((answer) => ({
-            accepted: answer.decision === "accept",
-            choice: answer.choice ?? null,
-            via: answer.decision === "cancel" ? null : answer.via,
-          })),
-        ),
-      hold: (reason, hold) => this.#attention.awaitCreditsHold(client, request, approval(reason), hold),
-      requesters: this.#turnRequesters(agentId, params.turnId),
-      show: (media: CreditMediaShown) =>
-        Effect.uninterruptible(
-          this.#addGeneratedMessage({
-            agentId,
-            threadId,
-            turnId: params.turnId,
-            messageId,
-            file: { bytes: media.bytes, name: media.name, mimeType: media.mimeType },
-            text: "",
-            itemType: media.itemType,
-            eventType: "response.attachments-added",
-            detail: () => ({ turnId: params.turnId, messageId, attachmentCount: 1 }),
-            imageGeneration: media.imageGeneration,
-            videoGeneration: media.videoGeneration,
-          }),
-        ),
-    });
-  });
-
-  #readCreditMediaInputs(agentId: string, paths: readonly string[]) {
-    if (paths.length === 0) return Effect.succeed([]);
-    return Effect.acquireUseRelease(
-      this.#attachments.openSources(agentId, [...paths], { allowAnyReadablePath: true }),
-      (sources) =>
-        Effect.tryPromise({
-          try: () =>
-            Promise.all(
-              paths.map(async (path, index) => {
-                const source = sources[index];
-                if (!source) throw new CreditMediaToolInputFailed(`${path} was not found.`);
-                const { size } = await source.handle.stat();
-                if (size === 0) throw new CreditMediaToolInputFailed(`${path} is empty.`);
-                if (size > CREDIT_MEDIA_INPUT_LIMIT_BYTES)
-                  throw new CreditMediaToolInputFailed(
-                    `${path} is larger than ${CREDIT_MEDIA_INPUT_LIMIT_BYTES / 1024 / 1024} MB. Make a smaller copy first.`,
-                  );
-                const mimeType = attachmentMimeTypeForName(path);
-                if (!CREDIT_MEDIA_INPUT_TYPES.some((type) => type === mimeType))
-                  throw new CreditMediaToolInputFailed(`${path} is not a PNG, JPEG or WebP picture.`);
-                const bytes = Buffer.alloc(size);
-                const { bytesRead } = await source.handle.read(bytes, 0, size, 0);
-                return new Uint8Array(bytes.subarray(0, bytesRead));
-              }),
-            ),
-          catch: (error) =>
-            error instanceof CreditMediaToolInputFailed
-              ? error
-              : new CreditMediaToolInputFailed("CodeBot could not read the input pictures."),
-        }),
-      (sources) => Effect.promise(() => Promise.allSettled(sources.map((source) => source.handle.close()))),
-    ).pipe(
-      Effect.catch((failure) =>
-        Effect.fail(
-          failure instanceof CreditMediaToolInputFailed
-            ? failure
-            : new CreditMediaToolInputFailed("CodeBot could not open the input pictures."),
-        ),
-      ),
-    );
-  }
 
   readonly #mcpServerTool = Effect.fn("CodeBotToolRouter.mcpServerTool")(function* (
     this: CodeBotToolRouter,

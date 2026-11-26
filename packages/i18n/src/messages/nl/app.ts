@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "Threads",
   "app.rail.workflows": "Workflows",
   "app.rail.usage": "Gebruik",
-  "app.rail.creditsAsk": "Vragen wanneer credits nodig zijn",
-  "app.rail.creditsAskSaveFailed": "Kan de vragen over credits niet wijzigen.",
   "app.rail.library": "Bibliotheek",
   "app.rail.providers": "Aanbieders",
   "app.rail.crm": "CRM",

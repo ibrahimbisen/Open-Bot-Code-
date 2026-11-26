@@ -7,22 +7,22 @@ const CHECK_INTERVAL_MS = 5_000;
 const START_RETRY_DELAYS_MS = [10_000, 30_000, 60_000, 2 * 60_000, 5 * 60_000, 10 * 60_000];
 const RETRY_PHASES: ReadonlySet<HostPhase> = new Set(["error", "idle", "unconfigured"]);
 
-export interface HostedServerStartRetryOptions {
+export interface HostStartRetryOptions {
   hostPhase: () => HostPhase;
   startHost: () => Effect.Effect<unknown, RemoteWorkflowError>;
   onError: (message: string, error: unknown) => void;
   now?: () => number;
 }
 
-export class HostedServerStartRetry {
-  readonly #options: HostedServerStartRetryOptions;
+export class HostStartRetry {
+  readonly #options: HostStartRetryOptions;
   readonly #now: () => number;
   #timer: ReturnType<typeof setInterval> | null = null;
   #pending: Deferred.Deferred<void, RemoteWorkflowError> | null = null;
   #startFailures = 0;
   #nextStartAt = 0;
 
-  constructor(options: HostedServerStartRetryOptions) {
+  constructor(options: HostStartRetryOptions) {
     this.#options = options;
     this.#now = options.now ?? Date.now;
   }
@@ -59,7 +59,7 @@ export class HostedServerStartRetry {
     }).pipe(Effect.uninterruptible);
   }
 
-  readonly #tickEffect = Effect.fn("HostedServerStartRetry.tick")(function* (this: HostedServerStartRetry) {
+  readonly #tickEffect = Effect.fn("HostStartRetry.tick")(function* (this: HostStartRetry) {
     const now = this.#now();
     const phase = this.#options.hostPhase();
     if (phase === "online") {

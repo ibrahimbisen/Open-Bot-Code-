@@ -146,8 +146,6 @@ export const messages = {
   "error.agent.automationPayloadTooLong": "载荷超过 {limit} 个字符。",
   "error.agent.automationRateLimited": "过去一小时内本地脚本运行了该助手的自动化任务 {limit} 次，请稍后再试。",
   "error.agent.workspaceOnlyMacOnly": "该服务商的“仅工作区”仅在 macOS 上可用，请在助手设置中选择完全访问。",
-  "error.agent.lowMemory":
-    "该服务器内存不足。你的消息会在队列中等待，内存释放后自动开始。更大的套餐可为服务器提供更多内存。",
   "error.agent.lowMemoryServer": "该服务器内存不足。你的消息会在队列中等待，内存释放后自动开始。",
   "error.agent.workspaceOnlyToolMissing":
     "“仅工作区”需要 {tool}，但 CodeBot 没有找到它。请安装它，或在助手设置中选择完全访问。",
@@ -163,8 +161,6 @@ export const messages = {
   "error.agent.screenCaptureUnavailable": "这台电脑不支持截屏。",
   "error.agent.screenCaptureShared": "在 Slack、Discord、Telegram 对话中无法使用截屏，因为其他人也会收到这些文件。",
   "error.agent.screenCaptureDeclined": "用户未允许本次截屏，没有截取任何内容。",
-  "error.agent.creditMediaDeclined": "用户未允许此次生成。未花费任何积分。",
-  "error.agent.creditMediaNotSaved": "文件已生成，但 CodeBot 无法将其保存到聊天中。",
   "error.agent.mcpServerDeclined": "用户未允许这次 MCP 服务器更改，未做任何更改。",
   "error.agent.mcpToolDeclined": "用户未允许这次 MCP 工具调用，工具没有运行。",
   "error.agent.mcpServerNotSaved": "该 MCP 服务器没有响应，因此未保存。{error}",

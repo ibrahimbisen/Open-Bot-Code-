@@ -1,6 +1,5 @@
 import {
   isWorkflowMediaSide,
-  WORKFLOW_CATALOG_SOURCES,
   WORKFLOW_MEDIA_ASPECTS,
   WORKFLOW_MEDIA_CUSTOM_ASPECT,
   WORKFLOW_MEDIA_KINDS,
@@ -16,21 +15,17 @@ import {
   type WorkflowMediaKind,
   type WorkflowMediaModel,
   type WorkflowMediaOption,
-  type WorkflowMediaPrice,
-  type WorkflowMediaPriceRequest,
   type WorkflowMediaSize,
   workflowMediaAspects,
   workflowMediaResolutions,
   workflowMediaSpecs,
   workflowVideoDurations,
 } from "@codebot/contracts/ipc";
-import { isOneOf } from "@codebot/contracts/runtime-values";
 import type { AppTextKey } from "@codebot/i18n";
 import { Play } from "@codebot/ui";
-import { createEffect, createSignal, Show, untrack } from "solid-js";
+import { Show, untrack } from "solid-js";
 import { useText } from "../../text";
-import { CreditIcon } from "../credits/CreditIcon";
-import { resultValue, useBoard, type WfnBoard } from "./workflow-board";
+import { resultValue, useBoard } from "./workflow-board";
 import { type InputRole, orStoredPicture, pictureUrl as storedPictureUrl } from "./workflow-input-pictures";
 import { asString, oneOf, useField, useLocked, useStepRun, useTextField } from "./workflow-node-parts";
 
@@ -196,51 +191,9 @@ export function typedSide(text: string, current: number): number {
   return Math.min(WORKFLOW_MEDIA_SIZE_MAX, Math.max(WORKFLOW_MEDIA_SIZE_MIN, value));
 }
 
-const openQuotes = new WeakMap<WfnBoard, Map<string, Promise<WorkflowMediaPrice>>>();
-
-function sharedQuote(
-  board: WfnBoard,
-  choices: string,
-  quote: (request: WorkflowMediaPriceRequest) => Promise<WorkflowMediaPrice>,
-  request: WorkflowMediaPriceRequest,
-) {
-  const open = openQuotes.get(board) ?? new Map<string, Promise<WorkflowMediaPrice>>();
-  openQuotes.set(board, open);
-  const known = open.get(choices);
-  if (known) return known;
-  const asked = quote(request).finally(() => open.delete(choices));
-  open.set(choices, asked);
-  return asked;
-}
-
-function useMediaPrice(request: () => WorkflowMediaPriceRequest | null) {
-  const board = useBoard();
-  const [credits, setCredits] = createSignal<number | null>(null);
-  let asked = 0;
-  const key = () => {
-    const next = request();
-    return next && board.catalogs().mediaPrice ? JSON.stringify(next) : null;
-  };
-  createEffect(key, (choices) => {
-    asked += 1;
-    const sent = asked;
-    setCredits(null);
-    const next = untrack(request);
-    const quote = untrack(() => board.catalogs().mediaPrice);
-    if (!choices || !next || !quote) return;
-    sharedQuote(board, choices, quote, next).then(
-      (answer) => {
-        if (sent === asked) setCredits(answer.credits);
-      },
-      () => undefined,
-    );
-  });
-  return credits;
-}
-
 export function useMediaStep(id: string, defaults: { prompt?: string | undefined; aspect?: Aspect | undefined } = {}) {
   const board = useBoard();
-  const { t, format } = useText();
+  const { t } = useText();
   const key = () => id;
   const [kind] = useField<WorkflowMediaKind>(key, "media", "image", oneOf(WORKFLOW_MEDIA_KINDS));
   const [prompt, setPrompt] = useTextField(key, "prompt", defaults.prompt ?? "");
@@ -304,46 +257,7 @@ export function useMediaStep(id: string, defaults: { prompt?: string | undefined
   const frameCount = () => (kind() === "video" ? model()?.frameCount : undefined);
   const resolutions = () => resolutionsBySize(workflowMediaResolutions(model(), kind()));
   const durations = () => workflowVideoDurations(model());
-  const price = useMediaPrice(() => {
-    const chosen = model();
-    if (!chosen?.credits || !isOneOf(WORKFLOW_CATALOG_SOURCES, chosen.provider)) return null;
-    const { aspect, duration, resolution, transparent, options } = specs();
-    return {
-      model: chosen.id,
-      kind: kind(),
-      aspect,
-      duration,
-      resolution,
-      transparent,
-      ...(options.length > 0 ? { options } : {}),
-    };
-  });
   const [batch, setBatch] = useField<number>(key, "batch", 1, asBatch);
-  const total = () => {
-    const credits = price();
-    return credits === null ? null : credits * batch();
-  };
-  const balance = () => (model()?.provider === "codebot" ? board.catalogs().creditBalance : undefined);
-  const exceeds = (credits: number | null) => {
-    const available = balance();
-    return typeof available === "number" && credits !== null && credits > available;
-  };
-  const short = () => exceeds(total());
-  const retryShort = () => exceeds(price());
-  const priced = (label: string, isShort: boolean) =>
-    isShort ? [t("billing.credits.notEnough"), label].join(", ") : label;
-  const runLabel = () => {
-    const credits = total();
-    return credits === null || modelMissing()
-      ? undefined
-      : priced(t("workflow.node.runPriceLabel", { credits: format.number(credits) }), short());
-  };
-  const retryLabel = () => {
-    const credits = price();
-    return credits === null
-      ? undefined
-      : priced(t("workflow.node.retryPriceLabel", { credits: format.number(credits) }), retryShort());
-  };
   const chooseFrame = (frame: Frame) => {
     if (frame !== WORKFLOW_MEDIA_CUSTOM_ASPECT) {
       board.setField(id, "aspect", frame);
@@ -408,14 +322,8 @@ export function useMediaStep(id: string, defaults: { prompt?: string | undefined
     setMode,
     mediaInputs,
     frameCount,
-    price,
-    total,
     batch,
     setBatch,
-    short,
-    retryShort,
-    runLabel,
-    retryLabel,
     chooseFrame,
     voice,
     setVoice,
@@ -438,22 +346,12 @@ export type MediaStep = ReturnType<typeof useMediaStep>;
 
 export const resolutionName = (value: string) => value.replace(/k$/u, "K");
 
-export function RunContent(props: { credits: number | null; takes?: number; modelMissing?: boolean }) {
-  const { t, format } = useText();
+export function RunContent(props: { takes?: number; modelMissing?: boolean }) {
+  const { t } = useText();
   return (
     <Show when={!props.modelMissing} fallback={t("workflow.image.modelUnavailable")}>
-      <Show
-        when={props.credits !== null}
-        fallback={
-          <>
-            <Play aria-hidden="true" />
-            {t("workflow.node.run")}
-          </>
-        }
-      >
-        <CreditIcon class="wfn-run-credits-icon" />
-        {format.number(props.credits ?? 0)}
-      </Show>
+      <Play aria-hidden="true" />
+      {t("workflow.node.run")}
       <Show when={(props.takes ?? 1) > 1}>
         <span class="wfn-run-takes">{t("workflow.media.batchCount", { value: String(props.takes) })}</span>
       </Show>

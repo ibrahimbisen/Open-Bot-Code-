@@ -104,7 +104,6 @@ import {
   DEFAULT_DYNAMIC_ISLAND_PREFERENCE,
   DEFAULT_EXTERNAL_LINK_PREFERENCE,
   DEFAULT_MACHINE_ALERT_SETTINGS,
-  DEFAULT_MEDIA_APPROVAL_CREDITS_SETTING,
   DEFAULT_MEMORY_REVIEW_INTERVAL,
   DEFAULT_PROMPT_CACHE_TTL,
   DEFAULT_PROVIDER_ACCOUNT_ID,
@@ -124,7 +123,6 @@ import {
   type ExternalLinkPreference,
   type FilePreview,
   folderInside,
-  type HostedSiteSummary,
   type HostStatus,
   hostAgentMemoryLimit,
   hostBrowsingMemory,
@@ -146,7 +144,6 @@ import {
   MESSAGE_PIN_THREAD_TITLE_LIMIT,
   MESSAGE_PINS_LIMIT,
   MESSAGE_PINS_LIST_LIMIT,
-  type MediaApprovalCreditsSetting,
   type MemoryReviewPreference,
   type MessagePinner,
   nextBrowserProfileHue,
@@ -165,7 +162,6 @@ import {
   type ProviderModelVisibility,
   parseAgentAccessChange,
   parseBrowserProxyAddress,
-  parseMediaApprovalCreditsUpdate,
   parseProviderModelVisibilityChange,
   parseSetMcpAccessInput,
   providerEnvironmentProblem,
@@ -226,7 +222,6 @@ import {
   STORY_FOREIGN_AGENT,
   STORY_FOREIGN_MODEL,
   STORY_FOREIGN_SERVER_ID,
-  STORY_HOSTED_SITES,
   STORY_MARKETPLACE_AGENT_DETAILS,
   STORY_MARKETPLACE_AGENTS,
   STORY_MCP_SERVERS,
@@ -242,11 +237,9 @@ import {
 } from "./fixtures";
 import { mockAgentAnalytics, mockHostAnalytics } from "./mock-agent-analytics";
 import { createMockAuth, type MockAuthOptions } from "./mock-auth";
-import { createMockBilling, previewBillingServers } from "./mock-billing";
 import { createMockBitwardenConnector } from "./mock-bitwarden-connector";
 import { createMockBrowser, type MockBrowserOptions } from "./mock-browser";
 import { createMockChannels, type MockChannelSeed } from "./mock-channels";
-import { createMockCredits } from "./mock-credits";
 import { type MockCrmSeed, mockCrm } from "./mock-crm";
 import { createMockEvents } from "./mock-events";
 import { createMockGitHubConnector } from "./mock-github-connector";
@@ -256,11 +249,7 @@ import { createMockHostTimezone } from "./mock-host-timezone";
 import { createMockHostTurnLimits } from "./mock-host-turn-limits";
 import { createMockHostUpdate, type MockHostUpdateOptions } from "./mock-host-update";
 import { createMockHostVoiceModel } from "./mock-host-voice-model";
-import { createMockHostedServers } from "./mock-hosted-servers";
-import { createMockLicense } from "./mock-license";
-import { createMockLinkAccount } from "./mock-link-account";
 import { createMockMessaging } from "./mock-messaging";
-import { createMockNearWallet } from "./mock-near-wallet";
 import { createMockOnePasswordConnector } from "./mock-onepassword-connector";
 import { createMockPasswordManagers } from "./mock-password-managers";
 import { createMockProviderRuntimes, type MockProviderRuntimeOptions } from "./mock-provider-runtimes";
@@ -517,7 +506,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
   let promptCacheTtl: PromptCacheTtlSetting = { ...DEFAULT_PROMPT_CACHE_TTL };
   let claudeUserSetup: ClaudeUserSetupSetting = { ...DEFAULT_CLAUDE_USER_SETUP };
   let cacheExpiryCompaction: CacheExpiryCompactionSetting = { ...DEFAULT_CACHE_EXPIRY_COMPACTION };
-  let mediaApprovalCredits: MediaApprovalCreditsSetting = { ...DEFAULT_MEDIA_APPROVAL_CREDITS_SETTING };
   let claudeCompactWindow: ClaudeCompactWindowSetting = { ...DEFAULT_CLAUDE_COMPACT_WINDOW };
   const providerVariables = new Map<
     ProviderEnvironmentProvider,
@@ -710,7 +698,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
   const usage = clone(options.usage ?? STORY_USAGE);
   const usageResets = new Map<string, number>();
   let agentCounter = agents.length;
-  let hostedSites = clone(STORY_HOSTED_SITES);
   let detectionSettings: ProviderDetectionSettings = clone(DEFAULT_PROVIDER_DETECTION_SETTINGS);
   let customAgents: CustomAgentSummary[] = [];
   const registryEntry: AcpRegistryEntry = {
@@ -1296,7 +1283,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       ? Promise.resolve(clone((routineRuns.get(routineId) ?? []).slice(0, limit)))
       : mockChannels.listChannelRoutineRuns({ channelId: owner.id, routineId, limit }),
   );
-  const billingPlans = previewBillingServers();
 
   async function createMockAgent(input: CreateAgentInput, welcome: boolean): Promise<ClientAgentSummary> {
     const agent = createAgentSummary({
@@ -1712,60 +1698,12 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     ),
     auth: mockAuth.auth,
     skills: mockSkills.skills,
-    hostedSites: {
-      list: async () => ({
-        sites: clone(hostedSites),
-        limit: 3,
-        used: hostedSites.filter((site) => site.status === "active").length,
-      }),
-      chooseDirectory: async () => "/mock/CodeBot/Sites/launch-notes",
-      publish: async (input) => {
-        const hostname = `${input.title.toLowerCase().replaceAll(/[^a-z0-9]+/gu, "-")}.openbot.site`;
-        const site: HostedSiteSummary = {
-          id: `site-${hostedSites.length + 1}`,
-          hostname,
-          url: `https://${hostname}`,
-          title: input.title,
-          description: input.description,
-          framework: "vanilla",
-          status: "active",
-          fileCount: 12,
-          size: 786_432,
-          expiresAt: null,
-          updatedAt: new Date().toISOString(),
-          serverId: "host-preview",
-        };
-        hostedSites = [site, ...hostedSites];
-        return clone(site);
-      },
-      replace: async (input) => {
-        const existing = hostedSites.find((site) => site.id === input.siteId);
-        if (!existing) throw new Error("Site not found");
-        const replaced: HostedSiteSummary = {
-          ...existing,
-          title: input.title,
-          description: input.description,
-          updatedAt: new Date().toISOString(),
-        };
-        hostedSites = hostedSites.map((site) => (site.id === input.siteId ? replaced : site));
-        return clone(replaced);
-      },
-      delete: async ({ siteId }) => {
-        hostedSites = hostedSites.filter((site) => site.id !== siteId);
-      },
-    },
     githubConnector: createMockGitHubConnector(),
-    linkAccount: createMockLinkAccount(),
-    nearWallet: createMockNearWallet(),
     onePasswordConnector: createMockOnePasswordConnector(),
     bitwardenConnector: createMockBitwardenConnector(),
     passwordManagers: createMockPasswordManagers(),
     vault: createMockVault(),
-    billing: createMockBilling(billingPlans),
-    license: createMockLicense(),
-    credits: createMockCredits(),
     routineFeed: createMockRoutineFeed(),
-    hostedServers: createMockHostedServers(billingPlans),
     customProviders: {
       list: async () => clone(customProviders),
       save: async (input) => {
@@ -3570,11 +3508,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       },
       respondToApproval: async () => undefined,
       readPendingApproval: async () => null,
-      readMediaApproval: async () => ({ media: null, hold: null }),
-      respondToMediaApproval: async () => undefined,
-      respondToCreditsHold: async () => null,
-      setCreditsAskMuted: async () => undefined,
-      readCreditsAskMuted: async () => ({ muted: false }),
       listPendingPrompts: async () => (runtimeSnapshot ? clone(runtimeSnapshot.pendingPrompts) : []),
       respondToBrowserSecret: async (input) => {
         for (const listener of agentListeners)
@@ -3745,13 +3678,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
         if (typeof enabled !== "boolean") throw new Error("Invalid cache expiry compaction setting.");
         cacheExpiryCompaction = { enabled };
         return clone(cacheExpiryCompaction);
-      },
-      getMediaApprovalCredits: async () => clone(mediaApprovalCredits),
-      setMediaApprovalCredits: async (update) => {
-        const parsed = parseMediaApprovalCreditsUpdate(update);
-        if (!parsed) throw new Error("Invalid media approval credits.");
-        mediaApprovalCredits = { ...mediaApprovalCredits, ...parsed };
-        return clone(mediaApprovalCredits);
       },
       getClaudeUserSetup: async () => clone(claudeUserSetup),
       setClaudeUserSetup: async (enabled) => {

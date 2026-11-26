@@ -73,13 +73,7 @@ import { ConversationBrowserLocation } from "./ConversationBrowserLocation";
 import { ConversationBrowserTakeover } from "./ConversationBrowserTakeover";
 import { ConversationQuestionPrompt } from "./ConversationQuestionPrompt";
 import { chatSearchCanOpen, chatSearchOpensMessage } from "./chat-search";
-import {
-  ApprovalCard,
-  NearPaymentCard,
-  preloadConversationCards,
-  QuestionPromptBubble,
-  UiBlockPrompt,
-} from "./conversation-cards";
+import { ApprovalCard, preloadConversationCards, QuestionPromptBubble, UiBlockPrompt } from "./conversation-cards";
 import { useConversationController } from "./conversation-controller-context";
 import { conversationPort } from "./conversation-port";
 import { isIncomingAgentMessage } from "./conversation-read-state";
@@ -89,7 +83,6 @@ import { MarketplaceSuggestionChatCard, marketplaceSuggestionKnown } from "./Mar
 import { McpSignInChatCard } from "./McpSignInChatCard";
 import { useMessageBackdropAction, watchAgentBackdrops } from "./message-backdrop";
 import { createMessageImageFiles, decodedPath } from "./message-image-files";
-import { useNearPaymentApproval } from "./near-payment-approval";
 import { RoutineChatCard } from "./RoutineChatCard";
 import { createChatWebhookRoutines, RoutineWebhookChatCard } from "./RoutineWebhookChatCard";
 import { createRoutineRunFailures, type RoutineRunFailureSource } from "./routine-run-failures";
@@ -361,9 +354,6 @@ export function ConversationTimeline() {
     () => props.isOwnSender,
   );
   const messageImageFiles = props.runtime ? undefined : createMessageImageFiles(runtime.agent);
-  const { payment: nearPayment, wallet: nearWallet } = useNearPaymentApproval(
-    () => props.server?.kind === "local" && !props.runtime,
-  );
   const withdrawFeedback = createMemo(() => {
     const agentId = props.agent?.id;
     const server = props.server;
@@ -409,7 +399,6 @@ export function ConversationTimeline() {
       onApprove={() => approve(approval)}
       onReject={() => props.onRespondToApproval("decline")}
       onAlwaysAllow={props.onAlwaysAllowApproval}
-      media={props.mediaApproval}
     />
   );
   async function approve(approval: AgentApproval) {
@@ -1718,21 +1707,7 @@ export function ConversationTimeline() {
               </div>
             </Show>
             <Show keyed when={props.approval ?? heldFeedback()}>
-              {(approval) => (
-                <Loading>
-                  <Show when={nearPayment(approval)} fallback={approvalCard(approval)}>
-                    {(payment) => (
-                      <NearPaymentCard
-                        payment={payment()}
-                        status={nearWallet.state.status}
-                        actions={nearWallet.actions}
-                        onApprove={() => approve(approval)}
-                        onReject={() => props.onRespondToApproval("decline")}
-                      />
-                    )}
-                  </Show>
-                </Loading>
-              )}
+              {(approval) => <Loading>{approvalCard(approval)}</Loading>}
             </Show>
             <Show when={props.usageLimitAsk}>
               {(ask) => (

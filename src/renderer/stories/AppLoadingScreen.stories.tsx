@@ -42,7 +42,7 @@ export const QuietLoading: Story = {
 
 export const QuietStartingServer: Story = {
   render: () => (
-    <ServerConnectionNotice name="My server" phase="waking" initial loadingScene="quiet" onRetry={() => {}} />
+    <ServerConnectionNotice name="My server" phase="connecting" initial loadingScene="quiet" onRetry={() => {}} />
   ),
 };
 
@@ -57,48 +57,13 @@ export const HistoryLoading: Story = {
 };
 
 export const StartingServer: Story = {
-  render: () => <ServerConnectionNotice name="My server" phase="waking" initial onRetry={() => {}} />,
-};
-export const StartingCodeBot: Story = {
-  render: () => (
-    <ServerConnectionNotice
-      name="My server"
-      phase="waking"
-      start={{ step: "codebot", startedAt: Date.now() - 4 * 60_000 }}
-      initial
-      onRetry={() => {}}
-    />
-  ),
-};
-export const StartRestoring: Story = {
-  render: () => (
-    <ServerConnectionNotice
-      name="My server"
-      phase="waking"
-      start={{ step: "restore", startedAt: Date.now() - 3 * 60_000 }}
-      initial
-      onRetry={() => {}}
-    />
-  ),
-};
-export const StartRateLimited: Story = {
-  render: () => (
-    <ServerConnectionNotice
-      name="My server"
-      phase="waking"
-      start={{ step: "provider_limit", startedAt: Date.now() - 45_000 }}
-      initial={false}
-      onRetry={() => {}}
-    />
-  ),
+  render: () => <ServerConnectionNotice name="My server" phase="connecting" initial onRetry={() => {}} />,
 };
 export const UpdatingServer: Story = {
   render: () => <ServerConnectionNotice name="My server" phase="updating" initial={false} onRetry={() => {}} />,
 };
 export const StartFailed: Story = {
-  render: () => (
-    <ServerConnectionNotice name="My server" phase="blocked" issue="start_timeout" initial onRetry={() => {}} />
-  ),
+  render: () => <ServerConnectionNotice name="My server" phase="blocked" initial onRetry={() => {}} />,
 };
 export const Reconnecting: Story = {
   render: () => (

@@ -141,7 +141,6 @@ export const messages = {
   "error.team.claudeUserSetupUnsupported": "この接続は Claude Code 設定のスイッチに対応していません。",
   "error.team.claudeCompactWindowUnsupported": "この接続は Claude の圧縮サイズに対応していません。",
   "error.team.cacheExpiryCompactionUnsupported": "この接続はキャッシュの期限切れ前の圧縮に対応していません。",
-  "error.team.mediaApprovalCreditsUnsupported": "この接続はクレジット確認の上限に対応していません。",
   "error.team.mediaApprovalCreditsInvalid": "0 から 100,000 までの整数でクレジットを入力してください。",
   "error.team.providerEnvironmentUnsupported": "この接続はプロバイダーの変数に対応していません。",
   "error.team.modelVisibilityUnsupported": "この接続はモデル一覧に対応していません。",
@@ -161,9 +160,6 @@ export const messages = {
   "error.team.machineResourcesUnsupported": "この接続ではマシンの使用状況を利用できません。",
   "error.team.machineAlertMemberInvalid":
     "マシンのアラートを受け取れるのは、このサーバーのオーナーまたは管理者のみです。",
-  "error.team.hostedSitesUnsupported": "この接続ではサイトを利用できません。",
-  "error.team.hostedSitesUnregistered": "このサーバーは CodeBot に登録されていないため、サイトがありません。",
-  "error.team.hostedSiteNotFound": "サイトが見つかりません。",
   "error.team.markUnreadUnsupported": "このクライアントは会話を未読にする操作に対応していません。",
   "error.team.inviteServiceUnavailable": "招待サービスを利用できません。",
   "error.team.logoNotFound": "サーバーのロゴが見つかりません。",
@@ -208,7 +204,4 @@ export const messages = {
   "error.team.backgroundProcessesUnsupported": "この接続ではバックグラウンドプロセスを使用できません。",
   "error.team.providerUseUnsupported": "この接続ではプロバイダーのオン・オフを切り替えられません。",
   "error.team.providerUseInvalid": "このプロバイダーにはオン・オフの切り替えがありません。",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "このサーバーはメディア承認でのモデル選択に対応していません。サーバーの CodeBot を更新してください。",
-  "error.team.mediaApprovalChoiceInvalid": "メディア承認の選択が無効です。",
 } as const satisfies PartialTranslation<typeof source>;

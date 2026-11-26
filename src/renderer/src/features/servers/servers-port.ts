@@ -33,10 +33,6 @@ export interface ServersPort {
     CodeBotDesktopApi["hostAdmin"],
     "cancelUpdate" | "getUpdateStatus" | "restartHost" | "rotateHostKey" | "startUpdate" | "updateIdentity"
   >;
-  hostedServers: Pick<
-    CodeBotDesktopApi["hostedServers"],
-    "list" | "openCheckout" | "openCustomCheckout" | "restart" | "wake"
-  >;
   localServers: CodeBotDesktopApi["localServers"];
   host: Pick<
     CodeBotDesktopApi["host"],

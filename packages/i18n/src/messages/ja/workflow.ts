@@ -56,8 +56,6 @@ export const messages = {
   "workflow.node.locked": "ロック中",
   "workflow.node.missingInput": "このステップを実行するには入力を接続してください。",
   "workflow.node.run": "実行",
-  "workflow.node.runPriceLabel": "実行。価格（クレジット）: {credits}",
-  "workflow.node.retryPriceLabel": "再試行。価格（クレジット）: {credits}",
   "workflow.node.running": "実行中",
   "workflow.node.waiting": "順番待ち",
   "workflow.node.stop": "停止",

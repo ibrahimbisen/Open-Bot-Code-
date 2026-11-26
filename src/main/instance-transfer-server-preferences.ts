@@ -10,11 +10,9 @@ import {
   isServerNotificationLevel,
   isSkillLearningMode,
   type MachineAlertSettings,
-  type MediaApprovalCreditsSetting,
   type MemoryReviewPreference,
   type PromptCacheTtl,
   parseHostTurnLimitsInput,
-  parseMediaApprovalCreditsSetting,
   type ServerNotificationLevel,
   type SkillLearningPreference,
 } from "@codebot/contracts/ipc";
@@ -48,7 +46,6 @@ export interface TransferServerPreferencePort {
   browsingMemory: Preference<{ enabled: boolean }>;
   claudeUserSetup: Preference<boolean>;
   cacheExpiryCompaction: Preference<boolean>;
-  mediaApprovalCredits: Preference<MediaApprovalCreditsSetting>;
   claudeCompactWindow: Preference<number | null>;
   machineAlerts: Preference<MachineAlertSettings>;
   modelVisibility: Preference<HiddenModels>;
@@ -97,12 +94,6 @@ function parseCompactWindow(value: unknown): number | null {
   return value;
 }
 
-function parseMediaApprovalCredits(value: unknown): MediaApprovalCreditsSetting {
-  const setting = parseMediaApprovalCreditsSetting(value);
-  if (!setting) throw new Error("Media approval credits are required.");
-  return setting;
-}
-
 function parseMachineAlerts(value: unknown): MachineAlertSettings {
   return { ...decodeMachineAlertSettings(value), responsibleMemberId: null };
 }
@@ -143,7 +134,6 @@ function savers(
     browsingMemory: (value) => save(port.browsingMemory, parseBrowsingMemory, value),
     claudeUserSetup: (value) => save(port.claudeUserSetup, parseBoolean, value),
     cacheExpiryCompaction: (value) => save(port.cacheExpiryCompaction, parseBoolean, value),
-    mediaApprovalCredits: (value) => save(port.mediaApprovalCredits, parseMediaApprovalCredits, value),
     claudeCompactWindow: (value) => save(port.claudeCompactWindow, parseCompactWindow, value),
     machineAlerts: (value) => save(port.machineAlerts, parseMachineAlerts, value),
     modelVisibility: (value) => save(port.modelVisibility, parseHiddenModels, value),
@@ -164,7 +154,6 @@ const KEYS: readonly (keyof TransferServerPreferencePort)[] = [
   "browsingMemory",
   "claudeUserSetup",
   "cacheExpiryCompaction",
-  "mediaApprovalCredits",
   "claudeCompactWindow",
   "machineAlerts",
   "modelVisibility",
@@ -184,7 +173,6 @@ export function readServerPreferences(port: TransferServerPreferencePort, owner:
     browsingMemory: port.browsingMemory.get(),
     claudeUserSetup: port.claudeUserSetup.get(),
     cacheExpiryCompaction: port.cacheExpiryCompaction.get(),
-    mediaApprovalCredits: port.mediaApprovalCredits.get(),
     claudeCompactWindow: port.claudeCompactWindow.get(),
     machineAlerts: { ...port.machineAlerts.get(), responsibleMemberId: null },
     modelVisibility: port.modelVisibility.get(),

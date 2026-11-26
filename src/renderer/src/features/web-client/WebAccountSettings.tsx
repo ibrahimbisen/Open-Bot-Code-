@@ -3,8 +3,6 @@ import type { AppLanguage } from "@codebot/contracts/app-language";
 import type { AvatarColor, CentralAuthUser } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import {
-  Button,
-  CreditCard,
   Item,
   ItemActions,
   ItemContent,
@@ -90,7 +88,6 @@ export interface WebAccountSettingsProps {
   onChangeLanguage: (language: AppLanguage) => void;
   appearance: AppAppearance;
   onChangeAppearance: (appearance: AppAppearance) => void;
-  onOpenBilling: () => void;
   onSignOut: () => Promise<void>;
   notifications: WebNotificationSettings;
   notificationFocusRequest?: { serverId: string; nonce: number } | null | undefined;
@@ -189,20 +186,6 @@ export default function WebAccountSettings(props: WebAccountSettingsProps) {
                 );
               })}
             </Tabs.List>
-            <div class="settings-modal-nav">
-              <Button
-                variant="ghost"
-                type="button"
-                class="settings-modal-nav-item"
-                onClick={() => {
-                  props.onOpenChange(false);
-                  props.onOpenBilling();
-                }}
-              >
-                <CreditCard aria-hidden="true" />
-                <span>{t("account.menu.billing")}</span>
-              </Button>
-            </div>
           </>
         }
       >

@@ -1,9 +1,6 @@
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   BROWSER_TAKEOVER_REASONS,
-  isNearRecipient,
-  isNearRuleDomain,
-  NEAR_WALLET_LIMITS,
   VAULT_PASSWORD_LIMIT,
   VAULT_TEXT_LIMIT,
   type VaultContactFields,
@@ -370,61 +367,6 @@ export const BROWSER_TOOL_DEFINITIONS = [
           message: "Use expiry, or expMonth and expYear, not both.",
         }),
       timeoutMs: timeout,
-    },
-  }),
-  browserTool({
-    name: "request_link_payment",
-    description:
-      "Pay with the user's Link account (link.com). The user approves this one payment in Link; the call waits up to 5 minutes. On approval it returns a cardId of a one-time card for fill_card. Call it once per purchase, with the final total.",
-    shape: {
-      amount: z
-        .number()
-        .int()
-        .positive()
-        .max(100_000_000)
-        .describe("The total in the smallest currency unit, such as cents."),
-      currency: z
-        .string()
-        .regex(/^[A-Za-z]{3}$/)
-        .optional()
-        .describe("ISO 4217 code. Default: the currency of the Link card."),
-      merchantName: requiredString(200),
-      merchantUrl: requiredString(2048).refine((value) => URL.canParse(value) && new URL(value).protocol === "https:", {
-        message: "Use the https address of the merchant's site.",
-      }),
-      context: z
-        .string()
-        .trim()
-        .min(100)
-        .max(2000)
-        .describe("What you buy, the quantity, and why. The user reads it in Link."),
-    },
-  }),
-  browserTool({
-    name: "request_near_payment",
-    description:
-      "Pay with the user's NEAR Intents wallet, for a site or service that takes crypto. The owner approves the payment in the chat, unless a rule of the owner allows this recipient for this domain; the call waits for the answer. Call it once per payment. Never call it again after status uncertain: CodeBot finishes that payment.",
-    shape: {
-      domain: z
-        .string()
-        .refine(isNearRuleDomain, { message: "Use the lowercase host name of the site, such as api.example.com." })
-        .describe("The host name of the site or service that asks for the payment."),
-      recipient: z
-        .string()
-        .refine(isNearRecipient, { message: "Use a NEAR account id, or chain:address." })
-        .describe("The NEAR account that the site gives, or chain:address for another chain, such as base:0xab…"),
-      asset: requiredString(NEAR_WALLET_LIMITS.asset).describe("The token symbol, such as USDC, or its asset id."),
-      amount: z
-        .string()
-        .max(NEAR_WALLET_LIMITS.amount)
-        .regex(/^(0|[1-9]\d*)(\.\d+)?$/u)
-        .describe("The amount in whole tokens, as decimal text, such as 1.5."),
-      reason: z
-        .string()
-        .trim()
-        .min(10)
-        .max(NEAR_WALLET_LIMITS.reason)
-        .describe("What the payment buys. The owner reads it."),
     },
   }),
   browserTool({

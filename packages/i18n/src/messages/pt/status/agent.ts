@@ -27,12 +27,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Capturar a tela principal e enviar a imagem ao modelo do agente.",
   "status.agent.screenCaptureChannel":
     "A imagem aparece no canal {channel}, e cada membro deste servidor que lê o canal pode vê-la.",
-  "status.agent.creditImageApproval": "Gerar uma imagem com {model}. Custa {credits} créditos.",
-  "status.agent.creditVideoApproval": "Gerar um vídeo com {model}. Custa {credits} créditos.",
-  "status.agent.creditMediaChannel":
-    "O resultado aparece no canal {channel}, e cada membro deste servidor que lê o canal pode vê-lo.",
-  "status.agent.creditsHoldBalance": "Isso usa {credits} créditos, e o saldo é de {balance} créditos.",
-  "status.agent.creditsHoldAgentsOff": "Os agentes deste servidor não podem usar créditos.",
   "status.agent.screenCapturePermissionNext":
     "Depois, o macOS pode pedir que você permita a Gravação de Tela para o CodeBot.",
   "status.agent.screenCaptureDisplay": "Capturar o monitor {name} e enviar a imagem ao modelo do agente.",
@@ -69,19 +63,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "Excluir o fluxo de trabalho {title} com suas execuções e versões. Suas etapas abertas param.",
   "status.agent.deleteAgents": "Excluir {agents} com seus chats e arquivos. Não é possível desfazer.",
-  "status.agent.nearSignatureReceived": "O CodeBot recebeu a assinatura. Você pode fechar esta aba.",
-  "status.agent.nearSignatureUnknown": "O CodeBot não está aguardando esta assinatura. Comece de novo no CodeBot.",
-  "status.agent.nearPayment": "Pagar {amount} {symbol} para {recipient} pela carteira cripto, para {domain}: {reason}",
-  "status.agent.nearSummaryCreate":
-    "Todos os agentes podem pagar até {amount} USD por dia. Você pode alterar isso depois no CodeBot.",
-  "status.agent.nearSummaryGrant":
-    "Permitir que este app do CodeBot pague pela carteira por {days} dias, dentro das suas regras.",
-  "status.agent.nearSummaryBudget": "Alterar o orçamento diário da carteira para {amount} USD.",
-  "status.agent.nearSummaryAutoPay":
-    "Permitir que o CodeBot pague sem sua assinatura quando uma regra de pagamento permitir. Outros pagamentos continuam pedindo sua aprovação no chat.",
-  "status.agent.nearSummaryPayment": "Aprovar o pagamento de {amount} para {recipient}.",
-  "status.agent.nearSummaryFreeze": "Os agentes não podem pagar por esta carteira até você retomar os pagamentos.",
-  "status.agent.nearSummaryUnfreeze": "Os agentes podem pagar por esta carteira de novo, dentro das suas regras.",
   "status.agent.screenCaptureProgress": "Pedindo para capturar a tela…",
   "status.agent.screenCaptureReviewing": "Analisando a captura de tela…",
   "status.agent.browserOpening": "Abrindo uma página da web…",
@@ -89,7 +70,6 @@ export const messages = {
   "status.agent.browserClicking": "Clicando na página da web…",
   "status.agent.browserTyping": "Digitando na página da web…",
   "status.agent.browserActing": "Usando a página da web…",
-  "status.agent.browserPaying": "Enviando o pagamento…",
   "status.agent.browserReviewing": "Analisando a página da web…",
   "status.agent.memoriesSearching": "Pesquisando suas memórias…",
   "status.agent.chatsSearching": "Pesquisando seus chats anteriores…",

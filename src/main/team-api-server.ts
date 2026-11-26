@@ -114,7 +114,6 @@ import {
   CHANNEL_SEEN_SUBTASKS_CAPABILITY,
   CHANNEL_TASK_CANCEL_CAPABILITY,
   CHANNEL_TASK_WAITS_CAPABILITY,
-  CODEBOT_CREDITS_EVENTS_CAPABILITY,
   COMPUTER_ACTIVITY_CAPABILITY,
   CONNECTORS_CAPABILITY,
   DISCORD_ACCESS_CAPABILITY,
@@ -130,7 +129,6 @@ import {
   HOST_TURN_LIMITS_CAPABILITY,
   HOST_TURN_LIMITS_EVENTS_CAPABILITY,
   HOST_UPDATE_CAPABILITY,
-  HOSTED_SITES_CAPABILITY,
   INSTANCE_TRANSFER_CAPABILITY,
   INSTANCE_TRANSFER_CHUNKS_CAPABILITY,
   INSTANCE_TRANSFER_FULL_COPY_CAPABILITY,
@@ -212,8 +210,6 @@ import {
   WORKFLOWS_CAPABILITY,
   WORKFLOWS_CHANNELS_CAPABILITY,
   WORKFLOWS_CHATS_CAPABILITY,
-  WORKFLOWS_CREDIT_MEDIA_CAPABILITY,
-  WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY,
   WORKFLOWS_GITHUB_CAPABILITY,
   WORKFLOWS_HIGGSFIELD_CAPABILITY,
   WORKFLOWS_MEDIA_CAPABILITY,
@@ -257,7 +253,6 @@ import {
 } from "@codebot/contracts/team-protocol/machine-resources-v1";
 import { MCP_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/mcp-access-v1";
 import { MCP_MANY_SERVERS_CAPABILITY } from "@codebot/contracts/team-protocol/mcp-many-servers-v1";
-import { MEDIA_APPROVAL_CREDITS_CAPABILITY } from "@codebot/contracts/team-protocol/media-approval-credits-v1";
 import { MESSAGE_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/message-pins-v1";
 import { MISTRAL_CODE_SIGN_IN_CAPABILITY } from "@codebot/contracts/team-protocol/mistral-code-sign-in-v1";
 import { MODEL_STEERING_CAPABILITY } from "@codebot/contracts/team-protocol/model-steering-v1";
@@ -465,7 +460,6 @@ import { routeHostTimezone } from "./team-api/route-host-timezone";
 import { routeHostTurnLimits } from "./team-api/route-host-turn-limits";
 import { routeHostUpdate } from "./team-api/route-host-update";
 import { routeHostVoiceModel } from "./team-api/route-host-voice-model";
-import { routeHostedSites } from "./team-api/route-hosted-sites";
 import { routeInstanceTransfer } from "./team-api/route-instance-transfer";
 import { routeInstanceTransferChunks } from "./team-api/route-instance-transfer-chunks";
 import { routeLibraryFolders } from "./team-api/route-library-folders";
@@ -477,8 +471,6 @@ import { routeMcpServers } from "./team-api/route-mcp";
 import { routeMcpAccess } from "./team-api/route-mcp-access";
 import { routeMcpSignIn } from "./team-api/route-mcp-sign-in";
 import { routeMcpSignInApp } from "./team-api/route-mcp-sign-in-app";
-import { routeMediaApprovalChoice } from "./team-api/route-media-approval-choice";
-import { routeMediaApprovalCredits } from "./team-api/route-media-approval-credits";
 import { routeMemoryReview } from "./team-api/route-memory-review";
 import { routeMessageDelete } from "./team-api/route-message-delete";
 import { routeMessagePins } from "./team-api/route-message-pins";
@@ -536,6 +528,7 @@ import { routeWhatsAppWorkingMessage } from "./team-api/route-whatsapp-working-m
 import { routeWorkflowFolders } from "./team-api/route-workflow-folders";
 import { routeWorkflows } from "./team-api/route-workflows";
 import { routeWorkspaceDirectory } from "./team-api/route-workspace-directory";
+import { UNSERVED_TEAM_CAPABILITIES } from "./team-api/unserved-capabilities";
 import { visibleWorkflowIds } from "./team-api/workflow-visibility";
 import { TeamStoreError } from "./team-store";
 
@@ -1279,7 +1272,6 @@ export class TeamApiServer {
         return;
       if ((await routeMachineResources(context, this.#options.machine)) === "handled") return;
       if ((await routeBackgroundProcesses(context, this.#options.backgroundProcesses, hidden)) === "handled") return;
-      if ((await routeHostedSites(context, this.#options.hostedSites)) === "handled") return;
       if ((await routeAgentAdmin(context, this.#options.admin, hidden)) === "handled") return;
       if ((await routeAgentHostSettings(context, this.#options.admin, hidden)) === "handled") return;
       if ((await routeAgentBackupModels(context, this.#options.admin, hidden)) === "handled") return;
@@ -1387,7 +1379,6 @@ export class TeamApiServer {
       if ((await routeClaudeUserSetup(context, this.#options.admin)) === "handled") return;
       if ((await routeClaudeCompactWindow(context, this.#options.admin)) === "handled") return;
       if ((await routeCacheExpiryCompaction(context, this.#options.admin)) === "handled") return;
-      if ((await routeMediaApprovalCredits(context, this.#options.admin)) === "handled") return;
       if ((await routeProviderEnvironment(context, this.#options.admin)) === "handled") return;
       if ((await routeProviderDetection(context, this.#options.admin)) === "handled") return;
       if ((await routeModelVisibility(context, this.#options.admin)) === "handled") return;
@@ -1411,11 +1402,6 @@ export class TeamApiServer {
       if ((await routeContextCompact(context, this.#options.agents, hidden)) === "handled") return;
       if ((await routeAgentWaits(context, this.#options.agents, hidden)) === "handled") return;
       if ((await routePendingApproval(context, this.#options.agents, hidden)) === "handled") return;
-      if (
-        (await routeMediaApprovalChoice(context, this.#options.agents, hidden, this.#options.admin?.creditAsks)) ===
-        "handled"
-      )
-        return;
       if ((await routePendingPrompts(context, this.#options.agents, hidden)) === "handled") return;
       if ((await routePhoneFeedback(context, this.#options.agents)) === "handled") return;
       if ((await routeMessagePins(context, this.#options.agents, this.#options.agentTasks, hidden)) === "handled")
@@ -2782,6 +2768,7 @@ export class TeamApiServer {
     const expanded = protocol !== null && protocol >= 7;
     return teamCapabilitiesVisibleToProtocol(TEAM_CURRENT_CAPABILITIES, protocol ?? TEAM_PROTOCOL_V1).filter(
       (capability) => {
+        if (UNSERVED_TEAM_CAPABILITIES.has(capability)) return false;
         if (!expanded && !legacyTeamCapabilities([capability]).length) return false;
         if (
           capability === "channel-chats-v1" ||
@@ -2863,7 +2850,6 @@ export class TeamApiServer {
         if (capability === SERVER_SAFE_MODE_CAPABILITY) return false;
         if (capability === BACKGROUND_PROCESSES_CAPABILITY) return this.#options.backgroundProcesses !== undefined;
         if (capability === ROUTINES_ONCE_CAPABILITY) return true;
-        if (capability === HOSTED_SITES_CAPABILITY) return this.#options.hostedSites !== undefined;
         if (capability === AGENT_ADMIN_CAPABILITY) return this.#options.admin?.agents !== undefined;
         if (capability === ACP_REGISTRY_CAPABILITY) return this.#options.admin?.acpRegistry !== undefined;
         if (capability === CUSTOM_AGENTS_CAPABILITY) return this.#options.admin?.customAgents !== undefined;
@@ -2962,8 +2948,6 @@ export class TeamApiServer {
           return this.#options.admin?.claudeCompactWindow !== undefined;
         if (capability === CACHE_EXPIRY_COMPACTION_CAPABILITY)
           return this.#options.admin?.cacheExpiryCompaction !== undefined;
-        if (capability === MEDIA_APPROVAL_CREDITS_CAPABILITY)
-          return this.#options.admin?.mediaApprovalCredits !== undefined;
         if (capability === PROVIDER_ENVIRONMENT_CAPABILITY)
           return this.#options.admin?.providerEnvironment !== undefined;
         if (capability === PROVIDER_DETECTION_CAPABILITY) return this.#options.admin?.providerDetection !== undefined;
@@ -3003,8 +2987,6 @@ export class TeamApiServer {
         if (capability === WORKFLOWS_HIGGSFIELD_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_MEDIA_CATALOG_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_MEDIA_CATALOG_V2_CAPABILITY) return this.#options.workflows !== undefined;
-        if (capability === WORKFLOWS_CREDIT_MEDIA_CAPABILITY) return this.#options.workflows !== undefined;
-        if (capability === WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_MEDIA_SERVICE_ACCOUNT_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_STEP_SETTINGS_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_PAUSE_CAPABILITY) return this.#options.workflows !== undefined;
@@ -3240,7 +3222,6 @@ function eventCapability(event: AgentEvent): TeamCurrentCapability | null {
   if (event.type === "host-turn-limits-changed") return HOST_TURN_LIMITS_EVENTS_CAPABILITY;
   if (event.type === "library-folders-changed") return LIBRARY_FOLDERS_EVENTS_CAPABILITY;
   if (event.type === "usage-credits-changed") return USAGE_CREDITS_CAPABILITY;
-  if (event.type === "codebot-credits-changed") return CODEBOT_CREDITS_EVENTS_CAPABILITY;
   if (event.type === "turn-progress") return TEAM_AGENT_ACTIVITY_CAPABILITY;
   if (event.type === "runtime-snapshot") return "agent-runtime-snapshots";
   if (event.type === "sidebar-layout-changed") return "sidebar-layout";

@@ -28,7 +28,6 @@ import {
 import { OpenPanelBase, type OpenPanelOptions } from "@openpanel/web";
 import { Effect, Exit, Scope } from "effect";
 import { parse as parseDomain } from "tldts";
-import type { CreditMediaReport } from "../backend/agent/credit-media-tools";
 import type { FailureSignal } from "../backend/agent/failure-signal";
 import type { ToolUsageSignal } from "../backend/agent/thread-items";
 import type { TurnTiming } from "../backend/agent/turn-lifecycle";
@@ -815,45 +814,6 @@ export class HostAnalytics {
     });
   }
 
-  handleCreditMedia(report: CreditMediaReport): void {
-    if (!this.#client) return;
-    const turn = this.#activeTurns.get(report.turnId);
-    this.#track(
-      "system_credit_media",
-      {
-        ...(turn?.properties ?? this.#agentProperties(report.agentId)),
-        origin: turn?.origin ?? "unknown",
-        media_kind: report.kind,
-        outcome: report.outcome,
-        ...optionalProperty("media_model", report.model),
-        ...optionalProperty("agent_media_model", report.agentModel),
-        ...optionalProperty("model_source", report.modelSource),
-        ...optionalProperty("credits_cost", report.cost),
-        ...optionalProperty("credits_charged", report.charged),
-        ...optionalProperty("resolution", report.resolution),
-        ...optionalProperty("duration_seconds", report.durationSeconds),
-        ...optionalProperty("audio", report.audio),
-        reference_count: report.references,
-        ...(report.hold
-          ? {
-              hold_reason: report.hold.reason,
-              ...optionalProperty("hold_answer", report.hold.answer),
-              ...optionalProperty("hold_via", report.hold.via),
-            }
-          : {}),
-        ...(report.approval
-          ? {
-              approval: report.approval.accepted ? "accepted" : "declined",
-              ...optionalProperty("approval_via", report.approval.via),
-              model_changed: report.approval.modelChanged,
-            }
-          : {}),
-        duration_ms: Math.max(0, Math.round(report.durationMs)),
-      },
-      turn?.owner,
-    );
-  }
-
   handleWebhookDelivery(report: WebhookDeliveryReport): void {
     if (!this.#client) return;
     const now = Date.now();
@@ -1562,10 +1522,6 @@ function analyticsDomain(hostname: string): string | undefined {
 
 function isHomeNetwork(domain: string): boolean {
   return domain === "home.arpa" || domain.endsWith(".home.arpa");
-}
-
-function optionalProperty(property: HostPropertyName, value: HostPropertyValue | null): HostProperties {
-  return value === null ? {} : { [property]: value };
 }
 
 function boundedCount(value: unknown, max: number): number | undefined {

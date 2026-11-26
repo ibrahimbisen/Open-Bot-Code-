@@ -1,29 +1,4 @@
 import { isAgentTemplateId } from "@codebot/contracts/agent-template-links";
-import { type BillingState, parseBillingState } from "@codebot/contracts/billing";
-import { type BillingDetails, parseBillingDetails } from "@codebot/contracts/billing-details";
-import {
-  type CreditActivity,
-  type CreditRedeemResult,
-  type CreditsState,
-  parseCreditActivity,
-  parseCreditRedeemResult,
-  parseCreditsState,
-} from "@codebot/contracts/credits";
-import {
-  type CustomServerCheckoutResult,
-  parseCustomServerCheckoutResult,
-} from "@codebot/contracts/custom-server-plans";
-import {
-  type HostedServerCatalog,
-  type HostedServerList,
-  type HostedServerSummary,
-  parseHostedServerCatalog,
-  parseHostedServerList,
-  parseHostedServerSummary,
-  parseServerClaim,
-  type ServerClaim,
-} from "@codebot/contracts/hosted-servers";
-import { parseHostedSiteList, parseHostedSiteSummary } from "@codebot/contracts/hosted-sites";
 import {
   type AccountSession,
   AGENT_DEFAULT_KEYS,
@@ -67,8 +42,6 @@ import {
   type ExternalLinkPreference,
   type GitHubConnectorRepositories,
   type GitHubConnectorStatus,
-  type HostedSiteList,
-  type HostedSiteSummary,
   IDLE_RESTART_TARGETS,
   type IdleRestart,
   isAgentMemoryLimit,
@@ -111,21 +84,15 @@ import {
   isVoiceServerSettings,
   isVoiceTurnPause,
   isXaiSpeechVoice,
-  type LinkAccountStatus,
   type MobileConnectedDevice,
   type MobileConnectLink,
   type MobileConnectTicket,
-  type NearDepositAddress,
-  type NearWalletStatus,
   type NotificationOpenedEvent,
   type NotificationPreference,
   type OnePasswordConnectorStatus,
   type ProviderDetectionSettings,
   parseGitHubConnectorRepositories,
   parseGitHubConnectorStatus,
-  parseLinkAccountStatus,
-  parseNearDepositAddress,
-  parseNearWalletStatus,
   parseOnePasswordConnectorStatus,
   QUIT_GUARDS,
   type RemoteDesktopSetupStatus,
@@ -163,7 +130,6 @@ import {
   requiredNumber,
   requiredString,
 } from "@codebot/contracts/ipc-decoding";
-import { type LicenseState, parseLicenseState } from "@codebot/contracts/license";
 import {
   isMarketplaceAgentId,
   isMarketplaceSkillSlug,
@@ -734,18 +700,6 @@ export function decodeAgentImportSkill(value: unknown): string {
 
 export const decodeVoid = emptyDecoder("IPC returned unexpected data.");
 
-export function decodeHostedSite(value: unknown): HostedSiteSummary {
-  const site = parseHostedSiteSummary(value);
-  if (!site) throw new Error("Invalid hosted site response.");
-  return site;
-}
-
-export function decodeHostedSiteList(value: unknown): HostedSiteList {
-  const list = parseHostedSiteList(value);
-  if (!list) throw new Error("Invalid hosted site list response.");
-  return list;
-}
-
 export function decodeGitHubConnectorStatus(value: unknown): GitHubConnectorStatus {
   const status = parseGitHubConnectorStatus(value);
   if (!status) throw new Error("Invalid GitHub connector response.");
@@ -758,94 +712,10 @@ export function decodeGitHubConnectorRepositories(value: unknown): GitHubConnect
   return repositories;
 }
 
-export function decodeLinkAccountStatus(value: unknown): LinkAccountStatus {
-  const status = parseLinkAccountStatus(value);
-  if (!status) throw new Error("Invalid Link account response.");
-  return status;
-}
-
-export function decodeNearWalletStatus(value: unknown): NearWalletStatus {
-  const status = parseNearWalletStatus(value);
-  if (!status) throw new Error("Invalid NEAR wallet response.");
-  return status;
-}
-
-export function decodeNearDepositAddress(value: unknown): NearDepositAddress {
-  const address = parseNearDepositAddress(value);
-  if (!address) throw new Error("Invalid NEAR deposit address response.");
-  return address;
-}
-
 export function decodeOnePasswordConnectorStatus(value: unknown): OnePasswordConnectorStatus {
   const status = parseOnePasswordConnectorStatus(value);
   if (!status) throw new Error("Invalid 1Password connector response.");
   return status;
-}
-
-export function decodeBillingState(value: unknown): BillingState {
-  const state = parseBillingState(value);
-  if (!state) throw new Error("Invalid billing state response.");
-  return state;
-}
-
-export function decodeBillingDetails(value: unknown): BillingDetails {
-  const details = parseBillingDetails(value);
-  if (!details) throw new Error("Invalid billing details response.");
-  return details;
-}
-
-export function decodeCreditsState(value: unknown): CreditsState {
-  const state = parseCreditsState(value);
-  if (!state) throw new Error("Invalid credits state response.");
-  return state;
-}
-
-export function decodeCreditRedeemResult(value: unknown): CreditRedeemResult {
-  const result = parseCreditRedeemResult(value);
-  if (!result) throw new Error("Invalid credit redeem response.");
-  return result;
-}
-
-export function decodeCreditActivity(value: unknown): CreditActivity {
-  const activity = parseCreditActivity(value);
-  if (!activity) throw new Error("Invalid credit activity response.");
-  return activity;
-}
-
-export function decodeLicenseState(value: unknown): LicenseState {
-  const state = parseLicenseState(value);
-  if (!state) throw new Error("Invalid license state response.");
-  return state;
-}
-
-export function decodeHostedServer(value: unknown): HostedServerSummary {
-  const server = parseHostedServerSummary(value);
-  if (!server) throw new Error("Invalid hosted server response.");
-  return server;
-}
-
-export function decodeCustomServerCheckoutResult(value: unknown): CustomServerCheckoutResult {
-  const result = parseCustomServerCheckoutResult(value);
-  if (!result) throw new Error("Invalid custom server checkout response.");
-  return result;
-}
-
-export function decodeServerClaim(value: unknown): ServerClaim {
-  const claim = parseServerClaim(value);
-  if (!claim) throw new Error("Invalid server claim response.");
-  return claim;
-}
-
-export function decodeHostedServerCatalog(value: unknown): HostedServerCatalog {
-  const catalog = parseHostedServerCatalog(value);
-  if (!catalog) throw new Error("Invalid hosted server plans response.");
-  return catalog;
-}
-
-export function decodeHostedServerList(value: unknown): HostedServerList {
-  const list = parseHostedServerList(value);
-  if (!list) throw new Error("Invalid hosted server list response.");
-  return list;
 }
 
 export function decodeCustomProviders(value: unknown): CustomProviderSummary[] {
@@ -905,11 +775,6 @@ export function decodeDiscoverModelsResult(value: unknown): DiscoverModelsResult
 
 export function decodeProviderDetectionSettings(value: unknown): ProviderDetectionSettings {
   if (!isProviderDetectionSettings(value)) throw new Error("Invalid detection settings response.");
-  return value;
-}
-
-export function decodeNullablePath(value: unknown): string | null {
-  if (value !== null && !isString(value)) throw new Error("Invalid directory response.");
   return value;
 }
 

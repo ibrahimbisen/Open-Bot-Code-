@@ -1,15 +1,10 @@
-import type { CreditsState } from "@codebot/contracts/credits";
 import type {
   AccountSession,
   AppInfo,
   AvatarColor,
   AvatarImageInput,
-  BillingDesktopApi,
   CentralAuthUser,
-  CreditsDesktopApi,
   DynamicIslandGeometry,
-  HostedServersDesktopApi,
-  LicenseDesktopApi,
   MobileConnectedDevice,
   MobileConnectLink,
   MobileConnectTicket,
@@ -29,13 +24,6 @@ import {
   Tabs,
   TriangleAlert,
 } from "@codebot/ui";
-import { BillingPanel } from "@codebot/ui/features/billing/BillingPanel";
-import { createBillingStore } from "@codebot/ui/features/billing/billing-store";
-import { LicenseSection } from "@codebot/ui/features/billing/LicenseSection";
-import { createLicenseStore } from "@codebot/ui/features/billing/license-store";
-import { CreditActivitySection } from "@codebot/ui/features/credits/CreditActivitySection";
-import { CreditsSection } from "@codebot/ui/features/credits/CreditsSection";
-import { createCreditsStore } from "@codebot/ui/features/credits/credits-store";
 import type { GeneralSettingsValue } from "@codebot/ui/features/settings/app-settings";
 import {
   SettingsDialogShell,
@@ -46,7 +34,6 @@ import type { MobileInstallRequest } from "@codebot/ui/features/settings/Setting
 import { SettingsMobileConnectTab } from "@codebot/ui/features/settings/SettingsMobileConnectTab";
 import { SettingsProfileTab } from "@codebot/ui/features/settings/SettingsProfileTab";
 import { SettingsUpdatesTab } from "@codebot/ui/features/settings/SettingsUpdatesTab";
-import { createSettingsHostedServersStore } from "@codebot/ui/features/settings/stores/hosted-servers-store";
 import { createSettingsMobileConnectStore } from "@codebot/ui/features/settings/stores/mobile-connect-store";
 import { createSettingsProfileStore } from "@codebot/ui/features/settings/stores/profile-store";
 import { createSettingsUpdatesStore } from "@codebot/ui/features/settings/stores/updates-store";
@@ -55,7 +42,6 @@ import { useI18n } from "../../i18n-context";
 import { ComputerUseSetup } from "../computer-use/ComputerUseSetup";
 import type { CodexLiveAccess } from "../speech/codex-live-access";
 import type { LiveVoiceAccountChoice } from "./LiveVoiceAccountRow";
-import { licenseContactUs, trackLicenseEvent } from "./license-analytics";
 import { createNotificationLevelsStore } from "./notification-levels-store";
 import { createProfileActivityStore } from "./profile-activity-store";
 import { renderProfileShareImage } from "./profile-share-image";
@@ -106,18 +92,9 @@ export interface SettingsModalProps {
   onRevokeAccountSession?: (sessionId: string) => Promise<void>;
   onSignOut?: (() => Promise<void>) | undefined;
   processAvatarFile?: (file: File) => Promise<AvatarImageInput>;
-  billingApi?: BillingDesktopApi;
-  licenseApi?: LicenseDesktopApi | undefined;
-  creditsApi?: CreditsDesktopApi | undefined;
-  onCreditsChange?: ((credits: CreditsState) => void) | undefined;
-  onBuyCredits?: ((serverId: string | null) => void) | undefined;
-  onContactUs?: (() => void) | undefined;
-  hostedServersApi?: HostedServersDesktopApi | undefined;
-  onAddHostedServer?: (() => void) | undefined;
   codexLiveAccess?: CodexLiveAccess | undefined;
   liveVoiceAccount?: LiveVoiceAccountChoice | undefined;
   onConnectCodex?: (() => void) | undefined;
-  hostedServerDeleteRequest?: { serverId: string; nonce: number } | null;
   mobileInstallRequest?: MobileInstallRequest | null;
   onMobileInstallRequestHandled?: (() => void) | undefined;
   onTestNotification?: () => void | Promise<void>;
@@ -130,9 +107,7 @@ export interface SettingsModalProps {
 
 export function SettingsModal(props: SettingsModalProps) {
   const i18n = useI18n();
-  const [activeTab, setActiveTab] = createSignal<SettingsTab>(
-    untrack(() => (props.initialTab === "hosted-servers" ? "billing" : props.initialTab)) ?? "general",
-  );
+  const [activeTab, setActiveTab] = createSignal<SettingsTab>(untrack(() => props.initialTab) ?? "general");
   let modalElement: HTMLElement | undefined;
   const profile = createSettingsProfileStore(props, () => activeTab() === "profile");
   const profileActivity = createProfileActivityStore(
@@ -141,43 +116,14 @@ export function SettingsModal(props: SettingsModalProps) {
   );
   const mobileConnect = createSettingsMobileConnectStore(props, () => activeTab() === "mobile-connect");
   const updates = createSettingsUpdatesStore(props);
-  const billing = createBillingStore(
-    () => props.billingApi,
-    () => props.open && activeTab() === "billing",
-  );
-  const license = createLicenseStore(
-    () => props.licenseApi,
-    () => props.open && activeTab() === "billing",
-    trackLicenseEvent,
-  );
-  const credits = createCreditsStore(
-    () => props.creditsApi,
-    () => props.open && activeTab() === "billing",
-    (state) => props.onCreditsChange?.(state),
-    { activity: true },
-  );
-  const hostedServers = createSettingsHostedServersStore(props, () => activeTab() === "billing");
   const voice = createSettingsVoiceStore(() => props.open && activeTab() === "voice");
   const notificationLevels = createNotificationLevelsStore({
     visible: () => props.open && activeTab() === "notifications",
     servers: () => props.servers ?? [],
   });
-  let handledHostedServerDeleteNonce = 0;
-  createEffect(
-    () => (props.open ? props.hostedServerDeleteRequest : null),
-    (request) => {
-      if (!request || request.nonce === handledHostedServerDeleteNonce) return;
-      handledHostedServerDeleteNonce = request.nonce;
-      hostedServers.requestDeleteById(request.serverId);
-    },
-  );
-
   const dynamicIslandShown = () => dynamicIslandSettingsShown(props.appInfo?.platform, props.chatWindow === true);
   createEffect(
-    () => {
-      const tab = props.open ? props.openTab : undefined;
-      return tab === "hosted-servers" ? "billing" : tab;
-    },
+    () => (props.open ? props.openTab : undefined),
     (tab) => {
       if (!tab) return;
       setActiveTab(tab);
@@ -212,7 +158,6 @@ export function SettingsModal(props: SettingsModalProps) {
         (value === "agent-dock" && agentDockShown()) ||
         value === "computer-use" ||
         value === "profile" ||
-        value === "billing" ||
         value === "mobile-connect" ||
         value === "updates"
       ) {
@@ -405,33 +350,6 @@ export function SettingsModal(props: SettingsModalProps) {
             canListSessions={Boolean(props.onListAccountSessions)}
             canRevokeSession={Boolean(props.onRevokeAccountSession)}
             onSignOut={props.onSignOut}
-          />
-        </Tabs.Content>
-
-        <Tabs.Content value="billing" class="settings-modal-tab-panel" data-tab="billing">
-          <BillingPanel
-            store={billing}
-            available={Boolean(props.billingApi)}
-            hostedServers={hostedServers}
-            onAddServer={hostedServers.state.available ? props.onAddHostedServer : undefined}
-            license={
-              <LicenseSection
-                store={license}
-                onManagePayment={() => void billing.openPortal({ flow: "manage" })}
-                onContactUs={licenseContactUs(props.onContactUs)}
-                billingDetails={props.billingApi}
-              />
-            }
-            credits={
-              <Show when={props.onBuyCredits}>
-                {(onBuy) => (
-                  <>
-                    <CreditsSection store={credits} onBuy={(serverId) => onBuy()(serverId)} />
-                    <CreditActivitySection store={credits} />
-                  </>
-                )}
-              </Show>
-            }
           />
         </Tabs.Content>
 

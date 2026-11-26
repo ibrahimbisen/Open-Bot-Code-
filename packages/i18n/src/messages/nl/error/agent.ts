@@ -184,8 +184,6 @@ export const messages = {
     "Lokale scripts hebben de routines van deze agent het afgelopen uur {limit} keer uitgevoerd. Probeer het later opnieuw.",
   "error.agent.workspaceOnlyMacOnly":
     "Alleen werkruimte is voor deze aanbieder alleen beschikbaar op macOS. Kies Volledige toegang in de instellingen van de agent.",
-  "error.agent.lowMemory":
-    "Deze server heeft weinig geheugen. Je bericht wacht in de wachtrij en start zodra er geheugen vrij is. Met een groter abonnement krijgt de server meer geheugen.",
   "error.agent.lowMemoryServer":
     "Deze server heeft weinig geheugen. Je bericht wacht in de wachtrij en start zodra er geheugen vrij is.",
   "error.agent.workspaceOnlyToolMissing":
@@ -204,9 +202,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "Schermopname werkt niet in een gesprek in Slack, Discord of Telegram, omdat andere mensen de bestanden krijgen.",
   "error.agent.screenCaptureDeclined": "De gebruiker heeft deze schermopname niet toegestaan. Er is niets opgenomen.",
-  "error.agent.creditMediaDeclined":
-    "De gebruiker heeft deze generatie niet toegestaan. Er zijn geen credits gebruikt.",
-  "error.agent.creditMediaNotSaved": "Het bestand is gemaakt, maar CodeBot kon het niet in de chat opslaan.",
   "error.agent.mcpServerDeclined":
     "De gebruiker heeft deze wijziging van de MCP-server niet toegestaan. Er is niets gewijzigd.",
   "error.agent.mcpToolDeclined": "De gebruiker heeft deze MCP-toolaanroep niet toegestaan. De tool is niet uitgevoerd.",

@@ -4,11 +4,11 @@ import { RestartServerDialog } from "@codebot/ui/features/servers/RestartServerD
 import { createSignal, onCleanup } from "solid-js";
 import type { Meta, StoryObj } from "storybook-solidjs-vite";
 
-type StoryServer = Pick<ServerSummary, "id" | "name" | "state" | "hostedIssue">;
+type StoryServer = Pick<ServerSummary, "id" | "name" | "state">;
 
-const SERVER: StoryServer = { id: "research-hosted", name: "Research server", state: "online", hostedIssue: null };
+const SERVER: StoryServer = { id: "research-hosted", name: "Research server", state: "online" };
 
-function RestartStory(props: { outcome: "online" | "failed" | "request-failed" }) {
+function RestartStory(props: { outcome: "online" | "request-failed" }) {
   const [server, setServer] = createSignal<StoryServer>(SERVER);
   const [open, setOpen] = createSignal(true);
   const timers = new Set<ReturnType<typeof setTimeout>>();
@@ -23,9 +23,8 @@ function RestartStory(props: { outcome: "online" | "failed" | "request-failed" }
     await new Promise((resolve) => setTimeout(resolve, 600));
     if (props.outcome === "request-failed")
       throw new Error("The server cannot restart now. Wait a moment, then try again.");
-    later(1500, { state: "connecting", hostedIssue: null });
-    if (props.outcome === "online") later(5500, { state: "online" });
-    else later(5500, { state: "offline", hostedIssue: "start_timeout" });
+    later(1500, { state: "connecting" });
+    later(5500, { state: "online" });
   }
   return (
     <>
@@ -52,7 +51,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BackOnline: Story = { render: () => <RestartStory outcome="online" /> };
-
-export const DidNotStart: Story = { render: () => <RestartStory outcome="failed" /> };
 
 export const RequestFailed: Story = { render: () => <RestartStory outcome="request-failed" /> };

@@ -242,13 +242,6 @@ const SETTING_LINKS: Record<SettingLinkId, SettingLinkEntry> = {
     about: "Install new CodeBot versions without a question.",
     words: "auto update upgrade",
   },
-  "credits.explainer": {
-    title: "What are credits?",
-    place: "CodeBot > Credits (the credits button in the narrow bar on the left, or Help > What are credits?)",
-    about:
-      "A short explainer of CodeBot credits: they pay for pictures, videos and voices that agents make, chats do not use them, each media model has its own price, and packs of credits can be bought.",
-    words: "credits credit tokens token price prices cost costs pay balance buy pack packs media picture video free",
-  },
   "agent.model": {
     title: "Agent model",
     place: AGENT,

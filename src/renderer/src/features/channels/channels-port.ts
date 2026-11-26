@@ -23,12 +23,6 @@ export interface ChannelsPort {
     Partial<Pick<CodeBotDesktopApi["agent"], "discardDraftAttachment" | "downloadAttachments">> &
     Partial<Pick<CodeBotDesktopApi["agent"], "deleteChannelMessage">> &
     Partial<Pick<CodeBotDesktopApi["agent"], "setChannelImage">> &
-    Partial<
-      Pick<
-        CodeBotDesktopApi["agent"],
-        "readMediaApproval" | "respondToMediaApproval" | "respondToCreditsHold" | "setCreditsAskMuted"
-      >
-    > &
     Partial<ChannelFoldersApi & Pick<CodeBotDesktopApi["agent"], "chooseChannelFolder">> &
     Partial<
       Pick<

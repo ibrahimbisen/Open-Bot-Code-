@@ -155,7 +155,6 @@ export const messages = {
   "error.team.claudeCompactWindowUnsupported": "Diese Verbindung unterstützt die Claude-Komprimierungsgröße nicht.",
   "error.team.cacheExpiryCompactionUnsupported":
     "Diese Verbindung unterstützt das Komprimieren vor Ablauf des Caches nicht.",
-  "error.team.mediaApprovalCreditsUnsupported": "Diese Verbindung unterstützt die Credit-Freigabegrenze nicht.",
   "error.team.mediaApprovalCreditsInvalid": "Gib eine ganze Zahl an Credits von 0 bis 100.000 ein.",
   "error.team.providerEnvironmentUnsupported": "Diese Verbindung unterstützt keine Anbietervariablen.",
   "error.team.modelVisibilityUnsupported": "Diese Verbindung unterstützt die Modellliste nicht.",
@@ -175,9 +174,6 @@ export const messages = {
   "error.team.machineResourcesUnsupported": "Diese Verbindung unterstützt keine Maschinennutzung.",
   "error.team.machineAlertMemberInvalid":
     "Nur Eigentümer oder Administratoren dieses Servers können Maschinenwarnungen erhalten.",
-  "error.team.hostedSitesUnsupported": "Diese Verbindung unterstützt keine Websites.",
-  "error.team.hostedSitesUnregistered": "Dieser Server ist nicht bei CodeBot registriert und hat daher keine Websites.",
-  "error.team.hostedSiteNotFound": "Website nicht gefunden.",
   "error.team.markUnreadUnsupported": "Dieser Client unterstützt das Markieren von Unterhaltungen als ungelesen nicht.",
   "error.team.inviteServiceUnavailable": "Der Einladungsdienst ist nicht verfügbar.",
   "error.team.logoNotFound": "Serverlogo nicht gefunden.",
@@ -225,7 +221,4 @@ export const messages = {
   "error.team.providerUseUnsupported":
     "Das Ein- und Ausschalten von Anbietern wird von dieser Verbindung nicht unterstützt.",
   "error.team.providerUseInvalid": "Dieser Anbieter hat keinen Ein-/Aus-Schalter.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "Dieser Server unterstützt keine Modellwahl bei Medienfreigaben. Aktualisiere CodeBot auf dem Server.",
-  "error.team.mediaApprovalChoiceInvalid": "Die Auswahl für die Medienfreigabe ist ungültig.",
 } as const satisfies PartialTranslation<typeof source>;

@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "שרשורים",
   "app.rail.workflows": "תהליכי עבודה",
   "app.rail.usage": "שימוש",
-  "app.rail.creditsAsk": "לשאול כשצריך קרדיטים",
-  "app.rail.creditsAskSaveFailed": "לא ניתן לשנות את השאלות על קרדיטים.",
   "app.rail.library": "ספרייה",
   "app.rail.providers": "ספקים",
   "app.rail.crm": "CRM",

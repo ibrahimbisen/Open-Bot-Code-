@@ -59,8 +59,6 @@ export const messages = {
   "workflow.node.locked": "Verrouillé",
   "workflow.node.missingInput": "Connectez une entrée pour exécuter cette étape.",
   "workflow.node.run": "Lancer",
-  "workflow.node.runPriceLabel": "Lancer. Prix en crédits : {credits}",
-  "workflow.node.retryPriceLabel": "Réessayer. Prix en crédits : {credits}",
   "workflow.node.running": "En cours",
   "workflow.node.waiting": "En file d’attente",
   "workflow.node.stop": "Arrêter",

@@ -27,12 +27,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Ana ekranı yakala ve görüntüyü ajanın modeline gönder.",
   "status.agent.screenCaptureChannel":
     "Görüntü {channel} kanalında görünür ve bu sunucuda kanalı okuyan her üye onu görebilir.",
-  "status.agent.creditImageApproval": "{model} ile bir görsel oluştur. Bu işlem {credits} kredi kullanır.",
-  "status.agent.creditVideoApproval": "{model} ile bir video oluştur. Bu işlem {credits} kredi kullanır.",
-  "status.agent.creditMediaChannel":
-    "Sonuç {channel} kanalında görünür ve bu sunucuda kanalı okuyan her üye onu görebilir.",
-  "status.agent.creditsHoldBalance": "Bu işlem {credits} kredi kullanır, bakiye {balance} kredidir.",
-  "status.agent.creditsHoldAgentsOff": "Bu sunucudaki ajanlar kredi kullanamaz.",
   "status.agent.screenCapturePermissionNext": "Ardından macOS, CodeBot için Ekran Kaydı'na izin vermenizi isteyebilir.",
   "status.agent.screenCaptureDisplay": "{name} ekranını yakala ve görüntüyü ajanın modeline gönder.",
   "status.agent.screenCaptureWindow": "{name} penceresini yakala ve görüntüyü ajanın modeline gönder.",
@@ -68,19 +62,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "{title} iş akışını çalıştırmaları ve sürümleriyle birlikte silin. Açık adımları durur.",
   "status.agent.deleteAgents": "{agents} ajanlarını sohbetleri ve dosyalarıyla birlikte silin. Bu işlem geri alınamaz.",
-  "status.agent.nearSignatureReceived": "CodeBot imzayı aldı. Bu sekmeyi kapatabilirsiniz.",
-  "status.agent.nearSignatureUnknown": "CodeBot bu imzayı beklemiyor. CodeBot'ta yeniden başlatın.",
-  "status.agent.nearPayment": "{domain} için kripto cüzdandan {recipient} alıcısına {amount} {symbol} öde: {reason}",
-  "status.agent.nearSummaryCreate":
-    "Tüm ajanlar günde en fazla {amount} USD ödeyebilir. Bunu daha sonra CodeBot'ta değiştirebilirsiniz.",
-  "status.agent.nearSummaryGrant":
-    "Bu CodeBot uygulamasının {days} gün boyunca, kurallarınız dahilinde cüzdandan ödeme yapmasına izin ver.",
-  "status.agent.nearSummaryBudget": "Cüzdanın günlük bütçesini {amount} USD olarak değiştir.",
-  "status.agent.nearSummaryAutoPay":
-    "Bir ödeme kuralı izin verdiğinde CodeBot'un imzanız olmadan ödeme yapmasına izin ver. Diğer ödemeler için yine sohbette size sorulur.",
-  "status.agent.nearSummaryPayment": "{recipient} alıcısına {amount} ödemesini onayla.",
-  "status.agent.nearSummaryFreeze": "Siz ödemeleri sürdürene kadar ajanlar bu cüzdandan ödeme yapamaz.",
-  "status.agent.nearSummaryUnfreeze": "Ajanlar kurallarınız dahilinde bu cüzdandan yeniden ödeme yapabilir.",
   "status.agent.screenCaptureProgress": "Ekranı yakalamak için izin isteniyor…",
   "status.agent.screenCaptureReviewing": "Ekran görüntüsü inceleniyor…",
   "status.agent.browserOpening": "Web sayfası açılıyor…",
@@ -88,7 +69,6 @@ export const messages = {
   "status.agent.browserClicking": "Web sayfasında tıklanıyor…",
   "status.agent.browserTyping": "Web sayfasına yazılıyor…",
   "status.agent.browserActing": "Web sayfası kullanılıyor…",
-  "status.agent.browserPaying": "Ödeme gönderiliyor…",
   "status.agent.browserReviewing": "Web sayfası inceleniyor…",
   "status.agent.memoriesSearching": "Belleklerinde arıyor…",
   "status.agent.chatsSearching": "Önceki sohbetlerinde arıyor…",

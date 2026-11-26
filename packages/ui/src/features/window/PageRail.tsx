@@ -29,8 +29,6 @@ import { type AccountUsageProviderRow, accountUsageRowKey } from "@codebot/ui/fe
 import { useText } from "@codebot/ui/text";
 import { Dynamic, type JSX } from "@solidjs/web";
 import { createMemo, createSignal, For, onSettled, Show } from "solid-js";
-import { CreditIcon } from "../credits/CreditIcon";
-import { CreditsRailChip } from "../credits/CreditsRailChip";
 
 interface RailMenuItem {
   label: string;
@@ -328,48 +326,6 @@ function mediaCreditsTone(row: MediaCreditsRailRow) {
   return row.available > 0 ? "neutral" : "critical";
 }
 
-function CreditsRailButton(props: {
-  balance: number | undefined;
-  welcome: number | null | undefined;
-  current: boolean;
-  agents: boolean | undefined;
-  onAgentsChange: ((agents: boolean) => void) | undefined;
-  ask: boolean | undefined;
-  onAskChange: ((ask: boolean) => void) | undefined;
-  walletName: string | null | undefined;
-  onMove: (() => void) | undefined;
-  onOpenPrices: (() => void) | undefined;
-  onOpen: () => void;
-}) {
-  const { t } = useText();
-  return (
-    <Show
-      when={props.balance === undefined}
-      fallback={
-        <CreditsRailChip
-          balance={props.balance ?? 0}
-          welcome={props.welcome}
-          current={props.current}
-          agents={props.agents}
-          onAgentsChange={props.onAgentsChange}
-          ask={props.ask}
-          onAskChange={props.onAskChange}
-          walletName={props.walletName}
-          onMove={props.onMove}
-          onOpenPrices={props.onOpenPrices}
-          onBuy={props.onOpen}
-        />
-      }
-    >
-      <RailButton label={t("app.rail.credits")} class="credit-rail-icon" current={props.current} onClick={props.onOpen}>
-        <span class="credit-rail-tile">
-          <CreditIcon />
-        </span>
-      </RailButton>
-    </Show>
-  );
-}
-
 function MediaCreditsButton(props: { row: MediaCreditsRailRow; onOpen: (button: HTMLElement) => void }) {
   const { t, format } = useText();
   const percent = () => mediaCreditsPercent(props.row);
@@ -448,7 +404,6 @@ export type PageRailPage =
   | "providers"
   | "crm"
   | "marketplace"
-  | "credits"
   | "settings";
 
 export const PAGE_RAIL_PINNABLE_PAGES = [
@@ -462,7 +417,7 @@ export const PAGE_RAIL_PINNABLE_PAGES = [
 ] as const satisfies readonly PageRailPage[];
 export type PageRailPinnablePage = (typeof PAGE_RAIL_PINNABLE_PAGES)[number];
 
-export const PAGE_RAIL_HIDEABLE_ITEMS = ["credits", "marketplace", "help"] as const;
+export const PAGE_RAIL_HIDEABLE_ITEMS = ["marketplace", "help"] as const;
 export type PageRailHideableItem = (typeof PAGE_RAIL_HIDEABLE_ITEMS)[number];
 
 export interface PageRailProps {
@@ -485,16 +440,6 @@ export interface PageRailProps {
   onCrm?: ((button: HTMLElement) => void) | undefined;
   onCrmConnectors?: ((button: HTMLElement) => void) | undefined;
   onMarketplace?: (() => void) | undefined;
-  onCredits?: (() => void) | undefined;
-  creditBalance?: number | undefined;
-  creditWelcome?: number | null | undefined;
-  creditAgents?: boolean | undefined;
-  onCreditAgentsChange?: ((agents: boolean) => void) | undefined;
-  creditAsk?: boolean | undefined;
-  onCreditAskChange?: ((ask: boolean) => void) | undefined;
-  creditWalletName?: string | null | undefined;
-  onCreditMove?: (() => void) | undefined;
-  onCreditPrices?: (() => void) | undefined;
   hiddenItems?: readonly PageRailHideableItem[] | undefined;
   onHiddenChange?: ((item: PageRailHideableItem, hidden: boolean) => void) | undefined;
   onSettings: (button: HTMLElement) => void;
@@ -738,7 +683,6 @@ export function PageRail(props: PageRailProps) {
   });
   const shown = (item: PageRailHideableItem) => !props.hiddenItems?.includes(item);
   const hideableItems = () => [
-    ...(props.onCredits ? [{ id: "credits" as const, label: t("app.rail.credits") }] : []),
     ...(props.onMarketplace ? [{ id: "marketplace" as const, label: t("app.rail.marketplace") }] : []),
     { id: "help" as const, label: t("app.help.label") },
   ];
@@ -806,23 +750,6 @@ export function PageRail(props: PageRailProps) {
             <For each={props.mediaCredits ?? []} keyed={(row) => row.key}>
               {(row) => <MediaCreditsButton row={row()} onOpen={() => props.onMediaCredits?.(row().provider)} />}
             </For>
-            <Show when={shown("credits") && props.onCredits}>
-              {(onCredits) => (
-                <CreditsRailButton
-                  balance={props.creditBalance}
-                  welcome={props.creditWelcome}
-                  current={props.current === "credits"}
-                  agents={props.creditAgents}
-                  onAgentsChange={props.onCreditAgentsChange}
-                  ask={props.creditAsk}
-                  onAskChange={props.onCreditAskChange}
-                  walletName={props.creditWalletName}
-                  onMove={props.onCreditMove}
-                  onOpenPrices={props.onCreditPrices}
-                  onOpen={() => onCredits()()}
-                />
-              )}
-            </Show>
             <Show when={shown("marketplace") && props.onMarketplace}>
               {(onMarketplace) => (
                 <RailButton

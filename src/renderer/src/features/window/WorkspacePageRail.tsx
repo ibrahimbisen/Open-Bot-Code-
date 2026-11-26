@@ -1,20 +1,16 @@
 import { isUpdateActivePhase } from "@codebot/contracts/ipc";
 import { AGENT_TASKS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-tasks-v1";
 import { CRM_CAPABILITY } from "@codebot/contracts/team-protocol/crm-v1";
-import { creditsRailWallet } from "@codebot/ui/features/credits/credits-store";
-import { RailMoveCreditsDialog } from "@codebot/ui/features/credits/MoveCreditsDialog";
 import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
 import { PageRail, type PageRailPage } from "@codebot/ui/features/window/PageRail";
 import { useText } from "@codebot/ui/text";
-import { createSignal, Show } from "solid-js";
+import { Show } from "solid-js";
 import { appPort } from "../../app-port";
 import { useLayout } from "../../layout";
 import { WorkflowsPage } from "../../lazy-views";
 import { usePlatform } from "../../platform";
 import { useCustomAgents } from "../custom-agents/custom-agents-context";
 import { serverHasStorage } from "../files/storage-usage";
-import { createCreditAgentsRail } from "../servers/credit-agents-rail";
-import { openCreditPrices } from "../servers/credit-prices";
 import { useServerActions } from "../servers/server-actions";
 import {
   activeServerHasProviderSettings,
@@ -74,26 +70,6 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
   function crmRailAction(): ((button: HTMLElement) => void) | undefined {
     return crmShown() ? windowPage.openCrm : undefined;
   }
-  const creditWallet = () => {
-    const menu = windowPage.creditsMenu();
-    return creditsRailWallet(menu.state, activeServer() ?? null, menu.localServerId);
-  };
-  const [movingCredits, setMovingCredits] = createSignal(false);
-  function creditsRailAction(): (() => void) | undefined {
-    return windowPage.creditsAvailable() ? () => windowPage.openCredits(creditWallet()?.serverId ?? null) : undefined;
-  }
-  function creditMoveAction(): (() => void) | undefined {
-    return creditWallet()?.movable ? () => setMovingCredits(true) : undefined;
-  }
-  const creditAgents = createCreditAgentsRail({
-    server: activeServer,
-    shown: () => windowPage.creditsAvailable(),
-    calls: window.codebot.hostAdmin,
-    asks: {
-      readMuted: (serverId) => window.codebot.agent.readCreditsAskMuted(serverId),
-      setMuted: (muted, serverId) => window.codebot.agent.setCreditsAskMuted({ muted }, serverId),
-    },
-  });
   function crmConnectorsAction(): ((button: HTMLElement) => void) | undefined {
     if (!crmShown()) return undefined;
     return (button) => windowPage.openCrm(button, true);
@@ -133,16 +109,6 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
       onProviders={openProviders()}
       onCrm={crmRailAction()}
       onCrmConnectors={crmConnectorsAction()}
-      onCredits={creditsRailAction()}
-      creditBalance={creditWallet()?.balance}
-      creditWelcome={creditWallet()?.welcome}
-      creditWalletName={creditWallet()?.name}
-      onCreditMove={creditMoveAction()}
-      onCreditPrices={() => openCreditPrices(appPort().openUrl)}
-      creditAgents={creditAgents.agents()}
-      onCreditAgentsChange={creditAgents.change()}
-      creditAsk={creditAgents.ask()}
-      onCreditAskChange={creditAgents.changeAsk()}
       hiddenItems={layout.railHidden()}
       onHiddenChange={layout.setRailHidden}
       onMarketplace={() => {
@@ -153,35 +119,20 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
       settingsNotice={updateNotice()}
       logo={logo()}
       server={
-        <>
-          <Show when={platform.appInfo()}>
-            <ServerMenu
-              rail
-              serverName={activeServer()?.name ?? text.t("sidebar.topbar.localServer")}
-              servers={serverActions.orderedServers()}
-              view={layout.serverView()}
-              onViewChange={layout.setServerView}
-              onSelect={serverActions.select}
-              onAdd={serverActions.add}
-              onCreateLocal={serverActions.addMenuCreateLocal()}
-              onInstallServer={serverActions.addMenuInstallServer()}
-              addCreatesServer={serverActions.addCreatesServer()}
-              hiddenServers={serverActions.hiddenServers()}
-              credits={windowPage.creditsMenu()}
-              {...serverActions.callbacks}
-            />
-          </Show>
-          <Show when={movingCredits() ? creditWallet()?.movable : null}>
-            {(wallet) => (
-              <RailMoveCreditsDialog
-                calls={() => appPort().credits}
-                server={wallet()}
-                onChange={windowPage.adoptCredits}
-                onClose={() => setMovingCredits(false)}
-              />
-            )}
-          </Show>
-        </>
+        <Show when={platform.appInfo()}>
+          <ServerMenu
+            rail
+            serverName={activeServer()?.name ?? text.t("sidebar.topbar.localServer")}
+            servers={serverActions.orderedServers()}
+            view={layout.serverView()}
+            onViewChange={layout.setServerView}
+            onSelect={serverActions.select}
+            onAdd={serverActions.add}
+            addCreatesServer={serverActions.addCreatesServer()}
+            hiddenServers={serverActions.hiddenServers()}
+            {...serverActions.callbacks}
+          />
+        </Show>
       }
       help={
         <RailHelpMenu

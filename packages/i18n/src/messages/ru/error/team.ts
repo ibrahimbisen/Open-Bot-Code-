@@ -144,7 +144,6 @@ export const messages = {
   "error.team.claudeUserSetupUnsupported": "Это подключение не поддерживает переключатель настроек Claude Code.",
   "error.team.claudeCompactWindowUnsupported": "Это подключение не поддерживает размер сжатия Claude.",
   "error.team.cacheExpiryCompactionUnsupported": "Это подключение не поддерживает сжатие до истечения кэша.",
-  "error.team.mediaApprovalCreditsUnsupported": "Это подключение не поддерживает порог подтверждения кредитов.",
   "error.team.mediaApprovalCreditsInvalid": "Введите целое число кредитов от 0 до 100 000.",
   "error.team.providerEnvironmentUnsupported": "Это подключение не поддерживает переменные провайдера.",
   "error.team.modelVisibilityUnsupported": "Это подключение не поддерживает список моделей.",
@@ -164,9 +163,6 @@ export const messages = {
   "error.team.machineResourcesUnsupported": "Это подключение не поддерживает данные о машине.",
   "error.team.machineAlertMemberInvalid":
     "Оповещения о машине может получать только владелец или администратор этого сервера.",
-  "error.team.hostedSitesUnsupported": "Это подключение не поддерживает сайты.",
-  "error.team.hostedSitesUnregistered": "Этот сервер не зарегистрирован в CodeBot, поэтому у него нет сайтов.",
-  "error.team.hostedSiteNotFound": "Сайт не найден.",
   "error.team.markUnreadUnsupported": "Этот клиент не поддерживает отметку диалогов как непрочитанных.",
   "error.team.inviteServiceUnavailable": "Служба приглашений недоступна.",
   "error.team.logoNotFound": "Логотип сервера не найден.",
@@ -208,7 +204,4 @@ export const messages = {
   "error.team.backgroundProcessesUnsupported": "Это подключение не поддерживает фоновые процессы.",
   "error.team.providerUseUnsupported": "Это подключение не поддерживает включение и выключение провайдеров.",
   "error.team.providerUseInvalid": "У этого провайдера нет переключателя включения.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "Этот сервер не поддерживает выбор модели в одобрениях медиа. Обновите CodeBot на сервере.",
-  "error.team.mediaApprovalChoiceInvalid": "Выбор в одобрении медиа недействителен.",
 } as const satisfies PartialTranslation<typeof source>;

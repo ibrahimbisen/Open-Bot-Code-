@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "Mesaj dizileri",
   "app.rail.workflows": "İş akışları",
   "app.rail.usage": "Kullanım",
-  "app.rail.creditsAsk": "Kredi gerektiğinde sor",
-  "app.rail.creditsAskSaveFailed": "Kredi soruları değiştirilemedi.",
   "app.rail.library": "Kitaplık",
   "app.rail.providers": "Sağlayıcılar",
   "app.rail.crm": "CRM",

@@ -157,8 +157,6 @@ export const messages = {
     "סקריפטים מקומיים הריצו את השגרות של הסוכן הזה {limit} פעמים בשעה האחרונה. יש לנסות שוב מאוחר יותר.",
   "error.agent.workspaceOnlyMacOnly":
     "מצב סביבת עבודה בלבד זמין לספק הזה רק ב-macOS. יש לבחור גישה מלאה בהגדרות הסוכן.",
-  "error.agent.lowMemory":
-    "בשרת הזה חסר זיכרון. ההודעה שלך ממתינה בתור ותתחיל כשיתפנה זיכרון. תוכנית גדולה יותר נותנת לשרת יותר זיכרון.",
   "error.agent.lowMemoryServer": "בשרת הזה חסר זיכרון. ההודעה שלך ממתינה בתור ותתחיל כשיתפנה זיכרון.",
   "error.agent.workspaceOnlyToolMissing":
     "מצב סביבת עבודה בלבד דורש את {tool}, ש-CodeBot לא מצא. יש להתקין אותו, או לבחור גישה מלאה בהגדרות הסוכן.",
@@ -175,8 +173,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "צילום מסך לא פועל בשיחה ב-Slack, ב-Discord או ב-Telegram, כי אנשים אחרים מקבלים את הקבצים שלו.",
   "error.agent.screenCaptureDeclined": "המשתמש לא אישר את צילום המסך הזה. דבר לא צולם.",
-  "error.agent.creditMediaDeclined": "המשתמש לא אישר את היצירה הזו. לא נוצלו קרדיטים.",
-  "error.agent.creditMediaNotSaved": "הקובץ נוצר, אבל CodeBot לא הצליח לשמור אותו בצ׳אט.",
   "error.agent.mcpServerDeclined": "המשתמש לא אישר את שינוי שרת ה-MCP הזה. דבר לא השתנה.",
   "error.agent.mcpToolDeclined": "המשתמש לא אישר את הקריאה לכלי MCP הזה. הכלי לא הופעל.",
   "error.agent.mcpServerNotSaved": "שרת ה-MCP לא הגיב, ולכן לא נשמר. {error}",

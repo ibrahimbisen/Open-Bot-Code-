@@ -22,7 +22,6 @@ import { interruptAgentToolSchema } from "./agent/agent-interrupt-tool";
 import { setBrowserProfileToolSchema } from "./agent/browser-profile-tool";
 import { createChannelToolSchema, listChannelsToolSchema, updateChannelToolSchema } from "./agent/channel-agent-tools";
 import { setCommitCoAuthorToolSchema } from "./agent/commit-co-author-tool";
-import { CREDIT_MEDIA_TOOL_DEFINITIONS } from "./agent/credit-media-tools";
 import { CRM_TOOL_DEFINITIONS } from "./agent/crm-tool";
 import { DATA_TOOL_DEFINITIONS } from "./agent/data-tools";
 import { deleteAgentToolSchema } from "./agent/delete-agent-tool";
@@ -291,42 +290,7 @@ export const CODEBOT_TOOL_DEFINITIONS: readonly CodeBotToolDefinition[] = [
   ...WORKFLOW_TOOL_DEFINITIONS,
   WORKFLOW_ANSWER_TOOL_DEFINITION,
   ...CRM_TOOL_DEFINITIONS,
-  ...CREDIT_MEDIA_TOOL_DEFINITIONS,
   ...MCP_SERVER_TOOL_DEFINITIONS,
-  {
-    name: "list_sites",
-    description:
-      "List the static sites of this CodeBot server, with its site limit and the slots in use. Use this before retrying a hosting mutation.",
-    shape: {},
-  },
-  {
-    name: "publish_site",
-    description:
-      "Publish a new static site after the user explicitly asks to publish it. The source must be inside this agent's workspace or CodeBot Shared.",
-    shape: {
-      sourcePath: z.string().min(1).max(INPUT_LIMITS.path),
-      title: z.string().min(1).max(120),
-      description: z.string().min(1).max(500),
-      spaFallback: z.boolean().optional(),
-    },
-  },
-  {
-    name: "replace_site",
-    description:
-      "Replace an owned static site after the user explicitly asks to replace it. This keeps the URL and resets expiry to 30 days.",
-    shape: {
-      siteId: z.string().min(1).max(INPUT_LIMITS.identifier),
-      sourcePath: z.string().min(1).max(INPUT_LIMITS.path),
-      title: z.string().min(1).max(120),
-      description: z.string().min(1).max(500),
-      spaFallback: z.boolean().optional(),
-    },
-  },
-  {
-    name: "delete_site",
-    description: "Delete an owned static site after the user explicitly asks to delete it.",
-    shape: { siteId: z.string().min(1).max(INPUT_LIMITS.identifier) },
-  },
   {
     name: "attach_files_to_response",
     description:

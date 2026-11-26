@@ -1,12 +1,9 @@
-import { parseCustomServerPlan } from "@codebot/contracts/custom-server-plans";
 import {
   type DirectConversationPage,
   type DirectConversationReadState,
   type DirectConversationSnapshot,
   type DirectMessage,
   type DirectThreadSummary,
-  type HostedServerIssue,
-  type HostedServerStart,
   type HostStatus,
   type InvitePreview,
   type InviteSummary,
@@ -277,16 +274,7 @@ function server(summary: DynamicRecord): ServerSummary {
     connectionSequence,
     capabilitiesPending,
     hostRestart,
-    hostedSleep,
-    hostedIssue,
-    hostedStart,
     memberLimit,
-    licenseRaisesMemberLimit,
-    hosted,
-    restartAvailable,
-    storageGb,
-    paymentRequired,
-    customPlan,
     keyChangedAt,
     thisComputer,
     hidden,
@@ -299,14 +287,6 @@ function server(summary: DynamicRecord): ServerSummary {
   if (memberLimit !== undefined && !(isNumber(memberLimit) && Number.isSafeInteger(memberLimit) && memberLimit >= 1)) {
     throw new Error("Invalid memberLimit.");
   }
-  if (licenseRaisesMemberLimit !== undefined && !isBoolean(licenseRaisesMemberLimit)) {
-    throw new Error("Invalid licenseRaisesMemberLimit.");
-  }
-  if (hosted !== undefined && !isBoolean(hosted)) throw new Error("Invalid hosted.");
-  if (restartAvailable !== undefined && !isBoolean(restartAvailable)) throw new Error("Invalid restartAvailable.");
-  if (storageGb !== undefined && !(isNumber(storageGb) && Number.isSafeInteger(storageGb) && storageGb >= 1)) {
-    throw new Error("Invalid storageGb.");
-  }
   if (
     keyChangedAt !== undefined &&
     !(isNumber(keyChangedAt) && Number.isSafeInteger(keyChangedAt) && keyChangedAt >= 0)
@@ -315,9 +295,6 @@ function server(summary: DynamicRecord): ServerSummary {
   }
   if (thisComputer !== undefined && thisComputer !== true) throw new Error("Invalid thisComputer.");
   if (hidden !== undefined && !isBoolean(hidden)) throw new Error("Invalid hidden.");
-  if (paymentRequired !== undefined && paymentRequired !== true) throw new Error("Invalid paymentRequired.");
-  const plan = customPlan === undefined ? undefined : parseCustomServerPlan(customPlan);
-  if (plan === null) throw new Error("Invalid customPlan.");
   if (capabilitiesPending !== undefined && capabilitiesPending !== true) {
     throw new Error("Invalid capabilitiesPending.");
   }
@@ -342,18 +319,7 @@ function server(summary: DynamicRecord): ServerSummary {
     ...(connectionSequence === undefined ? {} : { connectionSequence }),
     ...(capabilitiesPending === undefined ? {} : { capabilitiesPending }),
     ...(hostRestart === undefined ? {} : { hostRestart: hostRestart === null ? null : serverHostRestart(hostRestart) }),
-    ...(hostedSleep === undefined
-      ? {}
-      : { hostedSleep: hostedSleep === "sleeping" || hostedSleep === "waking" ? hostedSleep : null }),
-    ...(hostedIssue === undefined ? {} : { hostedIssue: decodeHostedIssue(hostedIssue) }),
-    ...(hostedStart === undefined ? {} : { hostedStart: decodeHostedStart(hostedStart) }),
     ...(memberLimit === undefined ? {} : { memberLimit }),
-    ...(licenseRaisesMemberLimit === undefined ? {} : { licenseRaisesMemberLimit }),
-    ...(hosted === undefined ? {} : { hosted }),
-    ...(restartAvailable === undefined ? {} : { restartAvailable }),
-    ...(storageGb === undefined ? {} : { storageGb }),
-    ...(paymentRequired === undefined ? {} : { paymentRequired }),
-    ...(plan === undefined ? {} : { customPlan: plan }),
     ...(keyChangedAt === undefined ? {} : { keyChangedAt }),
     ...(thisComputer === undefined ? {} : { thisComputer }),
     ...(hidden === undefined ? {} : { hidden }),
@@ -496,18 +462,4 @@ function remoteDesktopDisplay(display: DynamicRecord): RemoteDesktopDisplay {
 function teamRole(value: unknown): TeamRole {
   if (!isOneOf(TEAM_ROLES, value)) throw new Error("Invalid role.");
   return value;
-}
-
-function decodeHostedIssue(value: unknown): HostedServerIssue | null {
-  if (value === null || value === "plan_ended" || value === "wake_failed" || value === "start_timeout") return value;
-  throw new Error("Invalid hostedIssue.");
-}
-
-function decodeHostedStart(value: unknown): HostedServerStart | null {
-  if (value === null) return null;
-  const start = decodeRecord(value, "hosted start");
-  const { step } = start;
-  if (step !== "machine" && step !== "restore" && step !== "codebot" && step !== "provider_limit")
-    throw new Error("Invalid hostedStart.");
-  return { step, startedAt: requiredNumber(start, "startedAt") };
 }

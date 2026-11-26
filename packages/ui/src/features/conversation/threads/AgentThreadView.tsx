@@ -62,7 +62,6 @@ import { ApprovalCard } from "@codebot/ui/features/conversation/ConversationProm
 import { dayMarkerLabel } from "@codebot/ui/features/conversation/chat-day-markers";
 import { CHAT_TIME_GAP_MS, continuesSenderRun } from "@codebot/ui/features/conversation/chat-grouping";
 import type { ImageCopies } from "@codebot/ui/features/conversation/ImageLightbox";
-import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import {
   preferredMessageScrollBehavior,
   ScrollToLatestButton,
@@ -223,8 +222,6 @@ export interface AgentThreadViewProps {
   macWindowControls?: boolean | undefined;
   approval?: AgentApproval | undefined;
   onRespondApproval: (decision: "accept" | "decline") => Promise<boolean>;
-  media?: MediaApprovalControls | undefined;
-  approvalCard?: ((approval: AgentApproval) => JSX.Element | undefined) | undefined;
   context?: ContextUsageView | undefined;
   onCompactContext?: (() => Promise<void>) | undefined;
   waitsForAnswer?: boolean | undefined;
@@ -1001,15 +998,12 @@ export function AgentThreadView(props: AgentThreadViewProps) {
           <Show keyed when={props.approval}>
             {(approval) => (
               <div class="virtual-chat-row">
-                {props.approvalCard?.(approval) ?? (
-                  <ApprovalCard
-                    approval={approval}
-                    agentName={props.agent.name}
-                    onApprove={() => props.onRespondApproval("accept")}
-                    onReject={() => props.onRespondApproval("decline")}
-                    media={props.media}
-                  />
-                )}
+                <ApprovalCard
+                  approval={approval}
+                  agentName={props.agent.name}
+                  onApprove={() => props.onRespondApproval("accept")}
+                  onReject={() => props.onRespondApproval("decline")}
+                />
               </div>
             )}
           </Show>

@@ -10,7 +10,6 @@ import type {
   TeamPresenceMember,
   UpdateTeamMemberInput,
 } from "@codebot/contracts/ipc";
-import { accountRestartsServer } from "@codebot/ui/features/servers/ServerActionItems";
 import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, flush, onCleanup } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
@@ -404,9 +403,9 @@ const ServerSettings = createSimpleContext({
       const server = restartConfirmServer();
       if (!server) throw new Error(currentText().t("server.settings.unavailable"));
       if (server.thisComputer) await serversPort().localServers.restart(server.id);
-      else if (!accountRestartsServer(server) && serverSupportsCapability(server, "host-restart-v1"))
+      else if (serverSupportsCapability(server, "host-restart-v1"))
         await serversPort().hostAdmin.restartHost(server.id);
-      else await serversPort().hostedServers.restart(server.id);
+      else throw new Error(currentText().t("server.settings.unavailable"));
     }
 
     async function removeMembership(server: ServerSummary): Promise<void> {

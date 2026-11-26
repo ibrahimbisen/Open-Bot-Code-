@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "话题",
   "app.rail.workflows": "工作流",
   "app.rail.usage": "用量",
-  "app.rail.creditsAsk": "需要积分时询问",
-  "app.rail.creditsAskSaveFailed": "无法更改积分询问设置。",
   "app.rail.library": "资料库",
   "app.rail.providers": "服务商",
   "app.rail.crm": "CRM",

@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "スレッド",
   "app.rail.workflows": "ワークフロー",
   "app.rail.usage": "使用量",
-  "app.rail.creditsAsk": "クレジットが必要なときに確認する",
-  "app.rail.creditsAskSaveFailed": "クレジットの確認設定を変更できませんでした。",
   "app.rail.library": "ライブラリ",
   "app.rail.providers": "プロバイダー",
   "app.rail.crm": "CRM",

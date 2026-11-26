@@ -1,13 +1,12 @@
-import { type WorkflowMediaInput, workflowCatalogSource } from "@codebot/contracts/ipc";
+import type { WorkflowMediaInput } from "@codebot/contracts/ipc";
 import type { AppTranslate } from "@codebot/i18n";
 import { Button, Download, Film, Image, Maximize2, Mic, RotateCcw, Square, Textarea, TriangleAlert } from "@codebot/ui";
 import type { JSX } from "@solidjs/web";
-import { createEffect, createSignal, Show, untrack } from "solid-js";
+import { createSignal, Show, untrack } from "solid-js";
 import { useText } from "../../text";
 import { ImageLightbox, type ImageLightboxOpening } from "../conversation/ImageLightbox";
 import { MediaGenerationCanvas } from "../conversation/media-generation-frame";
 import { VideoPlayer } from "../conversation/VideoPlayer";
-import { CreditIcon } from "../credits/CreditIcon";
 import { usePictureShape } from "./picture-shape";
 import { MediaModelPicker } from "./WorkflowMediaModelPicker";
 import { makingTake, resultValue, useBoard, type WfnResult } from "./workflow-board";
@@ -72,7 +71,7 @@ function cardWidth(ratio: number) {
 
 function FailedTake(props: { id: string; result: WfnResult; step: MediaStep }) {
   const board = useBoard();
-  const { t, format } = useText();
+  const { t } = useText();
   return (
     <div class="wfn-media-failed" role="alert">
       <TriangleAlert class="wfn-media-failed-icon" aria-hidden="true" />
@@ -84,20 +83,11 @@ function FailedTake(props: { id: string; result: WfnResult; step: MediaStep }) {
             variant="secondary"
             size="sm"
             class="wfn-media-retry"
-            aria-label={props.step.retryLabel()}
-            disabled={props.step.locked() || props.step.retryShort()}
+            disabled={props.step.locked()}
             onClick={() => retry()(props.id, props.result.id)}
           >
             <RotateCcw aria-hidden="true" />
             {t("workflow.node.retry")}
-            <Show when={props.step.price()}>
-              {(credits) => (
-                <span class="wfn-media-retry-price">
-                  <CreditIcon class="wfn-run-credits-icon" />
-                  {format.number(credits())}
-                </span>
-              )}
-            </Show>
           </Button>
         )}
       </Show>
@@ -122,10 +112,6 @@ export function ImageNode(props: { id: string; image?: string | undefined; promp
     untrack(() => ({ prompt: props.prompt, aspect: props.aspect })),
   );
   const { kind, prompt, specs, model, run } = step;
-  createEffect(step.short, (short) => {
-    board.markCreditsShort(props.id, short);
-    return () => board.markCreditsShort(props.id, false);
-  });
   const text = (key: keyof (typeof KIND_TEXT)["image"]) => t(KIND_TEXT[kind()][key]);
   const frameRatio = () => {
     const size = specs().size;
@@ -187,8 +173,7 @@ export function ImageNode(props: { id: string; image?: string | undefined; promp
     const shown = board.shown(props.id);
     return shown?.failed ? shown : undefined;
   };
-  const paidWithCredits = () => workflowCatalogSource(model()?.id ?? "") === "codebot";
-  const stoppable = () => !paidWithCredits() && run.stop();
+  const stoppable = () => run.stop();
   const durationText = (value: number) => t("workflow.video.seconds", { value: String(value) });
   const frameText = () => {
     const size = specs().size;
@@ -357,10 +342,9 @@ export function ImageNode(props: { id: string; image?: string | undefined; promp
                     size="xs"
                     class="wfn-run-pill"
                     loading={step.busy()}
-                    disabled={!step.runnable() || step.locked() || step.short() || !model()}
-                    aria-label={step.runLabel()}
+                    disabled={!step.runnable() || step.locked() || !model()}
                   >
-                    <RunContent credits={step.total()} takes={step.batch()} modelMissing={step.modelMissing()} />
+                    <RunContent takes={step.batch()} modelMissing={step.modelMissing()} />
                   </Button>
                 }
               >

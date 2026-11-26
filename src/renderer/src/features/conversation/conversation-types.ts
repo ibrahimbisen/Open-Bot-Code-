@@ -41,7 +41,6 @@ import type { AwaitingReplyItem } from "@codebot/ui/features/conversation/Awaiti
 import type { UsageLimitAskCardProps } from "@codebot/ui/features/conversation/BackupModels";
 import type { ChatMessageAuthor } from "@codebot/ui/features/conversation/ChatMessageRow";
 import type { UnloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
-import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import type { SidePanelPane } from "@codebot/ui/features/conversation/SidePanel";
 import type { AgentThreadOlderMessages } from "@codebot/ui/features/conversation/threads/AgentThreadView";
 import type { ThreadHeaderProps, ThreadItem } from "@codebot/ui/features/conversation/threads/thread-types";
@@ -225,7 +224,6 @@ export interface ConversationProps {
   onPromptResolutionPresented?: ((agentId: string, turnId: string, requestId: string | number) => void) | undefined;
   onRespondToApproval: (decision: "accept" | "decline") => Promise<boolean>;
   onAlwaysAllowApproval?: (() => Promise<boolean>) | undefined;
-  mediaApproval?: MediaApprovalControls | undefined;
   agentAutoApproves?: boolean | undefined;
   remoteBackupModelsLoaded?: boolean | undefined;
   remotePlanCardLoaded?: boolean | undefined;

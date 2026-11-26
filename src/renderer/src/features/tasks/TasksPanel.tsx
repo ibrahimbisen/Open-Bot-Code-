@@ -17,8 +17,6 @@ import { createAttachmentDownloads } from "../conversation/attachment-downloads"
 import { EMPTY_DRAFT } from "../conversation/composer-draft";
 import { composerDraftKey } from "../conversation/conversation-keys";
 import type { ComposerDraft } from "../conversation/conversation-types";
-import { useDesktopMediaApproval } from "../conversation/desktop-media-approval";
-import { useNearPaymentApproval } from "../conversation/near-payment-approval";
 import { createVoiceStore, VOICE_LEVEL_COUNT, type VoiceStoreDeps } from "../conversation/stores/voice-store";
 import { createServerResponseStyle } from "../servers/server-personality";
 import { useServers } from "../servers/servers-context";
@@ -37,8 +35,6 @@ export function TasksPanel(props: TasksPanelProps) {
   const { agentList } = useAgents();
   const { approvals, pendingPrompts, respondToApprovalRequest } = useTurns();
   const threads = useAgentTasks();
-  const mediaApproval = useDesktopMediaApproval();
-  const { card: nearPaymentCard } = useNearPaymentApproval(() => props.serverId === LOCAL_SERVER_ID);
   const tabs = useAgentThreads();
   const { selectAgent } = useNavigation();
   const platform = usePlatform();
@@ -76,7 +72,6 @@ export function TasksPanel(props: TasksPanelProps) {
       source={desktopTasksSource()}
       failureText={props.serverId === LOCAL_SERVER_ID ? undefined : remoteAgentError}
       agents={agentList()}
-      mediaApproval={mediaApproval}
       voice={createTasksVoice}
       onOpenLink={(url) => void appPort().openUrl(url)}
       onAttachmentAction={attachmentFiles.open}
@@ -96,13 +91,6 @@ export function TasksPanel(props: TasksPanelProps) {
       responseStyle={responseStyle()}
       onRead={(input, messageId) => threads.markTaskRead(input.agentId, input.taskId, messageId)}
       onRespondApproval={respondApproval}
-      approvalCard={(approval) =>
-        nearPaymentCard(
-          approval,
-          () => respondApproval(approval, "accept"),
-          () => respondApproval(approval, "decline"),
-        )
-      }
     />
   );
 }

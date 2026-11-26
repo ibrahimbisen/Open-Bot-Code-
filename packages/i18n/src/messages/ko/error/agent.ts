@@ -167,8 +167,6 @@ export const messages = {
     "지난 1시간 동안 로컬 스크립트가 이 에이전트의 루틴을 {limit}번 실행했어요. 나중에 다시 시도해 주세요.",
   "error.agent.workspaceOnlyMacOnly":
     "이 제공자의 워크스페이스 전용 모드는 macOS에서만 사용할 수 있어요. 에이전트 설정에서 전체 접근 권한을 선택하세요.",
-  "error.agent.lowMemory":
-    "이 서버의 메모리가 부족해요. 메시지는 대기열에서 기다리다가 메모리가 확보되면 시작돼요. 더 큰 플랜을 쓰면 서버 메모리가 늘어나요.",
   "error.agent.lowMemoryServer":
     "이 서버의 메모리가 부족해요. 메시지는 대기열에서 기다리다가 메모리가 확보되면 시작돼요.",
   "error.agent.workspaceOnlyToolMissing":
@@ -187,8 +185,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "Slack, Discord, Telegram 대화에서는 다른 사람도 파일을 받으므로 화면 캡처를 사용할 수 없어요.",
   "error.agent.screenCaptureDeclined": "사용자가 이 화면 캡처를 허용하지 않았어요. 캡처된 내용은 없어요.",
-  "error.agent.creditMediaDeclined": "사용자가 이 생성을 허용하지 않았습니다. 크레딧은 사용되지 않았습니다.",
-  "error.agent.creditMediaNotSaved": "파일은 만들어졌지만 CodeBot이 채팅에 저장하지 못했습니다.",
   "error.agent.mcpServerDeclined": "사용자가 이 MCP 서버 변경을 허용하지 않았어요. 변경된 내용은 없어요.",
   "error.agent.mcpToolDeclined": "사용자가 이 MCP 도구 호출을 허용하지 않았어요. 도구는 실행되지 않았어요.",
   "error.agent.mcpServerNotSaved": "MCP 서버가 응답하지 않아 저장하지 않았어요. {error}",

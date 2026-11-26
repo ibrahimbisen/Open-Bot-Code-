@@ -41,7 +41,6 @@ import { useWindowPage } from "../window/window-page-context";
 import { createCommunityCardVisibility } from "./community-card";
 import { DevWorktreeLabel } from "./DevWorktreeLabel";
 import { createSidebarAlertCards, SidebarAlertCards } from "./SidebarAlertCards";
-import { ServerUpgradeOffer } from "./server-upgrade-offer";
 import { useSidebar } from "./sidebar-context";
 
 const MOBILE_APP_DISMISSED_STORAGE_KEY = "codebot:mobile-app-card-dismissed";
@@ -238,11 +237,8 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
                 onViewChange: layout.setServerView,
                 onSelect: serverActions.select,
                 onAdd: serverActions.add,
-                onCreateLocal: serverActions.addMenuCreateLocal(),
-                onInstallServer: serverActions.addMenuInstallServer(),
                 addCreatesServer: serverActions.addCreatesServer(),
                 hiddenServers: serverActions.hiddenServers(),
-                credits: windowPage.creditsMenu(),
                 ...serverActions.callbacks,
               }
             : undefined
@@ -363,13 +359,6 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
               }
             : undefined
         }
-      />
-      <ServerUpgradeOffer
-        billing={appPort().billing}
-        card={alertCards.storageCard.card()}
-        server={activeServer()}
-        blocked={serverSettingsOpen()}
-        onFreeUpSpace={(serverId) => openServerSettings(serverId, null, "storage")}
       />
     </>
   );

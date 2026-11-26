@@ -3,26 +3,6 @@ import type { AppAppearancePreference, SetAppAppearancePreferenceInput } from ".
 import type { AppInterfaceSizePreference, SetAppInterfaceSizePreferenceInput } from "./app-interface-size";
 import type { AppLanguagePreference, SetAppLanguagePreferenceInput } from "./app-language";
 import type { AppLogoColorPreference, SetAppLogoColorPreferenceInput } from "./app-logo-color";
-import type { BillingPortalRequest, BillingState, BillingStorageRequest } from "./billing";
-import type { BillingDetails, BillingDetailsRequest } from "./billing-details";
-import type {
-  CreditActivity,
-  CreditCheckoutRequest,
-  CreditRedeemRequest,
-  CreditRedeemResult,
-  CreditsState,
-  CreditTransferRequest,
-} from "./credits";
-import type { CustomServerCheckoutRequest, CustomServerCheckoutResult } from "./custom-server-plans";
-import type {
-  CreateHostedServerInput,
-  DeleteHostedServerInput,
-  HostedServerCatalog,
-  HostedServerLifecycleInput,
-  HostedServerList,
-  HostedServerSummary,
-  ServerClaim,
-} from "./hosted-servers";
 import type {
   AcpRegistryEntry,
   AcpRegistryInstallation,
@@ -397,13 +377,6 @@ import type { HostSignalHomeSettings } from "./ipc-host-signal-home";
 import type { HostTimezoneSettings } from "./ipc-host-timezone";
 import type { HostTurnLimits, HostTurnLimitsInput } from "./ipc-host-turn-limits";
 import type {
-  DeleteHostedSiteInput,
-  HostedSiteList,
-  HostedSiteSummary,
-  PublishHostedSiteInput,
-  ReplaceHostedSiteInput,
-} from "./ipc-hosted-sites";
-import type {
   ApplyInstanceTransferInput,
   CopyInstanceAgentsInput,
   ExportInstanceInput,
@@ -414,7 +387,6 @@ import type {
   InstanceTransferUploadProgress,
 } from "./ipc-instance-transfer";
 import type { LibraryFolderAction, LibraryFoldersSnapshot } from "./ipc-library-folders";
-import type { LinkAccountStatus } from "./ipc-link-account";
 import type { MachineAlertSettings, MachineMetrics } from "./ipc-machine-resources";
 import type {
   AgentPublicationPreview,
@@ -443,14 +415,6 @@ import type {
   SignOutMcpServerInput,
   TestMcpServerInput,
 } from "./ipc-mcp-servers";
-import type {
-  CreditsHold,
-  MediaApprovalRead,
-  ReadMediaApprovalInput,
-  RespondToCreditsHoldInput,
-  RespondToMediaApprovalInput,
-} from "./ipc-media-approval";
-import type { MediaApprovalCreditsSetting, MediaApprovalCreditsUpdate } from "./ipc-media-approval-credits";
 import type { PinnedMessagesSnapshot, SetMessagePinnedInput } from "./ipc-message-pins";
 import type {
   AddMessagingOrchestratorInput,
@@ -492,15 +456,6 @@ import type {
   WhatsAppSenderInput,
 } from "./ipc-messaging";
 import type { ProviderModelVisibility, ProviderModelVisibilityChange } from "./ipc-model-visibility";
-import type {
-  NearAgentsInput,
-  NearAllowPaymentInput,
-  NearDepositAddress,
-  NearDepositInput,
-  NearRuleInput,
-  NearWalletCreateInput,
-  NearWalletStatus,
-} from "./ipc-near-wallet";
 import type {
   NotificationOpenedEvent,
   NotificationPreference,
@@ -704,13 +659,6 @@ import type {
   WorkflowVersionInput,
   WorkflowWebhookSecret,
 } from "./ipc-workflows";
-import type {
-  LicenseCheckoutRequest,
-  LicensePlanRequest,
-  LicenseRenewalRequest,
-  LicenseState,
-  LicenseUsersRequest,
-} from "./license";
 import type { MarketplaceListingLink } from "./marketplace-links";
 import type { AccountSession, MobileConnectedDevice, MobileConnectLink, MobileConnectTicket } from "./mobile-connect";
 import type { AcceptedOwnerTransfer, OwnerTransfer } from "./owner-transfer";
@@ -1291,12 +1239,6 @@ export const IPC_ENDPOINTS = {
     setCacheExpiryCompaction: scopedRequest<boolean, CacheExpiryCompactionSetting, "required">()(
       "host-admin:set-cache-expiry-compaction",
     ),
-    getMediaApprovalCredits: scopedQuery<MediaApprovalCreditsSetting, "required">()(
-      "host-admin:get-media-approval-credits",
-    ),
-    setMediaApprovalCredits: scopedRequest<MediaApprovalCreditsUpdate, MediaApprovalCreditsSetting, "required">()(
-      "host-admin:set-media-approval-credits",
-    ),
     getClaudeUserSetup: scopedQuery<ClaudeUserSetupSetting, "required">()("host-admin:get-claude-user-setup"),
     setClaudeUserSetup: scopedRequest<boolean, ClaudeUserSetupSetting, "required">()(
       "host-admin:set-claude-user-setup",
@@ -1368,31 +1310,6 @@ export const IPC_ENDPOINTS = {
     ),
     hostOpenSignIn: scopedRequest<PasswordManagerId, void, "required">()("password-managers:host-open-sign-in"),
   },
-  linkAccount: {
-    status: request<undefined, LinkAccountStatus>()("link-account:status"),
-    connect: request<undefined, LinkAccountStatus>()("link-account:connect"),
-    cancel: request<undefined, LinkAccountStatus>()("link-account:cancel"),
-    disconnect: request<undefined, LinkAccountStatus>()("link-account:disconnect"),
-    changed: event<LinkAccountStatus>()("link-account:changed"),
-  },
-  nearWallet: {
-    status: request<undefined, NearWalletStatus>()("near-wallet:status"),
-    create: request<NearWalletCreateInput, NearWalletStatus>()("near-wallet:create"),
-    setBudget: request<{ dailyBudgetUsd: string }, NearWalletStatus>()("near-wallet:set-budget"),
-    setAgents: request<NearAgentsInput, NearWalletStatus>()("near-wallet:set-agents"),
-    renewGrant: request<undefined, NearWalletStatus>()("near-wallet:renew-grant"),
-    freeze: request<undefined, NearWalletStatus>()("near-wallet:freeze"),
-    unfreeze: request<undefined, NearWalletStatus>()("near-wallet:unfreeze"),
-    deposit: request<NearDepositInput, NearDepositAddress>()("near-wallet:deposit"),
-    saveRule: request<NearRuleInput, NearWalletStatus>()("near-wallet:save-rule"),
-    removeRule: request<{ domain: string }, NearWalletStatus>()("near-wallet:remove-rule"),
-    allowPayment: request<NearAllowPaymentInput, NearWalletStatus>()("near-wallet:allow-payment"),
-    openSigning: request<undefined, void>()("near-wallet:open-signing"),
-    cancelSigning: request<undefined, NearWalletStatus>()("near-wallet:cancel-signing"),
-    checkBackup: request<undefined, NearWalletStatus>()("near-wallet:check-backup"),
-    disconnect: request<undefined, NearWalletStatus>()("near-wallet:disconnect"),
-    changed: event<NearWalletStatus>()("near-wallet:changed"),
-  },
   vault: {
     list: request<undefined, VaultState>()("vault:list"),
     save: request<VaultSaveInput, VaultState>()("vault:save"),
@@ -1428,52 +1345,10 @@ export const IPC_ENDPOINTS = {
     ),
     hostDisconnect: scopedQuery<OnePasswordConnectorStatus, "required">()("onepassword-connector:host-disconnect"),
   },
-  hostedSites: {
-    list: scopedQuery<HostedSiteList, "required">()("hosted-sites:list"),
-    chooseDirectory: request<undefined, string | null>()("hosted-sites:choose-directory"),
-    publish: request<PublishHostedSiteInput, HostedSiteSummary>()("hosted-sites:publish"),
-    replace: request<ReplaceHostedSiteInput, HostedSiteSummary>()("hosted-sites:replace"),
-    delete: scopedRequest<DeleteHostedSiteInput, void, "required">()("hosted-sites:delete"),
-  },
   routineFeed: {
     get: request<undefined, RoutineFeed>()("routine-feed:get"),
     create: request<undefined, RoutineFeed>()("routine-feed:create"),
     remove: request<undefined, RoutineFeed>()("routine-feed:remove"),
-  },
-  billing: {
-    getState: request<undefined, BillingState>()("billing:get-state"),
-    openPortal: request<BillingPortalRequest, void>()("billing:open-portal"),
-    buyStorage: request<BillingStorageRequest, BillingState>()("billing:buy-storage"),
-    getDetails: request<undefined, BillingDetails>()("billing:get-details"),
-    setDetails: request<BillingDetailsRequest, BillingDetails>()("billing:set-details"),
-  },
-  credits: {
-    getState: request<undefined, CreditsState>()("credits:get-state"),
-    getActivity: request<undefined, CreditActivity>()("credits:get-activity"),
-    openCheckout: request<CreditCheckoutRequest, void>()("credits:open-checkout"),
-    transfer: request<CreditTransferRequest, CreditsState>()("credits:transfer"),
-    redeem: request<CreditRedeemRequest, CreditRedeemResult>()("credits:redeem"),
-  },
-  license: {
-    getState: request<undefined, LicenseState>()("license:get-state"),
-    openCheckout: request<LicenseCheckoutRequest, void>()("license:open-checkout"),
-    setUsers: request<LicenseUsersRequest, LicenseState>()("license:set-users"),
-    changePlan: request<LicensePlanRequest, LicenseState>()("license:change-plan"),
-    setRenewal: request<LicenseRenewalRequest, LicenseState>()("license:set-renewal"),
-  },
-  hostedServers: {
-    list: request<undefined, HostedServerList>()("hosted-servers:list"),
-    plans: request<undefined, HostedServerCatalog>()("hosted-servers:plans"),
-    create: request<CreateHostedServerInput, HostedServerSummary>()("hosted-servers:create"),
-    openCheckout: request<string, HostedServerSummary>()("hosted-servers:open-checkout"),
-    openCustomCheckout: request<CustomServerCheckoutRequest, CustomServerCheckoutResult>()(
-      "hosted-servers:open-custom-checkout",
-    ),
-    delete: request<DeleteHostedServerInput, void>()("hosted-servers:delete"),
-    lifecycle: request<HostedServerLifecycleInput, void>()("hosted-servers:lifecycle"),
-    wake: request<string, HostedServerSummary>()("hosted-servers:wake"),
-    restart: request<string, HostedServerSummary>()("hosted-servers:restart"),
-    createServerClaim: request<undefined, ServerClaim>()("hosted-servers:create-server-claim"),
   },
   localServers: {
     create: request<string, ServerSummary>()("local-servers:create"),
@@ -1665,13 +1540,6 @@ export const IPC_ENDPOINTS = {
     respondToPrompt: scopedRequest<RespondToPromptInput, void>()("agent:respond-to-prompt"),
     respondToApproval: scopedRequest<RespondToApprovalInput, void>()("agent:respond-to-approval"),
     readPendingApproval: scopedRequest<ReadPendingApprovalInput, AgentApproval | null>()("agent:read-pending-approval"),
-    readMediaApproval: scopedRequest<ReadMediaApprovalInput, MediaApprovalRead>()("agent:read-media-approval"),
-    respondToMediaApproval: scopedRequest<RespondToMediaApprovalInput, void>()("agent:respond-to-media-approval"),
-    respondToCreditsHold: scopedRequest<RespondToCreditsHoldInput, CreditsHold | null>()(
-      "agent:respond-to-credits-hold",
-    ),
-    setCreditsAskMuted: scopedRequest<{ muted: boolean }, void>()("agent:set-credits-ask-muted"),
-    readCreditsAskMuted: scopedQuery<{ muted: boolean }>()("agent:read-credits-ask-muted"),
     listPendingPrompts: scopedQuery<AgentRuntimePrompt[]>()("agent:list-pending-prompts"),
     respondToBrowserSecret: scopedRequest<LocalBrowserSecretResponse, void>()("agent:respond-to-browser-secret"),
     respondToBrowserTakeover: scopedRequest<RespondToBrowserTakeoverInput, void>()("agent:respond-to-browser-takeover"),
@@ -2136,18 +2004,11 @@ export const IPC_GROUP_PATHS = {
   onePasswordConnector: "onePasswordConnector",
   bitwardenConnector: "bitwardenConnector",
   passwordManagers: "passwordManagers",
-  linkAccount: "linkAccount",
-  nearWallet: "nearWallet",
   vault: "vault",
-  hostedSites: "hostedSites",
   routineFeed: "routineFeed",
   workflows: "workflows",
   crm: "crm",
   routineResults: "routineResults",
-  billing: "billing",
-  credits: "credits",
-  license: "license",
-  hostedServers: "hostedServers",
   localServers: "localServers",
   marketplaceAgents: "marketplaceAgents",
   agentTemplates: "agentTemplates",

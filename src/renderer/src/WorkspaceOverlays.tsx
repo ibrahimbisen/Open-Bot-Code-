@@ -1,11 +1,4 @@
-import { INSTALL_SERVER_SCRIPT_URL } from "@codebot/contracts/hosted-servers";
-import {
-  type CentralAuthUser,
-  LOCAL_SERVER_ID,
-  LOCAL_SERVER_LIMIT,
-  type RoutineFields,
-  type ServerSummary,
-} from "@codebot/contracts/ipc";
+import { type CentralAuthUser, LOCAL_SERVER_ID, LOCAL_SERVER_LIMIT, type ServerSummary } from "@codebot/contracts/ipc";
 import { BROWSER_PROFILES_CAPABILITY } from "@codebot/contracts/team-protocol/browser-profiles-v1";
 import { OWNER_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/owner-transfer-v1";
 import { PROVIDER_DETECTION_CAPABILITY } from "@codebot/contracts/team-protocol/provider-detection-v1";
@@ -20,21 +13,16 @@ import type { CustomAgentSettingsApi } from "@codebot/ui/features/custom-provide
 import { providerDiagnosticsText } from "@codebot/ui/features/provider-diagnostics/provider-diagnostics";
 import { LeaveServerDialog } from "@codebot/ui/features/servers/LeaveServerDialog";
 import { RestartServerDialog } from "@codebot/ui/features/servers/RestartServerDialog";
-import type { HostedSiteDeleteResult } from "@codebot/ui/features/settings/stores/hosted-sites-store";
 import { sidebarAgentOrder } from "@codebot/ui/features/sidebar/sidebar-agent-order";
 import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, Loading, onCleanup, Show, untrack } from "solid-js";
 import { actionToast } from "./action-toast";
-import { desktopAnalytics } from "./analytics";
 import { appPort } from "./app-port";
 import { useAuth } from "./features/account/account-context";
 import { useAgents } from "./features/agents/agents-context";
 import { desktopBrowserProfileCalls } from "./features/browser/browser-profiles-port";
 import { createBrowserProfilesStore } from "./features/browser/stores/browser-profiles-store";
 import { useConnectors } from "./features/connectors/connectors-context";
-import { appendDraftText, EMPTY_DRAFT } from "./features/conversation/composer-draft";
-import { useConversationController } from "./features/conversation/conversation-controller-context";
-import { composerDraftKey } from "./features/conversation/conversation-keys";
 import { desktopCrmHost } from "./features/crm/crm-port";
 import { useCustomAgents } from "./features/custom-agents/custom-agents-context";
 import { useCustomProviders } from "./features/custom-providers/custom-providers-context";
@@ -44,17 +32,9 @@ import { createProviderDetectionStore } from "./features/custom-providers/stores
 import type { ServerStorageOptions } from "./features/files/ServerStoragePanel";
 import { useSetup } from "./features/onboarding/onboarding-context";
 import { useRemoteDesktop } from "./features/remote-desktop/remote-desktop-context";
-import { desktopScheduleSource } from "./features/schedule/schedule-port";
 import { AddServerOverlay } from "./features/servers/AddServerOverlay";
-import {
-  createdRoutines,
-  HostedServerUpsell,
-  hostedUpsellRoutineCreated,
-} from "./features/servers/hosted-server-upsell-controller";
-import { InstallServerOverlay } from "./features/servers/InstallServerOverlay";
 import { mcpToolRuntimeNote } from "./features/servers/mcp-servers";
 import { OwnerTransferPrompt } from "./features/servers/OwnerTransferPrompt";
-import { ServerPlanReminder } from "./features/servers/ServerPlanReminder";
 import type { ServerCopyOptions } from "./features/servers/ServerTransferPanel";
 import { useServerActions } from "./features/servers/server-actions";
 import {
@@ -66,7 +46,6 @@ import { useServerSelection } from "./features/servers/server-selection";
 import { useServerSettings } from "./features/servers/server-settings";
 import { useServerSwitch } from "./features/servers/server-switch";
 import { useServers } from "./features/servers/servers-context";
-import { serversPort } from "./features/servers/servers-port";
 import type { HostProviderSettings } from "./features/settings/ProviderSettingsSection";
 import { useSettings } from "./features/settings/settings-context";
 import { settingsPort } from "./features/settings/settings-port";
@@ -75,8 +54,6 @@ import { codexLiveAccess as codexLiveAccessOf } from "./features/speech/codex-li
 import { useUpdates } from "./features/updates/updates-context";
 import { useWhatsNew } from "./features/updates/whats-new-context";
 import { usePlanLimitRows } from "./features/usage/plan-limit-rows";
-import { createLinkAccountStore } from "./features/vault/stores/link-account-store";
-import { createNearWalletStore } from "./features/vault/stores/near-wallet-store";
 import { createVaultStore } from "./features/vault/stores/vault-store";
 import { desktopVaultCalls, hostVaultCalls } from "./features/vault/vault-port";
 import { useWindowPage } from "./features/window/window-page-context";
@@ -85,7 +62,6 @@ import { CreateLocalServerDialog, RemoteDesktopWorkspace, SettingsModal } from "
 import { useNavigation } from "./navigation";
 import { usePlatform } from "./platform";
 import { useProviders } from "./providers";
-import { useTurns } from "./turns";
 import {
   ChannelCreateOverlay,
   GlobalSearchOverlay,
@@ -112,9 +88,6 @@ export function WorkspaceOverlays(props: AccountProps) {
       <JoinServer account={props.account} />
       <AddServer />
       <CreateLocalServer />
-      <InstallServer />
-      <HostedUpsell account={props.account} />
-      <PlanReminder />
       <LeaveServer />
       <RestartServer />
       <ServerSettings />
@@ -224,20 +197,6 @@ export function SkillsMarketplace() {
   );
 }
 
-function PlanReminder() {
-  const platform = usePlatform();
-  const { allServers, callbacks } = useServerActions();
-  return (
-    <Show when={platform.chatWindow === null}>
-      <ServerPlanReminder
-        servers={allServers()}
-        planDeletesAt={callbacks.planDeletesAt}
-        onRenew={callbacks.onRenewPlan}
-      />
-    </Show>
-  );
-}
-
 function SharedAgentInstall() {
   const { pendingAgentTemplateId, setPendingAgentTemplateId } = useSettings();
   const { openInstalledMarketplaceAgent } = useServerSelection();
@@ -291,152 +250,25 @@ function CreateLocalServer() {
   );
 }
 
-function InstallServer() {
-  const { servers, activeServer, installServerOpen, setInstallServerOpen } = useServers();
-  const { select } = useServerActions();
-  const { activeAgent, agentStatus, agentSetupOpen, creatingAgent } = useAgents();
-  const { selectAgent } = useNavigation();
-  const controller = useConversationController();
-  const agentTarget = createMemo(() => {
-    const server = activeServer();
-    const agent = activeAgent();
-    if (!server || !agent || agentStatus().phase !== "ready" || (agentSetupOpen() && creatingAgent())) return undefined;
-    if (!server.thisComputer && server.role !== "owner") return undefined;
-    if (controller.submitting() || controller.voicePhase() !== "idle" || controller.editingDeliveryId())
-      return undefined;
-    return { serverId: server.id, agentId: agent.id };
-  });
-  function setUpWithAgent(): (() => void) | undefined {
-    const target = agentTarget();
-    if (!target) return undefined;
-    return () => {
-      selectAgent(target.agentId);
-      const task = currentText().t("server.install.sshAgentPrompt");
-      const key = composerDraftKey(target);
-      controller.setDrafts((current) => {
-        const draft = current[key] ?? EMPTY_DRAFT;
-        const next =
-          draft.text.trim() === task.trim() || draft.text.includes(INSTALL_SERVER_SCRIPT_URL)
-            ? { ...draft, text: task }
-            : appendDraftText(draft, task);
-        return { ...current, [key]: next };
-      });
-      setInstallServerOpen(false);
-      controller.setComposerFocusRequest((value) => value + 1);
-    };
-  }
-  return (
-    <InstallServerOverlay
-      open={installServerOpen()}
-      servers={servers()}
-      createClaim={() => appPort().hostedServers.createServerClaim()}
-      retryConnection={(serverId) => serversPort().servers.retryConnection(serverId)}
-      onSetUpWithAgent={setUpWithAgent()}
-      onOpenServer={select}
-      onClose={() => setInstallServerOpen(false)}
-    />
-  );
-}
-
 function AddServer() {
-  const { servers, addServerOpen, addServerEntryPoint, setAddServerOpen, setJoinServerOpen } = useServers();
-  const { select, createLocal, installServer } = useServerActions();
-  const { openAppSettings, setAppSettingsOpen } = useSettings();
-  const windowPage = useWindowPage();
+  const { addServerOpen, setAddServerOpen, setJoinServerOpen } = useServers();
+  const { createLocal } = useServerActions();
   const onCreateLocal =
     createLocal &&
     (() => {
       setAddServerOpen(false);
       createLocal();
     });
-  const onInstallServer =
-    installServer &&
-    (() => {
-      setAddServerOpen(false);
-      installServer();
-    });
 
   return (
     <AddServerOverlay
       open={addServerOpen()}
-      entryPoint={addServerEntryPoint() ?? undefined}
-      calls={appPort().hostedServers}
-      license={appPort().license}
-      billingDetails={appPort().billing}
-      thisComputer
-      pricingPage={windowPage.pricing}
-      onOpenUrl={(url) => void appPort().openUrl(url)}
-      servers={servers()}
       onClose={() => setAddServerOpen(false)}
-      onOpenServer={(serverId) => {
-        setAddServerOpen(false);
-        setAppSettingsOpen(false);
-        void select(serverId);
-      }}
-      onContactUs={() => void appPort().openExternal("hosted-server-contact")}
       onJoinWithInvite={() => {
         setAddServerOpen(false);
         setJoinServerOpen(true);
       }}
       onCreateLocal={onCreateLocal}
-      onInstallServer={onInstallServer}
-      onManageServers={() => openAppSettings(null, "hosted-servers")}
-    />
-  );
-}
-
-function HostedUpsell(props: AccountProps) {
-  const { activeServer, hostedServersAvailable, hostedServersLoaded, hostedServerIds, setAddServerOpen } = useServers();
-  const { activeTurns, routinesByConversation } = useTurns();
-  const platform = usePlatform();
-  const seen = new Map<string, readonly RoutineFields[]>();
-  createEffect(routinesByConversation, (snapshots) => {
-    for (const [key, snapshot] of Object.entries(snapshots)) {
-      if (!snapshot?.current || seen.get(key) === snapshot.routines) continue;
-      const created = createdRoutines(seen.get(key), snapshot.routines);
-      seen.set(key, snapshot.routines);
-      const agentId = key.slice(key.indexOf("\0") + 1);
-      for (const routine of created) {
-        hostedUpsellRoutineCreated({ id: routine.id, name: routine.name, agentId });
-      }
-    }
-  });
-  function canOfferHostedServer(): boolean {
-    return (
-      !platform.landingPreview &&
-      hostedServersAvailable() &&
-      hostedServersLoaded() &&
-      hostedServerIds().size === 0 &&
-      (activeServer()?.kind === "local" || activeServer()?.role === "owner") &&
-      activeServer()?.hosted !== true
-    );
-  }
-  function upsellServerId(): string {
-    return activeServer()?.id ?? "local";
-  }
-  function upsellHost() {
-    const server = activeServer();
-    return server?.kind === "remote" ? { name: server.name ?? "" } : ("this-computer" as const);
-  }
-  function localActiveRoutineIds(): Promise<readonly string[] | null> {
-    if (untrack(activeServer)?.kind !== "local") return Promise.resolve(null);
-    const from = Date.now() + 60_000;
-    return desktopScheduleSource()
-      .calendar({ from: new Date(from).toISOString(), to: new Date(from + 60_000).toISOString() }, LOCAL_SERVER_ID)
-      .then((calendar) => calendar.routines.filter((routine) => routine.active).map((routine) => routine.id));
-  }
-  return (
-    <HostedServerUpsell
-      accountId={props.account().id}
-      canOffer={canOfferHostedServer()}
-      serverId={upsellServerId()}
-      activeHostRoutineIds={localActiveRoutineIds}
-      host={upsellHost()}
-      busy={(agentId) => Boolean(activeTurns()[agentId])}
-      openPlans={() => setAddServerOpen(true, "upsell")}
-      track={(action, entryPoint) =>
-        desktopAnalytics.track("hosted_server_upsell", { action, entry_point: entryPoint })
-      }
     />
   );
 }
@@ -474,15 +306,7 @@ function ServerSettings() {
   const windowPage = useWindowPage();
   const usageRows = usePlanLimitRows();
   const platform = usePlatform();
-  const {
-    servers,
-    activeServer,
-    hostStatus,
-    hostedServerIds,
-    hostedServersAvailable,
-    hostedServersLoaded,
-    setAddServerOpen,
-  } = useServers();
+  const { servers, activeServer, hostStatus } = useServers();
   const { selectAgent, selectGlobalSearchMessage } = useNavigation();
   const { selectServer } = useServerSelection();
   const { setPendingAgentSelection } = useServerSwitch();
@@ -610,7 +434,6 @@ function ServerSettings() {
   });
   const vaultApiKeys = createMemo(() => serverCanAdminister(serverSettingsTarget(), VAULT_V2_CAPABILITY));
   const vaultTwoStep = createMemo(() => serverCanAdminister(serverSettingsTarget(), VAULT_V3_CAPABILITY));
-  const nearAgents = () => (activeServer()?.kind === "local" ? agentList() : undefined);
   const vaultImport = createMemo(() => serverCanAdminister(serverSettingsTarget(), VAULT_IMPORT_CAPABILITY));
   const vault = createMemo(() => {
     const serverId = vaultServerId();
@@ -620,9 +443,6 @@ function ServerSettings() {
       store: createVaultStore(local ? desktopVaultCalls() : hostVaultCalls(serverId, vaultImport())),
       apiKeys: vaultApiKeys(),
       twoStep: vaultTwoStep(),
-      link: local ? createLinkAccountStore() : undefined,
-      near: local ? createNearWalletStore() : undefined,
-      nearAgents,
       listAgents: () => appPort().agent.listAgents(serverId),
     };
   });
@@ -817,20 +637,6 @@ function ServerSettings() {
     );
   };
 
-  function canOfferServerPlans(server: ServerSummary): boolean {
-    return (
-      !platform.landingPreview &&
-      hostedServersAvailable() &&
-      hostedServersLoaded() &&
-      (server.kind === "local" || server.role === "owner") &&
-      server.hosted !== true
-    );
-  }
-  function openServerPlans(): void {
-    setServerSettingsOpen(false);
-    setAddServerOpen(true, "upsell");
-  }
-
   const storageOptions = (server: ServerSummary): Omit<ServerStorageOptions, "canManage"> => ({
     hostName:
       server.kind === "local"
@@ -876,23 +682,17 @@ function ServerSettings() {
           onSetPublished={setServerPublished}
           onRotateHostKey={serverRotatesHostKey(server()) ? rotateHostKey : undefined}
           onCreateInvite={createServerInvite}
-          license={appPort().license}
           companySignIn={appPort().auth}
           ownerTransfer={
-            server().kind === "remote" &&
-            server().hosted !== true &&
-            hostedServersLoaded() &&
-            !hostedServerIds().has(server().id) &&
-            serverSupportsCapability(server(), OWNER_TRANSFER_CAPABILITY)
+            server().kind === "remote" && serverSupportsCapability(server(), OWNER_TRANSFER_CAPABILITY)
               ? appPort().servers
               : undefined
           }
-          onContactUs={() => void appPort().openExternal("hosted-server-contact")}
           onUpdateMember={updateServerMember}
           onRemoveMember={removeServerMember}
           onRevokeInvite={revokeServerInvite}
           onLeaveServer={leaveServer}
-          onRemoveServer={hostedServersLoaded() && !hostedServerIds().has(server().id) ? leaveServer : undefined}
+          onRemoveServer={leaveServer}
           onOpenScreenRecordingSettings={() => appPort().openExternal("mac-screen-recording")}
           onRecheckScreenRecording={recheckScreenRecording}
           storage={storageOptions(server())}
@@ -902,22 +702,11 @@ function ServerSettings() {
               ? () => switchToManageProviders(server())
               : undefined
           }
-          hostedSites={
-            serverSupportsCapability(server(), "hosted-sites-v1")
-              ? {
-                  api: appPort().hostedSites,
-                  onOpenSite: (url) => void appPort().openUrl(url),
-                  trackDelete: trackHostedSiteDelete,
-                  onSeePlans: canOfferServerPlans(server()) ? openServerPlans : undefined,
-                }
-              : undefined
-          }
           hostUpdate={{}}
           hostTimezone={{}}
           hostVoiceModel={{}}
           hostSignalHome={{}}
           hostTurnLimits={{}}
-          mediaApprovalCredits={{}}
           hostPersonality={{}}
           hostMemoryLimit={{}}
           memoryReview={{}}
@@ -980,24 +769,13 @@ function ServerSettings() {
   );
 }
 
-function trackHostedSiteDelete(): (result: HostedSiteDeleteResult) => void {
-  const analytics = desktopAnalytics.scope();
-  return (result) =>
-    analytics.track("hosted_site_action", {
-      action: "delete",
-      entry_point: "settings",
-      result,
-      ...(result === "failed" ? { failure_code: "delete_failed" } : {}),
-    });
-}
-
 function AppSettings(props: AccountProps) {
   const windowPage = useWindowPage();
   const platform = usePlatform();
   const auth = useAuth();
   const updates = useUpdates();
   const whatsNew = useWhatsNew();
-  const { servers, activeServer, setAddServerOpen, setServerMuted, setServerNotificationLevel } = useServers();
+  const { servers, activeServer, setServerMuted, setServerNotificationLevel } = useServers();
   const { agentStatus, agentList, userHiddenAgentIds } = useAgents();
   const { sidebarLayout, pinnedSidebarItems } = useSidebar();
   const { openServerSettings } = useServerSettings();
@@ -1032,7 +810,6 @@ function AppSettings(props: AccountProps) {
     notificationFocusRequest,
     setAppSettingsOpen,
     appSettingsTab,
-    hostedServerDeleteRequest,
     mobileInstallRequest,
     clearMobileInstallRequest,
     generalSettings,
@@ -1088,17 +865,6 @@ function AppSettings(props: AccountProps) {
         onListAccountSessions={auth.listAccountSessions}
         onRevokeAccountSession={auth.revokeAccountSession}
         onSignOut={platform.landingPreview ? undefined : auth.logoutCentralAccount}
-        billingApi={appPort().billing}
-        licenseApi={appPort().license}
-        creditsApi={appPort().credits}
-        onCreditsChange={windowPage.adoptCredits}
-        onBuyCredits={(serverId) => windowPage.openCredits(serverId)}
-        onContactUs={() => void appPort().openExternal("hosted-server-contact")}
-        hostedServersApi={appPort().hostedServers}
-        onAddHostedServer={() => {
-          setAppSettingsOpen(false);
-          setAddServerOpen(true, "settings_billing");
-        }}
         codexLiveAccess={codexLiveAccess()}
         liveVoiceAccount={liveVoiceAccount()}
         onConnectCodex={() => {
@@ -1112,7 +878,6 @@ function AppSettings(props: AccountProps) {
         notificationFocusRequest={notificationFocusRequest()}
         restoreFocusTarget={appSettingsRestoreTarget()}
         openTab={appSettingsTab()}
-        hostedServerDeleteRequest={hostedServerDeleteRequest()}
         mobileInstallRequest={mobileInstallRequest()}
         onMobileInstallRequestHandled={clearMobileInstallRequest}
       />

@@ -24,8 +24,6 @@ const SECRET_TOOLS = new Set([
   "save_vault_item",
   "request_vault_item",
   "delete_vault_item",
-  "request_link_payment",
-  "request_near_payment",
 ]);
 
 const SNAKE_CASE = /_([a-z])/gu;

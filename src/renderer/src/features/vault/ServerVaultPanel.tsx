@@ -1,22 +1,16 @@
 import type { SettingsCrumb } from "@codebot/ui/features/settings/SettingsDialogShell";
-import type { NearWalletAgent } from "@codebot/ui/features/vault/VaultNearWallet";
 import { type VaultAgentChoice, VaultPanel } from "@codebot/ui/features/vault/VaultPanel";
 import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, onSettled, Show } from "solid-js";
 import { actionToast } from "../../action-toast";
-import type { LinkAccountStore } from "./stores/link-account-store";
-import type { NearWalletStore } from "./stores/near-wallet-store";
 import type { VaultStore } from "./stores/vault-store";
 
-type VaultAgent = VaultAgentChoice & NearWalletAgent;
+type VaultAgent = VaultAgentChoice;
 
 export interface ServerVaultOptions {
   store: VaultStore;
   apiKeys: boolean;
   twoStep: boolean;
-  link?: LinkAccountStore | undefined;
-  near?: NearWalletStore | undefined;
-  nearAgents?: (() => readonly NearWalletAgent[] | undefined) | undefined;
   listAgents?: (() => Promise<readonly VaultAgent[]>) | undefined;
 }
 
@@ -46,33 +40,10 @@ export function ServerVaultPanel(
     const store = props.store;
     const unsubscribe = store.subscribe();
     store.refresh().catch((error: unknown) => actionToast.error(errorMessage(error, t("vault.loadFailed"))));
-    const link = props.link;
-    const stopLink = link?.subscribe();
-    link?.refresh().catch((error: unknown) => actionToast.error(errorMessage(error, t("vault.link.failed"))));
-    const near = props.near;
-    const stopNear = near?.subscribe();
-    near?.refresh().catch((error: unknown) => actionToast.error(errorMessage(error, t("vault.near.failed"))));
     return () => {
       unsubscribe();
-      stopLink?.();
-      stopNear?.();
     };
   });
-  const linkAccount = () => {
-    const link = props.link;
-    if (!link) return undefined;
-    return {
-      status: link.state.status,
-      onConnect: link.connect,
-      onCancel: link.cancel,
-      onDisconnect: link.disconnect,
-    };
-  };
-  const nearWallet = () => {
-    const near = props.near;
-    if (!near) return undefined;
-    return { status: near.state.status, agents: props.nearAgents?.() ?? agents(), actions: near.actions };
-  };
   const onCodes = () => (props.twoStep ? props.store.codes : undefined);
   return (
     <Show when={props.store.state.vault}>
@@ -96,8 +67,6 @@ export function ServerVaultPanel(
           onImportCsv={props.store.importCsv}
           onReset={props.store.reset}
           menuMount={props.menuMount}
-          link={linkAccount()}
-          near={nearWallet()}
           onDetailChange={props.onDetailChange}
         />
       )}

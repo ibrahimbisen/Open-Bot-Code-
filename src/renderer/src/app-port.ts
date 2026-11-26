@@ -35,16 +35,11 @@ export interface AppPort {
   >;
   agentTemplates: Pick<CodeBotDesktopApi["agentTemplates"], "onOpenLink" | "takePendingLink">;
   acpRegistry: CodeBotDesktopApi["acpRegistry"];
-  hostedSites: CodeBotDesktopApi["hostedSites"];
-  billing: CodeBotDesktopApi["billing"];
-  credits: CodeBotDesktopApi["credits"];
-  license: CodeBotDesktopApi["license"];
   auth: CompanySignInCalls &
     Pick<
       CodeBotDesktopApi["auth"],
       "listOwnerTransfers" | "acceptOwnerTransfer" | "declineOwnerTransfer" | "onOwnerTransfersChanged"
     >;
-  hostedServers: CodeBotDesktopApi["hostedServers"];
   routineFeed: CodeBotDesktopApi["routineFeed"];
   events: CodeBotDesktopApi["events"];
   plugins: Pick<CodeBotDesktopApi["plugins"], "onOpenListing" | "takePendingListing">;

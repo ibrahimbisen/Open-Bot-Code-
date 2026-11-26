@@ -11,7 +11,6 @@ import { EASE_OUT, ISLAND_CLOSE, ISLAND_OPEN, type Spring, springKeyframes } fro
 import { useText } from "@codebot/ui/text";
 import { mix, prefersReducedMotion } from "@codebot/ui/utils";
 import { createEffect, createSignal, flush, onSettled, Show, untrack } from "solid-js";
-import type { MediaApprovalControls } from "../conversation/MediaApprovalCard";
 import { type BrowserIslandContent, BrowserIslandFace, browserIslandKey } from "./BrowserIsland";
 import {
   ISLAND_DURATION_MS,
@@ -85,7 +84,6 @@ export interface BrowserDockProps {
   onRespondSecret: (input: LocalBrowserSecretResponse) => Promise<void>;
   onAnswerPrompt: (requestId: string | number, answers: Record<string, string[]>) => Promise<boolean>;
   onRespondApproval: (requestId: string | number, decision: "accept" | "decline") => Promise<boolean>;
-  media?: MediaApprovalControls | undefined;
   onDismissReply: (id: string) => void;
   onOpenChat?: (() => void) | undefined;
   onSelectAgent: (agentId: string) => void;
@@ -589,7 +587,6 @@ export function BrowserDock(props: BrowserDockProps) {
               onRespondSecret={props.onRespondSecret}
               onAnswerPrompt={props.onAnswerPrompt}
               onRespondApproval={props.onRespondApproval}
-              media={props.media}
               onDismissReply={props.onDismissReply}
               onOpenChat={props.onOpenChat}
               onSelectAgent={props.onSelectAgent}
