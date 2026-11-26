@@ -7,6 +7,9 @@ PRD item IDs that you own, a worktree and a branch.
 
 - PRD: `C:\Users\IbrahimBisen\Desktop\Coding Software\CodeBot-PRD.md`. Read it in full. Each numbered
   item is a requirement.
+- Codebase map: `C:\Users\IbrahimBisen\Desktop\Coding Software\CodeBot\.claude\CLAUDE.md` and the
+  files in `.claude\codebase\` next to it (main checkout; your worktree may not have them yet). Read
+  the map file of each area that you change before you search the code. It saves hours.
 - Decisions already made: [decisions.md](decisions.md). Do not change a decision; tell the lead if a
   decision blocks you.
 - Repository rules: the root `AGENTS.md` and the `AGENTS.md` of each directory that you change. They
