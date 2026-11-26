@@ -116,15 +116,15 @@ export function ProjectColumn(props: { project: ProjectSummary }) {
       </div>
       <div class="project-column-history-head">
         <h3 class="project-section-label">{t(showArchived() ? "project.chat.archived" : "project.chat.history")}</h3>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setShowArchived((open) => !open)}
+        <IconButton
+          label={t(showArchived() ? "project.chat.recent" : "project.chat.showArchived")}
+          size="icon-sm"
+          variant={showArchived() ? "secondary" : "ghost"}
           aria-pressed={showArchived() ? "true" : "false"}
+          onClick={() => setShowArchived((open) => !open)}
         >
           <Archive />
-          {t("project.chat.showArchived")}
-        </Button>
+        </IconButton>
       </div>
       <Show when={searching()} fallback={<ChatHistory project={props.project} archived={showArchived()} />}>
         <SearchResults project={props.project} query={query()} />

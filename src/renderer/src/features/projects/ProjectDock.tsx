@@ -91,6 +91,7 @@ export function ProjectDock(props: { projectId: string }) {
   let loadedProjectId: string | null = null;
   let saveTimer: ReturnType<typeof setTimeout> | undefined;
   let loading = false;
+  let loadToken = 0;
 
   function register(host: PanelHost, initial: DockPanelParams | null): void {
     setHosts((current) => [...current.filter((entry) => entry.id !== host.id), host]);
@@ -321,6 +322,7 @@ export function ProjectDock(props: { projectId: string }) {
   async function loadProject(projectId: string): Promise<void> {
     const dock = api;
     if (!dock) return;
+    const token = ++loadToken;
     flushSave();
     loading = true;
     loadedProjectId = null;
@@ -339,7 +341,7 @@ export function ProjectDock(props: { projectId: string }) {
       }
       syncOpenChats();
       await dropDeadPanels();
-      if (dock !== api) return;
+      if (dock !== api || token !== loadToken) return;
       const requests = projects.takePendingOpens();
       loadedProjectId = projectId;
       loading = false;
@@ -352,8 +354,10 @@ export function ProjectDock(props: { projectId: string }) {
       syncShownChat();
       flushSave();
     } finally {
-      loading = false;
-      if (dock === api && loadedProjectId === null) loadedProjectId = projectId;
+      if (token === loadToken) {
+        loading = false;
+        if (dock === api && loadedProjectId === null) loadedProjectId = projectId;
+      }
     }
   }
 

@@ -25,6 +25,7 @@
 
 .project-section-label {
   margin: 0;
+  white-space: nowrap;
   color: var(--codebot-text-muted);
   font-size: var(--codebot-text-sm);
   font-weight: var(--codebot-weight-semibold);
@@ -321,6 +322,7 @@
 
 .project-column {
   position: relative;
+  max-width: 34%;
   display: flex;
   min-width: 0;
   min-height: 0;
@@ -792,6 +794,21 @@
   background: var(--codebot-bg-sidebar);
 }
 
+.project-thread {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.project-thread > .conversation-scroll {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
 .project-chat-missing {
   display: flex;
   align-items: center;
@@ -894,6 +911,13 @@
   display: flex;
   align-items: center;
   gap: var(--codebot-space-2);
+}
+
+.project-folder-input {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-family: var(--codebot-font-mono);
+  font-size: var(--codebot-text-sm);
 }
 
 .project-folder-path {

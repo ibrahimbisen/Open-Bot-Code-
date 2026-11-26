@@ -422,34 +422,36 @@ function ThreadSurface(props: {
   return (
     <Show when={profile()}>
       {(agent) => (
-        <AgentThreadView
-          task={props.task}
-          limit={tasks.snapshot(props.agentId)?.limit ?? 1}
-          agent={agent()}
-          agents={agents.agentList()}
-          messages={props.messages}
-          draft={props.draft}
-          onDraftChange={props.onDraftChange}
-          onSend={props.onSend}
-          onStop={props.onStop}
-          onOpenLink={(url) => void appPort().openUrl(url)}
-          onPreview={() => undefined}
-          onAttachmentAction={() => undefined}
-          approval={props.approval}
-          onRespondApproval={props.onRespondApproval}
-          waitsForAnswer={props.waitsForAnswer}
-          attention={props.attention}
-          stepsAbove={turnSteps.stepsAbove}
-          factsAbove={turnSteps.factsAbove}
-          traceAbove={turnTrace}
-          activeSteps={turnSteps.activeSteps()}
-          stepsOpenByDefault={showAgentSteps()}
-          compactMessageActions={compactMessageActions()}
-          bubbleStyle={bubbleStyle()}
-          onCopyMessage={(message) => {
-            void navigator.clipboard.writeText(message.body).catch(() => actionToast.error(message.body));
-          }}
-        />
+        <div class="project-thread">
+          <AgentThreadView
+            task={props.task}
+            limit={tasks.snapshot(props.agentId)?.limit ?? 1}
+            agent={agent()}
+            agents={agents.agentList()}
+            messages={props.messages}
+            draft={props.draft}
+            onDraftChange={props.onDraftChange}
+            onSend={props.onSend}
+            onStop={props.onStop}
+            onOpenLink={(url) => void appPort().openUrl(url)}
+            onPreview={() => undefined}
+            onAttachmentAction={() => undefined}
+            approval={props.approval}
+            onRespondApproval={props.onRespondApproval}
+            waitsForAnswer={props.waitsForAnswer}
+            attention={props.attention}
+            stepsAbove={turnSteps.stepsAbove}
+            factsAbove={turnSteps.factsAbove}
+            traceAbove={turnTrace}
+            activeSteps={turnSteps.activeSteps()}
+            stepsOpenByDefault={showAgentSteps()}
+            compactMessageActions={compactMessageActions()}
+            bubbleStyle={bubbleStyle()}
+            onCopyMessage={(message) => {
+              void navigator.clipboard.writeText(message.body).catch(() => actionToast.error(message.body));
+            }}
+          />
+        </div>
       )}
     </Show>
   );

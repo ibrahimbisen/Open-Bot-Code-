@@ -1,3 +1,4 @@
+import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AvatarColor,
   DEFAULT_PROJECT_ACCESS_LEVEL,
@@ -55,7 +56,7 @@ export function ProjectCreateDialog(props: { onClose: () => void }) {
       const choice = await projects.chooseFolder();
       if (choice.outcome === "chosen") {
         setFolder(choice.path);
-        if (!nameTouched() || trimmedName() === "") setName(folderBaseName(choice.path));
+        if (!nameTouched()) setName(folderBaseName(choice.path));
       } else if (choice.outcome === "refused") setError(t("project.field.folderFailed"));
     } catch (cause) {
       setError(errorMessage(cause, t("project.field.folderFailed")));
@@ -113,9 +114,21 @@ export function ProjectCreateDialog(props: { onClose: () => void }) {
                 error={showErrors() && !folder() ? t("project.field.mainFolderRequired") : undefined}
               >
                 <div class="project-folder-field">
-                  <span class="project-folder-path" data-empty={folder() ? undefined : ""} title={folder()}>
-                    {folder() || t("project.field.mainFolderEmpty")}
-                  </span>
+                  <Input
+                    id="project-create-folder"
+                    class="project-folder-input"
+                    autocomplete="off"
+                    spellcheck={false}
+                    placeholder={t("project.field.mainFolderEmpty")}
+                    aria-label={t("project.field.mainFolder")}
+                    value={folder()}
+                    maxlength={INPUT_LIMITS.path}
+                    disabled={busy()}
+                    onValueChange={(value) => {
+                      setFolder(value.trim());
+                      if (!nameTouched()) setName(folderBaseName(value.trim()));
+                    }}
+                  />
                   <Button type="button" variant="secondary" onClick={() => void chooseFolder()} disabled={busy()}>
                     <FolderOpen />
                     {t(folder() ? "project.field.changeFolder" : "project.field.chooseFolder")}
