@@ -133,7 +133,7 @@ async function runVariant(variant: Variant): Promise<VariantReport> {
     const format = started.argv.indexOf("--output-format");
     assert.ok(format >= 0 && started.argv[format + 1] === "stream-json", "The arguments arrive unchanged.");
     assert.ok(
-      started.argv.includes("--setting-sources=user,project,local"),
+      started.argv.includes("--setting-sources=project,local"),
       "An argument with commas arrives as one argument.",
     );
 

@@ -38,7 +38,8 @@ const { runCauseEffect } = await import("../src/backend/effect-boundary");
 const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 
-const STAND_IN_CLAUDE = `const fs = require("node:fs");
+const STAND_IN_CLAUDE = `#!${process.execPath}
+const fs = require("node:fs");
 const { randomUUID } = require("node:crypto");
 const args = process.argv.slice(2);
 if (args.includes("--version")) {

@@ -44,7 +44,8 @@ const { MailboxStore } = await import("../src/backend/mailbox-store");
 const { CodeBotDatabase } = await import("../src/backend/codebot-database");
 const { estimateUsageCost } = await import("../src/backend/agent/usage-pricing");
 
-const STAND_IN_CLAUDE = `const fs = require("node:fs");
+const STAND_IN_CLAUDE = `#!${process.execPath}
+const fs = require("node:fs");
 const { join } = require("node:path");
 const { randomUUID } = require("node:crypto");
 const args = process.argv.slice(2);

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { CLAUDE_API_KEY_ACCOUNT_ID } from "@codebot/contracts/team-protocol/claude-api-key-v1";
@@ -11,11 +11,13 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { CLAUDE_API_KEY_ACCOUNT_TYPE } from "../src/backend/protocol";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 import { ProviderAccountsHost as PeerAccountsHost } from "../src/main/provider-accounts-host";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-api-key-e2e");
 const KEY = "sk-ant-e2e-0f3c9a71";
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-api-key-"));
-const executable = join(root, "claude.cjs");
+const executable = standInPath(join(root, "claude.cjs"));
 const logPath = join(root, "claude.jsonl");
 delete process.env.ANTHROPIC_API_KEY;
 process.env.CLAUDE_CONFIG_DIR = join(root, "own-sign-in");
@@ -138,8 +140,7 @@ const report: {
   error?: string;
 } = { cases: [] };
 try {
-  await writeFile(executable, FAKE_CLAUDE);
-  await chmod(executable, 0o755);
+  await writeStandInScript(executable, FAKE_CLAUDE);
 
   const plan = await runCase("plan-and-key", KEY);
   report.cases.push(plan);
@@ -259,7 +260,7 @@ try {
   report.error = error instanceof Error ? error.message : String(error);
   throw error;
 } finally {
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
 }

@@ -11,6 +11,11 @@ import { createCustomAgentChanges } from "../src/main/custom-agent-changes";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { stopClients, xorCipher } from "./provider-fakes/host";
 
+if (process.platform === "win32") {
+  process.stdout.write("macOS and Linux only: Windows has no login shell.\n");
+  process.exit(1);
+}
+
 const INTERPRETER = "codebot-login-path-node";
 
 const FAKE_AGENT = `#!/usr/bin/env ${INTERPRETER}
