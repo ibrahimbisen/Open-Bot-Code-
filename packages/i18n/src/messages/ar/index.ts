@@ -1,10 +1,12 @@
 import type { PartialTranslation } from "../../message";
 import type { AppMessages } from "../en/index";
 import { messages as account } from "./account";
+import { messages as advancedArea } from "./advanced";
 import { messages as agent } from "./agent";
 import { messages as agentSettings } from "./agentSettings";
 import { messages as agentTemplate } from "./agentTemplate";
 import { messages as app } from "./app";
+import { messages as appUpdateArea } from "./appUpdate";
 import { messages as attachment } from "./attachment";
 import { messages as billing } from "./billing";
 import { messages as browser } from "./browser";
@@ -17,10 +19,13 @@ import { messages as conversation } from "./conversation";
 import { messages as crm } from "./crm";
 import { messages as customProvider } from "./customProvider";
 import { messages as dialog } from "./dialog";
+import { messages as explorerArea } from "./explorer";
 import { messages as extension } from "./extension";
 import { messages as files } from "./files";
 import { messages as importAgent } from "./import";
 import { messages as island } from "./island";
+import { messages as localServerArea } from "./localServer";
+import { messages as lockArea } from "./lock";
 import { messages as marketplace } from "./marketplace";
 import { messages as mcp } from "./mcp";
 import { messages as memory } from "./memory";
@@ -28,23 +33,32 @@ import { messages as menu } from "./menu";
 import { messages as messaging } from "./messaging";
 import { messages as notification } from "./notification";
 import { messages as onboarding } from "./onboarding";
+import { messages as panelArea } from "./panel";
 import { messages as plugin } from "./plugin";
 import { messages as preview } from "./preview";
+import { messages as projectArea } from "./project";
 import { messages as prompt } from "./prompt";
 import { messages as provider } from "./provider";
 import { messages as queue } from "./queue";
 import { messages as remoteDesktop } from "./remoteDesktop";
+import { messages as replyArea } from "./reply";
 import { messages as routine } from "./routine";
 import { messages as server } from "./server";
+import { messages as serverModeArea } from "./serverMode";
 import { messages as settings } from "./settings";
 import { shared } from "./shared";
 import { messages as sharedTable } from "./sharedTable";
+import { messages as shortcutArea } from "./shortcut";
 import { messages as sidebar } from "./sidebar";
+import { messages as signInArea } from "./signIn";
 import { messages as sitePage } from "./sitePage";
 import { messages as skill } from "./skill";
+import { messages as slashArea } from "./slash";
 import { source } from "./source";
 import { messages as startup } from "./startup";
+import { messages as statusBarArea } from "./statusBar";
 import { messages as team } from "./team";
+import { messages as themeArea } from "./theme";
 import { messages as uiBlock } from "./uiBlock";
 import { messages as update } from "./update";
 import { messages as usage } from "./usage";
@@ -106,4 +120,18 @@ export const ar = {
   ...uiBlock,
   ...sitePage,
   ...crm,
+  ...projectArea,
+  ...panelArea,
+  ...explorerArea,
+  ...replyArea,
+  ...slashArea,
+  ...lockArea,
+  ...advancedArea,
+  ...statusBarArea,
+  ...localServerArea,
+  ...serverModeArea,
+  ...shortcutArea,
+  ...themeArea,
+  ...signInArea,
+  ...appUpdateArea,
 } as const satisfies PartialTranslation<AppMessages>;

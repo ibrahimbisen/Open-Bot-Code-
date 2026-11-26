@@ -8,24 +8,15 @@ function git(...args: string[]): string {
 }
 
 function newestReleaseTag(): string {
-  let tags: string;
-  try {
-    tags = git("ls-remote", "--tags", "--refs", "--sort=-v:refname", "origin", "v*");
-  } catch {
-    tags = git("tag", "--list", "--sort=-v:refname", "v*");
-  }
-  const newest = /(?:^|\/)(v\d+\.\d+\.\d+)$/m.exec(tags)?.[1];
-  if (!newest) throw new Error("No v* release tag on origin or in this checkout.");
+  const tags = git("tag", "--list", "--sort=-v:refname", "codebot-v*");
+  const newest = /^(codebot-v\d+\.\d+\.\d+)$/m.exec(tags)?.[1];
+  if (!newest) throw new Error("No codebot-v* release tag in this checkout.");
   return newest;
 }
 
 const tagFlag = process.argv.indexOf("--tag");
 const tag = tagFlag === -1 ? newestReleaseTag() : (process.argv[tagFlag + 1] ?? "");
-try {
-  git("rev-parse", "--verify", "--quiet", `refs/tags/${tag}^{commit}`);
-} catch {
-  git("fetch", "--quiet", "--no-tags", "--depth=1", "origin", `refs/tags/${tag}:refs/tags/${tag}`);
-}
+git("rev-parse", "--verify", "--quiet", `refs/tags/${tag}^{commit}`);
 
 const releasedFiles = new Map<string, string>();
 for (const path of git("ls-tree", "--name-only", tag, "--", `${MIGRATIONS_DIR}/`).split("\n").filter(Boolean)) {

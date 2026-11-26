@@ -1,5 +1,6 @@
 import { messages as errorAgent } from "./error/agent";
 import { messages as errorApp } from "./error/app";
+import { messages as errorAppUpdateArea } from "./error/appUpdate";
 import { messages as errorAttachment } from "./error/attachment";
 import { messages as errorAuth } from "./error/auth";
 import { messages as errorBackend } from "./error/backend";
@@ -7,17 +8,23 @@ import { messages as errorBilling } from "./error/billing";
 import { messages as errorComputerUse } from "./error/computerUse";
 import { messages as errorConnector } from "./error/connector";
 import { messages as errorCrm } from "./error/crm";
+import { messages as errorExplorerArea } from "./error/explorer";
 import { messages as errorHost } from "./error/host";
 import { messages as errorImport } from "./error/import";
 import { messages as errorKind } from "./error/kind";
+import { messages as errorLocalServerArea } from "./error/localServer";
+import { messages as errorLockArea } from "./error/lock";
 import { messages as errorMarketplace } from "./error/marketplace";
 import { messages as errorMcp } from "./error/mcp";
 import { messages as errorMessaging } from "./error/messaging";
+import { messages as errorProjectArea } from "./error/project";
 import { messages as errorProvider } from "./error/provider";
 import { messages as errorReference } from "./error/reference";
 import { messages as errorRemote } from "./error/remote";
+import { messages as errorSignInArea } from "./error/signIn";
 import { messages as errorSite } from "./error/site";
 import { messages as errorSkill } from "./error/skill";
+import { messages as errorSlashArea } from "./error/slash";
 import { messages as errorStorage } from "./error/storage";
 import { messages as errorTeam } from "./error/team";
 import { messages as errorUpdate } from "./error/update";
@@ -66,4 +73,11 @@ export const source = {
   ...statusProvider,
   ...statusComputerUse,
   ...statusUpdate,
+  ...errorProjectArea,
+  ...errorExplorerArea,
+  ...errorSlashArea,
+  ...errorLockArea,
+  ...errorSignInArea,
+  ...errorAppUpdateArea,
+  ...errorLocalServerArea,
 } as const;

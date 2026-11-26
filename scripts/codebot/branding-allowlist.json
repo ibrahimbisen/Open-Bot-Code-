@@ -1,0 +1,5 @@
+{
+  "paths": ["LICENSE", "NOTICE", "scripts/codebot/branding-allowlist.json"],
+  "directories": ["docs/upstream/", "docs/codebot/"],
+  "lines": []
+}
