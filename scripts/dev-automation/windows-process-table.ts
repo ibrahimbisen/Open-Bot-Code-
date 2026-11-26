@@ -167,14 +167,14 @@ interface SnapshotEntry {
   image: string;
 }
 
-const SNAPSHOT_ATTEMPTS = 6;
+const SNAPSHOT_ATTEMPTS = 40;
 
 function createSnapshotWithRetry(api: ProcessApi): Handle {
   for (let attempt = 1; ; attempt++) {
     const snapshot = api.createSnapshot(SNAPSHOT_PROCESSES, 0);
     if (Number(snapshot) !== INVALID_HANDLE) return snapshot;
     if (attempt >= SNAPSHOT_ATTEMPTS) throw new Error("Windows did not give a process snapshot.");
-    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 200 * attempt);
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, Math.min(200 * attempt, 1000));
   }
 }
 

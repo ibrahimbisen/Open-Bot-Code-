@@ -52,7 +52,7 @@ function assertWindowsOwnerOnlyDirectory(directory: string): void {
       {
         encoding: "utf8",
         env: { ...process.env, CODEBOT_REGISTRY_DIRECTORY: directory },
-        timeout: 30_000,
+        timeout: 120_000,
         stdio: ["ignore", "pipe", "ignore"],
       },
     )
