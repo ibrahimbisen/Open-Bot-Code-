@@ -254,6 +254,8 @@ import {
 } from "./development-remote-bootstrap";
 import { performDynamicIslandCriticalAction } from "./dynamic-island-actions";
 import { DynamicIslandFailed, DynamicIslandWindowController, toDynamicIslandFailed } from "./dynamic-island-window";
+import { createDesktopExplorer } from "./explorer/explorer-desktop";
+import type { ExplorerService } from "./explorer/explorer-service";
 import {
   createExternalLinkPreferenceStore,
   ExternalLinkOpener,
@@ -606,6 +608,7 @@ const TEARDOWN_ORDER = {
   agentDock: 20.5,
   machineAlerts: 21,
   themePalettes: 22,
+  explorer: 22.5,
   providerAccountsHost: 27,
   providerHostSignIns: 28,
   mcpHostSignIns: 29,
@@ -732,6 +735,7 @@ export interface ApplicationServices {
   agentHostSettings: AgentHostSettingsService;
   agentDefaultsSettings: AgentDefaultsSettingsService;
   agentFolders: AgentFolders;
+  explorer: ExplorerService;
   channelFolders: ChannelFolders;
   agentInstructions: AgentInstructionsFiles;
   browserProfiles: BrowserProfileService;
@@ -2966,6 +2970,8 @@ export async function createApplicationServices({
   const agentHostSettings = createAgentHostSettings({ agents: service, busyMessageMode, agentDefaults });
   const agentDefaultsSettings = createAgentDefaultsSettings({ agents: service, agentDefaults, busyMessageMode });
   const agentFolders = createAgentFolders({ service, userDataPath: app.getPath("userData") });
+  const explorer = createDesktopExplorer(service);
+  teardown.push(TEARDOWN_ORDER.explorer, "the file tree watch", () => explorer.close());
   const channelFolders = createChannelFolders({
     service,
     userDataPath: app.getPath("userData"),
@@ -4052,7 +4058,7 @@ export async function createApplicationServices({
       write: (line) => process.stdout.write(line),
     });
   }
-  configureAttachmentProtocol({ mailbox, agents: service, remoteServers });
+  configureAttachmentProtocol({ mailbox, agents: service, remoteServers, explorerFile: explorer.fileResponse });
   configureServerLogoProtocols({ teamStore, remoteServers });
   const browserView = new BrowserViewClient({
     servers: remoteServers,
@@ -4522,6 +4528,7 @@ export async function createApplicationServices({
     agentHostSettings,
     agentDefaultsSettings,
     agentFolders,
+    explorer,
     channelFolders,
     agentInstructions,
     browserProfiles,

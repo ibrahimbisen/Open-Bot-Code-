@@ -326,6 +326,19 @@ import {
   decodeDynamicIslandPreference,
   decodeDynamicIslandPresentation,
 } from "./dynamic-island-decoding";
+import {
+  decodeExplorerChange,
+  decodeExplorerDirectory,
+  decodeExplorerEntry,
+  decodeExplorerEntryOrNull,
+  decodeExplorerFile,
+  decodeExplorerGitCommitFiles,
+  decodeExplorerGitDiff,
+  decodeExplorerGitLog,
+  decodeExplorerGitStatus,
+  decodeExplorerRoots,
+  decodeExplorerWriteResult,
+} from "./explorer-decoding";
 import { decodeHostReleaseStatusFromMain } from "./host-release-decoding";
 import { decodeMacAutomationResults } from "./mac-automation-decoding";
 import {
@@ -1756,6 +1769,24 @@ const codebotApi: CodeBotDesktopApi = {
     selectDisplay: decodeVoid,
     disconnect: decodeVoid,
     event: decodeRemoteDesktopSessions,
+  }),
+  explorer: bridgeGroup(IPC_ENDPOINTS.explorer, {
+    roots: decodeExplorerRoots,
+    list: decodeExplorerDirectory,
+    stat: decodeExplorerEntryOrNull,
+    read: decodeExplorerFile,
+    write: decodeExplorerWriteResult,
+    create: decodeExplorerEntry,
+    rename: decodeExplorerEntry,
+    trash: decodeVoid,
+    reveal: decodeVoid,
+    watch: decodeVoid,
+    unwatch: decodeVoid,
+    changed: decodeExplorerChange,
+    gitStatus: decodeExplorerGitStatus,
+    gitLog: decodeExplorerGitLog,
+    gitCommitFiles: decodeExplorerGitCommitFiles,
+    gitDiff: decodeExplorerGitDiff,
   }),
 };
 

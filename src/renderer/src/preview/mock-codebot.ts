@@ -249,6 +249,7 @@ import { createMockChannels, type MockChannelSeed } from "./mock-channels";
 import { createMockCredits } from "./mock-credits";
 import { type MockCrmSeed, mockCrm } from "./mock-crm";
 import { createMockEvents } from "./mock-events";
+import { createMockExplorer } from "./mock-explorer";
 import { createMockGitHubConnector } from "./mock-github-connector";
 import { createMockHostPersonality } from "./mock-host-personality";
 import { createMockHostSignalHome } from "./mock-host-signal-home";
@@ -3687,6 +3688,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     },
     host: mockTeam.host,
     events: mockEvents,
+    explorer: createMockExplorer(),
     hostAdmin: {
       updateIdentity: async (input, serverId) => {
         const { appearance, ...identity } = input;

@@ -59,6 +59,7 @@ export * from "./ipc-desktop-apis";
 export * from "./ipc-dynamic-island";
 export * from "./ipc-endpoints";
 export * from "./ipc-events";
+export * from "./ipc-explorer";
 export * from "./ipc-external-links";
 export * from "./ipc-github-connector";
 export * from "./ipc-github-skills";
