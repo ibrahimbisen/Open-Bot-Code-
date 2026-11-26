@@ -26,6 +26,7 @@ export interface AccountConfig {
   dataDir: string;
   trustProxy: boolean;
   secretKey: string;
+  replaceSecretKey: boolean;
   ticket: { keyId: string; privateJwk: string; publicJwks: string };
   signal: {
     url: string | null;
@@ -43,6 +44,7 @@ export interface AccountConfig {
     flowSeconds: number;
     revalidateSeconds: number;
     revalidateGraceSeconds: number;
+    ticketFreshnessSeconds: number;
   };
   minimumVersions: { desktop: string | null; host: string | null; ios: string | null; android: string | null };
   messaging: {
@@ -228,6 +230,7 @@ export function readAccountConfig(environment: AccountEnvironment): AccountConfi
     dataDir,
     trustProxy: flag("ACCOUNT_TRUST_PROXY"),
     secretKey,
+    replaceSecretKey: flag("ACCOUNT_REPLACE_SECRET_KEY"),
     ticket: { keyId, privateJwk, publicJwks },
     signal: { url: signalUrl, homes: signalHomes, webhookUrl, webhookUrls, webhookSecret },
     login: {
@@ -239,6 +242,7 @@ export function readAccountConfig(environment: AccountEnvironment): AccountConfi
       flowSeconds: integer("ACCOUNT_LOGIN_FLOW_SECONDS", 600, 1, 3_600),
       revalidateSeconds: integer("ACCOUNT_REVALIDATE_SECONDS", 300, 1, 86_400),
       revalidateGraceSeconds: integer("ACCOUNT_REVALIDATE_GRACE_SECONDS", 86_400, 0, 365 * 86_400),
+      ticketFreshnessSeconds: integer("ACCOUNT_TICKET_FRESHNESS_SECONDS", 60, 0, 3_600),
     },
     minimumVersions: {
       desktop: version("ACCOUNT_MINIMUM_VERSION_DESKTOP"),

@@ -5,7 +5,6 @@ import { type IdentityRecord, type IdentityStore, tokenContext } from "./identit
 import { type IdentityProvider, ProviderRejected, type ProviderRejection } from "./provider";
 import type { SecretBox } from "./secret-box";
 
-const TICKET_FRESHNESS_MS = 60_000;
 const CHECK_CONCURRENCY = 4;
 const PROVIDER_RETRY_SECONDS = 60;
 
@@ -61,6 +60,7 @@ export class AccountGuard {
   readonly #identities: IdentityStore;
   readonly #box: SecretBox;
   readonly #graceMs: number;
+  readonly #freshnessMs: number;
   readonly #logger: Logger;
   readonly #now: () => number;
   readonly #accessRevoked: () => void;
@@ -72,6 +72,7 @@ export class AccountGuard {
     identities: IdentityStore;
     box: SecretBox;
     graceSeconds: number;
+    freshnessSeconds: number;
     logger: Logger;
     accessRevoked: () => void;
     now?: () => number;
@@ -81,6 +82,7 @@ export class AccountGuard {
     this.#identities = input.identities;
     this.#box = input.box;
     this.#graceMs = input.graceSeconds * 1_000;
+    this.#freshnessMs = input.freshnessSeconds * 1_000;
     this.#logger = input.logger;
     this.#accessRevoked = input.accessRevoked;
     this.#now = input.now ?? Date.now;
@@ -170,7 +172,7 @@ export class AccountGuard {
     const record = identity.success;
     if (!record) return { kind: "blocked", reason: "no_identity" };
     if (record.status === "blocked") return { kind: "blocked", reason: record.blockedReason ?? "blocked" };
-    if (this.#now() - record.checkedAt <= TICKET_FRESHNESS_MS) return { kind: "active", checkedAt: record.checkedAt };
+    if (this.#now() - record.checkedAt <= this.#freshnessMs) return { kind: "active", checkedAt: record.checkedAt };
     return yield* this.#check(userId);
   });
 

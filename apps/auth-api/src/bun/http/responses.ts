@@ -3,6 +3,7 @@ import { AuthServiceError } from "../../server/auth-service";
 import { JsonBodyError } from "../../server/json-body";
 import { RemoteControlPlaneError } from "../../server/remote-control-plane";
 import type { Logger } from "../logging";
+import { AccountAccessError } from "../login/account-guard";
 
 const SAFE_HEADERS = {
   "Cache-Control": "no-store",
@@ -44,6 +45,9 @@ export function createErrorResponder(logger: Logger): ErrorResponder {
       return response;
     }
     if (error instanceof ApiResponseError) return error.response();
+    if (error instanceof AccountAccessError) {
+      return new ApiResponseError(error.status, error.code, error.message, error.retryAfterSeconds).response();
+    }
     const reference = `account/${crypto.randomUUID().replaceAll("-", "").slice(0, 16)}`;
     logger.error("A request failed.", { reference, error: errorType(error) });
     return json(

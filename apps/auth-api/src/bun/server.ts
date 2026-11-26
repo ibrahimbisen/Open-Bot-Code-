@@ -5,9 +5,10 @@ import { AccountConfigError, type AccountEnvironment, parseEnvironmentFile, read
 import { methodNotAllowed, notFound, Router } from "./http/router";
 import { requestSourceIp } from "./http/source-ip";
 import { createAccountLogger, type Logger, routeConsoleToLogger } from "./logging";
-import { registerAccountRoutes } from "./routes/account";
+import { checkSecretKey, SecretKeyMismatch } from "./login/key-check";
 import { registerHealthRoutes } from "./routes/health";
 import { registerLoginRoutes } from "./routes/login";
+import { registerRemoteAccessRoutes } from "./routes/remote-access";
 import { BackgroundTasks } from "./runtime/background";
 import { FileBucket } from "./runtime/file-bucket";
 import { acquireInstanceLock, InstanceLockError } from "./runtime/instance-lock";
@@ -22,6 +23,7 @@ const MIGRATION_CHAINS = [
 ];
 const DATABASE_FILE = "account.sqlite";
 const LOGIN_PRUNE_INTERVAL_MS = 10 * 60_000;
+const AUTH_EVENT_RETRY_INTERVAL_MS = 30_000;
 const MAXIMUM_REQUEST_BYTES = 8 * 1024 * 1024;
 const STOP_REQUEST_LIMIT_MS = 10_000;
 const STOP_BACKGROUND_LIMIT_MS = 10_000;
@@ -54,6 +56,19 @@ export async function startAccountService(
       applied: migration.applied.length,
       total: migration.total,
     });
+    const keyState = await runApiEffect(
+      checkSecretKey(database, config.secretKey, { replace: config.replaceSecretKey, now: Date.now() }),
+    ).catch((error: unknown) => {
+      if (error instanceof SecretKeyMismatch) {
+        throw new AccountConfigError([
+          "ACCOUNT_SECRET_KEY is not the key of this database. Use the old key, or set ACCOUNT_REPLACE_SECRET_KEY=true once. All accounts must then sign in again.",
+        ]);
+      }
+      throw error;
+    });
+    if (keyState === "replaced") {
+      logger.warn("The secret key was replaced. All accounts must sign in again.");
+    }
     for (const entry of migration.changed) logger.warn("An applied migration file has changed.", entry);
     for (const entry of migration.unknown)
       logger.warn("The database has a migration that this release does not have.", entry);
@@ -75,11 +90,26 @@ export async function startAccountService(
   const router = new Router();
   registerHealthRoutes(router, services);
   registerLoginRoutes(router, services, services.login);
-  registerAccountRoutes(router, services);
+  await registerRemoteAccessRoutes(router, services);
   scheduler.add({
     name: "login-prune",
     intervalMs: LOGIN_PRUNE_INTERVAL_MS,
     run: () => runApiEffect(services.login.prune()),
+  });
+
+  scheduler.add({
+    name: "account-revalidate",
+    intervalMs: config.login.revalidateSeconds * 1_000,
+    run: async () => {
+      await runApiEffect(services.guard.revalidateAll());
+    },
+  });
+  scheduler.add({
+    name: "auth-event-retry",
+    intervalMs: AUTH_EVENT_RETRY_INTERVAL_MS,
+    run: async () => {
+      services.flushAuthEvents();
+    },
   });
 
   const server = Bun.serve({

@@ -531,6 +531,8 @@
     "test:keep-previous-assets": "bun apps/auth-api/scripts/keep-previous-assets-e2e.ts",
     "test:mobile-connected-devices": "bun scripts/mobile-connected-devices-e2e.ts",
     "test:account-login": "bun scripts/account-oidc-login-e2e.ts",
+    "test:account-user-disabled": "bun scripts/account-user-disabled-e2e.ts",
+    "test:account-remote-access": "bun scripts/account-remote-access-e2e.ts",
     "test:mobile-share-sender": "bun scripts/mobile-share-sender-e2e.ts",
     "test:mobile-ota": "bun apps/mobile-updates/scripts/mobile-ota-e2e.ts",
     "test:mobile-ota-notes": "bun scripts/mobile-ota-release-notes-e2e.ts",

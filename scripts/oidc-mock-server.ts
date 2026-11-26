@@ -37,6 +37,7 @@ export interface OidcMock {
   readonly origin: string;
   readonly port: number;
   readonly requests: OidcMockRequest[];
+  readonly issuedRefreshTokens: string[];
   setUser(user: OidcMockUser): void;
   disableUser(id: string): void;
   enableUser(id: string): void;
@@ -153,6 +154,7 @@ export async function startOidcMock(options: OidcMockOptions): Promise<OidcMock>
   const accessTokens = new Map<string, AccessToken>();
   const refreshTokens = new Map<string, string>();
   const requests: OidcMockRequest[] = [];
+  const issuedRefreshTokens: string[] = [];
   const paths = PATHS[options.mode];
   let issueRefreshTokens = options.issueRefreshTokens ?? true;
   let origin = "";
@@ -213,6 +215,7 @@ export async function startOidcMock(options: OidcMockOptions): Promise<OidcMock>
     if (issueRefreshTokens) {
       const refreshToken = token();
       refreshTokens.set(refreshToken, user.id);
+      issuedRefreshTokens.push(refreshToken);
       answer.refresh_token = refreshToken;
     }
     if (options.mode === "nextcloud") {
@@ -465,6 +468,7 @@ export async function startOidcMock(options: OidcMockOptions): Promise<OidcMock>
       return port;
     },
     requests,
+    issuedRefreshTokens,
     setUser: storeUser,
     disableUser(id) {
       const user = users.get(id);

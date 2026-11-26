@@ -10,6 +10,7 @@ import type { WorkerBindings } from "../server/types";
 import type { AccountConfig } from "./config";
 import { createErrorResponder, type ErrorResponder } from "./http/responses";
 import type { Logger } from "./logging";
+import { AccountGuard } from "./login/account-guard";
 import { IdentityStore } from "./login/identity-store";
 import { LoginService } from "./login/login-service";
 import { IdentityProvider } from "./login/provider";
@@ -49,6 +50,7 @@ export interface AccountServices {
   provider: IdentityProvider;
   identities: IdentityStore;
   login: LoginService;
+  guard: AccountGuard;
   flushAuthEvents: () => void;
 }
 
@@ -93,7 +95,18 @@ export function createAccountServices(input: {
       ),
     );
   const provider = new IdentityProvider(config.login);
-  const identities = new IdentityStore(database, new SecretBox(config.secretKey));
+  const box = new SecretBox(config.secretKey);
+  const identities = new IdentityStore(database, box);
+  const guard = new AccountGuard({
+    database,
+    provider,
+    identities,
+    box,
+    graceSeconds: config.login.revalidateGraceSeconds,
+    freshnessSeconds: config.login.ticketFreshnessSeconds,
+    logger,
+    accessRevoked: flushAuthEvents,
+  });
   return {
     config,
     logger,
@@ -111,6 +124,7 @@ export function createAccountServices(input: {
     provider,
     identities,
     login: new LoginService({ database, provider, identities, config, logger, sessionsRevoked: flushAuthEvents }),
+    guard,
     flushAuthEvents,
   };
 }

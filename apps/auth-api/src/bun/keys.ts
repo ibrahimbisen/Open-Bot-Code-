@@ -2,7 +2,7 @@ import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { encodeBase64Url } from "../server/crypto";
 
-interface GeneratedKeys {
+export interface GeneratedKeys {
   keyId: string;
   privateJwk: string;
   publicJwks: string;

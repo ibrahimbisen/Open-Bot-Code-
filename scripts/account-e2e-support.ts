@@ -1,11 +1,11 @@
 import { type ChildProcess, spawn } from "node:child_process";
-import { createHash, randomBytes } from "node:crypto";
+import { createHash, createHmac, randomBytes } from "node:crypto";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
-import { generateAccountKeys } from "../apps/auth-api/src/bun/keys";
+import { type GeneratedKeys, generateAccountKeys } from "../apps/auth-api/src/bun/keys";
 import type { OidcMock } from "./oidc-mock-server";
 
 export const ROOT = resolve(import.meta.dirname, "..");
@@ -52,6 +52,7 @@ export class Checks {
 export interface AccountService {
   origin: string;
   dataDir: string;
+  keys: GeneratedKeys;
   logs: string[];
   exited: Promise<number | null>;
   stop(): Promise<{ clean: boolean; exitCode: number | null }>;
@@ -63,6 +64,7 @@ export interface AccountServiceInput {
   clientId: string;
   clientSecret: string;
   dataDir?: string;
+  keys?: GeneratedKeys;
   environment?: Record<string, string>;
 }
 
@@ -103,7 +105,7 @@ function readyOrigin(message: unknown): string | null {
 
 export async function startAccountService(input: AccountServiceInput): Promise<AccountService> {
   const dataDir = input.dataDir ?? (await temporaryFolder("codebot-account-e2e"));
-  const keys = await generateAccountKeys();
+  const keys = input.keys ?? (await generateAccountKeys());
   const child: ChildProcess = spawn(process.execPath, ["--no-env-file", SERVER_ENTRY], {
     cwd: ROOT,
     stdio: ["ignore", "pipe", "pipe", "ipc"],
@@ -156,6 +158,7 @@ export async function startAccountService(input: AccountServiceInput): Promise<A
   return {
     origin,
     dataDir,
+    keys,
     logs,
     exited,
     stop() {
@@ -411,4 +414,94 @@ export async function closeAll(resources: { mocks?: OidcMock[]; services?: Accou
     await removeFolder(service.dataDir).catch(() => undefined);
   }
   for (const mock of resources.mocks ?? []) await mock.close().catch(() => undefined);
+}
+
+export interface SignalEvent {
+  path: string;
+  body: DynamicRecord;
+  signatureValid: boolean;
+}
+
+export interface SignalMock {
+  origin: string;
+  secret: string;
+  events: SignalEvent[];
+  setFailing(failing: boolean): void;
+  close(): Promise<void>;
+}
+
+export async function startSignalMock(secret: string): Promise<SignalMock> {
+  const events: SignalEvent[] = [];
+  let failing = false;
+  const server = createServer((request, response) => {
+    const chunks: Buffer[] = [];
+    request.on("data", (chunk: Buffer) => chunks.push(chunk));
+    request.on("end", () => {
+      const text = Buffer.concat(chunks).toString("utf8");
+      if (failing) {
+        response.writeHead(503).end();
+        return;
+      }
+      const timestamp = String(request.headers["codebot-timestamp"] ?? "");
+      const signature = String(request.headers["codebot-signature"] ?? "");
+      const expected = createHmac("sha256", secret).update(`${timestamp}.${text}`).digest("base64url");
+      let body: DynamicRecord = {};
+      try {
+        const parsed = JSON.parse(text);
+        if (isDynamicRecord(parsed)) body = parsed;
+      } catch {
+        body = {};
+      }
+      events.push({ path: request.url ?? "", body, signatureValid: expected === signature });
+      response.writeHead(200, { "Content-Type": "application/json" }).end("{}");
+    });
+  });
+  const port = await new Promise<number>((listening, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", () => {
+      const address = server.address();
+      if (address === null || typeof address === "string") reject(new Error("The mock has no port."));
+      else listening(address.port);
+    });
+  });
+  return {
+    origin: `http://127.0.0.1:${port}`,
+    secret,
+    events,
+    setFailing(value) {
+      failing = value;
+    },
+    close: () =>
+      new Promise((closed) => {
+        server.close(() => closed());
+        server.closeAllConnections();
+      }),
+  };
+}
+
+export interface RegisteredHost {
+  hostId: string;
+  membershipId: string;
+  machineToken: string;
+}
+
+export async function registerHost(origin: string, token: string, name: string): Promise<RegisteredHost> {
+  const hostId = `host-${randomBytes(8).toString("hex")}`;
+  const membershipId = `member-${randomBytes(8).toString("hex")}`;
+  const answer = await api(origin, "/v2/remote/hosts/register", {
+    token,
+    body: { hostId, name, ownerMembershipId: membershipId, devicePublicKey: randomBytes(32).toString("base64url") },
+  });
+  const machineToken = textField(answer.body, "machineToken");
+  if (answer.status !== 201 || !machineToken) throw new Error(`The host was not registered: ${answer.status}`);
+  return { hostId, membershipId: textField(answer.body, "membershipId"), machineToken };
+}
+
+export async function startRemoteSession(origin: string, token: string, hostId: string): Promise<string> {
+  const answer = await api(origin, "/v2/remote/sessions", { token, body: { hostId } });
+  const sessionId = textField(answer.body, "sessionId");
+  if (answer.status !== 201 || !sessionId) {
+    throw new Error(`The remote session did not start: ${answer.status} ${JSON.stringify(answer.body)}`);
+  }
+  return sessionId;
 }
