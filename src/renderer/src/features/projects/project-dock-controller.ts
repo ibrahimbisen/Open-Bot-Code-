@@ -1,4 +1,5 @@
 import type { DockPlacement, DockSplitDirection, SlotPanelKind } from "./project-dock-panels";
+import type { CloseReason } from "./project-preview-model";
 
 export interface OpenChatRequest {
   projectId: string;
@@ -23,4 +24,15 @@ export interface ProjectDockController {
   toggleMaximize(): void;
   nextPanel(step: 1 | -1): void;
   panelCount(): number;
+  openContent(request: OpenContentRequest): void;
+  closeTransient(reason: CloseReason, scope?: { chatKey?: string | null }): void;
+}
+
+export interface OpenContentRequest {
+  kind: "preview" | "browser";
+  projectId: string;
+  title: string;
+  data: Record<string, string>;
+  activate: boolean;
+  pinned?: boolean;
 }

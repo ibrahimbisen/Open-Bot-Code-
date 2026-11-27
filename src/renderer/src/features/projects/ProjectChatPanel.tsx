@@ -22,6 +22,7 @@ import { latestVisibleAgentMessageId } from "../conversation/conversation-read-s
 import { createTurnSteps } from "../conversation/turn-steps";
 import { useTurnTrace } from "../conversation/turn-trace";
 import { ProjectModelPicker } from "./ProjectModelPicker";
+import { previewOfAttachment, previewOfFile } from "./project-agent-content";
 import type { ChatPanelParams } from "./project-dock-panels";
 import { FALLBACK_RUNTIME, runtimeOfProfile } from "./project-runtime";
 import { projectSlots } from "./project-slots";
@@ -200,6 +201,7 @@ function ProjectDraftChat(props: { api: DockviewPanelApi; params: ChatPanelParam
         <Show when={profile()} fallback={<div class="project-chat-missing">{t("panel.chat.noAgent")}</div>}>
           {(agent) => (
             <ThreadSurface
+              projectId={props.project.id}
               agentId={agent().id}
               task={null}
               messages={[]}
@@ -343,6 +345,7 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
           }
         >
           <ThreadSurface
+            projectId={props.project.id}
             agentId={agentId()}
             task={task() ?? null}
             messages={messages}
@@ -381,6 +384,7 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
 }
 
 function ThreadSurface(props: {
+  projectId: string;
   agentId: string;
   task: AgentTask | null;
   messages: readonly AgentMessage[];
@@ -396,6 +400,7 @@ function ThreadSurface(props: {
   steps: unknown;
 }) {
   const agents = useAgents();
+  const projects = useProjects();
   const tasks = useAgentTasks();
   const platform = usePlatform();
   const showAgentSteps = useShowAgentSteps();
@@ -436,7 +441,28 @@ function ThreadSurface(props: {
             onSend={props.onSend}
             onStop={props.onStop}
             onOpenLink={(url) => void appPort().openUrl(url)}
-            onPreview={() => undefined}
+            onPreview={(attachment) =>
+              projects
+                .dock()
+                ?.openContent(
+                  previewOfAttachment(
+                    props.projectId,
+                    { agentId: props.agentId, chatId: props.task?.id ?? null },
+                    attachment,
+                  ),
+                )
+            }
+            onOpenFile={(kind, agentId, path) =>
+              projects
+                .dock()
+                ?.openContent(
+                  previewOfFile(
+                    props.projectId,
+                    { agentId: props.agentId, chatId: props.task?.id ?? null },
+                    { kind, agentId, path },
+                  ),
+                )
+            }
             onAttachmentAction={() => undefined}
             approval={props.approval}
             onRespondApproval={props.onRespondApproval}
