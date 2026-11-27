@@ -79,7 +79,7 @@ function PanelHeader(props: {
           <Show when={agentName()}>
             {(agent) => (
               <span class="project-panel-agent">
-                {agent().role ? `${agent().name} · ${agent().role}` : agent().name}
+                {agent().role && agent().role !== agent().name ? `${agent().name} · ${agent().role}` : agent().name}
               </span>
             )}
           </Show>
@@ -93,7 +93,9 @@ function PanelHeader(props: {
           onChange={(event) => props.onAgent(event.currentTarget.value)}
         >
           {detail()?.agents.map((agent) => (
-            <option value={agent.id}>{agent.role ? `${agent.name} · ${agent.role}` : agent.name}</option>
+            <option value={agent.id}>
+              {agent.role && agent.role !== agent.name ? `${agent.name} · ${agent.role}` : agent.name}
+            </option>
           ))}
         </NativeSelect>
       </Show>

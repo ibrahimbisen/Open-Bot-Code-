@@ -50,6 +50,23 @@ async function until<T>(
 
 async function setViewport(page: Page, width: number, height: number): Promise<void> {
   const session = await page.context().newCDPSession(page);
+  const target = await session.send("Browser.getWindowForTarget").catch(() => undefined);
+  if (target) {
+    await session
+      .send("Browser.setWindowBounds", { windowId: target.windowId, bounds: { windowState: "normal" } })
+      .catch(() => undefined);
+    await session
+      .send("Browser.setWindowBounds", { windowId: target.windowId, bounds: { width, height } })
+      .catch(() => undefined);
+  }
+  await page.evaluate(([w, h]) => window.resizeTo(w ?? 0, h ?? 0), [width, height]);
+  await page.waitForTimeout(800);
+  const size = await page.evaluate(() => [window.innerWidth, window.innerHeight]);
+  process.stdout.write(`window ${size.join("x")} for ${width}x${height}\n`);
+  if (Math.abs((size[0] ?? 0) - width) < 40) {
+    await session.detach();
+    return;
+  }
   await session.send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 0, mobile: false });
   await session.detach();
   await page.waitForTimeout(1000);
@@ -348,6 +365,52 @@ async function main(): Promise<void> {
       await closeBlockingDialogs(page);
     });
 
+    await step("settings dialog shows its four sections", async () => {
+      await column(page).getByRole("button", { name: "Project settings" }).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.waitFor({ state: "visible", timeout: WAIT_MS });
+      const seen: string[] = [];
+      for (const tab of ["General", "Folders", "Agents", "Archive and delete"]) {
+        await dialog.getByRole("tab", { name: tab, exact: true }).click();
+        await page.waitForTimeout(500);
+        assert.ok((await dialog.locator("[role=tabpanel]:visible").count()) > 0, `no panel for ${tab}`);
+        screens.push(await shot(page, `project-settings-${tab.split(" ")[0]?.toLowerCase()}`));
+        seen.push(tab);
+      }
+      await dialog.getByRole("button", { name: "Close", exact: true }).click();
+      await dialog.waitFor({ state: "hidden", timeout: WAIT_MS });
+      return seen.join(", ");
+    });
+
+    await step("chat menu opens with its actions", async () => {
+      await column(page).locator(".project-chat-actions").first().click();
+      const menu = page.getByRole("menu");
+      await menu.waitFor({ state: "visible", timeout: WAIT_MS });
+      const items = await menu.getByRole("menuitem").count();
+      assert.ok(items >= 4, `only ${items} items`);
+      await page.waitForTimeout(500);
+      screens.push(await shot(page, "project-chat-menu"));
+      await page.keyboard.press("Escape");
+      return `${items} items`;
+    });
+
+    await step("chat picker opens from the dock add menu", async () => {
+      await page.getByRole("button", { name: "Add a panel", exact: true }).first().click();
+      await page.getByRole("menuitem", { name: "Chat from another project" }).click();
+      const dialog = page.getByRole("dialog");
+      await dialog.getByText("Open a chat in a panel").waitFor({ state: "visible", timeout: WAIT_MS });
+      await until(
+        page,
+        "picker list",
+        () => dialog.locator(".project-picker-list li").count(),
+        (count) => count > 0,
+      );
+      await page.waitForTimeout(800);
+      screens.push(await shot(page, "project-chat-picker"));
+      await dialog.getByRole("button", { name: "Cancel", exact: true }).click();
+      await dialog.waitFor({ state: "hidden", timeout: WAIT_MS });
+    });
+
     await step("screenshots in both themes and two window sizes", async () => {
       for (const [width, height] of [
         [1280, 800],
@@ -363,6 +426,29 @@ async function main(): Promise<void> {
       await clearViewport(page);
       await setTheme(page, "dark");
       return `${screens.length} screenshots`;
+    });
+
+    await step("deleting every project shows the no-project screen", async () => {
+      for (let guard = 0; guard < 120; guard += 1) {
+        if (
+          await page
+            .locator(".project-empty-screen")
+            .isVisible()
+            .catch(() => false)
+        )
+          break;
+        await column(page).getByRole("button", { name: "Project settings" }).click();
+        const dialog = page.getByRole("dialog");
+        await dialog.waitFor({ state: "visible", timeout: WAIT_MS });
+        await dialog.getByRole("tab", { name: "Archive and delete", exact: true }).click();
+        await dialog.getByRole("button", { name: "Delete project", exact: true }).click();
+        const confirm = page.getByRole("alertdialog");
+        await confirm.getByRole("button", { name: "Delete project", exact: true }).click();
+        await page.waitForTimeout(800);
+        await closeBlockingDialogs(page);
+      }
+      await page.locator(".project-empty-screen").waitFor({ state: "visible", timeout: WAIT_MS });
+      screens.push(await shot(page, "project-no-project"));
     });
 
     process.stdout.write(`screens: ${screens.join(", ")}\n`);

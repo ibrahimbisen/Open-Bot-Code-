@@ -219,6 +219,7 @@ const Projects = createSimpleContext({
           };
         });
       } catch (error) {
+        if (!untrack(() => project(projectId))) return;
         setState((current) => {
           current[key][projectId] = { ...before, loaded: true, loading: false, failed: true };
         });
@@ -325,6 +326,9 @@ const Projects = createSimpleContext({
     }
 
     async function deleteProject(projectId: string): Promise<void> {
+      if (untrack(() => state.activeProjectId) === projectId) {
+        setActiveProject(untrack(() => visibleProjects().find((entry) => entry.id !== projectId)?.id ?? null));
+      }
       await port.delete(projectId);
       setState((current) => {
         current.projects = current.projects.filter((entry) => entry.id !== projectId);
@@ -332,9 +336,6 @@ const Projects = createSimpleContext({
         delete current.active[projectId];
         delete current.archived[projectId];
       });
-      if (untrack(() => state.activeProjectId) === projectId) {
-        setActiveProject(untrack(() => visibleProjects()[0]?.id ?? null));
-      }
     }
 
     async function changeDetail(run: () => Promise<ProjectDetail>): Promise<ProjectDetail> {
