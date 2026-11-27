@@ -156,6 +156,16 @@ async function main(): Promise<void> {
         if (feature.id === "computerUse") {
           await openSettingsTab(page, "Computer Use");
           await page.getByRole("tabpanel").first().waitFor({ state: "visible", timeout: 30_000 });
+          if (
+            await page
+              .getByText("Computer Use isn’t available yet")
+              .first()
+              .isVisible()
+              .catch(() => false)
+          )
+            observations.push(
+              "Computer Use: the settings tab appears, but it says that this build carries no Computer Use driver.",
+            );
         } else {
           const label = feature.id === "routines" ? "Schedule" : feature.title;
           const direct = rail(page).getByRole("button", { name: label, exact: true });
