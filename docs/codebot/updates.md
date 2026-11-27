@@ -1,7 +1,8 @@
 # Application updates from your server
 
-CodeBot gets its updates from a folder on your own server (PRD 12, decision D15). It does not use
-GitHub Releases. The app uses `electron-updater` with the generic provider: it reads the file
+By default CodeBot gets its updates from the GitHub Releases of the owner repository (decision D22,
+see [releases.md](releases.md)). A folder on your own server (PRD 12, decision D15) is an optional
+setting that replaces it. The app uses `electron-updater` with the generic provider: it reads the file
 `latest.yml` (Windows), `latest-mac.yml` (macOS) or `latest-linux.yml` / `latest-linux-arm64.yml`
 (Linux) in that folder, and downloads the installer that the file names.
 
@@ -32,6 +33,8 @@ Order, first match wins:
 1. Settings > Updates > Update server (saved on the computer).
 2. The environment variable `CODEBOT_UPDATE_URL`.
 3. The URL that was built into the app (`CODEBOT_UPDATE_URL` at build time, in `resources/app-update.yml`).
+   When `CODEBOT_UPDATE_URL` is not set at build time, the build wrapper uses the GitHub feed
+   `https://github.com/ibrahimbisen/Open-Bot-Code-/releases/latest/download/`.
 
 With no URL the app makes no request and Settings shows "No update server is set". A URL must use
 `https://`. `http://` is accepted only for a computer on your own network (localhost, a private IP

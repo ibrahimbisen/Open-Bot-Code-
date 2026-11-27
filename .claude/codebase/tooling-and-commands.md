@@ -18,7 +18,7 @@ Read this file before you run a check, add a script, or change a build.
 | `knip.config.ts` | knip entry points, project scopes per workspace, `ignoreIssues`, `ignoreBinaries`, `ignoreDependencies`, and the CSS `@import` compiler. |
 | `electron.vite.config.ts` | electron-vite build for `main`, `preload` and `renderer`: entry inputs, externals, plugins, dev port, and the bench build flag. |
 | `electron-builder.yml` | Packaging for macOS (DMG and ZIP), Windows (NSIS, x64), and Linux (AppImage, x64 and arm64). It holds the app id, the fuses, the update feed, `files`, `asarUnpack` and `extraResources`. |
-| `electron-builder.windows-signing.yml` | Extends `electron-builder.yml`. It adds `forceCodeSigning` and `win.azureSignOptions`. `.github/workflows/release.yml` passes it to `bun run dist:win --config`. |
+| `electron-builder.windows-signing.yml` | Extends `electron-builder.yml`. It adds `forceCodeSigning` and `win.azureSignOptions`. Upstream used it for signed Windows releases; the CodeBot release workflow does not use it (Windows builds are unsigned). |
 | `tsconfig.json` | Solution file. It has no `files` and refers to `tsconfig.node.json` and `tsconfig.web.json`. |
 | `tsconfig.base.json` | Shared compiler options. `strict`, `noUncheckedIndexedAccess`, `noImplicitOverride`, `noUnusedLocals`, `noUnusedParameters`, `isolatedModules`, `skipLibCheck`. |
 | `tsconfig.node.json` | Node project. `types: ["node"]`, `verbatimModuleSyntax`. Includes the root configs, `scripts/**`, `tools/vitest/**`, `src/backend`, `src/main`, `src/preload`, `packages/contracts/src`, `packages/logging/src`. |
@@ -52,7 +52,7 @@ Read this file before you run a check, add a script, or change a build.
 | `scripts/dev-automation/bench.ts` | Runs `dev:bench`. Scenarios are in `scripts/dev-automation/bench-scenarios.ts`. |
 | `scripts/dev-worktree-vite-plugin.ts` | Vite plugin used by `electron.vite.config.ts`. |
 | `packages/i18n/src/vite-plugin.ts` | `lazyLanguageCatalogs()` plugin used by `electron.vite.config.ts`. |
-| `.github/workflows/ci.yml` | Source of truth for CI jobs (read only the table in `docs/development-checks.md`; `ci.yml` itself was not read). |
+| `.github/workflows/ci.yml` | CodeBot CI (D22): jobs `check` (typecheck:node, typecheck:renderer, typecheck:contracts, typecheck:i18n, lint, check:ui, i18n:check, knip:check) and `tests` (test:desktop, test:app-update, test:release-script). No secrets. |
 
 ## How it works
 
@@ -249,7 +249,7 @@ Notes:
    No other list is needed for a workspace package.
    A fixed extra mapping is in the table at the top of `scripts/staged-typecheck.ts` (lines 11 to 16).
 3. Add the new name to the `desktop:typecheck` list only if it belongs to the desktop group.
-4. Add the job to `.github/workflows/ci.yml`. The CI file was not read in this review (unverified).
+4. Add the job to `.github/workflows/ci.yml`.
 
 ### Add or change a Biome grit rule
 
@@ -371,7 +371,7 @@ Notes:
 
 ## Unverified points
 
-- `.github/workflows/ci.yml` was not read in full. The job table in `docs/development-checks.md` is the only source for CI jobs here.
+- `.github/workflows/release.yml` builds and publishes a GitHub Release on each push to `main` (D22, `docs/codebot/releases.md`).
 - The exact list of `typecheck:*` scripts in `package.json` was read from the file. Their target `tsconfig` files were not checked one by one.
 - `scripts/dev-verify.ts`, `scripts/dev-mobile.ts` and `scripts/dev-extension.ts` were not read. Their behavior comes from the README table and the script names. `scripts/dev-stack.ts` was read for its commands and flags only.
 - The rule-by-rule meaning of each anti-slop `.grit` file was not read. Their names come from `biome.json`.
@@ -381,7 +381,7 @@ Notes:
 - The `--write` flag on `check:agent-context` is read by `scripts/debt-ratchet.ts` (line 18), which the script calls. Confirmed.
 - The `test:*` E2E scripts (306 `test:*` entries in `package.json`; 462 `scripts/*-e2e.ts` files and 26 `apps/auth-api/scripts/*-e2e.ts` files) were counted, not run. Their behavior was not checked.
 - The root `*.tsbuildinfo` files are listed as ignored by `.gitignore` line 2 (`*.tsbuildinfo`).
-- The `.github/workflows/release.yml` use of `electron-builder.windows-signing.yml` was confirmed by grep (line 661). Its signing steps were not read.
+- The upstream release workflow was replaced by the CodeBot one in `.github/workflows/release.yml`.
 - The `tools/vitest/hermetic-environment.ts` helper was confirmed as imported by the two hermetic setup files. Its credential patterns and `HOME` handling were read. The rest was not.
 - The default dev ports (5173, 5174, 9333, 9334) were confirmed in `scripts/dev-services.ts` (lines 86 to 96). The registry allocation rules come from the README and were not read in `scripts/dev-automation/port-allocation.ts`.
 - Whether `dev`, `dev:all` and `dev:test-client` differ in any other way than the service list was not checked.

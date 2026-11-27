@@ -498,7 +498,8 @@ described above.
 
 ## Releases
 
-CodeBot updates come from a folder on your own server, not from GitHub Releases. `bun run release:patch`,
+Each push to `main` makes a GitHub Release, and installed builds get updates from it (see
+[releases.md](releases.md)). A folder on your own server is an optional update feed. `bun run release:patch`,
 `release:minor`, or `release:major` prepares the version and changelog. Then `bun run release:codebot`
 builds the installer for the computer that you run it on and uploads it and the update metadata to the
 update folder (`--target-dir`, `--webdav` or `--scp`). Installed builds check the folder at start and every

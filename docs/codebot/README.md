@@ -10,6 +10,7 @@ the engine that CodeBot keeps.
 | [decisions.md](decisions.md) | Choices made for the owner, and the work packages |
 | [agent-brief.md](agent-brief.md) | Rules for build agents |
 | [upstream-sync.md](upstream-sync.md) | How to take changes from upstream OpenBot |
+| [releases.md](releases.md) | Each push to `main` makes a GitHub Release; secrets for macOS signing |
 | [updates.md](updates.md) | Application updates from your server and the one-command release |
 | [unsigned-builds.md](unsigned-builds.md) | How to open unsigned builds on macOS and Windows |
 | [server-mode.md](server-mode.md) | Phase 2: the engine on a home server, the switch, setup and proof |

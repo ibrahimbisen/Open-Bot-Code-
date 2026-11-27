@@ -164,7 +164,7 @@ Scope: `apps/` in the CodeBot repo (CodeBot fork). Read-only map for coding agen
 - `GET /manifest`: reads headers `expo-platform`, `expo-runtime-version`, `expo-channel-name`. Looks up pointer `pointers/<channel>/<platform>/<runtime version>.json`. Returns `multipart/mixed` with a signed `manifest` part or a signed `directive` part. Returns `204` when the phone keeps its bundle.
 - `GET /assets/<hash>`: returns an object from `assets/<sha256 base64url>`. Hash in the URL must match `ASSET_HASH_PATTERN` (43 characters).
 - Rollout: `rolloutBucket(clientId, updateId)` gives 0-99. Pointer rollout percentage decides who gets the update.
-- Signing happens in GitHub Actions (`.github/workflows/mobile-ota.yml` and `scripts/mobile-ota.ts` in the repo root). The Worker holds no key.
+- Signing happens in GitHub Actions (upstream `.github/workflows/mobile-ota.yml`, removed in CodeBot by D22, and `scripts/mobile-ota.ts` in the repo root). The Worker holds no key.
 - Cache: pointer 30 s, update 1 day, asset 1 year. Missing objects are cached too.
 
 ### site-router

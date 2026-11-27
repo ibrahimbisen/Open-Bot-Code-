@@ -32,8 +32,9 @@ xattr -dr com.apple.quarantine /Applications/CodeBot.app
 ```
 
 Automatic updates on macOS need a code signature that stays the same between versions. An unsigned
-build, or one that is only ad-hoc signed, downloads the update but macOS can refuse to install it. In
-that case install the new DMG by hand as above. To get automatic updates on macOS, sign the app with
+build, or one that is only ad-hoc signed, does not download or install an update by itself: it shows
+the new version, and Download opens the release page in the browser. Install the new DMG by hand as
+above. To get automatic updates on macOS, sign the app with
 one certificate every time (a Developer ID Application certificate, or a self-made code signing
 certificate that all your Macs trust).
 

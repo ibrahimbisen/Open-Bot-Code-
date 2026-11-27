@@ -1,9 +1,11 @@
 # Releasing CodeBot
 
-> CodeBot does not publish through GitHub Releases. The update folder, the release command
-> (`bun run release:codebot`) and unsigned builds are in [codebot/updates.md](codebot/updates.md) and
-> [codebot/unsigned-builds.md](codebot/unsigned-builds.md). The GitHub Actions release workflow, its
-> secrets and its signing steps below are upstream text and do not apply to CodeBot.
+> CodeBot publishes each push to `main` as a GitHub Release of `ibrahimbisen/Open-Bot-Code-`: see
+> [codebot/releases.md](codebot/releases.md) for the workflow, the version numbers, the files and the
+> macOS signing secrets. The optional home update server and the release command
+> (`bun run release:codebot`) are in [codebot/updates.md](codebot/updates.md), and unsigned builds in
+> [codebot/unsigned-builds.md](codebot/unsigned-builds.md). The upstream release workflow, its secrets
+> and its signing steps below are upstream text and do not apply to CodeBot.
 
 For iOS builds uploaded to TestFlight through GitHub Actions, see
 [the mobile release guide](../apps/mobile/README.md#github-actions-testflight-release). For Android
