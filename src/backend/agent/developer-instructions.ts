@@ -29,6 +29,7 @@ import { PASSWORD_MANAGER_BRAND_NAMES } from "../password-vault";
 import { COMPUTER_USE_GUIDE_URI, piComputerUseGuideStep } from "../pi-mcp-names";
 import { agentProjectContext } from "../projects/project-context";
 import { projectInstructionLines, projectWorkingDirectoryText } from "../projects/project-prompt";
+import { replyRuleInstruction } from "./reply-rule";
 import { ROUTINE_NO_UPDATE_MARKER, ROUTINE_NO_UPDATE_TOOL } from "./routine-quiet-runs";
 import type { PromptInstructionsFile } from "./workspace-instructions";
 import { existingAgentFolders, workspaceExcludedFolders } from "./workspace-sandbox";
@@ -140,6 +141,7 @@ export interface DeveloperInstructionOptions {
   instructionsFile?: PromptInstructionsFile | null;
   instructionsFileInTurns?: boolean;
   responseStyle?: ResponseStyle;
+  replyRule?: string;
   memoryReview?: boolean;
   skillRevision?: boolean;
   platform?: NodeJS.Platform;
@@ -419,6 +421,7 @@ export function developerInstructions(
   const style = options.responseStyle ?? DEFAULT_RESPONSE_STYLE;
   const platform = options.platform ?? process.platform;
   return [
+    ...replyRuleInstruction(options.replyRule),
     STYLE_OPENING[style],
     `${
       options.catalogAsMcpTools

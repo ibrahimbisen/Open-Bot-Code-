@@ -73,6 +73,46 @@ a decision here fills a gap in the PRD or selects one of several possible design
   belong to OpenBot. The new themes (16.2, 16.3) are extra choices, not a redesign. Do not restyle
   existing screens.
 
+## Short replies (W10)
+
+The lead agreed to these choices on 2026-11-26. The numbers are local to W10 until the lead gives them
+a place in the list above.
+
+- **D-W10.1. Reply rule.** The rule is the first line of the instructions that each provider gets, with
+  the label "Reply rule, above all style guidance:". The order is: project rule, global rule, default
+  rule. An empty rule gives no line. The global rule is in the preference file
+  `codebot-reply-rule-v1.json` of the engine. `ThreadLifecycle` compares the rule of each session with
+  the rule at the start of a turn and resumes the provider session with new instructions when the
+  rule changed. It does not start a new provider session.
+- **D-W10.2. Plain style is the default.** The default response style of the engine is `classic`. The
+  `natural` style asks for a status line before each tool call and for more text at the end, which is
+  against the reply rule. `natural` stays as a choice in Server settings.
+- **D-W10.3. Step class and targets in the stored trace.** A stored tool step
+  (`ConversationTraceStep` in `message.trace`) has two new optional fields: `activity` (`editing`,
+  `running`, `reading`, `searching`, `browsing`, `delegating` or `working`; an open text field, an
+  unknown value reads as `working`) and `targets` (at most 16 texts of at most 500 characters: file
+  paths for `editing` and `reading`, the query for `searching`, the host for `browsing`). The summary
+  line counts edited and read files by these paths. A multi-file change has more than one path, thus
+  the field is a list and not one `target`. Old rows have no fields; the screen then gets the class
+  from the label of the step. Team API clients get the fields inside `trace`; a client that does not
+  know them ignores them.
+- **D-W10.4. Step inputs, outputs and diffs.** The engine keeps a capped copy of the input, the
+  output and the diff of each tool step at the time of the turn, for every provider. The provider
+  transcripts were checked first: only Codex and Claude Code keep a transcript that can be read for
+  one turn, Claude Code removes old transcripts (after 30 days by default, from its documentation; not
+  checked here), each one needs its own parser, and the
+  ACP providers and local models need a session replay in a provider process. Thus they do not give
+  the same result "for every provider". The caps are: input 2,000 characters, output 8,000
+  characters (the end of a command output, the start of other outputs), diff 16,000 characters for
+  each file and 8 files for each step, 512,000 characters for each turn. A cut text has a
+  `truncated` mark. Secrets are redacted before the write.
+- **D-W10.5. Place of the step details.** The step details are in a separate SQLite file,
+  `turn-step-details.db` in the user data folder, not in `codebot.db`: the main database then has no
+  new table and no new migration, and message rows do not grow. The file keeps at most 256 MB; the
+  oldest turns go first. The engine deletes the details of a thread or an agent when that thread
+  history or agent is deleted. The screen loads the details of one turn through the typed endpoint
+  `replies.readTurnSteps` only when the user opens "Details", and drops them when "Details" closes.
+
 ## Work packages
 
 | Package | Scope |

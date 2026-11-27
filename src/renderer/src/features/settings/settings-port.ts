@@ -28,6 +28,7 @@ export interface SettingsPort {
     CodeBotDesktopApi["dynamicIsland"],
     "getBuiltInDisplayGeometry" | "getPreference" | "onPreference" | "setPreference" | "setXWayland"
   >;
+  replies: Pick<CodeBotDesktopApi["replies"], "getRule" | "setRule">;
   notifications: Pick<CodeBotDesktopApi["notifications"], "getPreference" | "openSettings" | "setPreference" | "test">;
   update: Pick<CodeBotDesktopApi["update"], "getPreference" | "onPreference" | "setPreference">;
 }

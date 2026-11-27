@@ -607,6 +607,7 @@ import type {
   RemoteNetworkRouteState,
   RemoteSessionReusePreference,
 } from "./ipc-remote-sessions";
+import type { ReplyRuleSettings, TurnStepDetails, TurnStepDetailsInput } from "./ipc-replies";
 import type {
   ResendRoutineResultInput,
   RoutineResultConnectionOption,
@@ -2247,6 +2248,11 @@ export const IPC_ENDPOINTS = {
     ),
     gitDiff: scopedRequest<ExplorerGitDiffInput, ExplorerGitDiff, "required">()("explorer:git-diff"),
   },
+  replies: {
+    getRule: scopedQuery<ReplyRuleSettings>()("replies:get-rule"),
+    setRule: scopedRequest<ReplyRuleSettings, ReplyRuleSettings>()("replies:set-rule"),
+    readTurnSteps: scopedRequest<TurnStepDetailsInput, TurnStepDetails>()("replies:read-turn-steps"),
+  },
 } as const;
 
 export type IpcEndpoints = typeof IPC_ENDPOINTS;
@@ -2323,6 +2329,7 @@ export const IPC_GROUP_PATHS = {
   events: "events",
   remoteDesktop: "remoteDesktop",
   explorer: "explorer",
+  replies: "replies",
 } as const satisfies { readonly [Group in keyof IpcEndpoints]: string | null };
 
 export type IpcGroupName = keyof IpcEndpoints;

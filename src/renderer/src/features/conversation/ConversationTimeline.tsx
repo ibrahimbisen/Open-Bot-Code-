@@ -97,6 +97,7 @@ import { desktopChatEventRoutinesApi } from "./routine-webhooks-api";
 import { ServerInstallChatCard } from "./ServerInstallChatCard";
 import { SettingLinkChatCard } from "./SettingLinkChatCard";
 import { SkillSuggestionChatCard, skillSuggestionOutcome } from "./SkillSuggestionChatCard";
+import { stepDetailsLoader } from "./step-details-loader";
 import { PENDING_SEND_ID_PREFIX, pendingSendRetrySafe } from "./stores/pending-send-store";
 import { createSubagentDock } from "./subagent-dock";
 import { createTurnSteps, SUBAGENT_SPAN_PREFIX } from "./turn-steps";
@@ -685,6 +686,13 @@ export function ConversationTimeline() {
     activeTurnId: () => props.activeTurnId,
   });
   const showAgentSteps = useShowAgentSteps();
+  const loadStepDetails = (messageId: string | undefined) =>
+    stepDetailsLoader({
+      agentId: props.agent?.id,
+      turnId: turnSteps.turnIdAbove(messageId),
+      server: props.server,
+      hosted: Boolean(channel) || props.runtime !== undefined,
+    });
   const compactActions = useCompactMessageActions();
   const rowDayMarker = (current: AgentMessage, previous: AgentMessage | undefined) => {
     if (current.createdAt)
@@ -1443,7 +1451,8 @@ export function ConversationTimeline() {
                       <AgentStepsDisclosure
                         steps={steps()}
                         defaultOpen={showAgentSteps()}
-                        list={!stepsInRow()}
+                        activity={turnSteps.activityAbove(message()?.id)}
+                        loadDetails={loadStepDetails(message()?.id)}
                         trace={traceAbove(
                           message()?.id,
                           channel && author().kind === "agent" ? author().name : undefined,

@@ -2,7 +2,7 @@ import { isDynamicRecord } from "./runtime-values";
 
 export const RESPONSE_STYLES = ["natural", "classic"] as const;
 export type ResponseStyle = (typeof RESPONSE_STYLES)[number];
-export const DEFAULT_RESPONSE_STYLE: ResponseStyle = "natural";
+export const DEFAULT_RESPONSE_STYLE: ResponseStyle = "classic";
 export const LEGACY_RESPONSE_STYLE: ResponseStyle = "classic";
 
 export interface HostPersonality {

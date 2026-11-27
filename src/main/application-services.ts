@@ -450,6 +450,7 @@ import {
 } from "./remote-session-reuse-preference-store";
 import { remoteSyncProfileFile } from "./remote-sync-profile-file";
 import { sendToRenderer } from "./renderer-ipc";
+import { REPLY_RULE_PREFERENCE_FILE, ReplyRulePreferenceStore } from "./reply-rule-preference-store";
 import { HOSTED_UPDATE_MAXIMUM_IDLE_WAIT_MS, RequestedUpdate, RequestedUpdateRefusal } from "./requested-update";
 import { RequiredUpdate } from "./required-update";
 import { ResourceMonitor } from "./resource-monitor";
@@ -763,6 +764,7 @@ export interface ApplicationServices {
   hostSignalHome: HostSignalHomeService;
   hostTurnLimits: HostTurnLimitsPreferenceStore;
   serverPersonality: ServerPersonalityPreferenceStore;
+  replyRule: ReplyRulePreferenceStore;
   promptCacheTtl: PromptCacheTtlPreferenceStore;
   claudeUserSetup: ClaudeUserSetupControl;
   cacheExpiryCompaction: CacheExpiryCompactionControl;
@@ -1571,6 +1573,7 @@ export async function createApplicationServices({
   const serverPersonality = new ServerPersonalityPreferenceStore(
     join(app.getPath("userData"), SERVER_PERSONALITY_PREFERENCE_FILE),
   );
+  const replyRule = new ReplyRulePreferenceStore(join(app.getPath("userData"), REPLY_RULE_PREFERENCE_FILE));
   const promptCacheTtl = new PromptCacheTtlPreferenceStore(
     join(app.getPath("userData"), PROMPT_CACHE_TTL_PREFERENCE_FILE),
   );
@@ -1634,6 +1637,7 @@ export async function createApplicationServices({
       hostSignalHome.load(),
       hostTurnLimits.load(),
       serverPersonality.load(),
+      replyRule.load(),
       promptCacheTtl.load(),
       claudeUserSetup.load(),
       cacheExpiryCompaction.load(),
@@ -2398,6 +2402,7 @@ export async function createApplicationServices({
     },
     skillLearner: () => localSkillLearner(skills),
     responseStyle: () => serverPersonality.responseStyle(),
+    replyRule: () => replyRule.rule(),
     timezone: () => serverTimezone.effective(),
     chosenTimezone: () => serverTimezone.get().timezone,
     extraRoutineSources: () => (workflowTriggers ? [workflowTriggers] : []),
@@ -4473,6 +4478,7 @@ export async function createApplicationServices({
     hostSignalHome,
     hostTurnLimits,
     serverPersonality,
+    replyRule,
     promptCacheTtl,
     claudeUserSetup: claudeUserSetupSetting,
     advancedFeatures,

@@ -1,3 +1,32 @@
 import { defineMessages } from "../../message";
 
-export const messages = defineMessages("reply", {});
+export const messages = defineMessages("reply", {
+  "reply.summary.edited": { one: "edited {count} file", other: "edited {count} files" },
+  "reply.summary.ran": { one: "ran {count} command", other: "ran {count} commands" },
+  "reply.summary.read": { one: "read {count} file", other: "read {count} files" },
+  "reply.summary.searched": { one: "searched {count} time", other: "searched {count} times" },
+  "reply.summary.browsed": { one: "opened {count} page", other: "opened {count} pages" },
+  "reply.summary.delegated": { one: "handed off {count} task", other: "handed off {count} tasks" },
+  "reply.summary.worked": { one: "used {count} other tool", other: "used {count} other tools" },
+  "reply.details.show": "Details",
+  "reply.details.hide": "Hide details",
+  "reply.details.loading": "Loading details…",
+  "reply.details.input": "Input",
+  "reply.details.output": "Output",
+  "reply.details.shortened": "Shortened",
+  "reply.details.timeline": "Timeline",
+  "reply.code.showAll": "Show all ({count} lines)",
+  "reply.code.showLess": "Show less",
+  "reply.view.title": "Reply view",
+  "reply.view.description": "Short shows the answer and a one-line summary of the work. Detailed also shows the steps.",
+  "reply.view.short": "Short",
+  "reply.view.detailed": "Detailed",
+  "reply.rule.title": "Reply rule",
+  "reply.rule.description": "Every chat gets this rule. Projects can use their own rule.",
+  "reply.rule.label": "Rule for replies",
+  "reply.rule.save": "Save rule",
+  "reply.rule.reset": "Use default rule",
+  "reply.rule.saved": "Rule saved",
+  "reply.rule.empty": "Empty: no reply rule is sent",
+  "reply.rule.count": "{count} of {max} characters",
+});

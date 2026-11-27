@@ -79,6 +79,7 @@ import {
 import { decodeCapturedSteps, readCapturedSteps } from "./handoff-tool-steps";
 import { mcpFallbackRunsServer } from "./mcp-tools";
 import { isProviderTimeout } from "./provider-status";
+import { agentReplyRule } from "./reply-rule";
 import { sessionSettingsIdentity } from "./session-settings";
 import { isArchivedThreadError, isMissingProviderSessionError, providerLabel } from "./thread-items";
 import { toolCatalogNames, visibleDynamicTools } from "./tool-catalog";
@@ -178,6 +179,7 @@ export interface ThreadLifecycleOptions {
   computerUseInputRefused?: () => boolean;
   computerUseForegroundInput?: boolean;
   responseStyle?: () => ResponseStyle;
+  replyRule?: (agentId: string) => string;
   memoryReview?: () => boolean;
   skillRevision?: () => boolean;
   sectionTeammates?: (agentId: string) => SectionTeammates | null;
@@ -213,6 +215,8 @@ export class ThreadLifecycle {
   readonly #computerUseInputRefused: () => boolean;
   readonly #computerUseForegroundInput: boolean;
   readonly #responseStyle: () => ResponseStyle;
+  readonly #replyRule: (agentId: string) => string;
+  readonly #givenReplyRules = new Map<string, string>();
   readonly #memoryReview: () => boolean;
   readonly #skillRevision: () => boolean;
   readonly #sectionTeammates: (agentId: string) => SectionTeammates | null;
@@ -257,6 +261,7 @@ export class ThreadLifecycle {
     this.#computerUseInputRefused = options.computerUseInputRefused ?? (() => false);
     this.#computerUseForegroundInput = options.computerUseForegroundInput ?? false;
     this.#responseStyle = options.responseStyle ?? (() => DEFAULT_RESPONSE_STYLE);
+    this.#replyRule = options.replyRule ?? ((agentId) => agentReplyRule(agentId, null));
     this.#memoryReview = options.memoryReview ?? (() => false);
     this.#skillRevision = options.skillRevision ?? (() => false);
     this.#sectionTeammates = options.sectionTeammates ?? (() => null);
@@ -456,7 +461,8 @@ export class ThreadLifecycle {
       const turnContext = yield* this.#turnContextKey(currentAgent, client);
       if (
         this.#conversation.loadedClientFor(session.externalSessionId) !== client ||
-        this.#turnContextChanged(client, session.externalSessionId, turnContext)
+        this.#turnContextChanged(client, session.externalSessionId, turnContext) ||
+        this.#replyRuleChanged(session.externalSessionId, currentAgent.id)
       ) {
         const resumed = yield* Effect.result(this.resumeThread(currentAgent, client, session.externalSessionId));
         if (Result.isFailure(resumed)) {
@@ -755,6 +761,7 @@ export class ThreadLifecycle {
       return yield* prepared.failure;
     }
     this.#rememberTurnContext(client, externalThreadId, givenContext);
+    this.#givenReplyRules.set(externalThreadId, this.#replyRule(agent.id));
     this.#conversation.bindThread(externalThreadId, agent.id, publicThreadId);
     this.#conversation.markThreadLoaded(externalThreadId, client);
     this.#conversation.ensureSnapshot(agent.id, publicThreadId);
@@ -1021,6 +1028,11 @@ export class ThreadLifecycle {
     if (client.turnContext === true) this.#givenTurnContext.set(externalThreadId, key);
   }
 
+  #replyRuleChanged(externalThreadId: string, agentId: string): boolean {
+    const given = this.#givenReplyRules.get(externalThreadId);
+    return given !== undefined && given !== this.#replyRule(agentId);
+  }
+
   #turnContextChanged(client: AgentClient, externalThreadId: string, current: string): boolean {
     const given = this.#givenTurnContext.get(externalThreadId);
     return client.turnContext === true && given !== undefined && given !== current;
@@ -1191,6 +1203,7 @@ export class ThreadLifecycle {
       computerUseInputRefused: this.#computerUseInputRefused(),
       computerUseForegroundInput: this.#computerUseForegroundInput,
       responseStyle: this.#responseStyle(),
+      replyRule: this.#replyRule(agent.id),
       memoryReview: this.#memoryReview(),
       skillRevision: this.#skillRevision(),
       memoryLimit: this.#memories.limit(),
@@ -1366,6 +1379,7 @@ export class ThreadLifecycle {
       response = yield* client.request("thread/resume", params, decodeRecordResponse).pipe(toThreadOperationFailed);
     } else response = resumed.success;
     this.#rememberTurnContext(client, externalThreadId, givenContext);
+    this.#givenReplyRules.set(externalThreadId, this.#replyRule(agent.id));
     this.#conversation.markThreadLoaded(externalThreadId, client);
     yield* this.#nameSession(client, externalThreadId, agent, getString(getRecord(response, "thread"), "name"));
     yield* this.#archiveRetries.retry(client);
@@ -1444,6 +1458,7 @@ export class ThreadLifecycle {
     this.#conversation.unbindThread(externalThreadId);
     this.#conversation.unloadThread(externalThreadId);
     this.#givenTurnContext.delete(externalThreadId);
+    this.#givenReplyRules.delete(externalThreadId);
     this.#compaction.forgetThread(externalThreadId);
     this.#pendingHandoffs.delete(externalThreadId);
   }
@@ -1582,6 +1597,7 @@ export class ThreadLifecycle {
     resumes = false,
   ) {
     this.#givenTurnContext.delete(externalThreadId);
+    this.#givenReplyRules.delete(externalThreadId);
     if (!client?.releaseThread) return;
     yield* client
       .releaseThread(externalThreadId, resumes)

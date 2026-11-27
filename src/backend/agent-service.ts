@@ -179,6 +179,7 @@ import {
   type SkillLearningMode,
   sameAgentBrowserProfile,
   sameAgentModelChoice,
+  type TurnStepDetails,
   WORKFLOW_CATALOG_PROVIDERS,
   WORKFLOW_MEDIA_CATALOG_MAX,
   WORKFLOW_MEDIA_SERVICE_ACCOUNT_MAX,
@@ -302,6 +303,7 @@ import { isBalanceDiagnostic, isPlanLimitDiagnostic, providerResetDelayMs } from
 import { type AgentClientFactory, ProviderRuntime, toProviderOperationFailed } from "./agent/provider-runtime";
 import { ProviderSignInWaits } from "./agent/provider-sign-in-waits";
 import { QueueControls } from "./agent/queue-controls";
+import { agentReplyRule } from "./agent/reply-rule";
 import {
   type FollowsUpOwnAnswer,
   quietRoutineRun,
@@ -402,6 +404,7 @@ import { SLASH_COMMAND_CATALOG_FILE, SlashCommandCatalog } from "./slash-command
 import { SlashCommands, type SlashCommandsFailed } from "./slash-commands/slash-commands";
 import { shortenDiagnostic } from "./stderr-diagnostics";
 import { extractJsonObject } from "./structured-output";
+import { TURN_STEP_DETAILS_FILE, TurnStepDetailsStore } from "./turn-step-details-store";
 import type { UserBrowsingLog } from "./user-browsing-log";
 import type { VaultItems } from "./vault-items";
 import { type CreditMediaGateway, CreditMediaWorkflows } from "./workflows/credit-media";
@@ -524,6 +527,7 @@ export interface AgentServiceOptions {
   approvalAutomation?: ApprovalAutomationPolicy | undefined;
   busyMessageMode?: () => BusyMessageMode;
   responseStyle?: () => ResponseStyle;
+  replyRule?: () => string | null;
   agentMemoryLimit?: () => number;
   memoryReviewInterval?: () => number;
   timezone?: () => string;
@@ -656,6 +660,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly #boot: BootRecovery;
   readonly #deltas: DeltaBuffer;
   readonly #turn: TurnLifecycle;
+  readonly #stepDetails: TurnStepDetailsStore;
   readonly #compaction: ContextCompaction;
   readonly #duplication: DuplicationGate;
   readonly #removal: AgentRemoval;
@@ -1466,6 +1471,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       ...(options.computerUseInputRefused ? { computerUseInputRefused: options.computerUseInputRefused } : {}),
       ...(options.computerUseForegroundInput ? { computerUseForegroundInput: true } : {}),
       ...(options.responseStyle ? { responseStyle: options.responseStyle } : {}),
+      replyRule: (agentId) => agentReplyRule(agentId, options.replyRule?.()),
       memoryReview: () => this.#memoryReview.running(),
       skillRevision: () => options.skillLearning?.() === "automatic",
       sectionTeammates: (agentId) => this.sectionTeammates(agentId),
@@ -2042,6 +2048,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         fromChrome: (deliveryId) => this.#fromChrome.has(deliveryId),
       },
     });
+    this.#stepDetails = new TurnStepDetailsStore(join(store.database.userDataPath, TURN_STEP_DETAILS_FILE));
     this.#turn = new TurnLifecycle({
       store,
       mailbox,
@@ -2073,6 +2080,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
           ? { checkFinish: (agentId: string, input: FinishCheckInput) => this.#checkFinish(agentId, input) }
           : {}),
         emitToolUsage: (usage) => this.emit("toolUsage", usage),
+        recordStepDetail: (record) => this.#stepDetails.record(record),
         turnModel: (agentId, turnId) => this.#drain.modelForTurn(agentId, turnId),
         mayFailOver: (agentId) => this.#mayFailOver(agentId),
         backupReadyAt: (agentId) => this.#backupReadyAt(agentId),
@@ -2428,6 +2436,10 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       if (standingProfileChanged(agent, agent, defaults, previous)) this.#conversation.unloadAgentThreads(agent.id);
     }
     this.#emit({ type: "agents-changed", agents: this.listAgents() });
+  }
+
+  readTurnStepDetails(agentId: string, turnId: string): TurnStepDetails {
+    return { turnId, steps: this.#stepDetails.read(agentId, turnId) };
   }
 
   responseStyleChanged(): void {
@@ -5043,6 +5055,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         const agent = this.#conversation.requireKnownAgent(agentId);
         if (threadId !== target.threadId || snapshot.activeTurnId || mainChatBusy(agent)) throw busy();
         const revision = this.#store.database.deleteThreadHistory({ agentId, threadId });
+        this.#stepDetails.deleteThread(threadId);
         this.#conversation.forgetDeletedHistory(threadId);
         snapshot.messages = [];
         snapshot.revision = revision;
@@ -5211,6 +5224,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
 
   #deleteChannelThreadHistory(agentId: string, threadId: string): void {
     const revision = this.#store.database.deleteThreadHistory({ agentId, threadId });
+    this.#stepDetails.deleteThread(threadId);
     this.#conversation.forgetDeletedHistory(threadId);
     const loaded = this.#conversation.executionSnapshot(threadId);
     if (!loaded) return;
@@ -5441,6 +5455,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   deleteAgent(agentId: string): Effect.Effect<void, AgentLifecycleFailed> {
     return Effect.sync(() => this.#planContinuation.cancel(agentId)).pipe(
       Effect.andThen(this.#removal.delete(agentId)),
+      Effect.tap(() => Effect.sync(() => this.#stepDetails.deleteAgent(agentId))),
       Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "deleteAgent", cause: failure.cause })),
     );
   }
@@ -6210,6 +6225,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       if (session) this.#images.interrupt(agentId, session, snapshot.activeTurnId);
     }
     yield* this.#turn.dispose();
+    this.#stepDetails.close();
     yield* this.#usageLimits.dispose();
     this.#drain.dispose();
     this.#queue.dispose();
@@ -7967,6 +7983,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     }
     this.#conversation.forgetExecutionThread(threadId);
     this.#turn.fileHistory.forgetThread(threadId);
+    this.#stepDetails.deleteThread(threadId);
   }, Effect.uninterruptible);
 }
 

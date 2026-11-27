@@ -377,6 +377,7 @@ import {
   decodeProjectsChangedEvent,
 } from "./project-decoding";
 import { decodeProviderRuntimeSnapshot } from "./provider-runtime";
+import { decodeReplyRuleFromMain, decodeTurnStepDetailsFromMain } from "./reply-decoding";
 import {
   decodeRoutineResultDeliveries,
   decodeRoutineResultDestination,
@@ -1856,6 +1857,11 @@ const codebotApi: CodeBotDesktopApi = {
     gitLog: decodeExplorerGitLog,
     gitCommitFiles: decodeExplorerGitCommitFiles,
     gitDiff: decodeExplorerGitDiff,
+  }),
+  replies: bridgeGroup(IPC_ENDPOINTS.replies, {
+    getRule: decodeReplyRuleFromMain,
+    setRule: decodeReplyRuleFromMain,
+    readTurnSteps: decodeTurnStepDetailsFromMain,
   }),
 };
 

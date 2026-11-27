@@ -31,6 +31,7 @@ import { useMessageBackdropAction } from "./message-backdrop";
 import { naturalThreadRows } from "./narration-rows";
 import { useNearPaymentApproval } from "./near-payment-approval";
 import { useThreadSettingLinkCard } from "./SettingLinkChatCard";
+import { stepDetailsLoader } from "./step-details-loader";
 import { createTurnSteps } from "./turn-steps";
 import { createTurnStreamHold } from "./turn-stream-hold";
 import { useTurnTrace } from "./turn-trace";
@@ -323,6 +324,15 @@ export function ConversationSideThread(props: { threadId: string; resizer: JSX.E
             focusMessage={current().thread.focusMessage}
             stepsAbove={turnSteps.stepsAbove}
             factsAbove={turnSteps.factsAbove}
+            activityAbove={turnSteps.activityAbove}
+            loadDetailsAbove={(messageId) =>
+              stepDetailsLoader({
+                agentId: view.agent?.id,
+                turnId: turnSteps.turnIdAbove(messageId),
+                server: view.server,
+                hosted: view.runtime !== undefined,
+              })
+            }
             traceAbove={turnTrace}
             activeSteps={turnSteps.activeSteps()}
             backgroundWorkSince={threadBackgroundWorkSince(current().thread.task?.id)}
