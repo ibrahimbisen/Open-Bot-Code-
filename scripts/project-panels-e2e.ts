@@ -431,19 +431,34 @@ async function main(): Promise<void> {
     });
 
     await step("an agent browser page opens as a dock panel and closes when the agent is done", async () => {
-      await column(page).locator(".project-chat-row").filter({ hasText: "First question" }).first().click();
+      const known = new Set((await readChats(page, name)).map((entry) => entry.chatId));
+      await column(page).getByRole("button", { name: "New chat" }).click();
+      await page.waitForTimeout(800);
       await chatPanels(page).first().getByRole("textbox").first().waitFor({ state: "visible", timeout: WAIT_MS });
-      await chatPanels(page).first().getByRole("textbox").first().click();
-      await page.keyboard.type("Open the page");
+      await sendInChat(page, "Open the page");
+      const fresh = await until(
+        page,
+        "new chat",
+        async () => (await readChats(page, name)).filter((entry) => !known.has(entry.chatId)),
+        (list) => list.length >= 1,
+      );
+      const source = fresh[0];
+      assert.ok(source, "no new chat");
+      await until(
+        page,
+        "first turn done",
+        () => column(page).locator(".project-chat-row").filter({ hasText: "Open the page" }).first().innerText(),
+        (text) => !/running|queued/i.test(text),
+      );
+      await sendInChat(page, "Second message");
       await page.evaluate(
         ({ url, agentId, threadId }) =>
           window.codebot.browser.open({ url, ownerAgentId: agentId, ownerThreadId: threadId, focus: true }),
-        { url: pageUrl, agentId: ref.agentId, threadId: ref.threadId },
+        { url: pageUrl, agentId: source.agentId, threadId: source.threadId },
       );
       await browsers(page).waitFor({ state: "visible", timeout: WAIT_MS });
       const ratio = await groupWidthRatio(page, ".project-browser-panel");
       assert.ok(ratio > 0.2 && ratio < 0.8, `browser ratio ${ratio.toFixed(2)}`);
-      await chatPanels(page).first().getByRole("button", { name: "Send message" }).click();
       await browsers(page).waitFor({ state: "detached", timeout: WAIT_MS });
     });
 
