@@ -14,12 +14,12 @@ describe("maskIdentifiers", () => {
     expect(maskIdentifiers("CodeBot 1.4.0 (212), 999.1.1.1")).toBe("CodeBot 1.4.0 (212), 999.1.1.1");
   });
 
-  it("masks each host name that is not an CodeBot service", () => {
+  it("masks each host name that is not a CodeBot service", () => {
     expect(maskIdentifiers("GET https://anna.example.com:8443/v1/me -> failed")).toBe(
       "GET https://[host]:8443/v1/me -> failed",
     );
     expect(maskIdentifiers("wss://user@my-server.internal/socket")).toBe("wss://[host]/socket");
-    expect(maskIdentifiers("Failed to resolve nas.anna.pl, then anna-pages.codebot.example.")).toBe(
+    expect(maskIdentifiers("Failed to resolve nas.anna.pl, then anna-pages.example.site.")).toBe(
       "Failed to resolve [host], then [host].",
     );
     const service = "GET https://api.codebot.example/v1/me and turn2.codebot.example and http://localhost:8081/status";
