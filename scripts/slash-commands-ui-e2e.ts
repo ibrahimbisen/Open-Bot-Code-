@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { mkdirSync } from "node:fs";
-import { resolve } from "node:path";
+import { mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { translateFor } from "@codebot/i18n";
 import { connectChannelE2e, waitFor, writeReport } from "./channel-e2e-support";
 
@@ -32,18 +34,55 @@ async function shot(label: string): Promise<void> {
 
 const marker = crypto.randomUUID().replace(/-/g, "").slice(0, 6);
 const agentName = `Slash ${marker}`;
+const projectFolder = await mkdtemp(join(tmpdir(), "codebot-slash-ui-"));
+await page.reload();
+await page
+  .getByRole("navigation", { name: english("project.list.label") })
+  .waitFor({ state: "visible", timeout: UI_WAIT_MS });
+for (let attempt = 0; attempt < 4; attempt += 1) {
+  if (
+    !(await page
+      .locator("[role=dialog], [role=alertdialog]")
+      .first()
+      .isVisible()
+      .catch(() => false))
+  )
+    break;
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(250);
+}
+await page.evaluate(() => {
+  for (const button of document.querySelectorAll<HTMLElement>(".ui-toaster li button[aria-label]")) button.click();
+});
+await page.waitForTimeout(500);
+await page
+  .getByRole("button", { name: english("project.new"), exact: true })
+  .first()
+  .click();
+const createDialog = page.getByRole("dialog");
+await createDialog.getByLabel(english("project.field.mainFolder")).fill(projectFolder);
+await createDialog.getByLabel(english("project.field.name"), { exact: true }).fill(agentName);
+await createDialog.getByRole("button", { name: english("project.create.submit") }).click();
+await page
+  .getByRole("navigation", { name: english("project.list.label") })
+  .getByRole("button", { name: english("project.row.open", { name: agentName }), exact: true })
+  .waitFor({ timeout: UI_WAIT_MS });
 await page.evaluate(() => window.codebot.setProviderApiKey({ provider: "claude", key: "sk-ant-recorder-not-a-key" }));
-const agent = await page.evaluate(
-  (name) =>
-    window.codebot.agent.createAgent({
-      name,
-      description: "Slash command check",
-      avatarSeed: `slash${name.replace(/[^a-z0-9]/gi, "").toLowerCase()}`,
-      avatarHue: null,
-      initialMessage: "Reply with the single word ready.",
-      provider: "claude",
-    }),
-  agentName,
+const agent = await waitFor(
+  page,
+  "the project agent",
+  () =>
+    page.evaluate(() =>
+      window.codebot.agent.listAgents().then((list) => list.filter((entry) => entry.name === "Developer").at(-1)),
+    ),
+  (found) => found !== undefined,
+).then((found) => {
+  assert.ok(found, "The project agent exists.");
+  return found;
+});
+await page.evaluate(
+  (id) => window.codebot.agent.updateAgent({ agentId: id, provider: "claude", model: "claude-haiku-5-5" }),
+  agent.id,
 );
 report.agentId = agent.id;
 
@@ -62,21 +101,8 @@ try {
     (list) => list.commands.length > 10,
   );
   await page.bringToFront();
-  await page
-    .getByRole("navigation", { name: english("sidebar.nav.label") })
-    .getByRole("button", { name: new RegExp(`^${agentName}[,.]`) })
-    .first()
-    .click();
-  const composer = page.getByRole("textbox", { name: english("composer.placeholder.message", { name: agentName }) });
+  const composer = page.locator(".project-chat-panel:visible").first().getByRole("textbox").first();
   await composer.waitFor({ timeout: UI_WAIT_MS });
-  await page.waitForFunction(
-    (label) => {
-      const box = document.querySelector(`[aria-label="${label}"]`);
-      return box !== null && box.getAttribute("aria-disabled") !== "true" && !box.hasAttribute("disabled");
-    },
-    english("composer.placeholder.message", { name: agentName }),
-    { timeout: UI_WAIT_MS },
-  );
   await composer.click();
   await composer.pressSequentially("/");
   await picker().waitFor({ timeout: UI_WAIT_MS });
@@ -125,11 +151,6 @@ try {
   await shot("menu-no-match");
   report.passed = true;
 } finally {
-  await page
-    .getByRole("textbox", { name: english("composer.placeholder.message", { name: agentName }) })
-    .fill("")
-    .catch(() => undefined);
-  await page.evaluate((id) => window.codebot.agent.deleteAgent(id), agent.id).catch(() => undefined);
   writeReport(NAME, report);
   await session.close();
 }

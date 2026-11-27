@@ -467,7 +467,7 @@ export function ProjectDock(props: { projectId: string }) {
               }}
               onOther={() => {
                 entry.group.api.setActive();
-                projects.setPickerOpen({ placement: "active" });
+                projects.setPickerOpen({ placement: "right" });
               }}
               onSlot={(kind) => {
                 entry.group.api.setActive();
