@@ -1,4 +1,61 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/localServer";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "localServer.settings.title": "Lokale servers",
+  "localServer.settings.description":
+    "Modelmachines in je netwerk, zoals een DGX Spark. Elke machine is een apart item.",
+  "localServer.settings.add": "Machine toevoegen",
+  "localServer.settings.empty":
+    "Nog geen lokale machine. Voeg het adres van een modelserver toe om hem in een project of chat te gebruiken.",
+  "localServer.settings.edit": "{name} bewerken",
+  "localServer.settings.remove": "{name} verwijderen",
+  "localServer.settings.refresh": "Nu controleren",
+  "localServer.settings.statusOff": "Status uit",
+  "localServer.settings.models": { one: "{count} model", other: "{count} modellen" },
+  "localServer.scan.title": "Een machine zoeken",
+  "localServer.scan.description":
+    "Voer een hostnaam of een IP-adres in. OpenBot Code zoekt naar Ollama, LM Studio en vLLM op hun gebruikelijke poorten.",
+  "localServer.scan.host": "Host of adres",
+  "localServer.scan.placeholder": "spark-1.local",
+  "localServer.scan.action": "Scannen",
+  "localServer.scan.scanning": "Scannen",
+  "localServer.scan.none": "Geen modelserver gevonden op deze host.",
+  "localServer.scan.needsKey": "Heeft een API-sleutel nodig",
+  "localServer.scan.add": "{name} toevoegen",
+  "localServer.dialog.addTitle": "Een lokale machine toevoegen",
+  "localServer.dialog.editTitle": "{name} bewerken",
+  "localServer.dialog.description":
+    "OpenBot Code leest de modellenlijst en de status van het OpenAI-compatibele adres van de machine.",
+  "localServer.field.name": "Naam",
+  "localServer.field.namePlaceholder": "DGX Spark 1",
+  "localServer.field.baseUrl": "Serveradres",
+  "localServer.field.baseUrlPlaceholder": "http://192.168.1.41:8000/v1",
+  "localServer.field.apiKey": "API-sleutel (optioneel)",
+  "localServer.field.apiKeyKept": "Opgeslagen. Laat leeg om hem te behouden.",
+  "localServer.field.gpuUrl": "GPU-statusadres (optioneel)",
+  "localServer.field.gpuUrlPlaceholder": "http://192.168.1.41:9101/gpu",
+  "localServer.field.gpuUrlHelp":
+    "Een JSON-, nvidia-smi-exporter- of DCGM-exporteradres dat GPU-belasting en -geheugen toont.",
+  "localServer.field.gpuUsesKey": "De API-sleutel naar het GPU-statusadres sturen",
+  "localServer.field.gpuUsesKeyHelp": "Alleen voor een adres met dezelfde oorsprong als het serveradres.",
+  "localServer.field.monitored": "De status van deze machine tonen",
+  "localServer.field.monitoredHelp": "OpenBot Code controleert de machine af en toe en toont dit in de statusbalk.",
+  "localServer.error.nameRequired": "Voer een naam in.",
+  "localServer.error.gpuUrlInvalid": "Voer een http- of https-adres in zonder gebruikersnaam en wachtwoord.",
+  "localServer.error.gpuKeyOtherOrigin": "Het GPU-statusadres moet dezelfde oorsprong hebben als het serveradres.",
+  "localServer.test.action": "Testen",
+  "localServer.test.testing": "Testen",
+  "localServer.test.online": "Online. {models} gevonden.",
+  "localServer.test.onlineKind": "{kind} is online. {models} gevonden.",
+  "localServer.test.gpuFound": "GPU-status gelezen: {count}",
+  "localServer.test.gpuCount": { one: "{count} GPU", other: "{count} GPU's" },
+  "localServer.test.offline": "Offline. {error}",
+  "localServer.test.gpuFailed": "GPU-status mislukt: {error}",
+  "localServer.dialog.saving": "Opslaan",
+  "localServer.dialog.saveFailed": "OpenBot Code kon deze machine niet opslaan.",
+  "localServer.remove.title": "{name} verwijderen?",
+  "localServer.remove.description":
+    "OpenBot Code gebruikt deze machine niet meer. Projecten en chats die haar modellen gebruiken, hebben een ander model nodig.",
+  "localServer.remove.failed": "OpenBot Code kon deze machine niet verwijderen.",
+} as const satisfies PartialTranslation<typeof source>;

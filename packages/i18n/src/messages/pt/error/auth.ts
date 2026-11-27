@@ -9,6 +9,15 @@ export const messages = {
   "error.auth.networkBlocked":
     "Um firewall ou proxy desta rede impediu o OpenBot Code de acessar {host}. Peça ao administrador da rede para permitir {host} e tente novamente.",
   "error.auth.signInFirst": "Entre no OpenBot Code primeiro.",
+  "error.auth.accountServiceNotConfigured": "Informe primeiro o endereço do seu serviço de conta.",
+  "error.auth.accountServiceUrlInvalid": "O endereço do serviço de conta deve começar com https:// e não ter caminho.",
+  "error.auth.accountServiceFixed":
+    "A variável de ambiente CODEBOT_AUTH_API_URL define o serviço de conta. Remova-a para alterar o endereço aqui.",
+  "error.auth.signInFailed": "O login não foi concluído. Tente novamente.",
+  "error.auth.signInCancelled": "O login foi cancelado ou recusado.",
+  "error.auth.signInTimeout": "O login demorou demais. Inicie-o novamente.",
+  "error.auth.signInBrowserFailed": "O OpenBot Code não conseguiu abrir seu navegador para o login.",
+  "error.auth.signInUnavailable": "Este OpenBot Code não consegue abrir um navegador para o login.",
   "error.auth.signInRequired": "É necessário entrar.",
   "error.auth.chatColorUnavailable":
     "O serviço de contas ainda não oferece suporte a cores de chat. Tente de novo mais tarde.",

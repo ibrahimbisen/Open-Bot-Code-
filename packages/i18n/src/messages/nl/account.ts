@@ -107,4 +107,21 @@ export const messages = {
   "account.language.next": "Volgende taal",
   "account.language.continue": "Doorgaan",
   "account.language.change": "Taal wijzigen",
+  "account.service.title": "Accountservice",
+  "account.service.description":
+    "Inloggen is optioneel. Zonder inloggen werkt OpenBot Code op deze computer met een lokaal profiel.",
+  "account.service.address.title": "Serviceadres",
+  "account.service.address.description":
+    "Het adres van de accountservice op je server, bijvoorbeeld https://account.example.com.",
+  "account.service.address.fixed": "De omgevingsvariabele CODEBOT_AUTH_API_URL bepaalt dit adres.",
+  "account.service.address.placeholder": "https://account.example.com",
+  "account.service.address.save": "Opslaan",
+  "account.service.saveFailed": "Het adres kon niet worden opgeslagen.",
+  "account.service.signIn.title": "Inloggen met Nextcloud",
+  "account.service.signIn.description":
+    "Je browser opent de inlogpagina van Nextcloud. Gebruik daar je Nextcloud-gebruikersnaam en wachtwoord.",
+  "account.service.signIn.waiting": "Rond het inloggen af in je browser.",
+  "account.service.signIn.action": "Inloggen",
+  "account.service.signIn.cancel": "Annuleren",
+  "account.service.signInFailed": "Het inloggen kon niet worden gestart.",
 } as const satisfies PartialTranslation<typeof source>;

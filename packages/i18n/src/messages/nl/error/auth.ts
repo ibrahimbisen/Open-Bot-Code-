@@ -9,6 +9,16 @@ export const messages = {
   "error.auth.networkBlocked":
     "Een firewall of proxy op dit netwerk blokkeert de verbinding van OpenBot Code met {host}. Vraag je netwerkbeheerder om {host} toe te staan en probeer het opnieuw.",
   "error.auth.signInFirst": "Log eerst in bij OpenBot Code.",
+  "error.auth.accountServiceNotConfigured": "Voer eerst het adres van je accountservice in.",
+  "error.auth.accountServiceUrlInvalid":
+    "Het adres van de accountservice moet beginnen met https:// en mag geen pad hebben.",
+  "error.auth.accountServiceFixed":
+    "De omgevingsvariabele CODEBOT_AUTH_API_URL bepaalt de accountservice. Verwijder die om het adres hier te wijzigen.",
+  "error.auth.signInFailed": "Het inloggen is niet voltooid. Probeer het opnieuw.",
+  "error.auth.signInCancelled": "Het inloggen is geannuleerd of geweigerd.",
+  "error.auth.signInTimeout": "Het inloggen duurde te lang. Start het opnieuw.",
+  "error.auth.signInBrowserFailed": "OpenBot Code kon je browser niet openen voor het inloggen.",
+  "error.auth.signInUnavailable": "Deze OpenBot Code kan geen browser openen voor het inloggen.",
   "error.auth.signInRequired": "Inloggen is verplicht.",
   "error.auth.chatColorUnavailable": "De accountservice ondersteunt nog geen chatkleuren. Probeer het later opnieuw.",
   "error.auth.accountChangedDuringRegister":

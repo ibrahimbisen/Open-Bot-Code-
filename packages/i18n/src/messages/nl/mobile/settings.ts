@@ -234,6 +234,18 @@ export const messages = {
     "Je keuzes gelden op al je apparaten. Dempen geldt alleen voor deze telefoon.",
   "mobile.settings.notifications.channel": "Agentmeldingen ({sound})",
   "mobile.settings.notifications.channelSilent": "Agentmeldingen (geen geluid)",
+  "mobile.settings.connection.title": "Verbinding",
+  "mobile.settings.connection.account": "Account",
+  "mobile.settings.connection.accountService": "Accountservice",
+  "mobile.settings.connection.accountFooter":
+    "Het adres van de accountservice wordt ingesteld bij het inloggen. Log uit om een ander te gebruiken.",
+  "mobile.settings.connection.notSignedIn": "Niet ingelogd",
+  "mobile.settings.connection.signal": "Signal-adres",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "Optioneel. Laat leeg om het Signal-adres van de accountservice te gebruiken. Je TURN-server komt van Signal.",
+  "mobile.settings.connection.save": "Opslaan",
+  "mobile.settings.connection.saving": "Opslaan…",
   "mobile.settings.conversations.title": "Gesprekken",
   "mobile.settings.conversations.hiddenChats": "Verborgen chats",
   "mobile.settings.conversations.largeFiles": "Grote bestanden automatisch downloaden",
