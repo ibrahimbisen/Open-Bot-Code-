@@ -146,3 +146,8 @@ a place in the list above.
 - Auto-close for unpinned panels: chat switch, project switch, a click in the chat input. Panels that an agent opened also close when the agent turn of the source chat ends. A pinned panel never closes by itself.
 - A browser panel that the user adds from the "+" menu is pinned from the start. The agent browser tools (CDP) are unchanged.
 - Known gap: no agent tool yet opens a document by itself; previews open from file links and attachments in the chat. A dev-only hook `window.__codebotProjectDock` is used by the E2E test.
+
+- **D20. OpenBot logo shape, blue color.** The owner decided on 2026-11-26 to use the OpenBot logo (the
+  two drawn eyes) for now, in a different color. The default logo color stays blue (`#84aadd`); lavender,
+  the OpenBot color, stays a choice in Settings. `scripts/codebot/generate-brand-icons.ts` and
+  `scripts/generate-logo-color-icons.ts` draw every icon file from `packages/brand/src/app-logo-shape.ts`.

@@ -35,7 +35,7 @@
   stroke: var(--app-logo-eye);
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 20px;
+  stroke-width: 9.5px;
   pointer-events: none;
   transform-box: view-box;
 }
