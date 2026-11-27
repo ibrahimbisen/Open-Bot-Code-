@@ -556,9 +556,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot はアップデートを確認できませんでした。もう一度お試しください。",
   "settings.updates.status.unsupported": "このビルドではアップデートを利用できません。",
   "settings.updates.actionFailed": "CodeBot をアップデートできませんでした。",
-  "settings.updates.autoInstall.title": "アップデートを自動的にインストールする",
-  "settings.updates.autoInstall.description":
-    "エージェントがアイドル状態のときに、CodeBot はダウンロード済みのアップデートで再起動します。サーバーのメンバーは短時間切断されます。",
   "settings.updates.idleRestart.title": "CodeBot を再起動",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot は、作業中のエージェントがいなくなったときに再起動します。新しいルーティンの実行はそれまで待機します。",

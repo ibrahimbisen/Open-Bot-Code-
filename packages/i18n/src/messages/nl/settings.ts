@@ -561,9 +561,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot kan niet controleren op updates. Probeer het opnieuw.",
   "settings.updates.status.unsupported": "Updates zijn niet beschikbaar in deze build.",
   "settings.updates.actionFailed": "Kan CodeBot niet bijwerken.",
-  "settings.updates.autoInstall.title": "Installeer updates automatisch",
-  "settings.updates.autoInstall.description":
-    "CodeBot start opnieuw met een gedownloade update wanneer de agents inactief zijn. Leden van je servers worden kort losgekoppeld.",
   "settings.updates.idleRestart.title": "CodeBot opnieuw starten",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot start opnieuw wanneer geen agent werkt. Nieuwe routineruns wachten tot dan.",

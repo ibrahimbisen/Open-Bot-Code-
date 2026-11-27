@@ -567,9 +567,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot konnte nicht nach Updates suchen. Versuche es erneut.",
   "settings.updates.status.unsupported": "Updates sind in dieser Version nicht verfügbar.",
   "settings.updates.actionFailed": "CodeBot konnte nicht aktualisiert werden.",
-  "settings.updates.autoInstall.title": "Updates automatisch installieren",
-  "settings.updates.autoInstall.description":
-    "CodeBot startet mit einem heruntergeladenen Update neu, wenn die Agenten inaktiv sind. Die Verbindungen der Servermitglieder werden kurz getrennt.",
   "settings.updates.idleRestart.title": "CodeBot neu starten",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot startet neu, wenn kein Agent arbeitet. Neue Ausführungen von Routinen warten bis dahin.",

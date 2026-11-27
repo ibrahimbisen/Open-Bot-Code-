@@ -542,9 +542,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot לא הצליח לבדוק עדכונים. יש לנסות שוב.",
   "settings.updates.status.unsupported": "עדכונים אינם זמינים בגרסה הזו.",
   "settings.updates.actionFailed": "לא ניתן לעדכן את CodeBot.",
-  "settings.updates.autoInstall.title": "התקנת עדכונים אוטומטית",
-  "settings.updates.autoInstall.description":
-    "CodeBot מופעל מחדש לתוך עדכון שהורד כשהסוכנים אינם פעילים. חברים בשרתים שלך מנותקים לזמן קצר.",
   "settings.updates.idleRestart.title": "הפעלה מחדש של CodeBot",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot מופעל מחדש כשאף סוכן אינו עובד. הרצות שגרה חדשות ממתינות עד אז.",

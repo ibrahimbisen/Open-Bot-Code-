@@ -547,9 +547,6 @@ export const messages = defineMessages("settings", {
   "settings.updates.status.checkFailed": "CodeBot could not check for updates. Try again.",
   "settings.updates.status.unsupported": "Updates are unavailable in this build.",
   "settings.updates.actionFailed": "Could not update CodeBot.",
-  "settings.updates.autoInstall.title": "Install updates automatically",
-  "settings.updates.autoInstall.description":
-    "CodeBot restarts into a downloaded update when the agents are idle. Members of your servers are disconnected for a short time.",
   "settings.updates.idleRestart.title": "Restart CodeBot",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot restarts when no agent works. New routine runs wait until then.",

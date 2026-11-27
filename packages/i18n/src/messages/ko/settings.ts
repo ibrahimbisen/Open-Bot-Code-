@@ -549,9 +549,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot이 업데이트를 확인할 수 없어요. 다시 시도해 주세요.",
   "settings.updates.status.unsupported": "이 빌드에서는 업데이트를 사용할 수 없어요.",
   "settings.updates.actionFailed": "CodeBot을 업데이트할 수 없어요.",
-  "settings.updates.autoInstall.title": "업데이트 자동 설치",
-  "settings.updates.autoInstall.description":
-    "에이전트가 유휴 상태일 때 CodeBot이 다운로드한 업데이트로 다시 시작해요. 서버 멤버의 연결이 잠시 끊겨요.",
   "settings.updates.idleRestart.title": "CodeBot 다시 시작",
   "settings.updates.idleRestart.relaunchDescription":
     "작업 중인 에이전트가 없을 때 CodeBot이 다시 시작돼요. 새 루틴 실행은 그때까지 기다려요.",

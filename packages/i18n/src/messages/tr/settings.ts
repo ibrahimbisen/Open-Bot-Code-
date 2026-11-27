@@ -555,9 +555,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot güncellemeleri denetleyemedi. Tekrar deneyin.",
   "settings.updates.status.unsupported": "Bu derlemede güncellemeler kullanılamıyor.",
   "settings.updates.actionFailed": "CodeBot güncellenemedi.",
-  "settings.updates.autoInstall.title": "Güncellemeleri otomatik yükle",
-  "settings.updates.autoInstall.description":
-    "Ajanlar boştayken CodeBot yeniden başlar ve indirilen güncellemeyi yükler. Sunucularınızın üyelerinin bağlantısı kısa bir süre kesilir.",
   "settings.updates.idleRestart.title": "CodeBot'u yeniden başlat",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot hiçbir ajan çalışmadığında yeniden başlatılır. Yeni rutin çalıştırmaları o zamana kadar bekler.",

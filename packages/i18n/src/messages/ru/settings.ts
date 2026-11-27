@@ -571,9 +571,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot не удалось проверить обновления. Повторите попытку.",
   "settings.updates.status.unsupported": "В этой сборке обновления недоступны.",
   "settings.updates.actionFailed": "Не удалось обновить CodeBot.",
-  "settings.updates.autoInstall.title": "Устанавливать обновления автоматически",
-  "settings.updates.autoInstall.description":
-    "CodeBot перезапустится со скачанным обновлением, когда агенты простаивают. Участники ваших серверов ненадолго отключатся.",
   "settings.updates.idleRestart.title": "Перезапустить CodeBot",
   "settings.updates.idleRestart.relaunchDescription":
     "CodeBot перезапустится, когда ни один агент не работает. Новые запуски регулярных задач до этого ждут.",

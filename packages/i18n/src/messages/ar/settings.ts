@@ -570,9 +570,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "تعذّر على CodeBot التحقق من وجود تحديثات. حاول مرة أخرى.",
   "settings.updates.status.unsupported": "التحديثات غير متاحة في هذا الإصدار.",
   "settings.updates.actionFailed": "تعذّر تحديث CodeBot.",
-  "settings.updates.autoInstall.title": "تثبيت التحديثات تلقائيًا",
-  "settings.updates.autoInstall.description":
-    "يعيد CodeBot التشغيل إلى تحديث منزَّل عندما يكون الوكلاء في وضع الخمول. يُقطع اتصال أعضاء خوادمك لوقت قصير.",
   "settings.updates.idleRestart.title": "إعادة تشغيل CodeBot",
   "settings.updates.idleRestart.relaunchDescription":
     "يعيد CodeBot التشغيل عندما لا يعمل أي وكيل. تنتظر تشغيلات المهام الدورية الجديدة حتى ذلك الحين.",

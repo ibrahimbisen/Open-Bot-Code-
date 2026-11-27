@@ -521,9 +521,6 @@ export const messages = {
   "settings.updates.status.checkFailed": "CodeBot 无法检查更新，请重试。",
   "settings.updates.status.unsupported": "当前版本不支持更新。",
   "settings.updates.actionFailed": "无法更新 CodeBot。",
-  "settings.updates.autoInstall.title": "自动安装更新",
-  "settings.updates.autoInstall.description":
-    "助手空闲时，CodeBot 会重启并应用已下载的更新。你的服务器成员会短暂断开连接。",
   "settings.updates.idleRestart.title": "重启 CodeBot",
   "settings.updates.idleRestart.relaunchDescription": "助手空闲时 CodeBot 会重启。新的自动化任务会等到那时再运行。",
   "settings.updates.idleRestart.updateDescription":

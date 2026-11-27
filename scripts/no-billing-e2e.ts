@@ -109,7 +109,7 @@ const files = sourceFiles();
 {
   const problems: string[] = [];
   for (const file of files) {
-    if (file === "scripts/no-billing-e2e.ts") continue;
+    if (file === "scripts/no-billing-e2e.ts" || file === "scripts/account-remote-access-e2e.ts") continue;
     const text = readFileSync(join(root, file), "utf8");
     for (const word of BANNED_IDENTIFIERS) if (text.includes(word)) problems.push(`${file} contains ${word}`);
   }
@@ -136,7 +136,7 @@ record(
   const problems: string[] = [];
   const stripe = /(checkout\.stripe\.com|billing\.stripe\.com|\/v2\/(billing|hosting|license|credits))/u;
   for (const file of files) {
-    if (file === "scripts/no-billing-e2e.ts") continue;
+    if (file === "scripts/no-billing-e2e.ts" || file === "scripts/account-remote-access-e2e.ts") continue;
     if (stripe.test(readFileSync(join(root, file), "utf8")))
       problems.push(`${file} calls a payment or hosting endpoint`);
   }

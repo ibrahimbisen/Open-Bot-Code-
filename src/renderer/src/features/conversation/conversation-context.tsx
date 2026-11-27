@@ -59,8 +59,6 @@ import {
 } from "./conversation-read-state";
 import type { ConversationMessagePins, SendMessageResult } from "./conversation-types";
 import { useDirectMessages } from "./direct-messages-context";
-import { noteAgentMessageSent } from "./github-star-prompt";
-import { noteSocialFollowMessageSent } from "./social-follow-prompt";
 
 type ConversationDeltaEvent = Extract<AgentEvent, { type: "conversation-delta" }>;
 
@@ -1015,8 +1013,6 @@ const Conversation = createSimpleContext({
           result: "succeeded",
           delivery_count: receipt.deliveries.length,
         });
-        noteAgentMessageSent();
-        noteSocialFollowMessageSent();
         const messageId = receipt.deliveries[0]?.id ?? receipt.messageId;
         markAgentMessagesRead(agentId, messageId, serverId).catch((error: unknown) => {
           reportAutomaticReadFailure(agentId, error, serverId);

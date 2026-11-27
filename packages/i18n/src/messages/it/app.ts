@@ -95,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "Unisciti a {handle}",
   "app.socialFollow.followedTitle": "Ci vediamo su {name}!",
   "app.socialFollow.followedBody": "Lì trovi le nostre novità per primo.",
-  "app.socialFollow.draftPost":
-    "I miei agenti IA ora lavorano sul mio computer con CodeBot. Le mie chat e i miei file restano con me. Provalo: {site}",
-  "app.socialFollow.redditTitle": "Come uso CodeBot",
   "app.rail.usageRings": "Utilizzo di {name}: {windows}. Apri utilizzo",
   "app.rail.usageUnavailable": "Utilizzo di {name} non disponibile. Apri utilizzo",
   "app.rail.customAgentUsage": "Utilizzo di {name}. Apri utilizzo",
