@@ -314,7 +314,7 @@
   opacity: 1;
 }
 
-@media (hover: none) {
+@media (hover: none) and (pointer: coarse) {
   .ui-action-menu.window-rail-more-menu .window-rail-more-pin[role="menuitemcheckbox"] {
     opacity: 1;
   }
