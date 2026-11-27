@@ -110,7 +110,7 @@ export const messages = defineMessages("settings", {
   "settings.quitGuard.never": "Never",
   "settings.externalLinks.title": "Open external links in",
   "settings.externalLinks.description":
-    "Links in chats, sign-in pages and billing pages open here. With CodeBot, only links in the main window's chats with agents on this computer open in CodeBot. Other links open in the default browser.",
+    "Links in chats, and sign-in pages open here. With CodeBot, only links in the main window's chats with agents on this computer open in CodeBot. Other links open in the default browser.",
   "settings.externalLinks.defaultBrowser": "Default browser",
   "settings.externalLinks.codebot": "CodeBot",
   "settings.externalLinks.defaultBrowserNamed": "Default browser ({name})",
