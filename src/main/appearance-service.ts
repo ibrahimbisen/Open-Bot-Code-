@@ -14,7 +14,7 @@ import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Effect, Exit, Result, Scope, Semaphore } from "effect";
 import { isMissingFileError } from "../backend/file-errors";
 import { type PreferenceFileFailure, readPreferenceFile, writePreferenceFile } from "./preference-file";
-import { readThemePalettes, watchThemePalettes } from "./theme-palette-files";
+import { readThemePalettes, seedThemePalettes, watchThemePalettes } from "./theme-palette-files";
 
 type StoredAppearancePreference = Pick<
   AppAppearancePreference,
@@ -112,6 +112,7 @@ export class AppearanceService {
   load(): Effect.Effect<AppAppearancePreference, PreferenceFileFailure> {
     return Effect.gen({ self: this }, function* () {
       this.#preference = yield* readAppearancePreference(this.#path);
+      yield* seedThemePalettes(this.#paletteDirectory);
       this.#palettes = yield* readThemePalettes(this.#paletteDirectory);
       this.#showFirstPalette();
       return this.preference;

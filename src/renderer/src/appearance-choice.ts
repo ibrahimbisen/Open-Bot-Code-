@@ -22,6 +22,7 @@ import { applyAppFonts } from "./app-fonts";
 import { appPort } from "./app-port";
 import { applyChatBackground } from "./chat-background";
 import { syncColorScheme } from "./color-scheme";
+import { applyEditorTheme, effectivePalette } from "./editor-theme";
 import { applyThemePalette } from "./theme-palette";
 import { sweepTheme } from "./theme-sweep";
 import { setWindowGlass } from "./window-glass";
@@ -207,7 +208,10 @@ function cachePreference(preference: AppAppearancePreference): void {
 
 export function syncAppearance(options: { windowGlass?: boolean; sweep?: boolean } = {}): void {
   let preference = cachedPreference();
-  const scheme = syncColorScheme(() => selectedThemePalette(preference)?.scheme ?? preference.appearance);
+  const scheme = syncColorScheme(
+    () => selectedThemePalette(preference)?.scheme ?? preference.appearance,
+    (resolved) => applyEditorTheme(effectivePalette(preference, resolved)),
+  );
   applyThemePalette(selectedThemePalette(preference));
   applyChatBackground(preference);
   applyAppFonts(preference);

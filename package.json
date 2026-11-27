@@ -152,6 +152,7 @@
     "mobile:lint": "bun run --cwd apps/mobile lint",
     "mobile:typecheck": "bun run typecheck:mobile",
     "mobile:doctor": "bun run --cwd apps/mobile doctor",
+    "test:themes": "bun scripts/themes-e2e.ts --allow-mutations",
     "dev:seed": "tsx scripts/seed-dev-state.ts",
     "dev:automation": "bun scripts/dev-automation/cli.ts",
     "dev:cpu": "bun scripts/dev-automation/cli.ts cpu",
