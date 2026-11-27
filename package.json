@@ -230,7 +230,7 @@
     "test:api": "bun run --cwd apps/auth-api test",
     "test:backend": "vitest run src/backend",
     "test:browser": "bun scripts/browser-smoke.ts",
-    "test:project-shell": "bun scripts/project-shell-e2e.ts --allow-mutations",
+    "test:project-shell": "bun scripts/project-shell-run.ts",
     "test:shell-integration": "bun scripts/shell-integration-e2e.ts --allow-mutations",
     "test:project-panels": "bun scripts/project-panels-e2e.ts",
     "test:shortcuts": "bun scripts/shortcuts-e2e.ts",

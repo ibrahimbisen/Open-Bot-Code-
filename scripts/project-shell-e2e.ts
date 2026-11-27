@@ -79,7 +79,10 @@ async function clearViewport(page: Page): Promise<void> {
 }
 
 async function setTheme(page: Page, appearance: "light" | "dark"): Promise<void> {
-  await page.evaluate((value) => window.codebot.setAppAppearancePreference({ appearance: value }), appearance);
+  await page.evaluate(
+    (value) => window.codebot.setAppAppearancePreference({ appearance: value, palette: `codebot-${value}` }),
+    appearance,
+  );
   await until(
     page,
     `color scheme ${appearance}`,
@@ -168,26 +171,15 @@ async function main(): Promise<void> {
   const screens: string[] = [];
   try {
     await clearViewport(page);
+    await page.evaluate(() => {
+      window.localStorage.setItem("codebot:language-step-done", "true");
+      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: null });
+    });
     await page.reload();
     await leftBar(page).waitFor({ state: "visible", timeout: WAIT_MS });
     await closeBlockingDialogs(page);
     await dismissToasts(page);
     await page.evaluate(() => window.localStorage.removeItem("codebot:active-project:v1"));
-
-    await step("left bar lists projects with status dot and access badge", async () => {
-      const rows = leftBar(page).locator(".project-row-item");
-      await until(
-        page,
-        "project rows",
-        () => rows.count(),
-        (count) => count > 0,
-      );
-      const dots = await leftBar(page).locator(".project-row .project-status-dot").count();
-      const badges = await leftBar(page).locator(".project-row .project-access-badge").count();
-      assert.ok(dots > 0, "no status dot");
-      assert.ok(badges > 0, "no access badge");
-      return `${await rows.count()} rows`;
-    });
 
     if (!screenshotsOnly) {
       await step("create five projects with different access levels", async () => {
@@ -225,6 +217,21 @@ async function main(): Promise<void> {
         return `${count} chats in the history`;
       });
     }
+
+    await step("left bar lists projects with status dot and access badge", async () => {
+      const rows = leftBar(page).locator(".project-row-item");
+      await until(
+        page,
+        "project rows",
+        () => rows.count(),
+        (count) => count > 0,
+      );
+      const dots = await leftBar(page).locator(".project-row .project-status-dot").count();
+      const badges = await leftBar(page).locator(".project-row .project-access-badge").count();
+      assert.ok(dots > 0, "no status dot");
+      assert.ok(badges > 0, "no access badge");
+      return `${await rows.count()} rows`;
+    });
 
     await step("chat list shows newest first with a title and a date", async () => {
       const rows = column(page).locator(".project-chat-row");
@@ -264,11 +271,12 @@ async function main(): Promise<void> {
     await step("search narrows the chat list", async () => {
       const search = column(page).getByRole("searchbox").or(column(page).getByPlaceholder("Search chats"));
       await search.first().fill("Second");
+      const rows = column(page).locator(".project-search-row");
       await until(
         page,
-        "one result",
-        () => column(page).locator(".project-search-row").count(),
-        (count) => count === 1,
+        "results of the Second chat only",
+        async () => (await rows.locator(".project-chat-title").allTextContents()).map((title) => title.trim()),
+        (titles) => titles.length >= 1 && titles.every((title) => title === "Second question"),
       );
       await search.first().fill("");
       await until(
