@@ -55,6 +55,7 @@ import { createSettingsProfileStore } from "@codebot/ui/features/settings/stores
 import { createSettingsUpdatesStore } from "@codebot/ui/features/settings/stores/updates-store";
 import { createEffect, createSignal, Show, untrack } from "solid-js";
 import { useI18n } from "../../i18n-context";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { ComputerUseSetup } from "../computer-use/ComputerUseSetup";
 import type { CodexLiveAccess } from "../speech/codex-live-access";
 import { UpdateServerSetting } from "../updates/UpdateServerSetting";
@@ -63,6 +64,7 @@ import { licenseContactUs, trackLicenseEvent } from "./license-analytics";
 import { createNotificationLevelsStore } from "./notification-levels-store";
 import { createProfileActivityStore } from "./profile-activity-store";
 import { renderProfileShareImage } from "./profile-share-image";
+import { SettingsAdvancedFeaturesTab } from "./SettingsAdvancedFeaturesTab";
 import { type AgentDockSettingsModel, SettingsAgentDockTab } from "./SettingsAgentDockTab";
 import { SettingsDynamicIslandTab } from "./SettingsDynamicIslandTab";
 import { SettingsGeneralTab } from "./SettingsGeneralTab";
@@ -135,6 +137,7 @@ export interface SettingsModalProps {
 
 export function SettingsModal(props: SettingsModalProps) {
   const i18n = useI18n();
+  const advancedFeatures = useAdvancedFeatures();
   const [activeTab, setActiveTab] = createSignal<SettingsTab>(
     untrack(() => (props.initialTab === "hosted-servers" ? "billing" : props.initialTab)) ?? "general",
   );
@@ -193,12 +196,19 @@ export function SettingsModal(props: SettingsModalProps) {
     },
   );
   const agentDockShown = () =>
-    settingsTabShown("agent-dock", { platform: props.appInfo?.platform, chatWindow: props.chatWindow === true }) &&
-    props.agentDock !== undefined;
+    settingsTabShown("agent-dock", {
+      platform: props.appInfo?.platform,
+      chatWindow: props.chatWindow === true,
+      advanced: advancedFeatures.settings(),
+    }) && props.agentDock !== undefined;
   const visibleNavItems = () =>
     navItems.filter(
       (item) =>
-        settingsTabShown(item.value, { platform: props.appInfo?.platform, chatWindow: props.chatWindow === true }) &&
+        settingsTabShown(item.value, {
+          platform: props.appInfo?.platform,
+          chatWindow: props.chatWindow === true,
+          advanced: advancedFeatures.settings(),
+        }) &&
         (item.value !== "agent-dock" || props.agentDock !== undefined),
     );
 
@@ -219,7 +229,8 @@ export function SettingsModal(props: SettingsModalProps) {
         value === "keyboard" ||
         (value === "dynamic-island" && dynamicIslandShown()) ||
         (value === "agent-dock" && agentDockShown()) ||
-        value === "computer-use" ||
+        (value === "computer-use" && advancedFeatures.enabled("computerUse")) ||
+        value === "advanced-features" ||
         value === "profile" ||
         value === "billing" ||
         value === "referral" ||
@@ -403,8 +414,14 @@ export function SettingsModal(props: SettingsModalProps) {
           )}
         </Show>
 
-        <Tabs.Content value="computer-use" class="settings-modal-tab-panel" data-tab="computer-use">
-          <ComputerUseSetup variant="settings" />
+        <Show when={advancedFeatures.enabled("computerUse")}>
+          <Tabs.Content value="computer-use" class="settings-modal-tab-panel" data-tab="computer-use">
+            <ComputerUseSetup variant="settings" />
+          </Tabs.Content>
+        </Show>
+
+        <Tabs.Content value="advanced-features" class="settings-modal-tab-panel" data-tab="advanced-features">
+          <SettingsAdvancedFeaturesTab />
         </Tabs.Content>
 
         <Tabs.Content value="profile" class="settings-modal-tab-panel profile-panel" data-tab="profile">

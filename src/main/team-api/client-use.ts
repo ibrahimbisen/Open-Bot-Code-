@@ -1,4 +1,5 @@
 import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
+import { ADVANCED_FEATURES_ROUTES } from "@codebot/contracts/team-protocol/advanced-features-v1";
 import { AGENT_ACCESS_ROUTES } from "@codebot/contracts/team-protocol/agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_ROUTES } from "@codebot/contracts/team-protocol/agent-active-queues-v1";
 import { AGENT_ADMIN_ROUTES } from "@codebot/contracts/team-protocol/agent-admin-v1";
@@ -146,6 +147,7 @@ const PASSIVE_ROUTES: ReadonlySet<string> = new Set([
   HOST_RELEASE_ROUTES.status,
   HOST_MEMBER_UPDATE_ROUTES.status,
   HOST_TIMEZONE_ROUTES.settings,
+  ADVANCED_FEATURES_ROUTES.settings,
   HOST_VOICE_MODEL_ROUTES.settings,
   HOST_SIGNAL_HOME_ROUTES.settings,
   HOST_TURN_LIMITS_ROUTES.settings,

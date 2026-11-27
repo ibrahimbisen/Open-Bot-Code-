@@ -30,6 +30,7 @@ import { createScopeGuard } from "../../scope-lifetime";
 import { useTurns } from "../../turns";
 import { turnsPort } from "../../turns-port";
 import { useAuth } from "../account/account-context";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useAgentTasks } from "../agent-tasks/agent-tasks-context";
 import { useAgentThreads } from "../agent-threads/agent-threads-context";
 import { conversationThreads } from "../agent-threads/conversation-threads";
@@ -84,6 +85,7 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
   const platform = usePlatform();
   const connectors = useConnectors();
   const { servers, serversLoaded, activeServer, activeServerSupportsCapability, joinServerOpen } = useServers();
+  const advanced = useAdvancedFeatures();
   const { select: selectServer } = useServerActions();
   const { serverSettingsOpen, openServerSettings } = useServerSettings();
   const {
@@ -495,7 +497,11 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
           setSkillsMarketplaceOpen(true);
         }}
         appSettingOpener={appSettingRowOpener(
-          () => ({ platform: platform.appInfo()?.platform, chatWindow: platform.chatWindow !== null }),
+          () => ({
+            platform: platform.appInfo()?.platform,
+            chatWindow: platform.chatWindow !== null,
+            advanced: advanced.settings(),
+          }),
           openAppSettingRow,
         )}
         onOpenMcpSignIn={(() => {
@@ -582,7 +588,10 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
         remoteDesktopSessionActive={Boolean(activeRemoteDesktopSession())}
         remoteDesktopVisible={remoteDesktopWorkspaceVisible()}
         remoteDesktopEnabled={
-          !platform.landingPreview && !platform.chatWindow && activeServerSupportsCapability("remote-desktop")
+          advanced.enabled("remoteDesktop") &&
+          !platform.landingPreview &&
+          !platform.chatWindow &&
+          activeServerSupportsCapability("remote-desktop")
         }
         prompt={activePrompt()}
         promptUiBlock={activePromptUiBlock()}

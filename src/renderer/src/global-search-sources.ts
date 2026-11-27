@@ -9,6 +9,7 @@ import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal } from "solid-js";
 import { formatMessageTime } from "./app-message-projection";
 import { appPort } from "./app-port";
+import { useAdvancedFeatures } from "./features/advanced/advanced-features-context";
 import { useAgents } from "./features/agents/agents-context";
 import { useChannels } from "./features/channels/channels-context";
 import { globalSearchChannels } from "./features/channels/global-search-channels";
@@ -35,6 +36,7 @@ export function useGlobalSearchSources(open: () => boolean) {
   const { agentList, agentSetupOpen, creatingAgent, openAgentSetup, setSettingsRequest } = useAgents();
   const { selectAgent, globalSearchOpener } = useNavigation();
   const { activeServer } = useServers();
+  const advanced = useAdvancedFeatures();
   const { openServerSettings } = useServerSettings();
   const { openAppSettings, setSkillsMarketplaceOpen } = useSettings();
   const { openSchedule } = useUsage();
@@ -53,10 +55,11 @@ export function useGlobalSearchSources(open: () => boolean) {
   );
 
   createEffect(
-    () => (open() ? agentList() : null),
+    () => (open() && advanced.enabled("routines") ? agentList() : null),
     (agents) => {
       const request = ++routineRequest;
       if (!agents) {
+        setRoutines([]);
         setRoutinesLoading(false);
         return;
       }
@@ -111,7 +114,11 @@ export function useGlobalSearchSources(open: () => boolean) {
   const actions = createMemo<GlobalSearchAction[]>(
     () => {
       const server = activeServer();
-      const settingsWindow = { platform: platform.appInfo()?.platform, chatWindow: platform.chatWindow !== null };
+      const settingsWindow = {
+        platform: platform.appInfo()?.platform,
+        chatWindow: platform.chatWindow !== null,
+        advanced: advanced.settings(),
+      };
       const list: GlobalSearchAction[] = [
         {
           id: "new-agent",
@@ -133,14 +140,16 @@ export function useGlobalSearchSources(open: () => boolean) {
           run: channels.create,
         });
       }
-      list.push({
-        id: "marketplace",
-        label: t("sidebar.topbar.openMarketplace"),
-        group: "actions",
-        icon: Store,
-        run: () => setSkillsMarketplaceOpen(true),
-      });
-      if (server) {
+      if (advanced.enabled("marketplace")) {
+        list.push({
+          id: "marketplace",
+          label: t("sidebar.topbar.openMarketplace"),
+          group: "actions",
+          icon: Store,
+          run: () => setSkillsMarketplaceOpen(true),
+        });
+      }
+      if (server && advanced.enabled("routines")) {
         list.push({
           id: "schedule",
           label: t("routine.calendar.open"),

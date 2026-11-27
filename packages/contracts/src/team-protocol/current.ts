@@ -3,6 +3,7 @@ import { CHANNEL_DELETE_CAPABILITY, CHANNEL_TASK_CANCEL_CAPABILITY } from "../ip
 import { MCP_SERVERS_CAPABILITY } from "../ipc-mcp-servers";
 import { STORAGE_CAPABILITY } from "../ipc-storage";
 import { ACP_REGISTRY_CAPABILITY } from "./acp-registry-v1";
+import { ADVANCED_FEATURES_CAPABILITY } from "./advanced-features-v1";
 import { AGENT_ACCESS_CAPABILITY } from "./agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_CAPABILITY } from "./agent-active-queues-v1";
 import { AGENT_ADMIN_CAPABILITY } from "./agent-admin-v1";
@@ -313,6 +314,7 @@ export const TEAM_MEMBER_LEAVE_CAPABILITY = "member-leave-v1";
 export const TEAM_QUEUE_WINDOW_CAPABILITY = "queue-window-v1";
 export {
   ACP_REGISTRY_CAPABILITY,
+  ADVANCED_FEATURES_CAPABILITY,
   AGENT_ACCESS_CAPABILITY,
   AGENT_ACTIVE_QUEUES_CAPABILITY,
   AGENT_ADMIN_CAPABILITY,
@@ -882,6 +884,7 @@ const TEAM_CAPABILITY_REGISTRY = [
   [CHANNEL_COMPACT_AVAILABILITY_CAPABILITY, V10],
   [EXPLORER_CAPABILITY, V10],
   [PROJECTS_V1_CAPABILITY, V10],
+  [ADVANCED_FEATURES_CAPABILITY, V10],
 ] as const satisfies readonly (readonly [string, TeamCapabilityPlacement])[];
 
 export const TEAM_CURRENT_CAPABILITIES = TEAM_CAPABILITY_REGISTRY.map(([capability]) => capability);

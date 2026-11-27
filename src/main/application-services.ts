@@ -71,6 +71,7 @@ import {
   systemPreferences,
   webContents,
 } from "electron";
+import { advancedFeatureEnabled, configureAdvancedFeatureGate } from "../backend/agent/advanced-feature-gate";
 import { toAgentRemovalFailed } from "../backend/agent/agent-removal";
 import { pasteCodeLoginSupported } from "../backend/agent/cli-code-login";
 import { toHostedSiteOperationFailed } from "../backend/agent/hosted-site-coordinator";
@@ -140,6 +141,12 @@ import {
 } from "../backend/workflows/workflows";
 import { centralAuthApiUrl, createCentralAuthManager, safeStorageCipher } from "./account-service-access";
 import { type AcpRegistry, createAcpRegistry } from "./acp-registry";
+import {
+  ADVANCED_FEATURES_PREFERENCE_FILE,
+  type AdvancedFeaturesControl,
+  advancedFeaturesControl,
+  createAdvancedFeaturesPreferenceStore,
+} from "./advanced-features-store";
 import { AGENT_ACCESS_FILE, AgentAccessStore } from "./agent-access-store";
 import { type AgentAdminSettingsService, createAgentAdminSettings } from "./agent-admin-settings";
 import { checkDatabaseIntegrityInHost, spawnAgentDatabaseHost } from "./agent-database-host-process";
@@ -759,6 +766,7 @@ export interface ApplicationServices {
   promptCacheTtl: PromptCacheTtlPreferenceStore;
   claudeUserSetup: ClaudeUserSetupControl;
   cacheExpiryCompaction: CacheExpiryCompactionControl;
+  advancedFeatures: AdvancedFeaturesControl;
   mediaApprovalCredits: MediaApprovalCreditsControl;
   creditAsks: CreditAsksControl;
   claudeCompactWindow: ClaudeCompactWindowControl;
@@ -1569,6 +1577,9 @@ export async function createApplicationServices({
   const claudeUserSetup = createClaudeUserSetupPreferenceStore(
     join(app.getPath("userData"), CLAUDE_USER_SETUP_PREFERENCE_FILE),
   );
+  const advancedFeaturesStore = createAdvancedFeaturesPreferenceStore(
+    join(app.getPath("userData"), ADVANCED_FEATURES_PREFERENCE_FILE),
+  );
   const cacheExpiryCompaction = createCacheExpiryCompactionPreferenceStore(
     join(app.getPath("userData"), CACHE_EXPIRY_COMPACTION_PREFERENCE_FILE),
   );
@@ -1626,6 +1637,7 @@ export async function createApplicationServices({
       promptCacheTtl.load(),
       claudeUserSetup.load(),
       cacheExpiryCompaction.load(),
+      advancedFeaturesStore.load(),
       mediaApprovalCredits.load(),
       creditAsksMuted.load(),
       crmPreference.load(),
@@ -2339,7 +2351,7 @@ export async function createApplicationServices({
         ...githubConnector.agentEnvironment(inherited, gitConfig),
       }),
     },
-    computerUseMcpServer: () => cuaDriver.mcpServerForProviders(),
+    computerUseMcpServer: () => (advancedFeatureEnabled("computerUse") ? cuaDriver.mcpServerForProviders() : null),
     githubConnector: {
       mcpServer: () => githubConnector.mcpServer(),
       mcpAuthorization: () => githubConnector.mcpAuthorization().pipe(toMcpGatewayFailed),
@@ -2417,6 +2429,8 @@ export async function createApplicationServices({
   const agentMemoryLimitSetting = reloadingAgentMemoryLimit(agentMemoryLimit, service);
   promptCacheTtl.onChange(() => service.notifyProviderSettingsChanged());
   const cacheExpiryCompactionSetting = cacheExpiryCompactionControl(cacheExpiryCompaction);
+  const advancedFeatures = advancedFeaturesControl(advancedFeaturesStore);
+  configureAdvancedFeatureGate(() => advancedFeatures.get());
   const claudeUserSetupSetting = claudeUserSetupControl(claudeUserSetup, () => service.notifyProviderSettingsChanged());
   const claudeCompactWindowSetting = claudeCompactWindowControl(claudeCompactWindow, () =>
     service.notifyProviderSettingsChanged(),
@@ -3488,6 +3502,7 @@ export async function createApplicationServices({
       browsingMemory,
       promptCacheTtl,
       claudeUserSetup: claudeUserSetupSetting,
+      advancedFeatures,
       cacheExpiryCompaction: cacheExpiryCompactionSetting,
       mediaApprovalCredits: mediaApprovalCreditsSetting,
       creditAsks,
@@ -4460,6 +4475,7 @@ export async function createApplicationServices({
     serverPersonality,
     promptCacheTtl,
     claudeUserSetup: claudeUserSetupSetting,
+    advancedFeatures,
     cacheExpiryCompaction: cacheExpiryCompactionSetting,
     mediaApprovalCredits: mediaApprovalCreditsSetting,
     creditAsks,

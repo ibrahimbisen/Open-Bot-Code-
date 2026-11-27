@@ -62,14 +62,23 @@ export interface ConnectorRegistry {
   canManage: () => boolean;
 }
 
+export const CHAT_APP_CONNECTOR_IDS: ReadonlySet<ConnectorId> = new Set<ConnectorId>([
+  "slack",
+  "discord",
+  "telegram",
+  "whatsapp",
+]);
+
 export function createConnectorRegistry(
   server: () => ServerSummary | undefined,
   sets: { computer: ConnectorSet; server: ConnectorSet },
+  hidden: (id: ConnectorId) => boolean = () => false,
 ): ConnectorRegistry {
   const entries = createMemo((): readonly ConnectorEntry[] => {
     const current = server();
     const set = current?.kind === "local" ? sets.computer : sets.server;
     return CONNECTOR_IDS.map((id): ConnectorEntry => {
+      if (hidden(id)) return { id, access: "hidden" };
       const access = connectorAccess(id, current);
       if (access !== "available") return { id, access };
       const controller = set[id];
@@ -82,7 +91,7 @@ export function createConnectorRegistry(
     const set = current?.kind === "local" ? sets.computer : sets.server;
     return CONNECTOR_IDS.flatMap((id) => {
       const controller = set[id];
-      return controller && connectorAccess(id, current) === "available" ? [controller] : [];
+      return controller && !hidden(id) && connectorAccess(id, current) === "available" ? [controller] : [];
     });
   };
   const reload = () =>

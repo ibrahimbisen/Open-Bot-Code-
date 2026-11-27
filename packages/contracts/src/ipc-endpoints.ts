@@ -29,6 +29,7 @@ import type {
   AcpRegistryInstallInput,
   AcpRegistryOperation,
 } from "./ipc-acp-registry";
+import type { AdvancedFeatureSettings, SetAdvancedFeatureInput } from "./ipc-advanced-features";
 import type { AgentAccessChange, AgentAccessSnapshot } from "./ipc-agent-access";
 import type {
   AddedAgent,
@@ -1337,6 +1338,10 @@ export const IPC_ENDPOINTS = {
     cancelUpdate: scopedQuery<HostUpdateStatus, "required">()("host-admin:cancel-update"),
     setUpdateSettings: scopedRequest<HostUpdateSettingsChange, HostUpdateStatus, "required">()(
       "host-admin:set-update-settings",
+    ),
+    getAdvancedFeatures: scopedQuery<AdvancedFeatureSettings, "required">()("host-admin:get-advanced-features"),
+    setAdvancedFeature: scopedRequest<SetAdvancedFeatureInput, AdvancedFeatureSettings, "required">()(
+      "host-admin:set-advanced-feature",
     ),
     getTimezone: scopedQuery<HostTimezoneSettings, "required">()("host-admin:get-timezone"),
     setTimezone: scopedRequest<string | null, HostTimezoneSettings, "required">()("host-admin:set-timezone"),

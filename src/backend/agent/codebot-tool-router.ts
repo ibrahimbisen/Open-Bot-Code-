@@ -141,6 +141,7 @@ import {
   WORKFLOW_TOOL_NAMES,
   type WorkflowTools,
 } from "../workflows/workflow-tools";
+import { toolHiddenByAdvancedFeature } from "./advanced-feature-gate";
 import { AgentInterruptTool } from "./agent-interrupt-tool";
 import type { AgentMemories } from "./agent-memories";
 import { AgentSettingsRefused } from "./agent-settings-refused";
@@ -791,6 +792,10 @@ export class CodeBotToolRouter {
               }
               params = resolved;
             }
+          }
+          if (params.namespace === "codebot" && toolHiddenByAdvancedFeature(params.tool)) {
+            client.respond(request.id, codeBotToolFailure(sourceText("error.advanced.featureOff")));
+            return;
           }
           if (params.namespace === "codebot" && (params.tool === "history_search" || params.tool === "history_read")) {
             const scope = this.#conversation.historyScope(params.threadId, client);

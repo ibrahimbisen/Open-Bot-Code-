@@ -28,6 +28,7 @@ import { actionToast } from "./action-toast";
 import { desktopAnalytics } from "./analytics";
 import { appPort } from "./app-port";
 import { useAuth } from "./features/account/account-context";
+import { useAdvancedFeatures } from "./features/advanced/advanced-features-context";
 import { useAgents } from "./features/agents/agents-context";
 import { desktopBrowserProfileCalls } from "./features/browser/browser-profiles-port";
 import { createBrowserProfilesStore } from "./features/browser/stores/browser-profiles-store";
@@ -473,6 +474,7 @@ function RestartServer() {
 }
 
 function ServerSettings() {
+  const advanced = useAdvancedFeatures();
   const windowPage = useWindowPage();
   const usageRows = usePlanLimitRows();
   const platform = usePlatform();
@@ -852,10 +854,11 @@ function ServerSettings() {
           open={serverSettingsOpen() && windowPage.settingsPlacement("server") !== undefined}
           page={windowPage.settingsPlacement("server")}
           sectionQuery={windowPage.serverSettingsQuery()}
+          remoteDesktopSupported={advanced.enabled("remoteDesktop")}
           openFirstSectionRequest={windowPage.openFirstServerSectionRequest()}
           onFirstSectionOpened={() => windowPage.setServerSettingsQuery("")}
           onOpenMarketplaceApps={
-            server().id === activeServer()?.id
+            advanced.enabled("marketplace") && server().id === activeServer()?.id
               ? () => {
                   windowPage.setServerSettingsQuery("");
                   setPendingPluginConnect(false);
@@ -965,7 +968,7 @@ function ServerSettings() {
                 : undefined
           }
           routineFeed={
-            server().kind === "local"
+            advanced.enabled("routines") && server().kind === "local"
               ? { api: appPort().routineFeed, listAgents: () => appPort().agent.listAgents(server().id) }
               : undefined
           }

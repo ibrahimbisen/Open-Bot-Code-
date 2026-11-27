@@ -66,7 +66,7 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
   let freeStartRequested = false;
 
   const stepsFor = (path: FirstRunPath): FirstRunStep[] => {
-    const permissions: FirstRunStep[] = props.platform === "darwin" ? ["computer"] : [];
+    const permissions: FirstRunStep[] = [];
     return path === "plan" ? ["choose", "plan", ...permissions] : ["choose", ...permissions];
   };
   const steps = () => stepsFor(state.path);

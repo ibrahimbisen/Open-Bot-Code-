@@ -7,6 +7,7 @@ import { createEffect, createSignal, For, flush, onCleanup, Show } from "solid-j
 import { useI18n } from "../../i18n-context";
 import { usePlatform } from "../../platform";
 import { useAuth } from "../account/account-context";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useConnectors } from "../connectors/connectors-context";
 import { canManageStorage, serverHasBackgroundProcesses } from "../files/storage-usage";
 import type { ServerSettingsSection } from "../servers/ServerSettingsModal";
@@ -118,6 +119,7 @@ export function SettingsPage(props: { kind: SettingsKind }) {
   const serverSettings = useServerSettings();
   const platform = usePlatform();
   const connectors = useConnectors();
+  const advanced = useAdvancedFeatures();
   const { activeServer } = useServers();
   const { signedInAccount } = useAuth();
   const [personalQuery, setPersonalQuery] = createSignal("");
@@ -126,7 +128,11 @@ export function SettingsPage(props: { kind: SettingsKind }) {
     props.kind === "personal" ? setPersonalQuery(value) : windowPage.setServerSettingsQuery(value);
   onCleanup(() => windowPage.setServerSettingsQuery(""));
   const tabShown = (tab: SettingsTab) =>
-    settingsTabShown(tab, { platform: platform.appInfo()?.platform, chatWindow: platform.chatWindow !== null });
+    settingsTabShown(tab, {
+      platform: platform.appInfo()?.platform,
+      chatWindow: platform.chatWindow !== null,
+      advanced: advanced.settings(),
+    });
   const searchRows = (): SearchRow[] => {
     const server = activeServer();
     const personal = SEARCH_ROWS.filter(
@@ -143,7 +149,7 @@ export function SettingsPage(props: { kind: SettingsKind }) {
       (server.kind === "local" || server.state === "online")
         ? [BACKGROUND_PROCESSES_ROW]
         : []),
-      MARKETPLACE_APPS_ROW,
+      ...(advanced.enabled("marketplace") ? [MARKETPLACE_APPS_ROW] : []),
       ...connectors.active.available().map(
         ({ id }): MarketplaceRow => ({
           app: id,

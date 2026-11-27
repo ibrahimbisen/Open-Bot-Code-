@@ -1,4 +1,5 @@
-import type { AppInfo } from "@codebot/contracts/ipc";
+import type { AdvancedFeatureSettings, AppInfo } from "@codebot/contracts/ipc";
+import { ADVANCED_FEATURE_IDS } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import {
   Bell,
@@ -14,10 +15,12 @@ import {
   Power,
   Server,
   Settings,
+  SlidersHorizontal,
   Smartphone,
   UserRound,
 } from "@codebot/ui";
 import { SHORTCUT_COMMANDS, SHORTCUT_TITLES } from "@codebot/ui/features/settings/keyboard-shortcuts";
+import { ADVANCED_FEATURE_TEXT } from "../advanced/advanced-feature-text";
 
 export type SettingsTab =
   | "general"
@@ -34,7 +37,8 @@ export type SettingsTab =
   | "referral"
   | "mobile-connect"
   | "updates"
-  | "hosted-servers";
+  | "hosted-servers"
+  | "advanced-features";
 
 type SettingsRow = {
   titleKey: AppTextKey;
@@ -263,6 +267,13 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
     ],
   },
   {
+    value: "advanced-features",
+    titleKey: "advanced.tab.title",
+    descriptionKey: "advanced.tab.description",
+    icon: SlidersHorizontal,
+    rows: ADVANCED_FEATURE_IDS.map((id) => ({ titleKey: ADVANCED_FEATURE_TEXT[id].title })),
+  },
+  {
     value: "hosted-servers",
     titleKey: "settings.tab.hostedServers.title",
     descriptionKey: "settings.tab.hostedServers.description",
@@ -279,9 +290,14 @@ export function navItem(tab: SettingsTab): SettingsNavItem {
 
 export function settingsTabShown(
   tab: SettingsTab,
-  window: { platform: AppInfo["platform"] | undefined; chatWindow: boolean },
+  window: {
+    platform: AppInfo["platform"] | undefined;
+    chatWindow: boolean;
+    advanced: AdvancedFeatureSettings | undefined;
+  },
 ): boolean {
   if (tab === "hosted-servers") return false;
+  if (tab === "computer-use") return window.advanced?.computerUse === true;
   if (tab === "dynamic-island") return dynamicIslandSettingsShown(window.platform, window.chatWindow);
   if (tab === "agent-dock") return window.platform !== undefined && !window.chatWindow;
   return true;

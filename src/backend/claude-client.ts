@@ -35,6 +35,7 @@ import { classifyFailure } from "@codebot/telemetry";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { Deferred, Effect, Exit, Fiber, Option, Scope } from "effect";
 import { z } from "zod";
+import { toolHiddenByAdvancedFeature } from "./agent/advanced-feature-gate";
 import { advertisedZodShape } from "./agent/advertised-json-schema";
 import { isTurnContextBlock } from "./agent/developer-instructions";
 import {
@@ -3513,8 +3514,10 @@ export function claudeCodeBotTools(
   channelTools = false,
 ) {
   const channel = channelTools
-    ? CHANNEL_TOOL_DEFINITIONS.filter((definition) =>
-        CLAUDE_TERMINAL_CHANNEL_TOOLS.includes(`mcp__codebot__${definition.name}`),
+    ? CHANNEL_TOOL_DEFINITIONS.filter(
+        (definition) =>
+          CLAUDE_TERMINAL_CHANNEL_TOOLS.includes(`mcp__codebot__${definition.name}`) &&
+          !toolHiddenByAdvancedFeature(definition.name),
       )
     : [];
   const claudeTool = (definition: (typeof channel)[number], extras?: { alwaysLoad: true }) =>

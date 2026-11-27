@@ -38,6 +38,7 @@ import type { StorageUsageService } from "../../backend/storage-usage";
 import type { TeamChatStore } from "../../backend/team-chat-store";
 import type { WorkflowsHandle } from "../../backend/workflows/workflows";
 import type { AcpRegistry } from "../acp-registry";
+import type { AdvancedFeaturesControl } from "../advanced-features-store";
 import type { AgentAccessStore } from "../agent-access-store";
 import type { AgentAdminSettingsService } from "../agent-admin-settings";
 import type { AgentDefaultsSettingsService } from "../agent-defaults-settings";
@@ -491,6 +492,7 @@ export interface TeamApiAdmin {
   promptCacheTtl?: Pick<PromptCacheTtlPreferenceStore, "get" | "set">;
   claudeUserSetup?: ClaudeUserSetupControl;
   cacheExpiryCompaction?: CacheExpiryCompactionControl;
+  advancedFeatures?: AdvancedFeaturesControl;
   mediaApprovalCredits?: MediaApprovalCreditsControl;
   creditAsks?: Pick<CreditAsksControl, "setMuted" | "mutedFor">;
   claudeCompactWindow?: ClaudeCompactWindowControl;
