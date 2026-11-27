@@ -102,6 +102,17 @@ function ProjectGitSlot(props: { project: ProjectSummary }) {
 }
 
 function FileSlot(props: SlotPanelProps) {
+  return (
+    <Show
+      when={props.params.data.path}
+      fallback={<Show when={props.project}>{(project) => <ProjectTreeSlot project={project()} />}</Show>}
+    >
+      <FileSlotContent {...props} />
+    </Show>
+  );
+}
+
+function FileSlotContent(props: SlotPanelProps) {
   const servers = useServers();
   const scope = (): ExplorerScope | null => {
     const id = props.params.data.agentId ?? props.project?.agentIds[0];
@@ -148,6 +159,17 @@ function parseDiff(value: string | undefined): ExplorerDiffTarget | null {
 }
 
 function DiffSlot(props: SlotPanelProps) {
+  return (
+    <Show
+      when={props.params.data.diff}
+      fallback={<Show when={props.project}>{(project) => <ProjectGitSlot project={project()} />}</Show>}
+    >
+      <DiffSlotContent {...props} />
+    </Show>
+  );
+}
+
+function DiffSlotContent(props: SlotPanelProps) {
   const servers = useServers();
   const scope = (): ExplorerScope | null => {
     const id = props.params.data.agentId ?? props.project?.agentIds[0];

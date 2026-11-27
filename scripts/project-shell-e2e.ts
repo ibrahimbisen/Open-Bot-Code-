@@ -164,6 +164,7 @@ async function main(): Promise<void> {
   const { page } = session;
   const root = await mkdtemp(join(tmpdir(), "codebot-project-shell-"));
   const folders = Array.from({ length: 6 }, (_, index) => join(root, `project-${index + 1}`));
+  for (const folder of folders) mkdirSync(folder, { recursive: true });
   const screens: string[] = [];
   try {
     await clearViewport(page);

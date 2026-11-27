@@ -1,4 +1,11 @@
-import type { AgentApproval, AgentTask, ProjectChat, ProjectRuntime, ProjectSummary } from "@codebot/contracts/ipc";
+import {
+  type AgentApproval,
+  type AgentTask,
+  LOCAL_SERVER_ID,
+  type ProjectChat,
+  type ProjectRuntime,
+  type ProjectSummary,
+} from "@codebot/contracts/ipc";
 import { taskApproval } from "@codebot/team-client/agent-tasks";
 import { Folder, IconButton, NativeSelect, Spinner, X } from "@codebot/ui";
 import type { AgentMessage } from "@codebot/ui/data";
@@ -21,6 +28,8 @@ import { QuestionPromptBubble } from "../conversation/conversation-cards";
 import { latestVisibleAgentMessageId } from "../conversation/conversation-read-state";
 import { createTurnSteps } from "../conversation/turn-steps";
 import { useTurnTrace } from "../conversation/turn-trace";
+import { useServers } from "../servers/servers-context";
+import { createSlashCommandsFor } from "../slash-commands/slash-commands-source";
 import { ProjectModelPicker } from "./ProjectModelPicker";
 import type { ChatPanelParams } from "./project-dock-panels";
 import { FALLBACK_RUNTIME, runtimeOfProfile } from "./project-runtime";
@@ -154,6 +163,7 @@ function ProjectDraftChat(props: { api: DockviewPanelApi; params: ChatPanelParam
   );
   const runtime = () => runtimeChoice() ?? defaultRuntime();
   const [sending, setSending] = createSignal(false);
+  const [treeOpen, setTreeOpen] = createSignal(false);
   const draftKey = `draft:${props.api.id}`;
   const agents = useAgents();
   const profile = () => agents.agentList().find((agent) => agent.id === chosenAgent());
@@ -193,10 +203,23 @@ function ProjectDraftChat(props: { api: DockviewPanelApi; params: ChatPanelParam
           props.api.updateParameters({ agentId: id });
         }}
         onClose={() => props.api.close()}
-        treeOpen={false}
-        onToggleTree={() => undefined}
+        treeOpen={treeOpen()}
+        onToggleTree={() => setTreeOpen((open) => !open)}
       />
       <div class="project-panel-body">
+        <Show when={treeOpen() && projectSlots.chatFileTree}>
+          {(Tree) => (
+            <aside class="project-panel-tree">
+              {Tree()({
+                get project() {
+                  return props.project;
+                },
+                chat: null,
+                onClose: () => setTreeOpen(false),
+              })}
+            </aside>
+          )}
+        </Show>
         <Show when={profile()} fallback={<div class="project-chat-missing">{t("panel.chat.noAgent")}</div>}>
           {(agent) => (
             <ThreadSurface
@@ -325,8 +348,12 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
           {(Tree) => (
             <aside class="project-panel-tree">
               {Tree()({
-                project: props.project,
-                chat: { agentId: agentId(), chatId: taskId() },
+                get project() {
+                  return props.project;
+                },
+                get chat() {
+                  return { agentId: agentId(), chatId: taskId() };
+                },
                 onClose: () => setTreeOpen(false),
               })}
             </aside>
@@ -402,6 +429,12 @@ function ThreadSurface(props: {
   const compactMessageActions = useCompactMessageActions();
   const bubbleStyle = useChatBubbleStyle();
   const profile = () => agents.agentList().find((agent) => agent.id === props.agentId);
+  const servers = useServers();
+  const slash = createSlashCommandsFor(() => ({
+    agentId: props.agentId,
+    taskId: props.task?.id,
+    serverId: servers.activeServer()?.id ?? LOCAL_SERVER_ID,
+  }));
   const turnSteps = createTurnSteps({
     messages: () => props.messages,
     lines: () => undefined,
@@ -431,6 +464,8 @@ function ThreadSurface(props: {
             agent={agent()}
             agents={agents.agentList()}
             messages={props.messages}
+            slashCommands={slash.commands()}
+            onSlashScreen={slash.openScreen}
             draft={props.draft}
             onDraftChange={props.onDraftChange}
             onSend={props.onSend}

@@ -17,7 +17,10 @@ export function ProjectChatPicker(props: { placement: OpenChatRequest["placement
 
   function open(agentId: string | null, chatId: string | null): void {
     props.onClose();
-    projects.openChat({ projectId: projectId(), agentId, chatId, placement: props.placement });
+    const request = { projectId: projectId(), agentId, chatId, placement: props.placement };
+    const controller = projects.dock();
+    if (controller) controller.open(request);
+    else projects.openChat(request);
   }
 
   return (

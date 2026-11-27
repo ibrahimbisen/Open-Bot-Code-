@@ -14,9 +14,9 @@ import {
   PinOff,
   Search,
   Settings,
+  SlidingTabs,
   Spinner,
   SquareArrowOutUpRight,
-  Tabs,
   Trash2,
   X,
 } from "@codebot/ui";
@@ -143,7 +143,7 @@ export function ProjectColumn(props: { project: ProjectSummary }) {
             onResize={setToolsHeight}
             onResizeEnd={(value) => savePanelWidth(TOOLS_HEIGHT_KEY, value)}
           />
-          <Tabs.Root
+          <SlidingTabs.Root
             class="project-tools-tabs"
             value={shownTool()}
             onChange={(value) => {
@@ -151,19 +151,25 @@ export function ProjectColumn(props: { project: ProjectSummary }) {
               if (next) setTool(next);
             }}
           >
-            <Tabs.List class="project-tools-tab-list">
+            <SlidingTabs.List aria-label={t("project.tools.label")}>
               <For each={toolKinds()}>
                 {(kind) => (
-                  <Tabs.Trigger value={kind}>
+                  <SlidingTabs.Trigger value={kind}>
                     {t(kind === "files" ? "project.tools.files" : "project.tools.git")}
-                  </Tabs.Trigger>
+                  </SlidingTabs.Trigger>
                 )}
               </For>
-            </Tabs.List>
-          </Tabs.Root>
+            </SlidingTabs.List>
+          </SlidingTabs.Root>
           <div class="project-tools-body" id="project-tools-body">
             <Show when={shownTool() === "files" ? projectSlots.projectFiles : projectSlots.projectGit}>
-              {(slot) => slot()({ project: props.project })}
+              {(slot) =>
+                slot()({
+                  get project() {
+                    return props.project;
+                  },
+                })
+              }
             </Show>
           </div>
         </section>
