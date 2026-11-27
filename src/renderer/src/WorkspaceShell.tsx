@@ -419,10 +419,10 @@ export function WorkspaceShell(props: {
             </>
           }
         >
-          <Show when={projectShell && !serverOnboardingOpen()}>
+          <Show when={projectShell && !serverOnboardingOpen() && middlePane() !== "tasks"}>
             <ProjectsWorkspace />
           </Show>
-          <Show when={!projectShell && middlePane() === "tasks" && tasksSupported() ? usage.state.serverId : null}>
+          <Show when={middlePane() === "tasks" && tasksSupported() ? usage.state.serverId : null}>
             {(serverId) => (
               <TasksPanel
                 serverId={serverId()}

@@ -11,6 +11,7 @@ export interface FakeCodexOptions {
   corpus?: FakeCodexCorpus;
   reasoning?: boolean;
   commands?: boolean;
+  slashCommands?: boolean;
 }
 
 export interface FakeCodex {
@@ -90,6 +91,25 @@ const MARKDOWN_CORPUS = [
   "",
 ].join("\n");
 
+const SLASH_COMMANDS = [
+  ["compact", "Summarize the chat to free context."],
+  ["diff", "Show the changes in the working tree."],
+  ["init", "Write an AGENTS.md file for this folder."],
+  ["mention", "Add a file to the message."],
+  ["model", "Choose the model and the reasoning level."],
+  ["new", "Start a new chat."],
+  ["review", "Review the current changes."],
+  ["status", "Show the session settings and the token use."],
+].map(([name, description]) => ({
+  name,
+  description,
+  argumentHint: "",
+  aliases: [],
+  builtin: true,
+  terminalOnly: false,
+  skill: false,
+}));
+
 const MARKDOWN_PIECES = MARKDOWN_CORPUS.match(/\S+\s*|\s+/gu) ?? [];
 
 const FAKE_CODEX = `#!/usr/bin/env node
@@ -107,6 +127,8 @@ const COMMANDS = process.env.CODEBOT_BENCH_CODEX_COMMANDS === "1";
 const LIMITS = process.env.CODEBOT_BENCH_CODEX_LIMITS === "1";
 const LONG_CODE = Array.from({ length: 30 }, (_, index) => "  const line" + (index + 1) + " = " + (index + 1) + ";").join("\\n");
 const threadFolders = new Map();
+const SLASH = process.env.CODEBOT_BENCH_CODEX_SLASH === "1";
+const SLASH_COMMANDS = ${JSON.stringify(SLASH_COMMANDS)};
 const REASONING_DELTAS = 40;
 const COMMAND_COUNT = 5;
 const COMMAND_OUTPUT_DELTAS = 4;
@@ -243,6 +265,10 @@ const answerSideTurn = (threadId, turnId) => {
   write({ method: "turn/completed", params: { threadId, turn: { id: turnId, status: "completed" } } });
   log({ sideTurnEnded: turnId });
 };
+const reportSlashCommands = (threadId) => {
+  if (!SLASH) return;
+  write({ method: "codebot/slashCommands/updated", params: { threadId, engineVersion: "0.160.1", commands: SLASH_COMMANDS, flags: false, plugins: [], hostPlugins: { project: false, user: false } } });
+};
 const answer = (message) => {
   const params = message.params || {};
   switch (message.method) {
@@ -262,12 +288,16 @@ const answer = (message) => {
     case "config/batchWrite": return write({ id: message.id, result: {} });
     case "thread/start": {
       const id = prefix + "thread-" + (++threads);
+      const id = prefix + "thread-" + (++threads);
       if (params.cwd) threadFolders.set(id, params.cwd);
-      return write({ id: message.id, result: { thread: { id, turns: [] } } });
+      write({ id: message.id, result: { thread: { id, turns: [] } } });
+      return reportSlashCommands(id);
     }
-    case "thread/resume":
+    case "thread/resume": {
       if (params.cwd) threadFolders.set(params.threadId, params.cwd);
-      return write({ id: message.id, result: { thread: { id: params.threadId, turns: [] } } });
+      write({ id: message.id, result: { thread: { id: params.threadId, turns: [] } } });
+      return reportSlashCommands(params.threadId);
+    }
     case "thread/unsubscribe": return write({ id: message.id, result: { status: "Unsubscribed" } });
     case "thread/name/set":
     case "thread/archive":
@@ -336,6 +366,7 @@ export async function writeFakeCodex(directory: string, options: FakeCodexOption
       CODEBOT_BENCH_CODEX_CORPUS: options.corpus ?? "words",
       CODEBOT_BENCH_CODEX_REASONING: options.reasoning ? "1" : "0",
       CODEBOT_BENCH_CODEX_COMMANDS: options.commands ? "1" : "0",
+      CODEBOT_BENCH_CODEX_SLASH: options.slashCommands ? "1" : "0",
     },
   };
 }

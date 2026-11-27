@@ -7,13 +7,23 @@ import { FAKE_CODEX_MODEL, writeFakeCodex } from "./dev-automation/bench-fake-co
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const RUN_FLAGS = new Set(["--restart", "--codex-limits"]);
-const runArguments = process.argv.slice(2);
-const runFlags = new Set(runArguments.filter((value, index) => index < 2 && RUN_FLAGS.has(value)));
+const RUNNER_FLAGS = [
+  "--restart",
+  "--codex-limits",
+  "--keep-first-run",
+  "--markdown",
+  "--steps",
+  "--slash-commands",
+] as const;
+type RunnerFlag = (typeof RUNNER_FLAGS)[number];
+const isRunnerFlag = (value: string): value is RunnerFlag => RUNNER_FLAGS.some((flag) => flag === value);
+const allArguments = process.argv.slice(2);
+const scriptIndex = allArguments.findIndex((value) => !isRunnerFlag(value));
+const runFlags = new Set(allArguments.slice(0, Math.max(0, scriptIndex)));
 const restart = runFlags.has("--restart");
-const [requested, ...scriptArguments] = runArguments.slice(runFlags.size);
+const [requested, ...scriptArguments] = scriptIndex < 0 ? [] : allArguments.slice(scriptIndex);
 if (!requested)
-  throw new Error("Usage: bun scripts/fake-codex-app-run.ts [--restart] [--codex-limits] <script> [arguments]");
+  throw new Error(`Usage: bun scripts/fake-codex-app-run.ts [${RUNNER_FLAGS.join("] [")}] <script> [arguments]`);
 const script: string = requested;
 const OUT = resolve(ROOT, ".codebot-build/fake-codex-app");
 
@@ -77,7 +87,25 @@ function stopDevStack(): void {
 }
 
 await mkdir(OUT, { recursive: true });
-const fake = await writeFakeCodex(resolve(OUT, "fake-codex"), { deltaMs: 250, deltas: 12 });
+const fake = await writeFakeCodex(
+  resolve(OUT, "fake-codex"),
+  runFlags.has("--markdown")
+    ? {
+        deltaMs: 40,
+        deltas: 70,
+        corpus: "markdown",
+        reasoning: runFlags.has("--steps"),
+        commands: runFlags.has("--steps"),
+        slashCommands: runFlags.has("--slash-commands"),
+      }
+    : {
+        deltaMs: 250,
+        deltas: 12,
+        reasoning: runFlags.has("--steps"),
+        commands: runFlags.has("--steps"),
+        slashCommands: runFlags.has("--slash-commands"),
+      },
+);
 const log = openSync(resolve(OUT, "dev.log"), "w");
 
 function startDevStack(): { isExited: () => boolean } {
@@ -120,7 +148,7 @@ let code = 1;
 try {
   const first = startDevStack();
   await waitForApp(first.isExited);
-  await finishFirstRun();
+  if (!runFlags.has("--keep-first-run")) await finishFirstRun();
   code = runScript(restart ? ["--phase=first"] : []);
   if (restart && code === 0) {
     stopDevStack();

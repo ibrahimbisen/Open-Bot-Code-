@@ -258,7 +258,8 @@
 
 .message-entry:hover .message-steps,
 .message-entry:focus-within .message-steps,
-.message-entry:has(.message-actions-open) .message-steps {
+.message-entry:has(.message-actions-open) .message-steps,
+.message-steps:has(.agent-steps[data-open]) {
   opacity: 1;
   pointer-events: auto;
 }

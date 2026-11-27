@@ -28,9 +28,10 @@ import {
 } from "@codebot/ui";
 import { useText } from "@codebot/ui/text";
 import { createEffect, createSignal, For, Show, untrack } from "solid-js";
+import { useAgents } from "../agents/agents-context";
 import { AccessLevelPicker, ProjectColorPicker } from "./ProjectFormParts";
 import { ProjectModelPicker } from "./ProjectModelPicker";
-import { FALLBACK_RUNTIME } from "./project-runtime";
+import { runtimeOfProfile } from "./project-runtime";
 import { projectSlots } from "./project-slots";
 import { useProjects } from "./projects-context";
 
@@ -141,7 +142,11 @@ function GeneralSection(props: { projectId: string }) {
   const [busy, setBusy] = createSignal(false);
   const [saved, setSaved] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
-  const shownRuntime = (): ProjectRuntime => runtime() ?? current()?.defaultRuntime ?? FALLBACK_RUNTIME;
+  const agents = useAgents();
+  const shownRuntime = (): ProjectRuntime =>
+    runtime() ??
+    current()?.defaultRuntime ??
+    runtimeOfProfile(agents.agentList().find((agent) => agent.id === current()?.agentIds[0]));
 
   async function save(): Promise<void> {
     if (busy() || !name().trim()) return;
@@ -439,8 +444,15 @@ function AgentForm(props: { projectId: string; agent: ProjectAgent | null; onDon
   const [runtime, setRuntime] = createSignal<ProjectRuntime | null>(props.agent?.runtime ?? null);
   const [busy, setBusy] = createSignal(false);
   const [error, setError] = createSignal<string | null>(null);
+  const agents = useAgents();
   const shownRuntime = (): ProjectRuntime =>
-    runtime() ?? projects.project(props.projectId)?.defaultRuntime ?? FALLBACK_RUNTIME;
+    runtime() ??
+    projects.project(props.projectId)?.defaultRuntime ??
+    runtimeOfProfile(
+      agents
+        .agentList()
+        .find((agent) => agent.id === (props.agent?.id ?? projects.project(props.projectId)?.agentIds[0])),
+    );
 
   async function save(): Promise<void> {
     if (busy() || !role().trim()) return;

@@ -730,6 +730,7 @@
 .message-code-heading {
   min-width: 0;
   display: flex;
+  overflow: hidden;
   align-items: baseline;
   gap: 6px;
 }
@@ -746,7 +747,11 @@
 }
 
 .message-code-language {
-  flex: none;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   border-radius: var(--codebot-radius-pill);
   background: var(--codebot-border);
   padding: 1px 6px;
@@ -966,6 +971,7 @@
 
 .message-data-table-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--codebot-space-1);
   margin-top: var(--codebot-space-1);

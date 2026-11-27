@@ -290,9 +290,15 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
   );
 
   createEffect(
-    () => ({ agent: agentId(), id: taskId(), loaded: tasks.conversation(taskId()) !== undefined }),
-    ({ agent, id, loaded }) => {
+    () => ({
+      agent: agentId(),
+      id: taskId(),
+      loaded: tasks.conversation(taskId()) !== undefined,
+      listed: task() !== undefined,
+    }),
+    ({ agent, id, loaded, listed }) => {
       if (agent && id && !loaded) tasks.openTask(agent, id);
+      if (agent && id && !listed) void tasks.loadTasks(agent);
     },
   );
 
@@ -339,7 +345,9 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
     const current = task();
     if (!current) return false;
     if (current.state === "closed" && !(await tasks.reopenTask(agentId(), current.id))) return false;
-    return tasks.sendToTask(agentId(), current.id, text);
+    const sent = await tasks.sendToTask(agentId(), current.id, text);
+    if (sent && (projects.state.drafts[taskId()] ?? "").trim() === text) projects.setDraft(taskId(), "");
+    return sent;
   }
 
   const working = () => {

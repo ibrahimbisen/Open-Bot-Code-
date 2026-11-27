@@ -6,29 +6,12 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { Page } from "playwright-core";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
+import "./project-dock-hook";
 
 interface Check {
   name: string;
   passed: boolean;
   detail?: string;
-}
-
-interface DockHook {
-  openContent(request: {
-    kind: "preview" | "browser";
-    projectId: string;
-    title: string;
-    data: Record<string, string>;
-    activate: boolean;
-    pinned?: boolean;
-  }): void;
-  closeTransient(reason: string): void;
-}
-
-declare global {
-  interface Window {
-    __codebotProjectDock?: DockHook;
-  }
 }
 
 const checks: Check[] = [];
@@ -139,13 +122,13 @@ async function sendInChat(page: Page, text: string, panelIndex = 0): Promise<voi
   const editor = chatPanels(page).nth(panelIndex).getByRole("textbox").first();
   await editor.click();
   await page.keyboard.type(text);
-  await page.waitForTimeout(600);
-  for (let attempt = 0; attempt < 5; attempt += 1) {
-    await page.keyboard.press("Enter");
-    await page.waitForTimeout(1500);
-    const left = await editor.innerText().catch(() => "");
-    if (!left.includes(text)) return;
-  }
+  await page.keyboard.press("Enter");
+  await until(
+    page,
+    "composer is empty after send",
+    () => editor.innerText().catch(() => ""),
+    (left) => !left.includes(text),
+  );
 }
 
 async function readChats(page: Page, projectName: string): Promise<ChatRef[]> {

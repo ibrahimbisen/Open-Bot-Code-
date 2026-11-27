@@ -1020,7 +1020,7 @@
 }
 
 .settings-page-nav-group .settings-modal-nav-item[data-selected] {
-  background: var(--codebot-bg-control-hover);
+  background: var(--codebot-bg-control-active);
   color: var(--codebot-text-primary);
 }
 

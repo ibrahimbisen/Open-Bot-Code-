@@ -634,19 +634,41 @@ function GroupActions(props: {
   onMaximize: () => void;
 }) {
   const { t } = useText();
+  let keepFocus = false;
+  const pick = (action: () => void) => () => {
+    keepFocus = false;
+    action();
+  };
   return (
     <div class="project-dock-actions">
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger as={IconButton} label={t("panel.add")} size="icon-sm" variant="ghost">
+        <DropdownMenu.Trigger
+          as={IconButton}
+          label={t("panel.add")}
+          size="icon-sm"
+          variant="ghost"
+          onPointerDown={() => {
+            keepFocus = false;
+          }}
+          onKeyDown={() => {
+            keepFocus = true;
+          }}
+        >
           <Plus />
         </DropdownMenu.Trigger>
         <DropdownMenu.Portal>
-          <DropdownMenu.Content>
-            <DropdownMenu.Item onSelect={props.onNew}>{t("project.chat.new")}</DropdownMenu.Item>
-            <DropdownMenu.Item onSelect={props.onOther}>{t("panel.add.otherChat")}</DropdownMenu.Item>
+          <DropdownMenu.Content
+            onCloseAutoFocus={(event) => {
+              if (!keepFocus) event.preventDefault();
+            }}
+          >
+            <DropdownMenu.Item onSelect={pick(props.onNew)}>{t("project.chat.new")}</DropdownMenu.Item>
+            <DropdownMenu.Item onSelect={pick(props.onOther)}>{t("panel.add.otherChat")}</DropdownMenu.Item>
             <For each={props.slotKinds}>
               {(kind) => (
-                <DropdownMenu.Item onSelect={() => props.onSlot(kind)}>{t(SLOT_ADD_LABEL[kind])}</DropdownMenu.Item>
+                <DropdownMenu.Item onSelect={pick(() => props.onSlot(kind))}>
+                  {t(SLOT_ADD_LABEL[kind])}
+                </DropdownMenu.Item>
               )}
             </For>
           </DropdownMenu.Content>
