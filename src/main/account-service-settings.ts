@@ -6,7 +6,7 @@ import { sourceText } from "@codebot/i18n/source";
 
 export const ACCOUNT_SERVICE_FILE = "codebot-account-service-v1.json";
 
-export function normalizeAccountServiceUrl(value: string): string {
+function normalizeAccountServiceUrl(value: string): string {
   let url: URL;
   try {
     url = new URL(value.trim());

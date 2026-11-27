@@ -2508,21 +2508,6 @@ function serverClockOffsetMs(dateHeader: string | null, requestedAt: number, rec
   return 0;
 }
 
-export function readCentralAuthApiUrl(value: string | undefined, fallback = "http://127.0.0.1:3100"): string {
-  const url = new URL(value ?? fallback);
-  const loopback = url.hostname === "127.0.0.1" || url.hostname === "localhost";
-  if ((url.protocol !== "https:" && !(url.protocol === "http:" && loopback)) || url.pathname !== "/") {
-    throw new Error("CODEBOT_AUTH_API_URL must be HTTPS or an HTTP loopback origin.");
-  }
-  return url.origin;
-}
-
-export function readMobileConnectApiUrl(value: string | undefined, fallback: string): string {
-  const apiUrl = value ?? fallback;
-  createMobileConnectUrl({ apiUrl, ticket: "x".repeat(32) });
-  return new URL(apiUrl).origin;
-}
-
 export function isHostNotOnAccount(error: unknown): boolean {
   return error instanceof AuthApiError && (error.status === 403 || error.status === 404);
 }

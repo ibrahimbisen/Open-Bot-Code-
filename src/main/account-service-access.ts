@@ -44,7 +44,7 @@ async function accountServiceFetch(input: string | URL | Request, init?: Request
   }
 }
 
-export const ACCOUNT_SERVICE_PLACEHOLDER_URL = "http://account-service.invalid";
+const ACCOUNT_SERVICE_PLACEHOLDER_URL = "http://account-service.invalid";
 
 let accountServiceSettings: AccountServiceSettingsStore | null = null;
 
@@ -56,7 +56,7 @@ export function accountServiceSettingsStore(): AccountServiceSettingsStore {
   return accountServiceSettings;
 }
 
-export function configuredAccountServiceUrl(): string | null {
+function configuredAccountServiceUrl(): string | null {
   return accountServiceSettingsStore().read().url;
 }
 

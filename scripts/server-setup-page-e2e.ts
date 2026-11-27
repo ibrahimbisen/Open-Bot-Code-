@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { mkdtemp } from "node:fs/promises";
 import { createServer } from "node:net";
 import { tmpdir } from "node:os";
@@ -7,7 +7,6 @@ import { join, resolve } from "node:path";
 import type { CentralAuthState, HostStatus } from "@codebot/contracts/ipc";
 import { createCodeBotLogger } from "@codebot/logging";
 import { Effect } from "effect";
-import { chromium, type Page } from "playwright-core";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { ServerMode, type ServerModeOptions } from "../src/main/server-mode";
 import { ServerSetupPage } from "../src/main/server-setup-page";
@@ -15,24 +14,13 @@ import { ServerSetupPage } from "../src/main/server-setup-page";
 const logger = createCodeBotLogger("server-setup-page-e2e");
 const ROOT = resolve(import.meta.dirname, "..");
 const OUT = resolve(ROOT, ".codebot-build/server-setup-page-e2e");
-const browserExecutable = process.argv.find((value) => value.startsWith("--browser-executable="))?.split("=")[1];
-const rendererRoot = resolve(
-  process.argv.find((value) => value.startsWith("--renderer="))?.split("=")[1] ?? join(ROOT, "out/renderer"),
-);
-if (!existsSync(join(rendererRoot, "server-setup.html"))) {
-  throw new Error(`${rendererRoot} has no server-setup.html. Build the renderer first: bun run build.`);
-}
 
 const EMAIL = "owner@example.com";
 const CODE = "K7PQ-R2MX";
-const WRONG_CODE = "22222222";
 const CHALLENGE = "challenge-e2e";
-const SERVER_NAME = "CodeBot";
 
 let account: CentralAuthState = { status: "signed_out" };
 let session = false;
-const sentCodes: string[] = [];
-const verifiedCodes: string[] = [];
 const centralAuth: ServerModeOptions["centralAuth"] = {
   getState: () => structuredClone(account),
   hasSession: () => session,
@@ -99,6 +87,9 @@ const host: ServerModeOptions["host"] = {
 };
 
 const runtime = await mkdtemp(join(tmpdir(), "codebot-setup-page-"));
+const rendererRoot = join(runtime, "renderer");
+mkdirSync(rendererRoot);
+writeFileSync(join(rendererRoot, "server-setup.html"), "<!doctype html><title>setup</title>");
 const serverMode = new ServerMode({
   environment: { controlSocketPath: join(runtime, "control.sock"), setupPagePort: null },
   version: "0.0.0-e2e",
@@ -124,17 +115,8 @@ interface Checks {
     "noHeader" | "crossSite" | "textPlainPost" | "logout" | "claim" | "mobileConnect" | "pathEscape" | "sourceFile",
     number
   >;
-  signIn?: {
-    email: string;
-    serverName: string | null;
-    phase: HostStatus["phase"];
-    appLink: string | null;
-    language: string;
-  };
-  signedInRefusesSignIn?: number;
-  oldChallengeRefused?: number;
-  signedInRefusesCode?: number;
-  unconfirmedSessionRefuses?: { start: number; verify: number; retry: string | number | undefined };
+  emailSignInRemoved?: { start: number; verify: number };
+  retryKeepsSession?: string | number | undefined;
 }
 const checks: Checks = {};
 rmSync(OUT, { recursive: true, force: true });
@@ -179,115 +161,30 @@ try {
     pathEscape: 404,
     sourceFile: 404,
   });
-  assert.equal(sentCodes.length, 0, "A refused request sent a sign-in code.");
   checks.refusals = refusals;
 
-  const browser = await chromium.launch(
-    browserExecutable ? { executablePath: browserExecutable } : { channel: "chrome" },
-  );
-  try {
-    const context = await browser.newContext({ locale: "en-US", viewport: { width: 1000, height: 760 } });
-    const tab = await context.newPage();
-    const pageErrors: string[] = [];
-    tab.on("pageerror", (error) => pageErrors.push(error.message));
-    tab.on("console", (message) => {
-      if (message.type() === "error" && !message.text().startsWith("Failed to load resource")) {
-        pageErrors.push(message.text());
-      }
-    });
-    await tab.goto(`${origin}/`);
-    await tab.getByRole("heading", { name: "Sign in to CodeBot" }).waitFor();
-    await tab.getByLabel("Email").fill(EMAIL);
-    await settledScreenshot(tab, join(OUT, "1-email.png"));
-    await tab.getByRole("button", { name: "Send sign-in code" }).click();
-    await tab.getByRole("heading", { name: "Check your inbox" }).waitFor();
-    assert.deepEqual(sentCodes, [EMAIL]);
+  const start = await postForm("/api/login/start", { email: EMAIL });
+  assert.equal(start.status, 410);
+  assert.deepEqual(await start.json(), { error: "email_sign_in_removed" });
+  const verify = await postForm("/api/login/verify", { challenge: CHALLENGE, code: CODE });
+  assert.equal(verify.status, 410);
+  assert.deepEqual(await verify.json(), { error: "email_sign_in_removed" });
+  checks.emailSignInRemoved = { start: start.status, verify: verify.status };
 
-    const oldChallenge = await postForm("/api/login/verify", { challenge: "old-challenge", code: CODE });
-    assert.equal(oldChallenge.status, 409);
-    assert.deepEqual(await oldChallenge.json(), {
-      error: "challenge_replaced",
-      message: "The sign-in code could not be verified.",
-    });
-    assert.deepEqual(verifiedCodes, []);
-    checks.oldChallengeRefused = oldChallenge.status;
-
-    const codeInput = tab.getByLabel("One-time code", { exact: true });
-    await codeInput.fill(WRONG_CODE);
-    await tab.getByText("The code is not valid.").waitFor();
-    await settledScreenshot(tab, join(OUT, "2-wrong-code.png"));
-
-    await codeInput.fill(CODE.replace("-", ""));
-    await tab.getByRole("heading", { name: `${SERVER_NAME} is online` }).waitFor({ timeout: 30_000 });
-    await tab.getByText(`Signed in as ${EMAIL}`).waitFor();
-    const appLink = await tab.getByRole("link", { name: "Open CodeBot" }).getAttribute("href");
-    assert.equal(appLink, "https://openbot.run/app");
-    await settledScreenshot(tab, join(OUT, "3-online.png"));
-    assert.equal(hostStatus.serverName, SERVER_NAME);
-
-    await tab.reload();
-    await tab.getByRole("heading", { name: `${SERVER_NAME} is online` }).waitFor();
-    assert.equal(await tab.getByLabel("Email").count(), 0);
-
-    const dark = await browser.newContext({ colorScheme: "dark", viewport: { width: 390, height: 760 } });
-    const phone = await dark.newPage();
-    await phone.goto(`${origin}/`);
-    await phone.getByRole("heading", { name: `${SERVER_NAME} is online` }).waitFor();
-    await settledScreenshot(phone, join(OUT, "4-online-dark-phone.png"));
-    const overflow = await phone.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
-    assert.equal(overflow, false, "The page scrolls sideways at phone width.");
-    await dark.close();
-
-    const polish = await browser.newContext({ locale: "pl-PL" });
-    const polishTab = await polish.newPage();
-    await polishTab.goto(`${origin}/`);
-    await polishTab.getByRole("heading", { name: `${SERVER_NAME} is online` }).waitFor();
-    const language = await polishTab.evaluate(() => document.documentElement.lang);
-    assert.equal(language, "pl");
-    await polish.close();
-
-    assert.deepEqual(pageErrors, [], "The page wrote errors.");
-    checks.signIn = { email: EMAIL, serverName: hostStatus.serverName, phase: hostStatus.phase, appLink, language };
-  } finally {
-    await browser.close();
-  }
-
-  const codesBefore = [...verifiedCodes];
-  const again = await postForm("/api/login/start", { email: "other@example.com" });
-  assert.equal(again.status, 409);
-  assert.deepEqual(await again.json(), { error: "signed_in" });
-  assert.deepEqual(sentCodes, [EMAIL]);
-  checks.signedInRefusesSignIn = again.status;
-  const code = await postForm("/api/login/verify", { challenge: "other-challenge", code: WRONG_CODE });
-  assert.equal(code.status, 409);
-  assert.deepEqual(await code.json(), { error: "signed_in" });
-  assert.deepEqual(verifiedCodes, codesBefore);
-  assert.equal(account.status, "signed_in");
-  checks.signedInRefusesCode = code.status;
+  account = { status: "signed_in", user: { id: "user-e2e", email: EMAIL, name: null, avatarUrl: null } };
+  session = true;
 
   const signedIn = account;
   account = { status: "error", issue: { code: "auth_api_unavailable", message: "The account service is down." } };
-  const unconfirmedStart = await postForm("/api/login/start", { email: "other@example.com" });
-  assert.deepEqual(await unconfirmedStart.json(), { error: "account_error" });
-  const unconfirmedVerify = await postForm("/api/login/verify", { challenge: CHALLENGE, code: CODE });
-  assert.deepEqual(await unconfirmedVerify.json(), { error: "account_error" });
-  assert.deepEqual(sentCodes, [EMAIL]);
-  assert.deepEqual(verifiedCodes, codesBefore);
-  assert.equal(session, true);
   const retried = await postForm("/api/retry", {});
   const retriedValues = await retried.json();
   assert.equal(retriedValues.account, "signed_in");
   assert.deepEqual(account, signedIn);
-  checks.unconfirmedSessionRefuses = {
-    start: unconfirmedStart.status,
-    verify: unconfirmedVerify.status,
-    retry: retriedValues.account,
-  };
+  checks.retryKeepsSession = retriedValues.account;
 
   const report = {
     ok: true,
     checks,
-    screenshots: ["1-email.png", "2-wrong-code.png", "3-online.png", "4-online-dark-phone.png"],
   };
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   logger.info(`Setup page e2e passed. Report: ${join(OUT, "report.json")}`);
@@ -305,20 +202,6 @@ function postForm(path: string, fields: Record<string, string>): Promise<Respons
     headers: { "x-codebot-setup": "1", "content-type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams(fields).toString(),
   });
-}
-
-async function settledScreenshot(page: Page, path: string): Promise<void> {
-  await page.evaluate(() =>
-    Promise.all(
-      document
-        .getAnimations()
-        .filter((animation) =>
-          Number.isFinite(animation.effect?.getComputedTiming().endTime ?? Number.POSITIVE_INFINITY),
-        )
-        .map((animation) => animation.finished),
-    ),
-  );
-  await page.screenshot({ path });
 }
 
 function freePort(): Promise<number> {

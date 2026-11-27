@@ -304,28 +304,6 @@ export function decodeRemoteMembers(value: unknown): RemoteMemberRecord[] {
   return record.members.map(decodeRemoteMember);
 }
 
-export function decodeEmailChallenge(value: unknown): {
-  challengeId: string;
-  expiresAt: number;
-  resendAt?: number;
-  developmentCode?: string;
-} {
-  const record = decodeRecord(value, "email challenge");
-  if (!isNumber(record.expiresAt)) throw new Error("Invalid email challenge expiration.");
-  const developmentCode = record.developmentCode;
-  const resendAt = record.resendAt;
-  if (developmentCode !== undefined && !isString(developmentCode)) {
-    throw new Error("Invalid development code.");
-  }
-  if (resendAt !== undefined && !isNumber(resendAt)) throw new Error("Invalid email resend time.");
-  return {
-    challengeId: requiredString(record, "challengeId"),
-    expiresAt: record.expiresAt,
-    ...(resendAt === undefined ? {} : { resendAt }),
-    ...(developmentCode === undefined ? {} : { developmentCode }),
-  };
-}
-
 export function decodeSessionResponse(value: unknown): SessionResponse {
   const record = decodeRecord(value, "session");
   return {

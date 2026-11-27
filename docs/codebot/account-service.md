@@ -190,7 +190,8 @@ direct connection is not possible. Both run from `remote/compose.yaml`. The full
 4. Point the app at the services. In the desktop app open Settings > Profile > Account service, enter
    `https://account.example.com` and save it, then choose Sign in. The app opens your browser at the Nextcloud
    sign-in page and returns to a loopback address of the app when you finish. The environment variable
-   `CODEBOT_AUTH_API_URL` overrides the saved address (the field is then read-only).
+   `CODEBOT_AUTH_API_URL` overrides the saved address (the field is then read-only). `bun run dev` sets it to its
+   local API, so unset it there to test the address field.
    `CODEBOT_REMOTE_SIGNAL_URL=wss://signal.example.com/v1/signal` still comes from the environment.
 
    Sign-in is optional (decision D9, PRD 11.7). With no address saved the app makes no request to any account
