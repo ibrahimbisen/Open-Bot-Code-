@@ -20,6 +20,11 @@ export const SHORTCUT_COMMANDS = [
   "forward",
   "toggleSidebar",
   "showShortcuts",
+  "newChat",
+  "switchProject",
+  "splitPanel",
+  "closePanel",
+  "openCommandMenu",
 ] as const;
 
 export type ShortcutCommand = (typeof SHORTCUT_COMMANDS)[number];
@@ -68,6 +73,11 @@ const DEFAULTS: Record<ShortcutCommand, ShortcutDefaults> = {
   forward: { mac: chord("BracketRight", { meta: true }, true), other: chord("ArrowRight", { alt: true }, false) },
   toggleSidebar: both("KeyB", { primary: true }),
   showShortcuts: both("Slash", { primary: true }),
+  newChat: both("KeyN", { primary: true, shift: true }),
+  switchProject: both("KeyJ", { primary: true, shift: true }),
+  splitPanel: both("KeyD", { primary: true, shift: true }),
+  closePanel: both("KeyX", { primary: true, shift: true }),
+  openCommandMenu: both("KeyP", { primary: true, shift: true }),
 };
 
 export const SHORTCUT_TITLES: Record<ShortcutCommand, AppTextKey> = {
@@ -82,6 +92,11 @@ export const SHORTCUT_TITLES: Record<ShortcutCommand, AppTextKey> = {
   forward: "settings.shortcuts.command.forward",
   toggleSidebar: "settings.shortcuts.command.toggleSidebar",
   showShortcuts: "settings.shortcuts.command.showShortcuts",
+  newChat: "shortcut.command.newChat",
+  switchProject: "shortcut.command.switchProject",
+  splitPanel: "shortcut.command.splitPanel",
+  closePanel: "shortcut.command.closePanel",
+  openCommandMenu: "shortcut.command.openCommandMenu",
 };
 
 export type FixedShortcut = "openSettings" | "stopAllAgents" | "switchServer" | "zoom";

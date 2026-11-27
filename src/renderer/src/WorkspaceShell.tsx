@@ -53,6 +53,7 @@ import { WorkspacePageRail } from "./features/window/WorkspacePageRail";
 import { useWindowPage } from "./features/window/window-page-context";
 import { useWorkspaceShortcuts } from "./features/window/workspace-shortcuts";
 import { useLayout } from "./layout";
+import { useNavigation } from "./navigation";
 import { usePlatform } from "./platform";
 import { startupLoadingScene } from "./startup-animation-preference";
 import { WorkspaceFrame } from "./WorkspaceFrame";
@@ -92,6 +93,7 @@ export function WorkspaceShell(props: {
   const windowAgentDock = () => agentDockPlacement() === "window" && activeServer() !== undefined;
   const { agentSetupOpen, serverOnboardingOpen, activeAgent, agentList, agentListSettled } = useAgents();
   const projects = projectShell ? useProjects() : undefined;
+  const { globalSearchOpen, setGlobalSearchVisibility } = useNavigation();
   const { conversations, retryConversation } = useConversation();
   const activeConversation = () => conversations[activeAgent()?.id ?? ""];
   const { activeDirectMember } = useDirectMessages();
@@ -342,6 +344,37 @@ export function WorkspaceShell(props: {
       toggleSidebar: () => {
         if (layout.sidebarClosed()) layout.expandSidebar();
         else layout.setSidebarClosed(true);
+        return true;
+      },
+      newChat: () => {
+        if (!activeServer() || platform.landingPreview || !projects) return false;
+        projects.newChat();
+        return true;
+      },
+      switchProject: () => {
+        const list = projects?.visibleProjects() ?? [];
+        if (!projects || list.length < 2) return false;
+        const index = list.findIndex((entry) => entry.id === projects.state.activeProjectId);
+        const next = list[(index + 1) % list.length];
+        if (!next) return false;
+        projects.setActiveProject(next.id);
+        return true;
+      },
+      splitPanel: () => {
+        const dock = projects?.dock();
+        if (!dock || dock.panelCount() === 0) return false;
+        dock.split("right");
+        return true;
+      },
+      closePanel: () => {
+        const dock = projects?.dock();
+        if (!dock || dock.panelCount() === 0) return false;
+        dock.closeActive();
+        return true;
+      },
+      openCommandMenu: () => {
+        if (!activeServer() || platform.landingPreview) return false;
+        setGlobalSearchVisibility(!globalSearchOpen());
         return true;
       },
       showShortcuts: () => {
