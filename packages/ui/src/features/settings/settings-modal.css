@@ -470,6 +470,10 @@
   width: 220px;
 }
 
+:is(.app-settings-modal-shell, .server-settings-modal-shell) .settings-modal-theme-select {
+  width: 256px;
+}
+
 .ui-select-item.settings-modal-select-group-end {
   margin-bottom: var(--codebot-space-1);
   border-bottom: 1px solid var(--codebot-border);

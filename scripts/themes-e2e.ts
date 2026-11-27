@@ -588,12 +588,29 @@ try {
     },
   );
 
-  await page.getByRole("button", { name: en["panel.add"], exact: true }).first().click();
-  await page.getByRole("menuitem", { name: "Browser", exact: true }).click();
-  const browserAddress = page.getByRole("textbox", { name: en["browser.address.label"] }).last();
+  const chat = await page.evaluate(async (name) => {
+    const project = (await window.codebot.projects.list()).find((entry) => entry.name === name);
+    if (!project) return null;
+    const first = (await window.codebot.projects.listChats({ projectId: project.id, limit: 1 })).chats[0];
+    return first ? { projectId: project.id, agentId: first.agentId } : null;
+  }, PROJECT);
+  assert.ok(chat, "The theme project has no chat.");
+  await page.evaluate(
+    ({ projectId, agentId, url }) =>
+      window.__codebotProjectDock?.openContent({
+        kind: "browser",
+        projectId,
+        title: "Browser",
+        data: { origin: "user", url, agentId },
+        activate: true,
+        pinned: true,
+      }),
+    { ...chat, url: pageUrl },
+  );
+  const browserAddress = page
+    .locator(".project-browser-panel")
+    .getByRole("textbox", { name: en["browser.address.label"] });
   await browserAddress.waitFor({ state: "visible", timeout: WAIT_MS });
-  await browserAddress.fill(pageUrl);
-  await browserAddress.press("Enter");
   await page.waitForFunction(
     async (url) => (await window.codebot.browser.listTabs()).some((tab) => tab.url === url),
     pageUrl,
