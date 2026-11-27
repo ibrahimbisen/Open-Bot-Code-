@@ -77,7 +77,7 @@ export function ProjectCreateDialog(props: { onClose: () => void }) {
         color: color(),
         defaultRuntime: runtime(),
         instructions: instructions(),
-        agents: [{ name: "", role: role().trim() }],
+        agents: [{ name: role().trim(), role: role().trim() }],
       });
       props.onClose();
     } catch (cause) {

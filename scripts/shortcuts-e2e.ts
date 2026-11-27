@@ -69,6 +69,14 @@ async function closeBlockingDialogs(page: Page): Promise<void> {
   }
 }
 
+async function closeSettings(page: Page): Promise<void> {
+  const heading = page.getByRole("heading", { name: "Your settings", exact: true });
+  if (!(await heading.isVisible().catch(() => false))) return;
+  await dismissToasts(page);
+  await page.getByRole("button", { name: "Close", exact: true }).first().click();
+  await heading.waitFor({ state: "hidden", timeout: WAIT_MS });
+}
+
 async function dismissToasts(page: Page): Promise<void> {
   await page.evaluate(() => {
     for (const button of document.querySelectorAll<HTMLElement>(".ui-toaster li button[aria-label]")) button.click();
@@ -100,7 +108,7 @@ async function storedShortcuts(page: Page): Promise<string> {
 async function openKeyboardSettings(page: Page): Promise<void> {
   await page.keyboard.press(`${MOD}+/`);
   await page
-    .getByRole("dialog")
+    .getByRole("tabpanel", { name: "Keyboard" })
     .getByRole("button", { name: "Change the shortcut for New chat", exact: true })
     .waitFor({ state: "attached", timeout: WAIT_MS });
 }
@@ -119,14 +127,18 @@ async function main(): Promise<void> {
     await dismissToasts(page);
 
     await step("create two projects", async () => {
-      for (const [index, name] of names.entries()) await createProject(page, name, join(root, `project-${index + 1}`));
+      for (const [index, name] of names.entries()) {
+        const folder = join(root, `project-${index + 1}`);
+        mkdirSync(folder, { recursive: true });
+        await createProject(page, name, folder);
+      }
       await projectButton(page, names[0] ?? "").click();
       return names.join(", ");
     });
 
     await step("keyboard settings list the five new commands", async () => {
       await openKeyboardSettings(page);
-      const dialog = page.getByRole("dialog");
+      const dialog = page.getByRole("tabpanel", { name: "Keyboard" });
       for (const title of [
         "New chat",
         "Switch to the next project",
@@ -140,20 +152,28 @@ async function main(): Promise<void> {
       }
       await page.waitForTimeout(500);
       screens.push(await shot(page, "keyboard-settings-defaults"));
-      await closeBlockingDialogs(page);
+      await closeSettings(page);
       return "5 rows";
     });
 
-    await step("default shortcut new chat opens a chat panel", async () => {
-      const before = await panelCount(page);
+    await step("default shortcut new chat replaces the active draft with an empty chat", async () => {
+      const editor = panels(page).first().getByRole("textbox").first();
+      await editor.click();
+      await page.keyboard.type("marker text");
+      await until(
+        page,
+        "marker typed",
+        () => editor.innerText(),
+        (text) => text.includes("marker text"),
+      );
       await page.keyboard.press(`${MOD}+Shift+N`);
       await until(
         page,
-        "chat panel",
-        () => panelCount(page),
-        (count) => count > before,
+        "empty chat",
+        () => panels(page).allInnerTexts(),
+        (texts) => texts.every((text) => !text.includes("marker text")),
       );
-      return `${before} -> ${await panelCount(page)}`;
+      return undefined;
     });
 
     await step("default shortcut split panel adds a panel", async () => {
@@ -213,9 +233,9 @@ async function main(): Promise<void> {
     });
 
     await step("changing split panel to a new key stores it", async () => {
-      await closeBlockingDialogs(page);
+      await closeSettings(page);
       await openKeyboardSettings(page);
-      const dialog = page.getByRole("dialog");
+      const dialog = page.getByRole("tabpanel", { name: "Keyboard" });
       const button = dialog.getByRole("button", { name: "Change the shortcut for Split the panel", exact: true });
       await button.scrollIntoViewIfNeeded();
       await button.click();
@@ -230,7 +250,7 @@ async function main(): Promise<void> {
       await button.scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
       screens.push(await shot(page, "keyboard-settings-changed"));
-      await closeBlockingDialogs(page);
+      await closeSettings(page);
       return stored;
     });
 
@@ -258,16 +278,19 @@ async function main(): Promise<void> {
     });
 
     await step("reset all restores the default", async () => {
-      await closeBlockingDialogs(page);
+      await closeSettings(page);
       await openKeyboardSettings(page);
-      await page.getByRole("dialog").getByRole("button", { name: "Reset all", exact: true }).click();
+      await page
+        .getByRole("tabpanel", { name: "Keyboard" })
+        .getByRole("button", { name: "Reset all", exact: true })
+        .click();
       await until(
         page,
         "storage cleared",
         () => storedShortcuts(page),
         (value) => value === "",
       );
-      await closeBlockingDialogs(page);
+      await closeSettings(page);
       return undefined;
     });
 
