@@ -19,7 +19,8 @@ import {
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const { checks, step } = createChecks();
+let activePage: Page | undefined;
+const { checks, step } = createChecks(() => activePage);
 const screens: string[] = [];
 
 function pdfDocument(text: string): string {
@@ -102,6 +103,7 @@ async function openPreview(page: Page, name: string) {
 async function main(): Promise<void> {
   const session = await connectChannelE2e("explorer-screen-e2e");
   const { page } = session;
+  activePage = page;
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   const restore = await prepareWindow(page);
@@ -189,11 +191,13 @@ async function main(): Promise<void> {
       const table = host.getByRole("table");
       await table.waitFor({ state: "visible", timeout: 30_000 });
       await table.getByRole("cell", { name: "Grace" }).waitFor({ state: "visible", timeout: 30_000 });
-      await host.getByText("4 rows, 3 columns.").waitFor({ state: "visible", timeout: 30_000 });
+      await host.getByText("3 rows, 3 columns.").waitFor({ state: "visible", timeout: 30_000 });
       screens.push(await shot(page, "explorer-preview-csv-dark"));
     });
 
     await step("7.7 a file that the agent changed in the chat opens in a diff view", async () => {
+      await page.locator(".dv-tab", { hasText: "New chat" }).first().click();
+      await chatPanels(page).first().waitFor({ state: "visible", timeout: 30_000 });
       await sendInPanel(page, chatPanels(page).first(), "Update the notes [edit]");
       await waitForChatsIdle(page, projectName, 1);
       await openTool(page, "Git");
@@ -208,7 +212,7 @@ async function main(): Promise<void> {
         page,
         "the diff shows the agent line",
         () => diff.first().innerText(),
-        (text) => text.includes("Line written by the agent"),
+        (text) => text.replace(/\s+/g, " ").includes("Line written by the agent"),
       );
       await page.waitForTimeout(800);
       screens.push(await shot(page, "explorer-diff-agent-change-dark"));

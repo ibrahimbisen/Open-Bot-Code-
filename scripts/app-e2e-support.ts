@@ -11,7 +11,7 @@ export interface AppCheck {
 export const APP_WAIT_MS = 60_000;
 export const F2_SCREENS = resolve(import.meta.dirname, "../.codebot-build/f2/screens");
 
-export function createChecks(): {
+export function createChecks(failurePage?: () => Page | undefined): {
   checks: AppCheck[];
   step: (name: string, run: () => Promise<unknown>) => Promise<boolean>;
 } {
@@ -26,6 +26,12 @@ export function createChecks(): {
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
       checks.push({ name, passed: false, detail });
+      const page = failurePage?.();
+      if (page) {
+        const folder = resolve(F2_SCREENS, "../failures");
+        mkdirSync(folder, { recursive: true });
+        await page.screenshot({ path: join(folder, `${checks.length}-${Date.now()}.png`) }).catch(() => undefined);
+      }
       process.stdout.write(`FAIL ${name}: ${detail}\n`);
       return false;
     }

@@ -204,6 +204,18 @@ async function firstPhase(page: Page): Promise<void> {
   const state: SavedState = { projectName, boxes: await panelBoxes(page), checks, screens };
   mkdirSync(OUT, { recursive: true });
   writeFileSync(STATE, `${JSON.stringify(state, null, 2)}\n`);
+  quitRequested = checks.every((entry) => entry.passed);
+}
+
+let quitRequested = false;
+
+async function quitApp(page: Page): Promise<void> {
+  const browser = page.context().browser();
+  if (!browser) return;
+  const cdp = await browser.newBrowserCDPSession();
+  const disconnected = new Promise<void>((done) => browser.once("disconnected", () => done()));
+  void cdp.send("Browser.close").catch(() => undefined);
+  await Promise.race([disconnected, new Promise((done) => setTimeout(done, 30_000))]);
 }
 
 async function secondPhase(page: Page): Promise<void> {
@@ -227,6 +239,12 @@ async function secondPhase(page: Page): Promise<void> {
       for (const key of ["x", "y", "width", "height"] as const)
         assert.ok(Math.abs(now[key] - saved[key]) < 0.03, `${saved.marker} ${key}: ${now[key]} vs ${saved[key]}`);
     }
+    await until(
+      page,
+      "restored chats show their titles and replies",
+      () => page.locator(".project-dock-surface").innerText(),
+      (text) => MARKERS.every((marker) => text.includes(marker)) && (text.match(/The each server/g) ?? []).length >= 3,
+    );
     screens.push(await shot(page, "dock-restored-after-restart-dark"));
     return `${restored.length} panels`;
   });
@@ -248,7 +266,8 @@ try {
   });
 } finally {
   await restore();
-  await session.close();
+  if (quitRequested) await quitApp(page).catch(() => undefined);
+  else await session.close().catch(() => undefined);
 }
 const passed = checks.length > 0 && checks.every((entry) => entry.passed);
 if (phase !== "first" || !passed) {
@@ -260,4 +279,4 @@ if (phase !== "first" || !passed) {
   });
   process.stdout.write(`report: ${reportPath}\n`);
 }
-process.exitCode = passed ? 0 : 1;
+process.exit(passed ? 0 : 1);

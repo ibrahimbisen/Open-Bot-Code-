@@ -18,7 +18,8 @@ import {
 } from "./app-e2e-support";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 
-const { checks, step } = createChecks();
+let activePage: Page | undefined;
+const { checks, step } = createChecks(() => activePage);
 const screens: string[] = [];
 const rail = (page: Page) => page.getByRole("navigation", { name: "Pages" });
 
@@ -42,6 +43,7 @@ async function setReplyView(page: Page, view: "Short" | "Detailed"): Promise<voi
 async function main(): Promise<void> {
   const session = await connectChannelE2e("reply-details-e2e");
   const { page } = session;
+  activePage = page;
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   const restore = await prepareWindow(page);

@@ -7,7 +7,8 @@ import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 const KEY = "local-e2e-key-5d1f0c3a";
 const MACHINE = "Desk GPU";
 const MODEL = "desk-coder-7b";
-const { checks, step } = createChecks();
+let activePage: Page | undefined;
+const { checks, step } = createChecks(() => activePage);
 const screens: string[] = [];
 const requests: { path: string; authorized: boolean }[] = [];
 
@@ -49,6 +50,7 @@ async function main(): Promise<void> {
   const baseUrl = `http://127.0.0.1:${address.port}/v1`;
   const session = await connectChannelE2e("local-server-settings-e2e");
   const { page } = session;
+  activePage = page;
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   const restore = await prepareWindow(page);

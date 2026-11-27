@@ -18,13 +18,15 @@ import {
 } from "./app-e2e-support";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 
-const { checks, step } = createChecks();
+let activePage: Page | undefined;
+const { checks, step } = createChecks(() => activePage);
 const screens: string[] = [];
 const statusButton = (page: Page) => page.getByRole("button", { name: /^Open status details/ }).first();
 
 async function main(): Promise<void> {
   const session = await connectChannelE2e("usage-limits-screen-e2e");
   const { page } = session;
+  activePage = page;
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
   const restore = await prepareWindow(page);
