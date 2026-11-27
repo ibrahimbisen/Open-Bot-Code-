@@ -161,10 +161,6 @@ export const messages = {
   "sidebar.announce.movedPinned": "Discussion épinglée déplacée en position {position} sur {total}.",
   "sidebar.announce.personFallback": "personne",
   "sidebar.announce.chatFallback": "discussion",
-  "sidebar.mobileApp.pocketTitle": "Vos agents, dans votre poche",
-  "sidebar.mobileApp.iphone": "iPhone",
-  "sidebar.mobileApp.android": "Android",
-  "sidebar.mobileApp.dismiss": "Masquer l’annonce de l’app mobile",
   "sidebar.storage.lowTitle": "Stockage presque plein",
   "sidebar.storage.fullTitle": "Stockage plein",
   "sidebar.storage.body": "{used} sur {total} utilisés sur {server}.",
@@ -187,10 +183,4 @@ export const messages = {
   "sidebar.machine.alertTo": "L’alerte est envoyée à {name}",
   "sidebar.machine.details": "Voir les détails",
   "sidebar.machine.dismiss": "Masquer jusqu’à la prochaine alerte",
-  "sidebar.community.title": "Installez-vous.",
-  "sidebar.community.body":
-    "Il y a une place pour vous dans le futur de l’IA. Rejoignez la communauté sur Discord et X.",
-  "sidebar.community.joinDiscord": "Rejoindre Discord",
-  "sidebar.community.followX": "Suivre CodeBot sur X",
-  "sidebar.community.dismiss": "Masquer l’invitation à la communauté",
 } as const satisfies PartialTranslation<typeof source>;

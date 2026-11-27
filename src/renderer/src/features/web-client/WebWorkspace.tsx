@@ -171,7 +171,6 @@ import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
 import { type HiddenServer, ServerRail } from "@codebot/ui/features/servers/ServerRail";
 import type { SettingsPagePlacement } from "@codebot/ui/features/settings/SettingsDialogShell";
 import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
-import { SidebarCommunityCard } from "@codebot/ui/features/sidebar/SidebarCommunityCard";
 import { sidebarAgentOrder } from "@codebot/ui/features/sidebar/sidebar-agent-order";
 import {
   computeSidebarAgentStates,
@@ -311,7 +310,6 @@ import type { HostClaudeUserSetupCalls } from "../settings/provider-claude-user-
 import type { HostProviderEnvironmentCalls } from "../settings/provider-environment";
 import type { HostModelVisibilityCalls } from "../settings/provider-model-visibility";
 import type { HostPromptCacheTtlCalls } from "../settings/provider-prompt-cache";
-import { createCommunityCardVisibility } from "../sidebar/community-card";
 import { createSidebarAlertCards, SidebarAlertCards } from "../sidebar/SidebarAlertCards";
 import { isReaderAuthor } from "../team/reader-identity";
 import type { ServerVaultOptions } from "../vault/ServerVaultPanel";
@@ -829,7 +827,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
       hiddenAgentIds: hiddenAgentIds(),
     }),
   );
-  const communityCard = createCommunityCardVisibility();
   const [messageFocusRequest, setMessageFocusRequest] = createSignal<{
     agentId: string;
     messageId: string;
@@ -3211,13 +3208,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                             members={workspace.state.presence?.members ?? []}
                             onOpenStorage={(serverId) => void openServerSettings(serverId, null, "storage")}
                           />
-                          <Show when={!alertCards.shown() && !communityCard.dismissed()}>
-                            <SidebarCommunityCard
-                              onJoinDiscord={() => void openWebDestination("discord")}
-                              onFollowX={() => void openWebDestination("x")}
-                              onDismiss={communityCard.dismiss}
-                            />
-                          </Show>
                         </>
                       }
                       emptyAction={

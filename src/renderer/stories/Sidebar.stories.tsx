@@ -3,9 +3,7 @@ import { Button } from "@codebot/ui";
 import type { AvatarMood } from "@codebot/ui/bloub-avatar";
 import type { ThreadItem } from "@codebot/ui/features/conversation/threads/thread-types";
 import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
-import { SidebarCommunityCard } from "@codebot/ui/features/sidebar/SidebarCommunityCard";
 import { SidebarMachineCard } from "@codebot/ui/features/sidebar/SidebarMachineCard";
-import { SidebarMobileAppCard } from "@codebot/ui/features/sidebar/SidebarMobileAppCard";
 import { SidebarStorageCard } from "@codebot/ui/features/sidebar/SidebarStorageCard";
 import { normalizeSidebarPinnedItems, type SidebarPinnedItem } from "@codebot/ui/features/sidebar/sidebar-pins";
 import {
@@ -316,16 +314,6 @@ export const ChatHistory: Story = {
       onForward: fn(),
     },
   },
-  decorators: [(Story) => <div style={{ width: "280px", height: "100vh" }}>{Story()}</div>],
-};
-
-export const MobileAppCard: Story = {
-  args: { footer: <SidebarMobileAppCard agents={STORY_AGENTS} onInstall={fn()} onDismiss={fn()} /> },
-  decorators: [(Story) => <div style={{ width: "280px", height: "100vh" }}>{Story()}</div>],
-};
-
-export const CommunityCard: Story = {
-  args: { footer: <SidebarCommunityCard onJoinDiscord={fn()} onFollowX={fn()} onDismiss={fn()} /> },
   decorators: [(Story) => <div style={{ width: "280px", height: "100vh" }}>{Story()}</div>],
 };
 
