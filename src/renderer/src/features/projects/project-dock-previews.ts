@@ -13,6 +13,7 @@ import { clampPreviewFraction, readPreviewFraction, writePreviewFraction } from 
 
 const WIDTH_SAVE_DELAY_MS = 300;
 const MIN_SPLIT_SURFACE_PX = 560;
+const ROW_TOLERANCE_PX = 2;
 const COMPOSER_SELECTOR = '[role="textbox"], textarea, [contenteditable="true"]';
 
 export interface PreviewDockDeps {
@@ -65,12 +66,29 @@ export function createPreviewDock(deps: PreviewDockDeps) {
     });
   }
 
+  function rowOf(group: DockviewGroupPanel): DockviewGroupPanel[] {
+    const box = group.element.getBoundingClientRect();
+    return (deps.api()?.groups ?? [])
+      .filter((member) => {
+        const rect = member.element.getBoundingClientRect();
+        return Math.abs(rect.top - box.top) < ROW_TOLERANCE_PX && Math.abs(rect.bottom - box.bottom) < ROW_TOLERANCE_PX;
+      })
+      .sort(
+        (first, second) => first.element.getBoundingClientRect().left - second.element.getBoundingClientRect().left,
+      );
+  }
+
   function applyWidth(group: DockviewGroupPanel): void {
     const total = deps.container()?.clientWidth ?? 0;
     if (total <= 0) return;
     applyingSize += 1;
     try {
-      group.api.setSize({ width: Math.round(total * readPreviewFraction()) });
+      const row = rowOf(group);
+      if (row.length <= 2) group.api.setSize({ width: Math.round(total * readPreviewFraction()) });
+      else {
+        const share = Math.round(total / row.length);
+        for (const member of row.slice(0, -1)) member.api.setSize({ width: share });
+      }
     } finally {
       queueMicrotask(() => {
         applyingSize -= 1;

@@ -271,9 +271,15 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
   });
 
   createEffect(
-    () => ({ agent: agentId(), id: taskId(), loaded: tasks.conversation(taskId()) !== undefined }),
-    ({ agent, id, loaded }) => {
+    () => ({
+      agent: agentId(),
+      id: taskId(),
+      loaded: tasks.conversation(taskId()) !== undefined,
+      listed: task() !== undefined,
+    }),
+    ({ agent, id, loaded, listed }) => {
       if (agent && id && !loaded) tasks.openTask(agent, id);
+      if (agent && id && !listed) void tasks.loadTasks(agent);
     },
   );
 

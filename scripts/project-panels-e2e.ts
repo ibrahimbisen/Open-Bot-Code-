@@ -6,29 +6,12 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { Page } from "playwright-core";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
+import "./project-dock-hook";
 
 interface Check {
   name: string;
   passed: boolean;
   detail?: string;
-}
-
-interface DockHook {
-  openContent(request: {
-    kind: "preview" | "browser";
-    projectId: string;
-    title: string;
-    data: Record<string, string>;
-    activate: boolean;
-    pinned?: boolean;
-  }): void;
-  closeTransient(reason: string): void;
-}
-
-declare global {
-  interface Window {
-    __codebotProjectDock?: DockHook;
-  }
 }
 
 const checks: Check[] = [];
