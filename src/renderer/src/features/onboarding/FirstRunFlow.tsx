@@ -29,8 +29,8 @@ export interface FirstRunFlowProps extends SetupProviderProps {
 }
 
 const TEAM_SIZE = 7;
-const TERMS_URL = "https://openbot.run/terms";
-const PRIVACY_URL = "https://openbot.run/privacy";
+const TERMS_URL = "https://github.com/nightly-labs/openbot/blob/main/LICENSE";
+const PRIVACY_URL = "https://github.com/nightly-labs/openbot/blob/main/README.md";
 
 type FirstRunStep = "choose" | "plan" | "computer";
 type FirstRunPath = "free" | "plan" | null;

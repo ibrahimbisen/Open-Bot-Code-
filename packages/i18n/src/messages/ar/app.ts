@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "السلاسل",
   "app.rail.workflows": "مسارات العمل",
   "app.rail.usage": "الاستخدام",
-  "app.rail.creditsAsk": "اسأل عند الحاجة إلى أرصدة",
-  "app.rail.creditsAskSaveFailed": "تعذر تغيير أسئلة الأرصدة.",
   "app.rail.library": "المكتبة",
   "app.rail.providers": "المزوّدون",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "انضم إلى {handle}",
   "app.socialFollow.followedTitle": "نراك على {name}!",
   "app.socialFollow.followedBody": "تصل أخبارنا إلى هناك أولًا.",
-  "app.socialFollow.draftPost":
-    "وكلائي للذكاء الاصطناعي يعملون الآن على حاسوبي مع CodeBot. محادثاتي وملفاتي تبقى معي. جرّبه: {site}",
-  "app.socialFollow.redditTitle": "كيف أستخدم CodeBot",
   "app.rail.usageRings": "استخدام {name}: {windows}. فتح الاستخدام",
   "app.rail.usageUnavailable": "استخدام {name} غير متاح. فتح الاستخدام",
   "app.rail.customAgentUsage": "استخدام {name}. فتح الاستخدام",

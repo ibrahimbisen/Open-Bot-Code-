@@ -1,9 +1,6 @@
-import { type CreditsMenu, createCreditsSummary } from "@codebot/ui/features/credits/credits-store";
 import type { SettingsPageBack, SettingsPagePlacement } from "@codebot/ui/features/settings/SettingsDialogShell";
-import { createEffect, createMemo, createSignal, onCleanup, untrack } from "solid-js";
-import { appPort } from "../../app-port";
+import { createEffect, createMemo, createSignal, untrack } from "solid-js";
 import { createSimpleContext } from "../../simple-context";
-import { useAuth } from "../account/account-context";
 import { useServerSettings } from "../servers/server-settings";
 import { useServers } from "../servers/servers-context";
 import { useSettings } from "../settings/settings-context";
@@ -20,7 +17,6 @@ export type WindowPage =
   | "marketplace"
   | "settings"
   | "server-settings"
-  | "credits"
   | "pricing";
 
 export type WindowPageKind = "agents" | "settings" | "titled";
@@ -30,7 +26,7 @@ export function windowPageKind(page: WindowPage): WindowPageKind {
   return page === "agents" || page === "tasks" ? "agents" : "titled";
 }
 
-export interface PricingPagePlacement {
+interface PricingPagePlacement {
   mount: () => HTMLElement | undefined;
   open: (leave: () => void) => void;
   close: () => void;
@@ -44,17 +40,7 @@ const context = createSimpleContext({
     const settings = useSettings();
     const serverSettings = useServerSettings();
     const usage = useUsage();
-    const { activeServerId, hostStatus } = useServers();
-    const { signedInAccount } = useAuth();
-    const credits = createCreditsSummary(
-      () => appPort().credits,
-      () => signedInAccount()?.id ?? null,
-    );
-    onCleanup(
-      appPort().agent.onScopedEvent(({ event }) => {
-        if (event.type === "codebot-credits-changed") credits.refresh();
-      }),
-    );
+    const { activeServerId } = useServers();
     const [settingsMounts, setSettingsMounts] = createSignal<SettingsPagePlacement | undefined>();
     const [serverSettingsQuery, setServerSettingsQuery] = createSignal("");
     const [openFirstServerSectionRequest, setOpenFirstServerSectionRequest] = createSignal(0);
@@ -68,14 +54,9 @@ const context = createSimpleContext({
       setPricingMount(undefined);
       leave();
     }
-    const [creditsOpen, setCreditsOpen] = createSignal<{ serverId: string | null } | null>(null);
-    function closeCredits() {
-      if (untrack(creditsOpen)) setCreditsOpen(null);
-    }
     const pricing: PricingPagePlacement = {
       mount: pricingMount,
       open: (leave) => {
-        closeCredits();
         setPricingLeave(() => leave);
       },
       close: () => {
@@ -92,7 +73,7 @@ const context = createSimpleContext({
     });
     const page = createMemo<WindowPage>(() => {
       if (pricingLeave()) return "pricing";
-      return creditsOpen() ? "credits" : basePage();
+      return basePage();
     });
 
     createEffect(basePage, (_next, previous) => {
@@ -102,7 +83,6 @@ const context = createSimpleContext({
     createEffect(settings.appSettingsOpenRequest, (request, previous) => {
       if (previous === undefined || request === previous) return;
       leavePricing();
-      closeCredits();
       usage.dismissUsage();
       if (untrack(settings.skillsMarketplaceOpen)) settings.setSkillsMarketplaceOpen(false);
       if (untrack(serverSettings.serverSettingsOpen)) serverSettings.setServerSettingsOpen(false);
@@ -111,7 +91,6 @@ const context = createSimpleContext({
     createEffect(serverSettings.serverSettingsOpenRequest, (request, previous) => {
       if (previous === undefined || request === previous) return;
       leavePricing();
-      closeCredits();
       usage.dismissUsage();
       if (untrack(settings.skillsMarketplaceOpen)) settings.setSkillsMarketplaceOpen(false);
       if (untrack(settings.appSettingsOpen)) settings.setAppSettingsOpen(false);
@@ -121,7 +100,6 @@ const context = createSimpleContext({
       () => usage.state.serverId,
       (serverId) => {
         if (!serverId) return;
-        closeCredits();
         if (untrack(settings.appSettingsOpen)) settings.setAppSettingsOpen(false);
         if (untrack(serverSettings.serverSettingsOpen)) serverSettings.setServerSettingsOpen(false);
         if (untrack(settings.skillsMarketplaceOpen)) settings.setSkillsMarketplaceOpen(false);
@@ -130,7 +108,6 @@ const context = createSimpleContext({
 
     createEffect(settings.skillsMarketplaceOpen, (open) => {
       if (!open) return;
-      closeCredits();
       usage.dismissUsage();
       if (untrack(settings.appSettingsOpen)) settings.setAppSettingsOpen(false);
       if (untrack(serverSettings.serverSettingsOpen)) serverSettings.setServerSettingsOpen(false);
@@ -160,15 +137,6 @@ const context = createSimpleContext({
       return page() === "server-settings" ? serverBack() : null;
     }
 
-    function openCredits(serverId: string | null) {
-      leavePricing();
-      usage.dismissUsage();
-      if (untrack(settings.appSettingsOpen)) settings.setAppSettingsOpen(false);
-      if (untrack(serverSettings.serverSettingsOpen)) serverSettings.setServerSettingsOpen(false);
-      if (untrack(settings.skillsMarketplaceOpen)) settings.setSkillsMarketplaceOpen(false);
-      setCreditsOpen({ serverId });
-    }
-
     return {
       page,
       conversationCovered: () => page() !== "agents",
@@ -182,20 +150,8 @@ const context = createSimpleContext({
       pricing,
       setPricingMount: (element: HTMLElement | undefined) => setPricingMount(element),
       leavePricing,
-      creditsServerId: () => creditsOpen()?.serverId ?? null,
-      creditsAvailable: credits.available,
-      adoptCredits: credits.adopt,
-      creditsMenu: (): CreditsMenu => ({
-        state: credits.state(),
-        localServerId: hostStatus().serverId,
-        onOpen: openCredits,
-        onRefresh: credits.refresh,
-      }),
-      openCredits,
-      closeCredits,
       showAgents() {
         leavePricing();
-        closeCredits();
         settings.setAppSettingsOpen(false);
         serverSettings.setServerSettingsOpen(false);
         settings.setSkillsMarketplaceOpen(false);

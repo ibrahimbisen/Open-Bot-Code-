@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import type { CreditMediaGenerationKind } from "@codebot/contracts/credit-media";
 import type { FeedbackPhone } from "@codebot/contracts/feedback";
 import type {
   AgentApproval,
@@ -12,14 +11,9 @@ import type {
   BrowserTakeoverRequest,
   BrowserVaultSkipReason,
   ConversationMessageSender,
-  CreditsHold,
   LocalBrowserSecretResponse,
-  MediaApprovalChoice,
-  MediaApprovalOffer,
   RespondToApprovalInput,
   RespondToBrowserTakeoverInput,
-  RespondToCreditsHoldInput,
-  RespondToMediaApprovalInput,
   RespondToPromptInput,
 } from "@codebot/contracts/ipc";
 import {
@@ -55,7 +49,6 @@ import {
 import { sourceText } from "@codebot/i18n/source";
 import { createCodeBotLogger, redactText, registerSecretValue, toLogValue } from "@codebot/logging";
 import { Deferred, Effect, Option, Result, Schema } from "effect";
-import { getDomain } from "tldts";
 import type { AgentApiKeys, SavedApiKey } from "../agent-api-keys";
 import type { AgentClient, AgentProvider } from "../agent-client";
 import { type BrowserOperationError, browserFailure, secureInputFailure } from "../browser-effects";
@@ -64,8 +57,6 @@ import type { BrowserCardVault } from "../browser-tool-actions";
 import { repairBrowserToolInput } from "../browser-tool-input";
 import { type BrowserToolArguments, parseBrowserToolCall } from "../browser-tools";
 import { causeHelpers } from "../effect-boundary";
-import { LINK_CARD_ID_PREFIX, type LinkWallet } from "../link-wallet";
-import type { NearWallet } from "../near-wallet";
 import {
   isWebProtocol,
   type PasswordVault,
@@ -94,13 +85,6 @@ import {
 } from "../vault-items";
 import { type ApprovalAutomationPolicy, NO_APPROVAL_AUTOMATION, shouldAutoApprove } from "./approval-automation";
 import type { ConversationRuntime } from "./conversation-runtime";
-import type { HostedSiteOperationFailed } from "./hosted-site-coordinator";
-import {
-  HOSTED_SITE_APPROVAL_METHOD,
-  type HostedSiteApprovalTarget,
-  type HostedSiteMutationContext,
-} from "./hosted-site-coordinator";
-import type { HostedSiteMutationTool } from "./hosted-site-events";
 import { ForbiddenAttentionAnswer, InactiveAttentionRequest } from "./inactive-attention-request";
 import {
   API_KEY_FIELD_ID,
@@ -211,47 +195,6 @@ export interface ApprovalResponder {
   person?: { id: string; canAdminister: boolean };
 }
 
-export interface CreditsHoldCall {
-  kind: CreditMediaGenerationKind;
-  cost: number;
-}
-
-export interface CreditsHoldWallet {
-  agentsAllowed: () => boolean;
-  enableAgents: () => Effect.Effect<void, unknown>;
-  balance: () => Effect.Effect<number | null>;
-}
-
-export type CreditAnswerVia = "local" | "remote" | "automatic";
-
-function answerVia(responder: ApprovalResponder | undefined): CreditAnswerVia {
-  return responder ? "remote" : "local";
-}
-
-export interface CreditsHoldAnswer {
-  action: "continue" | "skip" | "mute";
-  responder?: ApprovalResponder;
-  via?: CreditAnswerVia;
-  enabled?: boolean;
-  stopped?: boolean;
-}
-
-interface PendingCreditsHold {
-  call: CreditsHoldCall;
-  balance: number | null;
-  wallet: CreditsHoldWallet;
-  answer: (answer: CreditsHoldAnswer) => void;
-}
-
-function respondsAsAdmin(responder: ApprovalResponder | undefined): boolean {
-  if (!responder) return true;
-  return responder.person?.canAdminister ?? responder.owner;
-}
-
-function creditsSum(values: readonly number[]): number {
-  return Math.round(values.reduce((total, value) => total + value, 0) * 1000) / 1000;
-}
-
 interface PendingApproval {
   client: AgentClient;
   id: RequestId;
@@ -259,22 +202,13 @@ interface PendingApproval {
   params: unknown;
   approval: AgentApproval;
   executionThreadId: string;
-  hostedSiteMutation?: HostedSiteMutationContext;
-  decide?: (decision: ToolApprovalDecision, responder?: ApprovalResponder, choice?: MediaApprovalChoice) => void;
-  media?: MediaApprovalOffer;
-  creditsHold?: PendingCreditsHold;
+  decide?: (decision: ToolApprovalDecision, responder?: ApprovalResponder) => void;
   alwaysAsk?: boolean;
   ownerOnly?: boolean;
   needsPhone?: boolean;
 }
 
 export type ToolApprovalDecision = "accept" | "decline" | "cancel";
-
-interface MediaApprovalAnswer {
-  readonly decision: ToolApprovalDecision;
-  readonly choice?: MediaApprovalChoice;
-  readonly via: CreditAnswerVia;
-}
 
 const TOOL_APPROVAL_METHOD = "codebot/tool-approval";
 const MESSAGING_QUESTION_REFUSED =
@@ -314,28 +248,6 @@ const VAULT_FIELDS: Record<BrowserToolArguments<"save_vault_item">["kind"], read
   login: ["website", "username", "password", "twoStepKey"],
   card: ["label", "nameOnCard", "expMonth", "expYear", "billingContactId"],
 };
-
-const LINK_UNAVAILABLE =
-  "Link is not connected. Ask the user to connect Link in Server settings > Vault > Cards, or use a saved card.";
-
-const NEAR_UNAVAILABLE =
-  "The NEAR Intents wallet is not ready. Ask the user to set it up or unfreeze it in Server settings > Vault > Crypto.";
-
-function httpsHost(address: string): string | null {
-  try {
-    const url = new URL(address);
-    return url.protocol === "https:" ? url.hostname.toLowerCase() : null;
-  } catch {
-    return null;
-  }
-}
-
-function sameSite(address: string, merchant: string): boolean {
-  const host = httpsHost(address);
-  if (!host) return false;
-  const domain = getDomain(host, { allowPrivateDomains: true });
-  return domain !== null && domain === getDomain(merchant, { allowPrivateDomains: true });
-}
 
 type VaultAgentSave = VaultAgentChange | { kind: "newLogin"; login: VaultTypedLogin; twoStepKey?: string | undefined };
 
@@ -508,20 +420,6 @@ function takeoverCall() {
   return { completion, resolve };
 }
 
-export interface HostedSiteApprovals {
-  prepareApproval(
-    client: AgentClient,
-    request: AppServerRequest,
-    params: DynamicToolCallParams,
-    tool: HostedSiteMutationTool,
-  ): Effect.Effect<{ approval: AgentApproval; mutation: HostedSiteMutationContext } | null, HostedSiteOperationFailed>;
-  resolveApproval(
-    mutation: HostedSiteMutationContext,
-    target: HostedSiteApprovalTarget,
-    decision: "accept" | "decline",
-  ): Effect.Effect<void, HostedSiteOperationFailed>;
-}
-
 export interface RoutineAttention {
   markNeedsAttention(turnId: string | null): void;
   markRunningForTurn(turnId: string | null): void;
@@ -545,7 +443,6 @@ type AttentionConversation = Pick<
 export interface AttentionRegistryOptions {
   conversation: AttentionConversation;
   browser: AttentionBrowserHost;
-  hostedSites: HostedSiteApprovals;
   routines: RoutineAttention;
   approvalAutomation?: ApprovalAutomationPolicy | undefined;
   workspaceSandboxed?(agentId: string): boolean;
@@ -558,8 +455,6 @@ export interface AttentionRegistryOptions {
   emitRuntimeSnapshot(): void;
   passwordVault?: PasswordVault | null | undefined;
   vaultItems?: VaultItems | null | undefined;
-  linkWallet?: LinkWallet | null | undefined;
-  nearWallet?: NearWallet | null | undefined;
   agentName?(agentId: string): string | undefined;
   noteVaultChange?(agentId: string, threadId: string, turnId: string, text: string): void;
   apiKeys?: AgentApiKeys | null | undefined;
@@ -593,7 +488,6 @@ export class AttentionRegistry {
   readonly #localHandles = new WeakMap<PendingPrompt | PendingApproval | PendingBrowserTakeover, string>();
   readonly #conversation: AttentionConversation;
   readonly #browser: AttentionBrowserHost;
-  readonly #hostedSites: HostedSiteApprovals;
   readonly #routines: RoutineAttention;
   readonly #approvalAutomation: ApprovalAutomationPolicy;
   readonly #workspaceSandboxed: (agentId: string) => boolean;
@@ -606,8 +500,6 @@ export class AttentionRegistry {
   readonly #emitRuntimeSnapshot: () => void;
   readonly #passwordVault: PasswordVault | null;
   readonly #vaultItems: VaultItems | null;
-  readonly #linkWallet: LinkWallet | null;
-  readonly #nearWallet: NearWallet | null;
   readonly #agentName: (agentId: string) => string | undefined;
   readonly #noteVaultChange: (agentId: string, threadId: string, turnId: string, text: string) => void;
   readonly #apiKeys: AgentApiKeys | null;
@@ -623,7 +515,6 @@ export class AttentionRegistry {
   constructor(options: AttentionRegistryOptions) {
     this.#conversation = options.conversation;
     this.#browser = options.browser;
-    this.#hostedSites = options.hostedSites;
     this.#routines = options.routines;
     this.#approvalAutomation = options.approvalAutomation ?? NO_APPROVAL_AUTOMATION;
     this.#workspaceSandboxed = options.workspaceSandboxed ?? (() => false);
@@ -636,8 +527,6 @@ export class AttentionRegistry {
     this.#emitRuntimeSnapshot = options.emitRuntimeSnapshot;
     this.#passwordVault = options.passwordVault ?? null;
     this.#vaultItems = options.vaultItems ?? null;
-    this.#linkWallet = options.linkWallet ?? null;
-    this.#nearWallet = options.nearWallet ?? null;
     this.#agentName = options.agentName ?? (() => undefined);
     this.#noteVaultChange = options.noteVaultChange ?? (() => undefined);
     this.#apiKeys = options.apiKeys ?? null;
@@ -662,123 +551,6 @@ export class AttentionRegistry {
   pendingApproval(requestId: RequestId): AgentApproval | undefined {
     const pending = this.#approvals.get(requestId);
     return pending ? structuredClone(pending.approval) : undefined;
-  }
-
-  pendingMediaApproval(agentId: string, requestId: RequestId): MediaApprovalOffer | undefined {
-    const pending = this.#approvals.get(requestId);
-    if (!pending?.media || pending.approval.agentId !== agentId) return undefined;
-    return structuredClone(pending.media);
-  }
-
-  pendingCreditsHold(agentId: string, requestId: RequestId, canEnable: boolean): CreditsHold | undefined {
-    const pending = this.#approvals.get(requestId);
-    if (!pending?.creditsHold || pending.approval.agentId !== agentId) return undefined;
-    return this.#creditsHoldSummary(pending, pending.creditsHold, canEnable);
-  }
-
-  #creditsHoldGroup(pending: PendingApproval): PendingApproval[] {
-    const { agentId, threadId, turnId } = pending.approval;
-    return [...this.#approvals.values()].filter(
-      (other) =>
-        other.creditsHold !== undefined &&
-        other.approval.agentId === agentId &&
-        other.approval.threadId === threadId &&
-        other.approval.turnId === turnId,
-    );
-  }
-
-  #creditsHoldSummary(pending: PendingApproval, hold: PendingCreditsHold, canEnable: boolean): CreditsHold {
-    const calls = this.#creditsHoldGroup(pending).flatMap((other) =>
-      other.creditsHold ? [other.creditsHold.call] : [],
-    );
-    return {
-      reason: hold.wallet.agentsAllowed() ? "balance" : "agentsOff",
-      images: calls.filter((call) => call.kind === "image").length,
-      videos: calls.filter((call) => call.kind === "video").length,
-      cost: creditsSum(calls.map((call) => call.cost)),
-      balance: hold.balance,
-      canEnable,
-    };
-  }
-
-  #resolveCreditsHolds(group: readonly PendingApproval[], answer: CreditsHoldAnswer): void {
-    for (const pending of group) {
-      if (this.#approvals.get(pending.id) !== pending) continue;
-      this.#approvals.delete(pending.id);
-      this.#routines.markRunningForTurn(pending.approval.turnId);
-      this.#emitInputResolved("approval", pending.id, pending.approval.agentId);
-      pending.creditsHold?.answer(answer);
-    }
-    this.#emitRuntimeSnapshot();
-  }
-
-  readonly respondToCreditsHold = Effect.fn("AttentionRegistry.respondToCreditsHold")(function* (
-    this: AttentionRegistry,
-    input: RespondToCreditsHoldInput,
-    responder?: ApprovalResponder,
-    automatic = false,
-  ) {
-    const { pending, hold } = yield* attentionStep(() => {
-      const value = this.#approvals.get(input.requestId);
-      if (!value?.creditsHold || value.approval.agentId !== input.agentId)
-        throw new InactiveAttentionRequest(sourceText("error.backend.approvalInactive"));
-      if (input.action === "enable" && !respondsAsAdmin(responder))
-        throw new ForbiddenAttentionAnswer(sourceText("error.backend.creditsHoldAdminOnly"));
-      return { pending: value, hold: value.creditsHold };
-    });
-    const canEnable = respondsAsAdmin(responder);
-    const via = automatic ? "automatic" : answerVia(responder);
-    if (input.action === "skip" || input.action === "mute") {
-      this.#resolveCreditsHolds(this.#creditsHoldGroup(pending), {
-        action: input.action,
-        via,
-        ...(responder ? { responder } : {}),
-      });
-      return null;
-    }
-    if (input.action === "enable" && !hold.wallet.agentsAllowed())
-      yield* hold.wallet.enableAgents().pipe(Effect.mapError((cause) => new AttentionOperationFailed({ cause })));
-    if (!hold.wallet.agentsAllowed()) return this.#creditsHoldSummary(pending, hold, canEnable);
-    const balance = yield* hold.wallet.balance();
-    const group = this.#creditsHoldGroup(pending);
-    const cost = creditsSum(group.flatMap((other) => (other.creditsHold ? [other.creditsHold.call.cost] : [])));
-    if (balance !== null && balance < cost) {
-      for (const other of group) if (other.creditsHold) other.creditsHold.balance = balance;
-      return this.#creditsHoldSummary(pending, hold, canEnable);
-    }
-    this.#resolveCreditsHolds(group, {
-      action: "continue",
-      via,
-      ...(input.action === "enable" ? { enabled: true } : {}),
-      ...(responder ? { responder } : {}),
-    });
-    return null;
-  }, Effect.uninterruptible).bind(this);
-
-  recheckCreditsHolds(): void {
-    const seen = new Set<string>();
-    for (const pending of [...this.#approvals.values()]) {
-      if (!pending.creditsHold) continue;
-      const key = `${pending.approval.agentId}\u0000${pending.approval.threadId}\u0000${pending.approval.turnId}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      const report = (error: unknown) =>
-        Effect.sync(() => {
-          if (this.#approvals.get(pending.id) === pending)
-            this.#emitError("credits_hold_recheck_failed", error, pending.approval.agentId);
-        });
-      Effect.runFork(
-        this.respondToCreditsHold(
-          {
-            agentId: pending.approval.agentId,
-            requestId: pending.id,
-            action: "continue",
-          },
-          undefined,
-          true,
-        ).pipe(Effect.catch(report), Effect.catchDefect(report)),
-      );
-    }
   }
 
   hasAttentionFor(agentId: string): boolean {
@@ -1089,45 +861,14 @@ export class AttentionRegistry {
     return { pending: answer.pending, item, saved };
   });
 
-  readonly respondToMediaApproval = Effect.fn("AttentionRegistry.respondToMediaApproval")(function* (
-    this: AttentionRegistry,
-    input: RespondToMediaApprovalInput,
-    responder?: ApprovalResponder,
-  ) {
-    yield* attentionStep(() => {
-      if (!this.pendingMediaApproval(input.agentId, input.requestId))
-        throw new InactiveAttentionRequest(sourceText("error.backend.approvalInactive"));
-    });
-    yield* this.respondToApproval({ requestId: input.requestId, decision: "accept" }, responder, input.choice);
-  }).bind(this);
-
   readonly respondToApproval = Effect.fn("AttentionRegistry.respondToApproval")(function* (
     this: AttentionRegistry,
     input: RespondToApprovalInput,
     responder?: ApprovalResponder,
-    choice?: MediaApprovalChoice,
   ) {
-    const held = this.#approvals.get(input.requestId);
-    if (held?.creditsHold) {
-      const still = yield* this.respondToCreditsHold(
-        {
-          agentId: held.approval.agentId,
-          requestId: input.requestId,
-          action: input.decision === "accept" ? "continue" : "skip",
-        },
-        responder,
-      );
-      if (still)
-        yield* attentionStep(() => {
-          throw new ForbiddenAttentionAnswer(sourceText("error.backend.creditsHoldShort"));
-        });
-      return;
-    }
     const pending = yield* attentionStep(() => {
       const value = this.#approvals.get(input.requestId);
       if (!value) throw new InactiveAttentionRequest(sourceText("error.backend.approvalInactive"));
-      if (choice && !value.media?.models.some((model) => model.id === choice.model))
-        throw new InactiveAttentionRequest(sourceText("error.backend.approvalInactive"));
       if (value.ownerOnly && responder && !responder.owner)
         throw new ForbiddenAttentionAnswer(sourceText("error.backend.approvalOwnerOnly"));
       if (value.needsPhone && input.decision === "accept" && !responder?.phone)
@@ -1138,18 +879,8 @@ export class AttentionRegistry {
     });
     this.#routines.markRunningForTurn(getString(pending.params, "turnId"));
 
-    const mutation = pending.hostedSiteMutation;
     if (pending.decide) {
-      pending.decide(input.decision, responder, choice);
-    } else if (mutation) {
-      this.#approvals.delete(input.requestId);
-      yield* this.#hostedSites
-        .resolveApproval(
-          mutation,
-          { client: pending.client, id: pending.id, agentId: pending.approval.agentId },
-          input.decision,
-        )
-        .pipe(toAttentionOperationFailed);
+      pending.decide(input.decision, responder);
     } else {
       pending.client.respond(
         pending.id,
@@ -1347,47 +1078,6 @@ export class AttentionRegistry {
     return (yield* this.#awaitToolAnswer(client, request, approval, options)).decision;
   }).bind(this);
 
-  readonly awaitMediaApproval = Effect.fn("AttentionRegistry.awaitMediaApproval")(function* (
-    this: AttentionRegistry,
-    client: AgentClient,
-    request: AppServerRequest,
-    approval: AgentApproval,
-    media: MediaApprovalOffer,
-  ) {
-    const answer = yield* this.#awaitToolAnswer(client, request, approval, { alwaysAsk: true, media });
-    const choice = "choice" in answer ? answer.choice : undefined;
-    const via = "via" in answer && answer.via ? answer.via : "local";
-    return { decision: answer.decision, via, ...(choice ? { choice } : {}) } satisfies MediaApprovalAnswer;
-  }).bind(this);
-
-  readonly awaitCreditsHold = Effect.fn("AttentionRegistry.awaitCreditsHold")(function* (
-    this: AttentionRegistry,
-    client: AgentClient,
-    request: AppServerRequest,
-    approval: AgentApproval,
-    hold: { call: CreditsHoldCall; balance: number | null; wallet: CreditsHoldWallet },
-  ) {
-    if (request.signal?.aborted) return { action: "skip" } satisfies CreditsHoldAnswer;
-    const answer = Deferred.makeUnsafe<CreditsHoldAnswer>();
-    const settle = (value: CreditsHoldAnswer) => Deferred.doneUnsafe(answer, Effect.succeed(value));
-    this.#holdApproval({
-      client,
-      id: request.id,
-      method: TOOL_APPROVAL_METHOD,
-      params: request.params,
-      approval,
-      decide: (decision, responder) =>
-        settle(
-          decision === "cancel"
-            ? { action: "skip", stopped: true }
-            : { action: decision === "accept" ? "continue" : "skip", via: answerVia(responder) },
-        ),
-      creditsHold: { ...hold, answer: settle },
-      alwaysAsk: true,
-    });
-    return yield* Deferred.await(answer);
-  }).bind(this);
-
   readonly awaitPhoneFeedbackApproval = Effect.fn("AttentionRegistry.awaitPhoneFeedbackApproval")(function* (
     this: AttentionRegistry,
     client: AgentClient,
@@ -1406,7 +1096,6 @@ export class AttentionRegistry {
       readonly alwaysAsk?: boolean;
       readonly ownerOnly?: boolean;
       readonly needsPhone?: boolean;
-      readonly media?: MediaApprovalOffer;
     },
   ) {
     if (request.signal?.aborted) return { decision: "cancel" } as const;
@@ -1415,8 +1104,6 @@ export class AttentionRegistry {
     const answer = Deferred.makeUnsafe<{
       decision: ToolApprovalDecision;
       phone?: FeedbackPhone;
-      choice?: MediaApprovalChoice;
-      via?: CreditAnswerVia;
     }>();
     this.#holdApproval({
       client,
@@ -1424,50 +1111,20 @@ export class AttentionRegistry {
       method: TOOL_APPROVAL_METHOD,
       params: request.params,
       approval,
-      decide: (decision, responder, choice) =>
+      decide: (decision, responder) =>
         Deferred.doneUnsafe(
           answer,
           Effect.succeed({
             decision,
-            via: answerVia(responder),
             ...(responder?.phone ? { phone: responder.phone } : {}),
-            ...(choice && decision === "accept" ? { choice } : {}),
           }),
         ),
-      ...(options.media ? { media: options.media } : {}),
       ...(alwaysAsk ? { alwaysAsk: true } : {}),
       ...(options.ownerOnly ? { ownerOnly: true } : {}),
       ...(options.needsPhone ? { needsPhone: true } : {}),
     });
     return yield* Deferred.await(answer);
   }).bind(this);
-
-  readonly surfaceHostedSiteApproval = Effect.fn("AttentionRegistry.surfaceHostedSiteApproval")(function* (
-    this: AttentionRegistry,
-    client: AgentClient,
-    request: AppServerRequest,
-    params: DynamicToolCallParams,
-    tool: HostedSiteMutationTool,
-  ) {
-    const prepared = yield* this.#hostedSites
-      .prepareApproval(client, request, params, tool)
-      .pipe(toAttentionOperationFailed);
-    if (!prepared || request.signal?.aborted) return;
-    if (this.#answersForAgent(prepared.approval.agentId)) {
-      yield* this.#hostedSites
-        .resolveApproval(prepared.mutation, { client, id: request.id, agentId: prepared.approval.agentId }, "accept")
-        .pipe(toAttentionOperationFailed);
-      return;
-    }
-    this.#holdApproval({
-      client,
-      id: request.id,
-      method: HOSTED_SITE_APPROVAL_METHOD,
-      params,
-      approval: prepared.approval,
-      hostedSiteMutation: prepared.mutation,
-    });
-  }, Effect.uninterruptible).bind(this);
 
   surfaceLegacyApproval(client: AgentClient, request: AppServerRequest): void {
     const threadId = getString(request.params, "conversationId");
@@ -1795,155 +1452,6 @@ export class AttentionRegistry {
         }),
     };
   }
-
-  readonly requestLinkPayment = Effect.fn("AttentionRegistry.requestLinkPayment")(function* (
-    this: AttentionRegistry,
-    params: DynamicToolCallParams,
-  ) {
-    const call = yield* attentionStep(() => parseBrowserToolCall("request_link_payment", params.arguments));
-    if (call.tool !== "request_link_payment")
-      return yield* new AttentionOperationFailed({ cause: new Error("Invalid Link payment request.") });
-    const wallet = this.#linkWallet;
-    if (!wallet?.connected()) return browserTakeoverError(LINK_UNAVAILABLE);
-    const answer = yield* Effect.result(wallet.requestPayment(call.args));
-    if (Result.isFailure(answer)) return browserTakeoverError(`Link payment failed: ${answer.failure.message}`);
-    const result = answer.success;
-    const next =
-      result.status === "approved"
-        ? "Take a fresh snapshot of the checkout and call fill_card with this cardId."
-        : "Do not ask Link again for this purchase. Tell the user.";
-    return {
-      success: result.status === "approved",
-      contentItems: [{ type: "inputText", text: JSON.stringify({ ...result, next }) }],
-    } satisfies DynamicToolResult;
-  }).bind(this);
-
-  readonly requestNearPayment = Effect.fn("AttentionRegistry.requestNearPayment")(function* (
-    this: AttentionRegistry,
-    client: AgentClient,
-    request: AppServerRequest,
-    params: DynamicToolCallParams,
-  ) {
-    const call = yield* attentionStep(() => parseBrowserToolCall("request_near_payment", params.arguments));
-    if (call.tool !== "request_near_payment")
-      return yield* new AttentionOperationFailed({ cause: new Error("Invalid NEAR payment request.") });
-    const wallet = this.#nearWallet;
-    const agentId = params.ownerAgentId;
-    if (!wallet?.ready() || !agentId) return browserTakeoverError(NEAR_UNAVAILABLE);
-    if (this.#messagingThread(params.threadId) || this.#messagingRequestTurn(agentId, params.turnId))
-      return browserTakeoverError(
-        "request_near_payment does not work for a request from a Slack, Discord or Telegram chat. Ask the user to start the payment in the CodeBot chat.",
-      );
-    const requestId = String(request.id);
-    const plan = yield* Effect.result(wallet.prepare({ agentId, threadId: params.threadId, requestId, ...call.args }));
-    if (Result.isFailure(plan))
-      return browserTakeoverError(`NEAR payment refused: ${plan.failure.message} Do not try again; tell the user.`);
-    if (plan.success.kind === "ask") {
-      const decision = yield* this.awaitToolApproval(
-        client,
-        request,
-        {
-          requestId: request.id,
-          agentId,
-          threadId: params.threadId,
-          turnId: params.turnId,
-          kind: "permissions",
-          command: null,
-          cwd: null,
-          reason: sourceText("status.agent.nearPayment", {
-            amount: plan.success.amount,
-            symbol: plan.success.symbol,
-            recipient: call.args.recipient,
-            domain: call.args.domain,
-            reason: call.args.reason,
-          }),
-          grantRoot: null,
-          permissions: null,
-        },
-        { ownerOnly: true },
-      ).pipe(Effect.onInterrupt(() => Effect.sync(() => wallet.drop(requestId))));
-      if (decision !== "accept") {
-        wallet.drop(requestId);
-        return browserTakeoverError("The owner declined this NEAR payment. Do not ask again; tell the user.");
-      }
-    }
-    const paid = yield* Effect.result(wallet.pay(requestId));
-    if (Result.isFailure(paid)) return browserTakeoverError(`NEAR payment failed: ${paid.failure.message}`);
-    const result = paid.success;
-    const next =
-      result.status === "paid"
-        ? "Go back to the site and continue."
-        : result.status === "uncertain"
-          ? "Do not pay again. CodeBot finishes this payment; tell the user to check the wallet in Server settings > Vault > Crypto."
-          : "Do not try again; tell the user.";
-    return {
-      success: result.status === "paid",
-      contentItems: [{ type: "inputText", text: JSON.stringify({ ...result, next }) }],
-    } satisfies DynamicToolResult;
-  }).bind(this);
-
-  readonly linkCardVault = Effect.fn("AttentionRegistry.linkCardVault")(function* (
-    this: AttentionRegistry,
-    client: AgentClient,
-    request: AppServerRequest,
-    params: DynamicToolCallParams,
-  ): Effect.fn.Return<BrowserCardVault | DynamicToolResult | null> {
-    if (params.tool !== "fill_card") return null;
-    const call = yield* Effect.result(attentionStep(() => parseBrowserToolCall("fill_card", params.arguments)));
-    if (Result.isFailure(call) || call.success.tool !== "fill_card") return null;
-    const cardId = call.success.args.cardId;
-    if (!cardId.startsWith(LINK_CARD_ID_PREFIX)) return null;
-    const wallet = this.#linkWallet;
-    const agentId = params.ownerAgentId;
-    if (!wallet?.connected() || !agentId) return browserTakeoverError(LINK_UNAVAILABLE);
-    const read = yield* Effect.result(wallet.card(cardId));
-    if (Result.isFailure(read)) return browserTakeoverError(`Link card failed: ${read.failure.message}`);
-    const card = read.success;
-    if (!card) return browserTakeoverError("Link has no approved card with this id. Call request_link_payment first.");
-    const merchant = httpsHost(card.merchantUrl);
-    const onMerchant = (address: string) => merchant !== null && sameSite(address, merchant);
-    const approvedFrames = new Map<string, Set<string>>();
-    return {
-      secret: (id) => (id === cardId ? card.secret : null),
-      approved: (id, page, frames) =>
-        id === cardId &&
-        [page, ...frames].every((frame) => onMerchant(frame) || approvedFrames.get(page)?.has(frame) === true),
-      approve: (id, page, frames) =>
-        Effect.gen({ self: this }, function* () {
-          if (id !== cardId) return false;
-          const others = frames.filter((frame) => frame !== page && !onMerchant(frame));
-          const decision = yield* this.awaitToolApproval(
-            client,
-            request,
-            {
-              requestId: request.id,
-              agentId,
-              threadId: params.threadId,
-              turnId: params.turnId,
-              kind: "permissions",
-              command: null,
-              cwd: null,
-              reason: [
-                sourceText("status.agent.linkCardFill", {
-                  card: `•••• ${card.secret.number.slice(-4)}`,
-                  site: page,
-                  merchant: card.merchantUrl || "?",
-                }),
-                ...(others.length > 0
-                  ? [sourceText("status.agent.vaultCardFillFrames", { origins: others.join(", ") })]
-                  : []),
-              ].join(" "),
-              grantRoot: null,
-              permissions: null,
-            },
-            { ownerOnly: true },
-          );
-          if (decision !== "accept") return false;
-          approvedFrames.set(page, new Set([...(approvedFrames.get(page) ?? []), page, ...frames]));
-          return true;
-        }),
-    } satisfies BrowserCardVault;
-  }).bind(this);
 
   readonly saveVaultItem = Effect.fn("AttentionRegistry.saveVaultItem")(function* (
     this: AttentionRegistry,
@@ -2640,20 +2148,6 @@ export class AttentionRegistry {
     this.#emitInputResolved("approval", pending.id, pending.approval.agentId);
     pending.decide?.("cancel");
     if (pending.decide || !pending.client.running) return;
-    if (pending.hostedSiteMutation) {
-      const report = (error: unknown) =>
-        Effect.sync(() => this.#emitError("approval_cleanup_failed", error, pending.approval.agentId));
-      Effect.runFork(
-        this.#hostedSites
-          .resolveApproval(
-            pending.hostedSiteMutation,
-            { client: pending.client, id: pending.id, agentId: pending.approval.agentId },
-            "decline",
-          )
-          .pipe(Effect.catch(report), Effect.catchDefect(report)),
-      );
-      return;
-    }
     try {
       pending.client.respond(
         pending.id,

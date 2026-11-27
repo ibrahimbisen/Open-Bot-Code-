@@ -171,8 +171,6 @@ export const messages = {
     "Локальные скрипты запускали регулярные задачи этого агента {limit} раз за последний час. Повторите попытку позже.",
   "error.agent.workspaceOnlyMacOnly":
     "Режим «Только рабочее пространство» для этого провайдера доступен только в macOS. Выберите «Полный доступ» в настройках агента.",
-  "error.agent.lowMemory":
-    "На этом сервере мало памяти. Ваше сообщение ждёт в очереди и начнётся, когда память освободится. Более крупный тариф даёт серверу больше памяти.",
   "error.agent.lowMemoryServer":
     "На этом сервере мало памяти. Ваше сообщение ждёт в очереди и начнётся, когда память освободится.",
   "error.agent.workspaceOnlyToolMissing":
@@ -191,8 +189,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "Снимки экрана не работают в диалогах Slack, Discord или Telegram, потому что их файлы получают другие люди.",
   "error.agent.screenCaptureDeclined": "Пользователь не разрешил этот снимок экрана. Ничего не снято.",
-  "error.agent.creditMediaDeclined": "Пользователь не разрешил эту генерацию. Кредиты не списаны.",
-  "error.agent.creditMediaNotSaved": "Файл создан, но CodeBot не смог сохранить его в чате.",
   "error.agent.mcpToolDeclined": "Пользователь не разрешил этот вызов инструмента MCP. Инструмент не был запущен.",
   "error.agent.screenCaptureWindowMissing":
     "Это окно сейчас не открыто. Вызовите list_capture_sources, чтобы получить текущие ID окон.",

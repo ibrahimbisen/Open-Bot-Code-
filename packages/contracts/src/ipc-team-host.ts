@@ -1,4 +1,3 @@
-import type { CustomServerPlan } from "./custom-server-plans";
 import { type AvatarColor, isAvatarColor } from "./ipc-agent-identity";
 import type { AvatarImageInput } from "./ipc-agents";
 import type { IceServer } from "./signal-protocol/messages";
@@ -87,12 +86,6 @@ export interface ServerSummary {
   role: TeamRole | null;
   active: boolean;
   memberLimit?: number;
-  licenseRaisesMemberLimit?: boolean;
-  hosted?: boolean;
-  restartAvailable?: boolean;
-  storageGb?: number;
-  paymentRequired?: true;
-  customPlan?: CustomServerPlan;
   keyChangedAt?: number;
   thisComputer?: true;
   hidden?: boolean;
@@ -101,21 +94,7 @@ export interface ServerSummary {
   connectionSequence?: number;
   capabilitiesPending?: true;
   hostRestart?: { state: Exclude<HostRestartState, "none">; version: string | null } | null;
-  hostedSleep?: HostedServerSleep | null;
-  hostedIssue?: HostedServerIssue | null;
-  hostedStart?: HostedServerStart | null;
 }
-
-export type HostedServerIssue = "plan_ended" | "wake_failed" | "start_timeout";
-
-export type HostedServerStartStep = "machine" | "restore" | "codebot" | "provider_limit";
-
-export interface HostedServerStart {
-  step: HostedServerStartStep;
-  startedAt: number;
-}
-
-export type HostedServerSleep = "sleeping" | "waking";
 
 export interface JoinServerInput {
   inviteUrl: string;

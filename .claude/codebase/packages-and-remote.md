@@ -141,7 +141,7 @@ Connector code that uses this package: `src/backend/messaging/whatsapp/` (9 file
 | `docs/self-hosting.md` | Run your own account service (Cloudflare Worker), Signal and TURN. Steps 1 to 4 and updates. |
 | `docs/self-hosted-server.md` | Linux server install (`scripts/install-server.sh`), server claims, `codebot` commands, control socket, Hermes install, display size, Not confirmed list. |
 | `docs/docker.md` | Container run, network, tags, data paths, instances, backups, updates, memory, environment variables, security, limits. |
-| `docs/remote-session-deployment.md` | Issue #325 evidence and production procedure. Production steps need separate approval. |
+| `docs/self-hosting.md` | Self-hosted Signal and TURN setup. The former `docs/remote-session-deployment.md` is deleted. |
 
 ## How it works
 
@@ -180,7 +180,7 @@ Connector code that uses this package: `src/backend/messaging/whatsapp/` (9 file
 - Relay health: each relay is probed once a minute by a real Allocate (`turn-probe.ts`). `/health/turn` reports only the relay of `TURN_HOST` (cached 1 min). Metric `codebot_remote_turn_relay_available{host=...}` shows each relay.
 - Two Signal machines: `SignalEntry` (`entry.ts`) resolves `SIGNAL_ENTRY_HOST` and checks whether `SIGNAL_PUBLIC_IPV4` is in the answer. Two misses in a row end the entry role. Metric `codebot_remote_signal_entry` shows 1 or 0.
 - Sleeping hosted servers: `ingress-queue.ts` keeps sealed events for at most 10 min, 64 events and 192 KiB per host, when the host has sent a queue key.
-- Restart behavior: Signal has no database. Rooms and presence exist only in memory. Replacing Signal closes its WebSocket sockets. Existing WebRTC data channels stay up (`remote/README.md`, and `docs/remote-session-deployment.md`).
+- Restart behavior: Signal has no database. Rooms and presence exist only in memory. Replacing Signal closes its WebSocket sockets. Existing WebRTC data channels stay up (`remote/README.md`, `docs/self-hosting.md`).
 
 ### Coturn (`remote/coturn`)
 
@@ -216,7 +216,7 @@ Connector code that uses this package: `src/backend/messaging/whatsapp/` (9 file
 2. Add it to `remote/compose.yaml` under `remote-api.environment`. Use `${NAME:-}` for optional values, `${NAME:?...}` for required values.
 3. Add the name (not a value) to `remote/.env.example`. Document it in `remote/README.md`.
 4. Check: `bun run remote:check` (root script) and `bun run remote:check:compose`. For a local check, `bun remote/scripts/check.ts --compose` checks only the compose files.
-5. For a production value, edit `remote/.env.production` through the Dotenvx wrapper (`remote/bin/dotenvx`, the exact edit command is unverified here). Check it with `bun run remote:env:validate`. Do not paste values into chat or docs. Production changes need approval (see `docs/remote-session-deployment.md`).
+5. For a production value, edit `remote/.env.production` through the Dotenvx wrapper (`remote/bin/dotenvx`, the exact edit command is unverified here). Check it with `bun run remote:env:validate`. Do not paste values into chat or docs. Production changes need approval (see `docs/self-hosting.md`).
 
 ### Add a Signal route or message
 
@@ -233,7 +233,7 @@ Connector code that uses this package: `src/backend/messaging/whatsapp/` (9 file
 ### Change the TURN relay port range
 
 1. Edit `min-port` and `max-port` in `remote/coturn/turnserver.conf`. For dev, set `TURN_MIN_PORT` and `TURN_MAX_PORT` (the entrypoint writes them too).
-2. Open the new range in the firewall first (`docs/remote-session-deployment.md`, coturn configuration update).
+2. Open the new range in the firewall first (`docs/self-hosting.md`, coturn configuration).
 3. Recreate coturn with the procedure in that doc. Do it in a quiet hour, one machine at a time.
 
 ### Add a team-client module
@@ -320,7 +320,7 @@ Follow `docs/self-hosted-server.md`, section Install: `curl -fsSL .../scripts/in
 - The nginx file name in `remote/README.md` is `nginx/signal.openbot.run.conf`, but the file in the repo is `remote/nginx/signal.codebot.run.conf`. Use the real file name (unverified which name the server uses).
 - `remote/coturn/entrypoint.sh` appends `min-port` and `max-port` after copying `turnserver.conf`, but only when `TURN_MIN_PORT` and `TURN_MAX_PORT` are set (the dev compose sets them). Then the runtime file has duplicate keys. Which value coturn keeps is unverified.
 - `/health/turn` makes a real allocation every minute (cached 1 min). It can briefly take a relay slot.
-- `docs/remote-session-deployment.md` holds production hostnames and an SSH alias. Its deployment steps need separate approval. Do not run them from a map or a dev task.
+- The old deployment doc `docs/remote-session-deployment.md` was deleted; it held upstream hostnames. Production-like steps need separate approval.
 - The remote API image copies only `packages/contracts` and `packages/i18n` into the final stage. This works because `remote/api/src` imports only those (checked by grep). Do not import other workspace packages in `remote/api` without updating `remote/api/Dockerfile`.
 
 ### team-client

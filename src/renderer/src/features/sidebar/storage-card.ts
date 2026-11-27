@@ -1,10 +1,9 @@
-import { hostedPlanDisk } from "@codebot/contracts/hosted-servers";
 import type { ServerSummary, StorageDisk } from "@codebot/contracts/ipc";
 import { STORAGE_DISK_CAPABILITY } from "@codebot/contracts/team-protocol/storage-disk-v1";
 import type { SidebarStorageLevel } from "@codebot/ui/features/sidebar/SidebarStorageCard";
 import { createMemo, createSignal, untrack } from "solid-js";
 import { createUsageRefreshPoll } from "../account/usage-refresh-poll";
-import { canManageStorage, hostedPlanStorageGb } from "../files/storage-usage";
+import { canManageStorage } from "../files/storage-usage";
 import { serverSupportsCapability } from "../servers/server-capabilities";
 import { type SidebarCardsPort, sidebarPort } from "./sidebar-port";
 
@@ -12,12 +11,11 @@ const GB = 1024 ** 3;
 
 const DISMISSED_KEY_PREFIX = "codebot:storage-card-dismissed:";
 
-function storageLevel(disk: StorageDisk, storageGb: number | null): SidebarStorageLevel | null {
-  const { freeBytes, totalBytes } = storageGb === null ? disk : hostedPlanDisk(disk, storageGb);
+function storageLevel(disk: StorageDisk): SidebarStorageLevel | null {
+  const { freeBytes, totalBytes } = disk;
   if (freeBytes === null || totalBytes === null || totalBytes <= 0) return null;
   if (freeBytes < Math.min(totalBytes * 0.02, GB)) return "full";
-  if (freeBytes < (storageGb === null ? Math.min(totalBytes * 0.1, 5 * GB) : Math.min(totalBytes * 0.2, 10 * GB)))
-    return "low";
+  if (freeBytes < Math.min(totalBytes * 0.1, 5 * GB)) return "low";
   return null;
 }
 
@@ -36,35 +34,14 @@ function writeDismissed(serverId: string, dismissed: boolean): void {
   } catch {}
 }
 
-const UPGRADE_OFFERED_KEY_PREFIX = "codebot:server-upgrade-offered:";
-
-export function readUpgradeOffered(serverId: string): SidebarStorageLevel | null {
-  try {
-    const value = window.localStorage.getItem(UPGRADE_OFFERED_KEY_PREFIX + serverId);
-    return value === "low" || value === "full" ? value : null;
-  } catch {
-    return null;
-  }
-}
-
-export function writeUpgradeOffered(serverId: string, level: SidebarStorageLevel): boolean {
-  try {
-    window.localStorage.setItem(UPGRADE_OFFERED_KEY_PREFIX + serverId, level);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function clearUpgradeOffered(serverId: string): void {
   try {
-    window.localStorage.removeItem(UPGRADE_OFFERED_KEY_PREFIX + serverId);
+    window.localStorage.removeItem("codebot:server-upgrade-offered:" + serverId);
   } catch {}
 }
 
 export function createStorageCard(server: () => ServerSummary | undefined, port: () => SidebarCardsPort = sidebarPort) {
   const [disk, setDisk] = createSignal<{ serverId: string; disk: StorageDisk } | null>(null);
-  const storageGb = createMemo(() => hostedPlanStorageGb(server()));
   const [dismissals, setDismissals] = createSignal(0);
   const target = createMemo(() => {
     const current = server();
@@ -80,7 +57,7 @@ export function createStorageCard(server: () => ServerSummary | undefined, port:
         (answer) => {
           if (untrack(target) !== serverId) return;
           setDisk(answer ? { serverId, disk: answer } : null);
-          if (answer && storageLevel(answer, untrack(storageGb)) === null) {
+          if (answer && storageLevel(answer) === null) {
             writeDismissed(serverId, false);
             clearUpgradeOffered(serverId);
           }
@@ -96,9 +73,8 @@ export function createStorageCard(server: () => ServerSummary | undefined, port:
     card: createMemo(() => {
       const current = disk();
       if (!current || current.serverId !== target()) return null;
-      const plan = storageGb();
-      const level = storageLevel(current.disk, plan);
-      const { freeBytes, totalBytes } = plan === null ? current.disk : hostedPlanDisk(current.disk, plan);
+      const level = storageLevel(current.disk);
+      const { freeBytes, totalBytes } = current.disk;
       if (!level || freeBytes === null || totalBytes === null) return null;
       dismissals();
       if (level === "low" && readDismissed(current.serverId)) return null;
@@ -108,7 +84,6 @@ export function createStorageCard(server: () => ServerSummary | undefined, port:
         serverId: current.serverId,
         freeBytes,
         totalBytes,
-        hostedPlan: plan !== null,
         thisComputer: selected?.kind === "local" || selected?.thisComputer === true,
       };
     }),

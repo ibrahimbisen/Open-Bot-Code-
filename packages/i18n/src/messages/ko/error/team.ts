@@ -141,7 +141,6 @@ export const messages = {
   "error.team.claudeUserSetupUnsupported": "이 연결은 Claude Code 설정 스위치를 지원하지 않아요.",
   "error.team.claudeCompactWindowUnsupported": "이 연결은 Claude 압축 크기를 지원하지 않아요.",
   "error.team.cacheExpiryCompactionUnsupported": "이 연결은 캐시가 만료되기 전 압축을 지원하지 않아요.",
-  "error.team.mediaApprovalCreditsUnsupported": "이 연결은 크레딧 승인 한도를 지원하지 않아요.",
   "error.team.mediaApprovalCreditsInvalid": "0에서 100,000 사이의 정수로 크레딧을 입력해 주세요.",
   "error.team.providerEnvironmentUnsupported": "이 연결은 공급자 변수를 지원하지 않아요.",
   "error.team.modelVisibilityUnsupported": "이 연결에서는 모델 목록을 지원하지 않아요.",
@@ -165,9 +164,6 @@ export const messages = {
   "error.team.storageUnsupported": "이 연결에서는 스토리지를 지원하지 않아요.",
   "error.team.machineResourcesUnsupported": "이 연결에서는 머신 사용량을 지원하지 않아요.",
   "error.team.machineAlertMemberInvalid": "이 서버의 소유자나 관리자만 머신 알림을 받을 수 있어요.",
-  "error.team.hostedSitesUnsupported": "이 연결에서는 사이트를 지원하지 않아요.",
-  "error.team.hostedSitesUnregistered": "이 서버는 CodeBot에 등록되어 있지 않아서 사이트가 없어요.",
-  "error.team.hostedSiteNotFound": "사이트를 찾을 수 없어요.",
   "error.team.markUnreadUnsupported": "이 클라이언트는 대화를 읽지 않음으로 표시하는 기능을 지원하지 않아요.",
   "error.team.inviteServiceUnavailable": "초대 서비스를 사용할 수 없어요.",
   "error.team.logoNotFound": "서버 로고를 찾을 수 없어요.",
@@ -208,7 +204,4 @@ export const messages = {
   "error.team.backgroundProcessesUnsupported": "이 연결에서는 백그라운드 프로세스를 지원하지 않아요.",
   "error.team.providerUseUnsupported": "이 연결에서는 제공자를 켜고 끌 수 없어요.",
   "error.team.providerUseInvalid": "이 제공자에는 켜기/끄기 스위치가 없어요.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "이 서버는 미디어 승인에서 모델 선택을 지원하지 않습니다. 서버의 CodeBot을 업데이트하세요.",
-  "error.team.mediaApprovalChoiceInvalid": "미디어 승인 선택이 올바르지 않습니다.",
 } as const satisfies PartialTranslation<typeof source>;

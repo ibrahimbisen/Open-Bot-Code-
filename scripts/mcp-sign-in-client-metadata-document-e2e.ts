@@ -11,7 +11,7 @@ import { McpOAuth, type McpOAuthRecord, mcpOAuthRecordSchema } from "../src/back
 import { testMcpServer } from "../src/backend/mcp-probe";
 
 const out = resolve(import.meta.dirname, "../.codebot-build/mcp-sign-in-client-metadata-document-e2e");
-const CLIENT_METADATA_URL = "https://openbot.run/oauth/mcp-client.json";
+const CLIENT_METADATA_URL = "https://mcp-oauth.codebot.invalid/oauth/mcp-client.json";
 const REDIRECT_URL = "http://127.0.0.1:28417/mcp-auth";
 const OTHER_REDIRECT_URL = "http://127.0.0.1:28418/mcp-auth";
 const ACCESS_TOKEN = "e2e-access-token";

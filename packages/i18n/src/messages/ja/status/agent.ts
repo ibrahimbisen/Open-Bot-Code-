@@ -28,12 +28,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "メイン画面をキャプチャし、その画像をエージェントのモデルに送信します。",
   "status.agent.screenCaptureChannel":
     "画像はチャンネル {channel} に表示され、このサーバーでチャンネルを読むメンバー全員が見ることができます。",
-  "status.agent.creditImageApproval": "{model} で画像を生成します。{credits} クレジットを使います。",
-  "status.agent.creditVideoApproval": "{model} で動画を生成します。{credits} クレジットを使います。",
-  "status.agent.creditMediaChannel":
-    "結果はチャンネル {channel} に表示され、このサーバーでチャンネルを読むすべてのメンバーが見られます。",
-  "status.agent.creditsHoldBalance": "{credits} クレジットを使い、残高は {balance} クレジットです。",
-  "status.agent.creditsHoldAgentsOff": "このサーバーのエージェントはクレジットを使えません。",
   "status.agent.screenCapturePermissionNext": "その後、macOS が CodeBot に画面収録を許可するよう求めることがあります。",
   "status.agent.screenCaptureDisplay":
     "ディスプレイ {name} をキャプチャし、その画像をエージェントのモデルに送信します。",
@@ -53,9 +47,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "このレポートは GitHub で誰も見られなくなります。元に戻せません。修正するには、エージェントが修正したレポートを送信できます。",
   "status.agent.feedbackWithdrawing": "レポートを GitHub から削除しています…",
-  "status.agent.serverInstallCommand":
-    "別のコンピューターに CodeBot をサーバー {name} としてインストールし、あなたのアカウントにサインインさせる 1 回限りのコマンドを作成します。エージェントがそこで実行します。",
-  "status.agent.serverInstallCard": "サーバー {name} のインストールコマンド",
   "status.agent.browserProfileNamed":
     "{agents} をブラウザープロファイル {profile} に移動します。そのログイン情報と Cookie を使えるようになります。開いているタブは閉じます。",
   "status.agent.commitCoAuthorOff": "すべてのエージェントのコミットに CodeBot を共同作成者として追加するのをやめます。",
@@ -70,21 +61,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "ワークフロー {title} を実行履歴とバージョンごと削除します。実行中のステップは停止します。",
   "status.agent.deleteAgents": "{agents} をチャットとファイルごと削除します。元に戻せません。",
-  "status.agent.nearSignatureReceived": "CodeBot が署名を受け取りました。このタブは閉じてかまいません。",
-  "status.agent.nearSignatureUnknown": "CodeBot はこの署名を待っていません。CodeBot でもう一度始めてください。",
-  "status.agent.nearPayment":
-    "{domain} のため、暗号資産ウォレットから {recipient} に {amount} {symbol} を支払います: {reason}",
-  "status.agent.nearSummaryCreate":
-    "すべてのエージェントが 1 日あたり最大 {amount} USD まで支払えます。あとで CodeBot で変更できます。",
-  "status.agent.nearSummaryGrant":
-    "この CodeBot アプリが、あなたのルールの範囲内で {days} 日間ウォレットから支払えるようにします。",
-  "status.agent.nearSummaryBudget": "ウォレットの 1 日の予算を {amount} USD に変更します。",
-  "status.agent.nearSummaryAutoPay":
-    "支払いルールで許可されている場合は、CodeBot があなたの署名なしで支払えるようにします。その他の支払いは引き続きチャットで確認します。",
-  "status.agent.nearSummaryPayment": "{recipient} への {amount} の支払いを承認します。",
-  "status.agent.nearSummaryFreeze": "支払いを再開するまで、エージェントはこのウォレットから支払えません。",
-  "status.agent.nearSummaryUnfreeze":
-    "エージェントは、あなたのルールの範囲内で再びこのウォレットから支払えるようになります。",
   "status.agent.screenCaptureProgress": "画面のキャプチャを要求しています…",
   "status.agent.screenCaptureReviewing": "画面のキャプチャを確認しています…",
   "status.agent.browserOpening": "Web ページを開いています…",
@@ -92,7 +68,6 @@ export const messages = {
   "status.agent.browserClicking": "Web ページをクリックしています…",
   "status.agent.browserTyping": "Web ページに入力しています…",
   "status.agent.browserActing": "Web ページを操作しています…",
-  "status.agent.browserPaying": "支払いを送信しています…",
   "status.agent.browserReviewing": "Web ページを確認しています…",
   "status.agent.memoriesSearching": "メモリーを検索しています…",
   "status.agent.chatsSearching": "過去のチャットを検索しています…",

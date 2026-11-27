@@ -1068,7 +1068,6 @@ function markerLabel(
   if (marker.kind === "setting-link") return t("chat.marker.settingLink");
   if (marker.kind === "skill-suggestion") return t("chat.marker.skillSuggestion");
   if (marker.kind === "mcp-sign-in") return t("chat.marker.mcpSignIn");
-  if (marker.kind === "server-install") return t("chat.marker.serverInstall");
   if (marker.kind === "skill-lifecycle") return t(SKILL_ACTION_LABELS[marker.action]);
   if (marker.kind === "agent-message") {
     if (marker.expectsReply)
@@ -1146,7 +1145,6 @@ function markerAccessibleLabel(
     marker.kind === "marketplace-suggestion" ||
     marker.kind === "setting-link" ||
     marker.kind === "mcp-sign-in" ||
-    marker.kind === "server-install" ||
     marker.kind === "model-switch" ||
     marker.kind === "channel-change" ||
     marker.kind === "vault-change" ||

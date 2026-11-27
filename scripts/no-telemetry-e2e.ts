@@ -143,7 +143,6 @@ await check("analytics call sites run with no network request and no file write"
     host.handleFailure(anything);
     host.handleToolUsage(anything);
     host.handleWorkflowRun(anything);
-    host.handleCreditMedia(anything);
     host.handleWebhookDelivery(anything);
     host.handleSiteVisit(anything);
     host.checkResources();

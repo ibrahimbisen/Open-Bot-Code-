@@ -1,7 +1,6 @@
 import { isManagedRuntimeProvider, type ManagedProviderId } from "@codebot/contracts/agent-providers";
 import type { AgentProviderStatus, AgentStatus } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
-import { CodexCliError, resolveClaudeCli, resolveCodexCli } from "../backend/cli";
 import type { ProviderRuntimeManager } from "./provider-runtime-manager";
 import type { ProviderUseSettingsStore } from "./provider-use-settings-store";
 
@@ -12,7 +11,6 @@ export interface SystemCliTrackerDependencies {
   >;
   providerUse: Pick<ProviderUseSettingsStore, "off" | "installed">;
   agentProviders: () => ReadonlySet<string>;
-  hosted: boolean;
   server: boolean;
 }
 
@@ -20,27 +18,8 @@ export function createSystemCliTracker({
   runtimes,
   providerUse,
   agentProviders,
-  hosted,
   server,
 }: SystemCliTrackerDependencies): (status: Pick<AgentStatus, "providers">) => void {
-  const resolvesAsMissing = (provider: "claude" | "codex") =>
-    (provider === "claude" ? resolveClaudeCli : resolveCodexCli)({
-      bundledExecutable: runtimes.executablePath(provider),
-    }).pipe(
-      Effect.as(false),
-      Effect.catch((failure) =>
-        Effect.succeed(failure.cause instanceof CodexCliError && failure.cause.code === "missing"),
-      ),
-    );
-  const hostedCliDownload = (provider: AgentProviderStatus, used: ReadonlySet<string>) => {
-    if (provider.state === "outdated") return Effect.succeed(true);
-    if (!used.has(provider.id) || provider.cliSource !== undefined || provider.version !== null) return null;
-    if (provider.state === "not-installed") return Effect.succeed(true);
-    if (provider.state === "error" && (provider.id === "claude" || provider.id === "codex"))
-      return resolvesAsMissing(provider.id);
-    return null;
-  };
-  const hostedStarted = new Set<ManagedProviderId>();
   const incompleteStarted = new Set<ManagedProviderId>();
   const replacesIncompleteCli = (
     provider: AgentProviderStatus,
@@ -76,13 +55,7 @@ export function createSystemCliTracker({
       if (replacesIncompleteCli(provider, runtime, used)) {
         incompleteStarted.add(runtime);
         startDownload(runtime, Effect.succeed(true));
-        continue;
       }
-      if (!hosted || hostedStarted.has(runtime)) continue;
-      const needsDownload = hostedCliDownload(provider, used());
-      if (needsDownload === null) continue;
-      hostedStarted.add(runtime);
-      startDownload(runtime, needsDownload);
     }
     if (copyInUse) Effect.runFork(runtimes.providerUseChanged());
   };

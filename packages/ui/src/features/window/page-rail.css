@@ -77,12 +77,6 @@
   height: var(--codebot-space-6);
 }
 
-.window-rail-button.window-rail-server > .window-rail-server-sleep {
-  position: absolute;
-  inset-block-end: var(--codebot-space-1);
-  inset-inline-end: var(--codebot-space-1);
-}
-
 .window-rail-button {
   --codebot-icon-stroke: var(--codebot-icon-stroke-lg);
 
@@ -240,36 +234,6 @@
   font-weight: var(--codebot-weight-semibold);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-}
-
-.credit-rail-tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.credit-rail-icon .credit-icon {
-  transition:
-    rotate var(--codebot-duration-overlay) var(--codebot-ease-out),
-    scale var(--codebot-duration-overlay) var(--codebot-ease-out);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .credit-rail-icon:hover .credit-icon {
-    rotate: 90deg;
-    scale: 1.12;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .credit-rail-icon .credit-icon {
-    transition: none;
-  }
-
-  .credit-rail-icon:hover .credit-icon {
-    rotate: none;
-    scale: none;
-  }
 }
 
 .window-rail-credits-count[data-usage-tone="warning"] {

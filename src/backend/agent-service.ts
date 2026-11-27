@@ -9,7 +9,6 @@ import {
   customAgentIdOfModel,
 } from "@codebot/contracts/agent-providers";
 import { sortConversationMessages } from "@codebot/contracts/conversation-order";
-import { CREDIT_MEDIA_PREFERRED_MODELS } from "@codebot/contracts/credit-media";
 import { developmentStartingModel } from "@codebot/contracts/development-defaults";
 import type { FeedbackFacts } from "@codebot/contracts/feedback";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
@@ -159,7 +158,6 @@ import {
   browserHttpSignInPrompts,
   COMPUTER_USE_MCP_SERVER_NAME,
   CONTEXT_RESET_ITEM_TYPE,
-  type CreditsHold,
   DEFAULT_BUSY_MESSAGE_MODE,
   DEFAULT_CUSTOM_PROVIDER_HARNESS,
   DEFAULT_PROVIDER_ACCOUNT_ID,
@@ -168,13 +166,9 @@ import {
   isContextResetMarker,
   isCustomProviderHarness,
   type MacPermissionId,
-  type MediaApprovalCreditsSetting,
-  type MediaApprovalOffer,
   MODEL_SWITCH_ITEM_TYPES,
   type ModelSwitchReason,
   type QueueSteerFallback,
-  type RespondToCreditsHoldInput,
-  type RespondToMediaApprovalInput,
   type ResponseStyle,
   type SkillLearningMode,
   sameAgentBrowserProfile,
@@ -229,7 +223,6 @@ import type { ClientBrowser } from "./agent/client-browser-tools";
 import {
   type AgentFeedback,
   type AgentMessageSteer,
-  type AgentServerClaims,
   CodeBotToolRouter,
   type McpServerOwnerHooks,
 } from "./agent/codebot-tool-router";
@@ -238,12 +231,6 @@ import type { SetCommitCoAuthor } from "./agent/commit-co-author-tool";
 import { ContextCompaction, compactsOnRequest } from "./agent/context-compaction";
 import { ConversationReader } from "./agent/conversation-reader";
 import { ConversationRuntime } from "./agent/conversation-runtime";
-import {
-  type CreditAsksPerson,
-  type CreditMediaReport,
-  CreditMediaTools,
-  DEFAULT_MEDIA_APPROVAL_CREDITS,
-} from "./agent/credit-media-tools";
 import { CustomEndpoints, toEndpointChangeFailed } from "./agent/custom-endpoints";
 import { agentNamesById, displayMessageReferences, type TagReferenceSource } from "./agent/delivery-content";
 import { DeltaBuffer } from "./agent/delta-buffer";
@@ -253,7 +240,6 @@ import { DuplicationGate, toAgentDuplicationFailed } from "./agent/duplication-g
 import type { FailureContext, FailureSignal } from "./agent/failure-signal";
 import { FeedbackWithdrawal } from "./agent/feedback-withdrawal";
 import { type FinishCheckInput, FinishCheckResult, finishCheckPrompt } from "./agent/finish-check";
-import { type AgentHostedSites, HostedSiteCoordinator } from "./agent/hosted-site-coordinator";
 import { ImageGenRuntime } from "./agent/image-gen-runtime";
 import {
   decodeGeneratedImage,
@@ -370,7 +356,6 @@ import { readUsageReportInWorker } from "./database/usage-report-reader";
 import { reportOriginalFailure } from "./effect-boundary";
 import type { HostMemory } from "./host-memory";
 import type { SignInRegion } from "./kimi-region";
-import type { LinkWallet } from "./link-wallet";
 import { lockEnforced } from "./lock/lock-level";
 import { type MailboxStore, MESSAGING_LANE } from "./mailbox-store";
 import { toMcpOperationError } from "./mcp-effects";
@@ -379,7 +364,6 @@ import { McpServerStore } from "./mcp-server-store";
 import type { MessageDeleteAccess, MessageDeleteRefused } from "./message-delete";
 import type { MessagePinRefused } from "./message-pins";
 import { isAnswer, MessagingThreads, toMessagingThreadFailed } from "./messaging/messaging-threads";
-import type { NearWallet } from "./near-wallet";
 import type { CustomProviderConfig } from "./opencode-config";
 import type { PasswordVault } from "./password-vault";
 import { canConfineProcesses } from "./process-confinement";
@@ -407,7 +391,6 @@ import { extractJsonObject } from "./structured-output";
 import { TURN_STEP_DETAILS_FILE, TurnStepDetailsStore } from "./turn-step-details-store";
 import type { UserBrowsingLog } from "./user-browsing-log";
 import type { VaultItems } from "./vault-items";
-import { type CreditMediaGateway, CreditMediaWorkflows } from "./workflows/credit-media";
 import { generateHiggsfieldMedia, HIGGSFIELD_MCP_HOST, readHiggsfieldCredits } from "./workflows/higgsfield-media";
 import { WorkflowMediaCatalogCache } from "./workflows/media-catalog";
 import { generateSunraMedia, readSunraCredits, SUNRA_MCP_HOST } from "./workflows/sunra-media";
@@ -446,7 +429,6 @@ interface AgentServiceEvents {
   event: [event: AgentEvent, memberId?: string];
   toolUsage: [usage: ToolUsageSignal];
   workflowRun: [end: WorkflowRunEnd];
-  creditMedia: [report: CreditMediaReport];
   liveVoice: [event: VoiceLiveEvent, memberId: string | null];
   taskRead: [agentId: string, taskId: string, unreadCount: number];
   slashCommandsChanged: [change: SlashCommandsChanged];
@@ -471,12 +453,6 @@ export interface AgentServiceOptions {
   contextCompactionTimeoutMs?: number;
   cacheExpiryCompactionDelayMs?: number;
   cacheExpiryCompaction?: () => boolean;
-  mediaApprovalCredits?: () => MediaApprovalCreditsSetting;
-  creditAsks?: {
-    muted: (personIds: readonly string[]) => boolean;
-    enableAgents: () => Effect.Effect<void, unknown>;
-    mute: (person: CreditAsksPerson | null) => Effect.Effect<void, unknown>;
-  };
   memoryReviewIdleMs?: number;
   finishCheck?: boolean;
   preferredProvider?: AgentProvider;
@@ -484,7 +460,6 @@ export interface AgentServiceOptions {
   clientFactory?: AgentClientFactory | null;
   bundledExecutables?: BundledProviderExecutables;
   prepareAgentWorkspace?: (agent: AgentSummary) => Effect.Effect<void, AgentLifecycleFailed>;
-  hostedSites?: AgentHostedSites | null;
   visualPreview?: ChatVisualPreviewHost | null;
   setCommitCoAuthor?: SetCommitCoAuthor | undefined;
   clearPictureBackground?: ((bytes: Uint8Array) => Uint8Array | null) | undefined;
@@ -500,7 +475,6 @@ export interface AgentServiceOptions {
   passwordManagerConnected?: (manager: PasswordManagerId) => boolean;
   feedbackFacts?: FeedbackFacts | null;
   feedback?: AgentFeedback | null;
-  serverClaims?: AgentServerClaims | null;
   browserProfiles?: (() => AgentBrowserProfiles | null) | undefined;
   clientBrowser?: ClientBrowser | null;
   crm?: (() => CrmHandle | null) | undefined;
@@ -545,19 +519,15 @@ export interface AgentServiceOptions {
   githubConnector?: GitHubConnectorSource | null;
   passwordVault?: PasswordVault | null;
   vaultItems?: VaultItems | null;
-  linkWallet?: LinkWallet | null;
-  nearWallet?: NearWallet | null;
   agentApiKeys?: AgentApiKeys | null;
   hostMemory?: HostMemory | null;
   hostTurnLimits?: { turnLimit(): number | "unlimited" | null; agentTaskLimit(): number };
-  hostedStorageGb?: () => number | null;
   agentCursorDrawn?: boolean;
   computerUseOnWayland?: boolean;
   computerUseInputRefused?: () => boolean;
   computerUseForegroundInput?: boolean;
   computerUseMissingPermissions?: () => readonly MacPermissionId[];
   codexIdleSessions?: { releaseAfterMs: number; idleLimit: number };
-  creditMedia?: CreditMediaGateway | null;
 }
 
 const USER_SEND_RETRY_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -631,7 +601,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly routineRecords: RoutineRecords;
   readonly #mcp: McpGateway;
   readonly #mediaCatalog: WorkflowMediaCatalogCache;
-  readonly #creditMedia: CreditMediaWorkflows | null;
   readonly #mcpAgentAccess: AgentServiceOptions["mcpAgentAccess"];
   readonly #usageReportWorkerPath: string | null;
   readonly #hiddenModels: AgentServiceOptions["hiddenModels"];
@@ -640,7 +609,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly #providerUseChanges = Semaphore.makeUnsafe(1);
   readonly #endpoints: CustomEndpoints;
   readonly #prepareAgentWorkspace: (agent: AgentSummary) => Effect.Effect<void, AgentLifecycleFailed>;
-  readonly #hostedSites: HostedSiteCoordinator;
   readonly #conversation: ConversationRuntime;
   readonly #attention: AttentionRegistry;
   readonly #images: ImageGenRuntime;
@@ -703,7 +671,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       clientFactory = null,
       bundledExecutables = DEFAULT_BUNDLED_EXECUTABLES,
       prepareAgentWorkspace = () => Effect.void,
-      hostedSites = null,
       sidebarLayout = null,
       libraryFolders = null,
       credentials = NO_PROVIDER_CREDENTIALS,
@@ -741,13 +708,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       signIn: (provider) => this.#mediaSignIn(provider),
       warn: (message, details) => logger.warn(message, details),
     });
-    this.#creditMedia = options.creditMedia
-      ? new CreditMediaWorkflows({
-          gateway: options.creditMedia,
-          warn: (message, details) => logger.warn(message, details),
-          creditsChanged: () => this.#emit({ type: "codebot-credits-changed" }),
-        })
-      : null;
     this.#sidebarLayout = sidebarLayout;
     this.#libraryFolders = libraryFolders;
     this.#profileSave = new ProfileSave(store, {
@@ -961,17 +921,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
           );
         },
       },
-    });
-    this.#hostedSites = new HostedSiteCoordinator({
-      store,
-      conversation: this.#conversation,
-      hostedSites,
-      emitError: (code, error, agentId) => this.#emitError(code, error, agentId),
-      reportFailure: (code, error, agentId) => {
-        this.#reportFailure(code, error, agentId);
-      },
-      isStopping: () => this.#stopping,
-      redact: (text) => this.#mcp.redact(text),
     });
     this.#providers = new ProviderRuntime({
       offProviders: options.offProviders ?? [],
@@ -1289,7 +1238,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     this.#attention = new AttentionRegistry({
       conversation: this.#conversation,
       browser: this.#browser,
-      hostedSites: this.#hostedSites,
       routines: this.#routines,
       ...(approvalAutomation === undefined ? {} : { approvalAutomation }),
       workspaceSandboxed: (agentId) => {
@@ -1309,8 +1257,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       emitRuntimeSnapshot: () => this.#emitRuntimeSnapshot(),
       ...(options.passwordVault === undefined ? {} : { passwordVault: options.passwordVault }),
       ...(options.vaultItems === undefined ? {} : { vaultItems: options.vaultItems }),
-      linkWallet: options.linkWallet ?? null,
-      nearWallet: options.nearWallet ?? null,
       agentName: (agentId) => store.get(agentId)?.name,
       noteVaultChange: (agentId, threadId, turnId, text) => this.#tools.postVaultNote(agentId, threadId, turnId, text),
       apiKeys: options.agentApiKeys ?? null,
@@ -1461,11 +1407,8 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         available: options.vaultItems?.ready() ?? false,
         cards: options.vaultItems?.hasCards(agentId) ?? false,
         contacts: options.vaultItems?.hasContacts(agentId) ?? false,
-        link: options.linkWallet?.connected() ?? false,
-        near: options.nearWallet?.ready() ?? false,
       }),
       serverHost: hostMemory !== null,
-      ...(options.hostedStorageGb ? { hostedStorageGb: options.hostedStorageGb } : {}),
       ...(options.agentCursorDrawn ? { agentCursorDrawn: true } : {}),
       ...(options.computerUseOnWayland ? { computerUseOnWayland: true } : {}),
       ...(options.computerUseInputRefused ? { computerUseInputRefused: options.computerUseInputRefused } : {}),
@@ -2149,7 +2092,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       drain: this.#drain,
       threads: this.#threads,
       turn: this.#turn,
-      hostedSites: this.#hostedSites,
       compaction: this.#compaction,
       apiKeys: options.agentApiKeys ?? null,
       deleteWithRevokedApproval: options.deleteWithRevokedApproval ?? ((_agentId, remove) => remove()),
@@ -2219,7 +2161,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       attachments: this.#attachments,
       channels: this.channels,
       messaging: this.messaging,
-      hostedSites: this.#hostedSites,
       routines: this.#routines,
       memories: this.#memories,
       waits: this.#waits,
@@ -2240,22 +2181,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       ...(options.videoReader === undefined ? {} : { videoReader: options.videoReader }),
       ...(options.avatarDecoder === undefined ? {} : { avatarDecoder: options.avatarDecoder }),
       ...(options.fitImage === undefined ? {} : { fitImage: options.fitImage }),
-      creditMediaTools: new CreditMediaTools({
-        media: () => this.#creditMedia,
-        approvalCredits: () => options.mediaApprovalCredits?.().credits ?? DEFAULT_MEDIA_APPROVAL_CREDITS,
-        agentsAllowed: () => options.mediaApprovalCredits?.().agents ?? true,
-        askWhenBlocked: () => options.mediaApprovalCredits?.().askWhenBlocked ?? true,
-        asksMuted: (personIds) => options.creditAsks?.muted(personIds) ?? false,
-        enableAgents: () => options.creditAsks?.enableAgents() ?? Effect.void,
-        muteAsks: (person) => options.creditAsks?.mute(person) ?? Effect.void,
-        defaultModel: (kind) => {
-          const setting = options.mediaApprovalCredits?.();
-          return (kind === "image" ? setting?.imageModel : setting?.videoModel) ?? CREDIT_MEDIA_PREFERRED_MODELS[kind];
-        },
-        fitImage: options.fitImage ?? null,
-        scope: () => this.#scope,
-        report: (report) => this.emit("creditMedia", report),
-      }),
       mcpServers: mcpServersFromGateway(
         this.#mcp,
         options.prepareMcpTest,
@@ -2274,7 +2199,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       feedbackFacts: options.feedbackFacts ?? null,
       feedback: options.feedback ?? null,
       feedbackWithdrawal: this.#feedbackWithdrawal,
-      serverClaims: options.serverClaims ?? null,
       ...(options.browserProfiles === undefined ? {} : { browserProfiles: options.browserProfiles }),
       ...(options.clientBrowser === undefined ? {} : { clientBrowser: options.clientBrowser }),
       fromChrome: (deliveryId) => this.#fromChrome.has(deliveryId),
@@ -2493,18 +2417,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
 
   pendingApproval(requestId: string | number): AgentApproval | undefined {
     return this.#attention.pendingApproval(requestId);
-  }
-
-  pendingMediaApproval(agentId: string, requestId: string | number): MediaApprovalOffer | undefined {
-    return this.#attention.pendingMediaApproval(agentId, requestId);
-  }
-
-  pendingCreditsHold(agentId: string, requestId: string | number, canEnable: boolean): CreditsHold | undefined {
-    return this.#attention.pendingCreditsHold(agentId, requestId, canEnable);
-  }
-
-  recheckCreditsHolds(): void {
-    this.#attention.recheckCreditsHolds();
   }
 
   approvalExecutionThreadId(requestId: string | number): string | undefined {
@@ -3291,52 +3203,30 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     this: AgentService,
     only?: WorkflowCatalogSource,
   ) {
-    if (this.#stopping) return { models: [] } satisfies WorkflowMediaCatalog;
-    const credit =
-      this.#creditMedia && (only === undefined || only === "codebot")
-        ? this.#creditMedia.catalog()
-        : Effect.succeed({ models: [], unavailable: [] } satisfies WorkflowMediaCatalog);
-    const services =
-      only === "codebot"
-        ? Effect.succeed({ models: [] } satisfies WorkflowMediaCatalog)
-        : this.#mediaCatalog.catalog(only);
-    const [listed, credits] = yield* Effect.all([services, credit], { concurrency: "unbounded" });
-    return {
-      models: [...credits.models, ...listed.models].slice(0, WORKFLOW_MEDIA_CATALOG_MAX),
-      ...(credits.unavailable.length > 0
-        ? { unavailable: credits.unavailable.slice(0, WORKFLOW_MEDIA_CATALOG_MAX) }
-        : {}),
-    } satisfies WorkflowMediaCatalog;
+    if (this.#stopping || only === "codebot") return { models: [] } satisfies WorkflowMediaCatalog;
+    const listed = yield* this.#mediaCatalog.catalog(only);
+    return { models: listed.models.slice(0, WORKFLOW_MEDIA_CATALOG_MAX) } satisfies WorkflowMediaCatalog;
   }).bind(this);
 
   readonly workflowMediaPrice = Effect.fn("AgentService.workflowMediaPrice")(function* (
     this: AgentService,
     request: WorkflowMediaPriceRequest,
   ) {
-    if (this.#stopping) return { credits: null } satisfies WorkflowMediaPrice;
-    if (workflowCatalogSource(request.model) === "codebot")
-      return {
-        credits: this.#creditMedia ? yield* this.#creditMedia.price(request) : null,
-      } satisfies WorkflowMediaPrice;
+    if (this.#stopping || workflowCatalogSource(request.model) === "codebot")
+      return { credits: null } satisfies WorkflowMediaPrice;
     return yield* this.#mediaCatalog.price(request);
   }).bind(this);
 
   workflowMediaProviders(): WorkflowMediaProviders {
-    return {
-      ...workflowMediaProvidersOf(this.#mediaServiceAccounts().map(({ account }) => account)),
-      codebot: this.#creditMedia?.available() === true,
-    };
+    return workflowMediaProvidersOf(this.#mediaServiceAccounts().map(({ account }) => account));
   }
 
   readonly workflowMediaCredits = Effect.fn("AgentService.workflowMediaCredits")(function* (
     this: AgentService,
     only?: WorkflowCatalogSource,
   ) {
-    if (this.#stopping) return { sunra: null, higgsfield: null, accounts: null } satisfies WorkflowMediaCredits;
-    const codebot =
-      this.#creditMedia && (only === undefined || only === "codebot") ? yield* this.#creditMedia.credits() : null;
-    if (only === "codebot")
-      return { sunra: null, higgsfield: null, accounts: null, codebot } satisfies WorkflowMediaCredits;
+    if (this.#stopping || only === "codebot")
+      return { sunra: null, higgsfield: null, accounts: null } satisfies WorkflowMediaCredits;
     const all = this.#mediaServiceAccounts();
     const accounts = only ? all.filter((account) => account.provider === only).slice(0, 1) : all;
     const orNull = <A>(read: Effect.Effect<A, { readonly message: string }>, service: string) =>
@@ -3358,7 +3248,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     return {
       ...workflowMediaCreditsOf(listed),
       accounts: only ? null : listed,
-      ...(only ? {} : { codebot }),
     } satisfies WorkflowMediaCredits;
   }).bind(this);
 
@@ -3366,8 +3255,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     function* (
       this: AgentService,
       input: {
-        jobId: string;
-        earlierJobIds: readonly string[];
         kind: GeneratedMediaKind;
         provider: WorkflowMediaProvider;
         model: string;
@@ -3383,32 +3270,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       const pictures = input.images.filter(
         (image): image is { role: MediaPictureRole; attachmentId: string } => image.role !== "file",
       );
-      if (input.provider === "codebot") {
-        if (this.#stopping) return yield* failed(sourceText("error.backend.shuttingDown"));
-        if (!this.#creditMedia) return yield* failed(sourceText("error.billing.mediaSignInRequired"));
-        return yield* this.#creditMedia
-          .generate(
-            {
-              resolveAttachment: (attachmentId) => this.#mailbox.resolveAttachment(attachmentId),
-              store: (file) => this.#mailbox.storeGeneratedAttachment(file),
-            },
-            {
-              jobId: input.jobId,
-              earlierJobIds: input.earlierJobIds,
-              kind: input.kind,
-              model: input.catalogId,
-              prompt: input.prompt,
-              specs: input.specs,
-              images: pictures,
-            },
-          )
-          .pipe(
-            Effect.tapError((failure) =>
-              Effect.sync(() => logger.warn("Could not make workflow media with credits.", { error: failure.message })),
-            ),
-            Effect.mapError((failure) => failed(failure.message)),
-          );
-      }
+      if (input.provider === "codebot") return yield* failed(sourceText("error.workflow.modelUnavailable"));
       if (input.provider === "sunra") {
         if (this.#stopping) return yield* failed(sourceText("error.backend.shuttingDown"));
         const signIn = yield* this.#mediaStepSignIn("sunra", input.account);
@@ -5551,7 +5413,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       );
     yield* lifecycleStep("recover agent state", () => {
       this.#boot.recoverPersistedTurns();
-      this.#hostedSites.restore();
       const paused = this.#routines.pauseForAgentsHiddenBeforeWork();
       if (paused > 0)
         logger.info("Routines of agents hidden by an earlier version were turned off.", { count: paused });
@@ -6205,7 +6066,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     yield* this.#liveVoice.dispose();
     this.#routineTimer.dispose();
     yield* this.#memoryHold.dispose();
-    this.#hostedSites.dispose();
     this.#compaction.dispose();
     this.#deltas.dispose();
     this.#conversation.dispose();
@@ -7822,32 +7682,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       .pipe(
         Effect.mapError(
           (failure) => new AgentLifecycleFailed({ operation: "respondToApproval", cause: failure.cause }),
-        ),
-      );
-  }
-
-  respondToMediaApproval(
-    input: RespondToMediaApprovalInput,
-    responder?: ApprovalResponder,
-  ): Effect.Effect<void, AgentLifecycleFailed> {
-    return this.#attention
-      .respondToMediaApproval(input, responder)
-      .pipe(
-        Effect.mapError(
-          (failure) => new AgentLifecycleFailed({ operation: "respondToMediaApproval", cause: failure.cause }),
-        ),
-      );
-  }
-
-  respondToCreditsHold(
-    input: RespondToCreditsHoldInput,
-    responder?: ApprovalResponder,
-  ): Effect.Effect<CreditsHold | null, AgentLifecycleFailed> {
-    return this.#attention
-      .respondToCreditsHold(input, responder)
-      .pipe(
-        Effect.mapError(
-          (failure) => new AgentLifecycleFailed({ operation: "respondToCreditsHold", cause: failure.cause }),
         ),
       );
   }

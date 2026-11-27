@@ -167,8 +167,6 @@ export const messages = {
     "Yerel betikler bu ajanın rutinlerini son bir saat içinde {limit} kez çalıştırdı. Daha sonra tekrar deneyin.",
   "error.agent.workspaceOnlyMacOnly":
     "Bu sağlayıcıda “Yalnızca çalışma alanı” seçeneği yalnızca macOS'ta kullanılabilir. Ajan ayarlarından Tam erişim'i seçin.",
-  "error.agent.lowMemory":
-    "Bu sunucunun belleği azaldı. Mesajınız kuyrukta bekler ve bellek boşaldığında başlar. Daha büyük bir plan sunucuya daha fazla bellek sağlar.",
   "error.agent.lowMemoryServer":
     "Bu sunucunun belleği azaldı. Mesajınız kuyrukta bekler ve bellek boşaldığında başlar.",
   "error.agent.workspaceOnlyToolMissing":
@@ -187,8 +185,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "Ekran yakalama bir Slack, Discord ya da Telegram konuşmasında çalışmaz, çünkü dosyalarını başka kişiler de alır.",
   "error.agent.screenCaptureDeclined": "Kullanıcı bu ekran yakalamaya izin vermedi. Hiçbir şey yakalanmadı.",
-  "error.agent.creditMediaDeclined": "Kullanıcı bu oluşturmaya izin vermedi. Hiç kredi harcanmadı.",
-  "error.agent.creditMediaNotSaved": "Dosya oluşturuldu, ancak CodeBot onu sohbete kaydedemedi.",
   "error.agent.mcpToolDeclined": "Kullanıcı bu MCP aracı çağrısına izin vermedi. Araç çalışmadı.",
   "error.agent.screenCaptureWindowMissing":
     "Bu pencere şu anda açık değil. Geçerli pencere kimliklerini almak için list_capture_sources çağırın.",

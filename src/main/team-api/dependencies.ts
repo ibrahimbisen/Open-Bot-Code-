@@ -72,7 +72,6 @@ import type { HostService } from "../host-service";
 import type { HostSignalHomeService } from "../host-signal-home";
 import type { HostTurnLimitsPreferenceStore } from "../host-turn-limits-preference-store";
 import type { HostVoiceModelService } from "../host-voice-model";
-import type { HostedSiteDesktopService } from "../hosted-site-service";
 import type { InstanceTransferService } from "../instance-transfer-service";
 import type { McpToolRuntimePreparation } from "../ipc/mcp-server-handlers";
 import type { LibraryFoldersService } from "../library-folders-service";
@@ -81,7 +80,6 @@ import type { MachineAlertMonitor } from "../machine-alerts";
 import type { McpAccessControl } from "../mcp-access-store";
 import type { McpHostSignIns } from "../mcp-host-sign-ins";
 import type { McpServerOwnersStore } from "../mcp-server-owners-store";
-import type { CreditAsksControl, MediaApprovalCreditsControl } from "../media-approval-credits-preference-store";
 import type { MemoryReviewPreferenceStore } from "../memory-review-preference-store";
 import type { ModelVisibility } from "../model-visibility";
 import type { OnePasswordConnectorService } from "../onepassword-connector-service";
@@ -200,13 +198,9 @@ type TeamApiAgentMethods = Pick<
   | "compactTaskContext"
   | "agentIdForRequest"
   | "pendingApproval"
-  | "pendingMediaApproval"
-  | "pendingCreditsHold"
   | "pendingPrompts"
   | "respondToPrompt"
   | "respondToApproval"
-  | "respondToMediaApproval"
-  | "respondToCreditsHold"
   | "respondToBrowserSecret"
   | "respondToBrowserTakeover"
 >;
@@ -318,8 +312,6 @@ export interface TeamApiBackgroundProcesses {
   list(): ReturnType<typeof listBackgroundProcesses>;
   stop(id: string): ReturnType<typeof stopBackgroundProcess>;
 }
-export type TeamApiHostedSites = Pick<HostedSiteDesktopService, "listServerSites" | "deleteServerSite">;
-
 export type TeamApiHiddenAgents = Pick<AgentService, "listHiddenAgents" | "setAgentHidden">;
 
 export type TeamApiRoutineRunPlaces = Pick<AgentService["routineRecords"], "list" | "get" | "save">;
@@ -493,8 +485,6 @@ export interface TeamApiAdmin {
   claudeUserSetup?: ClaudeUserSetupControl;
   cacheExpiryCompaction?: CacheExpiryCompactionControl;
   advancedFeatures?: AdvancedFeaturesControl;
-  mediaApprovalCredits?: MediaApprovalCreditsControl;
-  creditAsks?: Pick<CreditAsksControl, "setMuted" | "mutedFor">;
   claudeCompactWindow?: ClaudeCompactWindowControl;
   providerEnvironment?: Pick<ProviderEnvironmentControl, "get" | "set">;
   providerDetection?: {
@@ -664,7 +654,6 @@ export interface TeamApiOptions {
   liveVoice?: TeamApiLiveVoice;
   voiceTranscription?: TeamApiVoiceTranscription;
   clientBrowser?: TeamApiClientBrowser;
-  hostedSites?: TeamApiHostedSites;
   agentImport?: TeamApiAgentImport;
   hermesImport?: TeamApiHermesImport;
   instanceTransfer?: TeamApiInstanceTransfer;

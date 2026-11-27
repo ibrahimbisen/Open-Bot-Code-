@@ -1,5 +1,4 @@
 import { bugReportFormUrl } from "@codebot/contracts/feedback";
-import { HOSTED_SERVER_CONTACT_URL } from "@codebot/contracts/hosted-servers";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
   type AppInfo,
@@ -57,12 +56,6 @@ import {
 } from "./app-inputs";
 import { stringPayload } from "./validation";
 
-const CODEBOT_SITE = "https://openbot.run";
-
-function draftPost(translate: AppTranslate): string {
-  return encodeURIComponent(translate("app.socialFollow.draftPost", { site: "openbot.run" }));
-}
-
 const EXTERNAL_DESTINATIONS: Record<
   Exclude<ExternalDestination, "download">,
   string | ((translate: AppTranslate) => string)
@@ -72,30 +65,13 @@ const EXTERNAL_DESTINATIONS: Record<
   "opencode-auth": "https://opencode.ai/auth",
   "claude-install": "https://code.claude.com/docs",
   "hermes-install": "https://hermes-agent.nousresearch.com/docs/getting-started/installation",
-  feedback: "https://x.com/intent/post?text=Feedback%20for%20CodeBot%20%40norbertbodziony%3A%20",
+  feedback: "https://github.com/nightly-labs/openbot/discussions",
   "report-problem": () => bugReportFormUrl(feedbackFacts()),
-  message: "https://x.com/norbertbodziony",
-  changelog: "https://openbot.run/changelog",
-  guides: "https://openbot.run/guides",
-  discord: "https://discord.openbot.run",
+  changelog: "https://github.com/nightly-labs/openbot/releases",
+  guides: "https://github.com/nightly-labs/openbot/tree/main/docs",
+  discord: "https://github.com/nightly-labs/openbot/discussions",
   github: "https://github.com/nightly-labs/openbot",
-  x: "https://x.com/OpenBot_",
-  threads: "https://www.threads.com/@openbot.run",
-  instagram: "https://www.instagram.com/openbot.run/",
-  tiktok: "https://www.tiktok.com/@openbot.run",
-  facebook: "https://www.facebook.com/profile.php?id=61595425259628",
-  linkedin: "https://www.linkedin.com/company/openbot-si/",
-  reddit: "https://www.reddit.com/r/OpenBot_/",
-  "x-post": (translate) => `https://x.com/intent/post?text=${draftPost(translate)}`,
-  "threads-post": (translate) => `https://www.threads.com/intent/post?text=${draftPost(translate)}`,
-  "linkedin-post": `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(CODEBOT_SITE)}`,
-  "reddit-post": (translate) =>
-    `https://www.reddit.com/r/OpenBot_/submit?type=TEXT&title=${encodeURIComponent(translate("app.socialFollow.redditTitle"))}&text=${draftPost(translate)}`,
-  "facebook-post": `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(CODEBOT_SITE)}`,
-  "instagram-post": "https://www.instagram.com/",
-  "tiktok-post": "https://www.tiktok.com/upload",
   "grok-bot-export": GROK_BOT_EXPORT_URL,
-  "hosted-server-contact": HOSTED_SERVER_CONTACT_URL,
   "mac-screen-recording": MAC_PERMISSION_URLS["screen-recording"],
 };
 

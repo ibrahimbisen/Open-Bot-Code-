@@ -61,15 +61,12 @@ import { HOST_TIMEZONE_ROUTES } from "@codebot/contracts/team-protocol/host-time
 import { HOST_TURN_LIMITS_ROUTES } from "@codebot/contracts/team-protocol/host-turn-limits-v1";
 import { HOST_UPDATE_ROUTES } from "@codebot/contracts/team-protocol/host-update-v1";
 import { HOST_VOICE_MODEL_ROUTES } from "@codebot/contracts/team-protocol/host-voice-model-v1";
-import { HOSTED_SITES_ROUTES } from "@codebot/contracts/team-protocol/hosted-sites-v1";
 import { LIBRARY_FOLDERS_ROUTES } from "@codebot/contracts/team-protocol/library-folders-v1";
 import { LIVE_ACTIVITY_PUSH_ROUTES } from "@codebot/contracts/team-protocol/live-activity-push-v1";
 import { LIVE_VOICE_ACCOUNT_ROUTES } from "@codebot/contracts/team-protocol/live-voice-account-v1";
 import { LOCAL_SERVERS_ROUTES } from "@codebot/contracts/team-protocol/local-servers-v1";
 import { MACHINE_RESOURCES_ROUTES } from "@codebot/contracts/team-protocol/machine-resources-v1";
 import { MCP_SIGN_IN_ROUTES } from "@codebot/contracts/team-protocol/mcp-sign-in-v1";
-import { MEDIA_APPROVAL_CHOICE_ROUTES } from "@codebot/contracts/team-protocol/media-approval-choice-v1";
-import { MEDIA_APPROVAL_CREDITS_ROUTES } from "@codebot/contracts/team-protocol/media-approval-credits-v1";
 import { MEMORY_REVIEW_ROUTES } from "@codebot/contracts/team-protocol/memory-review-v1";
 import { MESSAGE_PINS_ROUTES } from "@codebot/contracts/team-protocol/message-pins-v1";
 import { MODEL_STEERING_ROUTES } from "@codebot/contracts/team-protocol/model-steering-v1";
@@ -117,8 +114,6 @@ import { WHATSAPP_READ_ONLY_ROUTES } from "@codebot/contracts/team-protocol/what
 import { WHATSAPP_STATUS_REACTIONS_ROUTES } from "@codebot/contracts/team-protocol/whatsapp-status-reactions-v1";
 import { WHATSAPP_WORKING_MESSAGE_ROUTES } from "@codebot/contracts/team-protocol/whatsapp-working-message-v1";
 import { WORKFLOW_FOLDERS_ROUTES } from "@codebot/contracts/team-protocol/workflow-folders-v1";
-import { WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES } from "@codebot/contracts/team-protocol/workflows-credit-media-unavailable-v1";
-import { WORKFLOWS_CREDIT_MEDIA_ROUTES } from "@codebot/contracts/team-protocol/workflows-credit-media-v1";
 import { WORKFLOWS_GITHUB_ROUTES } from "@codebot/contracts/team-protocol/workflows-github-v1";
 import { WORKFLOWS_HIGGSFIELD_ROUTES } from "@codebot/contracts/team-protocol/workflows-higgsfield-v1";
 import { WORKFLOWS_MEDIA_CATALOG_ROUTES } from "@codebot/contracts/team-protocol/workflows-media-catalog-v1";
@@ -159,9 +154,6 @@ const PASSIVE_ROUTES: ReadonlySet<string> = new Set([
   PROMPT_CACHE_TTL_ROUTES.settings,
   CLAUDE_COMPACT_WINDOW_ROUTES.settings,
   CACHE_EXPIRY_COMPACTION_ROUTES.settings,
-  MEDIA_APPROVAL_CREDITS_ROUTES.settings,
-  MEDIA_APPROVAL_CHOICE_ROUTES.read,
-  MEDIA_APPROVAL_CHOICE_ROUTES.mutedRead,
   PROVIDER_ENVIRONMENT_ROUTES.settings,
   MODEL_VISIBILITY_ROUTES.settings,
   MODEL_VISIBILITY_ROUTES.listing,
@@ -246,7 +238,6 @@ const PASSIVE_ROUTES: ReadonlySet<string> = new Set([
   SKILLS_ADMIN_ROUTES.list,
   AGENT_PUBLISH_ROUTES.preview,
   SHARED_TABLES_ROUTES.list,
-  HOSTED_SITES_ROUTES.list,
   PROVIDERS_ADMIN_ROUTES.apiKeyState,
   PROVIDERS_ADMIN_ROUTES.customList,
   CUSTOM_PROVIDER_HARNESS_ROUTES.customList,
@@ -290,9 +281,6 @@ const PASSIVE_ROUTES: ReadonlySet<string> = new Set([
   WORKFLOWS_GITHUB_ROUTES.catalog,
   WORKFLOWS_GITHUB_ROUTES.history,
   WORKFLOWS_GITHUB_ROUTES.options,
-  WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog,
-  WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES.list,
-  WORKFLOWS_CREDIT_MEDIA_ROUTES.credits,
   CONNECTORS_ROUTES.githubStatus,
   CONNECTORS_ROUTES.githubRepositories,
   CONNECTORS_ROUTES.messagingOverview,

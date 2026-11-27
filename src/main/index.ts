@@ -37,7 +37,6 @@ import {
 import { localTimezone } from "../backend/agent/routine-tools";
 import { replaceInvalidLinuxSystemLanguages } from "../backend/browser-policy";
 import { LATEST_SCHEMA_VERSION, NewerDatabaseError } from "../backend/codebot-database-schema";
-import { setDiskRestoreProbe } from "../backend/disk-restore";
 import { runCauseEffect } from "../backend/effect-boundary";
 import { perfTime } from "../backend/perf-probe-hooks";
 import { OWNER_NOTIFICATION_KEY } from "./agent-notification-level-store";
@@ -66,8 +65,6 @@ import { tintDevelopmentIcon } from "./development-worktree-icon";
 import { stopStuckExitAfterLimit } from "./exit-watchdog";
 import { filePreviewPages } from "./file-preview-pages";
 import { hostAllowsTenantLaunch } from "./host-update-coordinator";
-import { hostedDiskRestoreProbe, takeHostedServerEnvironment } from "./hosted-server-bootstrap";
-import { takeHostingDeveloperKey } from "./hosted-server-service";
 import { accountIpcHandlers } from "./ipc/account-handlers";
 import { acpRegistryIpcHandlers } from "./ipc/acp-registry-handlers";
 import { agentAdminIpcHandlers } from "./ipc/agent-admin-handlers";
@@ -81,7 +78,6 @@ import { appIpcHandlers } from "./ipc/app-handlers";
 import { appUpdateIpcHandlers } from "./ipc/app-update-handlers";
 import { attachmentIpcHandlers } from "./ipc/attachment-handlers";
 import { backgroundProcessIpcHandlers } from "./ipc/background-process-handlers";
-import { billingIpcHandlers } from "./ipc/billing-handlers";
 import { bitwardenConnectorIpcHandlers } from "./ipc/bitwarden-connector-handlers";
 import { browserDockIpcHandlers } from "./ipc/browser-dock-handlers";
 import { browserIpcHandlers } from "./ipc/browser-handlers";
@@ -89,7 +85,6 @@ import { channelFolderIpcHandlers } from "./ipc/channel-folder-handlers";
 import { channelMemoryIpcHandlers } from "./ipc/channel-memory-handlers";
 import { channelRoutineIpcHandlers } from "./ipc/channel-routine-handlers";
 import { computerUseIpcHandlers } from "./ipc/computer-use-handlers";
-import { creditsIpcHandlers } from "./ipc/credits-handlers";
 import { crmIpcHandlers } from "./ipc/crm-handlers";
 import { customAgentIpcHandlers } from "./ipc/custom-agent-handlers";
 import { customProviderIpcHandlers } from "./ipc/custom-provider-handlers";
@@ -99,11 +94,7 @@ import { eventsIpcHandlers } from "./ipc/events-handlers";
 import { explorerIpcHandlers } from "./ipc/explorer-handlers";
 import { githubConnectorIpcHandlers } from "./ipc/github-connector-handlers";
 import { hostAdminIpcHandlers } from "./ipc/host-admin-handlers";
-import { hostedServerIpcHandlers } from "./ipc/hosted-server-handlers";
-import { hostedSiteIpcHandlers } from "./ipc/hosted-site-handlers";
 import { instanceTransferIpcHandlers } from "./ipc/instance-transfer-handlers";
-import { licenseIpcHandlers } from "./ipc/license-handlers";
-import { linkAccountIpcHandlers } from "./ipc/link-account-handlers";
 import { localModelServersIpcHandlers } from "./ipc/local-model-servers-handlers";
 import { localServerIpcHandlers } from "./ipc/local-server-handlers";
 import { macAutomationIpcHandlers } from "./ipc/mac-automation-handlers";
@@ -112,7 +103,6 @@ import { marketplaceLinkIpcHandlers } from "./ipc/marketplace-link-handlers";
 import { mcpServerIpcHandlers } from "./ipc/mcp-server-handlers";
 import { memoryIpcHandlers } from "./ipc/memory-handlers";
 import { messagingIpcHandlers } from "./ipc/messaging-handlers";
-import { nearWalletIpcHandlers } from "./ipc/near-wallet-handlers";
 import { notificationIpcHandlers } from "./ipc/notification-handlers";
 import { onePasswordConnectorIpcHandlers } from "./ipc/onepassword-connector-handlers";
 import { passwordManagersIpcHandlers } from "./ipc/password-managers-handlers";
@@ -121,7 +111,6 @@ import { projectIpcHandlers } from "./ipc/project-handlers";
 import { providerAdminIpcHandlers } from "./ipc/provider-admin-handlers";
 import { providerDetectionIpcHandlers } from "./ipc/provider-detection-handlers";
 import { providerIpcHandlers } from "./ipc/provider-handlers";
-import { referralIpcHandlers } from "./ipc/referral-handlers";
 import { replyIpcHandlers } from "./ipc/reply-handlers";
 import { routineFeedIpcHandlers } from "./ipc/routine-feed-handlers";
 import { routineIpcHandlers } from "./ipc/routine-handlers";
@@ -280,23 +269,19 @@ const developmentRemoteRole =
 const developmentTestClientEnabled = !app.isPackaged && process.env.CODEBOT_DEV_TEST_CLIENT_ENABLED === "1";
 removeClaudeCodeSessionEnvironment(process.env);
 removeOrcaPaneEnvironment(process.env);
-const hostedServer = takeHostedServerEnvironment(process.env, app.isPackaged, process.platform);
-if (hostedServer) setDiskRestoreProbe(hostedDiskRestoreProbe());
-const hostingDeveloperKey = takeHostingDeveloperKey(process.env, app.isPackaged);
 const serverMode = takeServerModeEnvironment(process.env, app.isPackaged, process.platform);
 const localServerChildEnvironment = takeLocalServerChildEnvironment(process.env, commandLineUserDataDirectory);
-const localServerChild = serverMode || hostedServer ? null : localServerChildEnvironment;
+const localServerChild = serverMode ? null : localServerChildEnvironment;
 const forcedStartFailure = takeForcedStartFailure(process.env, app.isPackaged);
 const forcedRendererStop = takeForcedRendererStop(process.env, app.isPackaged);
-const serverStartGuard =
-  serverMode !== null || hostedServer !== null || takeServerStartGuardTest(process.env, app.isPackaged);
+const serverStartGuard = serverMode !== null || takeServerStartGuardTest(process.env, app.isPackaged);
 const localServerControl = localServerChild
   ? openLocalServerControl(process.platform, (cause) =>
       logger.error("The local server has no control pipe from the desktop app:", toLogValue(cause)),
     )
   : null;
-if (serverMode || hostedServer || localServerChild) hideExceptionErrorBox();
-if (serverMode || hostedServer || localServerChild) keepWindowsHidden();
+if (serverMode || localServerChild) hideExceptionErrorBox();
+if (serverMode || localServerChild) keepWindowsHidden();
 if (developmentProfile && process.env.CODEBOT_DEV_WINDOW_FOCUS === "background") openWindowsInBackground();
 if (localServerChild && process.platform === "darwin") app.dock?.hide();
 const inviteLinkOptions = {
@@ -329,7 +314,7 @@ if (commandLineUserDataDirectory) {
 }
 app.setName("CodeBot");
 const systemTimezone =
-  serverMode || hostedServer || localServerChild
+  serverMode || localServerChild
     ? applyServerTimezone(join(app.getPath("userData"), SERVER_TIMEZONE_PREFERENCE_FILE), process.env)
     : localTimezone;
 app.enableSandbox();
@@ -337,7 +322,7 @@ const WINDOWS_APP_USER_MODEL_ID = app.isPackaged ? "app.codebot.desktop" : "app.
 if (process.platform === "win32") app.setAppUserModelId(WINDOWS_APP_USER_MODEL_ID);
 if (
   app.isPackaged &&
-  !(serverMode || hostedServer || localServerChildEnvironment) &&
+  !(serverMode || localServerChildEnvironment) &&
   (await Effect.runPromise(
     restartOutsideWindowsPackage(
       process.env,
@@ -350,7 +335,7 @@ if (
 const startedOnXWayland = takeXWaylandRestartMarker(process.env, process.argv);
 if (
   app.isPackaged &&
-  !(serverMode || hostedServer || localServerChildEnvironment) &&
+  !(serverMode || localServerChildEnvironment) &&
   ((await Effect.runPromise(restartOnXWaylandForAboveApps(process.env, app.getPath("userData")))) ||
     (await Effect.runPromise(
       restartOnXWaylandForSoftwareRendering(
@@ -364,7 +349,7 @@ if (
 if (
   process.platform === "darwin" &&
   app.isPackaged &&
-  !(serverMode || hostedServer || localServerChildEnvironment) &&
+  !(serverMode || localServerChildEnvironment) &&
   Effect.runSync(
     shipItInstallInProgress({
       userDataPath: app.getPath("userData"),
@@ -384,7 +369,7 @@ if (hasSingleInstanceLock) {
       userDataPath: app.getPath("userData"),
       crashDumpsPath: app.getPath("crashDumps"),
       appVersion: app.getVersion(),
-      server: hostedServer !== null || serverMode !== null,
+      server: serverMode !== null,
       now: Date.now(),
       bootedAt: Date.now() - uptime() * 1_000,
     }));
@@ -428,7 +413,7 @@ if (hasSingleInstanceLock) {
 configureLinuxGpu({
   userDataPath: app.getPath("userData"),
   ownsInstance: hasSingleInstanceLock,
-  server: hostedServer !== null || serverMode !== null,
+  server: serverMode !== null,
 });
 const appVariant = readAppVariant(process.env.CODEBOT_APP_VARIANT, app.isPackaged);
 const appIconPath = resolveAppIconPath({
@@ -494,10 +479,7 @@ let systemSessionEnding = false;
 let systemSessionEndFlushStarted = false;
 let relaunchRequested = false;
 let quitStarted = false;
-type RendererDeepLink = Exclude<
-  DeepLink,
-  { kind: "mcp-auth" | "slack-workspace" | "discord-guild" | "near-signature" }
->;
+type RendererDeepLink = Exclude<DeepLink, { kind: "mcp-auth" | "slack-workspace" | "discord-guild" }>;
 
 let pendingDeepLink: RendererDeepLink | null = takeRendererDeepLink(findDeepLink(process.argv, inviteLinkOptions));
 let deepLinkReceiverReady = false;
@@ -543,8 +525,6 @@ const {
   forwardVoiceServerSettings,
   forwardProviderRuntimeStatus,
   forwardGitHubConnectorStatus,
-  forwardLinkAccountStatus,
-  forwardNearWalletStatus,
   forwardOnePasswordConnectorStatus,
   forwardBitwardenConnectorStatus,
   forwardPasswordManagerStatus,
@@ -775,8 +755,6 @@ function registerIpcHandlers({
   claudeUserSetup,
   advancedFeatures,
   cacheExpiryCompaction,
-  mediaApprovalCredits,
-  creditAsks,
   claudeCompactWindow,
   providerEnvironment,
   modelVisibility,
@@ -795,19 +773,11 @@ function registerIpcHandlers({
   remoteServers,
   centralAuth,
   skills,
-  hostedSites,
   githubConnector,
-  linkAccount,
-  nearWallet,
   onePasswordConnector,
   bitwardenConnector,
   passwordManagers,
   vault,
-  billing,
-  referral,
-  license,
-  credits,
-  hostedServers,
   localServers,
   routineFeed,
   events,
@@ -937,24 +907,12 @@ function registerIpcHandlers({
       translate: language.translate,
     }),
     ...agentInstructionsIpcHandlers({ files: agentInstructions, remoteServers }),
-    ...hostedSiteIpcHandlers({
-      hostedSites,
-      remoteServers,
-      getMainWindow: getDialogParent,
-      translate: language.translate,
-    }),
     ...githubConnectorIpcHandlers({ githubConnector, remoteServers, openExternal: openLink }),
-    ...linkAccountIpcHandlers({ linkAccount }),
-    ...nearWalletIpcHandlers({ nearWallet }),
     ...onePasswordConnectorIpcHandlers({ onePasswordConnector, remoteServers }),
     ...bitwardenConnectorIpcHandlers({ bitwardenConnector, remoteServers }),
     ...passwordManagersIpcHandlers({ passwordManagers, remoteServers, openExternal: openLink }),
     ...slashCommandIpcHandlers({ service }),
     ...vaultIpcHandlers({ vault, getMainWindow: getDialogParent, translate: language.translate, remoteServers }),
-    ...billingIpcHandlers({ billing }),
-    ...referralIpcHandlers({ referral }),
-    ...licenseIpcHandlers({ license }),
-    ...creditsIpcHandlers({ credits }),
     ...routineFeedIpcHandlers({ routineFeed }),
     ...eventsIpcHandlers({ events, remoteServers }),
     ...explorerIpcHandlers({
@@ -962,7 +920,6 @@ function registerIpcHandlers({
       remoteServers,
       windowOf: (contents) => BrowserWindow.fromWebContents(contents),
     }),
-    ...hostedServerIpcHandlers({ hostedServers }),
     ...localServerIpcHandlers({ localServers }),
     ...customProviderIpcHandlers(customProviderChanges),
     ...customAgentIpcHandlers({ changes: customAgentChanges, remoteServers }),
@@ -1075,7 +1032,6 @@ function registerIpcHandlers({
       claudeUserSetup,
       advancedFeatures,
       cacheExpiryCompaction,
-      mediaApprovalCredits,
       claudeCompactWindow,
       providerEnvironment,
       modelVisibility,
@@ -1152,7 +1108,6 @@ function registerIpcHandlers({
       openExternal: openLink,
       modelVisibility,
       closeChatNotifications,
-      creditAsks,
     }),
     ...browserIpcHandlers({
       browserPictureInPicture,
@@ -1354,10 +1309,6 @@ function acceptDeepLink(link: DeepLink): void {
     receiveMessagingInstall(link);
     return;
   }
-  if (link.kind === "near-signature") {
-    receiveNearSignature(link);
-    return;
-  }
   pendingDeepLink = link;
   const window = windowHolder.current;
   if (!window || window.isDestroyed() || !deepLinkReceiverReady) return;
@@ -1396,24 +1347,9 @@ function isDeepLinkKind<Kind extends RendererDeepLink["kind"]>(
 }
 
 function takeRendererDeepLink(link: DeepLink | null): RendererDeepLink | null {
-  return link &&
-    link.kind !== "mcp-auth" &&
-    link.kind !== "slack-workspace" &&
-    link.kind !== "discord-guild" &&
-    link.kind !== "near-signature"
+  return link && link.kind !== "mcp-auth" && link.kind !== "slack-workspace" && link.kind !== "discord-guild"
     ? link
     : null;
-}
-
-function receiveNearSignature(link: Extract<DeepLink, { kind: "near-signature" }>): void {
-  const current = services;
-  if (!current) return;
-  if (!current.nearWallet.receiveSignature(link.nonce, link.data)) {
-    logger.warn("A NEAR signature link was not accepted: no signature of this run waits for it.");
-    return;
-  }
-  const window = windowHolder.current;
-  if (window && !window.isDestroyed()) showMainWindow(window);
 }
 
 function receiveMessagingInstall(link: Extract<DeepLink, { kind: "slack-workspace" | "discord-guild" }>): void {
@@ -1522,7 +1458,7 @@ if (!hasSingleInstanceLock) {
         app.quit();
         return;
       }
-      if (!localServerChild && !serverMode && !hostedServer) {
+      if (!localServerChild && !serverMode) {
         clearEarlierWindowsNotifications(WINDOWS_APP_USER_MODEL_ID);
         await presentApplication();
       }
@@ -1556,9 +1492,7 @@ if (!hasSingleInstanceLock) {
         appVariant,
         developmentRemoteRole,
         developmentTestClientEnabled,
-        hostedServer,
         serverMode,
-        hostingDeveloperKey,
         localServerChild,
         localServerControl,
         systemTimezone,
@@ -1578,7 +1512,7 @@ if (!hasSingleInstanceLock) {
       services = built;
       performance.mark("codebot:services-built");
       placeWindowButtons(BrowserWindow.getAllWindows());
-      if (app.isPackaged && !serverMode && !hostedServer && !localServerChild) {
+      if (app.isPackaged && !serverMode && !localServerChild) {
         teardown.push(0, "app archive watch", watchAppArchive(process.resourcesPath, built.language.translate));
       }
       const appliedAccount = built.appliedAccount;
@@ -1666,7 +1600,6 @@ if (!hasSingleInstanceLock) {
       });
       service.on("toolUsage", (usage) => built.analytics.handleToolUsage(usage));
       service.on("workflowRun", (end) => built.analytics.handleWorkflowRun(end));
-      service.on("creditMedia", (report) => built.analytics.handleCreditMedia(report));
       service.on("liveVoice", forwardVoiceLiveEvent);
       service.on("slashCommandsChanged", forwardSlashCommandsChanged);
       built.browser.onSiteVisited((visit) => built.analytics.handleSiteVisit(visit));
@@ -1691,8 +1624,6 @@ if (!hasSingleInstanceLock) {
       host.on("directTyping", (event) => forwardDirectTyping("local", event));
       remoteDesktop.on("changed", forwardRemoteDesktopSessions);
       built.githubConnector.onChanged(forwardGitHubConnectorStatus);
-      built.linkAccount.onChanged(forwardLinkAccountStatus);
-      built.nearWallet.onChanged(forwardNearWalletStatus);
       built.onePasswordConnector.onChanged(forwardOnePasswordConnectorStatus);
       built.bitwardenConnector.onChanged(forwardBitwardenConnectorStatus);
       built.passwordManagers.onChanged(forwardPasswordManagerStatus);
@@ -1767,7 +1698,7 @@ if (!hasSingleInstanceLock) {
           );
         }
       };
-      const publishesBeforeRenderer = Boolean(built.serverMode || hostedServer);
+      const publishesBeforeRenderer = Boolean(built.serverMode);
       if (publishesBeforeRenderer) publishOnLaunch();
       void requestDesktopNotificationPermission(built.notificationPreference, language.translate).catch((error) =>
         logger.warn("Unable to ask for notification permission:", toLogValue(error)),
@@ -1979,7 +1910,7 @@ if (!hasSingleInstanceLock) {
           });
         return;
       }
-      if (!serverMode && !hostedServer && !localServerChild) {
+      if (!serverMode && !localServerChild) {
         const locale = services?.language.locale ?? resolveLocale("system", app.getLocale());
         const translate = services?.language.translate ?? translateFor(locale);
         if (error instanceof NewerDatabaseError) {

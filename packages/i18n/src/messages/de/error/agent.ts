@@ -195,8 +195,6 @@ export const messages = {
     "Lokale Skripte haben die Routinen dieses Agenten in der letzten Stunde {limit}-mal ausgeführt. Versuche es später erneut.",
   "error.agent.workspaceOnlyMacOnly":
     "„Nur Arbeitsbereich“ ist für diesen Anbieter nur unter macOS verfügbar. Wähle „Voller Zugriff“ in den Agenteneinstellungen.",
-  "error.agent.lowMemory":
-    "Dieser Server hat wenig freien Arbeitsspeicher. Deine Nachricht wartet in der Warteschlange und startet, wenn Speicher frei ist. Ein größerer Tarif gibt dem Server mehr Arbeitsspeicher.",
   "error.agent.lowMemoryServer":
     "Dieser Server hat wenig freien Arbeitsspeicher. Deine Nachricht wartet in der Warteschlange und startet, wenn Speicher frei ist.",
   "error.agent.workspaceOnlyToolMissing":
@@ -216,9 +214,6 @@ export const messages = {
     "Die Bildschirmaufnahme funktioniert nicht in einer Slack-, Discord- oder Telegram-Unterhaltung, da andere Personen ihre Dateien erhalten.",
   "error.agent.screenCaptureDeclined":
     "Der Benutzer hat diese Bildschirmaufnahme nicht erlaubt. Es wurde nichts aufgenommen.",
-  "error.agent.creditMediaDeclined":
-    "Der Benutzer hat diese Erstellung nicht erlaubt. Es wurden keine Credits verbraucht.",
-  "error.agent.creditMediaNotSaved": "Die Datei wurde erstellt, aber CodeBot konnte sie nicht im Chat speichern.",
   "error.agent.mcpToolDeclined":
     "Der Benutzer hat diesen MCP-Toolaufruf nicht erlaubt. Das Tool wurde nicht ausgeführt.",
   "error.agent.screenCaptureWindowMissing":

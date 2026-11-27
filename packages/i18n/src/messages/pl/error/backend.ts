@@ -4,9 +4,6 @@ import type { messages as source } from "../../en/error/backend";
 export const messages = {
   "error.backend.eventsUnavailable": "Zdarzenia nie są dostępne na tym hoście.",
   "error.backend.databaseIntegrity": "Baza danych CodeBot nie przeszła kontroli integralności.",
-  "error.backend.creditsHoldAdminOnly":
-    "Tylko właściciel lub administrator tego serwera może zezwolić agentom na używanie kredytów.",
-  "error.backend.creditsHoldShort": "Nie ma jeszcze wystarczającej liczby kredytów.",
   "error.backend.webhookRouteLimit": "Host może mieć maksymalnie {limit} rutyn typu webhook.",
   "error.backend.webhookSettingsInvalid": "Sprawdź ustawienia webhooka i spróbuj ponownie.",
   "error.backend.webhookSenderSecretInvalid":

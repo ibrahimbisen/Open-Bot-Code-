@@ -28,12 +28,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Przechwyć główny ekran i wyślij obraz do modelu agenta.",
   "status.agent.screenCaptureChannel":
     "Obraz pojawi się na kanale {channel} i każdy członek tego serwera, który czyta kanał, może go zobaczyć.",
-  "status.agent.creditImageApproval": "Wygeneruj obraz za pomocą {model}. Koszt w kredytach: {credits}.",
-  "status.agent.creditVideoApproval": "Wygeneruj wideo za pomocą {model}. Koszt w kredytach: {credits}.",
-  "status.agent.creditMediaChannel":
-    "Wynik pojawi się na kanale {channel} i każdy członek tego serwera, który czyta kanał, może go zobaczyć.",
-  "status.agent.creditsHoldBalance": "Zużyje to {credits} kredytów, a saldo wynosi {balance} kredytów.",
-  "status.agent.creditsHoldAgentsOff": "Agenci na tym serwerze nie mogą używać kredytów.",
   "status.agent.screenCapturePermissionNext":
     "Potem macOS może poprosić cię o zezwolenie CodeBot na nagrywanie ekranu.",
   "status.agent.screenCaptureDisplay": "Przechwyć wyświetlacz {name} i wyślij obraz do modelu agenta.",
@@ -53,9 +47,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Nikt już nie zobaczy tego zgłoszenia na GitHubie. Tego nie można cofnąć. Aby je poprawić, agent może wysłać poprawione zgłoszenie.",
   "status.agent.feedbackWithdrawing": "Usuwanie zgłoszenia z GitHuba…",
-  "status.agent.serverInstallCommand":
-    "Utwórz jednorazowe polecenie, które instaluje CodeBot na innym komputerze jako serwer {name} i loguje go do Twojego konta. Agent uruchamia je tam.",
-  "status.agent.serverInstallCard": "Polecenie instalacji dla serwera {name}",
   "status.agent.browserProfileNamed":
     "Przenieś {agents} do profilu przeglądarki {profile}. Otrzymają jego logowania i pliki cookie. Ich otwarte karty zostaną zamknięte.",
   "status.agent.commitCoAuthorOff": "Przestań dodawać CodeBot jako współautora commitów wszystkich agentów.",
@@ -70,20 +61,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "Usuń przepływ pracy {title} razem z jego uruchomieniami i wersjami. Jego otwarte kroki zostaną zatrzymane.",
   "status.agent.deleteAgents": "Usuń {agents} razem z ich czatami i plikami. Tej operacji nie można cofnąć.",
-  "status.agent.nearSignatureReceived": "CodeBot otrzymał podpis. Możesz zamknąć tę kartę.",
-  "status.agent.nearSignatureUnknown": "CodeBot nie czeka na ten podpis. Rozpocznij go ponownie w CodeBot.",
-  "status.agent.nearPayment":
-    "Zapłać {amount} {symbol} odbiorcy {recipient} z portfela kryptowalut, dla {domain}: {reason}",
-  "status.agent.nearSummaryCreate":
-    "Wszyscy agenci mogą płacić do {amount} USD dziennie. Możesz to później zmienić w CodeBot.",
-  "status.agent.nearSummaryGrant":
-    "Pozwól tej aplikacji CodeBot płacić z portfela przez {days} dni, zgodnie z twoimi regułami.",
-  "status.agent.nearSummaryBudget": "Zmień budżet dzienny portfela na {amount} USD.",
-  "status.agent.nearSummaryAutoPay":
-    "Pozwól CodeBot płacić bez twojego podpisu, gdy pozwala na to reguła płatności. O inne płatności nadal zapytamy cię na czacie.",
-  "status.agent.nearSummaryPayment": "Zatwierdź płatność {amount} dla odbiorcy {recipient}.",
-  "status.agent.nearSummaryFreeze": "Agenci nie mogą płacić z tego portfela, dopóki nie wznowisz płatności.",
-  "status.agent.nearSummaryUnfreeze": "Agenci znów mogą płacić z tego portfela, zgodnie z twoimi regułami.",
   "status.agent.screenCaptureProgress": "Prośba o przechwycenie ekranu…",
   "status.agent.screenCaptureReviewing": "Sprawdzanie przechwyconego ekranu…",
   "status.agent.browserOpening": "Otwieranie strony internetowej…",
@@ -91,7 +68,6 @@ export const messages = {
   "status.agent.browserClicking": "Klikanie na stronie internetowej…",
   "status.agent.browserTyping": "Wpisywanie na stronie internetowej…",
   "status.agent.browserActing": "Korzystanie ze strony internetowej…",
-  "status.agent.browserPaying": "Wysyłanie płatności…",
   "status.agent.browserReviewing": "Sprawdzanie strony internetowej…",
   "status.agent.memoriesSearching": "Przeszukiwanie wspomnień…",
   "status.agent.chatsSearching": "Przeszukiwanie wcześniejszych czatów…",

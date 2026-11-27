@@ -21,7 +21,6 @@ import {
 import { createSignal, For, Show } from "solid-js";
 import { isApiKeyAccount, providerAccountName } from "../../components/provider-accounts";
 import { useText } from "../../text";
-import { creditModelMakerNamed, MakerLogo } from "../credits/MakerLogo";
 import { createPickerFades, type PickerChip, type PickerOption, PickerRow, pickerMatches } from "./WorkflowPicker";
 import { Hint } from "./workflow-board";
 import { resolutionsBySize } from "./workflow-media-step";
@@ -40,14 +39,7 @@ const entryKey = (provider: string, accountId: string | null) => (accountId ? `$
 const rowValue = (entry: string, model: string) => `${entry}|${model}`;
 
 function ModelLogo(props: { model: WorkflowImageModel }) {
-  return (
-    <Show
-      when={props.model.provider === "codebot" && creditModelMakerNamed(props.model.maker)}
-      fallback={<ProviderLogo provider={props.model.provider} class="wfn-model-logo" />}
-    >
-      {(maker) => <MakerLogo maker={maker()} mono />}
-    </Show>
-  );
+  return <ProviderLogo provider={props.model.provider} class="wfn-model-logo" />;
 }
 
 function span(values: readonly string[]): string | undefined {

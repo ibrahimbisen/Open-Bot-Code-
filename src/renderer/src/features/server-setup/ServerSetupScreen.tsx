@@ -15,7 +15,7 @@ import {
   text,
 } from "./server-setup-port";
 
-const APP_URL = "https://openbot.run/app";
+const APP_URL = "https://github.com/nightly-labs/openbot";
 const PRODUCT_NAME = "CodeBot";
 const DEFAULT_SERVER_NAME = "CodeBot";
 const STATUS_POLL_MS = 2_000;

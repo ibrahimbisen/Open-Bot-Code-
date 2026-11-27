@@ -516,10 +516,7 @@ export function createTemporaryProjectsPort(deps: TemporaryProjectsDeps): Engine
       save((stored) => ({ ...stored, projects: stored.projects.filter((entry) => entry.id !== projectId) }));
     },
 
-    chooseFolder: async () => {
-      const path = await window.codebot.hostedSites.chooseDirectory();
-      return path === null ? { outcome: "cancelled" } : { outcome: "chosen", path };
-    },
+    chooseFolder: (input) => window.codebot.projects.chooseFolder(input),
 
     addFolder: async ({ projectId, path }) => {
       const current = project(projectId);

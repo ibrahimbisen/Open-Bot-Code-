@@ -49,7 +49,7 @@ What the workflows do, checked on 2026-10-01:
 - **But** `REMOTE_TICKET_PUBLIC_JWKS` is in that file. Each CI deploy writes the GitHub secret's value,
   which was last changed on 2026-08-31 and does not have the Slack route key. Signal then refuses every
   route ticket.
-- **Signal.** No workflow. `docs/remote-session-deployment.md` deploys it by hand over SSH. The release
+- **Signal.** No workflow. `docs/self-hosting.md` covers it. The release
   links the server's own `/opt/codebot/remote/.env.production`; the archive leaves out `.env*`. The
   `SLACK_SIGNING_SECRET` in this repository does not reach the server by itself.
 - **Desktop.** `release.yml` on a version tag.
@@ -78,7 +78,7 @@ Do the steps in this order:
          same value, encrypted with the root `DOTENV_PRIVATE_KEY_PRODUCTION`. It lists only
          `A0C5H5C95NH`. To add the development app, change the repository file with `-fk .env.keys`,
          then copy it to the server.
-   - [ ] Deploy as `docs/remote-session-deployment.md` says, with `remote/nginx/signal.openbot.run.conf`.
+   - [ ] Deploy as `docs/self-hosting.md` says, with `remote/nginx/signal.openbot.run.conf`.
    - [ ] `POST https://signal.openbot.run/v1/slack/events` without a signature gives 401, not 404 or
          503.
 5. **Slack app settings** for `A0C5H5C95NH`:

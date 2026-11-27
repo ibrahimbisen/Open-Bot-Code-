@@ -40,7 +40,6 @@ export const SETTING_LINK_SCOPES = {
   "computer-use.permissions": "app",
   "updates.track": "app",
   "updates.auto-install": "app",
-  "credits.explainer": "app",
   "agent.model": "agent",
   "agent.backup-models": "agent",
   "agent.chat-color": "agent",

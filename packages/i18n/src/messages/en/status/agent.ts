@@ -37,12 +37,6 @@ export const messages = defineMessages("status.agent", {
   "status.agent.screenCaptureScreen": "Capture the main screen and send the image to the agent's model.",
   "status.agent.screenCaptureChannel":
     "The image shows in the channel {channel}, and each member of this server who reads the channel can see it.",
-  "status.agent.creditImageApproval": "Generate an image with {model}. This uses {credits} credits.",
-  "status.agent.creditVideoApproval": "Generate a video with {model}. This uses {credits} credits.",
-  "status.agent.creditMediaChannel":
-    "The result shows in the channel {channel}, and each member of this server who reads the channel can see it.",
-  "status.agent.creditsHoldBalance": "This uses {credits} credits, and the balance is {balance} credits.",
-  "status.agent.creditsHoldAgentsOff": "Agents on this server cannot use credits.",
   "status.agent.screenCapturePermissionNext": "macOS can then ask you to allow Screen Recording for CodeBot.",
   "status.agent.screenCaptureDisplay": "Capture the display {name} and send the image to the agent's model.",
   "status.agent.screenCaptureWindow": "Capture the window {name} and send the image to the agent's model.",
@@ -63,9 +57,6 @@ export const messages = defineMessages("status.agent", {
   "status.agent.feedbackWithdrawReason":
     "Everyone loses access to this report on GitHub. You cannot undo this. To fix it, the agent can send a corrected report.",
   "status.agent.feedbackWithdrawing": "Removing your report from GitHub…",
-  "status.agent.serverInstallCommand":
-    "Make a one-time command that installs CodeBot on another computer as the server {name} and signs it in to your account. The agent runs it there.",
-  "status.agent.serverInstallCard": "Install command for the server {name}",
   "status.agent.browserProfileNamed":
     "Move {agents} to the browser profile {profile}. They get its sign-ins and cookies. Their open tabs close.",
   "status.agent.commitCoAuthorOff": "Stop adding CodeBot as a co-author to the commits of all agents.",
@@ -79,19 +70,6 @@ export const messages = defineMessages("status.agent", {
   "status.agent.workflowDelete": "Delete the workflow {title} with its runs and versions. Its open steps stop.",
   "status.agent.deleteAgents": "Delete {agents} with their chats and files. You cannot undo this.",
   "status.agent.vaultCardFillFrames": "The card fields are in frames from {origins}.",
-  "status.agent.linkCardFill":
-    "Fill the one-time Link card {card} on {site}. You approved this payment in Link for {merchant}.",
-  "status.agent.nearSignatureReceived": "CodeBot received the signature. You can close this tab.",
-  "status.agent.nearSignatureUnknown": "CodeBot does not wait for this signature. Start it again in CodeBot.",
-  "status.agent.nearPayment": "Pay {amount} {symbol} to {recipient} from the crypto wallet, for {domain}: {reason}",
-  "status.agent.nearSummaryCreate": "All agents can pay up to {amount} USD a day. You can change it later in CodeBot.",
-  "status.agent.nearSummaryGrant": "Let this CodeBot app pay from the wallet for {days} days, within your rules.",
-  "status.agent.nearSummaryBudget": "Change the daily budget of the wallet to {amount} USD.",
-  "status.agent.nearSummaryAutoPay":
-    "Let CodeBot pay without your signature when a payment rule allows it. Other payments still ask you in the chat.",
-  "status.agent.nearSummaryPayment": "Approve the payment of {amount} to {recipient}.",
-  "status.agent.nearSummaryFreeze": "Agents cannot pay from this wallet until you resume payments.",
-  "status.agent.nearSummaryUnfreeze": "Agents can pay from this wallet again, within your rules.",
   "status.agent.screenCaptureProgress": "Asking to capture the screen…",
   "status.agent.screenCaptureReviewing": "Reviewing the screen capture…",
   "status.agent.browserOpening": "Opening a web page…",
@@ -99,7 +77,6 @@ export const messages = defineMessages("status.agent", {
   "status.agent.browserClicking": "Clicking on the web page…",
   "status.agent.browserTyping": "Typing on the web page…",
   "status.agent.browserActing": "Using the web page…",
-  "status.agent.browserPaying": "Sending the payment…",
   "status.agent.browserReviewing": "Reviewing the web page…",
   "status.agent.memoriesSearching": "Searching its memories…",
   "status.agent.chatsSearching": "Searching its past chats…",

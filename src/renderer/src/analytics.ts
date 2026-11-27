@@ -19,8 +19,6 @@ interface AgentAnalyticsProperties {
   server_kind: ServerKind;
 }
 
-type CreditsCardAnalyticsAction = "buy" | "enable" | "continue" | "skip" | "mute" | "unmute" | "allow" | "set_default";
-
 export type WorkflowAnalyticsAction =
   | "create"
   | "rename"
@@ -74,15 +72,6 @@ interface DesktopAnalyticsEvents {
   };
   queue_action: {
     action: "cancel" | "steer" | "send_now" | "edit" | "reorder" | "interrupt";
-    result: AnalyticsResult;
-    failure_code?: string;
-  };
-  credits_card_action: {
-    card: "hold" | "approval";
-    action: CreditsCardAnalyticsAction;
-    server_kind: "local" | "remote" | "unknown";
-    media_kind?: "image" | "video";
-    still_short?: boolean;
     result: AnalyticsResult;
     failure_code?: string;
   };
@@ -231,54 +220,6 @@ interface DesktopAnalyticsEvents {
     result: AnalyticsResult;
     failure_code?: string;
   };
-  hosted_site_action: {
-    action: "publish" | "replace" | "delete";
-    entry_point: "agent" | "settings";
-    result: AnalyticsResult;
-    failure_code?: string;
-  };
-  hosted_server_upsell: {
-    action: "shown" | "see_plans" | "dismissed";
-    entry_point: "routine_created" | "routines_list" | "server_offline";
-  };
-  hosted_server_plans_action: {
-    action:
-      | "viewed"
-      | "currency_changed"
-      | "interval_changed"
-      | "plan_selected"
-      | "create_failed"
-      | "payment_open_failed"
-      | "retried"
-      | "closed"
-      | "join_opened";
-    entry_point?: string;
-    plan?: string;
-    interval?: string;
-    currency?: string;
-    failure_code?: string;
-  };
-  limit_reached: {
-    kind: "servers" | "members" | "license_users";
-    action: "shown" | "manage_clicked" | "confirmed" | "dismissed" | "contact_clicked";
-    role?: "admin" | "member";
-  };
-  license_action: {
-    action:
-      | "buy_opened"
-      | "checkout_opened"
-      | "users_change_requested"
-      | "plan_change_requested"
-      | "cancel_requested"
-      | "cancel_kept"
-      | "renewal_resumed"
-      | "over_limit_shown";
-    result?: AnalyticsOutcome;
-    direction?: "up" | "down";
-    failure_code?: string;
-  };
-  sales_contact_clicked: { entry_point: "add_server" | "license" | "members" };
-  billing_return_viewed: { outcome: "completed" | "cancelled"; kind?: "plan" | "license" | "portal" };
   usage_limit_action: {
     action: "shown" | "model_switched" | "waited";
     from_provider?: AgentProviderId;
@@ -304,14 +245,7 @@ interface DesktopAnalyticsEvents {
   };
   computer_use_action: { action: "permission_opened"; permission: "screen-recording" | "accessibility" };
   help_link_opened: {
-    destination:
-      | "discord"
-      | "feedback"
-      | "report-problem"
-      | "guides"
-      | "changelog"
-      | "credits-explainer"
-      | "credit-prices";
+    destination: "discord" | "feedback" | "report-problem" | "guides" | "changelog";
   };
   channel_action: {
     action: "created" | "archived" | "member_added";

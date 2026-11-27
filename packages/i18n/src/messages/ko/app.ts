@@ -53,8 +53,6 @@ export const messages = {
   "app.rail.schedule": "일정",
   "app.rail.tasks": "스레드",
   "app.rail.usage": "사용량",
-  "app.rail.creditsAsk": "크레딧이 필요할 때 묻기",
-  "app.rail.creditsAskSaveFailed": "크레딧 확인 설정을 변경하지 못했습니다.",
   "app.rail.library": "라이브러리",
   "app.rail.providers": "제공자",
   "app.rail.crm": "CRM",
@@ -96,9 +94,6 @@ export const messages = {
   "app.socialFollow.join": "{handle} 가입",
   "app.socialFollow.followedTitle": "{name}에서 만나요!",
   "app.socialFollow.followedBody": "새 소식은 그곳에 가장 먼저 올라옵니다.",
-  "app.socialFollow.draftPost":
-    "이제 CodeBot으로 AI 에이전트가 내 컴퓨터에서 일합니다. 채팅과 파일은 내 곁에 남습니다. 써 보세요: {site}",
-  "app.socialFollow.redditTitle": "CodeBot을 쓰는 방법",
   "app.rail.usageRings": "{name} 사용량: {windows}. 사용량 열기",
   "app.rail.usageUnavailable": "{name} 사용량을 사용할 수 없음. 사용량 열기",
   "app.rail.moreUsage": { other: "그 외 계정 {count}개. 사용량 열기" },

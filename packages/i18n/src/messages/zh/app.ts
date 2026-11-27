@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "话题",
   "app.rail.workflows": "工作流",
   "app.rail.usage": "用量",
-  "app.rail.creditsAsk": "需要积分时询问",
-  "app.rail.creditsAskSaveFailed": "无法更改积分询问设置。",
   "app.rail.library": "资料库",
   "app.rail.providers": "服务商",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "加入 {handle}",
   "app.socialFollow.followedTitle": "{name} 上见！",
   "app.socialFollow.followedBody": "我们的新消息会最先发布在那里。",
-  "app.socialFollow.draftPost":
-    "我的 AI 智能体现在借助 CodeBot 在我自己的电脑上工作。我的聊天和文件都留在我身边。试试看：{site}",
-  "app.socialFollow.redditTitle": "我如何使用 CodeBot",
   "app.rail.usageRings": "{name} 用量：{windows}。打开用量",
   "app.rail.usageUnavailable": "{name} 用量不可用。打开用量",
   "app.rail.customAgentUsage": "{name} 用量。打开用量",

@@ -2,7 +2,6 @@ import { dirname, join } from "node:path";
 import {
   DEFAULT_AGENT_DEFAULTS,
   DEFAULT_MACHINE_ALERT_SETTINGS,
-  DEFAULT_MEDIA_APPROVAL_CREDITS_SETTING,
   type HostTurnLimitsInput,
 } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
@@ -164,7 +163,6 @@ export function emptyInstanceTransferService(
     browsingMemory: preference("browsingMemory", { enabled: true }),
     claudeUserSetup: preference("claudeUserSetup", false),
     cacheExpiryCompaction: preference("cacheExpiryCompaction", true),
-    mediaApprovalCredits: preference("mediaApprovalCredits", DEFAULT_MEDIA_APPROVAL_CREDITS_SETTING),
     claudeCompactWindow: preference<number | null>("claudeCompactWindow", null),
     machineAlerts: preference("machineAlerts", DEFAULT_MACHINE_ALERT_SETTINGS),
     modelVisibility: preference<{ provider: string; hidden: string[] }[]>("modelVisibility", []),

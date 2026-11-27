@@ -240,13 +240,6 @@
   gap: var(--codebot-space-4);
 }
 
-.settings-modal-row-title {
-  color: var(--codebot-text-primary);
-  font-size: var(--codebot-text-lg);
-  font-weight: var(--codebot-weight-medium);
-  line-height: var(--codebot-leading-lg);
-}
-
 .settings-modal :where(.ui-item-title, .ui-switch-label) {
   font-size: var(--codebot-text-lg);
   line-height: var(--codebot-leading-lg);
@@ -870,8 +863,7 @@
   padding: calc(var(--codebot-space-2) + var(--codebot-space-0-5)) var(--codebot-space-4);
 }
 
-.settings-modal-page :where(.ui-item-title, .ui-switch-label),
-.settings-modal-page .settings-modal-row-title {
+.settings-modal-page :where(.ui-item-title, .ui-switch-label) {
   font-size: var(--codebot-text-lg);
   font-weight: var(--codebot-weight-regular);
   line-height: var(--codebot-leading-lg);

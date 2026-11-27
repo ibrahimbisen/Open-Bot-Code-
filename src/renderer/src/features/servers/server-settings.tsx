@@ -1,4 +1,3 @@
-import { parseHostedServerName } from "@codebot/contracts/hosted-servers";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AvatarImageInput,
@@ -10,7 +9,7 @@ import type {
   TeamPresenceMember,
   UpdateTeamMemberInput,
 } from "@codebot/contracts/ipc";
-import { accountRestartsServer } from "@codebot/ui/features/servers/ServerActionItems";
+import { parseServerName } from "@codebot/contracts/server-name";
 import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, flush, onCleanup } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
@@ -35,7 +34,7 @@ function generatedServerName(user: CentralAuthUser | null): string {
   let name = t("server.settings.generatedName", { name: person });
   for (let length = characters.length - 1; name.length > INPUT_LIMITS.serverName && length > 0; length--)
     name = t("server.settings.generatedName", { name: characters.slice(0, length).join("") });
-  return parseHostedServerName(name) ?? FALLBACK_SERVER_NAME;
+  return parseServerName(name) ?? FALLBACK_SERVER_NAME;
 }
 
 const ServerSettings = createSimpleContext({
@@ -404,9 +403,9 @@ const ServerSettings = createSimpleContext({
       const server = restartConfirmServer();
       if (!server) throw new Error(currentText().t("server.settings.unavailable"));
       if (server.thisComputer) await serversPort().localServers.restart(server.id);
-      else if (!accountRestartsServer(server) && serverSupportsCapability(server, "host-restart-v1"))
+      else if (serverSupportsCapability(server, "host-restart-v1"))
         await serversPort().hostAdmin.restartHost(server.id);
-      else await serversPort().hostedServers.restart(server.id);
+      else throw new Error(currentText().t("server.settings.unavailable"));
     }
 
     async function removeMembership(server: ServerSummary): Promise<void> {

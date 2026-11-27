@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "スレッド",
   "app.rail.workflows": "ワークフロー",
   "app.rail.usage": "使用量",
-  "app.rail.creditsAsk": "クレジットが必要なときに確認する",
-  "app.rail.creditsAskSaveFailed": "クレジットの確認設定を変更できませんでした。",
   "app.rail.library": "ライブラリ",
   "app.rail.providers": "プロバイダー",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "{handle} に参加",
   "app.socialFollow.followedTitle": "{name} でお会いしましょう！",
   "app.socialFollow.followedBody": "最新情報はまずそこでお届けします。",
-  "app.socialFollow.draftPost":
-    "CodeBot で、AI エージェントが自分のコンピューターで動くようになりました。チャットもファイルも手元に残ります。試してみて：{site}",
-  "app.socialFollow.redditTitle": "CodeBot の使い方",
   "app.rail.usageRings": "{name} の使用量: {windows}。使用量を開く",
   "app.rail.usageUnavailable": "{name} の使用量は表示できません。使用量を開く",
   "app.rail.customAgentUsage": "{name} の使用量。使用量を開く",

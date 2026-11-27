@@ -143,7 +143,6 @@ export const messages = {
   "error.team.claudeUserSetupUnsupported": "Bu bağlantı Claude Code kurulumu anahtarını desteklemiyor.",
   "error.team.claudeCompactWindowUnsupported": "Bu bağlantı Claude sıkıştırma boyutunu desteklemiyor.",
   "error.team.cacheExpiryCompactionUnsupported": "Bu bağlantı önbelleğin süresi dolmadan sıkıştırmayı desteklemiyor.",
-  "error.team.mediaApprovalCreditsUnsupported": "Bu bağlantı kredi onay sınırını desteklemiyor.",
   "error.team.mediaApprovalCreditsInvalid": "0 ile 100.000 arasında tam sayı olarak kredi girin.",
   "error.team.providerEnvironmentUnsupported": "Bu bağlantı sağlayıcı değişkenlerini desteklemiyor.",
   "error.team.modelVisibilityUnsupported": "Bu bağlantı model listesini desteklemiyor.",
@@ -162,9 +161,6 @@ export const messages = {
   "error.team.storageUnsupported": "Depolama bu bağlantı tarafından desteklenmiyor.",
   "error.team.machineResourcesUnsupported": "Makine kullanımı bu bağlantı tarafından desteklenmiyor.",
   "error.team.machineAlertMemberInvalid": "Makine uyarılarını yalnızca bu sunucunun sahibi veya yöneticisi alabilir.",
-  "error.team.hostedSitesUnsupported": "Siteler bu bağlantı tarafından desteklenmiyor.",
-  "error.team.hostedSitesUnregistered": "Bu sunucu CodeBot'a kayıtlı değil, bu nedenle sitesi yok.",
-  "error.team.hostedSiteNotFound": "Site bulunamadı.",
   "error.team.markUnreadUnsupported": "Bu istemci konuşmaları okunmadı olarak işaretlemeyi desteklemiyor.",
   "error.team.inviteServiceUnavailable": "Davet hizmeti kullanılamıyor.",
   "error.team.logoNotFound": "Sunucu logosu bulunamadı.",
@@ -207,7 +203,4 @@ export const messages = {
   "error.team.backgroundProcessesUnsupported": "Bu bağlantı arka plan işlemlerini desteklemiyor.",
   "error.team.providerUseUnsupported": "Bu bağlantı sağlayıcıları açıp kapatmayı desteklemiyor.",
   "error.team.providerUseInvalid": "Bu sağlayıcının açma/kapatma anahtarı yok.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "Bu sunucu medya onaylarında model seçimini desteklemiyor. Sunucudaki CodeBot'u güncelleyin.",
-  "error.team.mediaApprovalChoiceInvalid": "Medya onayı seçimi geçerli değil.",
 } as const satisfies PartialTranslation<typeof source>;

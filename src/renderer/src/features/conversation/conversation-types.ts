@@ -41,7 +41,6 @@ import type { AwaitingReplyItem } from "@codebot/ui/features/conversation/Awaiti
 import type { UsageLimitAskCardProps } from "@codebot/ui/features/conversation/BackupModels";
 import type { ChatMessageAuthor } from "@codebot/ui/features/conversation/ChatMessageRow";
 import type { UnloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
-import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import type { SidePanelPane } from "@codebot/ui/features/conversation/SidePanel";
 import type { AgentThreadOlderMessages } from "@codebot/ui/features/conversation/threads/AgentThreadView";
 import type { ThreadHeaderProps, ThreadItem } from "@codebot/ui/features/conversation/threads/thread-types";
@@ -51,7 +50,6 @@ import type { ConnectorRegistry } from "../connectors/connector-registry";
 import type { AppSettingLinkId } from "../settings/setting-link-targets";
 import type { ChannelReplyView } from "../speech/speech-replies";
 import type { ConversationRuntime } from "./conversation-runtime";
-import type { ServerInstallWatch } from "./ServerInstallChatCard";
 import type { TurnStepLines } from "./turn-step-lines";
 
 export interface AgentSettingsRequest {
@@ -117,7 +115,6 @@ export interface ConversationProps {
   onOpenMcpSignIn?: ((mcpServerId: string, trigger: HTMLElement | null) => void) | undefined;
   mcpSignedIn?: ((mcpServerId: string) => boolean) | undefined;
   refreshMcpSignIns?: (() => void) | undefined;
-  serverInstall?: ServerInstallWatch | undefined;
   platform?: import("@codebot/contracts/ipc").AppInfo["platform"] | undefined;
 
   agentStatus: AgentStatus;
@@ -225,7 +222,6 @@ export interface ConversationProps {
   onPromptResolutionPresented?: ((agentId: string, turnId: string, requestId: string | number) => void) | undefined;
   onRespondToApproval: (decision: "accept" | "decline") => Promise<boolean>;
   onAlwaysAllowApproval?: (() => Promise<boolean>) | undefined;
-  mediaApproval?: MediaApprovalControls | undefined;
   agentAutoApproves?: boolean | undefined;
   remoteBackupModelsLoaded?: boolean | undefined;
   remotePlanCardLoaded?: boolean | undefined;

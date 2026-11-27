@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "Ветки",
   "app.rail.workflows": "Рабочие процессы",
   "app.rail.usage": "Использование",
-  "app.rail.creditsAsk": "Спрашивать, когда нужны кредиты",
-  "app.rail.creditsAskSaveFailed": "Не удалось изменить вопросы о кредитах.",
   "app.rail.library": "Библиотека",
   "app.rail.providers": "Провайдеры",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "Вступить в {handle}",
   "app.socialFollow.followedTitle": "До встречи в {name}!",
   "app.socialFollow.followedBody": "Там наши новости выходят первыми.",
-  "app.socialFollow.draftPost":
-    "Мои ИИ-агенты теперь работают на моём компьютере с CodeBot. Мои чаты и файлы остаются у меня. Попробуйте: {site}",
-  "app.socialFollow.redditTitle": "Как я использую CodeBot",
   "app.rail.usageRings": "Использование {name}: {windows}. Открыть использование",
   "app.rail.usageUnavailable": "Использование {name} недоступно. Открыть использование",
   "app.rail.customAgentUsage": "Использование {name}. Открыть использование",

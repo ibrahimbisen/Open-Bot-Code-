@@ -146,7 +146,6 @@ export type ChatActionMarkerModel =
   | { kind: "setting-link"; settingId: SettingLinkId; timestamp: string }
   | (SkillSuggestionEvent & { kind: "skill-suggestion"; timestamp: string })
   | { kind: "mcp-sign-in"; mcpServerId: string; timestamp: string }
-  | { kind: "server-install"; name: string | null; expiresAt: number; timestamp: string }
   | {
       kind: "feedback-sent";
       messageId: string;

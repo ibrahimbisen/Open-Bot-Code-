@@ -143,7 +143,7 @@ export function WorkflowMediaComposer(props: {
   });
 
   const pictures = () => step.inputs().filter((source) => step.inputUrl(source) !== undefined);
-  const ready = () => !step.busy() && step.runnable() && !step.locked() && !step.short() && step.model() !== undefined;
+  const ready = () => !step.busy() && step.runnable() && !step.locked() && step.model() !== undefined;
   takeKey(
     isEscape,
     (target) => section?.contains(target) === true,
@@ -554,10 +554,9 @@ function RunButton(props: { step: MediaStep; id: string; ready: boolean }) {
             loading={step.busy()}
             disabled={!props.ready}
             aria-keyshortcuts="Meta+Enter Control+Enter"
-            aria-label={step.runLabel()}
             onClick={step.run.start}
           >
-            <RunContent credits={step.total()} takes={step.batch()} modelMissing={step.modelMissing()} />
+            <RunContent takes={step.batch()} modelMissing={step.modelMissing()} />
           </Button>
         }
       >

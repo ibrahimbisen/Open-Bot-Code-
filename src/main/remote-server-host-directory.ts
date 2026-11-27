@@ -23,41 +23,6 @@ export function watchRemoteHostDirectory(options: {
   return () => clearInterval(timer);
 }
 
-const SERVER_CLAIM_REFRESH_INTERVAL_MS = 5_000;
-const SERVER_CLAIM_MAX_WATCH_MS = 15 * 60_000;
-
-export function watchServerClaims(options: { serverIds(): readonly string[]; refresh(): void }): {
-  add(expiresAt: number): void;
-  stop(): void;
-} {
-  let timer: ReturnType<typeof setInterval> | undefined;
-  let known = new Set<string>();
-  let claims = 0;
-  let deadline = 0;
-  const stop = () => {
-    clearInterval(timer);
-    timer = undefined;
-    claims = 0;
-  };
-  const tick = () => {
-    const fresh = options.serverIds().filter((id) => !known.has(id)).length;
-    if (fresh >= claims || Date.now() >= deadline) stop();
-    else options.refresh();
-  };
-  return {
-    add(expiresAt) {
-      if (!timer) {
-        known = new Set(options.serverIds());
-        timer = setInterval(tick, SERVER_CLAIM_REFRESH_INTERVAL_MS);
-        timer.unref();
-      }
-      claims += 1;
-      deadline = Math.max(deadline, Math.min(expiresAt, Date.now() + SERVER_CLAIM_MAX_WATCH_MS));
-    },
-    stop,
-  };
-}
-
 interface HostKeyPin {
   readonly hostId: string;
   readonly publicKey: string;
@@ -166,7 +131,6 @@ export function reconcileWebRtcHosts(input: WebRtcHostReconciliationInput): WebR
         ...(host.restartAvailable === undefined ? {} : { restartAvailable: host.restartAvailable }),
         ...(host.storageGb === undefined ? {} : { storageGb: host.storageGb }),
         ...(host.paymentRequired ? { paymentRequired: true } : {}),
-        ...(host.customPlan ? { customPlan: host.customPlan } : {}),
         transport: "webrtc-v2",
       };
     });

@@ -18,7 +18,6 @@ import {
   type WorkflowMediaCatalogModel,
   type WorkflowMediaOptionValue,
   type WorkflowMediaPriceRequest,
-  type WorkflowMediaUnavailableModel,
   type WorkflowNode,
   workflowFileAssetBytes,
   workflowVideoLengthChoices,
@@ -50,12 +49,10 @@ import { WORKFLOWS_CHANNELS_CAPABILITY } from "@codebot/contracts/team-protocol/
 import { WORKFLOWS_CHATS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-chats-v1";
 import {
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY,
-  WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CODECS,
   WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES,
 } from "@codebot/contracts/team-protocol/workflows-credit-media-unavailable-v1";
 import {
   WORKFLOWS_CREDIT_MEDIA_CAPABILITY,
-  WORKFLOWS_CREDIT_MEDIA_CODECS,
   WORKFLOWS_CREDIT_MEDIA_ROUTES,
 } from "@codebot/contracts/team-protocol/workflows-credit-media-v1";
 import {
@@ -116,7 +113,6 @@ import {
 import { sourceText } from "@codebot/i18n/source";
 import {
   decodeRemoteWorkflowDetail,
-  decodeRemoteWorkflowMediaUnavailable,
   decodeRemoteWorkflowRunDetail,
   decodeRemoteWorkflowVersions,
 } from "@codebot/team-client/workflow-decoding";
@@ -202,28 +198,6 @@ const CINEMA_MODEL: WorkflowMediaCatalogModel = {
   transparent: false,
 };
 let liveModels: readonly WorkflowMediaCatalogModel[] = [LIVE_MODEL];
-const CREDIT_MODEL: WorkflowMediaCatalogModel = {
-  id: "codebot-video_e2e",
-  provider: "codebot",
-  providerModel: "video_e2e",
-  name: "Video e2e",
-  maker: "ByteDance",
-  kinds: ["video"],
-  aspects: ["16:9", "9:16"],
-  durations: [5, 10],
-  resolutions: ["720p"],
-  transparent: false,
-  options: [{ name: "generate_audio", kind: "switch", values: ["off", "on"], default: "on" }],
-  inputs: ["frames"],
-};
-let creditModels: readonly WorkflowMediaCatalogModel[] = [];
-const CREDIT_UNAVAILABLE: WorkflowMediaUnavailableModel = {
-  id: "codebot-kling_e2e",
-  name: "Kling e2e · Omni",
-  kinds: ["video"],
-};
-let creditUnavailable: readonly WorkflowMediaUnavailableModel[] = [];
-let creditBalance: { available: number; quota: number | null } | null = null;
 const sizeRequests: { attachmentId: string; width: number; height: number }[] = [];
 let sizeFails = false;
 const handoffs: { agentId: string; text: string; sourcePaths: readonly string[] }[] = [];
@@ -535,16 +509,8 @@ async function startHost(): Promise<Host> {
           sunra: sunraSignedIn ? { available: 120, quota: 500 } : null,
           higgsfield: higgsfieldSignedIn ? { available: 42, quota: null } : null,
           accounts: serviceAccounts,
-          codebot: creditBalance,
         }),
-      mediaCatalog: (only) =>
-        Effect.succeed({
-          models:
-            only === "codebot"
-              ? creditModels
-              : [...(higgsfieldSignedIn ? liveModels : []), ...(only === undefined ? creditModels : [])],
-          ...(only === undefined || only === "codebot" ? { unavailable: creditUnavailable } : {}),
-        }),
+      mediaCatalog: (only) => Effect.succeed({ models: only === "codebot" || !higgsfieldSignedIn ? [] : liveModels }),
       mediaPrice: (request) =>
         Effect.sync(() => {
           priceRequests.push(request);
@@ -2527,105 +2493,44 @@ try {
   );
 
   await step(
-    "credit media: the host advertises workflows-credit-media-v1 to protocol 10; its catalog and credits routes return the credit models and balance, and the service catalogs never list a credit model",
+    "credit media: the host does not advertise workflows-credit-media-v1 or workflows-credit-media-unavailable-v1 and answers 404 on their routes, and the service catalogs still list the live model",
     async () => {
-      const capabilities = async (protocol: number) =>
-        decodeTeamProtocolSupportExpanded((await call("GET", TEAM_API_ROUTES.compatibility, { protocol })).body)
-          .capabilities;
-      assert.ok((await capabilities(TEAM_PROTOCOL_V10)).includes(WORKFLOWS_CREDIT_MEDIA_CAPABILITY));
-      assert.ok(!(await capabilities(TEAM_PROTOCOL_V9)).includes(WORKFLOWS_CREDIT_MEDIA_CAPABILITY));
-      const codec = (route: string) => {
-        const found =
-          WORKFLOWS_CREDIT_MEDIA_CODECS.get(route) ??
-          WORKFLOWS_MEDIA_CATALOG_V2_CODECS.get(route) ??
-          WORKFLOWS_MEDIA_CATALOG_CODECS.get(route);
-        assert.ok(found, `No codec for ${route}.`);
-        return found;
-      };
-      const raw = async (route: string, capabilities: readonly string[] = TEAM_CURRENT_CAPABILITIES) =>
-        call("POST", route, { token: member, body: {}, protocol: TEAM_PROTOCOL_V10, capabilities });
+      const advertised = decodeTeamProtocolSupportExpanded(
+        (await call("GET", TEAM_API_ROUTES.compatibility, { protocol: TEAM_PROTOCOL_V10 })).body,
+      ).capabilities;
+      assert.ok(!advertised.includes(WORKFLOWS_CREDIT_MEDIA_CAPABILITY));
+      assert.ok(!advertised.includes(WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY));
+      const raw = async (route: string) =>
+        call("POST", route, {
+          token: member,
+          body: {},
+          protocol: TEAM_PROTOCOL_V10,
+          capabilities: TEAM_CURRENT_CAPABILITIES,
+        });
+      const removed = [
+        WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog,
+        WORKFLOWS_CREDIT_MEDIA_ROUTES.credits,
+        WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES.list,
+      ];
+      const statuses = await Promise.all(removed.map(async (route) => (await raw(route)).status));
+      assert.deepEqual(statuses, [404, 404, 404]);
       const read = async (route: string) => {
-        codec(route).request({});
+        const codec = WORKFLOWS_MEDIA_CATALOG_V2_CODECS.get(route) ?? WORKFLOWS_MEDIA_CATALOG_CODECS.get(route);
+        assert.ok(codec, `No codec for ${route}.`);
+        codec.request({});
         const response = await raw(route);
         assert.equal(response.status, 200, JSON.stringify(response.body));
-        return codec(route).response(response.status, response.body);
+        return codec.response(response.status, response.body);
       };
       higgsfieldSignedIn = true;
-      creditModels = [CREDIT_MODEL];
-      creditBalance = { available: 350.5, quota: null };
       try {
-        const catalog = await read(WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog);
-        assert.deepEqual(catalog, { models: [CREDIT_MODEL] });
-        const credits = await read(WORKFLOWS_CREDIT_MEDIA_ROUTES.credits);
-        assert.deepEqual(credits, { codebot: { available: 350.5, quota: null } });
         const catalogV2 = await read(WORKFLOWS_MEDIA_CATALOG_V2_ROUTES.catalog);
         assert.deepEqual(catalogV2, { models: [LIVE_MODEL] });
         const catalogV1 = await read(WORKFLOWS_MEDIA_CATALOG_ROUTES.catalog);
         assert.deepEqual(catalogV1, { models: [LIVE_MODEL] });
-        creditBalance = null;
-        const signedOut = await read(WORKFLOWS_CREDIT_MEDIA_ROUTES.credits);
-        assert.deepEqual(signedOut, { codebot: null });
-        const old = await raw(
-          WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog,
-          TEAM_CURRENT_CAPABILITIES.filter((capability) => capability !== WORKFLOWS_CREDIT_MEDIA_CAPABILITY),
-        );
-        assert.equal(old.status, 400, JSON.stringify(old.body));
-        assert.ok(
-          JSON.stringify(old.body).includes(sourceText("error.workflow.serverTooOld")),
-          JSON.stringify(old.body),
-        );
-        return { catalog, credits, catalogV2, catalogV1, signedOut, old: old.status };
+        return { statuses, catalogV2, catalogV1 };
       } finally {
         higgsfieldSignedIn = false;
-        creditModels = [];
-        creditBalance = null;
-      }
-    },
-  );
-
-  await step(
-    "credit media unavailable: the host advertises workflows-credit-media-unavailable-v1 to protocol 10; its route lists a saved credit model with no route by name only, the credit catalog does not list it, and a peer without the capability gets server too old",
-    async () => {
-      const capabilities = async (protocol: number) =>
-        decodeTeamProtocolSupportExpanded((await call("GET", TEAM_API_ROUTES.compatibility, { protocol })).body)
-          .capabilities;
-      assert.ok((await capabilities(TEAM_PROTOCOL_V10)).includes(WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY));
-      assert.ok(!(await capabilities(TEAM_PROTOCOL_V9)).includes(WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY));
-      const route = WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_ROUTES.list;
-      const codec = WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CODECS.get(route);
-      assert.ok(codec, `No codec for ${route}.`);
-      const raw = async (path: string, capabilities: readonly string[] = TEAM_CURRENT_CAPABILITIES) =>
-        call("POST", path, { token: member, body: {}, protocol: TEAM_PROTOCOL_V10, capabilities });
-      creditModels = [CREDIT_MODEL];
-      creditUnavailable = [CREDIT_UNAVAILABLE];
-      try {
-        codec.request({});
-        const response = await raw(route);
-        assert.equal(response.status, 200, JSON.stringify(response.body));
-        const listed = codec.response(response.status, response.body);
-        assert.deepEqual(listed, { models: [CREDIT_UNAVAILABLE] });
-        assert.deepEqual(decodeRemoteWorkflowMediaUnavailable(response.body), [CREDIT_UNAVAILABLE]);
-        const catalog = await raw(WORKFLOWS_CREDIT_MEDIA_ROUTES.catalog);
-        assert.equal(catalog.status, 200, JSON.stringify(catalog.body));
-        assert.deepEqual(catalog.body, { models: [CREDIT_MODEL] });
-        creditUnavailable = [];
-        const empty = await raw(route);
-        assert.deepEqual(codec.response(empty.status, empty.body), { models: [] });
-        const old = await raw(
-          route,
-          TEAM_CURRENT_CAPABILITIES.filter(
-            (capability) => capability !== WORKFLOWS_CREDIT_MEDIA_UNAVAILABLE_CAPABILITY,
-          ),
-        );
-        assert.equal(old.status, 400, JSON.stringify(old.body));
-        assert.ok(
-          JSON.stringify(old.body).includes(sourceText("error.workflow.serverTooOld")),
-          JSON.stringify(old.body),
-        );
-        return { listed, catalog: catalog.body, empty: empty.body, old: old.status };
-      } finally {
-        creditModels = [];
-        creditUnavailable = [];
       }
     },
   );

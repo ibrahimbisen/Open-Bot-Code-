@@ -89,10 +89,6 @@ export const STORY_CATALOGS: WorkflowCatalogs = {
   ],
   mediaSize: true,
   agentFiles: true,
-  mediaPrice: async (request) => {
-    const silent = request.options?.some((option) => option.name === "generate_audio" && option.value === "off");
-    return { credits: request.kind === "video" ? request.duration * (silent ? 2 : 2.5) : 1.5 };
-  },
   imageModels: [
     {
       id: "gpt-image",

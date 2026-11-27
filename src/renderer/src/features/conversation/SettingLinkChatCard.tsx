@@ -7,15 +7,10 @@ import {
   isAgentSettingLinkId,
 } from "@codebot/ui/features/conversation/agent-setting-links";
 import { SettingLinkCard } from "@codebot/ui/features/conversation/SettingLinkCard";
-import { CreditIcon } from "@codebot/ui/features/credits/CreditIcon";
-import { CreditsExplainerDialog } from "@codebot/ui/features/credits/CreditsExplainerDialog";
 import { useText } from "@codebot/ui/text";
-import { createSignal, Show } from "solid-js";
 import { usePlatform } from "../../platform";
-import { openCreditPrices } from "../servers/credit-prices";
 import { appSettingLinkTarget } from "../settings/setting-link-targets";
 import { navItem } from "../settings/settings-tabs";
-import { conversationRuntime } from "./conversation-runtime";
 import { useConversationViewScope } from "./conversation-scope";
 import type { ConversationProps } from "./conversation-types";
 
@@ -26,36 +21,7 @@ export interface SettingLinkChatCardProps {
   appSettingOpener?: ConversationProps["appSettingOpener"];
 }
 
-function CreditsExplainerChatCard() {
-  const { t } = useText();
-  const { props } = useConversationViewScope();
-  const [open, setOpen] = createSignal(false);
-  return (
-    <>
-      <SettingLinkCard
-        title={t("billing.credits.explainer.title")}
-        path={[t("billing.credits.explainer.place"), t("app.rail.credits")]}
-        icon={<CreditIcon />}
-        onOpen={() => setOpen(true)}
-      />
-      <CreditsExplainerDialog
-        open={open()}
-        onOpenChange={setOpen}
-        onOpenPrices={() => openCreditPrices(conversationRuntime(props).openUrl)}
-      />
-    </>
-  );
-}
-
 export function SettingLinkChatCard(props: SettingLinkChatCardProps) {
-  return (
-    <Show when={props.settingId !== "credits.explainer"} fallback={<CreditsExplainerChatCard />}>
-      <SettingRowChatCard {...props} />
-    </Show>
-  );
-}
-
-function SettingRowChatCard(props: SettingLinkChatCardProps) {
   const { t } = useText();
   const platform = usePlatform();
   const card = () => {
@@ -72,7 +38,6 @@ function SettingRowChatCard(props: SettingLinkChatCardProps) {
         note: agent ? undefined : t("chat.settingLink.agentChatOnly"),
       };
     }
-    if (settingId === "credits.explainer") return { title: "", path: [], open: undefined, note: undefined };
     const target = appSettingLinkTarget(settingId, platform.appInfo()?.platform);
     const open = props.appSettingOpener?.(settingId);
     return {

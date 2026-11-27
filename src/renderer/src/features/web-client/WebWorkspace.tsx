@@ -1,8 +1,6 @@
 import { isKnownAgentProvider } from "@codebot/contracts/agent-providers";
 import type { AppAppearance } from "@codebot/contracts/app-appearance";
 import type { AppLanguage } from "@codebot/contracts/app-language";
-import type { CreditMediaGenerationKind } from "@codebot/contracts/credit-media";
-import { HOSTED_SERVER_CONTACT_URL } from "@codebot/contracts/hosted-servers";
 import {
   type AddedAgent,
   type AgentModelChoice,
@@ -30,13 +28,11 @@ import {
   decodeHostVoiceModel,
   LEGACY_RESPONSE_STYLE,
   type McpSignInState,
-  mediaApprovalDefaultModelUpdate,
   type RoutineFields,
   type ServerConnectionState,
   type ServerSummary,
   STORAGE_CAPABILITY,
 } from "@codebot/contracts/ipc";
-import type { PricingOrder } from "@codebot/contracts/license";
 import type { MarketplaceListingLink } from "@codebot/contracts/marketplace-links";
 import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
 import { AGENT_BACKUP_MODELS_ROUTES } from "@codebot/contracts/team-protocol/agent-backup-models-v1";
@@ -81,7 +77,6 @@ import { HOST_RELEASE_CAPABILITY } from "@codebot/contracts/team-protocol/host-r
 import { HOST_SIGNAL_HOME_ROUTES } from "@codebot/contracts/team-protocol/host-signal-home-v1";
 import { HOST_TURN_LIMITS_ROUTES } from "@codebot/contracts/team-protocol/host-turn-limits-v1";
 import { HOST_VOICE_MODEL_ROUTES } from "@codebot/contracts/team-protocol/host-voice-model-v1";
-import { HOSTED_SITES_CAPABILITY } from "@codebot/contracts/team-protocol/hosted-sites-v1";
 import { INSTANCE_TRANSFER_CHUNKS_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-chunks-v1";
 import { INSTANCE_TRANSFER_FULL_COPY_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-full-copy-v1";
 import { INSTANCE_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/instance-transfer-v1";
@@ -115,7 +110,6 @@ import {
   checkHostForUpdate,
   checkHostRelease,
   clearStorage,
-  deleteHostedSite,
   deleteStoredFile,
   getAgentAdminSettings,
   getHostAgentAccess,
@@ -124,7 +118,6 @@ import {
   getHostBrowsingMemory,
   getHostCacheExpiryCompaction,
   getHostClaudeCompactWindow,
-  getHostMediaApprovalCredits,
   getHostMemoryReview,
   getHostModelVisibility,
   getHostPersonality,
@@ -136,14 +129,12 @@ import {
   getHostUpdateStatus,
   getStorageUsage,
   listHostBackgroundProcesses,
-  listHostedSites,
   requestHostRestart,
   setHostAgentAccess,
   setHostAgentMemoryLimit,
   setHostBrowsingMemory,
   setHostCacheExpiryCompaction,
   setHostClaudeCompactWindow,
-  setHostMediaApprovalCredits,
   setHostMemoryReview,
   setHostModelVisibility,
   setHostPersonality,
@@ -163,24 +154,10 @@ import type { GlobalSearchRoutine } from "@codebot/ui/components/GlobalSearch";
 import type { AgentMessage, ComposerThreadMessageMatch } from "@codebot/ui/data";
 import { accountUsageProviderRows } from "@codebot/ui/features/account/account-usage-view";
 import { computeAgentAvatarMoods } from "@codebot/ui/features/agents/agent-avatar-mood";
+import type { CreationPreference } from "@codebot/ui/features/agents/agent-creation-model";
 import { createFirstAgentDraft, type FirstAgentDraft } from "@codebot/ui/features/agents/FirstAgentSetup";
-import { BillingDialog } from "@codebot/ui/features/billing/BillingDialog";
-import { createBillingStore } from "@codebot/ui/features/billing/billing-store";
-import { LicenseSection } from "@codebot/ui/features/billing/LicenseSection";
-import { createLicenseStore } from "@codebot/ui/features/billing/license-store";
 import { unloadedHistory } from "@codebot/ui/features/conversation/ChatScrollRail";
-import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import { MAIN_THREAD_ID } from "@codebot/ui/features/conversation/threads/thread-types";
-import { BuyCreditsPage } from "@codebot/ui/features/credits/BuyCreditsPage";
-import { CreditActivitySection } from "@codebot/ui/features/credits/CreditActivitySection";
-import { CreditsSection } from "@codebot/ui/features/credits/CreditsSection";
-import {
-  type CreditsMenu,
-  createCreditsStore,
-  createCreditsSummary,
-  creditsRailWallet,
-} from "@codebot/ui/features/credits/credits-store";
-import { RailMoveCreditsDialog } from "@codebot/ui/features/credits/MoveCreditsDialog";
 import { LeaveServerDialog } from "@codebot/ui/features/servers/LeaveServerDialog";
 import { RestartServerDialog } from "@codebot/ui/features/servers/RestartServerDialog";
 import type { ServerActionCallbacks } from "@codebot/ui/features/servers/ServerActionItems";
@@ -191,13 +168,9 @@ import {
   serverWorkspacePhase,
 } from "@codebot/ui/features/servers/ServerConnectionNotice";
 import { ServerMenu } from "@codebot/ui/features/servers/ServerMenu";
-import { createServerPaywall } from "@codebot/ui/features/servers/ServerPaywall";
-import { serverPlanBlocks, serverPlanScreenShown } from "@codebot/ui/features/servers/ServerPlanEnd";
 import { type HiddenServer, ServerRail } from "@codebot/ui/features/servers/ServerRail";
 import type { SettingsPagePlacement } from "@codebot/ui/features/settings/SettingsDialogShell";
-import { createSettingsHostedServersStore } from "@codebot/ui/features/settings/stores/hosted-servers-store";
 import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
-import { SidebarCommunityCard } from "@codebot/ui/features/sidebar/SidebarCommunityCard";
 import { sidebarAgentOrder } from "@codebot/ui/features/sidebar/sidebar-agent-order";
 import {
   computeSidebarAgentStates,
@@ -221,16 +194,10 @@ import {
   Switch,
   untrack,
 } from "solid-js";
-import { matchesShortcut } from "../../keyboard-shortcut-preference";
-import { queuedDeliveriesInOrder } from "../../queue-reconciliation";
-import { backgroundWorkKey } from "../conversation/background-work-key";
-import "katex/contrib/copy-tex";
-import "../../selection-copy";
-import type { CreationPreference } from "@codebot/ui/features/agents/agent-creation-model";
 import { actionToast } from "../../action-toast";
-import { desktopAnalytics } from "../../analytics";
 import { collectThreadMessageMatches, formatMessageTime, toAgentMessage } from "../../app-message-projection";
 import { ProviderSignInDialogs } from "../../components/ProviderSignInDialogs";
+import { matchesShortcut } from "../../keyboard-shortcut-preference";
 import { LayoutProvider, useLayout } from "../../layout";
 import {
   AgentUsagePanel,
@@ -243,6 +210,7 @@ import {
   WorkflowsCanvas,
 } from "../../lazy-views";
 import { PlatformProvider } from "../../platform";
+import { queuedDeliveriesInOrder } from "../../queue-reconciliation";
 import { deviceSendShortcut } from "../../send-shortcut-preference";
 import { startupLoadingScene } from "../../startup-animation-preference";
 import { WorkspaceFrame } from "../../WorkspaceFrame";
@@ -279,6 +247,7 @@ import { globalSearchChannels } from "../channels/global-search-channels";
 import { createConnectorRegistry, createConnectorSet } from "../connectors/connector-registry";
 import { hostMessagingApi } from "../connectors/host-messaging-port";
 import { hostWhatsAppPort } from "../connectors/whatsapp-connector";
+import { backgroundWorkKey } from "../conversation/background-work-key";
 import { Conversation, createConversationController } from "../conversation/Conversation";
 import { clearStoredQueueEdit } from "../conversation/composer-draft";
 import { ConversationControllerProvider } from "../conversation/conversation-controller-context";
@@ -288,8 +257,6 @@ import type {
   ConversationThreads,
   PromptAnswerOptions,
 } from "../conversation/conversation-types";
-import { trackedMediaApproval } from "../conversation/credits-card-analytics";
-import { creditsHoldControls } from "../conversation/credits-hold-controls";
 import {
   type AgentLevelsSource,
   createAgentMessageDeleteAccess,
@@ -303,12 +270,8 @@ import { hostSetupProviderProps } from "../onboarding/host-setup-provider-props"
 import { createRoutineTimezonePrompt } from "../schedule/routine-timezone-prompt";
 import type { ScheduleRoutine } from "../schedule/SchedulePanel";
 import { scheduleRoutinePorts } from "../schedule/schedule-routine-create";
-import { AddServerOverlay, type AddServerResume } from "../servers/AddServerOverlay";
-import { createCreditAgentsRail } from "../servers/credit-agents-rail";
-import { openCreditPrices } from "../servers/credit-prices";
-import { createHostedUpsellOffline, HostedServerUpsell } from "../servers/hosted-server-upsell-controller";
+import { AddServerOverlay } from "../servers/AddServerOverlay";
 import { mcpSignInRecord } from "../servers/mcp-servers";
-import { type HostMediaApprovalCreditsCalls, saveMediaApprovalCredits } from "../servers/media-approval-credits-store";
 import { OwnerTransferPrompt } from "../servers/OwnerTransferPrompt";
 import { saveRemoteFrameChannels } from "../servers/remote-workspace-frame";
 import type { HostAgentDefaultsCalls } from "../servers/ServerAgentsSection";
@@ -317,9 +280,8 @@ import type { HostBrowsingMemoryCalls } from "../servers/ServerBrowsingMemorySet
 import type { HostMemoryLimitCalls } from "../servers/ServerMemoryLimitSetting";
 import type { HostMemoryReviewCalls } from "../servers/ServerMemoryReviewSetting";
 import type { OwnerTransferCalls } from "../servers/ServerOwnerTransferSection";
-import { ServerPlanReminder } from "../servers/ServerPlanReminder";
 import type { HostAgentAccessCalls } from "../servers/ServerRolesSection";
-import type { ServerHostedSitesOptions, ServerSettingsSection } from "../servers/ServerSettingsModal";
+import type { ServerSettingsSection } from "../servers/ServerSettingsModal";
 import type { HostSignalHomeCalls } from "../servers/ServerSignalHomeSetting";
 import type { HostSkillLearningCalls } from "../servers/ServerSkillLearningSetting";
 import type { HostTimezoneCalls } from "../servers/ServerTimezoneSetting";
@@ -343,15 +305,12 @@ import {
   serverUpdateBadge,
   showServerUpdate,
 } from "../servers/server-update-flow";
-import { licenseContactUs, trackLicenseEvent } from "../settings/license-analytics";
 import type { HostClaudeCompactWindowCalls } from "../settings/provider-claude-compact-window";
 import type { HostClaudeUserSetupCalls } from "../settings/provider-claude-user-setup";
 import type { HostProviderEnvironmentCalls } from "../settings/provider-environment";
 import type { HostModelVisibilityCalls } from "../settings/provider-model-visibility";
 import type { HostPromptCacheTtlCalls } from "../settings/provider-prompt-cache";
-import { createCommunityCardVisibility } from "../sidebar/community-card";
 import { createSidebarAlertCards, SidebarAlertCards } from "../sidebar/SidebarAlertCards";
-import { ServerUpgradeOffer } from "../sidebar/server-upgrade-offer";
 import { isReaderAuthor } from "../team/reader-identity";
 import type { ServerVaultOptions } from "../vault/ServerVaultPanel";
 import { createVaultStore } from "../vault/stores/vault-store";
@@ -368,7 +327,6 @@ import { WindowBackdrop } from "../window/WindowBackdrop";
 import type { SettingsKind, WindowPage } from "../window/window-page-context";
 import { useWorkspaceShortcuts } from "../window/workspace-shortcuts";
 import { workflowAgentProgress } from "../workflows/workflow-agent-progress";
-import { createWorkflowMediaCredits } from "../workflows/workflow-media-credits";
 import { WebAgentSettings } from "./WebAgentSettings";
 import { WebConnectComputer } from "./WebConnectComputer";
 import { WebMobileNavigation, type WebMobilePane } from "./WebMobileNavigation";
@@ -379,13 +337,6 @@ import { createWebAgentImportCalls } from "./web-agent-import";
 import { createWebAgentThreads } from "./web-agent-threads";
 import { createWebAttachmentMedia } from "./web-attachment-media";
 import { openWebLink } from "./web-attachments";
-import {
-  createWebBillingCalls,
-  createWebCreditsCalls,
-  createWebLicenseCalls,
-  createWebReferralCalls,
-  type WebAppStart,
-} from "./web-billing";
 import { webBitwardenConnectorPort } from "./web-bitwarden-connector";
 import { createWebChannelsPort } from "./web-channels-runtime";
 import { createWebChatHistory, type WebChatHistoryEntry } from "./web-chat-history";
@@ -395,7 +346,6 @@ import { createWebConversationView } from "./web-conversation-view";
 import { webCrmHost } from "./web-crm";
 import { createWebFileSaver } from "./web-file-download";
 import { webGitHubConnectorPort } from "./web-github-connector";
-import { createWebHostedServers } from "./web-hosted-server-state";
 import { createWebInstanceTransferCalls } from "./web-instance-transfer";
 import { webMachineCalls } from "./web-machine-calls";
 import { createWebAgentTemplateCalls, createWebMarketplaceCalls } from "./web-marketplace";
@@ -468,12 +418,6 @@ type WebWorkspaceProps = {
   onPluginSlugConsumed?: () => void;
   marketplaceListing?: MarketplaceListingLink | null;
   onMarketplaceListingConsumed?: () => void;
-  start?: WebAppStart | null;
-  onStartConsumed?: () => void;
-  billingReturn?: boolean;
-  onBillingReturnConsumed?: () => void;
-  hostingReturn?: AddServerResume | null;
-  onHostingReturnConsumed?: () => void;
   language: AppLanguage;
   onChangeLanguage: (language: AppLanguage) => void;
   appearance: AppAppearance;
@@ -549,12 +493,11 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
   const noHost = () => !workspace.state.host && (workspace.state.hostsLoaded || Boolean(workspace.state.hostsError));
   const hostOffline = () => !noHost() && !workspace.state.workspaceLoaded;
   const conversationConnecting = () =>
-    !workspace.state.hostedSleep &&
-    (workspace.state.status === "connecting" ||
-      (workspace.state.status === "online" &&
-        Boolean(workspace.conversation()) &&
-        !workspace.conversation()?.page &&
-        !workspace.conversation()?.error));
+    workspace.state.status === "connecting" ||
+    (workspace.state.status === "online" &&
+      Boolean(workspace.conversation()) &&
+      !workspace.conversation()?.page &&
+      !workspace.conversation()?.error);
   const hostUpdating = () => workspace.state.hostRestart?.state === "restarting";
   createServerConnectionToast(() => {
     const host = workspace.state.host;
@@ -566,7 +509,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
           quiet: Boolean(
             !workspace.state.workspaceLoaded ||
               workspace.state.otherTab ||
-              workspace.state.hostedSleep ||
               workspace.state.hostRestart?.state === "restarting" ||
               workspace.state.incompatibility,
           ),
@@ -602,13 +544,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     },
   );
   const [joinOpen, setJoinOpen] = createSignal(false);
-  const hostedServers = createWebHostedServers({
-    accountFetch: props.accountFetch,
-    hosts: () => workspace.state.hosts,
-    hostingReturn: () => props.hostingReturn,
-    onHostingReturnConsumed: () => props.onHostingReturnConsumed?.(),
-    onJoin: () => setJoinOpen(true),
-  });
+  const [addServerOpen, setAddServerOpen] = createSignal(false);
   const [creating, setCreating] = createSignal(false);
   const [agentAvatar, setAgentAvatar] = createSignal(newAgentAvatar());
   const [mobilePane, setMobilePane] = createSignal<WebMobilePane>("conversation");
@@ -654,9 +590,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
           : null,
         active,
         state: incompatibility ? "incompatible" : hostState(host.hostId),
-        hostedSleep: active ? workspace.state.hostedSleep : null,
-        hostedIssue: active ? workspace.state.hostedIssue : null,
-        hostedStart: active ? workspace.state.hostedStart : null,
         notificationsMuted: notice.muted,
         notificationsMutedUntil: notice.mutedUntil,
         notificationLevel: notice.level,
@@ -664,14 +597,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
         hidden: host.hidden === true,
         ...(appearance === undefined ? {} : { appearance }),
         ...(host.memberLimit === undefined ? {} : { memberLimit: host.memberLimit }),
-        ...(host.licenseRaisesMemberLimit === undefined
-          ? {}
-          : { licenseRaisesMemberLimit: host.licenseRaisesMemberLimit }),
-        ...(host.hosted === undefined ? {} : { hosted: host.hosted }),
-        ...(host.restartAvailable === undefined ? {} : { restartAvailable: host.restartAvailable }),
-        ...(host.storageGb === undefined ? {} : { storageGb: host.storageGb }),
-        ...(host.paymentRequired ? { paymentRequired: host.paymentRequired } : {}),
-        ...(host.customPlan ? { customPlan: host.customPlan } : {}),
         compatibility: {
           localAppVersion: "web",
           hostAppVersion: incompatibility?.hostAppVersion ?? null,
@@ -734,30 +659,11 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     }
     await changeServerHidden(serverId, true);
   }
-  const paywall = createServerPaywall({
-    server,
-    subscribe: (request) => hostedServers.calls.openCustomCheckout(request),
-    billingDetails: createWebBillingCalls(props.accountFetch),
-    errorMessage: (error) => text.errorMessage(error, t("server.paywall.checkoutFailed")),
-  });
   const blockedServer = createMemo(() => {
-    const paywallServer = paywall.server();
-    if (paywallServer) return paywallServer;
     const current = server();
     if (!current) return null;
-    return current.state === "incompatible" || serverPlanBlocks(current, hostedServers.planDeletesAt(current.id))
-      ? current
-      : null;
+    return current.state === "incompatible" ? current : null;
   });
-  const planScreenShown = () => serverPlanScreenShown(blockedServer(), hostedServers.planDeletesAt);
-  createEffect(
-    () =>
-      hostedServers.loaded() &&
-      servers().some((item) => item.hostedIssue === "plan_ended" && hostedServers.planDeletesAt(item.id) === null),
-    (dateMissing) => {
-      if (dateMissing) void hostedServers.refresh();
-    },
-  );
   const connectionShown = () => !noHost() && workspace.state.status !== "online" && !blockedServer();
   const frameFirstLoad = () =>
     workspace.state.workspaceLoaded &&
@@ -766,7 +672,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     !workspace.state.connectionError;
   const connectionPhase = () =>
     serverWorkspacePhase({
-      hostedSleep: workspace.state.hostedSleep,
       updating: hostUpdating(),
       blocked: workspace.state.recovery?.phase === "suspended",
       // Signal holds the attempt of a host that is offline. As on desktop, that is not a load: the notice
@@ -804,18 +709,8 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
   const closeSidebar = () => layout.setSidebarClosed(true);
   const collapseSidebar = () => (phone() ? undefined : closeSidebar);
   const [marketplaceOpen, setMarketplaceOpen] = createSignal(false);
-  const [creditsOpen, setCreditsOpen] = createSignal<{ serverId: string | null } | null>(null);
   const [hostPage, setHostPage] = createSignal<{ view: HostPageView; trigger: HTMLElement | null } | null>(null);
   const [crmConnectorsRequest, setCrmConnectorsRequest] = createSignal<string>();
-  function canOfferServerPlans(): boolean {
-    return (
-      hostedServers.available() && hostedServers.loaded() && server()?.role === "owner" && server()?.hosted !== true
-    );
-  }
-  function openServerPlans(): void {
-    serverSettings.setOpen(false);
-    hostedServers.openAddServer("upsell");
-  }
   async function openHostPage(serverId: string, view: HostPageView, trigger: HTMLElement | null) {
     if (server()?.id !== serverId) {
       const host = workspace.state.hosts.find((item) => item.hostId === serverId);
@@ -932,7 +827,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
       hiddenAgentIds: hiddenAgentIds(),
     }),
   );
-  const communityCard = createCommunityCardVisibility();
   const [messageFocusRequest, setMessageFocusRequest] = createSignal<{
     agentId: string;
     messageId: string;
@@ -1280,14 +1174,8 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     if (marketplaceOpen()) return "marketplace";
     const host = hostPage();
     if (host && server() && !blockedServer()) return host.view;
-    return creditsOpen() ? "credits" : "agents";
+    return "agents";
   });
-  createEffect(
-    () => Boolean(serverSettings.state.open || accountSettingsOpen() || marketplaceOpen() || hostPage()),
-    (otherPage) => {
-      if (otherPage) setCreditsOpen(null);
-    },
-  );
   const pageCovered = () => page() !== "agents";
   const tasksOpen = () => page() === "tasks";
   function showAgents() {
@@ -1295,15 +1183,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     serverSettings.setOpen(false);
     setMarketplaceOpen(false);
     setHostPage(null);
-    setCreditsOpen(null);
-  }
-  function openCredits(serverId: string | null) {
-    setMobilePane("conversation");
-    setAccountSettingsOpen(false);
-    serverSettings.setOpen(false);
-    setMarketplaceOpen(false);
-    setHostPage(null);
-    setCreditsOpen({ serverId });
   }
   function openMarketplace() {
     setMobilePane("conversation");
@@ -1390,10 +1269,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     download: (attachmentId) => workspace.runtime.download(attachmentId),
     saveFile: createWebFileSaver(),
   });
-  const mediaCredits = createWorkflowMediaCredits(
-    () => (page() === "workflows" && workspace.state.status === "online" ? (server()?.id ?? null) : null),
-    () => workflowHost.workflows.mediaCredits(),
-  );
   const librarySupported = () => workspace.state.capabilities.includes(STORAGE_CAPABILITY);
   createEffect(
     () => page() === "library" && workspace.state.status === "online" && !librarySupported(),
@@ -1505,53 +1380,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
       if (link) openMarketplace();
     },
   );
-  const [billingOpen, setBillingOpen] = createSignal(false);
-  const [licenseStart, setLicenseStart] = createSignal<{ order: PricingOrder | null } | null>(null);
-  const billingCalls = createWebBillingCalls(props.accountFetch);
-  const billing = createBillingStore(() => billingCalls, billingOpen);
-  const licenseCalls = createWebLicenseCalls(props.accountFetch);
-  const license = createLicenseStore(() => licenseCalls, billingOpen, trackLicenseEvent);
-  const referralCalls = createWebReferralCalls(props.accountFetch);
-  const creditsCalls = createWebCreditsCalls(props.accountFetch);
-  const credits = createCreditsStore(
-    () => creditsCalls,
-    () => billingOpen() || creditsOpen() !== null,
-    (state) => creditsSummary.adopt(state),
-    { activity: true },
-  );
-  const creditsSummary = createCreditsSummary(
-    () => creditsCalls,
-    () => props.accountId,
-  );
-  onCleanup(
-    workspace.onHostEvent((event) => {
-      if (event.type === "codebot-credits-changed") creditsSummary.refresh();
-    }),
-  );
-  const creditWallet = () => creditsRailWallet(creditsSummary.state(), server() ?? null, null);
-  const [movingCredits, setMovingCredits] = createSignal(false);
-  function creditsRailAction(): (() => void) | undefined {
-    return creditsSummary.available() ? () => openCredits(creditWallet()?.serverId ?? null) : undefined;
-  }
-  function creditMoveAction(): (() => void) | undefined {
-    return creditWallet()?.movable ? () => setMovingCredits(true) : undefined;
-  }
-  function creditsMenu(): CreditsMenu {
-    return { state: creditsSummary.state(), onOpen: openCredits, onRefresh: creditsSummary.refresh };
-  }
-  const billingHostedServers = createSettingsHostedServersStore(
-    {
-      get open() {
-        return billingOpen();
-      },
-      hostedServersApi: hostedServers.calls,
-    },
-    billingOpen,
-  );
-  function deleteHostedServer(serverId: string): void {
-    setBillingOpen(true);
-    billingHostedServers.requestDeleteById(serverId);
-  }
   const [leaveRequest, setLeaveRequest] = createSignal<{
     hostId: string;
     trigger: HTMLElement | null;
@@ -1579,8 +1407,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     serverSettings.setOpen(false);
   }
   function removeFromSettings(hostId: string): (() => Promise<void>) | undefined {
-    if (!workspace.runtime.removeOwnedHost || !hostedServers.loaded() || hostedServers.isHosted(hostId))
-      return undefined;
+    if (!workspace.runtime.removeOwnedHost) return undefined;
     return () => leaveFromSettings(hostId, true);
   }
   const [restartRequest, setRestartRequest] = createSignal<{ hostId: string; trigger: HTMLElement | null } | null>(
@@ -1593,48 +1420,15 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
       if (gone) setRestartRequest(null);
     },
   );
-  function accountRestarts(serverId: string): boolean {
-    const item = servers().find((candidate) => candidate.id === serverId);
-    if (item?.restartAvailable === false) return false;
-    return item?.hosted === true || hostedServers.isHosted(serverId);
-  }
   function restartsItself(serverId: string): boolean {
-    return (
-      !accountRestarts(serverId) &&
-      server()?.id === serverId &&
-      workspace.state.restartReady &&
-      workspace.runtime.admin !== undefined
-    );
+    return server()?.id === serverId && workspace.state.restartReady && workspace.runtime.admin !== undefined;
   }
   async function restartHost(): Promise<void> {
     const hostId = restartRequest()?.hostId;
     if (!hostId) return;
-    if (accountRestarts(hostId)) await hostedServers.calls.restart(hostId);
-    else {
-      await runTeamEffect(requestHostRestart(hostRequest(hostId)).pipe(Effect.mapError((error) => error.cause)));
-      workspace.restartRequested();
-    }
+    await runTeamEffect(requestHostRestart(hostRequest(hostId)).pipe(Effect.mapError((error) => error.cause)));
+    workspace.restartRequested();
   }
-  createEffect(
-    () => props.billingReturn,
-    (billingReturn) => {
-      if (!billingReturn) return;
-      setBillingOpen(true);
-      props.onBillingReturnConsumed?.();
-    },
-  );
-  createEffect(
-    () => (props.start?.kind === "server" && !hostedServers.loaded() ? null : props.start),
-    (start) => {
-      if (!start) return;
-      if (start.kind === "server") hostedServers.openAddServer("pricing_page", start.order);
-      else {
-        setLicenseStart({ order: start.order });
-        setBillingOpen(true);
-      }
-      props.onStartConsumed?.();
-    },
-  );
   const saveFile = createWebFileSaver();
   const machineCalls = webMachineCalls(hostRequest, (capability) => workspace.state.capabilities.includes(capability));
   const storageCalls: FilesPort = {
@@ -1681,24 +1475,10 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
       if (!open && wasOpen) alertCards.refresh();
     },
   );
-  const hostedSiteCalls: ServerHostedSitesOptions["api"] = {
-    list: async (serverId) =>
-      runTeamEffect(listHostedSites(hostRequest(serverId)).pipe(Effect.mapError((error) => error.cause))),
-    delete: async ({ siteId }, serverId) =>
-      runTeamEffect(deleteHostedSite(hostRequest(serverId), siteId).pipe(Effect.mapError((error) => error.cause))),
-  };
   const ownerTransferCalls = (): OwnerTransferCalls | undefined => {
     const transfers = workspace.runtime.ownerTransfers;
     const target = server();
-    if (
-      !transfers ||
-      !target ||
-      target.hosted === true ||
-      !hostedServers.loaded() ||
-      hostedServers.isHosted(target.id) ||
-      !workspace.state.capabilities.includes(OWNER_TRANSFER_CAPABILITY)
-    )
-      return undefined;
+    if (!transfers || !target || !workspace.state.capabilities.includes(OWNER_TRANSFER_CAPABILITY)) return undefined;
     return {
       getOwnerTransfer: (serverId) => transfers.pending(serverId),
       startOwnerTransfer: (email, serverId) => transfers.start(serverId, email),
@@ -1817,23 +1597,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
         setHostAgentMemoryLimit(hostRequest(serverId), limit).pipe(Effect.mapError((error) => error.cause)),
       ),
   };
-  const hostMediaApprovalCreditsCalls: HostMediaApprovalCreditsCalls = {
-    getMediaApprovalCredits: async (serverId) =>
-      runTeamEffect(getHostMediaApprovalCredits(hostRequest(serverId)).pipe(Effect.mapError((error) => error.cause))),
-    setMediaApprovalCredits: async (update, serverId) =>
-      runTeamEffect(
-        setHostMediaApprovalCredits(hostRequest(serverId), update).pipe(Effect.mapError((error) => error.cause)),
-      ),
-  };
-  const creditAgents = createCreditAgentsRail({
-    server,
-    shown: () => creditsRailAction() !== undefined,
-    calls: hostMediaApprovalCreditsCalls,
-    asks: {
-      readMuted: () => workspace.readCreditsAskMuted(),
-      setMuted: (muted) => workspace.setCreditsAskMuted(muted),
-    },
-  });
   const hostMemoryReviewCalls: HostMemoryReviewCalls = {
     getMemoryReview: async (serverId) =>
       runTeamEffect(getHostMemoryReview(hostRequest(serverId)).pipe(Effect.mapError((error) => error.cause))),
@@ -2007,14 +1770,9 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     onOpenNotificationSettings: (serverId) => openNotificationSettings(serverId),
     onLeave: (hostId, trigger) => setLeaveRequest({ hostId, trigger }),
     onRemove: (hostId, trigger) => setLeaveRequest({ hostId, trigger, removeOwned: true }),
-    canRemove: (serverId) =>
-      Boolean(workspace.runtime.removeOwnedHost) && hostedServers.loaded() && !hostedServers.isHosted(serverId),
-    onDelete: deleteHostedServer,
-    canDelete: hostedServers.isHosted,
+    canRemove: () => Boolean(workspace.runtime.removeOwnedHost),
     onRestart: (hostId, trigger) => setRestartRequest({ hostId, trigger }),
-    canRestart: (serverId) => accountRestarts(serverId) || restartsItself(serverId),
-    planDeletesAt: hostedServers.planDeletesAt,
-    onRenewPlan: hostedServers.renewPlan,
+    canRestart: restartsItself,
     onHide: (serverId) => void hideServer(serverId),
     canHide: canHideServer,
   } satisfies ServerActionCallbacks;
@@ -2112,7 +1870,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     beforeOpen: () => {
       setCreating(false);
       setHostPage(null);
-      setCreditsOpen(null);
       setMessageFocusRequest(null);
     },
     canMarkRead,
@@ -2620,7 +2377,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
         if (states && mcpSignIns()?.serverId === serverId) setMcpSignIns({ serverId, states });
       });
   };
-  const offlineUpsell = createHostedUpsellOffline(() => workspace.state.hostOffline);
   const agentThreads = createMemo(() => {
     const hostId = workspace.state.host?.hostId;
     if (!hostId) return undefined;
@@ -2727,35 +2483,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     const threadId = open === undefined ? agent.threadId : open?.threadId;
     return workspace.state.takeovers.find((request) => request.agentId === agent.id && request.threadId === threadId);
   });
-  const setMediaApprovalDefault = async (kind: CreditMediaGenerationKind, model: string | null) => {
-    const serverId = server()?.id;
-    if (!serverId) throw new Error(t("webClient.error.connectServerFirst"));
-    await saveMediaApprovalCredits(
-      serverId,
-      mediaApprovalDefaultModelUpdate(kind, model),
-      hostMediaApprovalCreditsCalls,
-    );
-  };
-  const mediaApproval: MediaApprovalControls = trackedMediaApproval(
-    {
-      read: (approval) => workspace.readMediaApproval({ agentId: approval.agentId, requestId: approval.requestId }),
-      allow: async (approval, choice) => {
-        await workspace.respondToMediaApproval({ agentId: approval.agentId, requestId: approval.requestId, choice });
-        return true;
-      },
-      setDefault: setMediaApprovalDefault,
-      hold: creditsHoldControls({
-        agents: workspace.profiles,
-        credits: creditsMenu,
-        walletId: () => server()?.id ?? null,
-        serverId: () => server()?.id,
-        respond: (approval, action) =>
-          workspace.respondToCreditsHold({ agentId: approval.agentId, requestId: approval.requestId, action }),
-        setMuted: (muted) => workspace.setCreditsAskMuted(muted),
-      }),
-    },
-    () => "remote",
-  );
   const view = createWebConversationView({
     workspace,
     remoteAgentAdmin,
@@ -2964,8 +2691,8 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
     throw new Error(t("webClient.error.desktopOnly"));
   };
   const connectionDetail = () => {
-    if (workspace.state.hostedSleep === "sleeping" || workspace.state.hostedIssue || hostUpdating()) return null;
-    if (workspace.state.hostOffline && workspace.state.host && workspace.state.host.hosted !== true)
+    if (hostUpdating()) return null;
+    if (workspace.state.hostOffline && workspace.state.host)
       return {
         message: t("server.connection.computerOffline", { name: workspace.state.host.name }),
         reference: workspace.state.connectionError?.reference ?? null,
@@ -2999,8 +2726,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
         fullWindow={fullWindowLoading()}
         screen={!frameConnecting()}
         loadingScene={startupLoadingScene()}
-        issue={workspace.state.hostedIssue}
-        start={workspace.state.hostedStart}
         updateVersion={workspace.state.hostRestart?.version ?? null}
         detail={connectionDetail()?.message ?? null}
         reference={connectionDetail()?.reference ?? null}
@@ -3013,8 +2738,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
         busy={workspace.state.status === "connecting" || !workspace.state.host}
         onRetry={() => void workspace.run(workspace.reconnect)}
         onWaitedLong={cover ? setLoadingWaitedLong : undefined}
-        onManage={() => setBillingOpen(true)}
-        upsell={offlineUpsell()}
       />
     );
   };
@@ -3071,21 +2794,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                 const id = server()?.id;
                 if (id) void openHostPage(id, "usage", button);
               }}
-              mediaCredits={mediaCredits()}
-              onMediaCredits={(provider) => {
-                setSuggestedApp({ appId: provider, connect: false });
-                openMarketplace();
-              }}
-              onCredits={creditsRailAction()}
-              creditBalance={creditWallet()?.balance}
-              creditWelcome={creditWallet()?.welcome}
-              creditWalletName={creditWallet()?.name}
-              onCreditMove={creditMoveAction()}
-              onCreditPrices={() => openCreditPrices(openWebLink)}
-              creditAgents={creditAgents.agents()}
-              onCreditAgentsChange={creditAgents.change()}
-              creditAsk={creditAgents.ask()}
-              onCreditAskChange={creditAgents.changeAsk()}
               hiddenItems={layout.railHidden()}
               onHiddenChange={layout.setRailHidden}
               onMarketplace={workspace.state.status === "online" ? openMarketplace : undefined}
@@ -3100,21 +2808,10 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                     view={layout.serverView()}
                     onViewChange={layout.setServerView}
                     onSelect={selectServer}
-                    onAdd={() => hostedServers.openAddServer("server_rail")}
-                    addCreatesServer={hostedServers.available()}
-                    credits={creditsMenu()}
+                    onAdd={() => setAddServerOpen(true)}
+                    addCreatesServer
                     {...serverActionCallbacks}
                   />
-                  <Show when={movingCredits() ? creditWallet()?.movable : null}>
-                    {(wallet) => (
-                      <RailMoveCreditsDialog
-                        calls={() => creditsCalls}
-                        server={wallet()}
-                        onChange={(state) => creditsSummary.adopt(state)}
-                        onClose={() => setMovingCredits(false)}
-                      />
-                    )}
-                  </Show>
                 </>
               }
               help={
@@ -3131,9 +2828,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
               data-web-mobile-pane={mobilePane()}
               compact={compact()}
               blockedServer={blockedServer()}
-              paywall={paywall}
-              planDeletesAt={hostedServers.planDeletesAt}
-              onRenewPlan={hostedServers.renewPlan}
               initialLoading={hostOffline()}
               connection={
                 <>
@@ -3162,7 +2856,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
               }
               onRetryServer={(serverId) =>
                 workspace.run(async () => {
-                  void hostedServers.refresh();
                   const host = workspace.state.hosts.find((item) => item.hostId === serverId);
                   if (host) await workspace.connect(host);
                 })
@@ -3184,58 +2877,42 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                       when={settingsKind()}
                       keyed
                       fallback={
-                        <Show
-                          when={creditsOpen()}
-                          keyed
-                          fallback={
-                            <MarketplaceOverlay
-                              open={page() === "marketplace"}
-                              onOpenChange={setMarketplaceOpen}
-                              calls={marketplaceCalls}
-                              browserRuntime={workspace.runtime.browser}
-                              connectors={connectors}
-                              server={server()}
-                              agents={workspace.shownAgents()}
-                              activeAgentId={workspace.state.selectedId ?? ""}
-                              composerAvailable={status().phase === "ready" && !agentFormOpen()}
-                              onOpenAgent={(agentId) => {
-                                setMobilePane("conversation");
-                                if (agentId !== workspace.state.selectedId) void select(agentId);
-                                else {
-                                  userOpensChat("agent", agentId);
-                                  setCreating(false);
-                                  showAgents();
-                                  channels.close();
-                                }
-                              }}
-                              onAgentInstalled={async (agent) => {
-                                setMarketplaceOpen(false);
-                                await openAddedAgent(agent);
-                              }}
-                              pluginSlug={suggestedApp()?.appId ?? props.pluginSlug}
-                              pluginConnect={suggestedApp()?.connect ?? false}
-                              onPluginSlugConsumed={() => {
-                                if (suggestedApp()) setSuggestedApp(null);
-                                else props.onPluginSlugConsumed?.();
-                              }}
-                              marketplaceListing={props.marketplaceListing}
-                              onMarketplaceListingConsumed={props.onMarketplaceListingConsumed}
-                              mcpSignInRequest={mcpSignInRequest()}
-                              onMcpSignInRequestHandled={() => setMcpSignInRequest(null)}
-                              onMcpSignIns={(serverId, states) => setMcpSignIns({ serverId, states })}
-                            />
-                          }
-                        >
-                          {(request) => (
-                            <BuyCreditsPage
-                              store={credits}
-                              initialServerId={request.serverId}
-                              headerFrame="window"
-                              billingDetails={billingCalls}
-                              onClose={showAgents}
-                            />
-                          )}
-                        </Show>
+                        <MarketplaceOverlay
+                          open={page() === "marketplace"}
+                          onOpenChange={setMarketplaceOpen}
+                          calls={marketplaceCalls}
+                          browserRuntime={workspace.runtime.browser}
+                          connectors={connectors}
+                          server={server()}
+                          agents={workspace.shownAgents()}
+                          activeAgentId={workspace.state.selectedId ?? ""}
+                          composerAvailable={status().phase === "ready" && !agentFormOpen()}
+                          onOpenAgent={(agentId) => {
+                            setMobilePane("conversation");
+                            if (agentId !== workspace.state.selectedId) void select(agentId);
+                            else {
+                              userOpensChat("agent", agentId);
+                              setCreating(false);
+                              showAgents();
+                              channels.close();
+                            }
+                          }}
+                          onAgentInstalled={async (agent) => {
+                            setMarketplaceOpen(false);
+                            await openAddedAgent(agent);
+                          }}
+                          pluginSlug={suggestedApp()?.appId ?? props.pluginSlug}
+                          pluginConnect={suggestedApp()?.connect ?? false}
+                          onPluginSlugConsumed={() => {
+                            if (suggestedApp()) setSuggestedApp(null);
+                            else props.onPluginSlugConsumed?.();
+                          }}
+                          marketplaceListing={props.marketplaceListing}
+                          onMarketplaceListingConsumed={props.onMarketplaceListingConsumed}
+                          mcpSignInRequest={mcpSignInRequest()}
+                          onMcpSignInRequestHandled={() => setMcpSignInRequest(null)}
+                          onMcpSignIns={(serverId, states) => setMcpSignIns({ serverId, states })}
+                        />
                       }
                     >
                       {(kind) => (
@@ -3396,12 +3073,12 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                       hiddenServers={hiddenServers()}
                       onSelect={selectServer}
                       onReorder={reorderShownServers}
-                      onAdd={() => hostedServers.openAddServer("server_rail")}
-                      addCreatesServer={hostedServers.available()}
+                      onAdd={() => setAddServerOpen(true)}
+                      addCreatesServer
                       {...serverActionCallbacks}
                     />
                   </Show>
-                  <Show when={!planScreenShown() && !paywall.server()}>
+                  <>
                     <Sidebar
                       agentsConnecting={!noHost() && !workspace.state.agentsLoaded}
                       channels={sidebarChannels().filter((channel) => !channel.archived)}
@@ -3447,9 +3124,8 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                         view: layout.serverView(),
                         onViewChange: layout.setServerView,
                         onSelect: selectServer,
-                        onAdd: () => hostedServers.openAddServer("server_rail"),
-                        addCreatesServer: hostedServers.available(),
-                        credits: creditsMenu(),
+                        onAdd: () => setAddServerOpen(true),
+                        addCreatesServer: true,
                         ...serverActionCallbacks,
                       }}
                       agents={workspace.profiles()}
@@ -3532,13 +3208,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                             members={workspace.state.presence?.members ?? []}
                             onOpenStorage={(serverId) => void openServerSettings(serverId, null, "storage")}
                           />
-                          <Show when={!alertCards.shown() && !communityCard.dismissed()}>
-                            <SidebarCommunityCard
-                              onJoinDiscord={() => void openWebDestination("discord")}
-                              onFollowX={() => void openWebDestination("x")}
-                              onDismiss={communityCard.dismiss}
-                            />
-                          </Show>
                         </>
                       }
                       emptyAction={
@@ -3553,58 +3222,20 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                           : undefined
                       }
                     />
-                  </Show>
+                  </>
                   <WebMobileNavigation activePane={mobilePane()} onChange={setMobilePane} />
                 </>
               }
               after={
                 <>
                   <ServerUpdateDialogHost hosts={workspace.hostViews()} />
-                  <ServerPlanReminder
-                    servers={servers()}
-                    planDeletesAt={hostedServers.planDeletesAt}
-                    onRenew={hostedServers.renewPlan}
-                  />
-                  <HostedServerUpsell
-                    accountId={props.accountId}
-                    canOffer={
-                      hostedServers.available() &&
-                      hostedServers.loaded() &&
-                      !hostedServers.ownsHostedServer() &&
-                      server()?.role === "owner" &&
-                      server()?.hosted !== true
-                    }
-                    serverId={server()?.id ?? ""}
-                    host={{ name: server()?.name ?? "" }}
-                    busy={(agentId) => Boolean(workspace.state.conversations[agentId]?.page?.activeTurnId)}
-                    openPlans={() => hostedServers.openAddServer("upsell")}
-                    track={(action, entryPoint) =>
-                      desktopAnalytics.track("hosted_server_upsell", { action, entry_point: entryPoint })
-                    }
-                  />
                   <AddServerOverlay
-                    open={hostedServers.addServer() !== null}
-                    entryPoint={hostedServers.addServer()?.entryPoint}
-                    order={hostedServers.addServer()?.order}
-                    calls={hostedServers.calls}
-                    servers={servers()}
-                    onRefreshServers={workspace.retryHosts}
-                    resume={hostedServers.addServer()?.resume}
-                    license={licenseCalls}
-                    billingDetails={billingCalls}
-                    onOpenUrl={(url) => window.open(url, "_blank", "noopener")}
-                    onClose={hostedServers.closeAddServer}
-                    onOpenServer={(serverId) => {
-                      hostedServers.closeAddServer();
-                      setBillingOpen(false);
-                      selectServer(serverId);
-                    }}
-                    onContactUs={() => window.location.assign(HOSTED_SERVER_CONTACT_URL)}
+                    open={addServerOpen()}
+                    onClose={() => setAddServerOpen(false)}
                     onJoinWithInvite={() => {
-                      hostedServers.closeAddServer();
+                      setAddServerOpen(false);
                       setJoinOpen(true);
                     }}
-                    onManageServers={() => setBillingOpen(true)}
                   />
                   <Show when={workspace.runtime.ownerTransfers}>
                     {(transfers) => (
@@ -3643,8 +3274,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                         onChangeLanguage={props.onChangeLanguage}
                         appearance={props.appearance}
                         onChangeAppearance={props.onChangeAppearance}
-                        onOpenBilling={() => setBillingOpen(true)}
-                        referral={referralCalls}
                         onSignOut={signOut}
                         notifications={notificationSettings}
                         notificationFocusRequest={notificationFocusRequest()}
@@ -3691,9 +3320,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                         onRotateHostKey={rotateHostKeyAction()}
                         onCreateInvite={serverSettings.createInvite}
                         ownerTransfer={ownerTransferCalls()}
-                        license={licenseCalls}
                         onDownloadDesktopApp={() => void window.open("/download", "_blank", "noopener")}
-                        onContactUs={() => window.location.assign(HOSTED_SERVER_CONTACT_URL)}
                         onUpdateMember={serverSettings.updateMember}
                         onRemoveMember={serverSettings.removeMember}
                         onRevokeInvite={serverSettings.revokeInvite}
@@ -3714,15 +3341,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                             void openMessage(agentId, messageId);
                           },
                         }}
-                        hostedSites={
-                          workspace.state.capabilities.includes(HOSTED_SITES_CAPABILITY)
-                            ? {
-                                api: hostedSiteCalls,
-                                onOpenSite: (url) => void openWebLink(url),
-                                onSeePlans: canOfferServerPlans() ? openServerPlans : undefined,
-                              }
-                            : undefined
-                        }
                         providers={providerSettings()}
                         hostUpdate={{ calls: hostUpdateCalls }}
                         hostTimezone={{ calls: hostTimezoneCalls }}
@@ -3736,7 +3354,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                                 listener(workspace.state.host?.hostId ?? "");
                             }),
                         }}
-                        mediaApprovalCredits={{ calls: hostMediaApprovalCreditsCalls }}
                         hostPersonality={{ calls: hostPersonalityCalls }}
                         hostMemoryLimit={{ calls: hostMemoryLimitCalls }}
                         memoryReview={{ calls: hostMemoryReviewCalls }}
@@ -3792,44 +3409,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                     onRestart={restartHost}
                     restoreFocusTarget={restartRequest()?.trigger}
                   />
-                  <BillingDialog
-                    open={billingOpen()}
-                    onOpenChange={(open) => {
-                      setBillingOpen(open);
-                      if (!open) setLicenseStart(null);
-                    }}
-                    store={billing}
-                    hostedServers={billingHostedServers}
-                    license={
-                      <LicenseSection
-                        store={license}
-                        onManagePayment={() => void billing.openPortal({ flow: "manage" })}
-                        onContactUs={licenseContactUs(() => window.location.assign(HOSTED_SERVER_CONTACT_URL))}
-                        startBuying={licenseStart() !== null}
-                        startOrder={licenseStart()?.order ?? undefined}
-                        billingDetails={billingCalls}
-                      />
-                    }
-                    credits={
-                      <>
-                        <CreditsSection
-                          store={credits}
-                          onBuy={(serverId) => {
-                            setBillingOpen(false);
-                            openCredits(serverId);
-                          }}
-                        />
-                        <CreditActivitySection store={credits} />
-                      </>
-                    }
-                  />
-                  <ServerUpgradeOffer
-                    billing={billingCalls}
-                    card={alertCards.storageCard.card()}
-                    server={server()}
-                    blocked={serverSettings.state.open || billingOpen() || accountSettingsOpen()}
-                    onFreeUpSpace={(serverId) => void openServerSettings(serverId, null, "storage")}
-                  />
                   <ChannelCreateOverlay />
                   <GlobalSearchOverlay
                     open={searchOpen()}
@@ -3870,7 +3449,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                         discard: (id, serverId) => runtime.agent.discardDraftAttachment(id, serverId),
                       }}
                       agents={workspace.profiles()}
-                      mediaApproval={mediaApproval}
                       onOpenLink={(url) => void openWebLink(url)}
                       onAttachmentAction={(attachment) =>
                         void runtime.agent
@@ -4051,20 +3629,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                         onTypingChange={() => {}}
                         onAnswerPrompt={channelView.onAnswerPrompt}
                         onRespondToApproval={channelView.onRespondToApproval}
-                        mediaApproval={trackedMediaApproval(
-                          {
-                            ...channelView.mediaApproval,
-                            setDefault: setMediaApprovalDefault,
-                            hold: creditsHoldControls({
-                              agents: workspace.profiles,
-                              credits: creditsMenu,
-                              walletId: () => server()?.id ?? null,
-                              serverId: () => server()?.id,
-                              ...channelView.creditsHold,
-                            }),
-                          },
-                          () => "remote",
-                        )}
                         onRespondToBrowserTakeover={channelView.onRespondToBrowserTakeover}
                         onCancelQueuedMessage={() => {}}
                         onSteerQueuedMessage={() => {}}
@@ -4087,11 +3651,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                   failed={Boolean(workspace.state.hostsError)}
                   reference={workspace.state.hostsError?.reference ?? null}
                   onJoin={() => setJoinOpen(true)}
-                  onCreateServer={
-                    hostedServers.available() && !hostedServers.ownsHostedServer()
-                      ? () => hostedServers.openAddServer("empty_state")
-                      : undefined
-                  }
+                  onCreateServer={() => setAddServerOpen(true)}
                   onRefresh={() => void workspace.run(workspace.refreshHosts)}
                 />
               </Show>
@@ -4243,7 +3803,6 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                   }
                   onRespondToApproval={view.respondToApproval}
                   onAlwaysAllowApproval={view.alwaysAllowApproval()}
-                  mediaApproval={mediaApproval}
                   agentAutoApproves={remoteAgentAdmin.autoApproves()}
                   remoteBackupModelsLoaded={remoteAgentAdmin.backupModels() !== undefined}
                   remotePlanCardLoaded={remoteAgentAdmin.quickAcknowledgement() !== undefined}

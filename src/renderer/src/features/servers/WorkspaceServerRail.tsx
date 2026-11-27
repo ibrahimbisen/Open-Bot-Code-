@@ -8,17 +8,7 @@ import { useServerActions } from "./server-actions";
 export function WorkspaceServerRail() {
   const platform = usePlatform();
   const layout = useLayout();
-  const {
-    orderedServers,
-    reorder,
-    select,
-    add,
-    addMenuCreateLocal,
-    addMenuInstallServer,
-    addCreatesServer,
-    hiddenServers,
-    callbacks,
-  } = useServerActions();
+  const { orderedServers, reorder, select, add, addCreatesServer, hiddenServers, callbacks } = useServerActions();
 
   onSettled(() => {
     const handleServerShortcut = (event: KeyboardEvent) => {
@@ -55,8 +45,6 @@ export function WorkspaceServerRail() {
         onSelect={select}
         onReorder={reorder}
         onAdd={add}
-        onCreateLocal={addMenuCreateLocal()}
-        onInstallServer={addMenuInstallServer()}
         addCreatesServer={addCreatesServer()}
         hiddenServers={hiddenServers()}
         {...callbacks}

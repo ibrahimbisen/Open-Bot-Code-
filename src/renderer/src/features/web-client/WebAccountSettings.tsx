@@ -3,9 +3,6 @@ import type { AppLanguage } from "@codebot/contracts/app-language";
 import type { AvatarColor, CentralAuthUser } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import {
-  Button,
-  CreditCard,
-  Gift,
   Item,
   ItemActions,
   ItemContent,
@@ -21,8 +18,6 @@ import {
   UserRound,
 } from "@codebot/ui";
 import { documentColorScheme } from "@codebot/ui/document-color-scheme";
-import { ReferralPanel } from "@codebot/ui/features/referral/ReferralPanel";
-import { createReferralStore, type ReferralCalls } from "@codebot/ui/features/referral/referral-store";
 import { AppearanceSelect } from "@codebot/ui/features/settings/AppearanceSelect";
 import { ACTION_SOUND_CHOICES, TASK_SOUND_CHOICES } from "@codebot/ui/features/settings/app-settings";
 import { ChatBackgroundSetting } from "@codebot/ui/features/settings/ChatBackgroundSetting";
@@ -56,7 +51,7 @@ import { setWebChatBackground, useWebChatBackground } from "./web-chat-backgroun
 import { setWebLiveVoice, useWebLiveVoice } from "./web-live-voice";
 import type { WebNotificationSettings } from "./web-notification-settings";
 
-const TABS = ["profile", "preferences", "keyboard", "referral"] as const;
+const TABS = ["profile", "preferences", "keyboard"] as const;
 type WebAccountSettingsTab = (typeof TABS)[number];
 
 const TAB_ITEMS = {
@@ -75,11 +70,6 @@ const TAB_ITEMS = {
     descriptionKey: "settings.tab.keyboard.description",
     icon: Keyboard,
   },
-  referral: {
-    titleKey: "settings.tab.referral.title",
-    descriptionKey: "settings.tab.referral.description",
-    icon: Gift,
-  },
 } as const satisfies Record<
   WebAccountSettingsTab,
   { titleKey: AppTextKey; descriptionKey: AppTextKey; icon: typeof UserRound }
@@ -96,8 +86,6 @@ export interface WebAccountSettingsProps {
   onChangeLanguage: (language: AppLanguage) => void;
   appearance: AppAppearance;
   onChangeAppearance: (appearance: AppAppearance) => void;
-  onOpenBilling: () => void;
-  referral: ReferralCalls;
   onSignOut: () => Promise<void>;
   notifications: WebNotificationSettings;
   notificationFocusRequest?: { serverId: string; nonce: number } | null | undefined;
@@ -143,10 +131,6 @@ export default function WebAccountSettings(props: WebAccountSettingsProps) {
       onRevokeAccountSession: (sessionId) => props.calls.revokeSession(sessionId),
     },
     () => activeTab() === "profile",
-  );
-  const referral = createReferralStore(
-    () => props.referral,
-    () => props.open && activeTab() === "referral",
   );
   const navItem = () => TAB_ITEMS[activeTab()];
   createEffect(
@@ -199,20 +183,6 @@ export default function WebAccountSettings(props: WebAccountSettingsProps) {
                 );
               })}
             </Tabs.List>
-            <div class="settings-modal-nav">
-              <Button
-                variant="ghost"
-                type="button"
-                class="settings-modal-nav-item"
-                onClick={() => {
-                  props.onOpenChange(false);
-                  props.onOpenBilling();
-                }}
-              >
-                <CreditCard aria-hidden="true" />
-                <span>{t("account.menu.billing")}</span>
-              </Button>
-            </div>
           </>
         }
       >
@@ -228,10 +198,6 @@ export default function WebAccountSettings(props: WebAccountSettingsProps) {
 
         <Tabs.Content value="keyboard" class="settings-modal-tab-panel" data-tab="keyboard">
           <SettingsKeyboardTab />
-        </Tabs.Content>
-
-        <Tabs.Content value="referral" class="settings-modal-tab-panel" data-tab="referral">
-          <ReferralPanel store={referral} available />
         </Tabs.Content>
 
         <Tabs.Content value="preferences" class="settings-modal-tab-panel" data-tab="preferences">

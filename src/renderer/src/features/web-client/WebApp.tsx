@@ -1,6 +1,5 @@
 import { agentTemplateIdFromWebAppSearch, WEB_APP_AGENT_TEMPLATE_PARAM } from "@codebot/contracts/agent-template-links";
 import { companySignInErrorKey, WEB_APP_COMPANY_SIGN_IN_ERROR_PARAM } from "@codebot/contracts/company-sign-in";
-import { type FirstTouch, readFirstTouch } from "@codebot/contracts/first-touch";
 import { inviteUrlFromWebAppSearch, WEB_APP_INVITE_FIELDS } from "@codebot/contracts/invite-links";
 import { type AppVariant, type CentralAuthState, type CentralAuthUser, isAvatarColor } from "@codebot/contracts/ipc";
 import {
@@ -10,7 +9,6 @@ import {
   WEB_APP_MARKETPLACE_SKILL_PARAM,
 } from "@codebot/contracts/marketplace-links";
 import { pluginSlugFromWebAppSearch, WEB_APP_PLUGIN_PARAM } from "@codebot/contracts/plugin-links";
-import { forgetReferralCode, readReferralCode } from "@codebot/contracts/referral";
 import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { formatLocale, resolveLocale } from "@codebot/i18n";
 import { sourceText } from "@codebot/i18n/source";
@@ -22,7 +20,6 @@ import { AppLoadingScreen } from "@codebot/ui/features/account/AppLoadingScreen"
 import { currentText } from "@codebot/ui/text";
 import { Dynamic } from "@solidjs/web";
 import { createEffect, createSignal, createStore, onSettled, Show } from "solid-js";
-import type { DesktopAnalyticsProperties } from "../../analytics";
 import { reportNotification } from "../../error-reports";
 import { StaticI18nProvider } from "../../i18n-context";
 import { startupLoadingScene } from "../../startup-animation-preference";
@@ -38,12 +35,10 @@ import { WebSlowLoadNotice } from "./WebSlowLoadNotice";
 import type { WebWorkspace } from "./WebWorkspace";
 import { deleteSavedAgentPictures } from "./web-agent-pictures";
 import { createWebAppearancePreference } from "./web-appearance-preference";
-import { takeWebAppStart, WEB_APP_BILLING_PARAM, type WebAppStart } from "./web-billing";
 import { syncWebChatBackground } from "./web-chat-background";
 import type { WebRuntimeFactory } from "./web-client-context";
 import { extensionReturnUrl, forgetExtensionConnect, takeExtensionConnect } from "./web-extension-connect";
 import { deleteCachedWebHosts } from "./web-host-cache";
-import { takeHostingReturn } from "./web-hosted-servers";
 import { createWebLanguagePreference } from "./web-language-preference";
 
 export { loadSavedLanguage } from "./web-language-preference";
@@ -131,25 +126,6 @@ function takeMarketplaceLink(): MarketplaceListingLink | null {
   return link;
 }
 
-type BillingReturn = DesktopAnalyticsProperties<"billing_return_viewed">;
-
-function takeBillingReturn(): BillingReturn | null {
-  const url = new URL(window.location.href);
-  const kind = url.searchParams.get(WEB_APP_BILLING_PARAM);
-  if (kind === null) return null;
-  const outcome = url.searchParams.get("cancelled") === "1" ? "cancelled" : "completed";
-  for (const name of [WEB_APP_BILLING_PARAM, "cancelled"]) url.searchParams.delete(name);
-  window.history.replaceState(window.history.state, "", url);
-  return kind === "license" || kind === "portal" ? { outcome, kind } : { outcome };
-}
-
-function takeStartLink(): WebAppStart | null {
-  const url = new URL(window.location.href);
-  const start = takeWebAppStart(url);
-  if (url.href !== window.location.href) window.history.replaceState(window.history.state, "", url);
-  return start;
-}
-
 export function WebApp(props: { createRuntime?: WebRuntimeFactory } = {}) {
   return (
     <WindowBackdropBubbles>
@@ -177,7 +153,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
   const [inviteUrl, setInviteUrl] = createSignal(takeInviteLink());
   const [pluginSlug, setPluginSlug] = createSignal(takePluginLink());
   const [marketplaceListing, setMarketplaceListing] = createSignal(takeMarketplaceLink());
-  const [startLink, setStartLink] = createSignal(takeStartLink());
   const extensionConnect = takeExtensionConnect();
   createEffect(
     () => state.loaded && !state.account,
@@ -187,20 +162,13 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
       window.location.assign(extensionReturnUrl(extensionConnect, { error: "login_required" }));
     },
   );
-  const initialBillingReturn = takeBillingReturn();
-  const initialHostingReturn = takeHostingReturn();
-  const [billingReturn, setBillingReturn] = createSignal(initialBillingReturn !== null);
-  const [hostingReturn, setHostingReturn] = createSignal(initialHostingReturn);
   let companySignInReturnError = takeCompanySignInError();
   const addressHadLink =
     agentTemplateId() !== null ||
     inviteUrl() !== null ||
     pluginSlug() !== null ||
     marketplaceListing() !== null ||
-    startLink() !== null ||
     extensionConnect !== null ||
-    initialBillingReturn !== null ||
-    initialHostingReturn !== null ||
     companySignInReturnError !== null;
   const [workspace, setWorkspace] = createSignal<typeof WebWorkspace>();
   async function showAccount(account: CentralAuthUser) {
@@ -246,10 +214,7 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
   };
   async function request(
     path: string,
-    body?:
-      | { email: string }
-      | { challengeId: string | null; code: string; firstTouch?: FirstTouch; referralCode?: string }
-      | Record<string, never>,
+    body?: { email: string } | { challengeId: string | null; code: string } | Record<string, never>,
     send?: { idempotencyKey?: string; signal: AbortSignal },
   ) {
     const response = await accountFetch(`/api/browser/${path}`, {
@@ -461,16 +426,12 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
       draft.login = { status: "company_sign_in", email, issue: companySignInIssue(code) };
     });
   }
-  async function verify(challengeId: string, code: string, referralCode?: string) {
-    const firstTouch = readFirstTouch(() => window.localStorage, Date.now());
+  async function verify(challengeId: string, code: string) {
     const value = await signInRequest("email/verify", {
       challengeId,
       code,
-      ...(firstTouch ? { firstTouch } : {}),
-      ...(referralCode ? { referralCode } : {}),
     });
     if (value === null) return;
-    forgetReferralCode(() => window.localStorage);
     const account = accountFrom(value);
     sessionGeneration += 1;
     sessionEnded = false;
@@ -555,9 +516,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
                     onRetry={checkSession}
                     onRequestEmailCode={start}
                     onVerifyEmailCode={verify}
-                    inviteField
-                    initialInviteCode={readReferralCode(() => window.localStorage, Date.now()) ?? undefined}
-                    revealed={!loadingShown()}
                     onOpenCompanySignIn={() =>
                       state.login.status === "company_sign_in"
                         ? openCompanySignIn(state.login.email)
@@ -603,12 +561,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
                       onPluginSlugConsumed={() => setPluginSlug(null)}
                       marketplaceListing={marketplaceListing()}
                       onMarketplaceListingConsumed={() => setMarketplaceListing(null)}
-                      start={startLink()}
-                      onStartConsumed={() => setStartLink(null)}
-                      billingReturn={billingReturn()}
-                      onBillingReturnConsumed={() => setBillingReturn(false)}
-                      hostingReturn={hostingReturn()}
-                      onHostingReturnConsumed={() => setHostingReturn(null)}
                       language={languagePreference.language()}
                       onChangeLanguage={languagePreference.setLanguage}
                       appearance={appearancePreference.appearance()}

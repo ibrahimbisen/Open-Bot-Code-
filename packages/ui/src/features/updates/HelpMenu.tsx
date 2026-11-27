@@ -1,8 +1,6 @@
 import { BookOpen, Bug, CircleQuestionMark, DropdownMenu, Gift, Megaphone, MotionTooltip } from "@codebot/ui";
 import { createSignal, For, Show } from "solid-js";
 import { useText } from "../../text";
-import { CreditIcon } from "../credits/CreditIcon";
-import { CreditsExplainerDialog } from "../credits/CreditsExplainerDialog";
 import { DiscordMark } from "../settings/brand-marks";
 
 export interface HelpMenuNews {
@@ -20,8 +18,6 @@ export interface HelpMenuProps {
   onOpenDiscord: () => void;
   onReportProblem: () => void;
   onSendFeedback: () => void;
-  onOpenCreditsExplainer?: () => void;
-  onOpenCreditPrices?: () => void;
 }
 
 function releaseDate(value: string): Date {
@@ -32,11 +28,6 @@ function releaseDate(value: string): Date {
 export function HelpMenu(props: HelpMenuProps) {
   const { t, format } = useText();
   const [open, setOpen] = createSignal(false);
-  const [explaining, setExplaining] = createSignal(false);
-  const explain = () => {
-    props.onOpenCreditsExplainer?.();
-    setExplaining(true);
-  };
   return (
     <>
       <DropdownMenu.Root
@@ -80,10 +71,6 @@ export function HelpMenu(props: HelpMenuProps) {
               <BookOpen class="agent-context-icon size-4" aria-hidden="true" />
               <span>{t("app.help.guides")}</span>
             </DropdownMenu.Item>
-            <DropdownMenu.Item onSelect={explain}>
-              <CreditIcon class="agent-context-icon size-4" />
-              <span>{t("billing.credits.explainer.title")}</span>
-            </DropdownMenu.Item>
             <DropdownMenu.Item onSelect={() => props.onOpenDiscord()}>
               <DiscordMark class="agent-context-icon size-4" />
               <span>{t("app.help.discord")}</span>
@@ -99,11 +86,6 @@ export function HelpMenu(props: HelpMenuProps) {
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
-      <CreditsExplainerDialog
-        open={explaining()}
-        onOpenChange={setExplaining}
-        onOpenPrices={props.onOpenCreditPrices}
-      />
     </>
   );
 }

@@ -22,14 +22,12 @@ import type { AgentMessage, AgentProfile } from "@codebot/ui/data";
 import type { AgentTaskWait } from "@codebot/ui/features/conversation/AgentTasks";
 import type { AttachmentDownloads, AttachmentMediaSource } from "@codebot/ui/features/conversation/AttachmentCards";
 import type { ComposerPasteResult, ComposerSelection } from "@codebot/ui/features/conversation/ComposerEditor";
-import type { MediaApprovalControls } from "@codebot/ui/features/conversation/MediaApprovalCard";
 import type { SendShortcut } from "@codebot/ui/features/conversation/send-shortcut";
 import { AgentThreadView, type AgentThreadVoice } from "@codebot/ui/features/conversation/threads/AgentThreadView";
 import { TaskAnswerCard, TaskPanel } from "@codebot/ui/features/tasks/TaskPanel";
 import { TASKS_SIDE_DEFAULT, TASKS_SIDE_MIN, TasksPage, type TasksVoice } from "@codebot/ui/features/tasks/TasksPage";
 import { currentText } from "@codebot/ui/text";
 import { appendVoiceTranscript } from "@codebot/ui/voice-recording";
-import type { JSX } from "@solidjs/web";
 import {
   createEffect,
   createMemo,
@@ -102,8 +100,6 @@ interface TasksViewProps {
   downloads?: AttachmentDownloads | undefined;
   approvals: readonly AgentApproval[];
   onRespondApproval: (approval: AgentApproval, decision: "accept" | "decline") => Promise<boolean>;
-  mediaApproval?: MediaApprovalControls | undefined;
-  approvalCard?: ((approval: AgentApproval) => JSX.Element | undefined) | undefined;
   onRead?: ((input: AgentTaskInput, messageId: string) => void) | undefined;
   waitsForAnswer?: ((task: AgentTask) => boolean) | undefined;
   onOpenInChat?: ((task: AgentTask) => void) | undefined;
@@ -830,8 +826,6 @@ export function TasksView(props: TasksViewProps) {
               mediaSource={props.mediaSource}
               downloads={props.downloads}
               approval={approval()}
-              media={props.mediaApproval}
-              approvalCard={props.approvalCard}
               onRespondApproval={async (decision) => {
                 const current = approval();
                 return current ? props.onRespondApproval(current, decision) : false;

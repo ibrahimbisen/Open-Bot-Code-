@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "Mesaj dizileri",
   "app.rail.workflows": "İş akışları",
   "app.rail.usage": "Kullanım",
-  "app.rail.creditsAsk": "Kredi gerektiğinde sor",
-  "app.rail.creditsAskSaveFailed": "Kredi soruları değiştirilemedi.",
   "app.rail.library": "Kitaplık",
   "app.rail.providers": "Sağlayıcılar",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "{handle} topluluğuna katıl",
   "app.socialFollow.followedTitle": "{name} üzerinde görüşürüz!",
   "app.socialFollow.followedBody": "Haberlerimiz önce orada çıkar.",
-  "app.socialFollow.draftPost":
-    "Yapay zekâ ajanlarım artık CodeBot ile kendi bilgisayarımda çalışıyor. Sohbetlerim ve dosyalarım bende kalıyor. Dene: {site}",
-  "app.socialFollow.redditTitle": "CodeBot'u nasıl kullanıyorum",
   "app.rail.usageRings": "{name} kullanımı: {windows}. Kullanımı aç",
   "app.rail.usageUnavailable": "{name} kullanımı kullanılamıyor. Kullanımı aç",
   "app.rail.customAgentUsage": "{name} kullanımı. Kullanımı aç",

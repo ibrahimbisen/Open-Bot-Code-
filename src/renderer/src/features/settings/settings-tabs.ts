@@ -4,8 +4,6 @@ import type { AppTextKey } from "@codebot/i18n";
 import {
   Bell,
   CircleArrowDown,
-  CreditCard,
-  Gift,
   Keyboard,
   Mic,
   MousePointer2,
@@ -13,7 +11,6 @@ import {
   PanelRight,
   PanelTop,
   Power,
-  Server,
   Settings,
   SlidersHorizontal,
   Smartphone,
@@ -33,11 +30,8 @@ export type SettingsTab =
   | "agent-dock"
   | "computer-use"
   | "profile"
-  | "billing"
-  | "referral"
   | "mobile-connect"
   | "updates"
-  | "hosted-servers"
   | "advanced-features";
 
 type SettingsRow = {
@@ -157,22 +151,6 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
     ],
   },
   {
-    value: "billing",
-    titleKey: "settings.tab.billing.title",
-    descriptionKey: "settings.tab.billing.description",
-    icon: CreditCard,
-    group: "settings.sections.group.account",
-    rows: [],
-  },
-  {
-    value: "referral",
-    titleKey: "settings.tab.referral.title",
-    descriptionKey: "settings.tab.referral.description",
-    icon: Gift,
-    group: "settings.sections.group.account",
-    rows: [],
-  },
-  {
     value: "mobile-connect",
     titleKey: "settings.tab.mobileConnect.title",
     descriptionKey: "settings.tab.mobileConnect.description",
@@ -273,13 +251,6 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
     icon: SlidersHorizontal,
     rows: ADVANCED_FEATURE_IDS.map((id) => ({ titleKey: ADVANCED_FEATURE_TEXT[id].title })),
   },
-  {
-    value: "hosted-servers",
-    titleKey: "settings.tab.hostedServers.title",
-    descriptionKey: "settings.tab.hostedServers.description",
-    icon: Server,
-    rows: [],
-  },
 ];
 
 export function navItem(tab: SettingsTab): SettingsNavItem {
@@ -296,7 +267,6 @@ export function settingsTabShown(
     advanced: AdvancedFeatureSettings | undefined;
   },
 ): boolean {
-  if (tab === "hosted-servers") return false;
   if (tab === "computer-use") return window.advanced?.computerUse === true;
   if (tab === "dynamic-island") return dynamicIslandSettingsShown(window.platform, window.chatWindow);
   if (tab === "agent-dock") return window.platform !== undefined && !window.chatWindow;

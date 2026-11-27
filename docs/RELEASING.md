@@ -926,7 +926,7 @@ Before creating the first tag or any later release:
     finds changes for either commit, deploy Signal from the local tag before you push the tag. Compare with the running
     commit, not with the previous tag: an earlier release can have left Signal behind. Pushing the tag starts the
     release workflow, and nothing in it waits for Signal. Use the Signal-only procedure in
-    [remote-session-deployment.md](remote-session-deployment.md#deployment-procedure--requires-separate-approval);
+    [self-hosting.md](self-hosting.md);
     the `.agents/skills/signal-deploy/` skill adds the checks before and after it.
     Confirm that `/health/live` of `signal1.openbot.run` and of `signal2.openbot.run` shows the tag commit. A client
     that needs a newer Signal fails until then: v0.33.0 shipped webhook routines while Signal was older

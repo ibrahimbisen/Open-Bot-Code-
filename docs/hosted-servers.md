@@ -1107,7 +1107,7 @@ Leaseweb accounts use one scheme:
 | `pool` | In the hosted pool. It does not tell whether a server has the VPS: a purchase gives a VPS to a server in D1 and does not change the reference. `leaseweb-pool.ts status` shows the free ones. Only `leaseweb-pool.ts` and [Move a server from boat](#move-a-server-from-boat) use a pool VPS. Before 2026-11-13 a free pool VPS had `pool-free`; the script reads it as `pool`. | `pool` |
 | `<owner email> <first 8 characters of the CodeBot server ID>` | In the hosted pool, with a hosted server. `move` sets it for a moved server, and `sync` for a server that started on the machine. A label for the Leaseweb panel only: `sync` sets `pool` again on a free pool VPS that still has one. Do not decide from it whether a VPS is free. | `jane@example.com 1a2b3c4d` |
 | `custom-<NN> <customer> <owner email>` | A server for one customer, not in the pool. `<NN>` is the next number after the highest on all accounts; `leaseweb-pool.ts custom` sets it. `<customer>` is one word in small letters. | `custom-01 acme jane@example.com` |
-| `codebot-signal-<home>` | A Signal machine (see `docs/remote-session-deployment.md`). | `codebot-signal-us` |
+| `codebot-signal-<home>` | A Signal machine (see `docs/self-hosting.md`). | `codebot-signal-us` |
 | `pool-test-<NN>` | A test machine of the operator. | `pool-test-01` |
 | `internal-<purpose>` | A machine of the operators, not in the pool and not for tests. `internal-store-review` is the server of the app store reviewers; see `AGENTS.md`. | `internal-store-review` |
 

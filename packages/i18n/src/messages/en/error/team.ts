@@ -148,7 +148,6 @@ export const messages = defineMessages("error.team", {
   "error.team.claudeCompactWindowUnsupported": "This connection does not support the Claude compaction size.",
   "error.team.cacheExpiryCompactionUnsupported":
     "This connection does not support compaction before the cache expires.",
-  "error.team.mediaApprovalCreditsUnsupported": "This connection does not support the credit approval limit.",
   "error.team.mediaApprovalCreditsInvalid": "Enter a whole number of credits from 0 to 100,000.",
   "error.team.providerEnvironmentUnsupported": "This connection does not support provider variables.",
   "error.team.modelVisibilityUnsupported": "The model list is not supported by this connection.",
@@ -172,9 +171,6 @@ export const messages = defineMessages("error.team", {
   "error.team.storageUnsupported": "Storage is not supported by this connection.",
   "error.team.machineResourcesUnsupported": "Machine use is not supported by this connection.",
   "error.team.machineAlertMemberInvalid": "Only an owner or admin of this server can get machine alerts.",
-  "error.team.hostedSitesUnsupported": "Sites are not supported by this connection.",
-  "error.team.hostedSitesUnregistered": "This server is not registered with CodeBot, so it has no sites.",
-  "error.team.hostedSiteNotFound": "Site not found.",
   "error.team.markUnreadUnsupported": "This client does not support marking conversations unread.",
   "error.team.inviteServiceUnavailable": "Invitation service is unavailable.",
   "error.team.logoNotFound": "Server logo not found.",
@@ -219,7 +215,4 @@ export const messages = defineMessages("error.team", {
   "error.team.backgroundProcessesUnsupported": "Background processes are not supported by this connection.",
   "error.team.providerUseUnsupported": "Turning providers on and off is not supported by this connection.",
   "error.team.providerUseInvalid": "This provider does not have an on/off switch.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "This server does not support a model choice in media approvals. Update CodeBot on the server.",
-  "error.team.mediaApprovalChoiceInvalid": "The media approval choice is not valid.",
 });

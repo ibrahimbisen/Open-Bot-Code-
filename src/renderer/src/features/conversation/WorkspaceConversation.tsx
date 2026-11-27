@@ -47,7 +47,6 @@ import { useConnectors } from "../connectors/connectors-context";
 import { useCustomAgents } from "../custom-agents/custom-agents-context";
 import { useCustomProviders } from "../custom-providers/custom-providers-context";
 import { useRemoteDesktop } from "../remote-desktop/remote-desktop-context";
-import { useServerActions } from "../servers/server-actions";
 import {
   remoteMcpSignIn,
   serverCanAdminister,
@@ -58,7 +57,6 @@ import { createServerResponseStyle } from "../servers/server-personality";
 import { useServerScope } from "../servers/server-scope";
 import { useServerSettings } from "../servers/server-settings";
 import { useServers } from "../servers/servers-context";
-import { serversPort } from "../servers/servers-port";
 import { appSettingRowOpener } from "../settings/setting-link-targets";
 import { useSettings } from "../settings/settings-context";
 import { isReaderAuthor } from "../team/reader-identity";
@@ -71,7 +69,6 @@ import { useConversation } from "./conversation-context";
 import { useConversationController } from "./conversation-controller-context";
 import { messagePromptRequestKey, promptRequestKey } from "./conversation-keys";
 import type { ConversationThreads } from "./conversation-types";
-import { useDesktopMediaApproval } from "./desktop-media-approval";
 import {
   createAgentMessageDeleteAccess,
   desktopAgentMessageDeleteAccess,
@@ -84,9 +81,8 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
   const serverScope = useServerScope();
   const platform = usePlatform();
   const connectors = useConnectors();
-  const { servers, serversLoaded, activeServer, activeServerSupportsCapability, joinServerOpen } = useServers();
+  const { activeServer, activeServerSupportsCapability, joinServerOpen } = useServers();
   const advanced = useAdvancedFeatures();
-  const { select: selectServer } = useServerActions();
   const { serverSettingsOpen, openServerSettings } = useServerSettings();
   const {
     appSettingsOpen,
@@ -198,7 +194,6 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
   const panelAgentStatus = () => (remoteLoading() ? { ...agentStatus(), phase: "starting" as const } : agentStatus());
   const usage = useUsage();
   const windowPage = useWindowPage();
-  const mediaApproval = useDesktopMediaApproval();
   const auth = useAuth();
   const { teamPresence, readerMemberId } = usePresence();
   const { selectAgent, openAgentMessage, messageFocusRequest, globalSearchOpen } = useNavigation();
@@ -517,16 +512,6 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
           return known?.serverId === activeServer()?.id && known?.states[mcpServerId]?.signedIn === true;
         }}
         refreshMcpSignIns={() => refreshMcpSignIns(activeServer()?.id)}
-        serverInstall={{
-          get servers() {
-            return servers();
-          },
-          get loaded() {
-            return serversLoaded();
-          },
-          retryConnection: (serverId) => serversPort().servers.retryConnection(serverId),
-          onOpenServer: selectServer,
-        }}
         onOpenUsage={(trigger) => usage.openUsage(activeServer()?.id ?? "local", trigger, activeAgent()?.id)}
         agentStatus={panelAgentStatus()}
         agentsConnecting={agentListConnecting() || (remoteLoading() && activeServer()?.state === "online")}
@@ -658,7 +643,6 @@ export function WorkspaceConversation(props: { account: () => CentralAuthUser })
         onPromptResolutionPresented={presentPromptResolution}
         onRespondToApproval={respondToApproval}
         onAlwaysAllowApproval={alwaysAllowApproval()}
-        mediaApproval={mediaApproval}
         agentAutoApproves={activeAgentAutoApproves()}
         remoteBackupModelsLoaded={remoteAgentAdmin.backupModels() !== undefined}
         remotePlanCardLoaded={remoteAgentAdmin.quickAcknowledgement() !== undefined}

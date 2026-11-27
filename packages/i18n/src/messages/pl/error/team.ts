@@ -143,7 +143,6 @@ export const messages = {
   "error.team.claudeCompactWindowUnsupported": "To połączenie nie obsługuje rozmiaru kompaktowania Claude.",
   "error.team.cacheExpiryCompactionUnsupported":
     "To połączenie nie obsługuje kompaktowania przed wygaśnięciem pamięci podręcznej.",
-  "error.team.mediaApprovalCreditsUnsupported": "To połączenie nie obsługuje progu zatwierdzania kredytów.",
   "error.team.mediaApprovalCreditsInvalid": "Wpisz liczbę całkowitą kredytów od 0 do 100 000.",
   "error.team.providerEnvironmentUnsupported": "To połączenie nie obsługuje zmiennych dostawcy.",
   "error.team.modelVisibilityUnsupported": "To połączenie nie obsługuje listy modeli.",
@@ -163,9 +162,6 @@ export const messages = {
   "error.team.machineResourcesUnsupported": "To połączenie nie obsługuje użycia maszyny.",
   "error.team.machineAlertMemberInvalid":
     "Alerty maszyny może otrzymywać tylko właściciel lub administrator tego serwera.",
-  "error.team.hostedSitesUnsupported": "To połączenie nie obsługuje witryn.",
-  "error.team.hostedSitesUnregistered": "Ten serwer nie jest zarejestrowany w CodeBot, więc nie ma witryn.",
-  "error.team.hostedSiteNotFound": "Nie znaleziono witryny.",
   "error.team.markUnreadUnsupported": "Ten klient nie obsługuje oznaczania rozmów jako nieprzeczytane.",
   "error.team.inviteServiceUnavailable": "Usługa zaproszeń jest niedostępna.",
   "error.team.logoNotFound": "Nie znaleziono logo serwera.",
@@ -208,7 +204,4 @@ export const messages = {
   "error.team.backgroundProcessesUnsupported": "To połączenie nie obsługuje procesów w tle.",
   "error.team.providerUseUnsupported": "To połączenie nie obsługuje włączania i wyłączania dostawców.",
   "error.team.providerUseInvalid": "Ten dostawca nie ma przełącznika włączania.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "Ten serwer nie obsługuje wyboru modelu w zatwierdzeniach multimediów. Zaktualizuj CodeBot na serwerze.",
-  "error.team.mediaApprovalChoiceInvalid": "Wybór w zatwierdzeniu multimediów jest nieprawidłowy.",
 } as const satisfies PartialTranslation<typeof source>;

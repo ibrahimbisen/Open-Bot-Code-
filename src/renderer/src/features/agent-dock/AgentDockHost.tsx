@@ -77,7 +77,6 @@ import { browserSecretVault } from "../conversation/browser-secret-vault";
 import { useConversation } from "../conversation/conversation-context";
 import { useConversationController } from "../conversation/conversation-controller-context";
 import { latestVisibleAgentMessageId } from "../conversation/conversation-read-state";
-import { useDesktopMediaApproval } from "../conversation/desktop-media-approval";
 import { createAgentMessageDeleteAccess, desktopAgentMessageDeleteAccess } from "../conversation/message-delete-access";
 import { narrationRows, placeTurnRowsByTime } from "../conversation/narration-rows";
 import { usageLimitAskFrom } from "../conversation/usage-limit-ask";
@@ -845,7 +844,6 @@ function WindowAgentDock(props: { serverId: string }) {
   const channels = useChannels();
   const { openAppSettings } = useSettings();
   const dock = createServerDock(props.serverId, { readWhenHidden: false });
-  const media = useDesktopMediaApproval();
   const voice = createAgentDockVoice(() => props.serverId);
   const openTakeoverPage = useTakeoverPageOpener((agentId) => dock.mainTabOf(agentId));
   const answers: AgentDockChatAnswers = {
@@ -858,7 +856,6 @@ function WindowAgentDock(props: { serverId: string }) {
     secret: (_takeover, input) => agentDockPort().agent.respondToBrowserSecret(input, props.serverId),
     usageLimitSend: (limit, option, remember) => dock.sendOnBackup(limit.agentId, option.key, remember),
     usageLimitWait: (limit) => dock.waitForReset(limit.agentId),
-    media,
   };
 
   return (

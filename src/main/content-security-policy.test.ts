@@ -7,9 +7,7 @@ describe("buildContentSecurityPolicy", () => {
       .split("; ")
       .find((directive) => directive.startsWith("connect-src "));
 
-    expect(connect).toBe(
-      "connect-src 'self' codebot-attachment: codebot-remote-attachment: ws://127.0.0.1:* wss://*.openbot.run",
-    );
+    expect(connect).toBe("connect-src 'self' codebot-attachment: codebot-remote-attachment: ws://127.0.0.1:*");
     expect(connect).not.toContain("analytics");
     expect(connect).not.toContain("localhost");
   });
@@ -30,7 +28,7 @@ describe("buildContentSecurityPolicy", () => {
   it.each([true, false])("allows loopback viewer frames when packaged=%s", (packaged) => {
     const directives = buildContentSecurityPolicy(packaged).split("; ");
     expect(directives.find((directive) => directive.startsWith("frame-src "))).toBe(
-      "frame-src 'self' codebot-attachment: codebot-remote-attachment: codebot-visual: codebot-remote-visual: https://*.openbot.run http://127.0.0.1:* http://localhost:*",
+      "frame-src 'self' codebot-attachment: codebot-remote-attachment: codebot-visual: codebot-remote-visual: http://127.0.0.1:* http://localhost:*",
     );
     expect(directives.find((directive) => directive.startsWith("script-src "))).toBe("script-src 'self'");
   });

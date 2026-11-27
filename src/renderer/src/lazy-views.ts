@@ -35,17 +35,9 @@ export const InitialSetup = lazy(() =>
 export const AddServerDialog = lazy(() =>
   import("@codebot/ui/features/servers/AddServerDialog").then((module) => ({ default: module.AddServerDialog })),
 );
-export const HostedPricingPage = lazy(() =>
-  import("@codebot/ui/features/servers/HostedPricingPage").then((module) => ({ default: module.HostedPricingPage })),
-);
 export const CreateLocalServerDialog = lazy(() =>
   import("@codebot/ui/features/servers/CreateLocalServerDialog").then((module) => ({
     default: module.CreateLocalServerDialog,
-  })),
-);
-export const InstallServerDialog = lazy(() =>
-  import("@codebot/ui/features/servers/InstallServerDialog").then((module) => ({
-    default: module.InstallServerDialog,
   })),
 );
 export const JoinServerDialog = lazy(() =>

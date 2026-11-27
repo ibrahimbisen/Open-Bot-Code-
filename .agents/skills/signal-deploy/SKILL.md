@@ -9,7 +9,7 @@ Signal runs on `sui-alexandria` in the Compose project `codebot-remote` (`/opt/c
 has no database: a restart closes the signalling WebSockets and empties the in-memory rooms, routes
 and resume-token cache. Active WebRTC data channels stay up. coturn is a separate container.
 
-[docs/remote-session-deployment.md](../../../docs/remote-session-deployment.md) is the source for
+[docs/self-hosting.md](../../../docs/self-hosting.md) describes
 the staging, build and rollback commands. This skill adds the checks before and after them.
 
 ## When to deploy
@@ -110,8 +110,8 @@ changes that are live now.
 
 ## 4. Deploy
 
-Report the results of steps 1 to 3 and get approval. Then follow "Deployment procedure" in
-[docs/remote-session-deployment.md](../../../docs/remote-session-deployment.md) with these changes:
+Report the results of steps 1 to 3 and get approval. Then follow the Signal and TURN steps in
+[docs/self-hosting.md](../../../docs/self-hosting.md) with these changes:
 
 - Use `git archive <tag>` and the release directory `/opt/codebot/releases/$(git rev-parse <tag>^{commit})`.
   If the directory exists, do not write into it again.

@@ -27,12 +27,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Capturar la pantalla principal y enviar la imagen al modelo del agente.",
   "status.agent.screenCaptureChannel":
     "La imagen aparece en el canal {channel}, y cada miembro de este servidor que lee el canal puede verla.",
-  "status.agent.creditImageApproval": "Generar una imagen con {model}. Cuesta {credits} créditos.",
-  "status.agent.creditVideoApproval": "Generar un vídeo con {model}. Cuesta {credits} créditos.",
-  "status.agent.creditMediaChannel":
-    "El resultado se muestra en el canal {channel}, y cada miembro de este servidor que lea el canal puede verlo.",
-  "status.agent.creditsHoldBalance": "Esto usa {credits} créditos y el saldo es de {balance} créditos.",
-  "status.agent.creditsHoldAgentsOff": "Los agentes de este servidor no pueden usar créditos.",
   "status.agent.screenCapturePermissionNext":
     "Después, macOS puede pedirte que permitas a CodeBot la grabación de pantalla.",
   "status.agent.screenCaptureDisplay": "Capturar la pantalla {name} y enviar la imagen al modelo del agente.",
@@ -52,9 +46,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Nadie podrá ver este informe en GitHub. No puedes deshacerlo. Para corregirlo, el agente puede enviar un informe corregido.",
   "status.agent.feedbackWithdrawing": "Eliminando tu informe de GitHub…",
-  "status.agent.serverInstallCommand":
-    "Crear un comando de un solo uso que instala CodeBot en otro ordenador como el servidor {name} y lo conecta a tu cuenta. El agente lo ejecuta allí.",
-  "status.agent.serverInstallCard": "Comando de instalación para el servidor {name}",
   "status.agent.browserProfileNamed":
     "Mover {agents} al perfil del navegador {profile}. Reciben sus inicios de sesión y cookies. Sus pestañas abiertas se cierran.",
   "status.agent.commitCoAuthorOff": "Dejar de añadir a CodeBot como coautor en los commits de todos los agentes.",
@@ -69,19 +60,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "Eliminar el flujo de trabajo {title} con sus ejecuciones y versiones. Sus pasos abiertos se detienen.",
   "status.agent.deleteAgents": "Eliminar {agents} con sus chats y archivos. No se puede deshacer.",
-  "status.agent.nearSignatureReceived": "CodeBot recibió la firma. Puedes cerrar esta pestaña.",
-  "status.agent.nearSignatureUnknown": "CodeBot no está esperando esta firma. Vuelve a iniciarla en CodeBot.",
-  "status.agent.nearPayment": "Pagar {amount} {symbol} a {recipient} desde la cartera cripto, para {domain}: {reason}",
-  "status.agent.nearSummaryCreate":
-    "Todos los agentes pueden pagar hasta {amount} USD al día. Puedes cambiarlo más tarde en CodeBot.",
-  "status.agent.nearSummaryGrant":
-    "Permitir que esta app de CodeBot pague desde la cartera durante {days} días, dentro de tus reglas.",
-  "status.agent.nearSummaryBudget": "Cambiar el presupuesto diario de la cartera a {amount} USD.",
-  "status.agent.nearSummaryAutoPay":
-    "Permitir que CodeBot pague sin tu firma cuando una regla de pago lo permita. Para los demás pagos, te seguirán preguntando en el chat.",
-  "status.agent.nearSummaryPayment": "Aprobar el pago de {amount} a {recipient}.",
-  "status.agent.nearSummaryFreeze": "Los agentes no podrán pagar desde esta cartera hasta que reanudes los pagos.",
-  "status.agent.nearSummaryUnfreeze": "Los agentes pueden volver a pagar desde esta cartera, dentro de tus reglas.",
   "status.agent.screenCaptureProgress": "Pidiendo permiso para capturar la pantalla…",
   "status.agent.screenCaptureReviewing": "Revisando la captura de pantalla…",
   "status.agent.browserOpening": "Abriendo una página web…",
@@ -89,7 +67,6 @@ export const messages = {
   "status.agent.browserClicking": "Haciendo clic en la página web…",
   "status.agent.browserTyping": "Escribiendo en la página web…",
   "status.agent.browserActing": "Usando la página web…",
-  "status.agent.browserPaying": "Enviando el pago…",
   "status.agent.browserReviewing": "Revisando la página web…",
   "status.agent.memoriesSearching": "Buscando en sus recuerdos…",
   "status.agent.chatsSearching": "Buscando en sus chats anteriores…",

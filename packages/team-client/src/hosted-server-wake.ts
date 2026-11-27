@@ -4,9 +4,10 @@ import {
   parseHostedServerStatus,
   parseHostedServerSummary,
 } from "@codebot/contracts/hosted-servers";
-import type { HostedServerStartStep } from "@codebot/contracts/ipc";
 import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { Deferred, Effect, Schema } from "effect";
+
+type HostedServerStartStep = "machine" | "restore" | "codebot" | "provider_limit";
 
 class HostedServerWakeError extends Schema.TaggedError<HostedServerWakeError>()("HostedServerWakeError", {}) {}
 

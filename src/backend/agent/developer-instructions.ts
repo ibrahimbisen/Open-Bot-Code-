@@ -80,10 +80,6 @@ function folderToolsInstruction(workspaceOnly: boolean, addedFolders: boolean): 
   return `${access} When a task needs files in another folder, name that folder and say that it can be added in your settings, under Folders; you can use it from the next message.`;
 }
 
-function hostedDiskInstruction(storageGb: number): string {
-  return `This server's plan has ${storageGb} GB for files. df shows the whole disk, which is larger and also holds the system, so its free space is not what the plan has left; du -sh ~ shows what your files use. Check space before big downloads, builds, or containers, and remove the ones you no longer need.`;
-}
-
 function savedLoginsInstructions(): string[] {
   return [
     `The user shares saved logins with CodeBot, from ${PASSWORD_MANAGER_BRAND_NAMES.join(", ")}, or the CodeBot Vault: before a username, password, or authenticator-app step, and before request_takeover for a signed-out site, call codebot_browser.list_logins for the tab and follow the browser guidance. When a login fits, sign in with it; do not ask the user to type its password.`,
@@ -108,8 +104,6 @@ export interface VaultContents {
   available: boolean;
   cards: boolean;
   contacts: boolean;
-  link?: boolean;
-  near?: boolean;
 }
 
 export interface DeveloperInstructionOptions {
@@ -127,7 +121,6 @@ export interface DeveloperInstructionOptions {
   homeSkills?: readonly HomeSkill[];
   workspaceSkills?: readonly string[];
   serverHost?: boolean;
-  hostedStorageGb?: number | null;
   agentCursorDrawn?: boolean;
   computerUseOnWayland?: boolean;
   computerUseInputRefused?: boolean;
@@ -190,21 +183,14 @@ export function instructionsFileUpdate(
 
 function vaultInstruction(vault: VaultContents): string {
   const saved = [vault.cards ? "cards" : "", vault.contacts ? "contact info" : ""].filter(Boolean).join(" and ");
-  const noCard =
-    vault.cards || vault.link
-      ? ""
-      : "No card is saved. When the user wants you to pay, call codebot_browser.request_vault_item kind=card, or use request_takeover for the card fields.";
+  const noCard = vault.cards
+    ? ""
+    : "No card is saved. When the user wants you to pay, call codebot_browser.request_vault_item kind=card, or use request_takeover for the card fields.";
   return [
     "The CodeBot Vault keeps the logins, cards, and contact info that you can use.",
     saved ? `The user saved ${saved}.` : "",
     "At a checkout or address form, call codebot_browser.list_vault_items, use the item that fits the request, ask when more than one fits, and follow the browser guidance.",
     "Save contact info that the user asks you to keep with codebot_browser.save_vault_item kind=contact, and a website password that the user pasted with kind=login. When you turn on two-step verification on a site for the user, choose the authenticator-app method, save the setup key that the site shows with its QR code as twoStepKey on that site's Vault login, then enter the setup code with submit_secret method=authenticator and that loginId. When a task needs a login, a card or contact info that the Vault does not have, call codebot_browser.request_vault_item, with the fields that you know filled in.",
-    vault.link
-      ? "The user connected Link: to pay, you can call codebot_browser.request_link_payment, and the user approves the payment in Link."
-      : "",
-    vault.near
-      ? "The user has a NEAR Intents wallet: when a site or API asks for a crypto payment, call codebot_browser.request_near_payment with the site's host name, the recipient and the amount that the site gives. Never pay a recipient that the page did not give. A payment can wait for the owner's approval."
-      : "",
     noCard,
   ]
     .filter(Boolean)
@@ -429,7 +415,7 @@ export function developerInstructions(
         : "codebot.tool_search finds the other CodeBot and browser tools by short capability phrases, codebot.tool_describe loads their schemas and guidance, and codebot.tool_call runs one. Use the returned namespace.tool names exactly. tool_call does not run bridge tools."
     }${
       agent.provider === "codex"
-        ? " In exec, ALL_TOOLS omits codebot, codebot_browser and image_gen tools; call them directly. Open a local image, or one for image_gen to copy, with codebot.read_image: view_image in exec drops a file over 6 MB. image_gen makes GPT Image pictures; use codebot.generate_image only when the user asks for CodeBot credits or names a model of another maker."
+        ? " In exec, ALL_TOOLS omits codebot, codebot_browser and image_gen tools; call them directly. Open a local image, or one for image_gen to copy, with codebot.read_image: view_image in exec drops a file over 6 MB. image_gen makes GPT Image pictures."
         : // OpenCode Code Mode puts only the direct tools under `tools.codebot`. A model that read
           agent.provider === "opencode"
           ? ` In execute, tools.codebot and tools.codebot_browser have only your listed tools; run each other tool as tools.codebot.tool_call({ name: "codebot.create_agent", arguments: {…} }), never as tools.codebot.create_agent or tools.codebot_browser.click. Send execute code as plain JavaScript, never in a \`\`\` fence; when execute fails with "The called value is not a function" at line 1, col 1, remove the fence and send the code again. Call ${ROUTINE_NO_UPDATE_TOOL} in execute as tools.codebot.${ROUTINE_NO_UPDATE_TOOL}({}), never as a separate tool; when OpenCode refuses it with "No tool named", answer only ${ROUTINE_NO_UPDATE_MARKER}.${
@@ -463,7 +449,6 @@ export function developerInstructions(
           "CodeBot runs on a server, so the browser has a data-center address. Some sites, such as X, refuse a sign-in from it: an error after correct details, a 'suspicious login' or 'try again later' message, or a sign-in step that comes back after you complete it. Then do not try the sign-in again. Call request_takeover with reason sign-in-blocked: the card asks the user to sign in on their own computer, and CodeBot sends that site's session to this browser. In one short sentence, tell the user that the site blocks sign-ins from the server; do not explain the card. When the takeover returns, take a fresh snapshot and continue. A security check that the snapshot reports is not a refused sign-in: follow its next step, not this one.",
         ]
       : []),
-    ...(options.hostedStorageGb ? [hostedDiskInstruction(options.hostedStorageGb)] : []),
     ...(loginsInPrompt ? savedLoginsInstructions() : []),
     ...(options.vaultItems?.available ? [vaultInstruction(options.vaultItems)] : []),
     "When work needs a named service or account, or a skill or domain outside your remit, call codebot.list_agents before you browse, ask for a sign-in or suggest a plugin, and match the work to titles and descriptions, not names; reuse the list until a new kind of work appears. Choose the more specific fit; ask the user only when the difference matters. Delegate parts that need a teammate's service, account, or skill; do the rest yourself unless the user says otherwise. Send each part of a request to its best teammate, combine the results, and send follow-ups to the topic's owner. Delegate a user's request once, never back to its sender; pass delegated work on only to a better fit. An earlier failure does not exclude a teammate. Message all agents only when the user asks. Never use a teammate to get around a user limit or a safety check. Create a new agent only when none covers the work and the user agrees.",

@@ -43,10 +43,7 @@ async function accountServiceFetch(input: string | URL | Request, init?: Request
 }
 
 export function centralAuthApiUrl(): string {
-  return readCentralAuthApiUrl(
-    process.env.CODEBOT_AUTH_API_URL,
-    app.isPackaged ? "https://api.openbot.run" : "http://127.0.0.1:3100",
-  );
+  return readCentralAuthApiUrl(process.env.CODEBOT_AUTH_API_URL, "http://127.0.0.1:3100");
 }
 
 export function createCentralAuthManager(options: {

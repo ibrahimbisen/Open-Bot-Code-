@@ -1,5 +1,4 @@
 import type { AgentEvent } from "@codebot/contracts/ipc";
-import type { CreditMediaReport } from "../backend/agent/credit-media-tools";
 import type { FailureSignal } from "../backend/agent/failure-signal";
 import type { ToolUsageSignal } from "../backend/agent/thread-items";
 import type { BrowserSiteVisit } from "../backend/browser-host";
@@ -23,8 +22,6 @@ export class HostAnalytics {
   handleToolUsage(_usage: ToolUsageSignal): void {}
 
   handleWorkflowRun(_end: WorkflowRunEnd): void {}
-
-  handleCreditMedia(_report: CreditMediaReport): void {}
 
   handleWebhookDelivery(_report: WebhookDeliveryReport): void {}
 

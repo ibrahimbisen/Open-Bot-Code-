@@ -157,8 +157,6 @@ export const messages = {
     "شغّلت السكربتات المحلية المهام الدورية لهذا الوكيل {limit} مرة في الساعة الأخيرة. أعد المحاولة لاحقًا.",
   "error.agent.workspaceOnlyMacOnly":
     "خيار «مساحة العمل فقط» متاح لهذا المزوّد على macOS فقط. اختر الوصول الكامل في إعدادات الوكيل.",
-  "error.agent.lowMemory":
-    "ذاكرة هذا الخادم منخفضة. تنتظر رسالتك في قائمة الانتظار وتبدأ عند توفر الذاكرة. تمنح الخطة الأكبر الخادمَ ذاكرة أكثر.",
   "error.agent.lowMemoryServer": "ذاكرة هذا الخادم منخفضة. تنتظر رسالتك في قائمة الانتظار وتبدأ عند توفر الذاكرة.",
   "error.agent.workspaceOnlyToolMissing":
     "يحتاج خيار «مساحة العمل فقط» إلى {tool}، ولم يجده CodeBot. ثبّته، أو اختر الوصول الكامل في إعدادات الوكيل.",
@@ -176,8 +174,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "لا يعمل التقاط الشاشة في محادثة Slack أو Discord أو Telegram، لأن أشخاصًا آخرين يتلقون ملفاته.",
   "error.agent.screenCaptureDeclined": "لم يسمح المستخدم بالتقاط الشاشة هذا. لم يُلتقط شيء.",
-  "error.agent.creditMediaDeclined": "لم يسمح المستخدم بعملية الإنشاء هذه. لم يُنفق أي رصيد.",
-  "error.agent.creditMediaNotSaved": "تم إنشاء الملف، لكن CodeBot لم يتمكن من حفظه في الدردشة.",
   "error.agent.mcpServerDeclined": "لم يسمح المستخدم بتغيير خادم MCP هذا. لم يتغير شيء.",
   "error.agent.mcpToolDeclined": "لم يسمح المستخدم باستدعاء أداة MCP هذه. لم تعمل الأداة.",
   "error.agent.mcpServerNotSaved": "لم يستجب خادم MCP، لذا لم يُحفظ. {error}",

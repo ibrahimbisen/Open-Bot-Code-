@@ -18,7 +18,6 @@ import type {
   BusyMessageModePreference,
   ChatBackgroundColor,
   ChatWindowTarget,
-  DeleteHostedSiteInput,
   DynamicIslandAction,
   DynamicIslandPreference,
   DynamicIslandPresentation,
@@ -35,11 +34,9 @@ import type {
   MarketplaceSkillSort,
   MemoryReviewPreference,
   NotificationPreference,
-  PublishHostedSiteInput,
   RemoteNetworkRoutePreference,
   RemoteSessionReusePreference,
   RendererTimingReport,
-  ReplaceHostedSiteInput,
   SaveSetupInput,
   SetAgentDockInteractiveInput,
   SetAgentDockXWaylandInput,
@@ -94,7 +91,6 @@ import {
   QUIT_GUARDS,
   RENDERER_TIMING_LIMITS,
 } from "@codebot/contracts/ipc";
-import { isReferralCode } from "@codebot/contracts/referral";
 import {
   type DynamicRecord,
   isBoolean,
@@ -401,26 +397,6 @@ export function parseMacAutomationTargets(input: unknown): readonly MacAutomatio
   return [...new Set(input)];
 }
 
-const SOCIAL_DESTINATIONS = [
-  "threads",
-  "instagram",
-  "tiktok",
-  "facebook",
-  "linkedin",
-  "reddit",
-  "x-post",
-  "threads-post",
-  "linkedin-post",
-  "reddit-post",
-  "facebook-post",
-  "instagram-post",
-  "tiktok-post",
-] as const satisfies readonly ExternalDestination[];
-
-function isSocialDestination(input: unknown): input is (typeof SOCIAL_DESTINATIONS)[number] {
-  return SOCIAL_DESTINATIONS.some((destination) => destination === input);
-}
-
 export function parseExternalDestination(input: unknown): ExternalDestination {
   if (
     input !== "agent-setup" &&
@@ -430,15 +406,11 @@ export function parseExternalDestination(input: unknown): ExternalDestination {
     input !== "opencode-auth" &&
     input !== "feedback" &&
     input !== "report-problem" &&
-    input !== "message" &&
     input !== "changelog" &&
     input !== "guides" &&
     input !== "discord" &&
     input !== "github" &&
-    input !== "x" &&
-    !isSocialDestination(input) &&
     input !== "grok-bot-export" &&
-    input !== "hosted-server-contact" &&
     input !== "download" &&
     input !== "mac-screen-recording"
   ) {
@@ -452,7 +424,6 @@ export function parseEmailCodeVerification(input: unknown): VerifyEmailCodeInput
   return {
     challengeId: requireString(input.challengeId, "challengeId", INPUT_LIMITS.identifier),
     code: requireString(input.code, "code", 32),
-    ...(isReferralCode(input.referralCode) ? { referralCode: input.referralCode } : {}),
   };
 }
 
@@ -558,34 +529,6 @@ export function parseSetEnabledSkill(input: unknown): SetEnabledSkillInput {
     skillId: requireSkillId(input.skillId),
     enabled,
   };
-}
-
-export function parsePublishHostedSite(input: unknown): PublishHostedSiteInput {
-  if (!isObject(input)) throw new Error("Invalid site publication.");
-  const spaFallback = optionalBoolean(input.spaFallback, "spaFallback");
-  return {
-    sourcePath: requireString(input.sourcePath, "sourcePath", INPUT_LIMITS.path),
-    title: requireString(input.title, "title", 120),
-    description: requireString(input.description, "description", 500),
-    ...(spaFallback !== undefined ? { spaFallback } : {}),
-  };
-}
-
-export function parseReplaceHostedSite(input: unknown): ReplaceHostedSiteInput {
-  if (!isObject(input)) throw new Error("Invalid site replacement.");
-  const spaFallback = optionalBoolean(input.spaFallback, "spaFallback");
-  return {
-    siteId: requireString(input.siteId, "siteId", INPUT_LIMITS.identifier),
-    sourcePath: requireString(input.sourcePath, "sourcePath", INPUT_LIMITS.path),
-    title: requireString(input.title, "title", 120),
-    description: requireString(input.description, "description", 500),
-    ...(spaFallback !== undefined ? { spaFallback } : {}),
-  };
-}
-
-export function parseDeleteHostedSite(input: unknown): DeleteHostedSiteInput {
-  if (!isObject(input)) throw new Error("Invalid site deletion.");
-  return { siteId: requireString(input.siteId, "siteId", INPUT_LIMITS.identifier) };
 }
 
 export function parseSubmitMarketplaceAgent(input: unknown): SubmitMarketplaceAgentInput {

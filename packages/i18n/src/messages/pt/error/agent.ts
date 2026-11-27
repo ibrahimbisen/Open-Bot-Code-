@@ -175,8 +175,6 @@ export const messages = {
     "Scripts locais executaram as rotinas deste agente {limit} vezes na última hora. Tente de novo mais tarde.",
   "error.agent.workspaceOnlyMacOnly":
     "Para este provedor, o acesso Somente o espaço de trabalho existe apenas no macOS. Escolha Acesso completo nas configurações do agente.",
-  "error.agent.lowMemory":
-    "Este servidor está com pouca memória. Sua mensagem aguarda na fila e começa quando houver memória livre. Um plano maior oferece mais memória ao servidor.",
   "error.agent.lowMemoryServer":
     "Este servidor está com pouca memória. Sua mensagem aguarda na fila e começa quando houver memória livre.",
   "error.agent.workspaceOnlyToolMissing":
@@ -195,8 +193,6 @@ export const messages = {
   "error.agent.screenCaptureShared":
     "A captura de tela não funciona em uma conversa do Slack, Discord ou Telegram, porque outras pessoas recebem os arquivos dela.",
   "error.agent.screenCaptureDeclined": "O usuário não permitiu esta captura de tela. Nada foi capturado.",
-  "error.agent.creditMediaDeclined": "O usuário não permitiu esta geração. Nenhum crédito foi gasto.",
-  "error.agent.creditMediaNotSaved": "O arquivo foi criado, mas o CodeBot não conseguiu salvá-lo no chat.",
   "error.agent.mcpToolDeclined":
     "O usuário não permitiu esta chamada da ferramenta MCP. A ferramenta não foi executada.",
   "error.agent.screenCaptureWindowMissing":

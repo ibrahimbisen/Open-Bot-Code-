@@ -1,6 +1,5 @@
 import type {
   AvatarImageInput,
-  HostedSitesDesktopApi,
   HostStatus,
   InviteSummary,
   ServerAppearance,
@@ -27,7 +26,6 @@ import {
   CalendarClock,
   Download,
   FlaskConical,
-  Globe2,
   HardDrive,
   History,
   ItemGroup,
@@ -45,7 +43,6 @@ import {
   Text,
   UsersRound,
 } from "@codebot/ui";
-import type { LicenseCalls } from "@codebot/ui/features/billing/license-store";
 import type { ProviderSettingsDetail } from "@codebot/ui/features/settings/ProviderSettingsPage";
 import {
   SaveBarDock,
@@ -54,18 +51,13 @@ import {
   SettingsNavGroupLabel,
   type SettingsPagePlacement,
 } from "@codebot/ui/features/settings/SettingsDialogShell";
-import { SettingsHostedSitesTab } from "@codebot/ui/features/settings/SettingsHostedSitesTab";
-import {
-  createSettingsHostedSitesStore,
-  type HostedSiteDeleteResult,
-} from "@codebot/ui/features/settings/stores/hosted-sites-store";
+
 import { useText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, For, onCleanup, Show, untrack } from "solid-js";
 import { actionToast } from "../../action-toast";
 import { type ServerBrowserProfilesOptions, ServerBrowserProfilesPanel } from "../browser/ServerBrowserProfilesPanel";
 import type { CrmHost } from "../crm/crm-port";
 import { type ServerStorageOptions, ServerStoragePanel } from "../files/ServerStoragePanel";
-import { hostedPlanStorageGb } from "../files/storage-usage";
 import { type HostProviderSettings, HostProviderSettingsPanel } from "../settings/ProviderSettingsSection";
 import type {
   HostClaudeCompactWindowOptions,
@@ -91,7 +83,6 @@ import {
   type ServerImportOptions,
   ServerImportPanel,
 } from "./ServerImportPanel";
-import type { ServerMediaApprovalOptions } from "./ServerMediaApprovalSetting";
 import { createServerMembersSection } from "./ServerMembersSection";
 import type { ServerMemoryLimitOptions } from "./ServerMemoryLimitSetting";
 import type { ServerMemoryReviewOptions } from "./ServerMemoryReviewSetting";
@@ -107,7 +98,7 @@ import { type ServerTransferOptions, ServerTransferPanel } from "./ServerTransfe
 import type { ServerTurnLimitsOptions } from "./ServerTurnLimitsSetting";
 import { type ServerUpdateOptions, ServerUpdatePanel } from "./ServerUpdatePanel";
 import type { ServerVoiceModelOptions } from "./ServerVoiceModelSetting";
-import { PROVIDER_SEARCH_NAMES, serverCanAdminister, serverRoleCanAdminister } from "./server-capabilities";
+import { PROVIDER_SEARCH_NAMES, serverCanAdminister } from "./server-capabilities";
 import type { ServerSettingsSectionHost } from "./server-settings-section";
 
 export interface ServerSettingsModalProps {
@@ -127,11 +118,9 @@ export interface ServerSettingsModalProps {
   onSetPublished: (published: boolean) => Promise<void>;
   onRotateHostKey?: (() => Promise<void>) | undefined;
   onCreateInvite: (input: { role: "admin" | "member"; email?: string; permanent?: boolean }) => Promise<InviteSummary>;
-  license?: Pick<LicenseCalls, "getState" | "setUsers" | "changePlan"> | undefined;
   companySignIn?: CompanySignInCalls | undefined;
   ownerTransfer?: OwnerTransferCalls | undefined;
   onDownloadDesktopApp?: (() => void) | undefined;
-  onContactUs?: () => void;
   onUpdateMember: (input: UpdateTeamMemberInput) => Promise<void>;
   onRemoveMember: (memberId: string) => Promise<void>;
   onRevokeInvite: (inviteId: string) => Promise<void>;
@@ -140,7 +129,6 @@ export interface ServerSettingsModalProps {
   onOpenScreenRecordingSettings: () => Promise<void>;
   onRecheckScreenRecording: () => Promise<void>;
   storage?: ServerStorageOptions | undefined;
-  hostedSites?: ServerHostedSitesOptions | undefined;
   providers?: HostProviderSettings | undefined;
   onSwitchToManageProviders?: (() => void) | undefined;
   agentImport?: ServerImportOptions | undefined;
@@ -150,7 +138,6 @@ export interface ServerSettingsModalProps {
   hostVoiceModel?: ServerVoiceModelOptions | undefined;
   hostSignalHome?: ServerSignalHomeOptions | undefined;
   hostTurnLimits?: ServerTurnLimitsOptions | undefined;
-  mediaApprovalCredits?: ServerMediaApprovalOptions | undefined;
   hostPersonality?: ServerPersonalityOptions | undefined;
   hostMemoryLimit?: ServerMemoryLimitOptions | undefined;
   memoryReview?: ServerMemoryReviewOptions | undefined;
@@ -179,13 +166,6 @@ export interface ServerSettingsModalProps {
   onOpenMarketplaceApps?: (() => void) | undefined;
 }
 
-export interface ServerHostedSitesOptions {
-  api: Pick<HostedSitesDesktopApi, "list" | "delete">;
-  onOpenSite: (url: string) => void;
-  trackDelete?: () => (result: HostedSiteDeleteResult) => void;
-  onSeePlans?: (() => void) | undefined;
-}
-
 export type ServerSettingsSection =
   | "general"
   | "personality"
@@ -197,7 +177,6 @@ export type ServerSettingsSection =
   | "audit"
   | "desktop"
   | "storage"
-  | "sites"
   | "providers"
   | "updates"
   | "import"
@@ -219,7 +198,6 @@ const sections = {
   audit: { title: "server.settings.auditTitle", description: "server.settings.auditDescription" },
   desktop: { title: "server.settings.desktopTitle", description: "server.settings.desktopDescription" },
   storage: { title: "server.settings.storageTitle", description: "server.settings.storageDescription" },
-  sites: { title: "server.settings.hostedSitesTitle", description: "server.settings.hostedSitesDescription" },
   providers: { title: "server.settings.providersTitle", description: "server.settings.providersDescription" },
   updates: { title: "server.settings.updatesTitle", description: "server.settings.updatesDescription" },
   import: { title: "server.settings.importTitle", description: "server.settings.importDescription" },
@@ -246,8 +224,6 @@ const SECTION_ROWS: Partial<Record<Section, readonly AppTextKey[]>> = {
     "server.settings.turnLimit",
     "server.settings.voiceModel.section",
     "server.settings.agentTaskLimit",
-    "server.settings.mediaApprovalAgents",
-    "server.settings.mediaApprovalCredits",
     "agentSettings.automation.title",
     "agentSettings.agentNewChat.title",
     "agentSettings.quickAcknowledgement.title",
@@ -281,7 +257,6 @@ const NAV_SECTIONS: ReadonlyArray<{ value: Section; icon: typeof Settings; group
   { value: "vault", icon: KeyRound, group: "server.settings.group.agents" },
   { value: "browser-profiles", icon: AppWindow, group: "server.settings.group.agents" },
   { value: "routines", icon: CalendarClock, group: "server.settings.group.agents" },
-  { value: "sites", icon: Globe2, group: "server.settings.group.agents" },
   { value: "members", icon: UsersRound, group: "server.settings.group.people" },
   { value: "roles", icon: ShieldCheck, group: "server.settings.group.people" },
   { value: "audit", icon: History, group: "server.settings.group.people" },
@@ -440,8 +415,6 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
         return remoteDesktopSection();
       case "storage":
         return Boolean(props.storage);
-      case "sites":
-        return Boolean(props.hostedSites);
       case "providers":
         return Boolean(props.providers || props.onSwitchToManageProviders);
       case "updates":
@@ -519,24 +492,6 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
     () => props.ownerTransfer,
     () => props.open && section() === "members",
   );
-  const hostedSites = createSettingsHostedSitesStore(
-    {
-      get open() {
-        return props.open;
-      },
-      get serverId() {
-        return props.server.id;
-      },
-      get hostedSitesApi() {
-        return props.hostedSites?.api;
-      },
-      get trackDelete() {
-        return props.hostedSites?.trackDelete;
-      },
-    },
-    () => section() === "sites",
-  );
-
   createEffect(
     () => ({ element: modalElement(), height: toastHeight() }),
     ({ element, height }) => {
@@ -647,7 +602,6 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
         value === "audit" ||
         value === "desktop" ||
         value === "storage" ||
-        value === "sites" ||
         value === "providers" ||
         value === "updates" ||
         value === "import" ||
@@ -853,25 +807,7 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
         <Show when={props.storage}>
           {(storage) => (
             <Tabs.Content value="storage" class="settings-modal-tab-panel server-settings-panel" data-tab="storage">
-              <ServerStoragePanel
-                serverId={props.server.id}
-                storageGb={hostedPlanStorageGb(props.server)}
-                members={props.members}
-                {...storage()}
-              />
-            </Tabs.Content>
-          )}
-        </Show>
-        <Show when={props.hostedSites}>
-          {(sites) => (
-            <Tabs.Content value="sites" class="settings-modal-tab-panel server-settings-panel" data-tab="sites">
-              <SettingsHostedSitesTab
-                store={hostedSites}
-                available
-                canDelete={serverRoleCanAdminister(props.server)}
-                onOpenSite={sites().onOpenSite}
-                onSeePlans={sites().onSeePlans}
-              />
+              <ServerStoragePanel serverId={props.server.id} members={props.members} {...storage()} />
             </Tabs.Content>
           )}
         </Show>

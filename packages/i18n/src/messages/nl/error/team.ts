@@ -148,7 +148,6 @@ export const messages = {
   "error.team.claudeCompactWindowUnsupported": "Deze verbinding ondersteunt de compressiegrootte van Claude niet.",
   "error.team.cacheExpiryCompactionUnsupported":
     "Deze verbinding ondersteunt comprimeren voordat de cache verloopt niet.",
-  "error.team.mediaApprovalCreditsUnsupported": "Deze verbinding ondersteunt de creditgoedkeuringsgrens niet.",
   "error.team.mediaApprovalCreditsInvalid": "Voer een geheel aantal credits in van 0 tot 100.000.",
   "error.team.providerEnvironmentUnsupported": "Deze verbinding ondersteunt geen providervariabelen.",
   "error.team.modelVisibilityUnsupported": "Deze verbinding ondersteunt de modellijst niet.",
@@ -173,9 +172,6 @@ export const messages = {
   "error.team.machineResourcesUnsupported": "Deze verbinding ondersteunt geen machinegebruik.",
   "error.team.machineAlertMemberInvalid":
     "Alleen een eigenaar of beheerder van deze server kan machinealarmen krijgen.",
-  "error.team.hostedSitesUnsupported": "Deze verbinding ondersteunt geen sites.",
-  "error.team.hostedSitesUnregistered": "Deze server is niet geregistreerd bij CodeBot, dus hij heeft geen sites.",
-  "error.team.hostedSiteNotFound": "Site niet gevonden.",
   "error.team.markUnreadUnsupported": "Deze client ondersteunt het markeren van gesprekken als ongelezen niet.",
   "error.team.inviteServiceUnavailable": "De uitnodigingsservice is niet beschikbaar.",
   "error.team.logoNotFound": "Serverlogo niet gevonden.",
@@ -221,7 +217,4 @@ export const messages = {
   "error.team.backgroundProcessesUnsupported": "Deze verbinding ondersteunt geen achtergrondprocessen.",
   "error.team.providerUseUnsupported": "Deze verbinding ondersteunt het aan- en uitzetten van aanbieders niet.",
   "error.team.providerUseInvalid": "Deze aanbieder heeft geen aan/uit-schakelaar.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "Deze server ondersteunt geen modelkeuze bij mediagoedkeuringen. Werk CodeBot op de server bij.",
-  "error.team.mediaApprovalChoiceInvalid": "De keuze voor de mediagoedkeuring is ongeldig.",
 } as const satisfies PartialTranslation<typeof source>;

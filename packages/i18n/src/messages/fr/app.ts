@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "Fils",
   "app.rail.workflows": "Workflows",
   "app.rail.usage": "Utilisation",
-  "app.rail.creditsAsk": "Demander quand des crédits sont nécessaires",
-  "app.rail.creditsAskSaveFailed": "Impossible de modifier les questions sur les crédits.",
   "app.rail.library": "Bibliothèque",
   "app.rail.providers": "Fournisseurs",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "Rejoindre {handle}",
   "app.socialFollow.followedTitle": "À bientôt sur {name} !",
   "app.socialFollow.followedBody": "Nos nouveautés y arrivent en premier.",
-  "app.socialFollow.draftPost":
-    "Mes agents IA travaillent maintenant sur mon propre ordinateur avec CodeBot. Mes discussions et mes fichiers restent chez moi. Essayez : {site}",
-  "app.socialFollow.redditTitle": "Comment j’utilise CodeBot",
   "app.rail.usageRings": "Utilisation de {name} : {windows}. Ouvrir l’utilisation",
   "app.rail.usageUnavailable": "Utilisation de {name} indisponible. Ouvrir l’utilisation",
   "app.rail.customAgentUsage": "Utilisation de {name}. Ouvrir l’utilisation",

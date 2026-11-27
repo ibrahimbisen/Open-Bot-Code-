@@ -22,7 +22,6 @@ import { interruptAgentToolSchema } from "./agent/agent-interrupt-tool";
 import { setBrowserProfileToolSchema } from "./agent/browser-profile-tool";
 import { createChannelToolSchema, listChannelsToolSchema, updateChannelToolSchema } from "./agent/channel-agent-tools";
 import { setCommitCoAuthorToolSchema } from "./agent/commit-co-author-tool";
-import { CREDIT_MEDIA_TOOL_DEFINITIONS } from "./agent/credit-media-tools";
 import { CRM_TOOL_DEFINITIONS } from "./agent/crm-tool";
 import { DATA_TOOL_DEFINITIONS } from "./agent/data-tools";
 import { deleteAgentToolSchema } from "./agent/delete-agent-tool";
@@ -260,15 +259,6 @@ export const webSearchToolSchema = z.strictObject({
   query: z.string().trim().min(1).max(1_000).describe("The whole question, with its context."),
 });
 
-export const serverInstallCommandToolSchema = z.strictObject({
-  name: z
-    .string()
-    .trim()
-    .min(INPUT_LIMITS.serverNameMin)
-    .max(INPUT_LIMITS.serverName)
-    .describe("The server name, such as the host name."),
-});
-
 export const sendToChannelToolSchema = z.strictObject({
   channelId: z.string().min(1).max(INPUT_LIMITS.identifier),
   text: z.string().trim().min(1).max(INPUT_LIMITS.messageText),
@@ -291,42 +281,7 @@ export const CODEBOT_TOOL_DEFINITIONS: readonly CodeBotToolDefinition[] = [
   ...WORKFLOW_TOOL_DEFINITIONS,
   WORKFLOW_ANSWER_TOOL_DEFINITION,
   ...CRM_TOOL_DEFINITIONS,
-  ...CREDIT_MEDIA_TOOL_DEFINITIONS,
   ...MCP_SERVER_TOOL_DEFINITIONS,
-  {
-    name: "list_sites",
-    description:
-      "List the static sites of this CodeBot server, with its site limit and the slots in use. Use this before retrying a hosting mutation.",
-    shape: {},
-  },
-  {
-    name: "publish_site",
-    description:
-      "Publish a new static site after the user explicitly asks to publish it. The source must be inside this agent's workspace or CodeBot Shared.",
-    shape: {
-      sourcePath: z.string().min(1).max(INPUT_LIMITS.path),
-      title: z.string().min(1).max(120),
-      description: z.string().min(1).max(500),
-      spaFallback: z.boolean().optional(),
-    },
-  },
-  {
-    name: "replace_site",
-    description:
-      "Replace an owned static site after the user explicitly asks to replace it. This keeps the URL and resets expiry to 30 days.",
-    shape: {
-      siteId: z.string().min(1).max(INPUT_LIMITS.identifier),
-      sourcePath: z.string().min(1).max(INPUT_LIMITS.path),
-      title: z.string().min(1).max(120),
-      description: z.string().min(1).max(500),
-      spaFallback: z.boolean().optional(),
-    },
-  },
-  {
-    name: "delete_site",
-    description: "Delete an owned static site after the user explicitly asks to delete it.",
-    shape: { siteId: z.string().min(1).max(INPUT_LIMITS.identifier) },
-  },
   {
     name: "attach_files_to_response",
     description:
@@ -380,12 +335,6 @@ export const CODEBOT_TOOL_DEFINITIONS: readonly CodeBotToolDefinition[] = [
     description:
       "Search the web for current facts. Returns a short answer with source URLs. One question per call. To read or use a page, use codebot_browser.",
     shape: webSearchToolSchema.shape,
-  },
-  {
-    name: "create_server_install_command",
-    description:
-      'Make a one-time command that installs CodeBot as a server on a Linux computer or VPS, signed in to the user\'s account. Get the SSH address from the user. Run it as root over SSH; it asks nothing and ends with "CodeBot is connected to your account." It works once, for 15 minutes: never save, show or share it.',
-    shape: serverInstallCommandToolSchema.shape,
   },
   {
     name: "read_video",

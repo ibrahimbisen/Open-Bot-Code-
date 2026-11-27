@@ -47,26 +47,12 @@ export function WorkflowsCanvas(props: {
   );
   const [sunra, setSunra] = createSignal(false);
   const [higgsfield, setHiggsfield] = createSignal(false);
-  const [codebot, setCodebot] = createSignal(false);
   const [serviceAccounts, setServiceAccounts] = createSignal<readonly WorkflowMediaServiceAccount[] | null>(null);
   const [catalog, setCatalog] = createSignal<readonly WorkflowMediaCatalogModel[]>([]);
   const [providersRead, setProvidersRead] = createSignal(false);
   const [catalogRead, setCatalogRead] = createSignal(false);
   const [unavailable, setUnavailable] = createSignal<readonly WorkflowMediaUnavailableModel[]>([]);
-  const [creditBalance, setCreditBalance] = createSignal<number | null>(null);
   let disposed = false;
-  let balanceRequest = 0;
-  const readCreditBalance = () => {
-    if (!props.host.mediaSupported()) return;
-    balanceRequest += 1;
-    const sent = balanceRequest;
-    void props.host.workflows
-      .mediaCredits()
-      .then((answer) => {
-        if (!disposed && sent === balanceRequest) setCreditBalance(answer.codebot?.available ?? null);
-      })
-      .catch(() => undefined);
-  };
   const readMediaProviders = () => {
     if (!props.host.mediaSupported()) return;
     void props.host.workflows
@@ -75,10 +61,8 @@ export function WorkflowsCanvas(props: {
         if (disposed) return;
         setSunra(providers.sunra);
         setHiggsfield(providers.higgsfield);
-        setCodebot(providers.codebot === true);
         setServiceAccounts(providers.accounts);
         setProvidersRead(true);
-        if (providers.codebot === true) readCreditBalance();
       })
       .catch(() => undefined);
     void props.host.workflows
@@ -138,7 +122,6 @@ export function WorkflowsCanvas(props: {
       }
       if (!ended) return;
       noteMediaStepEnded();
-      if (codebot()) readCreditBalance();
     },
   );
   window.addEventListener("focus", readMediaProviders);
@@ -174,7 +157,7 @@ export function WorkflowsCanvas(props: {
     get imageModels() {
       if (!props.host.mediaSupported()) return [];
       const fixed = WORKFLOW_MEDIA_MODELS.flatMap((model) => {
-        if (model.provider === "sunra" || model.provider === "higgsfield" || model.provider === "codebot") return [];
+        if (model.provider !== "codex" && model.provider !== "grok") return [];
         if (providerTurnedOff(props.status, model.provider)) return [];
         const status = providerAvailability(props.status, props.models, model.provider, currentText().t);
         if (status.state !== "available") return [];
@@ -200,30 +183,13 @@ export function WorkflowsCanvas(props: {
           ...(accounts ? { accounts } : {}),
         }));
       };
-      const credit = codebot()
-        ? catalog()
-            .filter((entry) => entry.provider === "codebot")
-            .flatMap((entry) => workflowCatalogMediaModel(entry) ?? [])
-        : [];
-      return [...credit, ...fixed, ...service("sunra", sunra()), ...service("higgsfield", higgsfield())];
+      return [...fixed, ...service("sunra", sunra()), ...service("higgsfield", higgsfield())];
     },
     get imageModelsReady() {
       return !props.host.mediaSupported() || (providersRead() && catalogRead());
     },
     get unavailableModels() {
-      if (!props.host.mediaSupported()) return [];
-      const hidden = codebot()
-        ? []
-        : catalog()
-            .filter((entry) => entry.provider === "codebot")
-            .map(({ id, name, kinds }) => ({ id, name, kinds }));
-      return [...unavailable(), ...hidden];
-    },
-    get mediaPrice() {
-      return props.host.mediaSupported() ? props.host.workflows.mediaPrice : undefined;
-    },
-    get creditBalance() {
-      return codebot() ? creditBalance() : null;
+      return props.host.mediaSupported() ? unavailable() : [];
     },
     get mediaSize() {
       return props.host.mediaSizeSupported();

@@ -144,7 +144,6 @@ async function newProviderUse(name: string, change?: (store: ProviderUseSettings
 async function countDownloads(
   name: string,
   options: {
-    hosted: boolean;
     server: boolean;
     agents: string[];
     change?: (store: ProviderUseSettingsStore) => ProviderUseChange;
@@ -165,7 +164,6 @@ async function countDownloads(
     },
     providerUse: await newProviderUse(name, options.change),
     agentProviders: () => new Set(options.agents),
-    hosted: options.hosted,
     server: options.server,
   });
   track(await codexStatus());
@@ -195,10 +193,9 @@ try {
     incomplete: systemCli.incomplete === true,
   };
 
-  report.scenarios.push(await countDownloads("desktop-window", { hosted: false, server: false, agents: ["codex"] }));
+  report.scenarios.push(await countDownloads("desktop-window", { server: false, agents: ["codex"] }));
   report.scenarios.push(
     await countDownloads("installed-version-chosen", {
-      hosted: false,
       server: true,
       agents: ["codex"],
       change: (store) => store.setInstalled("codex", true),
@@ -206,21 +203,18 @@ try {
   );
   report.scenarios.push(
     await countDownloads("provider-off", {
-      hosted: false,
       server: true,
       agents: ["codex"],
       change: (store) => store.set("codex", false),
     }),
   );
-  report.scenarios.push(await countDownloads("no-chatgpt-agent", { hosted: false, server: true, agents: ["claude"] }));
-  report.scenarios.push(await countDownloads("hosted-server", { hosted: true, server: true, agents: ["codex"] }));
+  report.scenarios.push(await countDownloads("no-chatgpt-agent", { server: true, agents: ["claude"] }));
 
   const manager = newManager("self-hosted-server");
   const track = createSystemCliTracker({
     runtimes: manager,
     providerUse: await newProviderUse("self-hosted-server"),
     agentProviders: () => new Set(["codex"]),
-    hosted: false,
     server: true,
   });
   try {

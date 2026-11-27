@@ -29,12 +29,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Den Hauptbildschirm aufnehmen und das Bild an das Modell des Agenten senden.",
   "status.agent.screenCaptureChannel":
     "Das Bild erscheint im Kanal {channel}, und jedes Mitglied dieses Servers, das den Kanal liest, kann es sehen.",
-  "status.agent.creditImageApproval": "Ein Bild mit {model} erstellen. Das kostet {credits} Credits.",
-  "status.agent.creditVideoApproval": "Ein Video mit {model} erstellen. Das kostet {credits} Credits.",
-  "status.agent.creditMediaChannel":
-    "Das Ergebnis erscheint im Kanal {channel}, und jedes Mitglied dieses Servers, das den Kanal liest, kann es sehen.",
-  "status.agent.creditsHoldBalance": "Das kostet {credits} Credits, und das Guthaben beträgt {balance} Credits.",
-  "status.agent.creditsHoldAgentsOff": "Agenten auf diesem Server können keine Credits verwenden.",
   "status.agent.screenCapturePermissionNext":
     "macOS kann dich danach bitten, CodeBot die Bildschirmaufnahme zu erlauben.",
   "status.agent.screenCaptureDisplay": "Den Bildschirm {name} aufnehmen und das Bild an das Modell des Agenten senden.",
@@ -54,9 +48,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Niemand kann diesen Bericht auf GitHub mehr sehen. Das kannst du nicht rückgängig machen. Zum Korrigieren kann der Agent einen korrigierten Bericht senden.",
   "status.agent.feedbackWithdrawing": "Dein Bericht wird von GitHub entfernt…",
-  "status.agent.serverInstallCommand":
-    "Einen einmaligen Befehl erstellen, der CodeBot auf einem anderen Computer als Server {name} installiert und bei deinem Konto anmeldet. Der Agent führt ihn dort aus.",
-  "status.agent.serverInstallCard": "Installationsbefehl für den Server {name}",
   "status.agent.browserProfileNamed":
     "{agents} in das Browser-Profil {profile} verschieben. Sie erhalten seine Anmeldungen und Cookies. Ihre offenen Tabs werden geschlossen.",
   "status.agent.commitCoAuthorOff": "CodeBot nicht mehr als Mitautor in die Commits aller Agenten eintragen.",
@@ -71,19 +62,6 @@ export const messages = {
   "status.agent.workflowDelete":
     "Den Workflow {title} mit seinen Ausführungen und Versionen löschen. Seine offenen Schritte werden beendet.",
   "status.agent.deleteAgents": "{agents} mit ihren Chats und Dateien löschen. Das lässt sich nicht rückgängig machen.",
-  "status.agent.nearSignatureReceived": "CodeBot hat die Signatur erhalten. Du kannst diesen Tab schließen.",
-  "status.agent.nearSignatureUnknown": "CodeBot wartet nicht auf diese Signatur. Starte sie in CodeBot erneut.",
-  "status.agent.nearPayment": "{amount} {symbol} aus der Krypto-Wallet an {recipient} zahlen, für {domain}: {reason}",
-  "status.agent.nearSummaryCreate":
-    "Alle Agenten können bis zu {amount} USD pro Tag zahlen. Du kannst das später in CodeBot ändern.",
-  "status.agent.nearSummaryGrant":
-    "Diese CodeBot-App {days} Tage lang im Rahmen deiner Regeln aus der Wallet zahlen lassen.",
-  "status.agent.nearSummaryBudget": "Das Tagesbudget der Wallet auf {amount} USD ändern.",
-  "status.agent.nearSummaryAutoPay":
-    "CodeBot ohne deine Signatur zahlen lassen, wenn eine Zahlungsregel es erlaubt. Bei anderen Zahlungen wirst du weiterhin im Chat gefragt.",
-  "status.agent.nearSummaryPayment": "Die Zahlung von {amount} an {recipient} genehmigen.",
-  "status.agent.nearSummaryFreeze": "Agenten können nicht aus dieser Wallet zahlen, bis du die Zahlungen fortsetzt.",
-  "status.agent.nearSummaryUnfreeze": "Agenten können wieder im Rahmen deiner Regeln aus dieser Wallet zahlen.",
   "status.agent.screenCaptureProgress": "Bildschirmaufnahme wird angefragt…",
   "status.agent.screenCaptureReviewing": "Bildschirmaufnahme wird geprüft…",
   "status.agent.browserOpening": "Webseite wird geöffnet…",
@@ -91,7 +69,6 @@ export const messages = {
   "status.agent.browserClicking": "Klick auf der Webseite…",
   "status.agent.browserTyping": "Eingabe auf der Webseite…",
   "status.agent.browserActing": "Webseite wird bedient…",
-  "status.agent.browserPaying": "Zahlung wird gesendet…",
   "status.agent.browserReviewing": "Webseite wird geprüft…",
   "status.agent.memoriesSearching": "Erinnerungen werden durchsucht…",
   "status.agent.chatsSearching": "Frühere Chats werden durchsucht…",

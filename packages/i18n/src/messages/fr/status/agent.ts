@@ -27,12 +27,6 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Capturer l’écran principal et envoyer l’image au modèle de l’agent.",
   "status.agent.screenCaptureChannel":
     "L’image s’affiche dans le canal {channel}, et chaque membre de ce serveur qui lit le canal peut la voir.",
-  "status.agent.creditImageApproval": "Générer une image avec {model}. Cela coûte {credits} crédits.",
-  "status.agent.creditVideoApproval": "Générer une vidéo avec {model}. Cela coûte {credits} crédits.",
-  "status.agent.creditMediaChannel":
-    "Le résultat s’affiche dans le canal {channel}, et chaque membre de ce serveur qui lit le canal peut le voir.",
-  "status.agent.creditsHoldBalance": "Cela utilise {credits} crédits, et le solde est de {balance} crédits.",
-  "status.agent.creditsHoldAgentsOff": "Les agents de ce serveur ne peuvent pas utiliser de crédits.",
   "status.agent.screenCapturePermissionNext":
     "macOS peut ensuite vous demander d’autoriser l’enregistrement de l’écran pour CodeBot.",
   "status.agent.screenCaptureDisplay": "Capturer l’écran {name} et envoyer l’image au modèle de l’agent.",
@@ -52,9 +46,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Plus personne ne pourra voir ce rapport sur GitHub. Vous ne pourrez pas annuler. Pour le corriger, l’agent peut envoyer un rapport corrigé.",
   "status.agent.feedbackWithdrawing": "Suppression de votre rapport de GitHub…",
-  "status.agent.serverInstallCommand":
-    "Créer une commande à usage unique qui installe CodeBot sur un autre ordinateur comme serveur {name} et le connecte à ton compte. L'agent l'exécute là-bas.",
-  "status.agent.serverInstallCard": "Commande d'installation pour le serveur {name}",
   "status.agent.browserProfileNamed":
     "Déplacer {agents} vers le profil de navigateur {profile}. Ils reçoivent ses connexions et ses cookies. Leurs onglets ouverts se ferment.",
   "status.agent.commitCoAuthorOff": "Ne plus ajouter CodeBot comme coauteur des commits de tous les agents.",
@@ -70,21 +61,6 @@ export const messages = {
     "Supprimer le workflow {title} avec ses exécutions et ses versions. Ses étapes en cours s'arrêtent.",
   "status.agent.deleteAgents":
     "Supprimer {agents} avec leurs discussions et leurs fichiers. Cette action est irréversible.",
-  "status.agent.nearSignatureReceived": "CodeBot a reçu la signature. Vous pouvez fermer cet onglet.",
-  "status.agent.nearSignatureUnknown": "CodeBot n’attend pas cette signature. Recommencez depuis CodeBot.",
-  "status.agent.nearPayment":
-    "Payer {amount} {symbol} à {recipient} depuis le portefeuille crypto, pour {domain} : {reason}",
-  "status.agent.nearSummaryCreate":
-    "Tous les agents peuvent payer jusqu’à {amount} USD par jour. Vous pourrez le modifier plus tard dans CodeBot.",
-  "status.agent.nearSummaryGrant":
-    "Autoriser cette app CodeBot à payer depuis le portefeuille pendant {days} jours, selon vos règles.",
-  "status.agent.nearSummaryBudget": "Passer le budget quotidien du portefeuille à {amount} USD.",
-  "status.agent.nearSummaryAutoPay":
-    "Autoriser CodeBot à payer sans votre signature quand une règle de paiement le permet. Les autres paiements vous sont toujours demandés dans le chat.",
-  "status.agent.nearSummaryPayment": "Approuver le paiement de {amount} à {recipient}.",
-  "status.agent.nearSummaryFreeze":
-    "Les agents ne peuvent pas payer depuis ce portefeuille tant que vous n’avez pas repris les paiements.",
-  "status.agent.nearSummaryUnfreeze": "Les agents peuvent de nouveau payer depuis ce portefeuille, selon vos règles.",
   "status.agent.screenCaptureProgress": "Demande de capture d’écran…",
   "status.agent.screenCaptureReviewing": "Analyse de la capture d’écran…",
   "status.agent.browserOpening": "Ouverture d’une page web…",
@@ -92,7 +68,6 @@ export const messages = {
   "status.agent.browserClicking": "Clic sur la page web…",
   "status.agent.browserTyping": "Saisie sur la page web…",
   "status.agent.browserActing": "Utilisation de la page web…",
-  "status.agent.browserPaying": "Envoi du paiement…",
   "status.agent.browserReviewing": "Analyse de la page web…",
   "status.agent.memoriesSearching": "Recherche dans ses souvenirs…",
   "status.agent.chatsSearching": "Recherche dans ses anciennes discussions…",

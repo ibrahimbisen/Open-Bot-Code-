@@ -3,9 +3,7 @@ import { EventEmitter } from "node:events";
 import { chmod, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { companySignInErrorKey } from "@codebot/contracts/company-sign-in";
-import { CREDIT_MEDIA_HOST_HEADER, CREDIT_MEDIA_HOST_TOKEN_HEADER } from "@codebot/contracts/credit-media";
 import type { HostKeyHandover } from "@codebot/contracts/host-key-handover";
-import { parseHostedServerClaim } from "@codebot/contracts/hosted-servers";
 import type {
   AvatarColor,
   AvatarImageInput,
@@ -121,6 +119,8 @@ interface StoredMobileConnectLink {
   createdAt: number;
 }
 
+const HOST_ID_HEADER = "X-CodeBot-Host";
+const HOST_TOKEN_HEADER = "X-CodeBot-Host-Token";
 const MOBILE_CONNECT_LINK_TOKEN = /^[A-Za-z0-9_-]{32,128}$/u;
 
 const logger = createCodeBotLogger("central-auth");
@@ -683,8 +683,8 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     return this.#hostMachineToken(hostId).pipe(
       Effect.map((machineToken) => {
         const headers = new Headers(init);
-        headers.set(CREDIT_MEDIA_HOST_HEADER, hostId);
-        headers.set(CREDIT_MEDIA_HOST_TOKEN_HEADER, machineToken);
+        headers.set(HOST_ID_HEADER, hostId);
+        headers.set(HOST_TOKEN_HEADER, machineToken);
         return headers;
       }),
     );
@@ -2102,30 +2102,6 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   canPersistSession(): boolean {
     return this.#options.canPersist();
   }
-
-  readonly redeemHostedServerClaim = Effect.fn("CentralAuth.redeemHostedServerClaim")(
-    function* (
-      this: CentralAuthManager,
-      claim: string,
-    ): Effect.fn.Return<
-      { hostId: string; name: string; user: CentralAuthUser },
-      CentralAuthOperationError,
-      CentralAuthTransport
-    > {
-      const redeemed = yield* this.#requestEffect(
-        "/v2/hosting/claims/redeem",
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ claim }) },
-        (value) => {
-          const parsed = parseHostedServerClaim(value);
-          if (!parsed) throw new Error("Invalid hosted server claim.");
-          return parsed;
-        },
-      );
-      const user = yield* this.#applyClaimedSession(redeemed);
-      return { hostId: redeemed.hostId, name: redeemed.name, user };
-    },
-    (operation) => this.#owned(operation),
-  ).bind(this);
 
   readonly redeemServerClaim = Effect.fn("CentralAuth.redeemServerClaim")(
     function* (

@@ -54,8 +54,6 @@ export const messages = {
   "app.rail.tasks": "שרשורים",
   "app.rail.workflows": "תהליכי עבודה",
   "app.rail.usage": "שימוש",
-  "app.rail.creditsAsk": "לשאול כשצריך קרדיטים",
-  "app.rail.creditsAskSaveFailed": "לא ניתן לשנות את השאלות על קרדיטים.",
   "app.rail.library": "ספרייה",
   "app.rail.providers": "ספקים",
   "app.rail.crm": "CRM",
@@ -97,9 +95,6 @@ export const messages = {
   "app.socialFollow.join": "הצטרפות אל {handle}",
   "app.socialFollow.followedTitle": "נתראה ב-{name}!",
   "app.socialFollow.followedBody": "שם תקבלו את החדשות שלנו ראשונים.",
-  "app.socialFollow.draftPost":
-    "סוכני ה-AI שלי עובדים עכשיו במחשב שלי עם CodeBot. הצ'אטים והקבצים שלי נשארים אצלי. אפשר לנסות: {site}",
-  "app.socialFollow.redditTitle": "איך אני משתמש ב-CodeBot",
   "app.rail.usageRings": "שימוש ב-{name}: {windows}. פתיחת השימוש",
   "app.rail.usageUnavailable": "השימוש ב-{name} לא זמין. פתיחת השימוש",
   "app.rail.customAgentUsage": "שימוש ב-{name}. פתיחת השימוש",

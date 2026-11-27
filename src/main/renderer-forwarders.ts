@@ -588,14 +588,6 @@ export function createRendererForwarders({
     for (const window of appWindows()) sendToRenderer(window, IPC_ENDPOINTS.githubConnector.changed, status);
   }
 
-  function forwardLinkAccountStatus(status: import("@codebot/contracts/ipc").LinkAccountStatus): void {
-    for (const window of appWindows()) sendToRenderer(window, IPC_ENDPOINTS.linkAccount.changed, status);
-  }
-
-  function forwardNearWalletStatus(status: import("@codebot/contracts/ipc").NearWalletStatus): void {
-    for (const window of appWindows()) sendToRenderer(window, IPC_ENDPOINTS.nearWallet.changed, status);
-  }
-
   function forwardOnePasswordConnectorStatus(
     status: import("@codebot/contracts/ipc").OnePasswordConnectorStatus,
   ): void {
@@ -729,8 +721,6 @@ export function createRendererForwarders({
     forwardVoiceServerSettings,
     forwardProviderRuntimeStatus,
     forwardGitHubConnectorStatus,
-    forwardLinkAccountStatus,
-    forwardNearWalletStatus,
     forwardOnePasswordConnectorStatus,
     forwardBitwardenConnectorStatus,
     forwardPasswordManagerStatus,

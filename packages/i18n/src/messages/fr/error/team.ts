@@ -167,8 +167,6 @@ export const messages = {
     "Cette connexion ne prend pas en charge la taille de compactage de Claude.",
   "error.team.cacheExpiryCompactionUnsupported":
     "Cette connexion ne prend pas en charge le compactage avant l’expiration du cache.",
-  "error.team.mediaApprovalCreditsUnsupported":
-    "Cette connexion ne prend pas en charge le seuil d’approbation des crédits.",
   "error.team.mediaApprovalCreditsInvalid": "Saisissez un nombre entier de crédits entre 0 et 100 000.",
   "error.team.providerEnvironmentUnsupported": "Cette connexion ne prend pas en charge les variables de fournisseur.",
   "error.team.modelVisibilityUnsupported": "Cette connexion ne prend pas en charge la liste des modèles.",
@@ -189,9 +187,6 @@ export const messages = {
     "L’utilisation de la machine n’est pas prise en charge par cette connexion.",
   "error.team.machineAlertMemberInvalid":
     "Seul un propriétaire ou un admin de ce serveur peut recevoir les alertes de la machine.",
-  "error.team.hostedSitesUnsupported": "Les sites ne sont pas pris en charge par cette connexion.",
-  "error.team.hostedSitesUnregistered": "Ce serveur n’est pas enregistré auprès d’CodeBot : il n’a donc pas de sites.",
-  "error.team.hostedSiteNotFound": "Site introuvable.",
   "error.team.markUnreadUnsupported": "Ce client ne permet pas de marquer des conversations comme non lues.",
   "error.team.inviteServiceUnavailable": "Le service d’invitation n’est pas disponible.",
   "error.team.logoNotFound": "Logo du serveur introuvable.",
@@ -239,7 +234,4 @@ export const messages = {
   "error.team.providerUseUnsupported":
     "Cette connexion ne prend pas en charge l’activation et la désactivation des fournisseurs.",
   "error.team.providerUseInvalid": "Ce fournisseur n’a pas d’interrupteur d’activation.",
-  "error.team.mediaApprovalChoiceUnsupported":
-    "Ce serveur ne permet pas de choisir le modèle dans les approbations de médias. Mettez à jour CodeBot sur le serveur.",
-  "error.team.mediaApprovalChoiceInvalid": "Le choix de l'approbation de média n'est pas valide.",
 } as const satisfies PartialTranslation<typeof source>;

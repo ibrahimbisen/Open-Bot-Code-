@@ -17,7 +17,6 @@ import type { CodexLiveAccess } from "../src/features/speech/codex-live-access";
 import { LayoutProvider } from "../src/layout";
 import { PlatformProvider } from "../src/platform";
 import { STORY_AGENTS, STORY_SERVERS } from "../src/preview/fixtures";
-import { createMockBilling } from "../src/preview/mock-billing";
 import type { MockVoiceOptions } from "../src/preview/mock-voice";
 import { createMockCodeBot } from "./mock-codebot";
 import { SettingsPageStory } from "./settings-page-story";
@@ -87,8 +86,6 @@ const storyAgentDock = {
 
 function SettingsModalStory(props: {
   initialOpen: boolean;
-  hostedServers?: boolean;
-  hostedServersDelayMs?: number;
   initialTab?: SettingsTab;
   openTab?: SettingsTab;
   scheduledRestart?: UpdateStatus["scheduledRestart"];
@@ -99,7 +96,6 @@ function SettingsModalStory(props: {
   agentDock?: boolean;
 }) {
   const previousApi = window.codebot;
-  const billingApi = createMockBilling();
   const mock = createMockCodeBot(props.voice);
   window.codebot = mock.api;
   onCleanup(() => {
@@ -107,13 +103,6 @@ function SettingsModalStory(props: {
     toast.dismiss();
     if (window.codebot === mock.api) window.codebot = previousApi;
   });
-  const hostedServersApi = {
-    ...mock.api.hostedServers,
-    list: async () => {
-      await new Promise((resolve) => window.setTimeout(resolve, props.hostedServersDelayMs ?? 0));
-      return mock.api.hostedServers.list();
-    },
-  };
   const [open, setOpen] = createSignal(props.initialOpen);
   const [value, setValue] = createSignal({ ...storyGeneralSettings });
   const [updateStatus, setUpdateStatus] = createSignal<UpdateStatus>(storyInitialUpdateStatus(props));
@@ -249,10 +238,6 @@ function SettingsModalStory(props: {
               onGetRemoteNetworkRoute={mock.api.getRemoteNetworkRoute}
               onSetRemoteNetworkRoute={(route) => mock.api.setRemoteNetworkRoute({ route })}
               onUpdateAction={runUpdateAction}
-              billingApi={billingApi}
-              referralApi={mock.api.referral}
-              hostedServersApi={props.hostedServers ? hostedServersApi : undefined}
-              onAddHostedServer={props.hostedServers ? fn() : undefined}
               agentDock={props.agentDock ? storyAgentDock : undefined}
             />
           )}
@@ -392,26 +377,6 @@ export const MobileConnect: Story = {
 
 export const AgentDock: Story = {
   render: () => <SettingsModalStory initialOpen agentDock initialTab="agent-dock" />,
-};
-
-export const Billing: Story = {
-  render: () => <SettingsModalStory initialOpen initialTab="billing" />,
-};
-
-export const InviteFriends: Story = {
-  render: () => <SettingsModalStory initialOpen initialTab="referral" />,
-};
-
-export const HostedServers: Story = {
-  render: () => <SettingsModalStory initialOpen hostedServers initialTab="hosted-servers" />,
-};
-
-export const HostedServersFastList: Story = {
-  render: () => <SettingsModalStory initialOpen hostedServers hostedServersDelayMs={300} openTab="hosted-servers" />,
-};
-
-export const HostedServersSlowList: Story = {
-  render: () => <SettingsModalStory initialOpen hostedServers hostedServersDelayMs={3_000} openTab="hosted-servers" />,
 };
 
 export const ScheduledRemoteUpdate: Story = {

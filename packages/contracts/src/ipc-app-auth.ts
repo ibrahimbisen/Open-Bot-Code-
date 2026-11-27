@@ -279,7 +279,6 @@ export function decodeTestCompanySignInResult(value: unknown): TestCompanySignIn
 export interface VerifyEmailCodeInput {
   challengeId: string;
   code: string;
-  referralCode?: string;
 }
 
 export type MacPermissionId = "screen-recording" | "accessibility";
@@ -393,26 +392,10 @@ export type ExternalDestination =
   | "hermes-install"
   | "feedback"
   | "report-problem"
-  | "message"
   | "changelog"
   | "guides"
   | "discord"
   | "github"
-  | "x"
-  | "threads"
-  | "instagram"
-  | "tiktok"
-  | "facebook"
-  | "linkedin"
-  | "reddit"
-  | "x-post"
-  | "threads-post"
-  | "linkedin-post"
-  | "reddit-post"
-  | "facebook-post"
-  | "instagram-post"
-  | "tiktok-post"
   | "grok-bot-export"
-  | "hosted-server-contact"
   | "download"
   | "mac-screen-recording";
