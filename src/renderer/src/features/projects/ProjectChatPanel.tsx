@@ -271,6 +271,24 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
     return () => stop.dispose();
   });
 
+  let listedFor = "";
+  createEffect(
+    () => ({
+      agent: agentId(),
+      id: taskId(),
+      available: tasks.available(),
+      listed: tasks.snapshot(agentId()) !== undefined,
+      found: task() !== undefined,
+    }),
+    ({ agent, id, available, listed, found }) => {
+      if (!agent || !id || !available || found) return;
+      const key = `${agent}:${id}`;
+      if (listed && listedFor === key) return;
+      listedFor = key;
+      void tasks.loadTasks(agent);
+    },
+  );
+
   createEffect(
     () => ({ agent: agentId(), id: taskId(), loaded: tasks.conversation(taskId()) !== undefined }),
     ({ agent, id, loaded }) => {

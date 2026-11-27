@@ -240,23 +240,27 @@ async function secondPhase(page: Page): Promise<void> {
       for (const key of ["x", "y", "width", "height"] as const)
         assert.ok(Math.abs(now[key] - saved[key]) < 0.03, `${saved.marker} ${key}: ${now[key]} vs ${saved[key]}`);
     }
-    const loaded = await until(
+    await until(
       page,
       "restored chats show their replies",
       () => page.locator(".project-dock-surface").innerText(),
       (text) => (text.match(/The each server/g) ?? []).length >= 3,
       30_000,
-    ).then(
-      () => true,
-      () => false,
     );
-    observations.push(
-      loaded
-        ? "The restored chat panels load their messages."
-        : "The restored chat panels keep a spinner and the tab title New chat: their messages do not load after the restart until the chat is opened again.",
+    const titles = await until(
+      page,
+      "restored panel tabs show the chat titles",
+      () => page.locator(".project-dock-surface .dv-tab").allInnerTexts(),
+      (tabs) => MARKERS.every((marker) => tabs.some((tab) => tab.includes(marker))),
+      30_000,
+    );
+    assert.equal(
+      await page.locator(".project-dock-surface .project-chat-missing").count(),
+      0,
+      "a restored panel still shows the loading spinner",
     );
     screens.push(await shot(page, "dock-restored-after-restart-dark"));
-    return `${restored.length} panels`;
+    return `${restored.length} panels, tabs ${JSON.stringify(titles.map((tab) => tab.trim()))}`;
   });
 }
 
