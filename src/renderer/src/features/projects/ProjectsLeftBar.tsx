@@ -20,6 +20,7 @@ import {
 import { useText } from "@codebot/ui/text";
 import { For, Show } from "solid-js";
 import { useLayout } from "../../layout";
+import { EngineSwitch } from "../server-mode/EngineSwitch";
 import { useServers } from "../servers/servers-context";
 import { useSettings } from "../settings/settings-context";
 import { projectSlots } from "./project-slots";
@@ -240,6 +241,7 @@ export function ProjectsLeftBar() {
           </IconButton>
         </div>
       </header>
+      <EngineSwitch compact={compact()} />
       <nav class="project-left-bar-scroll" aria-label={t("project.list.label")}>
         <ul class="project-list">
           <For each={projects.visibleProjects()}>

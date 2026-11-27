@@ -60,6 +60,7 @@
 @import "./features/usage/usage.css";
 @import "dockview-core/dist/styles/dockview.css";
 @import "./features/projects/projects.css";
+@import "./features/server-mode/server-mode.css";
 @import "./features/schedule/schedule.css";
 @import "@codebot/ui/components/search-picker.css";
 @import "@codebot/ui/features/tasks/tasks.css";

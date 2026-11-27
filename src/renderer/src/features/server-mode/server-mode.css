@@ -1,0 +1,32 @@
+.engine-switch {
+  flex: 0 0 auto;
+  padding-inline: var(--codebot-space-3);
+  padding-block-end: var(--codebot-space-2);
+}
+
+.engine-switch-list {
+  width: 100%;
+}
+
+.engine-switch-trigger {
+  min-width: 0;
+  flex: 1 1 0;
+  gap: var(--codebot-space-1-5);
+}
+
+.engine-switch-icon {
+  width: var(--codebot-icon-sm);
+  height: var(--codebot-icon-sm);
+  flex: 0 0 auto;
+}
+
+.engine-switch-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.engine-switch-compact[data-mode="home"] {
+  color: var(--codebot-text-primary);
+}
