@@ -43,7 +43,6 @@ import { messages as remoteDesktop } from "./remoteDesktop";
 import { messages as replyArea } from "./reply";
 import { messages as routine } from "./routine";
 import { messages as server } from "./server";
-import { messages as serverModeArea } from "./serverMode";
 import { messages as settings } from "./settings";
 import { shared } from "./shared";
 import { messages as sharedTable } from "./sharedTable";
@@ -128,7 +127,6 @@ export const en = {
   ...advancedArea,
   ...statusBarArea,
   ...localServerArea,
-  ...serverModeArea,
   ...shortcutArea,
   ...themeArea,
   ...signInArea,
