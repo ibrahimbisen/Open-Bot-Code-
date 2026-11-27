@@ -26,6 +26,7 @@ import { attentionKey } from "../agents/agent-runtime-snapshot";
 import { useAgents } from "../agents/agents-context";
 import { QuestionPromptBubble } from "../conversation/conversation-cards";
 import { latestVisibleAgentMessageId } from "../conversation/conversation-read-state";
+import { stepDetailsLoader } from "../conversation/step-details-loader";
 import { createTurnSteps } from "../conversation/turn-steps";
 import { useTurnTrace } from "../conversation/turn-trace";
 import { useServers } from "../servers/servers-context";
@@ -505,6 +506,14 @@ function ThreadSurface(props: {
             attention={props.attention}
             stepsAbove={turnSteps.stepsAbove}
             factsAbove={turnSteps.factsAbove}
+            loadDetailsAbove={(messageId) =>
+              stepDetailsLoader({
+                agentId: props.agentId,
+                turnId: turnSteps.turnIdAbove(messageId),
+                server: servers.activeServer(),
+                hosted: false,
+              })
+            }
             traceAbove={turnTrace}
             activeSteps={turnSteps.activeSteps()}
             stepsOpenByDefault={showAgentSteps()}

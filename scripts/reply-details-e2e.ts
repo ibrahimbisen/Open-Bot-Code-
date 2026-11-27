@@ -121,10 +121,22 @@ async function main(): Promise<void> {
         .first()
         .waitFor({ state: "visible", timeout: 30_000 });
       await panel.getByText("Timeline", { exact: true }).first().waitFor({ state: "visible", timeout: 30_000 });
-      const outputs = await panel.getByText(/file-0[.]txt/).count();
-      observations.push(`Command outputs shown under the opened steps: ${outputs}`);
+      const outputs = await until(
+        page,
+        "the command output is shown under each step",
+        () =>
+          panel
+            .locator(".agent-step-detail")
+            .filter({ hasText: /file-3[.]txt/ })
+            .count(),
+        (count) => count >= 5,
+        30_000,
+      );
+      const firstDetail = panel.locator(".agent-step-detail").filter({ hasText: "ls -la" }).first();
+      assert.match(await firstDetail.innerText(), /ls -la[\s\S]*output[\s\S]*file-0[.]txt/i);
       await steps.first().scrollIntoViewIfNeeded();
       screens.push(await shot(page, "reply-details-open-dark"));
+      return `${outputs} step outputs`;
     });
 
     await step("8.5 with Detailed in settings the steps show without a click", async () => {
