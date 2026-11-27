@@ -12,6 +12,7 @@ import {
 import { clampPreviewFraction, readPreviewFraction, writePreviewFraction } from "./project-preview-storage";
 
 const WIDTH_SAVE_DELAY_MS = 300;
+const MIN_SPLIT_SURFACE_PX = 560;
 const COMPOSER_SELECTOR = '[role="textbox"], textarea, [contenteditable="true"]';
 
 export interface PreviewDockDeps {
@@ -128,14 +129,21 @@ export function createPreviewDock(deps: PreviewDockDeps) {
     }
     const reference = referenceChat(request) ?? api.activePanel ?? api.panels[0];
     const previous = api.activePanel;
+    const narrow = (deps.container()?.clientWidth ?? Number.POSITIVE_INFINITY) < MIN_SPLIT_SURFACE_PX;
+    const direction = narrow ? ("within" as const) : ("right" as const);
     const panel = api.addPanel({
       id: deps.newPanelId(),
       component: deps.component,
       title: request.title,
       params: { ...params, ...(request.pinned ? { pinned: true } : {}) },
-      ...(reference ? { position: { referencePanel: reference, direction: "right" as const } } : {}),
+      ...(reference ? { position: { referencePanel: reference, direction } } : {}),
     });
-    if (!request.activate && previous) previous.api.setActive();
+    if (narrow) panel.api.setActive();
+    else if (!request.activate && previous) previous.api.setActive();
+    if (narrow) {
+      deps.onChanged();
+      return;
+    }
     watchWidth(panel.group);
     if (reference) applyWidth(panel.group);
     deps.onChanged();

@@ -22,6 +22,7 @@ interface DockHook {
     activate: boolean;
     pinned?: boolean;
   }): void;
+  closeTransient(reason: string): void;
 }
 
 declare global {
@@ -178,6 +179,21 @@ async function openContent(
   }, request);
 }
 
+async function savedPinnedPanels(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    let count = 0;
+    for (let index = 0; index < window.localStorage.length; index += 1) {
+      const key = window.localStorage.key(index);
+      if (!key?.startsWith("codebot:project-dock:v1:")) continue;
+      const layout = JSON.parse(window.localStorage.getItem(key) ?? "null");
+      for (const panel of Object.values<{ params?: { pinned?: boolean } }>(layout?.panels ?? {})) {
+        if (panel.params?.pinned === true) count += 1;
+      }
+    }
+    return count;
+  });
+}
+
 async function closeAllTabs(page: Page): Promise<void> {
   await page.evaluate(async () => {
     for (const tab of await window.codebot.browser.listTabs()) await window.codebot.browser.close(tab.id);
@@ -216,7 +232,14 @@ async function main(): Promise<void> {
   const screens: string[] = [];
   const name = `${RUN} Panels`;
   let chat: ChatRef | undefined;
+  const viewport = await page.context().newCDPSession(page);
   try {
+    await viewport.send("Emulation.setDeviceMetricsOverride", {
+      width: 1600,
+      height: 900,
+      deviceScaleFactor: 0,
+      mobile: false,
+    });
     await page.reload();
     await leftBar(page).waitFor({ state: "visible", timeout: WAIT_MS });
     await closeBlockingDialogs(page);
@@ -270,6 +293,30 @@ async function main(): Promise<void> {
       const sash = await page.locator(".project-dock-surface .dv-sash").count();
       assert.ok(sash >= 1, "no resize edge");
       return `ratio ${ratio.toFixed(2)}`;
+    });
+
+    await step("the pin is saved when it changes, with no other layout change", async () => {
+      const group = page.locator(".dv-groupview").filter({ has: previews(page) });
+      await group.getByRole("button", { name: "Pin the panel so it stays open" }).dispatchEvent("click");
+      await group.getByRole("button", { name: "Unpin the panel" }).waitFor({ state: "attached", timeout: WAIT_MS });
+      await until(
+        page,
+        "the pin is saved",
+        () => savedPinnedPanels(page),
+        (count) => count === 1,
+        3000,
+      );
+      await group.getByRole("button", { name: "Unpin the panel" }).dispatchEvent("click");
+      await group
+        .getByRole("button", { name: "Pin the panel so it stays open" })
+        .waitFor({ state: "attached", timeout: WAIT_MS });
+      await until(
+        page,
+        "the unpin is saved",
+        () => savedPinnedPanels(page),
+        (count) => count === 0,
+        3000,
+      );
     });
 
     await step("drag resize saves the size and the next preview uses it", async () => {
@@ -523,6 +570,7 @@ async function main(): Promise<void> {
 
     process.stdout.write(`screens: ${screens.join(", ")}\n`);
   } finally {
+    await viewport.send("Emulation.clearDeviceMetricsOverride").catch(() => undefined);
     server.close();
     await closeAllTabs(page).catch(() => undefined);
     await page

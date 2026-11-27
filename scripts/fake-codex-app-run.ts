@@ -2,11 +2,27 @@ import { spawn, spawnSync } from "node:child_process";
 import { closeSync, openSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
+import { connectChannelE2e } from "./channel-e2e-support";
 import { writeFakeCodex } from "./dev-automation/bench-fake-codex";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const OUT = resolve(ROOT, ".codebot-build/project-shell");
+const [script, ...scriptArguments] = process.argv.slice(2);
+if (!script) throw new Error("Usage: bun scripts/fake-codex-app-run.ts <script> [arguments]");
+const OUT = resolve(ROOT, ".codebot-build/fake-codex-app");
+
+async function finishFirstRun(): Promise<void> {
+  process.argv.push("--allow-mutations");
+  const session = await connectChannelE2e("fake-codex-app-run");
+  try {
+    await session.page.evaluate(() => {
+      window.localStorage.setItem("codebot:language-step-done", "true");
+      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: null });
+    });
+  } finally {
+    await session.close();
+  }
+}
 const START_TIMEOUT_MS = 240_000;
 
 function appInstances() {
@@ -59,7 +75,8 @@ dev.on("exit", () => {
 let code = 1;
 try {
   await waitForApp(() => exited);
-  const result = spawnSync("bun", ["scripts/project-shell-e2e.ts", "--allow-mutations", ...process.argv.slice(2)], {
+  await finishFirstRun();
+  const result = spawnSync("bun", [script, "--allow-mutations", ...scriptArguments], {
     cwd: ROOT,
     stdio: "inherit",
     shell: process.platform === "win32",
