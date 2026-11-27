@@ -1,7 +1,5 @@
 import { type AvatarMimeType, isValidAvatarImage } from "@codebot/contracts/avatar-images";
-import { companySignInErrorKey, MOBILE_COMPANY_SIGN_IN_RETURN } from "@codebot/contracts/company-sign-in";
 import { AVATAR_IMAGE_LIMITS } from "@codebot/contracts/input-limits";
-import { CODEBOT_CONTROL_PLANE_ORIGIN } from "@codebot/contracts/invite-links";
 import type { CentralAuthUser } from "@codebot/contracts/ipc";
 import {
   isMobileConnectDevelopmentHost,
@@ -11,9 +9,8 @@ import {
   validateMobileConnectHostBinding,
 } from "@codebot/contracts/mobile-connect";
 import { type DynamicRecord, isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
-import { normalizeEmailAddress, normalizeOneTimeCode, validateProfileName } from "@codebot/contracts/validation";
+import { validateProfileName } from "@codebot/contracts/validation";
 import type { MobileTextKey } from "@codebot/i18n/mobile";
-import { bytesToBase64Url } from "@codebot/team-client/base64";
 import * as Crypto from "expo-crypto";
 import * as Device from "expo-device";
 import * as SecureStore from "expo-secure-store";
@@ -23,14 +20,12 @@ import { isAndroid, isIOS } from "@/shared/lib/platform";
 import { currentText } from "@/shared/lib/text";
 import * as LockedKeychain from "../../../shared/lib/locked-keychain";
 import { fetch } from "../../support/model/logged-fetch";
-import { companySignInReturnParams } from "../model/company-sign-in-return";
+import { type AccountSignInCode, AccountSignInError, signInWithAccountService } from "../model/account-sign-in";
 
 const MOBILE_SESSION_KEY = "codebot.mobile.session.v1";
 const MOBILE_REVOCATIONS_KEY = "codebot.mobile.pending-revocations.v1";
 const MOBILE_DEVICE_ID_KEY = "codebot.mobile.device-id.v1";
 const MOBILE_AUTH_REQUEST_TIMEOUT_MS = 10_000;
-const MOBILE_EMAIL_CODE_REQUEST_TIMEOUT_MS = 35_000;
-const MOBILE_COMPANY_START_TIMEOUT_MS = 20_000;
 
 const serializeMobileSessionStorage = serialQueue();
 const serializeMobileProfile = serialQueue();
@@ -50,7 +45,7 @@ export interface MobileSession {
   signIn?: AccountSignIn;
 }
 
-type AccountSignIn = "email" | "company";
+type AccountSignIn = "account";
 type MobileCredential = Pick<MobileSession, "apiUrl" | "sessionToken">;
 
 export function redeemMobileConnectUrl(value: string): Promise<MobileSession> {
@@ -115,19 +110,7 @@ async function redeemMobileConnectSession(value: string): Promise<MobileSession>
   return session;
 }
 
-function mobileAccountApiUrl(): string {
-  const override = process.env.EXPO_PUBLIC_CODEBOT_API_URL;
-  return (override && __DEV__ && normalizeAccountApiUrl(override)) || CODEBOT_CONTROL_PLANE_ORIGIN;
-}
-
-export interface MobileEmailChallenge {
-  challengeId: string;
-  email: string;
-  resendAt: number;
-  developmentCode?: string;
-}
-
-export class MobileEmailSignInError extends Error {
+export class MobileAccountSignInError extends Error {
   constructor(
     message: string,
     readonly code: string,
@@ -137,185 +120,45 @@ export class MobileEmailSignInError extends Error {
   }
 }
 
-export async function startMobileEmailSignIn(email: string, requestId: string): Promise<MobileEmailChallenge> {
-  const text = currentText();
-  const address = normalizeEmailAddress(email);
-  if (!address) throw new MobileEmailSignInError(text.t("mobile.auth.email.error.invalidEmail"), "invalid_email");
-  const { response, body } = await mobileEmailRequest(
-    "/v1/auth/email/start",
-    { email: address },
-    { "Idempotency-Key": requestId },
-    MOBILE_EMAIL_CODE_REQUEST_TIMEOUT_MS,
-  );
-  if (!response.ok) throw mobileEmailError(response, body, "mobile.auth.email.error.sendFailed");
-  if (!isDynamicRecord(body) || !isString(body.challengeId) || typeof body.resendAt !== "number") {
-    throw new MobileEmailSignInError(text.t("mobile.auth.email.error.sendFailed"), "invalid_response");
-  }
-  return {
-    challengeId: body.challengeId,
-    email: address,
-    resendAt: body.resendAt,
-    ...(isString(body.developmentCode) ? { developmentCode: body.developmentCode } : {}),
-  };
-}
-
-export function verifyMobileEmailCode(
-  challengeId: string,
-  code: string,
-  referralCode?: string,
-): Promise<MobileSession> {
-  return exclusiveSignIn(async () => {
-    const normalized = normalizeOneTimeCode(code);
-    if (!normalized) {
-      throw new MobileEmailSignInError(
-        currentText().t("mobile.auth.email.error.codeIncorrect"),
-        "invalid_sign_in_code",
-      );
-    }
-    void retryMobileSessionRevocations();
-    const current = await serializeMobileSessionStorage(() => readStoredSessionAndRevokeInvalid(true));
-    if (current) throw new Error(currentText().t("mobile.auth.error.alreadySignedIn"));
-    const device = await mobileDeviceIdentity();
-    const apiUrl = mobileAccountApiUrl();
-    const { response, body } = await mobileEmailRequest("/v1/mobile-auth/email/verify", {
-      challengeId,
-      code: normalized,
-      deviceId: device.id,
-      deviceName: device.name,
-      platform: device.platform,
-      ...(referralCode ? { referralCode } : {}),
-    });
-    if (!response.ok) throw mobileEmailError(response, body, "mobile.auth.email.error.verifyFailed");
-    const session = decodeMobileSession(body, apiUrl, "email");
-    await saveMobileSession(session);
-    return session;
-  });
-}
-
-export function signInMobileWithCompany(email: string): Promise<MobileSession | null> {
-  return exclusiveSignIn(async () => {
-    const address = normalizeEmailAddress(email);
-    if (!address) {
-      throw new MobileEmailSignInError(currentText().t("mobile.auth.email.error.invalidEmail"), "invalid_email");
-    }
-    void retryMobileSessionRevocations();
-    const current = await serializeMobileSessionStorage(() => readStoredSessionAndRevokeInvalid(true));
-    if (current) throw new Error(currentText().t("mobile.auth.error.alreadySignedIn"));
-    const verifier = randomToken();
-    const clientState = randomToken();
-    const challenge = base64Url(
-      await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, verifier, {
-        encoding: Crypto.CryptoEncoding.BASE64,
-      }),
-    );
-    const start = await mobileEmailRequest(
-      "/v1/auth/company/start",
-      { email: address, returnTo: MOBILE_COMPANY_SIGN_IN_RETURN, clientState, clientChallenge: challenge },
-      {},
-      MOBILE_COMPANY_START_TIMEOUT_MS,
-    );
-    if (!start.response.ok) throw companySignInError(errorCode(start.body), start.response);
-    const authorizationUrl = start.body?.authorizationUrl;
-    if (!isString(authorizationUrl) || !/^https?:\/\//u.test(authorizationUrl)) {
-      throw companySignInError("company_sign_in_failed");
-    }
-    const result = await openAuthSessionAsync(authorizationUrl, MOBILE_COMPANY_SIGN_IN_RETURN);
-    if (result.type !== "success") return null;
-    const params = companySignInReturnParams(result.url, clientState);
-    const failure = params?.get("error");
-    if (failure) throw companySignInError(failure);
-    const code = params?.get("code");
-    if (!code) throw companySignInError("company_sign_in_failed");
-    const device = await mobileDeviceIdentity();
-    const apiUrl = mobileAccountApiUrl();
-    const { response, body } = await mobileEmailRequest("/v1/mobile-auth/company/exchange", {
-      code,
-      codeVerifier: verifier,
-      deviceId: device.id,
-      deviceName: device.name,
-      platform: device.platform,
-    });
-    if (!response.ok) throw companySignInError(errorCode(body), response);
-    const session = decodeMobileSession(body, apiUrl, "company");
-    await saveMobileSession(session);
-    return session;
-  });
-}
-
-function randomToken(): string {
-  return bytesToBase64Url(Crypto.getRandomBytes(32));
-}
-
-function base64Url(base64: string): string {
-  return base64.replace(/\+/gu, "-").replace(/\//gu, "_").replace(/=+$/u, "");
-}
-
-function companySignInError(code: string, response?: Response): MobileEmailSignInError {
-  const text = currentText();
-  if (code === "rate_limited")
-    return new MobileEmailSignInError(text.t("mobile.auth.email.error.wait"), code, retryAfterSeconds(response));
-  if (code === "invalid_email") return new MobileEmailSignInError(text.t("mobile.auth.email.error.invalidEmail"), code);
-  return new MobileEmailSignInError(text.t(companySignInErrorKey(code)), code || "company_sign_in_failed");
-}
-
-async function mobileEmailRequest(
-  path: string,
-  payload: Record<string, string>,
-  headers: Record<string, string> = {},
-  timeoutMs?: number,
-): Promise<{ response: Response; body: DynamicRecord | null }> {
-  try {
-    return await withMobileAuthRequestTimeout(
-      async (signal) => {
-        const request = await fetch(new URL(path, mobileAccountApiUrl()).toString(), {
-          method: "POST",
-          headers: { "Content-Type": "application/json", ...headers },
-          body: JSON.stringify(payload),
-          signal,
-        });
-        return { response: request, body: await readResponseBody(request, signal) };
-      },
-      undefined,
-      timeoutMs,
-    );
-  } catch {
-    throw new MobileEmailSignInError(
-      currentText().t("mobile.auth.error.accountServiceUnreachable"),
-      "auth_api_unavailable",
-    );
-  }
-}
-
-const EMAIL_SIGN_IN_ERRORS = new Map<string, MobileTextKey>([
-  ["invalid_email", "mobile.auth.email.error.invalidEmail"],
-  ["code_recently_sent", "mobile.auth.email.error.wait"],
-  ["rate_limited", "mobile.auth.email.error.wait"],
-  ["email_delivery_rate_limited", "mobile.auth.email.error.wait"],
-  ["email_delivery_pending", "mobile.auth.email.error.deliveryUnconfirmed"],
-  ["email_delivery_timeout", "mobile.auth.email.error.deliveryUnconfirmed"],
-  ["email_delivery_unknown", "mobile.auth.email.error.deliveryUnconfirmed"],
-  ["invalid_sign_in_code", "mobile.auth.email.error.codeIncorrect"],
-  ["sign_in_code_expired", "mobile.auth.email.error.codeExpired"],
-  ["too_many_code_attempts", "mobile.auth.email.error.tooManyAttempts"],
+const ACCOUNT_SIGN_IN_ERRORS = new Map<AccountSignInCode, MobileTextKey>([
+  ["service_unreachable", "mobile.auth.error.accountServiceUnreachable"],
+  ["not_account_service", "mobile.auth.account.error.notAccountService"],
+  ["start_failed", "mobile.auth.account.error.startFailed"],
+  ["login_failed", "mobile.auth.account.error.loginFailed"],
+  ["state_mismatch", "mobile.auth.account.error.loginFailed"],
+  ["exchange_failed", "mobile.auth.account.error.loginFailed"],
+  ["rate_limited", "mobile.auth.account.error.wait"],
+  ["provider_unreachable", "mobile.auth.account.error.providerUnreachable"],
+  ["login_refused", "mobile.auth.account.error.refused"],
 ]);
 
-function errorCode(body: DynamicRecord | null): string {
-  return isDynamicRecord(body?.error) && isString(body.error.code) ? body.error.code : "";
-}
-
-function mobileEmailError(
-  response: Response,
-  body: DynamicRecord | null,
-  fallback: MobileTextKey,
-): MobileEmailSignInError {
-  const code = errorCode(body);
-  const key = EMAIL_SIGN_IN_ERRORS.get(code) ?? fallback;
-  return new MobileEmailSignInError(currentText().t(key), code, retryAfterSeconds(response));
-}
-
-function retryAfterSeconds(response: Response | undefined): number | undefined {
-  const retryAfter = Number(response?.headers.get("Retry-After"));
-  return Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined;
+export function signInMobileWithAccount(accountUrl: string): Promise<MobileSession | null> {
+  return exclusiveSignIn(async () => {
+    void retryMobileSessionRevocations();
+    const current = await serializeMobileSessionStorage(() => readStoredSessionAndRevokeInvalid(true));
+    if (current) throw new Error(currentText().t("mobile.auth.error.alreadySignedIn"));
+    let result: Awaited<ReturnType<typeof signInWithAccountService>>;
+    try {
+      result = await signInWithAccountService(accountUrl, {
+        fetch,
+        randomBytes: (length) => Crypto.getRandomBytes(length),
+        sha256Base64: (value) =>
+          Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, value, {
+            encoding: Crypto.CryptoEncoding.BASE64,
+          }),
+        openAuth: (url, returnUrl) => openAuthSessionAsync(url, returnUrl),
+        device: mobileDeviceIdentity,
+      });
+    } catch (error) {
+      if (!(error instanceof AccountSignInError)) throw error;
+      const key = ACCOUNT_SIGN_IN_ERRORS.get(error.code) ?? "mobile.auth.account.error.loginFailed";
+      throw new MobileAccountSignInError(currentText().t(key), error.code, error.retryAfterSeconds);
+    }
+    if (!result) return null;
+    const session = decodeMobileSession(result, accountUrl, "account");
+    await saveMobileSession(session);
+    return session;
+  });
 }
 
 export async function readMobileSession(): Promise<MobileSession | null> {
@@ -434,7 +277,7 @@ export async function revokeMobileAccountSession(session: MobileSession, target:
 }
 
 type MobileProfileFieldChange = { name: string } | { avatar: { bytes: Uint8Array; mimeType: AvatarMimeType } | null };
-export type MobileProfileChange = MobileProfileFieldChange | { analyticsEnabled: boolean; ageMs: number };
+export type MobileProfileChange = MobileProfileFieldChange;
 
 export function updateMobileProfile(
   session: MobileSession,
@@ -442,31 +285,10 @@ export function updateMobileProfile(
   onUpdated?: (updated: MobileSession) => void,
 ): Promise<MobileSession> {
   return serializeMobileProfile(async () => {
-    const updated =
-      "analyticsEnabled" in change
-        ? await writeMobileAnalytics(session, change.analyticsEnabled, change.ageMs)
-        : await writeMobileProfile(session, change);
+    const updated = await writeMobileProfile(session, change);
     onUpdated?.(updated);
     return updated;
   });
-}
-
-async function writeMobileAnalytics(session: MobileSession, enabled: boolean, ageMs: number): Promise<MobileSession> {
-  const { response, body } = await withMobileAuthRequestTimeout(async (signal) => {
-    const request = await fetch(new URL("/v1/me/analytics", session.apiUrl).toString(), {
-      method: "PUT",
-      headers: { Authorization: `Bearer ${session.sessionToken}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ enabled, ageMs }),
-      signal,
-    });
-    return { response: request, body: await readResponseBody(request, signal) };
-  });
-  await checkMobileAuthorization(response, session);
-  if (!response.ok) {
-    if (response.status === 429) throw new Error(currentText().t("mobile.auth.error.tooManyChanges"));
-    throw new Error(currentText().t("mobile.auth.error.profileSaveFailed"));
-  }
-  return saveUpdatedUser(session, body);
 }
 
 async function writeMobileProfile(session: MobileSession, change: MobileProfileFieldChange): Promise<MobileSession> {
@@ -754,8 +576,7 @@ function decodeMobileSession(value: unknown, apiUrl: string, signIn: AccountSign
 
 function decodeStoredMobileSession(value: unknown): MobileSession {
   const credential = decodeStoredMobileCredential(value);
-  const signIn =
-    isDynamicRecord(value) && (value.signIn === "email" || value.signIn === "company") ? value.signIn : null;
+  const signIn = isDynamicRecord(value) && value.signIn === "account" ? value.signIn : null;
   return decodeMobileSession(value, credential.apiUrl, signIn);
 }
 

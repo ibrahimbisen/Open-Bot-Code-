@@ -343,6 +343,18 @@ export const messages = defineMessages("mobile.settings", {
     "Feature use and connection results from this phone always go to CodeBot’s analytics. On: with your account ID and email. Off: with a random install ID only. Message contents and files are not sent.",
   "mobile.settings.privacy.analytics": "Link analytics to my account",
   "mobile.settings.privacy.retry": "Retry saving privacy setting",
+  "mobile.settings.connection.title": "Connection",
+  "mobile.settings.connection.account": "Account",
+  "mobile.settings.connection.accountService": "Account service",
+  "mobile.settings.connection.accountFooter":
+    "The address of the account service is set when you sign in. Sign out to use another one.",
+  "mobile.settings.connection.notSignedIn": "Not signed in",
+  "mobile.settings.connection.signal": "Signal address",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "Optional. Leave it empty to use the Signal address that the account service gives. Your TURN server comes from Signal.",
+  "mobile.settings.connection.save": "Save",
+  "mobile.settings.connection.saving": "Saving…",
   "mobile.settings.conversations.title": "Conversations",
   "mobile.settings.conversations.hiddenChats": "Hidden chats",
   "mobile.settings.conversations.largeFiles": "Download large files automatically",

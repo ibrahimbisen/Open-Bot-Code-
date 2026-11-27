@@ -26,7 +26,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { type MobileSession, redeemMobileConnectUrl } from "@/features/auth/api/mobile-auth";
-import type { EmailCodeInputHandle } from "@/features/auth/components/email-code-input";
 import { QrScanner, type ScannerMode, type ScanStatus } from "@/features/auth/components/qr-scanner";
 import {
   PANE_ENTER_DELAY_MS,
@@ -35,9 +34,9 @@ import {
   paneExit,
   SIGN_IN_EASE_MOVE,
 } from "@/features/auth/components/sign-in-motion";
-import { CodePane, EmailPane, HELP_MOVE, OptionsPane, type PaneMotion } from "@/features/auth/components/sign-in-panes";
+import { HELP_MOVE, OptionsPane, type PaneMotion, ServerPane } from "@/features/auth/components/sign-in-panes";
 import { useMobileSession } from "@/features/auth/context/mobile-session-context";
-import { type SignInStep, useEmailSignIn } from "@/features/auth/model/use-email-sign-in";
+import { type SignInStep, useAccountSignIn } from "@/features/auth/model/use-account-sign-in";
 import { BLOUB_MOVE_MS } from "@/shared/components/bloub-stage/bloub-look";
 import { useBloubStage, useBloubStageRequest } from "@/shared/components/bloub-stage/bloub-stage-context";
 import {
@@ -101,18 +100,6 @@ function SignInNoticeBanner({ notice }: { notice: SignInNotice }) {
 
 type PaneKey = SignInStep | "none";
 
-function enterFrom(from: PaneKey, to: PaneKey): PaneDirection {
-  if (from === "email" && to === "code") return "right";
-  if (from === "code" && to === "email") return "left";
-  return "vertical";
-}
-
-function exitTo(from: PaneKey, to: PaneKey): PaneDirection {
-  if (from === "email" && to === "code") return "left";
-  if (from === "code" && to === "email") return "right";
-  return "vertical";
-}
-
 interface ScanState {
   mode: ScannerMode;
   status: ScanStatus;
@@ -147,10 +134,9 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
     };
   }, [finished, reduced]);
 
-  const signIn = useEmailSignIn({ connect: setFinished, reduced });
+  const signIn = useAccountSignIn({ connect: setFinished, reduced });
   const { step } = signIn;
-  const emailInput = useRef<TextInputInstance>(null);
-  const codeInput = useRef<EmailCodeInputHandle>(null);
+  const addressInput = useRef<TextInputInstance>(null);
 
   const [scan, setScan] = useState<ScanState | null>(null);
   const [scannerMounted, setScannerMounted] = useState(false);
@@ -226,13 +212,7 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
     onPress: closeScanner,
     disabled: scanBusy,
   };
-  const formMood: BloubMood = signIn.verified
-    ? "happy"
-    : signIn.sending || signIn.verifying
-      ? "think"
-      : sad
-        ? "sad"
-        : "down";
+  const formMood: BloubMood = signIn.verified ? "happy" : signIn.sending ? "think" : sad ? "sad" : "down";
   const request: BloubStageRequest | null = !isFocused
     ? null
     : finished
@@ -260,7 +240,7 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
                   icon: "back",
                   label: t("common.back"),
                   onPress: signIn.back,
-                  disabled: signIn.sending || signIn.verifying || signIn.verified,
+                  disabled: signIn.sending || signIn.verified,
                 },
               };
   const active = useBloubStageRequest(request, BLOUB_PRIORITY.screen);
@@ -269,21 +249,19 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
     if (active) setRevealed(true);
   }, [active]);
 
-  const emailLength = signIn.email.length;
-  const codeLength = signIn.code.length;
+  const addressLength = signIn.accountAddress.length;
   const looking = !finished && !scan;
   useEffect(() => {
     if (!looking || step === "options") look(0, 0);
-    else if (step === "email") look(-16 + Math.min(emailLength, 26) * 1.25, 9);
-    else look(-22 + Math.min(codeLength, 7) * 6.4, 9);
-  }, [codeLength, emailLength, look, looking, step]);
+    else look(-16 + Math.min(addressLength, 26) * 1.25, 9);
+  }, [addressLength, look, looking, step]);
 
   const target: PaneKey = !revealed || finished || scan || scannerMounted ? "none" : step;
   const [pane, setPane] = useState<{ key: PaneKey; from: PaneDirection }>({ key: "none", from: "vertical" });
   useEffect(() => {
-    if (pane.key !== target) setPane({ key: target, from: enterFrom(pane.key, target) });
+    if (pane.key !== target) setPane({ key: target, from: "vertical" });
   }, [pane.key, target]);
-  const exit = paneExit(exitTo(pane.key, target), reduced);
+  const exit = paneExit("vertical", reduced);
   const motion: PaneMotion = {
     from: pane.from,
     startMs: pane.from === "vertical" ? PANE_ENTER_DELAY_MS : PANE_SIDE_ENTER_DELAY_MS,
@@ -291,19 +269,16 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
   };
 
   useEffect(() => {
-    if (pane.key !== "email") return;
+    if (pane.key !== "server") return;
     const timer = setTimeout(
-      () => emailInput.current?.focus(),
+      () => addressInput.current?.focus(),
       pane.from === "vertical" && !reduced ? EMAIL_FOCUS_MS : 0,
     );
     return () => clearTimeout(timer);
   }, [pane.from, pane.key, reduced]);
-  useEffect(() => {
-    if (pane.key === "code" && signIn.challenge && !signIn.needsNewCode) codeInput.current?.focus();
-  }, [pane.key, signIn.challenge, signIn.needsNewCode]);
 
   const [formHeight, setFormHeight] = useState(0);
-  const formStep = pane.key === "email" || pane.key === "code";
+  const formStep = pane.key === "server";
   const formBottom = useSharedValue(0);
   useEffect(() => {
     const bottom = formStep && formHeight > 0 ? formTop + formHeight : 0;
@@ -363,7 +338,7 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
             helpShift={staticShift}
             onToggleHelp={() => undefined}
             onScan={() => undefined}
-            onEmail={() => undefined}
+            onServer={() => undefined}
             onLayout={setOptionsHeight}
             onHelpLayout={setHelpHeight}
             reduced={reduced}
@@ -388,32 +363,19 @@ export function SignInScreen({ notice }: { notice?: SignInNotice }) {
               helpShift={helpShift}
               onToggleHelp={() => setHelpOpen((open) => !open)}
               onScan={openScanner}
-              onEmail={signIn.openEmail}
+              onServer={signIn.openServer}
               reduced={reduced}
             />
           </Animated.View>
         ) : null}
-        {pane.key === "email" ? (
-          <Animated.View key="email" exiting={exit} style={[column, { top: formTop }]}>
+        {pane.key === "server" ? (
+          <Animated.View key="server" exiting={exit} style={[column, { top: formTop }]}>
             <Animated.View style={liftStyle}>
-              <EmailPane
+              <ServerPane
                 signIn={signIn}
                 motion={motion}
-                emailInput={emailInput}
+                addressInput={addressInput}
                 onScanInstead={openScanner}
-                onLayout={setFormHeight}
-                reduced={reduced}
-              />
-            </Animated.View>
-          </Animated.View>
-        ) : null}
-        {pane.key === "code" ? (
-          <Animated.View key="code" exiting={exit} style={[column, { top: formTop }]}>
-            <Animated.View style={liftStyle}>
-              <CodePane
-                signIn={signIn}
-                motion={motion}
-                codeInput={codeInput}
                 onLayout={setFormHeight}
                 reduced={reduced}
               />

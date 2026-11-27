@@ -1,5 +1,4 @@
 import { DEFAULT_TEAM_MEMBER_LIMIT } from "@codebot/contracts/input-limits";
-import { WAKE_RECONNECT_STATES } from "@codebot/team-client/hosted-server-wake";
 import { router } from "expo-router";
 import { Typography } from "heroui-native";
 import type { LucideIcon } from "lucide-react-native";
@@ -26,8 +25,6 @@ import UsersRound from "lucide-react-native/icons/users-round";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { confirmOwner } from "@/features/app-lock/model/app-lock";
-import { useMobileSession } from "@/features/auth/context/mobile-session-context";
-import { hostedServerCalls } from "@/features/servers/api/hosted-servers";
 import {
   ServerBrowsingMemoryRow,
   ServerMediaApprovalCreditsRow,
@@ -40,7 +37,6 @@ import { ServerTurnLimitsRows } from "@/features/servers/components/server-turn-
 import { ServerVoiceModelRow } from "@/features/servers/components/server-voice-model-row";
 import { TrailingValue } from "@/features/servers/components/trailing-value";
 import { SERVER_ROLE_LABEL_KEYS } from "@/features/servers/model/server-role";
-import { canRestartServer, useOwnerHostedServerIds } from "@/features/servers/model/server-settings-access";
 import { timeZoneLabel } from "@/features/servers/model/time-zones";
 import { useLockedAction } from "@/features/servers/model/use-locked-action";
 import { useServerBrowserProfiles } from "@/features/servers/model/use-server-browser-profiles";
@@ -99,7 +95,6 @@ export function ServerPeopleSection({ server }: { server: MobileServer }) {
   const roles = row((checks) => checks.canManageServerRoles(server.id));
   const audit = row((checks) => checks.canReadServerAudit(server.id));
   const ownerTransfer = row((checks) => checks.canTransferOwnership(server.id));
-  const hostedServerIds = useOwnerHostedServerIds(server);
   const memberCount = memberCountByServer[server.id];
   return (
     <SettingsSection title={t("mobile.server.settings.peopleSection")}>
@@ -148,7 +143,7 @@ export function ServerPeopleSection({ server }: { server: MobileServer }) {
           disabled={audit === "disabled"}
         />
       )}
-      {ownerTransfer === "hidden" || hostedServerIds?.has(server.id) ? null : (
+      {ownerTransfer === "hidden" ? null : (
         <LinkRow
           label={t("mobile.server.route.ownerTransfer")}
           icon={UserRoundCog}
@@ -237,23 +232,15 @@ export function ServerDataSections({ serverId }: { serverId: string }) {
   );
 }
 
-export function ServerConnectionSection({
-  server,
-  hostedServerIds,
-}: {
-  server: MobileServer;
-  hostedServerIds: ReadonlySet<string> | null;
-}) {
+export function ServerConnectionSection({ server }: { server: MobileServer }) {
   const { t } = useText();
   const serverId = server.id;
-  const { reconnectServer, hostedServerStarting, canRestartServerItself, restartServerItself } = useMobileWorkspace();
-  const { session } = useMobileSession();
+  const { reconnectServer, canRestartServerItself, restartServerItself } = useMobileWorkspace();
   const action = useLockedAction();
   const { busy, error } = action;
   const [restarting, setRestarting] = useState(false);
   const [restarted, setRestarted] = useState<string | null>(null);
-  const hosted = canRestartServer(server, hostedServerIds);
-  const selfHosted = !hosted && canRestartServerItself(serverId);
+  const selfHosted = canRestartServerItself(serverId);
   function perform(operation: () => Promise<void>, failure?: (error: unknown) => string) {
     setRestarted(null);
     return action.perform(operation, failure);
@@ -270,7 +257,7 @@ export function ServerConnectionSection({
           {busy && !restarting ? t("mobile.server.settings.refreshing") : t("mobile.server.settings.refresh")}
         </Typography.Paragraph>
       </SettingsRow>
-      {hosted || selfHosted ? (
+      {selfHosted ? (
         <SettingsRow
           leading={<RowIcon icon={RotateCcw} tone="accent" />}
           disclosure={false}
@@ -288,12 +275,7 @@ export function ServerConnectionSection({
                       async () => {
                         setRestarting(true);
                         try {
-                          if (selfHosted) await restartServerItself(serverId);
-                          else {
-                            if (!session) throw new Error(currentText().t("mobile.server.hosted.restartFailed"));
-                            const restart = await hostedServerCalls(session).restart(serverId);
-                            if (WAKE_RECONNECT_STATES.has(restart.state)) hostedServerStarting(serverId);
-                          }
+                          await restartServerItself(serverId);
                         } finally {
                           setRestarting(false);
                         }

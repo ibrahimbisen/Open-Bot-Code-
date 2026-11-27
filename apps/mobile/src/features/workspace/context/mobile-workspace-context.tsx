@@ -179,6 +179,8 @@ import { showFailureAlert } from "@/features/analytics/failure-reports";
 import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { trackWorkspaceActions } from "@/features/analytics/workspace-actions";
 import { useMobileSession } from "@/features/auth/context/mobile-session-context";
+import { currentServiceAddresses } from "@/features/auth/model/service-address-store";
+import { signalOverrideFetch } from "@/features/auth/model/service-addresses";
 import { decodeMobileBrowserTabs, mobileHttpSignIns } from "@/features/browser/model/browser-tabs";
 import { MobileChannelStore } from "@/features/channels/model/channel-store";
 import { deleteServerDrafts } from "@/features/chat/model/composer-drafts";
@@ -419,6 +421,8 @@ function withoutKeys<T>(record: Record<string, T>, keys: ReadonlySet<string>): R
     : record;
 }
 
+const directoryFetch = signalOverrideFetch(fetch, () => currentServiceAddresses().signalUrl);
+
 export function MobileWorkspaceProvider({ children }: PropsWithChildren) {
   const { session, sessionScope } = useMobileSession();
   const queryClient = useQueryClient();
@@ -436,7 +440,7 @@ export function MobileWorkspaceProvider({ children }: PropsWithChildren) {
       new RemoteTeamDirectoryClient({
         apiUrl: session.apiUrl,
         token: session.sessionToken,
-        fetch,
+        fetch: directoryFetch,
         hostKeys: trustedHostKeys(session.apiUrl, session.user.id),
         pairedHost: session.host,
         verifyHostKeySignature: verifyEd25519Base64Url,

@@ -38,12 +38,6 @@ export const AGENT_SETTINGS_PARTS: readonly string[] = [
 
 export const queryKeys = {
   accountSessions: (...scope: [QueryScope] | []) => ["account-sessions", ...(scope[0] ?? [])],
-  hostedServerPlans: (...scope: [QueryScope] | []) => ["hosted-server-plans", ...(scope[0] ?? [])],
-  billing: (...scope: [QueryScope] | []) => ["billing", ...(scope[0] ?? [])],
-  credits: (...scope: [QueryScope] | []) => ["credits", ...(scope[0] ?? [])],
-  creditActivity: (...scope: [QueryScope] | []) => ["credit-activity", ...(scope[0] ?? [])],
-  referrals: (...scope: [QueryScope] | []) => ["referrals", ...(scope[0] ?? [])],
-  ownerHostedServerIds: (scope: QueryScope) => ["owner-hosted-server-ids", ...scope],
   agentTemplate: (apiUrl: string | null, templateId: string | null) => ["agent-template", apiUrl, templateId],
   marketplace: (apiUrl: string | null, ...parts: (string | null)[]) => ["marketplace", apiUrl, ...parts],
 

@@ -12,7 +12,6 @@
       "bundleIdentifier": "run.codebot.mobile",
       "appleTeamId": "8A47NKRZSJ",
       "supportsTablet": true,
-      "associatedDomains": ["applinks:openbot.run"],
       "infoPlist": {
         "NSLocalNetworkUsageDescription": "Allow CodeBot to connect to your desktop during local development.",
         "NSAppTransportSecurity": {
@@ -271,12 +270,7 @@
       "policy": "fingerprint"
     },
     "updates": {
-      "url": "https://updates.openbot.run/manifest",
-      "codeSigningCertificate": "./certs/certificate.pem",
-      "codeSigningMetadata": {
-        "keyid": "main",
-        "alg": "rsa-v1_5-sha256"
-      }
+      "enabled": false
     }
   }
 }

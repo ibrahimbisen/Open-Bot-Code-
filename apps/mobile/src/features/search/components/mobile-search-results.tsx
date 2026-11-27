@@ -64,7 +64,6 @@ function useSearchSettings(channelsSupported: boolean): MobileSearchSetting[] {
         { id: "liveActivities", title: t("mobile.settings.liveActivities.title"), detail: app },
       );
     pages.push(
-      { id: "privacy", title: t("mobile.settings.privacy.title"), detail: app },
       { id: "conversations", title: t("mobile.settings.conversations.title"), detail: app },
       { id: "hiddenChats", title: t("mobile.settings.conversations.hiddenChats"), detail: app },
       ...(channelsSupported

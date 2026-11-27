@@ -7,7 +7,7 @@ import { SIGN_IN_CONTROL_HEIGHT, useSignInColors } from "@/features/auth/compone
 import { useShake } from "@/features/auth/components/use-shake";
 import { selectionColorProps } from "@/shared/lib/selection-color";
 
-interface EmailFieldProps {
+interface AddressFieldProps {
   ref?: Ref<TextInputInstance>;
   value: string;
   onChangeText: (value: string) => void;
@@ -19,10 +19,10 @@ interface EmailFieldProps {
   editable: boolean;
   visible: boolean;
   reduced: boolean;
-  kind?: "email" | "invite";
+  kind?: "email" | "url";
 }
 
-export function EmailField({
+export function AddressField({
   ref,
   value,
   onChangeText,
@@ -35,7 +35,7 @@ export function EmailField({
   visible,
   reduced,
   kind = "email",
-}: EmailFieldProps) {
+}: AddressFieldProps) {
   const email = kind === "email";
   const colors = useSignInColors();
   const [focused, setFocused] = useState(false);
@@ -81,7 +81,7 @@ export function EmailField({
           textContentType={email ? "emailAddress" : "none"}
           autoCorrect={false}
           spellCheck={false}
-          returnKeyType="send"
+          returnKeyType={email ? "send" : "go"}
           submitBehavior="submit"
           maxLength={email ? INPUT_LIMITS.email : INPUT_LIMITS.inviteUrl}
           {...selectionColorProps(colors.brand)}
