@@ -4,7 +4,7 @@ Source of truth: `CodeBot-PRD.md` (rev 12) one level above this repository.
 Each row is one PRD item. An item is `done` only when the proof column names a test, a report file,
 or a screenshot that shows it. `partial` and `blocked` rows say what is missing.
 
-**Totals (2026-11-27, `main` = `0f33ed701`):** 144 rows in sections 1 to 19: 116 done, 17 partial, 2 not-on-windows, 1 dropped-by-decision, 0 todo, 8 info. Section 20: 9 met, 3 partly met, 0 not met.
+**Totals (2026-11-27, `main` = `0f33ed701`):** 144 rows in sections 1 to 19: 119 done, 14 partial, 2 not-on-windows, 1 dropped-by-decision, 0 todo, 8 info. Section 20: 9 met, 3 partly met, 0 not met.
 
 Status values: `done`, `partial` (the proof says what is missing), `todo`, `not-on-windows` (cannot be checked on this computer; the proof says why), `dropped-by-decision` (names the decision), `info` (a statement, not a task).
 
@@ -17,6 +17,7 @@ Report folders added on 2026-11-27 (package D6):
 - `CS/_wt/e1-sweep/.codebot-build/screen-sweep/report.json`: `bun run test:screens`, 749 screens in `CS/_wt/e1-sweep/.codebot-build/screens/`, review sheets in `CS/_wt/e1-sweep/.codebot-build/sheets/`. Short name below: `E1 sweep`.
 - `CS/_archive/d1-tests/.codebot-build/d1/reports/`, `CS/_archive/d2-cleanup/.codebot-build/`, `CS/_archive/d3-themes/.codebot-build/themes/report.json`: packages D1, D2, D3.
 - `CS/_wt/g1-release/.codebot-build/<name>/report.json`: package G1 (releases through GitHub, D22).
+- `CS/_archive/f3-tests/<name>/report.json` and `CS/_archive/f3-tests/f3/screens/`: package F3 (chat management, hidden features, provider CLI update), branch `f3-tests`.
 
 Work packages (column W) are described in [decisions.md](decisions.md#work-packages).
 
@@ -77,8 +78,8 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | 5.4 | Many chats per project, each with its own provider session | W07 | done | Many chats per project, each with its own provider thread, compaction per chat: `CS/CodeBot/.codebot-build/projects-e2e/report.json` |
 | 5.5 | New chat button per project | W12 | done | "New chat" button on the project column: `CS/CodeBot/.codebot-build/w14/screens/preview-pinned-dark.png`, `CS/CodeBot/.codebot-build/w12b/screens/two-projects-side-by-side-dark.png` |
 | 5.6 | Chat history list, newest first, title and date | W12 | done | Engine lists newest first with title from the first message: `CS/CodeBot/.codebot-build/projects-e2e/report.json`; screen: "chat list shows newest first with a title and a date" in `CS/_archive/d1-tests/.codebot-build/d1/reports/project-shell.json` |
-| 5.7 | Automatic chat title, rename | W07, W12 | partial | Engine title and rename pass: `CS/CodeBot/.codebot-build/projects-e2e/report.json`. Screen titles from the first message: `CS/_archive/d1-tests/.codebot-build/d1/reports/project-shell.json`. Missing: no screen test renames a chat |
-| 5.8 | Search, rename, archive, delete chats | W07, W12 | partial | Engine search (title and text), archive, restore, pin, delete pass: `CS/CodeBot/.codebot-build/projects-e2e/report.json`. Screen search, archive and restore pass: `CS/_archive/d1-tests/.codebot-build/d1/reports/project-shell.json`. Missing: no screen test renames or deletes a chat |
+| 5.7 | Automatic chat title, rename | W07, W12 | done | test:chat-manage (F3, 2 runs pass): title from the first message, rename from the row menu, new title kept after a reload: `CS/_archive/f3-tests/chat-manage/report.json`, `CS/_archive/f3-tests/f3/screens/chat-renamed-after-reload-dark.png`. Engine: `CS/CodeBot/.codebot-build/projects-e2e/report.json` |
+| 5.8 | Search, rename, archive, delete chats | W07, W12 | done | test:chat-manage (F3, 2 runs pass): search by title and by the new title, archive (leaves the list, in the archive), delete (gone from list, search, engine, after a reload): `CS/_archive/f3-tests/chat-manage/report.json`, screens `CS/_archive/f3-tests/f3/screens/chat-*.png`. Engine: `CS/CodeBot/.codebot-build/projects-e2e/report.json` |
 | 5.9 | Chat keeps running when the user leaves | W07 | done | A chat keeps running while the user works in another chat; five run at once: `CS/CodeBot/.codebot-build/projects-e2e/report.json` |
 | 5.10 | Provider and model per chat, default from project | W07, W12 | done | Chat model, change, clear back to the agent model, local model id: `CS/CodeBot/.codebot-build/projects-e2e/report.json`; model picker in `CS/CodeBot/.codebot-build/w14/screens/preview-pinned-dark.png` |
 | 5.11 | Keep automatic context compaction per chat | W07 | done | Full compaction cycle on the provider thread of a project chat: `CS/CodeBot/.codebot-build/projects-e2e/report.json` |
@@ -174,7 +175,7 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | 12.4 | One-command release script | W06, G1 | done | `bun run release:codebot`, dry run, folder and WebDAV transports: `CS/_wt/g1-release/.codebot-build/release-script/report.json`; each push to `main` releases through GitHub Actions (D22, commit `4c032054a`, `docs/codebot/releases.md`) |
 | 12.5 | Check at start and every hour | W06 | done | "checks at start and every hour": `CS/_wt/g1-release/.codebot-build/app-update/report.json` |
 | 12.6 | Background download, "Restart to update", auto-restart when idle option | W06 | done | Background download and "Restart to update": `CS/_wt/g1-release/.codebot-build/app-update/report.json`. test:app-update-idle-restart, 6 checks (option off waits, on waits while an agent works, survives a restart, cancel, off clears): `CS/_wt/f2-tests/.codebot-build/app-update-idle-restart/report.json` |
-| 12.7 | Keep provider CLI auto-update | W06 | partial | Provider CLI update code not changed by CodeBot; no test |
+| 12.7 | Keep provider CLI auto-update | W06 | done | test:provider-cli-update (F3, 2 runs pass, 10 checks): the real provider runtime manager with a local stand-in feed and a compiled fake Codex; a newer version downloads and switches with no click, the check repeats on its interval, no update for an older feed, a provider that is off, a user CLI path or an unreachable feed; next to a user's own CLI it only offers the update; Claude Code version check against a fake npm feed: `CS/_archive/f3-tests/provider-cli-update/report.json`. No real network, no real CLI |
 | 12.8 | Signing optional; document unsigned builds | W06, W19 | done | `docs/codebot/unsigned-builds.md` (Windows, macOS, Linux steps), linked from `README.md`, `home-server.md` and `user-guide.md`. Unsigned macOS offers the download instead of a silent install: `CS/_wt/g1-release/.codebot-build/app-update/report.json`. Not tried on a real unsigned installer |
 
 ## 13. Usage and status bar
@@ -215,8 +216,8 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | Remote desktop | Keep, hidden | W05 | done | Switch `remoteDesktop`: `CS/_archive/test-run-3/test:advanced-features.log`. Note: the GitHub release builds have no remote desktop runtime (`docs/codebot/releases.md`) |
 | Local skills | Keep, visible | W05 | partial | Not removed or changed by any package; skills of project and user are listed: `CS/CodeBot/.codebot-build/slash-commands/report.json`. Missing: no test of the skills screen |
 | Embedded browser | Keep, visible, redesigned | W14 | done | `CS/_archive/test-run-3/test:browser.log`; redesigned panel: `R1/w14`; browser panel screens in 7 themes: E1 sweep |
-| 15.1 | Hidden: no button; switch in Settings > Advanced features | W05 | done | Default every switch off, tools not offered: `CS/_archive/test-run-3/test:advanced-features.log` |
-| 15.2 | Turned-on feature appears in left bar or settings | W05, W12 | done | A feature turned on appears in the rail: `CS/_archive/test-run-3/test:shell-integration.log` |
+| 15.1 | Hidden: no button; switch in Settings > Advanced features | W05 | done | test:hidden-features (F3, 2 runs pass): with every switch off, no Schedule, Marketplace or Computer Use entry; each turns off again from Settings > Advanced features; the switch is kept after a reload: `CS/_archive/f3-tests/hidden-features/report.json`, `CS/_archive/f3-tests/f3/screens/hidden-features-off-main-dark.png`. Engine: `CS/_archive/test-run-3/test:advanced-features.log` |
+| 15.2 | Turned-on feature appears in left bar or settings | W05, W12 | done | test:hidden-features (F3): Routines shows Schedule and Marketplace shows Marketplace in the left bar, Computer Use shows its settings tab: `CS/_archive/f3-tests/hidden-features/report.json`, screens `CS/_archive/f3-tests/f3/screens/hidden-features-*-on-dark.png`. On Windows the Computer Use tab says the build has no driver |
 
 ## 16. Themes
 

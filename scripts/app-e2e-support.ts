@@ -55,9 +55,9 @@ export async function until<T>(
   }
 }
 
-export async function shot(page: Page, name: string): Promise<string> {
-  mkdirSync(F2_SCREENS, { recursive: true });
-  const path = join(F2_SCREENS, `${name}.png`);
+export async function shot(page: Page, name: string, folder = F2_SCREENS): Promise<string> {
+  mkdirSync(folder, { recursive: true });
+  const path = join(folder, `${name}.png`);
   await page.screenshot({ path });
   return path;
 }
