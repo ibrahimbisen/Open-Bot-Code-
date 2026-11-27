@@ -563,7 +563,7 @@ async function main(): Promise<void> {
     const downloadsRoot = join(temporaryRoot, "downloads");
     const statePath = join(temporaryRoot, "browser-tabs.json");
     const browser = new BrowserHost(window, downloadsRoot, statePath, {
-      recordingDurationMs: 500,
+      recordingDurationMs: 2500,
       recordingMaxConcurrent: 1,
       recordingMaxAggregateBytes: 100 * 1024 * 1024,
     });
