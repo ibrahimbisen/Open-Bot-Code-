@@ -1,16 +1,17 @@
 import { isBelowMinimumVersion } from "@codebot/contracts/app-minimum-version";
 import { Button, Typography } from "heroui-native";
 import { useState } from "react";
-import { BackHandler, Modal, StyleSheet, View } from "react-native";
+import { BackHandler, Linking, Modal, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FullWindowOverlay } from "react-native-screens";
-import { openStorePage } from "@/features/app-update/model/app-update";
 import { useMobileSession } from "@/features/auth/context/mobile-session-context";
 import { BloubBlock } from "@/shared/components/bloub-stage/bloub-block";
 import { useBloubColors } from "@/shared/components/bloub-stage/bloub-look";
 import { currentAppVersion, useMinimumAppVersion, useMobileFeaturesRefresh } from "@/shared/lib/mobile-features";
 import { isIOS } from "@/shared/lib/platform";
 import { useText } from "@/shared/lib/text";
+
+const UPDATE_URL = process.env.EXPO_PUBLIC_CODEBOT_UPDATE_URL ?? "";
 
 export function UpdateRequiredOverlay() {
   const { session } = useMobileSession();
@@ -47,7 +48,7 @@ function UpdateRequiredScreen({ version, minimum }: { version: string; minimum: 
     setBusy(true);
     setFailed(false);
     try {
-      await openStorePage();
+      await Linking.openURL(UPDATE_URL);
     } catch {
       setFailed(true);
     } finally {
@@ -75,9 +76,11 @@ function UpdateRequiredScreen({ version, minimum }: { version: string; minimum: 
             </Typography.Paragraph>
           ) : null}
         </View>
-        <Button variant="primary" className="rounded-full px-8" isDisabled={busy} onPress={() => void update()}>
-          <Button.Label>{t("mobile.app.update.install")}</Button.Label>
-        </Button>
+        {UPDATE_URL ? (
+          <Button variant="primary" className="rounded-full px-8" isDisabled={busy} onPress={() => void update()}>
+            <Button.Label>{t("mobile.app.update.install")}</Button.Label>
+          </Button>
+        ) : null}
       </View>
     </View>
   );

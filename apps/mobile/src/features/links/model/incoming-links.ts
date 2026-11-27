@@ -80,7 +80,7 @@ export function redirectIncomingLink(path: string, initial: boolean): string | n
   if (path === "codebot://" || path === "codebot:///" || path === "codebot:") return initial ? "/" : null;
   if (/^exps?:\/\//u.test(path)) return path;
   if (path.startsWith("/") && !path.startsWith("//")) {
-    const url = new URL(path, "https://openbot.run");
+    const url = new URL(path, "https://codebot.invalid");
     if (
       url.pathname !== "/join" &&
       !url.pathname.startsWith("/plugins/") &&

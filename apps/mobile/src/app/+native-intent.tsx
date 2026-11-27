@@ -1,4 +1,4 @@
-import { isCompanySignInReturn } from "@/features/auth/model/company-sign-in-return";
+import { isAccountSignInReturn } from "@/features/auth/model/account-sign-in";
 import { acceptDevelopmentConnectLink } from "@/features/auth/model/development-connect-link";
 import { redirectIncomingLink } from "@/features/links/model/incoming-links";
 import { isLiveActivityLink, liveActivityRoute } from "@/features/live-activity/model/live-activity-link";
@@ -9,7 +9,7 @@ import { holdShareSheet } from "@/features/share/model/share-sheet-opener";
 export function redirectSystemPath({ path, initial }: { path: string; initial: boolean }) {
   if (acceptDevelopmentConnectLink(path, __DEV__)) return null;
   if (isMessagingInstallReturn(path)) return null;
-  if (isCompanySignInReturn(path)) return null;
+  if (isAccountSignInReturn(path)) return null;
   try {
     if (isLiveActivityLink(path)) return liveActivityRoute(path, initial);
     if (isIncomingShareLink(path)) {

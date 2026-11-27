@@ -320,16 +320,6 @@ function AuthenticatedStack() {
       })}
     >
       <Stack.Screen name="connected" options={{ animation: "fade", gestureEnabled: false, title: "" }} />
-      <Stack.Screen
-        name="rate-app"
-        options={{
-          presentation: "containedTransparentModal",
-          animation: "none",
-          gestureEnabled: false,
-          headerShown: false,
-          contentStyle: { backgroundColor: "transparent" },
-        }}
-      />
       <Stack.Screen name="chat/[agentId]" options={chatPage} />
       <Stack.Screen name="side-question/[agentId]" options={chatPage} />
       <Stack.Screen name="task/[taskId]" options={chatPage} />
@@ -403,7 +393,6 @@ function AuthenticatedStack() {
       <Stack.Screen name="thread-rename" listeners={refocusNameField} options={formSheet([0.85])} />
       <Stack.Screen name="new-task" options={formSheet([0.85])} />
       <Stack.Screen name="add-server" options={formSheet([0.85])} />
-      <Stack.Screen name="hosted-server" options={formSheet([0.85])} />
       <Stack.Screen name="hidden-chats" options={formSheet([0.85])} />
       <Stack.Screen name="deleted-chats" options={formSheet([0.85])} />
       <Stack.Screen name="server-settings" options={formSheet([0.85])} />

@@ -1,4 +1,3 @@
-import { ONE_TIME_CODE_LENGTH } from "@codebot/contracts/validation";
 import { Button, Spinner, Typography } from "heroui-native";
 import type { LucideIcon } from "lucide-react-native";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
@@ -15,18 +14,16 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-import { EmailCodeInput, type EmailCodeInputHandle } from "@/features/auth/components/email-code-input";
-import { EmailField } from "@/features/auth/components/email-field";
+import { AddressField } from "@/features/auth/components/address-field";
 import { SIGN_IN_CONTROL_HEIGHT, useSignInColors } from "@/features/auth/components/sign-in-colors";
 import {
-  PANE_STAGGER_MS,
   type PaneDirection,
   paneEnter,
   SIGN_IN_EASE_OUT,
   SIGN_IN_TEXT_EASE,
   signInMotion,
 } from "@/features/auth/components/sign-in-motion";
-import type { EmailSignIn } from "@/features/auth/model/use-email-sign-in";
+import type { AccountSignIn } from "@/features/auth/model/use-account-sign-in";
 import { BLOUB_MOVE_MS } from "@/shared/components/bloub-stage/bloub-look";
 import { formatTimer } from "@/shared/lib/countdown";
 import { haptics } from "@/shared/lib/haptics";
@@ -270,7 +267,7 @@ export function OptionsPane({
   helpShift,
   onToggleHelp,
   onScan,
-  onEmail,
+  onServer,
   onLayout,
   onHelpLayout,
   reduced,
@@ -281,7 +278,7 @@ export function OptionsPane({
   helpShift: SharedValue<number>;
   onToggleHelp: () => void;
   onScan: () => void;
-  onEmail: () => void;
+  onServer: () => void;
   onLayout?: (height: number) => void;
   onHelpLayout?: (height: number) => void;
   reduced: boolean;
@@ -305,7 +302,12 @@ export function OptionsPane({
       </PaneItem>
       <PaneItem index={2} motion={motion} className="mt-7 gap-3">
         <SignInButton brand icon={ScanLine} label={t("mobile.auth.scanQrCode")} onPress={onScan} reduced={reduced} />
-        <SignInButton brand={false} label={t("mobile.auth.signIn.emailButton")} onPress={onEmail} reduced={reduced} />
+        <SignInButton
+          brand={false}
+          label={t("mobile.auth.signIn.accountButton")}
+          onPress={onServer}
+          reduced={reduced}
+        />
       </PaneItem>
       <PaneItem index={3} motion={motion}>
         <HelpToggle open={helpOpen} onToggle={onToggleHelp} onBodyLayout={onHelpLayout} reduced={reduced} />
@@ -314,88 +316,66 @@ export function OptionsPane({
   );
 }
 
-export function EmailPane({
+export function ServerPane({
   signIn,
   motion,
-  emailInput,
+  addressInput,
   onScanInstead,
   onLayout,
   reduced,
 }: {
-  signIn: EmailSignIn;
+  signIn: AccountSignIn;
   motion: PaneMotion;
-  emailInput: Ref<TextInputInstance>;
+  addressInput: Ref<TextInputInstance>;
   onScanInstead: () => void;
   onLayout: (height: number) => void;
   reduced: boolean;
 }) {
   const { t } = useText();
   const colors = useSignInColors();
-  const { retryIn, deliveryUnconfirmed, sending, companySignIn, usesCompanySignIn } = signIn;
-  const label = companySignIn
-    ? t("mobile.auth.email.companyWaiting")
-    : sending
-      ? t("mobile.auth.email.sending")
-      : usesCompanySignIn && retryIn === 0
-        ? t("mobile.auth.email.companyContinue")
-        : deliveryUnconfirmed
-          ? retryIn > 0
-            ? t("mobile.auth.email.checkAgainIn", { time: formatTimer(retryIn) })
-            : t("mobile.auth.email.checkDelivery")
-          : retryIn > 0
-            ? t("mobile.auth.email.tryAgainIn", { time: formatTimer(retryIn) })
-            : t("mobile.auth.email.send");
-  const labelKey = companySignIn
-    ? "company-waiting"
-    : sending
-      ? "sending"
-      : retryIn > 0
-        ? "wait"
-        : usesCompanySignIn
-          ? "company"
-          : deliveryUnconfirmed
-            ? "check"
-            : "send";
-  const inviteRejected = signIn.emailIssue?.code === "invalid_invite_code";
-  const message = signIn.emailIssue
-    ? { key: `email-${signIn.rejection}`, text: signIn.emailIssue.message, color: colors.danger }
-    : usesCompanySignIn
-      ? { key: "company", text: t("mobile.auth.email.companyNotice"), color: colors.muted }
-      : null;
+  const { retryIn, sending, issue } = signIn;
+  const label = sending
+    ? t("mobile.auth.account.waiting")
+    : retryIn > 0
+      ? t("mobile.auth.account.tryAgainIn", { time: formatTimer(retryIn) })
+      : t("mobile.auth.account.continue");
+  const labelKey = sending ? "waiting" : retryIn > 0 ? "wait" : "continue";
+  const message = issue ? { key: `issue-${signIn.rejection}`, text: issue.message, color: colors.danger } : null;
   return (
     <View onLayout={({ nativeEvent: { layout } }) => onLayout(layout.height)}>
       <PaneItem index={0} motion={motion}>
         <Typography.Heading type="h2" accessibilityRole="header" className="tracking-codebot-tight">
-          {t("mobile.auth.email.title")}
+          {t("mobile.auth.account.title")}
         </Typography.Heading>
       </PaneItem>
       <PaneItem index={1} motion={motion} className="mt-2.5">
-        <Typography.Paragraph color="muted">{t("mobile.auth.email.description")}</Typography.Paragraph>
+        <Typography.Paragraph color="muted">{t("mobile.auth.account.description")}</Typography.Paragraph>
       </PaneItem>
       <PaneItem index={2} motion={motion} className="mt-5">
-        <EmailField
-          ref={emailInput}
-          value={signIn.email}
-          onChangeText={signIn.setEmail}
-          onSubmit={signIn.sendCode}
-          placeholder={t("mobile.auth.email.placeholder")}
-          label={t("mobile.auth.email.label")}
-          invalid={signIn.emailIssue?.code === "invalid_email"}
-          rejection={inviteRejected ? 0 : signIn.rejection}
+        <AddressField
+          ref={addressInput}
+          kind="url"
+          value={signIn.accountAddress}
+          onChangeText={signIn.setAccountAddress}
+          onSubmit={signIn.submit}
+          placeholder={t("mobile.auth.account.placeholder")}
+          label={t("mobile.auth.account.label")}
+          invalid={issue?.field === "account"}
+          rejection={issue?.field === "signal" ? 0 : signIn.rejection}
           editable={!sending}
           visible
           reduced={reduced}
         />
         <View className="mt-2">
-          <EmailField
-            kind="invite"
-            value={signIn.invite}
-            onChangeText={signIn.setInvite}
-            onSubmit={signIn.sendCode}
-            placeholder={t("mobile.auth.email.inviteCode")}
-            label={t("mobile.auth.email.inviteCode")}
-            invalid={inviteRejected}
-            rejection={inviteRejected ? signIn.rejection : 0}
+          <AddressField
+            kind="url"
+            value={signIn.signalAddress}
+            onChangeText={signIn.setSignalAddress}
+            onSubmit={signIn.submit}
+            placeholder={t("mobile.auth.account.signalPlaceholder")}
+            label={t("mobile.auth.account.signalLabel")}
+            invalid={issue?.field === "signal"}
+            rejection={issue?.field === "signal" ? signIn.rejection : 0}
             editable={!sending}
             visible
             reduced={reduced}
@@ -408,7 +388,7 @@ export function EmailPane({
           brand
           label={label}
           labelKey={labelKey}
-          onPress={signIn.sendCode}
+          onPress={signIn.submit}
           busy={sending}
           waiting={retryIn > 0}
           reduced={reduced}
@@ -416,111 +396,9 @@ export function EmailPane({
       </PaneItem>
       <PaneItem index={4} motion={motion} className="mt-1.5 flex-row">
         <TextAction
-          label={t("mobile.auth.email.useQrCode")}
+          label={t("mobile.auth.account.useQrCode")}
           onPress={onScanInstead}
           disabled={sending}
-          reduced={reduced}
-        />
-      </PaneItem>
-    </View>
-  );
-}
-
-export function CodePane({
-  signIn,
-  motion,
-  codeInput,
-  onLayout,
-  reduced,
-}: {
-  signIn: EmailSignIn;
-  motion: PaneMotion;
-  codeInput: Ref<EmailCodeInputHandle>;
-  onLayout: (height: number) => void;
-  reduced: boolean;
-}) {
-  const { t } = useText();
-  const colors = useSignInColors();
-  const { resendIn, resending, needsNewCode } = signIn;
-  const slotMotion = (() => {
-    const base = signInMotion(reduced);
-    const start = motion.startMs + 2 * PANE_STAGGER_MS;
-    return { ...base, enter: (delay = 0) => base.enter(reduced ? delay : start + delay) };
-  })();
-  const canRetry = Boolean(
-    signIn.codeIssue && !signIn.codeRejected && !needsNewCode && signIn.code.length === ONE_TIME_CODE_LENGTH,
-  );
-  const resend = canRetry
-    ? { label: t("common.retry"), key: "retry", onPress: signIn.retryVerify, waiting: false }
-    : {
-        label: resending
-          ? t("mobile.auth.email.resending")
-          : resendIn > 0
-            ? t("mobile.auth.email.resendIn", { time: formatTimer(resendIn) })
-            : needsNewCode
-              ? t("mobile.auth.email.sendNewCode")
-              : t("mobile.auth.email.resend"),
-        key: resending ? "resending" : resendIn > 0 ? "resend-wait" : "resend",
-        onPress: signIn.resendCode,
-        waiting: resending || resendIn > 0 || signIn.busy,
-      };
-  const message = signIn.verified
-    ? { key: "verified", text: t("mobile.auth.email.verified"), color: colors.success }
-    : signIn.verifying
-      ? { key: "verifying", text: t("mobile.auth.email.verifying"), color: colors.muted }
-      : signIn.codeIssue
-        ? { key: `code-${signIn.rejection}`, text: signIn.codeIssue.message, color: colors.danger }
-        : signIn.notice
-          ? { key: "notice", text: signIn.notice, color: colors.muted }
-          : signIn.challenge?.developmentCode
-            ? {
-                key: "development",
-                text: t("mobile.auth.email.developmentCode", { code: signIn.challenge.developmentCode }),
-                color: colors.muted,
-              }
-            : null;
-  const busy = signIn.verifying || signIn.verified;
-  return (
-    <View onLayout={({ nativeEvent: { layout } }) => onLayout(layout.height)}>
-      <PaneItem index={0} motion={motion}>
-        <Typography.Heading type="h2" accessibilityRole="header" className="tracking-codebot-tight">
-          {t("mobile.auth.email.codeTitle")}
-        </Typography.Heading>
-      </PaneItem>
-      <PaneItem index={1} motion={motion} className="mt-2.5">
-        <Typography.Paragraph color="muted">
-          {t("mobile.auth.email.codeSent", { email: signIn.challenge?.email ?? signIn.email })}
-        </Typography.Paragraph>
-      </PaneItem>
-      <View className="mt-5">
-        <EmailCodeInput
-          ref={codeInput}
-          value={signIn.code}
-          onChange={signIn.setCode}
-          onComplete={signIn.verify}
-          status={
-            signIn.verified ? "verified" : signIn.verifying ? "verifying" : signIn.codeRejected ? "invalid" : "idle"
-          }
-          rejection={signIn.rejection}
-          disabled={needsNewCode || signIn.verified}
-          accessibilityLabel={t("mobile.auth.email.codeLabel")}
-          motion={slotMotion}
-          reduced={reduced}
-        />
-        <PaneMessage message={message} spinner={signIn.verifying} reduced={reduced} />
-      </View>
-      <PaneItem index={3} motion={motion} className="mt-1.5 flex-row justify-between">
-        <TextAction
-          label={resend.label}
-          labelKey={resend.key}
-          onPress={resend.onPress}
-          disabled={resend.waiting}
-          reduced={reduced}
-        />
-        <TextAction
-          label={t("mobile.auth.email.changeEmail")}
-          onPress={signIn.back}
-          disabled={busy}
           reduced={reduced}
         />
       </PaneItem>
