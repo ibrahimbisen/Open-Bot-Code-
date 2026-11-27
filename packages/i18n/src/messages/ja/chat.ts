@@ -178,7 +178,6 @@ export const messages = {
   "chat.settingLink.desktopOnly": "コンピューターの CodeBot アプリで開いてください。",
   "chat.settingLink.agentChatOnly": "このエージェントとのチャットで開いてください。",
   "chat.marker.skillSuggestion": "スキルを提案しました",
-  "chat.marker.serverInstall": "サーバーをインストールするコマンドを作成しました",
   "chat.marker.skill.created": "スキルを作成しました",
   "chat.marker.skill.revised": "スキルを改訂しました",
   "chat.marker.skill.installed": "スキルをインストールしました",
@@ -476,8 +475,6 @@ export const messages = {
   "chat.mcpSignIn.notNeededOutcome": "サインイン不要",
   "chat.mcpSignIn.notNeededMessage":
     "MCP サーバー {name} はサインインなしで使えるようになりました。もう一度テストしてください。",
-  "chat.serverInstall.title": "新しいサーバー",
-  "chat.serverInstall.expired": "コマンドの有効期限が切れました。エージェントに新しいコマンドを頼んでください。",
   "chat.compaction.running": "コンテキストを圧縮しています",
   "chat.compaction.completed": "コンテキストを圧縮しました",
   "chat.compaction.failed": "コンテキストを圧縮できませんでした",

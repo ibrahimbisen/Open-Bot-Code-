@@ -1,4 +1,3 @@
-import { type CustomServerPlan, optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
 import { type HostKeyHandover, optionalHostKeyHandovers } from "@codebot/contracts/host-key-handover";
 import { inviteUseCount, isPermanentInvite } from "@codebot/contracts/invite-links";
 import {
@@ -38,7 +37,6 @@ export interface RemoteHostSummary {
   restartAvailable?: boolean;
   storageGb?: number;
   paymentRequired?: true;
-  customPlan?: CustomServerPlan;
   hidden?: true;
 }
 
@@ -194,7 +192,6 @@ export function decodeRemoteHosts(value: unknown): RemoteHostSummary[] {
       ...(isBoolean(host.hosted) ? { hosted: host.hosted } : {}),
       ...(isBoolean(host.restartAvailable) ? { restartAvailable: host.restartAvailable } : {}),
       ...(validStorage ? { storageGb } : {}),
-      ...optionalCustomServerPayment(host),
       ...(host.hidden === true ? { hidden: true as const } : {}),
     };
   });

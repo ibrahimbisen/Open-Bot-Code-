@@ -454,11 +454,11 @@ const SERVER_PLACES: readonly ServerPlaceEntry[] = [
   {
     title: "Add a server",
     place:
-      "On a computer: the server button at the bottom of the narrow bar on the left, below Settings (Open server menu for <server name>) > Add a server, or Add remote server when no plans show. In the Server rail layout, use the + button at the bottom of the server list instead; with plans, it opens Add a server directly. Add a server opens Run CodeBot 24/7 on an external server, with hosted server plans. In it, Other options > New server on another computer gives one install command for a Linux computer or VPS that the user owns (Ubuntu 24.04 or 26.04). When no plans show, New server on another computer is in that menu itself. New server on another computer is only in the desktop app, not in the browser at openbot.run/app. On the phone app: Servers > Add a server, for a hosted server.",
+      "On a computer: the server button at the bottom of the narrow bar on the left, below Settings (Open server menu for <server name>) > Add a server. In the Server rail layout, use the + button at the bottom of the server list instead. Add a server offers a new server on this computer, or joining a server with an invite.",
     about:
-      "A server that runs 24/7 on another computer, so that agents, routines and chat apps such as WhatsApp keep working while this computer is off. The user runs the install command as root on that computer, then opens the new server and connects a provider and apps there. When the user gives the SSH address, create_server_install_command makes the same command for you to run over SSH.",
+      "A server keeps agents, routines and chat apps such as WhatsApp working. A new server runs on this computer; a server on another computer is joined with an invite from its owner.",
     words:
-      "24 add new another install setup create always online run running keep alive offline off away cloud hosted hosting headless linux ubuntu external own",
+      "24 add new another setup create always online run running keep alive offline off away join invite headless linux external own",
   },
   {
     title: "Remove server",

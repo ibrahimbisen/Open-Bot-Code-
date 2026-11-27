@@ -5,7 +5,6 @@ import { dirname } from "node:path";
 import { companySignInErrorKey } from "@codebot/contracts/company-sign-in";
 import { CREDIT_MEDIA_HOST_HEADER, CREDIT_MEDIA_HOST_TOKEN_HEADER } from "@codebot/contracts/credit-media";
 import type { HostKeyHandover } from "@codebot/contracts/host-key-handover";
-import { parseHostedServerClaim } from "@codebot/contracts/hosted-servers";
 import type {
   AvatarColor,
   AvatarImageInput,
@@ -2102,30 +2101,6 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   canPersistSession(): boolean {
     return this.#options.canPersist();
   }
-
-  readonly redeemHostedServerClaim = Effect.fn("CentralAuth.redeemHostedServerClaim")(
-    function* (
-      this: CentralAuthManager,
-      claim: string,
-    ): Effect.fn.Return<
-      { hostId: string; name: string; user: CentralAuthUser },
-      CentralAuthOperationError,
-      CentralAuthTransport
-    > {
-      const redeemed = yield* this.#requestEffect(
-        "/v2/hosting/claims/redeem",
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ claim }) },
-        (value) => {
-          const parsed = parseHostedServerClaim(value);
-          if (!parsed) throw new Error("Invalid hosted server claim.");
-          return parsed;
-        },
-      );
-      const user = yield* this.#applyClaimedSession(redeemed);
-      return { hostId: redeemed.hostId, name: redeemed.name, user };
-    },
-    (operation) => this.#owned(operation),
-  ).bind(this);
 
   readonly redeemServerClaim = Effect.fn("CentralAuth.redeemServerClaim")(
     function* (

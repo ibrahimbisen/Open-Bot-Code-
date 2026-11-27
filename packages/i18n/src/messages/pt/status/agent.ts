@@ -46,9 +46,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Ninguém mais poderá ver este relato no GitHub. Não é possível desfazer. Para corrigi-lo, o agente pode enviar um relato corrigido.",
   "status.agent.feedbackWithdrawing": "Removendo seu relato do GitHub…",
-  "status.agent.serverInstallCommand":
-    "Criar um comando de uso único que instala o CodeBot em outro computador como o servidor {name} e o conecta à sua conta. O agente o executa lá.",
-  "status.agent.serverInstallCard": "Comando de instalação para o servidor {name}",
   "status.agent.browserProfileNamed":
     "Mover {agents} para o perfil do navegador {profile}. Eles recebem os logins e cookies dele. As abas abertas deles fecham.",
   "status.agent.commitCoAuthorOff": "Parar de adicionar o CodeBot como coautor nos commits de todos os agentes.",

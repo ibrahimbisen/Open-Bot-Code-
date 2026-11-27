@@ -48,9 +48,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Niemand kann diesen Bericht auf GitHub mehr sehen. Das kannst du nicht rückgängig machen. Zum Korrigieren kann der Agent einen korrigierten Bericht senden.",
   "status.agent.feedbackWithdrawing": "Dein Bericht wird von GitHub entfernt…",
-  "status.agent.serverInstallCommand":
-    "Einen einmaligen Befehl erstellen, der CodeBot auf einem anderen Computer als Server {name} installiert und bei deinem Konto anmeldet. Der Agent führt ihn dort aus.",
-  "status.agent.serverInstallCard": "Installationsbefehl für den Server {name}",
   "status.agent.browserProfileNamed":
     "{agents} in das Browser-Profil {profile} verschieben. Sie erhalten seine Anmeldungen und Cookies. Ihre offenen Tabs werden geschlossen.",
   "status.agent.commitCoAuthorOff": "CodeBot nicht mehr als Mitautor in die Commits aller Agenten eintragen.",

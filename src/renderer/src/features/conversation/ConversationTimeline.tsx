@@ -87,7 +87,6 @@ import { RoutineChatCard } from "./RoutineChatCard";
 import { createChatWebhookRoutines, RoutineWebhookChatCard } from "./RoutineWebhookChatCard";
 import { createRoutineRunFailures, type RoutineRunFailureSource } from "./routine-run-failures";
 import { desktopChatEventRoutinesApi } from "./routine-webhooks-api";
-import { ServerInstallChatCard } from "./ServerInstallChatCard";
 import { SettingLinkChatCard } from "./SettingLinkChatCard";
 import { SkillSuggestionChatCard, skillSuggestionOutcome } from "./SkillSuggestionChatCard";
 import { PENDING_SEND_ID_PREFIX, pendingSendRetrySafe } from "./stores/pending-send-store";
@@ -636,10 +635,6 @@ export function ConversationTimeline() {
       ? (provider: AgentProviderId) => void signIn(provider)
       : undefined;
   };
-  const serverInstallCard = (marker: ChatActionMarkerModel) => {
-    const watch = props.serverInstall;
-    return marker.kind === "server-install" && watch ? { marker, watch } : undefined;
-  };
   const virtualMessageRows = createMemo(() => messageVirtualizer.getVirtualItems());
   let timelineScrollElement: HTMLDivElement | undefined;
   const subagentDock = createSubagentDock({
@@ -1058,58 +1053,44 @@ export function ConversationTimeline() {
                                                 when={webhookRoutineCard(message() ?? initialMessage, marker())}
                                                 fallback={
                                                   <Show
-                                                    when={serverInstallCard(marker())}
+                                                    when={settingLinkMarker(marker())}
                                                     fallback={
-                                                      <Show
-                                                        when={settingLinkMarker(marker())}
-                                                        fallback={
-                                                          <ChatActionMarker
-                                                            onOpenSkill={changeMarkerActions.onOpenSkill}
-                                                            marker={marker()}
-                                                            agents={props.agents}
-                                                            announce={arrives}
-                                                            routineAvailable={routineMarkerAvailable(
-                                                              marker(),
-                                                              availableRoutineIds(),
-                                                            )}
-                                                            onSelectAgent={props.onSelectAgent}
-                                                            onOpenRoutine={openRoutineSettings}
-                                                            openRoutineThread={openRoutineThread}
-                                                            routineRunFailure={routineRunFailure}
-                                                            onOpenHostedSite={(url) => void openExternalMessageUrl(url)}
-                                                            onOpenLink={(url) => void openExternalMessageUrl(url)}
-                                                            onWithdrawFeedback={withdrawFeedback()}
-                                                            onRequestFeedbackChange={requestFeedbackChange()}
-                                                            onToggleRoutineRun={toggleRoutineRun}
-                                                            onToggleAgentMessage={toggleAgentMessage}
-                                                            agentMessageText={agentMessageText}
-                                                            instructions={changeMarkerActions.instructions}
-                                                            onOpenInstructions={changeMarkerActions.onOpenInstructions}
-                                                            onSignInProvider={signInAction(message())}
-                                                          />
-                                                        }
-                                                      >
-                                                        {(link) => (
-                                                          <SettingLinkChatCard
-                                                            settingId={link().settingId}
-                                                            agent={
-                                                              channel || !props.agent
-                                                                ? null
-                                                                : { id: props.agent.id, name: props.agent.name }
-                                                            }
-                                                            onOpenAgentSetting={openAgentSettingRow}
-                                                            appSettingOpener={props.appSettingOpener}
-                                                          />
+                                                      <ChatActionMarker
+                                                        onOpenSkill={changeMarkerActions.onOpenSkill}
+                                                        marker={marker()}
+                                                        agents={props.agents}
+                                                        announce={arrives}
+                                                        routineAvailable={routineMarkerAvailable(
+                                                          marker(),
+                                                          availableRoutineIds(),
                                                         )}
-                                                      </Show>
+                                                        onSelectAgent={props.onSelectAgent}
+                                                        onOpenRoutine={openRoutineSettings}
+                                                        openRoutineThread={openRoutineThread}
+                                                        routineRunFailure={routineRunFailure}
+                                                        onOpenHostedSite={(url) => void openExternalMessageUrl(url)}
+                                                        onOpenLink={(url) => void openExternalMessageUrl(url)}
+                                                        onWithdrawFeedback={withdrawFeedback()}
+                                                        onRequestFeedbackChange={requestFeedbackChange()}
+                                                        onToggleRoutineRun={toggleRoutineRun}
+                                                        onToggleAgentMessage={toggleAgentMessage}
+                                                        agentMessageText={agentMessageText}
+                                                        instructions={changeMarkerActions.instructions}
+                                                        onOpenInstructions={changeMarkerActions.onOpenInstructions}
+                                                        onSignInProvider={signInAction(message())}
+                                                      />
                                                     }
                                                   >
-                                                    {(card) => (
-                                                      <ServerInstallChatCard
-                                                        messageId={message()?.id ?? initialMessage.id}
-                                                        name={card().marker.name}
-                                                        expiresAt={card().marker.expiresAt}
-                                                        watch={card().watch}
+                                                    {(link) => (
+                                                      <SettingLinkChatCard
+                                                        settingId={link().settingId}
+                                                        agent={
+                                                          channel || !props.agent
+                                                            ? null
+                                                            : { id: props.agent.id, name: props.agent.name }
+                                                        }
+                                                        onOpenAgentSetting={openAgentSettingRow}
+                                                        appSettingOpener={props.appSettingOpener}
                                                       />
                                                     )}
                                                   </Show>

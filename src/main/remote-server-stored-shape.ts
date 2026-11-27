@@ -1,4 +1,3 @@
-import { type CustomServerPlan, optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
 import type { ServerNotificationLevel, TeamRole } from "@codebot/contracts/ipc";
 import { LOCAL_SERVER_ID, SERVER_NOTIFICATION_LEVELS } from "@codebot/contracts/ipc";
 import {
@@ -33,7 +32,6 @@ export interface StoredRemoteServer {
   restartAvailable?: boolean;
   storageGb?: number;
   paymentRequired?: true;
-  customPlan?: CustomServerPlan;
 }
 
 interface PreservedRemoteServer {
@@ -203,7 +201,6 @@ function readStoredRemoteServer(value: unknown): StoredRemoteServer | null {
     ...(isBoolean(value.hosted) ? { hosted: value.hosted } : {}),
     ...(isBoolean(value.restartAvailable) ? { restartAvailable: value.restartAvailable } : {}),
     ...(isPositiveInteger(value.storageGb) ? { storageGb: value.storageGb } : {}),
-    ...optionalCustomServerPayment(value),
     ...optionalServerAppearanceField(value.appearance),
   };
 }

@@ -45,9 +45,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "이제 GitHub에서 누구도 이 보고서를 볼 수 없어요. 되돌릴 수 없어요. 고치려면 에이전트가 수정한 보고서를 보낼 수 있어요.",
   "status.agent.feedbackWithdrawing": "GitHub에서 보고서를 삭제하는 중…",
-  "status.agent.serverInstallCommand":
-    "다른 컴퓨터에 CodeBot을 서버 {name}(으)로 설치하고 계정에 로그인하는 일회용 명령을 만듭니다. 에이전트가 그곳에서 실행합니다.",
-  "status.agent.serverInstallCard": "서버 {name}의 설치 명령",
   "status.agent.browserProfileNamed":
     "{agents}을(를) 브라우저 프로필 {profile}(으)로 옮깁니다. 그 프로필의 로그인 정보와 쿠키를 사용하게 됩니다. 열린 탭은 닫힙니다.",
   "status.agent.commitCoAuthorOff": "모든 에이전트의 커밋에 CodeBot을 공동 작성자로 추가하지 않습니다.",

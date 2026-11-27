@@ -45,9 +45,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Этот отчёт больше никто не увидит на GitHub. Это нельзя отменить. Чтобы исправить отчёт, агент может отправить исправленный.",
   "status.agent.feedbackWithdrawing": "Удаление отчёта с GitHub…",
-  "status.agent.serverInstallCommand":
-    "Создать одноразовую команду, которая устанавливает CodeBot на другой компьютер как сервер {name} и подключает его к вашему аккаунту. Агент запускает её там.",
-  "status.agent.serverInstallCard": "Команда установки для сервера {name}",
   "status.agent.browserProfileNamed":
     "Перенести {agents} в профиль браузера {profile}. Они получат его входы в аккаунты и файлы cookie. Их открытые вкладки закроются.",
   "status.agent.commitCoAuthorOff": "Больше не добавлять CodeBot как соавтора в коммиты всех агентов.",

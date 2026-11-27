@@ -40,6 +40,7 @@
     "./conversation-read": "./src/conversation-read.ts",
     "./custom-server-plans": "./src/custom-server-plans.ts",
     "./hosted-servers": "./src/hosted-servers.ts",
+    "./server-name": "./src/server-name.ts",
     "./hosted-sites": "./src/hosted-sites.ts",
     "./host-grant": "./src/host-grant.ts",
     "./host-key-handover": "./src/host-key-handover.ts",

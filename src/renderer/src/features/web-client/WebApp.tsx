@@ -1,6 +1,5 @@
 import { agentTemplateIdFromWebAppSearch, WEB_APP_AGENT_TEMPLATE_PARAM } from "@codebot/contracts/agent-template-links";
 import { companySignInErrorKey, WEB_APP_COMPANY_SIGN_IN_ERROR_PARAM } from "@codebot/contracts/company-sign-in";
-import { type FirstTouch, readFirstTouch } from "@codebot/contracts/first-touch";
 import { inviteUrlFromWebAppSearch, WEB_APP_INVITE_FIELDS } from "@codebot/contracts/invite-links";
 import { type AppVariant, type CentralAuthState, type CentralAuthUser, isAvatarColor } from "@codebot/contracts/ipc";
 import {
@@ -248,10 +247,7 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
   const accountCalls = createWebAccountCalls(accountFetch, checkSession);
   async function request(
     path: string,
-    body?:
-      | { email: string }
-      | { challengeId: string | null; code: string; firstTouch?: FirstTouch }
-      | Record<string, never>,
+    body?: { email: string } | { challengeId: string | null; code: string } | Record<string, never>,
     send?: { idempotencyKey?: string; signal: AbortSignal },
   ) {
     const response = await accountFetch(`/api/browser/${path}`, {
@@ -479,11 +475,9 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
     });
   }
   async function verify(challengeId: string, code: string) {
-    const firstTouch = readFirstTouch(() => window.localStorage, Date.now());
     const value = await signInRequest("email/verify", {
       challengeId,
       code,
-      ...(firstTouch ? { firstTouch } : {}),
     });
     if (value === null) return;
     const account = accountFrom(value);

@@ -45,9 +45,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "لن يتمكن أحد من رؤية هذا البلاغ على GitHub بعد الآن. لا يمكنك التراجع عن ذلك. لتصحيحه، يمكن للوكيل إرسال بلاغ مصحَّح.",
   "status.agent.feedbackWithdrawing": "جارٍ إزالة بلاغك من GitHub…",
-  "status.agent.serverInstallCommand":
-    "إنشاء أمر لمرة واحدة يثبّت CodeBot على كمبيوتر آخر كالخادم {name} ويسجّل دخوله إلى حسابك. يشغّله الوكيل هناك.",
-  "status.agent.serverInstallCard": "أمر التثبيت للخادم {name}",
   "status.agent.browserProfileNamed":
     "انقل {agents} إلى ملف تعريف المتصفح {profile}. يحصلون على تسجيلات الدخول وملفات تعريف الارتباط الخاصة به. تُغلق علاماتهم المفتوحة.",
   "status.agent.commitCoAuthorOff": "إيقاف إضافة CodeBot كمؤلف مشارك في إيداعات جميع الوكلاء.",

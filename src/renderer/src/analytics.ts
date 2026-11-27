@@ -1,14 +1,5 @@
 import { isKeyOnlyProvider } from "@codebot/contracts/agent-providers";
 import {
-  BILLING_CURRENCIES,
-  BILLING_INTERVALS,
-  BILLING_PLAN_IDS,
-  type BillingCurrency,
-  type BillingInterval,
-  type BillingPlanId,
-} from "@codebot/contracts/billing";
-import { HOSTED_SERVER_ENTRY_POINTS, type HostedServerEntryPoint } from "@codebot/contracts/hosted-servers";
-import {
   AGENT_PROVIDERS,
   AGENT_REASONING_EFFORTS,
   type AgentModelId,
@@ -51,9 +42,6 @@ interface AgentAnalyticsProperties {
   reasoning_effort: AgentReasoningEffort;
   server_kind: ServerKind;
 }
-
-const CREDITS_CARD_ACTIONS = ["buy", "enable", "continue", "skip", "mute", "unmute", "allow", "set_default"] as const;
-type CreditsCardAnalyticsAction = (typeof CREDITS_CARD_ACTIONS)[number];
 
 const WORKFLOW_ACTIONS = [
   "create",
@@ -112,15 +100,6 @@ interface DesktopAnalyticsEvents {
   };
   queue_action: {
     action: "cancel" | "steer" | "send_now" | "edit" | "reorder" | "interrupt";
-    result: AnalyticsResult;
-    failure_code?: string;
-  };
-  credits_card_action: {
-    card: "hold" | "approval";
-    action: CreditsCardAnalyticsAction;
-    server_kind: "local" | "remote" | "unknown";
-    media_kind?: "image" | "video";
-    still_short?: boolean;
     result: AnalyticsResult;
     failure_code?: string;
   };
@@ -269,54 +248,11 @@ interface DesktopAnalyticsEvents {
     result: AnalyticsResult;
     failure_code?: string;
   };
-  hosted_site_action: {
-    action: "publish" | "replace" | "delete";
-    entry_point: "agent" | "settings";
-    result: AnalyticsResult;
-    failure_code?: string;
-  };
-  hosted_server_upsell: {
-    action: "shown" | "see_plans" | "dismissed";
-    entry_point: "routine_created" | "routines_list" | "server_offline";
-  };
-  hosted_server_plans_action: {
-    action:
-      | "viewed"
-      | "currency_changed"
-      | "interval_changed"
-      | "plan_selected"
-      | "create_failed"
-      | "payment_open_failed"
-      | "retried"
-      | "closed"
-      | "join_opened";
-    entry_point?: HostedServerEntryPoint;
-    plan?: BillingPlanId;
-    interval?: BillingInterval;
-    currency?: BillingCurrency;
-    failure_code?: string;
-  };
   limit_reached: {
-    kind: "servers" | "members" | "license_users";
+    kind: "servers" | "members";
     action: "shown" | "manage_clicked" | "confirmed" | "dismissed" | "contact_clicked";
     role?: "admin" | "member";
   };
-  license_action: {
-    action:
-      | "buy_opened"
-      | "checkout_opened"
-      | "users_change_requested"
-      | "plan_change_requested"
-      | "cancel_requested"
-      | "cancel_kept"
-      | "renewal_resumed"
-      | "over_limit_shown";
-    result?: AnalyticsOutcome;
-    direction?: "up" | "down";
-    failure_code?: string;
-  };
-  sales_contact_clicked: { entry_point: "add_server" | "license" | "members" };
-  billing_return_viewed: { outcome: "completed" | "cancelled"; kind?: "plan" | "license" | "portal" };
   usage_limit_action: {
     action: "shown" | "model_switched" | "waited";
     from_provider?: AgentProviderId;
@@ -342,14 +278,7 @@ interface DesktopAnalyticsEvents {
   };
   computer_use_action: { action: "permission_opened"; permission: "screen-recording" | "accessibility" };
   help_link_opened: {
-    destination:
-      | "discord"
-      | "feedback"
-      | "report-problem"
-      | "guides"
-      | "changelog"
-      | "credits-explainer"
-      | "credit-prices";
+    destination: "discord" | "feedback" | "report-problem" | "guides" | "changelog";
   };
   channel_action: {
     action: "created" | "archived" | "member_added";
@@ -416,7 +345,6 @@ const EVENT_PROPERTY_ALLOWLIST = {
   ],
   agent_input_action: ["kind", "decision", "result", "failure_code"],
   queue_action: ["action", "result", "failure_code"],
-  credits_card_action: ["card", "action", "server_kind", "media_kind", "still_short", "result", "failure_code"],
   routine_action: ["action", "trigger_type", "duration_ms", "result", "failure_code"],
   workflow_action: ["action", "node_kind", "duration_ms", "result", "failure_code"],
   team_action: ["action", "result", "server_kind", "role", "email_bound", "entry_point", "failure_code"],
@@ -451,13 +379,7 @@ const EVENT_PROPERTY_ALLOWLIST = {
   speech_model_action: ["action", "entry_point", "result", "duration_ms", "failure_code"],
   speech_settings_action: ["action", "result", "voice", "failure_code"],
   reaction_action: ["action", "result", "failure_code"],
-  hosted_site_action: ["action", "entry_point", "result", "failure_code"],
-  hosted_server_upsell: ["action", "entry_point"],
-  hosted_server_plans_action: ["action", "entry_point", "plan", "interval", "currency", "failure_code"],
   limit_reached: ["kind", "action", "role"],
-  license_action: ["action", "result", "direction", "failure_code"],
-  sales_contact_clicked: ["entry_point"],
-  billing_return_viewed: ["outcome", "kind"],
   usage_limit_action: ["action", "from_provider", "to_provider", "to_model"],
   agent_template_action: ["action", "result", "entry_point", "failure_code"],
   mobile_connect_action: ["action", "result", "failure_code"],
@@ -543,7 +465,6 @@ const SAFE_FAILURE_CODES = new Set([
   "update_failed",
   "webhook_route_limit",
   "verification_failed",
-  "hosted_site_failed",
   "cancelled",
   "interrupted",
   "mcp_server_test_failed",
@@ -551,9 +472,6 @@ const SAFE_FAILURE_CODES = new Set([
   "mcp_server_remove_failed",
   "mcp_server_toggle_failed",
   "member_limit_reached",
-  "license_users_full",
-  "payment_open_failed",
-  "checkout_failed",
   "export_failed",
   "import_failed",
   "copy_failed",
@@ -582,7 +500,6 @@ const EVENT_ACTIONS: Partial<Record<AnalyticsEventName, readonly string[]>> = {
   agent_action: ["create", "update", "delete", "duplicate", "branch"],
   agent_input_action: ["prompt", "approval"],
   queue_action: ["cancel", "steer", "send_now", "edit", "reorder", "interrupt"],
-  credits_card_action: CREDITS_CARD_ACTIONS,
   routine_action: ["create", "update", "delete", "test"],
   workflow_action: WORKFLOW_ACTIONS,
   team_action: [
@@ -627,30 +544,7 @@ const EVENT_ACTIONS: Partial<Record<AnalyticsEventName, readonly string[]>> = {
   speech_model_action: ["download"],
   speech_settings_action: ["read_replies_on", "read_replies_off", "voice_changed"],
   reaction_action: ["add", "remove"],
-  hosted_site_action: ["publish", "replace", "delete"],
-  hosted_server_upsell: ["shown", "see_plans", "dismissed"],
-  hosted_server_plans_action: [
-    "viewed",
-    "currency_changed",
-    "interval_changed",
-    "plan_selected",
-    "create_failed",
-    "payment_open_failed",
-    "retried",
-    "closed",
-    "join_opened",
-  ],
   limit_reached: ["shown", "manage_clicked", "confirmed", "dismissed", "contact_clicked"],
-  license_action: [
-    "buy_opened",
-    "checkout_opened",
-    "users_change_requested",
-    "plan_change_requested",
-    "cancel_requested",
-    "cancel_kept",
-    "renewal_resumed",
-    "over_limit_shown",
-  ],
   onboarding_step: ["viewed", "next", "back", "skipped"],
   usage_limit_action: ["shown", "model_switched", "waited"],
   agent_template_action: ["published", "updated", "unpublished", "link_copied", "installed"],
@@ -666,18 +560,12 @@ const EVENT_ENUMS: Partial<Record<AnalyticsEventName, Readonly<Record<string, re
   agent_input_action: { kind: ["prompt", "approval"] },
   search_action: { scope: ["global", "agent"] },
   team_action: { entry_point: ["in_app", "invite_deep_link"] },
-  hosted_site_action: { entry_point: ["agent", "settings"] },
-  hosted_server_upsell: { entry_point: ["routine_created", "routines_list", "server_offline"] },
   speech_model_action: { entry_point: ["settings", "voice_conversation"] },
   voice_conversation_action: { trigger: ["button", "voice"] },
-  hosted_server_plans_action: { entry_point: HOSTED_SERVER_ENTRY_POINTS },
-  limit_reached: { kind: ["servers", "members", "license_users"] },
-  sales_contact_clicked: { entry_point: ["add_server", "license", "members"] },
-  billing_return_viewed: { kind: ["plan", "license", "portal"] },
+  limit_reached: { kind: ["servers", "members"] },
   agent_template_action: { entry_point: ["deep_link", "in_app"] },
   usage_viewed: { scope: ["agent", "server"] },
   workflow_action: { node_kind: WORKFLOW_NODE_KINDS },
-  credits_card_action: { card: ["hold", "approval"], media_kind: ["image", "video"] },
 };
 
 const PROPERTY_ENUMS: Readonly<Record<string, readonly string[]>> = {
@@ -691,9 +579,6 @@ const PROPERTY_ENUMS: Readonly<Record<string, readonly string[]>> = {
   transcription: ["local", "cloud", "server"],
   trigger: ["voice_conversation", "dictation", "read_aloud"],
   voice: SPEECH_VOICES,
-  plan: BILLING_PLAN_IDS,
-  interval: BILLING_INTERVALS,
-  currency: BILLING_CURRENCIES,
   direction: ["up", "down"],
   outcome: ["completed", "cancelled"],
   step: ["existing", "choose", "plan", "computer", "language"],
@@ -701,7 +586,7 @@ const PROPERTY_ENUMS: Readonly<Record<string, readonly string[]>> = {
   connector: ["slack", "discord", "telegram", "whatsapp", "github", "onepassword", "bitwarden", "protonpass"],
   permission: ["screen-recording", "accessibility"],
   method: ["browser", "code", "api_key"],
-  destination: ["discord", "feedback", "report-problem", "guides", "changelog", "credits-explainer", "credit-prices"],
+  destination: ["discord", "feedback", "report-problem", "guides", "changelog"],
   range: ["7d", "30d", "90d", "1y"],
   from_provider: AGENT_PROVIDERS,
   to_provider: AGENT_PROVIDERS,

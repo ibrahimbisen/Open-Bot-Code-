@@ -1,4 +1,3 @@
-import { parseHostedServerName } from "@codebot/contracts/hosted-servers";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AvatarImageInput,
@@ -10,6 +9,7 @@ import type {
   TeamPresenceMember,
   UpdateTeamMemberInput,
 } from "@codebot/contracts/ipc";
+import { parseServerName } from "@codebot/contracts/server-name";
 import { currentText } from "@codebot/ui/text";
 import { createEffect, createMemo, createSignal, flush, onCleanup } from "solid-js";
 import { desktopAnalytics } from "../../analytics";
@@ -34,7 +34,7 @@ function generatedServerName(user: CentralAuthUser | null): string {
   let name = t("server.settings.generatedName", { name: person });
   for (let length = characters.length - 1; name.length > INPUT_LIMITS.serverName && length > 0; length--)
     name = t("server.settings.generatedName", { name: characters.slice(0, length).join("") });
-  return parseHostedServerName(name) ?? FALLBACK_SERVER_NAME;
+  return parseServerName(name) ?? FALLBACK_SERVER_NAME;
 }
 
 const ServerSettings = createSimpleContext({

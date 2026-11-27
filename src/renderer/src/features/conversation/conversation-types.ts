@@ -50,7 +50,6 @@ import type { ConnectorRegistry } from "../connectors/connector-registry";
 import type { AppSettingLinkId } from "../settings/setting-link-targets";
 import type { ChannelReplyView } from "../speech/speech-replies";
 import type { ConversationRuntime } from "./conversation-runtime";
-import type { ServerInstallWatch } from "./ServerInstallChatCard";
 import type { TurnStepLines } from "./turn-step-lines";
 
 export interface AgentSettingsRequest {
@@ -116,7 +115,6 @@ export interface ConversationProps {
   onOpenMcpSignIn?: ((mcpServerId: string, trigger: HTMLElement | null) => void) | undefined;
   mcpSignedIn?: ((mcpServerId: string) => boolean) | undefined;
   refreshMcpSignIns?: (() => void) | undefined;
-  serverInstall?: ServerInstallWatch | undefined;
   platform?: import("@codebot/contracts/ipc").AppInfo["platform"] | undefined;
 
   agentStatus: AgentStatus;

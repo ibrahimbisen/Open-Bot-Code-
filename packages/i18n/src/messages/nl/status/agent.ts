@@ -50,9 +50,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Niemand kan deze melding nog op GitHub zien. Je kunt dit niet ongedaan maken. Om de melding te verbeteren, kan de agent een verbeterde melding sturen.",
   "status.agent.feedbackWithdrawing": "Je melding wordt van GitHub verwijderd…",
-  "status.agent.serverInstallCommand":
-    "Een eenmalige opdracht maken die CodeBot op een andere computer installeert als de server {name} en die aanmeldt bij je account. De agent voert hem daar uit.",
-  "status.agent.serverInstallCard": "Installatieopdracht voor de server {name}",
   "status.agent.browserProfileNamed":
     "Verplaats {agents} naar het browserprofiel {profile}. Ze krijgen de aanmeldingen en cookies ervan. Hun open tabbladen sluiten.",
   "status.agent.commitCoAuthorOff": "Stop met CodeBot als co-auteur toevoegen aan de commits van alle agenten.",

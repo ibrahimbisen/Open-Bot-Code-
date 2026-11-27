@@ -1,4 +1,3 @@
-import { optionalCustomServerPayment } from "@codebot/contracts/custom-server-plans";
 import { isBoolean, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { optionalServerAppearanceField } from "@codebot/contracts/team-protocol/host-appearance-v1";
 import type { RemoteTeamHost } from "@codebot/team-client/remote-directory";
@@ -31,13 +30,10 @@ function decodeHost(value: unknown): RemoteTeamHost | null {
     membershipId,
     role,
     ...optionalServerAppearanceField(value.appearance),
-    ...optionalCustomServerPayment(value),
   };
   if (isNumber(value.memberLimit)) host.memberLimit = value.memberLimit;
   if (isBoolean(value.licenseRaisesMemberLimit)) host.licenseRaisesMemberLimit = value.licenseRaisesMemberLimit;
-  if (isBoolean(value.hosted)) host.hosted = value.hosted;
   if (isBoolean(value.restartAvailable)) host.restartAvailable = value.restartAvailable;
-  if (isNumber(value.storageGb)) host.storageGb = value.storageGb;
   if (isNumber(value.keyChangedAt)) host.keyChangedAt = value.keyChangedAt;
   return host;
 }

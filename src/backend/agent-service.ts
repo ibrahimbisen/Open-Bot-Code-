@@ -217,7 +217,6 @@ import type { ClientBrowser } from "./agent/client-browser-tools";
 import {
   type AgentFeedback,
   type AgentMessageSteer,
-  type AgentServerClaims,
   CodeBotToolRouter,
   type McpServerOwnerHooks,
 } from "./agent/codebot-tool-router";
@@ -451,7 +450,6 @@ export interface AgentServiceOptions {
   passwordManagerConnected?: (manager: PasswordManagerId) => boolean;
   feedbackFacts?: FeedbackFacts | null;
   feedback?: AgentFeedback | null;
-  serverClaims?: AgentServerClaims | null;
   browserProfiles?: (() => AgentBrowserProfiles | null) | undefined;
   clientBrowser?: ClientBrowser | null;
   crm?: (() => CrmHandle | null) | undefined;
@@ -2145,7 +2143,6 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       feedbackFacts: options.feedbackFacts ?? null,
       feedback: options.feedback ?? null,
       feedbackWithdrawal: this.#feedbackWithdrawal,
-      serverClaims: options.serverClaims ?? null,
       ...(options.browserProfiles === undefined ? {} : { browserProfiles: options.browserProfiles }),
       ...(options.clientBrowser === undefined ? {} : { clientBrowser: options.clientBrowser }),
       fromChrome: (deliveryId) => this.#fromChrome.has(deliveryId),

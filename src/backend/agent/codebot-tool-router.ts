@@ -31,12 +31,6 @@ import {
   type SimilarFeedbackIssue,
   withFeedbackPhone,
 } from "@codebot/contracts/feedback";
-import {
-  installServerCommand,
-  parseHostedServerName,
-  type ServerClaim,
-  serverInstallItemType,
-} from "@codebot/contracts/hosted-servers";
 import { ATTACHMENT_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import type {
   AgentApproval,
@@ -111,7 +105,6 @@ import {
   routineReportFailureToolSchema,
   saveApiKeyToolSchema,
   sendToChannelToolSchema,
-  serverInstallCommandToolSchema,
   setBackdropToolSchema,
   webSearchToolSchema,
 } from "../codebot-tools";
@@ -372,11 +365,6 @@ export interface McpServerOwnerHooks {
   removed(mcpServerId: string): Effect.Effect<void, { readonly cause: unknown }>;
 }
 
-export interface AgentServerClaims {
-  signedIn(): boolean;
-  create(): Effect.Effect<ServerClaim, ToolOperationFailed>;
-}
-
 const FEEDBACK_SIGNED_OUT_NEXT =
   "The user is not signed in to CodeBot, so CodeBot did not send it. Give the user this link to the same text on GitHub, to check and submit, or ask them to sign in and try again.";
 const FEEDBACK_PHONE_FORM_NEXT =
@@ -515,7 +503,6 @@ export interface CodeBotToolRouterOptions {
   feedbackFacts?: FeedbackFacts | null | undefined;
   feedback?: AgentFeedback | null | undefined;
   feedbackWithdrawal?: FeedbackWithdrawal | undefined;
-  serverClaims?: AgentServerClaims | null | undefined;
   browserProfiles?: (() => AgentBrowserProfiles | null) | undefined;
   crm?: (() => CrmHandle | null) | undefined;
   crmAgentVisibleToMembers?: ((agentId: string) => boolean) | undefined;
@@ -574,7 +561,6 @@ export class CodeBotToolRouter {
   readonly #toolFailures = new Map<string, { at: number; text: string }[]>();
   readonly #feedbackSearched = new Set<string>();
   readonly #routineRunTurns = new Map<string, RoutineRunTurn>();
-  readonly #serverClaims: AgentServerClaims | null;
   readonly #browserProfiles: () => AgentBrowserProfiles | null;
   readonly #crm: () => CrmHandle | null;
   readonly #crmAgentVisibleToMembers: (agentId: string) => boolean;
@@ -641,7 +627,6 @@ export class CodeBotToolRouter {
     this.#feedbackFacts = options.feedbackFacts ?? null;
     this.#feedback = options.feedback ?? null;
     this.#feedbackWithdrawal = options.feedbackWithdrawal ?? null;
-    this.#serverClaims = options.serverClaims ?? null;
     this.#browserProfiles = options.browserProfiles ?? (() => null);
     this.#crm = options.crm ?? (() => null);
     this.#crmAgentVisibleToMembers = options.crmAgentVisibleToMembers ?? (() => true);
@@ -1026,8 +1011,7 @@ export class CodeBotToolRouter {
               tool === "organize_library" ||
               tool === "send_message" ||
               tool === "messaging_post" ||
-              tool === "web_search" ||
-              tool === "create_server_install_command";
+              tool === "web_search";
             const correctable = (cause: unknown) =>
               correctableTool ||
               ((WORKFLOW_TOOL_NAMES.has(tool) || CRM_TOOL_NAMES.has(tool)) && cause instanceof z.ZodError);
@@ -1679,85 +1663,6 @@ export class CodeBotToolRouter {
       { ownerOnly: true },
     );
   }
-
-  readonly #serverInstallCommand = Effect.fn("CodeBotToolRouter.serverInstallCommand")(function* (
-    this: CodeBotToolRouter,
-    client: AgentClient,
-    request: AppServerRequest,
-    params: DynamicToolCallParams,
-    senderAgentId: string,
-  ): Effect.fn.Return<CodeBotToolResponse, ToolOperationFailed> {
-    const args = serverInstallCommandToolSchema.parse(params.arguments ?? {}, { reportInput: true });
-    const name = parseHostedServerName(args.name);
-    if (!name) return codeBotToolFailure("Use a server name of 6 to 32 characters, with letters or digits.");
-    const claims = this.#serverClaims;
-    if (!claims)
-      return codeBotToolFailure(
-        "This CodeBot cannot make install commands. Tell the user to open Add a server, Other options, in CodeBot on their computer.",
-      );
-    if (!this.#requestedByPerson(senderAgentId, params.turnId, params.threadId))
-      return codeBotToolFailure(
-        "Only a person's message, in your CodeBot chat or a thread they opened, can ask for an install command.",
-      );
-    if (!claims.signedIn())
-      return codeBotToolFailure(
-        "The user is not signed in to CodeBot, so CodeBot cannot make a command. Ask them to sign in, then try again.",
-      );
-    const threadId = this.#conversation.publicThreadId(senderAgentId, params.threadId);
-    const decision = yield* this.#attention.awaitToolApproval(
-      client,
-      request,
-      {
-        requestId: request.id,
-        agentId: senderAgentId,
-        threadId,
-        turnId: params.turnId,
-        kind: "permissions",
-        command: installServerCommand("<one-time code>", name),
-        cwd: null,
-        reason: sourceText("status.agent.serverInstallCommand", { name }),
-        grantRoot: null,
-        permissions: null,
-      },
-      { ownerOnly: true },
-    );
-    if (decision === "cancel")
-      return codeBotToolResult({
-        status: "cancelled",
-        next: "Nobody answered the card, so CodeBot made no command. Do not install CodeBot another way.",
-      });
-    if (decision !== "accept")
-      return codeBotToolResult({
-        status: "declined",
-        next: "The user selected Not now. Do not install CodeBot another way, and do not ask again for this server.",
-      });
-    const created = yield* Effect.result(claims.create());
-    if (Result.isFailure(created)) {
-      logger.warn("A server claim could not be made.", { error: toLogValue(created.failure.cause) });
-      return codeBotToolFailure(
-        "CodeBot could not make a command. Tell the user to check that they are signed in to CodeBot and online, then try again.",
-      );
-    }
-    const claim = created.success;
-    registerSecretValue(claim.claim);
-    const card = yield* Effect.result(
-      toolStep(() =>
-        this.#postSystemCard(senderAgentId, threadId, params.turnId, {
-          itemType: serverInstallItemType({ expiresAt: claim.expiresAt, name }),
-          text: sourceText("status.agent.serverInstallCard", { name }),
-          eventType: "server_install.command",
-          detail: {},
-        }),
-      ),
-    );
-    if (Result.isFailure(card))
-      logger.warn("The server install card could not be added.", { error: toLogValue(card.failure.cause) });
-    return codeBotToolResult({
-      command: installServerCommand(claim.claim, name),
-      expiresAt: new Date(claim.expiresAt).toISOString(),
-      next: 'Run the command on the server over SSH, as one command, and wait for it to end. Send it to the shell of the server on standard input (for example `ssh <user@host> bash -s` with the command as input), not as an argument of ssh: other users of the server can see arguments. Do not show the command to the user or save it: it works once and signs a computer in to the user\'s account. When it ends with "CodeBot is connected to your account.", tell the user in one short sentence that the server is installed; the card in the chat shows when it connects. When it fails, show the user the last lines of the output without the command. A new command needs this tool again.',
-    });
-  });
 
   #agentBrowserProfile(agent: AgentSummary) {
     const profiles = this.#browserProfiles()?.list().profiles;
@@ -2616,9 +2521,6 @@ export class CodeBotToolRouter {
     if (params.tool === "send_feedback") return yield* this.#sendFeedback(client, request, params, senderAgentId);
     if (params.tool === "withdraw_feedback")
       return yield* this.#withdrawFeedback(client, request, params, senderAgentId);
-
-    if (params.tool === "create_server_install_command")
-      return yield* this.#serverInstallCommand(client, request, params, senderAgentId);
 
     if (params.tool === "set_browser_profile")
       return yield* handleSetBrowserProfileTool(params, {

@@ -50,9 +50,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Nessuno potrà più vedere questa segnalazione su GitHub. Non puoi annullare l’operazione. Per correggerla, l’agente può inviare una segnalazione corretta.",
   "status.agent.feedbackWithdrawing": "Rimozione della segnalazione da GitHub…",
-  "status.agent.serverInstallCommand":
-    "Crea un comando monouso che installa CodeBot su un altro computer come server {name} e lo collega al tuo account. L'agente lo esegue lì.",
-  "status.agent.serverInstallCard": "Comando di installazione per il server {name}",
   "status.agent.browserProfileNamed":
     "Sposta {agents} nel profilo del browser {profile}. Ricevono i suoi accessi e cookie. Le loro schede aperte si chiudono.",
   "status.agent.commitCoAuthorOff": "Non aggiungere più CodeBot come coautore nei commit di tutti gli agenti.",

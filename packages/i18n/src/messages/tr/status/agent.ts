@@ -45,9 +45,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "Bu raporu artık kimse GitHub'da göremez. Bu işlem geri alınamaz. Düzeltmek için ajan düzeltilmiş bir rapor gönderebilir.",
   "status.agent.feedbackWithdrawing": "Raporunuz GitHub'dan kaldırılıyor…",
-  "status.agent.serverInstallCommand":
-    "CodeBot'u başka bir bilgisayara {name} sunucusu olarak kuran ve hesabınızda oturum açan tek kullanımlık bir komut oluştur. Ajan onu orada çalıştırır.",
-  "status.agent.serverInstallCard": "{name} sunucusu için kurulum komutu",
   "status.agent.browserProfileNamed":
     "{agents} ajanlarını {profile} tarayıcı profiline taşı. Onun oturum açma bilgilerini ve çerezlerini alırlar. Açık sekmeleri kapanır.",
   "status.agent.commitCoAuthorOff": "Tüm ajanların commit'lerine CodeBot'u ortak yazar olarak eklemeyi durdur.",

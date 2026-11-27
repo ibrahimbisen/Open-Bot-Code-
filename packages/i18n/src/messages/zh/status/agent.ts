@@ -43,9 +43,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "任何人都无法再在 GitHub 上看到此报告。此操作无法撤销。如需修改，助手可以发送一份修正后的报告。",
   "status.agent.feedbackWithdrawing": "正在从 GitHub 删除你的报告…",
-  "status.agent.serverInstallCommand":
-    "创建一个一次性命令，在另一台计算机上把 CodeBot 安装为服务器 {name}，并登录到你的账户。代理会在那里运行它。",
-  "status.agent.serverInstallCard": "服务器 {name} 的安装命令",
   "status.agent.browserProfileNamed":
     "将 {agents} 移到浏览器配置文件 {profile}。它们会使用其中的登录信息和 Cookie。它们打开的标签页会关闭。",
   "status.agent.commitCoAuthorOff": "不再将 CodeBot 作为共同作者添加到所有智能体的提交中。",

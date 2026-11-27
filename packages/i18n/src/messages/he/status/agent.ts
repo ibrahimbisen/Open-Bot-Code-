@@ -44,9 +44,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "אף אחד לא יוכל לראות את הדיווח הזה ב-GitHub. אי אפשר לבטל את הפעולה. כדי לתקן אותו, הסוכן יכול לשלוח דיווח מתוקן.",
   "status.agent.feedbackWithdrawing": "מסיר את הדיווח שלך מ-GitHub…",
-  "status.agent.serverInstallCommand":
-    "ליצור פקודה חד־פעמית שמתקינה את CodeBot במחשב אחר כשרת {name} ומחברת אותו לחשבון שלך. הסוכן מריץ אותה שם.",
-  "status.agent.serverInstallCard": "פקודת התקנה לשרת {name}",
   "status.agent.browserProfileNamed":
     "העבר את {agents} לפרופיל הדפדפן {profile}. הם יקבלו את ההתחברויות והעוגיות שלו. הכרטיסיות הפתוחות שלהם ייסגרו.",
   "status.agent.commitCoAuthorOff": "להפסיק להוסיף את CodeBot כמחבר שותף בקומיטים של כל הסוכנים.",

@@ -47,9 +47,6 @@ export const messages = {
   "status.agent.feedbackWithdrawReason":
     "このレポートは GitHub で誰も見られなくなります。元に戻せません。修正するには、エージェントが修正したレポートを送信できます。",
   "status.agent.feedbackWithdrawing": "レポートを GitHub から削除しています…",
-  "status.agent.serverInstallCommand":
-    "別のコンピューターに CodeBot をサーバー {name} としてインストールし、あなたのアカウントにサインインさせる 1 回限りのコマンドを作成します。エージェントがそこで実行します。",
-  "status.agent.serverInstallCard": "サーバー {name} のインストールコマンド",
   "status.agent.browserProfileNamed":
     "{agents} をブラウザープロファイル {profile} に移動します。そのログイン情報と Cookie を使えるようになります。開いているタブは閉じます。",
   "status.agent.commitCoAuthorOff": "すべてのエージェントのコミットに CodeBot を共同作成者として追加するのをやめます。",
