@@ -67,6 +67,11 @@ a decision here fills a gap in the PRD or selects one of several possible design
   data folders. The display rename is one pass after the work packages merge, so build agents keep
   writing "CodeBot" until then. `check:branding` must then allow the exact visible name and still
   fail on upstream server references.
+- **D19. Keep the OpenBot look.** The owner decided on 2026-11-26 that the app keeps the OpenBot
+  look: the same layout, spacing, fonts, components and current dark theme as the default. New
+  features use the existing `@codebot/ui` primitives and `--codebot-*` tokens and look like they
+  belong to OpenBot. The new themes (16.2, 16.3) are extra choices, not a redesign. Do not restyle
+  existing screens.
 
 ## Work packages
 
