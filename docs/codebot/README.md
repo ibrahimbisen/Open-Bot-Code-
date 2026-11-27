@@ -14,3 +14,23 @@ the engine that CodeBot keeps.
 | [unsigned-builds.md](unsigned-builds.md) | How to open unsigned builds on macOS and Windows |
 | [server-mode.md](server-mode.md) | Phase 2: the engine on a home server, the switch, setup and proof |
 | [windows-test-status.md](windows-test-status.md) | Result of each check and offline test suite on Windows |
+| [user-guide.md](user-guide.md) | How to use CodeBot: projects, chats, panels, replies, commands, folder lock, themes |
+| [home-server.md](home-server.md) | Home server: update server, Nextcloud login, account service, Signal and TURN |
+| [account-service.md](account-service.md) | Account service, Nextcloud, Signal and TURN in detail |
+| [folder-lock.md](folder-lock.md), [themes.md](themes.md), [local-models.md](local-models.md) | Design notes of these parts |
+| [engine-reference.md](engine-reference.md) | Long text of the upstream README: provider setup, data folders, attachments |
+
+## License and attribution (PRD 3.5)
+
+CodeBot is a fork of OpenBot by Synthetify Labs. OpenBot is licensed under the PolyForm Noncommercial
+License 1.0.0, and CodeBot keeps that license. These three parts stay in the repository, in the
+installer and in every copy that someone gets:
+
+- `LICENSE`: the license text.
+- `NOTICE`: the OpenBot copyright line, the notices of third-party parts, and the contact for a
+  commercial license.
+- The copyright line in `electron-builder.yml`.
+
+Do not remove or shorten them. The rename script keeps `LICENSE` and `NOTICE` as they are (decision
+D3), and `check:branding` skips both files. CodeBot is for internal use only (PRD 1.3), so it does not
+need a commercial license. Do not sell it and do not use it for commercial work.

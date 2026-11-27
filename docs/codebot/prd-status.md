@@ -14,7 +14,7 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | --- | --- | --- | --- | --- |
 | 1.1 | Fork of OpenBot | W00 | done | `git log`: `main` starts from upstream `100c60e89` (tag `openbot-baseline`); the download was the same tree |
 | 1.2 | Desktop app for macOS, Windows, Linux | all | todo | |
-| 1.3 | Internal use only, no sale | W19 | todo | |
+| 1.3 | Internal use only, no sale | W19 | done | `README.md` intro and "License and attribution" |
 | 1.4 | Many projects at once, short replies, clean screen, agents stay in folder | all | info | |
 | 1.5 | Phase 1 runs on each user's computer | all | todo | |
 | 1.6 | Phase 2 needs no screen changes | W07, W12, W17 | todo | |
@@ -39,7 +39,7 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | 3.2 | Product name CodeBot in all user-facing text | W00 | in progress | Mechanical rename `3377172d0` (73,264 replacements, 154 paths). New icon set and logo from `scripts/codebot/generate-brand-icons.ts` (files in `build/`). Open: mobile icons (W18), and the lines that `bun run check:branding` lists |
 | 3.3 | CodeBot bundle ID and app ID, side-by-side install | W00 | in progress | `electron-builder.yml`: `appId: app.codebot.desktop`, scheme `codebot`. Open: install test of a packaged build |
 | 3.4 | Data folder ~/CodeBot, userData CodeBot | W00 | in progress | Rename `3377172d0` (`src/backend/agent-store.ts`, `src/main/index.ts`). Open: a run that shows the folders |
-| 3.5 | Keep copyright notice, LICENSE, NOTICE | W00 | done | `git diff openbot-baseline main -- LICENSE NOTICE` is empty; `electron-builder.yml` keeps the copyright line |
+| 3.5 | Keep copyright notice, LICENSE, NOTICE | W00 | done | `git diff openbot-baseline main -- LICENSE NOTICE` is empty; `electron-builder.yml` keeps the copyright line. `README.md` and `docs/codebot/README.md` explain it |
 | 3.6 | Remove analytics and telemetry | W02 | todo | |
 | 3.7 | Remove calls to OpenBot cloud services | W02, W03, W04 | todo | |
 
@@ -163,7 +163,7 @@ Work packages (column W) are described in [decisions.md](decisions.md#work-packa
 | 12.5 | Check at start and every hour | W06 | todo | |
 | 12.6 | Background download, "Restart to update", auto-restart when idle option | W06 | todo | |
 | 12.7 | Keep provider CLI auto-update | W06 | todo | |
-| 12.8 | Signing optional; document unsigned builds | W06, W19 | todo | |
+| 12.8 | Signing optional; document unsigned builds | W06, W19 | done | `docs/codebot/unsigned-builds.md` (Windows, macOS, Linux steps), linked from `README.md`, `home-server.md` and `user-guide.md`. Steps were read against `electron-builder.yml`; not tried on a real unsigned installer |
 
 ## 13. Usage and status bar
 
