@@ -3,6 +3,8 @@ import { join } from "node:path";
 
 export type FakeCodexCorpus = "words" | "markdown";
 
+export const FAKE_CODEX_MODEL = "gpt-5.5";
+
 export interface FakeCodexOptions {
   deltaMs: number;
   deltas: number;
