@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import {
@@ -24,6 +24,8 @@ import {
 } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-empty-turn-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-empty-turn-"));
@@ -31,7 +33,7 @@ const userData = join(root, "user-data");
 const home = join(root, "home");
 const claudeConfig = join(home, ".claude");
 const projectsDir = join(claudeConfig, "projects", "stand-in");
-const claudeExecutable = join(root, "claude");
+const claudeExecutable = standInPath(join(root, "claude"));
 const logPath = join(root, "stand-in.jsonl");
 const CLAUDE_MODEL = defaultProviderModel("claude");
 const CLAUDE = agentProviderDescriptor("claude").displayName;
@@ -39,6 +41,7 @@ const NO_ANSWER = sourceText("error.provider.acpNoAnswer", { provider: CLAUDE })
 const NO_ANSWER_AFTER_STEPS = sourceText("error.provider.noAnswerAfterSteps", { provider: CLAUDE });
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 process.env.CLAUDE_CONFIG_DIR = claudeConfig;
 mkdirSync(projectsDir, { recursive: true });
@@ -285,7 +288,7 @@ const prompts = (): string[] =>
         })
     : [];
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
 const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
@@ -406,7 +409,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   if (!report.passed) process.exitCode = 1;
 }

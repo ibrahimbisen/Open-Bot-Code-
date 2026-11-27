@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
@@ -8,6 +8,8 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients, type TurnResult } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-expired-token-e2e");
 const FAIL_LIMIT_MS = 20_000;
@@ -51,7 +53,7 @@ async function waitFor(label: string, check: () => boolean): Promise<void> {
 }
 
 try {
-  const executable = join(root, "agy", "1.5.4", "bin", "antigravity");
+  const executable = standInPath(join(root, "agy", "1.5.4", "bin", "antigravity"));
   const workspace = join(root, "workspace");
   const refused = join(root, "token-refused");
   const log = join(root, "requests.jsonl");
@@ -95,7 +97,7 @@ try {
   if (refusedPid && running(refusedPid)) process.kill(refusedPid);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);
 }

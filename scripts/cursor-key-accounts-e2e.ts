@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -15,6 +15,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 import { ProviderCredentialStore } from "../src/main/provider-credential-store";
 import { installFakeAgent, readJsonl } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/cursor-key-accounts-e2e");
 const GOOD_KEY = "key_e2e_good_5d1c0a97";
@@ -30,7 +32,7 @@ interface Start {
 
 const root = await mkdtemp(join(tmpdir(), "codebot-cursor-key-accounts-"));
 const log = join(root, "starts.jsonl");
-const executable = join(root, "cursor", "cursor-agent");
+const executable = standInPath(join(root, "cursor", "cursor-agent"));
 const credentialPath = join(root, "profile", "provider-credentials.json");
 delete process.env.CURSOR_API_KEY;
 delete process.env.CURSOR_AUTH_TOKEN;
@@ -352,6 +354,6 @@ try {
   database.close();
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${report.result === "pass" ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);

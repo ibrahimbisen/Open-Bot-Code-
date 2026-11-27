@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -7,6 +7,8 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import { getString, isRecord } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-thought-interleave-e2e");
 
@@ -47,7 +49,7 @@ async function turnItems(client: AgentClient, thread: string, text: string): Pro
 try {
   const workspace = join(root, "workspace");
   await mkdir(workspace);
-  const executable = join(root, "opencode", "bin", "opencode");
+  const executable = standInPath(join(root, "opencode", "bin", "opencode"));
   await installFakeAgent(executable, "opencode-thought-interleave");
   const cli: AgentCliInfo = { executable, version: "2.1.4", source: "managed" };
   const client = requireProviderDriver("opencode").createClient(cli, 10_000, NO_PROVIDER_CREDENTIALS);
@@ -79,6 +81,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`PASS opencode-thought-interleave-e2e: ${join(OUT, "report.json")}\n`);

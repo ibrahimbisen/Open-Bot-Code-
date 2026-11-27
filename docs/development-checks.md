@@ -218,7 +218,12 @@ needs it.
 dependencies, unresolved imports and unlisted binaries in every workspace. It takes about 6 seconds. `knip.config.ts` names the entry
 points that knip cannot find by itself: the Metro shims and stylesheet, and every command in
 `scripts/`. Its electron-vite and wrangler plugins find the electron-vite inputs, the modules that
-the renderer HTML pages load, and the Worker entries. Each ignore entry states its reason.
+the renderer HTML pages load, and the Worker entries. On Windows, the electron-vite plugin of knip
+6.42.1 does not find the modules of the HTML pages: it reads the folder of a page with
+`path.posix.dirname`, which gives `.` for a path with backslashes. For this reason `knip.config.ts`
+reads the `<script src>` of each `src/renderer/*.html` file and gives these modules to the plugin as
+its entries, so the result is the same on Windows, macOS and Linux. An HTML file in `src/renderer`
+is thus a page for knip: delete the file when you remove a page. Each ignore entry states its reason.
 Stylesheets go through a small compiler so that `@import "<package>"` counts as a use. The frozen
 Team API protocol files (`packages/contracts/src/team-protocol/v*.ts` and `*-v*.ts`) are exempt
 from the export checks: a released codec keeps its full API. When knip names an unused export,
@@ -400,7 +405,10 @@ baseline. Do not name the script `typecheck:*`:
 counts in `tools/agent-context/budget.json`. It uses the same rules as the type debt ratchet
 (`scripts/debt-ratchet.ts`): more bytes fail, and fewer bytes fail until `--write` lowers the
 baseline. A raise is a hand edit that a reviewer sees. The fixture agent has no memories, teammates,
-skills, or connected vault, so the counts measure only CodeBot's own text:
+skills, or connected vault, so the counts measure only CodeBot's own text. The fixture also sets the
+`platform` option of `developerInstructions()` to `linux`, so the counts are the same on Windows,
+macOS and Linux. The text that the instructions have only on Windows or macOS (the long-job rule, the
+Computer Use rules and the automation command) is not in the counts:
 
 - `instructions.claude` and `instructions.codex`: `developerInstructions()` with the options of each
   provider.

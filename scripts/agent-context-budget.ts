@@ -9,6 +9,7 @@ import { runDebtRatchet } from "./debt-ratchet";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const OUT = resolve(ROOT, ".codebot-build/agent-context-budget");
+const MEASURED_PLATFORM: NodeJS.Platform = "linux";
 
 const agent: AgentSummary = {
   id: "agent-1",
@@ -39,6 +40,7 @@ function instructions(provider: "claude" | "codex"): string {
     teammatesInTurns: true,
     sectionTeammates: null,
     homeSkills: [],
+    platform: MEASURED_PLATFORM,
   });
 }
 

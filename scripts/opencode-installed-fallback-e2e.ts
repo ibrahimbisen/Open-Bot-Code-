@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
 import { Effect } from "effect";
@@ -10,6 +10,8 @@ import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-installed-fallback-e2e");
 const WAIT_MS = 60_000;
@@ -47,12 +49,12 @@ async function waitFor(label: string, check: () => boolean | Promise<boolean>): 
 const starts = async () => (await readJsonl<{ version: string }>(log)).map((entry) => entry.version);
 const copyStarts = async () => (await starts()).filter((version) => version === COPY).length;
 
-const copyExecutable = join(root, "runtime", "opencode", "bin", "opencode");
+const copyExecutable = standInPath(join(root, "runtime", "opencode", "bin", "opencode"));
 await installFakeAgent(copyExecutable, "opencode-start-failure", {
   FAKE_OPENCODE_VERSION: COPY,
   FAKE_OPENCODE_FAIL: "1",
 });
-await installFakeAgent(join(userBin, "opencode"), "opencode-start-failure", {
+await installFakeAgent(standInPath(join(userBin, "opencode")), "opencode-start-failure", {
   FAKE_OPENCODE_VERSION: INSTALLED,
 });
 
@@ -121,6 +123,6 @@ try {
   for (const client of await runCauseEffect(providers.dispose())) await runCauseEffect(client.stop());
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

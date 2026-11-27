@@ -17,6 +17,8 @@ import {
   requireProviderDriver,
 } from "../src/backend/provider-drivers";
 import { installFakeAgent, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-slow-start-e2e");
 
@@ -47,7 +49,7 @@ const report: Report = { passed: false };
 const clients: AgentClient[] = [];
 
 async function openRouterClient(name: string, env: Record<string, string>, requestTimeoutMs: number) {
-  const executable = join(root, name, "pi");
+  const executable = standInPath(join(root, name, "pi"));
   await installFakeAgent(executable, "pi-slow-start", env);
   const client = requireProviderDriver("openrouter").createClient(
     { executable, version: "1.5.2", source: "managed" },
@@ -84,7 +86,7 @@ async function readCatalog(client: AgentClient, requestTimeoutMs: number): Promi
 }
 
 async function readOverlappingPasses(requestTimeoutMs: number): Promise<NonNullable<Report["overlap"]>> {
-  const pi = join(root, "runtime", "pi");
+  const pi = standInPath(join(root, "runtime", "pi"));
   const gate = join(root, "runtime", "gate");
   const model = join(root, "runtime", "model");
   const piDirectory = join(root, "runtime", "pi-agent");
@@ -226,6 +228,6 @@ try {
 } finally {
   await stopClients(clients);
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

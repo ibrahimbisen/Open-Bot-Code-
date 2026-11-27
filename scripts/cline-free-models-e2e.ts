@@ -9,6 +9,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { decodeModelListResponse, type ModelListResponse } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/cline-free-models-e2e");
 
@@ -81,7 +83,7 @@ async function listModels(client: AgentClient): Promise<ModelListResponse["data"
 }
 
 try {
-  const executable = join(root, "cline", "bin", "cline");
+  const executable = standInPath(join(root, "cline", "bin", "cline"));
   const workspace = join(root, "workspace");
   await mkdir(workspace);
   await installFakeAgent(executable, "cline");
@@ -186,6 +188,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

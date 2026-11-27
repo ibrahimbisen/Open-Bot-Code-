@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AcpAgentClient } from "../src/backend/acp-client";
@@ -16,6 +16,8 @@ import {
   type ThreadItem,
 } from "../src/backend/protocol";
 import { installFakeAgent, readJsonl, runTurn, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-workspace-bridge-tools-e2e");
 
@@ -163,7 +165,7 @@ async function run(
   flavor: AcpFlavor = ANTIGRAVITY_ACP_FLAVOR,
   calls: readonly object[] = ALL_CALLS,
 ): Promise<Run> {
-  const executable = join(root, name, "bin", "antigravity");
+  const executable = standInPath(join(root, name, "bin", "antigravity"));
   const log = join(root, name, "agent.jsonl");
   await installFakeAgent(executable, "antigravity-bridge-permission", {
     FAKE_LOG: log,
@@ -324,6 +326,6 @@ try {
 } finally {
   await stopClients(clients);
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

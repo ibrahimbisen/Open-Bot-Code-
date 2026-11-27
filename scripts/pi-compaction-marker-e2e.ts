@@ -1,6 +1,6 @@
 import { EventEmitter } from "node:events";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS, type AgentContextState } from "@codebot/contracts/ipc";
@@ -11,13 +11,15 @@ import type { AgentCliInfo } from "../src/backend/cli";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import { installFakeAgent, readJsonl } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-compaction-marker-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-pi-compaction-marker-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const piDirectory = join(root, "pi-agent");
-const executable = join(root, "bin", "pi");
+const executable = standInPath(join(root, "bin", "pi"));
 const logPath = join(root, "pi.jsonl");
 const MODEL = "openrouter/fake/cache";
 const LARGE_TOKENS = 611_000;
@@ -202,7 +204,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   if (!report.passed) process.exitCode = 1;
 }

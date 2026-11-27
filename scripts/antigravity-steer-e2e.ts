@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { AgentClient } from "../src/backend/agent-client";
@@ -7,6 +7,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AppServerNotification, getRecord, getString, isRecord } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/antigravity-steer-e2e");
 const TURN_TIMEOUT_MS = 60_000;
@@ -61,7 +63,7 @@ async function open(
   env: Readonly<Record<string, string>>,
   agent = "antigravity-steer",
 ): Promise<{ client: AgentClient; log: string }> {
-  const executable = join(root, name, "bin", "antigravity");
+  const executable = standInPath(join(root, name, "bin", "antigravity"));
   const log = join(root, name, "agent.jsonl");
   await installFakeAgent(executable, agent, { FAKE_LOG: log, ...env });
   const client = requireProviderDriver("antigravity").createClient(
@@ -401,6 +403,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

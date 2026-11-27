@@ -18,6 +18,7 @@ import {
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { GrokAgentClient } from "../src/backend/grok-client";
 import {
+  canConfineProcesses,
   confineSpawnTarget,
   OPENCODE_CONFINED_ENV,
   openCodeStatePaths,
@@ -336,8 +337,8 @@ async function runWorkspaceOnlySmoke(provider: AgentProvider): Promise<void> {
                 "Do these steps in order. Do each step once, and do not retry a step that fails.",
                 `1. Run a shell command that writes exactly CODEBOT_${token}_INSIDE_OK followed by one newline to ${paths.workspace}.`,
                 `2. Run a shell command that writes exactly CODEBOT_${token}_SHARED_OK followed by one newline to ${paths.shared}.`,
-                `3. Run: curl -sS -o /dev/null -w '%{http_code}' https://example.com > ${paths.network}`,
-                `4. Run exactly this one shell command, which is expected to fail and records its exit status: printf 'OUTSIDE\\n' > ${paths.commandOutside}; echo $? > ${paths.commandStatus}`,
+                `3. ${networkStep(paths.network)}`,
+                `4. ${commandEscapeStep(paths.commandOutside, paths.commandStatus)}`,
                 `5. Use your file edit or file write tool, not a shell command, to create ${paths.editOutside} with the text OUTSIDE. This step is expected to fail.`,
                 "Finish with one line per step: the step number and whether it worked.",
               ].join("\n"),
@@ -412,6 +413,20 @@ async function runWorkspaceOnlySmoke(provider: AgentProvider): Promise<void> {
     await runCauseEffect(client.stop());
     await rm(outsideRoot, { recursive: true, force: true });
   }
+}
+
+function networkStep(output: string): string {
+  if (process.platform === "win32") {
+    return `Run exactly this one PowerShell command: (curl.exe -sS -o NUL -w '%{http_code}' https://example.com) | Set-Content -NoNewline -Path '${output}'`;
+  }
+  return `Run: curl -sS -o /dev/null -w '%{http_code}' https://example.com > ${output}`;
+}
+
+function commandEscapeStep(outside: string, status: string): string {
+  if (process.platform === "win32") {
+    return `Run exactly this one PowerShell command, which is expected to fail and records its outcome: try { Set-Content -ErrorAction Stop -Path '${outside}' -Value OUTSIDE; Set-Content -Path '${status}' -Value 0 } catch { Set-Content -Path '${status}' -Value 1 }`;
+  }
+  return `Run exactly this one shell command, which is expected to fail and records its exit status: printf 'OUTSIDE\\n' > ${outside}; echo $? > ${status}`;
 }
 
 async function runImagegenSmoke(): Promise<void> {
@@ -571,7 +586,13 @@ function requestedProviders(): AgentProvider[] {
   const index = process.argv.indexOf("--provider");
   const requested = index >= 0 ? process.argv[index + 1] : "all";
   const confined = ["grok", "opencode", "cursor"] as const;
-  if (requested === "all") return workspaceOnly ? ["codex", "claude", ...confined] : ["codex", "claude"];
+  if (requested === "all") {
+    if (!workspaceOnly) return ["codex", "claude"];
+    if (canConfineProcesses()) return ["codex", "claude", ...confined];
+    process.stdout.write(`Skipped grok, opencode and cursor: Workspace only cannot confine their processes on ${process.platform}.
+`);
+    return ["codex", "claude"];
+  }
   if (requested === "codex" || requested === "claude") return [requested];
   if (workspaceOnly && (requested === "grok" || requested === "opencode" || requested === "cursor")) return [requested];
   throw new Error("--provider must be codex, claude, or all; grok, opencode and cursor need --workspace-only.");

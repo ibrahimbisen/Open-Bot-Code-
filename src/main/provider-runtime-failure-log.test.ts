@@ -11,6 +11,10 @@ import { ProviderRuntimeManager } from "./provider-runtime-manager";
 
 const cleanups: Array<() => Promise<void> | void> = [];
 
+function inLogLine(text: string): string {
+  return JSON.stringify(text).slice(1, -1);
+}
+
 afterEach(async () => {
   for (const cleanup of cleanups.splice(0).reverse()) await cleanup();
 });
@@ -48,8 +52,9 @@ describe("provider runtime failure log", () => {
     expect(line).toContain('"runtime":"antigravity"');
     expect(line).toContain('"stage":"download"');
     expect(line).toMatch(/"version":"[^"]+"/u);
-    expect(line).toContain("~/proxy.conf");
+    expect(line).toContain(inLogLine(join("~", "proxy.conf")));
     expect(line).not.toContain(homedir());
+    expect(line).not.toContain(inLogLine(homedir()));
     expect(line).not.toContain(secret);
     expect(line).not.toContain('"stack"');
   });

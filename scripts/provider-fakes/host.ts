@@ -1,23 +1,18 @@
-import { chmod, mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
 import type { MemoryContext } from "../../src/backend/agent/developer-instructions";
 import type { AgentClient } from "../../src/backend/agent-client";
 import { runCauseEffect } from "../../src/backend/effect-boundary";
 import { type AppServerNotification, getRecord, getString, isRecord } from "../../src/backend/protocol";
 import type { CustomProviderCipher } from "../../src/main/custom-provider-store";
+import { writeStandInLauncher } from "../stand-in-program";
 
 export async function installFakeAgent(
   executable: string,
   agent: string,
   env: Readonly<Record<string, string>> = {},
 ): Promise<void> {
-  const file = resolve(import.meta.dirname, "agents", `${agent}.ts`);
-  const exports = Object.entries(env)
-    .map(([name, value]) => `export ${name}=${JSON.stringify(value)}\n`)
-    .join("");
-  await mkdir(dirname(executable), { recursive: true });
-  await writeFile(executable, `#!/bin/sh\n${exports}exec "${process.execPath}" "${file}" "$@"\n`);
-  await chmod(executable, 0o755);
+  await writeStandInLauncher(executable, resolve(import.meta.dirname, "agents", `${agent}.ts`), env);
 }
 
 export async function readJsonl<T>(path: string): Promise<T[]> {

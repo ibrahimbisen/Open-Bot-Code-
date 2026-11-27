@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { isMissingProviderSessionError } from "../src/backend/agent/thread-items";
@@ -8,6 +8,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, startThread, stopClients, xorCipher } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-flavor-e2e");
 
@@ -56,7 +58,7 @@ try {
     log: string;
   }[] = [];
   for (const command of COMMANDS) {
-    const executable = join(root, "bin", command);
+    const executable = standInPath(join(root, "bin", command));
     await installFakeAgent(executable, "session-errors");
     const store = new CustomAgentStore({ path: join(root, `${command}-agents.json`), cipher: xorCipher });
     await runCauseEffect(store.load());
@@ -136,7 +138,7 @@ try {
   report.passed = true;
 } finally {
   await stopClients(clients);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

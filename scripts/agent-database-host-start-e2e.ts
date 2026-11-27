@@ -300,6 +300,7 @@ try {
   process.exitCode = 1;
 } finally {
   for (const child of children) child.kill("SIGKILL");
+  await waitForExits();
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   await rm(root, { recursive: true, force: true });
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
