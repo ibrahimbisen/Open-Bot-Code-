@@ -41,7 +41,7 @@ in_container() {
 
 require_host() {
   in_container || return 0
-  fail "In a container, $1. See https://github.com/nightly-labs/openbot/blob/main/docs/docker.md"
+  fail "In a container, $1. See docs/docker.md"
 }
 
 require_root() {
@@ -209,7 +209,7 @@ login_command() {
   done
   show_status
   if [ "$(value server)" = online ]; then
-    echo "Sign in to CodeBot with $email on your computer or https://openbot.run/app to use this server."
+    echo "Sign in to CodeBot with $email on your computer to use this server."
     echo "To use it from your phone, run: codebot mobile-connect"
   fi
 }

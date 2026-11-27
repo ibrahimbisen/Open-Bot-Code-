@@ -24,7 +24,7 @@ usage() {
   cat <<'EOF'
 Installs CodeBot as a self-hosted server on a Linux computer with no screen:
 
-  curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh | sudo bash
+  sudo bash install-server.sh --update-url https://updates.example.com/codebot
 
 Options (after `sudo bash -s --`):
   --user <name>             The user that runs CodeBot and its agents. Default: the user of the
@@ -88,7 +88,7 @@ done
 
 update_url=${update_url%/}
 [[ $update_url =~ ^https://[^/[:space:]?#@]+(/[^[:space:]?#]*)?$ ]] || fail "Give the https:// URL of your update folder with --update-url."
-[ "$(uname -s)" = Linux ] || fail "This install is for Linux. Download the desktop app at https://openbot.run."
+[ "$(uname -s)" = Linux ] || fail "This install is for Linux. Run the desktop app on this computer instead."
 [ "$(id -u)" -eq 0 ] || fail "Run this with sudo."
 [ -d /run/systemd/system ] || fail "CodeBot needs systemd."
 command -v apt-get >/dev/null || fail "CodeBot needs Ubuntu 24.04 or a newer Ubuntu or Debian."

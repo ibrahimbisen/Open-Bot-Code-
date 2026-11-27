@@ -62,11 +62,9 @@ export function EngineSwitch(props: { compact: boolean }) {
         <SlidingTabs.Root value={mode()} onChange={(value) => change(value === "home" ? "home" : "computer")}>
           <SlidingTabs.List class="engine-switch-list" aria-label={t("serverMode.switch.label")}>
             <SlidingTabs.Trigger value="computer" class="engine-switch-trigger">
-              <Monitor class="engine-switch-icon" aria-hidden="true" />
               <span class="engine-switch-text">{t("serverMode.switch.thisComputer")}</span>
             </SlidingTabs.Trigger>
             <SlidingTabs.Trigger value="home" class="engine-switch-trigger" title={homeHint()}>
-              <Server class="engine-switch-icon" aria-hidden="true" />
               <span class="engine-switch-text">{homeLabel()}</span>
             </SlidingTabs.Trigger>
           </SlidingTabs.List>

@@ -12,4 +12,5 @@ the engine that CodeBot keeps.
 | [upstream-sync.md](upstream-sync.md) | How to take changes from upstream OpenBot |
 | [updates.md](updates.md) | Application updates from your server and the one-command release |
 | [unsigned-builds.md](unsigned-builds.md) | How to open unsigned builds on macOS and Windows |
+| [server-mode.md](server-mode.md) | Phase 2: the engine on a home server, the switch, setup and proof |
 | [windows-test-status.md](windows-test-status.md) | Result of each check and offline test suite on Windows |

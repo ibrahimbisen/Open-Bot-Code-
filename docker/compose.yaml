@@ -1,6 +1,6 @@
 services:
   codebot:
-    image: ghcr.io/nightly-labs/openbot:latest
+    image: codebot:latest
     restart: unless-stopped
     security_opt:
       - seccomp=./seccomp.json

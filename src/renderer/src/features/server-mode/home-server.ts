@@ -13,8 +13,9 @@ export function pickHomeServer(servers: readonly ServerSummary[], storedId: stri
   const remote = servers.filter((server) => server.kind === "remote");
   return (
     remote.find((server) => server.active) ??
-    remote.find((server) => server.id === storedId) ??
+    remote.find((server) => server.id === storedId && server.state === "online") ??
     remote.find((server) => server.state === "online") ??
+    remote.find((server) => server.id === storedId) ??
     remote[0] ??
     null
   );

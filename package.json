@@ -471,6 +471,8 @@
     "test:slash-commands": "bun scripts/slash-commands-e2e.ts",
     "test:slash-commands-ui": "bun scripts/slash-commands-ui-e2e.ts --allow-mutations",
     "test:server-mode": "bun scripts/server-mode-e2e.ts",
+    "test:server-mode-ui": "bun scripts/server-mode-ui-e2e.ts --allow-mutations",
+    "test:server-install": "bun scripts/server-install-check.ts",
     "test:team-api-routes": "bun --preload ./scripts/team-api-routes-e2e-electron.mjs scripts/team-api-routes-e2e.ts",
     "test:crm-team-api": "bun scripts/crm-team-api-e2e.ts",
     "test:advanced-features": "bun scripts/advanced-features-e2e.ts",

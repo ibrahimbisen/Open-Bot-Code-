@@ -5,19 +5,17 @@
 }
 
 .engine-switch-list {
+  display: flex;
   width: 100%;
 }
 
 .engine-switch-trigger {
+  display: inline-flex;
   min-width: 0;
+  align-items: center;
+  justify-content: center;
   flex: 1 1 0;
   gap: var(--codebot-space-1-5);
-}
-
-.engine-switch-icon {
-  width: var(--codebot-icon-sm);
-  height: var(--codebot-icon-sm);
-  flex: 0 0 auto;
 }
 
 .engine-switch-text {
