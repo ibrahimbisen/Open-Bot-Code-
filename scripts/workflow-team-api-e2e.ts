@@ -873,7 +873,13 @@ try {
       });
       assert.equal(joined.status, 201, `Join returned ${joined.status}.`);
       const memberToken = await login(MEMBER);
-      await setLevels(ownerToken, { [closed]: "none", [viewer]: "view", [chatter]: "chat" });
+      await setLevels(ownerToken, {
+        [open]: "manage",
+        [closed]: "none",
+        [viewer]: "view",
+        [later]: "manage",
+        [chatter]: "chat",
+      });
       return { ids: { open, closed, viewer, later, chatter }, memberToken };
     },
     ({ ids }) => ({ ids }),
@@ -1723,7 +1729,13 @@ try {
       }),
     );
     assert.ok(saved.ok);
-    await setLevels(ownerToken, { [closed]: "none", [viewer]: "view", [chatter]: "chat", [later]: "none" });
+    await setLevels(ownerToken, {
+      [open]: "manage",
+      [closed]: "none",
+      [viewer]: "view",
+      [chatter]: "chat",
+      [later]: "none",
+    });
     const nodesOf = (detail: JsonObject) =>
       list(detail.steps, "steps")
         .map((row) => text(record(row, "step").nodeId, "node id"))
@@ -3227,6 +3239,6 @@ try {
   await stopHost();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }).catch(() => undefined);
   process.stdout.write(`${report.passed ? "passed" : "FAILED"}: ${join(OUT, "report.json")}\n`);
 }

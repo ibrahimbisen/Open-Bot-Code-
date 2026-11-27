@@ -1410,7 +1410,7 @@ export const messages = {
   "mobile.server.route.roles": "権限",
   "mobile.server.route.role": "ロール",
   "mobile.server.roles.description":
-    "メンバーが使えるエージェントを選びます。オーナーと管理者はすべてのエージェントを使えます。",
+    "メンバーが使えるエージェントを選びます。オーナーと管理者はすべてのエージェントを使えます。アクセスを設定していない場合、メンバーは自分で作成したエージェントだけを使えます。",
   "mobile.server.roles.unsupported": "ロールを管理するには、このサーバーの OpenBot Code を更新してください。",
   "mobile.server.roles.unavailable": "ロールを管理できるのは、オンラインのサーバーのオーナーまたは管理者だけです。",
   "mobile.server.roles.loading": "ロールを読み込み中…",

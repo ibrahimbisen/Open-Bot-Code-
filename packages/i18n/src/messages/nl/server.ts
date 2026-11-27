@@ -321,7 +321,7 @@ export const messages = {
   "server.settings.browsingMemoryLoadFailed": "Kan de browse-instelling niet laden.",
   "server.settings.rolesTitle": "Machtigingen",
   "server.settings.rolesDescription":
-    "Kies de agents die leden kunnen gebruiken. Een lid krijgt de hoogste toegang van Iedereen en van zijn rollen. Eigenaars en beheerders kunnen alle agents gebruiken.",
+    "Kies de agents die leden kunnen gebruiken. Een lid krijgt de hoogste toegang van Iedereen en van zijn rollen. Eigenaars en beheerders kunnen alle agents gebruiken. Zonder ingestelde toegang gebruiken leden alleen de agents die ze zelf hebben gemaakt.",
   "server.settings.auditTitle": "Auditlog",
   "server.settings.auditDescription":
     "Wijzigingen in de leden, rollen en agenttoegang van deze server, nieuwste eerst. De host bewaart de nieuwste 500 wijzigingen.",

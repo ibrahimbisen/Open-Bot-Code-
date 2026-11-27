@@ -1378,7 +1378,7 @@ export const messages = {
   "mobile.server.route.roles": "권한",
   "mobile.server.route.role": "역할",
   "mobile.server.roles.description":
-    "멤버가 사용할 수 있는 에이전트를 선택하세요. 소유자와 관리자는 모든 에이전트를 사용할 수 있어요.",
+    "멤버가 사용할 수 있는 에이전트를 선택하세요. 소유자와 관리자는 모든 에이전트를 사용할 수 있어요. 접근 권한을 설정하지 않으면 멤버는 자신이 만든 에이전트만 사용할 수 있어요.",
   "mobile.server.roles.unsupported": "역할을 관리하려면 이 서버의 OpenBot Code를 업데이트해 주세요.",
   "mobile.server.roles.unavailable": "온라인 서버의 소유자나 관리자만 역할을 관리할 수 있어요.",
   "mobile.server.roles.loading": "역할 불러오는 중…",

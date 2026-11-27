@@ -23,4 +23,8 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code nie może użyć tego folderu. Wybierz inny folder.",
   "error.project.mainFolderMissing":
     "Brakuje głównego folderu tego projektu: {path}. Przywróć folder albo wybierz nowy folder główny.",
+  "error.project.ownerOnly": "Tylko osoba, która utworzyła ten projekt, może go używać.",
+  "error.project.memberFolder": "Użyj folderu we własnej przestrzeni projektów na tym serwerze.",
+  "error.project.memberOpenAccess":
+    "Tylko właściciel lub administrator może dać projektowi pełny dostęp do tego komputera.",
 } as const satisfies PartialTranslation<typeof source>;

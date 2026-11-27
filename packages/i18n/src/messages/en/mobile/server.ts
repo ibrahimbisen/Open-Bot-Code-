@@ -1825,7 +1825,8 @@ export const messages = defineMessages("mobile.server", {
   "mobile.server.sites.offline": "Connect to this server to see its sites.",
   "mobile.server.route.roles": "Permissions",
   "mobile.server.route.role": "Role",
-  "mobile.server.roles.description": "Choose the agents that members can use. Owners and admins can use all agents.",
+  "mobile.server.roles.description":
+    "Choose the agents that members can use. Owners and admins can use all agents. With no access set, members use only the agents that they created.",
   "mobile.server.roles.unsupported": "Update OpenBot Code on this server to manage roles.",
   "mobile.server.roles.unavailable": "Only an owner or admin of an online server can manage roles.",
   "mobile.server.roles.loading": "Loading roles…",

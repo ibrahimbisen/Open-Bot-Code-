@@ -23,4 +23,8 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code はこのフォルダーを使えません。別のフォルダーを選んでください。",
   "error.project.mainFolderMissing":
     "このプロジェクトのメインフォルダーが見つかりません: {path}。フォルダーを復元するか、新しいメインフォルダーを選んでください。",
+  "error.project.ownerOnly": "このプロジェクトを作成した人だけが使えます。",
+  "error.project.memberFolder": "このサーバー上の自分のプロジェクト用スペースにあるフォルダーを使ってください。",
+  "error.project.memberOpenAccess":
+    "プロジェクトにこのコンピューターへのフルアクセスを与えられるのはオーナーと管理者だけです。",
 } as const satisfies PartialTranslation<typeof source>;

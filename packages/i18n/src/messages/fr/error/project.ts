@@ -24,4 +24,8 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code ne peut pas utiliser ce dossier. Choisis un autre dossier.",
   "error.project.mainFolderMissing":
     "Le dossier principal de ce projet est introuvable : {path}. Restaure le dossier ou choisis un nouveau dossier principal.",
+  "error.project.ownerOnly": "Seule la personne qui a créé ce projet peut l'utiliser.",
+  "error.project.memberFolder": "Utilisez un dossier de votre propre espace de projets sur ce serveur.",
+  "error.project.memberOpenAccess":
+    "Seul un propriétaire ou un admin peut donner à un projet un accès complet à cet ordinateur.",
 } as const satisfies PartialTranslation<typeof source>;

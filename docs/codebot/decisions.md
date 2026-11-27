@@ -166,3 +166,9 @@ a place in the list above.
   for updates (electron-updater `latest*.yml`). A home-server update feed (W06) stays possible as a
   setting. macOS signing and notarization run only when the signing secrets exist in the repo; without
   them the macOS build is unsigned and cannot install an update by itself, so it offers the download.
+
+- **D23. Members see only their own data unless shared.** PRD 11.6 says that each user has their own
+  projects and chats. On a server, a member now gets no access to an agent, its chats or its project when
+  no rule gives access; OpenBot gave members "manage" on every agent by default. A member manages the
+  agents, projects and chats that they created, and can create projects only in their own folder on the
+  host. Owners and admins still see everything, and roles or Everyone still share an agent with members.

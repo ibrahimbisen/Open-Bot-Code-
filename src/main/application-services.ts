@@ -4,7 +4,7 @@ import { EventEmitter } from "node:events";
 import { existsSync } from "node:fs";
 import { readdir, readFile, rm } from "node:fs/promises";
 import { homedir, hostname, tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import type { Readable } from "node:stream";
 import { isKeyOnlyProvider, isManagedRuntimeProvider } from "@codebot/contracts/agent-providers";
@@ -3260,6 +3260,7 @@ export async function createApplicationServices({
     },
     crm,
     projects,
+    memberProjectsRoot: join(dirname(store.sharedRoot), "Member projects"),
     explorer,
     slashCommands: service,
     replies: {

@@ -23,4 +23,7 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code가 이 폴더를 사용할 수 없습니다. 다른 폴더를 선택하세요.",
   "error.project.mainFolderMissing":
     "이 프로젝트의 기본 폴더가 없습니다: {path}. 폴더를 복원하거나 새 기본 폴더를 선택하세요.",
+  "error.project.ownerOnly": "이 프로젝트를 만든 사람만 사용할 수 있어요.",
+  "error.project.memberFolder": "이 서버에 있는 내 프로젝트 공간의 폴더를 사용하세요.",
+  "error.project.memberOpenAccess": "소유자나 관리자만 프로젝트에 이 컴퓨터 전체 접근 권한을 줄 수 있어요.",
 } as const satisfies PartialTranslation<typeof source>;

@@ -1284,7 +1284,8 @@ export const messages = {
   "mobile.server.sites.offline": "请连接该服务器以查看其站点。",
   "mobile.server.route.roles": "权限",
   "mobile.server.route.role": "角色",
-  "mobile.server.roles.description": "选择成员可以使用的助手。所有者和管理员可以使用所有助手。",
+  "mobile.server.roles.description":
+    "选择成员可以使用的助手。所有者和管理员可以使用所有助手。未设置访问权限时，成员只能使用自己创建的助手。",
   "mobile.server.roles.unsupported": "请更新该服务器上的 OpenBot Code，才能管理角色。",
   "mobile.server.roles.unavailable": "只有在线服务器的所有者或管理员可以管理角色。",
   "mobile.server.roles.loading": "正在加载角色…",

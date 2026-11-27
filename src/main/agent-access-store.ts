@@ -20,6 +20,8 @@ export interface AgentAccessState {
   revision: number;
   everyone: AgentAccessLevels;
   roles: AgentAccessRole[];
+  /** The member who created each agent. A member always manages the agents that they created. */
+  owners?: Record<string, string>;
 }
 
 export type AgentAccessAudit = (
@@ -40,7 +42,8 @@ export function agentAccessLevel(
 ): AgentAccessLevel {
   if (member.role !== "member") return "manage";
   if (state === "closed") return "none";
-  let level: AgentAccessLevel = state.everyone[agentId] ?? "manage";
+  if (state.owners?.[agentId] === member.id) return "manage";
+  let level: AgentAccessLevel = state.everyone[agentId] ?? "none";
   for (const role of state.roles) {
     if (level === "manage") break;
     if (!role.memberIds.includes(member.id)) continue;
@@ -101,7 +104,15 @@ function copyState(state: AgentAccessState): AgentAccessState {
     revision: state.revision,
     everyone: { ...state.everyone },
     roles: state.roles.map((role) => ({ ...role, agents: { ...role.agents }, memberIds: [...role.memberIds] })),
+    ...(state.owners ? { owners: { ...state.owners } } : {}),
   };
+}
+
+function decodeOwners(value: unknown): Record<string, string> | undefined {
+  if (!isDynamicRecord(value)) return undefined;
+  const owners: Record<string, string> = {};
+  for (const [agentId, memberId] of Object.entries(value)) if (typeof memberId === "string") owners[agentId] = memberId;
+  return owners;
 }
 
 function decodeServers(parsed: unknown): Map<string, AgentAccessState> | null {
@@ -114,7 +125,8 @@ function decodeServers(parsed: unknown): Map<string, AgentAccessState> | null {
       everyone: value.everyone,
       roles: value.roles,
     });
-    servers.set(serverId, { revision: value.revision, everyone, roles });
+    const owners = decodeOwners(value.owners);
+    servers.set(serverId, { revision: value.revision, everyone, roles, ...(owners ? { owners } : {}) });
   }
   return servers;
 }
@@ -173,6 +185,7 @@ export class AgentAccessStore {
           ...role,
           agents: mergeShown(storedRoles.get(role.id)?.agents ?? {}, role.agents, shown, existing),
         })),
+        ...(current.owners ? { owners: current.owners } : {}),
       };
     });
     if (before && this.#audit && saved.revision !== before.revision)
@@ -188,7 +201,7 @@ export class AgentAccessStore {
     yield* this.#replace(serverId, (state) =>
       state.roles.some((role) => role.memberIds.includes(memberId))
         ? {
-            everyone: state.everyone,
+            ...state,
             roles: state.roles.map((role) => ({
               ...role,
               memberIds: role.memberIds.filter((id) => id !== memberId),
@@ -214,7 +227,23 @@ export class AgentAccessStore {
       const roles = state.roles.map((role) => ({ ...role, agents: copy(role.agents) }));
       const changed =
         everyone !== state.everyone || roles.some((role, index) => role.agents !== state.roles[index]?.agents);
-      return changed ? { everyone, roles } : "unchanged";
+      return changed ? { ...state, everyone, roles } : "unchanged";
+    });
+  }).bind(this);
+
+  /** Records the member who created these agents. An agent that has an owner keeps it. */
+  readonly claimAgents = Effect.fn("AgentAccessStore.claimAgents")(function* (
+    this: AgentAccessStore,
+    serverId: string,
+    agentIds: readonly string[],
+    memberId: string,
+  ) {
+    yield* this.#replace(serverId, (state) => {
+      const added = agentIds.filter((agentId) => state.owners?.[agentId] === undefined);
+      if (this.#closed || added.length === 0) return "unchanged";
+      const owners = { ...state.owners };
+      for (const agentId of added) owners[agentId] = memberId;
+      return { ...state, owners };
     });
   }).bind(this);
 

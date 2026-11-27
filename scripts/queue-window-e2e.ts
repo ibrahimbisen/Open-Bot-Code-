@@ -132,6 +132,7 @@ function requestContext(request: IncomingMessage, response: ServerResponse, url:
     member,
     token: "token",
     agentLevel: () => "manage",
+    claimAgents: async () => undefined,
     sessionId: "session",
     sessionExpiresAt: new Date(Date.now() + 60_000).toISOString(),
     fromChrome: false,

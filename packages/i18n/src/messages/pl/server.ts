@@ -324,7 +324,7 @@ export const messages = {
   "server.settings.browsingMemoryLoadFailed": "Nie udało się wczytać ustawienia przeglądania.",
   "server.settings.rolesTitle": "Uprawnienia",
   "server.settings.rolesDescription":
-    "Wybierz agentów, których mogą używać członkowie. Członek dostaje najwyższy dostęp spośród roli Wszyscy i swoich ról. Właściciele i administratorzy mogą używać wszystkich agentów.",
+    "Wybierz agentów, których mogą używać członkowie. Członek dostaje najwyższy dostęp spośród roli Wszyscy i swoich ról. Właściciele i administratorzy mogą używać wszystkich agentów. Bez ustawionego dostępu członkowie korzystają tylko z agentów, które sami utworzyli.",
   "server.settings.remoteOnline": "Host jest online. Publikacją zarządza jego właściciel.",
   "server.settings.remoteOffline": "Host jest offline. Publikacją zarządza jego właściciel.",
   "server.settings.reachable": "Dostępny online. Zalogować się mogą tylko zaproszone osoby.",

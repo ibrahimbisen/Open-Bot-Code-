@@ -24,4 +24,8 @@ export const messages = {
   "error.project.folderProtected": "O OpenBot Code não pode usar esta pasta. Escolha outra pasta.",
   "error.project.mainFolderMissing":
     "A pasta principal deste projeto está ausente: {path}. Restaure a pasta ou escolha uma nova pasta principal.",
+  "error.project.ownerOnly": "Só a pessoa que criou este projeto pode usá-lo.",
+  "error.project.memberFolder": "Use uma pasta no seu próprio espaço de projetos neste servidor.",
+  "error.project.memberOpenAccess":
+    "Só um proprietário ou administrador pode dar a um projeto acesso total a este computador.",
 } as const satisfies PartialTranslation<typeof source>;

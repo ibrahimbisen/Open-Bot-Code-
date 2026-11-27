@@ -1164,9 +1164,15 @@ let accessLevels: AgentAccessState = { revision: 0, everyone: {}, roles: [] };
 let largePendingPrompts = false;
 let importFreeBytes: number | null = null;
 const accessListeners = new Set<(serverId: string, state: AgentAccessState) => void>();
+// Members now get no access to an agent with no rule. These checks treat an agent that the fixture
+// does not close as open to members, as before that change.
+const fixtureLevels = (): AgentAccessState => ({
+  ...accessLevels,
+  everyone: { ...Object.fromEntries(agents.map((agent) => [agent.id, "manage" as const])), ...accessLevels.everyone },
+});
 const agentAccess: TeamApiAgentAccess = {
   get: () => accessLevels,
-  levels: () => accessLevels,
+  levels: fixtureLevels,
   subscribe: (listener) => {
     accessListeners.add(listener);
     return () => accessListeners.delete(listener);

@@ -306,7 +306,7 @@ export const messages = {
   "server.settings.browsingMemoryLoadFailed": "브라우징 설정을 불러올 수 없습니다.",
   "server.settings.rolesTitle": "권한",
   "server.settings.rolesDescription":
-    "멤버가 사용할 수 있는 에이전트를 선택하세요. 멤버는 모든 사용자와 자신의 역할 중 가장 높은 접근 권한을 받아요. 소유자와 관리자는 모든 에이전트를 사용할 수 있어요.",
+    "멤버가 사용할 수 있는 에이전트를 선택하세요. 멤버는 모든 사용자와 자신의 역할 중 가장 높은 접근 권한을 받아요. 소유자와 관리자는 모든 에이전트를 사용할 수 있어요. 접근 권한을 설정하지 않으면 멤버는 자신이 만든 에이전트만 사용할 수 있어요.",
   "server.settings.auditTitle": "감사 로그",
   "server.settings.auditDescription":
     "이 서버의 멤버, 역할, 에이전트 접근 권한 변경 내역이에요. 최신 항목이 먼저 보여요. 호스트는 최근 500개의 변경 내역을 보관해요.",

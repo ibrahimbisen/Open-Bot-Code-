@@ -1435,7 +1435,7 @@ export const messages = {
   "mobile.server.route.roles": "Autorizzazioni",
   "mobile.server.route.role": "Ruolo",
   "mobile.server.roles.description":
-    "Scegli gli agenti che i membri possono usare. Proprietari e admin possono usare tutti gli agenti.",
+    "Scegli gli agenti che i membri possono usare. Proprietari e admin possono usare tutti gli agenti. Senza un accesso impostato, i membri usano solo gli agenti che hanno creato.",
   "mobile.server.roles.unsupported": "Aggiorna OpenBot Code su questo server per gestire i ruoli.",
   "mobile.server.roles.unavailable": "Solo un proprietario o un admin di un server online può gestire i ruoli.",
   "mobile.server.roles.loading": "Caricamento ruoli…",

@@ -628,7 +628,8 @@ export type TeamApiClientBrowser = Pick<
   "setPresence" | "resolve" | "sessionEnded" | "subscribe" | "shares"
 >;
 
-export type TeamApiAgentAccess = Pick<AgentAccessStore, "copyAgent" | "get" | "levels" | "set" | "subscribe">;
+export type TeamApiAgentAccess = Pick<AgentAccessStore, "copyAgent" | "get" | "levels" | "set" | "subscribe"> &
+  Partial<Pick<AgentAccessStore, "claimAgents">>;
 export type TeamApiServerAudit = Pick<ServerAuditStore, "read">;
 
 export interface TeamApiOptions {
@@ -664,6 +665,8 @@ export interface TeamApiOptions {
   workflows?: TeamApiWorkflows;
   crm?: TeamApiCrm;
   projects?: ProjectOperations;
+  /** The folder for the projects of members. Without it, members cannot create projects. */
+  memberProjectsRoot?: string;
   explorer?: TeamApiExplorer;
   slashCommands?: TeamApiSlashCommands;
   replies?: TeamApiReplies;

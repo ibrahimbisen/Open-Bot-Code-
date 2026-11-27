@@ -23,4 +23,8 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code не может использовать эту папку. Выберите другую папку.",
   "error.project.mainFolderMissing":
     "Основная папка этого проекта отсутствует: {path}. Восстановите папку или выберите новую основную папку.",
+  "error.project.ownerOnly": "Пользоваться этим проектом может только тот, кто его создал.",
+  "error.project.memberFolder": "Используйте папку в своём пространстве проектов на этом сервере.",
+  "error.project.memberOpenAccess":
+    "Дать проекту полный доступ к этому компьютеру может только владелец или администратор.",
 } as const satisfies PartialTranslation<typeof source>;

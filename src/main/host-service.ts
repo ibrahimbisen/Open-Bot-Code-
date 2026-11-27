@@ -167,6 +167,7 @@ interface HostServiceOptions {
   workflowFolders?: ForwardedApiOptions["workflowFolders"];
   crm?: ForwardedApiOptions["crm"];
   projects?: ForwardedApiOptions["projects"];
+  memberProjectsRoot?: ForwardedApiOptions["memberProjectsRoot"];
   explorer?: ForwardedApiOptions["explorer"];
   slashCommands?: ForwardedApiOptions["slashCommands"];
   replies?: ForwardedApiOptions["replies"];
@@ -517,6 +518,7 @@ export class HostService extends EventEmitter<HostEvents> {
       ...(options.workflowFolders === undefined ? {} : { workflowFolders: options.workflowFolders }),
       ...(options.crm === undefined ? {} : { crm: options.crm }),
       ...(options.projects === undefined ? {} : { projects: options.projects }),
+      ...(options.memberProjectsRoot === undefined ? {} : { memberProjectsRoot: options.memberProjectsRoot }),
       ...(options.explorer === undefined ? {} : { explorer: options.explorer }),
       ...(options.slashCommands === undefined ? {} : { slashCommands: options.slashCommands }),
       ...(options.replies === undefined ? {} : { replies: options.replies }),

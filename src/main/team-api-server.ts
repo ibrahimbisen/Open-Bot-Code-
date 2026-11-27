@@ -1484,8 +1484,9 @@ export class TeamApiServer {
       )
         return;
       if ((await routeCrm(context, this.#options.crm)) === "handled") return;
-      if ((await routeProjects(context, this.#options.projects)) === "handled") return;
-      if ((await routeExplorer(context, this.#options.explorer)) === "handled") return;
+      if ((await routeProjects(context, this.#options.projects, this.#options.memberProjectsRoot)) === "handled")
+        return;
+      if ((await routeExplorer(context, this.#options.explorer, this.#options.projects)) === "handled") return;
       if ((await routeSlashCommands(context, this.#options.slashCommands)) === "handled") return;
       if ((await routeReplies(context, this.#options.replies)) === "handled") return;
       if ((await this.#routeEvents(context)) === "handled") return;
@@ -2684,6 +2685,18 @@ export class TeamApiServer {
       );
   }
 
+  claimAgents(memberId: string, agentIds: readonly string[]): Effect.Effect<void> {
+    const claim = this.#options.agentAccess?.claimAgents;
+    const serverId = this.#options.store.getIdentity()?.serverId;
+    if (!claim || !serverId || agentIds.length === 0) return Effect.void;
+    return claim(serverId, agentIds, memberId).pipe(
+      Effect.asVoid,
+      Effect.catch((error) =>
+        Effect.sync(() => logger.warn("The owner of the new agent did not save.", toLogValue(error))),
+      ),
+    );
+  }
+
   agentLevel(member: AccessMember | string, agentId: string): AgentAccessLevel {
     const access = this.#options.agentAccess;
     const serverId = this.#options.store.getIdentity()?.serverId;
@@ -3128,6 +3141,7 @@ export class TeamApiServer {
       sessionExpiresAt: authenticated.sessionExpiresAt,
       fromChrome: this.#options.clientBrowser?.shares(authenticated.sessionId) === true,
       agentLevel: (agentId) => this.agentLevel(authenticated.member, agentId),
+      claimAgents: (agentIds) => Effect.runPromise(this.claimAgents(authenticated.member.id, agentIds)),
       json: (status, value) => this.#json(response, status, value),
       empty: (status) => this.#empty(response, status),
     };

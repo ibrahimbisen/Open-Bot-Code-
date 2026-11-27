@@ -1428,7 +1428,7 @@ export const messages = {
   "mobile.server.route.roles": "İzinler",
   "mobile.server.route.role": "Rol",
   "mobile.server.roles.description":
-    "Üyelerin kullanabileceği ajanları seçin. Sahipler ve yöneticiler tüm ajanları kullanabilir.",
+    "Üyelerin kullanabileceği ajanları seçin. Sahipler ve yöneticiler tüm ajanları kullanabilir. Erişim ayarlanmadığında üyeler yalnızca kendi oluşturdukları ajanları kullanabilir.",
   "mobile.server.roles.unsupported": "Rolleri yönetmek için bu sunucudaki OpenBot Code'u güncelleyin.",
   "mobile.server.roles.unavailable": "Rolleri yalnızca çevrimiçi bir sunucunun sahibi veya yöneticisi yönetebilir.",
   "mobile.server.roles.loading": "Roller yükleniyor…",

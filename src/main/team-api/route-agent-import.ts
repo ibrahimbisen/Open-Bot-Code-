@@ -95,6 +95,7 @@ export async function routeAgentImport(
       ),
     409,
   );
+  await context.claimAgents(result.agents.map((agent) => agent.id));
   return json(200, {
     ...result,
     agents: result.agents.map((agent) => ({ agentId: agent.id, name: agent.name })),
