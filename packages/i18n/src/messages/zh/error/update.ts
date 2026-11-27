@@ -10,7 +10,7 @@ export const messages = {
   "error.update.notInstalled": "上次重启未能安装更新。请重启以重试。",
   "error.update.downloadFailed": "无法下载更新，请重试。",
   "error.update.signatureNotConfirmed":
-    "OpenBot Code 无法验证此更新，请重试。如果仍然出错，请从 openbot.run/download 下载 OpenBot Code。",
+    "OpenBot Code 无法验证此更新，请重试。如果仍然出错，请从 codebot.example/download 下载 OpenBot Code。",
   "error.update.checkFailed": "无法检查更新，请重试。",
   "error.update.checkStalled": "更新检查停止响应，请重试。",
   "error.update.checkOffline": "无法连接更新服务，请检查网络后重试。",

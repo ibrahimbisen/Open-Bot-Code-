@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Linking } from "react-native";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { showFailureAlert } from "@/features/analytics/failure-reports";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { AUTOMATIC_DICTATION_LANGUAGE, useDictationLanguage } from "@/features/settings/model/dictation-language";
 import { ElevenLabsError, scribeToken } from "@/features/voice/model/elevenlabs";
 import { type LocalRecognition, loadLocalRecognizer } from "@/features/voice/model/recognition-models";
@@ -130,27 +129,6 @@ export function showNotice(notice: DictationNotice, error?: unknown): void {
   );
 }
 
-export function trackTurn(
-  current: Pick<CaptureSession, "heard" | "listeningAt" | "stoppingAt" | "ending">,
-  transcription: "cloud" | "local" | undefined,
-): void {
-  const now = performance.now();
-  const failed = current.ending === "permission_denied" || current.ending === "operation_failed";
-  mobileAnalytics.track("voice_turn", {
-    server_kind: "remote",
-    transcription,
-    result: failed ? "failed" : current.ending === "cancelled" || !current.heard ? "cancelled" : "succeeded",
-    failure_code: !failed
-      ? undefined
-      : current.ending === "permission_denied"
-        ? "permission_denied"
-        : "operation_failed",
-    audio_duration_seconds:
-      current.listeningAt === null ? 0 : ((current.stoppingAt ?? now) - current.listeningAt) / 1_000,
-    duration_ms: current.stoppingAt === null ? undefined : now - current.stoppingAt,
-  });
-}
-
 export const modelCaptureAvailable = (): boolean =>
   typeof speechNative?.startCapture === "function" && speechRecognition !== null;
 
@@ -189,11 +167,6 @@ export function useModelDictation({
   }, []);
 
   const settle = useCallback(() => {
-    if (session.current)
-      trackTurn(
-        session.current,
-        session.current.engine === "elevenlabs" || session.current.engine === "voice-server" ? "cloud" : "local",
-      );
     if (owner === id) owner = null;
     session.current = null;
     if (stopTimer.current) clearTimeout(stopTimer.current);

@@ -25,7 +25,7 @@ import { suggestServerId } from "../provider-detection";
 import { type Measurement, type MeasureTarget, measureServer } from "./server-measure";
 import { serverCredentials } from "./server-read";
 
-export class LocalModelServerFailure extends Schema.TaggedError<LocalModelServerFailure>()("LocalModelServerFailure", {
+class LocalModelServerFailure extends Schema.TaggedError<LocalModelServerFailure>()("LocalModelServerFailure", {
   cause: Schema.Defect(),
 }) {}
 
@@ -38,7 +38,7 @@ export interface MonitorTiming {
   readonly backoffLimit: number;
 }
 
-export const DEFAULT_MONITOR_TIMING: MonitorTiming = {
+const DEFAULT_MONITOR_TIMING: MonitorTiming = {
   visibleMs: 10_000,
   hiddenMs: 60_000,
   requestTimeoutMs: 3_000,

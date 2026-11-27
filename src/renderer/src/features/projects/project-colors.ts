@@ -12,7 +12,7 @@ function channel(hue: number, offset: number): string {
     .padStart(2, "0");
 }
 
-export function projectColorFromHue(hue: number): AvatarColor {
+function projectColorFromHue(hue: number): AvatarColor {
   return `#${channel(hue, 0)}${channel(hue, 8)}${channel(hue, 4)}`;
 }
 

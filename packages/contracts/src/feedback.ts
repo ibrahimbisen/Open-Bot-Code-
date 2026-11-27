@@ -2,9 +2,9 @@ import type { AgentProviderId } from "./agent-providers";
 import type { ConversationMessage } from "./ipc-conversation-messages";
 import { isDynamicRecord, isOneOf, isString } from "./runtime-values";
 
-const ISSUE_FORM = "https://github.com/nightly-labs/openbot/issues/new?template=";
+const ISSUE_FORM = "https://github.com/your-org/codebot/issues/new?template=";
 
-export const FEEDBACK_REPOSITORY = "nightly-labs/openbot";
+export const FEEDBACK_REPOSITORY = "your-org/codebot";
 
 export const FEEDBACK_KINDS = ["bug", "idea"] as const;
 export type FeedbackKind = (typeof FEEDBACK_KINDS)[number];

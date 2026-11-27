@@ -2,8 +2,8 @@ import type { ExplorerFile } from "@codebot/contracts/ipc";
 
 export type ExplorerPreviewKind = "markdown" | "json" | "table" | "svg" | "image" | "pdf" | "audio" | "video";
 
-export const CSV_MAX_ROWS = 2_000;
-export const CSV_MAX_COLUMNS = 100;
+const CSV_MAX_ROWS = 2_000;
+const CSV_MAX_COLUMNS = 100;
 
 function extensionOf(name: string): string {
   const dot = name.lastIndexOf(".");

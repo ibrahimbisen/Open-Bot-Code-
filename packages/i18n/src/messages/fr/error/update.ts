@@ -12,7 +12,7 @@ export const messages = {
   "error.update.notInstalled": "Le dernier redémarrage n’a pas installé la mise à jour. Redémarrez pour réessayer.",
   "error.update.downloadFailed": "Impossible de télécharger la mise à jour. Réessayez.",
   "error.update.signatureNotConfirmed":
-    "OpenBot Code n'a pas pu vérifier la mise à jour. Réessayez. Si l'erreur persiste, téléchargez OpenBot Code sur openbot.run/download.",
+    "OpenBot Code n'a pas pu vérifier la mise à jour. Réessayez. Si l'erreur persiste, téléchargez OpenBot Code sur codebot.example/download.",
   "error.update.checkFailed": "Impossible de rechercher des mises à jour. Réessayez.",
   "error.update.checkStalled": "La recherche de mise à jour ne répond plus. Réessayez.",
   "error.update.checkOffline":

@@ -48,7 +48,7 @@ const CHECK_BACKUP: NearSignRequest = {
   summary: "",
   payload: {
     challenge: "story-challenge",
-    rpId: "nearintents.openbot.run",
+    rpId: "nearintents.codebot.example",
     allowCredentials: [{ id: "story-credential", type: "public-key" }],
     userVerification: "required",
     timeout: 120_000,

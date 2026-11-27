@@ -46,7 +46,7 @@ const probeServer = createServer((request, response) => {
   if (path === "/signal/health/turn") return reply("connections", '{"status":"ready"}');
   if (path === "/api/health/hosting") return reply("hosted", '{"status":"ok"}');
   if (path === "/api/v1/skills?limit=1") return reply("marketplace", '{"skills":[]}');
-  if (/^\/github\/nightly-labs\/codebot\/releases\/latest\/download\/latest(-mac|-linux)?\.yml$/.test(path)) {
+  if (/^\/github\/your-org\/codebot\/releases\/latest\/download\/latest(-mac|-linux)?\.yml$/.test(path)) {
     return reply("updates", "version: 0.42.0\n");
   }
   response.writeHead(404).end();
@@ -81,7 +81,7 @@ interface FixtureIssue {
 }
 
 const issue = (fields: FixtureIssue) => ({
-  html_url: `https://github.com/nightly-labs/openbot/issues/${fields.number}`,
+  html_url: `https://github.com/your-org/codebot/issues/${fields.number}`,
   state: "open",
   state_reason: null,
   user: MEMBER,
@@ -413,7 +413,7 @@ interface IncidentFixture {
   resolvedAt?: string | null;
 }
 const incident = (fields: IncidentFixture) => ({
-  url: `https://github.com/nightly-labs/openbot/issues/${fields.id}`,
+  url: `https://github.com/your-org/codebot/issues/${fields.id}`,
   kind: "incident",
   impact: "partial",
   resolvedAt: null,
@@ -594,7 +594,7 @@ for (const item of got.filter((entry) => entry.subscription === "team" || entry.
   const body = JSON.parse(item.body);
   assert.equal(body.version, 1);
   assert.equal(body.type, item.headers["x-codebot-event"]);
-  assert.equal(body.page, "https://status.openbot.run");
+  assert.equal(body.page, "https://status.codebot.example");
   assert.match(item.headers["x-codebot-delivery-id"] ?? "", /^[0-9a-f]{32}$/);
 }
 const created = JSON.parse(
@@ -625,7 +625,7 @@ assert.equal(slack?.headers["x-codebot-signature"], undefined, "A chat subscript
 const slackText = JSON.parse(slack?.body ?? "{}").text;
 assert.match(slackText, /^\*New incident: Sign-in fails\*/);
 assert.match(slackText, /&lt;some&gt; users &amp; @everyone/, "Slack text is not escaped.");
-assert.match(slackText, /<https:\/\/github\.com\/nightly-labs\/codebot\/issues\/203\|Open>$/);
+assert.match(slackText, /<https:\/\/github\.com\/your-org\/codebot\/issues\/203\|Open>$/);
 const discord = JSON.parse(got.filter((item) => item.subscription === "discord").at(-1)?.body ?? "{}");
 assert.deepEqual(discord.allowed_mentions, { parse: [] }, "A Discord message can notify @everyone.");
 assert.match(

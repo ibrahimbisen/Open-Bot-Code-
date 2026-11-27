@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Avvia un flusso di lavoro da GitHub: un trigger GitHub si attiva su nuove issue, commenti, pull request, revisioni, controlli non riusciti o una menzione di @openbotgit.",
+          "Avvia un flusso di lavoro da GitHub: un trigger GitHub si attiva su nuove issue, commenti, pull request, revisioni, controlli non riusciti o una menzione di @codebotgit.",
           "Modifica GitHub da un flusso di lavoro: commenta, aggiungi etichette, assegna, revisiona, chiudi o crea una issue come GitHub App di CodeBot.",
           "Il Marketplace ha 17 nuovi agenti CodeBot, come QA Tester, PR Shepherd e Chief of Staff, e 15 nuove skill per loro.",
           "Utilizzo mostra il limite mensile di OpenCode Go come terza barra."
@@ -854,7 +854,7 @@
         "items": [
           "Ramifica una conversazione: fai clic destro sull'ultimo messaggio dell'agente in un turno e seleziona Ramifica da qui. Si apre un nuovo thread con la conversazione fino a quel messaggio.",
           "Le impostazioni dell'agente hanno una pagina Istruzioni che mostra il file AGENTS.md dell'agente. Quando l'agente cambia le sue istruzioni, la chat mostra la modifica con Annulla.",
-          "Il Marketplace è su openbot.run. Ogni agente e ogni skill ha la propria pagina, e Copia link la condivide.",
+          "Il Marketplace è su codebot.example. Ogni agente e ogni skill ha la propria pagina, e Copia link la condivide.",
           "Un agente può rispondere a un avviso o a una conferma di un sito web aperti dalla sua stessa azione nel browser.",
           "Un'attività di canale fermata o non riuscita ha un pulsante Annulla attività."
         ]

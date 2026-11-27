@@ -167,7 +167,7 @@ Triggered by `packages/contracts/src/team-protocol/`, `packages/team-client/`,
   The list must have `/v1/mobile-auth/session` and `/v2/remote/hosts/` routes. Run it on `v<last>`
   too, and compare. For each route that is new in the range, put `x` in place of each `${...}` part
   and check that production has it now:
-  `curl -s -o /dev/null -w '%{http_code}\n' -X OPTIONS https://api.openbot.run<route>`. A `404` is a
+  `curl -s -o /dev/null -w '%{http_code}\n' -X OPTIONS https://api.codebot.example<route>`. A `404` is a
   **stop**: deploy the account service first. Do not deploy it from this skill.
 
 ### E. Store policy and privacy

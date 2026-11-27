@@ -10,7 +10,7 @@ export const messages = {
   "error.update.notInstalled": "لم تُثبِّت إعادة التشغيل الأخيرة التحديث. أعد التشغيل للمحاولة مرة أخرى.",
   "error.update.downloadFailed": "تعذّر تنزيل التحديث. حاول مرة أخرى.",
   "error.update.signatureNotConfirmed":
-    "تعذّر على OpenBot Code التحقق من التحديث. حاول مرة أخرى. إذا استمر هذا الخطأ، نزّل OpenBot Code من openbot.run/download.",
+    "تعذّر على OpenBot Code التحقق من التحديث. حاول مرة أخرى. إذا استمر هذا الخطأ، نزّل OpenBot Code من codebot.example/download.",
   "error.update.checkFailed": "تعذّر التحقق من وجود تحديثات. حاول مرة أخرى.",
   "error.update.checkStalled": "توقف التحقق من التحديثات عن الاستجابة. حاول مرة أخرى.",
   "error.update.checkOffline": "تعذّر الوصول إلى خدمة التحديث. تحقق من اتصالك بالإنترنت، ثم حاول مرة أخرى.",

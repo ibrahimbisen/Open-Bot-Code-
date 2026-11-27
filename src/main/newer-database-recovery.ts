@@ -23,7 +23,7 @@ import { listSiblingCodeBotInstances } from "./update-sibling-instances";
 const logger = createCodeBotLogger("update");
 const STALLED_INSTALL_DIALOG_MS = 10 * 60_000;
 const GUIDE_URL =
-  "https://github.com/nightly-labs/openbot/blob/main/docs/TROUBLESHOOTING.md#codebot-says-a-newer-version-saved-your-data";
+  "https://github.com/your-org/codebot/blob/main/docs/TROUBLESHOOTING.md#codebot-says-a-newer-version-saved-your-data";
 
 interface NewerDatabaseRecoveryOptions {
   window: BrowserWindow | null;

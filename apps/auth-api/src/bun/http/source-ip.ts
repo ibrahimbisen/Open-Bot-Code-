@@ -1,6 +1,6 @@
 const IPV4_MAPPED_PREFIX = "::ffff:";
 
-export function normalizeSourceIp(address: string | null | undefined): string {
+function normalizeSourceIp(address: string | null | undefined): string {
   const value = (address ?? "").trim().toLowerCase();
   if (!value) return "unknown";
   const unmapped =

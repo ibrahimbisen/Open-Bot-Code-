@@ -1,5 +1,11 @@
 {
   "paths": ["LICENSE", "NOTICE", "scripts/codebot/branding-allowlist.json"],
   "directories": ["docs/upstream/", "docs/codebot/"],
-  "lines": []
+  "lines": [
+    {
+      "path": "scripts/bench-compare.ts",
+      "contains": "\".openbot-build\"",
+      "reason": "The RAM and CPU baseline is an upstream build tree, which keeps its build output in this folder."
+    }
+  ]
 }

@@ -5,7 +5,7 @@ import { createSimpleContext } from "../../simple-context";
 import { serverCanAdminister, serverSupportsCapability } from "../servers/server-capabilities";
 import { useServers } from "../servers/servers-context";
 
-export function advancedFeaturesReadable(server: ServerSummary | undefined): server is ServerSummary {
+function advancedFeaturesReadable(server: ServerSummary | undefined): server is ServerSummary {
   if (!server) return false;
   if (server.kind === "local") return true;
   return server.state === "online" && serverSupportsCapability(server, ADVANCED_FEATURES_CAPABILITY);

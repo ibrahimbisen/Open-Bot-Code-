@@ -22,7 +22,7 @@ import {
 import { receiveGitHubDelivery } from "../src/main/github-relay";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/github-workflow-e2e");
-const BOT = "openbotgit";
+const BOT = "codebotgit";
 
 interface Report {
   checks: string[];

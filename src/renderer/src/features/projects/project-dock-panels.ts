@@ -24,7 +24,7 @@ const slotPanelSchema = z.object({
 export const dockPanelParamsSchema = z.discriminatedUnion("kind", [chatPanelSchema, slotPanelSchema]);
 
 export type ChatPanelParams = z.infer<typeof chatPanelSchema>;
-export type SlotPanelParams = z.infer<typeof slotPanelSchema>;
+type SlotPanelParams = z.infer<typeof slotPanelSchema>;
 export type DockPanelParams = z.infer<typeof dockPanelParamsSchema>;
 
 export function isChatPanel(params: DockPanelParams): params is ChatPanelParams {

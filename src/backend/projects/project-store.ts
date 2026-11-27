@@ -60,7 +60,7 @@ const PROJECT_CHAT_AGGREGATE = "project-chat";
 
 const SELECT_PROJECT = "SELECT * FROM cb_projects";
 
-export function emptyProjectChatSettings(threadId: string): ProjectChatSettings {
+function emptyProjectChatSettings(threadId: string): ProjectChatSettings {
   return { threadId, runtime: null, archived: false, pinned: false, unseenOutcome: null };
 }
 

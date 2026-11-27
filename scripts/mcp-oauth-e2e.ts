@@ -715,7 +715,7 @@ async function proxyCases(auth: Awaited<ReturnType<typeof startAuthorizationServ
       name: "codebot",
       title,
       version: "9.9.9-e2e",
-      websiteUrl: "https://openbot.run",
+      websiteUrl: "https://codebot.example",
     });
     assert.deepEqual(resource.clients.at(-1), codebotClient("CodeBot"));
     assert.ok(upstream.every((hit) => !/bot/iu.test(hit.userAgent ?? "")));

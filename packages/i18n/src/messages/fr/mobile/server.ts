@@ -1374,7 +1374,7 @@ export const messages = {
   "mobile.server.update.path.container":
     "Sur l’hôte Docker, récupérez la nouvelle image OpenBot Code et recréez le conteneur avec les mêmes volumes de données. Attendez d’abord la fin du travail en cours. Conservez les volumes existants pour préserver vos données.",
   "mobile.server.update.path.manual":
-    "Cette installation ne peut pas se remplacer elle-même. Demandez à l’administrateur de l’hôte d’installer la version compatible depuis github.com/nightly-labs/openbot/releases. Conservez les données OpenBot Code existantes.",
+    "Cette installation ne peut pas se remplacer elle-même. Demandez à l’administrateur de l’hôte d’installer la version compatible depuis github.com/your-org/codebot/releases. Conservez les données OpenBot Code existantes.",
   "mobile.server.update.path.unavailable":
     "Ceci est un build de développement. Utilisez une version installée d’OpenBot Code pour rechercher des mises à jour.",
   "mobile.server.update.check": "Rechercher des mises à jour",

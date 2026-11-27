@@ -87,7 +87,7 @@ function changeFromCode(code: string): ExplorerGitChange | null {
   }
 }
 
-export function parseGitStatus(output: string, top: string): { branch: ExplorerGitBranch; files: ExplorerGitFile[] } {
+function parseGitStatus(output: string, top: string): { branch: ExplorerGitBranch; files: ExplorerGitFile[] } {
   const branch: ExplorerGitBranch = { name: null, head: null, upstream: null, ahead: 0, behind: 0 };
   const files: ExplorerGitFile[] = [];
   const records = output.split("\0");
@@ -145,7 +145,7 @@ export function parseGitStatus(output: string, top: string): { branch: ExplorerG
   return { branch, files };
 }
 
-export function parseGitLog(output: string): ExplorerGitCommit[] {
+function parseGitLog(output: string): ExplorerGitCommit[] {
   const commits: ExplorerGitCommit[] = [];
   for (const record of output.split("\0")) {
     const [hash, shortHash, author, seconds, refs, parents, ...subject] = record.replace(/^\n+/u, "").split(FIELD);
@@ -167,7 +167,7 @@ export function parseGitLog(output: string): ExplorerGitCommit[] {
   return commits;
 }
 
-export function parseGitNameStatus(output: string, top: string): ExplorerGitCommitFile[] {
+function parseGitNameStatus(output: string, top: string): ExplorerGitCommitFile[] {
   const files: ExplorerGitCommitFile[] = [];
   const records = output.split("\0");
   const absolute = (path: string) => join(top, ...path.split("/"));
@@ -426,5 +426,3 @@ export function createExplorerGit({ roots, searchPath, command = "git" }: Explor
 
   return { status, log, commitFiles, diff };
 }
-
-export type ExplorerGit = ReturnType<typeof createExplorerGit>;

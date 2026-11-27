@@ -482,7 +482,6 @@ EAS CLI prompts for signing credentials when needed.
 
 The build loads `Plain text` and `Sensitive` variables from the EAS `production` environment.
 Variables with `Secret` visibility must be supplied in the local environment.
-See [OpenPanel configuration](#openpanel-product-analytics) for the required analytics variables.
 
 To upload, open Apple's Transporter app, sign in, add the `.ipa`, and select **Deliver**.
 After Apple processes the build, select it in App Store Connect under **TestFlight** and assign

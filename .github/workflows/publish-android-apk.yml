@@ -4,7 +4,7 @@ name: Publish the Android APK
 #
 # `release-android-apk.yml` saves the APK of each store build on a draft GitHub release, which is not
 # public. `bun run mobile:release:published android` sets the newest Google Play version in
-# `mobile-features-config.ts`, and openbot.run offers the APK of that version. When that change is on
+# `mobile-features-config.ts`, and codebot.example offers the APK of that version. When that change is on
 # main, this workflow makes the draft `android-v<version>` public. The account Worker deploys at the
 # end of CI, some minutes later, so the file is there before the site links to it. The release is a
 # prerelease, so it never becomes the "latest" release, which is the desktop app.

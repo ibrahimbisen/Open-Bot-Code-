@@ -44,16 +44,6 @@ export function writeDockLayout(
   } catch {}
 }
 
-export function removeDockLayout(
-  serverId: string,
-  projectId: string,
-  storage: LayoutStorage = window.localStorage,
-): void {
-  try {
-    storage.removeItem(dockLayoutKey(serverId, projectId));
-  } catch {}
-}
-
 function storedActiveProjects(stored: unknown): Record<string, string> {
   if (!isDynamicRecord(stored)) return {};
   return Object.fromEntries(Object.entries(stored).flatMap(([key, value]) => (isString(value) ? [[key, value]] : [])));

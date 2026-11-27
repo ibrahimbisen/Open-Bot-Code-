@@ -45,7 +45,7 @@ Consumers (counted by import): `apps/mobile` (100 files), `src/renderer` (65), `
 | --- | --- |
 | `packages/telemetry/src/events.ts` | Schemas: `CauseCode`, `Operation`, `NotificationMetadata`, `FailureProperties`, `Report`. Functions: `safeReport`, `safeProperties`, `classifyFailure`, `httpStatusCause`, `structuredCause`, `operationForCode`, `isCauseCode`, `isReportProfileId`. Const `ANALYTICS_GENERATIONS` (desktop_host 22, desktop 14, web 2, mobile 5). |
 | `packages/telemetry/src/queue.ts` | `ReportQueue` (class). Local queue of reports with a lock. `REPORT_LIMIT` (1,000), `REPORT_BYTES` (1 MiB), `REPORT_TTL` (7 days). `ReportStorage` (interface) and `ReportTransport` (type). `TelemetryFailure`, `telemetryIO`. |
-| `packages/telemetry/src/transport.ts` | `openPanelTransport(options)`. Posts `type: "track"` to `https://analytics.openbot.run/api/track` (default endpoint). Accepts HTTP 200 or 202 as success. |
+| `packages/telemetry/src/transport.ts` | `openPanelTransport(options)`. Posts `type: "track"` to `https://analytics.codebot.example/api/track` (default endpoint). Accepts HTTP 200 or 202 as success. |
 | `packages/telemetry/src/node.ts` | `fileReportStorage(path)`. Writes JSON with mode 0600 through a `.tmp` file and rename. |
 | `packages/telemetry/src/browser.ts` | `indexedReportStorage(name)`. IndexedDB store, guarded by `navigator.locks`. |
 | `packages/telemetry/src/install-id.ts` | `newAnalyticsInstallId`, `currentAnalyticsInstallId`. Install ID expires after 395 days. |
@@ -115,7 +115,7 @@ Connector code that uses this package: `src/backend/messaging/whatsapp/` (9 file
 | Path | What it owns |
 | --- | --- |
 | `docker/Dockerfile` | Image build. Base `ubuntu:24.04` pinned by digest (ARG `BASE`). Extracts `CodeBot.AppImage` from the build context, reads `packages.txt` and `optional-packages.txt` from the AppImage's `resources/hosting/`, and copies the app to `/opt/CodeBot/app`. User `codebot` (UID 1000), home `/data`. `tini` is PID 1. |
-| `docker/compose.yaml` | Single-container Compose: image `ghcr.io/nightly-labs/openbot:latest`, `seccomp=./seccomp.json`, `no-new-privileges`, `shm_size: 1g`, `stop_grace_period: 60s`, volume `codebot-data:/data`. |
+| `docker/compose.yaml` | Single-container Compose: image `ghcr.io/your-org/codebot:latest`, `seccomp=./seccomp.json`, `no-new-privileges`, `shm_size: 1g`, `stop_grace_period: 60s`, volume `codebot-data:/data`. |
 | `docker/seccomp.json` | Docker default seccomp profile plus a rule that allows `clone` and `unshare` flags (for the Electron sandbox). |
 | `docker/instances/codebot-instance` | Bash script (about 880 lines). Commands: `setup`, `create`, `list`, `up`, `down`, `restart`, `logs`, `upgrade [--all]`, `update-request`, `backup`, `verify`, `restore`, `backups`, `run`. |
 | `docker/instances/compose.yaml` | Instance Compose with `CODEBOT_NAME`, `CODEBOT_CPUS`, `CODEBOT_MEM` (required), `CODEBOT_TAG` (default `latest`), `CODEBOT_TMP` (default `8g`). Read-only root, tmpfs folders, syslog log driver. |
@@ -147,7 +147,7 @@ Connector code that uses this package: `src/backend/messaging/whatsapp/` (9 file
 
 ### Remote connection path (WebRTC, as implemented in team-client)
 
-1. The app signs in through the account Worker (`api.openbot.run`, or a self-hosted one). The app keeps the session.
+1. The app signs in through the account Worker (`api.codebot.example`, or a self-hosted one). The app keeps the session.
 2. `RemoteTeamDirectoryClient.startSession(hostId)` creates a session. `#ticket(sessionId, clientPublicKey)` calls `POST /v2/remote/sessions/<id>/ticket` and gets `signalUrl` and a signed ticket.
 3. The host and the client open `WSS /v1/signal` (see `remote/README.md`, Flow). Signal checks the ES256 ticket with JWKS (`tokens.ts`).
 4. `createRemoteTeamPeer` (in `remote-peer.ts`) sends a `hello`. Signal replies with `ready`, and the TURN `iceServers`. Signal then relays `offer`, `ice-candidate`, `ice-restart` and `turn-refresh` messages. Message types are in `packages/contracts/src/signal-protocol/messages.ts`.
@@ -279,7 +279,7 @@ Follow `docs/self-hosted-server.md`, section Install: `curl -fsSL .../scripts/in
 
 1. Get `docker/compose.yaml` and `docker/seccomp.json` (from `main` or from a release tag).
 2. `docker compose up -d`, then `docker compose exec codebot codebot login`.
-3. Pin a version: change `image:` to `ghcr.io/nightly-labs/openbot:<version>`.
+3. Pin a version: change `image:` to `ghcr.io/your-org/codebot:<version>`.
 
 ### Run several instances on one host
 
@@ -309,15 +309,15 @@ Follow `docs/self-hosted-server.md`, section Install: `curl -fsSL .../scripts/in
 ### Remote path
 
 - Signal never stores tokens, SDP, ICE, file names or messages (`remote/README.md`). Rooms and presence are in memory. Restarting Signal drops them.
-- A self-hosted Signal needs a self-hosted account service with its own ticket keys. A ticket from `openbot.run` does not open a self-hosted Signal, and the reverse (`docs/self-hosting.md`).
+- A self-hosted Signal needs a self-hosted account service with its own ticket keys. A ticket from `codebot.example` does not open a self-hosted Signal, and the reverse (`docs/self-hosting.md`).
 - Signal and TURN names must be DNS only. A Cloudflare proxy hides the real IP, and the entry rule and TURN clients need that IP (`remote/README.md`, Production requirements).
 - Without UDP 16384-65535 open, relay connections are slow or fail (`remote/README.md`).
 - The entry name (`SIGNAL_ENTRY_HOST`) must also be DNS only. `SIGNAL_ENTRY_HOST` and `SIGNAL_PUBLIC_IPV4` must be set together, or `config.ts` throws and Signal does not start. `SIGNAL_ID` is optional, but when set it must match `^[a-z0-9-]{1,32}$`.
 - A relay that is full (quota 486) gives every new peer a failed connection. Watch `codebot_remote_turn_relay_available` and the `signal_capacity` event.
 - `REMOTE_MAX_CONNECTIONS_PER_USER` must be changed on the Signal server. The desktop cannot change it.
-- `remote/.env.example` contains production-looking defaults (`REMOTE_TICKET_JWKS_URL`, `REMOTE_CONTROL_PLANE_URL`, `TELEGRAM_WEBHOOK_ORIGIN` point to `openbot.run`). Change them for a self-hosted install.
+- `remote/.env.example` contains production-looking defaults (`REMOTE_TICKET_JWKS_URL`, `REMOTE_CONTROL_PLANE_URL`, `TELEGRAM_WEBHOOK_ORIGIN` point to `codebot.example`). Change them for a self-hosted install.
 - `remote/.env.production` is encrypted (Dotenvx). Do not pass it to `docker compose --env-file`, because Compose does not decrypt it. Use `remote:up` (Dotenvx wrapper). Do not make a new key pair.
-- The nginx file name in `remote/README.md` is `nginx/signal.openbot.run.conf`, but the file in the repo is `remote/nginx/signal.codebot.run.conf`. Use the real file name (unverified which name the server uses).
+- The nginx file name in `remote/README.md` is `nginx/signal.codebot.example.conf`, but the file in the repo is `remote/nginx/signal.codebot.run.conf`. Use the real file name (unverified which name the server uses).
 - `remote/coturn/entrypoint.sh` appends `min-port` and `max-port` after copying `turnserver.conf`, but only when `TURN_MIN_PORT` and `TURN_MAX_PORT` are set (the dev compose sets them). Then the runtime file has duplicate keys. Which value coturn keeps is unverified.
 - `/health/turn` makes a real allocation every minute (cached 1 min). It can briefly take a relay slot.
 - The old deployment doc `docs/remote-session-deployment.md` was deleted; it held upstream hostnames. Production-like steps need separate approval.

@@ -14,7 +14,6 @@ export interface EngineSlashCommand {
 export const SLASH_COMMANDS_UPDATED_METHOD = "codebot/slashCommands/updated";
 export const SLASH_COMMANDS_PROBE_METHOD = "codebot/slashCommands/probe";
 export const SLASH_COMMANDS_CUSTOM_METHOD = "codebot/slashCommands/custom";
-export const CONVERSATION_RESET_METHOD = "codebot/conversationReset";
 
 function bounded(value: unknown, limit: number): string {
   if (!isString(value)) return "";

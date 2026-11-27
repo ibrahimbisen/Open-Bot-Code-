@@ -27,13 +27,11 @@ export function signInMotion(reduced: boolean) {
   };
 }
 
-export type SignInMotion = ReturnType<typeof signInMotion>;
-
 export type PaneDirection = "vertical" | "left" | "right";
 
 export const PANE_ENTER_DELAY_MS = 320;
 export const PANE_SIDE_ENTER_DELAY_MS = 160;
-export const PANE_STAGGER_MS = 45;
+const PANE_STAGGER_MS = 45;
 const PANE_ENTER_MS = 300;
 const PANE_EXIT_MS = 160;
 const PANE_RISE = 10;

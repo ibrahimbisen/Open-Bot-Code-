@@ -19,7 +19,7 @@ export interface ExplorerGitMark {
   ignored: boolean;
 }
 
-export const NO_GIT_MARK: ExplorerGitMark = { change: null, contains: false, ignored: false };
+const NO_GIT_MARK: ExplorerGitMark = { change: null, contains: false, ignored: false };
 
 export function explorerGitMarks(
   statuses: readonly (ExplorerGitStatus | undefined)[],

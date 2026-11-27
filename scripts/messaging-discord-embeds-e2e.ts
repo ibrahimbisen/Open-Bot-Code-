@@ -240,13 +240,13 @@ async function post(threads: MessagingThreads, connection: string, args: Dynamic
 const embed = {
   title: "  Nightly report  ",
   description: `All checks passed. Key ${SECRET} is set.`,
-  url: "https://openbot.run/report",
+  url: "https://codebot.example/report",
   color: 0x5865f2,
   timestamp: "2026-11-09T10:00:00.000Z",
-  author: { name: "CodeBot", icon_url: "https://openbot.run/icon.png" },
+  author: { name: "CodeBot", icon_url: "https://codebot.example/icon.png" },
   footer: { text: "Routine: nightly" },
-  thumbnail: { url: "https://openbot.run/thumb.png" },
-  image: { url: "https://openbot.run/chart.png" },
+  thumbnail: { url: "https://codebot.example/thumb.png" },
+  image: { url: "https://codebot.example/chart.png" },
   fields: [
     { name: "Passed", value: "41", inline: true },
     { name: "Failed", value: "0", inline: true },
@@ -335,7 +335,7 @@ try {
         { embeds: [{}] },
         { embeds: [{ title: "Link", url: "javascript:alert(1)" }] },
         { embeds: [{ title: "Color", color: 0x1000000 }] },
-        { embeds: [{ title: "Unknown", video: { url: "https://openbot.run/v.mp4" } }] },
+        { embeds: [{ title: "Unknown", video: { url: "https://codebot.example/v.mp4" } }] },
         { embeds: Array.from({ length: 11 }, () => ({ title: "Many" })) },
         { embeds: [{ description: "d".repeat(4_000) }, { description: "d".repeat(2_001) }] },
       ];

@@ -18,19 +18,11 @@ export function apiError(status: number, code: string, message: string): Respons
   return json({ error: { code, message } }, status);
 }
 
-export function noContent(): Response {
-  return new Response(null, { status: 204, headers: { "Cache-Control": "no-store" } });
-}
-
 export function bearerToken(request: Request): string | null {
   const authorization = request.headers.get("Authorization");
   if (!authorization?.startsWith("Bearer ")) return null;
   const token = authorization.slice("Bearer ".length);
   return token && token.length <= 512 ? token : null;
-}
-
-export function unauthorized(message = "Sign in is required."): Response {
-  return apiError(401, "unauthorized", message);
 }
 
 export type ErrorResponder = (error: unknown) => Response;
@@ -57,7 +49,7 @@ export function createErrorResponder(logger: Logger): ErrorResponder {
   };
 }
 
-export class ApiResponseError extends Error {
+class ApiResponseError extends Error {
   constructor(
     readonly status: number,
     readonly code: string,

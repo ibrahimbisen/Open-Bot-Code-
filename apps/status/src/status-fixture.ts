@@ -2,7 +2,7 @@ import { HISTORY_DAYS, type Incident, SERVICE_IDS, type ServiceId, type StatusFi
 
 export const FIXTURE_NOW = "2026-10-16T10:05:00Z";
 
-const ISSUES = "https://github.com/nightly-labs/openbot/issues";
+const ISSUES = "https://github.com/your-org/codebot/issues";
 
 const INCIDENTS: readonly Incident[] = [
   {

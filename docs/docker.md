@@ -2,7 +2,7 @@
 
 The CodeBot image is the Linux release, run as a [self-hosted server](self-hosted-server.md) in a
 container. It is a normal Remote host of your account. You use it from the desktop app, the iPhone
-app or `openbot.run/app`. The image is `ghcr.io/nightly-labs/openbot`, for `linux/amd64` and
+app or `codebot.example/app`. The image is `ghcr.io/your-org/codebot`, for `linux/amd64` and
 `linux/arm64`.
 
 ## Run
@@ -10,8 +10,8 @@ app or `openbot.run/app`. The image is `ghcr.io/nightly-labs/openbot`, for `linu
 With Docker Compose:
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/nightly-labs/openbot/main/docker/compose.yaml
-curl -fsSLO https://raw.githubusercontent.com/nightly-labs/openbot/main/docker/seccomp.json
+curl -fsSLO https://raw.githubusercontent.com/your-org/codebot/main/docker/compose.yaml
+curl -fsSLO https://raw.githubusercontent.com/your-org/codebot/main/docker/seccomp.json
 docker compose up -d
 docker compose exec codebot codebot login
 ```
@@ -19,12 +19,12 @@ docker compose exec codebot codebot login
 With `docker run`:
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/nightly-labs/openbot/main/docker/seccomp.json
+curl -fsSLO https://raw.githubusercontent.com/your-org/codebot/main/docker/seccomp.json
 docker run -d --name codebot --restart unless-stopped \
   --security-opt seccomp=seccomp.json --security-opt no-new-privileges:true \
   --shm-size 1g --stop-timeout 60 \
   -v codebot-data:/data \
-  ghcr.io/nightly-labs/openbot:latest
+  ghcr.io/your-org/codebot:latest
 docker exec -it codebot codebot login
 ```
 
@@ -32,12 +32,12 @@ These commands get the files from `main` and run `latest`. To pin a release (see
 get the files of the same release tag, and use its version in the image. For example, for 0.76.1:
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/nightly-labs/openbot/v0.76.1/docker/compose.yaml
-curl -fsSLO https://raw.githubusercontent.com/nightly-labs/openbot/v0.76.1/docker/seccomp.json
+curl -fsSLO https://raw.githubusercontent.com/your-org/codebot/v0.76.1/docker/compose.yaml
+curl -fsSLO https://raw.githubusercontent.com/your-org/codebot/v0.76.1/docker/seccomp.json
 ```
 
-Then set `image: ghcr.io/nightly-labs/openbot:0.76.1` in `compose.yaml`, or use
-`ghcr.io/nightly-labs/openbot:0.76.1` in `docker run`.
+Then set `image: ghcr.io/your-org/codebot:0.76.1` in `compose.yaml`, or use
+`ghcr.io/your-org/codebot:0.76.1` in `docker run`.
 
 `codebot login` asks for your email and the code that CodeBot sends to it. An operator who sets up
 the container for somebody else can use `codebot login --claim` instead (see
@@ -68,9 +68,9 @@ The container publishes no port. CodeBot only connects out: to the account serve
 and to Signal and TURN for remote use. The Team API listens on `127.0.0.1` in the container.
 The container does not serve a web interface, except the setup page of
 `CODEBOT_SETUP_PAGE_PORT` (see [Umbrel](umbrel.md#the-setup-page)). After `codebot login`, use
-[`openbot.run/app`](https://openbot.run/app) with the same account to select the server. A web
+[`codebot.example/app`](https://codebot.example/app) with the same account to select the server. A web
 client at your own origin is not included in this image. The
-[self-hosted account service](self-hosting.md#what-changes) is a separate deployment with its own
+[self-hosted account service](self-hosting.md) is a separate deployment with its own
 client limits.
 
 ## Network
@@ -407,7 +407,7 @@ is the machine-readable source for the newest full release. For example, this re
 prints its tag:
 
 ```sh
-gh api repos/nightly-labs/openbot/releases/latest --jq '.tag_name'
+gh api repos/your-org/codebot/releases/latest --jq '.tag_name'
 ```
 
 Automation can poll that metadata and download an image. Installation needs these checks:
@@ -469,7 +469,7 @@ environment of CodeBot, so they can read these values.
 | `XAI_API_KEY`, `CURSOR_API_KEY`, `CLINE_API_KEY` | A provider API key. |
 | `CODEBOT_CODEX_PATH`, `CODEBOT_CLAUDE_PATH`, `CODEBOT_GROK_PATH`, `CODEBOT_OPENCODE_PATH`, `CODEBOT_CURSOR_PATH`, `CODEBOT_CLINE_PATH`, `CODEBOT_KIMI_PATH`, `CODEBOT_DEVIN_PATH`, `CODEBOT_COPILOT_PATH`, `CODEBOT_MISTRAL_PATH`, `CODEBOT_ANTIGRAVITY_PATH`, `CODEBOT_PI_PATH`, `CODEBOT_MUSE_PATH`, `CODEBOT_HERMES_PATH` | Another provider executable. Mount it read-only in the container. With `CODEBOT_HERMES_PATH`, CodeBot does not offer the Hermes download. |
 | `CODEBOT_AUTH_API_URL` | Another account server, for example a [self-hosted account service](self-hosting.md). |
-| `CODEBOT_REMOTE_SIGNAL_URL` | The Signal of a [self-hosted account service](self-hosting.md#4-start-the-app), as a `wss:` URL. Set it together with `CODEBOT_AUTH_API_URL`. Without that variable, CodeBot does not start. |
+| `CODEBOT_REMOTE_SIGNAL_URL` | The Signal of a [self-hosted account service](self-hosting.md), as a `wss:` URL. Set it together with `CODEBOT_AUTH_API_URL`. Without that variable, CodeBot does not start. |
 | `CODEBOT_DISPLAY_SIZE` | The size of the virtual display that computer use reads, as `WIDTHxHEIGHT` from 640x480 to 2576x2576. The default is 1280x800. A value that is not valid writes a warning in `docker logs`, and the container starts with 1280x800. See [Display size](self-hosted-server.md#display-size) for when to use 1920x1080. `docker/instances/compose.yaml` does not pass it, so an instance uses 1280x800. |
 | `CODEBOT_SETUP_PAGE_PORT` | A port from 1024 to 65535 for the [setup page](umbrel.md#the-setup-page), which signs the server in from a browser. The Umbrel app sets it. Publish the port only behind a proxy that asks for a password: any client that reaches it can sign in a server that is signed out. |
 
@@ -493,9 +493,9 @@ environment of CodeBot, so they can read these values.
   release:
 
   ```sh
-  gh attestation verify oci://ghcr.io/nightly-labs/openbot:<version> \
-    --repo nightly-labs/openbot \
-    --signer-workflow nightly-labs/openbot/.github/workflows/release.yml \
+  gh attestation verify oci://ghcr.io/your-org/codebot:<version> \
+    --repo your-org/codebot \
+    --signer-workflow your-org/codebot/.github/workflows/release.yml \
     --source-ref refs/tags/v<version>
   ```
 

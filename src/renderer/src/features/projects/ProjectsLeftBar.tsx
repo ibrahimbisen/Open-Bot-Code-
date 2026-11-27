@@ -25,7 +25,7 @@ import { ProjectStatusEntries } from "./ProjectStatusEntries";
 import { projectSlots } from "./project-slots";
 import { RECENT_CHAT_COUNT, useProjects } from "./projects-context";
 
-export const ACTIVITY_LABEL = {
+const ACTIVITY_LABEL = {
   idle: "project.status.idle",
   working: "project.status.working",
   done: "project.status.done",

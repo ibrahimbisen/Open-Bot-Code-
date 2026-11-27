@@ -70,7 +70,7 @@ when a server is idle or boat stops a sandbox; and `error` and `deleted`. The Wo
    renews on the same day as the server ([Commercial license](architecture/servers.md#commercial-license)).
    While the license promotion (`LICENSE_TRIAL_END`) runs, the page has the server line only, and the
    license starts with a free trial until the promotion ends.
-   Refunds are by email only (Terms: Consumer Right of Withdrawal): email hello@openbot.run within
+   Refunds are by email only (Terms: Consumer Right of Withdrawal): email hello@codebot.example within
    2 hours of the purchase for a 90% refund, or use the statutory withdrawal. An operator makes the
    refund in the Stripe Dashboard and cancels the subscription now. A refunded and cancelled server plan
    deletes the server and its data at once (step 7).
@@ -683,7 +683,7 @@ copies (`rm -rf`, then `cp -a`); see plan 011 item 3.
 A server that has no updater, such as one made from a template before 0.26.0, needs one upgrade by
 hand. With a boat key that has command and file access: upload `scripts/hosting/` to
 `/tmp/codebot-upgrade`, run `sudo systemctl stop codebot.service`, run `sudo bash /tmp/codebot-upgrade/provision.sh user <AppImage URL> <SHA-256>
-https://api.openbot.run` as a detached command, and start the service again. The data in the home
+https://api.codebot.example` as a detached command, and start the service again. The data in the home
 folder and in `/srv` stays.
 
 On a server, `codebot-hosted-server` starts a D-Bus session, unlocks a gnome-keyring with a
@@ -1690,7 +1690,7 @@ Not confirmed:
 - the behavior of Signal while the sandbox and the VPS both have the host ID. The test never ran both;
 - the restart action in the desktop and mobile clients. They read the same field through the same
   gate, and only the web client was checked;
-- the cause of five `turn.openbot.run` resolve errors on the first start on the VPS in the first
+- the cause of five `turn.codebot.example` resolve errors on the first start on the VPS in the first
   test. The second test did not look for them.
 
 Tested on 2026-11-11 on one VPS (FRA-01, 6 vCPU, 16 GiB, Ubuntu 24.04, CodeBot 0.67.1):
@@ -1726,7 +1726,7 @@ sales organization (locations FRA-01, FRA-10 and FRA-14), did not order a server
 - On Ubuntu 26.04, the server signed in with `codebot login`, and the web client connected to it. An
   agent with a free OpenCode model ran a shell command as the service user and read a web page. After
   a restart, the server was online again with no new sign-in, and the agent had its chat. The log
-  has `Failed to resolve address for turn.openbot.run` lines when a client connects, although the
+  has `Failed to resolve address for turn.codebot.example` lines when a client connects, although the
   service user resolves that name; the cause is not known, and the connection was made.
 - The configurator of the Leaseweb shop, on the same day, marks Frankfurt (FRA-01) as out of stock
   for each VPS package (`VPS02_1` to `VPS02_6`), and Montreal and Tokyo too. Amsterdam, London,

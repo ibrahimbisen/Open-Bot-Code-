@@ -162,7 +162,7 @@ export const STORY_SEED = {
   title: "Competitor watch",
 };
 
-export const storyWebhook = (id: string) => `https://hooks.openbot.run/wf/${id}`;
+export const storyWebhook = (id: string) => `https://hooks.codebot.example/wf/${id}`;
 
 interface StoryVersion {
   version: WorkflowVersion;

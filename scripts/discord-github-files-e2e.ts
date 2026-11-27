@@ -227,7 +227,7 @@ try {
       store: new WorkflowStore({ database, nextDueAt: workflowScheduleDueAt(() => "UTC") }),
       runs: new WorkflowRunStore({ database }),
       github: new WorkflowGitHubStore({ database }),
-      githubApp: () => "openbotgit",
+      githubApp: () => "codebotgit",
       githubApi,
       delivery: () => null,
       turnAnswer: () => null,

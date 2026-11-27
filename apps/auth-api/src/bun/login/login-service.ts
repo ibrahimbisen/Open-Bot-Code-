@@ -13,7 +13,7 @@ import { enforceRateLimit, RateLimited } from "./rate-limit";
 
 export const CALLBACK_PATH = "/v1/auth/oidc/callback";
 export const DEVICE_PATH = "/device";
-export const APP_LINK_REDIRECT = "codebot://auth";
+const APP_LINK_REDIRECT = "codebot://auth";
 
 const CODE_TTL_MS = 2 * 60_000;
 const DEVICE_POLL_INTERVAL_SECONDS = 5;
@@ -88,7 +88,7 @@ function invalidRequest(message: string): LoginError {
   return new LoginError(400, "invalid_login_request", message);
 }
 
-export function isAllowedClientRedirect(value: string): boolean {
+function isAllowedClientRedirect(value: string): boolean {
   if (value === APP_LINK_REDIRECT) return true;
   const match = LOOPBACK_REDIRECT_PATTERN.exec(value);
   if (!match) return false;

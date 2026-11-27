@@ -10,7 +10,7 @@ import Constants, { ExecutionEnvironment } from "expo-constants";
 import { useEffect } from "react";
 import { AppState } from "react-native";
 import { create } from "zustand";
-import { devFeatureOverride, devLatestAppVersion } from "@/shared/lib/dev-feature-overrides";
+import { devFeatureOverride } from "@/shared/lib/dev-feature-overrides";
 import { nativeApplicationVersion } from "@/shared/lib/native-application";
 import { isAndroid, isIOS } from "@/shared/lib/platform";
 
@@ -31,7 +31,7 @@ const useMobileFeatures = create<{
   checkedAt: 0,
 }));
 
-export async function refreshMobileFeatures(apiUrl: string, force = false): Promise<MobileFeatureFlags> {
+async function refreshMobileFeatures(apiUrl: string, force = false): Promise<MobileFeatureFlags> {
   const current = useMobileFeatures.getState();
   if (current.apiUrl !== apiUrl) {
     useMobileFeatures.setState({
@@ -79,7 +79,7 @@ export function currentAppVersion(): string | null {
   return nativeApplicationVersion();
 }
 
-export function useMobileFeature(apiUrl: string, feature: keyof MobileFeatureFlags): boolean {
+function useMobileFeature(apiUrl: string, feature: keyof MobileFeatureFlags): boolean {
   const on = useMobileFeatures((state) => state.apiUrl === apiUrl && state.flags[feature]);
   return devFeatureOverride(feature) ?? on;
 }
@@ -100,11 +100,6 @@ export function useMobileFeaturesRefresh(apiUrl: string | null, options: { onApp
 export function useRefreshedMobileFeature(apiUrl: string, feature: keyof MobileFeatureFlags): boolean {
   useMobileFeaturesRefresh(apiUrl);
   return useMobileFeature(apiUrl, feature);
-}
-
-export function useLatestAppVersion(apiUrl: string): string | null {
-  const latest = useMobileFeatures((state) => (state.apiUrl === apiUrl ? state.latestVersion : null));
-  return devLatestAppVersion() ?? latest;
 }
 
 export function useMinimumAppVersion(apiUrl: string): string | null {

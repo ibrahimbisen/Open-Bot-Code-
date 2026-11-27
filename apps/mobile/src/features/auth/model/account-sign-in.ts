@@ -1,7 +1,7 @@
 import type { MobileDevicePlatform } from "@codebot/contracts/mobile-connect";
 import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 
-export const ACCOUNT_SIGN_IN_RETURN = "codebot://auth";
+const ACCOUNT_SIGN_IN_RETURN = "codebot://auth";
 
 const REQUEST_TIMEOUT_MS = 15_000;
 
@@ -25,13 +25,13 @@ export class AccountSignInError extends Error {
   }
 }
 
-export interface AccountSignInDevice {
+interface AccountSignInDevice {
   id: string;
   name: string;
   platform: MobileDevicePlatform;
 }
 
-export type AuthBrowserResult = { type: "success"; url: string } | { type: "cancel" | "dismiss" | "locked" | "opened" };
+type AuthBrowserResult = { type: "success"; url: string } | { type: "cancel" | "dismiss" | "locked" | "opened" };
 
 export interface AccountSignInDependencies {
   fetch: typeof fetch;
@@ -102,7 +102,7 @@ function failureFor(code: string, response?: Response): AccountSignInError {
   return new AccountSignInError("login_failed");
 }
 
-export async function checkAccountService(fetcher: typeof fetch, origin: string): Promise<void> {
+async function checkAccountService(fetcher: typeof fetch, origin: string): Promise<void> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   let response: Response;

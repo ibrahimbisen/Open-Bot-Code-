@@ -2,7 +2,7 @@ import type { AgentProviderDescriptor } from "@codebot/contracts/ipc";
 import type { ContainerPolicy } from "./container";
 import type { EnforcedLockLevel } from "./lock-level";
 
-export type WorkspaceEnforcement = AgentProviderDescriptor["workspaceEnforcement"];
+type WorkspaceEnforcement = AgentProviderDescriptor["workspaceEnforcement"];
 
 export interface LockFacts {
   readonly level: EnforcedLockLevel;

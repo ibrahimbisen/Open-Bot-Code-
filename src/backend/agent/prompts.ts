@@ -215,7 +215,7 @@ function mcpSignInPageQuestion(params: unknown, serverName: string | null): Agen
 
 function elicitationServerName(params: unknown): string | null {
   const name = getString(params, "serverName")?.trim() || null;
-  const shown = name?.startsWith("openbot_") ? name.slice("openbot_".length) : name;
+  const shown = name?.startsWith("codebot_") ? name.slice("codebot_".length) : name;
   return shown && name && !isReservedMcpServerName(name) && shown !== CODEX_APPS_MCP_SERVER_NAME ? shown : name;
 }
 

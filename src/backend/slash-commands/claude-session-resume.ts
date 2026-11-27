@@ -22,7 +22,7 @@ import {
 import { providerListsSessions } from "./slash-command-screens";
 import { SlashCommandsFailed } from "./slash-commands";
 
-export const RESUME_HISTORY_EVENT = "thread.session-resumed";
+const RESUME_HISTORY_EVENT = "thread.session-resumed";
 const SESSION_LIMIT = 100;
 const IMPORTED_MESSAGE_LIMIT = 400;
 const TITLE_LIMIT = 120;

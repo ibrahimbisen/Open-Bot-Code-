@@ -6,9 +6,7 @@ import {
   type InterfaceAddress,
   interfaceAddresses,
   type PhoneConnection,
-  type PhoneVpnState,
   phoneNetworkText,
-  phoneVpnState,
   probeShape,
 } from "./phone-network";
 import { supportLog } from "./support-log";
@@ -17,7 +15,6 @@ const GATHER_LIMIT_MS = 1_500;
 const NOT_READ = "Not read yet";
 
 let text = NOT_READ;
-let vpn: PhoneVpnState = "unknown";
 let reading: Promise<string> | null = null;
 let again = false;
 let installed = false;
@@ -76,13 +73,13 @@ async function readInterfaces(): Promise<InterfaceAddress[] | null> {
   }
 }
 
-async function read(): Promise<{ text: string; vpn: PhoneVpnState }> {
+async function read(): Promise<string> {
   const [state, addresses] = await Promise.all([
     Network.getNetworkStateAsync().catch((): Network.NetworkState => ({})),
     readInterfaces(),
   ]);
   const network = { connection: connectionOf(state), addresses };
-  return { text: phoneNetworkText(network), vpn: phoneVpnState(network) };
+  return phoneNetworkText(network);
 }
 
 export function refreshPhoneNetwork(): Promise<string> {
@@ -95,10 +92,7 @@ export function refreshPhoneNetwork(): Promise<string> {
     do {
       again = false;
       const result = await read().catch(() => null);
-      if (result) {
-        next = result.text;
-        vpn = result.vpn;
-      }
+      if (result !== null) next = result;
     } while (again);
     if (next !== text) {
       text = next;
@@ -115,10 +109,6 @@ export function refreshPhoneNetwork(): Promise<string> {
 
 export function phoneNetwork(): string {
   return text;
-}
-
-export function phoneVpn(): PhoneVpnState {
-  return vpn;
 }
 
 export function subscribePhoneNetwork(listener: () => void): () => void {

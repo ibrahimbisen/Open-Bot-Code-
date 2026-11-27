@@ -197,14 +197,14 @@ idle hours, the next vault call unlocks again from the stored record. Disconnect
 the CLI data. The phone shows the connector with no action.
 
 The GitHub connector is built in and has no SQLite row. `src/main/github-connector-service.ts` signs
-in to the `openbotgit` GitHub App with the device flow, which needs only the public Client ID, and keeps
+in to the `codebotgit` GitHub App with the device flow, which needs only the public Client ID, and keeps
 the tokens in `codebot-github-connector-v1.json`, encrypted with `safeStorage`. While it is
 connected, `McpGateway.enabled()` adds the `codebot-github` server (`api.githubcopilot.com/mcp/`),
 and `mcpAuthorization()` gives it a fresh bearer at each hand-off. An enabled server that the user added
 with the name `github` wins. For `gh` and `git`, the service writes the token to
 `<userData>/provider-state/github` (mode 0600), and each provider gets `GH_CONFIG_DIR` and a
 `GIT_CONFIG_*` credential helper that reads that file. The environment holds only paths, never the
-token. The helper gives the `openbotgit[bot]` token for a repository that has one. For other
+token. The helper gives the `codebotgit[bot]` token for a repository that has one. For other
 repositories, it first asks the git credential helpers that the computer had before (with the
 original `GH_CONFIG_DIR` and no prompts), and gives the connector's user token only when they have
 no credential. The CodeBot GitHub App reaches only the repositories where it is installed, so this
@@ -213,7 +213,7 @@ reads: git does not send a store or an erase to the helpers of the computer, and
 the computer's credential, git does not try the connector token in the same command. Codex gets
 these values through `shell_environment_policy.set` in the thread config.
 
-A user token makes GitHub show "user with OpenBotGit". To show `openbotgit[bot]`, the desktop sends
+A user token makes GitHub show "user with CodeBotGit". To show `codebotgit[bot]`, the desktop sends
 the user token to `POST /v1/github/installation-tokens` on the account Worker
 (`apps/auth-api/src/server/github-installation-tokens.ts`). The Worker holds the app's private key
 (`GITHUB_APP_PRIVATE_KEY`, PKCS #8) and signs an app JWT. It mints one installation token for each
@@ -236,7 +236,7 @@ agent can give to the user. With no key it answers 503, and the desktop keeps th
   URL and header.
 - `gh` has one token for each host, so it acts as the user.
 
-A pull request that an agent opens with a bot token has `openbotgit[bot]` as its author, so the user
+A pull request that an agent opens with a bot token has `codebotgit[bot]` as its author, so the user
 who asked for it can approve it. A branch rule that needs one approval then passes with no second
 person.
 
@@ -254,6 +254,6 @@ The backend local skill tools derive the agent from the calling provider session
 
 ## Plugin distribution
 
-A plugin is one developer's bundle: an MCP server, shown as an app, the skills that drive it, and the listing text. The catalog of available plugins is a static file set that the Account Worker serves from `openbot.run` without an account, and the main process keeps a copy in the user-data directory rather than in SQLite, because a remote catalog is a cache and not the source of truth. An install saves the app as a host-global MCP server and installs the pinned skills into the chosen agent. A share link at `openbot.run/plugins/<slug>` opens a public page, and `codebot://plugins/<slug>` opens the listing in the app; neither one installs anything.
+A plugin is one developer's bundle: an MCP server, shown as an app, the skills that drive it, and the listing text. The catalog of available plugins is a static file set that the Account Worker serves from `codebot.example` without an account, and the main process keeps a copy in the user-data directory rather than in SQLite, because a remote catalog is a cache and not the source of truth. An install saves the app as a host-global MCP server and installs the pinned skills into the chosen agent. A share link at `codebot.example/plugins/<slug>` opens a public page, and `codebot://plugins/<slug>` opens the listing in the app; neither one installs anything.
 
-See [plugin distribution and sharing](../plugin-distribution.md) for the catalog shape, the fetch and cache rules, the install and uninstall order, the deep-link parser rules, and the security review. Three parts of that design run today. The Apps tab installs the listing's pinned skills into the chosen agent and saves its app as a host-global MCP server. The links work: `openbot.run/marketplace/apps` (which `openbot.run/plugins` redirects to) and `openbot.run/plugins/<slug>` are pages on the public site, and `codebot://plugins/<slug>` opens that listing in the app, which is one of the link kinds that `src/main/deep-link-router.ts` recognises beside an invitation. Both sides read one catalog, generated from `marketplace/plugin-catalog/`, because a listing that said one thing on the page and another in the app would be two catalogs. The Apps tab also uninstalls a listing. The catalog files, the Worker routes that serve them, and the cache in the main process are still design.
+See [plugin distribution and sharing](../plugin-distribution.md) for the catalog shape, the fetch and cache rules, the install and uninstall order, the deep-link parser rules, and the security review. Three parts of that design run today. The Apps tab installs the listing's pinned skills into the chosen agent and saves its app as a host-global MCP server. The links work: `codebot.example/marketplace/apps` (which `codebot.example/plugins` redirects to) and `codebot.example/plugins/<slug>` are pages on the public site, and `codebot://plugins/<slug>` opens that listing in the app, which is one of the link kinds that `src/main/deep-link-router.ts` recognises beside an invitation. Both sides read one catalog, generated from `marketplace/plugin-catalog/`, because a listing that said one thing on the page and another in the app would be two catalogs. The Apps tab also uninstalls a listing. The catalog files, the Worker routes that serve them, and the cache in the main process are still design.

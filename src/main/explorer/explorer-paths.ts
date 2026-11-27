@@ -56,7 +56,7 @@ function missing(): ExplorerRefused {
   return new ExplorerRefused("missing", sourceText("error.explorer.notFound"));
 }
 
-export function samePath(first: string, second: string): boolean {
+function samePath(first: string, second: string): boolean {
   return relative(first, second) === "";
 }
 
@@ -146,7 +146,7 @@ export async function resolveNearest(roots: readonly ExplorerRoot[], input: stri
 
 const WINDOWS_RESERVED = /^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$/iu;
 
-export function isValidEntryName(name: string, platform: NodeJS.Platform = process.platform): boolean {
+function isValidEntryName(name: string, platform: NodeJS.Platform = process.platform): boolean {
   if (name.length === 0 || name.length > EXPLORER_LIMITS.name) return false;
   if (name === "." || name === ".." || /[\0/\\]/u.test(name)) return false;
   if (platform !== "win32") return true;

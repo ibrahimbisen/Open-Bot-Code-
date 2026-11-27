@@ -18,7 +18,7 @@ const ICE_ROUTE = new RegExp(`^${candidate} -> ${candidate}$`, "u");
 const iceRoute = (value: unknown): value is string => isString(value) && ICE_ROUTE.test(value);
 const voice = { server_kind: ["remote"], transcription: ["local", "cloud"] } as const;
 
-export const MOBILE_EVENTS = {
+const MOBILE_EVENTS = {
   mobile_app_opened: { kind: ["cold_start", "foreground"], signed_in: isBoolean },
   mobile_pairing_action: {
     action: ["scanner_opened", "camera_permission", "redeem", "cancel"],

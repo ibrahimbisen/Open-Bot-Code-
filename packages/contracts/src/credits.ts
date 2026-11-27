@@ -486,7 +486,7 @@ export const CREDIT_MODEL_COSTS: readonly CreditModelCost[] = [
 export const CREDIT_CLIP_SECONDS = 5;
 export const CREDIT_WELCOME = 10;
 
-export const CREDIT_PRICES_URL = "https://openbot.run/credits";
+export const CREDIT_PRICES_URL = "https://codebot.example/credits";
 
 export const CREDIT_MIN_RATE = 0.1;
 

@@ -91,7 +91,7 @@ export const messages = {
   "sitePage.nearSign.failure.failed": "La firma no se completó. Inténtalo de nuevo.",
   "sitePage.report.pageTitle": "Denunciar un sitio alojado — OpenBot Code",
   "sitePage.report.title": "Denunciar un sitio alojado",
-  "sitePage.report.intro": "Envía una denuncia sobre contenido dañino o ilegal en una dirección de openbot.site.",
+  "sitePage.report.intro": "Envía una denuncia sobre contenido dañino o ilegal en una dirección de codebot.example.",
   "sitePage.report.hostnameLabel": "Dirección del sitio",
   "sitePage.report.hostnameMissing": "Introduce la dirección del sitio",
   "sitePage.report.reasonLabel": "Motivo",

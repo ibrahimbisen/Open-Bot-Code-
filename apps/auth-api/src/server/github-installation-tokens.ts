@@ -125,7 +125,7 @@ const MAX_COMMENT_PAGES = 10;
 
 const SIMILAR_ISSUES = 5;
 const SIMILAR_SUMMARY_LENGTH = 300;
-const FEEDBACK_APP = "openbotgit";
+const FEEDBACK_APP = "codebotgit";
 
 export interface GitHubIssue {
   number: number;

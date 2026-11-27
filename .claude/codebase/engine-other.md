@@ -227,7 +227,7 @@ Source: `docs/codebot/prd-status.md` section 15 and `docs/codebot/decisions.md` 
 Other PRD section 15 rows that touch this area:
 
 - Billing, Stripe, plans (Remove, W02): `crm/crm-stripe.ts` is a CRM source adapter for Stripe. It is not billing code. Its removal status is unverified.
-- OpenBot hosted servers (Remove, W02): the agent tool `list_sites` in `codebot-tools.ts` and `src/main/ipc/hosted-site-handlers.ts` look related. Status unverified.
+- CodeBot hosted servers (Remove, W02): the agent tool `list_sites` in `codebot-tools.ts` and `src/main/ipc/hosted-site-handlers.ts` look related. Status unverified.
 
 ## How it works
 
@@ -396,7 +396,7 @@ Other PRD section 15 rows that touch this area:
 - Routine limits are shared. `ROUTINE_TABLES` uses `INPUT_LIMITS.agentRoutines` for both agent and channel routines.
 - Routine timer. Any change to a routine must call `arm()`. Otherwise the next run waits for the next timer tick.
 - Stripe in CRM versus PRD billing removal. `crm/crm-stripe.ts` reads Stripe data for CRM. PRD row W02 says remove Stripe billing. Check the intent before removing it.
-- Hosting tool. `list_sites` in `codebot-tools.ts` relates to hosted sites. PRD W02 says remove OpenBot hosted servers. Check before removal.
+- Hosting tool. `list_sites` in `codebot-tools.ts` relates to hosted sites. PRD W02 says remove CodeBot hosted servers. Check before removal.
 - MCP catalog pins. `MCP_REMOTE_ARGS` uses `mcp-remote@latest`, which is not a pinned version. `CATALOG_PIN_MOVES` is a one-off move for `apple-apps`. `migrateCatalogRows` rewrites stored rows (when it runs: unverified).
 - Computer-use server name. A user server named `computer_use` is moved by migration 0021. The name is reserved for CodeBot's own computer-use server (`COMPUTER_USE_MCP_SERVER_NAME` in `packages/contracts/src/ipc-mcp-servers.ts` is `computer_use`). `agentMcpServers` removes that server when `computerUse` is false.
 - WhatsApp is not a connector id. `CONNECTOR_MESSAGING_PLATFORMS` has slack, discord and telegram. WhatsApp is in `MESSAGING_PLATFORMS` only. Check both lists when you add a platform.

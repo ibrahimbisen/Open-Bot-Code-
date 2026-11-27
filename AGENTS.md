@@ -68,7 +68,7 @@ adding a module or moving ownership between workspaces.
   the same way. Both pass them through in transit only: they do not store or log them, and the
   account service keeps only the credit hold record. The processor adapters, routes, upstream model
   IDs and keys are in the private repository
-  [`nightly-labs/openbot-media-gateway`](https://github.com/nightly-labs/openbot-media-gateway) and
+  [`your-org/codebot-media-gateway`](https://github.com/your-org/codebot-media-gateway) and
   its Worker secrets, never in this repository. To change a processor, a route, a welcome route or
   the active upstream, work in that repository and deploy its Worker as its README says.
   Exception: the crypto wallet sends its NEAR Intents Agent API calls through the account service
@@ -223,7 +223,7 @@ State which surfaces a change touches. Check all affected consumers and reverse 
 - Desktop renderer (`src/renderer`), mobile (`apps/mobile`), public web (`apps/auth-api`; no separate
   landing app), hosted-site routing (`apps/site-router`), the mobile update server
   (`apps/mobile-updates`), and Signal (`remote/api`).
-- Joined servers: the desktop with a joined server, the web client (`openbot.run/app`), and mobile.
+- Joined servers: the desktop with a joined server, the web client (`codebot.example/app`), and mobile.
   See [Joined servers](#joined-servers).
 - IPC contracts (`packages/contracts`) and their preview implementation
   (`src/renderer/src/preview/mock-codebot.ts`).

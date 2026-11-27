@@ -151,7 +151,7 @@ async function main(): Promise<void> {
     const fixtureCopied = run("docker", ["cp", `${fixture}/.`, `${dind}:/fixture`]);
     if (fixtureCopied.status !== 0) throw new Error(`The instance fixture did not copy: ${fixtureCopied.stderr}`);
     must(`mkdir -p /stand-in && cat >/stand-in/Dockerfile <<'EOF'\n${standIn}EOF`);
-    must("docker build --quiet --tag ghcr.io/nightly-labs/openbot:latest /stand-in >/dev/null");
+    must("docker build --quiet --tag ghcr.io/your-org/codebot:latest /stand-in >/dev/null");
 
     must(`mkdir -p /srv/codebot/main/data /backups
       fallocate --length 256M /srv/codebot/main/data.img
@@ -159,7 +159,7 @@ async function main(): Promise<void> {
       mount -o loop /srv/codebot/main/data.img ${data}
       cp -a /fixture/. ${data}/ && chown -R 1000:1000 ${data} && chmod 0700 ${data}
       printf 'CODEBOT_NAME=main\\nCODEBOT_CPUS=1\\nCODEBOT_MEM=1g\\nCODEBOT_DISK=256M\\nCODEBOT_BACKUP_DIR=/backups\\nCODEBOT_BACKUP_KEEP=2\\nCODEBOT_BACKUP_MAX_AGE=24\\n' >/opt/codebot-docker/instances/main.env
-      docker run --detach --name codebot-main --stop-timeout 20 -v ${data}:/data ghcr.io/nightly-labs/openbot:latest >/dev/null`);
+      docker run --detach --name codebot-main --stop-timeout 20 -v ${data}:/data ghcr.io/your-org/codebot:latest >/dev/null`);
     const dataHash = must(`sha256sum ${data}/.config/CodeBot/codebot.db | cut -d ' ' -f 1`);
 
     let result = instance("backups", "main");
@@ -408,7 +408,7 @@ async function main(): Promise<void> {
       `sed -n 's/^  "codebotVersion": "\\(.*\\)",$/\\1/p' /backups/main/${removedBackup}/manifest.json`,
     );
     must(
-      `docker run --detach --name codebot-main --stop-timeout 20 -v ${data}:/data ghcr.io/nightly-labs/openbot:latest >/dev/null`,
+      `docker run --detach --name codebot-main --stop-timeout 20 -v ${data}:/data ghcr.io/your-org/codebot:latest >/dev/null`,
     );
     check(
       "a backup without a container has the version of the image",

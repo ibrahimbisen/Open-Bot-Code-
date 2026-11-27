@@ -1,5 +1,5 @@
 const GITHUB_APP_CLIENT_ID = "Iv23lik5pzHz70cb0RUL";
-const GITHUB_APP_SLUG = "openbotgit";
+const GITHUB_APP_SLUG = "codebotgit";
 
 export interface GitHubAppConfig {
   clientId: string;

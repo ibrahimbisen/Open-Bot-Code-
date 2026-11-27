@@ -21,7 +21,7 @@ export interface ProviderBlocklistOptions {
 
 const NOTHING_BLOCKED: BlockedVersions = new Map();
 
-export function parseBlockedVersions(value: unknown): BlockedVersions | null {
+function parseBlockedVersions(value: unknown): BlockedVersions | null {
   if (!isDynamicRecord(value) || value.schemaVersion !== 1 || !isDynamicRecord(value.blocked)) return null;
   const blocked = new Map<ManagedProviderId, ReadonlySet<string>>();
   for (const provider of MANAGED_RUNTIME_PROVIDERS) {
@@ -31,7 +31,7 @@ export function parseBlockedVersions(value: unknown): BlockedVersions | null {
   return blocked;
 }
 
-export function mergeBlockedVersions(first: BlockedVersions, second: BlockedVersions): BlockedVersions {
+function mergeBlockedVersions(first: BlockedVersions, second: BlockedVersions): BlockedVersions {
   const merged = new Map<ManagedProviderId, ReadonlySet<string>>();
   for (const provider of MANAGED_RUNTIME_PROVIDERS) {
     const versions = new Set([...(first.get(provider) ?? []), ...(second.get(provider) ?? [])]);

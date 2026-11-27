@@ -42,7 +42,7 @@ function log(text: string): void {
 function usage(): never {
   process.stderr.write(
     [
-      "Usage: bun run bench:compare -- --baseline=<dir of the OpenBot baseline tree> [options]",
+      "Usage: bun run bench:compare -- --baseline=<dir of the upstream baseline tree> [options]",
       "  --baseline=<dir>     baseline tree with its own build (or set CODEBOT_BENCH_BASELINE)",
       "  --out=<dir>          where reports and summary.md go (default _measure next to the worktree folders, else .codebot-build/bench-compare)",
       `  --scenarios=a,b,c    default: ${DEFAULT_SCENARIOS.join(",")}`,

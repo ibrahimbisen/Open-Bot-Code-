@@ -14,11 +14,11 @@ import {
   validUpdateFeedUrl,
 } from "./update-feed";
 
-export class UpdateFeedFailure extends Schema.TaggedError<UpdateFeedFailure>()("UpdateFeedFailure", {
+class UpdateFeedFailure extends Schema.TaggedError<UpdateFeedFailure>()("UpdateFeedFailure", {
   cause: Schema.Defect(),
 }) {}
 
-export interface GenericUpdateFeedOptions {
+interface GenericUpdateFeedOptions {
   provider: "generic";
   url: string;
 }
@@ -49,7 +49,7 @@ const PROBLEM_MESSAGES = {
   insecure: "error.appUpdate.urlInsecure",
 } as const satisfies Record<UpdateFeedUrlProblem, string>;
 
-export function updateFeedUrlProblemMessage(problem: UpdateFeedUrlProblem): string {
+function updateFeedUrlProblemMessage(problem: UpdateFeedUrlProblem): string {
   return sourceText(PROBLEM_MESSAGES[problem]);
 }
 

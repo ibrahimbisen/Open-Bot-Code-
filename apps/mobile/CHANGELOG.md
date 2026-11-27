@@ -1703,7 +1703,7 @@ the [root changelog](../../CHANGELOG.md).
 - In the message queue, tap a teammate's answer to steer it into the running turn. Before, the
   answer had no actions and waited for the turn to end.
 - The app icon has a new design, with a dark appearance on iOS.
-- Settings > About opens the privacy policy on openbot.run instead of GitHub.
+- Settings > About opens the privacy policy on codebot.example instead of GitHub.
 - The Threads row of the server menu shows how many threads have unread messages, not "needs you".
 - The Threads page puts threads in Working, Unread, Read and Archived sections. A host that does not keep read marks still shows Needs you, Working and Waiting.
 - Tasks are now called threads, as on desktop. The Tasks page is now Threads, and Close and Reopen are now Archive and Restore.
@@ -1786,7 +1786,7 @@ the [root changelog](../../CHANGELOG.md).
 
 - MP3 and other audio files in a chat play in the conversation. The card shows the waveform of the file, as on desktop. Tap or drag the waveform to move the position, and tap the speed button to play at 0.5×, 1×, 1.5× or 2×. Before, you could only download them.
 - A Markdown file in a chat opens in a preview that shows the formatted text. The menu shows the source, copies it, or shares the file. Before, you could only download it.
-- Tap any image in a chat to open it, then swipe left or right to see all the other images of the loaded conversation, in chat order. The top bar shows the position, such as "3 of 8". ([#2426](https://github.com/nightly-labs/openbot/issues/2426))
+- Tap any image in a chat to open it, then swipe left or right to see all the other images of the loaded conversation, in chat order. The top bar shows the position, such as "3 of 8". ([#2426](https://github.com/your-org/codebot/issues/2426))
 - When an agent sends two or more images in one reply, the chat shows them together in a compact grid, as on desktop. Before, each image took the full width of the chat.
 - Channels are back in the mobile app, on a computer whose CodeBot has channels again. A channel
   shows in the home list beside your agents, and you can pin it, hide it, put it in a section, and
@@ -1854,7 +1854,7 @@ the [root changelog](../../CHANGELOG.md).
 - Attach ZIP archives in chat when the host runs a version of CodeBot that accepts them.
 - Server settings has a General section for owners and admins: Timezone sets the zone of new routines when the message does not give one, and Memories per agent sets how many memories each agent can keep. The server must have an CodeBot version that supports these settings.
 - Server settings has a Storage page, as on desktop. A ring chart shows how much space CodeBot uses on the server by type, with the size and share of each type. Tap a type to highlight it in the chart. The page also shows the agents and the largest chats, and the free disk space. Tap All files to open, share or delete a stored file. Owners and admins can clear cached server files and logs. The server must have an CodeBot version that supports storage.
-- Server settings has a Sites page, as on desktop. It shows the sites that agents on the server published to openbot.site, the number of sites and the limit of your plan, and when each site expires. Tap a site to open it. Owners and admins can also delete a site. The server must have an CodeBot version that supports sites.
+- Server settings has a Sites page, as on desktop. It shows the sites that agents on the server published to codebot.example, the number of sites and the limit of your plan, and when each site expires. Tap a site to open it. Owners and admins can also delete a site. The server must have an CodeBot version that supports sites.
 - Server settings has an Updates page, as on the desktop. It shows the CodeBot version of the server and the update status. You can check for updates and start an update. Owners and admins can also restart the server now, cancel a scheduled restart, and turn automatic downloads and automatic installs on or off. Members can start an update that waits until the agents are idle, when the server permits it.
 - Server settings has Providers for owners and admins, as in CodeBot on the computer. It shows each AI provider of the computer that runs the server and its status. Tap a provider to connect it, download it, check for updates and update it, or save its API key. The server must have an CodeBot version that supports provider management.
 - Server settings has Connectors for owners and admins, as on the desktop. Connect Slack, Discord, Telegram, GitHub and 1Password on the server, see the status of each connection, pause or resume it, reconnect or disconnect it, and add the orchestrator agent that answers. GitHub shows the repositories that agents can use. Bitwarden shows as a desktop-only connector. The server must have an CodeBot version that supports connectors.
@@ -2284,7 +2284,7 @@ the [root changelog](../../CHANGELOG.md).
   logo.
 - Haptic feedback when you open and close screens, pick options, save, and when an action succeeds
   or fails. Turn it off with the Haptics setting.
-- Open a shared agent link (`https://openbot.run/agents/...` or `codebot://agents/...`) in the app.
+- Open a shared agent link (`https://codebot.example/agents/...` or `codebot://agents/...`) in the app.
   You see the agent before you add it, and you choose the server where you are owner or admin.
   Before, the link opened Safari or showed "Link unavailable".
 - Manage the skills of an agent from Agent info > Skills. An owner or admin can turn a skill on or

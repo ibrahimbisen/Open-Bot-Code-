@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/solid-router";
 
-const PRIVACY_EMAIL = "privacy@openbot.run";
+const PRIVACY_EMAIL = "privacy@codebot.example";
 
 function PrivacyEmail() {
   return <a href={`mailto:${PRIVACY_EMAIL}`}>{PRIVACY_EMAIL}</a>;
@@ -23,8 +23,9 @@ export function PrivacyPolicy() {
         tasks.
       </p>
       <p>
-        This Privacy Policy applies to the CodeBot website at <a href="https://openbot.run">https://openbot.run</a>, its
-        applications, and related services (collectively, the "Services").
+        This Privacy Policy applies to the CodeBot website at{" "}
+        <a href="https://codebot.example">https://codebot.example</a>, its applications, and related services
+        (collectively, the "Services").
       </p>
       <p>
         By accessing or using the Services, you acknowledge that you have read and understood this Privacy Policy. If
@@ -33,7 +34,7 @@ export function PrivacyPolicy() {
       <p>
         Contact: <PrivacyEmail />
         <br />
-        Website: <a href="https://openbot.run">https://openbot.run</a>
+        Website: <a href="https://codebot.example">https://codebot.example</a>
       </p>
 
       <h2>About Our Services</h2>
@@ -913,9 +914,9 @@ export function PrivacyPolicy() {
         the Platform and cannot be disabled without affecting its core functionality.
       </p>
       <p>
-        When you choose a language on the openbot.run website, the website saves that choice in the{" "}
+        When you choose a language on the codebot.example website, the website saves that choice in the{" "}
         <code>codebot_lang</code> cookie for one year, so that the next pages open in the same language. The cookie
-        holds only the language code. To remove it, clear the site data of openbot.run.
+        holds only the language code. To remove it, clear the site data of codebot.example.
       </p>
 
       <h2>Children's Privacy</h2>

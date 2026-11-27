@@ -53,7 +53,7 @@ dd{margin:0;overflow-wrap:anywhere}
 .brand{color:GrayText;font-size:.85rem;margin-top:2.5rem}
 `;
 
-export function escapeHtml(value: string): string {
+function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")

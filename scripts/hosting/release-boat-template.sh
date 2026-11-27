@@ -49,7 +49,7 @@ bun scripts/hosting/build-boat-template.ts \
   "--in-use=$in_use" \
   "--appimage-url=https://github.com/$GITHUB_REPOSITORY/releases/download/$RELEASE_TAG/$asset" \
   "--appimage-sha256=$sha" \
-  --auth-api-url=https://api.openbot.run
+  --auth-api-url=https://api.codebot.example
 
 require_latest
 printf '%s\n' "$name" | node_modules/.bin/wrangler secret put HOSTED_SERVER_TEMPLATE \

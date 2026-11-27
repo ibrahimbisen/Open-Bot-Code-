@@ -257,7 +257,7 @@ export function requireSitePublishingEnabled(): void {
     throw new HostedSiteInputError(
       409,
       "cookie_isolation_unavailable",
-      "Site publishing is disabled until openbot.site has public-suffix cookie isolation.",
+      "Site publishing is disabled until codebot.example has public-suffix cookie isolation.",
     );
   }
 }

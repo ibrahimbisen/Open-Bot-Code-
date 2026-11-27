@@ -36,7 +36,7 @@ export function validUpdateFeedUrl(input: string | null | undefined): string | n
   return parsed.ok ? parsed.url : null;
 }
 
-export function isPrivateNetworkHost(hostname: string): boolean {
+function isPrivateNetworkHost(hostname: string): boolean {
   const host = hostname.toLowerCase().replace(/\.$/u, "");
   if (host.startsWith("[") && host.endsWith("]")) return isPrivateIpv6(host.slice(1, -1));
   const octets = ipv4Octets(host);
@@ -109,7 +109,7 @@ export function redactUpdateFeedUrl(text: string, feedUrl: string): string {
   return search.length > 1 ? withoutFolder.replaceAll(search, "?<redacted>") : withoutFolder;
 }
 
-export function buildUpdateUrl(appUpdateConfig: string): string | null {
+function buildUpdateUrl(appUpdateConfig: string): string | null {
   if (yamlScalar(appUpdateConfig, "provider") !== "generic") return null;
   return validUpdateFeedUrl(yamlScalar(appUpdateConfig, "url"));
 }
@@ -143,7 +143,7 @@ export function savedUpdateFeedUrl(stored: unknown): string | null {
   return typeof stored.url === "string" ? validUpdateFeedUrl(stored.url) : null;
 }
 
-export function readSavedUpdateFeedUrl(storePath: string): string | null {
+function readSavedUpdateFeedUrl(storePath: string): string | null {
   try {
     return savedUpdateFeedUrl(JSON.parse(readFileSync(storePath, "utf8")));
   } catch {

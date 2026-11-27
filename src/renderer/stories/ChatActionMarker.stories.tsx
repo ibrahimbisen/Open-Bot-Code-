@@ -218,7 +218,7 @@ function FeedbackSentStory(props: { withdrawn: boolean; result?: WithdrawFeedbac
             messageId: "feedback-card",
             title: "The chat stops scrolling after a long reply",
             number: 5712,
-            url: "https://github.com/nightly-labs/openbot/issues/5712",
+            url: "https://github.com/your-org/codebot/issues/5712",
             withdrawn: props.withdrawn,
             timestamp: "2026-11-08T10:02:00.000Z",
           }}
@@ -487,8 +487,8 @@ function siteMarker(
     operationId: `${action}-${status}`,
     siteId: hasPublishedSite ? "site-1" : null,
     title: "Launch page",
-    hostname: hasPublishedSite ? "launch-page-23456789ab.openbot.site" : null,
-    url: hasPublishedSite ? "https://launch-page-23456789ab.openbot.site" : null,
+    hostname: hasPublishedSite ? "launch-page-23456789ab.codebot.example" : null,
+    url: hasPublishedSite ? "https://launch-page-23456789ab.codebot.example" : null,
     timestamp,
   };
 }

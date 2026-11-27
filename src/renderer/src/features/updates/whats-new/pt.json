@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Inicie um fluxo de trabalho pelo GitHub: um gatilho do GitHub é executado com novas issues, comentários, pull requests, revisões, verificações com falha ou uma menção a @openbotgit.",
+          "Inicie um fluxo de trabalho pelo GitHub: um gatilho do GitHub é executado com novas issues, comentários, pull requests, revisões, verificações com falha ou uma menção a @codebotgit.",
           "Altere o GitHub a partir de um fluxo de trabalho: comente, adicione rótulos, atribua, revise, feche ou crie uma issue como o GitHub App do CodeBot.",
           "A Loja tem 17 novos agentes do CodeBot, como QA Tester, PR Shepherd e Chief of Staff, e 15 novas habilidades para eles.",
           "Uso mostra o limite mensal do OpenCode Go como uma terceira barra."
@@ -854,7 +854,7 @@
         "items": [
           "Ramifique uma conversa: clique com o botão direito na última mensagem do agente em um turno e selecione Ramificar daqui. Um novo tópico abre com a conversa até essa mensagem.",
           "As configurações do agente têm uma página Instruções que mostra o arquivo AGENTS.md do agente. Quando o agente altera as instruções, o chat mostra a mudança com Desfazer.",
-          "A Loja está em openbot.run. Cada agente e cada habilidade têm a própria página, e Copiar link compartilha essa página.",
+          "A Loja está em codebot.example. Cada agente e cada habilidade têm a própria página, e Copiar link compartilha essa página.",
           "Um agente pode responder a um alerta ou a uma confirmação de um site que a própria ação do navegador dele abriu.",
           "Uma tarefa de canal parada ou com falha tem um botão Cancelar tarefa."
         ]

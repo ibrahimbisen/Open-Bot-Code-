@@ -9,8 +9,8 @@ const TRUSTED_PERMISSIONS = new Set(["admin", "maintain", "write"]);
 const AGREEMENT_PATH = "CLA.md";
 const AGREEMENT_NAME = "CodeBot Contributor License Agreement";
 const EARLIER_ACCEPTED_VERSIONS = ["1.0"];
-const CLA_PAGE_URL = "https://openbot.run/cla";
-const LICENSES_EMAIL = "licenses@openbot.run";
+const CLA_PAGE_URL = "https://codebot.example/cla";
+const LICENSES_EMAIL = "licenses@codebot.example";
 const SIGNATURES_BRANCH = "cla-signatures";
 const SIGNATURES_FILE = "signatures.json";
 const STATUS_CONTEXT = "CLA";
@@ -277,7 +277,7 @@ function requestComment(pr: PullRequest, unsigned: readonly Person[], unlinked: 
     lines.push(
       `${unsigned.map((person) => `@${person.login}`).join(", ")}, thank you for the contribution. Before we can merge it, each author from outside the organization must sign the [${AGREEMENT_NAME}](${CLA_PAGE_URL}). With the agreement, you keep the copyright in your contributions and give CodeBot a license to use them.`,
       "",
-      `To sign, download the agreement as a PDF from [openbot.run/cla](${CLA_PAGE_URL}). Fill it in, sign it, and send it to ${LICENSES_EMAIL}. In the email, write your GitHub login and the link to this pull request: ${pr.url}`,
+      `To sign, download the agreement as a PDF from [codebot.example/cla](${CLA_PAGE_URL}). Fill it in, sign it, and send it to ${LICENSES_EMAIL}. In the email, write your GitHub login and the link to this pull request: ${pr.url}`,
       "",
       "A maintainer records your signature, and then this check runs again. You sign one time. The signature applies to all your contributions to CodeBot.",
     );

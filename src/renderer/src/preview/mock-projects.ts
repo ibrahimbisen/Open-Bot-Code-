@@ -31,14 +31,14 @@ import {
 import { type SourceMessages, sourceText } from "@codebot/i18n/source";
 import { clone, type Listener, type MockRuntime } from "./mock-support";
 
-export interface MockProjectAgentSeed {
+interface MockProjectAgentSeed {
   id: string;
   name: string;
   role: string;
   instructions?: string;
 }
 
-export interface MockProjectChatSeed {
+interface MockProjectChatSeed {
   agentId: string;
   title: string;
   minutesAgo: number;

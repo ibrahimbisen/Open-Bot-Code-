@@ -47,7 +47,6 @@
     "@codebot/team-client": "workspace:*",
     "@codebot/telemetry": "workspace:*",
     "@codebot/user-errors": "workspace:*",
-    "@openpanel/react-native": "1.4.4",
     "@react-native-masked-view/masked-view": "0.3.2",
     "@shopify/react-native-skia": "2.14.0",
     "@speed-highlight/core": "catalog:",

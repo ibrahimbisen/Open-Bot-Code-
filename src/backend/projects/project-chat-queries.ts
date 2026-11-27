@@ -45,7 +45,7 @@ export interface ProjectChatRowPage {
   nextCursor: string | null;
 }
 
-export interface ProjectChatMatchRow {
+interface ProjectChatMatchRow {
   row: ProjectChatRow;
   kind: ProjectChatMatchKind;
   messageId: string | null;

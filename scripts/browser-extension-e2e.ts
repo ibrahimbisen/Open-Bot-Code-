@@ -732,7 +732,7 @@ try {
   async function writeReply() {
     await xPage.goto(`${xBase}/x-fixture/bob/status/2`);
     await replyBox.click();
-    await xPage.keyboard.type(`@OpenBot_ ${xQuestion}`);
+    await xPage.keyboard.type(`@codebot_x ${xQuestion}`);
   }
   let unchangedWithoutAgent: boolean | null = null;
   if (!(await xAgent())) {
@@ -808,7 +808,7 @@ try {
     sent.text.includes("my uncle, a cardiologist") &&
     sent.text.includes("@bob") &&
     sent.text.includes("https://pbs.twimg.com/media/egg.jpg") &&
-    !sent.text.includes("@OpenBot_");
+    !sent.text.includes("@codebot_x");
   const otherReplyLeftOut = !sent.text.includes("Carol thinks");
   const postedAtOnce = posted.text.includes(xQuestion) && posted.at - clickedAt < 5_000;
   const outboxKey = "codebot.x-outbox.v1";
@@ -838,7 +838,7 @@ try {
   );
   await xPage.goto(`${xBase}${X_REDESIGN_PATH}`);
   await xPage.locator("textarea").click();
-  await xPage.keyboard.type(`@OpenBot_ ${redesignQuestion}`);
+  await xPage.keyboard.type(`@codebot_x ${redesignQuestion}`);
   const redesignReply = xPage.locator('button.bg-btn-primary[data-codebot-x="armed"]');
   await redesignReply.waitFor({ timeout: 60_000 });
   await shot(xPage, "8a-x-redesign-armed");
@@ -875,7 +875,7 @@ try {
     !redesignSent.text.includes(`${X_REDESIGN_PATH}/photo`) &&
     redesignSent.text.includes("https://pbs.twimg.com/media/coffee.jpg") &&
     !redesignSent.text.includes("Erin thinks") &&
-    !redesignSent.text.includes("@OpenBot_");
+    !redesignSent.text.includes("@codebot_x");
   report.x = { ...report.x, redesign: { posted: redesignPosted, messageComplete: redesignMessageComplete } };
   assert.ok(redesignPosted, "The redesigned page did not post the reply.");
   assert.ok(

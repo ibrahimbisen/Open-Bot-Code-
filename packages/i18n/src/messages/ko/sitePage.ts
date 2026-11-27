@@ -86,7 +86,7 @@ export const messages = {
   "sitePage.nearSign.failure.failed": "서명을 완료하지 못했어요. 다시 시도해 주세요.",
   "sitePage.report.pageTitle": "호스팅 사이트 신고 — OpenBot Code",
   "sitePage.report.title": "호스팅 사이트 신고",
-  "sitePage.report.intro": "openbot.site 주소의 유해하거나 불법적인 콘텐츠를 신고해 주세요.",
+  "sitePage.report.intro": "codebot.example 주소의 유해하거나 불법적인 콘텐츠를 신고해 주세요.",
   "sitePage.report.hostnameLabel": "사이트 주소",
   "sitePage.report.hostnameMissing": "사이트 주소를 입력해 주세요",
   "sitePage.report.reasonLabel": "사유",

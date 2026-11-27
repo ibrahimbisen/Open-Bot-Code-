@@ -15,9 +15,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { Directory, File, Paths } from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { useMemo, useRef, useState } from "react";
-import { attachmentSizeBucket } from "@/features/analytics/events";
 import { showFailureAlert } from "@/features/analytics/failure-reports";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { haptics } from "@/shared/lib/haptics";
 import { isAndroid } from "@/shared/lib/platform";
 import { readFileBase64 } from "@/shared/lib/read-file-base64";
@@ -170,19 +168,10 @@ export function useChatAttachments(
       ...(dimensions ? { dimensions } : {}),
     };
   }
-  function trackSelected(size: number) {
-    mobileAnalytics.track("attachment_action", {
-      action: "select",
-      result: "succeeded",
-      attachment_count: 1,
-      size_bucket: attachmentSizeBucket(size),
-    });
-  }
   function add(input: RemoteFileUpload & { uri?: string }) {
     if (itemsRef.current.length >= INPUT_LIMITS.attachments) throw new Error(limitMessage());
     const item = prepare(input);
     const saved = persistItems([...itemsRef.current, item]);
-    trackSelected(item.size);
     return saved;
   }
   async function readFile(uri: string, name: string): Promise<RemoteFileUpload & { uri: string }> {
@@ -247,19 +236,16 @@ export function useChatAttachments(
       if (asset) picked = { uri: asset.uri, name: asset.name };
     }
     if (!picked) {
-      mobileAnalytics.track("attachment_action", { action: "select", result: "cancelled", attachment_count: 0 });
       return;
     }
     const item = prepare(await readFile(picked.uri, picked.name));
     const next = itemsRef.current.map((candidate) => (candidate.id === id ? item : candidate));
     if (!next.includes(item)) return;
     await persistItems(next);
-    trackSelected(item.size);
   }
   async function chooseFiles() {
     const result = await DocumentPicker.getDocumentAsync({ multiple: true, copyToCacheDirectory: true });
     if (!result.canceled) for (const asset of result.assets) await addFile(asset.uri, asset.name);
-    else mobileAnalytics.track("attachment_action", { action: "select", result: "cancelled", attachment_count: 0 });
   }
   async function requestCamera(): Promise<boolean> {
     try {
@@ -279,9 +265,7 @@ export function useChatAttachments(
       quality: 1,
       preferredAssetRepresentationMode: ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
     });
-    if (result.canceled)
-      mobileAnalytics.track("attachment_action", { action: "select", result: "cancelled", attachment_count: 0 });
-    else for (const asset of result.assets) await addPhotoFile(asset.uri, photoName(asset));
+    if (!result.canceled) for (const asset of result.assets) await addPhotoFile(asset.uri, photoName(asset));
   }
   async function choosePhotos() {
     if (itemsRef.current.length >= INPUT_LIMITS.attachments) throw new Error(limitMessage());
@@ -292,9 +276,7 @@ export function useChatAttachments(
       preferredAssetRepresentationMode: ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
       selectionLimit: INPUT_LIMITS.attachments - itemsRef.current.length,
     });
-    if (result.canceled)
-      mobileAnalytics.track("attachment_action", { action: "select", result: "cancelled", attachment_count: 0 });
-    else
+    if (!result.canceled)
       for (const asset of result.assets)
         await (asset.type === "video" ? addFile : addPhotoFile)(asset.uri, photoName(asset));
   }
@@ -308,11 +290,6 @@ export function useChatAttachments(
     onText(text);
   }
   function reportFailures(failures: unknown[]) {
-    mobileAnalytics.track("attachment_action", {
-      action: "select",
-      result: "failed",
-      failure_code: "operation_failed",
-    });
     void haptics.notification("error");
     showFailureAlert(
       failures[0],
@@ -397,7 +374,6 @@ export function useChatAttachments(
     addShared,
     remove: (id: string) => {
       void report(() => persistItems(itemsRef.current.filter((item) => item.id !== id)));
-      mobileAnalytics.track("attachment_action", { action: "remove", result: "succeeded", attachment_count: 1 });
     },
     clear: () => replace([]),
     restore: (files: readonly ChatAttachment[]) =>

@@ -8,7 +8,7 @@ export const GROK_BOT_EXPORT_URL = "https://x.ai/bot/pOUBH2kQK8CKvM7nW8stG";
 export const AGENT_IMPORT_SKILL_SOURCES = ["grok-bot", "hermes-agent"] as const;
 export type AgentImportSkillSource = (typeof AGENT_IMPORT_SKILL_SOURCES)[number];
 
-export const HERMES_EXPORT_SKILL_ID = "nightly-labs/openbot/resources/agent-import/hermes-agent";
+export const HERMES_EXPORT_SKILL_ID = "your-org/codebot/resources/agent-import/hermes-agent";
 
 export const HERMES_SKILL_COMMAND = `/skills install ${HERMES_EXPORT_SKILL_ID}`;
 

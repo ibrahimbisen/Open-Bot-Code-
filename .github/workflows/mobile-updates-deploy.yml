@@ -71,7 +71,7 @@ jobs:
               --write-out '%{http_code}' \
               -H 'expo-platform: ios' -H 'expo-protocol-version: 1' \
               -H 'expo-runtime-version: deployment-check' -H 'expo-channel-name: production' \
-              https://updates.openbot.run/manifest || true)"
+              https://updates.codebot.example/manifest || true)"
             if [[ "$status" == "204" ]] && grep -qi '^expo-protocol-version: 1' "$headers"; then
               echo "The update server answers."
               exit 0

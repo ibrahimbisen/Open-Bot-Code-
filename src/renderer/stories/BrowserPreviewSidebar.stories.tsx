@@ -9,7 +9,7 @@ const tabs = [
   {
     id: "docs",
     title: "CodeBot documentation",
-    url: "https://openbot.run/docs",
+    url: "https://codebot.example/docs",
     loading: false,
     ownerThreadId: "chief",
     ownerAgentId: "chief",

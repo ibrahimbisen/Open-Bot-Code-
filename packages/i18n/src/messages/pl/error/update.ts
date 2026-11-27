@@ -12,7 +12,7 @@ export const messages = {
     "Ostatnie ponowne uruchomienie nie zainstalowało aktualizacji. Uruchom ponownie, aby spróbować jeszcze raz.",
   "error.update.downloadFailed": "Nie udało się pobrać aktualizacji. Spróbuj ponownie.",
   "error.update.signatureNotConfirmed":
-    "OpenBot Code nie mógł zweryfikować aktualizacji. Spróbuj ponownie. Jeśli błąd się powtarza, pobierz OpenBot Code ze strony openbot.run/download.",
+    "OpenBot Code nie mógł zweryfikować aktualizacji. Spróbuj ponownie. Jeśli błąd się powtarza, pobierz OpenBot Code ze strony codebot.example/download.",
   "error.update.checkFailed": "Nie udało się sprawdzić aktualizacji. Spróbuj ponownie.",
   "error.update.checkStalled": "Sprawdzanie aktualizacji przestało odpowiadać. Spróbuj ponownie.",
   "error.update.checkOffline":

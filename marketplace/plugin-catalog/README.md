@@ -294,7 +294,7 @@ Troubleshooting:
 The listing connects to ElevenLabs' hosted MCP server at `https://api.elevenlabs.io/v1/mcp`
 (<https://elevenlabs.io/docs/eleven-agents/operate/hosted-mcp>). ElevenLabs deprecated its local
 server. The authorization server has no client registration. It reads CodeBot's client metadata
-document, `https://openbot.run/oauth/mcp-client.json`, so the user signs in through the browser and
+document, `https://codebot.example/oauth/mcp-client.json`, so the user signs in through the browser and
 types no key. Generated audio comes back as a short-lived download link.
 
 The data residency servers (`api.eu.residency.elevenlabs.io`, `api.in.residency.elevenlabs.io`,

@@ -29,7 +29,7 @@ This note lists the Windows faults that agents found, and the work package state
 | `CodeBot/docs/codebot/agent-brief.md` | Rules for build agents: sandbox, commit cadence, checks, report format. |
 | `CodeBot/docs/codebot/decisions.md` | Decisions D1 to D18 and the work package table (W00 to W21). |
 | `CodeBot/docs/codebot/prd-status.md` | Each PRD item with status and proof. Source of truth is `CodeBot-PRD.md` (one level above the repo, not read here). |
-| `CodeBot/docs/codebot/upstream-sync.md` | How to take upstream OpenBot changes (rename first, then merge). |
+| `CodeBot/docs/codebot/upstream-sync.md` | How to take upstream changes (rename first, then merge). |
 | `CodeBot/.claude/codebase/*.md` | Codebase notes for agents (this file sits here). |
 | `_wt/<pkg>/docs/codebot/perf/README.md` | Planned W01 baseline table (absent in the W01 worktree on 2026-11-26). |
 | `_wt/w20-wintests/scripts/stand-in-program.ts` | Shared stand-in helpers: `standInPath`, `writeStandInScript`, `writeStandInLauncher` (W20 worktree). |
@@ -56,7 +56,7 @@ This note lists the Windows faults that agents found, and the work package state
   - `ELECTRON_BUILDER_CACHE` = `_tools\cache\electron-builder`.
   - `npm_config_cache` = `_tools\cache\npm`.
   - `PLAYWRIGHT_BROWSERS_PATH` = `_tools\cache\ms-playwright`.
-  - `OPENBOT_DEV_REGISTRY_DIR` and `CODEBOT_DEV_REGISTRY_DIR` = `_tools\dev-registry`.
+  - `CODEBOT_DEV_REGISTRY_DIR` and `CODEBOT_DEV_REGISTRY_DIR` = `_tools\dev-registry`.
   - `DO_NOT_TRACK=1`.
   - Exports `CB_ROOT`, `CB_ROOT_WIN`, `CB_TOOLS`, `CB_TOOLS_WIN`.
 
@@ -256,7 +256,7 @@ Main is at `443768fe6` (icons and logo), per `_tools/agents.md`. Agents started 
 
 ### Sandbox and real profile
 
-- Never read, write or start anything in `%APPDATA%\OpenBot*`, `%APPDATA%\CodeBot*`, `%USERPROFILE%\OpenBot`,
+- Never read, write or start anything in `%APPDATA%\CodeBot*`, `%APPDATA%\CodeBot*`, `%USERPROFILE%\CodeBot`,
   `%USERPROFILE%\CodeBot`, `%USERPROFILE%\.claude`, `%USERPROFILE%\.codex`, or other provider folders (agent-brief).
 - Existence tests count as access. A W12 survey agent checked `%APPDATA%\CodeBot*` and
   `%LOCALAPPDATA%\CodeBot\codebot-dev-instances`. Nothing existed, and nothing was read or written. The lead

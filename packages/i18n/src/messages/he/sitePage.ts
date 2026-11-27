@@ -83,7 +83,7 @@ export const messages = {
   "sitePage.nearSign.failure.failed": "החתימה לא הושלמה. יש לנסות שוב.",
   "sitePage.report.pageTitle": "דיווח על אתר מתארח — OpenBot Code",
   "sitePage.report.title": "דיווח על אתר מתארח",
-  "sitePage.report.intro": "אפשר לשלוח דיווח על תוכן מזיק או בלתי חוקי בכתובת openbot.site.",
+  "sitePage.report.intro": "אפשר לשלוח דיווח על תוכן מזיק או בלתי חוקי בכתובת codebot.example.",
   "sitePage.report.hostnameLabel": "כתובת האתר",
   "sitePage.report.hostnameMissing": "יש להזין את כתובת האתר",
   "sitePage.report.reasonLabel": "סיבה",

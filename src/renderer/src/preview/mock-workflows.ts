@@ -38,7 +38,7 @@ import { sourceText } from "@codebot/i18n/source";
 import { nextValidRoutineOccurrence } from "@codebot/team-client/routine-schedule";
 import { workflowMediaCreditsOf, workflowMediaProvidersOf } from "@codebot/team-client/workflow-decoding";
 
-const PREVIEW_HOOKS = "https://hooks.openbot.run/wf";
+const PREVIEW_HOOKS = "https://hooks.codebot.example/wf";
 
 const PREVIEW_GITHUB_CATALOG: WorkflowGitHubCatalog = {
   connected: true,

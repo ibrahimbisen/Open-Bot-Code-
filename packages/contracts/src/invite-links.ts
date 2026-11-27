@@ -1,8 +1,8 @@
 import { isCodeBotTeamApiHostname } from "./validation";
 
-export const CODEBOT_INVITE_ORIGIN = "https://openbot.run";
+export const CODEBOT_INVITE_ORIGIN = "https://codebot.example";
 export const CODEBOT_INVITE_PATH = "/join";
-export const CODEBOT_CONTROL_PLANE_ORIGIN = "https://api.openbot.run";
+export const CODEBOT_CONTROL_PLANE_ORIGIN = "https://api.codebot.example";
 
 export const PERMANENT_INVITE_EXPIRES_AT_MS = 8_640_000_000_000_000;
 

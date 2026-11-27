@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Starte einen Workflow von GitHub aus: Ein GitHub-Auslöser läuft bei neuen Issues, Kommentaren, Pull Requests, Reviews, fehlgeschlagenen Checks oder einer Erwähnung von @openbotgit.",
+          "Starte einen Workflow von GitHub aus: Ein GitHub-Auslöser läuft bei neuen Issues, Kommentaren, Pull Requests, Reviews, fehlgeschlagenen Checks oder einer Erwähnung von @codebotgit.",
           "Ändere GitHub aus einem Workflow: Kommentiere, setze Labels, weise zu, prüfe, schließe oder erstelle ein Issue als CodeBot GitHub App.",
           "Der Marketplace hat 17 neue CodeBot-Agenten, etwa QA Tester, PR Shepherd und Chief of Staff, und 15 neue Fähigkeiten für sie.",
           "Nutzung zeigt das monatliche Limit von OpenCode Go als dritten Balken."
@@ -854,7 +854,7 @@
         "items": [
           "Verzweige eine Unterhaltung: Klicke mit der rechten Maustaste auf die letzte Agentennachricht eines Durchlaufs und wähle Hier abzweigen. Ein neuer Thread öffnet sich mit der Unterhaltung bis zu dieser Nachricht.",
           "Die Agenteneinstellungen haben eine Seite Anweisungen, die die AGENTS.md-Datei des Agenten zeigt. Wenn der Agent seine Anweisungen ändert, zeigt der Chat die Änderung mit Rückgängig.",
-          "Der Marketplace ist auf openbot.run. Jeder Agent und jede Fähigkeit hat eine eigene Seite, und Link kopieren teilt sie.",
+          "Der Marketplace ist auf codebot.example. Jeder Agent und jede Fähigkeit hat eine eigene Seite, und Link kopieren teilt sie.",
           "Ein Agent kann auf eine Warnung oder Bestätigung einer Website antworten, die seine eigene Browseraktion geöffnet hat.",
           "Eine gestoppte oder fehlgeschlagene Kanalaufgabe hat eine Schaltfläche Aufgabe abbrechen."
         ]

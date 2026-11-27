@@ -207,7 +207,7 @@ const DEVELOPMENT_OPTIONS = [
   "--slack",
   "--foreground",
 ] as const;
-const TEST_ACCOUNT_API_URL = "https://openbot-auth-api-test.internal9671.workers.dev";
+const TEST_ACCOUNT_API_URL = "https://codebot-auth-api-test.example";
 
 export interface DevelopmentInvocation {
   target: DevelopmentTarget;

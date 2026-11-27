@@ -28,25 +28,6 @@ export const CLAUDE_WORKSPACE_MANAGED_SETTINGS: NonNullable<Options["managedSett
   allowManagedHooksOnly: true,
 };
 
-export const claudeWorkspaceSkillPlugin = Effect.fn("ClaudeWorkspace.skillPlugin")(function* (
-  stateDirectory: string,
-  cwd: string,
-): Effect.fn.Return<SdkPluginConfig, ProviderClientOperationError> {
-  const directory = join(stateDirectory, "claude-skill-plugins", createHash("sha256").update(cwd).digest("hex"));
-  yield* providerCall(() => mkdir(join(directory, ".claude-plugin"), { recursive: true, mode: 0o700 }));
-  yield* providerCall(() =>
-    writeFile(join(directory, ".claude-plugin", "plugin.json"), `${JSON.stringify({ name: "codebot" })}\n`),
-  );
-  const link = join(directory, "skills");
-  const target = join(cwd, ".claude", "skills");
-  if ((yield* currentLink(link)) !== target) {
-    const staged = `${link}.${randomUUID()}`;
-    yield* providerCall(() => symlink(target, staged, "junction"));
-    yield* providerCall(() => rename(staged, link));
-  }
-  return { type: "local", path: directory };
-});
-
 export const claudeHomeSkillPlugin = Effect.fn("ClaudeWorkspace.homeSkillPlugin")(function* (
   stateDirectory: string,
   configDirectory: string,
@@ -84,12 +65,6 @@ const pathExists = Effect.fn("ClaudeWorkspace.pathExists")((path: string) =>
   providerCall(() => lstat(path)).pipe(
     Effect.as(true),
     Effect.catch((error) => (isMissingFileError(error.cause) ? Effect.succeed(false) : Effect.fail(error))),
-  ),
-);
-
-const currentLink = Effect.fn("ClaudeWorkspace.currentLink")((path: string) =>
-  providerCall(() => readlink(path)).pipe(
-    Effect.catch((error) => (isMissingFileError(error.cause) ? Effect.succeed(null) : Effect.fail(error))),
   ),
 );
 

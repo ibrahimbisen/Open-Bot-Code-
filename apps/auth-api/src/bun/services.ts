@@ -18,7 +18,7 @@ import { SecretBox } from "./login/secret-box";
 import type { BackgroundTasks } from "./runtime/background";
 import type { SqliteD1Database } from "./runtime/sqlite-d1";
 
-export type AccountBindings = Pick<
+type AccountBindings = Pick<
   WorkerBindings,
   | "DB"
   | "AVATARS"
@@ -54,7 +54,7 @@ export interface AccountServices {
   flushAuthEvents: () => void;
 }
 
-export function accountBindings(config: AccountConfig, database: D1Database, avatars: R2Bucket): AccountBindings {
+function accountBindings(config: AccountConfig, database: D1Database, avatars: R2Bucket): AccountBindings {
   const bindings: AccountBindings = {
     DB: database,
     AVATARS: avatars,

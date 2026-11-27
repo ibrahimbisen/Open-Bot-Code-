@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Start een workflow vanuit GitHub: een GitHub-trigger draait bij nieuwe issues, reacties, pull requests, reviews, mislukte checks of een vermelding van @openbotgit.",
+          "Start een workflow vanuit GitHub: een GitHub-trigger draait bij nieuwe issues, reacties, pull requests, reviews, mislukte checks of een vermelding van @codebotgit.",
           "Wijzig GitHub vanuit een workflow: reageer, label, wijs toe, review, sluit of maak een issue als de CodeBot GitHub App.",
           "De Marktplaats heeft 17 nieuwe CodeBot-agents, zoals QA Tester, PR Shepherd en Chief of Staff, en 15 nieuwe vaardigheden voor ze.",
           "Gebruik toont de maandlimiet van OpenCode Go als derde balk."
@@ -854,7 +854,7 @@
         "items": [
           "Vertak een gesprek: klik met de rechtermuisknop op het laatste agentbericht van een beurt en kies Hier aftakken. Er opent een nieuwe thread met het gesprek tot dat bericht.",
           "De agentinstellingen hebben een pagina Instructies die het AGENTS.md-bestand van de agent toont. Als de agent zijn instructies wijzigt, toont de chat de wijziging met Ongedaan maken.",
-          "De Marktplaats staat op openbot.run. Elke agent en vaardigheid heeft een eigen pagina, en met Link kopiëren deel je die.",
+          "De Marktplaats staat op codebot.example. Elke agent en vaardigheid heeft een eigen pagina, en met Link kopiëren deel je die.",
           "Een agent kan antwoorden op een melding of bevestiging van een website die zijn eigen browseractie heeft geopend.",
           "Een gestopte of mislukte kanaaltaak heeft de knop Taak annuleren."
         ]

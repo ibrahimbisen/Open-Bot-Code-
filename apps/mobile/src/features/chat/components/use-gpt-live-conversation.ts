@@ -10,7 +10,6 @@ import { type SharedValue, useSharedValue, withTiming } from "react-native-reani
 import type { MediaStream, MediaStreamTrack, RTCPeerConnection } from "react-native-webrtc";
 import { scheduleOnRN } from "react-native-worklets";
 import { showFailureAlert } from "@/features/analytics/failure-reports";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { liveVoiceWebRtc } from "@/features/voice/model/live-voice-webrtc";
 import { speechNative } from "@/features/voice/model/speech-native";
 import { subscribeLiveVoiceEvents } from "@/features/workspace/model/live-voice-events";
@@ -127,8 +126,6 @@ function createController({
   let currentReply: string | null = null;
   let silencedTurn: string | null = null;
   let silenceNextReply = false;
-  let startedAt = 0;
-  let turns = 0;
 
   const update = (change: Partial<GptLiveState>) => setState((current) => ({ ...current, ...change }));
   const setPhase = (next: LiveConversationPhase) => {
@@ -227,7 +224,6 @@ function createController({
       setPhase("listening");
       showCaption();
     } else if (turn.step === "user-done") {
-      turns += 1;
       if (phase !== "speaking") setPhase("thinking");
     } else if (turn.step === "reply-started") {
       currentReply = turn.id;
@@ -277,13 +273,6 @@ function createController({
         error !== null &&
         "name" in error &&
         (error.name === "SecurityError" || error.name === "NotAllowedError");
-      mobileAnalytics.track("voice_conversation_action", {
-        action: "start",
-        server_kind: "remote",
-        transcription: "cloud",
-        result: "failed",
-        failure_code: denied ? "permission_denied" : "operation_failed",
-      });
       fail(currentText().t(denied ? "mobile.chat.liveVoice.gptMicrophoneOff" : "mobile.chat.liveVoice.gptFailed"));
       return;
     }
@@ -346,21 +335,8 @@ function createController({
       routeCall();
       setPhase("listening");
       update({ connected: true });
-      mobileAnalytics.track("voice_conversation_action", {
-        action: "start",
-        server_kind: "remote",
-        transcription: "cloud",
-        result: "succeeded",
-      });
     } catch (error) {
       if (own !== generation) return;
-      mobileAnalytics.track("voice_conversation_action", {
-        action: "start",
-        server_kind: "remote",
-        transcription: "cloud",
-        result: "failed",
-        failure_code: "connection_failed",
-      });
       const text = currentText();
       const caption = text.t("mobile.chat.liveVoice.gptFailed");
       failWithAlert(text.t("mobile.chat.liveVoice.gptFailedTitle"), caption, text.errorMessage(error, caption), error);
@@ -409,8 +385,6 @@ function createController({
       open = true;
       exiting = false;
       muted = false;
-      startedAt = performance.now();
-      turns = 0;
       setState(() => ({ ...CLOSED, open: true }));
       void haptics.impact("light");
       presence.set(withTiming(1, PRESENCE_OPEN));
@@ -443,14 +417,6 @@ function createController({
       release();
       update({ exit: "cancel" });
       void haptics.selection();
-      mobileAnalytics.track("voice_conversation_action", {
-        action: "end",
-        server_kind: "remote",
-        transcription: "cloud",
-        result: "succeeded",
-        duration_ms: performance.now() - startedAt,
-        turn_count: turns,
-      });
       presence.set(
         withTiming(0, PRESENCE_CLOSE, (finished) => {
           if (finished) scheduleOnRN(closed);

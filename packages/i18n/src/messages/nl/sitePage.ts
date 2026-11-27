@@ -90,7 +90,7 @@ export const messages = {
   "sitePage.nearSign.failure.failed": "De ondertekening is niet afgerond. Probeer het opnieuw.",
   "sitePage.report.pageTitle": "Een gehoste site melden — OpenBot Code",
   "sitePage.report.title": "Een gehoste site melden",
-  "sitePage.report.intro": "Stuur een melding over schadelijke of onrechtmatige inhoud op een openbot.site-adres.",
+  "sitePage.report.intro": "Stuur een melding over schadelijke of onrechtmatige inhoud op een codebot.example-adres.",
   "sitePage.report.hostnameLabel": "Siteadres",
   "sitePage.report.hostnameMissing": "Vul het siteadres in",
   "sitePage.report.reasonLabel": "Reden",

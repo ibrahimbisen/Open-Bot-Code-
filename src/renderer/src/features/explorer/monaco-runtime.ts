@@ -3,7 +3,7 @@ import type { monaco as MonacoApi } from "./monaco-setup";
 
 export type Monaco = typeof MonacoApi;
 
-export const MONACO_THEME = "codebot";
+const MONACO_THEME = "codebot";
 
 let loading: Promise<Monaco> | undefined;
 

@@ -2,7 +2,6 @@ import type { McpServerConfig } from "@codebot/contracts/ipc";
 import { applyMcpFlow, type McpAuthValues } from "@codebot/contracts/mcp-connect-flows";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { useQueryScope } from "@/features/auth/context/mobile-session-context";
 import { type McpSignInRelayState, useMcpSignInRelay } from "@/features/servers/model/use-mcp-sign-in-relay";
 import { useMobileWorkspaceActions } from "@/features/workspace/context/mobile-workspace-context";
@@ -47,7 +46,7 @@ export function usePluginConnect(serverId: string, app: MobilePluginApp | null, 
     relay.setError(null);
     setState({ phase: "working" });
     try {
-      await mobileAnalytics.operation("marketplace_action", { entity: "plugin", action: "install" }, operation);
+      await operation();
       if (!relay.mounted.current) return;
       void haptics.notification("success");
       setState({ phase: "done" });

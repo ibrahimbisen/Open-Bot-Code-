@@ -1,3 +1,4 @@
+import { messages as errorAdvanced } from "./error/advanced";
 import { messages as errorAgent } from "./error/agent";
 import { messages as errorApp } from "./error/app";
 import { messages as errorAppUpdateArea } from "./error/appUpdate";
@@ -41,6 +42,7 @@ import { messages as statusUpdate } from "./status/update";
 
 export const source = {
   ...errorKind,
+  ...errorAdvanced,
   ...errorReference,
   ...errorApp,
   ...errorTeam,

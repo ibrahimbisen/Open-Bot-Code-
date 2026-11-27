@@ -2,15 +2,15 @@ import { defineMessages } from "../../message";
 
 export const messages = defineMessages("extension", {
   "extension.signIn.title": "Sign in to OpenBot Code",
-  "extension.signIn.description": "Sign in on openbot.run, then allow the extension to use your account.",
-  "extension.signIn.withWeb": "Sign in with openbot.run",
-  "extension.signIn.waiting": "Finish in the openbot.run window…",
+  "extension.signIn.description": "Sign in on codebot.example, then allow the extension to use your account.",
+  "extension.signIn.withWeb": "Sign in with codebot.example",
+  "extension.signIn.waiting": "Finish in the codebot.example window…",
   "extension.signIn.withCode": "Use an email code instead",
   "extension.signIn.cancelled": "The sign-in was cancelled.",
   "extension.signIn.failed": "Sign-in failed.",
   "extension.signIn.sessionFailed": "Could not check this session.",
   "extension.signIn.companyUnsupported":
-    "This email signs in through your company. Go back and use Sign in with openbot.run.",
+    "This email signs in through your company. Go back and use Sign in with codebot.example.",
   "extension.connection.connecting": "Connecting to {server}…",
   "extension.connection.offline": "{server} is offline.",
   "extension.connection.changed": "The server changed. Try again.",

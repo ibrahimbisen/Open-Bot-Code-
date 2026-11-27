@@ -1,21 +1,21 @@
 import type { ProjectSummary } from "@codebot/contracts/ipc";
 import type { JSX } from "@solidjs/web";
 
-export interface LeftBarSlotProps {
+interface LeftBarSlotProps {
   compact: boolean;
 }
 
-export interface ProjectToolSlotProps {
+interface ProjectToolSlotProps {
   project: ProjectSummary;
 }
 
-export interface ChatFileTreeSlotProps {
+interface ChatFileTreeSlotProps {
   project: ProjectSummary;
   chat: { agentId: string; chatId: string } | null;
   onClose: () => void;
 }
 
-export interface ProjectReplyRuleSlotProps {
+interface ProjectReplyRuleSlotProps {
   project: ProjectSummary;
   value: string | null;
   disabled: boolean;

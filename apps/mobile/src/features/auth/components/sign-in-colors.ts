@@ -21,6 +21,4 @@ export function useSignInColors() {
   };
 }
 
-export type SignInColors = ReturnType<typeof useSignInColors>;
-
 export const SIGN_IN_CONTROL_HEIGHT = 52;

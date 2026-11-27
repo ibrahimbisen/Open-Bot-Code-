@@ -23,7 +23,7 @@ const UNAVAILABLE = /Sandbox required but unavailable: (.+?)\.? Set sandbox\.fai
 const logger = createCodeBotLogger("claude-sandbox-probe");
 const states = new Map<string, Promise<ClaudeSandboxState>>();
 
-export function claudeSandboxFailure(text: string): string | null {
+function claudeSandboxFailure(text: string): string | null {
   return UNAVAILABLE.exec(text)?.[1]?.trim() ?? null;
 }
 
@@ -41,10 +41,6 @@ export function claudeSandboxState(probe: ClaudeSandboxProbe): Promise<ClaudeSan
   });
   states.set(probe.key, started);
   return started;
-}
-
-export function markClaudeSandboxUnavailable(key: string, reason: string): void {
-  states.set(key, Promise.resolve({ available: false, reason }));
 }
 
 function waitingPrompt(): { prompt: AsyncIterable<SDKUserMessage>; end: () => void } {

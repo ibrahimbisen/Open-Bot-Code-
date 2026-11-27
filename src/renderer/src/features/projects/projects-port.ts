@@ -57,7 +57,7 @@ export interface EngineProjectsPort {
   onActivityChanged(listener: (event: ProjectActivityChangedEvent) => void): () => void;
 }
 
-export interface SetProjectChatRuntimeInput extends ProjectChatRef {
+interface SetProjectChatRuntimeInput extends ProjectChatRef {
   runtime: ProjectRuntime | null;
 }
 

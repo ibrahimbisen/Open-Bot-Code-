@@ -829,7 +829,7 @@ class McpOAuthClientProvider implements OAuthClientProvider {
     const methods = this.#discoveryState?.authorizationServerMetadata?.token_endpoint_auth_methods_supported;
     return {
       client_name: MCP_CLIENT_NAME,
-      client_uri: "https://github.com/nightly-labs/openbot",
+      client_uri: "https://github.com/your-org/codebot",
       redirect_uris: [this.#retryRedirectUrl ?? this.#options.redirectUrl],
       application_type: "native",
       grant_types: ["authorization_code", "refresh_token"],

@@ -86,7 +86,7 @@ Each account gets 10 welcome credits once, with no end date. They pay only for t
 media gateway gives a welcome route. The Worker reaches the media generation processor only through
 the private Worker `codebot-media-gateway` (service binding `MEDIA_GATEWAY`, production only). D1 keeps
 the models, prices, holds and ledger; the gateway keeps the adapters, routes and keys. Its source is
-in the private repository [`nightly-labs/openbot-media-gateway`](https://github.com/nightly-labs/openbot-media-gateway):
+in the private repository [`your-org/codebot-media-gateway`](https://github.com/your-org/codebot-media-gateway):
 change processors, routes and welcome routes there, then deploy that Worker. Without the
 binding, as in local development, every credits model is unavailable. `bun run test:credit-media`
 checks the service against a fake gateway.
@@ -204,11 +204,11 @@ is missing, out of date, or belongs to no article.
 The home page beam is a SolidJS port of
 [LaserFlow from React Bits](https://reactbits.dev/animations/laser-flow). Its license lets the
 website use it, but does not let this public repository contain it. The port is in the private
-`nightly-labs/openbot-laser-flow` repository. Git ignores its path here, and a checkout without it
+`your-org/codebot-laser-flow` repository. Git ignores its path here, and a checkout without it
 builds a home page with no beam. To see the beam locally, clone it into that path:
 
 ```bash
-git clone git@github.com:nightly-labs/openbot-laser-flow.git apps/auth-api/src/vendor/laser-flow
+git clone git@github.com:your-org/codebot-laser-flow.git apps/auth-api/src/vendor/laser-flow
 ```
 
 CI checks it out with the read-only deploy key in the `LASER_FLOW_DEPLOY_KEY` secret. Pull request
@@ -231,14 +231,14 @@ exercise real delivery locally, put a full set in the ignored `.dev.vars` file:
 ```dotenv
 EMAIL_SMTP_HOST=mail.privateemail.com
 EMAIL_SMTP_PORT=465
-EMAIL_SMTP_USERNAME=no_reply@openbot.run
+EMAIL_SMTP_USERNAME=no_reply@codebot.example
 EMAIL_SMTP_PASSWORD=<PRIVATE_EMAIL_APP_PASSWORD>
-EMAIL_FROM=no_reply@openbot.run
-EMAIL_REPLY_TO=hello@openbot.run
-EMAIL_LICENSE_REPLY_TO=licenses@openbot.run
+EMAIL_FROM=no_reply@codebot.example
+EMAIL_REPLY_TO=hello@codebot.example
+EMAIL_LICENSE_REPLY_TO=licenses@codebot.example
 ```
 
-Sign-in codes, invitations and welcome emails go from `EMAIL_FROM`, the `no_reply@openbot.run`
+Sign-in codes, invitations and welcome emails go from `EMAIL_FROM`, the `no_reply@codebot.example`
 mailbox, with `EMAIL_REPLY_TO` in `Reply-To`, so a reply goes to the team's inbox. An empty
 `EMAIL_REPLY_TO` uses `EMAIL_FROM` and adds no `Reply-To`. `EMAIL_SMTP_PASSWORD` is the password of
 the `EMAIL_SMTP_USERNAME` mailbox. The CI deploy reads it from the `EMAIL_SMTP_PASSWORD` secret of the
@@ -248,7 +248,7 @@ change both, at the time of the merge.
 License emails (the first payment, a failed renewal payment, and the end of a license) go from
 `EMAIL_LICENSE_FROM`. The SMTP account must be allowed to send as that address: on Private Email,
 make it an alias of the `EMAIL_SMTP_USERNAME` mailbox. An empty value uses `EMAIL_FROM`, as production
-does. A reply goes to `EMAIL_LICENSE_REPLY_TO` (`licenses@openbot.run` in production), or to the
+does. A reply goes to `EMAIL_LICENSE_REPLY_TO` (`licenses@codebot.example` in production), or to the
 license sender when it is empty.
 
 `bun run env:set:smtp` encrypts the app password into `.env.production` only.
@@ -277,9 +277,9 @@ before remote changes. Test deployments do not send account analytics.
 
 `GITHUB_APP_PRIVATE_KEY` is the CodeBot GitHub App's private key as a PKCS #8 PEM. GitHub gives a
 PKCS #1 key; convert it with `openssl pkcs8 -topk8 -nocrypt -in <key>.pem`. With the key, the
-Worker gives the desktop installation tokens, so GitHub shows `openbotgit[bot]` as the author of an
+Worker gives the desktop installation tokens, so GitHub shows `codebotgit[bot]` as the author of an
 agent's work. The key also lets `POST /v1/feedback` open an approved bug report or feature idea from the app as
-an issue in `nightly-labs/openbot`, for any signed-in account, three times a minute (`FEEDBACK_RATE_LIMITER`) and 10 times a UTC day (`feedback_daily_counts` in D1). The Worker does not store or log the text. With `sameAs`, the report is a comment on that open app issue. Before the card, `POST /v1/feedback/similar` finds open app issues with a similar title, three times a minute for each account (the same limiter, with its own key); the title is in the body, so request logs do not keep it. Each report ends with a hidden owner mark
+an issue in `your-org/codebot`, for any signed-in account, three times a minute (`FEEDBACK_RATE_LIMITER`) and 10 times a UTC day (`feedback_daily_counts` in D1). The Worker does not store or log the text. With `sameAs`, the report is a comment on that open app issue. Before the card, `POST /v1/feedback/similar` finds open app issues with a similar title, three times a minute for each account (the same limiter, with its own key); the title is in the body, so request logs do not keep it. Each report ends with a hidden owner mark
 (`feedback-owner.ts`): a random value and an HMAC of it and the account ID, with a key that HKDF derives
 from the app key. `POST /v1/feedback/withdraw` takes `{ number }` and, for the account whose mark ends
 the text, deletes its comments on that issue or moves its issue to `FEEDBACK_WITHDRAWN_REPOSITORY`, a
@@ -372,7 +372,7 @@ recipient. The fallback uses only the time left in the 25-second delivery budget
 and it does not start with less than 2 seconds left, as after three SMTP timeouts. When
 Cloudflare also fails, the answer stays the SMTP failure, so a sender limit keeps its 429. Each
 fallback sends an `email_fallback_sent` analytics event. Before the first deploy with the binding,
-onboard `openbot.run` in the Cloudflare dashboard under Email Sending, and keep
+onboard `codebot.example` in the Cloudflare dashboard under Email Sending, and keep
 `allowed_sender_addresses` equal to `EMAIL_FROM` and `EMAIL_LICENSE_FROM`. The preview and test
 Workers have no fallback.
 
@@ -381,7 +381,7 @@ The contact form on `/contact` posts to `/v1/contact`. The Worker sends each mes
 The D1 counter of sign-in allows 3 messages for each IP address and 15 in total in each 15-minute
 window, so the form cannot spend the quota that sign-in codes need. A Cloudflare rate-limit binding
 counts in each location separately, so it cannot hold a total. Without SMTP the route answers 503
-`email_delivery_not_configured`, and the form tells the visitor to write to `hello@openbot.run`.
+`email_delivery_not_configured`, and the form tells the visitor to write to `hello@codebot.example`.
 
 ## Cloudflare deployment
 
@@ -398,7 +398,7 @@ The service applies limits per email, per IP, per challenge, and per resend.
 
 A deploy replaces every file under `/assets/`. Before a production deploy, CI and `bun run api:deploy`
 run `scripts/keep-previous-assets.ts`. It copies the files of the builds that were live in the last
-24 hours from `https://openbot.run` into the new build, so a tab that is open during a deploy can
+24 hours from `https://codebot.example` into the new build, so a tab that is open during a deploy can
 still load code. The site keeps the list of these files in `/asset-history.json`. When the list or a
 file cannot be read, the deploy continues with fewer files, and such a tab reloads when it next loads
 code.
@@ -447,7 +447,7 @@ Two optional variables spread hosts over more than one Signal machine. When both
 ticket names `REMOTE_SIGNAL_URL`, as before.
 
 - `REMOTE_SIGNAL_HOMES`: the Signal machines that a host can have as its home, as `id=url,id=url`,
-  for example `a=wss://signal-a.openbot.run/v1/signal,b=wss://signal-b.openbot.run/v1/signal`. An ID
+  for example `a=wss://signal-a.codebot.example/v1/signal,b=wss://signal-b.codebot.example/v1/signal`. An ID
   has 1 to 32 characters from `a-z`, `0-9` and `-`. A URL must use `wss:`, or `ws:` when
   `REMOTE_SIGNAL_URL` uses `ws:`. An invalid value makes each ticket request fail with
   `503 remote_not_configured`. A host ticket request with `signalHome: true` gets a home, which
