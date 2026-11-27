@@ -29,7 +29,6 @@ RUN install -d -m 0755 /opt/CodeBot/hosted \
 ARG VERSION=unknown
 ARG REVISION=unknown
 LABEL org.opencontainers.image.title=CodeBot \
-  org.opencontainers.image.source=https://github.com/nightly-labs/openbot \
   org.opencontainers.image.licenses=PolyForm-Noncommercial-1.0.0 \
   org.opencontainers.image.version=${VERSION} \
   org.opencontainers.image.revision=${REVISION}

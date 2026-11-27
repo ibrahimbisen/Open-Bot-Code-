@@ -24,7 +24,10 @@ export function createSlashCommands(target: () => SlashCommandTarget | undefined
   const load = (current: SlashCommandTarget) => {
     const own = ++request;
     window.codebot.slashCommands
-      .list({ agentId: current.agentId, ...(current.taskId === undefined ? {} : { taskId: current.taskId }) })
+      .list(
+        { agentId: current.agentId, ...(current.taskId === undefined ? {} : { taskId: current.taskId }) },
+        current.serverId,
+      )
       .then(
         (list) => {
           if (own === request) setCommands(list.commands);
@@ -36,11 +39,12 @@ export function createSlashCommands(target: () => SlashCommandTarget | undefined
   };
   createEffect(target, (current) => {
     request += 1;
-    if (!current || current.serverId !== LOCAL_SERVER_ID) {
+    if (!current) {
       setCommands(undefined);
       return undefined;
     }
     load(current);
+    if (current.serverId !== LOCAL_SERVER_ID) return undefined;
     return window.codebot.slashCommands.onChanged((change) => {
       if (slashCommandsAffect(change, current)) load(current);
     });
@@ -52,7 +56,8 @@ export function createSlashCommandsFor(target: () => SlashCommandTarget | undefi
   const commands = createSlashCommands(target);
   const openScreen = (screen: SlashCommandScreen) => {
     const current = target();
-    if (current) openSlashScreen({ screen, agentId: current.agentId, taskId: current.taskId });
+    if (current)
+      openSlashScreen({ screen, agentId: current.agentId, serverId: current.serverId, taskId: current.taskId });
   };
   return { commands, openScreen };
 }

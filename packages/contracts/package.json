@@ -256,6 +256,8 @@
     "./team-protocol/workflow-folders-v1": "./src/team-protocol/workflow-folders-v1.ts",
     "./team-protocol/crm-v1": "./src/team-protocol/crm-v1.ts",
     "./team-protocol/projects-v1": "./src/team-protocol/projects-v1.ts",
+    "./team-protocol/slash-commands-v1": "./src/team-protocol/slash-commands-v1.ts",
+    "./team-protocol/replies-v1": "./src/team-protocol/replies-v1.ts",
     "./team-protocol/workspace-only-process-limit-v1": "./src/team-protocol/workspace-only-process-limit-v1.ts",
     "./team-protocol/mac-apps-limit-v1": "./src/team-protocol/mac-apps-limit-v1.ts",
     "./team-protocol/vault-import-v1": "./src/team-protocol/vault-import-v1.ts",

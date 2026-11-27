@@ -1006,9 +1006,11 @@ export const IPC_ENDPOINTS = {
     stop: scopedRequest<string, void, "required">()("background-processes:stop"),
   },
   slashCommands: {
-    list: request<SlashCommandChatInput, SlashCommandList>()("slash-commands:list"),
-    listSessions: request<string, ResumableSessionList>()("slash-commands:list-sessions"),
-    resumeSession: request<ResumeSessionInput, ResumeSessionResult>()("slash-commands:resume-session"),
+    list: scopedRequest<SlashCommandChatInput, SlashCommandList, "required">()("slash-commands:list"),
+    listSessions: scopedRequest<string, ResumableSessionList, "required">()("slash-commands:list-sessions"),
+    resumeSession: scopedRequest<ResumeSessionInput, ResumeSessionResult, "required">()(
+      "slash-commands:resume-session",
+    ),
     changed: event<SlashCommandsChanged>()("slash-commands:changed"),
   },
   skills: {

@@ -3,6 +3,8 @@ import { defineMessages } from "../../../message";
 export const messages = defineMessages("error.project", {
   "error.project.serverTooOld": "This server does not support projects. Update CodeBot on the computer that runs it.",
   "error.project.remoteFailed": "The server could not finish this project action. Try again.",
+  "error.project.replyUnsupported": "This server cannot share reply settings. Update the server.",
+  "error.project.replyFailed": "The server could not save the reply rule. Try again.",
   "error.project.notFound": "This project no longer exists.",
   "error.project.archived": "This project is archived. Restore it first.",
   "error.project.nameRequired": "Give the project a name.",
