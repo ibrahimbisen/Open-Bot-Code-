@@ -137,6 +137,7 @@ async function main(): Promise<void> {
       screens.push(await shot(page, "explorer-git-changes-dark"));
       await openTool(page, "Files");
       await tree(page).waitFor({ state: "visible", timeout: 30_000 });
+      await row(page, "untracked.txt").scrollIntoViewIfNeeded();
       screens.push(await shot(page, "explorer-tree-git-marks-dark"));
       return `ignored opacity ${ignored}`;
     });
