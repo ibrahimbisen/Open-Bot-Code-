@@ -24,6 +24,7 @@ import {
 import { redactSecrets, redactText } from "@codebot/logging";
 import { automationRunCommand } from "../automation-command";
 import type { HomeSkill } from "../home-skills";
+import { lockInstructions } from "../lock/lock-prompt";
 import { PASSWORD_MANAGER_BRAND_NAMES } from "../password-vault";
 import { COMPUTER_USE_GUIDE_URI, piComputerUseGuideStep } from "../pi-mcp-names";
 import { agentProjectContext } from "../projects/project-context";
@@ -530,6 +531,7 @@ export function developerInstructions(
           `The user also gave you these folders to work in: ${folders.join(", ")}. You can change files and run commands in them. They belong to the user: keep your own files in your working directory.`,
         ]
       : []),
+    ...lockInstructions(agent, folders),
     agentProviderDescriptor(agent.provider).foldersInFullAccess
       ? folderToolsInstruction(workspaceAccessEnforced(agent), folders.length > 0)
       : workspaceAccessEnforced(agent)

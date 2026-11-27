@@ -1,21 +1,25 @@
 import { stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { isAbsolute } from "node:path";
-import { type AgentSummary, workspaceAccessEnforced } from "@codebot/contracts/ipc";
+import type { AgentSummary } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
+import { lockEnforced } from "../lock/lock-level";
 import { isPathInside } from "../path-containment";
 import { agentProjectContext } from "../projects/project-context";
 
 type SandboxedAgent = Pick<AgentSummary, "id" | "access" | "additionalFolders" | "provider" | "workspacePath">;
 
 export function codexSandboxMode(agent: SandboxedAgent): "workspace-write" | "danger-full-access" {
-  return workspaceAccessEnforced(agent) ? "workspace-write" : "danger-full-access";
+  return lockEnforced(agent) ? "workspace-write" : "danger-full-access";
 }
 
 export type CodexApprovalPolicy = "untrusted" | "on-request";
 
-export function codexApprovalPolicy(agent: Pick<AgentSummary, "access">, asksFirst: boolean): CodexApprovalPolicy {
-  return asksFirst && !workspaceAccessEnforced(agent) ? "untrusted" : "on-request";
+export function codexApprovalPolicy(
+  agent: Pick<AgentSummary, "id" | "access">,
+  asksFirst: boolean,
+): CodexApprovalPolicy {
+  return asksFirst && !lockEnforced(agent) ? "untrusted" : "on-request";
 }
 
 const foundFolders = new Map<string, boolean>();
@@ -58,14 +62,18 @@ export function existingAgentFolders(agent: FolderAgent): string[] {
 }
 
 export function workspaceWritableRoots(
-  agent: Pick<AgentSummary, "id" | "additionalFolders" | "workspacePath">,
+  agent: Pick<AgentSummary, "id" | "access" | "additionalFolders" | "workspacePath">,
   sharedRoot: string,
 ) {
-  return [agent.workspacePath, sharedRoot, ...existingAgentFolders(agent)];
+  return [
+    agent.workspacePath,
+    ...(agentProjectContext(agent.id) && lockEnforced(agent) ? [] : [sharedRoot]),
+    ...existingAgentFolders(agent),
+  ];
 }
 
-export function workspaceExcludedFolders(agent: Pick<AgentSummary, "access" | "excludedFolders">): string[] {
-  return workspaceAccessEnforced(agent) ? (agent.excludedFolders ?? []) : [];
+export function workspaceExcludedFolders(agent: Pick<AgentSummary, "id" | "access" | "excludedFolders">): string[] {
+  return lockEnforced(agent) ? (agent.excludedFolders ?? []) : [];
 }
 
 export function confinedWritesAllowed(
@@ -73,7 +81,7 @@ export function confinedWritesAllowed(
   sharedRoot: string,
   paths: readonly string[],
 ): boolean {
-  if (!workspaceAccessEnforced(agent) || paths.length === 0) return false;
+  if (!lockEnforced(agent) || paths.length === 0) return false;
   const roots = workspaceWritableRoots(agent, sharedRoot);
   const excluded = workspaceExcludedFolders(agent);
   return paths.every(
@@ -99,7 +107,7 @@ export function workspaceTemporaryPaths(platform: NodeJS.Platform = process.plat
 }
 
 export function codexSandboxPolicy(agent: SandboxedAgent, sharedRoot: string): CodexSandboxPolicy {
-  if (!workspaceAccessEnforced(agent)) return { type: "dangerFullAccess" };
+  if (!lockEnforced(agent)) return { type: "dangerFullAccess" };
   return {
     type: "workspaceWrite",
     writableRoots: workspaceWritableRoots(agent, sharedRoot),
@@ -113,7 +121,7 @@ export function codexSandboxConfig(
   agent: SandboxedAgent,
   sharedRoot: string,
 ): { sandbox_workspace_write?: { writable_roots: string[]; network_access: boolean } } {
-  if (!workspaceAccessEnforced(agent)) return {};
+  if (!lockEnforced(agent)) return {};
   return {
     sandbox_workspace_write: { writable_roots: workspaceWritableRoots(agent, sharedRoot), network_access: true },
   };

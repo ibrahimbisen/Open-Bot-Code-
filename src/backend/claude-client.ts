@@ -18,6 +18,7 @@ import {
   type PermissionResult,
   query,
   type SDKUserMessage,
+  type SdkPluginConfig,
   type SessionMessage,
   type Settings,
   type SpawnedProcess,
@@ -117,6 +118,18 @@ import {
 import { runCauseEffect } from "./effect-boundary";
 import { skillFolderNames } from "./home-skills";
 import { IdleThreadPool } from "./idle-thread-pool";
+import { type ClaudeLockPlan, type ClaudeShellGate, claudeLockPlan, isClaudeShellTool } from "./lock/claude-lock";
+import { claudeSandboxState } from "./lock/claude-sandbox-probe";
+import {
+  type ContainerPlan,
+  containerExecTarget,
+  containerPlan,
+  containerPolicy,
+  ensureProjectContainer,
+  findContainerTool,
+} from "./lock/container";
+import { type FolderLock, readFolderLock } from "./lock/folder-lock";
+import { lockStrategy } from "./lock/lock-strategy";
 import { MCP_STDIO_PROBE_TIMEOUT_MS } from "./mcp-probe";
 import {
   agentMcpServers,
@@ -362,6 +375,7 @@ interface ThreadConfig {
   workspaceOnly: boolean;
   excludedFolders: string[];
   excludedInstructionFiles: string[];
+  folderLock: FolderLock | null;
   agentId: string | null;
 }
 
@@ -1503,10 +1517,13 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     this.#decideApiKey();
     const input = new AsyncMessageQueue();
     const appliedEffort = this.#resolveEffort(config.model, config.effort);
+    let lockShell: ClaudeShellGate = "sandbox";
     const canUseTool: CanUseTool = (toolName, toolInput, options) =>
       runCauseEffect(
         Effect.gen({ self: this }, function* () {
           if (config.profileGeneration) return { behavior: "deny", message: "Profile generation has no tools." };
+          if (config.folderLock && lockShell === "ask" && isClaudeShellTool(toolName))
+            return yield* this.#requestCommandApprovalEffect(threadId, toolInput, options.toolUseID ?? randomUUID());
           if (config.workspaceOnly) {
             const excluded = yield* claudeWriteInExcluded(toolName, toolInput, config.cwd, config.excludedFolders);
             if (excluded) return { behavior: "deny", message: claudeExcludedWriteMessage(excluded) };
@@ -1636,9 +1653,16 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         ? { env: { ...codeBotSettings.env, ...nodeOptionsSettings.env } }
         : {}),
     };
-    const sandbox = config.workspaceOnly
-      ? claudeWorkspaceSandbox(config.additionalDirectories, config.excludedFolders)
-      : null;
+    const lockPlan =
+      config.folderLock && !config.profileGeneration
+        ? yield* this.#lockPlan(config.folderLock, config.cwd, configDirectory, cliEnvironment, plugins)
+        : null;
+    if (lockPlan) lockShell = lockPlan.context.shell;
+    const sandbox = lockPlan
+      ? lockPlan.sandbox
+      : config.workspaceOnly
+        ? claudeWorkspaceSandbox(config.additionalDirectories, config.excludedFolders)
+        : null;
     const settingsFile =
       Object.keys(signInSettings).length > 0
         ? stateDirectory
@@ -1670,6 +1694,7 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
       ...(claudeTakesPromptSnapshotFlag(this.#cli.version) ? { "system-prompt-snapshot": "off" } : {}),
       ...(mcpConfigFile ? { "mcp-config": mcpConfigFile } : {}),
     };
+    const lockContainer = lockPlan?.container ?? null;
     const stderr = new ClaudeStderrTail();
     const claudeQuery = yield* providerSync(() =>
       this.#createQuery({
@@ -1677,7 +1702,12 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
         options: {
           cwd: config.cwd,
           ...this.#sdkLaunch,
-          ...this.#claudeProcessSpawner(stderr),
+          ...(lockContainer
+            ? {
+                spawnClaudeCodeProcess: (spawnOptions: SpawnOptions) =>
+                  spawnClaudeInContainer(spawnOptions, stderr, lockContainer),
+              }
+            : this.#claudeProcessSpawner(stderr)),
           ...(config.model ? { model: this.#sdkModel(config.model) } : {}),
           ...(appliedEffort ? { effort: appliedEffort } : {}),
           ...(resume ? { resume: threadId } : { sessionId: threadId, title: CLAUDE_SESSION_TITLE }),
@@ -1705,7 +1735,9 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
           ...(sandbox && !settingsFile ? { sandbox } : {}),
           ...(config.workspaceOnly
             ? {
-                hooks: claudeWorkspaceHooks(config.cwd, config.additionalDirectories, config.excludedFolders),
+                hooks: lockPlan
+                  ? lockPlan.hooks
+                  : claudeWorkspaceHooks(config.cwd, config.additionalDirectories, config.excludedFolders),
                 managedSettings: CLAUDE_WORKSPACE_MANAGED_SETTINGS,
               }
             : {}),
@@ -3188,6 +3220,90 @@ export class ClaudeAgentClient extends EventEmitter<ClientEvents> {
     return { behavior: "deny", message: "The user did not allow this write outside the workspace." };
   });
 
+  readonly #requestCommandApprovalEffect = Effect.fn("ClaudeAgentClient.requestCommandApproval")(function* (
+    this: ClaudeAgentClient,
+    threadId: string,
+    toolInput: DynamicRecord,
+    toolUseId: string,
+  ): Effect.fn.Return<PermissionResult, ProviderClientOperationError> {
+    const result = yield* this.#awaitPerson(
+      threadId,
+      this.#serverRequests.call("item/commandExecution/requestApproval", {
+        threadId,
+        turnId: this.#threads.get(threadId)?.activeTurn?.id ?? randomUUID(),
+        itemId: toolUseId,
+        command: isString(toolInput.command) ? toolInput.command : null,
+        reason: sourceText("error.lock.commandAsk", {}),
+      }),
+    ).pipe(toProviderClientOperationError);
+    if (isRecord(result) && result.decision === "accept") return { behavior: "allow", updatedInput: toolInput };
+    return { behavior: "deny", message: "The user did not allow this command." };
+  });
+
+  readonly #lockPlan = Effect.fn("ClaudeAgentClient.lockPlan")(function* (
+    this: ClaudeAgentClient,
+    lock: FolderLock,
+    cwd: string,
+    configDirectory: string,
+    environment: NodeJS.ProcessEnv,
+    plugins: readonly SdkPluginConfig[],
+  ): Effect.fn.Return<ClaudeLockPlan, ProviderClientOperationError> {
+    const policy = containerPolicy();
+    const tool = policy === "never" ? null : findContainerTool();
+    const state = yield* providerCall(() =>
+      policy === "always" && lock.level === "strict"
+        ? Promise.resolve({ available: false as const, reason: "container" })
+        : claudeSandboxState({
+            key: `${this.#cli.executable} ${this.#cli.version}`,
+            createQuery: this.#createQuery,
+            launch: { ...this.#sdkLaunch, ...this.#claudeProcessSpawner(new ClaudeStderrTail()) },
+            env: environment,
+          }),
+    );
+    const strategy = lockStrategy({
+      level: lock.level,
+      enforcement: "tool-sandbox",
+      platform: process.platform,
+      bubblewrap: false,
+      seatbelt: false,
+      containerTool: tool !== null,
+      containerPolicy: policy,
+      claudeSandbox: state.available,
+    });
+    if (strategy.kind === "refuse")
+      return yield* providerFailure(
+        new Error(
+          strategy.reason === "container-missing"
+            ? sourceText("error.lock.containerMissing", {})
+            : sourceText("error.lock.claudeStrictNoSandbox", { reason: state.available ? "" : state.reason }),
+        ),
+      );
+    const container =
+      strategy.kind === "container" && tool
+        ? containerPlan({
+            tool,
+            projectId: lock.projectId ?? cwd,
+            writableFolders: [...lock.allowedFolders, configDirectory],
+            readOnlyFolders: [...lock.readOnlyFolders, dirname(this.#cli.executable)],
+            workdir: cwd,
+          })
+        : null;
+    if (container)
+      yield* providerCall(() => ensureProjectContainer(container)).pipe(
+        Effect.catch((error) =>
+          providerFailure(new Error(sourceText("error.lock.containerFailed", { reason: String(error.cause) }))),
+        ),
+      );
+    return claudeLockPlan(lock, {
+      cwd,
+      configDirectory,
+      container,
+      shell: container ? "container" : state.available ? "sandbox" : "ask",
+      engineFolder: dirname(this.#cli.executable),
+      skillFolders: [join(configDirectory, "skills"), ...plugins.map((plugin) => plugin.path)],
+    });
+  });
+
   #requireThread(threadId: string): ThreadRuntime {
     const runtime = this.#threads.get(threadId);
     if (!runtime) throw new Error(`Unknown Claude thread: ${threadId}`);
@@ -3445,6 +3561,24 @@ function spawnClaudeProcessGroup(
   return child;
 }
 
+function spawnClaudeInContainer(
+  { command, args, cwd, env, signal }: SpawnOptions,
+  stderr: ClaudeStderrTail,
+  plan: ContainerPlan,
+): SpawnedProcess {
+  const target = containerExecTarget(plan, { command, args, windowsVerbatimArguments: false }, cwd, Object.keys(env));
+  const child = spawn(target.command, target.args, { env, stdio: ["pipe", "pipe", "pipe"], windowsHide: true });
+  child.stderr.on("data", (chunk: Buffer) => stderr.push(chunk));
+  child.stderr.on("error", () => {});
+  const abort = () => child.kill();
+  const release = () => signal.removeEventListener("abort", abort);
+  signal.addEventListener("abort", abort, { once: true });
+  child.once("exit", release);
+  child.once("error", release);
+  if (signal.aborted) abort();
+  return child;
+}
+
 function spawnClaudeThroughLauncher(
   { command, args, cwd, env, signal }: SpawnOptions,
   stderr: ClaudeStderrTail,
@@ -3609,6 +3743,7 @@ function readThreadConfig(params: unknown): ThreadConfig {
       isRecord(params) && Array.isArray(params.excludedInstructionFiles)
         ? params.excludedInstructionFiles.filter((value): value is string => isString(value))
         : [],
+    folderLock: readFolderLock(params),
     agentId: mcpAgentParam(params),
   };
 }
