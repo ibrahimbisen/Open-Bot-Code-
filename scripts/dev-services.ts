@@ -145,7 +145,9 @@ export function createDevelopmentServiceSpec(
       CODEBOT_DEV_REMOTE_DEBUGGING_PORT:
         childEnvironment.CODEBOT_DEV_REMOTE_DEBUGGING_PORT ??
         String(isTestClient ? DEFAULT_REMOTE_DEBUGGING_PORTS["test-client"] : DEFAULT_REMOTE_DEBUGGING_PORTS.app),
-      CODEBOT_DEV_REMOTE_ROLE: childEnvironment.CODEBOT_DEV_REMOTE_ROLE ?? (isTestClient ? "client" : "host"),
+      CODEBOT_DEV_REMOTE_ROLE:
+        childEnvironment.CODEBOT_DEV_REMOTE_ROLE ??
+        (isTestClient ? "client" : childEnvironment.CODEBOT_DEV_TEST_CLIENT_ENABLED === "1" ? "host" : "none"),
     },
   };
 }
