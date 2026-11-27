@@ -118,6 +118,7 @@ function PanelHeader(props: {
       <Show when={projectSlots.chatFileTree !== undefined}>
         <IconButton
           label={t("panel.header.files")}
+          class="project-panel-files-toggle"
           size="icon-sm"
           variant="ghost"
           aria-pressed={props.treeOpen ? "true" : "false"}

@@ -82,6 +82,8 @@ function shortTheme(palette: AppThemePalette): string {
 
 const ONLY = process.argv.find((value) => value.startsWith("--only="))?.slice("--only=".length) ?? null;
 const SKIP_FRESH = process.argv.includes("--skip-fresh");
+const STEPS = process.argv.find((value) => value.startsWith("--steps="))?.slice("--steps=".length) ?? null;
+const STEP_FILTER = STEPS === null ? null : new RegExp(STEPS, "i");
 
 const ALL_VARIANTS: Variant[] = [
   ...BUILT_IN_THEME_PALETTES.map((palette) => ({ palette, theme: shortTheme(palette), width: 1280, height: 800 })),
@@ -149,6 +151,7 @@ async function shot(name: string, options: { settle?: boolean; keepMouse?: boole
 
 async function step(name: string, run: () => Promise<void>): Promise<void> {
   const label = current ? `${current.theme} ${current.width}x${current.height}: ${name}` : name;
+  if (STEP_FILTER !== null && run !== setup && !STEP_FILTER.test(name)) return;
   try {
     await run();
     checks.push({ name: label, passed: true });
@@ -699,7 +702,13 @@ async function phaseMain(variant: Variant): Promise<void> {
     await shot("dock-two-panels");
   });
   await step("dock with three panels", async () => {
-    await (await groupActions(1)).getByRole("button", { name: english("panel.split.down"), exact: true }).click();
+    const group = await groupActions(1);
+    const splitDown = group.getByRole("button", { name: english("panel.split.down"), exact: true });
+    if (await visible(splitDown)) await splitDown.click();
+    else {
+      await group.getByRole("tab").first().click();
+      await page.evaluate(() => window.__codebotProjectDock?.split("below"));
+    }
     await until(
       "three chat panels",
       () => chatPanels().count(),

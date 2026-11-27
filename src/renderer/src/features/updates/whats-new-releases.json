@@ -3,15 +3,12 @@
     "version": "0.79.0",
     "date": "2026-11-25",
     "notices": [
-      "Update each joined server to this version too. Credit image and video tools, location requests and many fixes below work on a server only when the server has this version."
+      "Update each joined server to this version too. Location requests and many fixes below work on a server only when the server has this version."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Agents can make images and videos with CodeBot credits, and edit your pictures. The approval card shows the model, the price and the prompt. You can choose another model before you allow it. The Credits item in the left rail shows your balance. An owner or an admin can turn \"Agents can use credits\" on or off.",
-          "Agents can pay sites in crypto from a NEAR Intents wallet. Connect it in Server settings › Vault › Crypto with a passkey, then add funds. A payment waits for your approval in the chat, unless you select \"Always allow\" for that site. A daily budget limits what agents can spend. The wallet is only for this computer, and payments use real funds.",
-          "Each account gets 10 free welcome credits. You can also redeem a credit code on the Credits page with Redeem code.",
           "An agent's browser tab can ask for your location. The chat asks you first, and you choose Block, Allow always or Allow. Before, the browser always blocked the request.",
           "The sidebar has tabs above the chat list: All, Unread and the folders that you choose. Each tab shows its unread chats."
         ]
@@ -20,7 +17,6 @@
         "type": "changed",
         "items": [
           "A new workflow step now starts with a model that can run. A text step uses your preferred model, or the usual model of a connected provider.",
-          "When you have only free credits, the model list on an approval card marks the models that free credits pay for with \"Free credits\".",
           "The side panel can split into up to three groups, one above the other. Drag the line between two groups to change their heights."
         ]
       },
@@ -73,15 +69,13 @@
     "version": "0.77.0",
     "date": "2026-11-23",
     "notices": [
-      "Update each joined server to this version too. On a server, CodeBot credit models, paused and exported workflows, WhatsApp read-only chats, location requests and the Signal server choice work only when the server has this version.",
+      "Update each joined server to this version too. On a server, paused and exported workflows, WhatsApp read-only chats, location requests and the Signal server choice work only when the server has this version.",
       "After this update, an older version of CodeBot cannot open your data."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Buy CodeBot credits for yourself or for a server from the Credits button in the page rail or in Settings → Billing. A paid license also gives free credits each month.",
-          "Image and video steps in a workflow can use CodeBot models that your credits pay for, with no other sign-in. Set Batch on a step to make up to 4 results at the same time.",
           "Pause a workflow from the workflow menu. You can also export a workflow to a file and import it on another computer or server.",
           "Type {{ in a workflow step to add a field from an earlier step. Schedule, GitHub, Discord, Telegram and Slack triggers now give fields too.",
           "An agent can ask for your location when a request needs it, such as \"restaurants near me\". Nothing is sent until you answer.",
@@ -197,7 +191,6 @@
       {
         "type": "added",
         "items": [
-          "Share your invite link in Settings > Invite friends. The tab shows your credit and the friends who joined. A friend gets 10% off each payment, and you get 10% of each paid invoice of your friend as credit.",
           "Put nodes of a workflow canvas in a group. Select them and press Group (⌘G). Collapse a group into one stack card, and press Ungroup (⇧⌘G) to end it.",
           "Give a video step on the workflow canvas any length that its Sunra or Higgsfield model makes. Select Custom in the Length menu and use the slider.",
           "Open the Marketplace from the Apps row in the settings of an agent. Connect an app, or add your own MCP server with Add custom.",
@@ -944,7 +937,6 @@
         "type": "fixed",
         "items": [
           "Gemini no longer fills the memory of a computer or server over hours of use.",
-          "A self-hosted server takes as many members as your license has users.",
           "The web app connects to your server again at once when you go back to it.",
           "Picture in Picture shows the page of a joined server's browser."
         ]
@@ -961,8 +953,7 @@
         "items": [
           "A Workspace only agent can change files in folders that you add. Open the agent's settings, then Folders, or drop a folder on the chat.",
           "Set the context window of each model of a custom provider, so OpenCode compacts the conversation at the correct size.",
-          "Ctrl+F (⌘F on macOS) searches the open side thread.",
-          "Buy a commercial license for work from Billing or from Add server: Starter for 1 user, or Team for 2 to 10 users. A new license is free until 1 December 2026."
+          "Ctrl+F (⌘F on macOS) searches the open side thread."
         ]
       },
       {
@@ -1475,7 +1466,6 @@
       {
         "type": "added",
         "items": [
-          "Settings → Billing has a License for work at a company: 5 to 25 users, in EUR, USD or PLN. See who uses it and change the number of users.",
           "The chat shows the subagents that a Claude or Codex agent starts. Click a subagent to see its task and its steps.",
           "An agent can show its plan before a long task. Turn on \"Show the plan before long tasks\" in the agent's settings.",
           "The context meter in the composer has a New chat button.",
@@ -1490,8 +1480,7 @@
           "A Claude agent makes a routine in CodeBot when you ask for one, not a claude.ai cloud routine.",
           "The Cline model picker shows Cline's free models, and a Cline agent runs on the model that you select.",
           "An OpenCode agent uses the key that you paste into CodeBot, and an expired key shows an Update key button.",
-          "On Windows, CodeBot finds an OpenCode that you installed yourself, and a failed provider download shows why.",
-          "Renew in Settings → Billing works again for a cancelled server plan."
+          "On Windows, CodeBot finds an OpenCode that you installed yourself, and a failed provider download shows why."
         ]
       }
     ]

@@ -264,7 +264,11 @@
   pointer-events: auto;
 }
 
-@media (hover: none), (pointer: coarse) {
+.message-action-row:has(.agent-steps[data-open]) {
+  align-items: flex-start;
+}
+
+@media (hover: none) and (pointer: coarse) {
   .message-actions,
   .message-time,
   .message-steps {

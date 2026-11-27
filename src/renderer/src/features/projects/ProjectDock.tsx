@@ -56,6 +56,7 @@ const SLOT_ADD_LABEL = {
 const CHAT_COMPONENT = "chat";
 const SLOT_COMPONENT = "slot";
 const SAVE_DELAY_MS = 350;
+const NARROW_GROUP_WIDTH = 300;
 
 interface PanelHost {
   id: string;
@@ -164,12 +165,19 @@ export function ProjectDock(props: { projectId: string }) {
   function createActionsRenderer(group: DockviewGroupPanel): IHeaderActionsRenderer {
     const element = document.createElement("div");
     element.className = "project-dock-actions-host";
+    const widthWatcher = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width ?? Number.POSITIVE_INFINITY;
+      if (width < NARROW_GROUP_WIDTH) element.dataset.narrow = "";
+      else delete element.dataset.narrow;
+    });
     return {
       element,
       init() {
+        widthWatcher.observe(group.element);
         setActions((current) => [...current, { groupId: group.id, element, group }]);
       },
       dispose() {
+        widthWatcher.disconnect();
         setActions((current) => current.filter((entry) => entry.element !== element));
       },
     };
@@ -692,14 +700,27 @@ function GroupActions(props: {
           </IconButton>
         )}
       </Show>
-      <IconButton label={t("panel.split.right")} size="icon-sm" variant="ghost" onClick={() => props.onSplit("right")}>
+      <IconButton
+        label={t("panel.split.right")}
+        class="project-dock-action-secondary"
+        size="icon-sm"
+        variant="ghost"
+        onClick={() => props.onSplit("right")}
+      >
         <Columns2 />
       </IconButton>
-      <IconButton label={t("panel.split.down")} size="icon-sm" variant="ghost" onClick={() => props.onSplit("below")}>
+      <IconButton
+        label={t("panel.split.down")}
+        class="project-dock-action-secondary"
+        size="icon-sm"
+        variant="ghost"
+        onClick={() => props.onSplit("below")}
+      >
         <Rows2 />
       </IconButton>
       <IconButton
         label={props.maximized ? t("panel.restore") : t("panel.maximize")}
+        class="project-dock-action-secondary"
         size="icon-sm"
         variant="ghost"
         onClick={props.onMaximize}

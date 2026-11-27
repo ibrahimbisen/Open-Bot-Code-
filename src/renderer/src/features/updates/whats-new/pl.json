@@ -3,15 +3,12 @@
     "version": "0.79.0",
     "date": "2026-11-25",
     "notices": [
-      "Zaktualizuj także do tej wersji każdy dołączony serwer. Narzędzia do obrazów i wideo za kredyty, prośby o lokalizację oraz wiele poprawek poniżej działają na serwerze tylko wtedy, gdy serwer ma tę wersję."
+      "Zaktualizuj także do tej wersji każdy dołączony serwer. Prośby o lokalizację oraz wiele poprawek poniżej działają na serwerze tylko wtedy, gdy serwer ma tę wersję."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Agenci mogą tworzyć obrazy i filmy za kredyty CodeBot oraz edytować twoje zdjęcia. Karta zatwierdzenia pokazuje model, cenę i prompt. Zanim zezwolisz, możesz wybrać inny model. Pozycja Credits w lewym pasku pokazuje twoje saldo. Właściciel lub administrator może włączyć albo wyłączyć opcję „Agenci mogą używać kredytów”.",
-          "Agenci mogą płacić na stronach kryptowalutami z portfela NEAR Intents. Połącz go w Ustawienia serwera › Sejf › Krypto za pomocą klucza dostępu, a potem dodaj środki. Każda płatność czeka na twoje zatwierdzenie w czacie, chyba że dla danej strony wybierzesz „Zawsze zezwalaj”. Budżet dzienny ogranicza wydatki agentów. Portfel działa tylko na tym komputerze, a płatności używają prawdziwych środków.",
-          "Każde konto dostaje 10 darmowych kredytów powitalnych. Na stronie Credits możesz też zrealizować kod kredytowy przyciskiem Redeem code.",
           "Karta przeglądarki agenta może poprosić o twoją lokalizację. Czat najpierw cię pyta, a ty wybierasz Blokuj, Zawsze zezwalaj albo Zezwól. Wcześniej przeglądarka zawsze blokowała prośbę.",
           "Pasek boczny ma karty nad listą czatów: Wszystkie, Nieprzeczytane oraz foldery, które wybierzesz. Każda karta pokazuje swoje nieprzeczytane czaty."
         ]
@@ -20,7 +17,6 @@
         "type": "changed",
         "items": [
           "Nowy krok przepływu pracy zaczyna się teraz od modelu, który może działać. Krok tekstowy używa twojego ulubionego modelu albo zwykłego modelu połączonego dostawcy.",
-          "Gdy masz tylko darmowe kredyty, lista modeli na karcie zatwierdzenia oznacza modele, za które płacą darmowe kredyty, znacznikiem „Darmowe kredyty”.",
           "Panel boczny może podzielić się na do trzech grup, jedna nad drugą. Przeciągnij linię między dwiema grupami, aby zmienić ich wysokość."
         ]
       },
@@ -73,15 +69,13 @@
     "version": "0.77.0",
     "date": "2026-11-23",
     "notices": [
-      "Zaktualizuj także do tej wersji każdy serwer, do którego dołączyłeś. Na serwerze modele płatne kredytami CodeBot, wstrzymane i wyeksportowane przepływy pracy, czaty WhatsApp tylko do odczytu, prośby o lokalizację oraz wybór serwera Signal działają tylko wtedy, gdy serwer ma tę wersję.",
+      "Zaktualizuj także do tej wersji każdy serwer, do którego dołączyłeś. Na serwerze wstrzymane i wyeksportowane przepływy pracy, czaty WhatsApp tylko do odczytu, prośby o lokalizację oraz wybór serwera Signal działają tylko wtedy, gdy serwer ma tę wersję.",
       "Po tej aktualizacji starsza wersja CodeBot nie może otworzyć twoich danych."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Kup kredyty CodeBot dla siebie lub dla serwera przyciskiem „Credits” w pasku stron albo w Ustawienia → Rozliczenia. Płatna licencja daje też darmowe kredyty co miesiąc.",
-          "Kroki z obrazami i wideo w przepływie pracy mogą używać modeli CodeBot opłacanych twoimi kredytami, bez dodatkowego logowania. Ustaw w kroku opcję „Liczba”, aby uzyskać jednocześnie do 4 wyników.",
           "Wstrzymaj przepływ pracy z jego menu. Możesz też wyeksportować przepływ pracy do pliku i zaimportować go na innym komputerze lub serwerze.",
           "Wpisz {{ w kroku przepływu pracy, aby dodać pole z wcześniejszego kroku. Wyzwalacze Harmonogram, GitHub, Discord, Telegram i Slack też teraz podają pola.",
           "Agent może poprosić o twoją lokalizację, gdy prośba jej wymaga, na przykład „restauracje w pobliżu”. Nic nie jest wysyłane, dopóki nie odpowiesz.",
@@ -197,7 +191,6 @@
       {
         "type": "added",
         "items": [
-          "Udostępnij swój link z zaproszeniem w Ustawienia > Invite friends. Karta pokazuje twój kredyt i znajomych, którzy dołączyli. Znajomy dostaje 10% zniżki od każdej płatności, a ty dostajesz 10% każdej opłaconej faktury znajomego jako kredyt.",
           "Umieść węzły kanwy przepływu pracy w grupie. Zaznacz je i naciśnij Grupuj (⌘G). Zwiń grupę do jednej karty stosu, a Rozgrupuj (⇧⌘G) zakończy grupowanie.",
           "Nadaj krokowi wideo na kanwie przepływu pracy dowolną długość, jaką obsługuje jego model Sunra lub Higgsfield. Wybierz Własna w menu Długość i użyj suwaka.",
           "Otwórz Marketplace z wiersza Aplikacje w ustawieniach agenta. Połącz aplikację albo dodaj własny serwer MCP przyciskiem Dodaj własną.",

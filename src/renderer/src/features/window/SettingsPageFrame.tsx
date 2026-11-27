@@ -1,5 +1,5 @@
 import type { CentralAuthUser, ServerSummary } from "@codebot/contracts/ipc";
-import { Button, ChevronRight, Input, Search, UserAvatar, UserRound, X } from "@codebot/ui";
+import { Button, ChevronRight, escapeFromTabList, Input, Search, UserAvatar, UserRound, X } from "@codebot/ui";
 import { ServerMark } from "@codebot/ui/features/servers/ServerRail";
 import type { SettingsPagePlacement } from "@codebot/ui/features/settings/SettingsDialogShell";
 import { useText } from "@codebot/ui/text";
@@ -27,7 +27,8 @@ export function SettingsPageFrame(props: {
       root.querySelector<HTMLElement>(".settings-page-title")?.focus({ preventScroll: true });
     }
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented) return;
+      if (event.key !== "Escape") return;
+      if (event.defaultPrevented && !escapeFromTabList(event)) return;
       const target = event.target instanceof Element ? event.target : null;
       if (target?.closest("[role=dialog], [role=alertdialog], [role=menu], [role=listbox]")) return;
       if (target && !root.contains(target) && target.closest("input, textarea, select, [contenteditable]")) return;

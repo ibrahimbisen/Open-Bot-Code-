@@ -672,6 +672,26 @@
   height: 100%;
 }
 
+.codebot-dock-theme [role="tab"] {
+  min-width: 72px;
+  flex: 0 1 auto;
+}
+
+.codebot-dock-theme [role="tab"] > :first-child {
+  min-width: 0;
+}
+
+.codebot-dock-theme [role="tab"] > :first-child > :first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-dock-actions-host[data-narrow] .project-dock-action-secondary {
+  display: none;
+}
+
 .project-dock-actions-host {
   display: flex;
   height: 100%;
@@ -792,6 +812,24 @@
 
 @container project-chat-panel (max-width: 380px) {
   .project-panel-project {
+    display: none;
+  }
+}
+
+@container project-chat-panel (max-width: 320px) {
+  .project-panel-header > .project-panel-files-toggle,
+  .project-panel-header > .provider-model-picker .provider-model-trigger-effort {
+    display: none;
+  }
+
+  .project-panel-header > .provider-model-picker {
+    min-width: 88px;
+    flex-shrink: 1;
+  }
+}
+
+@container project-chat-panel (max-width: 240px) {
+  .project-panel-title {
     display: none;
   }
 }

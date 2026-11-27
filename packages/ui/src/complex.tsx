@@ -196,6 +196,10 @@ export function dialogOpen(): boolean {
   return document.querySelector(".ui-dialog-content") !== null;
 }
 
+export function escapeFromTabList(event: KeyboardEvent): boolean {
+  return event.target instanceof Element && event.target.closest("[role=tablist]") !== null;
+}
+
 const [mountedDialogs, setMountedDialogs] = createSignal(0);
 
 export const dialogShown = () => mountedDialogs() > 0;
@@ -214,10 +218,15 @@ export const Dialog: DialogApi = {
   Overlay: (props) => <DialogPrimitive.Overlay {...props} class={withBaseClass("ui-dialog-overlay", props.class)} />,
   Content: (props) => {
     countMountedDialog();
+    const context = DialogPrimitive.useDialogContext();
     return (
       <DialogPrimitive.Content
         {...props}
         class={withBaseClass("ui-dialog-content", props.class)}
+        onEscapeKeyDown={(event) => {
+          props.onEscapeKeyDown?.(event);
+          if (event.defaultPrevented && escapeFromTabList(event)) context.close();
+        }}
         onInteractOutside={(event) => {
           props.onInteractOutside?.(event);
           const target = event.detail.originalEvent.target;

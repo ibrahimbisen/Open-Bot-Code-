@@ -3,15 +3,12 @@
     "version": "0.79.0",
     "date": "2026-11-25",
     "notices": [
-      "Mettez aussi à jour vers cette version chaque serveur que vous avez rejoint. Les outils d’image et de vidéo payés en crédits, les demandes de localisation et plusieurs des corrections ci-dessous ne fonctionnent sur un serveur que si le serveur a cette version."
+      "Mettez aussi à jour vers cette version chaque serveur que vous avez rejoint. Les demandes de localisation et plusieurs des corrections ci-dessous ne fonctionnent sur un serveur que si le serveur a cette version."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Les agents peuvent créer des images et des vidéos avec des crédits CodeBot, et retoucher vos images. La carte d’approbation affiche le modèle, le prix et le prompt. Vous pouvez choisir un autre modèle avant de l’autoriser. L’élément Credits de la barre latérale gauche affiche votre solde. Un propriétaire ou un administrateur peut activer ou désactiver « Les agents peuvent utiliser des crédits ».",
-          "Les agents peuvent payer des sites en crypto depuis un portefeuille NEAR Intents. Connectez-le dans Réglages du serveur › Vault › Crypto avec une clé d’accès, puis faites un dépôt. Chaque paiement attend votre approbation dans la discussion, sauf si vous choisissez « Toujours autoriser » pour ce site. Un budget quotidien limite ce que les agents peuvent dépenser. Le portefeuille sert uniquement sur cet ordinateur, et les paiements utilisent de vrais fonds.",
-          "Chaque compte reçoit 10 crédits gratuits de bienvenue. Vous pouvez aussi utiliser un code de crédit sur la page Credits avec Redeem code.",
           "L’onglet de navigateur d’un agent peut demander votre localisation. Le chat vous demande d’abord, et vous choisissez Bloquer, Toujours autoriser ou Autoriser. Avant, le navigateur bloquait toujours la demande.",
           "La barre latérale a des onglets au-dessus de la liste des discussions : Tous, Non lues et les dossiers que vous choisissez. Chaque onglet affiche ses discussions non lues."
         ]
@@ -20,7 +17,6 @@
         "type": "changed",
         "items": [
           "Une nouvelle étape de workflow démarre maintenant avec un modèle qui peut s’exécuter. Une étape de texte utilise votre modèle préféré, ou le modèle habituel d’un fournisseur connecté.",
-          "Quand vous n’avez que des crédits gratuits, la liste des modèles d’une carte d’approbation marque avec « Crédits gratuits » les modèles payés par les crédits gratuits.",
           "Le panneau latéral peut se diviser en jusqu’à trois groupes, l’un au-dessus de l’autre. Faites glisser la ligne entre deux groupes pour changer leur hauteur."
         ]
       },
@@ -73,15 +69,13 @@
     "version": "0.77.0",
     "date": "2026-11-23",
     "notices": [
-      "Mettez aussi à jour vers cette version chaque serveur que vous avez rejoint. Sur un serveur, les modèles CodeBot payés en crédits, les workflows suspendus et exportés, les discussions WhatsApp en lecture seule, les demandes de localisation et le choix du serveur Signal ne fonctionnent que si le serveur a cette version.",
+      "Mettez aussi à jour vers cette version chaque serveur que vous avez rejoint. Sur un serveur, les workflows suspendus et exportés, les discussions WhatsApp en lecture seule, les demandes de localisation et le choix du serveur Signal ne fonctionnent que si le serveur a cette version.",
       "Après cette mise à jour, une version plus ancienne d’CodeBot ne peut pas ouvrir vos données."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Achetez des crédits CodeBot pour vous ou pour un serveur depuis le bouton Credits de la barre de pages ou dans Réglages → Facturation. Une licence payante donne aussi des crédits gratuits chaque mois.",
-          "Les étapes image et vidéo d’un workflow peuvent utiliser les modèles CodeBot que vos crédits paient, sans autre connexion. Réglez Lot sur une étape pour obtenir jusqu’à 4 résultats en même temps.",
           "Suspendez un workflow depuis le menu du workflow. Vous pouvez aussi exporter un workflow dans un fichier et l’importer sur un autre ordinateur ou serveur.",
           "Tapez {{ dans une étape de workflow pour ajouter un champ d’une étape précédente. Les déclencheurs Planification, GitHub, Discord, Telegram et Slack donnent maintenant des champs aussi.",
           "Un agent peut demander votre position quand une demande en a besoin, par exemple « restaurants près de moi ». Rien n’est envoyé tant que vous n’avez pas répondu.",
@@ -197,7 +191,6 @@
       {
         "type": "added",
         "items": [
-          "Partagez votre lien d’invitation dans Réglages > Invite friends. L’onglet affiche votre crédit et les amis qui ont rejoint. Un ami obtient 10 % de réduction sur chaque paiement, et vous obtenez 10 % de chaque facture payée de votre ami sous forme de crédit.",
           "Placez des nœuds d’un canevas de workflow dans un groupe. Sélectionnez-les et appuyez sur Grouper (⌘G). Réduisez un groupe en une seule carte empilée, et appuyez sur Dissocier (⇧⌘G) pour le défaire.",
           "Donnez à une étape vidéo du canevas de workflow n’importe quelle durée que permet son modèle Sunra ou Higgsfield. Sélectionnez Personnalisée dans le menu Durée, puis utilisez le curseur.",
           "Ouvrez le Marketplace depuis la ligne Apps dans les réglages d’un agent. Connectez une application, ou ajoutez votre propre serveur MCP avec Ajout personnalisé.",

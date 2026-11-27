@@ -1654,7 +1654,7 @@
   }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none) and (pointer: coarse) {
   .message-file-reference,
   .composer-file-reference {
     max-width: calc(100% - 8px);

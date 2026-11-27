@@ -1401,7 +1401,7 @@ html:not(.library-dragging) .library-row[data-actions]:is(:hover, :focus-within)
 }
 
 .library-side .ui-button.library-row-main[aria-current="page"] {
-  background: var(--codebot-bg-surface);
+  background: var(--codebot-bg-control-active);
   color: var(--codebot-text-primary);
   font-weight: var(--codebot-weight-medium);
 }
