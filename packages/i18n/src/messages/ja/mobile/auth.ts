@@ -33,6 +33,29 @@ export const messages = {
   "mobile.auth.signIn.helpStep2": "2. 設定 → Mobile Connect に移動します。",
   "mobile.auth.signIn.helpStep3":
     "3. 「スマートフォンを追加」→「はい、サインイン」を選択して、ここでコードをスキャンします。",
+  "mobile.auth.signIn.accountButton": "Nextcloud でサインイン",
+  "mobile.auth.account.title": "Nextcloud でサインイン",
+  "mobile.auth.account.description":
+    "OpenBot Code アカウントサービスのアドレスを入力してください。その後、Nextcloud がユーザー名とパスワードを求めます。",
+  "mobile.auth.account.label": "アカウントサービスのアドレス",
+  "mobile.auth.account.placeholder": "account.example.com",
+  "mobile.auth.account.signalLabel": "Signal アドレス (任意)",
+  "mobile.auth.account.signalPlaceholder": "Signal アドレス (任意)",
+  "mobile.auth.account.continue": "Nextcloud で続行",
+  "mobile.auth.account.waiting": "Nextcloud を待っています…",
+  "mobile.auth.account.tryAgainIn": "{time} 後にもう一度お試しください",
+  "mobile.auth.account.useQrCode": "代わりに QR コードをスキャン",
+  "mobile.auth.account.error.invalidAddress":
+    "アカウントサービスのアドレスを入力してください。例: account.example.com。",
+  "mobile.auth.account.error.invalidSignal": "wss:// で始まる Signal アドレスを入力するか、空のままにしてください。",
+  "mobile.auth.account.error.notAccountService": "このアドレスは OpenBot Code アカウントサービスではありません。",
+  "mobile.auth.account.error.startFailed":
+    "アカウントサービスがサインインを開始できませんでした。もう一度お試しください。",
+  "mobile.auth.account.error.loginFailed": "サインインが完了しませんでした。もう一度お試しください。",
+  "mobile.auth.account.error.wait": "サインインの試行回数が多すぎます。しばらく待ってからもう一度お試しください。",
+  "mobile.auth.account.error.providerUnreachable":
+    "アカウントサービスが Nextcloud に接続できませんでした。後でもう一度お試しください。",
+  "mobile.auth.account.error.refused": "Nextcloud がこのサインインを許可しませんでした。",
   "mobile.auth.done.title": "接続しました",
   "mobile.auth.done.body": "サインインしました。",
   "mobile.auth.error.sessionEnded": "セッションが終了しました。もう一度サインインしてください。",

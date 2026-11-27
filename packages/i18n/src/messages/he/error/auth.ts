@@ -7,6 +7,15 @@ export const messages = {
   "error.auth.networkBlocked":
     "חומת אש או שרת proxy ברשת הזו חסמו את הגישה של OpenBot Code אל {host}. יש לבקש ממנהל הרשת לאפשר את {host} ולנסות שוב.",
   "error.auth.signInFirst": "יש להתחבר תחילה ל-OpenBot Code.",
+  "error.auth.accountServiceNotConfigured": "הזן קודם את הכתובת של שירות החשבון שלך.",
+  "error.auth.accountServiceUrlInvalid": "כתובת שירות החשבון חייבת להתחיל ב-https:// ולא להכיל נתיב.",
+  "error.auth.accountServiceFixed":
+    "משתנה הסביבה CODEBOT_AUTH_API_URL קובע את שירות החשבון. הסר אותו כדי לשנות כאן את הכתובת.",
+  "error.auth.signInFailed": "ההתחברות לא הסתיימה. נסה שוב.",
+  "error.auth.signInCancelled": "ההתחברות בוטלה או נדחתה.",
+  "error.auth.signInTimeout": "ההתחברות לקחה יותר מדי זמן. התחל אותה מחדש.",
+  "error.auth.signInBrowserFailed": "OpenBot Code לא הצליח לפתוח את הדפדפן שלך להתחברות.",
+  "error.auth.signInUnavailable": "ה-OpenBot Code הזה לא יכול לפתוח דפדפן להתחברות.",
   "error.auth.signInRequired": "נדרשת התחברות.",
   "error.auth.chatColorUnavailable": "שירות החשבון עדיין אינו תומך בצבעי צ'אט. יש לנסות שוב מאוחר יותר.",
   "error.auth.accountChangedDuringRegister": "החשבון המחובר השתנה בזמן רישום השרת הזה.",

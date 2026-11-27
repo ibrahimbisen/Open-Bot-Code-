@@ -1,4 +1,36 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "الأوامر",
+  "slash.picker.option": "الأمر /{name}",
+  "slash.picker.none": "لم يبلّغ المحرّك عن أوامره بعد. يقرؤها OpenBot Code عند بدء المحرّك.",
+  "slash.picker.noMatch": "لا يوجد أمر يطابق “{query}”.",
+  "slash.badge.project": "المشروع",
+  "slash.badge.user": "المستخدم",
+  "slash.badge.plugin": "إضافة",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "مهارة",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "الطرفية فقط",
+  "slash.screen.close": "إغلاق",
+  "slash.screen.loading": "جارٍ التحميل…",
+  "slash.model.title": "اختيار النموذج",
+  "slash.model.description": "يستخدم {name} هذا النموذج من الرسالة التالية.",
+  "slash.model.empty": "لا توجد نماذج متاحة لهذا الوكيل.",
+  "slash.model.failed": "لم يتغير النموذج.",
+  "slash.effort.title": "مستوى التفكير",
+  "slash.effort.description": "مقدار تفكير {name} قبل أن يجيب.",
+  "slash.effort.unsupported": "نموذج هذا الوكيل ليس له مستويات تفكير.",
+  "slash.effort.failed": "لم يتغير مستوى التفكير.",
+  "slash.resume.title": "استئناف محادثة",
+  "slash.resume.description": "محادثات حفظها المحرّك لمجلد {name}. تُفتح المحادثة المستأنفة كمحادثة جديدة.",
+  "slash.resume.empty": "ليس للمحرّك محادثات محفوظة لهذا المجلد.",
+  "slash.resume.failed": "تعذّر على OpenBot Code قراءة المحادثات المحفوظة.",
+  "slash.resume.retry": "حاول مرة أخرى",
+  "slash.resume.inUse": "مفتوحة في OpenBot Code",
+  "slash.resume.untitled": "محادثة بلا عنوان",
+  "slash.resume.branch": "الفرع {name}",
+  "slash.resume.updated": "حُدّثت {time}",
+  "slash.resume.openFailed": "لم تُفتح المحادثة.",
+} as const satisfies PartialTranslation<typeof source>;

@@ -232,6 +232,18 @@ export const messages = {
     "선택한 내용은 내 모든 기기에 적용돼요. 음소거는 이 휴대전화에만 적용돼요.",
   "mobile.settings.notifications.channel": "에이전트 알림 ({sound})",
   "mobile.settings.notifications.channelSilent": "에이전트 알림 (소리 없음)",
+  "mobile.settings.connection.title": "연결",
+  "mobile.settings.connection.account": "계정",
+  "mobile.settings.connection.accountService": "계정 서비스",
+  "mobile.settings.connection.accountFooter":
+    "계정 서비스의 주소는 로그인할 때 설정됩니다. 다른 주소를 쓰려면 로그아웃하세요.",
+  "mobile.settings.connection.notSignedIn": "로그인하지 않음",
+  "mobile.settings.connection.signal": "Signal 주소",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "선택 사항입니다. 비워 두면 계정 서비스가 제공하는 Signal 주소를 사용합니다. TURN 서버는 Signal에서 가져옵니다.",
+  "mobile.settings.connection.save": "저장",
+  "mobile.settings.connection.saving": "저장 중…",
   "mobile.settings.conversations.title": "대화",
   "mobile.settings.conversations.hiddenChats": "숨긴 채팅",
   "mobile.settings.conversations.largeFiles": "큰 파일 자동 다운로드",

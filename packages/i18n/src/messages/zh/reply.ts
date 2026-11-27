@@ -1,4 +1,33 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/reply";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "reply.summary.edited": { other: "编辑了 {count} 个文件" },
+  "reply.summary.ran": { other: "运行了 {count} 个命令" },
+  "reply.summary.read": { other: "读取了 {count} 个文件" },
+  "reply.summary.searched": { other: "搜索了 {count} 次" },
+  "reply.summary.browsed": { other: "打开了 {count} 个页面" },
+  "reply.summary.delegated": { other: "移交了 {count} 个任务" },
+  "reply.summary.worked": { other: "使用了 {count} 个其他工具" },
+  "reply.details.show": "详情",
+  "reply.details.hide": "隐藏详情",
+  "reply.details.loading": "正在加载详情…",
+  "reply.details.input": "输入",
+  "reply.details.output": "输出",
+  "reply.details.shortened": "已缩短",
+  "reply.details.timeline": "时间线",
+  "reply.code.showAll": "全部显示（{count} 行）",
+  "reply.code.showLess": "显示更少",
+  "reply.view.title": "回复视图",
+  "reply.view.description": "简短显示答案和一行工作摘要。详细还会显示步骤。",
+  "reply.view.short": "简短",
+  "reply.view.detailed": "详细",
+  "reply.rule.title": "回复规则",
+  "reply.rule.description": "每个聊天都会收到此规则。项目可以使用自己的规则。",
+  "reply.rule.label": "回复规则",
+  "reply.rule.save": "保存规则",
+  "reply.rule.reset": "使用默认规则",
+  "reply.rule.saved": "规则已保存",
+  "reply.rule.empty": "空：不发送回复规则",
+  "reply.rule.count": "{count} / {max} 个字符",
+} as const satisfies PartialTranslation<typeof source>;

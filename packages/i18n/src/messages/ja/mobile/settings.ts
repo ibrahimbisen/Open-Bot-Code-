@@ -237,6 +237,18 @@ export const messages = {
     "選んだ内容はあなたのすべてのデバイスに適用されます。ミュートはこのスマートフォンだけに適用されます。",
   "mobile.settings.notifications.channel": "エージェントの通知（{sound}）",
   "mobile.settings.notifications.channelSilent": "エージェントの通知（サウンドなし）",
+  "mobile.settings.connection.title": "接続",
+  "mobile.settings.connection.account": "アカウント",
+  "mobile.settings.connection.accountService": "アカウントサービス",
+  "mobile.settings.connection.accountFooter":
+    "アカウントサービスのアドレスはサインイン時に設定されます。別のアドレスを使うにはサインアウトしてください。",
+  "mobile.settings.connection.notSignedIn": "サインインしていません",
+  "mobile.settings.connection.signal": "Signal アドレス",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "任意。空のままにすると、アカウントサービスが提供する Signal アドレスを使います。TURN サーバーは Signal から取得されます。",
+  "mobile.settings.connection.save": "保存",
+  "mobile.settings.connection.saving": "保存中…",
   "mobile.settings.conversations.title": "会話",
   "mobile.settings.conversations.hiddenChats": "非表示のチャット",
   "mobile.settings.conversations.largeFiles": "大きなファイルを自動でダウンロード",

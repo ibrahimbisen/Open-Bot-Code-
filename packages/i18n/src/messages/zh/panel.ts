@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "面板",
+  "panel.add": "添加面板",
+  "panel.add.otherChat": "来自其他项目的聊天",
+  "panel.add.file": "文件",
+  "panel.add.diff": "更改",
+  "panel.add.browser": "浏览器",
+  "panel.add.preview": "预览",
+  "panel.split.right": "向右拆分",
+  "panel.split.down": "向下拆分",
+  "panel.maximize": "最大化面板",
+  "panel.restore": "恢复面板大小",
+  "panel.close": "关闭面板",
+  "panel.pin": "固定面板使其保持打开",
+  "panel.unpin": "取消固定面板",
+  "panel.preview.loading": "正在加载预览",
+  "panel.preview.failed": "无法打开预览。",
+  "panel.browser.label": "浏览器面板",
+  "panel.browser.starting": "正在打开浏览器",
+  "panel.browser.failed": "无法打开浏览器页面。",
+  "panel.browser.closed": "此浏览器页面已关闭。",
+  "panel.browser.takeControl": "接管页面",
+  "panel.browser.handControl": "将控制权交给代理",
+  "panel.browser.userControls": "你正在控制此页面",
+  "panel.browser.agentControls": "代理正在控制此页面",
+  "panel.header.model": "此聊天的模型",
+  "panel.header.modelLocked": "现在无法更改模型。",
+  "panel.header.files": "项目的文件",
+  "panel.draft.agent": "代理",
+  "panel.chat.noAgent": "此项目没有代理。请在项目设置中添加代理。",
+  "panel.picker.title": "在面板中打开聊天",
+  "panel.picker.description": "先选择项目，再选择聊天。面板会显示项目名称。",
+  "panel.picker.project": "项目",
+} as const satisfies PartialTranslation<typeof source>;

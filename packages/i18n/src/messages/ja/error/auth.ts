@@ -9,6 +9,15 @@ export const messages = {
   "error.auth.networkBlocked":
     "このネットワークのファイアウォールまたはプロキシが、OpenBot Code から {host} への接続をブロックしました。ネットワーク管理者に {host} の許可を依頼してから、再試行してください。",
   "error.auth.signInFirst": "先に OpenBot Code にサインインしてください。",
+  "error.auth.accountServiceNotConfigured": "先にアカウントサービスのアドレスを入力してください。",
+  "error.auth.accountServiceUrlInvalid": "アカウントサービスのアドレスは https:// で始まり、パスを含められません。",
+  "error.auth.accountServiceFixed":
+    "環境変数 CODEBOT_AUTH_API_URL がアカウントサービスを設定しています。ここでアドレスを変更するには、この変数を削除してください。",
+  "error.auth.signInFailed": "サインインが完了しませんでした。もう一度お試しください。",
+  "error.auth.signInCancelled": "サインインがキャンセルされたか、拒否されました。",
+  "error.auth.signInTimeout": "サインインに時間がかかりすぎました。もう一度開始してください。",
+  "error.auth.signInBrowserFailed": "OpenBot Code はサインイン用のブラウザーを開けませんでした。",
+  "error.auth.signInUnavailable": "この OpenBot Code はサインイン用のブラウザーを開けません。",
   "error.auth.signInRequired": "サインインが必要です。",
   "error.auth.chatColorUnavailable":
     "アカウントサービスはまだチャットの色に対応していません。後でもう一度お試しください。",

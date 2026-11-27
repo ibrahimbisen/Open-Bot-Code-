@@ -107,4 +107,20 @@ export const messages = {
   "account.language.next": "次の言語",
   "account.language.continue": "続ける",
   "account.language.change": "言語を変更",
+  "account.service.title": "アカウントサービス",
+  "account.service.description":
+    "サインインは任意です。サインインしない場合、OpenBot Code はこのコンピューター上でローカルプロファイルを使って動作します。",
+  "account.service.address.title": "サービスのアドレス",
+  "account.service.address.description": "サーバー上のアカウントサービスのアドレス。例: https://account.example.com。",
+  "account.service.address.fixed": "環境変数 CODEBOT_AUTH_API_URL がこのアドレスを設定します。",
+  "account.service.address.placeholder": "https://account.example.com",
+  "account.service.address.save": "保存",
+  "account.service.saveFailed": "アドレスを保存できませんでした。",
+  "account.service.signIn.title": "Nextcloud でサインイン",
+  "account.service.signIn.description":
+    "ブラウザーで Nextcloud のサインインページが開きます。そこで Nextcloud のユーザー名とパスワードを入力してください。",
+  "account.service.signIn.waiting": "ブラウザーでサインインを完了してください。",
+  "account.service.signIn.action": "サインイン",
+  "account.service.signIn.cancel": "キャンセル",
+  "account.service.signInFailed": "サインインを開始できませんでした。",
 } as const satisfies PartialTranslation<typeof source>;

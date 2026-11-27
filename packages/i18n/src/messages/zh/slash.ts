@@ -1,4 +1,36 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "命令",
+  "slash.picker.option": "命令 /{name}",
+  "slash.picker.none": "引擎尚未报告其命令。OpenBot Code 在引擎启动时读取它们。",
+  "slash.picker.noMatch": "没有与“{query}”匹配的命令。",
+  "slash.badge.project": "项目",
+  "slash.badge.user": "用户",
+  "slash.badge.plugin": "插件",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "技能",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "仅终端",
+  "slash.screen.close": "关闭",
+  "slash.screen.loading": "正在加载…",
+  "slash.model.title": "选择模型",
+  "slash.model.description": "{name} 从下一条消息开始使用此模型。",
+  "slash.model.empty": "此代理没有可用的模型。",
+  "slash.model.failed": "模型未更改。",
+  "slash.effort.title": "思考级别",
+  "slash.effort.description": "{name} 在回答之前思考多久。",
+  "slash.effort.unsupported": "此代理的模型没有思考级别。",
+  "slash.effort.failed": "思考级别未更改。",
+  "slash.resume.title": "恢复聊天",
+  "slash.resume.description": "引擎为 {name} 的文件夹保存的聊天。恢复的聊天会作为新聊天打开。",
+  "slash.resume.empty": "引擎没有为此文件夹保存的聊天。",
+  "slash.resume.failed": "OpenBot Code 无法读取已保存的聊天。",
+  "slash.resume.retry": "重试",
+  "slash.resume.inUse": "已在 OpenBot Code 中打开",
+  "slash.resume.untitled": "无标题聊天",
+  "slash.resume.branch": "分支 {name}",
+  "slash.resume.updated": "更新于 {time}",
+  "slash.resume.openFailed": "聊天未能打开。",
+} as const satisfies PartialTranslation<typeof source>;

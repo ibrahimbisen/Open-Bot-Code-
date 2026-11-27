@@ -1,4 +1,61 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/localServer";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "localServer.settings.title": "ローカルサーバー",
+  "localServer.settings.description": "ネットワーク上のモデルマシン (DGX Spark など)。各マシンは個別のエントリーです。",
+  "localServer.settings.add": "マシンを追加",
+  "localServer.settings.empty":
+    "ローカルマシンはまだありません。モデルサーバーのアドレスを追加すると、プロジェクトやチャットで使えます。",
+  "localServer.settings.edit": "{name} を編集",
+  "localServer.settings.remove": "{name} を削除",
+  "localServer.settings.refresh": "今すぐ確認",
+  "localServer.settings.statusOff": "ステータスオフ",
+  "localServer.settings.models": { other: "{count} モデル" },
+  "localServer.scan.title": "マシンを探す",
+  "localServer.scan.description":
+    "ホスト名または IP アドレスを入力してください。OpenBot Code は、Ollama、LM Studio、vLLM を通常のポートで探します。",
+  "localServer.scan.host": "ホストまたはアドレス",
+  "localServer.scan.placeholder": "spark-1.local",
+  "localServer.scan.action": "スキャン",
+  "localServer.scan.scanning": "スキャン中",
+  "localServer.scan.none": "このホストにモデルサーバーが見つかりません。",
+  "localServer.scan.needsKey": "API キーが必要",
+  "localServer.scan.add": "{name} を追加",
+  "localServer.dialog.addTitle": "ローカルマシンを追加",
+  "localServer.dialog.editTitle": "{name} を編集",
+  "localServer.dialog.description":
+    "OpenBot Code は、マシンの OpenAI 互換アドレスからモデル一覧とステータスを読み取ります。",
+  "localServer.field.name": "名前",
+  "localServer.field.namePlaceholder": "DGX Spark 1",
+  "localServer.field.baseUrl": "サーバーのアドレス",
+  "localServer.field.baseUrlPlaceholder": "http://192.168.1.41:8000/v1",
+  "localServer.field.apiKey": "API キー (任意)",
+  "localServer.field.apiKeyKept": "保存済み。そのまま使うには空のままにしてください。",
+  "localServer.field.gpuUrl": "GPU ステータスのアドレス (任意)",
+  "localServer.field.gpuUrlPlaceholder": "http://192.168.1.41:9101/gpu",
+  "localServer.field.gpuUrlHelp":
+    "GPU の負荷とメモリを表示する JSON、nvidia-smi エクスポーター、または DCGM エクスポーターのアドレス。",
+  "localServer.field.gpuUsesKey": "API キーを GPU ステータスのアドレスに送る",
+  "localServer.field.gpuUsesKeyHelp": "サーバーのアドレスと同じオリジンのアドレスの場合のみ。",
+  "localServer.field.monitored": "このマシンのステータスを表示",
+  "localServer.field.monitoredHelp": "OpenBot Code はこのマシンを時々確認し、ステータスバーに表示します。",
+  "localServer.error.nameRequired": "名前を入力してください。",
+  "localServer.error.gpuUrlInvalid":
+    "ユーザー名とパスワードを含まない http または https のアドレスを入力してください。",
+  "localServer.error.gpuKeyOtherOrigin": "GPU ステータスのアドレスは、サーバーのアドレスと同じオリジンにしてください。",
+  "localServer.test.action": "テスト",
+  "localServer.test.testing": "テスト中",
+  "localServer.test.online": "オンライン。{models} が見つかりました。",
+  "localServer.test.onlineKind": "{kind} はオンラインです。{models} が見つかりました。",
+  "localServer.test.gpuFound": "GPU ステータスを読み取りました: {count}",
+  "localServer.test.gpuCount": { other: "{count} GPU" },
+  "localServer.test.offline": "オフライン。{error}",
+  "localServer.test.gpuFailed": "GPU ステータスの取得に失敗しました: {error}",
+  "localServer.dialog.saving": "保存中",
+  "localServer.dialog.saveFailed": "OpenBot Code はこのマシンを保存できませんでした。",
+  "localServer.remove.title": "{name} を削除しますか?",
+  "localServer.remove.description":
+    "OpenBot Code はこのマシンを使わなくなります。このマシンのモデルを使うプロジェクトとチャットには、別のモデルが必要です。",
+  "localServer.remove.failed": "OpenBot Code はこのマシンを削除できませんでした。",
+} as const satisfies PartialTranslation<typeof source>;

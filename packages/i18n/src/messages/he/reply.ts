@@ -1,4 +1,41 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/reply";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "reply.summary.edited": { one: "נערך קובץ {count}", two: "נערכו {count} קבצים", other: "נערכו {count} קבצים" },
+  "reply.summary.ran": { one: "הורצה פקודה {count}", two: "הורצו {count} פקודות", other: "הורצו {count} פקודות" },
+  "reply.summary.read": { one: "נקרא קובץ {count}", two: "נקראו {count} קבצים", other: "נקראו {count} קבצים" },
+  "reply.summary.searched": { one: "בוצע חיפוש {count}", two: "בוצעו {count} חיפושים", other: "בוצעו {count} חיפושים" },
+  "reply.summary.browsed": { one: "נפתח דף {count}", two: "נפתחו {count} דפים", other: "נפתחו {count} דפים" },
+  "reply.summary.delegated": {
+    one: "הועברה משימה {count}",
+    two: "הועברו {count} משימות",
+    other: "הועברו {count} משימות",
+  },
+  "reply.summary.worked": {
+    one: "נעשה שימוש בכלי אחר {count}",
+    two: "נעשה שימוש ב-{count} כלים אחרים",
+    other: "נעשה שימוש ב-{count} כלים אחרים",
+  },
+  "reply.details.show": "פרטים",
+  "reply.details.hide": "הסתר פרטים",
+  "reply.details.loading": "טוען פרטים…",
+  "reply.details.input": "קלט",
+  "reply.details.output": "פלט",
+  "reply.details.shortened": "מקוצר",
+  "reply.details.timeline": "ציר זמן",
+  "reply.code.showAll": "הצג הכול ({count} שורות)",
+  "reply.code.showLess": "הצג פחות",
+  "reply.view.title": "תצוגת תגובה",
+  "reply.view.description": "קצר מציג את התשובה וסיכום של שורה אחת מהעבודה. מפורט מציג גם את השלבים.",
+  "reply.view.short": "קצר",
+  "reply.view.detailed": "מפורט",
+  "reply.rule.title": "כלל תגובה",
+  "reply.rule.description": "כל צ'אט מקבל את הכלל הזה. פרויקטים יכולים להשתמש בכלל משלהם.",
+  "reply.rule.label": "כלל לתגובות",
+  "reply.rule.save": "שמירת כלל",
+  "reply.rule.reset": "שימוש בכלל ברירת המחדל",
+  "reply.rule.saved": "הכלל נשמר",
+  "reply.rule.empty": "ריק: לא נשלח כלל תגובה",
+  "reply.rule.count": "{count} מתוך {max} תווים",
+} as const satisfies PartialTranslation<typeof source>;

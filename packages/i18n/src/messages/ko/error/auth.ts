@@ -9,6 +9,15 @@ export const messages = {
   "error.auth.networkBlocked":
     "이 네트워크의 방화벽 또는 프록시가 OpenBot Code의 {host} 접속을 막았어요. 네트워크 관리자에게 {host} 허용을 요청한 후 다시 시도해 주세요.",
   "error.auth.signInFirst": "먼저 OpenBot Code에 로그인해 주세요.",
+  "error.auth.accountServiceNotConfigured": "먼저 계정 서비스 주소를 입력하세요.",
+  "error.auth.accountServiceUrlInvalid": "계정 서비스 주소는 https://로 시작해야 하며 경로가 없어야 합니다.",
+  "error.auth.accountServiceFixed":
+    "환경 변수 CODEBOT_AUTH_API_URL이 계정 서비스를 설정합니다. 여기서 주소를 바꾸려면 이 변수를 제거하세요.",
+  "error.auth.signInFailed": "로그인이 완료되지 않았습니다. 다시 시도하세요.",
+  "error.auth.signInCancelled": "로그인이 취소되었거나 거부되었습니다.",
+  "error.auth.signInTimeout": "로그인에 시간이 너무 오래 걸렸습니다. 다시 시작하세요.",
+  "error.auth.signInBrowserFailed": "OpenBot Code가 로그인을 위해 브라우저를 열 수 없었습니다.",
+  "error.auth.signInUnavailable": "이 OpenBot Code는 로그인을 위해 브라우저를 열 수 없습니다.",
   "error.auth.signInRequired": "로그인이 필요해요.",
   "error.auth.chatColorUnavailable": "계정 서비스가 아직 채팅 색상을 지원하지 않아요. 나중에 다시 시도해 주세요.",
   "error.auth.accountChangedDuringRegister": "이 서버를 등록하는 동안 로그인한 계정이 바뀌었어요.",
