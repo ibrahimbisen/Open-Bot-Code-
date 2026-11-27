@@ -153,6 +153,7 @@ export function ProjectDock(props: { projectId: string }) {
           setParams((current) => {
             current[id] = next;
           });
+        queueMicrotask(syncShownChat);
       },
       dispose() {
         unregister(id);
@@ -419,6 +420,7 @@ export function ProjectDock(props: { projectId: string }) {
     const listeners = [
       dock.onDidLayoutChange(() => {
         syncOpenChats();
+        setActiveTick((value) => value + 1);
         scheduleSave();
       }),
       dock.onDidActivePanelChange(() => syncShownChat()),
@@ -601,7 +603,9 @@ function PanelBody(props: {
             {(content) =>
               content()({
                 panelId: props.host.id,
-                params: value(),
+                get params() {
+                  return value();
+                },
                 project: props.project,
                 get visible() {
                   return visible();

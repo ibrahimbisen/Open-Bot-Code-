@@ -127,14 +127,15 @@ export function createPreviewDock(deps: PreviewDockDeps) {
       return;
     }
     const reference = referenceChat(request) ?? api.activePanel ?? api.panels[0];
+    const previous = api.activePanel;
     const panel = api.addPanel({
       id: deps.newPanelId(),
       component: deps.component,
       title: request.title,
       params: { ...params, ...(request.pinned ? { pinned: true } : {}) },
-      inactive: !request.activate,
       ...(reference ? { position: { referencePanel: reference, direction: "right" as const } } : {}),
     });
+    if (!request.activate && previous) previous.api.setActive();
     watchWidth(panel.group);
     if (reference) applyWidth(panel.group);
     deps.onChanged();

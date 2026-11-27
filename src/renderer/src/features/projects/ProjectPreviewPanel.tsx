@@ -39,8 +39,9 @@ export function ProjectPreviewPanel(props: SlotPanelProps) {
   const [failed, setFailed] = createSignal(false);
 
   createEffect(
-    () => props.params.data,
-    (data) => {
+    () => JSON.stringify(props.params.data),
+    (serialized) => {
+      const data: Record<string, string> = JSON.parse(serialized);
       let current = true;
       setFailed(false);
       loadPreview(data).then(

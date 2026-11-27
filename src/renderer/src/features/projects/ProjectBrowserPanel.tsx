@@ -7,7 +7,7 @@ import {
   BrowserReloadIcon,
 } from "@codebot/ui/features/conversation/ConversationIcons";
 import { useText } from "@codebot/ui/text";
-import { createEffect, createSignal, onCleanup, onSettled, Show, untrack } from "solid-js";
+import { createEffect, createMemo, createSignal, onCleanup, onSettled, Show, untrack } from "solid-js";
 import { projectBrowserPort } from "./project-browser-port";
 import type { SlotPanelProps } from "./project-dock-panels";
 import { useProjects } from "./projects-context";
@@ -28,6 +28,10 @@ export function ProjectBrowserPanel(props: SlotPanelProps) {
   const tabId = () => props.params.data.tabId ?? null;
   const tab = () => tabs()?.find((entry) => entry.id === tabId());
   const port = () => projectBrowserPort().browser;
+  const present = createMemo(() => tab() !== undefined);
+  const title = createMemo(() => tab()?.title);
+  const activeId = createMemo(() => (props.visible ? tab()?.id : undefined));
+  const shown = createMemo(() => props.visible && present() && !overlayOpen());
 
   onSettled(() => {
     const stop = port().onDisplayState((state) => setTabs(state.tabs));
@@ -51,71 +55,64 @@ export function ProjectBrowserPanel(props: SlotPanelProps) {
       const detail = untrack(() => projects.detailOf(props.params.projectId));
       const agentId = props.params.data.agentId ?? detail?.agents[0]?.id ?? null;
       void port()
-        .open({ url: BROWSER_NEW_TAB_URL, ownerAgentId: agentId, ownerThreadId: null, focus: true })
+        .open({
+          url: props.params.data.url ?? BROWSER_NEW_TAB_URL,
+          ownerAgentId: agentId,
+          ownerThreadId: null,
+          focus: true,
+        })
         .then((created) => props.onDataChange({ ...props.params.data, tabId: created.id }))
-        .catch(() => setFailed(true))
-        .finally(() => {
+        .catch(() => {
           creating = false;
+          setFailed(true);
         });
     },
   );
 
-  createEffect(
-    () => tab() !== undefined,
-    (present) => {
-      if (present) setSeen(true);
-      else if (untrack(seen) && untrack(tabs) !== null) props.onClose();
-    },
-  );
+  createEffect(present, (isPresent) => {
+    if (isPresent) setSeen(true);
+    else if (untrack(seen) && untrack(tabs) !== null) props.onClose();
+  });
 
-  createEffect(
-    () => tab()?.title,
-    (title) => {
-      if (title) props.onTitleChange(title);
-    },
-  );
+  createEffect(title, (value) => {
+    if (value) props.onTitleChange(value);
+  });
 
-  createEffect(
-    () => (props.visible ? tab()?.id : undefined),
-    (id) => {
-      if (id) void port().activate(id);
-    },
-  );
+  createEffect(activeId, (id) => {
+    if (id) void port().activate(id);
+  });
 
-  createEffect(
-    () => props.visible && tab() !== undefined && !overlayOpen(),
-    (shown) => {
-      if (!shown) {
-        void port().setVisible({ visible: false, target: "main" });
-        return;
-      }
-      let frame: number | undefined;
-      const sync = () => {
-        frame = undefined;
-        if (!surface?.isConnected) return;
-        const bounds = surface.getBoundingClientRect();
-        void port().setVisible({
-          visible: true,
-          target: "main",
-          bounds: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height },
-        });
-      };
-      const schedule = () => {
-        if (frame === undefined) frame = requestAnimationFrame(sync);
-      };
-      const observer = new ResizeObserver(schedule);
-      if (surface) observer.observe(surface);
-      const root = surface?.closest(".project-dock");
-      if (root) observer.observe(root);
-      window.addEventListener("resize", schedule);
-      schedule();
-      return () => {
-        observer.disconnect();
-        window.removeEventListener("resize", schedule);
-        if (frame !== undefined) cancelAnimationFrame(frame);
-      };
-    },
-  );
+  createEffect(shown, (isShown) => {
+    if (!isShown) {
+      void port().setVisible({ visible: false, target: "main" });
+      return;
+    }
+    let frame: number | undefined;
+    const sync = () => {
+      frame = undefined;
+      if (!surface?.isConnected) return;
+      const bounds = surface.getBoundingClientRect();
+      void port().setVisible({
+        visible: true,
+        target: "main",
+        bounds: { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height },
+      });
+    };
+    const schedule = () => {
+      if (frame === undefined) frame = requestAnimationFrame(sync);
+    };
+    const observer = new ResizeObserver(schedule);
+    if (surface) observer.observe(surface);
+    const root = surface?.closest(".project-dock");
+    if (root) observer.observe(root);
+    window.addEventListener("resize", schedule);
+    schedule();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", schedule);
+      if (frame !== undefined) cancelAnimationFrame(frame);
+    };
+  });
 
   onCleanup(() => {
     void port().setVisible({ visible: false, target: "main" });
