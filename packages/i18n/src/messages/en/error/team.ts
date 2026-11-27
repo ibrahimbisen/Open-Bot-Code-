@@ -1,13 +1,13 @@
 import { defineMessages } from "../../../message";
 
 export const messages = defineMessages("error.team", {
-  "error.team.ownerNotLinked": "This host is not linked to an CodeBot owner account.",
-  "error.team.ownerEmailRequired": "Sign in with the CodeBot email that created this host.",
+  "error.team.ownerNotLinked": "This host is not linked to an OpenBot Code owner account.",
+  "error.team.ownerEmailRequired": "Sign in with the OpenBot Code email that created this host.",
   "error.team.hostNotConfigured": "The team host is not configured.",
   "error.team.alreadyConfigured": "The team server is already configured.",
   "error.team.identityCreateFailed": "The team identity could not be created.",
   "error.team.accountChangedDuringCreate": "The signed-in account changed while this server was being created.",
-  "error.team.notConfigured": "This CodeBot has not been configured.",
+  "error.team.notConfigured": "This OpenBot Code has not been configured.",
   "error.team.keyRotationMissing": "No server key change is waiting.",
   "error.team.serverNotActive": "This server is no longer the active one for the signed-in account.",
   "error.team.logoInvalid": "Choose a valid PNG, JPEG, or WebP image up to 512 KB.",
@@ -20,9 +20,9 @@ export const messages = defineMessages("error.team", {
   "error.team.inviteEmailMismatch": "This invitation belongs to a different email address.",
   "error.team.memberDisabled": "This team member is disabled.",
   "error.team.memberLimit": "A host can have up to {limit} members.",
-  "error.team.accountNotMember": "This CodeBot account is not a member of the team.",
+  "error.team.accountNotMember": "This OpenBot Code account is not a member of the team.",
   "error.team.usernameTaken": "This username is already in use.",
-  "error.team.inviteRequiresAccount": "This invitation requires a verified CodeBot account.",
+  "error.team.inviteRequiresAccount": "This invitation requires a verified OpenBot Code account.",
   "error.team.loginIncorrect": "The username or password is incorrect.",
   "error.team.currentPasswordIncorrect": "The current password is incorrect.",
   "error.team.memberNotFound": "Team member not found.",
@@ -43,22 +43,22 @@ export const messages = defineMessages("error.team", {
   "error.team.usernameInvalid": "Username must contain 3 to 32 letters, numbers, dots, dashes, or underscores.",
   "error.team.passwordLength": "Password must contain 12 to 256 characters.",
   "error.team.bindFailed": "Could not bind the team API.",
-  "error.team.signInRequired": "CodeBot sign-in is required.",
+  "error.team.signInRequired": "OpenBot Code sign-in is required.",
   "error.team.authenticationRequired": "Authentication required.",
   "error.team.agentNotFound": "Agent not found.",
   "error.team.routeNotFound": "Route not found.",
   "error.team.requestFailed": "Request failed.",
   "error.team.tooManySignInAttempts": "Too many sign-in attempts. Try again later.",
-  "error.team.clientUpdateRequired": "Update this CodeBot client before connecting to this host.",
-  "error.team.hostUpdateRequired": "Update CodeBot on the host before connecting.",
-  "error.team.serverSafeMode": "This server is in safe mode because CodeBot on it does not start.",
+  "error.team.clientUpdateRequired": "Update this OpenBot Code client before connecting to this host.",
+  "error.team.hostUpdateRequired": "Update OpenBot Code on the host before connecting.",
+  "error.team.serverSafeMode": "This server is in safe mode because OpenBot Code on it does not start.",
   "error.team.serverSafeModeNewerDatabase":
-    "CodeBot {version} on this server cannot open its data, because a newer CodeBot version saved it. A newer CodeBot release on the server fixes this.",
+    "OpenBot Code {version} on this server cannot open its data, because a newer OpenBot Code version saved it. A newer OpenBot Code release on the server fixes this.",
   "error.team.serverSafeModeStartFailed":
-    "CodeBot {version} on this server stopped after it failed to start many times. A newer CodeBot release on the server fixes this.",
+    "OpenBot Code {version} on this server stopped after it failed to start many times. A newer OpenBot Code release on the server fixes this.",
   "error.team.sidebarLayoutUnavailable": "Sidebar layout is unavailable.",
   "error.team.providersUnsupported": "Provider settings are not supported by this connection.",
-  "error.team.providerNotManaged": "CodeBot does not manage this provider's CLI.",
+  "error.team.providerNotManaged": "OpenBot Code does not manage this provider's CLI.",
   "error.team.channelsUnsupported": "Channel chats are not supported by this connection.",
   "error.team.channelContextUnsupported":
     "This connection does not support a new conversation or compaction in a channel.",
@@ -92,9 +92,9 @@ export const messages = defineMessages("error.team", {
   "error.team.libraryFoldersUnsupported": "Library folders are not supported by this connection.",
   "error.team.workflowFoldersUnsupported": "Workflow folders are not supported by this connection.",
   "error.team.agentNotificationLevelsUnsupported":
-    "This server cannot keep your own notification level for each agent. Update CodeBot on the computer that runs it.",
+    "This server cannot keep your own notification level for each agent. Update OpenBot Code on the computer that runs it.",
   "error.team.sidebarPinsUnsupported":
-    "This server cannot keep your pinned chats for all of your devices. Update CodeBot on the computer that runs it.",
+    "This server cannot keep your pinned chats for all of your devices. Update OpenBot Code on the computer that runs it.",
   "error.team.agentInstructionsUnsupported": "Editing agent instructions is not supported by this connection.",
   "error.team.agentPublishUnsupported": "Publishing agents is not supported by this connection.",
   "error.team.agentUpdateUnsupported": "Updating agents is not supported by this connection.",
@@ -106,14 +106,14 @@ export const messages = defineMessages("error.team", {
   "error.team.threadMessageSearchUnsupported": "Searching side threads is not supported by this connection.",
   "error.team.sideQuestionUnsupported": "Side questions are not supported by this connection.",
   "error.team.liveVoiceUnsupported":
-    "This server does not support Codex live voice. Update CodeBot on the computer that runs it.",
+    "This server does not support Codex live voice. Update OpenBot Code on the computer that runs it.",
   "error.team.voiceTranscriptionUnsupported":
-    "This server does not support dictation. Update CodeBot on the computer that runs it.",
+    "This server does not support dictation. Update OpenBot Code on the computer that runs it.",
   "error.team.clientBrowserUnsupported":
-    "This server does not support shared Chrome tabs. Update CodeBot on the computer that runs it.",
+    "This server does not support shared Chrome tabs. Update OpenBot Code on the computer that runs it.",
   "error.team.clientBrowserCommandUnknown": "The agent no longer waits for this Chrome action.",
   "error.team.routineFlowsUnsupported":
-    "This server does not support routine flows. Update CodeBot on the computer that runs it.",
+    "This server does not support routine flows. Update OpenBot Code on the computer that runs it.",
   "error.team.routineCanvasTooLarge":
     "This routine canvas is too large to send to this device. Shorten the routine instructions on the computer that runs the server.",
   "error.team.conversationPageTooLarge":
@@ -165,9 +165,9 @@ export const messages = defineMessages("error.team", {
   "error.team.browserSessionNotFound": "Browser view session not found.",
   "error.team.mcpUnsupported": "MCP servers are not supported by this connection.",
   "error.team.mcpServerListNeedsUpdate":
-    "Update CodeBot on this device to use more than {limit} MCP servers on this server.",
+    "Update OpenBot Code on this device to use more than {limit} MCP servers on this server.",
   "error.team.providerAccountListNeedsUpdate":
-    "Update CodeBot on this device to use more than {limit} accounts of one provider on this server.",
+    "Update OpenBot Code on this device to use more than {limit} accounts of one provider on this server.",
   "error.team.storageUnsupported": "Storage is not supported by this connection.",
   "error.team.machineResourcesUnsupported": "Machine use is not supported by this connection.",
   "error.team.machineAlertMemberInvalid": "Only an owner or admin of this server can get machine alerts.",
@@ -193,13 +193,13 @@ export const messages = defineMessages("error.team", {
   "error.team.mcpServerNotYours": "Only the person who added this MCP server, or an admin, can change it.",
   "error.team.ownerRequired": "Only the owner of this server can do this.",
   "error.team.requestTooLarge": "Request body is too large.",
-  "error.team.signInRelayUnsupported": "This server cannot relay sign-ins. Update CodeBot on the host.",
+  "error.team.signInRelayUnsupported": "This server cannot relay sign-ins. Update OpenBot Code on the host.",
   "error.team.connectorsUnsupported":
-    "This server cannot manage its connections from here. Update CodeBot on the host.",
-  "error.team.vaultUnsupported": "This server cannot open its Vault from here. Update CodeBot on the host.",
+    "This server cannot manage its connections from here. Update OpenBot Code on the host.",
+  "error.team.vaultUnsupported": "This server cannot open its Vault from here. Update OpenBot Code on the host.",
   "error.team.vaultResetReadable": "The Vault on this server can be read, so it was not reset.",
-  "error.team.discordAccessUnsupported": "This server cannot set Discord roles. Update CodeBot on it.",
-  "error.team.connectorPageRefused": "The server sent a page that CodeBot does not open.",
+  "error.team.discordAccessUnsupported": "This server cannot set Discord roles. Update OpenBot Code on it.",
+  "error.team.connectorPageRefused": "The server sent a page that OpenBot Code does not open.",
   "error.team.signInRelayUnknown": "This sign-in ended or does not exist.",
   "error.team.signInRelayUsed": "This sign-in was already sent.",
   "error.team.signInRelayMismatch": "This address is not from this sign-in.",

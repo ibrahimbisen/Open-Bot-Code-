@@ -2,10 +2,10 @@ import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/window";
 
 export const messages = {
-  "window.localHostTitle": "Host local de CodeBot",
-  "window.localClientTitle": "Cliente local de CodeBot",
+  "window.localHostTitle": "Host local de OpenBot Code",
+  "window.localClientTitle": "Cliente local de OpenBot Code",
   "window.computerUsePermissionTitle": "Activar el uso del equipo",
-  "window.rendererStoppedTitle": "CodeBot dejó de funcionar",
+  "window.rendererStoppedTitle": "OpenBot Code dejó de funcionar",
   "window.rendererStoppedBody":
     "La ventana se detuvo varias veces. Tus chats están guardados y tus agentes siguen trabajando.",
   "window.rendererStoppedReload": "Recargar",

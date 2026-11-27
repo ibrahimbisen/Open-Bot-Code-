@@ -3,7 +3,7 @@ import type { messages as source } from "../../en/error/backend";
 
 export const messages = {
   "error.backend.eventsUnavailable": "Bu ana makinede etkinlikler kullanılamıyor.",
-  "error.backend.databaseIntegrity": "CodeBot veritabanı bütünlük denetiminden geçemedi.",
+  "error.backend.databaseIntegrity": "OpenBot Code veritabanı bütünlük denetiminden geçemedi.",
   "error.backend.webhookRouteLimit": "Bir ana makinede en fazla {limit} webhook rutini olabilir.",
   "error.backend.webhookSettingsInvalid": "Webhook ayarlarını kontrol edin ve tekrar deneyin.",
   "error.backend.webhookSenderSecretInvalid":
@@ -15,8 +15,8 @@ export const messages = {
   "error.backend.browserViewLimit": "Bu ana makinede çok fazla tarayıcı görünümü açık.",
   "error.backend.browserViewEnded": "Bu sayfanın canlı görünümü sona erdi.",
   "error.backend.browserViewFailed": "Bu sayfanın canlı görünümü başarısız oldu.",
-  "error.backend.windowTemporarilyUnavailable": "CodeBot penceresi geçici olarak kullanılamıyor.",
-  "error.backend.windowUnavailable": "CodeBot penceresi kullanılamıyor.",
+  "error.backend.windowTemporarilyUnavailable": "OpenBot Code penceresi geçici olarak kullanılamıyor.",
+  "error.backend.windowUnavailable": "OpenBot Code penceresi kullanılamıyor.",
   "error.backend.sunshineApiHttp": "Sunshine API HTTP {status} ile başarısız oldu.",
   "error.backend.sunshinePortsUnavailable": "Uzak Masaüstü için boş bir Sunshine bağlantı noktası ailesi ayrılamadı.",
   "error.backend.moonlightPortsUnavailable":
@@ -32,7 +32,7 @@ export const messages = {
   "error.backend.moonlightRejectedPairing": "Moonlight Sunshine eşleştirmesini reddetti.",
   "error.backend.moonlightNoPin": "Moonlight bir eşleştirme PIN'i döndürmedi.",
   "error.backend.moonlightPairingIncomplete": "Moonlight eşleştirmesi tamamlanmadı.",
-  "error.backend.moonlightWebNotEmbedded": "Moonlight Web gömülü bir CodeBot derlemesi değil.",
+  "error.backend.moonlightWebNotEmbedded": "Moonlight Web gömülü bir OpenBot Code derlemesi değil.",
   "error.backend.moonlightEmptyResponse": "Moonlight boş bir yanıt döndürdü.",
   "error.backend.remoteDesktopTimeout": "Uzak masaüstü isteği zaman aşımına uğradı.",
   "error.backend.moonlightApiHttp": "Moonlight API HTTP {status} ile başarısız oldu.",
@@ -53,10 +53,10 @@ export const messages = {
   "error.backend.browserUserControlUnsupported":
     "Bu uzak ana makine bir tarayıcı sekmesinin denetimini almayı desteklemiyor.",
   "error.backend.browserSignInUnsupported": "Bu uzak ana makine bu bilgisayardan oturum açma alamaz.",
-  "error.backend.browserSignInOpenFailed": "CodeBot oturum açma penceresini açamadı.",
+  "error.backend.browserSignInOpenFailed": "OpenBot Code oturum açma penceresini açamadı.",
   "error.backend.browserSignInLoadFailed":
-    "CodeBot oturum açma penceresinde sayfayı yükleyemedi. İnternet bağlantısını kontrol edin, ardından oturum açma penceresini yeniden açın.",
-  "error.backend.browserSignInReadFailed": "CodeBot pencereden oturumu okuyamadı.",
+    "OpenBot Code oturum açma penceresinde sayfayı yükleyemedi. İnternet bağlantısını kontrol edin, ardından oturum açma penceresini yeniden açın.",
+  "error.backend.browserSignInReadFailed": "OpenBot Code pencereden oturumu okuyamadı.",
   "error.backend.browserStopUnsupported": "Bu uzak ana makine sayfa yüklemesini durduramaz.",
   "error.backend.browserLocationFailed": "Sayfanın konumu ayarlanamadı.",
   "error.backend.browserPermissionsUnsupported": "Bu uzak ana bilgisayar konum isteklerini yanıtlayamaz.",
@@ -70,23 +70,23 @@ export const messages = {
   "error.backend.sunshineNotReadyReason": "Sunshine hazır hale gelmedi. {reason}",
   "error.backend.channelLeadModelUnavailable": "Kanal lideri modeli kullanılamıyor.",
   "error.backend.contextCompactionIneffective":
-    "Sıkıştırma bu sohbeti küçültmüyor: iki sıkıştırmadan sonra hâlâ modelin bağlam penceresinin %{percent} kadarını kullanıyor, bu yüzden CodeBot sıkıştırmayı durduruyor. Pencerenin çoğunu araçlar ve talimatlar kullanıyor. Bu ajanın ihtiyaç duymadığı MCP sunucularını veya bilgisayar kullanımını kapatın ya da daha büyük pencereli bir model seçin. Ardından yeni bir sohbet başlatın.",
+    "Sıkıştırma bu sohbeti küçültmüyor: iki sıkıştırmadan sonra hâlâ modelin bağlam penceresinin %{percent} kadarını kullanıyor, bu yüzden OpenBot Code sıkıştırmayı durduruyor. Pencerenin çoğunu araçlar ve talimatlar kullanıyor. Bu ajanın ihtiyaç duymadığı MCP sunucularını veya bilgisayar kullanımını kapatın ya da daha büyük pencereli bir model seçin. Ardından yeni bir sohbet başlatın.",
   "error.backend.contextCompactionStopped":
-    'Bu sohbetin art arda iki sıkıştırması başarısız oldu, bu yüzden CodeBot onu otomatik olarak sıkıştırmayı bırakıyor. Her deneme tüm sohbeti modele gönderir ve plan sınırınızı kullanır. Yeniden denemek için "Şimdi sıkıştır"ı seçin veya yeni bir sohbet başlatın.',
+    'Bu sohbetin art arda iki sıkıştırması başarısız oldu, bu yüzden OpenBot Code onu otomatik olarak sıkıştırmayı bırakıyor. Her deneme tüm sohbeti modele gönderir ve plan sınırınızı kullanır. Yeniden denemek için "Şimdi sıkıştır"ı seçin veya yeni bir sohbet başlatın.',
   "error.backend.contextCompactionRetrying":
-    "Sağlayıcı bu sohbeti sıkıştıramadı ve yeniden deniyor. Bu sohbetteki yeni mesajlar sıkıştırma bitene kadar bekler. Yakında bitmezse CodeBot onu durdurur ve mesajlarını gönderir.",
+    "Sağlayıcı bu sohbeti sıkıştıramadı ve yeniden deniyor. Bu sohbetteki yeni mesajlar sıkıştırma bitene kadar bekler. Yakında bitmezse OpenBot Code onu durdurur ve mesajlarını gönderir.",
   "error.backend.contextCompactionFailed":
     "Bu sohbetin sıkıştırılması başarısız oldu. Sohbet değişmedi. Bekleyen mesajlar şimdi ajana gidiyor.",
   "error.backend.contextCompactionTimedOut":
-    "Bu sohbetin sıkıştırılması çok uzun sürdü, bu yüzden CodeBot onu durdurdu. Sohbet değişmedi. Bekleyen mesajlar şimdi ajana gidiyor.",
+    "Bu sohbetin sıkıştırılması çok uzun sürdü, bu yüzden OpenBot Code onu durdurdu. Sohbet değişmedi. Bekleyen mesajlar şimdi ajana gidiyor.",
   "error.backend.providerModelAtCapacity":
     "Model kapasitesinin sınırında. Sağlayıcı birkaç dakika içinde yeniden deneyecek. Hemen devam etmek için turu durdurun ve başka bir model seçin.",
   "error.backend.providerRetrying":
     "Sağlayıcı bu isteği {attempts} kez tamamlayamadı ve yeniden deniyor. Ajan devam etmezse turu durdurun.",
   "error.backend.providerRetryingLargeContext":
-    "Sağlayıcı bu isteği {attempts} kez tamamlayamadı ve yeniden deniyor. Bu sohbet modelin bağlam penceresinin %{percent} kadarını kullanıyor. Ajan devam etmezse turu durdurun: CodeBot sohbeti sonraki mesajdan önce sıkıştırır.",
+    "Sağlayıcı bu isteği {attempts} kez tamamlayamadı ve yeniden deniyor. Bu sohbet modelin bağlam penceresinin %{percent} kadarını kullanıyor. Ajan devam etmezse turu durdurun: OpenBot Code sohbeti sonraki mesajdan önce sıkıştırır.",
   "error.backend.sharedDataUnavailable": "Paylaşılan veriler kullanılamıyor.",
-  "error.backend.shuttingDown": "CodeBot kapanıyor.",
+  "error.backend.shuttingDown": "OpenBot Code kapanıyor.",
   "error.backend.channelUnconfirmedStart":
     "Kanalda onaylanmamış bir görev başlangıcı var. Silmeden önce sonucunu kontrol edin.",
   "error.backend.channelNotFound": "Kanal bulunamadı.",
@@ -151,7 +151,7 @@ export const messages = {
     "Çalıştırma bir hatayla durdu, ancak bir neden gelmedi. Ajanın ne yaptığını görmek için çalıştırmayı açın.",
   "error.backend.turnNotStarted": "Sağlayıcı bu turu başlatmadı.",
   "error.backend.turnStartUnconfirmed":
-    "{provider} bu mesajı başlattığını zamanında onaylamadı. İş iki kez çalışmasın diye CodeBot mesajı yeniden göndermez. CodeBot, ajanın başlaması için en fazla 5 dakika bekler.",
+    "{provider} bu mesajı başlattığını zamanında onaylamadı. İş iki kez çalışmasın diye OpenBot Code mesajı yeniden göndermez. OpenBot Code, ajanın başlaması için en fazla 5 dakika bekler.",
   "error.backend.turnStartAbandoned": "Ajan bu mesajı 5 dakika içinde başlatmadı. Mesajı yeniden gönderin.",
   "error.backend.routineResultConnectionOff": "Bu mesajlaşma bağlantısı kapalı veya kaldırılmış. Başka bir yer seçin.",
   "error.backend.routineResultNoDelivery": "Bu çalıştırmanın yeniden gönderilecek bir yanıtı yok.",
@@ -189,7 +189,7 @@ export const messages = {
   "error.backend.fileGone": "Dosya mevcut değil veya zaten silinmiş.",
   "error.backend.managedAttachmentChanged": "Yönetilen ek eksik veya değişti: {name}",
   "error.backend.mailboxStateCorrupt":
-    "Posta kutusu durumu bozuk veya daha yeni bir CodeBot sürümünden; üzerine yazılması reddedildi.",
+    "Posta kutusu durumu bozuk veya daha yeni bir OpenBot Code sürümünden; üzerine yazılması reddedildi.",
   "error.backend.recipientDeleting": "Alıcı siliniyor. Silme işlemi tamamlandıktan sonra tekrar deneyin.",
   "error.backend.recipientHidden": "Bu ajan gizli. Mesaj göndermek için onu geri yükleyin.",
   "error.backend.agentIdUnknown":
@@ -204,7 +204,7 @@ export const messages = {
   "error.backend.videoGenerationNoVideo": "Video oluşturma bir video döndürmedi.",
   "error.backend.videoGenerationInterrupted": "Video oluşturma kesintiye uğradı.",
   "error.backend.attachmentNotRegularFile": "Yalnızca normal dosyalar eklenebilir: {name}",
-  "error.backend.attachmentCopyFailed": "CodeBot {name} öğesini kopyalayamadı.",
+  "error.backend.attachmentCopyFailed": "OpenBot Code {name} öğesini kopyalayamadı.",
   "error.backend.routineNameRequired": "Bir rutin adı gereklidir.",
   "error.backend.routineNameTooLong": "Rutin adı çok uzun.",
   "error.backend.routineInstructionRequired": "Bir rutin talimatı gereklidir.",
@@ -226,14 +226,15 @@ export const messages = {
   "error.backend.routineWaitForAgent": "Bir rutini çalıştırmadan önce ajan işleminin bitmesini bekleyin.",
   "error.backend.routineRunStarting": "Bu rutin çalıştırması hâlâ başlıyor. Tur başladıktan sonra tekrar deneyin.",
   "error.backend.routineRunNoSession":
-    "CodeBot sağlayıcı oturumu kullanılamadığı için etkin rutin çalıştırmasını kesemiyor.",
+    "OpenBot Code sağlayıcı oturumu kullanılamadığı için etkin rutin çalıştırmasını kesemiyor.",
   "error.backend.interruptSelf": "Bir ajan kendi kendini kesintiye uğratamaz.",
   "error.backend.interruptOtherWork":
     "Bu ajan mesajınızın başlatmadığı bir görev üzerinde çalışıyor. Yalnızca kullanıcı veya o görevin göndereni görevi durdurabilir.",
   "error.backend.interruptSharedWork":
     "Bu ajanın turu mesajınız ve ayrıca kullanıcıdan ya da başka bir ajandan gelen bir mesaj üzerinde çalışıyor. Onu yalnızca kullanıcı, o ajanın sohbetindeki Ajanı durdur ile durdurabilir.",
   "error.backend.interruptStarting": "Bu ajan hâlâ bir tur başlatıyor. Tur başladıktan sonra tekrar deneyin.",
-  "error.backend.interruptNoSession": "CodeBot sağlayıcı oturumu kullanılamadığı için bu ajanı kesintiye uğratamıyor.",
+  "error.backend.interruptNoSession":
+    "OpenBot Code sağlayıcı oturumu kullanılamadığı için bu ajanı kesintiye uğratamıyor.",
   "error.backend.memoryTextRequired": "Bellek metni gereklidir.",
   "error.backend.memoryTextTooLong": "Bellek metni çok uzun.",
   "error.backend.mcpServerGone": "Bu MCP sunucusu artık mevcut değil.",
@@ -264,9 +265,9 @@ export const messages = {
   "error.backend.messagePinLimit":
     "Bu sohbette 50 sabitlenmiş mesaj var. Başka bir mesaj sabitlemeden önce birini kaldırın.",
   "error.backend.routineFlowHandoffFailed": "Rutin işi bu ajana aktaramadı.",
-  "error.backend.mcpServerLimit": "CodeBot en fazla {limit} MCP sunucusu tutar.",
+  "error.backend.mcpServerLimit": "OpenBot Code en fazla {limit} MCP sunucusu tutar.",
   "error.backend.mcpServerNameTaken": "{name} adında bir MCP sunucusu zaten mevcut.",
-  "error.backend.mcpServerInvalid": "CodeBot bu MCP sunucusu yapılandırmasını kaydedemiyor.",
+  "error.backend.mcpServerInvalid": "OpenBot Code bu MCP sunucusu yapılandırmasını kaydedemiyor.",
   "error.backend.mcpHeaderNameInvalid":
     "Başlık adları boşluk veya : ( ) / gibi simgeler içeremez. Authorization gibi bir ad kullanın ve anahtarı ya da belirteci Değer alanına girin.",
   "error.backend.mcpServerNoAnswer": "Sunucu {seconds} saniye içinde yanıt vermedi.",
@@ -276,18 +277,18 @@ export const messages = {
   "error.backend.mcpSignInAccountRefused":
     "Sunucu, oturum açtığınız hesabı reddetti. Bu hesabın hizmeti kullanabildiğini kontrol edin. Başka bir hesap kullanmak için oturumu kapatıp yeniden açın.",
   "error.backend.mcpSignInClientRefused":
-    "Oturum açma sunucusu, oturum açma tamamlanırken CodeBot'u kabul etmedi. Yeniden oturum açın: CodeBot sunucuya yeniden kaydolur.",
+    "Oturum açma sunucusu, oturum açma tamamlanırken OpenBot Code'u kabul etmedi. Yeniden oturum açın: OpenBot Code sunucuya yeniden kaydolur.",
   "error.backend.mcpSignInAppRefused":
     "Oturum açma sunucusu bu sunucunun oturum açma uygulamasını kabul etmedi. Oturum açma uygulamasının istemci kimliğini ve istemci gizli anahtarını kontrol edip yeniden oturum açın.",
   "error.backend.mcpCommandNotFound": "Komut bulunamadı: {command}",
   "error.backend.mcpProviderLimit":
     "Bu ajan yalnızca sınırlı sayıda MCP sunucusu kullanabilir. Bu sunucuyu kullanmak için ajanın ihtiyaç duymadığı bir MCP sunucusunu kapatın.",
   "error.backend.mcpRegistrationRefused":
-    "Oturum açma sunucusu CodeBot'u henüz bir uygulama olarak kabul etmiyor. Hesabınız bunun nedeni değildir. Yerel bir MCP sunucusu gibi bağlanmanın başka bir yolunu kullanın.",
+    "Oturum açma sunucusu OpenBot Code'u henüz bir uygulama olarak kabul etmiyor. Hesabınız bunun nedeni değildir. Yerel bir MCP sunucusu gibi bağlanmanın başka bir yolunu kullanın.",
   "error.backend.mcpRegistrationUnavailable":
-    "Oturum açma sunucusu CodeBot'u uygulama olarak kaydedemiyor. Hesabınız bunun nedeni değildir. Bağlanmak için bu sunucuyu Pazaryeri, Uygulamalar bölümünde kaydedin, ardından ona bir oturum açma uygulaması ekleyin.",
+    "Oturum açma sunucusu OpenBot Code'u uygulama olarak kaydedemiyor. Hesabınız bunun nedeni değildir. Bağlanmak için bu sunucuyu Pazaryeri, Uygulamalar bölümünde kaydedin, ardından ona bir oturum açma uygulaması ekleyin.",
   "error.backend.mcpSignInAppNeeded":
-    "Oturum açma sunucusu CodeBot'u uygulama olarak kaydedemiyor. Hesabınız bunun nedeni değildir. Bağlanmak için bu sunucuyu Pazaryeri, Uygulamalar bölümünde açın, Bağlantıyı test et'e tıklayın, ardından bir oturum açma uygulaması ekleyin.",
+    "Oturum açma sunucusu OpenBot Code'u uygulama olarak kaydedemiyor. Hesabınız bunun nedeni değildir. Bağlanmak için bu sunucuyu Pazaryeri, Uygulamalar bölümünde açın, Bağlantıyı test et'e tıklayın, ardından bir oturum açma uygulaması ekleyin.",
   "error.backend.mcpSignInAbandonedGeneric": "Oturum açma yarıda bırakıldı.",
   "error.backend.mcpSignInForgotten": "MCP oturum açma işlemi çalışırken unutuldu.",
   "error.backend.mcpSignInAbandoned": "MCP oturum açma işlemi yarıda bırakıldı.",
@@ -295,9 +296,9 @@ export const messages = {
   "error.backend.mcpSignInNotWebPage": "Oturum açma adresi bir web sayfası değil.",
   "error.backend.mcpSignInRequired":
     "Bu sunucu oturum açmanızı istiyor. Tarayıcınızda devam etmek için Oturum aç'ı seçin.",
-  "error.backend.mcpSignInOnHost": "Bu sunucu oturum açılmasını istiyor. Ana makinedeki CodeBot'ta oturum açın.",
+  "error.backend.mcpSignInOnHost": "Bu sunucu oturum açılmasını istiyor. Ana makinedeki OpenBot Code'da oturum açın.",
   "error.backend.mcpSignInNeedsHttps":
-    "Bu sunucu oturum açılmasını istiyor ve CodeBot yalnızca https üzerinden oturum açar. URL'yi {url} olarak değiştirin.",
+    "Bu sunucu oturum açılmasını istiyor ve OpenBot Code yalnızca https üzerinden oturum açar. URL'yi {url} olarak değiştirin.",
   "error.backend.mcpSignInOtherAddress":
     "Bu sunucu yalnızca {url} adresinde oturum açar. URL'yi bu adresle değiştirin, sonra yeniden oturum açın.",
   "error.backend.mcpSignInCancelled": "Oturum açma iptal edildi.",
@@ -305,9 +306,9 @@ export const messages = {
   "error.backend.mcpSignInRefused": "Oturum açma sayfası erişimi reddetti. Yeniden oturum açın.",
   "error.backend.mcpSignInResponseTimedOut": "Oturum açma yanıtı zamanında gelmedi.",
   "error.backend.mcpSignInMetadataUnreadable":
-    "CodeBot bu sunucunun oturum açma bilgilerini okuyamadı. Sunucu adresini denetleyin ve yeniden deneyin.",
+    "OpenBot Code bu sunucunun oturum açma bilgilerini okuyamadı. Sunucu adresini denetleyin ve yeniden deneyin.",
   "error.backend.mcpSignInAnswerUnreadable":
-    "Oturum açma sunucusu CodeBot'un okuyamadığı bir yanıt gönderdi. Hizmet size bir API anahtarı veya belirteç veriyorsa bunu bu sunucunun ayarlarına ekleyin, ardından bağlantıyı yeniden test edin.",
+    "Oturum açma sunucusu OpenBot Code'un okuyamadığı bir yanıt gönderdi. Hizmet size bir API anahtarı veya belirteç veriyorsa bunu bu sunucunun ayarlarına ekleyin, ardından bağlantıyı yeniden test edin.",
   "error.backend.mcpServerExited":
     "Sunucu yanıt vermeden durdu. Hatasını görmek için komutu bir terminalde çalıştırın.",
   "error.backend.mcpServerExitedWithOutput": "Sunucu yanıt vermeden durdu. Yazdığı: {detail}",
@@ -315,7 +316,7 @@ export const messages = {
     "Sunucu başlamadı, çünkü indirilmesi başarısız oldu. İnternet bağlantısını kontrol edin, sonra yeniden deneyin.",
   "error.backend.mcpServerFailedToStart": "Sunucu başlamadı: {reason}",
   "error.backend.mcpServerProgramMissing":
-    "CodeBot, {name} MCP sunucusunu başlatamadı, çünkü programı CodeBot'un çalıştığı bilgisayarda yüklü değil. {name} sağlayan uygulamayı o bilgisayara yükleyin veya Pazaryeri, Uygulamalar bölümünde {name} öğesini kapatın.",
+    "OpenBot Code, {name} MCP sunucusunu başlatamadı, çünkü programı OpenBot Code'un çalıştığı bilgisayarda yüklü değil. {name} sağlayan uygulamayı o bilgisayara yükleyin veya Pazaryeri, Uygulamalar bölümünde {name} öğesini kapatın.",
   "error.backend.mcpServerStartAbandoned":
     "{provider}, sunucu başlamadan beklemeyi bıraktı. Bu yüzden ajanları bu sunucunun araçlarını almıyor.",
   "error.backend.mcpServerStoppedDuringCall": "MCP sunucusu bu çağrıya yanıt vermeden durdu.",
@@ -328,7 +329,7 @@ export const messages = {
   "error.backend.mcpServerFailedForProvider":
     "{provider}, {name} MCP sunucusunu başlatamadı. Nedeni görmek için Pazaryeri, Uygulamalar bölümünde {name} öğesini açın ve Bağlantıyı test et'i seçin.",
   "error.backend.mcpServerFailedInProvider":
-    "{provider}, {name} MCP sunucusunu başlatamadı. Araçları {provider} için kullanılamıyor. {provider} sunucuyu kendisi başlatır, bu yüzden CodeBot'taki bağlantı testi başarılı olabilir. Yeniden denemek için yeni bir sohbet başlatın.",
+    "{provider}, {name} MCP sunucusunu başlatamadı. Araçları {provider} için kullanılamıyor. {provider} sunucuyu kendisi başlatır, bu yüzden OpenBot Code'daki bağlantı testi başarılı olabilir. Yeniden denemek için yeni bir sohbet başlatın.",
   "error.backend.mcpServerTimedOutInProvider":
     "{provider}, {name} MCP sunucusunu başlatamadı, çünkü sunucu zamanında yanıt vermedi. Yeniden denemek için yeni bir sohbet başlatın.",
   "error.backend.mcpServerUnavailableInProvider":
@@ -338,12 +339,12 @@ export const messages = {
   "error.backend.githubToolsNotStarted":
     "{provider}, GitHub yanıt vermediği için GitHub araçlarını alamadı. Pazaryeri, Uygulamalar bölümünde GitHub öğesini açın ve isterse yeniden bağlayın. Ardından yeniden denemek için yeni bir sohbet başlatın.",
   "error.backend.mcpOAuthProxyUnavailable":
-    "CodeBot bu sunucu için yerel oturum açma bağlantısını başlatamadı. CodeBot'u yeniden başlatın ve tekrar deneyin.",
+    "OpenBot Code bu sunucu için yerel oturum açma bağlantısını başlatamadı. OpenBot Code'u yeniden başlatın ve tekrar deneyin.",
   "error.backend.mcpOAuthSignInNeeded":
-    "Bu MCP sunucusundaki oturum sona erdi. Kullanıcının CodeBot'ta yeniden oturum açması gerekiyor.",
+    "Bu MCP sunucusundaki oturum sona erdi. Kullanıcının OpenBot Code'da yeniden oturum açması gerekiyor.",
   "error.backend.mcpOAuthRenewalFailed":
-    "CodeBot bu MCP sunucusundaki oturumu şu anda yenileyemedi. Oturum korunuyor ve sonraki istek yeniden deneyecek. Bu hata sürerse kullanıcı CodeBot'ta sunucudan çıkış yapıp yeniden giriş yapabilir.",
-  "error.backend.mcpServerUnreachable": "CodeBot sunucuya ulaşamadı. URL'yi ve ağınızı kontrol edin.",
+    "OpenBot Code bu MCP sunucusundaki oturumu şu anda yenileyemedi. Oturum korunuyor ve sonraki istek yeniden deneyecek. Bu hata sürerse kullanıcı OpenBot Code'da sunucudan çıkış yapıp yeniden giriş yapabilir.",
+  "error.backend.mcpServerUnreachable": "OpenBot Code sunucuya ulaşamadı. URL'yi ve ağınızı kontrol edin.",
   "error.backend.mcpLocalServerOff":
     "Bu bilgisayarda {address} adresinde yanıt veren bir sunucu yok. Sunucuyu başlatın veya onu çalıştıran uygulamada açın, ardından tekrar deneyin.",
   "error.backend.mcpServerBlocked":
@@ -351,7 +352,7 @@ export const messages = {
   "error.backend.mcpServerIncompatible":
     "Bu adreste bir şey yanıt verdi, ancak Streamable HTTP üzerinden bir MCP sunucusu olarak değil. URL'yi kontrol edin ve sunucuyu çalıştıran uygulamayı güncelleyin.",
   "error.backend.mcpRemoteBridge":
-    "{reason} Bu komut mcp-remote köprüsünü çalıştırır. Bunun yerine {url} URL'siyle Streamable HTTP'yi seçin; CodeBot oturumunuzu açar.",
+    "{reason} Bu komut mcp-remote köprüsünü çalıştırır. Bunun yerine {url} URL'siyle Streamable HTTP'yi seçin; OpenBot Code oturumunuzu açar.",
   "error.backend.oauthNotHttps": "OAuth uç noktası {origin} https değil, bu nedenle kimlik bilgileri gönderilmedi.",
   "error.backend.oauthTooManyRedirects": "OAuth uç noktası çok fazla yönlendirme yaptı.",
   "error.backend.oauthRedirectOrigin":
@@ -402,14 +403,14 @@ export const messages = {
   "error.backend.promptAnswerMismatch": "Bir istem yanıtı etkin bir soruyla eşleşmiyor.",
   "error.backend.approvalInactive": "Bu onay artık etkin değil.",
   "error.backend.feedbackNeedsPhone":
-    "Bu raporu yalnızca CodeBot telefon uygulaması gönderebilir, çünkü telefonun sürümünü ve destek günlüğünü ekler. Bu sohbeti telefonda açın. Bu mesajı orada görürseniz telefon uygulamasını güncelleyin.",
+    "Bu raporu yalnızca OpenBot Code telefon uygulaması gönderebilir, çünkü telefonun sürümünü ve destek günlüğünü ekler. Bu sohbeti telefonda açın. Bu mesajı orada görürseniz telefon uygulamasını güncelleyin.",
   "error.backend.takeoverInactive": "Bu tarayıcı devralması artık etkin değil.",
   "error.backend.authSubmitting": "Kimlik doğrulama gönderimi zaten devam ediyor.",
-  "error.backend.apiKeyListFailed": "CodeBot kayıtlı API anahtarlarını okuyamadı.",
-  "error.backend.apiKeySaveFailed": "CodeBot API anahtarını kaydedemedi. Yeniden deneyin.",
+  "error.backend.apiKeyListFailed": "OpenBot Code kayıtlı API anahtarlarını okuyamadı.",
+  "error.backend.apiKeySaveFailed": "OpenBot Code API anahtarını kaydedemedi. Yeniden deneyin.",
   "error.backend.apiKeySaving": "API anahtarı zaten kaydediliyor.",
   "error.backend.apiKeyAnswerUnreadable":
-    "CodeBot API anahtarını okuyamadı. En fazla 8.000 karakterlik bir anahtar girin ve onu kimin kullanabileceğini seçin.",
+    "OpenBot Code API anahtarını okuyamadı. En fazla 8.000 karakterlik bir anahtar girin ve onu kimin kullanabileceğini seçin.",
   "error.backend.authRequestInactive": "Bu güvenli kimlik doğrulama isteği artık etkin değil.",
   "error.backend.secureAuthUnavailable": "Güvenli kimlik doğrulaması kullanılamıyor.",
   "error.backend.browserUrlRequired": "Bir tarayıcı URL'si gereklidir.",
@@ -430,9 +431,9 @@ export const messages = {
   "error.backend.browserProxyUnreachable": "{name} proxy'si yanıt vermiyor, bu yüzden sayfa açılmadı.",
   "error.backend.browserProxySignInRefused": "{name} proxy'si oturum açmayı reddetti, bu yüzden sayfa açılmadı.",
   "error.backend.browserSystemProxyFailed":
-    "CodeBot'u çalıştıran bilgisayarın ayarlarındaki proxy yanıt vermiyor veya bağlantıyı reddetti, bu yüzden sayfa açılmadı. O bilgisayarın proxy ayarlarını kontrol edin.",
+    "OpenBot Code'u çalıştıran bilgisayarın ayarlarındaki proxy yanıt vermiyor veya bağlantıyı reddetti, bu yüzden sayfa açılmadı. O bilgisayarın proxy ayarlarını kontrol edin.",
   "error.backend.browserSystemProxyOrSiteClosed":
-    "Site veya CodeBot'u çalıştıran bilgisayarın ayarlarındaki proxy bağlantıyı yanıt vermeden kapattı, bu yüzden sayfa açılmadı. Hiçbir site açılmıyorsa o bilgisayarın proxy ayarlarını kontrol edin.",
+    "Site veya OpenBot Code'u çalıştıran bilgisayarın ayarlarındaki proxy bağlantıyı yanıt vermeden kapattı, bu yüzden sayfa açılmadı. Hiçbir site açılmıyorsa o bilgisayarın proxy ayarlarını kontrol edin.",
   "error.backend.browserProfileProxyOrSiteClosed":
     "Site veya bu tarayıcı profilinin proxy'si bağlantıyı yanıt vermeden kapattı, bu yüzden sayfa açılmadı. Hiçbir site açılmıyorsa profilin proxy'sini kontrol edin.",
   "error.backend.browserProxyComputerUnreachable":
@@ -473,7 +474,7 @@ export const messages = {
   "error.backend.mcpSignInAppUrl": "Oturum açma uygulaması için geçerli bir sunucu URL'si gerekir.",
   "error.backend.mcpSignInAppClientId": "Oturum açma uygulamasının istemci kimliğini girin.",
   "error.backend.mcpSignInAppIssuerChanged":
-    "Bu MCP sunucusunun oturum açma sunucusu değişti, bu yüzden CodeBot oturum açma uygulamasını ona göndermedi. Değişiklik doğruysa oturum açma uygulamasını kaldırıp yeniden ekleyin.",
+    "Bu MCP sunucusunun oturum açma sunucusu değişti, bu yüzden OpenBot Code oturum açma uygulamasını ona göndermedi. Değişiklik doğruysa oturum açma uygulamasını kaldırıp yeniden ekleyin.",
   "error.backend.mcpSignInAppNoServer":
     "Oturum açma uygulaması eklemeden önce bu MCP sunucusunu URL sunucusu olarak kaydedin.",
   "error.backend.mcpSignInAppUnavailable": "Bu bilgisayar oturum açma uygulaması saklayamaz.",
@@ -506,6 +507,6 @@ export const messages = {
   "error.backend.taskOpenLimitReached":
     "Bu ajanın {count} açık görevi var. Bir görevi kapatın, ardından başka bir görev başlatın veya açın.",
   "error.backend.taskRemoteUnsupported": "Görevler yalnızca bu bilgisayardaki ajanlar için kullanılabilir.",
-  "error.backend.taskMessageFailed": "CodeBot mesajı göreve gönderemedi. Daha sonra yeniden deneyin.",
-  "error.backend.taskStartFailed": "CodeBot görevi başlatamadı. Bunun yerine işi bu turda yapın.",
+  "error.backend.taskMessageFailed": "OpenBot Code mesajı göreve gönderemedi. Daha sonra yeniden deneyin.",
+  "error.backend.taskStartFailed": "OpenBot Code görevi başlatamadı. Bunun yerine işi bu turda yapın.",
 } as const satisfies PartialTranslation<typeof source>;

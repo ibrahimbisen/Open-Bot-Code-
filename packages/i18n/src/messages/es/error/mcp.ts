@@ -4,25 +4,27 @@ import type { messages as source } from "../../en/error/mcp";
 export const messages = {
   "error.mcp.redirectByName": "No se puede acceder a esta dirección por nombre.",
   "error.mcp.redirectNotSignIn": "Esta dirección no forma parte de un inicio de sesión.",
-  "error.mcp.redirectRefused": "Se rechazó el inicio de sesión. Vuelve a CodeBot e inténtalo de nuevo.",
-  "error.mcp.redirectNoSignIn": "Este inicio de sesión ya no está activo. Vuelve a CodeBot e inicia sesión de nuevo.",
-  "error.mcp.redirectSignedIn": "CodeBot ha iniciado sesión. Puedes cerrar esta ventana.",
-  "error.mcp.redirectNotSaved": "El inicio de sesión no terminó. Vuelve a CodeBot para ver el motivo.",
+  "error.mcp.redirectRefused": "Se rechazó el inicio de sesión. Vuelve a OpenBot Code e inténtalo de nuevo.",
+  "error.mcp.redirectNoSignIn":
+    "Este inicio de sesión ya no está activo. Vuelve a OpenBot Code e inicia sesión de nuevo.",
+  "error.mcp.redirectSignedIn": "OpenBot Code ha iniciado sesión. Puedes cerrar esta ventana.",
+  "error.mcp.redirectNotSaved": "El inicio de sesión no terminó. Vuelve a OpenBot Code para ver el motivo.",
   "error.mcp.signInFileUnreadable": "El archivo de inicio de sesión de MCP no se puede leer.",
   "error.mcp.signInFileTooLarge": "El archivo de inicio de sesión de MCP es demasiado grande.",
   "error.mcp.unsupported": "Este servidor no admite servidores MCP.",
-  "error.mcp.signInOnHost": "Solo puedes iniciar sesión en un servidor MCP desde CodeBot en el equipo host.",
+  "error.mcp.signInOnHost": "Solo puedes iniciar sesión en un servidor MCP desde OpenBot Code en el equipo host.",
   "error.mcp.signInPageOnServer":
     "Esta página de inicio de sesión solo se abre en el servidor. Pide a un propietario o administrador del servidor que inicie sesión.",
   "error.mcp.signInPageOnServerSwitch":
     "Esta página de inicio de sesión solo se abre en el servidor. Cambia a este servidor y luego elige Iniciar sesión otra vez.",
-  "error.mcp.signInAppUnsupported": "Este servidor no admite apps de inicio de sesión. Actualiza CodeBot en el host.",
-  "error.mcp.redirectRelayed": "CodeBot envió el inicio de sesión al servidor. Puedes cerrar esta ventana.",
+  "error.mcp.signInAppUnsupported":
+    "Este servidor no admite apps de inicio de sesión. Actualiza OpenBot Code en el host.",
+  "error.mcp.redirectRelayed": "OpenBot Code envió el inicio de sesión al servidor. Puedes cerrar esta ventana.",
   "error.mcp.relayEnded": "Este inicio de sesión terminó. Vuelve a iniciarlo.",
   "error.mcp.signInLinkNotReady":
     "La página de inicio de sesión aún no está abierta. Inténtalo de nuevo en un momento.",
   "error.mcp.relayNoState":
-    "La página de inicio de sesión del servidor no protege su dirección de retorno, así que CodeBot no la abre en este equipo.",
+    "La página de inicio de sesión del servidor no protege su dirección de retorno, así que OpenBot Code no la abre en este equipo.",
   "error.mcp.relayAddressInvalid":
     "Esta no es la dirección del final de este inicio de sesión. Copia la dirección completa del navegador.",
 } as const satisfies PartialTranslation<typeof source>;

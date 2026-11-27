@@ -2,7 +2,7 @@ appId: app.codebot.desktop
 productName: CodeBot
 copyright: Copyright © 2026 Synthetify Labs spółka z ograniczoną odpowiedzialnością
 protocols:
-  - name: CodeBot invitations
+  - name: OpenBot Code invitations
     schemes:
       - codebot
 asar: true
@@ -110,16 +110,18 @@ mac:
   entitlementsInherit: build/entitlements.mac.inherit.plist
   darkModeSupport: true
   extendInfo:
-    NSMicrophoneUsageDescription: CodeBot uses the microphone to transcribe voice prompts locally on this Mac.
-    NSLocationUsageDescription: CodeBot shares the location of this Mac with a page in the CodeBot browser only when you allow it.
-    NSLocationWhenInUseUsageDescription: CodeBot shares the location of this Mac with a page in the CodeBot browser only when you allow it.
-    NSScreenCaptureUsageDescription: CodeBot captures the screen so an agent can see the app windows you ask it to control.
-    NSAppleEventsUsageDescription: CodeBot sends Automation events so an agent can control the apps you ask it to control.
-    NSCalendarsFullAccessUsageDescription: CodeBot lets the commands that an agent runs read and change your calendar events.
-    NSCalendarsWriteOnlyAccessUsageDescription: CodeBot lets the commands that an agent runs add events to your calendars.
-    NSCalendarsUsageDescription: CodeBot lets the commands that an agent runs use your calendars.
-    NSRemindersFullAccessUsageDescription: CodeBot lets the commands that an agent runs read and change your reminders.
-    NSRemindersUsageDescription: CodeBot lets the commands that an agent runs use your reminders.
+    CFBundleDisplayName: OpenBot Code
+    CFBundleName: OpenBot Code
+    NSMicrophoneUsageDescription: OpenBot Code uses the microphone to transcribe voice prompts locally on this Mac.
+    NSLocationUsageDescription: OpenBot Code shares the location of this Mac with a page in the OpenBot Code browser only when you allow it.
+    NSLocationWhenInUseUsageDescription: OpenBot Code shares the location of this Mac with a page in the OpenBot Code browser only when you allow it.
+    NSScreenCaptureUsageDescription: OpenBot Code captures the screen so an agent can see the app windows you ask it to control.
+    NSAppleEventsUsageDescription: OpenBot Code sends Automation events so an agent can control the apps you ask it to control.
+    NSCalendarsFullAccessUsageDescription: OpenBot Code lets the commands that an agent runs read and change your calendar events.
+    NSCalendarsWriteOnlyAccessUsageDescription: OpenBot Code lets the commands that an agent runs add events to your calendars.
+    NSCalendarsUsageDescription: OpenBot Code lets the commands that an agent runs use your calendars.
+    NSRemindersFullAccessUsageDescription: OpenBot Code lets the commands that an agent runs read and change your reminders.
+    NSRemindersUsageDescription: OpenBot Code lets the commands that an agent runs use your reminders.
   target:
     - dmg
     - zip
@@ -139,6 +141,8 @@ win:
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
+  shortcutName: OpenBot Code
+  uninstallDisplayName: OpenBot Code
 linux:
   category: Development
   icon: build/icon-production.png
@@ -158,13 +162,16 @@ linux:
     - from: build/cua-driver/linux/${arch}
       to: cua-driver/linux/${arch}
   syncDesktopName: true
+  desktop:
+    entry:
+      Name: OpenBot Code
   target:
     - target: AppImage
       arch:
         - x64
         - arm64
 dmg:
-  title: ${productName} ${version}
+  title: OpenBot Code ${version}
   background: build/dmg-background.png
   iconSize: 128
   iconTextSize: 14

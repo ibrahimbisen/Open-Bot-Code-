@@ -144,7 +144,7 @@ export const messages = {
   "sidebar.delete.pending": "Excluindo…",
   "sidebar.delete.title": "Excluir {name}?",
   "sidebar.delete.agentDescription":
-    "Isso remove do aplicativo o agente e sua conversa no CodeBot. A fila, as memórias, as rotinas e o espaço de trabalho são excluídos. O histórico armazenado separadamente pelo provedor de CLI conectado não é excluído.",
+    "Isso remove do aplicativo o agente e sua conversa no OpenBot Code. A fila, as memórias, as rotinas e o espaço de trabalho são excluídos. O histórico armazenado separadamente pelo provedor de CLI conectado não é excluído.",
   "sidebar.delete.channelDescription":
     "Isso para o canal. O histórico continua em Canais excluídos, somente para visualização. Você pode restaurá-lo de lá. Os agentes membros são mantidos.",
   "sidebar.delete.sectionDescription":

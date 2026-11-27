@@ -14,7 +14,7 @@ export const messages = defineMessages("localServer", {
   "localServer.settings.models": { one: "{count} model", other: "{count} models" },
   "localServer.scan.title": "Find a machine",
   "localServer.scan.description":
-    "Enter a host name or an IP address. CodeBot looks for Ollama, LM Studio and vLLM on their usual ports.",
+    "Enter a host name or an IP address. OpenBot Code looks for Ollama, LM Studio and vLLM on their usual ports.",
   "localServer.scan.host": "Host or address",
   "localServer.scan.placeholder": "spark-1.local",
   "localServer.scan.action": "Scan",
@@ -25,7 +25,7 @@ export const messages = defineMessages("localServer", {
   "localServer.dialog.addTitle": "Add a local machine",
   "localServer.dialog.editTitle": "Edit {name}",
   "localServer.dialog.description":
-    "CodeBot reads the model list and the status from the OpenAI-compatible address of the machine.",
+    "OpenBot Code reads the model list and the status from the OpenAI-compatible address of the machine.",
   "localServer.field.name": "Name",
   "localServer.field.namePlaceholder": "DGX Spark 1",
   "localServer.field.baseUrl": "Server address",
@@ -39,7 +39,7 @@ export const messages = defineMessages("localServer", {
   "localServer.field.gpuUsesKey": "Send the API key to the GPU status address",
   "localServer.field.gpuUsesKeyHelp": "Only for an address with the same origin as the server address.",
   "localServer.field.monitored": "Show the status of this machine",
-  "localServer.field.monitoredHelp": "CodeBot checks the machine now and then and shows it in the status bar.",
+  "localServer.field.monitoredHelp": "OpenBot Code checks the machine now and then and shows it in the status bar.",
   "localServer.error.nameRequired": "Enter a name.",
   "localServer.error.gpuUrlInvalid": "Enter an http or https address with no user name and no password.",
   "localServer.error.gpuKeyOtherOrigin": "The GPU status address must have the same origin as the server address.",
@@ -52,9 +52,9 @@ export const messages = defineMessages("localServer", {
   "localServer.test.offline": "Offline. {error}",
   "localServer.test.gpuFailed": "GPU status failed: {error}",
   "localServer.dialog.saving": "Saving",
-  "localServer.dialog.saveFailed": "CodeBot could not save this machine.",
+  "localServer.dialog.saveFailed": "OpenBot Code could not save this machine.",
   "localServer.remove.title": "Remove {name}?",
   "localServer.remove.description":
-    "CodeBot stops using this machine. Projects and chats that use its models need another model.",
-  "localServer.remove.failed": "CodeBot could not remove this machine.",
+    "OpenBot Code stops using this machine. Projects and chats that use its models need another model.",
+  "localServer.remove.failed": "OpenBot Code could not remove this machine.",
 });

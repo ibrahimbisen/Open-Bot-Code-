@@ -2,9 +2,9 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/computerUse";
 
 export const messages = {
-  "error.computerUse.noAppToDrag": "CodeBot'un bu derlemesinde sürüklenecek bir uygulama yok.",
+  "error.computerUse.noAppToDrag": "OpenBot Code'un bu derlemesinde sürüklenecek bir uygulama yok.",
   "error.computerUse.helpWindowChanged": "İzin yardım penceresi sürükleme başlamadan önce değişti.",
-  "error.computerUse.noAppToShow": "CodeBot'un bu derlemesinde gösterilecek bir uygulama yok.",
+  "error.computerUse.noAppToShow": "OpenBot Code'un bu derlemesinde gösterilecek bir uygulama yok.",
   "error.computerUse.noDriver": "Bu bilgisayarda Bilgisayar Kullanımı sürücüsü yok.",
   "error.computerUse.socketPathTooLong":
     "Bilgisayar Kullanımı soket yolu {length} karakterdir ve bu sistem {limit} karaktere izin verir.",

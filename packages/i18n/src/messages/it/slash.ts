@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Comandi",
+  "slash.picker.option": "Comando /{name}",
+  "slash.picker.none": "Il motore non ha ancora segnalato i suoi comandi. OpenBot Code li legge all'avvio del motore.",
+  "slash.picker.noMatch": "Nessun comando corrisponde a «{query}».",
+  "slash.badge.project": "Progetto",
+  "slash.badge.user": "Utente",
+  "slash.badge.plugin": "Plugin",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Solo terminale",
+  "slash.screen.close": "Chiudi",
+  "slash.screen.loading": "Caricamento…",
+  "slash.model.title": "Scegli il modello",
+  "slash.model.description": "{name} usa questo modello dal prossimo messaggio.",
+  "slash.model.empty": "Nessun modello è disponibile per questo agente.",
+  "slash.model.failed": "Il modello non è cambiato.",
+  "slash.effort.title": "Livello di ragionamento",
+  "slash.effort.description": "Quanto {name} ragiona prima di rispondere.",
+  "slash.effort.unsupported": "Il modello di questo agente non ha livelli di ragionamento.",
+  "slash.effort.failed": "Il livello di ragionamento non è cambiato.",
+  "slash.resume.title": "Riprendi una chat",
+  "slash.resume.description":
+    "Chat che il motore ha salvato per la cartella di {name}. Una chat ripresa si apre come nuova chat.",
+  "slash.resume.empty": "Il motore non ha chat salvate per questa cartella.",
+  "slash.resume.failed": "OpenBot Code non è riuscito a leggere le chat salvate.",
+  "slash.resume.retry": "Riprova",
+  "slash.resume.inUse": "Aperta in OpenBot Code",
+  "slash.resume.untitled": "Chat senza titolo",
+  "slash.resume.branch": "Branch {name}",
+  "slash.resume.updated": "Aggiornata {time}",
+  "slash.resume.openFailed": "La chat non si è aperta.",
+} as const satisfies PartialTranslation<typeof source>;

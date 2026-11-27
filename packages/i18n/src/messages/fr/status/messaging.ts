@@ -5,13 +5,14 @@ export const messages = {
   "status.messaging.working": "En cours…",
   "status.messaging.queued": "En attente de la fin d’une demande précédente. La réponse arrivera ici.",
   "status.messaging.busy": "Trop de demandes sont en attente. Réessayez plus tard.",
-  "status.messaging.failed": "CodeBot n’a pas pu terminer cette demande. L’hôte CodeBot dispose des détails.",
-  "status.messaging.noAnswer": "CodeBot a terminé sans réponse écrite.",
-  "status.messaging.noAgent": "Aucun agent ne peut encore répondre ici. Ajoutez l’Orchestrateur Slack dans CodeBot.",
+  "status.messaging.failed": "OpenBot Code n’a pas pu terminer cette demande. L’hôte OpenBot Code dispose des détails.",
+  "status.messaging.noAnswer": "OpenBot Code a terminé sans réponse écrite.",
+  "status.messaging.noAgent":
+    "Aucun agent ne peut encore répondre ici. Ajoutez l’Orchestrateur Slack dans OpenBot Code.",
   "status.messaging.delegated": "Un coéquipier s’en occupe. La réponse arrivera ici.",
   "status.messaging.stopped": "Arrêté.",
   "status.messaging.stop": "Arrêter",
-  "status.messaging.approvalTitle": "CodeBot demande une approbation pour continuer.",
+  "status.messaging.approvalTitle": "OpenBot Code demande une approbation pour continuer.",
   "status.messaging.approvalTitleTeammate": "Le coéquipier {agent} demande une approbation pour continuer.",
   "status.messaging.approvalCommand": "Exécuter une commande",
   "status.messaging.approvalFileChange": "Modifier des fichiers",
@@ -20,30 +21,31 @@ export const messages = {
   "status.messaging.deny": "Refuser",
   "status.messaging.approvedBy": "Approuvé par {user}.",
   "status.messaging.deniedBy": "Refusé par {user}.",
-  "status.messaging.answeredOnHost": "Réponse donnée sur l’hôte CodeBot.",
+  "status.messaging.answeredOnHost": "Réponse donnée sur l’hôte OpenBot Code.",
   "status.messaging.requestInactive": "Cette demande n’est plus active.",
-  "status.messaging.onlyRequester": "Seul {user} peut faire cela. L’hôte CodeBot peut aussi répondre.",
-  "status.messaging.hostOnly": "Seul l’hôte CodeBot peut répondre à cette demande.",
+  "status.messaging.onlyRequester": "Seul {user} peut faire cela. L’hôte OpenBot Code peut aussi répondre.",
+  "status.messaging.hostOnly": "Seul l’hôte OpenBot Code peut répondre à cette demande.",
   "status.messaging.filesSkipped": "Certains fichiers n’ont pas été envoyés : {names}.",
   "status.messaging.orchestratorName": "Orchestrateur Slack",
   "status.messaging.orchestratorTitle": "Répond dans Slack et consulte l’équipe",
   "status.messaging.discordNoAgent":
-    "Aucun agent ne peut encore répondre ici. Ajoutez l’Orchestrateur Discord dans CodeBot.",
+    "Aucun agent ne peut encore répondre ici. Ajoutez l’Orchestrateur Discord dans OpenBot Code.",
   "status.messaging.discordOrchestratorName": "Orchestrateur Discord",
   "status.messaging.discordOrchestratorTitle": "Répond dans Discord et consulte l’équipe",
   "status.messaging.integrationsSection": "Intégrations",
-  "status.messaging.signInReceived": "CodeBot a reçu l’installation Slack. Vous pouvez fermer cet onglet.",
-  "status.messaging.signInUnknown": "CodeBot n’a pas lancé cette installation Slack. Relancez-la dans CodeBot.",
+  "status.messaging.signInReceived": "OpenBot Code a reçu l’installation Slack. Vous pouvez fermer cet onglet.",
+  "status.messaging.signInUnknown":
+    "OpenBot Code n’a pas lancé cette installation Slack. Relancez-la dans OpenBot Code.",
   "status.messaging.telegramNoAgent":
-    "Aucun agent ne peut encore répondre ici. Dans CodeBot, ouvrez Marketplace > Apps > Telegram et cliquez sur Ajouter un agent.",
+    "Aucun agent ne peut encore répondre ici. Dans OpenBot Code, ouvrez Marketplace > Apps > Telegram et cliquez sur Ajouter un agent.",
   "status.messaging.telegramLinked":
-    "CodeBot est connecté à cette discussion. Mentionnez {bot} ou répondez à un message d’CodeBot pour solliciter les agents.",
+    "OpenBot Code est connecté à cette discussion. Mentionnez {bot} ou répondez à un message d’OpenBot Code pour solliciter les agents.",
   "status.messaging.telegramNotLinked":
-    "CodeBot n’est pas connecté à cette discussion. Pour le connecter, ouvrez l’app CodeBot, allez dans Marketplace → Apps → Telegram et sélectionnez « Ajouter à un groupe » ou « Discuter en privé ».",
+    "OpenBot Code n’est pas connecté à cette discussion. Pour le connecter, ouvrez l’app OpenBot Code, allez dans Marketplace → Apps → Telegram et sélectionnez « Ajouter à un groupe » ou « Discuter en privé ».",
   "status.messaging.telegramOrchestratorName": "Orchestrateur Telegram",
   "status.messaging.telegramOrchestratorTitle": "Répond dans Telegram et consulte l’équipe",
   "status.messaging.whatsappNoAgent":
-    "Aucun agent ne peut encore répondre ici. Ajoutez l’Orchestrateur WhatsApp dans CodeBot.",
+    "Aucun agent ne peut encore répondre ici. Ajoutez l’Orchestrateur WhatsApp dans OpenBot Code.",
   "status.messaging.whatsappApprovalMenu": "Répondez 1 pour approuver ou 2 pour refuser.",
   "status.messaging.whatsappStopMenu": "Répondez « stop » pour arrêter.",
   "status.messaging.whatsappPairingCode":
@@ -51,13 +53,13 @@ export const messages = {
   "status.messaging.whatsappPairingApproved": "Vous pouvez maintenant envoyer des demandes à ce numéro.",
   "status.messaging.whatsappOwnChat": "Message à vous-même",
   "status.messaging.whatsappWelcomeOwn":
-    "👋 *CodeBot est connecté*\n\nÉcrivez ici pour poser vos questions à vos agents. Le WhatsApp Orchestrator répond, ou confie le travail au bon agent.\n\nEnvoyez *stop* pour arrêter une demande.",
+    "👋 *OpenBot Code est connecté*\n\nÉcrivez ici pour poser vos questions à vos agents. Le WhatsApp Orchestrator répond, ou confie le travail au bon agent.\n\nEnvoyez *stop* pour arrêter une demande.",
   "status.messaging.whatsappWelcomeDedicated":
-    "👋 *CodeBot est connecté*\n\nLes personnes que vous autorisez dans CodeBot peuvent maintenant écrire à ce numéro. Une nouvelle personne reçoit un code : approuvez-le dans CodeBot, sous Demandes.\n\nEnvoyez *stop* pour arrêter une demande.",
+    "👋 *OpenBot Code est connecté*\n\nLes personnes que vous autorisez dans OpenBot Code peuvent maintenant écrire à ce numéro. Une nouvelle personne reçoit un code : approuvez-le dans OpenBot Code, sous Demandes.\n\nEnvoyez *stop* pour arrêter une demande.",
   "status.messaging.whatsappOtherCodeBot":
-    "Un autre CodeBot est associé à ce numéro WhatsApp, vous pouvez donc recevoir deux réponses. Pour corriger cela, ouvrez Appareils connectés dans WhatsApp sur votre téléphone et déconnectez l’CodeBot que vous n’utilisez pas.",
+    "Un autre OpenBot Code est associé à ce numéro WhatsApp, vous pouvez donc recevoir deux réponses. Pour corriger cela, ouvrez Appareils connectés dans WhatsApp sur votre téléphone et déconnectez l’OpenBot Code que vous n’utilisez pas.",
   "status.messaging.whatsappPaused":
-    "CodeBot ne répond plus ici pendant 10 minutes : trop de messages sont arrivés en peu de temps. Si un autre CodeBot est associé à ce numéro, ouvrez Appareils connectés dans WhatsApp sur votre téléphone et déconnectez l’CodeBot que vous n’utilisez pas.",
+    "OpenBot Code ne répond plus ici pendant 10 minutes : trop de messages sont arrivés en peu de temps. Si un autre OpenBot Code est associé à ce numéro, ouvrez Appareils connectés dans WhatsApp sur votre téléphone et déconnectez l’OpenBot Code que vous n’utilisez pas.",
   "status.messaging.whatsappNotDelivered": "WhatsApp n’a pas accepté cette réponse, la personne ne l’a donc pas reçue.",
   "status.messaging.whatsappPartlyDelivered":
     "WhatsApp n’a pas accepté toute cette réponse, la personne n’en a donc reçu qu’une partie.",

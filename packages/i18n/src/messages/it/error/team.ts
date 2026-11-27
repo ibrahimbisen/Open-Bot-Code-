@@ -2,14 +2,14 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/team";
 
 export const messages = {
-  "error.team.ownerNotLinked": "Questo host non è collegato a un account proprietario di CodeBot.",
-  "error.team.ownerEmailRequired": "Accedi con l'email CodeBot che ha creato questo host.",
+  "error.team.ownerNotLinked": "Questo host non è collegato a un account proprietario di OpenBot Code.",
+  "error.team.ownerEmailRequired": "Accedi con l'email OpenBot Code che ha creato questo host.",
   "error.team.hostNotConfigured": "L'host del team non è configurato.",
   "error.team.alreadyConfigured": "Il server del team è già configurato.",
   "error.team.identityCreateFailed": "Non è stato possibile creare l'identità del team.",
   "error.team.accountChangedDuringCreate":
     "L'account con cui hai effettuato l'accesso è cambiato durante la creazione del server.",
-  "error.team.notConfigured": "Questo CodeBot non è stato configurato.",
+  "error.team.notConfigured": "Questo OpenBot Code non è stato configurato.",
   "error.team.keyRotationMissing": "Nessun cambio della chiave del server è in attesa.",
   "error.team.serverNotActive": "Questo server non è più quello attivo per l'account con cui hai effettuato l'accesso.",
   "error.team.logoInvalid": "Scegli un'immagine PNG, JPEG o WebP valida, fino a 512 KB.",
@@ -24,9 +24,9 @@ export const messages = {
   "error.team.inviteEmailMismatch": "Questo invito appartiene a un altro indirizzo email.",
   "error.team.memberDisabled": "Questo membro del team è disattivato.",
   "error.team.memberLimit": "Un host può avere fino a {limit} membri.",
-  "error.team.accountNotMember": "Questo account CodeBot non è membro del team.",
+  "error.team.accountNotMember": "Questo account OpenBot Code non è membro del team.",
   "error.team.usernameTaken": "Questo nome utente è già in uso.",
-  "error.team.inviteRequiresAccount": "Questo invito richiede un account CodeBot verificato.",
+  "error.team.inviteRequiresAccount": "Questo invito richiede un account OpenBot Code verificato.",
   "error.team.loginIncorrect": "Nome utente o password non corretti.",
   "error.team.currentPasswordIncorrect": "La password attuale non è corretta.",
   "error.team.memberNotFound": "Membro del team non trovato.",
@@ -49,22 +49,22 @@ export const messages = {
     "Il nome utente deve contenere da 3 a 32 tra lettere, numeri, punti, trattini o trattini bassi.",
   "error.team.passwordLength": "La password deve contenere da 12 a 256 caratteri.",
   "error.team.bindFailed": "Impossibile mettere in ascolto l'API del team.",
-  "error.team.signInRequired": "È necessario accedere a CodeBot.",
+  "error.team.signInRequired": "È necessario accedere a OpenBot Code.",
   "error.team.authenticationRequired": "Autenticazione richiesta.",
   "error.team.agentNotFound": "Agente non trovato.",
   "error.team.routeNotFound": "Percorso non trovato.",
   "error.team.requestFailed": "Richiesta non riuscita.",
   "error.team.tooManySignInAttempts": "Troppi tentativi di accesso. Riprova più tardi.",
-  "error.team.clientUpdateRequired": "Aggiorna questo client CodeBot prima di connetterti a questo host.",
-  "error.team.hostUpdateRequired": "Aggiorna CodeBot sull'host prima di connetterti.",
-  "error.team.serverSafeMode": "Questo server è in modalità provvisoria perché CodeBot non si avvia.",
+  "error.team.clientUpdateRequired": "Aggiorna questo client OpenBot Code prima di connetterti a questo host.",
+  "error.team.hostUpdateRequired": "Aggiorna OpenBot Code sull'host prima di connetterti.",
+  "error.team.serverSafeMode": "Questo server è in modalità provvisoria perché OpenBot Code non si avvia.",
   "error.team.serverSafeModeNewerDatabase":
-    "CodeBot {version} su questo server non può aprire i suoi dati perché una versione più recente di CodeBot li ha salvati. Una versione più recente di CodeBot sul server risolve il problema.",
+    "OpenBot Code {version} su questo server non può aprire i suoi dati perché una versione più recente di OpenBot Code li ha salvati. Una versione più recente di OpenBot Code sul server risolve il problema.",
   "error.team.serverSafeModeStartFailed":
-    "CodeBot {version} su questo server si è fermato dopo molti avvii non riusciti. Una versione più recente di CodeBot sul server risolve il problema.",
+    "OpenBot Code {version} su questo server si è fermato dopo molti avvii non riusciti. Una versione più recente di OpenBot Code sul server risolve il problema.",
   "error.team.sidebarLayoutUnavailable": "Il layout della barra laterale non è disponibile.",
   "error.team.providersUnsupported": "Le impostazioni dei provider non sono supportate da questa connessione.",
-  "error.team.providerNotManaged": "CodeBot non gestisce la CLI di questo provider.",
+  "error.team.providerNotManaged": "OpenBot Code non gestisce la CLI di questo provider.",
   "error.team.channelsUnsupported": "Le chat dei canali non sono supportate da questa connessione.",
   "error.team.channelContextUnsupported":
     "Questa connessione non supporta una nuova conversazione né la compattazione in un canale.",
@@ -105,9 +105,9 @@ export const messages = {
   "error.team.libraryFoldersUnsupported": "Le cartelle della Libreria non sono supportate da questa connessione.",
   "error.team.workflowFoldersUnsupported": "Questa connessione non supporta le cartelle di workflow.",
   "error.team.agentNotificationLevelsUnsupported":
-    "Questo server non può salvare il tuo livello di notifiche per ogni agente. Aggiorna CodeBot sul computer che lo esegue.",
+    "Questo server non può salvare il tuo livello di notifiche per ogni agente. Aggiorna OpenBot Code sul computer che lo esegue.",
   "error.team.sidebarPinsUnsupported":
-    "Questo server non può salvare le chat fissate per tutti i tuoi dispositivi. Aggiorna CodeBot sul computer che lo esegue.",
+    "Questo server non può salvare le chat fissate per tutti i tuoi dispositivi. Aggiorna OpenBot Code sul computer che lo esegue.",
   "error.team.agentInstructionsUnsupported":
     "La modifica delle istruzioni degli agenti non è supportata da questa connessione.",
   "error.team.agentPublishUnsupported": "La pubblicazione di agenti non è supportata da questa connessione.",
@@ -121,9 +121,9 @@ export const messages = {
   "error.team.threadMessageSearchUnsupported": "Questa connessione non supporta la ricerca nei thread secondari.",
   "error.team.sideQuestionUnsupported": "Questa connessione non supporta le domande a parte.",
   "error.team.liveVoiceUnsupported":
-    "Questo server non supporta la voce dal vivo di Codex. Aggiorna CodeBot sul computer che lo esegue.",
+    "Questo server non supporta la voce dal vivo di Codex. Aggiorna OpenBot Code sul computer che lo esegue.",
   "error.team.routineFlowsUnsupported":
-    "Questo server non supporta i flussi di routine. Aggiorna CodeBot sul computer che lo esegue.",
+    "Questo server non supporta i flussi di routine. Aggiorna OpenBot Code sul computer che lo esegue.",
   "error.team.routineCanvasTooLarge":
     "La tela di questa routine è troppo grande per essere inviata a questo dispositivo. Accorcia le istruzioni della routine sul computer che esegue il server.",
   "error.team.conversationPageTooLarge":
@@ -172,9 +172,9 @@ export const messages = {
   "error.team.browserSessionNotFound": "Sessione della vista del browser non trovata.",
   "error.team.mcpUnsupported": "I server MCP non sono supportati da questa connessione.",
   "error.team.mcpServerListNeedsUpdate":
-    "Aggiorna CodeBot su questo dispositivo per usare più di {limit} server MCP su questo server.",
+    "Aggiorna OpenBot Code su questo dispositivo per usare più di {limit} server MCP su questo server.",
   "error.team.providerAccountListNeedsUpdate":
-    "Aggiorna CodeBot su questo dispositivo per usare più di {limit} account di un provider su questo server.",
+    "Aggiorna OpenBot Code su questo dispositivo per usare più di {limit} account di un provider su questo server.",
   "error.team.storageUnsupported": "L'archiviazione non è supportata da questa connessione.",
   "error.team.machineResourcesUnsupported": "L'uso della macchina non è supportato da questa connessione.",
   "error.team.machineAlertMemberInvalid":
@@ -202,12 +202,12 @@ export const messages = {
     "Solo la persona che ha aggiunto questo server MCP, o un amministratore, può modificarlo.",
   "error.team.ownerRequired": "Solo il proprietario di questo server può farlo.",
   "error.team.requestTooLarge": "Il corpo della richiesta è troppo grande.",
-  "error.team.signInRelayUnsupported": "Questo server non può inoltrare gli accessi. Aggiorna CodeBot sull'host.",
+  "error.team.signInRelayUnsupported": "Questo server non può inoltrare gli accessi. Aggiorna OpenBot Code sull'host.",
   "error.team.connectorsUnsupported":
-    "Questo server non può gestire le proprie connessioni da qui. Aggiorna CodeBot sull'host.",
+    "Questo server non può gestire le proprie connessioni da qui. Aggiorna OpenBot Code sull'host.",
   "error.team.discordAccessUnsupported":
-    "Questo server non può impostare i ruoli di Discord. Aggiorna CodeBot sul server.",
-  "error.team.connectorPageRefused": "Il server ha inviato una pagina che CodeBot non apre.",
+    "Questo server non può impostare i ruoli di Discord. Aggiorna OpenBot Code sul server.",
+  "error.team.connectorPageRefused": "Il server ha inviato una pagina che OpenBot Code non apre.",
   "error.team.signInRelayUnknown": "Questo accesso è terminato o non esiste.",
   "error.team.signInRelayUsed": "Questo accesso è già stato inviato.",
   "error.team.signInRelayMismatch": "Questo indirizzo non appartiene a questo accesso.",

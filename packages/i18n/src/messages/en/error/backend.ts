@@ -2,7 +2,7 @@ import { defineMessages } from "../../../message";
 
 export const messages = defineMessages("error.backend", {
   "error.backend.eventsUnavailable": "Events are not available on this host.",
-  "error.backend.databaseIntegrity": "CodeBot database failed its integrity check.",
+  "error.backend.databaseIntegrity": "OpenBot Code database failed its integrity check.",
   "error.backend.webhookRouteLimit": "A host can have at most {limit} webhook routines.",
   "error.backend.webhookSettingsInvalid": "Check the webhook settings and try again.",
   "error.backend.webhookSenderSecretInvalid":
@@ -17,8 +17,8 @@ export const messages = defineMessages("error.backend", {
   "error.backend.browserViewLimit": "Too many browser views are open on this host.",
   "error.backend.browserViewEnded": "The live view of this page ended.",
   "error.backend.browserViewFailed": "The live view of this page failed.",
-  "error.backend.windowTemporarilyUnavailable": "The CodeBot window is temporarily unavailable.",
-  "error.backend.windowUnavailable": "The CodeBot window is unavailable.",
+  "error.backend.windowTemporarilyUnavailable": "The OpenBot Code window is temporarily unavailable.",
+  "error.backend.windowUnavailable": "The OpenBot Code window is unavailable.",
   "error.backend.sunshineApiHttp": "Sunshine API failed with HTTP {status}.",
   "error.backend.sunshinePortsUnavailable": "Could not reserve a free Sunshine port family for Remote Desktop.",
   "error.backend.moonlightPortsUnavailable": "Could not reserve a free Moonlight WebRTC port range for Remote Desktop.",
@@ -33,7 +33,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.moonlightRejectedPairing": "Moonlight rejected Sunshine pairing.",
   "error.backend.moonlightNoPin": "Moonlight did not return a pairing PIN.",
   "error.backend.moonlightPairingIncomplete": "Moonlight pairing did not complete.",
-  "error.backend.moonlightWebNotEmbedded": "Moonlight Web is not an CodeBot embedded build.",
+  "error.backend.moonlightWebNotEmbedded": "Moonlight Web is not an OpenBot Code embedded build.",
   "error.backend.moonlightEmptyResponse": "Moonlight returned an empty response.",
   "error.backend.remoteDesktopTimeout": "Remote desktop request timed out.",
   "error.backend.moonlightApiHttp": "Moonlight API failed with HTTP {status}.",
@@ -51,10 +51,10 @@ export const messages = defineMessages("error.backend", {
   "error.backend.browserTeachUnsupported": "This remote host does not support the recording of a task.",
   "error.backend.browserUserControlUnsupported": "This remote host does not support taking control of a browser tab.",
   "error.backend.browserSignInUnsupported": "This remote host cannot take a sign-in from this computer.",
-  "error.backend.browserSignInOpenFailed": "CodeBot could not open the sign-in window.",
+  "error.backend.browserSignInOpenFailed": "OpenBot Code could not open the sign-in window.",
   "error.backend.browserSignInLoadFailed":
-    "CodeBot could not load the page in the sign-in window. Check the internet connection, then open the sign-in window again.",
-  "error.backend.browserSignInReadFailed": "CodeBot could not read the sign-in from the window.",
+    "OpenBot Code could not load the page in the sign-in window. Check the internet connection, then open the sign-in window again.",
+  "error.backend.browserSignInReadFailed": "OpenBot Code could not read the sign-in from the window.",
   "error.backend.browserStopUnsupported": "This remote host cannot stop a page load.",
   "error.backend.browserLocationFailed": "Could not set the location for the page.",
   "error.backend.browserPermissionsUnsupported": "This remote host cannot answer location requests.",
@@ -67,23 +67,23 @@ export const messages = defineMessages("error.backend", {
   "error.backend.sunshineNotReadyReason": "Sunshine did not become ready. {reason}",
   "error.backend.channelLeadModelUnavailable": "The channel lead model is unavailable.",
   "error.backend.contextCompactionIneffective":
-    "Compaction does not make this chat smaller: after two compactions it still uses {percent}% of the model's context window, so CodeBot stops compacting it. Tools and instructions use most of the window. Turn off the MCP servers or computer use that this agent does not need, or select a model with a larger window. Then start a new chat.",
+    "Compaction does not make this chat smaller: after two compactions it still uses {percent}% of the model's context window, so OpenBot Code stops compacting it. Tools and instructions use most of the window. Turn off the MCP servers or computer use that this agent does not need, or select a model with a larger window. Then start a new chat.",
   "error.backend.contextCompactionStopped":
-    "Two compactions of this chat failed in a row, so CodeBot stops compacting it automatically. Each try sends the whole chat to the model and uses your plan limit. Select Compact now to try again, or start a new chat.",
+    "Two compactions of this chat failed in a row, so OpenBot Code stops compacting it automatically. Each try sends the whole chat to the model and uses your plan limit. Select Compact now to try again, or start a new chat.",
   "error.backend.contextCompactionRetrying":
-    "The provider could not compact this chat and tries again. New messages in this chat wait until the compaction ends. If it does not end soon, CodeBot stops it and sends your messages.",
+    "The provider could not compact this chat and tries again. New messages in this chat wait until the compaction ends. If it does not end soon, OpenBot Code stops it and sends your messages.",
   "error.backend.contextCompactionFailed":
     "Compacting this chat failed. The chat did not change. Messages that wait go to the agent now.",
   "error.backend.contextCompactionTimedOut":
-    "Compacting this chat timed out, so CodeBot stopped it. The chat did not change. Messages that wait go to the agent now.",
+    "Compacting this chat timed out, so OpenBot Code stopped it. The chat did not change. Messages that wait go to the agent now.",
   "error.backend.providerModelAtCapacity":
     "The model is at capacity. The provider tries again in a few minutes. To continue now, stop the turn and choose a different model.",
   "error.backend.providerRetrying":
     "The provider failed this request {attempts} times and tries again. If the agent does not continue, stop the turn.",
   "error.backend.providerRetryingLargeContext":
-    "The provider failed this request {attempts} times and tries again. This chat uses {percent}% of the model's context window. If the agent does not continue, stop the turn: CodeBot then compacts the chat before the next message.",
+    "The provider failed this request {attempts} times and tries again. This chat uses {percent}% of the model's context window. If the agent does not continue, stop the turn: OpenBot Code then compacts the chat before the next message.",
   "error.backend.sharedDataUnavailable": "Shared data is unavailable.",
-  "error.backend.shuttingDown": "CodeBot is shutting down.",
+  "error.backend.shuttingDown": "OpenBot Code is shutting down.",
   "error.backend.channelUnconfirmedStart":
     "The channel has an unconfirmed assignment start. Check its outcome before deleting it.",
   "error.backend.channelNotFound": "Channel not found.",
@@ -146,7 +146,7 @@ export const messages = defineMessages("error.backend", {
     "The run stopped with an error, but no reason came with it. Open the run to see what the agent did.",
   "error.backend.turnNotStarted": "The provider did not start this turn.",
   "error.backend.turnStartUnconfirmed":
-    "{provider} did not confirm in time that it started this message. CodeBot does not send it again, so the work does not run twice. CodeBot waits up to 5 minutes for the agent to start.",
+    "{provider} did not confirm in time that it started this message. OpenBot Code does not send it again, so the work does not run twice. OpenBot Code waits up to 5 minutes for the agent to start.",
   "error.backend.turnStartAbandoned": "The agent did not start this message in 5 minutes. Send the message again.",
   "error.backend.routineResultConnectionOff": "This messaging connection is off or removed. Choose another place.",
   "error.backend.routineResultNoDelivery": "This run has no answer to send again.",
@@ -184,7 +184,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.fileGone": "The file does not exist or is already deleted.",
   "error.backend.managedAttachmentChanged": "Managed attachment is missing or has changed: {name}",
   "error.backend.mailboxStateCorrupt":
-    "Mailbox state is corrupt or from a newer CodeBot version; refusing to overwrite it.",
+    "Mailbox state is corrupt or from a newer OpenBot Code version; refusing to overwrite it.",
   "error.backend.recipientDeleting": "The recipient is being deleted. Retry after deletion finishes.",
   "error.backend.recipientHidden": "This agent is hidden. Restore it to send messages.",
   "error.backend.agentIdUnknown": "No agent has the id {id}. Get the ids from codebot.list_agents, then try again.",
@@ -201,7 +201,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.videoGenerationNoVideo": "Video generation did not return a video.",
   "error.backend.videoGenerationInterrupted": "Video generation was interrupted.",
   "error.backend.attachmentNotRegularFile": "Only regular files can be attached: {name}",
-  "error.backend.attachmentCopyFailed": "CodeBot could not copy {name}.",
+  "error.backend.attachmentCopyFailed": "OpenBot Code could not copy {name}.",
   "error.backend.routineNameRequired": "A routine name is required.",
   "error.backend.routineNameTooLong": "The routine name is too long.",
   "error.backend.routineInstructionRequired": "A routine instruction is required.",
@@ -223,7 +223,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.routineWaitForAgent": "Wait until the agent operation finishes before running a routine.",
   "error.backend.routineRunStarting": "This routine run is still starting. Try again after its turn starts.",
   "error.backend.routineRunNoSession":
-    "CodeBot cannot interrupt the active routine run because its provider session is unavailable.",
+    "OpenBot Code cannot interrupt the active routine run because its provider session is unavailable.",
   "error.backend.interruptSelf": "An agent cannot interrupt itself.",
   "error.backend.interruptOtherWork":
     "This agent works on a task that your message did not start. Only the user or the sender of that task can stop it.",
@@ -231,7 +231,7 @@ export const messages = defineMessages("error.backend", {
     "This agent's turn works on your message and also on a message from the user or another agent. Only the user can stop it, with Stop agent in that agent's chat.",
   "error.backend.interruptStarting": "This agent is still starting a turn. Try again after the turn starts.",
   "error.backend.interruptNoSession":
-    "CodeBot cannot interrupt this agent because its provider session is unavailable.",
+    "OpenBot Code cannot interrupt this agent because its provider session is unavailable.",
   "error.backend.memoryTextRequired": "Memory text is required.",
   "error.backend.memoryTextTooLong": "Memory text is too long.",
   "error.backend.mcpServerGone": "This MCP server no longer exists.",
@@ -262,9 +262,9 @@ export const messages = defineMessages("error.backend", {
   "error.backend.messagePinNotFound": "The message to pin is not in this chat.",
   "error.backend.messagePinLimit": "This chat has 50 pinned messages. Unpin one before you pin another.",
   "error.backend.routineFlowHandoffFailed": "The routine could not pass the work on to this agent.",
-  "error.backend.mcpServerLimit": "CodeBot keeps up to {limit} MCP servers.",
+  "error.backend.mcpServerLimit": "OpenBot Code keeps up to {limit} MCP servers.",
   "error.backend.mcpServerNameTaken": "An MCP server named {name} already exists.",
-  "error.backend.mcpServerInvalid": "CodeBot cannot save this MCP server configuration.",
+  "error.backend.mcpServerInvalid": "OpenBot Code cannot save this MCP server configuration.",
   "error.backend.mcpHeaderNameInvalid":
     "Header names cannot contain spaces or symbols such as : ( ) /. Use a name such as Authorization, and put the key or token in Value.",
   "error.backend.mcpServerNoAnswer": "The server did not answer in {seconds} seconds.",
@@ -274,27 +274,28 @@ export const messages = defineMessages("error.backend", {
   "error.backend.mcpSignInAccountRefused":
     "The server refused the account that you signed in with. Check that this account can use the service. To use another account, sign out, then sign in again.",
   "error.backend.mcpSignInClientRefused":
-    "The sign-in server did not accept CodeBot when it completed the sign-in. Sign in again: CodeBot registers with the server again.",
+    "The sign-in server did not accept OpenBot Code when it completed the sign-in. Sign in again: OpenBot Code registers with the server again.",
   "error.backend.mcpSignInAppRefused":
     "The sign-in server did not accept the sign-in app of this server. Check the client ID and the client secret of the sign-in app, then sign in again.",
   "error.backend.mcpCommandNotFound": "Command not found: {command}",
   "error.backend.mcpProviderLimit":
     "This agent can use only a limited number of MCP servers. To use this server, turn off an MCP server that the agent does not need.",
   "error.backend.mcpRegistrationRefused":
-    "The sign-in server does not accept CodeBot as an app yet. Your account is not the cause. Use another way to connect, such as a local MCP server.",
+    "The sign-in server does not accept OpenBot Code as an app yet. Your account is not the cause. Use another way to connect, such as a local MCP server.",
   "error.backend.mcpRegistrationUnavailable":
-    "The sign-in server cannot register CodeBot as an app. Your account is not the cause. To connect, save this server in Marketplace, Apps, then add a sign-in app to it.",
+    "The sign-in server cannot register OpenBot Code as an app. Your account is not the cause. To connect, save this server in Marketplace, Apps, then add a sign-in app to it.",
   "error.backend.mcpSignInAppNeeded":
-    "The sign-in server cannot register CodeBot as an app. Your account is not the cause. To connect, open this server in Marketplace, Apps, click Test connection, then add a sign-in app.",
+    "The sign-in server cannot register OpenBot Code as an app. Your account is not the cause. To connect, open this server in Marketplace, Apps, click Test connection, then add a sign-in app.",
   "error.backend.mcpSignInAbandonedGeneric": "The sign-in was abandoned.",
   "error.backend.mcpSignInForgotten": "The MCP sign-in was forgotten while it was running.",
   "error.backend.mcpSignInAbandoned": "The MCP sign-in was abandoned.",
   "error.backend.mcpSignInNoBrowser": "This MCP sign-in cannot open a browser.",
   "error.backend.mcpSignInNotWebPage": "The sign-in address is not a web page.",
   "error.backend.mcpSignInRequired": "This server asks you to sign in. Choose Sign in to continue in your browser.",
-  "error.backend.mcpSignInOnHost": "This server asks for a sign-in. Sign in to it in CodeBot on the host computer.",
+  "error.backend.mcpSignInOnHost":
+    "This server asks for a sign-in. Sign in to it in OpenBot Code on the host computer.",
   "error.backend.mcpSignInNeedsHttps":
-    "This server asks for a sign-in, and CodeBot signs in only over https. Change the URL to {url}.",
+    "This server asks for a sign-in, and OpenBot Code signs in only over https. Change the URL to {url}.",
   "error.backend.mcpSignInOtherAddress":
     "This server signs in only at {url}. Change the URL to this address, then sign in again.",
   "error.backend.mcpSignInCancelled": "The sign-in was cancelled.",
@@ -302,9 +303,9 @@ export const messages = defineMessages("error.backend", {
   "error.backend.mcpSignInRefused": "The sign-in page refused access. Sign in again.",
   "error.backend.mcpSignInResponseTimedOut": "The sign-in response did not arrive in time.",
   "error.backend.mcpSignInMetadataUnreadable":
-    "CodeBot could not read the sign-in information of this server. Check the server address and try again.",
+    "OpenBot Code could not read the sign-in information of this server. Check the server address and try again.",
   "error.backend.mcpSignInAnswerUnreadable":
-    "The sign-in server sent an answer that CodeBot cannot read. If the service gives you an API key or a token, add it to the settings of this server, then test the connection again.",
+    "The sign-in server sent an answer that OpenBot Code cannot read. If the service gives you an API key or a token, add it to the settings of this server, then test the connection again.",
   "error.backend.mcpServerExited":
     "The server stopped before it answered. Run the command in a terminal to see its error.",
   "error.backend.mcpServerExitedWithOutput": "The server stopped before it answered. It wrote: {detail}",
@@ -312,7 +313,7 @@ export const messages = defineMessages("error.backend", {
     "The server did not start, because its download failed. Check the internet connection, then try again.",
   "error.backend.mcpServerFailedToStart": "The server did not start: {reason}",
   "error.backend.mcpServerProgramMissing":
-    "CodeBot could not start the MCP server {name}, because its program is not installed on the computer that runs CodeBot. Install the app that gives {name} on that computer, or turn {name} off in Marketplace, Apps.",
+    "OpenBot Code could not start the MCP server {name}, because its program is not installed on the computer that runs OpenBot Code. Install the app that gives {name} on that computer, or turn {name} off in Marketplace, Apps.",
   "error.backend.mcpServerStartAbandoned":
     "{provider} stopped waiting before the server started, so its agents do not get the tools of this server.",
   "error.backend.mcpServerStoppedDuringCall": "The MCP server stopped before it answered this call.",
@@ -325,7 +326,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.mcpServerFailedForProvider":
     "{provider} could not start the MCP server {name}. Open {name} in Marketplace, Apps, and choose Test connection to see the cause.",
   "error.backend.mcpServerFailedInProvider":
-    "{provider} could not start the MCP server {name}. Its tools are not available to {provider}. {provider} starts the server itself, so the connection test in CodeBot can pass. Start a new chat to try again.",
+    "{provider} could not start the MCP server {name}. Its tools are not available to {provider}. {provider} starts the server itself, so the connection test in OpenBot Code can pass. Start a new chat to try again.",
   "error.backend.mcpServerTimedOutInProvider":
     "{provider} could not start the MCP server {name}, because the server did not answer in time. Start a new chat to try again.",
   "error.backend.mcpServerUnavailableInProvider":
@@ -337,24 +338,24 @@ export const messages = defineMessages("error.backend", {
   "error.backend.mcpAppReconnect":
     "{name} on ChatGPT asks you to sign in again. Reconnect {name} on ChatGPT, then ask the agent again.",
   "error.backend.mcpAppAutoReview":
-    "This ChatGPT app does not run when the agent has Ask first or Full access. The app needs the automatic approval review of Codex, which CodeBot does not support yet. You can try Workspace only for Access in the agent settings, then ask the agent again.",
+    "This ChatGPT app does not run when the agent has Ask first or Full access. The app needs the automatic approval review of Codex, which OpenBot Code does not support yet. You can try Workspace only for Access in the agent settings, then ask the agent again.",
   "error.backend.mcpServerSignInPage":
-    "The MCP server {name} asked you to sign in on a web page. CodeBot does not open this page for a server, so it declined. Open {name} in Marketplace, Apps, and sign in, then ask the agent again.",
+    "The MCP server {name} asked you to sign in on a web page. OpenBot Code does not open this page for a server, so it declined. Open {name} in Marketplace, Apps, and sign in, then ask the agent again.",
   "error.backend.mcpServerRequestDeclined":
-    "The MCP server {name} asked for something that CodeBot cannot show, so CodeBot declined it.",
+    "The MCP server {name} asked for something that OpenBot Code cannot show, so OpenBot Code declined it.",
   "error.backend.mcpRequestDeclined":
-    "An MCP server asked for something that CodeBot cannot show, so CodeBot declined it.",
+    "An MCP server asked for something that OpenBot Code cannot show, so OpenBot Code declined it.",
   "error.backend.mcpOAuthProxyUnavailable":
-    "CodeBot could not start its local sign-in connection for this server. Restart CodeBot, then try again.",
+    "OpenBot Code could not start its local sign-in connection for this server. Restart OpenBot Code, then try again.",
   "error.backend.mcpOAuthSignInNeeded":
-    "The sign-in to this MCP server has ended. The user must sign in to it again in CodeBot.",
+    "The sign-in to this MCP server has ended. The user must sign in to it again in OpenBot Code.",
   "error.backend.mcpOAuthRenewalFailed":
-    "CodeBot could not renew the sign-in to this MCP server now. The sign-in is kept, and the next request tries again. If this error continues, the user can sign out of the server in CodeBot and sign in again.",
+    "OpenBot Code could not renew the sign-in to this MCP server now. The sign-in is kept, and the next request tries again. If this error continues, the user can sign out of the server in OpenBot Code and sign in again.",
   "error.backend.mcpOAuthRequestRefused":
-    "The MCP server refused this request, but the sign-in to it is still active. Possibly the account cannot use this tool, or the sign-in did not give all the necessary access. The user can examine the plan and the access of the account at the service, or sign in to the server again in CodeBot and allow all the access that it asks for.",
+    "The MCP server refused this request, but the sign-in to it is still active. Possibly the account cannot use this tool, or the sign-in did not give all the necessary access. The user can examine the plan and the access of the account at the service, or sign in to the server again in OpenBot Code and allow all the access that it asks for.",
   "error.backend.mcpOAuthScopeNeeded":
-    "The MCP server needs more access for this request than the sign-in gives. The sign-in is kept for the other tools. The user must sign in to the server again in CodeBot and allow the access that it asks for.",
-  "error.backend.mcpServerUnreachable": "CodeBot could not reach the server. Check the URL and your network.",
+    "The MCP server needs more access for this request than the sign-in gives. The sign-in is kept for the other tools. The user must sign in to the server again in OpenBot Code and allow the access that it asks for.",
+  "error.backend.mcpServerUnreachable": "OpenBot Code could not reach the server. Check the URL and your network.",
   "error.backend.mcpLocalServerOff":
     "No server answers at {address} on this computer. Start the server, or turn it on in the app that runs it, then try again.",
   "error.backend.mcpServerBlocked":
@@ -362,7 +363,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.mcpServerIncompatible":
     "Something answered at this address, but not as an MCP server over Streamable HTTP. Check the URL, and update the app that runs the server.",
   "error.backend.mcpRemoteBridge":
-    "{reason} This command runs the mcp-remote bridge. Choose Streamable HTTP with the URL {url} instead, and CodeBot signs you in.",
+    "{reason} This command runs the mcp-remote bridge. Choose Streamable HTTP with the URL {url} instead, and OpenBot Code signs you in.",
   "error.backend.oauthNotHttps": "The OAuth endpoint {origin} is not https, so the credentials were not sent.",
   "error.backend.oauthTooManyRedirects": "The OAuth endpoint redirected too many times.",
   "error.backend.oauthRedirectOrigin":
@@ -418,14 +419,14 @@ export const messages = defineMessages("error.backend", {
   "error.backend.approvalInactive": "This approval is no longer active.",
   "error.backend.approvalOwnerOnly": "Only the server owner can approve this action.",
   "error.backend.feedbackNeedsPhone":
-    "Only the CodeBot phone app can send this report, because it adds the phone's version and support log. Open this chat on the phone. If you see this message there, update the phone app.",
+    "Only the OpenBot Code phone app can send this report, because it adds the phone's version and support log. Open this chat on the phone. If you see this message there, update the phone app.",
   "error.backend.takeoverInactive": "This browser takeover is no longer active.",
   "error.backend.authSubmitting": "Authentication submission is already in progress.",
-  "error.backend.apiKeyListFailed": "CodeBot could not read the saved API keys.",
-  "error.backend.apiKeySaveFailed": "CodeBot could not save the API key. Try again.",
+  "error.backend.apiKeyListFailed": "OpenBot Code could not read the saved API keys.",
+  "error.backend.apiKeySaveFailed": "OpenBot Code could not save the API key. Try again.",
   "error.backend.apiKeySaving": "The API key is already being saved.",
   "error.backend.apiKeyAnswerUnreadable":
-    "CodeBot could not read the API key. Enter a key of 8,000 characters or less, and select who can use it.",
+    "OpenBot Code could not read the API key. Enter a key of 8,000 characters or less, and select who can use it.",
   "error.backend.vaultItemSaving": "The Vault item is already being saved.",
   "error.backend.authRequestInactive": "This secure authentication request is no longer active.",
   "error.backend.secureAuthUnavailable": "Secure authentication is unavailable.",
@@ -447,9 +448,9 @@ export const messages = defineMessages("error.backend", {
   "error.backend.browserProxyUnreachable": "The proxy {name} does not answer, so the page did not open.",
   "error.backend.browserProxySignInRefused": "The proxy {name} refused the sign-in, so the page did not open.",
   "error.backend.browserSystemProxyFailed":
-    "The proxy in the settings of the computer that runs CodeBot does not answer or refused the connection, so the page did not open. Check the proxy settings of that computer.",
+    "The proxy in the settings of the computer that runs OpenBot Code does not answer or refused the connection, so the page did not open. Check the proxy settings of that computer.",
   "error.backend.browserSystemProxyOrSiteClosed":
-    "The site or the proxy in the settings of the computer that runs CodeBot closed the connection with no answer, so the page did not open. If no site opens, check the proxy settings of that computer.",
+    "The site or the proxy in the settings of the computer that runs OpenBot Code closed the connection with no answer, so the page did not open. If no site opens, check the proxy settings of that computer.",
   "error.backend.browserProfileProxyOrSiteClosed":
     "The site or the proxy of this browser profile closed the connection with no answer, so the page did not open. If no site opens, check the proxy of the profile.",
   "error.backend.browserProxyComputerUnreachable":
@@ -496,7 +497,7 @@ export const messages = defineMessages("error.backend", {
   "error.backend.mcpSignInAppUrl": "The sign-in app needs a valid server URL.",
   "error.backend.mcpSignInAppClientId": "Enter the client ID of the sign-in app.",
   "error.backend.mcpSignInAppIssuerChanged":
-    "The sign-in server of this MCP server changed, so CodeBot did not send it the sign-in app. If the change is correct, remove the sign-in app and add it again.",
+    "The sign-in server of this MCP server changed, so OpenBot Code did not send it the sign-in app. If the change is correct, remove the sign-in app and add it again.",
   "error.backend.mcpSignInAppNoServer": "Save this MCP server as a URL server before you add a sign-in app.",
   "error.backend.mcpSignInAppUnavailable": "This computer cannot keep a sign-in app.",
   "error.backend.taskMoveRefused": "Only a message that you sent to this agent alone can run as a task.",
@@ -525,6 +526,6 @@ export const messages = defineMessages("error.backend", {
   "error.backend.taskOpenLimitReached":
     "This agent has {count} open tasks. Close a task, then start or open another one.",
   "error.backend.taskRemoteUnsupported": "Tasks are only available for agents on this computer.",
-  "error.backend.taskMessageFailed": "CodeBot could not send the message to the task. Try again later.",
-  "error.backend.taskStartFailed": "CodeBot could not start the task. Do the work in this turn instead.",
+  "error.backend.taskMessageFailed": "OpenBot Code could not send the message to the task. Try again later.",
+  "error.backend.taskStartFailed": "OpenBot Code could not start the task. Do the work in this turn instead.",
 });

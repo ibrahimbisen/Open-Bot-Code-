@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "חלוניות",
+  "panel.add": "הוספת חלונית",
+  "panel.add.otherChat": "צ'אט מפרויקט אחר",
+  "panel.add.file": "קובץ",
+  "panel.add.diff": "שינויים",
+  "panel.add.browser": "דפדפן",
+  "panel.add.preview": "תצוגה מקדימה",
+  "panel.split.right": "פיצול ימינה",
+  "panel.split.down": "פיצול כלפי מטה",
+  "panel.maximize": "הגדלת החלונית",
+  "panel.restore": "שחזור גודל החלונית",
+  "panel.close": "סגירת החלונית",
+  "panel.pin": "נעץ את החלונית כדי שתישאר פתוחה",
+  "panel.unpin": "ביטול נעיצת החלונית",
+  "panel.preview.loading": "טוען את התצוגה המקדימה",
+  "panel.preview.failed": "לא ניתן היה לפתוח את התצוגה המקדימה.",
+  "panel.browser.label": "חלונית דפדפן",
+  "panel.browser.starting": "פותח את הדפדפן",
+  "panel.browser.failed": "לא ניתן היה לפתוח את דף הדפדפן.",
+  "panel.browser.closed": "דף הדפדפן הזה נסגר.",
+  "panel.browser.takeControl": "קח שליטה בדף",
+  "panel.browser.handControl": "העבר את השליטה לסוכן",
+  "panel.browser.userControls": "אתה שולט בדף הזה",
+  "panel.browser.agentControls": "הסוכן שולט בדף הזה",
+  "panel.header.model": "המודל של הצ'אט הזה",
+  "panel.header.modelLocked": "אי אפשר לשנות את המודל עכשיו.",
+  "panel.header.files": "קבצי הפרויקט",
+  "panel.draft.agent": "סוכן",
+  "panel.chat.noAgent": "לפרויקט הזה אין סוכן. הוסף סוכן בהגדרות הפרויקט.",
+  "panel.picker.title": "פתיחת צ'אט בחלונית",
+  "panel.picker.description": "בחר פרויקט ואז צ'אט. החלונית מציגה את שם הפרויקט.",
+  "panel.picker.project": "פרויקט",
+} as const satisfies PartialTranslation<typeof source>;

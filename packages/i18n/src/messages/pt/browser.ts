@@ -57,10 +57,10 @@ export const messages = {
   "browser.pip.reattach": "Reanexar navegador à barra lateral direita",
   "browser.pip.reattachTitle": "Reanexar navegador",
   "browser.pip.close": "Fechar janela flutuante do navegador",
-  "browser.pip.reattachFailed": "O CodeBot não conseguiu reanexar o navegador.",
-  "browser.pip.closeFailed": "O CodeBot não conseguiu fechar a janela flutuante do navegador.",
+  "browser.pip.reattachFailed": "O OpenBot Code não conseguiu reanexar o navegador.",
+  "browser.pip.closeFailed": "O OpenBot Code não conseguiu fechar a janela flutuante do navegador.",
   "browser.window.open": "Abrir navegador em nova janela",
-  "browser.window.openFailed": "O CodeBot não conseguiu abrir a janela do navegador.",
+  "browser.window.openFailed": "O OpenBot Code não conseguiu abrir a janela do navegador.",
   "browser.popupBlocked.title": "Pop-up bloqueado",
   "browser.popupBlocked.dismiss": "Dispensar mensagem de pop-up",
   "browser.liveView.label": "Visualização ao vivo da página no servidor",
@@ -101,16 +101,17 @@ export const messages = {
   "browser.secret.failed": "Não foi possível concluir a solicitação. Verifique a conexão e tente novamente.",
   "browser.secret.ended": "Esta solicitação de login terminou. Peça ao agente que tente de novo.",
   "browser.secret.vaultSkip.agentScript":
-    "O CodeBot não usou seu login salvo porque o agente executou um script nesta página. Para usá-lo, peça ao agente que recarregue a página e tente de novo.",
+    "O OpenBot Code não usou seu login salvo porque o agente executou um script nesta página. Para usá-lo, peça ao agente que recarregue a página e tente de novo.",
   "browser.secret.vaultSkip.fieldKind":
-    "O CodeBot não usou seu login salvo porque o agente escolheu o campo errado na página.",
+    "O OpenBot Code não usou seu login salvo porque o agente escolheu o campo errado na página.",
   "browser.secret.vaultSkip.loginChoice":
-    "O CodeBot não usou nenhum login salvo porque o agente não escolheu nenhum dos logins salvos para este site. Diga ao agente qual conta usar.",
-  "browser.secret.vaultSkip.noPassword": "O CodeBot não usou seu login salvo porque ele não tem senha para este site.",
+    "O OpenBot Code não usou nenhum login salvo porque o agente não escolheu nenhum dos logins salvos para este site. Diga ao agente qual conta usar.",
+  "browser.secret.vaultSkip.noPassword":
+    "O OpenBot Code não usou seu login salvo porque ele não tem senha para este site.",
   "browser.secret.vaultSkip.noAuthenticatorKey":
-    "O CodeBot não usou seu login salvo porque ele não tem chave do autenticador.",
+    "O OpenBot Code não usou seu login salvo porque ele não tem chave do autenticador.",
   "browser.secret.vaultSkip.vaultUnreadable":
-    "O CodeBot não usou nenhum login salvo porque não conseguiu ler seu gerenciador de senhas.",
+    "O OpenBot Code não usou nenhum login salvo porque não conseguiu ler seu gerenciador de senhas.",
   "browser.error.openAddress": "Não foi possível abrir o endereço nesta aba.",
   "browser.error.channelNoBrowserMember": "Nenhum membro pode abrir uma nova aba neste canal.",
   "browser.error.closeTab": "Não foi possível fechar a aba do navegador.",
@@ -169,17 +170,18 @@ export const messages = {
   "browser.signIn.local": "Entrar neste computador",
   "browser.signIn.title": "Entrar em {site}",
   "browser.signIn.description":
-    "Alguns sites recusam um login a partir de um servidor. Entre neste computador, e o CodeBot envia o login de {site} para {server}. Todos os agentes e membros em {server} podem usá-lo no navegador.",
+    "Alguns sites recusam um login a partir de um servidor. Entre neste computador, e o OpenBot Code envia o login de {site} para {server}. Todos os agentes e membros em {server} podem usá-lo no navegador.",
   "browser.signIn.windowOpen":
-    "Entre na janela que abriu. O CodeBot envia o login quando ele estiver completo. Se a janela continuar aberta, selecione Concluído.",
+    "Entre na janela que abriu. O OpenBot Code envia o login quando ele estiver completo. Se a janela continuar aberta, selecione Concluído.",
   "browser.signIn.windowClosed":
     "A janela de login está fechada. Selecione Concluído para enviar o login ou abra a janela novamente.",
   "browser.signIn.reopen": "Abrir a janela de login",
   "browser.signIn.sending": "Enviando para {server}…",
   "browser.signIn.sent": "Conectado a {site} em {server}",
-  "browser.signIn.notFound": "O CodeBot não encontrou um login para {site}. Entre na janela e selecione Concluído.",
+  "browser.signIn.notFound":
+    "O OpenBot Code não encontrou um login para {site}. Entre na janela e selecione Concluído.",
   "browser.signIn.stillSignedOut": "{server} ainda mostra uma página de login de {site}. Termine o login na janela.",
-  "browser.signIn.failed": "O CodeBot não conseguiu enviar o login.",
+  "browser.signIn.failed": "O OpenBot Code não conseguiu enviar o login.",
   "browser.httpSignIn.title": "Entrar em {site}",
   "browser.httpSignIn.description": "Este site pede o próprio nome de usuário e senha.",
   "browser.httpSignIn.refused": "O site não aceitou este nome de usuário ou esta senha.",
@@ -188,7 +190,7 @@ export const messages = {
   "browser.httpSignIn.submit": "Entrar",
   "browser.profiles.title": "Perfis do navegador",
   "browser.profiles.subtitle":
-    "Cada perfil mantém logins, cookies e dados de sites próprios no computador que executa o CodeBot.",
+    "Cada perfil mantém logins, cookies e dados de sites próprios no computador que executa o OpenBot Code.",
   "browser.profiles.label": "Perfis do navegador",
   "browser.profiles.newName": "Nome do perfil",
   "browser.profiles.create": "Adicionar",
@@ -207,8 +209,8 @@ export const messages = {
   "browser.profiles.deleteDescription":
     "Isso exclui os logins, os cookies e os dados de sites do perfil. As abas abertas dele são fechadas.",
   "browser.profiles.deleteAgents": "Estes agentes passam a usar o perfil compartilhado: {agents}.",
-  "browser.profiles.failed": "O CodeBot não conseguiu alterar os perfis do navegador.",
-  "browser.profiles.loadFailed": "O CodeBot não conseguiu carregar os perfis do navegador.",
+  "browser.profiles.failed": "O OpenBot Code não conseguiu alterar os perfis do navegador.",
+  "browser.profiles.loadFailed": "O OpenBot Code não conseguiu carregar os perfis do navegador.",
   "browser.profiles.tabLabel": "Perfil: {name}",
   "browser.profiles.tabLabelProxy": "Perfil: {name} · Proxy: {proxy}",
   "browser.profiles.agentTabLabel": "Perfil próprio do agente",
@@ -223,7 +225,7 @@ export const messages = {
   "browser.proxies.addTitle": "Adicionar proxy",
   "browser.proxies.editTitle": "Editar {name}",
   "browser.proxies.dialogDescription":
-    "Use socks5, http ou https. Nome de usuário e senha são opcionais em qualquer tipo. A senha fica criptografada no computador que executa o CodeBot.",
+    "Use socks5, http ou https. Nome de usuário e senha são opcionais em qualquer tipo. A senha fica criptografada no computador que executa o OpenBot Code.",
   "browser.proxies.address": "Endereço",
   "browser.proxies.addressPlaceholder": "socks5://user:password@host:1080",
   "browser.proxies.deleteUsed": {
@@ -233,7 +235,7 @@ export const messages = {
   "browser.proxies.deleteUnused": "Nenhum perfil usa este proxy.",
   "browser.proxies.failing": "{name} não responde",
   "browser.proxies.signInRefused": "{name} recusou o início de sessão",
-  "browser.proxies.unsupported": "Este servidor não pode usar proxies. Atualize o CodeBot nesse servidor.",
+  "browser.proxies.unsupported": "Este servidor não pode usar proxies. Atualize o OpenBot Code nesse servidor.",
   "browser.proxies.yourComputer": "Seu computador",
   "browser.proxies.memberComputer": "Computador de {name}",
   "browser.proxies.unknownComputer": "Computador de um membro",
@@ -244,7 +246,7 @@ export const messages = {
   "browser.proxies.offlineBadge": "{name} está offline",
   "browser.proxies.shareTitle": "Compartilhar a conexão deste computador?",
   "browser.proxies.shareDescription":
-    "Os perfis que usam seu computador abrem sites públicos pela conexão de internet deste computador. Isso só funciona enquanto o CodeBot estiver aberto aqui. O servidor não pode abrir endereços da sua rede local.",
+    "Os perfis que usam seu computador abrem sites públicos pela conexão de internet deste computador. Isso só funciona enquanto o OpenBot Code estiver aberto aqui. O servidor não pode abrir endereços da sua rede local.",
   "browser.proxies.share": "Compartilhar",
   "browser.proxies.stopSharing": "Parar de compartilhar",
   "browser.proxies.closesTabs": {

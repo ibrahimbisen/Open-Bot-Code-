@@ -67,7 +67,7 @@ export class BrowserPictureInPicture {
       maximizable: false,
       skipTaskbar: true,
       backgroundColor: windowBackgroundColor(PICTURE_IN_PICTURE_DARK_BACKGROUND),
-      title: "CodeBot Browser",
+      title: "OpenBot Code Browser",
       icon: this.#options.iconPath,
       webPreferences: {
         preload: this.#options.preloadPath,

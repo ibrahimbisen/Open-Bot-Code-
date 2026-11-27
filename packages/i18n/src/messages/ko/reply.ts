@@ -1,4 +1,33 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/reply";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "reply.summary.edited": { other: "파일 {count}개 편집했음" },
+  "reply.summary.ran": { other: "명령 {count}개 실행했음" },
+  "reply.summary.read": { other: "파일 {count}개 읽었음" },
+  "reply.summary.searched": { other: "{count}번 검색했음" },
+  "reply.summary.browsed": { other: "페이지 {count}개 열었음" },
+  "reply.summary.delegated": { other: "작업 {count}개를 넘겼음" },
+  "reply.summary.worked": { other: "다른 도구 {count}개 사용했음" },
+  "reply.details.show": "세부 정보",
+  "reply.details.hide": "세부 정보 숨기기",
+  "reply.details.loading": "세부 정보를 불러오는 중…",
+  "reply.details.input": "입력",
+  "reply.details.output": "출력",
+  "reply.details.shortened": "축약됨",
+  "reply.details.timeline": "타임라인",
+  "reply.code.showAll": "모두 표시({count}줄)",
+  "reply.code.showLess": "적게 표시",
+  "reply.view.title": "답장 보기",
+  "reply.view.description": "간단히는 답변과 작업의 한 줄 요약을 표시합니다. 자세히는 단계도 함께 표시합니다.",
+  "reply.view.short": "간단히",
+  "reply.view.detailed": "자세히",
+  "reply.rule.title": "답장 규칙",
+  "reply.rule.description": "모든 채팅이 이 규칙을 받습니다. 프로젝트는 자체 규칙을 사용할 수 있습니다.",
+  "reply.rule.label": "답장 규칙",
+  "reply.rule.save": "규칙 저장",
+  "reply.rule.reset": "기본 규칙 사용",
+  "reply.rule.saved": "규칙이 저장됨",
+  "reply.rule.empty": "비어 있음: 답장 규칙이 전송되지 않습니다",
+  "reply.rule.count": "{count} / {max}자",
+} as const satisfies PartialTranslation<typeof source>;

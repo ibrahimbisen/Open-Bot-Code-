@@ -7,8 +7,8 @@ export const messages = defineMessages("advanced", {
   "advanced.section.description":
     "Each switch shows or hides a feature on {server}. A feature that is off has no buttons, no settings and no agent tools. Your data stays.",
   "advanced.adminOnly": "Only an owner or an admin of this server can change these switches.",
-  "advanced.loadFailed": "CodeBot could not read the switches of this server.",
-  "advanced.saveFailed": "CodeBot could not save the switch.",
+  "advanced.loadFailed": "OpenBot Code could not read the switches of this server.",
+  "advanced.saveFailed": "OpenBot Code could not save the switch.",
   "advanced.routines.title": "Routines",
   "advanced.routines.description":
     "Scheduled tasks and webhooks. Adds Schedule to the left bar and Routines to the agent settings.",

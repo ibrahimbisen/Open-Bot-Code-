@@ -3,7 +3,7 @@ import type { messages as source } from "../../en/error/crm";
 
 export const messages = {
   "error.crm.serverTooOld":
-    "Deze server ondersteunt het CRM niet. Werk CodeBot bij op de computer waarop de server draait.",
+    "Deze server ondersteunt het CRM niet. Werk OpenBot Code bij op de computer waarop de server draait.",
   "error.crm.tooLargeToSend": "Deze CRM-pagina is te groot om naar deze client te sturen.",
   "error.crm.customerMissing": "Deze klant bestaat niet meer.",
   "error.crm.planMissing": "Dit abonnement bestaat niet meer.",
@@ -39,10 +39,10 @@ export const messages = {
   "error.crm.sourcePermission":
     "Deze sleutel kan geen klanten, facturen, abonnementen, gebeurtenissen en producten lezen. Geef hem leestoegang daartoe.",
   "error.crm.sourceRateLimited": "Stripe kreeg te veel verzoeken. Probeer het over een minuut opnieuw.",
-  "error.crm.sourceNetwork": "CodeBot kan geen verbinding maken met Stripe. Controleer de internetverbinding.",
-  "error.crm.sourceFailed": "Stripe stuurde een antwoord dat CodeBot niet kan lezen. Probeer het later opnieuw.",
-  "error.crm.sourceKeySaveFailed": "CodeBot kan de Stripe-sleutel niet op deze computer opslaan.",
+  "error.crm.sourceNetwork": "OpenBot Code kan geen verbinding maken met Stripe. Controleer de internetverbinding.",
+  "error.crm.sourceFailed": "Stripe stuurde een antwoord dat OpenBot Code niet kan lezen. Probeer het later opnieuw.",
+  "error.crm.sourceKeySaveFailed": "OpenBot Code kan de Stripe-sleutel niet op deze computer opslaan.",
   "error.crm.off":
     "Het CRM staat uit. Een eigenaar of beheerder kan het aanzetten in Serverinstellingen > Experimenteel.",
-  "error.crm.settingsSaveFailed": "CodeBot kan de CRM-instelling op deze server niet opslaan.",
+  "error.crm.settingsSaveFailed": "OpenBot Code kan de CRM-instelling op deze server niet opslaan.",
 } as const satisfies PartialTranslation<typeof source>;

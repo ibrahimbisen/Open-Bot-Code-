@@ -2,13 +2,13 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/team";
 
 export const messages = {
-  "error.team.ownerNotLinked": "Deze host is niet gekoppeld aan een CodeBot-eigenaarsaccount.",
-  "error.team.ownerEmailRequired": "Log in met het CodeBot-e-mailadres waarmee deze host is gemaakt.",
+  "error.team.ownerNotLinked": "Deze host is niet gekoppeld aan een OpenBot Code-eigenaarsaccount.",
+  "error.team.ownerEmailRequired": "Log in met het OpenBot Code-e-mailadres waarmee deze host is gemaakt.",
   "error.team.hostNotConfigured": "De teamhost is niet geconfigureerd.",
   "error.team.alreadyConfigured": "De teamserver is al geconfigureerd.",
   "error.team.identityCreateFailed": "De teamidentiteit kon niet worden gemaakt.",
   "error.team.accountChangedDuringCreate": "Het ingelogde account is gewijzigd terwijl deze server werd gemaakt.",
-  "error.team.notConfigured": "Deze CodeBot is niet geconfigureerd.",
+  "error.team.notConfigured": "Deze OpenBot Code is niet geconfigureerd.",
   "error.team.keyRotationMissing": "Er wacht geen wijziging van de serversleutel.",
   "error.team.serverNotActive": "Deze server is niet meer de actieve server voor het ingelogde account.",
   "error.team.logoInvalid": "Kies een geldige PNG-, JPEG- of WebP-afbeelding van maximaal 512 KB.",
@@ -22,9 +22,9 @@ export const messages = {
   "error.team.inviteEmailMismatch": "Deze uitnodiging hoort bij een ander e-mailadres.",
   "error.team.memberDisabled": "Dit teamlid is uitgeschakeld.",
   "error.team.memberLimit": "Een host kan maximaal {limit} leden hebben.",
-  "error.team.accountNotMember": "Dit CodeBot-account is geen lid van het team.",
+  "error.team.accountNotMember": "Dit OpenBot Code-account is geen lid van het team.",
   "error.team.usernameTaken": "Deze gebruikersnaam is al in gebruik.",
-  "error.team.inviteRequiresAccount": "Voor deze uitnodiging is een geverifieerd CodeBot-account nodig.",
+  "error.team.inviteRequiresAccount": "Voor deze uitnodiging is een geverifieerd OpenBot Code-account nodig.",
   "error.team.loginIncorrect": "De gebruikersnaam of het wachtwoord is onjuist.",
   "error.team.currentPasswordIncorrect": "Het huidige wachtwoord is onjuist.",
   "error.team.memberNotFound": "Teamlid niet gevonden.",
@@ -46,22 +46,22 @@ export const messages = {
     "De gebruikersnaam moet 3 tot 32 letters, cijfers, punten, streepjes of underscores bevatten.",
   "error.team.passwordLength": "Het wachtwoord moet 12 tot 256 tekens bevatten.",
   "error.team.bindFailed": "Kan de team-API niet binden.",
-  "error.team.signInRequired": "Inloggen bij CodeBot is verplicht.",
+  "error.team.signInRequired": "Inloggen bij OpenBot Code is verplicht.",
   "error.team.authenticationRequired": "Verificatie is verplicht.",
   "error.team.agentNotFound": "Agent niet gevonden.",
   "error.team.routeNotFound": "Route niet gevonden.",
   "error.team.requestFailed": "Verzoek mislukt.",
   "error.team.tooManySignInAttempts": "Te veel inlogpogingen. Probeer het later opnieuw.",
-  "error.team.clientUpdateRequired": "Werk deze CodeBot-client bij voordat je verbinding maakt met deze host.",
-  "error.team.hostUpdateRequired": "Werk CodeBot bij op de host voordat je verbinding maakt.",
-  "error.team.serverSafeMode": "Deze server staat in de veilige modus, omdat CodeBot er niet start.",
+  "error.team.clientUpdateRequired": "Werk deze OpenBot Code-client bij voordat je verbinding maakt met deze host.",
+  "error.team.hostUpdateRequired": "Werk OpenBot Code bij op de host voordat je verbinding maakt.",
+  "error.team.serverSafeMode": "Deze server staat in de veilige modus, omdat OpenBot Code er niet start.",
   "error.team.serverSafeModeNewerDatabase":
-    "CodeBot {version} op deze server kan de gegevens niet openen, omdat een nieuwere CodeBot-versie ze heeft opgeslagen. Een nieuwere CodeBot-release op de server lost dit op.",
+    "OpenBot Code {version} op deze server kan de gegevens niet openen, omdat een nieuwere OpenBot Code-versie ze heeft opgeslagen. Een nieuwere OpenBot Code-release op de server lost dit op.",
   "error.team.serverSafeModeStartFailed":
-    "CodeBot {version} op deze server is gestopt nadat het starten vaak is mislukt. Een nieuwere CodeBot-release op de server lost dit op.",
+    "OpenBot Code {version} op deze server is gestopt nadat het starten vaak is mislukt. Een nieuwere OpenBot Code-release op de server lost dit op.",
   "error.team.sidebarLayoutUnavailable": "De indeling van de zijbalk is niet beschikbaar.",
   "error.team.providersUnsupported": "Deze verbinding ondersteunt geen instellingen voor aanbieders.",
-  "error.team.providerNotManaged": "CodeBot beheert de CLI van deze aanbieder niet.",
+  "error.team.providerNotManaged": "OpenBot Code beheert de CLI van deze aanbieder niet.",
   "error.team.channelsUnsupported": "Deze verbinding ondersteunt geen kanaalchats.",
   "error.team.channelContextUnsupported":
     "Deze verbinding ondersteunt geen nieuw gesprek of comprimeren in een kanaal.",
@@ -97,9 +97,9 @@ export const messages = {
   "error.team.libraryFoldersUnsupported": "Deze verbinding ondersteunt geen bibliotheekmappen.",
   "error.team.workflowFoldersUnsupported": "Deze verbinding ondersteunt geen workflowmappen.",
   "error.team.agentNotificationLevelsUnsupported":
-    "Deze server kan geen eigen meldingsniveau per agent bewaren. Werk CodeBot bij op de computer waarop de server draait.",
+    "Deze server kan geen eigen meldingsniveau per agent bewaren. Werk OpenBot Code bij op de computer waarop de server draait.",
   "error.team.sidebarPinsUnsupported":
-    "Deze server kan je vastgezette chats niet voor al je apparaten bewaren. Werk CodeBot bij op de computer waarop hij draait.",
+    "Deze server kan je vastgezette chats niet voor al je apparaten bewaren. Werk OpenBot Code bij op de computer waarop hij draait.",
   "error.team.agentInstructionsUnsupported": "Deze verbinding ondersteunt het bewerken van agentinstructies niet.",
   "error.team.agentPublishUnsupported": "Deze verbinding ondersteunt het publiceren van agents niet.",
   "error.team.agentUpdateUnsupported": "Deze verbinding ondersteunt het bijwerken van agents niet.",
@@ -111,9 +111,9 @@ export const messages = {
   "error.team.threadMessageSearchUnsupported": "Deze verbinding ondersteunt het zoeken in zijthreads niet.",
   "error.team.sideQuestionUnsupported": "Deze verbinding ondersteunt geen zijvragen.",
   "error.team.liveVoiceUnsupported":
-    "Deze server ondersteunt geen Codex live spraak. Werk CodeBot bij op de computer waarop de server draait.",
+    "Deze server ondersteunt geen Codex live spraak. Werk OpenBot Code bij op de computer waarop de server draait.",
   "error.team.routineFlowsUnsupported":
-    "Deze server ondersteunt geen routineflows. Werk CodeBot bij op de computer waarop de server draait.",
+    "Deze server ondersteunt geen routineflows. Werk OpenBot Code bij op de computer waarop de server draait.",
   "error.team.routineCanvasTooLarge":
     "Dit routinecanvas is te groot om naar dit apparaat te sturen. Maak de instructies van de routine korter op de computer waarop de server draait.",
   "error.team.conversationPageTooLarge":
@@ -165,9 +165,9 @@ export const messages = {
   "error.team.browserSessionNotFound": "Sessie van de browserweergave niet gevonden.",
   "error.team.mcpUnsupported": "Deze verbinding ondersteunt geen MCP-servers.",
   "error.team.mcpServerListNeedsUpdate":
-    "Werk CodeBot op dit apparaat bij om meer dan {limit} MCP-servers op deze server te gebruiken.",
+    "Werk OpenBot Code op dit apparaat bij om meer dan {limit} MCP-servers op deze server te gebruiken.",
   "error.team.providerAccountListNeedsUpdate":
-    "Werk CodeBot op dit apparaat bij om meer dan {limit} accounts van één provider op deze server te gebruiken.",
+    "Werk OpenBot Code op dit apparaat bij om meer dan {limit} accounts van één provider op deze server te gebruiken.",
   "error.team.storageUnsupported": "Deze verbinding ondersteunt geen opslag.",
   "error.team.machineResourcesUnsupported": "Deze verbinding ondersteunt geen machinegebruik.",
   "error.team.machineAlertMemberInvalid":
@@ -195,13 +195,13 @@ export const messages = {
     "Alleen de persoon die deze MCP-server heeft toegevoegd, of een beheerder, kan hem wijzigen.",
   "error.team.ownerRequired": "Alleen de eigenaar van deze server kan dit doen.",
   "error.team.requestTooLarge": "De inhoud van het verzoek is te groot.",
-  "error.team.signInRelayUnsupported": "Deze server kan geen inlogs doorgeven. Werk CodeBot bij op de host.",
+  "error.team.signInRelayUnsupported": "Deze server kan geen inlogs doorgeven. Werk OpenBot Code bij op de host.",
   "error.team.connectorsUnsupported":
-    "Deze server kan de verbindingen niet vanaf hier beheren. Werk CodeBot bij op de host.",
-  "error.team.vaultUnsupported": "Deze server kan zijn kluis niet vanaf hier openen. Werk CodeBot bij op de host.",
+    "Deze server kan de verbindingen niet vanaf hier beheren. Werk OpenBot Code bij op de host.",
+  "error.team.vaultUnsupported": "Deze server kan zijn kluis niet vanaf hier openen. Werk OpenBot Code bij op de host.",
   "error.team.vaultResetReadable": "De kluis op deze server is leesbaar en is daarom niet gereset.",
-  "error.team.discordAccessUnsupported": "Deze server kan geen Discord-rollen instellen. Werk CodeBot erop bij.",
-  "error.team.connectorPageRefused": "De server stuurde een pagina die CodeBot niet opent.",
+  "error.team.discordAccessUnsupported": "Deze server kan geen Discord-rollen instellen. Werk OpenBot Code erop bij.",
+  "error.team.connectorPageRefused": "De server stuurde een pagina die OpenBot Code niet opent.",
   "error.team.signInRelayUnknown": "Deze inlog is afgelopen of bestaat niet.",
   "error.team.signInRelayUsed": "Deze inlog is al verstuurd.",
   "error.team.signInRelayMismatch": "Dit adres hoort niet bij deze inlog.",

@@ -13,7 +13,7 @@ import {
   rememberExtensionAllowed,
 } from "./web-extension-connect";
 
-const PRODUCT_NAME = "CodeBot";
+const PRODUCT_NAME = "OpenBot Code";
 
 interface WebExtensionConnectProps {
   variant: AppVariant;

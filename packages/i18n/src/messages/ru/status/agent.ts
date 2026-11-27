@@ -27,7 +27,7 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Сделать снимок главного экрана и отправить изображение модели агента.",
   "status.agent.screenCaptureChannel":
     "Изображение появится в канале {channel}, и его увидит каждый участник этого сервера, который читает канал.",
-  "status.agent.screenCapturePermissionNext": "Затем macOS может попросить вас разрешить CodeBot запись экрана.",
+  "status.agent.screenCapturePermissionNext": "Затем macOS может попросить вас разрешить OpenBot Code запись экрана.",
   "status.agent.screenCaptureDisplay": "Сделать снимок дисплея {name} и отправить изображение модели агента.",
   "status.agent.screenCaptureWindow": "Сделать снимок окна {name} и отправить изображение модели агента.",
   "status.agent.screenCaptureRegion":
@@ -39,7 +39,7 @@ export const messages = {
   "status.agent.sendIdea": "Это станет публичным issue на GitHub. Ваше имя не показывается.",
   "status.agent.feedbackRecentErrors": "Последние ошибки в чате:",
   "status.agent.feedbackSameAs": "Добавляется к issue #{issue}",
-  "status.agent.feedbackSent": "Отправлено команде CodeBot: {title}",
+  "status.agent.feedbackSent": "Отправлено команде OpenBot Code: {title}",
   "status.agent.feedbackWithdrawn": "Удалено с GitHub: {title}",
   "status.agent.feedbackWithdrawCommand": "Удалить отчёт #{issue} с GitHub",
   "status.agent.feedbackWithdrawReason":
@@ -47,15 +47,15 @@ export const messages = {
   "status.agent.feedbackWithdrawing": "Удаление отчёта с GitHub…",
   "status.agent.browserProfileNamed":
     "Перенести {agents} в профиль браузера {profile}. Они получат его входы в аккаунты и файлы cookie. Их открытые вкладки закроются.",
-  "status.agent.commitCoAuthorOff": "Больше не добавлять CodeBot как соавтора в коммиты всех агентов.",
-  "status.agent.commitCoAuthorOn": "Снова добавлять CodeBot как соавтора в коммиты всех агентов.",
+  "status.agent.commitCoAuthorOff": "Больше не добавлять OpenBot Code как соавтора в коммиты всех агентов.",
+  "status.agent.commitCoAuthorOn": "Снова добавлять OpenBot Code как соавтора в коммиты всех агентов.",
   "status.agent.browserProfileNew":
     "Создать новый профиль браузера {profile} и перенести в него {agents}. В нём нет входов в аккаунты. Их открытые вкладки закроются.",
   "status.agent.browserProfileShared":
     "Перенести {agents} в общий профиль браузера. Они получат его входы в аккаунты и файлы cookie. Их открытые вкладки закроются.",
   "status.agent.browserProfileOwn":
     "Дать каждому из {agents} собственный профиль браузера. Их открытые вкладки закроются.",
-  "status.agent.feedbackSending": "Отправка отзыва команде CodeBot…",
+  "status.agent.feedbackSending": "Отправка отзыва команде OpenBot Code…",
   "status.agent.workflowDelete":
     "Удалить рабочий процесс {title} вместе с его запусками и версиями. Его открытые шаги остановятся.",
   "status.agent.deleteAgents": "Удалить {agents} вместе с их чатами и файлами. Это нельзя отменить.",

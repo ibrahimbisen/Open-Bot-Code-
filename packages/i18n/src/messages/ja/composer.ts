@@ -75,12 +75,12 @@ export const messages = {
   "composer.voice.transcribing": "音声プロンプトを文字起こししています",
   "composer.voice.start": "音声でプロンプトを作成",
   "composer.voice.blocked":
-    "マイクへのアクセスがブロックされています。システム設定で CodeBot にマイクの使用を許可してください。",
+    "マイクへのアクセスがブロックされています。システム設定で OpenBot Code にマイクの使用を許可してください。",
   "composer.voice.noMicrophone": "使用できるマイクがありません。",
-  "composer.voice.startFailed": "CodeBot は音声の録音を開始できませんでした。",
+  "composer.voice.startFailed": "OpenBot Code は音声の録音を開始できませんでした。",
   "composer.voice.microphoneUnavailable":
-    "CodeBot はマイクを開けませんでした。マイクを使用している他のアプリを閉じ、マイクが接続され、システム設定で許可されていることを確認してから、もう一度お試しください。",
-  "composer.voice.transcribeFailed": "CodeBot はこの録音を文字起こしできませんでした。",
+    "OpenBot Code はマイクを開けませんでした。マイクを使用している他のアプリを閉じ、マイクが接続され、システム設定で許可されていることを確認してから、もう一度お試しください。",
+  "composer.voice.transcribeFailed": "OpenBot Code はこの録音を文字起こしできませんでした。",
   "composer.reply.toYou": "あなたのメッセージに返信しています",
   "composer.reply.toAgent": "エージェントに返信しています",
   "composer.reply.attachment": "添付ファイル",

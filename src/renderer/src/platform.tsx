@@ -28,7 +28,7 @@ const Platform = createSimpleContext({
           })
           .catch(() =>
             setAppInfo({
-              name: "CodeBot",
+              name: "OpenBot Code",
               version: "unavailable",
               platform: "darwin",
               variant: "production",

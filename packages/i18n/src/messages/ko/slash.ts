@@ -1,4 +1,36 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "명령",
+  "slash.picker.option": "명령 /{name}",
+  "slash.picker.none": "엔진이 아직 명령을 보고하지 않았습니다. OpenBot Code는 엔진이 시작될 때 명령을 읽습니다.",
+  "slash.picker.noMatch": "“{query}”와(과) 일치하는 명령이 없습니다.",
+  "slash.badge.project": "프로젝트",
+  "slash.badge.user": "사용자",
+  "slash.badge.plugin": "플러그인",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "스킬",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "터미널 전용",
+  "slash.screen.close": "닫기",
+  "slash.screen.loading": "불러오는 중…",
+  "slash.model.title": "모델 선택",
+  "slash.model.description": "{name}은(는) 다음 메시지부터 이 모델을 사용합니다.",
+  "slash.model.empty": "이 에이전트에 사용할 수 있는 모델이 없습니다.",
+  "slash.model.failed": "모델이 변경되지 않았습니다.",
+  "slash.effort.title": "사고 수준",
+  "slash.effort.description": "{name}이(가) 답하기 전에 얼마나 생각하는지 설정합니다.",
+  "slash.effort.unsupported": "이 에이전트의 모델에는 사고 수준이 없습니다.",
+  "slash.effort.failed": "사고 수준이 변경되지 않았습니다.",
+  "slash.resume.title": "채팅 다시 시작",
+  "slash.resume.description": "엔진이 {name}의 폴더에 저장한 채팅입니다. 다시 시작한 채팅은 새 채팅으로 열립니다.",
+  "slash.resume.empty": "이 폴더에 대해 엔진에 저장된 채팅이 없습니다.",
+  "slash.resume.failed": "OpenBot Code가 저장된 채팅을 읽을 수 없었습니다.",
+  "slash.resume.retry": "다시 시도",
+  "slash.resume.inUse": "OpenBot Code에서 열려 있음",
+  "slash.resume.untitled": "제목 없는 채팅",
+  "slash.resume.branch": "브랜치 {name}",
+  "slash.resume.updated": "{time}에 업데이트됨",
+  "slash.resume.openFailed": "채팅이 열리지 않았습니다.",
+} as const satisfies PartialTranslation<typeof source>;

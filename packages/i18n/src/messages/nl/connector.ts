@@ -16,11 +16,11 @@ export const messages = {
   "connector.github.connectedAs": "Verbonden als @{login}",
   "connector.github.repositoriesTitle": "Repository’s",
   "connector.github.repositoriesDescription":
-    "Agents kunnen alleen de repository’s gebruiken waarop de CodeBot GitHub App is geïnstalleerd.",
+    "Agents kunnen alleen de repository’s gebruiken waarop de OpenBot Code GitHub App is geïnstalleerd.",
   "connector.github.chooseRepositories": "Kies repository’s",
   "connector.github.repositoriesLoading": "Repository’s van GitHub lezen",
-  "connector.github.repositoriesFailed": "CodeBot kan de repository’s van GitHub niet lezen.",
-  "connector.github.noRepositories": "De CodeBot GitHub App is nog op geen enkele repository geïnstalleerd.",
+  "connector.github.repositoriesFailed": "OpenBot Code kan de repository’s van GitHub niet lezen.",
+  "connector.github.noRepositories": "De OpenBot Code GitHub App is nog op geen enkele repository geïnstalleerd.",
   "connector.github.moreRepositories": { one: "En nog {count} repository", other: "En nog {count} repository’s" },
   "connector.github.private": "Privé",
   "connector.github.disconnect": "Verbreken",
@@ -29,7 +29,7 @@ export const messages = {
   "connector.github.expiredTitle": "De GitHub-verbinding is verlopen",
   "connector.github.expiredDescription": "Verbind opnieuw als @{login} om agents weer GitHub te geven.",
   "connector.github.reconnect": "Opnieuw verbinden",
-  "connector.github.actionFailed": "CodeBot kan de GitHub-verbinding niet wijzigen.",
+  "connector.github.actionFailed": "OpenBot Code kan de GitHub-verbinding niet wijzigen.",
   "connector.github.statusConnected": "Verbonden",
   "connector.github.statusConnecting": "Verbinden",
   "connector.github.statusExpired": "Verlopen",
@@ -39,7 +39,7 @@ export const messages = {
   "connector.github.noMatch": "Geen repository komt overeen met “{query}”.",
   "connector.github.stepSignIn": "Inloggen",
   "connector.github.stepConnected": "Verbonden",
-  "connector.github.requestingCode": "CodeBot vraagt GitHub om een code.",
+  "connector.github.requestingCode": "OpenBot Code vraagt GitHub om een code.",
   "connector.github.codeLabel": "Code {code}",
   "connector.github.failedTitle": "GitHub is niet verbonden",
   "connector.github.cancelConnecting": "Verbinden met GitHub annuleren",
@@ -53,7 +53,7 @@ export const messages = {
   "connector.github.disconnectConfirmDescription":
     "Loskoppelen verwijdert de aanmelding van @{login} van deze computer.",
   "connector.github.disconnectEffectTools": "Elke agent verliest de GitHub-tools, gh en git.",
-  "connector.github.disconnectEffectRevoke": "Daarna opent GitHub, waar je CodeBot kunt intrekken.",
+  "connector.github.disconnectEffectRevoke": "Daarna opent GitHub, waar je OpenBot Code kunt intrekken.",
   "connector.github.disconnectEffectKept": "Chats, bestanden en het geheugen van agents blijven op deze computer.",
   "connector.github.descriptionHost":
     "Elke agent op {host} kan je GitHub-repository’s, issues en pull requests gebruiken, en gh en git.",
@@ -67,7 +67,7 @@ export const messages = {
   "connector.github.close": "Sluiten",
   "connector.dangerZone": "Gevarenzone",
   "connector.statusUnknown": "Onbekend",
-  "connector.readFailed": "CodeBot kan de status van deze verbinding niet lezen.",
+  "connector.readFailed": "OpenBot Code kan de status van deze verbinding niet lezen.",
 
   "connector.slack.title": "Slack",
   "connector.slack.description":
@@ -91,10 +91,10 @@ export const messages = {
   "connector.slack.disconnectAllSummary":
     "Elke werkruimte wordt losgekoppeld. Mensen kunnen je agents niet meer bereiken via @CodeBot.",
   "connector.slack.disconnectAllSummaryOrchestrator":
-    "Elke werkruimte wordt losgekoppeld. De Slack Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+    "Elke werkruimte wordt losgekoppeld. De Slack Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.slack.missingScopes":
-    "CodeBot heeft deze machtigingen in Slack niet: {scopes}. Koppel de werkruimte los en verbind hem daarna opnieuw.",
-  "connector.slack.retryAt": "Slack vroeg CodeBot te wachten. Het probeert het opnieuw om {time}.",
+    "OpenBot Code heeft deze machtigingen in Slack niet: {scopes}. Koppel de werkruimte los en verbind hem daarna opnieuw.",
+  "connector.slack.retryAt": "Slack vroeg OpenBot Code te wachten. Het probeert het opnieuw om {time}.",
   "connector.slack.reconnect": "Opnieuw verbinden",
   "connector.slack.pause": "Pauzeren",
   "connector.slack.resume": "Hervatten",
@@ -105,12 +105,12 @@ export const messages = {
   "connector.slack.orchestratorNone": "Nog geen agent antwoordt",
   "connector.slack.orchestratorNoneDescription": "Voeg de Slack Orchestrator toe, anders krijgt Slack geen antwoord.",
   "connector.slack.inviteNote":
-    "CodeBot wordt zelf lid van elk openbaar kanaal, ook van elk nieuw kanaal. Nodig het uit voor een privékanaal: /invite @CodeBot.",
+    "OpenBot Code wordt zelf lid van elk openbaar kanaal, ook van elk nieuw kanaal. Nodig het uit voor een privékanaal: /invite @CodeBot.",
   "connector.slack.stepWorkspace": "Werkruimte",
   "connector.slack.stepAgent": "Agent",
   "connector.slack.connectTitle": "Verbind een Slack-werkruimte",
   "connector.slack.connectDescription":
-    "CodeBot installeert één app in de werkruimte, met de naam CodeBot, en die wordt lid van elk openbaar kanaal.",
+    "OpenBot Code installeert één app in de werkruimte, met de naam OpenBot Code, en die wordt lid van elk openbaar kanaal.",
   "connector.slack.connectStepBrowser": "Slack opent in je browser",
   "connector.slack.connectStepAllow": "Kies rechtsboven de werkruimte en daarna Toestaan",
   "connector.slack.connectStepReturn": "Dit venster gaat verder als Slack klaar is",
@@ -125,17 +125,17 @@ export const messages = {
   "connector.slack.orchestratorDoesDelegate": "Geeft elke taak aan de agent die het best past",
   "connector.slack.orchestratorDoesAnswer": "Plaatst het antwoord in de Slack-thread",
   "connector.slack.orchestratorModel": "Model",
-  "connector.slack.doneTitle": "CodeBot zit in {workspace}",
+  "connector.slack.doneTitle": "OpenBot Code zit in {workspace}",
   "connector.slack.doneDescription": "Noem @CodeBot in een openbaar kanaal, of stuur het een direct bericht.",
   "connector.slack.done": "Klaar",
   "connector.slack.disconnectTitle": "{workspace} loskoppelen?",
   "connector.slack.disconnectDescription":
-    "CodeBot antwoordt niet meer in {workspace} en verwijdert zijn Slack-token van deze computer.",
+    "OpenBot Code antwoordt niet meer in {workspace} en verwijdert zijn Slack-token van deze computer.",
   "connector.slack.disconnectDescriptionHost":
-    "CodeBot antwoordt niet meer in {workspace} en verwijdert zijn Slack-token van {host}.",
+    "OpenBot Code antwoordt niet meer in {workspace} en verwijdert zijn Slack-token van {host}.",
   "connector.slack.disconnectEffect": "Mensen in {workspace} kunnen je agents niet meer bereiken via @CodeBot.",
-  "connector.slack.removeEffectKept": "De gesprekken en de Slack Orchestrator blijven in CodeBot.",
-  "connector.slack.removeEffectDeleted": "De Slack Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+  "connector.slack.removeEffectKept": "De gesprekken en de Slack Orchestrator blijven in OpenBot Code.",
+  "connector.slack.removeEffectDeleted": "De Slack Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.slack.keep": "Verbonden houden",
   "connector.slack.close": "Sluiten",
   "connector.slack.addWorkspace": "Werkruimte toevoegen",
@@ -164,16 +164,16 @@ export const messages = {
   "connector.discord.addAgent": "Agent toevoegen",
   "connector.discord.actionFailed": "Discord heeft de wijziging niet geaccepteerd",
   "connector.discord.workspaceTitle": "Discord-servers",
-  "connector.discord.workspaceDescription": "Noem @CodeBot in een kanaal. Antwoord op CodeBot om verder te gaan.",
+  "connector.discord.workspaceDescription": "Noem @CodeBot in een kanaal. Antwoord op OpenBot Code om verder te gaan.",
   "connector.discord.disconnectWorkspace": "Verbreken",
   "connector.discord.disconnectAllTitle": "Discord loskoppelen",
   "connector.discord.disconnectAllSummary":
     "Elke Discord-server wordt losgekoppeld. Mensen kunnen je agents niet meer bereiken via @CodeBot.",
   "connector.discord.disconnectAllSummaryOrchestrator":
-    "Elke Discord-server wordt losgekoppeld. De Discord Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+    "Elke Discord-server wordt losgekoppeld. De Discord Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.discord.missingScopes":
-    "CodeBot heeft deze machtigingen in Discord niet: {scopes}. Koppel de Discord-server los en verbind hem daarna opnieuw.",
-  "connector.discord.retryAt": "Discord vroeg CodeBot te wachten. Het probeert het opnieuw om {time}.",
+    "OpenBot Code heeft deze machtigingen in Discord niet: {scopes}. Koppel de Discord-server los en verbind hem daarna opnieuw.",
+  "connector.discord.retryAt": "Discord vroeg OpenBot Code te wachten. Het probeert het opnieuw om {time}.",
   "connector.discord.reconnect": "Opnieuw verbinden",
   "connector.discord.pause": "Pauzeren",
   "connector.discord.resume": "Hervatten",
@@ -184,11 +184,12 @@ export const messages = {
   "connector.discord.orchestratorNone": "Nog geen agent antwoordt",
   "connector.discord.orchestratorNoneDescription":
     "Voeg de Discord Orchestrator toe, anders krijgt Discord geen antwoord.",
-  "connector.discord.channelsNote": "CodeBot ziet de kanalen die zijn rol kan bekijken.",
+  "connector.discord.channelsNote": "OpenBot Code ziet de kanalen die zijn rol kan bekijken.",
   "connector.discord.stepWorkspace": "Discord-server",
   "connector.discord.stepAgent": "Agent",
   "connector.discord.connectTitle": "Verbind een Discord-server",
-  "connector.discord.connectDescription": "CodeBot voegt één bot, met de naam CodeBot, toe aan de Discord-server.",
+  "connector.discord.connectDescription":
+    "OpenBot Code voegt één bot, met de naam OpenBot Code, toe aan de Discord-server.",
   "connector.discord.connectStepBrowser": "Discord opent in je browser",
   "connector.discord.connectStepAllow": "Kies de server en daarna Autoriseren",
   "connector.discord.connectStepReturn": "Dit venster gaat verder als Discord klaar is",
@@ -203,17 +204,18 @@ export const messages = {
   "connector.discord.orchestratorDoesDelegate": "Geeft elke taak aan de agent die het best past",
   "connector.discord.orchestratorDoesAnswer": "Antwoordt in het Discord-kanaal",
   "connector.discord.orchestratorModel": "Model",
-  "connector.discord.doneTitle": "CodeBot zit in {workspace}",
-  "connector.discord.doneDescription": "Noem @CodeBot in een kanaal. Antwoord op CodeBot om verder te gaan.",
+  "connector.discord.doneTitle": "OpenBot Code zit in {workspace}",
+  "connector.discord.doneDescription": "Noem @CodeBot in een kanaal. Antwoord op OpenBot Code om verder te gaan.",
   "connector.discord.done": "Klaar",
   "connector.discord.disconnectTitle": "{workspace} loskoppelen?",
   "connector.discord.disconnectDescription":
-    "CodeBot antwoordt niet meer in {workspace} en verwijdert de Discord-verbinding van deze computer.",
+    "OpenBot Code antwoordt niet meer in {workspace} en verwijdert de Discord-verbinding van deze computer.",
   "connector.discord.disconnectDescriptionHost":
-    "CodeBot antwoordt niet meer in {workspace} en verwijdert de Discord-verbinding van {host}.",
+    "OpenBot Code antwoordt niet meer in {workspace} en verwijdert de Discord-verbinding van {host}.",
   "connector.discord.disconnectEffect": "Mensen in {workspace} kunnen je agents niet meer bereiken via @CodeBot.",
-  "connector.discord.removeEffectKept": "De gesprekken en de Discord Orchestrator blijven in CodeBot.",
-  "connector.discord.removeEffectDeleted": "De Discord Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+  "connector.discord.removeEffectKept": "De gesprekken en de Discord Orchestrator blijven in OpenBot Code.",
+  "connector.discord.removeEffectDeleted":
+    "De Discord Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.discord.keep": "Verbonden houden",
   "connector.discord.close": "Sluiten",
   "connector.discord.addWorkspace": "Discord-server toevoegen",
@@ -225,25 +227,26 @@ export const messages = {
     one: "{count} Discord-server · Discord Orchestrator antwoordt",
     other: "{count} Discord-servers · Discord Orchestrator antwoordt",
   },
-  "connector.discord.accessTitle": "Wie CodeBot kan gebruiken",
-  "connector.discord.accessDescription": "CodeBot antwoordt alleen deze mensen. Het negeert vermeldingen van anderen.",
+  "connector.discord.accessTitle": "Wie OpenBot Code kan gebruiken",
+  "connector.discord.accessDescription":
+    "OpenBot Code antwoordt alleen deze mensen. Het negeert vermeldingen van anderen.",
   "connector.discord.accessEveryone": "Iedereen op de server",
   "connector.discord.accessEveryoneDescription":
-    "Iedereen die kan posten in een kanaal dat CodeBot ziet, kan het noemen.",
+    "Iedereen die kan posten in een kanaal dat OpenBot Code ziet, kan het noemen.",
   "connector.discord.accessRoles": "Leden met {roles}",
   "connector.discord.accessChoose": "Kies rollen",
-  "connector.discord.accessDialogTitle": "Wie kan CodeBot gebruiken in {workspace}?",
-  "connector.discord.accessDialogDescription": "Als er geen rol is gekozen, kan iedereen CodeBot noemen.",
+  "connector.discord.accessDialogTitle": "Wie kan OpenBot Code gebruiken in {workspace}?",
+  "connector.discord.accessDialogDescription": "Als er geen rol is gekozen, kan iedereen OpenBot Code noemen.",
   "connector.discord.accessLoading": "Rollen laden…",
   "connector.discord.accessLoadFailed": "Discord-rollen zijn niet geladen",
   "connector.discord.accessNoRoles": "Deze Discord-server heeft geen rollen om te kiezen.",
   "connector.discord.accessRoleDeleted": "{role} (verwijderd)",
   "connector.discord.accessSave": "Opslaan",
-  "connector.discord.accessHostUpdate": "Werk CodeBot bij op {host} om rollen te kiezen.",
+  "connector.discord.accessHostUpdate": "Werk OpenBot Code bij op {host} om rollen te kiezen.",
 
   "connector.telegram.title": "Telegram",
   "connector.telegram.description":
-    "Voeg de CodeBot-bot toe aan een Telegram-groep of open een directe chat ermee. De Telegram Orchestrator vraagt de juiste agent en antwoordt.",
+    "Voeg de OpenBot Code-bot toe aan een Telegram-groep of open een directe chat ermee. De Telegram Orchestrator vraagt de juiste agent en antwoordt.",
   "connector.telegram.statusConnected": "Verbonden",
   "connector.telegram.statusAttention": "Aandacht nodig",
   "connector.telegram.summaryConnected": {
@@ -266,31 +269,31 @@ export const messages = {
   "connector.telegram.groupDescription": "Mensen noemen de bot of antwoorden op zijn berichten.",
   "connector.telegram.directDescription": "Elk bericht in deze chat gaat naar de Telegram Orchestrator.",
   "connector.telegram.helpRemoved":
-    "De CodeBot-bot zit niet meer in deze chat. Koppel de chat los en voeg de bot daarna opnieuw toe.",
+    "De OpenBot Code-bot zit niet meer in deze chat. Koppel de chat los en voeg de bot daarna opnieuw toe.",
   "connector.telegram.helpRelayUnavailable":
-    "CodeBot kan op deze computer geen Telegram-berichten ontvangen. Log in, geef deze computer een naam in Serverinstellingen en houd CodeBot open.",
+    "OpenBot Code kan op deze computer geen Telegram-berichten ontvangen. Log in, geef deze computer een naam in Serverinstellingen en houd OpenBot Code open.",
   "connector.telegram.helpRelayUnavailableHost":
-    "CodeBot op {host} kan geen Telegram-berichten ontvangen. Log op {host} in, geef de server een naam in Serverinstellingen en houd CodeBot open.",
-  "connector.telegram.helpError": "CodeBot kan deze chat niet bereiken. Verbind opnieuw of koppel de chat los.",
+    "OpenBot Code op {host} kan geen Telegram-berichten ontvangen. Log op {host} in, geef de server een naam in Serverinstellingen en houd OpenBot Code open.",
+  "connector.telegram.helpError": "OpenBot Code kan deze chat niet bereiken. Verbind opnieuw of koppel de chat los.",
   "connector.telegram.helpNotLinked":
     "Deze chat is niet gekoppeld aan deze server. Kies Opnieuw verbinden om hem te koppelen.",
-  "connector.telegram.retryAt": "Telegram vroeg CodeBot te wachten. Het probeert het opnieuw om {time}.",
+  "connector.telegram.retryAt": "Telegram vroeg OpenBot Code te wachten. Het probeert het opnieuw om {time}.",
   "connector.telegram.pause": "Pauzeren",
   "connector.telegram.resume": "Hervatten",
   "connector.telegram.reconnect": "Opnieuw verbinden",
   "connector.telegram.disconnectChat": "Verbreken",
   "connector.telegram.disconnectAllTitle": "Telegram loskoppelen",
   "connector.telegram.disconnectAllSummary":
-    "Elke chat wordt losgekoppeld. Mensen kunnen je agents niet meer bereiken via de CodeBot-bot.",
+    "Elke chat wordt losgekoppeld. Mensen kunnen je agents niet meer bereiken via de OpenBot Code-bot.",
   "connector.telegram.disconnectAllSummaryOrchestrator":
-    "Elke chat wordt losgekoppeld. De Telegram Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+    "Elke chat wordt losgekoppeld. De Telegram Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.telegram.rowAction": "{action}: {name}",
   "connector.telegram.linkChat": "Koppel een chat",
   "connector.telegram.addToGroup": "Toevoegen aan een groep",
   "connector.telegram.openDirectChat": "Open een directe chat",
   "connector.telegram.orchestratorTitle": "Telegram Orchestrator",
   "connector.telegram.orchestratorDescription":
-    "Deze agent ontvangt de berichten voor CodeBot uit al je Telegram-chats. Korte berichten beantwoordt hij zelf, ander werk geeft hij aan de juiste agent, en hij plaatst het antwoord in de chat.",
+    "Deze agent ontvangt de berichten voor OpenBot Code uit al je Telegram-chats. Korte berichten beantwoordt hij zelf, ander werk geeft hij aan de juiste agent, en hij plaatst het antwoord in de chat.",
   "connector.telegram.orchestratorNone": "Nog geen agent antwoordt",
   "connector.telegram.orchestratorNoneDescription":
     "Voeg de Telegram Orchestrator toe, anders krijgt Telegram geen antwoord.",
@@ -300,28 +303,30 @@ export const messages = {
   "connector.telegram.stepAgent": "Agent",
   "connector.telegram.connectTitle": "Koppel een Telegram-chat",
   "connector.telegram.connectDescription":
-    "Voeg de CodeBot-bot toe aan een groep, of open een directe chat ermee. Eén bot bedient al je chats.",
+    "Voeg de OpenBot Code-bot toe aan een groep, of open een directe chat ermee. Eén bot bedient al je chats.",
   "connector.telegram.connectStepBrowser": "Telegram opent in je browser",
   "connector.telegram.connectStepPick": "Kies de groep, of druk op Start in de directe chat",
   "connector.telegram.connectStepReturn": "Dit venster gaat verder als de chat is gekoppeld",
   "connector.telegram.connectWaiting": "Wachten op Telegram. Kies de chat in Telegram.",
   "connector.telegram.agentStepTitle": "Voeg de Telegram Orchestrator toe",
   "connector.telegram.agentStepDescription":
-    "Deze nieuwe agent beantwoordt de berichten voor CodeBot in {chat} en in elke chat die je later koppelt.",
+    "Deze nieuwe agent beantwoordt de berichten voor OpenBot Code in {chat} en in elke chat die je later koppelt.",
   "connector.telegram.orchestratorName": "Telegram Orchestrator",
   "connector.telegram.orchestratorRole": "Antwoordt in Telegram en vraagt het team",
-  "connector.telegram.orchestratorDoesReceive": "Ontvangt elk Telegram-bericht voor CodeBot als eerste",
+  "connector.telegram.orchestratorDoesReceive": "Ontvangt elk Telegram-bericht voor OpenBot Code als eerste",
   "connector.telegram.orchestratorDoesDelegate": "Geeft elke taak aan de agent die het best past",
   "connector.telegram.orchestratorDoesAnswer": "Plaatst het antwoord in de Telegram-chat",
   "connector.telegram.orchestratorModel": "Model",
-  "connector.telegram.doneTitle": "CodeBot zit in {chat}",
+  "connector.telegram.doneTitle": "OpenBot Code zit in {chat}",
   "connector.telegram.done": "Klaar",
   "connector.telegram.disconnectTitle": "{chat} loskoppelen?",
-  "connector.telegram.leaveDescription": "De CodeBot-bot verlaat {chat}, en CodeBot antwoordt daar niet meer.",
-  "connector.telegram.disconnectEffect": "Mensen in {chat} kunnen je agents niet meer bereiken via de CodeBot-bot.",
-  "connector.telegram.removeEffectKept": "De gesprekken en de Telegram Orchestrator blijven in CodeBot.",
+  "connector.telegram.leaveDescription":
+    "De OpenBot Code-bot verlaat {chat}, en OpenBot Code antwoordt daar niet meer.",
+  "connector.telegram.disconnectEffect":
+    "Mensen in {chat} kunnen je agents niet meer bereiken via de OpenBot Code-bot.",
+  "connector.telegram.removeEffectKept": "De gesprekken en de Telegram Orchestrator blijven in OpenBot Code.",
   "connector.telegram.removeEffectDeleted":
-    "Dit is de laatste chat, dus de Telegram Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+    "Dit is de laatste chat, dus de Telegram Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.telegram.keep": "Verbonden houden",
   "connector.telegram.close": "Sluiten",
   "connector.whatsapp.title": "WhatsApp",
@@ -349,18 +354,19 @@ export const messages = {
   "connector.whatsapp.actionFailed": "WhatsApp heeft de wijziging niet geaccepteerd",
   "connector.whatsapp.numbersTitle": "Nummers",
   "connector.whatsapp.linkNumber": "Koppel een nummer",
-  "connector.whatsapp.ownNumberNote": "Je chat “Bericht aan jezelf” en de mensen die je toestaat bereiken CodeBot.",
+  "connector.whatsapp.ownNumberNote":
+    "Je chat “Bericht aan jezelf” en de mensen die je toestaat bereiken OpenBot Code.",
   "connector.whatsapp.dedicatedNote":
-    "Je chat “Bericht aan jezelf” en de mensen die je toestaat bereiken CodeBot. Anderen krijgen een code om aan jou te geven.",
+    "Je chat “Bericht aan jezelf” en de mensen die je toestaat bereiken OpenBot Code. Anderen krijgen een code om aan jou te geven.",
   "connector.whatsapp.helpLoggedOut":
     "WhatsApp heeft deze computer uit de gekoppelde apparaten verwijderd. Koppel het nummer opnieuw.",
   "connector.whatsapp.helpLoggedOutHost":
     "WhatsApp heeft deze server uit de gekoppelde apparaten verwijderd. Koppel het nummer opnieuw.",
   "connector.whatsapp.helpError":
-    "CodeBot kan WhatsApp op dit nummer niet bereiken. Verbind opnieuw of koppel het nummer los.",
+    "OpenBot Code kan WhatsApp op dit nummer niet bereiken. Verbind opnieuw of koppel het nummer los.",
   "connector.whatsapp.helpKeysUnreadable":
-    "CodeBot kan de opgeslagen sleutels van dit nummer niet lezen. Koppel het nummer opnieuw.",
-  "connector.whatsapp.retryAt": "WhatsApp vroeg CodeBot te wachten. Het probeert het opnieuw om {time}.",
+    "OpenBot Code kan de opgeslagen sleutels van dit nummer niet lezen. Koppel het nummer opnieuw.",
+  "connector.whatsapp.retryAt": "WhatsApp vroeg OpenBot Code te wachten. Het probeert het opnieuw om {time}.",
   "connector.whatsapp.pause": "Pauzeren",
   "connector.whatsapp.resume": "Hervatten",
   "connector.whatsapp.reconnect": "Opnieuw verbinden",
@@ -370,20 +376,20 @@ export const messages = {
   "connector.whatsapp.disconnectAllSummary":
     "Elk nummer wordt losgekoppeld. Mensen kunnen je agents niet meer bereiken via WhatsApp.",
   "connector.whatsapp.disconnectAllSummaryOrchestrator":
-    "Elk nummer wordt losgekoppeld. De WhatsApp Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+    "Elk nummer wordt losgekoppeld. De WhatsApp Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.whatsapp.rowAction": "{action}: {name}",
   "connector.whatsapp.ownNumber": "Persoonlijk nummer",
   "connector.whatsapp.ownNumberDescription":
-    "Alleen je chat “Bericht aan jezelf” en de mensen die je toestaat kunnen schrijven. Andere mensen krijgen geen antwoord. Als dit uit staat, antwoordt CodeBot onbekende mensen met een code.",
+    "Alleen je chat “Bericht aan jezelf” en de mensen die je toestaat kunnen schrijven. Andere mensen krijgen geen antwoord. Als dit uit staat, antwoordt OpenBot Code onbekende mensen met een code.",
   "connector.whatsapp.workingMessage": "Bericht “Mee bezig…”",
   "connector.whatsapp.workingMessageDescription":
-    "CodeBot stuurt het terwijl de agent werkt en vervangt het daarna door het antwoord. Een verzoek dat op een eerder verzoek wacht, krijgt ook een wachtbericht. Bij een persoonlijk nummer krijgt alleen je chat “Bericht aan jezelf” deze berichten. Zet dit uit om alleen het antwoord te sturen.",
+    "OpenBot Code stuurt het terwijl de agent werkt en vervangt het daarna door het antwoord. Een verzoek dat op een eerder verzoek wacht, krijgt ook een wachtbericht. Bij een persoonlijk nummer krijgt alleen je chat “Bericht aan jezelf” deze berichten. Zet dit uit om alleen het antwoord te sturen.",
   "connector.whatsapp.statusReactions": "Statusreacties",
   "connector.whatsapp.statusReactionsDescription":
-    "CodeBot reageert met 👀 als er een bericht binnenkomt en met ✅ als het antwoord klaar is. Zet dit uit om geen reacties te sturen.",
+    "OpenBot Code reageert met 👀 als er een bericht binnenkomt en met ✅ als het antwoord klaar is. Zet dit uit om geen reacties te sturen.",
   "connector.whatsapp.orchestratorTitle": "WhatsApp Orchestrator",
   "connector.whatsapp.orchestratorDescription":
-    "Deze agent ontvangt de berichten voor CodeBot van al je gekoppelde nummers. Korte berichten beantwoordt hij zelf, ander werk geeft hij aan de juiste agent, en hij antwoordt in WhatsApp.",
+    "Deze agent ontvangt de berichten voor OpenBot Code van al je gekoppelde nummers. Korte berichten beantwoordt hij zelf, ander werk geeft hij aan de juiste agent, en hij antwoordt in WhatsApp.",
   "connector.whatsapp.orchestratorNone": "Nog geen agent antwoordt",
   "connector.whatsapp.orchestratorNoneDescription":
     "Voeg de WhatsApp Orchestrator toe, anders krijgt WhatsApp geen antwoord.",
@@ -399,10 +405,10 @@ export const messages = {
   "connector.whatsapp.kindLabel": "Nummer",
   "connector.whatsapp.kindPersonal": "Mijn persoonlijke nummer",
   "connector.whatsapp.kindPersonalDescription":
-    "CodeBot antwoordt alleen in je chat “Bericht aan jezelf” en aan de mensen die je toestaat. Andere mensen krijgen geen antwoord.",
-  "connector.whatsapp.kindDedicated": "Een nummer alleen voor CodeBot",
+    "OpenBot Code antwoordt alleen in je chat “Bericht aan jezelf” en aan de mensen die je toestaat. Andere mensen krijgen geen antwoord.",
+  "connector.whatsapp.kindDedicated": "Een nummer alleen voor OpenBot Code",
   "connector.whatsapp.kindDedicatedDescription":
-    "CodeBot antwoordt vanaf dit nummer elke onbekende persoon met een code om aan jou te geven. Je keurt ze hier goed.",
+    "OpenBot Code antwoordt vanaf dit nummer elke onbekende persoon met een code om aan jou te geven. Je keurt ze hier goed.",
   "connector.whatsapp.methodLabel": "Koppelmethode",
   "connector.whatsapp.methodQr": "QR-code",
   "connector.whatsapp.methodCode": "Koppelcode",
@@ -429,26 +435,26 @@ export const messages = {
     "WhatsApp weigerde de koppeling. Wacht een paar minuten en probeer het dan opnieuw.",
   "connector.whatsapp.failedBusy":
     "Er loopt al een andere koppeling. Wacht tot die klaar is en probeer het dan opnieuw.",
-  "connector.whatsapp.failedUnavailable": "CodeBot kan WhatsApp niet bereiken. Controleer de internetverbinding.",
+  "connector.whatsapp.failedUnavailable": "OpenBot Code kan WhatsApp niet bereiken. Controleer de internetverbinding.",
   "connector.whatsapp.tryAgain": "Probeer opnieuw",
   "connector.whatsapp.agentStepTitle": "Voeg de WhatsApp Orchestrator toe",
   "connector.whatsapp.agentStepDescription":
-    "Deze nieuwe agent beantwoordt de berichten voor CodeBot op {number} en op elk nummer dat je later koppelt.",
+    "Deze nieuwe agent beantwoordt de berichten voor OpenBot Code op {number} en op elk nummer dat je later koppelt.",
   "connector.whatsapp.orchestratorName": "WhatsApp Orchestrator",
   "connector.whatsapp.orchestratorRole": "Antwoordt in WhatsApp en vraagt het team",
-  "connector.whatsapp.orchestratorDoesReceive": "Ontvangt elk WhatsApp-bericht voor CodeBot als eerste",
+  "connector.whatsapp.orchestratorDoesReceive": "Ontvangt elk WhatsApp-bericht voor OpenBot Code als eerste",
   "connector.whatsapp.orchestratorDoesDelegate": "Geeft elke taak aan de agent die het best past",
   "connector.whatsapp.orchestratorDoesAnswer": "Antwoordt in de WhatsApp-chat",
   "connector.whatsapp.orchestratorModel": "Model",
-  "connector.whatsapp.doneTitle": "CodeBot is gekoppeld aan {number}",
+  "connector.whatsapp.doneTitle": "OpenBot Code is gekoppeld aan {number}",
   "connector.whatsapp.done": "Klaar",
   "connector.whatsapp.disconnectTitle": "{number} loskoppelen?",
   "connector.whatsapp.disconnectDescription":
-    "CodeBot logt uit bij WhatsApp op {number}. Als CodeBot uit stond, verwijder het apparaat dan ook in WhatsApp > Gekoppelde apparaten.",
+    "OpenBot Code logt uit bij WhatsApp op {number}. Als OpenBot Code uit stond, verwijder het apparaat dan ook in WhatsApp > Gekoppelde apparaten.",
   "connector.whatsapp.disconnectEffect": "Mensen kunnen je agents niet meer bereiken via {number}.",
-  "connector.whatsapp.removeEffectKept": "De gesprekken en de WhatsApp Orchestrator blijven in CodeBot.",
+  "connector.whatsapp.removeEffectKept": "De gesprekken en de WhatsApp Orchestrator blijven in OpenBot Code.",
   "connector.whatsapp.removeEffectDeleted":
-    "Dit is het laatste nummer, dus de WhatsApp Orchestrator en zijn gesprekken worden uit CodeBot verwijderd.",
+    "Dit is het laatste nummer, dus de WhatsApp Orchestrator en zijn gesprekken worden uit OpenBot Code verwijderd.",
   "connector.whatsapp.keep": "Gekoppeld houden",
   "connector.whatsapp.close": "Sluiten",
   "connector.whatsapp.sendersTitle": "Wie naar {number} kan schrijven",
@@ -472,7 +478,7 @@ export const messages = {
     "Mensen in deze groep kunnen werk geven aan je agents als ze het nummer vermelden of op de berichten ervan reageren.",
   "connector.whatsapp.groupSearch": "Zoek groepen",
   "connector.whatsapp.groupsLoading": "Groepen lezen…",
-  "connector.whatsapp.groupsLoadFailed": "CodeBot kon de groepen niet lezen",
+  "connector.whatsapp.groupsLoadFailed": "OpenBot Code kon de groepen niet lezen",
   "connector.whatsapp.groupsEmpty": "Dit nummer zit in geen enkele groep.",
   "connector.whatsapp.groupsNoMatch": "Geen groep heeft deze naam.",
   "connector.whatsapp.groupAdded": "Toegevoegd",
@@ -485,9 +491,9 @@ export const messages = {
   "connector.whatsapp.deny": "Weigeren",
   "connector.onePassword.title": "1Password",
   "connector.onePassword.description":
-    "Deel een aparte 1Password-kluis met CodeBot via een serviceaccount, zodat agents kunnen inloggen op sites in de CodeBot-browser.",
+    "Deel een aparte 1Password-kluis met OpenBot Code via een serviceaccount, zodat agents kunnen inloggen op sites in de OpenBot Code-browser.",
   "connector.onePassword.howItWorks":
-    "Bij het verbinden worden in je 1Password-account een kluis “Shared with CodeBot” en een serviceaccount gemaakt dat alleen die kluis kan lezen. CodeBot vult opgeslagen logins in zijn browser op deze computer in, dus alleen de items die je naar die kluis verplaatst, worden ooit gedeeld. Agents zien nooit een wachtwoord.",
+    "Bij het verbinden worden in je 1Password-account een kluis “Shared with CodeBot” en een serviceaccount gemaakt dat alleen die kluis kan lezen. OpenBot Code vult opgeslagen logins in zijn browser op deze computer in, dus alleen de items die je naar die kluis verplaatst, worden ooit gedeeld. Agents zien nooit een wachtwoord.",
   "connector.onePassword.connect": "Verbind 1Password",
   "connector.onePassword.setupTitle": "Instellen",
   "connector.onePassword.stepCliTitle": "Installeer de 1Password CLI",
@@ -495,20 +501,20 @@ export const messages = {
   "connector.onePassword.stepCliInstalling": "De 1Password CLI downloaden van 1Password",
   "connector.onePassword.stepCliReady": "Versie {version} is geïnstalleerd.",
   "connector.onePassword.stepCliMissing":
-    "CodeBot downloadt hem van 1Password naar een eigen map. Er is geen beheerderswachtwoord nodig.",
+    "OpenBot Code downloadt hem van 1Password naar een eigen map. Er is geen beheerderswachtwoord nodig.",
   "connector.onePassword.stepCliManual":
-    "CodeBot kan hem niet op deze computer installeren. Installeer hem via 1Password en kom dan terug naar deze pagina.",
+    "OpenBot Code kan hem niet op deze computer installeren. Installeer hem via 1Password en kom dan terug naar deze pagina.",
   "connector.onePassword.installCli": "Installeren",
   "connector.onePassword.stepAppTitle": "Zet de CLI-integratie aan",
   "connector.onePassword.stepAppDescription":
     "Open in de 1Password-app Instellingen > Ontwikkelaar en zet “Integreren met 1Password CLI” aan.",
   "connector.onePassword.stepAppReady": "De 1Password-app laat de CLI de gedeelde kluis maken.",
   "connector.onePassword.openApp": "Open 1Password",
-  "connector.onePassword.openAppFailed": "CodeBot kan 1Password niet openen.",
+  "connector.onePassword.openAppFailed": "OpenBot Code kan 1Password niet openen.",
   "connector.onePassword.checkAgain": "Opnieuw controleren",
   "connector.onePassword.stepVaultTitle": "Maak de gedeelde kluis",
   "connector.onePassword.stepVaultDescription":
-    "CodeBot maakt de kluis “Shared with CodeBot” en een serviceaccount dat hem alleen kan lezen. 1Password vraagt je om goedkeuring.",
+    "OpenBot Code maakt de kluis “Shared with CodeBot” en een serviceaccount dat hem alleen kan lezen. 1Password vraagt je om goedkeuring.",
   "connector.onePassword.useTokenDescription":
     "Plak in plaats van deze stappen een serviceaccounttoken van 1Password.com.",
   "connector.onePassword.useTokenAction": "Gebruik token",
@@ -518,7 +524,7 @@ export const messages = {
   "connector.onePassword.approveInApp": "Keur het verzoek goed in de 1Password-app",
   "connector.onePassword.cancel": "Annuleren",
   "connector.onePassword.chooseAccountTitle": "Kies een account",
-  "connector.onePassword.chooseAccountDescription": "CodeBot maakt de gedeelde kluis in het account dat je kiest.",
+  "connector.onePassword.chooseAccountDescription": "OpenBot Code maakt de gedeelde kluis in het account dat je kiest.",
   "connector.onePassword.useAccount": "Gebruik dit account",
   "connector.onePassword.vaultTitle": "Gedeelde kluis",
   "connector.onePassword.vaultDescription":
@@ -528,14 +534,14 @@ export const messages = {
   "connector.onePassword.disconnect": "Verbreken",
   "connector.onePassword.disconnectTitle": "1Password loskoppelen",
   "connector.onePassword.disconnectSummary":
-    "CodeBot vergeet het token. De kluis en het serviceaccount blijven in 1Password; verwijder ze daar als je ze niet meer nodig hebt.",
-  "connector.onePassword.actionFailed": "CodeBot kan de 1Password-verbinding niet wijzigen.",
+    "OpenBot Code vergeet het token. De kluis en het serviceaccount blijven in 1Password; verwijder ze daar als je ze niet meer nodig hebt.",
+  "connector.onePassword.actionFailed": "OpenBot Code kan de 1Password-verbinding niet wijzigen.",
   "connector.onePassword.statusConnected": "Verbonden",
   "connector.onePassword.statusConnecting": "Verbinden",
   "connector.onePassword.descriptionHost":
-    "Deel een aparte 1Password-kluis met CodeBot op {host} via een serviceaccount, zodat agents op {host} kunnen inloggen op sites in de browser ervan.",
+    "Deel een aparte 1Password-kluis met OpenBot Code op {host} via een serviceaccount, zodat agents op {host} kunnen inloggen op sites in de browser ervan.",
   "connector.onePassword.howItWorksHost":
-    "{host} verbindt met een serviceaccounttoken. Maak op 1Password.com een serviceaccount dat alleen de kluis kan lezen die je met CodeBot deelt, en plak het token ervan hier. {host} controleert het token en bewaart het; deze computer niet. Agents zien nooit een wachtwoord.",
+    "{host} verbindt met een serviceaccounttoken. Maak op 1Password.com een serviceaccount dat alleen de kluis kan lezen die je met OpenBot Code deelt, en plak het token ervan hier. {host} controleert het token en bewaart het; deze computer niet. Agents zien nooit een wachtwoord.",
   "connector.onePassword.disconnectSummaryHost":
     "{host} vergeet het token. De kluis en het serviceaccount blijven in 1Password; verwijder ze daar als je ze niet meer nodig hebt.",
   "connector.bitwarden.title": "Bitwarden",
@@ -543,24 +549,24 @@ export const messages = {
   "connector.bitwarden.setup":
     "Installeer de Bitwarden CLI en log in met bw login. Maak een map met de naam Shared with CodeBot en zet daar alleen de logins in die agents mogen gebruiken. Voer bw unlock --raw uit en plak de sessiesleutel hieronder. Plak niet je hoofdwachtwoord.",
   "connector.bitwarden.scope":
-    "Alle agents op deze computer kunnen passende logins in Shared with CodeBot gebruiken. CodeBot gebruikt exacte HTTPS-origins. Het gebruikt geen items die om het hoofdwachtwoord vragen of een aangepaste URI-matchregel hebben.",
+    "Alle agents op deze computer kunnen passende logins in Shared with CodeBot gebruiken. OpenBot Code gebruikt exacte HTTPS-origins. Het gebruikt geen items die om het hoofdwachtwoord vragen of een aangepaste URI-matchregel hebben.",
   "connector.bitwarden.session":
-    "De sessiesleutel blijft in het geheugen. Verbind opnieuw na 8 uur zonder kluisgebruik of nadat CodeBot is afgesloten. Loskoppelen stopt de toegang van CodeBot; andere Bitwarden-clients worden niet vergrendeld.",
+    "De sessiesleutel blijft in het geheugen. Verbind opnieuw na 8 uur zonder kluisgebruik of nadat OpenBot Code is afgesloten. Loskoppelen stopt de toegang van OpenBot Code; andere Bitwarden-clients worden niet vergrendeld.",
   "connector.bitwarden.sessionKey": "Bitwarden-sessiesleutel",
   "connector.bitwarden.connect": "Verbind Bitwarden",
   "connector.bitwarden.disconnect": "Bitwarden loskoppelen",
   "connector.bitwarden.disconnectAction": "Verbreken",
   "connector.bitwarden.disconnectSummary":
-    "CodeBot vergeet de sessiesleutel. Agents kunnen geen logins uit Bitwarden meer invullen. Andere Bitwarden-clients blijven ontgrendeld.",
+    "OpenBot Code vergeet de sessiesleutel. Agents kunnen geen logins uit Bitwarden meer invullen. Andere Bitwarden-clients blijven ontgrendeld.",
   "connector.bitwarden.disconnectSummaryHost":
     "{host} verwijdert de API-sleutel en het hoofdwachtwoord. Agents op {host} kunnen geen logins uit Bitwarden meer invullen.",
   "connector.bitwarden.connected": "Verbonden",
-  "connector.bitwarden.actionFailed": "CodeBot kan de Bitwarden-verbinding niet wijzigen.",
+  "connector.bitwarden.actionFailed": "OpenBot Code kan de Bitwarden-verbinding niet wijzigen.",
   "connector.bitwarden.descriptionHost": "Vul browserlogins op {host} in vanuit Bitwarden of Vaultwarden.",
   "connector.bitwarden.setupHost":
     "{host} logt in met een eigen Bitwarden CLI. Maak in je kluis een map met de naam Shared with CodeBot en zet daar alleen de logins in die agents mogen gebruiken. Open in de webkluis Instellingen › Beveiliging › Sleutels en bekijk je API-sleutel. Voer hieronder het serveradres, client_id, client_secret en je hoofdwachtwoord in.",
   "connector.bitwarden.scopeHost":
-    "Alle agents op {host} kunnen passende logins in Shared with CodeBot gebruiken. CodeBot gebruikt exacte HTTPS-origins. Het gebruikt geen items die om het hoofdwachtwoord vragen of een aangepaste URI-matchregel hebben.",
+    "Alle agents op {host} kunnen passende logins in Shared with CodeBot gebruiken. OpenBot Code gebruikt exacte HTTPS-origins. Het gebruikt geen items die om het hoofdwachtwoord vragen of een aangepaste URI-matchregel hebben.",
   "connector.bitwarden.sessionHost":
     "{host} bewaart de API-sleutel en het hoofdwachtwoord versleuteld, zodat hij na een herstart weer kan ontgrendelen. Deze computer bewaart ze niet. Loskoppelen verwijdert ze van {host}. {host} moet het serveradres via HTTPS kunnen bereiken.",
   "connector.bitwarden.serverUrl": "Serveradres",
@@ -584,19 +590,19 @@ export const messages = {
   "connector.protonPass.keyPlaceholder": "pst_…",
   "connector.protonPass.setupTitle": "Instellen",
   "connector.protonPass.setupDescription":
-    "Verbinden opent de Proton-aanmelding in je browser. Daarna maakt CodeBot de gedeelde kluis en bewaart het alleen een sleutel met leestoegang.",
+    "Verbinden opent de Proton-aanmelding in je browser. Daarna maakt OpenBot Code de gedeelde kluis en bewaart het alleen een sleutel met leestoegang.",
   "connector.protonPass.setupDescriptionHost":
     "Verbinden opent de Proton-aanmelding in je browser. Daarna maakt {host} de gedeelde kluis en bewaart het alleen een sleutel met leestoegang.",
   "connector.protonPass.vaultName": "Shared with CodeBot",
   "connector.protonPass.vaultSetup":
-    "CodeBot maakt deze kluis wanneer je verbindt. Verplaats logins erheen om ze te delen.",
+    "OpenBot Code maakt deze kluis wanneer je verbindt. Verplaats logins erheen om ze te delen.",
   "connector.protonPass.showSteps": "Stappen tonen",
   "connector.protonPass.stepsLabel": "Verbindingsstappen",
   "connector.protonPass.stepSignIn": "Aanmelden",
   "connector.protonPass.stepVault": "Gedeelde kluis maken",
   "connector.protonPass.stepDone": "Klaar",
   "connector.protonPass.signInTitle": "Aanmelden bij Proton",
-  "connector.protonPass.signInStarting": "CodeBot start de aanmelding. De Proton-pagina opent in je browser.",
+  "connector.protonPass.signInStarting": "OpenBot Code start de aanmelding. De Proton-pagina opent in je browser.",
   "connector.protonPass.signInDescription":
     "De aanmelding is open in je browser. Proton vraagt om je wachtwoord en je tweede factor.",
   "connector.protonPass.signInDescriptionHost":
@@ -607,7 +613,7 @@ export const messages = {
   "connector.protonPass.continue": "Doorgaan",
   "connector.protonPass.setupStepTitle": "Gedeelde kluis maken",
   "connector.protonPass.setupStepDescription":
-    "CodeBot maakt de kluis ‘{vault}’ en een sleutel met leestoegang. Daarna meldt het je Proton-sessie af.",
+    "OpenBot Code maakt de kluis ‘{vault}’ en een sleutel met leestoegang. Daarna meldt het je Proton-sessie af.",
   "connector.protonPass.doneTitle": "Proton Pass is verbonden",
   "connector.protonPass.doneDescription": "Verplaats logins naar ‘{vault}’ zodat agents ermee kunnen inloggen.",
   "connector.protonPass.failedTitle": "Proton Pass is niet verbonden",
@@ -636,9 +642,9 @@ export const messages = {
   "connector.protonPass.keyNoExpiry": "Alleen lezen. Verloopt niet.",
   "connector.protonPass.disconnectTitle": "Proton Pass loskoppelen",
   "connector.protonPass.disconnectSummary":
-    "CodeBot verwijdert zijn toegangssleutel op deze computer. De kluis en de logins erin blijven in je Proton-account.",
+    "OpenBot Code verwijdert zijn toegangssleutel op deze computer. De kluis en de logins erin blijven in je Proton-account.",
   "connector.protonPass.disconnectSummaryHost":
-    "CodeBot verwijdert zijn toegangssleutel op {host}. De kluis en de logins erin blijven in je Proton-account.",
+    "OpenBot Code verwijdert zijn toegangssleutel op {host}. De kluis en de logins erin blijven in je Proton-account.",
   "connector.protonPass.disconnect": "Loskoppelen",
-  "connector.protonPass.actionFailed": "CodeBot kon de Proton Pass-verbinding niet wijzigen.",
+  "connector.protonPass.actionFailed": "OpenBot Code kon de Proton Pass-verbinding niet wijzigen.",
 } as const satisfies PartialTranslation<typeof source>;

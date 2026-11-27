@@ -26,13 +26,13 @@ export const messages = {
   "prompt.approval.alwaysAllow": "Всегда разрешать",
   "prompt.approval.deny": "Отклонить",
   "prompt.approval.cut":
-    "На этой карточке только начало запроса, поэтому его можно только отклонить. Если кнопка «Разрешить» скоро не появится, обновите CodeBot на сервере.",
+    "На этой карточке только начало запроса, поэтому его можно только отклонить. Если кнопка «Разрешить» скоро не появится, обновите OpenBot Code на сервере.",
   "prompt.approval.report.bugHeadline": "Нашли ошибку? Давайте исправим.",
   "prompt.approval.report.ideaHeadline": "Есть идея? Давайте воплотим.",
   "prompt.approval.report.dontSend": "Не сейчас",
-  "prompt.approval.report.send": "Отправить команде CodeBot",
+  "prompt.approval.report.send": "Отправить команде OpenBot Code",
   "prompt.approval.report.phoneOnly":
-    "Откройте этот чат в приложении CodeBot на телефоне и отправьте отчёт оттуда. Телефон добавляет свою версию, систему и журнал поддержки. Если телефон не может подключиться, откройте Настройки > Поддержка в приложении на телефоне и сообщите о проблеме на GitHub.",
+    "Откройте этот чат в приложении OpenBot Code на телефоне и отправьте отчёт оттуда. Телефон добавляет свою версию, систему и журнал поддержки. Если телефон не может подключиться, откройте Настройки > Поддержка в приложении на телефоне и сообщите о проблеме на GitHub.",
   "prompt.approval.title.command": "Выполнить команду",
   "prompt.approval.title.fileChange": "Изменить файлы",
   "prompt.approval.title.permissions": "Предоставить разрешения",
@@ -45,7 +45,7 @@ export const messages = {
   "prompt.browser.title.pending": "Выполните шаг на {host}",
   "prompt.browser.cancelled": "Отменено",
   "prompt.browser.reload":
-    "CodeBot не смог до конца ввести пароль или код. Проверьте страницу и введите недостающее. Завершите вход, затем перезагрузите страницу в браузере, прежде чем нажимать «Готово». Пока страница не перезагружена, её проверка заблокирована.",
+    "OpenBot Code не смог до конца ввести пароль или код. Проверьте страницу и введите недостающее. Завершите вход, затем перезагрузите страницу в браузере, прежде чем нажимать «Готово». Пока страница не перезагружена, её проверка заблокирована.",
   "prompt.browser.continuing": "{name} продолжает работу.",
   "prompt.browser.cancelledBody": "Шаг в браузере отменён.",
   "prompt.browser.pendingBody":
@@ -58,9 +58,9 @@ export const messages = {
   "prompt.browser.signInBlocked.title": "{host} заблокировал вход с {server}",
   "prompt.browser.signInBlocked.cancelledTitle": "Вход в {host} отменён",
   "prompt.browser.signInBlocked.body":
-    "Войдите на этом компьютере. CodeBot отправит на {server} только вход в {host}, и {name} продолжит работу.",
+    "Войдите на этом компьютере. OpenBot Code отправит на {server} только вход в {host}, и {name} продолжит работу.",
   "prompt.browser.signInBlocked.desktopBody":
-    "{host} не принимает вход с сервера. Откройте этот чат в приложении CodeBot для компьютера и войдите там. Затем {name} продолжит работу.",
+    "{host} не принимает вход с сервера. Откройте этот чат в приложении OpenBot Code для компьютера и войдите там. Затем {name} продолжит работу.",
   "prompt.browser.signInBlocked.cancelledBody": "Вход отменён.",
   "prompt.browser.signInBlocked.waiting": "Ожидание входа",
   "prompt.browser.signInBlocked.waitingButton": "Ожидание входа…",

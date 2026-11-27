@@ -1,4 +1,65 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/localServer";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "localServer.settings.title": "Serwery lokalne",
+  "localServer.settings.description":
+    "Maszyny z modelami w Twojej sieci, na przykład DGX Spark. Każda maszyna to osobny wpis.",
+  "localServer.settings.add": "Dodaj maszynę",
+  "localServer.settings.empty":
+    "Brak maszyn lokalnych. Dodaj adres serwera modeli, aby użyć go w projekcie lub czacie.",
+  "localServer.settings.edit": "Edytuj {name}",
+  "localServer.settings.remove": "Usuń {name}",
+  "localServer.settings.refresh": "Sprawdź teraz",
+  "localServer.settings.statusOff": "Stan wyłączony",
+  "localServer.settings.models": {
+    one: "{count} model",
+    few: "{count} modele",
+    many: "{count} modeli",
+    other: "{count} modelu",
+  },
+  "localServer.scan.title": "Znajdź maszynę",
+  "localServer.scan.description":
+    "Wpisz nazwę hosta lub adres IP. OpenBot Code szuka Ollama, LM Studio i vLLM na ich zwykłych portach.",
+  "localServer.scan.host": "Host lub adres",
+  "localServer.scan.placeholder": "spark-1.local",
+  "localServer.scan.action": "Skanuj",
+  "localServer.scan.scanning": "Skanowanie",
+  "localServer.scan.none": "Nie znaleziono serwera modeli na tym hoście.",
+  "localServer.scan.needsKey": "Wymaga klucza API",
+  "localServer.scan.add": "Dodaj {name}",
+  "localServer.dialog.addTitle": "Dodaj maszynę lokalną",
+  "localServer.dialog.editTitle": "Edytuj {name}",
+  "localServer.dialog.description": "OpenBot Code odczytuje listę modeli i stan z adresu maszyny zgodnego z OpenAI.",
+  "localServer.field.name": "Nazwa",
+  "localServer.field.namePlaceholder": "DGX Spark 1",
+  "localServer.field.baseUrl": "Adres serwera",
+  "localServer.field.baseUrlPlaceholder": "http://192.168.1.41:8000/v1",
+  "localServer.field.apiKey": "Klucz API (opcjonalnie)",
+  "localServer.field.apiKeyKept": "Zapisano. Zostaw puste, aby go zachować.",
+  "localServer.field.gpuUrl": "Adres stanu GPU (opcjonalnie)",
+  "localServer.field.gpuUrlPlaceholder": "http://192.168.1.41:9101/gpu",
+  "localServer.field.gpuUrlHelp":
+    "Adres JSON, eksportera nvidia-smi lub eksportera DCGM, który pokazuje obciążenie i pamięć GPU.",
+  "localServer.field.gpuUsesKey": "Wyślij klucz API na adres stanu GPU",
+  "localServer.field.gpuUsesKeyHelp": "Tylko dla adresu z tym samym origin co adres serwera.",
+  "localServer.field.monitored": "Pokaż stan tej maszyny",
+  "localServer.field.monitoredHelp": "OpenBot Code co jakiś czas sprawdza maszynę i pokazuje wynik na pasku stanu.",
+  "localServer.error.nameRequired": "Wpisz nazwę.",
+  "localServer.error.gpuUrlInvalid": "Wpisz adres http lub https bez nazwy użytkownika i hasła.",
+  "localServer.error.gpuKeyOtherOrigin": "Adres stanu GPU musi mieć ten sam origin co adres serwera.",
+  "localServer.test.action": "Testuj",
+  "localServer.test.testing": "Testowanie",
+  "localServer.test.online": "Online. Znaleziono: {models}.",
+  "localServer.test.onlineKind": "{kind} jest online. Znaleziono: {models}.",
+  "localServer.test.gpuFound": "Odczytano stan GPU: {count}",
+  "localServer.test.gpuCount": { one: "{count} GPU", few: "{count} GPU", many: "{count} GPU", other: "{count} GPU" },
+  "localServer.test.offline": "Offline. {error}",
+  "localServer.test.gpuFailed": "Stan GPU nie powiódł się: {error}",
+  "localServer.dialog.saving": "Zapisywanie",
+  "localServer.dialog.saveFailed": "OpenBot Code nie mógł zapisać tej maszyny.",
+  "localServer.remove.title": "Usunąć {name}?",
+  "localServer.remove.description":
+    "OpenBot Code przestaje używać tej maszyny. Projekty i czaty, które używają jej modeli, potrzebują innego modelu.",
+  "localServer.remove.failed": "OpenBot Code nie mógł usunąć tej maszyny.",
+} as const satisfies PartialTranslation<typeof source>;

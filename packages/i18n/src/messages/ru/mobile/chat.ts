@@ -4,7 +4,7 @@ import type { messages as source } from "../../en/mobile/chat";
 export const messages = {
   "mobile.chat.dictation.microphoneOffTitle": "Доступ к микрофону выключен",
   "mobile.chat.dictation.microphoneOffMessage":
-    "Чтобы диктовать сообщения, разрешите CodeBot использовать микрофон и распознавание речи в настройках.",
+    "Чтобы диктовать сообщения, разрешите OpenBot Code использовать микрофон и распознавание речи в настройках.",
   "mobile.chat.dictation.stopped": "Диктовка остановлена",
   "mobile.chat.dictation.tryAgain": "Повторите попытку.",
   "mobile.chat.dictation.unavailable": "Диктовка недоступна",
@@ -208,7 +208,7 @@ export const messages = {
   "mobile.chat.attachment.openFailed": "Не удалось открыть вложение",
   "mobile.chat.attachment.photosNeedUpdate": "Для сохранения фото нужна последняя версия приложения.",
   "mobile.chat.attachment.photosPermission":
-    "Чтобы сохранить изображение, разрешите CodeBot добавлять фото в настройках.",
+    "Чтобы сохранить изображение, разрешите OpenBot Code добавлять фото в настройках.",
   "mobile.chat.attachment.imageUnavailable": "Изображение недоступно. Повторите попытку.",
   "mobile.chat.attachment.saveImageFailed": "Не удалось сохранить изображение",
   "mobile.chat.attachment.copyImageFailed": "Не удалось скопировать изображение",
@@ -241,9 +241,9 @@ export const messages = {
   "mobile.chat.attachment.unsupported":
     "{name}: выберите изображения, аудио MP3, видео MOV или MP4, архивы ZIP, PDF, документы Office, EML, текстовые файлы, Markdown, данные или исходный код.",
   "mobile.chat.attachment.hostRejectsType":
-    "{name}: компьютер-хост не принимает файлы {type}. Обновите там CodeBot, чтобы прикреплять их.",
+    "{name}: компьютер-хост не принимает файлы {type}. Обновите там OpenBot Code, чтобы прикреплять их.",
   "mobile.chat.attachment.hostRejects":
-    "{name}: компьютер-хост не принимает такие файлы. Обновите там CodeBot, чтобы прикреплять их.",
+    "{name}: компьютер-хост не принимает такие файлы. Обновите там OpenBot Code, чтобы прикреплять их.",
   "mobile.chat.attachment.nameTooLong": "Выберите файл с более коротким именем.",
   "mobile.chat.attachment.damaged": "Вложение повреждено. Выберите его заново.",
   "mobile.chat.attachment.tooLarge": "{name} больше {limit}.",
@@ -294,13 +294,13 @@ export const messages = {
   "mobile.chat.liveVoice.voiceServerFailed":
     "Голосовой сервер не смог прочитать ответ. Проверьте его в разделе «Настройки > Голос».",
   "mobile.chat.liveVoice.gptUnsupported":
-    "Этот сервер не поддерживает GPT Live Voice. Обновите CodeBot на компьютере, где он работает.",
+    "Этот сервер не поддерживает GPT Live Voice. Обновите OpenBot Code на компьютере, где он работает.",
   "mobile.chat.liveVoice.gptFailed": "Не удалось запустить GPT Live Voice. Включите микрофон, чтобы повторить.",
   "mobile.chat.liveVoice.gptEnded": "GPT Live Voice остановлен. Включите микрофон, чтобы запустить его снова.",
   "mobile.chat.liveVoice.gptFailedTitle": "Не удалось запустить GPT Live Voice",
   "mobile.chat.liveVoice.gptEndedTitle": "GPT Live Voice остановлен",
   "mobile.chat.liveVoice.gptMicrophoneOff":
-    "Разрешите CodeBot использовать микрофон в Настройках. Затем включите микрофон, чтобы повторить.",
+    "Разрешите OpenBot Code использовать микрофон в Настройках. Затем включите микрофон, чтобы повторить.",
   "mobile.chat.composer.addAttachment": "Добавить вложение",
   "mobile.chat.composer.ask": "Спросить: {name}",
   "mobile.chat.composer.stopFailed": "Не удалось остановить агента. Возможно, он уже закончил.",
@@ -328,7 +328,8 @@ export const messages = {
   "mobile.chat.sideQuestion.deleteTitle": "Удалить этот побочный вопрос?",
   "mobile.chat.sideQuestion.deleteBody": "Его вопросы и ответы есть только на этом телефоне. Восстановить их нельзя.",
   "mobile.chat.sideQuestion.notFound": "Этого агента больше нет на сервере.",
-  "mobile.chat.sideQuestion.unsupported": "Этот хост не может отвечать на побочные вопросы. Обновите CodeBot на хосте.",
+  "mobile.chat.sideQuestion.unsupported":
+    "Этот хост не может отвечать на побочные вопросы. Обновите OpenBot Code на хосте.",
   "mobile.chat.pins.title": "Закреплённые сообщения",
   "mobile.chat.pins.emptyTitle": "Нет закреплённых сообщений",
   "mobile.chat.pins.emptyBody": "Нажмите и удерживайте сообщение, затем нажмите «Закрепить», чтобы оно было здесь.",
@@ -337,7 +338,7 @@ export const messages = {
   "mobile.chat.pins.unpin": "Открепить",
   "mobile.chat.pins.failed": "Закрепление не изменилось.",
   "mobile.chat.pins.loadFailed": "Не удалось загрузить закреплённые сообщения.",
-  "mobile.chat.pins.unsupported": "Этот хост не может закреплять сообщения. Обновите CodeBot на хосте.",
+  "mobile.chat.pins.unsupported": "Этот хост не может закреплять сообщения. Обновите OpenBot Code на хосте.",
   "mobile.chat.pins.mainChat": "Основной чат",
   "mobile.chat.pins.thread": "Боковая ветка",
   "mobile.chat.pins.pinnedBy": "Закрепил(а): {name}",
@@ -437,7 +438,7 @@ export const messages = {
   "mobile.chat.imageGallery.saved": "Сохранено в «Фото»",
   "mobile.chat.imageGallery.shareAll": "Поделиться всеми",
   "mobile.chat.imageGallery.photosPermission":
-    "Разрешите CodeBot добавлять фото в Настройках, чтобы сохранить эти изображения.",
+    "Разрешите OpenBot Code добавлять фото в Настройках, чтобы сохранить эти изображения.",
   "mobile.chat.imageGallery.saveFailed": "Не удалось сохранить изображения",
   "mobile.chat.imageGallery.shareFailed": "Не удалось поделиться изображениями",
   "mobile.chat.imageGallery.shareNeedsUpdate":
@@ -448,7 +449,8 @@ export const messages = {
   "mobile.chat.video.loading": "Загрузка {name}",
   "mobile.chat.video.share": "Поделиться: {name}",
   "mobile.chat.video.save": "Сохранить {name} в «Фото»",
-  "mobile.chat.video.photosPermission": "Разрешите CodeBot добавлять фото в Настройках, чтобы сохранить это видео.",
+  "mobile.chat.video.photosPermission":
+    "Разрешите OpenBot Code добавлять фото в Настройках, чтобы сохранить это видео.",
   "mobile.chat.video.saveFailed": "Не удалось сохранить видео",
   "mobile.chat.audio.play": "Воспроизвести: {name}",
   "mobile.chat.audio.pause": "Пауза: {name}",
@@ -463,28 +465,28 @@ export const messages = {
   "mobile.chat.browserSecret.ended": "Этот запрос на вход завершён. Попросите агента повторить попытку.",
   "mobile.chat.browserSecret.oneTimeCode": "Одноразовый код",
   "mobile.chat.browserSecret.takeoverTitle": "Управление браузером",
-  "mobile.chat.browserSecret.takeoverBody": "Выполните этот шаг в браузере на компьютере, где работает CodeBot.",
+  "mobile.chat.browserSecret.takeoverBody": "Выполните этот шаг в браузере на компьютере, где работает OpenBot Code.",
   "mobile.chat.browserSecret.signInBlockedTitle": "Войдите на своём компьютере",
   "mobile.chat.browserSecret.signInBlockedBody":
-    "Этот сайт не принимает вход с сервера. Откройте этот чат в приложении CodeBot для компьютера и войдите там.",
+    "Этот сайт не принимает вход с сервера. Откройте этот чат в приложении OpenBot Code для компьютера и войдите там.",
   "mobile.chat.browserSecret.takeoverReload":
-    "CodeBot не смог до конца ввести пароль или код. Введите на странице недостающее. Затем обновите страницу и только потом нажмите «Готово».",
+    "OpenBot Code не смог до конца ввести пароль или код. Введите на странице недостающее. Затем обновите страницу и только потом нажмите «Готово».",
   "mobile.chat.browserSecret.takeoverFailed": "Не удалось выполнить запрос.",
   "mobile.chat.browserSecret.done": "Готово",
   "mobile.chat.browserSecret.submitOnce": "Однократная отправка на {origin}. Это значение не попадёт в чат.",
   "mobile.chat.browserSecret.submitFailed": "Не удалось выполнить запрос. Проверьте подключение и повторите попытку.",
   "mobile.chat.browserSecret.vaultSkip.agentScript":
-    "CodeBot не использовал ваши сохранённые учётные данные, потому что агент запустил скрипт на этой странице. Чтобы их использовать, попросите агента перезагрузить страницу и попробовать снова.",
+    "OpenBot Code не использовал ваши сохранённые учётные данные, потому что агент запустил скрипт на этой странице. Чтобы их использовать, попросите агента перезагрузить страницу и попробовать снова.",
   "mobile.chat.browserSecret.vaultSkip.fieldKind":
-    "CodeBot не использовал ваши сохранённые учётные данные, потому что агент выбрал не то поле на странице.",
+    "OpenBot Code не использовал ваши сохранённые учётные данные, потому что агент выбрал не то поле на странице.",
   "mobile.chat.browserSecret.vaultSkip.loginChoice":
-    "CodeBot не использовал сохранённые учётные данные, потому что агент не выбрал ни одни из учётных данных, сохранённых для этого сайта. Скажите агенту, какой аккаунт использовать.",
+    "OpenBot Code не использовал сохранённые учётные данные, потому что агент не выбрал ни одни из учётных данных, сохранённых для этого сайта. Скажите агенту, какой аккаунт использовать.",
   "mobile.chat.browserSecret.vaultSkip.noPassword":
-    "CodeBot не использовал ваши сохранённые учётные данные, потому что в них нет пароля для этого сайта.",
+    "OpenBot Code не использовал ваши сохранённые учётные данные, потому что в них нет пароля для этого сайта.",
   "mobile.chat.browserSecret.vaultSkip.noAuthenticatorKey":
-    "CodeBot не использовал ваши сохранённые учётные данные, потому что в них нет ключа аутентификатора.",
+    "OpenBot Code не использовал ваши сохранённые учётные данные, потому что в них нет ключа аутентификатора.",
   "mobile.chat.browserSecret.vaultSkip.vaultUnreadable":
-    "CodeBot не использовал сохранённые учётные данные, потому что не смог прочитать ваш менеджер паролей.",
+    "OpenBot Code не использовал сохранённые учётные данные, потому что не смог прочитать ваш менеджер паролей.",
   "mobile.chat.browserSecret.submit": "Отправить",
   "mobile.chat.browserSecret.takeOver": "Взять управление",
   "mobile.chat.starter.title": "С чего начнём?",
@@ -567,14 +569,14 @@ export const messages = {
   "mobile.chat.approval.effect.permissions":
     "«Разрешить» даст {name} эти разрешения на {server}. «Отклонить» сохранит текущие разрешения.",
   "mobile.chat.approval.partial":
-    "{server} отправляет на телефон только начало этого запроса. Чтобы разрешить его, обновите CodeBot на {server} или откройте этот чат в приложении CodeBot для компьютера. Отклонить его можно здесь.",
+    "{server} отправляет на телефон только начало этого запроса. Чтобы разрешить его, обновите OpenBot Code на {server} или откройте этот чат в приложении OpenBot Code для компьютера. Отклонить его можно здесь.",
   "mobile.chat.approval.loading": "Загрузка полного запроса…",
   "mobile.chat.approval.loadFailed": "Не удалось загрузить полный запрос. Отклонить его можно здесь.",
   "mobile.chat.approval.retry": "Повторить",
   "mobile.chat.approval.report.bugHeadline": "Нашли ошибку? Давайте исправим.",
   "mobile.chat.approval.report.ideaHeadline": "Есть идея? Давайте воплотим.",
   "mobile.chat.approval.report.dontSend": "Не сейчас",
-  "mobile.chat.approval.report.send": "Отправить команде CodeBot",
+  "mobile.chat.approval.report.send": "Отправить команде OpenBot Code",
   "mobile.chat.approval.report.phoneAdds": "Этот телефон добавляет в отчёт:",
   "mobile.chat.approval.allow": "Разрешить",
   "mobile.chat.approval.deny": "Отклонить",
@@ -672,7 +674,7 @@ export const messages = {
   "mobile.chat.queue.sendNowNeedsTurn": "Отправить сейчас можно только во время выполнения хода.",
   "mobile.chat.queue.stillHoldingTitle": "Сообщение всё ещё удерживается",
   "mobile.chat.queue.stillHoldingMessage":
-    "CodeBot не удалось освободить это сообщение, поэтому агент продолжает его ждать. Повторите попытку после переподключения телефона.",
+    "OpenBot Code не удалось освободить это сообщение, поэтому агент продолжает его ждать. Повторите попытку после переподключения телефона.",
   "mobile.chat.queue.keepEditing": "Продолжить",
   "mobile.chat.queue.leaveAnyway": "Всё равно выйти",
   "mobile.chat.queue.discardTitle": "Отменить изменения?",
@@ -682,7 +684,7 @@ export const messages = {
   "mobile.chat.queue.alreadyReceivedKept":
     "Агент уже получил это сообщение, поэтому его нельзя изменить. Когда вы закроете этот экран, ваш текст попадёт в поле сообщения.",
   "mobile.chat.queue.holding": "Удерживаем сообщение для вас…",
-  "mobile.chat.queue.holdFailed": "CodeBot не удалось удержать это сообщение для редактирования.",
+  "mobile.chat.queue.holdFailed": "OpenBot Code не удалось удержать это сообщение для редактирования.",
   "mobile.chat.queue.messageLabel": "Сообщение",
   "mobile.chat.queue.messagePlaceholder": "Текст сообщения",
   "mobile.chat.queue.save": "Сохранить сообщение из очереди",
@@ -729,12 +731,14 @@ export const messages = {
   "mobile.chat.threads.renameSave": "Сохранить",
   "mobile.chat.threads.name": "Название ветки",
   "mobile.chat.threads.renameUnavailable":
-    "Сейчас нельзя переименовать эту ветку. Подключитесь к серверу или обновите CodeBot на хосте.",
+    "Сейчас нельзя переименовать эту ветку. Подключитесь к серверу или обновите OpenBot Code на хосте.",
   "mobile.chat.threads.delete.action": "Удалить",
   "mobile.chat.threads.delete.title": "Удалить эту ветку?",
-  "mobile.chat.threads.delete.body": "CodeBot навсегда удалит ветку, её сообщения и файлы. Основной чат не изменится.",
-  "mobile.chat.threads.filesUnsupported": "Этот хост не принимает файлы в ветке. Обновите CodeBot на хосте.",
-  "mobile.chat.threads.unsupported": "Этот хост не может переименовывать или удалять ветки. Обновите CodeBot на хосте.",
+  "mobile.chat.threads.delete.body":
+    "OpenBot Code навсегда удалит ветку, её сообщения и файлы. Основной чат не изменится.",
+  "mobile.chat.threads.filesUnsupported": "Этот хост не принимает файлы в ветке. Обновите OpenBot Code на хосте.",
+  "mobile.chat.threads.unsupported":
+    "Этот хост не может переименовывать или удалять ветки. Обновите OpenBot Code на хосте.",
   "mobile.chat.threads.error.rename": "Не удалось переименовать ветку.",
   "mobile.chat.threads.error.delete": "Не удалось удалить ветку.",
   "mobile.chat.channelWork.working": "Работает в канале {channel}",
@@ -754,7 +758,7 @@ export const messages = {
   "mobile.chat.locationRequest.unavailable": "Телефону не удалось определить местоположение. Попробуйте ещё раз.",
   "mobile.chat.locationRequest.deniedTitle": "Доступ к геопозиции выключен",
   "mobile.chat.locationRequest.denied":
-    "Чтобы поделиться местоположением, разрешите CodeBot доступ к нему в Настройках.",
+    "Чтобы поделиться местоположением, разрешите OpenBot Code доступ к нему в Настройках.",
   "mobile.chat.locationRequest.openSettings": "Открыть Настройки",
   "mobile.chat.appSuggestion.skip": "Пропустить",
   "mobile.chat.appSuggestion.skipNamed": "Пропустить {name}",

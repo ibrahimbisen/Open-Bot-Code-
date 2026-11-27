@@ -25,7 +25,7 @@ export function BrowserScene(props: { tabs: SceneTab[]; url: string; page: JSX.E
             <i />
           </span>
           <Show when={shared().length > 0}>
-            <span class="scene-group">CodeBot</span>
+            <span class="scene-group">OpenBot Code</span>
             <For each={shared()}>{(tab) => <Tab tab={tab} />}</For>
           </Show>
           <For each={others()}>{(tab) => <Tab tab={tab} />}</For>
@@ -49,7 +49,7 @@ export function BrowserScene(props: { tabs: SceneTab[]; url: string; page: JSX.E
           <aside class="scene-side">
             <div class="scene-side-head">
               <img src={codeBotIcon} alt="" />
-              <span>CodeBot</span>
+              <span>OpenBot Code</span>
               <Pin size={14} class="scene-side-pin" />
               <X size={15} />
             </div>

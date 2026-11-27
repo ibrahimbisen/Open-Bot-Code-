@@ -77,7 +77,7 @@ export interface SetupProviderChoice {
   customModel: () => AgentModelId | null;
 }
 
-const INCLUDED_DESCRIPTION = "Included with CodeBot";
+const INCLUDED_DESCRIPTION = "Included with OpenBot Code";
 
 const SETUP_PROVIDERS: Array<{ id: AgentProviderId; name: string; description: string | null }> =
   AGENT_PROVIDER_DESCRIPTORS.filter((descriptor) => descriptor.id !== "acp").map((descriptor) => ({

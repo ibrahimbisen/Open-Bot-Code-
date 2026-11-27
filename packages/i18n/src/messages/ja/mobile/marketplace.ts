@@ -65,13 +65,13 @@ export const messages = {
   "mobile.marketplace.facts.accessMac": "Mac のみ",
   "mobile.marketplace.permission.admin": "マーケットプレイスからインストールできるのはオーナーと管理者のみです。",
   "mobile.marketplace.permission.unavailable":
-    "このサーバーはオフラインか、CodeBot が古すぎます。サーバーを実行しているコンピューターで CodeBot をアップデートしてください。",
+    "このサーバーはオフラインか、OpenBot Code が古すぎます。サーバーを実行しているコンピューターで OpenBot Code をアップデートしてください。",
   "mobile.marketplace.error.agentUnsupported":
-    "マーケットプレイスからエージェントを追加するには、サーバーの CodeBot をアップデートしてください。",
+    "マーケットプレイスからエージェントを追加するには、サーバーの OpenBot Code をアップデートしてください。",
   "mobile.marketplace.error.agentUpdateUnsupported":
-    "マーケットプレイスからエージェントを更新するには、サーバーの CodeBot を更新してください。",
+    "マーケットプレイスからエージェントを更新するには、サーバーの OpenBot Code を更新してください。",
   "mobile.marketplace.error.signInUnsupported":
-    "電話からアプリにサインインするには、サーバーの CodeBot をアップデートしてください。",
+    "電話からアプリにサインインするには、サーバーの OpenBot Code をアップデートしてください。",
   "mobile.marketplace.agent.add": "エージェントを追加",
   "mobile.marketplace.agent.adding": "エージェントを追加中",
   "mobile.marketplace.agent.update": "エージェントをアップデート",
@@ -110,7 +110,7 @@ export const messages = {
   "mobile.marketplace.app.stepReturn": "ここに戻ります。{name} がサーバーに接続されます。",
   "mobile.marketplace.app.stepBlank": "最後のページは読み込まれません。これは正常です。",
   "mobile.marketplace.app.stepCopy": "アドレスバーをタップし、アドレス全体をコピーします。",
-  "mobile.marketplace.app.stepPaste": "CodeBot に戻り、下にアドレスを貼り付けます。",
+  "mobile.marketplace.app.stepPaste": "OpenBot Code に戻り、下にアドレスを貼り付けます。",
   "mobile.marketplace.app.openSignIn": "サインインページを開く",
   "mobile.marketplace.app.keySecure": "キーは暗号化された接続で、あなたのサーバーにのみ送られます。",
   "mobile.marketplace.app.connecting": "接続中",
@@ -120,11 +120,11 @@ export const messages = {
   "mobile.marketplace.app.linkInvalid": "{hostname} の https リンクを使ってください。",
   "mobile.marketplace.app.docs": "キーを取得",
   "mobile.marketplace.app.local":
-    "このアプリは CodeBot が動作するコンピューターで実行されます。そのコンピューターで設定してください。",
+    "このアプリは OpenBot Code が動作するコンピューターで実行されます。そのコンピューターで設定してください。",
   "mobile.marketplace.app.needsMac":
-    "このアプリは CodeBot を実行している Mac でのみ動作します。このサーバーは Mac ではありません。",
+    "このアプリは OpenBot Code を実行している Mac でのみ動作します。このサーバーは Mac ではありません。",
   "mobile.marketplace.app.relayUnsupported":
-    "このアプリにはブラウザーでのサインインが必要です。サーバーの CodeBot をアップデートするか、コンピューターでアプリを接続してください。",
+    "このアプリにはブラウザーでのサインインが必要です。サーバーの OpenBot Code をアップデートするか、コンピューターでアプリを接続してください。",
   "mobile.marketplace.app.waiting": "サインインページを待っています…",
   "mobile.marketplace.app.openAgain": "サインインページをもう一度開く",
   "mobile.marketplace.app.pasteLabel": "サインイン後のアドレス",

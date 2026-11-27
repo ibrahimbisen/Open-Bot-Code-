@@ -3,35 +3,35 @@ import { defineMessages } from "../../../message";
 export const messages = defineMessages("error.update", {
   "error.update.unsupported": "Updates are available in installed desktop builds.",
   "error.update.notReady": "An update is not ready to install.",
-  "error.update.restartFailed": "CodeBot could not restart to install the update.",
+  "error.update.restartFailed": "OpenBot Code could not restart to install the update.",
   "error.update.downloadStalled": "The update download stopped responding. Try again.",
-  "error.update.installFailed": "Could not install the update. Quit and reopen CodeBot, then try again.",
+  "error.update.installFailed": "Could not install the update. Quit and reopen OpenBot Code, then try again.",
   "error.update.notInstalled": "The last restart did not install the update. Restart to try again.",
   "error.update.downloadFailed": "Could not download the update. Try again.",
   "error.update.signatureNotConfirmed":
-    "CodeBot could not verify the update. Try again. If this error continues, download CodeBot from openbot.run/download.",
+    "OpenBot Code could not verify the update. Try again. If this error continues, download OpenBot Code from openbot.run/download.",
   "error.update.checkFailed": "Could not check for updates. Try again.",
   "error.update.checkStalled": "The update check stopped responding. Try again.",
   "error.update.checkOffline": "Could not reach the update service. Check your internet connection, then try again.",
   "error.update.checkUnavailable":
-    "The update service did not answer. CodeBot tries again on its own in a few minutes.",
+    "The update service did not answer. OpenBot Code tries again on its own in a few minutes.",
   "error.update.checkNoRelease":
-    "No published update was found for this platform. CodeBot tries again on its own in a few minutes.",
-  "error.update.managedByNix": "Nix installs updates for this copy of CodeBot. Update it with Nix.",
+    "No published update was found for this platform. OpenBot Code tries again on its own in a few minutes.",
+  "error.update.managedByNix": "Nix installs updates for this copy of OpenBot Code. Update it with Nix.",
   "error.update.managedByHost":
     "Updates on this Mac are installed by the host. The update stays ready until the host's maintenance runs.",
   "error.update.siblingSession":
-    "Another CodeBot session is still running from this application. Stop CodeBot in every other macOS user account first, then install the update again.",
+    "Another OpenBot Code session is still running from this application. Stop OpenBot Code in every other macOS user account first, then install the update again.",
   "error.update.siblingSessionSameAccount":
-    "Another CodeBot process is still running in this user account. Quit it, then install the update again.",
-  "error.update.siblingCheckFailed": "Could not verify other CodeBot sessions. Try again before installing.",
+    "Another OpenBot Code process is still running in this user account. Quit it, then install the update again.",
+  "error.update.siblingCheckFailed": "Could not verify other OpenBot Code sessions. Try again before installing.",
   "error.update.readOnlyLocation":
-    "CodeBot cannot install updates from this location. Quit CodeBot. In Finder, drag CodeBot into the Applications folder (if it is already there, drag it out and back in). Then open CodeBot and install the update again.",
+    "OpenBot Code cannot install updates from this location. Quit OpenBot Code. In Finder, drag OpenBot Code into the Applications folder (if it is already there, drag it out and back in). Then open OpenBot Code and install the update again.",
   "error.update.appImageMissing":
-    "CodeBot cannot install the update because its AppImage file was moved, renamed or replaced. Quit CodeBot, then open the AppImage file again.",
+    "OpenBot Code cannot install the update because its AppImage file was moved, renamed or replaced. Quit OpenBot Code, then open the AppImage file again.",
   "error.update.appImageReadOnly":
-    "CodeBot cannot install updates in the folder of its AppImage file. Quit CodeBot, move the AppImage file to a folder in your home folder, then open it and install the update again.",
+    "OpenBot Code cannot install updates in the folder of its AppImage file. Quit OpenBot Code, move the AppImage file to a folder in your home folder, then open it and install the update again.",
   "error.update.remoteDisabled": "Updates from server admins are turned off on this computer.",
-  "error.update.restartStarted": "CodeBot is already restarting to install the update.",
-  "error.update.alreadyRestarting": "CodeBot is already restarting.",
+  "error.update.restartStarted": "OpenBot Code is already restarting to install the update.",
+  "error.update.alreadyRestarting": "OpenBot Code is already restarting.",
 });

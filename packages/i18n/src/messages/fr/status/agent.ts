@@ -28,7 +28,7 @@ export const messages = {
   "status.agent.screenCaptureChannel":
     "L’image s’affiche dans le canal {channel}, et chaque membre de ce serveur qui lit le canal peut la voir.",
   "status.agent.screenCapturePermissionNext":
-    "macOS peut ensuite vous demander d’autoriser l’enregistrement de l’écran pour CodeBot.",
+    "macOS peut ensuite vous demander d’autoriser l’enregistrement de l’écran pour OpenBot Code.",
   "status.agent.screenCaptureDisplay": "Capturer l’écran {name} et envoyer l’image au modèle de l’agent.",
   "status.agent.screenCaptureWindow": "Capturer la fenêtre {name} et envoyer l’image au modèle de l’agent.",
   "status.agent.screenCaptureRegion":
@@ -40,7 +40,7 @@ export const messages = {
   "status.agent.sendIdea": "Ceci devient une issue GitHub publique. Votre nom n'est pas affiché.",
   "status.agent.feedbackRecentErrors": "Erreurs récentes dans le chat :",
   "status.agent.feedbackSameAs": "S'ajoute à l'issue #{issue}",
-  "status.agent.feedbackSent": "Envoyé à l'équipe CodeBot : {title}",
+  "status.agent.feedbackSent": "Envoyé à l'équipe OpenBot Code : {title}",
   "status.agent.feedbackWithdrawn": "Supprimé de GitHub : {title}",
   "status.agent.feedbackWithdrawCommand": "Supprimer le rapport #{issue} de GitHub",
   "status.agent.feedbackWithdrawReason":
@@ -48,15 +48,15 @@ export const messages = {
   "status.agent.feedbackWithdrawing": "Suppression de votre rapport de GitHub…",
   "status.agent.browserProfileNamed":
     "Déplacer {agents} vers le profil de navigateur {profile}. Ils reçoivent ses connexions et ses cookies. Leurs onglets ouverts se ferment.",
-  "status.agent.commitCoAuthorOff": "Ne plus ajouter CodeBot comme coauteur des commits de tous les agents.",
-  "status.agent.commitCoAuthorOn": "Ajouter de nouveau CodeBot comme coauteur des commits de tous les agents.",
+  "status.agent.commitCoAuthorOff": "Ne plus ajouter OpenBot Code comme coauteur des commits de tous les agents.",
+  "status.agent.commitCoAuthorOn": "Ajouter de nouveau OpenBot Code comme coauteur des commits de tous les agents.",
   "status.agent.browserProfileNew":
     "Créer le nouveau profil de navigateur {profile} et y déplacer {agents}. Il n'a aucune connexion. Leurs onglets ouverts se ferment.",
   "status.agent.browserProfileShared":
     "Déplacer {agents} vers le profil de navigateur partagé. Ils reçoivent ses connexions et ses cookies. Leurs onglets ouverts se ferment.",
   "status.agent.browserProfileOwn":
     "Donner à {agents} un profil de navigateur propre à chacun. Leurs onglets ouverts se ferment.",
-  "status.agent.feedbackSending": "Envoi de vos commentaires à l’équipe CodeBot…",
+  "status.agent.feedbackSending": "Envoi de vos commentaires à l’équipe OpenBot Code…",
   "status.agent.workflowDelete":
     "Supprimer le workflow {title} avec ses exécutions et ses versions. Ses étapes en cours s'arrêtent.",
   "status.agent.deleteAgents":

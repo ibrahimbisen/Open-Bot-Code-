@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Comandos",
+  "slash.picker.option": "Comando /{name}",
+  "slash.picker.none": "O motor ainda não informou seus comandos. O OpenBot Code os lê quando o motor inicia.",
+  "slash.picker.noMatch": "Nenhum comando corresponde a “{query}”.",
+  "slash.badge.project": "Projeto",
+  "slash.badge.user": "Usuário",
+  "slash.badge.plugin": "Plugin",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Somente terminal",
+  "slash.screen.close": "Fechar",
+  "slash.screen.loading": "Carregando…",
+  "slash.model.title": "Escolher o modelo",
+  "slash.model.description": "{name} usa este modelo a partir da próxima mensagem.",
+  "slash.model.empty": "Nenhum modelo está disponível para este agente.",
+  "slash.model.failed": "O modelo não foi alterado.",
+  "slash.effort.title": "Nível de raciocínio",
+  "slash.effort.description": "Quanto {name} pensa antes de responder.",
+  "slash.effort.unsupported": "O modelo deste agente não tem níveis de raciocínio.",
+  "slash.effort.failed": "O nível de raciocínio não foi alterado.",
+  "slash.resume.title": "Retomar um chat",
+  "slash.resume.description":
+    "Chats que o motor salvou para a pasta de {name}. Um chat retomado abre como um novo chat.",
+  "slash.resume.empty": "O motor não tem chats salvos para esta pasta.",
+  "slash.resume.failed": "O OpenBot Code não conseguiu ler os chats salvos.",
+  "slash.resume.retry": "Tentar novamente",
+  "slash.resume.inUse": "Aberto no OpenBot Code",
+  "slash.resume.untitled": "Chat sem título",
+  "slash.resume.branch": "Branch {name}",
+  "slash.resume.updated": "Atualizado {time}",
+  "slash.resume.openFailed": "O chat não abriu.",
+} as const satisfies PartialTranslation<typeof source>;

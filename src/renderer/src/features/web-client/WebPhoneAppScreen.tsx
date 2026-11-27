@@ -7,7 +7,7 @@ import { IOS_APP_STORE_URL } from "@codebot/ui/features/mobile-app/ios-app-store
 import { useText } from "@codebot/ui/text";
 import { For } from "solid-js";
 
-const PRODUCT_NAME = "CodeBot";
+const PRODUCT_NAME = "OpenBot Code";
 const STORAGE_KEY = "codebot.web.phoneBrowser";
 const PHONE_QUERY = "(pointer: coarse) and (max-width: 720px), (pointer: coarse) and (max-height: 500px)";
 

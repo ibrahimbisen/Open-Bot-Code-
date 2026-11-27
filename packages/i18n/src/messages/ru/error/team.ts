@@ -2,14 +2,14 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/team";
 
 export const messages = {
-  "error.team.ownerNotLinked": "Этот хост не связан с аккаунтом владельца CodeBot.",
-  "error.team.ownerEmailRequired": "Войдите с адресом электронной почты CodeBot, который создал этот хост.",
+  "error.team.ownerNotLinked": "Этот хост не связан с аккаунтом владельца OpenBot Code.",
+  "error.team.ownerEmailRequired": "Войдите с адресом электронной почты OpenBot Code, который создал этот хост.",
   "error.team.hostNotConfigured": "Хост команды не настроен.",
   "error.team.alreadyConfigured": "Сервер команды уже настроен.",
   "error.team.identityCreateFailed": "Не удалось создать идентификатор команды.",
   "error.team.accountChangedDuringCreate":
     "Аккаунт, в который выполнен вход, изменился во время создания этого сервера.",
-  "error.team.notConfigured": "Этот CodeBot не настроен.",
+  "error.team.notConfigured": "Этот OpenBot Code не настроен.",
   "error.team.keyRotationMissing": "Нет ожидающей смены ключа сервера.",
   "error.team.serverNotActive": "Этот сервер больше не является активным для аккаунта, в который выполнен вход.",
   "error.team.logoInvalid": "Выберите корректное изображение PNG, JPEG или WebP размером до 512 КБ.",
@@ -22,9 +22,9 @@ export const messages = {
   "error.team.inviteEmailMismatch": "Это приглашение относится к другому адресу электронной почты.",
   "error.team.memberDisabled": "Этот участник команды отключён.",
   "error.team.memberLimit": "У хоста может быть не более {limit} участников.",
-  "error.team.accountNotMember": "Этот аккаунт CodeBot не входит в команду.",
+  "error.team.accountNotMember": "Этот аккаунт OpenBot Code не входит в команду.",
   "error.team.usernameTaken": "Это имя пользователя уже занято.",
-  "error.team.inviteRequiresAccount": "Для этого приглашения нужен подтверждённый аккаунт CodeBot.",
+  "error.team.inviteRequiresAccount": "Для этого приглашения нужен подтверждённый аккаунт OpenBot Code.",
   "error.team.loginIncorrect": "Неверное имя пользователя или пароль.",
   "error.team.currentPasswordIncorrect": "Текущий пароль неверен.",
   "error.team.memberNotFound": "Участник команды не найден.",
@@ -46,22 +46,23 @@ export const messages = {
     "Имя пользователя должно содержать от 3 до 32 букв, цифр, точек, дефисов или подчёркиваний.",
   "error.team.passwordLength": "Пароль должен содержать от 12 до 256 символов.",
   "error.team.bindFailed": "Не удалось привязать API команды.",
-  "error.team.signInRequired": "Требуется вход в CodeBot.",
+  "error.team.signInRequired": "Требуется вход в OpenBot Code.",
   "error.team.authenticationRequired": "Требуется аутентификация.",
   "error.team.agentNotFound": "Агент не найден.",
   "error.team.routeNotFound": "Маршрут не найден.",
   "error.team.requestFailed": "Запрос не удался.",
   "error.team.tooManySignInAttempts": "Слишком много попыток входа. Повторите попытку позже.",
-  "error.team.clientUpdateRequired": "Обновите этот клиент CodeBot, прежде чем подключаться к этому хосту.",
-  "error.team.hostUpdateRequired": "Обновите CodeBot на хосте, прежде чем подключаться.",
-  "error.team.serverSafeMode": "Этот сервер находится в безопасном режиме, потому что CodeBot на нём не запускается.",
+  "error.team.clientUpdateRequired": "Обновите этот клиент OpenBot Code, прежде чем подключаться к этому хосту.",
+  "error.team.hostUpdateRequired": "Обновите OpenBot Code на хосте, прежде чем подключаться.",
+  "error.team.serverSafeMode":
+    "Этот сервер находится в безопасном режиме, потому что OpenBot Code на нём не запускается.",
   "error.team.serverSafeModeNewerDatabase":
-    "CodeBot {version} на этом сервере не может открыть свои данные, потому что их сохранила более новая версия CodeBot. Более новый выпуск CodeBot на сервере устранит проблему.",
+    "OpenBot Code {version} на этом сервере не может открыть свои данные, потому что их сохранила более новая версия OpenBot Code. Более новый выпуск OpenBot Code на сервере устранит проблему.",
   "error.team.serverSafeModeStartFailed":
-    "CodeBot {version} на этом сервере остановлен после многих неудачных запусков. Более новый выпуск CodeBot на сервере устранит проблему.",
+    "OpenBot Code {version} на этом сервере остановлен после многих неудачных запусков. Более новый выпуск OpenBot Code на сервере устранит проблему.",
   "error.team.sidebarLayoutUnavailable": "Структура боковой панели недоступна.",
   "error.team.providersUnsupported": "Это подключение не поддерживает настройки провайдеров.",
-  "error.team.providerNotManaged": "CodeBot не управляет CLI этого провайдера.",
+  "error.team.providerNotManaged": "OpenBot Code не управляет CLI этого провайдера.",
   "error.team.channelsUnsupported": "Это подключение не поддерживает чаты каналов.",
   "error.team.channelContextUnsupported": "Это подключение не поддерживает новый разговор и сжатие в канале.",
   "error.team.channelPictureUnsupported": "Это подключение не поддерживает изображения каналов.",
@@ -95,9 +96,9 @@ export const messages = {
   "error.team.libraryFoldersUnsupported": "Это подключение не поддерживает папки Библиотеки.",
   "error.team.workflowFoldersUnsupported": "Это подключение не поддерживает папки рабочих процессов.",
   "error.team.agentNotificationLevelsUnsupported":
-    "Этот сервер не может хранить ваш уровень уведомлений для каждого агента. Обновите CodeBot на компьютере, где он работает.",
+    "Этот сервер не может хранить ваш уровень уведомлений для каждого агента. Обновите OpenBot Code на компьютере, где он работает.",
   "error.team.sidebarPinsUnsupported":
-    "Этот сервер не может хранить закреплённые чаты для всех ваших устройств. Обновите CodeBot на компьютере, на котором он работает.",
+    "Этот сервер не может хранить закреплённые чаты для всех ваших устройств. Обновите OpenBot Code на компьютере, на котором он работает.",
   "error.team.agentInstructionsUnsupported": "Это подключение не поддерживает редактирование инструкций агентов.",
   "error.team.agentPublishUnsupported": "Это подключение не поддерживает публикацию агентов.",
   "error.team.agentUpdateUnsupported": "Это подключение не поддерживает обновление агентов.",
@@ -109,9 +110,9 @@ export const messages = {
   "error.team.threadMessageSearchUnsupported": "Это подключение не поддерживает поиск в побочных ветках.",
   "error.team.sideQuestionUnsupported": "Это подключение не поддерживает побочные вопросы.",
   "error.team.liveVoiceUnsupported":
-    "Этот сервер не поддерживает живой голос Codex. Обновите CodeBot на компьютере, где он работает.",
+    "Этот сервер не поддерживает живой голос Codex. Обновите OpenBot Code на компьютере, где он работает.",
   "error.team.routineFlowsUnsupported":
-    "Этот сервер не поддерживает цепочки регулярных задач. Обновите CodeBot на компьютере, где он работает.",
+    "Этот сервер не поддерживает цепочки регулярных задач. Обновите OpenBot Code на компьютере, где он работает.",
   "error.team.routineCanvasTooLarge":
     "Эта схема регулярных задач слишком велика для отправки на это устройство. Сократите инструкции регулярных задач на компьютере, где работает сервер.",
   "error.team.conversationPageTooLarge":
@@ -156,9 +157,9 @@ export const messages = {
   "error.team.browserSessionNotFound": "Сессия вида браузера не найдена.",
   "error.team.mcpUnsupported": "Это подключение не поддерживает серверы MCP.",
   "error.team.mcpServerListNeedsUpdate":
-    "Обновите CodeBot на этом устройстве, чтобы использовать на этом сервере больше {limit} серверов MCP.",
+    "Обновите OpenBot Code на этом устройстве, чтобы использовать на этом сервере больше {limit} серверов MCP.",
   "error.team.providerAccountListNeedsUpdate":
-    "Обновите CodeBot на этом устройстве, чтобы использовать на этом сервере больше {limit} аккаунтов одного провайдера.",
+    "Обновите OpenBot Code на этом устройстве, чтобы использовать на этом сервере больше {limit} аккаунтов одного провайдера.",
   "error.team.storageUnsupported": "Это подключение не поддерживает хранилище.",
   "error.team.machineResourcesUnsupported": "Это подключение не поддерживает данные о машине.",
   "error.team.machineAlertMemberInvalid":
@@ -185,10 +186,11 @@ export const messages = {
   "error.team.mcpServerNotYours": "Изменить этот MCP-сервер может только тот, кто его добавил, или администратор.",
   "error.team.ownerRequired": "Это может сделать только владелец сервера.",
   "error.team.requestTooLarge": "Тело запроса слишком большое.",
-  "error.team.signInRelayUnsupported": "Этот сервер не может передавать входы. Обновите CodeBot на хосте.",
-  "error.team.connectorsUnsupported": "Подключениями этого сервера нельзя управлять отсюда. Обновите CodeBot на хосте.",
-  "error.team.discordAccessUnsupported": "Этот сервер не может задать роли Discord. Обновите на нём CodeBot.",
-  "error.team.connectorPageRefused": "Сервер прислал страницу, которую CodeBot не открывает.",
+  "error.team.signInRelayUnsupported": "Этот сервер не может передавать входы. Обновите OpenBot Code на хосте.",
+  "error.team.connectorsUnsupported":
+    "Подключениями этого сервера нельзя управлять отсюда. Обновите OpenBot Code на хосте.",
+  "error.team.discordAccessUnsupported": "Этот сервер не может задать роли Discord. Обновите на нём OpenBot Code.",
+  "error.team.connectorPageRefused": "Сервер прислал страницу, которую OpenBot Code не открывает.",
   "error.team.signInRelayUnknown": "Этот вход завершён или не существует.",
   "error.team.signInRelayUsed": "Этот вход уже отправлен.",
   "error.team.signInRelayMismatch": "Этот адрес не относится к этому входу.",

@@ -47,7 +47,7 @@ export const messages = {
   "error.skill.ownSkillExists":
     "Este agente já tem uma habilidade própria chamada {slug}. Peça ao agente para renomear ou excluir essa habilidade e depois adicione esta habilidade de novo.",
   "error.skill.managedSlug":
-    "O CodeBot dá a cada agente sua própria habilidade {slug}. Dê outro nome a esta habilidade.",
+    "O OpenBot Code dá a cada agente sua própria habilidade {slug}. Dê outro nome a esta habilidade.",
   "error.skill.templateMarkdownTooLarge": "{name}: SKILL.md tem mais de 64 KB. Encurte o texto antes de publicar.",
   "error.skill.localNoRevisions": "A habilidade local não tem revisões publicadas.",
   "error.skill.localNotFound": "Esta habilidade local não existe. Confira o ID dela na lista de habilidades locais.",
@@ -65,13 +65,14 @@ export const messages = {
   "error.skill.pathSymlink": "Os caminhos de habilidades não podem conter links simbólicos.",
   "error.skill.folderNotRead": "{provider} não lê {folder}. Copie esta pasta para {target}.",
   "error.skill.githubLinkInvalid": "Cole um link para um repositório ou pasta do GitHub.",
-  "error.skill.githubNotFound": "O CodeBot não consegue abrir {repository}. O repositório é privado ou não existe.",
+  "error.skill.githubNotFound":
+    "O OpenBot Code não consegue abrir {repository}. O repositório é privado ou não existe.",
   "error.skill.githubNoSkills": "Não há SKILL.md em {folder}.",
-  "error.skill.githubUnavailable": "O CodeBot não consegue ler o GitHub agora. Tente novamente mais tarde.",
+  "error.skill.githubUnavailable": "O OpenBot Code não consegue ler o GitHub agora. Tente novamente mais tarde.",
   "error.skill.githubRateLimited":
-    "O GitHub limita a frequência com que o CodeBot pode lê-lo sem uma conta. Tente novamente em uma hora.",
+    "O GitHub limita a frequência com que o OpenBot Code pode lê-lo sem uma conta. Tente novamente em uma hora.",
   "error.skill.githubTooLarge":
-    "O CodeBot não consegue ler todos os arquivos de {repository}. O repositório é grande demais.",
+    "O OpenBot Code não consegue ler todos os arquivos de {repository}. O repositório é grande demais.",
   "error.skill.githubHostTooOld": "Atualize este servidor para adicionar habilidades do GitHub.",
   "error.skill.publishGithub": "{name} vem do GitHub. Você só pode publicar as habilidades que criou.",
 } as const satisfies PartialTranslation<typeof source>;

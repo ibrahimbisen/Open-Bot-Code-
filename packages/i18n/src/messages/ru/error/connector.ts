@@ -2,45 +2,45 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/connector";
 
 export const messages = {
-  "error.connector.githubUnavailable": "В этой сборке CodeBot нет GitHub App.",
+  "error.connector.githubUnavailable": "В этой сборке OpenBot Code нет GitHub App.",
   "error.connector.githubDenied": "Вход через GitHub отклонён.",
   "error.connector.githubCodeExpired": "Срок действия кода GitHub истёк. Подключите GitHub заново.",
   "error.connector.githubDeviceFlowDisabled": "GitHub App не разрешает вход с устройства.",
   "error.connector.githubClientUnknown": "GitHub не знает Client ID этого GitHub App.",
   "error.connector.githubUnexpected": "GitHub прислал неожиданный ответ: {detail}",
-  "error.connector.githubUnreachable": "CodeBot не может связаться с GitHub: {detail}",
+  "error.connector.githubUnreachable": "OpenBot Code не может связаться с GitHub: {detail}",
   "error.connector.githubOffline":
-    "CodeBot не может связаться с GitHub. Проверьте подключение к интернету и настройки DNS компьютера или сервера, на котором работает CodeBot, затем повторите попытку.",
+    "OpenBot Code не может связаться с GitHub. Проверьте подключение к интернету и настройки DNS компьютера или сервера, на котором работает OpenBot Code, затем повторите попытку.",
   "error.connector.githubExpired": "Подключение к GitHub истекло. Подключите GitHub заново.",
   "error.connector.githubFileUnreadable": "Файл подключения GitHub не читается.",
   "error.connector.githubFileTooLarge": "Файл подключения GitHub слишком большой.",
   "error.connector.onePasswordCliMissing":
-    "CodeBot не находит CLI 1Password. Установите его и включите интеграцию в приложении 1Password либо используйте токен сервисного аккаунта.",
+    "OpenBot Code не находит CLI 1Password. Установите его и включите интеграцию в приложении 1Password либо используйте токен сервисного аккаунта.",
   "error.connector.onePasswordCliInstallFailed":
-    "CodeBot не смог установить CLI 1Password. Проверьте подключение к интернету и повторите попытку.",
+    "OpenBot Code не смог установить CLI 1Password. Проверьте подключение к интернету и повторите попытку.",
   "error.connector.onePasswordCliSignedOut":
     "В CLI 1Password не выполнен вход. Включите его интеграцию в приложении 1Password и подключитесь снова.",
   "error.connector.onePasswordAppUnreachable":
-    "CodeBot не может связаться с приложением 1Password. Откройте 1Password и разблокируйте его. В разделе «Настройки» > «Разработчик» проверьте, что параметр «Integrate with 1Password CLI» включён. Затем повторите попытку.",
+    "OpenBot Code не может связаться с приложением 1Password. Откройте 1Password и разблокируйте его. В разделе «Настройки» > «Разработчик» проверьте, что параметр «Integrate with 1Password CLI» включён. Затем повторите попытку.",
   "error.connector.onePasswordCliFailed": "CLI 1Password завершился с ошибкой: {detail}",
   "error.connector.onePasswordCliForbidden":
     "Ваш аккаунт 1Password не позволяет вам создать общее хранилище или сервисный аккаунт. Попросите владельца или администратора аккаунта дать это разрешение или выдать токен сервисного аккаунта, затем нажмите «Использовать токен».",
   "error.connector.onePasswordUnexpected": "1Password прислал неожиданный ответ: {detail}",
   "error.connector.onePasswordTokenRejected": "1Password не принял токен сервисного аккаунта.",
   "error.connector.onePasswordUnreachable":
-    "CodeBot не смог подключиться к 1Password. Проверьте подключение к интернету и повторите попытку.",
+    "OpenBot Code не смог подключиться к 1Password. Проверьте подключение к интернету и повторите попытку.",
   "error.connector.onePasswordRateLimited":
     "1Password получил слишком много запросов. Подождите несколько минут и повторите попытку.",
   "error.connector.onePasswordNoVault":
     "Сервисный аккаунт не может читать ни одно хранилище. Дайте ему доступ к хранилищу и повторите попытку.",
   "error.connector.onePasswordReadFailed":
-    "CodeBot не может прочитать ваши логины в 1Password. Отключите 1Password, затем подключите его снова.",
+    "OpenBot Code не может прочитать ваши логины в 1Password. Отключите 1Password, затем подключите его снова.",
   "error.connector.onePasswordFileUnreadable": "Файл подключения 1Password не читается.",
   "error.connector.onePasswordFileTooLarge": "Файл подключения 1Password слишком большой.",
   "error.connector.bitwardenFailed":
     "Не удалось прочитать Bitwarden. Установите CLI bw, войдите, разблокируйте его и создайте одну папку с именем Shared with CodeBot. Подключитесь с новым ключом сессии.",
   "error.connector.bitwardenCliMissing":
-    "CodeBot не находит Bitwarden CLI. Установите bw, проверьте, что он работает в новом терминале, и подключитесь снова.",
+    "OpenBot Code не находит Bitwarden CLI. Установите bw, проверьте, что он работает в новом терминале, и подключитесь снова.",
   "error.connector.bitwardenFolderMissing":
     "В Bitwarden должна быть ровно одна папка с именем Shared with CodeBot. Создайте её или удалите лишнюю, затем подключитесь снова.",
   "error.connector.bitwardenHostInput":
@@ -54,7 +54,7 @@ export const messages = {
   "error.connector.bitwardenCliInstallFailed":
     "Не удалось установить Bitwarden CLI на этом сервере. Проверьте его сетевое подключение и подключитесь снова.",
   "error.connector.bitwardenFileUnreadable": "Файл подключения Bitwarden не читается.",
-  "error.connector.passwordManagerUnknown": "CodeBot не знает этот менеджер паролей.",
+  "error.connector.passwordManagerUnknown": "OpenBot Code не знает этот менеджер паролей.",
   "error.connector.passwordManagerMethod": "Этот менеджер паролей нельзя подключить таким способом.",
   "error.connector.passwordManagerNoSignIn": "Страница входа не открыта. Подключитесь снова.",
   "error.connector.protonPassFailed": "Не удалось подключить Proton Pass. Подключитесь снова.",

@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "Панели",
+  "panel.add": "Добавить панель",
+  "panel.add.otherChat": "Чат из другого проекта",
+  "panel.add.file": "Файл",
+  "panel.add.diff": "Изменения",
+  "panel.add.browser": "Браузер",
+  "panel.add.preview": "Предпросмотр",
+  "panel.split.right": "Разделить вправо",
+  "panel.split.down": "Разделить вниз",
+  "panel.maximize": "Развернуть панель",
+  "panel.restore": "Восстановить размер панели",
+  "panel.close": "Закрыть панель",
+  "panel.pin": "Закрепить панель, чтобы она оставалась открытой",
+  "panel.unpin": "Открепить панель",
+  "panel.preview.loading": "Загрузка предпросмотра",
+  "panel.preview.failed": "Не удалось открыть предпросмотр.",
+  "panel.browser.label": "Панель браузера",
+  "panel.browser.starting": "Открывается браузер",
+  "panel.browser.failed": "Не удалось открыть страницу браузера.",
+  "panel.browser.closed": "Эта страница браузера закрыта.",
+  "panel.browser.takeControl": "Взять страницу под управление",
+  "panel.browser.handControl": "Передать управление агенту",
+  "panel.browser.userControls": "Вы управляете этой страницей",
+  "panel.browser.agentControls": "Агент управляет этой страницей",
+  "panel.header.model": "Модель этого чата",
+  "panel.header.modelLocked": "Сейчас модель изменить нельзя.",
+  "panel.header.files": "Файлы проекта",
+  "panel.draft.agent": "Агент",
+  "panel.chat.noAgent": "В этом проекте нет агента. Добавьте агента в настройках проекта.",
+  "panel.picker.title": "Открыть чат в панели",
+  "panel.picker.description": "Выберите проект, затем чат. Панель показывает название проекта.",
+  "panel.picker.project": "Проект",
+} as const satisfies PartialTranslation<typeof source>;

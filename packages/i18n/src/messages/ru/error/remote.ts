@@ -17,14 +17,14 @@ export const messages = {
   "error.remote.sessionCapacity": "На хосте уже четыре активные сессии.",
   "error.remote.linuxNeedsX11": "Для удалённого рабочего стола в Linux нужна сессия X11. Wayland не поддерживается.",
   "error.remote.runtimeMissing":
-    "Среда Sunshine и Moonlight Web отсутствует или не поддерживается на этом хосте. Установите полный релиз CodeBot на Mac, хост Windows x64 или хост Linux x64 и перезапустите CodeBot.",
+    "Среда Sunshine и Moonlight Web отсутствует или не поддерживается на этом хосте. Установите полный релиз OpenBot Code на Mac, хост Windows x64 или хост Linux x64 и перезапустите OpenBot Code.",
   "error.remote.testActive": "Идёт проверка удалённого рабочего стола. Повторите попытку, когда она закончится.",
   "error.remote.screenRecordingDenied":
-    "Хост не разрешил CodeBot записывать экран. Разрешите запись экрана на хосте и повторите попытку.",
+    "Хост не разрешил OpenBot Code записывать экран. Разрешите запись экрана на хосте и повторите попытку.",
   "error.remote.windowsSessionDisconnected":
     "Сеанс Windows на хосте отключён, поэтому нет экрана для показа. Войдите в Windows на экране хоста и повторите попытку.",
   "error.remote.windowsCaptureDenied":
-    "Windows на хосте не разрешает CodeBot записывать экран. Разблокируйте Windows на экране хоста, закройте все запросы администратора и повторите попытку. Если проблема не исчезнет, перезапустите хост.",
+    "Windows на хосте не разрешает OpenBot Code записывать экран. Разблокируйте Windows на экране хоста, закройте все запросы администратора и повторите попытку. Если проблема не исчезнет, перезапустите хост.",
   "error.remote.macScreenLocked":
     "Mac заблокирован, поэтому не может показать свой экран. Разблокируйте Mac на его экране и повторите попытку.",
   "error.remote.streamTooSlowLowerQuality":
@@ -45,7 +45,7 @@ export const messages = {
   "error.remote.moonlightStartFailed":
     "Moonlight Web не запустился на хосте. Проверьте журналы удалённого рабочего стола на хосте и повторите попытку.",
   "error.remote.pairingFailed":
-    "Moonlight не удалось выполнить сопряжение с Sunshine на хосте. Повторите попытку. Если проблема не исчезает, перезапустите CodeBot на хосте.",
+    "Moonlight не удалось выполнить сопряжение с Sunshine на хосте. Повторите попытку. Если проблема не исчезает, перезапустите OpenBot Code на хосте.",
   "error.remote.runtimeStartFailed":
     "Среда удалённого рабочего стола не запустилась на хосте. Проверьте журналы удалённого рабочего стола на хосте и повторите попытку.",
   "error.remote.hostUnreachable": "Хост недоступен.",
@@ -53,7 +53,7 @@ export const messages = {
   "error.remote.invalidData": "Хост вернул некорректные данные.",
   "error.remote.unsafeData": "Хост вернул данные, которые приложение не смогло безопасно использовать.",
   "error.remote.requestFailedStatus": "Запрос к удалённому серверу не удался ({status}).",
-  "error.remote.appUpdateRequired": "Обновите это приложение CodeBot, прежде чем подключаться к хосту.",
+  "error.remote.appUpdateRequired": "Обновите это приложение OpenBot Code, прежде чем подключаться к хосту.",
   "error.remote.identityNotVerified": "Не удалось проверить идентификатор сервера.",
   "error.remote.webRtcUnavailable": "Транспорт WebRTC недоступен.",
   "error.remote.invalidCompatibility": "Хост вернул некорректные сведения о совместимости.",
@@ -72,9 +72,9 @@ export const messages = {
   "error.remote.inviteIdentityChanged": "Идентификатор хоста приглашения изменился во время принятия.",
   "error.remote.localServerRemove": "Локальный сервер нельзя удалить.",
   "error.remote.desktopSetupHostUpdate":
-    "Обновите CodeBot на хосте, чтобы проверить настройку удалённого рабочего стола.",
+    "Обновите OpenBot Code на хосте, чтобы проверить настройку удалённого рабочего стола.",
   "error.remote.desktopTestHostUpdate":
-    "Обновите CodeBot на хосте, чтобы проверить настройку удалённого рабочего стола.",
+    "Обновите OpenBot Code на хосте, чтобы проверить настройку удалённого рабочего стола.",
   "error.remote.viewerProxyUnavailable": "Локальный прокси просмотра удалённого рабочего стола недоступен.",
   "error.remote.viewerTransportInvalid": "Транспорт просмотра удалённого рабочего стола некорректен.",
   "error.remote.viewerProxyNoPort": "Локальный прокси просмотра удалённого рабочего стола не получил порт.",
@@ -92,12 +92,12 @@ export const messages = {
   "error.remote.requestTimeout": "Время удалённого запроса истекло.",
   "error.remote.requestFailed": "Удалённый запрос не удался.",
   "error.remote.hostKeyMissing":
-    "CodeBot не может проверить этот сервер: его ключ безопасности отсутствует или изменился. Попросите владельца сервера проверить сервер.",
+    "OpenBot Code не может проверить этот сервер: его ключ безопасности отсутствует или изменился. Попросите владельца сервера проверить сервер.",
   "error.remote.connectionNotStarted":
-    "CodeBot не удалось начать подключение к этому серверу. Если проблема повторяется, закройте CodeBot и откройте его снова.",
+    "OpenBot Code не удалось начать подключение к этому серверу. Если проблема повторяется, закройте OpenBot Code и откройте его снова.",
   "error.remote.connectionServiceUnreachable":
-    "Этот компьютер не может подключиться к сервису соединений CodeBot. Проверьте его подключение к интернету. CodeBot подключится снова автоматически.",
-  "error.remote.serverAnswerTimeout": "Сервер не ответил вовремя. CodeBot подключится снова автоматически.",
+    "Этот компьютер не может подключиться к сервису соединений OpenBot Code. Проверьте его подключение к интернету. OpenBot Code подключится снова автоматически.",
+  "error.remote.serverAnswerTimeout": "Сервер не ответил вовремя. OpenBot Code подключится снова автоматически.",
   "error.remote.signInConnectionClosed":
     "Соединение с сервером закрылось при входе. Если это повторяется, проверьте дату и время на сервере и на этом устройстве.",
   "error.remote.connectionCancelled": "Удалённое подключение отменено.",
@@ -151,11 +151,11 @@ export const messages = {
   "error.remote.permanentInviteNoEmail": "Постоянные приглашения нельзя отправить по электронной почте.",
   "error.remote.selfHostedInviteNoEmail":
     "Приглашение от собственной службы аккаунтов нельзя отправить по электронной почте. Скопируйте ссылку.",
-  "error.remote.inviteOtherService": "Это приглашение относится к другой службе CodeBot.",
+  "error.remote.inviteOtherService": "Это приглашение относится к другой службе OpenBot Code.",
   "error.remote.inviteFingerprintMismatch": "Идентификатор хоста приглашения не соответствует его отпечатку.",
   "error.remote.inviteHostKeyMissing": "Ключ хоста приглашения отсутствует.",
   "error.remote.inviteKeyConflict": "Приглашение противоречит доверенному ключу хоста.",
-  "error.remote.serviceRequestFailed": "Запрос к службе CodeBot не удался.",
+  "error.remote.serviceRequestFailed": "Запрос к службе OpenBot Code не удался.",
   "error.remote.downloadTimeout": "Время загрузки вложения истекло. Повторите попытку.",
   "error.remote.attachmentConnectionClosed": "Подключение для вложений закрыто.",
   "error.remote.tooManyDownloads": "Слишком много загрузок вложений.",
@@ -182,7 +182,7 @@ export const messages = {
   "error.remote.sessionInvalid": "Удалённая сессия некорректна.",
   "error.remote.ticketInvalid": "Билет подключения некорректен.",
   "error.remote.mobileUpdateRequired":
-    "Обновите CodeBot Mobile или приложение для компьютера, прежде чем подключаться.",
+    "Обновите OpenBot Code Mobile или приложение для компьютера, прежде чем подключаться.",
   "error.remote.connectionStepFailed": "Не удалось выполнить этот шаг подключения.",
   "error.remote.signalNotConnected": "Signal не подключён.",
   "error.remote.signalFrameUnreadable": "Signal прислал кадр, который этот узел не может прочитать.",
@@ -190,9 +190,10 @@ export const messages = {
   "error.remote.dataChannelFailed": "Сбой канала {kind}.",
   "error.remote.hostBusy": "Хост занят другим подключением. Повторите попытку чуть позже.",
   "error.remote.signalPermissionDenied": "У вашего аккаунта нет доступа к этому хосту. Попросите доступ у владельца.",
-  "error.remote.signalRateLimited": "Слишком много попыток подключения. CodeBot повторит попытку через {seconds} с.",
+  "error.remote.signalRateLimited":
+    "Слишком много попыток подключения. OpenBot Code повторит попытку через {seconds} с.",
   "error.remote.signalProtocolError":
-    "Signal и это приложение используют несовместимые протоколы подключения. Обновите CodeBot и повторите попытку.",
+    "Signal и это приложение используют несовместимые протоколы подключения. Обновите OpenBot Code и повторите попытку.",
   "error.remote.signalRefused": "Signal отклонил подключение.",
   "error.remote.signalClosed": "Подключение к Signal закрылось до ответа хоста.",
   "error.remote.relayUnavailable":
@@ -201,27 +202,27 @@ export const messages = {
     "Не удалось установить прямое подключение к хосту. Его может блокировать брандмауэр, VPN или прокси.",
   "error.remote.iceDisconnected": "Прямое подключение к хосту потеряно.",
   "error.remote.webrtcBlocked":
-    "Это устройство блокирует подключение, которое нужно CodeBot. Если включен режим блокировки, выключите его для CodeBot в Настройки > Конфиденциальность и безопасность > Режим блокировки.",
-  "error.remote.directoryUnreachable": "CodeBot не смог связаться со службой CodeBot. Проверьте подключение.",
-  "error.remote.directoryTimeout": "Служба CodeBot не ответила вовремя. Повторите попытку.",
+    "Это устройство блокирует подключение, которое нужно OpenBot Code. Если включен режим блокировки, выключите его для OpenBot Code в Настройки > Конфиденциальность и безопасность > Режим блокировки.",
+  "error.remote.directoryUnreachable": "OpenBot Code не смог связаться со службой OpenBot Code. Проверьте подключение.",
+  "error.remote.directoryTimeout": "Служба OpenBot Code не ответила вовремя. Повторите попытку.",
   "error.remote.inviteAlreadyUsed": "Это приглашение уже использовано. Попросите новое приглашение.",
   "error.remote.inviteNotFound": "Это приглашение не существует или истекло. Попросите новое приглашение.",
   "error.remote.licenseUsersFull":
     "В лицензии владельца сервера нет свободных пользователей. Попросите владельца добавить пользователя в лицензию.",
   "error.remote.memberLimitReached": "На этом хосте достигнут лимит участников. Попросите владельца освободить место.",
-  "error.remote.hostNotRegistered": "Этот хост больше не зарегистрирован в службе CodeBot.",
+  "error.remote.hostNotRegistered": "Этот хост больше не зарегистрирован в службе OpenBot Code.",
   "error.remote.membershipEnded": "Вы больше не участник этого хоста. Попросите у владельца новое приглашение.",
   "error.remote.membershipChanged":
     "Кто-то другой изменил этого участника в то же время. Загрузите участников заново и повторите попытку.",
   "error.remote.accountSessionInactive": "Ваш вход больше не активен. Войдите снова.",
   "error.remote.hostOtherAccount": "Этот хост принадлежит другому аккаунту.",
-  "error.remote.remoteNotConfigured": "Удалённые подключения не настроены в этой службе CodeBot.",
+  "error.remote.remoteNotConfigured": "Удалённые подключения не настроены в этой службе OpenBot Code.",
   "error.remote.hostRefused": "Хост отклонил запрос ({status}).",
   "error.remote.formUnavailable": "Эта форма больше недоступна.",
   "error.remote.hostedServerRemoval": "Чтобы удалить размещённый сервер, используйте раздел «Оплата».",
   "error.remote.hostRemoved": "Владелец удалил этот сервер из аккаунта.",
   "error.remote.ownerTransferSelf": "Этот сервер уже принадлежит вам. Введите email нового владельца.",
-  "error.remote.ownerTransferHosted": "Сервер, который размещает CodeBot, не может сменить владельца.",
+  "error.remote.ownerTransferHosted": "Сервер, который размещает OpenBot Code, не может сменить владельца.",
   "error.remote.ownerTransferInvalid":
     "Эта передача владения больше недоступна. Попросите владельца отправить её снова.",
   "error.remote.channelsUnsupported": "Обновите этот сервер на компьютере, чтобы использовать каналы.",
@@ -230,7 +231,7 @@ export const messages = {
   "error.remote.taskHistoryRefreshFailed": "Задача изменена, но историю чата обновить не удалось.",
   "error.remote.serverNotLoaded": "Не удалось загрузить сервер. Повторите попытку.",
   "error.remote.localServerNotStarted":
-    "Сервер на этом компьютере не запустился. Повторите попытку. Если он не запустится, перезапустите CodeBot на этом компьютере.",
+    "Сервер на этом компьютере не запустился. Повторите попытку. Если он не запустится, перезапустите OpenBot Code на этом компьютере.",
   "error.remote.localServerAccountRemovalFailed":
     "Сервер удалён на своём компьютере, но в аккаунте он ещё есть. Удалите его ещё раз, чтобы убрать из аккаунта.",
 } as const satisfies PartialTranslation<typeof source>;

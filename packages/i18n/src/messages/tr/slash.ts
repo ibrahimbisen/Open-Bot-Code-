@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Komutlar",
+  "slash.picker.option": "/{name} komutu",
+  "slash.picker.none": "Motor komutlarını henüz bildirmedi. OpenBot Code bunları motor başladığında okur.",
+  "slash.picker.noMatch": "Hiçbir komut “{query}” ile eşleşmiyor.",
+  "slash.badge.project": "Proje",
+  "slash.badge.user": "Kullanıcı",
+  "slash.badge.plugin": "Eklenti",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Yalnızca terminal",
+  "slash.screen.close": "Kapat",
+  "slash.screen.loading": "Yükleniyor…",
+  "slash.model.title": "Modeli seç",
+  "slash.model.description": "{name} bu modeli sonraki mesajdan itibaren kullanır.",
+  "slash.model.empty": "Bu ajan için kullanılabilir model yok.",
+  "slash.model.failed": "Model değişmedi.",
+  "slash.effort.title": "Düşünme düzeyi",
+  "slash.effort.description": "{name} yanıt vermeden önce ne kadar düşünür.",
+  "slash.effort.unsupported": "Bu ajanın modelinin düşünme düzeyi yok.",
+  "slash.effort.failed": "Düşünme düzeyi değişmedi.",
+  "slash.resume.title": "Bir sohbeti sürdür",
+  "slash.resume.description":
+    "Motorun {name} klasörü için kaydettiği sohbetler. Sürdürülen bir sohbet yeni sohbet olarak açılır.",
+  "slash.resume.empty": "Motorun bu klasör için kayıtlı sohbeti yok.",
+  "slash.resume.failed": "OpenBot Code kayıtlı sohbetleri okuyamadı.",
+  "slash.resume.retry": "Tekrar dene",
+  "slash.resume.inUse": "OpenBot Code'da açık",
+  "slash.resume.untitled": "Başlıksız sohbet",
+  "slash.resume.branch": "{name} dalı",
+  "slash.resume.updated": "Güncellendi {time}",
+  "slash.resume.openFailed": "Sohbet açılmadı.",
+} as const satisfies PartialTranslation<typeof source>;

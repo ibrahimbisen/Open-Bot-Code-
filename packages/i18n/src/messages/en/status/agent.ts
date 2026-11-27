@@ -37,7 +37,7 @@ export const messages = defineMessages("status.agent", {
   "status.agent.screenCaptureScreen": "Capture the main screen and send the image to the agent's model.",
   "status.agent.screenCaptureChannel":
     "The image shows in the channel {channel}, and each member of this server who reads the channel can see it.",
-  "status.agent.screenCapturePermissionNext": "macOS can then ask you to allow Screen Recording for CodeBot.",
+  "status.agent.screenCapturePermissionNext": "macOS can then ask you to allow Screen Recording for OpenBot Code.",
   "status.agent.screenCaptureDisplay": "Capture the display {name} and send the image to the agent's model.",
   "status.agent.screenCaptureWindow": "Capture the window {name} and send the image to the agent's model.",
   "status.agent.screenCaptureRegion":
@@ -51,7 +51,7 @@ export const messages = defineMessages("status.agent", {
   "status.agent.sendIdea": "This becomes a public GitHub issue. Your name is not shown.",
   "status.agent.feedbackRecentErrors": "Recent errors in the chat:",
   "status.agent.feedbackSameAs": "Adds to issue #{issue}",
-  "status.agent.feedbackSent": "Sent to the CodeBot team: {title}",
+  "status.agent.feedbackSent": "Sent to the OpenBot Code team: {title}",
   "status.agent.feedbackWithdrawn": "Removed from GitHub: {title}",
   "status.agent.feedbackWithdrawCommand": "Remove report #{issue} from GitHub",
   "status.agent.feedbackWithdrawReason":
@@ -59,14 +59,14 @@ export const messages = defineMessages("status.agent", {
   "status.agent.feedbackWithdrawing": "Removing your report from GitHub…",
   "status.agent.browserProfileNamed":
     "Move {agents} to the browser profile {profile}. They get its sign-ins and cookies. Their open tabs close.",
-  "status.agent.commitCoAuthorOff": "Stop adding CodeBot as a co-author to the commits of all agents.",
-  "status.agent.commitCoAuthorOn": "Add CodeBot as a co-author to the commits of all agents again.",
+  "status.agent.commitCoAuthorOff": "Stop adding OpenBot Code as a co-author to the commits of all agents.",
+  "status.agent.commitCoAuthorOn": "Add OpenBot Code as a co-author to the commits of all agents again.",
   "status.agent.browserProfileNew":
     "Make the new browser profile {profile} and move {agents} to it. It has no sign-ins. Their open tabs close.",
   "status.agent.browserProfileShared":
     "Move {agents} to the shared browser profile. They get its sign-ins and cookies. Their open tabs close.",
   "status.agent.browserProfileOwn": "Give {agents} each a browser profile of its own. Their open tabs close.",
-  "status.agent.feedbackSending": "Sending your feedback to the CodeBot team…",
+  "status.agent.feedbackSending": "Sending your feedback to the OpenBot Code team…",
   "status.agent.workflowDelete": "Delete the workflow {title} with its runs and versions. Its open steps stop.",
   "status.agent.deleteAgents": "Delete {agents} with their chats and files. You cannot undo this.",
   "status.agent.vaultCardFillFrames": "The card fields are in frames from {origins}.",
@@ -119,9 +119,9 @@ export const messages = defineMessages("status.agent", {
   "status.agent.memoryChangesWithConflicts":
     "Memory: {saved} saved, {updated} updated, {forgotten} forgotten, {notChanged} not changed because another thread changed it first.",
   "status.agent.mcpServerAdd":
-    "Add the MCP server {name}: {target}. Every agent on this server gets its tools. CodeBot connects to it to test it.",
+    "Add the MCP server {name}: {target}. Every agent on this server gets its tools. OpenBot Code connects to it to test it.",
   "status.agent.mcpServerChange":
-    "Change the MCP server {name} to {target}. Every agent on this server gets its tools. CodeBot connects to it to test it.",
+    "Change the MCP server {name} to {target}. Every agent on this server gets its tools. OpenBot Code connects to it to test it.",
   "status.agent.mcpServerHeaders": "It also changes these headers: {names}.",
   "status.agent.mcpServerEnable": "Turn on the MCP server {name} for every agent on this server.",
   "status.agent.mcpServerDisable": "Turn off the MCP server {name} for every agent on this server.",

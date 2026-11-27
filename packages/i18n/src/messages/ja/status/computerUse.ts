@@ -7,9 +7,9 @@ export const messages = {
   "status.computerUse.driverNoAnswer": "Computer Use ドライバーが応答しませんでした。{reason}",
   "status.computerUse.driverStopped": "Computer Use ドライバーが停止しました。",
   "status.computerUse.unsupported": "Computer Use は macOS、Windows、Linux で使用できます。",
-  "status.computerUse.driverMissing": "この CodeBot ビルドには Computer Use ドライバーが含まれていません。",
+  "status.computerUse.driverMissing": "この OpenBot Code ビルドには Computer Use ドライバーが含まれていません。",
   "status.computerUse.inputRefused":
-    "このデスクトップでは、CodeBot は他のアプリで入力やクリックができません。Web サイトでの作業は、エージェントに CodeBot ブラウザーを使うよう頼んでください。",
+    "このデスクトップでは、OpenBot Code は他のアプリで入力やクリックができません。Web サイトでの作業は、エージェントに OpenBot Code ブラウザーを使うよう頼んでください。",
   "status.computerUse.progressActing": "このコンピューターのアプリを操作しています…",
   "status.computerUse.progressDeciding": "アプリでの次の操作を決めています…",
 } as const satisfies PartialTranslation<typeof source>;

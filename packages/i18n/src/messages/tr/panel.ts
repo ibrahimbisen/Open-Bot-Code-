@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "Paneller",
+  "panel.add": "Panel ekle",
+  "panel.add.otherChat": "Başka bir projeden sohbet",
+  "panel.add.file": "Dosya",
+  "panel.add.diff": "Değişiklikler",
+  "panel.add.browser": "Tarayıcı",
+  "panel.add.preview": "Önizleme",
+  "panel.split.right": "Sağa böl",
+  "panel.split.down": "Aşağı böl",
+  "panel.maximize": "Paneli büyüt",
+  "panel.restore": "Panel boyutunu geri yükle",
+  "panel.close": "Paneli kapat",
+  "panel.pin": "Paneli açık kalması için sabitle",
+  "panel.unpin": "Panelin sabitlemesini kaldır",
+  "panel.preview.loading": "Önizleme yükleniyor",
+  "panel.preview.failed": "Önizleme açılamadı.",
+  "panel.browser.label": "Tarayıcı paneli",
+  "panel.browser.starting": "Tarayıcı açılıyor",
+  "panel.browser.failed": "Tarayıcı sayfası açılamadı.",
+  "panel.browser.closed": "Bu tarayıcı sayfası kapatıldı.",
+  "panel.browser.takeControl": "Sayfanın kontrolünü al",
+  "panel.browser.handControl": "Kontrolü ajana ver",
+  "panel.browser.userControls": "Bu sayfayı siz kontrol ediyorsunuz",
+  "panel.browser.agentControls": "Ajan bu sayfayı kontrol ediyor",
+  "panel.header.model": "Bu sohbetin modeli",
+  "panel.header.modelLocked": "Model şu anda değiştirilemez.",
+  "panel.header.files": "Projenin dosyaları",
+  "panel.draft.agent": "Ajan",
+  "panel.chat.noAgent": "Bu projenin ajanı yok. Proje ayarlarında bir ajan ekleyin.",
+  "panel.picker.title": "Bir paneldeki sohbeti aç",
+  "panel.picker.description": "Bir proje, sonra bir sohbet seçin. Panel proje adını gösterir.",
+  "panel.picker.project": "Proje",
+} as const satisfies PartialTranslation<typeof source>;

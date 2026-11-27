@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Befehle",
+  "slash.picker.option": "Befehl /{name}",
+  "slash.picker.none": "Die Engine hat ihre Befehle noch nicht gemeldet. OpenBot Code liest sie beim Start der Engine.",
+  "slash.picker.noMatch": "Kein Befehl passt zu „{query}“.",
+  "slash.badge.project": "Projekt",
+  "slash.badge.user": "Benutzer",
+  "slash.badge.plugin": "Plugin",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Nur Terminal",
+  "slash.screen.close": "Schließen",
+  "slash.screen.loading": "Wird geladen…",
+  "slash.model.title": "Modell wählen",
+  "slash.model.description": "{name} verwendet dieses Modell ab der nächsten Nachricht.",
+  "slash.model.empty": "Für diesen Agenten sind keine Modelle verfügbar.",
+  "slash.model.failed": "Das Modell wurde nicht geändert.",
+  "slash.effort.title": "Denkstufe",
+  "slash.effort.description": "Wie viel {name} nachdenkt, bevor es antwortet.",
+  "slash.effort.unsupported": "Das Modell dieses Agenten hat keine Denkstufen.",
+  "slash.effort.failed": "Die Denkstufe wurde nicht geändert.",
+  "slash.resume.title": "Einen Chat fortsetzen",
+  "slash.resume.description":
+    "Chats, die die Engine für den Ordner von {name} gespeichert hat. Ein fortgesetzter Chat öffnet sich als neuer Chat.",
+  "slash.resume.empty": "Die Engine hat für diesen Ordner keine gespeicherten Chats.",
+  "slash.resume.failed": "OpenBot Code konnte die gespeicherten Chats nicht lesen.",
+  "slash.resume.retry": "Erneut versuchen",
+  "slash.resume.inUse": "In OpenBot Code geöffnet",
+  "slash.resume.untitled": "Chat ohne Titel",
+  "slash.resume.branch": "Branch {name}",
+  "slash.resume.updated": "Aktualisiert {time}",
+  "slash.resume.openFailed": "Der Chat wurde nicht geöffnet.",
+} as const satisfies PartialTranslation<typeof source>;

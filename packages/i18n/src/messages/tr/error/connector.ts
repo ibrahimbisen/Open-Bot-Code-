@@ -2,45 +2,45 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/connector";
 
 export const messages = {
-  "error.connector.githubUnavailable": "CodeBot'un bu derlemesinde GitHub Uygulaması yok.",
+  "error.connector.githubUnavailable": "OpenBot Code'un bu derlemesinde GitHub Uygulaması yok.",
   "error.connector.githubDenied": "GitHub oturum açma isteği reddedildi.",
   "error.connector.githubCodeExpired": "GitHub kodunun süresi doldu. GitHub'a tekrar bağlanın.",
   "error.connector.githubDeviceFlowDisabled": "GitHub Uygulaması cihazla oturum açmaya izin vermiyor.",
   "error.connector.githubClientUnknown": "GitHub bu GitHub Uygulamasının İstemci Kimliğini (Client ID) bilmiyor.",
   "error.connector.githubUnexpected": "GitHub beklenmeyen bir yanıt gönderdi: {detail}",
-  "error.connector.githubUnreachable": "CodeBot GitHub'a ulaşamıyor: {detail}",
+  "error.connector.githubUnreachable": "OpenBot Code GitHub'a ulaşamıyor: {detail}",
   "error.connector.githubOffline":
-    "CodeBot GitHub'a ulaşamıyor. CodeBot'u çalıştıran bilgisayarın veya sunucunun internet bağlantısını ve DNS ayarlarını kontrol edin, sonra tekrar deneyin.",
+    "OpenBot Code GitHub'a ulaşamıyor. OpenBot Code'u çalıştıran bilgisayarın veya sunucunun internet bağlantısını ve DNS ayarlarını kontrol edin, sonra tekrar deneyin.",
   "error.connector.githubExpired": "GitHub bağlantısının süresi doldu. GitHub'a tekrar bağlanın.",
   "error.connector.githubFileUnreadable": "GitHub bağlantı dosyası okunamıyor.",
   "error.connector.githubFileTooLarge": "GitHub bağlantı dosyası çok büyük.",
   "error.connector.onePasswordCliMissing":
-    "CodeBot 1Password CLI'yi bulamıyor. Yükleyin ve 1Password uygulamasında entegrasyonunu açın ya da bir hizmet hesabı belirteci kullanın.",
+    "OpenBot Code 1Password CLI'yi bulamıyor. Yükleyin ve 1Password uygulamasında entegrasyonunu açın ya da bir hizmet hesabı belirteci kullanın.",
   "error.connector.onePasswordCliInstallFailed":
-    "CodeBot 1Password CLI'yi yükleyemedi. İnternet bağlantısını kontrol edin, ardından tekrar deneyin.",
+    "OpenBot Code 1Password CLI'yi yükleyemedi. İnternet bağlantısını kontrol edin, ardından tekrar deneyin.",
   "error.connector.onePasswordCliSignedOut":
     "1Password CLI'de oturum açılmamış. 1Password uygulamasında entegrasyonunu açın, ardından yeniden bağlanın.",
   "error.connector.onePasswordAppUnreachable":
-    "CodeBot, 1Password uygulamasına ulaşamıyor. 1Password'ü açın ve kilidini açın. Settings > Developer bölümünde “Integrate with 1Password CLI” seçeneğinin açık olduğundan emin olun. Ardından yeniden deneyin.",
+    "OpenBot Code, 1Password uygulamasına ulaşamıyor. 1Password'ü açın ve kilidini açın. Settings > Developer bölümünde “Integrate with 1Password CLI” seçeneğinin açık olduğundan emin olun. Ardından yeniden deneyin.",
   "error.connector.onePasswordCliFailed": "1Password CLI başarısız oldu: {detail}",
   "error.connector.onePasswordCliForbidden":
     "1Password hesabınız paylaşılan kasayı veya bir hizmet hesabı oluşturmanıza izin vermiyor. Hesabın sahibinden veya yöneticisinden bu izni isteyin ya da bir hizmet hesabı belirteci isteyip “Belirteç kullan” düğmesine tıklayın.",
   "error.connector.onePasswordUnexpected": "1Password beklenmeyen bir yanıt gönderdi: {detail}",
   "error.connector.onePasswordTokenRejected": "1Password hizmet hesabı belirtecini kabul etmedi.",
   "error.connector.onePasswordUnreachable":
-    "CodeBot 1Password'e bağlanamadı. İnternet bağlantısını kontrol edin, ardından tekrar deneyin.",
+    "OpenBot Code 1Password'e bağlanamadı. İnternet bağlantısını kontrol edin, ardından tekrar deneyin.",
   "error.connector.onePasswordRateLimited":
     "1Password çok fazla istek aldı. Birkaç dakika bekleyin, ardından tekrar deneyin.",
   "error.connector.onePasswordNoVault":
     "Hizmet hesabı bir kasayı okuyamıyor. Ona bir kasaya erişim verin, ardından tekrar deneyin.",
   "error.connector.onePasswordReadFailed":
-    "CodeBot, 1Password'deki girişlerinizi okuyamıyor. 1Password bağlantısını kesin, ardından yeniden bağlayın.",
+    "OpenBot Code, 1Password'deki girişlerinizi okuyamıyor. 1Password bağlantısını kesin, ardından yeniden bağlayın.",
   "error.connector.onePasswordFileUnreadable": "1Password bağlantı dosyası okunamıyor.",
   "error.connector.onePasswordFileTooLarge": "1Password bağlantı dosyası çok büyük.",
   "error.connector.bitwardenFailed":
     "Bitwarden okunamadı. bw CLI'yi yükleyin, oturum açın, kilidini açın ve Shared with CodeBot adlı bir klasör oluşturun. Yeni bir oturum anahtarıyla bağlanın.",
   "error.connector.bitwardenCliMissing":
-    "CodeBot, Bitwarden CLI'yı bulamıyor. bw'yi kurun, yeni bir terminalde çalıştığından emin olun ve yeniden bağlanın.",
+    "OpenBot Code, Bitwarden CLI'yı bulamıyor. bw'yi kurun, yeni bir terminalde çalıştığından emin olun ve yeniden bağlanın.",
   "error.connector.bitwardenFolderMissing":
     "Bitwarden'da Shared with CodeBot adında tam olarak bir klasör olmalı. Klasörü oluşturun veya fazla olanı kaldırın, ardından yeniden bağlanın.",
   "error.connector.bitwardenHostInput":
@@ -54,7 +54,7 @@ export const messages = {
   "error.connector.bitwardenCliInstallFailed":
     "Bu sunucuya Bitwarden CLI yüklenemedi. Ağ bağlantısını kontrol edin, sonra tekrar bağlanın.",
   "error.connector.bitwardenFileUnreadable": "Bitwarden bağlantı dosyası okunamıyor.",
-  "error.connector.passwordManagerUnknown": "CodeBot bu parola yöneticisini tanımıyor.",
+  "error.connector.passwordManagerUnknown": "OpenBot Code bu parola yöneticisini tanımıyor.",
   "error.connector.passwordManagerMethod": "Bu parola yöneticisi bu yolla bağlanamaz.",
   "error.connector.passwordManagerNoSignIn": "Açık bir oturum açma sayfası yok. Yeniden bağlanın.",
   "error.connector.protonPassFailed": "Proton Pass bağlanamadı. Yeniden bağlanın.",

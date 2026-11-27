@@ -31,11 +31,11 @@ function extensionManifest(apiUrl: string, webUrl: string, development: boolean)
       if (development) hostPermissions.push("http://localhost/*", "http://127.0.0.1/*");
       const manifest = {
         manifest_version: 3,
-        name: development ? "CodeBot (Dev)" : "CodeBot",
-        description: "Chat with your CodeBot agents beside any page.",
+        name: development ? "OpenBot Code (Dev)" : "OpenBot Code",
+        description: "Chat with your OpenBot Code agents beside any page.",
         version: rootPackage.version,
         icons: { 16: "icons/icon-16.png", 32: "icons/icon-32.png", 48: "icons/icon-48.png", 128: "icons/icon-128.png" },
-        action: { default_title: "CodeBot", default_icon: { 16: "icons/icon-16.png", 32: "icons/icon-32.png" } },
+        action: { default_title: "OpenBot Code", default_icon: { 16: "icons/icon-16.png", 32: "icons/icon-32.png" } },
         side_panel: { default_path: "sidepanel.html" },
         background: { service_worker: "background.js", type: "module" },
         permissions: [

@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Команды",
+  "slash.picker.option": "Команда /{name}",
+  "slash.picker.none": "Движок ещё не сообщил свои команды. OpenBot Code читает их при запуске движка.",
+  "slash.picker.noMatch": "Ни одна команда не соответствует «{query}».",
+  "slash.badge.project": "Проект",
+  "slash.badge.user": "Пользователь",
+  "slash.badge.plugin": "Плагин",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Скилл",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Только терминал",
+  "slash.screen.close": "Закрыть",
+  "slash.screen.loading": "Загрузка…",
+  "slash.model.title": "Выберите модель",
+  "slash.model.description": "{name} использует эту модель со следующего сообщения.",
+  "slash.model.empty": "Для этого агента нет доступных моделей.",
+  "slash.model.failed": "Модель не изменена.",
+  "slash.effort.title": "Уровень размышления",
+  "slash.effort.description": "Сколько {name} думает перед ответом.",
+  "slash.effort.unsupported": "У модели этого агента нет уровней размышления.",
+  "slash.effort.failed": "Уровень размышления не изменён.",
+  "slash.resume.title": "Возобновить чат",
+  "slash.resume.description":
+    "Чаты, которые движок сохранил для папки {name}. Возобновлённый чат открывается как новый чат.",
+  "slash.resume.empty": "У движка нет сохранённых чатов для этой папки.",
+  "slash.resume.failed": "OpenBot Code не удалось прочитать сохранённые чаты.",
+  "slash.resume.retry": "Повторить",
+  "slash.resume.inUse": "Открыт в OpenBot Code",
+  "slash.resume.untitled": "Чат без названия",
+  "slash.resume.branch": "Ветка {name}",
+  "slash.resume.updated": "Обновлено {time}",
+  "slash.resume.openFailed": "Чат не открылся.",
+} as const satisfies PartialTranslation<typeof source>;

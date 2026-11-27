@@ -5,19 +5,21 @@ export const messages = {
   "error.messaging.notConnected": "Ten obszar roboczy Slack nie jest połączony.",
   "error.messaging.unsupported": "Ten komputer nie może połączyć się ze Slackiem.",
   "error.messaging.relayUnavailable":
-    "CodeBot nie może odbierać zdarzeń Slack na tym komputerze. Zaloguj się, nadaj temu komputerowi nazwę i spróbuj ponownie.",
+    "OpenBot Code nie może odbierać zdarzeń Slack na tym komputerze. Zaloguj się, nadaj temu komputerowi nazwę i spróbuj ponownie.",
   "error.messaging.discordNotConnected": "Ten serwer Discord nie jest połączony.",
   "error.messaging.discordUnsupported": "Ten komputer nie może połączyć się z Discordem.",
   "error.messaging.discordRelayUnavailable":
-    "CodeBot nie może odbierać zdarzeń Discord na tym komputerze. Zaloguj się, nadaj temu komputerowi nazwę i spróbuj ponownie.",
-  "error.messaging.discordRolesUnsupported": "CodeBot nie może jeszcze pokazać ról Discorda. Spróbuj ponownie później.",
+    "OpenBot Code nie może odbierać zdarzeń Discord na tym komputerze. Zaloguj się, nadaj temu komputerowi nazwę i spróbuj ponownie.",
+  "error.messaging.discordRolesUnsupported":
+    "OpenBot Code nie może jeszcze pokazać ról Discorda. Spróbuj ponownie później.",
   "error.messaging.telegramNotConnected": "Ten czat Telegram nie jest połączony.",
   "error.messaging.telegramUnsupported": "Ten komputer nie może połączyć się z Telegramem.",
   "error.messaging.telegramRelayUnavailable":
-    "CodeBot nie może połączyć się z Telegramem na tym komputerze. Zaloguj się, nadaj temu komputerowi nazwę i spróbuj ponownie.",
+    "OpenBot Code nie może połączyć się z Telegramem na tym komputerze. Zaloguj się, nadaj temu komputerowi nazwę i spróbuj ponownie.",
   "error.messaging.telegramRelayUnreachable":
-    "CodeBot nie może połączyć się ze swoją usługą z tego komputera. Sprawdź połączenie z internetem, VPN, serwer proxy lub zaporę sieciową i spróbuj ponownie.",
-  "error.messaging.telegramServiceUnavailable": "CodeBot nie może teraz połączyć Telegrama. Spróbuj ponownie później.",
+    "OpenBot Code nie może połączyć się ze swoją usługą z tego komputera. Sprawdź połączenie z internetem, VPN, serwer proxy lub zaporę sieciową i spróbuj ponownie.",
+  "error.messaging.telegramServiceUnavailable":
+    "OpenBot Code nie może teraz połączyć Telegrama. Spróbuj ponownie później.",
   "error.messaging.whatsappNotConnected": "Ten numer WhatsApp nie jest połączony.",
   "error.messaging.whatsappUnsupported": "Ten komputer nie może połączyć się z WhatsApp.",
   "error.messaging.whatsappTooManySenders": "Numer WhatsApp może dopuścić maksymalnie 200 kontaktów i grup.",

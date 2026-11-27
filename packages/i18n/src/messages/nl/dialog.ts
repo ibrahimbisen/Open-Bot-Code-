@@ -20,9 +20,9 @@ export const messages = {
   "dialog.saveExportSkill": "Exportvaardigheid opslaan",
   "dialog.saveTransfer": "Overdrachtsbestand opslaan",
   "dialog.chooseTransfer": "Kies een overdrachtsbestand",
-  "dialog.filter.transfer": "CodeBot-overdrachtsbestanden",
+  "dialog.filter.transfer": "OpenBot Code-overdrachtsbestanden",
   "dialog.saveWorkflow": "Workflowbestand opslaan",
-  "dialog.filter.workflow": "CodeBot-workflowbestanden",
+  "dialog.filter.workflow": "OpenBot Code-workflowbestanden",
   "dialog.chooseExternalLinkApp": "Kies een browser",
   "dialog.filter.applications": "Apps",
 } as const satisfies PartialTranslation<typeof source>;

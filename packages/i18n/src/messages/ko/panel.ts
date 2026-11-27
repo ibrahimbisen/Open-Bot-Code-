@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "패널",
+  "panel.add": "패널 추가",
+  "panel.add.otherChat": "다른 프로젝트의 채팅",
+  "panel.add.file": "파일",
+  "panel.add.diff": "변경 사항",
+  "panel.add.browser": "브라우저",
+  "panel.add.preview": "미리보기",
+  "panel.split.right": "오른쪽으로 분할",
+  "panel.split.down": "아래로 분할",
+  "panel.maximize": "패널 최대화",
+  "panel.restore": "패널 크기 복원",
+  "panel.close": "패널 닫기",
+  "panel.pin": "패널을 고정하여 열어 두기",
+  "panel.unpin": "패널 고정 해제",
+  "panel.preview.loading": "미리보기를 불러오는 중",
+  "panel.preview.failed": "미리보기를 열 수 없습니다.",
+  "panel.browser.label": "브라우저 패널",
+  "panel.browser.starting": "브라우저를 여는 중",
+  "panel.browser.failed": "브라우저 페이지를 열 수 없습니다.",
+  "panel.browser.closed": "이 브라우저 페이지가 닫혔습니다.",
+  "panel.browser.takeControl": "페이지 제어권 가져오기",
+  "panel.browser.handControl": "에이전트에게 제어 넘기기",
+  "panel.browser.userControls": "사용자가 이 페이지를 제어하고 있습니다",
+  "panel.browser.agentControls": "에이전트가 이 페이지를 제어하고 있습니다",
+  "panel.header.model": "이 채팅의 모델",
+  "panel.header.modelLocked": "지금은 모델을 변경할 수 없습니다.",
+  "panel.header.files": "프로젝트의 파일",
+  "panel.draft.agent": "에이전트",
+  "panel.chat.noAgent": "이 프로젝트에는 에이전트가 없습니다. 프로젝트 설정에서 에이전트를 추가하세요.",
+  "panel.picker.title": "패널에서 채팅 열기",
+  "panel.picker.description": "프로젝트를 선택한 다음 채팅을 선택하세요. 패널에 프로젝트 이름이 표시됩니다.",
+  "panel.picker.project": "프로젝트",
+} as const satisfies PartialTranslation<typeof source>;

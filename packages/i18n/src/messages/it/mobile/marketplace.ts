@@ -65,11 +65,12 @@ export const messages = {
   "mobile.marketplace.facts.accessMac": "Solo Mac",
   "mobile.marketplace.permission.admin": "Solo proprietari e amministratori possono installare dal Marketplace.",
   "mobile.marketplace.permission.unavailable":
-    "Questo server è offline, oppure il suo CodeBot è troppo vecchio per questo. Aggiorna CodeBot sul computer che lo esegue.",
-  "mobile.marketplace.error.agentUnsupported": "Aggiorna CodeBot sul server per aggiungere agenti dal Marketplace.",
+    "Questo server è offline, oppure il suo OpenBot Code è troppo vecchio per questo. Aggiorna OpenBot Code sul computer che lo esegue.",
+  "mobile.marketplace.error.agentUnsupported":
+    "Aggiorna OpenBot Code sul server per aggiungere agenti dal Marketplace.",
   "mobile.marketplace.error.agentUpdateUnsupported":
-    "Aggiorna CodeBot sul server per aggiornare gli agenti dal Marketplace.",
-  "mobile.marketplace.error.signInUnsupported": "Aggiorna CodeBot sul server per accedere alle app dal telefono.",
+    "Aggiorna OpenBot Code sul server per aggiornare gli agenti dal Marketplace.",
+  "mobile.marketplace.error.signInUnsupported": "Aggiorna OpenBot Code sul server per accedere alle app dal telefono.",
   "mobile.marketplace.agent.add": "Aggiungi agente",
   "mobile.marketplace.agent.adding": "Aggiunta agente",
   "mobile.marketplace.agent.update": "Aggiorna agente",
@@ -106,7 +107,7 @@ export const messages = {
   "mobile.marketplace.app.stepReturn": "Torna qui. {name} si collega al tuo server.",
   "mobile.marketplace.app.stepBlank": "L'ultima pagina non si carica. È corretto.",
   "mobile.marketplace.app.stepCopy": "Tocca la barra degli indirizzi e copia l'indirizzo completo.",
-  "mobile.marketplace.app.stepPaste": "Torna su CodeBot e incolla l'indirizzo qui sotto.",
+  "mobile.marketplace.app.stepPaste": "Torna su OpenBot Code e incolla l'indirizzo qui sotto.",
   "mobile.marketplace.app.openSignIn": "Apri pagina di accesso",
   "mobile.marketplace.app.keySecure": "La chiave va solo al tuo server, con una connessione cifrata.",
   "mobile.marketplace.app.connecting": "Connessione",
@@ -116,11 +117,11 @@ export const messages = {
   "mobile.marketplace.app.connectFailed": "Impossibile connettere l’app.",
   "mobile.marketplace.app.linkInvalid": "Usa un link https su {hostname}.",
   "mobile.marketplace.app.docs": "Ottieni chiave",
-  "mobile.marketplace.app.local": "Questa app funziona sul computer con CodeBot. Configurala su quel computer.",
+  "mobile.marketplace.app.local": "Questa app funziona sul computer con OpenBot Code. Configurala su quel computer.",
   "mobile.marketplace.app.needsMac":
-    "Questa app funziona solo su un Mac che esegue CodeBot, e questo server non è un Mac.",
+    "Questa app funziona solo su un Mac che esegue OpenBot Code, e questo server non è un Mac.",
   "mobile.marketplace.app.relayUnsupported":
-    "Questa app chiede l’accesso nel browser. Aggiorna CodeBot sul server oppure connetti l’app sul computer.",
+    "Questa app chiede l’accesso nel browser. Aggiorna OpenBot Code sul server oppure connetti l’app sul computer.",
   "mobile.marketplace.app.waiting": "In attesa della pagina di accesso…",
   "mobile.marketplace.app.openAgain": "Riapri la pagina di accesso",
   "mobile.marketplace.app.pasteLabel": "Indirizzo dopo l’accesso",

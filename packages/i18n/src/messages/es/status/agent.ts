@@ -28,7 +28,7 @@ export const messages = {
   "status.agent.screenCaptureChannel":
     "La imagen aparece en el canal {channel}, y cada miembro de este servidor que lee el canal puede verla.",
   "status.agent.screenCapturePermissionNext":
-    "Después, macOS puede pedirte que permitas a CodeBot la grabación de pantalla.",
+    "Después, macOS puede pedirte que permitas a OpenBot Code la grabación de pantalla.",
   "status.agent.screenCaptureDisplay": "Capturar la pantalla {name} y enviar la imagen al modelo del agente.",
   "status.agent.screenCaptureWindow": "Capturar la ventana {name} y enviar la imagen al modelo del agente.",
   "status.agent.screenCaptureRegion":
@@ -40,7 +40,7 @@ export const messages = {
   "status.agent.sendIdea": "Esto se convierte en un issue público de GitHub. Tu nombre no se muestra.",
   "status.agent.feedbackRecentErrors": "Errores recientes en el chat:",
   "status.agent.feedbackSameAs": "Se añade al issue #{issue}",
-  "status.agent.feedbackSent": "Enviado al equipo de CodeBot: {title}",
+  "status.agent.feedbackSent": "Enviado al equipo de OpenBot Code: {title}",
   "status.agent.feedbackWithdrawn": "Eliminado de GitHub: {title}",
   "status.agent.feedbackWithdrawCommand": "Eliminar el informe #{issue} de GitHub",
   "status.agent.feedbackWithdrawReason":
@@ -48,15 +48,15 @@ export const messages = {
   "status.agent.feedbackWithdrawing": "Eliminando tu informe de GitHub…",
   "status.agent.browserProfileNamed":
     "Mover {agents} al perfil del navegador {profile}. Reciben sus inicios de sesión y cookies. Sus pestañas abiertas se cierran.",
-  "status.agent.commitCoAuthorOff": "Dejar de añadir a CodeBot como coautor en los commits de todos los agentes.",
-  "status.agent.commitCoAuthorOn": "Volver a añadir a CodeBot como coautor en los commits de todos los agentes.",
+  "status.agent.commitCoAuthorOff": "Dejar de añadir a OpenBot Code como coautor en los commits de todos los agentes.",
+  "status.agent.commitCoAuthorOn": "Volver a añadir a OpenBot Code como coautor en los commits de todos los agentes.",
   "status.agent.browserProfileNew":
     "Crear el nuevo perfil del navegador {profile} y mover {agents} a él. No tiene inicios de sesión. Sus pestañas abiertas se cierran.",
   "status.agent.browserProfileShared":
     "Mover {agents} al perfil del navegador compartido. Reciben sus inicios de sesión y cookies. Sus pestañas abiertas se cierran.",
   "status.agent.browserProfileOwn":
     "Dar a {agents} un perfil del navegador propio para cada uno. Sus pestañas abiertas se cierran.",
-  "status.agent.feedbackSending": "Enviando tus comentarios al equipo de CodeBot…",
+  "status.agent.feedbackSending": "Enviando tus comentarios al equipo de OpenBot Code…",
   "status.agent.workflowDelete":
     "Eliminar el flujo de trabajo {title} con sus ejecuciones y versiones. Sus pasos abiertos se detienen.",
   "status.agent.deleteAgents": "Eliminar {agents} con sus chats y archivos. No se puede deshacer.",

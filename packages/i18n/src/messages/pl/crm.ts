@@ -385,7 +385,7 @@ export const messages = {
   "crm.source.keyPlaceholder": "rk_live_…",
   "crm.source.createKey": "Utwórz klucz w {source}",
   "crm.source.stripeKeyHelp":
-    "Stripe otwiera klucz tylko do odczytu, gotowy do utworzenia. Utwórz go, a potem skopiuj klucz i wklej go tutaj. CodeBot tylko czyta dane ze Stripe.",
+    "Stripe otwiera klucz tylko do odczytu, gotowy do utworzenia. Utwórz go, a potem skopiuj klucz i wklej go tutaj. OpenBot Code tylko czyta dane ze Stripe.",
   "crm.source.connect": "Połącz",
   "crm.source.account": "Konto",
   "crm.source.testMode": "Tryb testowy",
@@ -399,9 +399,10 @@ export const messages = {
   "crm.source.errorPermission":
     "Klucz nie może odczytać wszystkiego, czego potrzebuje synchronizacja. Nadaj mu dostęp do odczytu w {source}.",
   "crm.source.errorRateLimited": "{source} dostał zbyt wiele żądań. Następna synchronizacja spróbuje ponownie.",
-  "crm.source.errorNetwork": "CodeBot nie może połączyć się z {source}. Następna synchronizacja spróbuje ponownie.",
+  "crm.source.errorNetwork":
+    "OpenBot Code nie może połączyć się z {source}. Następna synchronizacja spróbuje ponownie.",
   "crm.source.errorFailed":
-    "{source} wysłał odpowiedź, której CodeBot nie może odczytać. Następna synchronizacja spróbuje ponownie.",
+    "{source} wysłał odpowiedź, której OpenBot Code nie może odczytać. Następna synchronizacja spróbuje ponownie.",
   "crm.source.skipped": "Nie zaimportowano",
   "crm.source.skippedCurrency": "Inna waluta: {rows}",
   "crm.source.skippedInterval": "Inny okres rozliczeniowy: {rows}",
@@ -413,5 +414,5 @@ export const messages = {
   "crm.source.disconnect": "Rozłącz",
   "crm.source.disconnectTitle": "Rozłączyć {source}?",
   "crm.source.disconnectBody":
-    "CodeBot zatrzymuje synchronizację i usuwa klucz. Zaimportowane wiersze zostają i możesz je zmieniać.",
+    "OpenBot Code zatrzymuje synchronizację i usuwa klucz. Zaimportowane wiersze zostają i możesz je zmieniać.",
 } as const satisfies PartialTranslation<typeof source>;

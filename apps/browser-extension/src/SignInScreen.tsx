@@ -8,7 +8,7 @@ import { SignInIssue, signInOutcome, signInWithWeb } from "./account";
 import { track } from "./analytics";
 import type { ExtensionSession } from "./extension-storage";
 
-const PRODUCT_NAME = "CodeBot";
+const PRODUCT_NAME = "OpenBot Code";
 
 interface SignInScreenProps {
   login: CentralAuthState;

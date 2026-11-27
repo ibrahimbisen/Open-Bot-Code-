@@ -12,7 +12,7 @@ export const messages = {
   "server.connection.cachedHint":
     "Yüklenen içerik ve taslaklar korunur. Sunucu işlemleri yeniden bağlandıktan sonra devam eder.",
   "server.connection.computerOffline":
-    "{name} çevrimdışı. Bilgisayarının açık olduğundan, CodeBot'un açık olduğundan ve Sunucu ayarları > Üyeler bölümünde Bu sunucuyu yayımla seçeneğinin etkin olduğundan emin olun.",
+    "{name} çevrimdışı. Bilgisayarının açık olduğundan, OpenBot Code'un açık olduğundan ve Sunucu ayarları > Üyeler bölümünde Bu sunucuyu yayımla seçeneğinin etkin olduğundan emin olun.",
   "server.connection.conversationFailed": "Konuşma yüklenemedi. Tekrar deneyin.",
   "server.connection.panelsFailed": "Bazı çalışma alanı panelleri yüklenemedi. Tekrar deneyin.",
   "server.connection.retry": "Tekrar dene",
@@ -21,19 +21,19 @@ export const messages = {
   "server.connection.details": "Ayrıntılar",
 
   "server.status.steps": "Bağlantı adımları",
-  "server.status.updateCause": "{name}, CodeBot {version} sürümünü yüklemek için yeniden başlıyor.",
-  "server.status.updateCauseNoVersion": "{name}, bir CodeBot güncellemesini yüklemek için yeniden başlıyor.",
+  "server.status.updateCause": "{name}, OpenBot Code {version} sürümünü yüklemek için yeniden başlıyor.",
+  "server.status.updateCauseNoVersion": "{name}, bir OpenBot Code güncellemesini yüklemek için yeniden başlıyor.",
   "server.status.connectCause": "Bu uygulama {name} sunucusuna bağlanıyor.",
   "server.status.connectionCause": "Bu uygulamanın {name} ile bağlantısı kesildi. Otomatik olarak yeniden bağlanır.",
   "server.status.stepUpdate": "Güncellemeyi yükle",
-  "server.status.stepUpdateDetail": "CodeBot durur, güncellemeyi yükler ve yeniden başlar.",
+  "server.status.stepUpdateDetail": "OpenBot Code durur, güncellemeyi yükler ve yeniden başlar.",
   "server.status.stepConnect": "Bağlan",
   "server.status.stepConnectDetail": "Bu uygulama sunucuyla bir bağlantı açar.",
   "server.status.stepLoad": "Çalışma alanını yükle",
   "server.status.stepLoadDetail": "Ajanlar ve sohbetler sunucudan yüklenir.",
   "server.status.elapsed": "Geçen süre: {time}",
-  "server.compatibility.updateClientTitle": "Bu CodeBot uygulamasını güncelleyin",
-  "server.compatibility.updateHostTitle": "{name} üzerindeki CodeBot'u güncelleyin",
+  "server.compatibility.updateClientTitle": "Bu OpenBot Code uygulamasını güncelleyin",
+  "server.compatibility.updateHostTitle": "{name} üzerindeki OpenBot Code'u güncelleyin",
   "server.compatibility.unsafeDataTitle": "Ana makine güvenli olmayan veri döndürdü",
   "server.compatibility.cannotConnectTitle": "{name} ile bağlantı kurulamıyor",
   "server.compatibility.safeModeTitle": "{name} başlamıyor",
@@ -42,7 +42,7 @@ export const messages = {
   "server.compatibility.updateHostDescription":
     "Ana makine yalnızca bu uygulamadan daha eski protokolleri destekliyor. Ana makineyi güncelleyin, ardından tekrar deneyin.",
   "server.compatibility.unsafeDataDescription":
-    "Bilinen bir veri yükü geçersiz olduğu için CodeBot bu bağlantıyı durdurdu. Geçerli çalışma alanı verileriniz değiştirilmedi.",
+    "Bilinen bir veri yükü geçersiz olduğu için OpenBot Code bu bağlantıyı durdurdu. Geçerli çalışma alanı verileriniz değiştirilmedi.",
   "server.compatibility.clientVersion": "İstemci sürümü",
   "server.compatibility.hostVersion": "Ana makine sürümü",
   "server.compatibility.negotiatedProtocol": "Anlaşılan protokol",
@@ -83,12 +83,12 @@ export const messages = {
   "server.local.creating": "Sunucu oluşturuluyor…",
   "server.local.createFailed": "Sunucu oluşturulamadı.",
   "server.local.createFailedRetry":
-    "Bir sorun oluştu. Tekrar deneyin. Yine başarısız olursa CodeBot'u yeniden başlatın.",
+    "Bir sorun oluştu. Tekrar deneyin. Yine başarısız olursa OpenBot Code'u yeniden başlatın.",
   "server.local.limitReached":
     "Bu bilgisayarda en fazla {limit} sunucunuz olabilir. Yeni bir sunucu oluşturmak için birini silin.",
   "server.local.deleteConfirmTitle": "{name} silinsin mi?",
   "server.local.deleteConfirmDescription":
-    "CodeBot sunucuyu durdurur ve ajanlarını, sohbetlerini ve dosyalarını çöp kutusuna taşır.",
+    "OpenBot Code sunucuyu durdurur ve ajanlarını, sohbetlerini ve dosyalarını çöp kutusuna taşır.",
   "server.local.deleting": "Sunucu siliniyor…",
   "server.local.deletedTitle": "{name} silindi",
   "server.role.admin": "Yönetici",
@@ -144,13 +144,13 @@ export const messages = {
   "server.settings.identityLocalOnly":
     "Bu sunucunun adı ve logosu yalnızca onu çalıştıran bilgisayarda değiştirilebilir.",
   "server.settings.publicationLocalOnly": "Yayımlama durumunu yalnızca yerel sunucu değiştirebilir.",
-  "server.compatibility.versionMismatchTitle": "{name} üzerinde farklı CodeBot sürümleri",
+  "server.compatibility.versionMismatchTitle": "{name} üzerinde farklı OpenBot Code sürümleri",
   "server.compatibility.versionMismatchDescription":
     "Bağlantı {protocol} protokolünü kullanıyor. Bazı yeni özellikler kullanılamayabilir. İstemci {clientVersion}; ana makine {hostVersion}.",
   "server.compatibility.versionMismatchUpdateHostDescription":
-    "Tüm özellikleri kullanmak için {name} üzerindeki CodeBot'u güncelleyin. Bağlantı {protocol} protokolünü kullanıyor. İstemci {clientVersion}; ana makine {hostVersion}.",
+    "Tüm özellikleri kullanmak için {name} üzerindeki OpenBot Code'u güncelleyin. Bağlantı {protocol} protokolünü kullanıyor. İstemci {clientVersion}; ana makine {hostVersion}.",
   "server.compatibility.versionMismatchUpdateClientDescription":
-    "Tüm özellikleri kullanmak için bu CodeBot uygulamasını güncelleyin. Bağlantı {protocol} protokolünü kullanıyor. İstemci {clientVersion}; ana makine {hostVersion}.",
+    "Tüm özellikleri kullanmak için bu OpenBot Code uygulamasını güncelleyin. Bağlantı {protocol} protokolünü kullanıyor. İstemci {clientVersion}; ana makine {hostVersion}.",
   "server.connection.failedTitle": "Bağlantı başarısız oldu",
   "server.connection.failedDescription":
     "Bu sunucuya bağlanılamadı. Ana makinenin çevrim içi olduğunu kontrol edip tekrar deneyin.",
@@ -168,7 +168,7 @@ export const messages = {
   "server.settings.desktopTitle": "Uzak masaüstü",
   "server.settings.desktopDescription": "Bu sunucunun masaüstünü yapılandırın veya masaüstüne bağlanın.",
   "server.settings.storageTitle": "Depolama",
-  "server.settings.storageDescription": "CodeBot'un bu sunucunun diskinde ne sakladığını ve boş alanı görün.",
+  "server.settings.storageDescription": "OpenBot Code'un bu sunucunun diskinde ne sakladığını ve boş alanı görün.",
   "server.settings.importTitle": "İçe aktar",
   "server.settings.importDescription": "Ajanlarınızı Grok Bot'tan veya Hermes Agent'tan bu sunucuya taşıyın.",
   "server.settings.transferTitle": "Aktarım",
@@ -202,9 +202,9 @@ export const messages = {
   "server.settings.nameTooLong": "En fazla {limit} karakter kullanın.",
   "server.settings.actionFailedTitle": "Sunucu eylemi başarısız oldu",
   "server.settings.actionFailed": "Sunucu eylemi başarısız oldu.",
-  "server.settings.imageReadFailed": "CodeBot bu görseli okuyamadı.",
+  "server.settings.imageReadFailed": "OpenBot Code bu görseli okuyamadı.",
   "server.settings.copyFailedTitle": "Kopyalama başarısız oldu",
-  "server.settings.copyFailed": "CodeBot bu değeri kopyalayamadı.",
+  "server.settings.copyFailed": "OpenBot Code bu değeri kopyalayamadı.",
   "server.settings.unavailableTitle": "Sunucu ayarları kullanılamıyor",
   "server.settings.reset": "Sıfırla",
   "server.settings.unsavedChanges": "Kaydedilmemiş değişiklikler",
@@ -244,7 +244,7 @@ export const messages = {
   "server.settings.appearanceColorOption": "{color} sunucu rengi",
   "server.settings.appearanceReset": "Şekli ve rengi sıfırla",
   "server.settings.access": "Erişim",
-  "server.companySignIn.desktopOnly": "Çoklu oturum açmayı CodeBot masaüstü uygulamasında ayarlayın.",
+  "server.companySignIn.desktopOnly": "Çoklu oturum açmayı OpenBot Code masaüstü uygulamasında ayarlayın.",
   "server.settings.publish": "Bu sunucuyu yayımla",
   "server.settings.published": "Sunucu yayımlandı",
   "server.settings.setUpDesktopTitle": "Uzak masaüstünü ayarlayın",
@@ -353,7 +353,7 @@ export const messages = {
   "server.settings.restartTitle": "Yeniden başlat",
   "server.settings.restarting": "Yeniden başlatılıyor…",
   "server.settings.restartedTitle": "{name} yeniden başlatılıyor",
-  "server.settings.restartHiddenDescription": "Sunucu geri geldiğinde CodeBot otomatik olarak yeniden bağlanır.",
+  "server.settings.restartHiddenDescription": "Sunucu geri geldiğinde OpenBot Code otomatik olarak yeniden bağlanır.",
   "server.settings.restartHide": "Gizle",
   "server.settings.restartProgressTitle": "{name} yeniden başlatılıyor",
   "server.settings.restartProgressDescription":
@@ -418,7 +418,7 @@ export const messages = {
     other: "Bu sunucu {count} üye sınırına ulaştı. Yeni bir kişiyi davet etmek için bir üyeyi kaldırın.",
   },
   "server.invite.qrLabel": "Davet QR kodu",
-  "server.invite.qrDescription": "Bu sunucuya katılmak için bu kodu CodeBot Mobile uygulamasında tarayın.",
+  "server.invite.qrDescription": "Bu sunucuya katılmak için bu kodu OpenBot Code Mobile uygulamasında tarayın.",
   "server.invite.accepted": "Davet kabul edildi",
   "server.invite.expired": "Davetin süresi doldu",
   "server.invite.sent": "Davet gönderildi",
@@ -426,7 +426,7 @@ export const messages = {
   "server.invite.acceptedDescription":
     "Üye bu sunucuya katıldı. Başka birini davet etmek için yeni bir bağlantı oluşturun.",
   "server.invite.expiredDescription": "Birini davet etmek için yeni bir bağlantı oluşturun.",
-  "server.invite.linkReadyDescription": "Bağlantıyı paylaşın veya QR kodunu CodeBot Mobile uygulamasında tarayın.",
+  "server.invite.linkReadyDescription": "Bağlantıyı paylaşın veya QR kodunu OpenBot Code Mobile uygulamasında tarayın.",
   "server.invite.pendingTitle": "Bekleyen davetler",
   "server.invite.pendingCount": "{total} bekliyor",
   "server.invite.noPending": "Bekleyen davet yok.",
@@ -454,7 +454,7 @@ export const messages = {
   "server.desktop.connectionUnavailable": "Bağlantı kullanılamıyor",
   "server.desktop.hostOffline": "Ana makine çevrim dışı",
   "server.desktop.hostOfflineDescription": "Masaüstünü açmadan önce ana makineye yeniden bağlanın.",
-  "server.desktop.hostUpdateDescription": "Uzaktan kontrolü kullanmak için ana makinedeki CodeBot'u güncelleyin.",
+  "server.desktop.hostUpdateDescription": "Uzaktan kontrolü kullanmak için ana makinedeki OpenBot Code'u güncelleyin.",
   "server.desktop.serviceAvailable": "Hizmet kullanılabilir",
   "server.desktop.serviceNotReady": "Hizmet hazır değil",
   "server.desktop.serviceNotReadyDescription":
@@ -468,7 +468,7 @@ export const messages = {
   "server.desktop.accessMembers": "Tüm üyeler",
   "server.desktop.askLabel": "Bu bilgisayarda sor",
   "server.desktop.askDescription":
-    "Her oturum, bu bilgisayarın başındaki bir kişi izin verene kadar bekler. 30 saniye içinde yanıt gelmezse CodeBot oturumu reddeder.",
+    "Her oturum, bu bilgisayarın başındaki bir kişi izin verene kadar bekler. 30 saniye içinde yanıt gelmezse OpenBot Code oturumu reddeder.",
   "server.desktop.activeTitle": "Etkin uzak masaüstü oturumları: {active}",
   "server.desktop.activeDescription": "Her oturumu hemen sonlandırır. Üyeler yeniden isteyebilir.",
   "server.desktop.stopAll": "Tüm uzaktan kontrolü durdur",
@@ -480,9 +480,9 @@ export const messages = {
   "server.settings.providersSwitchNote": "Yapay zeka sağlayıcılarını yönetmek için {name} sunucusuna geçin.",
   "server.settings.providersSwitch": "Bu sunucuya geç",
   "server.settings.updatesTitle": "Güncellemeler",
-  "server.settings.updatesDescription": "Bu sunucuyu çalıştıran bilgisayardaki CodeBot'u güncelleyin.",
-  "server.update.hostTitle": "{name} üzerinde CodeBot",
-  "server.update.version": "CodeBot {version}",
+  "server.settings.updatesDescription": "Bu sunucuyu çalıştıran bilgisayardaki OpenBot Code'u güncelleyin.",
+  "server.update.hostTitle": "{name} üzerinde OpenBot Code",
+  "server.update.version": "OpenBot Code {version}",
   "server.update.status.idle": "En son sürümü bulmak için güncellemeleri denetleyin.",
   "server.update.status.checking": "Güncellemeler denetleniyor…",
   "server.update.status.available": "{version} sürümü mevcut.",
@@ -490,28 +490,28 @@ export const messages = {
   "server.update.status.downloadingUnknown": "{version} indiriliyor…",
   "server.update.status.ready": "{version} indirildi.",
   "server.update.status.installing": "{name}, güncellemeyi yüklemek için yeniden başlatılıyor.",
-  "server.update.status.upToDate": "{name} üzerinde CodeBot güncel.",
+  "server.update.status.upToDate": "{name} üzerinde OpenBot Code güncel.",
   "server.update.status.checkFailed": "{name} güncellemeleri denetleyemedi. Tekrar deneyin.",
   "server.update.status.downloadFailed": "{name} güncellemeyi indiremedi. Tekrar deneyin.",
   "server.update.status.installFailed":
-    "{name} güncellemeyi yükleyemedi. O bilgisayarın başka hiçbir kullanıcısının CodeBot çalıştırmadığından emin olun, ardından tekrar deneyin.",
+    "{name} güncellemeyi yükleyemedi. O bilgisayarın başka hiçbir kullanıcısının OpenBot Code çalıştırmadığından emin olun, ardından tekrar deneyin.",
   "server.update.releaseCheckFailed":
     "{name} sürüm akışını okuyamadı. Ana makinenin ağ bağlantısını kontrol edin, ardından tekrar deneyin.",
   "server.update.releaseUnavailable":
     "Bu derleme için sürüm denetimleri kullanılamıyor. Ana makine yöneticisinden uyumlu bir sürümü kontrol etmesini isteyin.",
   "server.update.externalTitle": "Kurulumu ana makine yönetir",
   "server.update.path.hostManager":
-    "CodeBot Host Manager, tüm kullanıcılar boştayken güncellemeleri yükler. Bir güncelleme başlamazsa ana makine yöneticisinden Host Manager durumunu kontrol etmesini isteyin.",
+    "OpenBot Code Host Manager, tüm kullanıcılar boştayken güncellemeleri yükler. Bir güncelleme başlamazsa ana makine yöneticisinden Host Manager durumunu kontrol etmesini isteyin.",
   "server.update.path.hosted":
     "Barındırılan hizmet güncellemeleri arka planda indirir. İndirilen bir güncelleme, sunucu bir sonraki başlatılışında başlar. Sunucuyu durdurup sürdürmeden önce etkin çalışmanın bitmesini bekleyin. Sunucu eski bir sürümde kalırsa ana makine yöneticisiyle iletişime geçin.",
   "server.update.path.system":
-    "En son sürümü yüklemek için ana makinede sudo codebot update komutunu çalıştırın. Bu komut CodeBot'u durdurur. Önce etkin çalışmanın bitmesini bekleyin. Otomatik indirmeler bir sonraki önyüklemede yüklenir.",
+    "En son sürümü yüklemek için ana makinede sudo codebot update komutunu çalıştırın. Bu komut OpenBot Code'u durdurur. Önce etkin çalışmanın bitmesini bekleyin. Otomatik indirmeler bir sonraki önyüklemede yüklenir.",
   "server.update.path.container":
-    "Docker ana makinesinde yeni CodeBot görüntüsünü çekin ve kapsayıcıyı aynı veri birimleriyle yeniden oluşturun. Önce etkin çalışmanın bitmesini bekleyin. Verilerinizi korumak için mevcut birimleri saklayın.",
+    "Docker ana makinesinde yeni OpenBot Code görüntüsünü çekin ve kapsayıcıyı aynı veri birimleriyle yeniden oluşturun. Önce etkin çalışmanın bitmesini bekleyin. Verilerinizi korumak için mevcut birimleri saklayın.",
   "server.update.path.manual":
-    "Bu kurulum kendini değiştiremez. Ana makine yöneticisinden uyumlu sürümü github.com/nightly-labs/openbot/releases adresinden yüklemesini isteyin. Mevcut CodeBot verilerini saklayın.",
+    "Bu kurulum kendini değiştiremez. Ana makine yöneticisinden uyumlu sürümü github.com/nightly-labs/openbot/releases adresinden yüklemesini isteyin. Mevcut OpenBot Code verilerini saklayın.",
   "server.update.path.unavailable":
-    "Bu bir geliştirme derlemesidir. Güncellemeleri denetlemek için yüklü bir CodeBot sürümü kullanın.",
+    "Bu bir geliştirme derlemesidir. Güncellemeleri denetlemek için yüklü bir OpenBot Code sürümü kullanın.",
   "server.update.check": "Güncellemeleri denetle",
   "server.update.start": "Boşta olduğunda güncelle",
   "server.update.restartNow": "Şimdi yeniden başlat",
@@ -521,38 +521,39 @@ export const messages = {
   "server.update.requestedBy": "{member} bu güncellemeyi istedi.",
   "server.update.automatic": "{name} güncellemeleri otomatik olarak yükler.",
   "server.update.autoDownloadTitle": "Güncellemeleri otomatik olarak indir",
-  "server.update.autoDownloadDescription": "{name}, CodeBot'un her yeni sürümü çıktığında indirir.",
+  "server.update.autoDownloadDescription": "{name}, OpenBot Code'un her yeni sürümü çıktığında indirir.",
   "server.update.autoInstallTitle": "Güncellemeleri otomatik olarak yükle",
   "server.update.autoInstallDescription":
     "{name}, ajanları boşta olduğunda indirilen güncellemeyle yeniden başlar. Üyelerin bağlantısı kısa bir süre için kesilir ve otomatik olarak tekrar bağlanır.",
   "server.update.waitingFor": "{reasons} bekleniyor.",
   "server.update.disabledTitle": "Uzaktan güncellemeler kapalı",
   "server.update.disabledDescription":
-    "{name} kullanıcısı sunucu üyelerinin güncelleme yapmasını kapattı. CodeBot uygulamasını güncellemesini veya o bilgisayarda Ayarlar > Güncellemeler bölümünü açıp “Sunucu üyelerinin güncelleme yapmasına izin ver” seçeneğini açmasını isteyin.",
-  "server.update.managedTitle": "Güncellemeleri CodeBot Host Manager yönetiyor",
+    "{name} kullanıcısı sunucu üyelerinin güncelleme yapmasını kapattı. OpenBot Code uygulamasını güncellemesini veya o bilgisayarda Ayarlar > Güncellemeler bölümünü açıp “Sunucu üyelerinin güncelleme yapmasına izin ver” seçeneğini açmasını isteyin.",
+  "server.update.managedTitle": "Güncellemeleri OpenBot Code Host Manager yönetiyor",
   "server.update.managedDescription":
-    "CodeBot Host Manager, {name} sunucusunu günceller. Ana makine yöneticisiyle iletişime geçin.",
+    "OpenBot Code Host Manager, {name} sunucusunu günceller. Ana makine yöneticisiyle iletişime geçin.",
   "server.update.unsupportedTitle": "{name} kendini güncelleyemiyor",
   "server.update.unsupportedDescription":
-    "Bu CodeBot derlemesinde güncelleyici yok. {name} üzerine yeni bir sürüm yükleyin.",
+    "Bu OpenBot Code derlemesinde güncelleyici yok. {name} üzerine yeni bir sürüm yükleyin.",
   "server.update.restarting": "Yeniden başlatılıyor…",
   "server.update.loadFailed": "{name} güncelleme durumu yüklenemedi.",
   "server.update.hostAction": "Ana makineyi güncelle",
-  "server.update.dialog.offerTitle": "{name} sunucusunu CodeBot {version} sürümüne güncelle",
+  "server.update.dialog.offerTitle": "{name} sunucusunu OpenBot Code {version} sürümüne güncelle",
   "server.update.dialog.offerDescription":
-    "{name}, CodeBot {current} kullanıyor. Önce güncellemeyi indirir, ardından yeniden başlar.",
+    "{name}, OpenBot Code {current} kullanıyor. Önce güncellemeyi indirir, ardından yeniden başlar.",
   "server.update.dialog.offerReadyDescription":
-    "{name}, CodeBot {current} kullanıyor. Güncelleme indirildi. {name}, güncellemeyi yüklemek için yeniden başlar.",
+    "{name}, OpenBot Code {current} kullanıyor. Güncelleme indirildi. {name}, güncellemeyi yüklemek için yeniden başlar.",
   "server.update.dialog.progressTitle": "{name} güncelleniyor",
   "server.update.dialog.progressDescription": "{time} · Bu pencereyi gizleyebilirsiniz.",
-  "server.update.dialog.doneTitle": "{name}, CodeBot {version} sürümünde",
+  "server.update.dialog.doneTitle": "{name}, OpenBot Code {version} sürümünde",
   "server.update.dialog.doneDescription": "Güncelleme {time} sürdü.",
   "server.update.dialog.failedTitle": "{name} güncellenmedi",
   "server.update.dialog.restartFailed":
     "{name} tekrar çevrim içi olmadı. Ana makineyi kontrol edin, ardından tekrar deneyin.",
-  "server.update.dialog.notInstalled": "{name}, CodeBot {current} ile yeniden başladı. Güncellemeyi tekrar deneyin.",
+  "server.update.dialog.notInstalled":
+    "{name}, OpenBot Code {current} ile yeniden başladı. Güncellemeyi tekrar deneyin.",
   "server.update.dialog.steps": "Güncelleme adımları",
-  "server.update.dialog.downloadStep": "CodeBot {version} sürümünü indir",
+  "server.update.dialog.downloadStep": "OpenBot Code {version} sürümünü indir",
   "server.update.dialog.downloadPending": "İndirme sırasında ajanlar çalışmaya devam eder.",
   "server.update.dialog.downloadPreparing": "İndirme hazırlanıyor…",
   "server.update.dialog.downloadRunning": "{progress} · Ajanlar çalışmaya devam ediyor.",
@@ -561,10 +562,10 @@ export const messages = {
   "server.update.dialog.restartPending": "Üyelerin bağlantısı yaklaşık bir dakika kesilir.",
   "server.update.dialog.restartWaiting": "Bitmesi beklenen işler: {reasons}.",
   "server.update.dialog.restartSoon": "Yeniden başlatma birazdan başlıyor.",
-  "server.update.dialog.restartRunning": "CodeBot {version} başlatılıyor…",
+  "server.update.dialog.restartRunning": "OpenBot Code {version} başlatılıyor…",
   "server.update.dialog.onlineStep": "Tekrar çevrim içi",
   "server.update.dialog.onlinePending": "Üyeler otomatik olarak tekrar bağlanır.",
-  "server.update.dialog.onlineDone": "{time} sonra CodeBot {version} sürümünde.",
+  "server.update.dialog.onlineDone": "{time} sonra OpenBot Code {version} sürümünde.",
   "server.update.dialog.waitIdle": "Ajanlar boşta olana kadar bekle",
   "server.update.dialog.waitIdleDescription":
     "Yeniden başlatma, ajan turlarının ve rutin çalıştırmalarının bitmesini bekler.",
@@ -590,14 +591,15 @@ export const messages = {
   "server.update.reason.fileTransfer": "bir dosya aktarımı",
   "server.update.reason.browserControl": "bir ajan tarafından tarayıcı kontrolü",
   "server.update.reason.updateOperation": "başka bir güncelleme adımı",
-  "server.update.reason.initialization": "CodeBot'un başlatılması",
+  "server.update.reason.initialization": "OpenBot Code'un başlatılması",
   "server.update.reason.other": "diğer çalışmalar",
   "server.restartNotice.waitingTitle": "{name}, bir güncellemeyi yüklemek için yeniden başlatılacak",
-  "server.restartNotice.waitingVersionTitle": "{name}, CodeBot {version} sürümünü yüklemek için yeniden başlatılacak",
+  "server.restartNotice.waitingVersionTitle":
+    "{name}, OpenBot Code {version} sürümünü yüklemek için yeniden başlatılacak",
   "server.restartNotice.waitingDescription":
-    "Yeniden başlatma, ajanları boşta kalana kadar bekler. Kısa bir süre için bağlantınız kesilir, ardından CodeBot otomatik olarak tekrar bağlanır.",
+    "Yeniden başlatma, ajanları boşta kalana kadar bekler. Kısa bir süre için bağlantınız kesilir, ardından OpenBot Code otomatik olarak tekrar bağlanır.",
   "server.restartNotice.restartingTitle": "{name}, güncellemeyi yüklemek için yeniden başlatılıyor",
-  "server.restartNotice.restartingDescription": "{name} geri geldiğinde CodeBot otomatik olarak tekrar bağlanır.",
+  "server.restartNotice.restartingDescription": "{name} geri geldiğinde OpenBot Code otomatik olarak tekrar bağlanır.",
   "server.restartNotice.backTitle": "{name} tekrar çevrim içi",
   "server.settings.personalityTitle": "Kişilik",
   "server.settings.personalityDescription": "Bu sunucudaki ajanların sizinle nasıl konuşacağını seçin.",
@@ -633,7 +635,7 @@ export const messages = {
   "server.ownerTransfer.incomingStays":
     "Sunucudaki sağlayıcı oturumları, kayıtlı anahtarlar, Vault girişleri, tarayıcı oturumları ve bağlı uygulamalar orada kalır ve bunları kullanabilirsiniz.",
   "server.ownerTransfer.incomingMachine":
-    "Sunucuyu çalıştıran bilgisayarda hâlâ oturum açabilen herkes CodeBot hesabınızı kullanabilir. O bilgisayarın parolalarını ve SSH anahtarlarını değiştirin.",
+    "Sunucuyu çalıştıran bilgisayarda hâlâ oturum açabilen herkes OpenBot Code hesabınızı kullanabilir. O bilgisayarın parolalarını ve SSH anahtarlarını değiştirin.",
   "server.ownerTransfer.later": "Sonra",
   "server.ownerTransfer.decline": "Reddet",
   "server.ownerTransfer.accept": "Kabul et",

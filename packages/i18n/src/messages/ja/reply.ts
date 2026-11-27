@@ -1,4 +1,33 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/reply";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "reply.summary.edited": { other: "{count} 個のファイルを編集しました" },
+  "reply.summary.ran": { other: "{count} 個のコマンドを実行しました" },
+  "reply.summary.read": { other: "{count} 個のファイルを読み取りました" },
+  "reply.summary.searched": { other: "{count} 回検索しました" },
+  "reply.summary.browsed": { other: "{count} ページを開きました" },
+  "reply.summary.delegated": { other: "{count} 件のタスクを引き継ぎました" },
+  "reply.summary.worked": { other: "ほかのツールを {count} 個使用しました" },
+  "reply.details.show": "詳細",
+  "reply.details.hide": "詳細を非表示",
+  "reply.details.loading": "詳細を読み込んでいます…",
+  "reply.details.input": "入力",
+  "reply.details.output": "出力",
+  "reply.details.shortened": "省略",
+  "reply.details.timeline": "タイムライン",
+  "reply.code.showAll": "すべて表示 ({count} 行)",
+  "reply.code.showLess": "表示を減らす",
+  "reply.view.title": "返信の表示",
+  "reply.view.description": "「簡潔」は回答と作業の 1 行の要約を表示します。「詳細」は手順も表示します。",
+  "reply.view.short": "簡潔",
+  "reply.view.detailed": "詳細",
+  "reply.rule.title": "返信ルール",
+  "reply.rule.description": "すべてのチャットにこのルールが適用されます。プロジェクトごとに独自のルールを使えます。",
+  "reply.rule.label": "返信のルール",
+  "reply.rule.save": "ルールを保存",
+  "reply.rule.reset": "既定のルールを使う",
+  "reply.rule.saved": "ルールを保存しました",
+  "reply.rule.empty": "空: 返信ルールは送信されません",
+  "reply.rule.count": "{count} / {max} 文字",
+} as const satisfies PartialTranslation<typeof source>;

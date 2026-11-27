@@ -18,7 +18,7 @@ import type { ServerMemory } from "./server-memory";
 
 const CONTROL_SOCKET_FILE = "control.sock";
 const MAX_BODY_BYTES = 4096;
-const DEFAULT_SERVER_NAME = "CodeBot";
+const DEFAULT_SERVER_NAME = "OpenBot Code";
 
 export interface ServerModeEnvironment {
   controlSocketPath: string;

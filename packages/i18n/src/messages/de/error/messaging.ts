@@ -5,21 +5,21 @@ export const messages = {
   "error.messaging.notConnected": "Dieser Slack-Arbeitsbereich ist nicht verbunden.",
   "error.messaging.unsupported": "Dieser Computer kann keine Verbindung zu Slack herstellen.",
   "error.messaging.relayUnavailable":
-    "CodeBot kann auf diesem Computer keine Slack-Ereignisse empfangen. Melde dich an, gib diesem Computer einen Namen und versuche es erneut.",
+    "OpenBot Code kann auf diesem Computer keine Slack-Ereignisse empfangen. Melde dich an, gib diesem Computer einen Namen und versuche es erneut.",
   "error.messaging.discordNotConnected": "Dieser Discord-Server ist nicht verbunden.",
   "error.messaging.discordUnsupported": "Dieser Computer kann keine Verbindung zu Discord herstellen.",
   "error.messaging.discordRelayUnavailable":
-    "CodeBot kann auf diesem Computer keine Discord-Ereignisse empfangen. Melde dich an, gib diesem Computer einen Namen und versuche es erneut.",
+    "OpenBot Code kann auf diesem Computer keine Discord-Ereignisse empfangen. Melde dich an, gib diesem Computer einen Namen und versuche es erneut.",
   "error.messaging.discordRolesUnsupported":
-    "CodeBot kann die Discord-Rollen noch nicht auflisten. Versuche es später noch einmal.",
+    "OpenBot Code kann die Discord-Rollen noch nicht auflisten. Versuche es später noch einmal.",
   "error.messaging.telegramNotConnected": "Dieser Telegram-Chat ist nicht verbunden.",
   "error.messaging.telegramUnsupported": "Dieser Computer kann keine Verbindung zu Telegram herstellen.",
   "error.messaging.telegramRelayUnavailable":
-    "CodeBot kann Telegram auf diesem Computer nicht erreichen. Melde dich an, gib diesem Computer einen Namen und versuche es erneut.",
+    "OpenBot Code kann Telegram auf diesem Computer nicht erreichen. Melde dich an, gib diesem Computer einen Namen und versuche es erneut.",
   "error.messaging.telegramRelayUnreachable":
-    "CodeBot kann von diesem Computer aus keine Verbindung zu seinem Dienst herstellen. Prüfe die Internetverbindung, das VPN, den Proxy oder die Firewall und versuche es erneut.",
+    "OpenBot Code kann von diesem Computer aus keine Verbindung zu seinem Dienst herstellen. Prüfe die Internetverbindung, das VPN, den Proxy oder die Firewall und versuche es erneut.",
   "error.messaging.telegramServiceUnavailable":
-    "CodeBot kann Telegram gerade nicht verbinden. Versuche es später erneut.",
+    "OpenBot Code kann Telegram gerade nicht verbinden. Versuche es später erneut.",
   "error.messaging.whatsappNotConnected": "Diese WhatsApp-Nummer ist nicht verbunden.",
   "error.messaging.whatsappUnsupported": "Dieser Computer kann keine Verbindung zu WhatsApp herstellen.",
   "error.messaging.whatsappTooManySenders": "Eine WhatsApp-Nummer kann bis zu 200 Kontakte und Gruppen zulassen.",

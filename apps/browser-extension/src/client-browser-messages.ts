@@ -16,7 +16,7 @@ export const SITES_KEY = "codebot.client-browser.sites.v1";
 export const ASKS_KEY = "codebot.client-browser.asks.v1";
 export const PRESENCE_KEY = "codebot.client-browser.presence.v1";
 
-export const CODEBOT_GROUP_TITLE = "CodeBot";
+export const CODEBOT_GROUP_TITLE = "OpenBot Code";
 
 export const ASK_KINDS = ["site", "password", "payment", "download", "sign-in"] as const;
 export type AskKind = (typeof ASK_KINDS)[number];

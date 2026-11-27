@@ -7,19 +7,19 @@ export const messages = {
   "error.workflow.annotation": "У текста, заметок и фигур не может быть связей.",
   "error.workflow.port": "Шаг не может принимать такой тип входных данных.",
   "error.workflow.unknownValue":
-    "Этот CodeBot не знает настройку одного из шагов. Обновите CodeBot и повторите попытку.",
+    "Этот OpenBot Code не знает настройку одного из шагов. Обновите OpenBot Code и повторите попытку.",
   "error.workflow.branch": "Только у условия могут быть связи «да» и «нет».",
   "error.workflow.conditionBranch": "Каждая связь от условия должна быть «да» или «нет».",
   "error.workflow.duplicateEdge": "У этих двух шагов уже есть такая связь.",
   "error.workflow.serverTooOld":
-    "Этот сервер не поддерживает рабочие процессы. Обновите CodeBot на компьютере, на котором он работает.",
+    "Этот сервер не поддерживает рабочие процессы. Обновите OpenBot Code на компьютере, на котором он работает.",
   "error.workflow.newerSteps":
-    "В этом рабочем процессе есть шаги из более новой версии CodeBot. Обновите CodeBot, чтобы изменить его.",
+    "В этом рабочем процессе есть шаги из более новой версии OpenBot Code. Обновите OpenBot Code, чтобы изменить его.",
   "error.workflow.nodeUnsupported":
-    "Эта версия CodeBot пока не может выполнять шаги с изображениями, файлами и сообщениями.",
-  "error.workflow.interrupted": "CodeBot остановился во время этого шага. Запустите его снова.",
+    "Эта версия OpenBot Code пока не может выполнять шаги с изображениями, файлами и сообщениями.",
+  "error.workflow.interrupted": "OpenBot Code остановился во время этого шага. Запустите его снова.",
   "error.workflow.agentMissing": "Выберите агента для этого шага.",
-  "error.workflow.handoffFailed": "CodeBot не смог отправить этот шаг агенту.",
+  "error.workflow.handoffFailed": "OpenBot Code не смог отправить этот шаг агенту.",
   "error.workflow.agentStepEnded": "Сообщение агенту было удалено до его ответа.",
   "error.workflow.agentStepStopped": "Агент остановился, не ответив на этот шаг. Запустите шаг снова.",
   "error.workflow.conditionUnclear": "Модель не ответила «да» или «нет».",
@@ -45,7 +45,7 @@ export const messages = {
   "error.workflow.modelUnavailable": "Модель этого шага недоступна. Выберите другую модель для этого шага.",
   "error.workflow.providerBusy": "Провайдер занят. Подождите несколько минут и запустите шаг снова.",
   "error.workflow.providerOffline":
-    "CodeBot не смог связаться с провайдером. Проверьте подключение к интернету и запустите шаг снова.",
+    "OpenBot Code не смог связаться с провайдером. Проверьте подключение к интернету и запустите шаг снова.",
   "error.workflow.providerBilling":
     "На счёте нет средств, или тариф не включает эту модель. Проверьте тариф или выберите другую модель.",
   "error.workflow.modelRefused": "Провайдер не разрешает эту модель для этого аккаунта. Выберите другую модель.",
@@ -75,7 +75,7 @@ export const messages = {
   "error.workflow.noDecision": "Этот шаг не ждет решения.",
   "error.workflow.outputPlaceMissing": "Выберите место в мессенджере для этого вывода.",
   "error.workflow.outputChannelMissing": "Выберите канал для этого вывода.",
-  "error.workflow.outputChannelFailed": "CodeBot не смог опубликовать результат в канале. Запустите шаг снова.",
+  "error.workflow.outputChannelFailed": "OpenBot Code не смог опубликовать результат в канале. Запустите шаг снова.",
   "error.workflow.discordNoMessage":
     "Этот вывод действует на сообщение Discord, которое запустило выполнение. Запустите его упоминанием в Discord или выберите «Опубликовать в канале».",
   "error.workflow.slackNoMessage":
@@ -85,7 +85,7 @@ export const messages = {
   "error.workflow.outputConnectionOff":
     "Подключение мессенджера для этого вывода выключено или удалено. Выберите место снова.",
   "error.workflow.outputNotRunning": "Подключение мессенджера сейчас не работает. Повторите, когда оно заработает.",
-  "error.workflow.outputRefused": "Место отклонило публикацию. Убедитесь, что CodeBot может публиковать там.",
+  "error.workflow.outputRefused": "Место отклонило публикацию. Убедитесь, что OpenBot Code может публиковать там.",
   "error.workflow.outputUncertain":
     "Публикация остановилась на полпути. Часть её может уже быть в этом месте. Проверьте перед повтором.",
   "error.workflow.tooLarge":
@@ -106,12 +106,12 @@ export const messages = {
   "error.workflow.githubChoseNothing": "Модель не выбрала ни одной метки или человека из этого репозитория.",
   "error.workflow.githubNotConnected": "Подключите GitHub на компьютере, на котором работает этот рабочий процесс.",
   "error.workflow.githubNoAccess":
-    "CodeBot GitHub App не видит этот репозиторий или элемент. Откройте GitHub и дайте приложению доступ.",
+    "OpenBot Code GitHub App не видит этот репозиторий или элемент. Откройте GitHub и дайте приложению доступ.",
   "error.workflow.githubNoWrite":
-    "CodeBot GitHub App не может изменять этот репозиторий. Откройте GitHub и дайте приложению доступ.",
+    "OpenBot Code GitHub App не может изменять этот репозиторий. Откройте GitHub и дайте приложению доступ.",
   "error.workflow.githubLocked": "Это обсуждение заблокировано на GitHub.",
   "error.workflow.githubRefused": "GitHub отклонил изменение: {detail}",
-  "error.workflow.githubUnreachable": "CodeBot не удалось связаться с GitHub. Запустите шаг снова.",
+  "error.workflow.githubUnreachable": "OpenBot Code не удалось связаться с GitHub. Запустите шаг снова.",
   "error.workflow.githubUncertain":
     "Изменение остановилось на полпути. Оно может уже быть на GitHub. Проверьте там, прежде чем запускать шаг снова.",
   "error.workflow.githubNoEvent": "На GitHub нет задачи или пул-реквеста, на которых запускается этот триггер.",
@@ -124,7 +124,7 @@ export const messages = {
     "Sunra принимает входные изображения только с личным аккаунтом. Выберите личный аккаунт в Sunra или удалите связи с изображениями.",
   "error.workflow.sunraFailed": "Sunra не удалось создать файл: {reason}",
   "error.workflow.sunraTimeout":
-    "Sunra не завершила файл вовремя. Проверьте проект CodeBot на sunra.ai, прежде чем запускать шаг снова.",
+    "Sunra не завершила файл вовремя. Проверьте проект OpenBot Code на sunra.ai, прежде чем запускать шаг снова.",
   "error.workflow.higgsfieldSignIn":
     "Войдите в Higgsfield в разделе «Приложения», чтобы использовать модели Higgsfield.",
   "error.workflow.higgsfieldNoCredits":

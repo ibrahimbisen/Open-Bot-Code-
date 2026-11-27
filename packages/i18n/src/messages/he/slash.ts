@@ -1,4 +1,36 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "פקודות",
+  "slash.picker.option": "הפקודה /{name}",
+  "slash.picker.none": "המנוע עדיין לא דיווח על הפקודות שלו. OpenBot Code קורא אותן כשהמנוע מתחיל.",
+  "slash.picker.noMatch": "אף פקודה לא תואמת ל-“{query}”.",
+  "slash.badge.project": "פרויקט",
+  "slash.badge.user": "משתמש",
+  "slash.badge.plugin": "תוסף",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "סקיל",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "טרמינל בלבד",
+  "slash.screen.close": "סגירה",
+  "slash.screen.loading": "טוען…",
+  "slash.model.title": "בחירת המודל",
+  "slash.model.description": "{name} משתמש במודל הזה מההודעה הבאה.",
+  "slash.model.empty": "אין מודלים זמינים לסוכן הזה.",
+  "slash.model.failed": "המודל לא שונה.",
+  "slash.effort.title": "רמת חשיבה",
+  "slash.effort.description": "כמה {name} חושב לפני שהוא עונה.",
+  "slash.effort.unsupported": "למודל של הסוכן הזה אין רמות חשיבה.",
+  "slash.effort.failed": "רמת החשיבה לא שונתה.",
+  "slash.resume.title": "המשך צ'אט",
+  "slash.resume.description": "צ'אטים שהמנוע שמר עבור התיקייה של {name}. צ'אט שהמשכת נפתח כצ'אט חדש.",
+  "slash.resume.empty": "למנוע אין צ'אטים שמורים לתיקייה הזו.",
+  "slash.resume.failed": "OpenBot Code לא הצליח לקרוא את הצ'אטים השמורים.",
+  "slash.resume.retry": "נסה שוב",
+  "slash.resume.inUse": "פתוח ב-OpenBot Code",
+  "slash.resume.untitled": "צ'אט ללא כותרת",
+  "slash.resume.branch": "ענף {name}",
+  "slash.resume.updated": "עודכן {time}",
+  "slash.resume.openFailed": "הצ'אט לא נפתח.",
+} as const satisfies PartialTranslation<typeof source>;

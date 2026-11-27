@@ -29,6 +29,13 @@ function forms(message: Message): readonly string[] {
   );
 }
 
+const PRODUCT_NAME = "OpenBot Code";
+const FORMER_PRODUCT_NAME = "CodeBot";
+
+function productPattern(escaped: string): string {
+  return escaped.split(PRODUCT_NAME).join(`(?:${PRODUCT_NAME}|${FORMER_PRODUCT_NAME})`);
+}
+
 function placeholderPattern(name: string) {
   if (name === "count") return "(-?\\d+(?:\\.\\d+)?)";
   if (name === "reason" || name === "detail") return "([\\s\\S]+?)";
@@ -41,12 +48,12 @@ function compile(key: string, text: string): Template {
   let last = 0;
   for (const match of text.matchAll(/\{(\w+)\}/g)) {
     const name = match[1] ?? "";
-    pattern += escapeRegExp(text.slice(last, match.index));
+    pattern += productPattern(escapeRegExp(text.slice(last, match.index)));
     pattern += placeholderPattern(name);
     names.push(name);
     last = match.index + match[0].length;
   }
-  pattern += escapeRegExp(text.slice(last));
+  pattern += productPattern(escapeRegExp(text.slice(last)));
   return { key, pattern: new RegExp(`^${pattern}$`), names };
 }
 
@@ -81,7 +88,16 @@ export function createSourceLocalizer(input: {
   }
 
   function candidates(text: string): readonly Template[] {
-    return [...(buckets().get(text.slice(0, BUCKET_LENGTH)) ?? []), ...unbucketed];
+    const renamed = text.startsWith(FORMER_PRODUCT_NAME)
+      ? `${PRODUCT_NAME}${text.slice(FORMER_PRODUCT_NAME.length)}`
+      : text;
+    const bucket = text.slice(0, BUCKET_LENGTH);
+    const renamedBucket = renamed.slice(0, BUCKET_LENGTH);
+    return [
+      ...(buckets().get(bucket) ?? []),
+      ...(renamedBucket === bucket ? [] : (buckets().get(renamedBucket) ?? [])),
+      ...unbucketed,
+    ];
   }
 
   const translators = new Map<TranslatedLocale, Translate<MessageCatalog>>();

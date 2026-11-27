@@ -78,12 +78,12 @@ export const messages = {
   "composer.voice.transcribing": "Transkrypcja promptu głosowego",
   "composer.voice.start": "Utwórz prompt głosem",
   "composer.voice.blocked":
-    "Dostęp do mikrofonu jest zablokowany. Pozwól CodeBot używać mikrofonu w ustawieniach systemowych.",
+    "Dostęp do mikrofonu jest zablokowany. Pozwól OpenBot Code używać mikrofonu w ustawieniach systemowych.",
   "composer.voice.noMicrophone": "Brak dostępnego mikrofonu.",
-  "composer.voice.startFailed": "CodeBot nie mógł rozpocząć nagrywania głosu.",
+  "composer.voice.startFailed": "OpenBot Code nie mógł rozpocząć nagrywania głosu.",
   "composer.voice.microphoneUnavailable":
-    "CodeBot nie mógł otworzyć mikrofonu. Zamknij inne aplikacje, które go używają, sprawdź, czy jest podłączony i dozwolony w ustawieniach systemowych, a potem spróbuj ponownie.",
-  "composer.voice.transcribeFailed": "CodeBot nie mógł przetranskrybować tego nagrania.",
+    "OpenBot Code nie mógł otworzyć mikrofonu. Zamknij inne aplikacje, które go używają, sprawdź, czy jest podłączony i dozwolony w ustawieniach systemowych, a potem spróbuj ponownie.",
+  "composer.voice.transcribeFailed": "OpenBot Code nie mógł przetranskrybować tego nagrania.",
   "composer.reply.toYou": "Odpowiedź na twoją wiadomość",
   "composer.reply.toAgent": "Odpowiedź na wiadomość agenta",
   "composer.reply.attachment": "Załącznik",

@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "Panelen",
+  "panel.add": "Een paneel toevoegen",
+  "panel.add.otherChat": "Chat van een ander project",
+  "panel.add.file": "Bestand",
+  "panel.add.diff": "Wijzigingen",
+  "panel.add.browser": "Browser",
+  "panel.add.preview": "Voorbeeld",
+  "panel.split.right": "Naar rechts splitsen",
+  "panel.split.down": "Naar beneden splitsen",
+  "panel.maximize": "Het paneel maximaliseren",
+  "panel.restore": "De paneelgrootte herstellen",
+  "panel.close": "Het paneel sluiten",
+  "panel.pin": "Het paneel vastzetten zodat het open blijft",
+  "panel.unpin": "Het paneel losmaken",
+  "panel.preview.loading": "Het voorbeeld wordt geladen",
+  "panel.preview.failed": "Het voorbeeld kon niet worden geopend.",
+  "panel.browser.label": "Browserpaneel",
+  "panel.browser.starting": "De browser wordt geopend",
+  "panel.browser.failed": "De browserpagina kon niet worden geopend.",
+  "panel.browser.closed": "Deze browserpagina is gesloten.",
+  "panel.browser.takeControl": "De pagina overnemen",
+  "panel.browser.handControl": "Besturing aan de agent geven",
+  "panel.browser.userControls": "Jij bestuurt deze pagina",
+  "panel.browser.agentControls": "De agent bestuurt deze pagina",
+  "panel.header.model": "Model van deze chat",
+  "panel.header.modelLocked": "Het model kan nu niet worden gewijzigd.",
+  "panel.header.files": "Bestanden van het project",
+  "panel.draft.agent": "Agent",
+  "panel.chat.noAgent": "Dit project heeft geen agent. Voeg een agent toe in de projectinstellingen.",
+  "panel.picker.title": "Een chat in een paneel openen",
+  "panel.picker.description": "Kies een project en daarna een chat. Het paneel toont de projectnaam.",
+  "panel.picker.project": "Project",
+} as const satisfies PartialTranslation<typeof source>;

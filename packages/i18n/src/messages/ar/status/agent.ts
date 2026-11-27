@@ -26,7 +26,7 @@ export const messages = {
   "status.agent.screenCaptureScreen": "التقاط الشاشة الرئيسية وإرسال الصورة إلى نموذج الوكيل.",
   "status.agent.screenCaptureChannel":
     "تظهر الصورة في القناة {channel}، ويمكن لكل عضو في هذا الخادم يقرأ القناة رؤيتها.",
-  "status.agent.screenCapturePermissionNext": "قد يطلب منك macOS بعد ذلك السماح لـ CodeBot بـ «تسجيل الشاشة».",
+  "status.agent.screenCapturePermissionNext": "قد يطلب منك macOS بعد ذلك السماح لـ OpenBot Code بـ «تسجيل الشاشة».",
   "status.agent.screenCaptureDisplay": "التقاط الشاشة {name} وإرسال الصورة إلى نموذج الوكيل.",
   "status.agent.screenCaptureWindow": "التقاط النافذة {name} وإرسال الصورة إلى نموذج الوكيل.",
   "status.agent.screenCaptureRegion":
@@ -39,7 +39,7 @@ export const messages = {
   "status.agent.sendIdea": "يصبح هذا مشكلة عامة على GitHub. لا يظهر اسمك.",
   "status.agent.feedbackRecentErrors": "الأخطاء الأخيرة في المحادثة:",
   "status.agent.feedbackSameAs": "يُضاف إلى المشكلة #{issue}",
-  "status.agent.feedbackSent": "أُرسل إلى فريق CodeBot: {title}",
+  "status.agent.feedbackSent": "أُرسل إلى فريق OpenBot Code: {title}",
   "status.agent.feedbackWithdrawn": "أُزيل من GitHub: {title}",
   "status.agent.feedbackWithdrawCommand": "إزالة البلاغ #{issue} من GitHub",
   "status.agent.feedbackWithdrawReason":
@@ -47,14 +47,14 @@ export const messages = {
   "status.agent.feedbackWithdrawing": "جارٍ إزالة بلاغك من GitHub…",
   "status.agent.browserProfileNamed":
     "انقل {agents} إلى ملف تعريف المتصفح {profile}. يحصلون على تسجيلات الدخول وملفات تعريف الارتباط الخاصة به. تُغلق علاماتهم المفتوحة.",
-  "status.agent.commitCoAuthorOff": "إيقاف إضافة CodeBot كمؤلف مشارك في إيداعات جميع الوكلاء.",
-  "status.agent.commitCoAuthorOn": "إضافة CodeBot مجددًا كمؤلف مشارك في إيداعات جميع الوكلاء.",
+  "status.agent.commitCoAuthorOff": "إيقاف إضافة OpenBot Code كمؤلف مشارك في إيداعات جميع الوكلاء.",
+  "status.agent.commitCoAuthorOn": "إضافة OpenBot Code مجددًا كمؤلف مشارك في إيداعات جميع الوكلاء.",
   "status.agent.browserProfileNew":
     "أنشئ ملف تعريف المتصفح الجديد {profile} وانقل {agents} إليه. لا يحتوي على أي تسجيل دخول. تُغلق علاماتهم المفتوحة.",
   "status.agent.browserProfileShared":
     "انقل {agents} إلى ملف تعريف المتصفح المشترك. يحصلون على تسجيلات الدخول وملفات تعريف الارتباط الخاصة به. تُغلق علاماتهم المفتوحة.",
   "status.agent.browserProfileOwn": "امنح كل واحد من {agents} ملف تعريف متصفح خاصًا به. تُغلق علاماتهم المفتوحة.",
-  "status.agent.feedbackSending": "جارٍ إرسال ملاحظاتك إلى فريق CodeBot…",
+  "status.agent.feedbackSending": "جارٍ إرسال ملاحظاتك إلى فريق OpenBot Code…",
   "status.agent.workflowDelete": "احذف سير العمل {title} مع عمليات تشغيله وإصداراته. تتوقف خطواته المفتوحة.",
   "status.agent.deleteAgents": "احذف {agents} مع محادثاتهم وملفاتهم. لا يمكنك التراجع عن ذلك.",
   "status.agent.vaultCardFillFrames": "حقول البطاقة موجودة في إطارات من {origins}.",
@@ -111,9 +111,9 @@ export const messages = {
   "status.agent.memoryChangesWithConflicts":
     "الذاكرة: حُفظ {saved}، وحُدّث {updated}، ونُسي {forgotten}، ولم يتغير {notChanged} لأن سلسلة أخرى غيّرته أولًا.",
   "status.agent.mcpServerAdd":
-    "إضافة خادم MCP {name}: {target}. يحصل كل وكيل على هذا الخادم على أدواته. يتصل CodeBot به لاختباره.",
+    "إضافة خادم MCP {name}: {target}. يحصل كل وكيل على هذا الخادم على أدواته. يتصل OpenBot Code به لاختباره.",
   "status.agent.mcpServerChange":
-    "تغيير خادم MCP {name} إلى {target}. يحصل كل وكيل على هذا الخادم على أدواته. يتصل CodeBot به لاختباره.",
+    "تغيير خادم MCP {name} إلى {target}. يحصل كل وكيل على هذا الخادم على أدواته. يتصل OpenBot Code به لاختباره.",
   "status.agent.mcpServerHeaders": "ويغيّر أيضًا هذه الترويسات: {names}.",
   "status.agent.mcpServerEnable": "تشغيل خادم MCP {name} لكل وكيل على هذا الخادم.",
   "status.agent.mcpServerDisable": "إيقاف خادم MCP {name} لكل وكيل على هذا الخادم.",

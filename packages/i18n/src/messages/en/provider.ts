@@ -31,7 +31,7 @@ export const messages = defineMessages("provider", {
   "provider.status.checking": "Checking",
   "provider.status.off": "Off",
   "provider.gemini.hostSignIn":
-    "To connect Gemini, open CodeBot on the host and select Connect in Server settings > Providers. Google sign-in needs a browser on that host. Remote sign-in is not supported.",
+    "To connect Gemini, open OpenBot Code on the host and select Connect in Server settings > Providers. Google sign-in needs a browser on that host. Remote sign-in is not supported.",
 
   "provider.key.free": "Free",
 
@@ -59,14 +59,14 @@ export const messages = defineMessages("provider", {
   "provider.aria.cancelSignIn": "Cancel the {name} sign-in",
   "provider.aria.apiKey": "{name} API key",
   "provider.connecting.browserHint": "Finish the sign-in if a browser page opens.",
-  "provider.connecting.cancelFailed": "CodeBot could not cancel the {name} sign-in. Try again.",
+  "provider.connecting.cancelFailed": "OpenBot Code could not cancel the {name} sign-in. Try again.",
   "provider.aria.install": "Install {name}",
   "provider.aria.signIn": "Sign in to {name}",
   "provider.aria.codeFallback": "Log in to {name} with a code",
   "provider.aria.addressFallback": "Paste the sign-in address for {name}",
   "provider.aria.moreActions": "More actions for {name}",
 
-  "provider.aria.use": "Use {name} in CodeBot",
+  "provider.aria.use": "Use {name} in OpenBot Code",
   "provider.use.inUseOne": "{agent} uses {name}. Change the model of this agent, then turn {name} off.",
   "provider.use.inUse": {
     one: "{count} agent uses {name}. Change the model of this agent, then turn {name} off.",
@@ -74,7 +74,7 @@ export const messages = defineMessages("provider", {
   },
 
   "provider.codeLogin.title": "Log in to {name} with a code",
-  "provider.codeLogin.description": "Finish on your phone or another browser. CodeBot waits here.",
+  "provider.codeLogin.description": "Finish on your phone or another browser. OpenBot Code waits here.",
   "provider.codeLogin.starting": "Getting a code from {name}…",
   "provider.codeLogin.qrLabel": "QR code for the {name} login page",
   "provider.codeLogin.open": "Open",
@@ -97,15 +97,16 @@ export const messages = defineMessages("provider", {
   "provider.codeLogin.pageDescription": "This page is open in the browser on {host}. Sign in here.",
   "provider.codeLogin.relayStarting": "Starting the {name} sign-in on {host}…",
   "provider.codeLogin.pageOpening": "Opening the {name} sign-in page on {host}…",
-  "provider.codeLogin.linkStep": "Log in to {name}. CodeBot continues by itself.",
-  "provider.codeLogin.thisComputerDescription": "Open this link in a browser on this computer. CodeBot waits here.",
+  "provider.codeLogin.linkStep": "Log in to {name}. OpenBot Code continues by itself.",
+  "provider.codeLogin.thisComputerDescription":
+    "Open this link in a browser on this computer. OpenBot Code waits here.",
   "provider.codeLogin.copyLink": "Copy link",
   "provider.codeLogin.chatgptDeviceSetting":
     "In ChatGPT on a computer, open the security settings and turn on device code sign-in for Codex. For a work account, your workspace admin turns it on.",
 
-  "provider.useApp.title": "Connect {name} in the CodeBot app",
+  "provider.useApp.title": "Connect {name} in the OpenBot Code app",
   "provider.useApp.description":
-    "The {name} sign-in returns to the computer that started it, and a browser tab cannot receive it. Connect {name} in the CodeBot app. The app finishes the sign-in by itself.",
+    "The {name} sign-in returns to the computer that started it, and a browser tab cannot receive it. Connect {name} in the OpenBot Code app. The app finishes the sign-in by itself.",
   "provider.useApp.download": "Get the app",
 
   "provider.picker.noEndpoints": "No endpoints yet",
@@ -116,7 +117,7 @@ export const messages = defineMessages("provider", {
   "provider.picker.providers": "Model providers",
   "provider.picker.downloading": "Downloading {percent}",
   "provider.picker.unavailable": "{name} is unavailable.",
-  "provider.picker.updateToUse": "Update CodeBot to use {name}",
+  "provider.picker.updateToUse": "Update OpenBot Code to use {name}",
   "provider.picker.models": "{name} models",
   "provider.picker.addProvider": "Add provider",
   "provider.picker.download": "{name} download",
@@ -202,21 +203,21 @@ export const messages = defineMessages("provider", {
   "provider.cursorKey.label": "Cursor API key",
   "provider.inceptionKey.title": "Inception API key",
   "provider.inceptionKey.description":
-    "Save an Inception API key on this computer to use the Mercury models. CodeBot runs them in the Pi CLI that it downloads.",
+    "Save an Inception API key on this computer to use the Mercury models. OpenBot Code runs them in the Pi CLI that it downloads.",
   "provider.inceptionKey.descriptionHost":
-    "Save an Inception API key on the host to use the Mercury models. CodeBot runs them in the Pi CLI that it downloads.",
+    "Save an Inception API key on the host to use the Mercury models. OpenBot Code runs them in the Pi CLI that it downloads.",
   "provider.inceptionKey.label": "Inception API key",
   "provider.deepseekKey.title": "DeepSeek API key",
   "provider.deepseekKey.description":
-    "Save a DeepSeek API key on this computer to use the DeepSeek models. CodeBot runs them in the Pi CLI that it downloads.",
+    "Save a DeepSeek API key on this computer to use the DeepSeek models. OpenBot Code runs them in the Pi CLI that it downloads.",
   "provider.deepseekKey.descriptionHost":
-    "Save a DeepSeek API key on the host to use the DeepSeek models. CodeBot runs them in the Pi CLI that it downloads.",
+    "Save a DeepSeek API key on the host to use the DeepSeek models. OpenBot Code runs them in the Pi CLI that it downloads.",
   "provider.deepseekKey.label": "DeepSeek API key",
   "provider.openrouterKey.title": "OpenRouter API key",
   "provider.openrouterKey.description":
-    "Save an OpenRouter API key on this computer to use the models that OpenRouter serves. CodeBot runs them in the Pi CLI that it downloads.",
+    "Save an OpenRouter API key on this computer to use the models that OpenRouter serves. OpenBot Code runs them in the Pi CLI that it downloads.",
   "provider.openrouterKey.descriptionHost":
-    "Save an OpenRouter API key on the host to use the models that OpenRouter serves. CodeBot runs them in the Pi CLI that it downloads.",
+    "Save an OpenRouter API key on the host to use the models that OpenRouter serves. OpenBot Code runs them in the Pi CLI that it downloads.",
   "provider.openrouterKey.label": "OpenRouter API key",
 
   "provider.openCodeKey.title": "Sign in to OpenCode Go",
@@ -299,12 +300,12 @@ export const messages = defineMessages("provider", {
   "provider.settings.removeTitle": "Remove {name}?",
   "provider.settings.removeMoves": "{agents} will use {name}.",
   "provider.settings.removeUnused": "No agent uses this account.",
-  "provider.settings.removeCredentials": "CodeBot deletes the sign-in of this account from this computer.",
+  "provider.settings.removeCredentials": "OpenBot Code deletes the sign-in of this account from this computer.",
   "provider.settings.disconnectTitle": "Disconnect {name}?",
   "provider.settings.disconnectOthers": "The other {provider} accounts wait until you connect {provider} again.",
   "provider.settings.disconnectLocal":
-    "CodeBot signs {provider} out on this computer. The {provider} CLI in your terminal also signs out.",
-  "provider.settings.disconnectHost": "CodeBot signs {provider} out on the server.",
+    "OpenBot Code signs {provider} out on this computer. The {provider} CLI in your terminal also signs out.",
+  "provider.settings.disconnectHost": "OpenBot Code signs {provider} out on the server.",
   "provider.settings.usageLow": "{percent} left · {window}",
   "provider.settings.usageOf": "Usage of {name}",
   "provider.settings.signIn": "Sign-in",
@@ -328,13 +329,13 @@ export const messages = defineMessages("provider", {
   "provider.settings.version": "Version",
   "provider.settings.versionAvailable": "{installed} · {available} is available",
   "provider.settings.versionInstalledByUser": "{version} · installed by you",
-  "provider.settings.versionDownloaded": "{version} · downloaded by CodeBot",
+  "provider.settings.versionDownloaded": "{version} · downloaded by OpenBot Code",
   "provider.settings.otherVersionInstalledByUser": "Not in use: {version} · installed by you",
-  "provider.settings.otherVersionDownloaded": "Not in use: {version} · downloaded by CodeBot",
+  "provider.settings.otherVersionDownloaded": "Not in use: {version} · downloaded by OpenBot Code",
   "provider.settings.installedVersionIncomplete":
-    "Some models need a part that this version does not have. Download CodeBot's version to use them.",
+    "Some models need a part that this version does not have. Download OpenBot Code's version to use them.",
   "provider.settings.useInstalledVersion": "Use installed version",
-  "provider.settings.useDownloadedVersion": "Use CodeBot's version",
+  "provider.settings.useDownloadedVersion": "Use OpenBot Code's version",
   "provider.settings.update": "Update",
   "provider.settings.downloadLabel": "Download of {name}",
   "provider.settings.diagnostics": "Diagnostics",
@@ -407,14 +408,14 @@ export const messages = defineMessages("provider", {
   "provider.settings.useTitle": "Use {name}",
   "provider.settings.deleteTitle": "Delete {name}",
   "provider.settings.deleteOn":
-    "Turns {name} off and deletes the CLI that CodeBot downloaded. Accounts, sign-ins and agents stay.",
+    "Turns {name} off and deletes the CLI that OpenBot Code downloaded. Accounts, sign-ins and agents stay.",
   "provider.settings.deleteOff":
-    "Deletes the CLI that CodeBot downloaded for {name} ({size}). Accounts, sign-ins and agents stay.",
+    "Deletes the CLI that OpenBot Code downloaded for {name} ({size}). Accounts, sign-ins and agents stay.",
   "provider.settings.removeDownloadFailed": "Could not remove the download.",
   "provider.settings.endpoints": "Endpoints",
   "provider.settings.noEndpoints": "No endpoints.",
   "provider.settings.endpointModels": { one: "{url} · 1 model", other: "{url} · {count} models" },
   "provider.settings.disconnectLocalOnly":
-    "CodeBot signs {provider} out on this computer. The {provider} CLI in your terminal keeps its own sign-in.",
+    "OpenBot Code signs {provider} out on this computer. The {provider} CLI in your terminal keeps its own sign-in.",
   "provider.settings.updateAll": "Update all",
 });

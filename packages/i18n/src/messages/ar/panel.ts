@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "اللوحات",
+  "panel.add": "إضافة لوحة",
+  "panel.add.otherChat": "محادثة من مشروع آخر",
+  "panel.add.file": "ملف",
+  "panel.add.diff": "التغييرات",
+  "panel.add.browser": "المتصفح",
+  "panel.add.preview": "معاينة",
+  "panel.split.right": "تقسيم لليمين",
+  "panel.split.down": "تقسيم للأسفل",
+  "panel.maximize": "تكبير اللوحة",
+  "panel.restore": "استعادة حجم اللوحة",
+  "panel.close": "إغلاق اللوحة",
+  "panel.pin": "تثبيت اللوحة لتبقى مفتوحة",
+  "panel.unpin": "إلغاء تثبيت اللوحة",
+  "panel.preview.loading": "جارٍ تحميل المعاينة",
+  "panel.preview.failed": "تعذّر فتح المعاينة.",
+  "panel.browser.label": "لوحة المتصفح",
+  "panel.browser.starting": "جارٍ فتح المتصفح",
+  "panel.browser.failed": "تعذّر فتح صفحة المتصفح.",
+  "panel.browser.closed": "أُغلقت صفحة المتصفح هذه.",
+  "panel.browser.takeControl": "تولّي التحكم في الصفحة",
+  "panel.browser.handControl": "تسليم التحكم إلى الوكيل",
+  "panel.browser.userControls": "أنت تتحكم في هذه الصفحة",
+  "panel.browser.agentControls": "الوكيل يتحكم في هذه الصفحة",
+  "panel.header.model": "نموذج هذه المحادثة",
+  "panel.header.modelLocked": "لا يمكن تغيير النموذج الآن.",
+  "panel.header.files": "ملفات المشروع",
+  "panel.draft.agent": "الوكيل",
+  "panel.chat.noAgent": "ليس لهذا المشروع وكيل. أضف وكيلًا في إعدادات المشروع.",
+  "panel.picker.title": "فتح محادثة في لوحة",
+  "panel.picker.description": "اختر مشروعًا ثم محادثة. تعرض اللوحة اسم المشروع.",
+  "panel.picker.project": "المشروع",
+} as const satisfies PartialTranslation<typeof source>;

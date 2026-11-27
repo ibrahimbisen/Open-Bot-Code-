@@ -27,7 +27,8 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Ana ekranı yakala ve görüntüyü ajanın modeline gönder.",
   "status.agent.screenCaptureChannel":
     "Görüntü {channel} kanalında görünür ve bu sunucuda kanalı okuyan her üye onu görebilir.",
-  "status.agent.screenCapturePermissionNext": "Ardından macOS, CodeBot için Ekran Kaydı'na izin vermenizi isteyebilir.",
+  "status.agent.screenCapturePermissionNext":
+    "Ardından macOS, OpenBot Code için Ekran Kaydı'na izin vermenizi isteyebilir.",
   "status.agent.screenCaptureDisplay": "{name} ekranını yakala ve görüntüyü ajanın modeline gönder.",
   "status.agent.screenCaptureWindow": "{name} penceresini yakala ve görüntüyü ajanın modeline gönder.",
   "status.agent.screenCaptureRegion":
@@ -39,7 +40,7 @@ export const messages = {
   "status.agent.sendIdea": "Bu, herkese açık bir GitHub issue'su olur. Adın gösterilmez.",
   "status.agent.feedbackRecentErrors": "Sohbetteki son hatalar:",
   "status.agent.feedbackSameAs": "#{issue} numaralı issue'ya eklenir",
-  "status.agent.feedbackSent": "CodeBot ekibine gönderildi: {title}",
+  "status.agent.feedbackSent": "OpenBot Code ekibine gönderildi: {title}",
   "status.agent.feedbackWithdrawn": "GitHub'dan kaldırıldı: {title}",
   "status.agent.feedbackWithdrawCommand": "#{issue} numaralı raporu GitHub'dan kaldır",
   "status.agent.feedbackWithdrawReason":
@@ -47,15 +48,15 @@ export const messages = {
   "status.agent.feedbackWithdrawing": "Raporunuz GitHub'dan kaldırılıyor…",
   "status.agent.browserProfileNamed":
     "{agents} ajanlarını {profile} tarayıcı profiline taşı. Onun oturum açma bilgilerini ve çerezlerini alırlar. Açık sekmeleri kapanır.",
-  "status.agent.commitCoAuthorOff": "Tüm ajanların commit'lerine CodeBot'u ortak yazar olarak eklemeyi durdur.",
-  "status.agent.commitCoAuthorOn": "Tüm ajanların commit'lerine CodeBot'u yeniden ortak yazar olarak ekle.",
+  "status.agent.commitCoAuthorOff": "Tüm ajanların commit'lerine OpenBot Code'u ortak yazar olarak eklemeyi durdur.",
+  "status.agent.commitCoAuthorOn": "Tüm ajanların commit'lerine OpenBot Code'u yeniden ortak yazar olarak ekle.",
   "status.agent.browserProfileNew":
     "Yeni {profile} tarayıcı profilini oluştur ve {agents} ajanlarını oraya taşı. Hiç oturum açma bilgisi yoktur. Açık sekmeleri kapanır.",
   "status.agent.browserProfileShared":
     "{agents} ajanlarını paylaşılan tarayıcı profiline taşı. Onun oturum açma bilgilerini ve çerezlerini alırlar. Açık sekmeleri kapanır.",
   "status.agent.browserProfileOwn":
     "{agents} ajanlarının her birine kendi tarayıcı profilini ver. Açık sekmeleri kapanır.",
-  "status.agent.feedbackSending": "Geri bildiriminiz CodeBot ekibine gönderiliyor…",
+  "status.agent.feedbackSending": "Geri bildiriminiz OpenBot Code ekibine gönderiliyor…",
   "status.agent.workflowDelete":
     "{title} iş akışını çalıştırmaları ve sürümleriyle birlikte silin. Açık adımları durur.",
   "status.agent.deleteAgents": "{agents} ajanlarını sohbetleri ve dosyalarıyla birlikte silin. Bu işlem geri alınamaz.",
