@@ -48,7 +48,7 @@ const TARGETS: Record<Exclude<AppSettingLinkId, "island.show">, AppSettingLinkTa
   "dock.agents": { tab: "agent-dock", row: "settings.agentDock.agents.title" },
   "computer-use.permissions": { tab: "computer-use", row: "computerUse.permissions.title" },
   "updates.track": { tab: "updates", row: "settings.updates.track.title" },
-  "updates.auto-install": { tab: "updates", row: "settings.updates.autoInstall.title" },
+  "updates.auto-install": { tab: "updates", row: "appUpdate.autoRestart.title" },
 };
 
 export function appSettingLinkTarget(

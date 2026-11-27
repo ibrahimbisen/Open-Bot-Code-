@@ -94,7 +94,7 @@ requested_size=""
 if [ -r /opt/CodeBot/hosted/codebot.env ]; then
   while IFS='=' read -r key value || [ -n "$key" ]; do
     case $key in
-      CODEBOT_AUTH_API_URL) export "$key=$value" ;;
+      CODEBOT_AUTH_API_URL | CODEBOT_UPDATE_URL) export "$key=$value" ;;
       CODEBOT_DISPLAY_SIZE) requested_size=$value ;;
     esac
   done </opt/CodeBot/hosted/codebot.env

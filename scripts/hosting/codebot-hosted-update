@@ -4,7 +4,7 @@ export LC_ALL=C DEBIAN_FRONTEND=noninteractive
 umask 022
 
 INSTALL=/opt/CodeBot
-RELEASES=https://github.com/nightly-labs/openbot/releases
+UPDATE_URL_PATTERN='^https://[^/[:space:]?#@]+(/[^[:space:]?#]*)?$'
 LOCK=/run/codebot-update.lock
 SCRATCH=/var/tmp
 RESTORE=/var/lib/ascii-lazy
@@ -26,6 +26,18 @@ RELEASE_FILES=(packages.txt optional-packages.txt codebot-hosted.apparmor codebo
 fail() {
   echo "$*" >&2
   exit 1
+}
+
+update_url() {
+  local url="${CODEBOT_UPDATE_URL:-}" file
+  for file in "$INSTALL/hosted/codebot.env" "$INSTALL/codebot.env"; do
+    [ -n "$url" ] || url=$(sed -n 's/^CODEBOT_UPDATE_URL=//p' "$file" 2>/dev/null | head -n 1)
+  done
+  [ -n "$url" ] || url=$(sed -n 's/^url: *//p' "$INSTALL/app/resources/app-update.yml" 2>/dev/null | head -n 1 | tr -d "'\"")
+  [ -n "$url" ] || fail "No update server is set. Set CODEBOT_UPDATE_URL in $INSTALL/hosted/codebot.env."
+  url=${url%/}
+  [[ $url =~ $UPDATE_URL_PATTERN ]] || fail "The update server URL must start with https://."
+  echo "$url"
 }
 
 fetch() {
@@ -344,7 +356,9 @@ stage() {
     return 0
   fi
   [ -x "$INSTALL/app/codebot" ] || fail "CodeBot is not installed."
-  manifest=$(fetch "$RELEASES/latest/download/$manifest")
+  local feed
+  feed=$(update_url)
+  manifest=$(fetch "$feed/$manifest")
   version=$(sed -n 's/^version: *//p' <<<"$manifest" | head -n 1)
   path=$(sed -n 's/^path: *//p' <<<"$manifest" | head -n 1)
   sha512=$(sed -n 's/^sha512: *//p' <<<"$manifest" | head -n 1)
@@ -360,7 +374,7 @@ stage() {
   echo "Staging CodeBot $version (installed: ${current:-unknown})."
   work=$(mktemp -d "$SCRATCH/codebot-update.XXXXXX")
   trap 'rm -rf "$work"; rm -f "$STATE"' EXIT
-  download "$RELEASES/download/v$version/$path" "$work/CodeBot.AppImage" "$size"
+  download "$feed/$path" "$work/CodeBot.AppImage" "$size"
   set_state preparing
   [ "$(openssl dgst -sha512 -binary "$work/CodeBot.AppImage" | openssl base64 -A)" = "$sha512" ] ||
     fail "The AppImage does not match the release manifest."

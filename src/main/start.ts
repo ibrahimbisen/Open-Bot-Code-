@@ -1,6 +1,6 @@
 import { resolveLocale, translateFor } from "@codebot/i18n";
-import { app, dialog, shell } from "electron";
-import { DOWNLOAD_URL } from "./download-url";
+import { app, dialog } from "electron";
+import { hasDownloadSource, openDownload } from "./download-url";
 
 function isDamagedInstallation(error: unknown): boolean {
   if (!app.isPackaged || !(error instanceof Error)) return false;
@@ -21,15 +21,16 @@ function report(message: string, error: unknown): void {
 
 async function showDamagedInstallation(): Promise<void> {
   const translate = translateFor(resolveLocale("system", app.getLocale()));
+  const download = hasDownloadSource() ? [translate("startup.archiveChangedDownload")] : [];
   const { response } = await dialog.showMessageBox({
     type: "error",
     message: translate("startup.failedTitle"),
     detail: translate("startup.filesDamagedBody"),
-    buttons: [translate("startup.archiveChangedDownload"), translate("common.close")],
+    buttons: [...download, translate("common.close")],
     defaultId: 0,
-    cancelId: 1,
+    cancelId: download.length,
   });
-  if (response === 0) await shell.openExternal(DOWNLOAD_URL);
+  if (response < download.length) await openDownload();
 }
 
 if (__CODEBOT_PERF_PROBES__ && !app.isPackaged && process.env.CODEBOT_PERF_PROBES === "1") {

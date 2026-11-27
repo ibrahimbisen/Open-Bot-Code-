@@ -343,6 +343,7 @@
     "./features/settings/SettingsHostedSitesTab": "./src/features/settings/SettingsHostedSitesTab.tsx",
     "./features/settings/SettingsMobileConnectTab": "./src/features/settings/SettingsMobileConnectTab.tsx",
     "./features/settings/SettingsProfileTab": "./src/features/settings/SettingsProfileTab.tsx",
+    "./features/settings/SettingsUpdateServerRow": "./src/features/settings/SettingsUpdateServerRow.tsx",
     "./features/settings/SettingsUpdatesTab": "./src/features/settings/SettingsUpdatesTab.tsx",
     "./features/settings/app-settings": "./src/features/settings/app-settings.ts",
     "./features/settings/marketplace-plugins": "./src/features/settings/marketplace-plugins.ts",

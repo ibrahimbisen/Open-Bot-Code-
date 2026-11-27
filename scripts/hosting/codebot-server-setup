@@ -72,6 +72,7 @@ set_server_env() {
   mv -f "$temporary" "$file"
 }
 if [ -n "$AUTH_API_URL" ]; then set_server_env CODEBOT_AUTH_API_URL "${AUTH_API_URL%/}"; fi
+if [ -n "${CODEBOT_UPDATE_URL:-}" ]; then set_server_env CODEBOT_UPDATE_URL "$CODEBOT_UPDATE_URL"; fi
 if [ -n "$DISPLAY_SIZE" ]; then set_server_env CODEBOT_DISPLAY_SIZE "$DISPLAY_SIZE"; fi
 flock -u 9
 systemctl start codebot.service

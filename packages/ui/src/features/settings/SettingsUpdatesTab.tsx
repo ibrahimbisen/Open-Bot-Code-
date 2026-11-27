@@ -24,6 +24,7 @@ import {
   SettingsSection,
   SwitchField,
 } from "@codebot/ui";
+import type { JSX } from "@solidjs/web";
 import { createSignal, Show } from "solid-js";
 import { useText } from "../../text";
 import { restartReasonKey } from "../updates/restart-reasons";
@@ -43,6 +44,7 @@ interface SettingsUpdatesTabProps {
   value: GeneralSettingsValue;
   onUpdateSetting: <Key extends keyof GeneralSettingsValue>(key: Key, value: GeneralSettingsValue[Key]) => void;
   selectMount: HTMLElement | undefined;
+  serverSetting?: JSX.Element | undefined;
 }
 
 export function SettingsUpdatesTab(props: SettingsUpdatesTabProps) {
@@ -207,6 +209,7 @@ export function SettingsUpdatesTab(props: SettingsUpdatesTabProps) {
             </ItemActions>
           </Show>
         </Item>
+        {props.serverSetting}
         <Show when={props.store.idleRestartOffered()}>
           <Item data-settings-row="settings.updates.idleRestart.title" class="settings-modal-row">
             <ItemContent>
@@ -245,11 +248,11 @@ export function SettingsUpdatesTab(props: SettingsUpdatesTabProps) {
                 description={t("settings.updates.autoDownload.description")}
               />
               <SwitchField
-                data-settings-row="settings.updates.autoInstall.title"
+                data-settings-row="appUpdate.autoRestart.title"
                 checked={props.value.autoInstallUpdates}
                 onChange={(checked) => props.onUpdateSetting("autoInstallUpdates", checked)}
-                label={t("settings.updates.autoInstall.title")}
-                description={t("settings.updates.autoInstall.description")}
+                label={t("appUpdate.autoRestart.title")}
+                description={t("appUpdate.autoRestart.description")}
               />
               <SwitchField
                 data-settings-row="settings.updates.allowRemote.title"

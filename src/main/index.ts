@@ -79,6 +79,7 @@ import { agentImportIpcHandlers } from "./ipc/agent-import-handlers";
 import { agentInstructionsIpcHandlers } from "./ipc/agent-instructions-handlers";
 import { agentTemplateIpcHandlers } from "./ipc/agent-template-handlers";
 import { appIpcHandlers } from "./ipc/app-handlers";
+import { appUpdateIpcHandlers } from "./ipc/app-update-handlers";
 import { attachmentIpcHandlers } from "./ipc/attachment-handlers";
 import { backgroundProcessIpcHandlers } from "./ipc/background-process-handlers";
 import { billingIpcHandlers } from "./ipc/billing-handlers";
@@ -731,6 +732,7 @@ function registerIpcHandlers({
   browserDock,
   browserView,
   updater,
+  updateFeed,
   setupFile,
   analyticsPreferences,
   analyticsInstallId,
@@ -987,6 +989,7 @@ function registerIpcHandlers({
       idleRestart,
       describeReadiness: describeRestartReadiness,
     }),
+    ...appUpdateIpcHandlers({ updateFeed }),
     ...notificationIpcHandlers({
       notificationPreference,
       translate: language.translate,

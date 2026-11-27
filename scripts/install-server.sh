@@ -2,7 +2,8 @@
 set -euo pipefail
 export LC_ALL=C DEBIAN_FRONTEND=noninteractive
 
-RELEASES=https://github.com/nightly-labs/openbot/releases
+update_url=${CODEBOT_UPDATE_URL:-}
+unset CODEBOT_UPDATE_URL
 service_user=""
 auth_api_url=""
 display_size=""
@@ -34,14 +35,16 @@ Options (after `sudo bash -s --`):
   --display-size <W>x<H>    The size of the virtual display that computer use reads, from 640x480
                             to 2576x2576. Default: the one of the installed server, else 1280x800.
   --name <name>             The server name, with a claim. Default: CodeBot.
+  --update-url <url>        The https:// URL of the update folder on your server (required, or set
+                            CODEBOT_UPDATE_URL). The server updates itself from this folder.
 
 The command from the app (Add server, Other options, New server on another computer) puts a line
 CODEBOT_CLAIM=<claim> before this script on standard input. The install then signs in with that
 one-time claim, asks no questions, waits until the server is online, and ends with exit code 0
 only when the server is connected. The claim is not an argument, because sudo logs its arguments.
 
-This file only downloads the latest release and checks it against the release manifest, the
-manifest that the Linux desktop updater reads. The install steps come from that release
+This file only downloads the latest release from your update folder and checks it against the
+release manifest, the manifest that the Linux desktop updater reads. The install steps come from that release
 (resources/hosting/codebot-server-setup), so they always match the build that they install.
 See docs/self-hosted-server.md.
 EOF
@@ -64,6 +67,11 @@ while [ "$#" -gt 0 ]; do
       display_size=$2
       shift 2
       ;;
+    --update-url)
+      [ "$#" -ge 2 ] || fail "Add a URL after --update-url."
+      update_url=$2
+      shift 2
+      ;;
     --name)
       [ "$#" -ge 2 ] || fail "Add a server name after --name."
       server_name=$2
@@ -78,6 +86,8 @@ while [ "$#" -gt 0 ]; do
 done
 [ -z "$server_name" ] || [ -n "$claim" ] || fail "Give --name only with the command from the app, or run: sudo codebot login --name <name>"
 
+update_url=${update_url%/}
+[[ $update_url =~ ^https://[^/[:space:]?#@]+(/[^[:space:]?#]*)?$ ]] || fail "Give the https:// URL of your update folder with --update-url."
 [ "$(uname -s)" = Linux ] || fail "This install is for Linux. Download the desktop app at https://openbot.run."
 [ "$(id -u)" -eq 0 ] || fail "Run this with sudo."
 [ -d /run/systemd/system ] || fail "CodeBot needs systemd."
@@ -111,7 +121,7 @@ fi
 
 work=$(mktemp -d /var/tmp/codebot-install.XXXXXX)
 trap 'rm -rf "$work"' EXIT
-manifest=$(fetch "$RELEASES/latest/download/$manifest")
+manifest=$(fetch "$update_url/$manifest")
 version=$(sed -n 's/^version: *//p' <<<"$manifest" | head -n 1)
 path=$(sed -n 's/^path: *//p' <<<"$manifest" | head -n 1)
 sha512=$(sed -n 's/^sha512: *//p' <<<"$manifest" | head -n 1)
@@ -120,7 +130,7 @@ sha512=$(sed -n 's/^sha512: *//p' <<<"$manifest" | head -n 1)
 [[ $sha512 =~ ^[A-Za-z0-9+/]{86}==$ ]] || fail "The release manifest has no valid SHA-512."
 
 echo "Downloading CodeBot $version..."
-fetch --output "$work/CodeBot.AppImage" "$RELEASES/download/v$version/$path"
+fetch --output "$work/CodeBot.AppImage" "$update_url/$path"
 [ "$(openssl dgst -sha512 -binary "$work/CodeBot.AppImage" | openssl base64 -A)" = "$sha512" ] ||
   fail "The download does not match the release manifest."
 chmod 0700 "$work/CodeBot.AppImage"
@@ -131,7 +141,7 @@ setup="$work/squashfs-root/resources/hosting/codebot-server-setup"
 if [ -n "$display_size" ] && ! grep -q CODEBOT_DISPLAY_SIZE "$setup"; then
   fail "CodeBot $version has no --display-size. Install without it, or try again after the next release."
 fi
-bash "$setup" "$service_user" "$work/squashfs-root" "$auth_api_url" ${display_size:+"$display_size"}
+CODEBOT_UPDATE_URL=$update_url bash "$setup" "$service_user" "$work/squashfs-root" "$auth_api_url" ${display_size:+"$display_size"}
 
 if [ -n "$claim" ]; then
   refuse_signed_in

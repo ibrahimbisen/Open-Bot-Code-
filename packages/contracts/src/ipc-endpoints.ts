@@ -203,6 +203,7 @@ import type {
   VerifyEmailCodeInput,
 } from "./ipc-app-auth";
 import type { AppBehaviorPreference, AppBehaviorPreferenceChange } from "./ipc-app-behavior";
+import type { AppUpdateFeed, SetAppUpdateFeedInput } from "./ipc-app-update";
 import type {
   AgentApproval,
   ApprovalAutomationPreference,
@@ -1550,6 +1551,10 @@ export const IPC_ENDPOINTS = {
     event: event<UpdateStatus>()("update:event"),
     preference: event<UpdatePreference>()("update:preference-event"),
   },
+  appUpdate: {
+    getFeed: request<undefined, AppUpdateFeed>()("app-update:get-feed"),
+    setFeedUrl: request<SetAppUpdateFeedInput, AppUpdateFeed>()("app-update:set-feed-url"),
+  },
   notifications: {
     getPreference: request<undefined, NotificationPreference>()("notifications:get-preference"),
     setPreference: request<NotificationPreference, NotificationPreference>()("notifications:set-preference"),
@@ -2158,6 +2163,7 @@ export const IPC_GROUP_PATHS = {
   agentTemplates: "agentTemplates",
   auth: "auth",
   update: "update",
+  appUpdate: "appUpdate",
   notifications: "notifications",
   agent: "agent",
   agentMemories: "agent",

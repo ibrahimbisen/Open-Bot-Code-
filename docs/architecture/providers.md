@@ -425,7 +425,7 @@ registry date, and keep the pinned command. An upstream install writes `codebot-
 file it installed, and every start verifies that record and the binary's `--version` before the
 install is used. The newest version in the store that verifies is the one that runs.
 
-`provider-runtime-blocklist.json` on `main` names versions no installation may offer. It stops a
+`provider-runtime-blocklist.json` in the application, and the same file name in the update folder (`<update URL>/provider-runtime-blocklist.json`, joined with the application list), name versions no installation may offer. It stops a
 broken upstream release without an CodeBot release. When the CodeBot copy of a provider runs a blocked
 version, the automatic update installs the version that the check offers, also when it is older, and then
 removes the blocked copy. Each update check also removes a blocked copy that is not active. A copy that

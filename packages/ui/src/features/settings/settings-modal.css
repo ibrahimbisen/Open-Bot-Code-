@@ -519,6 +519,22 @@
   color: var(--codebot-accent);
 }
 
+.app-settings-modal-shell .settings-modal-update-server-form {
+  display: flex;
+  align-items: center;
+  gap: var(--codebot-space-2);
+  margin-block: var(--codebot-space-2);
+}
+
+.app-settings-modal-shell .settings-modal-update-server-input {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.app-settings-modal-shell .settings-modal-update-server-source {
+  overflow-wrap: anywhere;
+}
+
 .app-settings-modal-shell .settings-modal-error {
   color: var(--codebot-danger);
 }

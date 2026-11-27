@@ -12,19 +12,19 @@ import { olderVersion } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { decodeModelListResponse } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
+import { ProviderBlocklist, type ProviderBlocklistOptions } from "../src/main/app-update/provider-blocklist";
 import { providerRuntimeDescriptor, type RuntimeTarget } from "../src/main/provider-runtime-descriptors";
 import { ProviderRuntimeManager, runtimeTarget } from "../src/main/provider-runtime-manager";
-import {
-  type BlockedVersions,
-  fetchBlockedVersions,
-  type LatestReleaseContext,
-  latestRelease,
-} from "../src/main/provider-runtime-releases";
+import { type LatestReleaseContext, latestRelease } from "../src/main/provider-runtime-releases";
 import { parseAgentRuntimeLock } from "./agent-runtime-lock";
 import { runTurn, startThread, stopClients } from "./provider-fakes/host";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-cli-canary");
 const REQUEST_TIMEOUT_MS = 120_000;
+const BLOCKLIST: ProviderBlocklistOptions = {
+  bundledPath: resolve(import.meta.dirname, "../provider-runtime-blocklist.json"),
+  remoteUrl: () => null,
+};
 const TARGETS: readonly RuntimeTarget[] = ["darwin-arm64", "darwin-x64", "linux-x64", "linux-arm64", "win32-x64"];
 
 const FREE_MODELS: Readonly<Partial<Record<ManagedProviderId, string>>> = {
@@ -198,9 +198,7 @@ async function expectedVersion(provider: ManagedProviderId): Promise<string> {
   const target = runtimeTarget(process.platform, process.arch);
   if (!target) throw new Error(`No provider runtime exists for ${process.platform}-${process.arch}.`);
   const newest = await runCauseEffect(latestRelease(provider, { target, lock, fetch }));
-  const blocked = await Effect.runPromise(
-    fetchBlockedVersions(fetch).pipe(Effect.catch(() => Effect.succeed<BlockedVersions>(new Map()))),
-  );
+  const blocked = await Effect.runPromise(new ProviderBlocklist(BLOCKLIST).bundled());
   const pinned = providerRuntimeDescriptor(provider).spec(target, lock).version;
   return blocked.get(provider)?.has(newest.version) || !olderVersion(pinned, newest.version) ? pinned : newest.version;
 }
@@ -281,7 +279,7 @@ async function canary(manager: ProviderRuntimeManager, provider: ManagedProvider
   };
 }
 
-const manager = new ProviderRuntimeManager({ root: join(root, "runtimes") });
+const manager = new ProviderRuntimeManager({ root: join(root, "runtimes"), blocklist: BLOCKLIST });
 try {
   await mkdir(home, { recursive: true });
   await runCauseEffect(manager.initialize());

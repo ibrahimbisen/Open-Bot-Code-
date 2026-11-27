@@ -173,6 +173,13 @@ import { AnalyticsPreferenceService } from "./analytics-preference-service";
 import { readAnalyticsPreference, saveAnalyticsDefault } from "./analytics-preference-store";
 import { providerAuthKind } from "./analytics-provider-auth";
 import { AppBehaviorService } from "./app-behavior-service";
+import {
+  PROVIDER_BLOCKLIST_FILE,
+  readBuildUpdateUrl,
+  UPDATE_FEED_FILE,
+  UPDATE_URL_ENVIRONMENT_VARIABLE,
+} from "./app-update/update-feed";
+import { UpdateFeedService } from "./app-update/update-feed-service";
 import { AppearanceService } from "./appearance-service";
 import { ApprovalAutomation, readApprovalAutomation } from "./approval-automation-store";
 import { AttachmentPreviews } from "./attachment-previews";
@@ -718,6 +725,7 @@ export interface ApplicationServices {
   browserDock: BrowserDockOverlay;
   browserView: BrowserViewClient;
   updater: UpdateService;
+  updateFeed: UpdateFeedService;
   describeRestartReadiness: () => RestartReadiness;
   hostUpdateCoordinator: HostUpdateCoordinator;
   requestedUpdate: RequestedUpdate;
@@ -1671,6 +1679,13 @@ export async function createApplicationServices({
   forgetSignedOutSessions(centralAuth.getState());
   centralAuth.on("changed", forgetSignedOutSessions);
   const updatePreference = await runCauseEffect(readUpdatePreference(updatePreferenceFile));
+  const updateFeed = new UpdateFeedService({
+    storePath: join(app.getPath("userData"), UPDATE_FEED_FILE),
+    environmentUrl: process.env[UPDATE_URL_ENVIRONMENT_VARIABLE],
+    buildUrl: readBuildUpdateUrl(app.isPackaged ? join(process.resourcesPath, "app-update.yml") : null),
+    log: (message) => logger.info(message),
+  });
+  await runCauseEffect(updateFeed.load());
   const approvalAutomationFile = join(app.getPath("userData"), APPROVAL_AUTOMATION_FILE);
   const approvalAutomation = new ApprovalAutomation({
     path: approvalAutomationFile,
@@ -1707,6 +1722,12 @@ export async function createApplicationServices({
     root: providerRuntimesRoot,
     downloadRoot: providerDownloads,
     hermesInstaller,
+    blocklist: {
+      bundledPath: app.isPackaged
+        ? join(process.resourcesPath, PROVIDER_BLOCKLIST_FILE)
+        : resolve(PROVIDER_BLOCKLIST_FILE),
+      remoteUrl: () => updateFeed.fileUrl(PROVIDER_BLOCKLIST_FILE),
+    },
     updateRuntime: (runtime, install, signal, onWait) => {
       if (isManagedToolRuntime(runtime)) return install().pipe(Effect.asVoid);
       return service
@@ -3033,6 +3054,7 @@ export async function createApplicationServices({
     arch: process.arch,
     environment: process.env,
     installationMode,
+    feedUrl: () => updateFeed.url(),
     updateStatus: () => ({
       phase: requestedUpdate?.snapshot().phase ?? "unsupported",
       managedByHost: requestedUpdate?.snapshot().remoteUpdates === "managed",
@@ -4199,6 +4221,7 @@ export async function createApplicationServices({
     updateAdapter = new HostedUpdateAdapter({
       currentVersion,
       arch: process.arch,
+      feedUrl: () => updateFeed.url(),
       ...(containerInstaller ? { paths: CONTAINER_UPDATE_PATHS } : {}),
     });
   } else if (updatesEnabled) {
@@ -4214,6 +4237,8 @@ export async function createApplicationServices({
   const updater = new UpdateService(updateAdapter, {
     currentVersion,
     enabled: updaterEnabled,
+    feedConfigured: updateFeed.url() !== null,
+    redactLog: (text) => updateFeed.redact(text),
     autoDownload: updatePreference.autoDownload,
     beforeInstall: prepareForUpdateInstall,
     ...(app.isPackaged
@@ -4255,6 +4280,7 @@ export async function createApplicationServices({
     appImagePath,
     updaterCacheDirectory,
   });
+  updateFeed.connect(updateAdapter, updater);
   teardown.push(TEARDOWN_ORDER.updater, "the update service", () => Effect.runPromise(updater.stop()));
   const agentInitialization = new AgentInitializationGate((rosterLoaded) =>
     Effect.gen(function* () {
@@ -4348,13 +4374,14 @@ export async function createApplicationServices({
       ? new RequiredUpdate({
           surface: hostedServer || serverModeEnvironment ? "host" : "desktop",
           currentVersion,
-          resolveApiUrl: (path) => centralAuth.resolveApiUrl(path),
+          feedUrl: () => updateFeed.url(),
           updater,
           setRequired: (required) => remoteUpdate.setRequired(required),
           log: (message) => logger.info(message),
         })
       : null;
   if (requiredUpdate) {
+    updateFeed.on("change", () => requiredUpdate.refresh());
     teardown.push(TEARDOWN_ORDER.requiredUpdate, "the minimum version check", () =>
       Effect.runPromise(requiredUpdate.dispose()),
     );
@@ -4513,6 +4540,7 @@ export async function createApplicationServices({
     browserDock,
     browserView,
     updater,
+    updateFeed,
     setupFile,
     analyticsPreferences,
     analyticsInstallId,

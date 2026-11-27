@@ -33,7 +33,7 @@ const DESKTOP: ReleaseTarget = {
   fragmentDir: FRAGMENT_DIR,
   versionFiles: ["package.json"],
   inReview: false,
-  next: "write the Discord highlights in .github/release-announcement.json (docs/RELEASING.md#discord-announcement), commit package.json, CHANGELOG.md, changelog.d and the announcement, push, run preflight, then tag it",
+  next: "commit package.json, CHANGELOG.md and changelog.d, run bun run release:preflight, tag it codebot-v<version>, then run bun run release:codebot (docs/codebot/updates.md)",
 };
 
 const MOBILE: ReleaseTarget = {

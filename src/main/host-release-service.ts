@@ -3,6 +3,7 @@ import type { HostReleaseStatus, UpdateStatus } from "@codebot/contracts/ipc";
 import { isNewerRelease, isValidSemver } from "@codebot/contracts/release-version";
 import { Deferred, Effect, Exit, Schema } from "effect";
 import { parse } from "yaml";
+import { updateFeedFileUrl } from "./app-update/update-feed";
 
 class ReleaseCheckFailed extends Schema.TaggedError<ReleaseCheckFailed>()("ReleaseCheckFailed", {}) {}
 
@@ -41,6 +42,7 @@ interface HostReleaseOptions {
   environment: NodeJS.ProcessEnv;
   updateStatus: () => Pick<UpdateStatus, "phase" | "managedByHost">;
   installationMode: string | null;
+  feedUrl: () => string | null;
   fetch?: typeof fetch;
 }
 
@@ -71,7 +73,7 @@ export class HostReleaseService {
     return {
       currentVersion: this.#options.currentVersion,
       latestVersion: this.#latestVersion,
-      phase: this.#target ? this.#phase : "unavailable",
+      phase: this.#target && this.#options.feedUrl() !== null ? this.#phase : "unavailable",
       method: this.#method(),
     };
   }
@@ -89,7 +91,8 @@ export class HostReleaseService {
   }
 
   readonly check = Effect.fn("HostRelease.check")(function* (this: HostReleaseService) {
-    if (!this.#target) return this.snapshot();
+    const feedUrl = this.#options.feedUrl();
+    if (!this.#target || feedUrl === null) return this.snapshot();
     if (this.#pending) return yield* Deferred.await(this.#pending);
     const pending = Deferred.makeUnsafe<HostReleaseStatus>();
     this.#pending = pending;
@@ -98,7 +101,7 @@ export class HostReleaseService {
     const target = this.#target;
     return yield* Effect.gen({ self: this }, function* () {
       const version = yield* Effect.tryPromise({
-        try: (signal) => fetchLatestRelease(target, this.#options.fetch ?? fetch, signal),
+        try: (signal) => fetchLatestRelease(target, feedUrl, this.#options.fetch ?? fetch, signal),
         catch: () => new ReleaseCheckFailed(),
       });
       this.#latestVersion = version;
@@ -121,8 +124,14 @@ export class HostReleaseService {
   }).bind(this);
 }
 
-async function fetchLatestRelease(target: ReleaseTarget, request: typeof fetch, signal: AbortSignal): Promise<string> {
-  const response = await request(`https://github.com/nightly-labs/openbot/releases/latest/download/${target.feed}`, {
+async function fetchLatestRelease(
+  target: ReleaseTarget,
+  feedUrl: string,
+  request: typeof fetch,
+  signal: AbortSignal,
+): Promise<string> {
+  const response = await request(updateFeedFileUrl(feedUrl, target.feed), {
+    cache: "no-store",
     signal: AbortSignal.any([signal, AbortSignal.timeout(15_000)]),
   });
   if (!response.ok || !response.body) {
@@ -150,8 +159,13 @@ async function fetchLatestRelease(target: ReleaseTarget, request: typeof fetch, 
   return manifest.version;
 }
 
-export function fetchLatestLinuxRelease(arch: string, request: typeof fetch, signal: AbortSignal): Promise<string> {
+export function fetchLatestLinuxRelease(
+  arch: string,
+  feedUrl: string,
+  request: typeof fetch,
+  signal: AbortSignal,
+): Promise<string> {
   const target = releaseTarget("linux", arch);
   if (!target) return Promise.reject(new Error("No release for this machine"));
-  return fetchLatestRelease(target, request, signal);
+  return fetchLatestRelease(target, feedUrl, request, signal);
 }

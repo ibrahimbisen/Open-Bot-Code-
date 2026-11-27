@@ -241,6 +241,7 @@ import {
   withStoryForeignProvider,
 } from "./fixtures";
 import { mockAgentAnalytics, mockHostAnalytics } from "./mock-agent-analytics";
+import { createMockAppUpdate, type MockAppUpdateOptions } from "./mock-app-update";
 import { createMockAuth, type MockAuthOptions } from "./mock-auth";
 import { createMockBilling, previewBillingServers } from "./mock-billing";
 import { createMockBitwardenConnector } from "./mock-bitwarden-connector";
@@ -285,6 +286,7 @@ export interface MockCodeBotOptions
     MockTeamOptions,
     MockSkillsOptions,
     MockHostUpdateOptions,
+    MockAppUpdateOptions,
     MockRoutineResultsOptions {
   appInfo?: AppInfo;
   analyticsPreference?: AnalyticsPreference;
@@ -3657,6 +3659,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       },
       onPreference: () => () => undefined,
     },
+    appUpdate: createMockAppUpdate(options),
     notifications: {
       getPreference: async () => ({ desktopNotifications: true, messagePreview: true }),
       setPreference: async (input) => ({ ...input }),
