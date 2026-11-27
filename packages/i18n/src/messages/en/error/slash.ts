@@ -7,5 +7,4 @@ export const messages = defineMessages("error.slash", {
   "error.slash.sessionInUse": "A chat in CodeBot already uses this saved chat.",
   "error.slash.remoteFailed": "The server could not finish this command. Try again.",
   "error.slash.serverUnsupported": "This server cannot list slash commands. Update the server.",
-  "error.slash.clientUnsupported": "This CodeBot version cannot read the slash commands of a server.",
 });
