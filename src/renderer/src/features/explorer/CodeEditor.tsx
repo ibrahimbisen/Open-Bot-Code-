@@ -55,7 +55,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
           monaco.Uri.from({ scheme: "codebot-file", path: `/${modelCounter}/${props.name}` }),
         );
         model.setEOL(monaco.editor.EndOfLineSequence.LF);
-        applyMonacoTheme(monaco, documentColorScheme());
+        applyMonacoTheme(monaco);
         editor = monaco.editor.create(host, {
           model,
           readOnly: props.readOnly,
@@ -106,8 +106,8 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   );
   createEffect(
     () => documentColorScheme(),
-    (scheme) => {
-      if (api) applyMonacoTheme(api, scheme);
+    () => {
+      if (api) applyMonacoTheme(api);
     },
   );
 

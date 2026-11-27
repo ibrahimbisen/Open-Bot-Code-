@@ -198,6 +198,13 @@ export function monacoThemeData(palette: AppThemePalette): EditorThemeData {
       "editorError.foreground": t.error,
       "editorWarning.foreground": t.warning,
       "minimap.background": t.background,
+      "editorBracketHighlight.foreground1": t.syntaxFunction,
+      "editorBracketHighlight.foreground2": t.syntaxType,
+      "editorBracketHighlight.foreground3": t.syntaxKeyword,
+      "editorBracketHighlight.foreground4": t.syntaxFunction,
+      "editorBracketHighlight.foreground5": t.syntaxType,
+      "editorBracketHighlight.foreground6": t.syntaxKeyword,
+      "editorBracketHighlight.unexpectedBracket.foreground": t.error,
     },
   };
 }

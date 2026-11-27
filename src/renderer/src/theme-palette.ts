@@ -42,7 +42,7 @@ function paletteTokens({ scheme, colors }: AppThemePalette): Record<string, stri
     "--codebot-text-primary": colors.text,
     "--codebot-text-secondary": mix(colors.text, colors.textMuted, 25),
     "--codebot-text-muted": colors.textMuted,
-    "--codebot-text-dim": mix(colors.textMuted, colors.canvas, 30),
+    "--codebot-text-dim": mix(colors.textMuted, colors.canvas, 15),
     "--codebot-text-placeholder": colors.textMuted,
     "--codebot-text-readable": colors.textMuted,
     "--codebot-text-grouped-secondary": colors.textMuted,

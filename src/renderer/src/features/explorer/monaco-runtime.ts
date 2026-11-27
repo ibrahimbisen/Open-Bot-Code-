@@ -1,4 +1,4 @@
-import type { DocumentColorScheme } from "@codebot/ui/document-color-scheme";
+import { currentEditorTheme, onEditorTheme } from "../../editor-theme";
 import type { monaco as MonacoApi } from "./monaco-setup";
 
 export type Monaco = typeof MonacoApi;
@@ -75,16 +75,22 @@ function colorOf(token: string): string {
   return `#${hex(red)}${hex(green)}${hex(blue)}${hex(alpha)}`;
 }
 
-export function applyMonacoTheme(monaco: Monaco, scheme: DocumentColorScheme): void {
+let followingTheme = false;
+
+export function applyMonacoTheme(monaco: Monaco): void {
+  const theme = currentEditorTheme();
   const colors: Record<string, string> = {};
   for (const [name, token] of Object.entries(THEME_TOKENS)) colors[name] = colorOf(token);
   monaco.editor.defineTheme(MONACO_THEME, {
-    base: scheme === "light" ? "vs" : "vs-dark",
+    base: theme.base,
     inherit: true,
-    rules: [],
-    colors,
+    rules: theme.rules,
+    colors: { ...colors, ...theme.colors },
   });
   monaco.editor.setTheme(MONACO_THEME);
+  if (followingTheme) return;
+  followingTheme = true;
+  onEditorTheme(() => requestAnimationFrame(() => applyMonacoTheme(monaco)));
 }
 
 const LANGUAGE_BY_NAME: Readonly<Record<string, string>> = {

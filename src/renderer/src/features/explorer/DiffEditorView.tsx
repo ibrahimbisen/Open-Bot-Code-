@@ -45,7 +45,7 @@ export function DiffEditorView(props: DiffEditorViewProps): JSX.Element {
           monaco.Uri.from({ scheme: "codebot-diff", path: `/${modelCounter}/${side}/${props.name}` });
         originalModel = monaco.editor.createModel(props.original, language, uri("original"));
         modifiedModel = monaco.editor.createModel(props.modified, language, uri("modified"));
-        applyMonacoTheme(monaco, documentColorScheme());
+        applyMonacoTheme(monaco);
         editor = monaco.editor.createDiffEditor(host, {
           readOnly: true,
           originalEditable: false,
@@ -85,8 +85,8 @@ export function DiffEditorView(props: DiffEditorViewProps): JSX.Element {
   );
   createEffect(
     () => documentColorScheme(),
-    (scheme) => {
-      if (api) applyMonacoTheme(api, scheme);
+    () => {
+      if (api) applyMonacoTheme(api);
     },
   );
 
