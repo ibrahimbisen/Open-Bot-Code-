@@ -8,6 +8,8 @@ import {
   Maximize2,
   MessageCirclePlus,
   Minimize2,
+  Pin,
+  PinOff,
   Plus,
   Rows2,
   X,
@@ -27,6 +29,7 @@ import {
 import { createEffect, createMemo, createSignal, createStore, For, onSettled, Show, untrack } from "solid-js";
 import { useServers } from "../servers/servers-context";
 import { ProjectChatPanel } from "./ProjectChatPanel";
+import { createAgentContentBridge } from "./project-agent-content";
 import type { OpenChatRequest, OpenSlotRequest, ProjectDockController } from "./project-dock-controller";
 import {
   type ChatPanelParams,
@@ -38,13 +41,16 @@ import {
   type SlotPanelKind,
   slotPanelContents,
 } from "./project-dock-panels";
+import { createPreviewDock } from "./project-dock-previews";
 import { readDockLayout, writeDockLayout } from "./project-dock-storage";
+import "./project-panel-contents";
 import { useProjects } from "./projects-context";
 
 const SLOT_ADD_LABEL = {
   file: "panel.add.file",
   diff: "panel.add.diff",
   browser: "panel.add.browser",
+  preview: "panel.add.preview",
 } as const satisfies Record<SlotPanelKind, AppTextKey>;
 
 const CHAT_COMPONENT = "chat";
@@ -86,12 +92,37 @@ export function ProjectDock(props: { projectId: string }) {
   const [params, setParams] = createStore<Record<string, DockPanelParams>>({});
   const [panelCount, setPanelCount] = createSignal(0);
   const [maximized, setMaximized] = createSignal(false);
+  const [activeTick, setActiveTick] = createSignal(0);
   let container: HTMLDivElement | undefined;
   let api: DockviewApi | undefined;
   let loadedProjectId: string | null = null;
   let saveTimer: ReturnType<typeof setTimeout> | undefined;
   let loading = false;
   let loadToken = 0;
+
+  const previews = createPreviewDock({
+    api: () => api,
+    container: () => container,
+    parsed: (panel) => parsedParams(panel.params),
+    newPanelId: panelId,
+    component: SLOT_COMPONENT,
+    onChanged: () => scheduleSave(),
+  });
+
+  function pinOf(group: DockviewGroupPanel): { pinned: boolean; toggle: () => void } | undefined {
+    activeTick();
+    const panel = group.activePanel;
+    const value = panel ? params[panel.id] : undefined;
+    if (!panel || !value || isChatPanel(value) || (value.kind !== "preview" && value.kind !== "browser"))
+      return undefined;
+    return {
+      pinned: value.pinned === true,
+      toggle: () => {
+        panel.api.updateParameters({ pinned: value.pinned !== true });
+        scheduleSave();
+      },
+    };
+  }
 
   function register(host: PanelHost, initial: DockPanelParams | null): void {
     setHosts((current) => [...current.filter((entry) => entry.id !== host.id), host]);
@@ -122,6 +153,7 @@ export function ProjectDock(props: { projectId: string }) {
           setParams((current) => {
             current[id] = next;
           });
+        queueMicrotask(syncShownChat);
       },
       dispose() {
         unregister(id);
@@ -166,7 +198,10 @@ export function ProjectDock(props: { projectId: string }) {
   function syncShownChat(): void {
     const active = api?.activePanel;
     const parsed = active ? parsedParams(active.params) : null;
-    projects.setShownChatKey(parsed && isChatPanel(parsed) ? chatKeyOf(parsed) : null);
+    const shownKey = parsed && isChatPanel(parsed) ? chatKeyOf(parsed) : null;
+    projects.setShownChatKey(shownKey);
+    if (!loading) previews.noteShownChat(shownKey);
+    setActiveTick((value) => value + 1);
     setMaximized(active?.api.isMaximized() === true);
   }
 
@@ -293,7 +328,11 @@ export function ProjectDock(props: { projectId: string }) {
     toggleMaximize,
     nextPanel,
     panelCount: () => api?.totalPanels ?? 0,
+    openContent: previews.openContent,
+    closeTransient: previews.closeTransient,
   };
+
+  createAgentContentBridge({ projectId: () => props.projectId, controller: () => controller });
 
   async function dropDeadPanels(): Promise<void> {
     if (!api) return;
@@ -339,6 +378,9 @@ export function ProjectDock(props: { projectId: string }) {
       for (const panel of dock.panels) {
         if (parsedParams(panel.params) === null) panel.api.close();
       }
+      previews.resetShownChat();
+      previews.dropUnpinnedAfterLoad();
+      previews.watchExisting();
       syncOpenChats();
       await dropDeadPanels();
       if (dock !== api || token !== loadToken) return;
@@ -373,9 +415,12 @@ export function ProjectDock(props: { projectId: string }) {
     });
     api = dock;
     projects.setDock(controller);
+    if (import.meta.env.DEV) Reflect.set(window, "__codebotProjectDock", controller);
+    const detach = previews.attach(container);
     const listeners = [
       dock.onDidLayoutChange(() => {
         syncOpenChats();
+        setActiveTick((value) => value + 1);
         scheduleSave();
       }),
       dock.onDidActivePanelChange(() => syncShownChat()),
@@ -401,6 +446,7 @@ export function ProjectDock(props: { projectId: string }) {
     void loadProject(untrack(() => props.projectId));
     return () => {
       window.removeEventListener("pagehide", flush);
+      detach();
       flushSave();
       for (const listener of listeners) listener.dispose();
       projects.setDock(null);
@@ -427,7 +473,9 @@ export function ProjectDock(props: { projectId: string }) {
   });
   onSettled(() => removeOnDeleted);
 
-  const slotKinds = createMemo(() => SLOT_PANEL_KINDS.filter((kind) => slotPanelContents[kind] !== undefined));
+  const slotKinds = createMemo(() =>
+    SLOT_PANEL_KINDS.filter((kind) => kind !== "preview" && slotPanelContents[kind] !== undefined),
+  );
 
   return (
     <section class="project-dock" aria-label={t("panel.dock.label")}>
@@ -455,6 +503,7 @@ export function ProjectDock(props: { projectId: string }) {
               group={entry.group}
               slotKinds={slotKinds()}
               maximized={maximized()}
+              pin={pinOf(entry.group)}
               onNew={() => {
                 entry.group.api.setActive();
                 const referenceParams = parsedParams(entry.group.activePanel?.params);
@@ -472,6 +521,22 @@ export function ProjectDock(props: { projectId: string }) {
               onSlot={(kind) => {
                 entry.group.api.setActive();
                 const reference = parsedParams(entry.group.activePanel?.params);
+                if (kind === "browser") {
+                  previews.openContent({
+                    kind,
+                    projectId: reference?.projectId ?? props.projectId,
+                    title: t(SLOT_ADD_LABEL[kind]),
+                    data: {
+                      origin: "user",
+                      ...(reference && isChatPanel(reference) && reference.agentId && reference.chatId
+                        ? { agentId: reference.agentId, chatId: reference.chatId }
+                        : {}),
+                    },
+                    activate: true,
+                    pinned: true,
+                  });
+                  return;
+                }
                 openSlot({
                   kind,
                   projectId: reference?.projectId ?? props.projectId,
@@ -513,6 +578,11 @@ function PanelBody(props: {
   project: ProjectSummary | undefined;
   onClose: () => void;
 }) {
+  const [visible, setVisible] = createSignal(props.host.api.isVisible);
+  onSettled(() => {
+    const stop = props.host.api.onDidVisibilityChange((event) => setVisible(event.isVisible));
+    return () => stop.dispose();
+  });
   const slot = () => {
     const value = props.params;
     return isChatPanel(value) ? undefined : value;
@@ -533,10 +603,15 @@ function PanelBody(props: {
             {(content) =>
               content()({
                 panelId: props.host.id,
-                params: value(),
+                get params() {
+                  return value();
+                },
                 project: props.project,
-                visible: props.host.api.isVisible,
+                get visible() {
+                  return visible();
+                },
                 onTitleChange: (title) => props.host.api.setTitle(title),
+                onDataChange: (data) => props.host.api.updateParameters({ data }),
                 onClose: props.onClose,
               })
             }
@@ -551,6 +626,7 @@ function GroupActions(props: {
   group: DockviewGroupPanel;
   slotKinds: readonly SlotPanelKind[];
   maximized: boolean;
+  pin: { pinned: boolean; toggle: () => void } | undefined;
   onNew: () => void;
   onOther: () => void;
   onSlot: (kind: SlotPanelKind) => void;
@@ -576,6 +652,24 @@ function GroupActions(props: {
           </DropdownMenu.Content>
         </DropdownMenu.Portal>
       </DropdownMenu.Root>
+      <Show when={props.pin}>
+        {(pin) => (
+          <IconButton
+            label={pin().pinned ? t("panel.unpin") : t("panel.pin")}
+            size="icon-sm"
+            variant="ghost"
+            aria-pressed={pin().pinned ? "true" : "false"}
+            onClick={() => {
+              props.group.activePanel?.api.setActive();
+              pin().toggle();
+            }}
+          >
+            <Show when={pin().pinned} fallback={<Pin />}>
+              <PinOff />
+            </Show>
+          </IconButton>
+        )}
+      </Show>
       <IconButton label={t("panel.split.right")} size="icon-sm" variant="ghost" onClick={() => props.onSplit("right")}>
         <Columns2 />
       </IconButton>

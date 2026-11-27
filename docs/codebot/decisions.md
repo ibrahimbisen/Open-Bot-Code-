@@ -139,3 +139,10 @@ a place in the list above.
 | W19 | Documents |
 | W20 | Test harness on Windows |
 | W21 | Checks, screenshots, corrections |
+
+## Preview and browser panels (W14)
+
+- Agent content opens as dock split panels of kind `preview` and `browser`, right of the source chat, at 50% of the main area. The width fraction is saved in the renderer (`codebot:project-preview-width:v1`).
+- Auto-close for unpinned panels: chat switch, project switch, a click in the chat input. Panels that an agent opened also close when the agent turn of the source chat ends. A pinned panel never closes by itself.
+- A browser panel that the user adds from the "+" menu is pinned from the start. The agent browser tools (CDP) are unchanged.
+- Known gap: no agent tool yet opens a document by itself; previews open from file links and attachments in the chat. A dev-only hook `window.__codebotProjectDock` is used by the E2E test.

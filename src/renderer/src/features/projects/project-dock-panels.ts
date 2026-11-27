@@ -2,7 +2,7 @@ import type { ProjectSummary } from "@codebot/contracts/ipc";
 import type { JSX } from "@solidjs/web";
 import { z } from "zod";
 
-export const SLOT_PANEL_KINDS = ["file", "diff", "browser"] as const;
+export const SLOT_PANEL_KINDS = ["file", "diff", "browser", "preview"] as const;
 export type SlotPanelKind = (typeof SLOT_PANEL_KINDS)[number];
 
 const chatPanelSchema = z.object({
@@ -37,6 +37,7 @@ export interface SlotPanelProps {
   project: ProjectSummary | undefined;
   visible: boolean;
   onTitleChange: (title: string) => void;
+  onDataChange: (data: Record<string, string>) => void;
   onClose: () => void;
 }
 
@@ -46,6 +47,7 @@ export const slotPanelContents: Record<SlotPanelKind, SlotPanelContent | undefin
   file: undefined,
   diff: undefined,
   browser: undefined,
+  preview: undefined,
 };
 
 export type DockPlacement = "active" | "right" | "below";
