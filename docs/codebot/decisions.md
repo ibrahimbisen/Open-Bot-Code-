@@ -157,3 +157,12 @@ a place in the list above.
   home server the OpenBot way: the server menu at the bottom of the icon rail (Servers list with Local
   and each joined or home server, Add a server, Server settings, Hide server, Server layout). The Projects
   screen then shows the projects of the active server. No credits or buy-credits rows (D7).
+
+- **D22. Releases and updates through GitHub.** The owner decided on 2026-11-27 that the code lives in
+  `https://github.com/ibrahimbisen/Open-Bot-Code-` (public). Each push to `main` makes a new version: a
+  GitHub Actions workflow sets the version, builds the macOS, Windows and Linux apps, attaches them to a
+  draft GitHub Release, and publishes the release when all three builds pass (the same pattern as the
+  owner's ApplyMaxxing release workflow). The desktop apps check the latest GitHub Release of that repo
+  for updates (electron-updater `latest*.yml`). A home-server update feed (W06) stays possible as a
+  setting. macOS signing and notarization run only when the signing secrets exist in the repo; without
+  them the macOS build is unsigned and cannot install an update by itself, so it offers the download.
