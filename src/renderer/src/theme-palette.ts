@@ -13,7 +13,6 @@ function paletteTokens({ scheme, colors }: AppThemePalette): Record<string, stri
   const raised = scheme === "light" ? mix(colors.canvas, "#ffffff", 70) : colors.surface;
   const tabsBar = scheme === "light" ? mix(colors.canvas, colors.surface, 30) : colors.surface;
   const raisedHex = scheme === "light" ? mixHex(colors.canvas, "#ffffff", 70) : colors.surface;
-  // Text must stay readable on the plain surfaces and on selected rows and accent-tinted cards.
   const backgrounds = [
     colors.canvas,
     colors.frame,

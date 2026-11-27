@@ -58,7 +58,6 @@ const routes: Route[] = [
   { path: "/count", handler: () => Response.json({ count: 42, ratio: 0.5 }) },
 ];
 
-// Start the server on the first free port.
 export function start(port = 3000): void {
   const pattern = /^\\/api\\/(\\w+)$/;
   createServer((req, res) => {
@@ -426,7 +425,6 @@ async function ensureProject() {
     });
     await page.reload();
   } else {
-    // Archive the chats of earlier runs so the chat list does not grow with each run.
     const archived = await page.evaluate(async (name) => {
       const project = (await window.codebot.projects.list()).find((entry) => entry.name === name);
       if (!project) return 0;

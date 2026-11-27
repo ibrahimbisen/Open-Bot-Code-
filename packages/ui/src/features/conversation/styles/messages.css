@@ -2070,9 +2070,8 @@ button.chat-action-target:active,
   content: none;
 }
 
-/* Theme palettes: solid bubbles take the text colour with the higher contrast. */
 :root[data-codebot-palette]:not([data-codebot-palette="codebot-high-contrast"])
-.ui-bubble.message-bubble-colored.message-bubble-solid.message-bubble-solid-themed-dark-text {
+  .ui-bubble.message-bubble-colored.message-bubble-solid.message-bubble-solid-themed-dark-text {
   --message-solid-text: var(--codebot-paper-text);
 }
 

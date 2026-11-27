@@ -70,7 +70,7 @@ function alpha(color: string, percent: number): string {
   return `${color.slice(0, 7)}${channel((percent / 100) * 255)}`;
 }
 
-export interface EditorTokens {
+interface EditorTokens {
   background: string;
   foreground: string;
   gutterForeground: string;
@@ -98,7 +98,7 @@ export interface EditorTokens {
   syntaxRegexp: string;
 }
 
-export function editorTokens({ colors }: AppThemePalette): EditorTokens {
+function editorTokens({ colors }: AppThemePalette): EditorTokens {
   const code = (color: string) => readable(color, colors.canvas);
   return {
     background: colors.canvas,
@@ -129,7 +129,7 @@ export function editorTokens({ colors }: AppThemePalette): EditorTokens {
   };
 }
 
-export function editorCssTokens(palette: AppThemePalette): Record<string, string> {
+function editorCssTokens(palette: AppThemePalette): Record<string, string> {
   const t = editorTokens(palette);
   return {
     "--codebot-editor-bg": t.background,
@@ -233,8 +233,6 @@ export function effectivePalette(preference: AppAppearancePreference, systemSche
   if (selected !== null) return selected;
   return builtInThemePalette(preference.appearance === "system" ? systemScheme : preference.appearance);
 }
-
-export const EDITOR_THEME_NAME = "codebot";
 
 type EditorThemeListener = (theme: EditorThemeData) => void;
 

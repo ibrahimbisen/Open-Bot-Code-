@@ -53,7 +53,6 @@ export function solidBubbleTakesDarkText(color: AvatarColor): boolean {
   return 1.05 / (solidLuminance(color) + 0.05) < 3;
 }
 
-/** Theme palettes pick whichever text colour has the higher contrast on the bubble. */
 export function solidBubbleReadsBetterDark(color: AvatarColor): boolean {
   const luminance = solidLuminance(color);
   return (luminance + 0.05) / 0.057 > 1.05 / (luminance + 0.05);
