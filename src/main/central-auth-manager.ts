@@ -2314,35 +2314,6 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     (operation) => this.#owned(operation),
   ).bind(this);
 
-  readonly updateAnalytics = Effect.fn("CentralAuth.updateAnalytics")(
-    function* (
-      this: CentralAuthManager,
-      enabled: boolean,
-      ageMs: number,
-    ): Effect.fn.Return<CentralAuthState, CentralAuthOperationError, CentralAuthTransport> {
-      const sessionToken = this.#sessionToken;
-      if (!sessionToken)
-        return yield* new CentralAuthOperationError({
-          cause: new AuthApiError(401, "unauthorized", sourceText("error.auth.signInRequired")),
-        });
-      const user = yield* this.#authorizedRequestEffect(
-        "/v1/me/analytics",
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ enabled, ageMs }),
-        },
-        decodeCentralAuthUser,
-      );
-      if (this.#sessionToken !== sessionToken || this.#state.status !== "signed_in") return this.getState();
-      return this.#setState({
-        status: "signed_in",
-        user: { ...this.#state.user, analyticsEnabled: user.analyticsEnabled ?? null },
-      });
-    },
-    (operation) => this.#owned(operation),
-  ).bind(this);
-
   readonly updateChatColor = Effect.fn("CentralAuth.updateChatColor")(
     function* (
       this: CentralAuthManager,

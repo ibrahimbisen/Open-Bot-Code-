@@ -186,7 +186,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "快速连接服务器",
   "settings.keepRemoteSessions.description":
     "在两次启动之间保持与已加入服务器的连接，CodeBot 启动约快一秒。退出 CodeBot 时，CodeBot 服务不会关闭该连接。",
-  "settings.permissions.title": "权限",
   "settings.notifications.whatYouHear": "你会收到哪些通知",
   "settings.notifications.allDevices": "我的所有设备",
   "settings.notifications.thisComputer": "这台电脑",
@@ -294,10 +293,6 @@ export const messages = {
   "settings.agentDock.agents.description": "{server} 的智能体。每台服务器都有自己的停靠栏。",
   "settings.agentDock.agents.empty": "这台服务器还没有智能体。",
   "settings.analytics.title": "将分析数据关联到我的账号",
-  "settings.analytics.description":
-    "开启：使用情况和可靠性元数据连同你的账号 ID 和邮箱发送到 CodeBot 自托管的分析服务，包括你和你的助手访问的网站、工具使用情况和每日设置摘要。关闭：仅随一个随机安装 ID 发送基本使用情况，例如轮次和 token 数量。绝不发送聊天、文件和提示词。",
-  "settings.analytics.webDescription":
-    "开启：使用情况和可靠性元数据连同你的账号 ID 和邮箱发送到 CodeBot 自托管的分析服务。关闭：相同的元数据仅随一个随机安装 ID 发送。绝不发送聊天、文件和提示词。该设置仅对该浏览器生效。",
   "settings.tab.general.title": "通用",
   "settings.tab.general.description": "选择聊天的工作方式以及 CodeBot 共享的内容。",
   "settings.tab.agents.title": "助手",

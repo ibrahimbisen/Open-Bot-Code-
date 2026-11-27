@@ -2,7 +2,6 @@ import { bugReportFormUrl } from "@codebot/contracts/feedback";
 import { HOSTED_SERVER_CONTACT_URL } from "@codebot/contracts/hosted-servers";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
-  type AnalyticsPreference,
   type AppInfo,
   type AppSetupState,
   type AppVariant,
@@ -14,7 +13,6 @@ import {
 } from "@codebot/contracts/ipc";
 import type { AppTranslate } from "@codebot/i18n";
 import { sourceText } from "@codebot/i18n/source";
-import { analyticsOnByDefault } from "@codebot/telemetry";
 import { Effect } from "effect";
 import { app, type BrowserWindow, dialog, type OpenDialogOptions, type WebContents } from "electron";
 import { version as developmentVersion } from "../../../package.json";
@@ -23,7 +21,6 @@ import type { BrowserHost } from "../../backend/browser-host";
 import type { MailboxStore } from "../../backend/mailbox-store";
 import type { AgentDefaultsPreferenceStore } from "../agent-defaults-preference-store";
 import type { AgentMemoryLimitSetting } from "../agent-memory-limit-preference-store";
-import type { AnalyticsPreferenceService } from "../analytics-preference-service";
 import type { AppBehaviorService } from "../app-behavior-service";
 import type { AppearanceService } from "../appearance-service";
 import type { ApprovalAutomation } from "../approval-automation-store";
@@ -45,7 +42,6 @@ import { readSetupState, writeSetupState } from "../setup-store";
 import { systemHourCycle } from "../system-hour-cycle";
 import type { UpdateService } from "../update-service";
 import {
-  parseAnalyticsPreference,
   parseAppAppearancePreference,
   parseAppBehaviorPreferenceChange,
   parseAppInterfaceSizePreference,
@@ -117,7 +113,6 @@ export interface AppIpcDependencies {
   browser: BrowserHost;
   updater: UpdateService;
   setupFile: string;
-  analyticsPreferences: AnalyticsPreferenceService;
   approvalAutomation: ApprovalAutomation;
   busyMessageMode: BusyMessageModePreferenceStore;
   agentDefaults: AgentDefaultsPreferenceStore;
@@ -136,8 +131,6 @@ export interface AppIpcDependencies {
   interfaceSize: InterfaceSizeService;
   initializeAgent: () => Promise<void>;
   appVariant: AppVariant;
-  analyticsCaptureUrl: string | null;
-  analyticsInstallId: string | null;
   dynamicIslandAvailable: boolean;
   getMainWindow: () => BrowserWindow | null;
   isMainWindow: (sender: WebContents) => boolean;
@@ -154,7 +147,6 @@ export function appIpcHandlers({
   browser,
   updater,
   setupFile,
-  analyticsPreferences,
   approvalAutomation,
   busyMessageMode,
   agentDefaults,
@@ -173,8 +165,6 @@ export function appIpcHandlers({
   interfaceSize,
   initializeAgent,
   appVariant,
-  analyticsCaptureUrl,
-  analyticsInstallId,
   dynamicIslandAvailable,
   getMainWindow,
   isMainWindow,
@@ -200,8 +190,6 @@ export function appIpcHandlers({
           version,
           platform,
           variant: appVariant,
-          ...(analyticsCaptureUrl ? { analyticsCaptureUrl } : {}),
-          ...(analyticsInstallId ? { analyticsInstallId } : {}),
           ...(softwareRendering ? { softwareRendering } : {}),
           ...(hourCycle ? { hourCycle } : {}),
           ...(aboveAppsSupport ? { aboveAppsSupport } : {}),
@@ -209,21 +197,6 @@ export function appIpcHandlers({
         };
       }),
       getSetupState: handler(() => runCauseEffect(readSetupState(setupFile))),
-      getAnalyticsPreference: handler(() =>
-        runCauseEffect(
-          readSetupState(setupFile).pipe(Effect.flatMap((setup) => analyticsPreferences.read(setup.completed))),
-        ),
-      ),
-      getAnalyticsDefault: handler(
-        (): AnalyticsPreference => ({
-          enabled:
-            analyticsPreferences.accountAnswer() ??
-            analyticsOnByDefault(app.getLocaleCountryCode(), Intl.DateTimeFormat().resolvedOptions().timeZone),
-        }),
-      ),
-      setAnalyticsPreference: payloadHandler(parseAnalyticsPreference, (parsed) =>
-        runCauseEffect(analyticsPreferences.set(parsed.enabled, parsed.chosen === true)),
-      ),
       reportRendererTiming: eventPayloadHandler(parseRendererTimingReport, (event, report) => {
         if (report.workspaceReady && isMainWindow(event.sender)) startup?.workspaceReady();
         resources.observeRendererTiming(report);
@@ -273,8 +246,6 @@ export function appIpcHandlers({
         runCauseEffect(interfaceSize.set(parsed)),
       ),
       saveSetup: payloadHandler(parseSetup, async (input): Promise<AppSetupState> => {
-        const before = await runCauseEffect(readSetupState(setupFile));
-        await runCauseEffect(analyticsPreferences.saveDefault(before.completed));
         const state = await runCauseEffect(writeSetupState(setupFile, input));
         await runCauseEffect(service.setPreferredProvider(input.preferredProvider, input.preferredModel));
         await initializeAgent();

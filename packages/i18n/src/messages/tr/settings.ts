@@ -197,7 +197,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "Sunuculara hızlı bağlantı",
   "settings.keepRemoteSessions.description":
     "Katıldığınız sunuculara olan bağlantıyı açılışlar arasında koruyun. CodeBot yaklaşık bir saniye daha hızlı başlar. CodeBot'tan çıktığınızda CodeBot hizmeti bağlantıyı kapatmaz.",
-  "settings.permissions.title": "İzinler",
   "settings.notifications.whatYouHear": "Neler hakkında bildirim alırsın",
   "settings.notifications.allDevices": "Tüm cihazlarım",
   "settings.notifications.thisComputer": "Bu bilgisayar",
@@ -310,10 +309,6 @@ export const messages = {
   "settings.agentDock.agents.description": "{server} sunucusunun ajanları. Her sunucunun kendi yuvası vardır.",
   "settings.agentDock.agents.empty": "Bu sunucuda henüz ajan yok.",
   "settings.analytics.title": "Analizleri hesabıma bağla",
-  "settings.analytics.description":
-    "Açık: kullanım ve güvenilirlik meta verileri, sizin ve ajanlarınızın ziyaret ettiği web siteleri, araç kullanımı ve günlük kurulum özetiyle birlikte hesap kimliğiniz ve e-postanızla CodeBot'un kendi barındırdığı analizlerine gönderilir. Kapalı: yalnızca turlar ve token sayıları gibi temel kullanım, rastgele bir kurulum kimliğiyle gönderilir. Sohbetler, dosyalar ve istemler asla gönderilmez.",
-  "settings.analytics.webDescription":
-    "Açık: kullanım ve güvenilirlik meta verileri hesap kimliğiniz ve e-postanızla birlikte CodeBot'un kendi barındırdığı analizlerine gönderilir. Kapalı: aynı meta veriler yalnızca rastgele bir kurulum kimliğiyle gönderilir. Sohbetler, dosyalar ve istemler asla gönderilmez. Bu ayar bu tarayıcı için geçerlidir.",
   "settings.tab.general.title": "Genel",
   "settings.tab.general.description": "Sohbetlerin nasıl çalışacağını ve CodeBot'un neyi paylaşacağını seçin.",
   "settings.tab.agents.title": "Ajanlar",

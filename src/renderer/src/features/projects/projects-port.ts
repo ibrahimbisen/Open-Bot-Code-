@@ -109,11 +109,7 @@ function ipcProjectsPort(serverId: string): EngineProjectsPort {
 }
 
 async function engineServesProjects(serverId: string): Promise<boolean> {
-  const unserved = [
-    sourceText("error.project.notReady"),
-    sourceText("error.project.remoteNotReady"),
-    sourceText("error.project.serverTooOld"),
-  ];
+  const unserved = [sourceText("error.project.serverTooOld")];
   try {
     await window.codebot.projects.get(PROBE_PROJECT_ID, serverId);
     return true;

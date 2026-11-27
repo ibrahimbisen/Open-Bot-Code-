@@ -37,7 +37,6 @@ import {
   type AgentTask,
   type AgentTasksSnapshot,
   type AgentTemplatePublication,
-  type AnalyticsPreference,
   type AppAppearancePreference,
   type AppBehaviorPreference,
   type AppInfo,
@@ -293,8 +292,6 @@ export interface MockCodeBotOptions
     MockAppUpdateOptions,
     MockRoutineResultsOptions {
   appInfo?: AppInfo;
-  analyticsPreference?: AnalyticsPreference;
-  analyticsDefault?: boolean;
   languagePreference?: AppLanguagePreference;
   setupState?: AppSetupState;
   agentStatus?: AgentStatus;
@@ -512,7 +509,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       message: null,
     };
   };
-  let analyticsPreference = clone<AnalyticsPreference>(options.analyticsPreference ?? { enabled: true });
   let approvalAutomation = clone<ApprovalAutomationPreference>(DEFAULT_APPROVAL_AUTOMATION_PREFERENCE);
   let busyMessageMode: BusyMessageModePreference = { mode: DEFAULT_BUSY_MESSAGE_MODE };
   let agentDefaults: AgentDefaults = { ...DEFAULT_AGENT_DEFAULTS };
@@ -1380,13 +1376,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       return clone(setupState);
     },
     onSetupState: () => () => undefined,
-    getAnalyticsPreference: async () => clone(analyticsPreference),
-    getAnalyticsDefault: async () => ({ enabled: options.analyticsDefault ?? false }),
-    setAnalyticsPreference: async ({ enabled }) => {
-      analyticsPreference = { enabled };
-      return clone(analyticsPreference);
-    },
-    onAnalyticsPreference: () => () => undefined,
     reportRendererTiming: async () => undefined,
     getApprovalAutomation: async () => clone(approvalAutomation),
     onApprovalAutomation: (listener) => {

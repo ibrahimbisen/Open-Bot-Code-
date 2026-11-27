@@ -11,7 +11,7 @@ import {
 } from "@codebot/contracts/marketplace-links";
 import { pluginSlugFromWebAppSearch, WEB_APP_PLUGIN_PARAM } from "@codebot/contracts/plugin-links";
 import { forgetReferralCode, readReferralCode } from "@codebot/contracts/referral";
-import { isBoolean, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
+import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { formatLocale, resolveLocale } from "@codebot/i18n";
 import { sourceText } from "@codebot/i18n/source";
 import { markRemoteSync } from "@codebot/team-client/sync-profile";
@@ -23,21 +23,11 @@ import { currentText } from "@codebot/ui/text";
 import { Dynamic } from "@solidjs/web";
 import { createEffect, createSignal, createStore, onSettled, Show } from "solid-js";
 import type { DesktopAnalyticsProperties } from "../../analytics";
-import {
-  configureWebReports,
-  reportNotification,
-  setWebAccountPending,
-  setWebReportsEnabled,
-  webAccountPending,
-  webKeepsOff,
-  webReportsAgreed,
-  webReportsEnabled,
-} from "../../error-reports";
+import { reportNotification } from "../../error-reports";
 import { StaticI18nProvider } from "../../i18n-context";
 import { startupLoadingScene } from "../../startup-animation-preference";
 import { clearStorageUsageCache } from "../files/storage-usage";
-import { AnalyticsConsentRow, ConsentNotice } from "../onboarding/AnalyticsConsent";
-import { createOnboardingTeam, onboardingSessionSeed } from "../onboarding/onboarding-avatars";
+import { ConsentNotice } from "../onboarding/AnalyticsConsent";
 import { deleteRemoteWorkspaceFrames } from "../servers/remote-workspace-frame";
 import { WindowBackdropBubbles } from "../window/backdrop-bubbles";
 import { keepCachedWorkflows } from "../workflows/workflow-cache";
@@ -46,7 +36,6 @@ import { WebLanguageStep } from "./WebLanguageStep";
 import { phoneAppScreenWanted, WebPhoneAppScreen } from "./WebPhoneAppScreen";
 import { WebSlowLoadNotice } from "./WebSlowLoadNotice";
 import type { WebWorkspace } from "./WebWorkspace";
-import { createWebAccountCalls } from "./web-account";
 import { deleteSavedAgentPictures } from "./web-agent-pictures";
 import { createWebAppearancePreference } from "./web-appearance-preference";
 import { takeWebAppStart, WEB_APP_BILLING_PARAM, type WebAppStart } from "./web-billing";
@@ -184,29 +173,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
     login: { status: "signed_out" },
     resendAt: 0,
   });
-  createEffect(
-    () => ({ account: state.account, loaded: state.loaded }),
-    ({ account, loaded }) => {
-      if (!loaded) return;
-      configureWebReports(account);
-      import("./web-analytics")
-        .then((module) => {
-          module.configureWebAnalytics(account);
-          if (!account || !billingReturnEvent) return;
-          module.trackBillingReturn(billingReturnEvent);
-          billingReturnEvent = null;
-        })
-        .catch(() => undefined);
-    },
-  );
-  const [analyticsAgreed, setAnalyticsAgreed] = createSignal(webReportsAgreed());
-  const [analyticsChoice, setAnalyticsChoice] = createSignal(webReportsEnabled());
-  let analyticsTouched = false;
-  function resetAnalyticsBox() {
-    setAnalyticsAgreed(webReportsAgreed());
-    setAnalyticsChoice(webReportsEnabled());
-    analyticsTouched = false;
-  }
   const [agentTemplateId, setAgentTemplateId] = createSignal(takeAgentTemplateLink());
   const [inviteUrl, setInviteUrl] = createSignal(takeInviteLink());
   const [pluginSlug, setPluginSlug] = createSignal(takePluginLink());
@@ -225,9 +191,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
   const initialHostingReturn = takeHostingReturn();
   const [billingReturn, setBillingReturn] = createSignal(initialBillingReturn !== null);
   const [hostingReturn, setHostingReturn] = createSignal(initialHostingReturn);
-  let billingReturnEvent: BillingReturn | null =
-    initialBillingReturn ??
-    (initialHostingReturn ? { outcome: initialHostingReturn.paid ? "completed" : "cancelled", kind: "plan" } : null);
   let companySignInReturnError = takeCompanySignInError();
   const addressHadLink =
     agentTemplateId() !== null ||
@@ -264,7 +227,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
       draft.account = null;
       draft.login = { status: "signed_out" };
     });
-    resetAnalyticsBox();
   }
   const accountFetch: typeof fetch = async (input, init) => {
     const generation = sessionGeneration;
@@ -282,7 +244,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
     }
     return response;
   };
-  const accountCalls = createWebAccountCalls(accountFetch, checkSession);
   async function request(
     path: string,
     body?:
@@ -361,17 +322,8 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
       email: value.user.email,
       name: isString(value.user.name) ? value.user.name : null,
       avatarUrl: isString(value.user.avatarUrl) ? value.user.avatarUrl : null,
-      analyticsEnabled: isBoolean(value.user.analyticsEnabled) ? value.user.analyticsEnabled : null,
       chatColor: isAvatarColor(value.user.chatColor) ? value.user.chatColor : null,
     };
-  }
-  async function followAccountAnalytics(answer: boolean | null | undefined) {
-    const module = await import("./web-analytics");
-    if (webAccountPending()) return module.sendWebAnalyticsChoice(accountCalls);
-    if (answer === null || answer === undefined || answer === webReportsEnabled()) return;
-    if (answer && webKeepsOff()) return;
-    setWebReportsEnabled(answer);
-    module.followWebReportsPreference();
   }
   async function checkSession() {
     const generation = sessionGeneration;
@@ -395,7 +347,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
         setState((draft) => {
           draft.account = account;
         });
-        void followAccountAnalytics(account.analyticsEnabled).catch(() => undefined);
       }
     } catch (error) {
       if (!disposed && generation === sessionGeneration) {
@@ -433,11 +384,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
   let emailStart: { email: string; idempotencyKey: string; startedAt: number } | null = null;
   async function start(email: string) {
     if (Date.now() < state.resendAt) throw new Error(text.t("webClient.login.wait"));
-    if (!analyticsAgreed()) {
-      setWebReportsEnabled(analyticsChoice());
-      if (analyticsTouched) setWebAccountPending(analyticsChoice());
-      import("./web-analytics").then((module) => module.followWebReportsPreference()).catch(() => undefined);
-    }
     const attempt =
       emailStart?.email === email && Date.now() - emailStart.startedAt < EMAIL_START_KEY_LIFE_MS
         ? emailStart
@@ -543,7 +489,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
     setState((draft) => {
       draft.account = account;
     });
-    void followAccountAnalytics(account.analyticsEnabled).catch(() => undefined);
   }
   async function logout() {
     await request("logout", {});
@@ -570,7 +515,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
     };
   });
   const variant: AppVariant = import.meta.env.DEV ? "dev" : "production";
-  const consentAgents = createOnboardingTeam(onboardingSessionSeed(), 3);
   const languagePreference = createWebLanguagePreference();
   const appearancePreference = createWebAppearancePreference();
   onSettled(() => syncWebChatBackground());
@@ -625,19 +569,6 @@ function WebAppContent(props: { createRuntime?: WebRuntimeFactory }) {
                         draft.resendAt = 0;
                       });
                     }}
-                    consent={
-                      <Show when={!analyticsAgreed()}>
-                        <AnalyticsConsentRow
-                          class="web-consent-row"
-                          checked={analyticsChoice()}
-                          agents={consentAgents}
-                          onChange={(checked) => {
-                            analyticsTouched = true;
-                            setAnalyticsChoice(checked);
-                          }}
-                        />
-                      </Show>
-                    }
                     notice={
                       <ConsentNotice
                         onOpenTerms={() => window.open("/terms", "_blank", "noopener")}

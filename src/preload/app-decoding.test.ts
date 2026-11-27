@@ -14,7 +14,6 @@ import type {
 import { describe, expect, it } from "vitest";
 import {
   decodeAccountSessions,
-  decodeAnalyticsPreference,
   decodeAppAppearancePreference,
   decodeAppBehaviorPreference,
   decodeAppInfo,
@@ -150,17 +149,6 @@ const valid: [string, (value: unknown) => unknown, unknown][] = [
     { name: "CodeBot", version: "1.0.0", platform: "darwin", variant: "dev" } satisfies AppInfo,
   ],
   [
-    "app info with an install ID",
-    decodeAppInfo,
-    {
-      name: "CodeBot",
-      version: "1.0.0",
-      platform: "darwin",
-      variant: "production",
-      analyticsInstallId: "install-0b5c7c9e-8d55-4a3f-9d0e-2f7c1a6b4e21",
-    } satisfies AppInfo,
-  ],
-  [
     "app info drawn on the CPU",
     decodeAppInfo,
     {
@@ -211,7 +199,6 @@ const valid: [string, (value: unknown) => unknown, unknown][] = [
     decodeAppSetupState,
     { completed: true, preferredProvider: "codex", preferredModel: null } satisfies AppSetupState,
   ],
-  ["analytics preference", decodeAnalyticsPreference, { enabled: false }],
   [
     "approval automation",
     decodeApprovalAutomationPreference,
@@ -417,11 +404,6 @@ const malformed: [string, (value: unknown) => unknown, unknown][] = [
   ],
   ["sent message stats with a negative count", decodeSentMessageStats, { firstSentAt: null, sentCount: -1 }],
   [
-    "app info with an install ID that is not text",
-    decodeAppInfo,
-    { name: "CodeBot", version: "1.0.0", platform: "darwin", variant: "production", analyticsInstallId: 1 },
-  ],
-  [
     "app info with a software rendering flag that is not a boolean",
     decodeAppInfo,
     { name: "CodeBot", version: "1.0.0", platform: "linux", variant: "production", softwareRendering: "yes" },
@@ -468,7 +450,6 @@ const malformed: [string, (value: unknown) => unknown, unknown][] = [
     decodeAppSetupState,
     { completed: true, preferredProvider: "other", preferredModel: null },
   ],
-  ["analytics preference without a switch", decodeAnalyticsPreference, {}],
   ["approval automation without overrides", decodeApprovalAutomationPreference, { defaultAutoApprove: true }],
   ["language preference with an unknown tag", decodeAppLanguagePreference, { language: "xx" }],
   ["appearance preference with no transparent window", decodeAppAppearancePreference, { appearance: "dark" }],
@@ -637,6 +618,18 @@ describe("app decoding", () => {
 
   it.each(malformed)("rejects %s", (_name, decode, value) => {
     expect(() => decode(value)).toThrow(/^Invalid /);
+  });
+
+  it("gives the page no analytics install ID and no analytics capture URL", () => {
+    const info = { name: "CodeBot", version: "1.0.0", platform: "darwin", variant: "production" } satisfies AppInfo;
+
+    expect(
+      decodeAppInfo({
+        ...info,
+        analyticsInstallId: "install-0b5c7c9e-8d55-4a3f-9d0e-2f7c1a6b4e21",
+        analyticsCaptureUrl: "http://localhost:47321",
+      }),
+    ).toEqual(info);
   });
 });
 

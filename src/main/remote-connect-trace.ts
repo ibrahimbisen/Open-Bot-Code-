@@ -2,7 +2,7 @@ import { ticketSignalHome } from "@codebot/contracts/signal-protocol/ticket";
 import { quantize } from "./resource-summary";
 import type { TraceSpan } from "./trace-file";
 
-export const REMOTE_CONNECT_PHASES = [
+const REMOTE_CONNECT_PHASES = [
   "session",
   "ticket",
   "bridge",
@@ -17,7 +17,7 @@ export type RemoteConnectPhase = (typeof REMOTE_CONNECT_PHASES)[number];
 
 const SIGNAL_HOME_NAME = /^[a-z][a-z0-9-]{0,15}$/u;
 
-export function isSignalHomeName(value: unknown): value is string {
+function isSignalHomeName(value: unknown): value is string {
   return typeof value === "string" && SIGNAL_HOME_NAME.test(value);
 }
 
