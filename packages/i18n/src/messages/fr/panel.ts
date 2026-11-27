@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "Panneaux",
+  "panel.add": "Ajouter un panneau",
+  "panel.add.otherChat": "Discussion d'un autre projet",
+  "panel.add.file": "Fichier",
+  "panel.add.diff": "Modifications",
+  "panel.add.browser": "Navigateur",
+  "panel.add.preview": "Aperçu",
+  "panel.split.right": "Diviser à droite",
+  "panel.split.down": "Diviser vers le bas",
+  "panel.maximize": "Agrandir le panneau",
+  "panel.restore": "Restaurer la taille du panneau",
+  "panel.close": "Fermer le panneau",
+  "panel.pin": "Épingler le panneau pour qu'il reste ouvert",
+  "panel.unpin": "Désépingler le panneau",
+  "panel.preview.loading": "Chargement de l'aperçu",
+  "panel.preview.failed": "Impossible d'ouvrir l'aperçu.",
+  "panel.browser.label": "Panneau du navigateur",
+  "panel.browser.starting": "Ouverture du navigateur",
+  "panel.browser.failed": "Impossible d'ouvrir la page du navigateur.",
+  "panel.browser.closed": "Cette page du navigateur a été fermée.",
+  "panel.browser.takeControl": "Prendre le contrôle de la page",
+  "panel.browser.handControl": "Confier le contrôle à l'agent",
+  "panel.browser.userControls": "Tu contrôles cette page",
+  "panel.browser.agentControls": "L'agent contrôle cette page",
+  "panel.header.model": "Modèle de cette discussion",
+  "panel.header.modelLocked": "Le modèle ne peut pas changer maintenant.",
+  "panel.header.files": "Fichiers du projet",
+  "panel.draft.agent": "Agent",
+  "panel.chat.noAgent": "Ce projet n'a pas d'agent. Ajoute un agent dans les réglages du projet.",
+  "panel.picker.title": "Ouvrir une discussion dans un panneau",
+  "panel.picker.description": "Choisis un projet, puis une discussion. Le panneau affiche le nom du projet.",
+  "panel.picker.project": "Projet",
+} as const satisfies PartialTranslation<typeof source>;

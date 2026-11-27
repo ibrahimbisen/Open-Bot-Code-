@@ -107,4 +107,21 @@ export const messages = {
   "account.language.next": "Langue suivante",
   "account.language.continue": "Continuer",
   "account.language.change": "Changer de langue",
+  "account.service.title": "Service de comptes",
+  "account.service.description":
+    "La connexion est facultative. Sans elle, OpenBot Code fonctionne sur cet ordinateur avec un profil local.",
+  "account.service.address.title": "Adresse du service",
+  "account.service.address.description":
+    "L'adresse du service de comptes sur ton serveur, par exemple https://account.example.com.",
+  "account.service.address.fixed": "La variable d'environnement CODEBOT_AUTH_API_URL définit cette adresse.",
+  "account.service.address.placeholder": "https://account.example.com",
+  "account.service.address.save": "Enregistrer",
+  "account.service.saveFailed": "Impossible d'enregistrer l'adresse.",
+  "account.service.signIn.title": "Se connecter avec Nextcloud",
+  "account.service.signIn.description":
+    "Ton navigateur ouvre la page de connexion Nextcloud. Utilise-y ton nom d'utilisateur et ton mot de passe Nextcloud.",
+  "account.service.signIn.waiting": "Termine la connexion dans ton navigateur.",
+  "account.service.signIn.action": "Se connecter",
+  "account.service.signIn.cancel": "Annuler",
+  "account.service.signInFailed": "Impossible de démarrer la connexion.",
 } as const satisfies PartialTranslation<typeof source>;

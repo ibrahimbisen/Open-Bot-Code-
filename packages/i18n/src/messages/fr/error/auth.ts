@@ -9,6 +9,16 @@ export const messages = {
   "error.auth.networkBlocked":
     "Un pare-feu ou un proxy de ce réseau a empêché OpenBot Code de joindre {host}. Demandez à votre administrateur réseau d’autoriser {host}, puis réessayez.",
   "error.auth.signInFirst": "Connectez-vous d’abord à OpenBot Code.",
+  "error.auth.accountServiceNotConfigured": "Saisis d'abord l'adresse de ton service de comptes.",
+  "error.auth.accountServiceUrlInvalid":
+    "L'adresse du service de comptes doit commencer par https:// et ne pas avoir de chemin.",
+  "error.auth.accountServiceFixed":
+    "La variable d'environnement CODEBOT_AUTH_API_URL définit le service de comptes. Retire-la pour changer l'adresse ici.",
+  "error.auth.signInFailed": "La connexion ne s'est pas terminée. Réessaie.",
+  "error.auth.signInCancelled": "La connexion a été annulée ou refusée.",
+  "error.auth.signInTimeout": "La connexion a pris trop de temps. Recommence-la.",
+  "error.auth.signInBrowserFailed": "OpenBot Code n'a pas pu ouvrir ton navigateur pour la connexion.",
+  "error.auth.signInUnavailable": "Cet OpenBot Code ne peut pas ouvrir de navigateur pour la connexion.",
   "error.auth.signInRequired": "Une connexion est requise.",
   "error.auth.chatColorUnavailable":
     "Le service de compte ne prend pas encore en charge les couleurs de discussion. Réessayez plus tard.",

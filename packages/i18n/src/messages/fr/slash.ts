@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Commandes",
+  "slash.picker.option": "Commande /{name}",
+  "slash.picker.none": "Le moteur n'a pas encore signalé ses commandes. OpenBot Code les lit au démarrage du moteur.",
+  "slash.picker.noMatch": "Aucune commande ne correspond à « {query} ».",
+  "slash.badge.project": "Projet",
+  "slash.badge.user": "Utilisateur",
+  "slash.badge.plugin": "Plugin",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Terminal uniquement",
+  "slash.screen.close": "Fermer",
+  "slash.screen.loading": "Chargement…",
+  "slash.model.title": "Choisir le modèle",
+  "slash.model.description": "{name} utilise ce modèle à partir du prochain message.",
+  "slash.model.empty": "Aucun modèle n'est disponible pour cet agent.",
+  "slash.model.failed": "Le modèle n'a pas changé.",
+  "slash.effort.title": "Niveau de réflexion",
+  "slash.effort.description": "Combien {name} réfléchit avant de répondre.",
+  "slash.effort.unsupported": "Le modèle de cet agent n'a pas de niveaux de réflexion.",
+  "slash.effort.failed": "Le niveau de réflexion n'a pas changé.",
+  "slash.resume.title": "Reprendre une discussion",
+  "slash.resume.description":
+    "Discussions que le moteur a enregistrées pour le dossier de {name}. Une discussion reprise s'ouvre comme une nouvelle discussion.",
+  "slash.resume.empty": "Le moteur n'a aucune discussion enregistrée pour ce dossier.",
+  "slash.resume.failed": "OpenBot Code n'a pas pu lire les discussions enregistrées.",
+  "slash.resume.retry": "Réessayer",
+  "slash.resume.inUse": "Ouverte dans OpenBot Code",
+  "slash.resume.untitled": "Discussion sans titre",
+  "slash.resume.branch": "Branche {name}",
+  "slash.resume.updated": "Mise à jour {time}",
+  "slash.resume.openFailed": "La discussion ne s'est pas ouverte.",
+} as const satisfies PartialTranslation<typeof source>;

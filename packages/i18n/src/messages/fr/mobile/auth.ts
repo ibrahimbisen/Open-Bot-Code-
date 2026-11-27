@@ -34,6 +34,29 @@ export const messages = {
   "mobile.auth.signIn.helpStep2": "2. Allez dans Réglages → Appli mobile.",
   "mobile.auth.signIn.helpStep3":
     "3. Choisissez « Ajouter un téléphone » → « Oui, se connecter », puis scannez le code ici.",
+  "mobile.auth.signIn.accountButton": "Se connecter avec Nextcloud",
+  "mobile.auth.account.title": "Se connecter avec Nextcloud",
+  "mobile.auth.account.description":
+    "Saisis l'adresse de ton service de comptes OpenBot Code. Nextcloud demande ensuite ton nom d'utilisateur et ton mot de passe.",
+  "mobile.auth.account.label": "Adresse du service de comptes",
+  "mobile.auth.account.placeholder": "account.example.com",
+  "mobile.auth.account.signalLabel": "Adresse Signal (facultative)",
+  "mobile.auth.account.signalPlaceholder": "Adresse Signal (facultative)",
+  "mobile.auth.account.continue": "Continuer avec Nextcloud",
+  "mobile.auth.account.waiting": "En attente de Nextcloud…",
+  "mobile.auth.account.tryAgainIn": "Réessaie dans {time}",
+  "mobile.auth.account.useQrCode": "Scanner plutôt un code QR",
+  "mobile.auth.account.error.invalidAddress":
+    "Saisis l'adresse de ton service de comptes, par exemple account.example.com.",
+  "mobile.auth.account.error.invalidSignal":
+    "Saisis une adresse Signal qui commence par wss://, ou laisse le champ vide.",
+  "mobile.auth.account.error.notAccountService": "Cette adresse n'est pas un service de comptes OpenBot Code.",
+  "mobile.auth.account.error.startFailed": "Le service de comptes n'a pas pu démarrer la connexion. Réessaie.",
+  "mobile.auth.account.error.loginFailed": "La connexion ne s'est pas terminée. Réessaie.",
+  "mobile.auth.account.error.wait": "Trop de tentatives de connexion. Attends avant de réessayer.",
+  "mobile.auth.account.error.providerUnreachable":
+    "Le service de comptes n'a pas pu joindre Nextcloud. Réessaie plus tard.",
+  "mobile.auth.account.error.refused": "Nextcloud n'a pas autorisé cette connexion.",
   "mobile.auth.done.title": "Connecté",
   "mobile.auth.done.body": "Vous êtes connecté à votre compte.",
   "mobile.auth.error.sessionEnded": "Votre session a pris fin. Reconnectez-vous.",
