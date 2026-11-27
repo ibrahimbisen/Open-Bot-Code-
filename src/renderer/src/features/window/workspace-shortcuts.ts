@@ -2,11 +2,30 @@ import type { ShortcutCommand } from "@codebot/ui/features/settings/keyboard-sho
 import { onSettled } from "solid-js";
 import { matchesShortcut } from "../../keyboard-shortcut-preference";
 
-type WorkspaceShortcutCommand = Extract<ShortcutCommand, "newAgent" | "toggleSidebar" | "showShortcuts">;
+type WorkspaceShortcutCommand = Extract<
+  ShortcutCommand,
+  | "newAgent"
+  | "toggleSidebar"
+  | "showShortcuts"
+  | "newChat"
+  | "switchProject"
+  | "splitPanel"
+  | "closePanel"
+  | "openCommandMenu"
+>;
 
 export type WorkspaceShortcutActions = Partial<Record<WorkspaceShortcutCommand, () => boolean>>;
 
-const WORKSPACE_SHORTCUT_COMMANDS: readonly WorkspaceShortcutCommand[] = ["newAgent", "toggleSidebar", "showShortcuts"];
+const WORKSPACE_SHORTCUT_COMMANDS: readonly WorkspaceShortcutCommand[] = [
+  "newAgent",
+  "toggleSidebar",
+  "showShortcuts",
+  "newChat",
+  "switchProject",
+  "splitPanel",
+  "closePanel",
+  "openCommandMenu",
+];
 
 export function insideOverlay(target: EventTarget | null): boolean {
   return target instanceof Element && target.closest("[role=dialog], [role=alertdialog], [role=menu]") !== null;
