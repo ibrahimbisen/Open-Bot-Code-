@@ -10,6 +10,7 @@ import {
   canPreviewAttachment,
   customProviderOfModel,
   DEFAULT_PROVIDER_ACCOUNT_ID,
+  LOCAL_SERVER_ID,
   type QueueSnapshot,
   queueHoldWorker,
   routineRunsTurn,
@@ -56,6 +57,7 @@ import { reportErrorBanner, reportNotification } from "../../error-reports";
 import { deviceSendShortcut, sendShortcutAriaKey, sendShortcutHintKey } from "../../send-shortcut-preference";
 import { readableAgentError } from "../agents/agent-error-text";
 import { customProviderRestartMessage } from "../custom-providers/custom-provider-restart";
+import { createSlashCommandsFor } from "../slash-commands/slash-commands-source";
 import { speechReading } from "../speech/speech-playback";
 import { stopSpokenReply } from "../speech/speech-replies";
 import { ConversationBrowserTabNotice } from "./ConversationBrowserTabNotice";
@@ -168,6 +170,10 @@ export function ConversationComposer() {
       : props.agent?.name
         ? t("composer.placeholder.message", { name: props.agent.name })
         : t("composer.placeholder.messageAgent");
+  const slash = createSlashCommandsFor(() => {
+    const agentId = props.agent?.id;
+    return agentId && !channel ? { agentId, serverId: props.server?.id ?? LOCAL_SERVER_ID } : undefined;
+  });
   const [skillPickerRequest, setSkillPickerRequest] = createSignal(0);
   const pickSkill = () => (channel ? undefined : () => setSkillPickerRequest((current) => current + 1));
   const teachTask = () => (channel || !canTeachBrowserTask() ? undefined : () => void openBrowserTeach());
@@ -826,6 +832,8 @@ export function ConversationComposer() {
               everyoneMention={Boolean(channel) && (props.mentionAgents ?? props.agents).length > 1}
               skills={installedSkills()}
               skillsLoadFailed={installedSkillsLoadFailed()}
+              slashCommands={slash.commands()}
+              onSlashScreen={slash.openScreen}
               mcpServers={mcpServers()}
               attachments={currentDraft().attachments}
               value={currentDraft().text}

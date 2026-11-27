@@ -144,6 +144,7 @@
     "./features/conversation/AgentMemoriesView": "./src/features/conversation/AgentMemoriesView.tsx",
     "./features/conversation/AgentSteps": "./src/features/conversation/AgentSteps.tsx",
     "./features/conversation/AgentTasks": "./src/features/conversation/AgentTasks.tsx",
+    "./features/conversation/SlashScreenDialog": "./src/features/conversation/SlashScreenDialog.tsx",
     "./features/conversation/BrowserSecretCard": "./src/features/conversation/BrowserSecretCard.tsx",
     "./features/conversation/BrowserTakeoverPreview": "./src/features/conversation/BrowserTakeoverPreview.tsx",
     "./features/conversation/AnchoredTooltip": "./src/features/conversation/AnchoredTooltip.tsx",
