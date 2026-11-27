@@ -817,7 +817,6 @@
 }
 
 @container project-chat-panel (max-width: 320px) {
-  .project-panel-header > .project-panel-files-toggle,
   .project-panel-header > .provider-model-picker .provider-model-trigger-effort {
     display: none;
   }

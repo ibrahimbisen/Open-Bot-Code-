@@ -2080,6 +2080,11 @@ button.chat-action-target:active,
   --message-solid-text: var(--codebot-paper-text);
 }
 
+:root[data-codebot-palette]:not([data-codebot-palette="codebot-high-contrast"])
+  .ui-bubble.message-bubble-colored.message-bubble-solid.message-bubble-solid-ink-text {
+  --message-solid-text: var(--codebot-ink-text);
+}
+
 :root[data-codebot-palette="codebot-high-contrast"] .ui-bubble.message-bubble-colored.message-bubble-solid {
   --message-bubble-tint-amount: 0%;
   --message-solid-text: var(--codebot-text-primary);

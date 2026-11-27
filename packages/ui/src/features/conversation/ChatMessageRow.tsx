@@ -20,7 +20,7 @@ import { chatBubbleColor, useBackdropBubbles } from "./BackdropBubbles";
 import type { ImageCopies } from "./ImageLightbox";
 import type { MessageImageFile } from "./MarkdownMessageText";
 import { conversationBubbleVariant, MessageBody } from "./MessageRendering";
-import { solidBubbleReadsBetterDark, solidBubbleTakesDarkText } from "./own-bubble";
+import { solidBubbleNeedsInkText, solidBubbleReadsBetterDark, solidBubbleTakesDarkText } from "./own-bubble";
 
 export interface ChatMessageAuthor {
   kind: "you" | "agent" | "member";
@@ -107,6 +107,7 @@ export function ChatMessageRow(props: ChatMessageRowProps): JSX.Element {
       "message-bubble-solid": solid !== undefined,
       "message-bubble-solid-dark-text": solid !== undefined && solidBubbleTakesDarkText(solid),
       "message-bubble-solid-themed-dark-text": solid !== undefined && solidBubbleReadsBetterDark(solid),
+      "message-bubble-solid-ink-text": solid !== undefined && solidBubbleNeedsInkText(solid),
     };
   };
   const rowClass = () => [

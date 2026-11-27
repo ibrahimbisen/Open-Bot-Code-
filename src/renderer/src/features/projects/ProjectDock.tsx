@@ -56,7 +56,7 @@ const SLOT_ADD_LABEL = {
 const CHAT_COMPONENT = "chat";
 const SLOT_COMPONENT = "slot";
 const SAVE_DELAY_MS = 350;
-const NARROW_GROUP_WIDTH = 300;
+const NARROW_GROUP_WIDTH = 200;
 
 interface PanelHost {
   id: string;
@@ -720,7 +720,6 @@ function GroupActions(props: {
       </IconButton>
       <IconButton
         label={props.maximized ? t("panel.restore") : t("panel.maximize")}
-        class="project-dock-action-secondary"
         size="icon-sm"
         variant="ghost"
         onClick={props.onMaximize}

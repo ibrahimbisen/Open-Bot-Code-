@@ -57,3 +57,7 @@ export function solidBubbleReadsBetterDark(color: AvatarColor): boolean {
   const luminance = solidLuminance(color);
   return (luminance + 0.05) / 0.057 > 1.05 / (luminance + 0.05);
 }
+
+export function solidBubbleNeedsInkText(color: AvatarColor): boolean {
+  return solidBubbleReadsBetterDark(color) && (solidLuminance(color) + 0.05) / 0.057 < 4.5;
+}

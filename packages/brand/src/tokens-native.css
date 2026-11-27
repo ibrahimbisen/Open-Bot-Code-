@@ -27,6 +27,7 @@
     --codebot-credit-star-fill: #9a6ad6;
     --codebot-paper: #f0f0f0;
     --codebot-paper-text: #141414;
+    --codebot-ink-text: #000000;
     --codebot-paper-text-muted: rgba(20, 20, 20, 0.52);
     --codebot-paper-border: rgba(20, 20, 20, 0.14);
     --codebot-success: #32a85d;
@@ -98,6 +99,7 @@
     --codebot-credit-star-fill: #d0afed;
     --codebot-paper: #f0f0f0;
     --codebot-paper-text: #141414;
+    --codebot-ink-text: #000000;
     --codebot-paper-text-muted: rgba(20, 20, 20, 0.52);
     --codebot-paper-border: rgba(20, 20, 20, 0.14);
     --codebot-success: #31cf76;

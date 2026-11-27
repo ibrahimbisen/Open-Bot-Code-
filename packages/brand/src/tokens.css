@@ -106,6 +106,7 @@
 
   --codebot-paper: #f0f0f0;
   --codebot-paper-text: #141414;
+  --codebot-ink-text: #000000;
   --codebot-paper-text-muted: rgba(20, 20, 20, 0.52);
   --codebot-paper-text-dim: rgba(20, 20, 20, 0.36);
   --codebot-paper-border: rgba(20, 20, 20, 0.14);
