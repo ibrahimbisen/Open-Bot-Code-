@@ -29,6 +29,7 @@ import { ProviderDetectionProvider } from "./features/custom-providers/provider-
 import { DynamicIslandBridge } from "./features/dynamic-island/dynamic-island-bridge";
 import { DynamicIslandProvider } from "./features/dynamic-island/dynamic-island-context";
 import { SetupProvider } from "./features/onboarding/onboarding-context";
+import { ProjectsProvider } from "./features/projects/projects-context";
 import { RemoteDesktopProvider } from "./features/remote-desktop/remote-desktop-context";
 import { ServerScopeProvider } from "./features/servers/server-scope";
 import { ServerSelectionProvider } from "./features/servers/server-selection";
@@ -120,6 +121,15 @@ export function AppProviders(props: ParentProps<AppProps>): JSX.Element {
   );
 }
 
+function ProjectsScope(props: ParentProps): JSX.Element {
+  const platform = usePlatform();
+  return (
+    <Show when={!platform.chatWindow} fallback={props.children}>
+      <ProjectsProvider>{props.children}</ProjectsProvider>
+    </Show>
+  );
+}
+
 function ServerScopeBoundary(props: ParentProps<ScopedConversationProps>): JSX.Element {
   const { activeServerId } = useServers();
   return (
@@ -164,7 +174,7 @@ function ScopedProviders(props: ParentProps<ScopedConversationProps>): JSX.Eleme
                                       <DynamicIslandBridge />
                                       <ServerBrowserWindowBridge />
                                     </Show>
-                                    {props.children}
+                                    <ProjectsScope>{props.children}</ProjectsScope>
                                   </ServerScopeProvider>
                                 </AgentActionsProvider>
                               </ServerSelectionProvider>
