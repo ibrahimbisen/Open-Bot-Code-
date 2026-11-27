@@ -9,6 +9,16 @@ export const messages = {
   "error.auth.networkBlocked":
     "Брандмауэр или прокси в этой сети не дал OpenBot Code подключиться к {host}. Попросите сетевого администратора разрешить {host} и повторите попытку.",
   "error.auth.signInFirst": "Сначала войдите в OpenBot Code.",
+  "error.auth.accountServiceNotConfigured": "Сначала введите адрес вашей службы учётных записей.",
+  "error.auth.accountServiceUrlInvalid":
+    "Адрес службы учётных записей должен начинаться с https:// и не содержать пути.",
+  "error.auth.accountServiceFixed":
+    "Службу учётных записей задаёт переменная среды CODEBOT_AUTH_API_URL. Удалите её, чтобы изменить адрес здесь.",
+  "error.auth.signInFailed": "Вход не завершён. Попробуйте ещё раз.",
+  "error.auth.signInCancelled": "Вход был отменён или отклонён.",
+  "error.auth.signInTimeout": "Вход занял слишком много времени. Начните его снова.",
+  "error.auth.signInBrowserFailed": "OpenBot Code не удалось открыть браузер для входа.",
+  "error.auth.signInUnavailable": "Этот OpenBot Code не может открыть браузер для входа.",
   "error.auth.signInRequired": "Требуется вход.",
   "error.auth.chatColorUnavailable": "Служба учётных записей пока не поддерживает цвета чата. Повторите попытку позже.",
   "error.auth.accountChangedDuringRegister":

@@ -1,4 +1,68 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/reply";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "reply.summary.edited": {
+    one: "изменён {count} файл",
+    few: "изменено {count} файла",
+    many: "изменено {count} файлов",
+    other: "изменено {count} файла",
+  },
+  "reply.summary.ran": {
+    one: "выполнена {count} команда",
+    few: "выполнено {count} команды",
+    many: "выполнено {count} команд",
+    other: "выполнено {count} команды",
+  },
+  "reply.summary.read": {
+    one: "прочитан {count} файл",
+    few: "прочитано {count} файла",
+    many: "прочитано {count} файлов",
+    other: "прочитано {count} файла",
+  },
+  "reply.summary.searched": {
+    one: "поиск выполнен {count} раз",
+    few: "поиск выполнен {count} раза",
+    many: "поиск выполнен {count} раз",
+    other: "поиск выполнен {count} раза",
+  },
+  "reply.summary.browsed": {
+    one: "открыта {count} страница",
+    few: "открыто {count} страницы",
+    many: "открыто {count} страниц",
+    other: "открыто {count} страницы",
+  },
+  "reply.summary.delegated": {
+    one: "передана {count} задача",
+    few: "передано {count} задачи",
+    many: "передано {count} задач",
+    other: "передано {count} задачи",
+  },
+  "reply.summary.worked": {
+    one: "использован {count} другой инструмент",
+    few: "использовано {count} других инструмента",
+    many: "использовано {count} других инструментов",
+    other: "использовано {count} других инструмента",
+  },
+  "reply.details.show": "Подробности",
+  "reply.details.hide": "Скрыть подробности",
+  "reply.details.loading": "Загрузка подробностей…",
+  "reply.details.input": "Ввод",
+  "reply.details.output": "Вывод",
+  "reply.details.shortened": "Сокращено",
+  "reply.details.timeline": "Хронология",
+  "reply.code.showAll": "Показать всё (строк: {count})",
+  "reply.code.showLess": "Показать меньше",
+  "reply.view.title": "Вид ответа",
+  "reply.view.description": "«Кратко» показывает ответ и однострочную сводку работы. «Подробно» показывает ещё и шаги.",
+  "reply.view.short": "Кратко",
+  "reply.view.detailed": "Подробно",
+  "reply.rule.title": "Правило ответов",
+  "reply.rule.description": "Каждый чат получает это правило. Проекты могут использовать своё правило.",
+  "reply.rule.label": "Правило ответов",
+  "reply.rule.save": "Сохранить правило",
+  "reply.rule.reset": "Использовать правило по умолчанию",
+  "reply.rule.saved": "Правило сохранено",
+  "reply.rule.empty": "Пусто: правило ответов не отправляется",
+  "reply.rule.count": "{count} из {max} символов",
+} as const satisfies PartialTranslation<typeof source>;

@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "Panele",
+  "panel.add": "Dodaj panel",
+  "panel.add.otherChat": "Czat z innego projektu",
+  "panel.add.file": "Plik",
+  "panel.add.diff": "Zmiany",
+  "panel.add.browser": "Przeglądarka",
+  "panel.add.preview": "Podgląd",
+  "panel.split.right": "Podziel w prawo",
+  "panel.split.down": "Podziel w dół",
+  "panel.maximize": "Maksymalizuj panel",
+  "panel.restore": "Przywróć rozmiar panelu",
+  "panel.close": "Zamknij panel",
+  "panel.pin": "Przypnij panel, aby pozostał otwarty",
+  "panel.unpin": "Odepnij panel",
+  "panel.preview.loading": "Wczytywanie podglądu",
+  "panel.preview.failed": "Nie udało się otworzyć podglądu.",
+  "panel.browser.label": "Panel przeglądarki",
+  "panel.browser.starting": "Otwieranie przeglądarki",
+  "panel.browser.failed": "Nie udało się otworzyć strony przeglądarki.",
+  "panel.browser.closed": "Ta strona przeglądarki została zamknięta.",
+  "panel.browser.takeControl": "Przejmij kontrolę nad stroną",
+  "panel.browser.handControl": "Przekaż sterowanie agentowi",
+  "panel.browser.userControls": "Ty sterujesz tą stroną",
+  "panel.browser.agentControls": "Agent steruje tą stroną",
+  "panel.header.model": "Model tego czatu",
+  "panel.header.modelLocked": "Model nie może teraz zostać zmieniony.",
+  "panel.header.files": "Pliki projektu",
+  "panel.draft.agent": "Agent",
+  "panel.chat.noAgent": "Ten projekt nie ma agenta. Dodaj agenta w ustawieniach projektu.",
+  "panel.picker.title": "Otwórz czat w panelu",
+  "panel.picker.description": "Wybierz projekt, a potem czat. Panel pokazuje nazwę projektu.",
+  "panel.picker.project": "Projekt",
+} as const satisfies PartialTranslation<typeof source>;

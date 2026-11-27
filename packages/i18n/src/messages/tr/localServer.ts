@@ -1,4 +1,60 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/localServer";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "localServer.dialog.addTitle": "Yerel makine ekle",
+  "localServer.dialog.description": "OpenBot Code, model listesini ve durumu makinenin OpenAI uyumlu adresinden okur.",
+  "localServer.dialog.editTitle": "{name} düzenle",
+  "localServer.dialog.saveFailed": "OpenBot Code bu makineyi kaydedemedi.",
+  "localServer.dialog.saving": "Kaydediliyor",
+  "localServer.error.gpuKeyOtherOrigin": "GPU durum adresi, sunucu adresiyle aynı kökene sahip olmalıdır.",
+  "localServer.error.gpuUrlInvalid": "Kullanıcı adı ve parola içermeyen bir http veya https adresi girin.",
+  "localServer.error.nameRequired": "Bir ad girin.",
+  "localServer.field.apiKey": "API anahtarı (isteğe bağlı)",
+  "localServer.field.apiKeyKept": "Kaydedildi. Korumak için boş bırakın.",
+  "localServer.field.baseUrl": "Sunucu adresi",
+  "localServer.field.baseUrlPlaceholder": "http://192.168.1.41:8000/v1",
+  "localServer.field.gpuUrl": "GPU durum adresi (isteğe bağlı)",
+  "localServer.field.gpuUrlHelp":
+    "GPU yükünü ve belleğini gösteren bir JSON, nvidia-smi dışa aktarıcı veya DCGM dışa aktarıcı adresi.",
+  "localServer.field.gpuUrlPlaceholder": "http://192.168.1.41:9101/gpu",
+  "localServer.field.gpuUsesKey": "API anahtarını GPU durum adresine gönder",
+  "localServer.field.gpuUsesKeyHelp": "Yalnızca sunucu adresiyle aynı kökene sahip bir adres için.",
+  "localServer.field.monitored": "Bu makinenin durumunu göster",
+  "localServer.field.monitoredHelp": "OpenBot Code makineyi ara sıra denetler ve durum çubuğunda gösterir.",
+  "localServer.field.name": "Ad",
+  "localServer.field.namePlaceholder": "DGX Spark 1",
+  "localServer.remove.description":
+    "OpenBot Code bu makineyi kullanmayı bırakır. Modellerini kullanan projelerin ve sohbetlerin başka bir modele ihtiyacı olur.",
+  "localServer.remove.failed": "OpenBot Code bu makineyi kaldıramadı.",
+  "localServer.remove.title": "{name} kaldırılsın mı?",
+  "localServer.scan.action": "Tara",
+  "localServer.scan.add": "{name} ekle",
+  "localServer.scan.description":
+    "Bir ana makine adı veya IP adresi girin. OpenBot Code, Ollama, LM Studio ve vLLM'i olağan bağlantı noktalarında arar.",
+  "localServer.scan.host": "Ana makine veya adres",
+  "localServer.scan.needsKey": "API anahtarı gerekir",
+  "localServer.scan.none": "Bu ana makinede model sunucusu bulunamadı.",
+  "localServer.scan.placeholder": "spark-1.local",
+  "localServer.scan.scanning": "Taranıyor",
+  "localServer.scan.title": "Makine bul",
+  "localServer.settings.add": "Makine ekle",
+  "localServer.settings.description":
+    "Ağınızdaki model makineleri, örneğin bir DGX Spark. Her makine ayrı bir kayıttır.",
+  "localServer.settings.edit": "{name} düzenle",
+  "localServer.settings.empty":
+    "Henüz yerel makine yok. Bir projede veya sohbette kullanmak için bir model sunucusunun adresini ekleyin.",
+  "localServer.settings.models": { one: "{count} model", other: "{count} model" },
+  "localServer.settings.refresh": "Şimdi denetle",
+  "localServer.settings.remove": "{name} kaldır",
+  "localServer.settings.statusOff": "Durum kapalı",
+  "localServer.settings.title": "Yerel sunucular",
+  "localServer.test.action": "Dene",
+  "localServer.test.gpuCount": { one: "{count} GPU", other: "{count} GPU" },
+  "localServer.test.gpuFailed": "GPU durumu başarısız: {error}",
+  "localServer.test.gpuFound": "GPU durumu okundu: {count}",
+  "localServer.test.offline": "Çevrimdışı. {error}",
+  "localServer.test.online": "Çevrimiçi. {models} bulundu.",
+  "localServer.test.onlineKind": "{kind} çevrimiçi. {models} bulundu.",
+  "localServer.test.testing": "Deneniyor",
+} as const satisfies PartialTranslation<typeof source>;

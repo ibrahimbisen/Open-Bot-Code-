@@ -548,4 +548,16 @@ export const messages = {
   "mobile.settings.shortcuts.send.unconfirmed": "Sunucudan yanıt yok. Mesaj sohbette olabilir.",
   "mobile.settings.shortcuts.send.inApp": "OpenBot Code’ta gönder",
   "mobile.settings.shortcuts.send.openChat": "Sohbeti aç",
+  "mobile.settings.connection.account": "Hesap",
+  "mobile.settings.connection.accountFooter":
+    "Hesap hizmetinin adresi oturum açarken ayarlanır. Başka birini kullanmak için oturumu kapatın.",
+  "mobile.settings.connection.accountService": "Hesap hizmeti",
+  "mobile.settings.connection.notSignedIn": "Oturum açılmadı",
+  "mobile.settings.connection.save": "Kaydet",
+  "mobile.settings.connection.saving": "Kaydediliyor…",
+  "mobile.settings.connection.signal": "Signal adresi",
+  "mobile.settings.connection.signalHint":
+    "İsteğe bağlı. Hesap hizmetinin verdiği Signal adresini kullanmak için boş bırakın. TURN sunucunuz Signal'den gelir.",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.title": "Bağlantı",
 } as const satisfies PartialTranslation<typeof source>;

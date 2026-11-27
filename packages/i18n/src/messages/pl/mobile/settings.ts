@@ -239,6 +239,18 @@ export const messages = {
     "Twoje wybory obowiązują na wszystkich twoich urządzeniach. Wyciszenie dotyczy tylko tego telefonu.",
   "mobile.settings.notifications.channel": "Powiadomienia agentów ({sound})",
   "mobile.settings.notifications.channelSilent": "Powiadomienia agentów (bez dźwięku)",
+  "mobile.settings.connection.title": "Połączenie",
+  "mobile.settings.connection.account": "Konto",
+  "mobile.settings.connection.accountService": "Usługa konta",
+  "mobile.settings.connection.accountFooter":
+    "Adres usługi konta jest ustawiany przy logowaniu. Wyloguj się, aby użyć innego.",
+  "mobile.settings.connection.notSignedIn": "Niezalogowany",
+  "mobile.settings.connection.signal": "Adres Signal",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "Opcjonalne. Zostaw puste, aby użyć adresu Signal podanego przez usługę konta. Twój serwer TURN pochodzi z Signal.",
+  "mobile.settings.connection.save": "Zapisz",
+  "mobile.settings.connection.saving": "Zapisywanie…",
   "mobile.settings.conversations.title": "Rozmowy",
   "mobile.settings.conversations.hiddenChats": "Ukryte czaty",
   "mobile.settings.conversations.largeFiles": "Automatycznie pobieraj duże pliki",

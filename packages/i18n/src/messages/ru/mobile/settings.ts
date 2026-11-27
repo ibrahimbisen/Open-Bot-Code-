@@ -239,6 +239,18 @@ export const messages = {
     "Ваш выбор действует на всех ваших устройствах. Режим без звука действует только на этом телефоне.",
   "mobile.settings.notifications.channel": "Уведомления агентов ({sound})",
   "mobile.settings.notifications.channelSilent": "Уведомления агентов (без звука)",
+  "mobile.settings.connection.title": "Подключение",
+  "mobile.settings.connection.account": "Учётная запись",
+  "mobile.settings.connection.accountService": "Служба учётных записей",
+  "mobile.settings.connection.accountFooter":
+    "Адрес службы учётных записей задаётся при входе. Выйдите, чтобы использовать другой.",
+  "mobile.settings.connection.notSignedIn": "Вход не выполнен",
+  "mobile.settings.connection.signal": "Адрес Signal",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "Необязательно. Оставьте пустым, чтобы использовать адрес Signal, который даёт служба учётных записей. Ваш сервер TURN приходит от Signal.",
+  "mobile.settings.connection.save": "Сохранить",
+  "mobile.settings.connection.saving": "Сохранение…",
   "mobile.settings.conversations.title": "Диалоги",
   "mobile.settings.conversations.hiddenChats": "Скрытые чаты",
   "mobile.settings.conversations.largeFiles": "Скачивать большие файлы автоматически",

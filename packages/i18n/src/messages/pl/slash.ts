@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Polecenia",
+  "slash.picker.option": "Polecenie /{name}",
+  "slash.picker.none": "Silnik nie zgłosił jeszcze swoich poleceń. OpenBot Code odczytuje je przy starcie silnika.",
+  "slash.picker.noMatch": "Żadne polecenie nie pasuje do „{query}”.",
+  "slash.badge.project": "Projekt",
+  "slash.badge.user": "Użytkownik",
+  "slash.badge.plugin": "Wtyczka",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Tylko terminal",
+  "slash.screen.close": "Zamknij",
+  "slash.screen.loading": "Wczytywanie…",
+  "slash.model.title": "Wybierz model",
+  "slash.model.description": "{name} używa tego modelu od następnej wiadomości.",
+  "slash.model.empty": "Brak modeli dostępnych dla tego agenta.",
+  "slash.model.failed": "Model nie został zmieniony.",
+  "slash.effort.title": "Poziom myślenia",
+  "slash.effort.description": "Jak długo {name} myśli, zanim odpowie.",
+  "slash.effort.unsupported": "Model tego agenta nie ma poziomów myślenia.",
+  "slash.effort.failed": "Poziom myślenia nie został zmieniony.",
+  "slash.resume.title": "Wznów czat",
+  "slash.resume.description":
+    "Czaty zapisane przez silnik dla folderu {name}. Wznowiony czat otwiera się jako nowy czat.",
+  "slash.resume.empty": "Silnik nie ma zapisanych czatów dla tego folderu.",
+  "slash.resume.failed": "OpenBot Code nie mógł odczytać zapisanych czatów.",
+  "slash.resume.retry": "Spróbuj ponownie",
+  "slash.resume.inUse": "Otwarty w OpenBot Code",
+  "slash.resume.untitled": "Czat bez tytułu",
+  "slash.resume.branch": "Gałąź {name}",
+  "slash.resume.updated": "Zaktualizowano {time}",
+  "slash.resume.openFailed": "Czat się nie otworzył.",
+} as const satisfies PartialTranslation<typeof source>;

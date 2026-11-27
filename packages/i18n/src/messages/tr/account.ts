@@ -107,4 +107,20 @@ export const messages = {
   "account.language.next": "Sonraki dil",
   "account.language.continue": "Devam et",
   "account.language.change": "Dili değiştir",
+  "account.service.address.description": "Sunucunuzdaki hesap hizmetinin adresi, örneğin https://account.example.com.",
+  "account.service.address.fixed": "CODEBOT_AUTH_API_URL ortam değişkeni bu adresi belirler.",
+  "account.service.address.placeholder": "https://account.example.com",
+  "account.service.address.save": "Kaydet",
+  "account.service.address.title": "Hizmet adresi",
+  "account.service.description":
+    "Oturum açmak isteğe bağlıdır. Oturum açmazsanız OpenBot Code bu bilgisayarda yerel bir profille çalışır.",
+  "account.service.saveFailed": "Adres kaydedilemedi.",
+  "account.service.signIn.action": "Oturum aç",
+  "account.service.signIn.cancel": "İptal",
+  "account.service.signIn.description":
+    "Tarayıcınız Nextcloud oturum açma sayfasını açar. Orada Nextcloud kullanıcı adınızı ve parolanızı kullanın.",
+  "account.service.signIn.title": "Nextcloud ile oturum aç",
+  "account.service.signIn.waiting": "Oturum açmayı tarayıcınızda tamamlayın.",
+  "account.service.signInFailed": "Oturum açma başlatılamadı.",
+  "account.service.title": "Hesap hizmeti",
 } as const satisfies PartialTranslation<typeof source>;

@@ -21,4 +21,13 @@ export const messages = {
   "error.auth.serviceStatus": "Hesap hizmeti bir hata döndürdü ({status}). Daha sonra tekrar deneyin.",
   "error.auth.deliveryTimeout":
     "OpenBot Code teslimatı zamanında onaylayamadı. Kod yine de gelebilir; tekrar göndermeden önce teslimatı kontrol edin.",
+  "error.auth.accountServiceFixed":
+    "Hesap hizmetini CODEBOT_AUTH_API_URL ortam değişkeni belirler. Adresi burada değiştirmek için onu kaldırın.",
+  "error.auth.accountServiceNotConfigured": "Önce hesap hizmetinizin adresini girin.",
+  "error.auth.accountServiceUrlInvalid": "Hesap hizmeti adresi https:// ile başlamalı ve yol içermemelidir.",
+  "error.auth.signInBrowserFailed": "OpenBot Code oturum açmak için tarayıcınızı açamadı.",
+  "error.auth.signInCancelled": "Oturum açma iptal edildi veya reddedildi.",
+  "error.auth.signInFailed": "Oturum açma tamamlanmadı. Tekrar deneyin.",
+  "error.auth.signInTimeout": "Oturum açma çok uzun sürdü. Yeniden başlatın.",
+  "error.auth.signInUnavailable": "Bu OpenBot Code oturum açmak için tarayıcı açamıyor.",
 } as const satisfies PartialTranslation<typeof source>;

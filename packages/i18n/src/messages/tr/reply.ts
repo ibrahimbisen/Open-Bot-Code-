@@ -1,4 +1,33 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/reply";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "reply.code.showAll": "Tümünü göster ({count} satır)",
+  "reply.code.showLess": "Daha az göster",
+  "reply.details.hide": "Ayrıntıları gizle",
+  "reply.details.input": "Girdi",
+  "reply.details.loading": "Ayrıntılar yükleniyor…",
+  "reply.details.output": "Çıktı",
+  "reply.details.shortened": "Kısaltıldı",
+  "reply.details.show": "Ayrıntılar",
+  "reply.details.timeline": "Zaman çizelgesi",
+  "reply.rule.count": "{count} / {max} karakter",
+  "reply.rule.description": "Her sohbet bu kuralı alır. Projeler kendi kurallarını kullanabilir.",
+  "reply.rule.empty": "Boş: yanıt kuralı gönderilmez",
+  "reply.rule.label": "Yanıtlar için kural",
+  "reply.rule.reset": "Varsayılan kuralı kullan",
+  "reply.rule.save": "Kuralı kaydet",
+  "reply.rule.saved": "Kural kaydedildi",
+  "reply.rule.title": "Yanıt kuralı",
+  "reply.summary.browsed": { one: "{count} sayfa açtı", other: "{count} sayfa açtı" },
+  "reply.summary.delegated": { one: "{count} görev devretti", other: "{count} görev devretti" },
+  "reply.summary.edited": { one: "{count} dosyayı düzenledi", other: "{count} dosyayı düzenledi" },
+  "reply.summary.ran": { one: "{count} komut çalıştırdı", other: "{count} komut çalıştırdı" },
+  "reply.summary.read": { one: "{count} dosyayı okudu", other: "{count} dosyayı okudu" },
+  "reply.summary.searched": { one: "{count} kez arama yaptı", other: "{count} kez arama yaptı" },
+  "reply.summary.worked": { one: "{count} başka araç kullandı", other: "{count} başka araç kullandı" },
+  "reply.view.description": "Kısa, yanıtı ve işin tek satırlık özetini gösterir. Ayrıntılı, adımları da gösterir.",
+  "reply.view.detailed": "Ayrıntılı",
+  "reply.view.short": "Kısa",
+  "reply.view.title": "Yanıt görünümü",
+} as const satisfies PartialTranslation<typeof source>;
