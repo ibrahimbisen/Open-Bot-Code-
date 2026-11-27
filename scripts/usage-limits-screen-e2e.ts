@@ -42,6 +42,13 @@ async function main(): Promise<void> {
     await waitForChatsIdle(page, projectName, 1);
 
     await step("13.2 the status bar shows the 5-hour and weekly limit left of the provider", async () => {
+      await until(
+        page,
+        "the engine reads the provider limits",
+        () => page.evaluate(() => window.codebot.agent.getUsage()),
+        (value) => value.limits.length > 0,
+        120_000,
+      );
       const bar = statusButton(page);
       await bar.waitFor({ state: "visible", timeout: 60_000 });
       const text = await until(

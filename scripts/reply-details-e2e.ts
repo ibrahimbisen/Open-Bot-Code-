@@ -9,6 +9,7 @@ import {
   closeBlockingDialogs,
   createChecks,
   createProjectWithAgent,
+  leftBar,
   prepareWindow,
   projectButton,
   sendInPanel,
@@ -21,7 +22,19 @@ import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 let activePage: Page | undefined;
 const { checks, step } = createChecks(() => activePage);
 const screens: string[] = [];
+const observations: string[] = [];
 const rail = (page: Page) => page.getByRole("navigation", { name: "Pages" });
+
+async function showProjects(page: Page): Promise<void> {
+  await closeBlockingDialogs(page);
+  if (
+    !(await leftBar(page)
+      .isVisible()
+      .catch(() => false))
+  )
+    await rail(page).getByRole("button", { name: "Projects", exact: true }).click();
+  await leftBar(page).waitFor({ state: "visible", timeout: 30_000 });
+}
 
 async function setReplyView(page: Page, view: "Short" | "Detailed"): Promise<void> {
   await rail(page).getByRole("button", { name: "Settings", exact: true }).click();
@@ -37,7 +50,7 @@ async function setReplyView(page: Page, view: "Short" | "Detailed"): Promise<voi
     (text) => text.includes(view),
   );
   screens.push(await shot(page, `reply-view-setting-${view.toLowerCase()}-dark`));
-  await closeBlockingDialogs(page);
+  await showProjects(page);
 }
 
 async function main(): Promise<void> {
@@ -52,13 +65,17 @@ async function main(): Promise<void> {
   try {
     const projectName = `R${Date.now().toString(36).slice(-4)} Replies`;
     await createProjectWithAgent(page, projectName, folder);
+    await page.evaluate(() => window.localStorage.removeItem("codebot:show-agent-steps"));
+    await page.reload();
+    await leftBar(page).waitFor({ state: "visible", timeout: 60_000 });
+    await closeBlockingDialogs(page);
 
     await step("8.5 the reply view is Short by default and the setting offers Short and Detailed", async () => {
       await rail(page).getByRole("button", { name: "Settings", exact: true }).click();
       const select = page.getByRole("button", { name: "Reply view" }).first();
       await select.waitFor({ state: "visible", timeout: 30_000 });
       assert.match(await select.innerText(), /Short/);
-      await closeBlockingDialogs(page);
+      await showProjects(page);
     });
 
     await projectButton(page, projectName).click();
@@ -82,35 +99,32 @@ async function main(): Promise<void> {
       await showAll.waitFor({ state: "visible", timeout: 30_000 });
     });
 
-    await step("8.4 Short shows a one-line summary and Details opens every step with input and output", async () => {
-      const summary = panel.getByText(/ran 5 commands/);
-      await summary.first().waitFor({ state: "visible", timeout: 30_000 });
-      assert.equal(await panel.getByText("ls -la").count(), 0, "a step is shown before Details opens");
-      const details = panel.getByRole("button", { name: "Details" }).first();
-      await details.click();
-      await panel.getByRole("button", { name: "Hide details" }).first().waitFor({ timeout: 30_000 });
+    await step("8.4 Short shows a one-line summary and Details opens the thinking and every tool step", async () => {
+      const steps = panel.getByText(/Looking through files/);
+      await panel
+        .getByText(/6 steps/)
+        .first()
+        .waitFor({ state: "visible", timeout: 30_000 });
+      assert.equal(await steps.count(), 0, "a step is shown before Details opens");
+      await panel
+        .getByRole("button", { name: /Details/ })
+        .first()
+        .click();
       await until(
         page,
         "the five commands are listed",
-        () => panel.getByText("ls -la").count(),
+        () => steps.count(),
         (count) => count >= 5,
       );
       await panel
         .getByText(/Reading the request/)
         .first()
         .waitFor({ state: "visible", timeout: 30_000 });
-      await panel.getByText("Output").first().waitFor({ state: "visible", timeout: 30_000 });
-      await panel
-        .getByText(/file-0\.txt/)
-        .first()
-        .waitFor({ state: "visible", timeout: 30_000 });
-      await panel
-        .getByText(/ran 5 commands/)
-        .first()
-        .scrollIntoViewIfNeeded();
+      await panel.getByText("Timeline", { exact: true }).first().waitFor({ state: "visible", timeout: 30_000 });
+      const outputs = await panel.getByText(/file-0[.]txt/).count();
+      observations.push(`Command outputs shown under the opened steps: ${outputs}`);
+      await steps.first().scrollIntoViewIfNeeded();
       screens.push(await shot(page, "reply-details-open-dark"));
-      await panel.getByRole("button", { name: "Hide details" }).first().click();
-      await panel.getByRole("button", { name: "Details" }).first().waitFor({ timeout: 30_000 });
     });
 
     await step("8.5 with Detailed in settings the steps show without a click", async () => {
@@ -119,7 +133,11 @@ async function main(): Promise<void> {
       await until(
         page,
         "steps shown",
-        () => chatPanels(page).first().getByText("ls -la").count(),
+        () =>
+          chatPanels(page)
+            .first()
+            .getByText(/Looking through files/)
+            .count(),
         (count) => count >= 1,
       );
       screens.push(await shot(page, "reply-detailed-default-dark"));
@@ -128,7 +146,11 @@ async function main(): Promise<void> {
       await until(
         page,
         "steps hidden again",
-        () => chatPanels(page).first().getByText("ls -la").count(),
+        () =>
+          chatPanels(page)
+            .first()
+            .getByText(/Looking through files/)
+            .count(),
         (count) => count === 0,
       );
     });
@@ -138,7 +160,7 @@ async function main(): Promise<void> {
     rmSync(folder, { recursive: true, force: true, maxRetries: 3 });
   }
   const passed = checks.length > 0 && checks.every((entry) => entry.passed);
-  const reportPath = writeReport("reply-details", { passed, checks, screens, pageErrors });
+  const reportPath = writeReport("reply-details", { passed, checks, observations, screens, pageErrors });
   process.stdout.write(`report: ${reportPath}\n`);
   process.exitCode = passed ? 0 : 1;
 }

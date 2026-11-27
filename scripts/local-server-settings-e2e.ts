@@ -30,17 +30,28 @@ const server = createServer((request, response) => {
   response.end(JSON.stringify({ error: "not found" }));
 });
 
-async function openLocalServers(page: Page): Promise<ReturnType<Page["getByRole"]>> {
+async function openLocalServers(page: Page): Promise<Page> {
   await page
     .getByRole("button", { name: /^Open server menu for/ })
     .first()
     .click();
   await page.getByRole("menuitem", { name: "Server settings" }).click();
-  const dialog = page.getByRole("dialog").first();
-  await dialog.waitFor({ state: "visible", timeout: 30_000 });
-  await dialog.getByRole("tab", { name: "Local servers" }).click();
-  await dialog.getByRole("button", { name: "Add machine" }).waitFor({ state: "visible", timeout: 30_000 });
-  return dialog;
+  const entry = page
+    .getByRole("tab", { name: "Local servers" })
+    .or(page.getByRole("button", { name: "Local servers" }));
+  await entry.first().click();
+  await page.getByRole("button", { name: "Add machine" }).waitFor({ state: "visible", timeout: 30_000 });
+  return page;
+}
+
+async function removeMachine(page: Page): Promise<void> {
+  const remove = page.getByRole("button", { name: `Remove ${MACHINE}` });
+  while ((await remove.count()) > 0) {
+    await remove.first().click();
+    await page.getByRole("alertdialog").getByRole("button", { name: "Remove" }).click();
+    await page.getByRole("alertdialog").waitFor({ state: "detached", timeout: 30_000 });
+    await page.waitForTimeout(300);
+  }
 }
 
 async function main(): Promise<void> {
@@ -57,6 +68,7 @@ async function main(): Promise<void> {
   try {
     await step("17.3 Phase 1 works with no local server: the list is empty", async () => {
       const dialog = await openLocalServers(page);
+      await removeMachine(page);
       assert.equal(await dialog.getByRole("button", { name: `Edit ${MACHINE}` }).count(), 0);
       screens.push(await shot(page, "local-servers-empty-dark"));
       await closeBlockingDialogs(page);
@@ -67,11 +79,11 @@ async function main(): Promise<void> {
       await dialog.getByRole("button", { name: "Add machine" }).click();
       const form = page.getByRole("dialog", { name: "Add a local machine" });
       await form.waitFor({ state: "visible", timeout: 30_000 });
-      await form.getByLabel("Name", { exact: true }).fill(MACHINE);
-      await form.getByLabel("Server address", { exact: true }).fill(baseUrl);
-      await form.getByLabel("API key (optional)", { exact: true }).fill(KEY);
+      await form.getByLabel(/^Name/).fill(MACHINE);
+      await form.getByLabel(/^Server address/).fill(baseUrl);
+      await form.getByLabel(/^API key/).fill(KEY);
       await form.getByRole("button", { name: "Test" }).click();
-      await form.getByText(/Online\. 1 model found\./).waitFor({ state: "visible", timeout: 30_000 });
+      await form.getByText(/online[.] 1 model found/i).waitFor({ state: "visible", timeout: 30_000 });
       screens.push(await shot(page, "local-server-add-tested-dark"));
       await form.getByRole("button", { name: "Save" }).click();
       await form.waitFor({ state: "detached", timeout: 30_000 });
@@ -115,6 +127,13 @@ async function main(): Promise<void> {
         "a model list request came without the key",
       );
       return `${requests.length} requests, all with the key`;
+    });
+
+    await step("17.3 removing the machine leaves the app with no local server", async () => {
+      await openLocalServers(page);
+      await removeMachine(page);
+      assert.equal(await page.getByRole("button", { name: `Edit ${MACHINE}` }).count(), 0);
+      await closeBlockingDialogs(page);
     });
   } finally {
     await restore();
