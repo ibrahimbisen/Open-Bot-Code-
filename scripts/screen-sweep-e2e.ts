@@ -343,6 +343,8 @@ async function home(options: { resetDock?: boolean } = {}): Promise<void> {
       () => page.evaluate(() => window.__codebotProjectDock?.panelCount() ?? 0),
       (count) => count === 1,
     );
+    await page.waitForTimeout(500);
+    await page.evaluate((widthKey) => window.localStorage.removeItem(widthKey), PREVIEW_WIDTH_KEY);
   }
   await escapeAll();
   await openProject(PROJECT);

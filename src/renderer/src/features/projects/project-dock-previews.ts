@@ -58,6 +58,7 @@ export function createPreviewDock(deps: PreviewDockDeps) {
       const active = group.activePanel;
       const params = active ? deps.parsed(active) : null;
       if (total <= 0 || !params || isChatPanel(params) || !isTransientKind(params.kind)) return;
+      if (rowOf(group).length < 2) return;
       clearTimeout(widthTimer);
       widthTimer = setTimeout(
         () => writePreviewFraction(clampPreviewFraction(event.width / total)),

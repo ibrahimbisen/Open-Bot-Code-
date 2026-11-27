@@ -971,6 +971,7 @@
 
 .message-data-table-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--codebot-space-1);
   margin-top: var(--codebot-space-1);
