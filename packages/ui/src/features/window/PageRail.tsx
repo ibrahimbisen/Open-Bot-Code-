@@ -475,6 +475,7 @@ export interface PageRailProps {
   mediaCredits?: readonly MediaCreditsRailRow[] | undefined;
   onMediaCredits?: ((provider: MediaCreditsRailRow["provider"]) => void) | undefined;
   onAgents: () => void;
+  agentsLabel?: string | undefined;
   onWorkflows?: (() => void) | undefined;
   onPreloadWorkflows?: (() => void) | undefined;
   onTasks?: ((button: HTMLElement) => void) | undefined;
@@ -761,7 +762,11 @@ export function PageRail(props: PageRailProps) {
             pageGroup = element;
           }}
         >
-          <RailButton label={t("app.rail.agents")} current={props.current === "agents"} onClick={props.onAgents}>
+          <RailButton
+            label={props.agentsLabel ?? t("app.rail.agents")}
+            current={props.current === "agents"}
+            onClick={props.onAgents}
+          >
             <Bot aria-hidden="true" />
           </RailButton>
           <For each={pages().filter((page) => props.pinned.includes(page.id))} keyed={(page) => page.id}>

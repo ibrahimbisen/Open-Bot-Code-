@@ -357,9 +357,7 @@ export function WorkspaceShell(props: {
     <ConnectorsProvider>
       <WindowBackdrop />
       <div class="app-window">
-        <Show when={!projectShell}>
-          <WorkspacePageRail hidden={chatWindow || remoteDesktopWorkspaceVisible()} />
-        </Show>
+        <WorkspacePageRail hidden={chatWindow || remoteDesktopWorkspaceVisible()} projects={projectShell} />
         <WorkspaceFrame
           class={
             chatWindow

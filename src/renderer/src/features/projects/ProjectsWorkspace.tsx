@@ -6,6 +6,7 @@ import { ProjectColumn } from "./ProjectColumn";
 import { ProjectCreateDialog } from "./ProjectCreateDialog";
 import { ProjectDock } from "./ProjectDock";
 import { ProjectSettingsDialog } from "./ProjectSettingsDialog";
+import "./project-explorer-slots";
 import { useProjects } from "./projects-context";
 
 export function ProjectsWorkspace() {

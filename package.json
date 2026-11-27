@@ -231,7 +231,7 @@
     "test:api": "bun run --cwd apps/auth-api test",
     "test:backend": "vitest run src/backend",
     "test:browser": "bun scripts/browser-smoke.ts",
-    "test:project-shell": "bun scripts/project-shell-e2e.ts",
+    "test:project-shell": "bun scripts/project-shell-e2e.ts --allow-mutations",
     "test:server-setup-page": "bun scripts/server-setup-page-e2e.ts",
     "test:browser-agent-session": "bun scripts/browser-agent-session-e2e.ts",
     "test:update-rollout": "bun scripts/update-rollout-e2e.ts",

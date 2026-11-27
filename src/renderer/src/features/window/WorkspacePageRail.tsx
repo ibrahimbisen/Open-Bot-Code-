@@ -34,7 +34,7 @@ import { desktopMediaCredits } from "../workflows/workflows-port";
 import { RailHelpMenu } from "./RailHelpMenu";
 import { useWindowPage } from "./window-page-context";
 
-export function WorkspacePageRail(props: { hidden: boolean }) {
+export function WorkspacePageRail(props: { hidden: boolean; projects?: boolean }) {
   const text = useText();
   const windowPage = useWindowPage();
   const advanced = useAdvancedFeatures();
@@ -125,6 +125,7 @@ export function WorkspacePageRail(props: { hidden: boolean }) {
         setPendingPluginSlug(provider);
         setSkillsMarketplaceOpen(true);
       }}
+      agentsLabel={props.projects ? text.t("project.rail.projects") : undefined}
       onAgents={() => windowPage.showAgents()}
       onWorkflows={() => windowPage.openWorkflows(null)}
       onPreloadWorkflows={() => void WorkflowsPage.preload()}

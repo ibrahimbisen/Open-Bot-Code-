@@ -21,7 +21,7 @@ import { useText } from "@codebot/ui/text";
 import { For, Show } from "solid-js";
 import { useLayout } from "../../layout";
 import { useServers } from "../servers/servers-context";
-import { useSettings } from "../settings/settings-context";
+import { ProjectStatusEntries } from "./ProjectStatusEntries";
 import { projectSlots } from "./project-slots";
 import { RECENT_CHAT_COUNT, useProjects } from "./projects-context";
 
@@ -205,7 +205,6 @@ export function ProjectsLeftBar() {
   const projects = useProjects();
   const layout = useLayout();
   const { activeServer } = useServers();
-  const settings = useSettings();
   const compact = () => layout.leftPanelCompact();
   const archived = () => projects.state.projects.filter((entry) => entry.archivedAt !== null);
   return (
@@ -276,28 +275,7 @@ export function ProjectsLeftBar() {
       <footer class="project-left-bar-footer">
         <Show when={projectSlots.leftBarAdvanced}>{(slot) => slot()({ compact: compact() })}</Show>
         <Show when={projectSlots.leftBarFooter}>{(slot) => slot()({ compact: compact() })}</Show>
-        <Show
-          when={!compact()}
-          fallback={
-            <IconButton
-              label={t("project.leftBar.settings")}
-              size="icon-sm"
-              variant="ghost"
-              onClick={(event) => settings.openAppSettings(event.currentTarget)}
-            >
-              <Settings />
-            </IconButton>
-          }
-        >
-          <Button
-            variant="ghost"
-            class="project-left-bar-settings"
-            onClick={(event) => settings.openAppSettings(event.currentTarget)}
-          >
-            <Settings />
-            {t("project.leftBar.settings")}
-          </Button>
-        </Show>
+        <ProjectStatusEntries compact={compact()} />
       </footer>
     </aside>
   );
