@@ -45,7 +45,6 @@ const SECOND_PROJECT = "Backend";
 const THIRD_PROJECT = "Docs";
 const FIRST_CHAT = "Explain the server";
 const LANGUAGE_STEP_KEY = "codebot:language-step-done";
-const DOCK_KEY_PREFIX = "codebot:project-dock:v1:";
 const PREVIEW_WIDTH_KEY = "codebot:project-preview-width:v1";
 const RAIL_FIXED = new Set([english("app.rail.more"), english("app.rail.settings"), "Projects", "Help"]);
 
@@ -133,9 +132,12 @@ async function settle(): Promise<void> {
   await page.waitForTimeout(250);
 }
 
-async function shot(name: string, options: { settle?: boolean } = {}): Promise<void> {
+async function shot(name: string, options: { settle?: boolean; keepMouse?: boolean } = {}): Promise<void> {
   assert.ok(current, "no variant");
-  if (options.settle !== false) await settle();
+  if (options.settle !== false) {
+    if (options.keepMouse !== true) await page.mouse.move(1, Math.round(current.height * 0.6));
+    await settle();
+  }
   const size = `${current.width}x${current.height}`;
   const folder = join(OUT, current.theme, size);
   mkdirSync(folder, { recursive: true });
@@ -201,8 +203,9 @@ async function escapeAll(): Promise<void> {
     const settings = await visible(page.locator(".settings-modal-content"));
     if (!menu && !dialog && !settings) return;
     if (dialog) {
-      const inner = anyDialog().locator("input, textarea, button").first();
-      await inner.focus().catch(() => undefined);
+      const fields = anyDialog().locator("input:not([type=hidden]), textarea");
+      const target = (await fields.count()) > 0 ? fields.first() : anyDialog();
+      await target.focus().catch(() => undefined);
     }
     if (settings && !menu && !dialog) {
       await page
@@ -328,15 +331,18 @@ async function openProject(name: string): Promise<void> {
 async function home(options: { resetDock?: boolean } = {}): Promise<void> {
   await escapeAll();
   if (options.resetDock) {
-    await page.evaluate(
-      ([prefix, widthKey]) => {
-        for (const key of Object.keys(window.localStorage))
-          if (key.startsWith(prefix) || key === widthKey) window.localStorage.removeItem(key);
-      },
-      [DOCK_KEY_PREFIX, PREVIEW_WIDTH_KEY] as const,
-    );
     await closeBrowserTabs();
-    await reloadApp();
+    await openProject(PROJECT);
+    await page.evaluate((widthKey) => {
+      window.localStorage.removeItem(widthKey);
+      const dock = window.__codebotProjectDock;
+      for (let attempt = 0; dock && attempt < 60 && dock.panelCount() > 0; attempt += 1) dock.closeActive();
+    }, PREVIEW_WIDTH_KEY);
+    await until(
+      "one dock panel",
+      () => page.evaluate(() => window.__codebotProjectDock?.panelCount() ?? 0),
+      (count) => count === 1,
+    );
   }
   await escapeAll();
   await openProject(PROJECT);
@@ -368,14 +374,24 @@ async function firstAgentId(): Promise<string> {
   }, projectId);
 }
 
+const settingsNav = () => page.locator(".settings-modal-nav");
+
+function treeItem(path: string): Locator {
+  const parts = path.split("/");
+  const cssBackslash = "\\\\";
+  const posix = `[role=treeitem][data-row-key$="/${parts.join("/")}"]`;
+  const windows = `[role=treeitem][data-row-key$="${cssBackslash}${parts.join(cssBackslash)}"]`;
+  return column().locator(`${posix}, ${windows}`).first();
+}
+
 async function settingsTabs(): Promise<string[]> {
-  return page
+  return settingsNav()
     .locator("[role=tab]")
     .evaluateAll((tabs) => tabs.map((tab) => (tab.textContent ?? "").trim()).filter(Boolean));
 }
 
 async function shootSettingsTab(prefix: string, tab: string): Promise<void> {
-  await page.getByRole("tab", { name: tab, exact: true }).click();
+  await settingsNav().getByRole("tab", { name: tab, exact: true }).click();
   await settingsContent().waitFor({ state: "visible", timeout: WAIT_MS });
   await page.waitForTimeout(500);
   await settingsContent().evaluate((element) => {
@@ -386,7 +402,7 @@ async function shootSettingsTab(prefix: string, tab: string): Promise<void> {
     const moved = await settingsContent().evaluate((element) => {
       const before = element.scrollTop;
       element.scrollTop = before + Math.round(element.clientHeight * 0.85);
-      return element.scrollTop > before + 4;
+      return element.scrollTop > before + 80;
     });
     if (!moved) break;
     await shot(`${prefix}-${slug(tab)}-${part}`);
@@ -421,6 +437,14 @@ async function enableAdvancedFeatures(): Promise<void> {
 }
 
 async function setup(): Promise<void> {
+  const reused = await page.evaluate(
+    async (name) => (await window.codebot.projects.list()).find((entry) => entry.name === name)?.id ?? null,
+    PROJECT,
+  );
+  if (reused !== null && SKIP_FRESH) {
+    projectId = reused;
+    return;
+  }
   writeWorkspace();
   await page.evaluate((model) => {
     window.localStorage.setItem("codebot:language-step-done", "true");
@@ -554,16 +578,19 @@ async function phaseMain(variant: Variant): Promise<void> {
     await page.keyboard.press("Backspace");
   });
   await step("chat model picker", async () => {
-    await chatPanels()
+    const picker = chatPanels()
       .first()
-      .getByRole("button", { name: /^Model of this chat/ })
-      .click();
-    await page
-      .locator("[role=menu], [role=listbox], [role=dialog]")
-      .first()
-      .waitFor({ state: "visible", timeout: WAIT_MS });
+      .getByRole("button", { name: /^Model of this chat/ });
+    await picker.click();
+    await until(
+      "the model picker opens",
+      () => picker.getAttribute("aria-expanded"),
+      (value) => value === "true",
+    );
+    await page.waitForTimeout(400);
     await shot("chat-model-picker");
     await escapeAll();
+    await page.keyboard.press("Escape");
   });
   await step("chat row menu", async () => {
     await column()
@@ -633,23 +660,23 @@ async function phaseMain(variant: Variant): Promise<void> {
     await escapeAll();
   });
   await step("file tree", async () => {
-    const tree = column().getByRole("tree").first();
-    await tree.waitFor({ state: "visible", timeout: WAIT_MS });
+    await column().getByRole("tree").first().waitFor({ state: "visible", timeout: WAIT_MS });
     for (const folder of ["src", "docs"]) {
-      const item = tree.getByRole("treeitem", { name: folder, exact: true }).first();
+      const item = treeItem(folder);
+      await item.waitFor({ state: "visible", timeout: WAIT_MS });
       if ((await item.getAttribute("aria-expanded")) !== "true") await item.click();
     }
-    await tree.getByRole("treeitem", { name: "server.ts" }).first().waitFor({ state: "visible", timeout: WAIT_MS });
+    await treeItem("src/server.ts").waitFor({ state: "visible", timeout: WAIT_MS });
     await shot("file-tree");
   });
   await step("file open in Monaco", async () => {
-    await column().getByRole("tree").first().getByRole("treeitem", { name: "server.ts" }).first().click();
+    await treeItem("src/server.ts").click();
     await page.locator(".monaco-editor").first().waitFor({ state: "visible", timeout: WAIT_MS });
     await page.locator(".monaco-editor .view-line").first().waitFor({ state: "visible", timeout: WAIT_MS });
     await shot("file-monaco");
   });
   await step("markdown preview", async () => {
-    await column().getByRole("tree").first().getByRole("treeitem", { name: "README.md" }).first().click();
+    await treeItem("README.md").click();
     await page
       .getByText("A small project for the screen sweep.")
       .first()
@@ -739,15 +766,15 @@ async function phaseMain(variant: Variant): Promise<void> {
     await home({ resetDock: true });
     const agentId = await firstAgentId();
     await page.evaluate(
-      ([id, agent]) =>
+      ([id, agent, file]) =>
         window.__codebotProjectDock?.openSlot({
           kind: "file",
           projectId: id,
           title: "server.ts",
-          data: { path: "src/server.ts", name: "server.ts", agentId: agent },
+          data: { path: file, name: "server.ts", agentId: agent },
           placement: "right",
         }),
-      [projectId, agentId] as const,
+      [projectId, agentId, join(WORKSPACE, "src", "server.ts")] as const,
     );
     await page.locator(".monaco-editor").first().waitFor({ state: "visible", timeout: WAIT_MS });
     await page.evaluate(
@@ -795,7 +822,7 @@ async function phaseMain(variant: Variant): Promise<void> {
     if (await visible(layout)) {
       await layout.hover();
       await page.waitForTimeout(500);
-      await shot("server-menu-layout");
+      await shot("server-menu-layout", { keepMouse: true });
     }
     await escapeAll();
   });

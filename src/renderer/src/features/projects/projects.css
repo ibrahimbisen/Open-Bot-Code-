@@ -697,6 +697,8 @@
 }
 
 .project-chat-panel {
+  container-name: project-chat-panel;
+  container-type: inline-size;
   display: flex;
   width: 100%;
   height: 100%;
@@ -711,7 +713,6 @@
   display: flex;
   flex-wrap: nowrap;
   min-width: 0;
-  overflow: hidden;
   flex: 0 0 auto;
   align-items: center;
   gap: var(--codebot-space-2);
@@ -767,6 +768,32 @@
 
 .project-panel-spinner {
   flex: 0 0 auto;
+}
+
+.project-panel-header > .provider-model-picker {
+  min-width: 0;
+  flex: 0 0.1 auto;
+}
+
+.project-panel-header > .provider-model-picker > .provider-model-trigger {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.project-panel-header > .ui-icon-button {
+  flex: none;
+}
+
+@container project-chat-panel (max-width: 520px) {
+  .project-panel-agent {
+    display: none;
+  }
+}
+
+@container project-chat-panel (max-width: 380px) {
+  .project-panel-project {
+    display: none;
+  }
 }
 
 .project-panel-body {
@@ -901,10 +928,16 @@
 }
 
 .project-dialog-actions {
+  position: sticky;
+  z-index: 1;
+  bottom: calc(var(--codebot-space-6) * -1);
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--codebot-space-2);
+  margin: 0 calc(var(--codebot-space-6) * -1) calc(var(--codebot-space-6) * -1);
+  background: var(--codebot-bg-control);
+  padding: var(--codebot-space-3) var(--codebot-space-6) var(--codebot-space-6);
 }
 
 .project-folder-field {
