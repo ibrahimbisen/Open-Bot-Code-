@@ -34,8 +34,14 @@ The values are original. They are not copied from a VS Code theme file. They are
 success, warning and danger have a contrast of at least 4.5 on each background. In High Contrast,
 text and muted text have at least 7 (WCAG AAA). CodeBot writes each built-in file only once: the file
 `.seeded.json` lists the files that it wrote. A file that you delete stays deleted, and a file that
-you edit is never replaced. A palette that a new version adds is written at the next start. A file
-that an older version wrote keeps its old values and its old name.
+you edit is never replaced. A palette that a new version adds is written at the next start. The file
+`.built-in.json` keeps the text that CodeBot wrote for each built-in file. When a new version changes a
+built-in palette and the file still holds that text, CodeBot replaces it with the new values. A file
+that a version before `.built-in.json` wrote keeps its old values; test:themes refreshes such files.
+
+In High Contrast, an own chat bubble shows on the surface with a ring in the chat colour, so its text
+stays at WCAG AAA. A solid chat bubble in every other theme uses dark or white text, whichever has the
+better contrast on the chat colour.
 
 A palette file:
 

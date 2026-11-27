@@ -314,6 +314,8 @@ function minimum(palette: AppThemePalette, sample: TextSample): 3 | 4.5 | 7 {
   return sample.large ? 3 : 4.5;
 }
 
+const OWN_MESSAGE = "own message";
+
 const NEW_PALETTE_IDS = new Set(
   BUILT_IN_THEME_PALETTES.filter(
     (item) => item.id !== CODEBOT_DARK_PALETTE.id && item.id !== CODEBOT_LIGHT_PALETTE.id,
@@ -327,11 +329,13 @@ async function checkParts(view: string, palette: AppThemePalette, parts: Record<
     record(`${label} is shown`, result.found, selector);
     if (!result.found) continue;
     const dark = palette.scheme === "dark";
-    record(
-      `${label} background follows the ${palette.scheme} theme`,
-      dark ? result.luminance < 0.2 : result.luminance > 0.55,
-      `luminance ${result.luminance.toFixed(3)}`,
-    );
+    const chatColored = part === OWN_MESSAGE && palette.id !== CODEBOT_HIGH_CONTRAST_PALETTE.id;
+    if (!chatColored)
+      record(
+        `${label} background follows the ${palette.scheme} theme`,
+        dark ? result.luminance < 0.2 : result.luminance > 0.55,
+        `luminance ${result.luminance.toFixed(3)}`,
+      );
     const failing = result.samples.filter((sample) => sample.ratio < minimum(palette, sample));
     const worst = [...result.samples].sort((a, b) => a.ratio - b.ratio)[0];
     const strict = NEW_PALETTE_IDS.has(palette.id);
@@ -588,7 +592,7 @@ try {
   );
   await eachTheme("chat", {
     "chat reply": ".message-entry-agent .ui-bubble-content",
-    "own message": ".message-entry-user .ui-bubble-content",
+    [OWN_MESSAGE]: ".message-entry-user .ui-bubble-content",
     "code block": ".message-code-block",
     "chat tabs": ".dv-tabs-and-actions-container",
   });
@@ -675,6 +679,10 @@ try {
       await checkParts("dock", palette, { "panel menu": "[role=menu]" });
       await page.keyboard.press("Escape");
       await page.getByRole("menu").first().waitFor({ state: "hidden" });
+      await page.evaluate(() => {
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      });
+      await page.getByRole("tooltip").first().waitFor({ state: "hidden" });
     },
   );
 

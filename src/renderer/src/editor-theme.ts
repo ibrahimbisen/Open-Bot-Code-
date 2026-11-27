@@ -108,7 +108,7 @@ export function editorTokens({ colors }: AppThemePalette): EditorTokens {
     syntaxKeyword: code(colors.accent),
     syntaxString: code(colors.success),
     syntaxNumber: code(colors.warning),
-    syntaxType: code(mix(colors.warning, colors.text, 30)),
+    syntaxType: code(mix(colors.success, colors.accent, 50)),
     syntaxFunction: code(mix(colors.accent, colors.danger, 40)),
     syntaxVariable: code(colors.text),
     syntaxOperator: code(mix(colors.text, colors.textMuted, 40)),
