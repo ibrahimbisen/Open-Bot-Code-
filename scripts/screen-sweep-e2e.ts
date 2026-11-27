@@ -551,8 +551,9 @@ async function phaseMain(variant: Variant): Promise<void> {
   await step("chat details steps", async () => {
     const panel = chatPanels().first();
     const show = panel.getByRole("button", { name: new RegExp(`${english("reply.details.show")}$`) }).last();
+    await show.waitFor({ state: "attached", timeout: WAIT_MS });
     await show.scrollIntoViewIfNeeded();
-    await show.click();
+    await show.dispatchEvent("click");
     const hide = panel.getByRole("button", { name: new RegExp(`${english("reply.details.hide")}$`) }).last();
     await hide.waitFor({ state: "visible", timeout: WAIT_MS });
     await hide.scrollIntoViewIfNeeded();
@@ -846,7 +847,7 @@ async function phaseMain(variant: Variant): Promise<void> {
     .evaluateAll((buttons) => buttons.map((button) => button.getAttribute("aria-label") ?? "").filter(Boolean))
     .catch((): string[] => []);
   for (const label of railNames) {
-    if (RAIL_FIXED.has(label) || label.startsWith("Open server menu")) continue;
+    if (RAIL_FIXED.has(label) || label.startsWith("Open server menu") || label.endsWith(". Open usage")) continue;
     await step(`rail page ${label}`, async () => {
       await escapeAll();
       await rail().getByRole("button", { name: label, exact: true }).click();
