@@ -425,7 +425,7 @@ try {
       const invite = await runCauseEffect(team.createInvite("member"));
       const joined = await call(TEAM_API_ROUTES.join.server, { body: { inviteToken: invite.token, ...MEMBER } });
       assert.equal(joined.status, 201, `Join returned ${joined.status}.`);
-      await setLevels(ownerToken, { [closed]: "none", [viewer]: "view" });
+      await setLevels(ownerToken, { [open]: "manage", [closed]: "none", [viewer]: "view" });
       return {
         workflows: {
           open: await hostWorkflow("Open flow", open),
@@ -697,6 +697,6 @@ try {
   await stopHost();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }).catch(() => undefined);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"}: ${join(OUT, "report.json")}\n`);
 }

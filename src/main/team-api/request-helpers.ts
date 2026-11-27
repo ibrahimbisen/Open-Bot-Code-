@@ -280,7 +280,10 @@ export function requireAgentLevel(
   agentId: string,
   required: Exclude<AgentAccessLevel, "none">,
 ): void {
-  if (agentAccessRank(context.agentLevel(agentId)) >= agentAccessRank(required)) return;
+  const level = context.agentLevel(agentId);
+  if (agentAccessRank(level) >= agentAccessRank(required)) return;
+  // An agent that a member cannot see answers as a missing agent, so the answer does not show that it exists.
+  if (level === "none") throw new HttpError(404, sourceText("error.team.agentNotFound"));
   throw new HttpError(
     403,
     sourceText(required === "manage" ? "error.team.agentManageDenied" : "error.team.agentViewOnly"),

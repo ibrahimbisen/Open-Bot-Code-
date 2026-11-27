@@ -251,7 +251,8 @@ Paths are relative to `src/main/` unless shown otherwise.
 - `agentAccessLevel` (line 36) returns:
   - `"manage"` for any member whose role is not `"member"`.
   - `"none"` if the server state is `"closed"`.
-  - Otherwise, starts at `state.everyone[agentId] ?? "manage"` and raises the level from matching role grants.
+  - `"manage"` for the member that `state.owners` records as the creator of the agent.
+  - Otherwise, starts at `state.everyone[agentId] ?? "none"` and raises the level from matching role grants (D23).
 - `AgentAccessStore` (line 122) keeps a `revision` and a `subscribe` listener list. It writes through `preference-file` (outside scope).
 
 ## Key classes and where they are built
@@ -359,7 +360,7 @@ Paths are relative to `src/main/` unless shown otherwise.
 4. Dynamic Island and the agent dock are destroyed twice on quit. `prepareForShutdown` calls `destroy()` directly (`index.ts` lines 2076 and 2077). The teardown steps at `application-services.ts` lines 1143 and 1234 call it again. Both `destroy()` methods clear their window maps, so a second call should do nothing (read from the code, not run).
 5. Analytics is gated. `analyticsEnabled` is true only for a packaged production build, or when a capture URL is set (`application-services.ts` line 3703). Dev builds send nothing unless `CODEBOT_ANALYTICS_CAPTURE_URL` is set.
 6. Pre-ready wiring needs getters. `createRendererForwarders` (`index.ts` line 559) gets `getAgentService: () => services?.service ?? null` and similar. Do not pass the `services` value into module-scope code. `services` is `null` until `createApplicationServices` returns.
-7. Agent access default for members is `"manage"` when there is no entry. `agentAccessLevel` (line 36) returns `state.everyone[agentId] ?? "manage"`. Check this default before changing access logic.
+7. Agent access default for members is `"none"` when there is no entry (D23). A member always manages the agents that `state.owners` records for them; the Team API records the owner when a member creates an agent, a project or a project agent (`claimAgents`). Check this default before changing access logic.
 8. Dev-only env values are read only when `app.isPackaged` is false (for example `index.ts` lines 269 to 275, 301, 304). Packaged builds ignore them.
 9. Archive import limits matter. `MANIFEST_MAX_BYTES` is 64 MiB (`agent-archive.ts` line 113). `isUnsafeEntry` (line 229) blocks unsafe entry names. Keep both when changing the import path.
 10. `index.ts` has module-scope Electron calls. Tests cannot import it. The source coverage tests read it as text (`src/main/AGENTS.md`).
