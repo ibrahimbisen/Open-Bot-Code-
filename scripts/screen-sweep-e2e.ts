@@ -761,6 +761,8 @@ async function phaseMain(variant: Variant): Promise<void> {
     await page.keyboard.press("Escape");
     await openMenu().waitFor({ state: "detached", timeout: WAIT_MS });
     await shot("dock-browser-after-menu");
+    const tooltips = await page.locator(".ui-tooltip").allInnerTexts();
+    assert.equal(tooltips.length, 0, `text stays over the browser panel: ${tooltips.join(", ")}`);
   });
   await step("browser next to a file panel", async () => {
     await home({ resetDock: true });
@@ -796,7 +798,8 @@ async function phaseMain(variant: Variant): Promise<void> {
       .evaluateAll((groups) => groups.map((group) => Math.round(group.getBoundingClientRect().width)));
     await shot("dock-browser-next-to-file");
     const narrowest = Math.min(...widths);
-    assert.ok(narrowest >= 200, `a dock panel is only ${narrowest} px wide (${widths.join(", ")})`);
+    const total = widths.reduce((sum, width) => sum + width, 0);
+    assert.ok(narrowest >= total * 0.2, `a dock panel is only ${narrowest} of ${total} px wide (${widths.join(", ")})`);
     await closeBrowserTabs();
   });
   await step("account entry", async () => {
