@@ -198,7 +198,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "サーバーへの高速接続",
   "settings.keepRemoteSessions.description":
     "参加しているサーバーへの接続を起動の間も維持します。CodeBot の起動が約 1 秒速くなります。CodeBot を終了しても、CodeBot サービスは接続を閉じません。",
-  "settings.permissions.title": "権限",
   "settings.notifications.whatYouHear": "通知を受け取る内容",
   "settings.notifications.allDevices": "すべてのデバイス",
   "settings.notifications.thisComputer": "このコンピューター",
@@ -311,10 +310,6 @@ export const messages = {
   "settings.agentDock.agents.description": "{server} のエージェントです。サーバーごとに専用のドックがあります。",
   "settings.agentDock.agents.empty": "このサーバーにはまだエージェントがいません。",
   "settings.analytics.title": "分析データをアカウントに関連付ける",
-  "settings.analytics.description":
-    "オン: 利用状況と安定性のメタデータを、アカウント ID とメールアドレスとともに CodeBot の自社運用の分析基盤に送信します。あなたとエージェントが閲覧した Web サイト、ツールの使用状況、セットアップの日次概要も含みます。オフ: ターン数やトークン数などの基本的な使用状況のみを、ランダムなインストール ID とともに送信します。チャット、ファイル、プロンプトは送信しません。",
-  "settings.analytics.webDescription":
-    "オン: 利用状況と安定性のメタデータを、アカウント ID とメールアドレスとともに CodeBot の自社運用の分析基盤に送信します。オフ: 同じメタデータをランダムなインストール ID のみとともに送信します。チャット、ファイル、プロンプトは送信しません。この設定はこのブラウザーに適用されます。",
   "settings.tab.general.title": "一般",
   "settings.tab.general.description": "チャットの動作と CodeBot が共有する内容を設定します。",
   "settings.tab.agents.title": "エージェント",

@@ -200,7 +200,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "اتصال سريع بالخوادم",
   "settings.keepRemoteSessions.description":
     "الإبقاء على الاتصال بالخوادم المنضم إليها بين مرات التشغيل. يبدأ CodeBot أسرع بنحو ثانية. عند إنهاء CodeBot، لا تغلق خدمة CodeBot الاتصال.",
-  "settings.permissions.title": "الأذونات",
   "settings.notifications.whatYouHear": "ما تُبلَّغ به",
   "settings.notifications.allDevices": "كل أجهزتي",
   "settings.notifications.thisComputer": "هذا الحاسوب",
@@ -311,10 +310,6 @@ export const messages = {
   "settings.agentDock.agents.description": "وكلاء {server}. لكل خادم شريطه الخاص.",
   "settings.agentDock.agents.empty": "لا يوجد وكلاء على هذا الخادم بعد.",
   "settings.analytics.title": "ربط التحليلات بحسابي",
-  "settings.analytics.description":
-    "مفعّل: تُرسل بيانات الاستخدام والموثوقية الوصفية إلى تحليلات CodeBot المستضافة ذاتيًا مع معرّف حسابك وبريدك الإلكتروني، ومع المواقع التي تزورها أنت ووكلاؤك، واستخدام الأدوات وملخص يومي لإعدادك. متوقف: يُرسل الاستخدام الأساسي فقط، مثل الأدوار وأعداد الرموز، مع معرّف تثبيت عشوائي. لا تُرسل الدردشات والملفات والموجّهات أبدًا.",
-  "settings.analytics.webDescription":
-    "مفعّل: تُرسل بيانات الاستخدام والموثوقية الوصفية إلى تحليلات CodeBot المستضافة ذاتيًا مع معرّف حسابك وبريدك الإلكتروني. متوقف: تُرسل البيانات الوصفية نفسها مع معرّف تثبيت عشوائي فقط. لا تُرسل الدردشات والملفات والموجّهات أبدًا. ينطبق هذا الإعداد على هذا المتصفح.",
   "settings.tab.general.title": "عام",
   "settings.tab.general.description": "اختر كيف تعمل المحادثات وما يشاركه CodeBot.",
   "settings.tab.agents.title": "الوكلاء",

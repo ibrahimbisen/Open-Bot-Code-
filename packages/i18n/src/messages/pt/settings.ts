@@ -199,7 +199,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "Conexão rápida a servidores",
   "settings.keepRemoteSessions.description":
     "Mantenha a conexão com os servidores em que você entrou entre as inicializações. O CodeBot inicia cerca de um segundo mais rápido. Ao sair do CodeBot, o serviço do CodeBot não fecha a conexão.",
-  "settings.permissions.title": "Permissões",
   "settings.notifications.whatYouHear": "Sobre o que você é avisado",
   "settings.notifications.allDevices": "Todos os meus dispositivos",
   "settings.notifications.thisComputer": "Este computador",
@@ -314,10 +313,6 @@ export const messages = {
   "settings.agentDock.agents.description": "Os agentes de {server}. Cada servidor tem seu próprio dock.",
   "settings.agentDock.agents.empty": "Este servidor ainda não tem agentes.",
   "settings.analytics.title": "Vincular a análise à minha conta",
-  "settings.analytics.description":
-    "Ativado: os metadados de uso e confiabilidade vão para o serviço de análise hospedado pelo próprio CodeBot com o ID e o e-mail da sua conta, junto com os sites que você e seus agentes visitam, o uso de ferramentas e um resumo diário da sua configuração. Desativado: só o uso básico, como turnos e contagens de tokens, vai com um ID de instalação aleatório. Chats, arquivos e prompts nunca são enviados.",
-  "settings.analytics.webDescription":
-    "Ativado: os metadados de uso e confiabilidade vão para o serviço de análise hospedado pelo próprio CodeBot com o ID e o e-mail da sua conta. Desativado: os mesmos metadados vão só com um ID de instalação aleatório. Chats, arquivos e prompts nunca são enviados. Esta configuração se aplica a este navegador.",
   "settings.tab.general.title": "Geral",
   "settings.tab.general.description": "Escolha como os chats funcionam e o que o CodeBot compartilha.",
   "settings.tab.agents.title": "Agentes",

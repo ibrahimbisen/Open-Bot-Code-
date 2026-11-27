@@ -202,7 +202,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "Connexion rapide aux serveurs",
   "settings.keepRemoteSessions.description":
     "Conservez la connexion aux serveurs que vous avez rejoints entre deux lancements. CodeBot démarre environ une seconde plus vite. Quand vous quittez CodeBot, le service CodeBot ne ferme pas la connexion.",
-  "settings.permissions.title": "Autorisations",
   "settings.notifications.whatYouHear": "Ce qui vous est signalé",
   "settings.notifications.allDevices": "Tous mes appareils",
   "settings.notifications.thisComputer": "Cet ordinateur",
@@ -320,10 +319,6 @@ export const messages = {
   "settings.agentDock.agents.description": "Les agents de {server}. Chaque serveur a son propre dock.",
   "settings.agentDock.agents.empty": "Ce serveur n’a pas encore d’agents.",
   "settings.analytics.title": "Lier les données analytiques à mon compte",
-  "settings.analytics.description":
-    "Activé : les métadonnées d’utilisation et de fiabilité sont envoyées aux services analytiques auto-hébergés d’CodeBot avec l’identifiant et l’e-mail de votre compte, ainsi que les sites web que vous et vos agents visitez, l’utilisation des outils et un résumé quotidien de votre configuration. Désactivé : seule l’utilisation de base, comme les tours et le nombre de tokens, est envoyée avec un identifiant d’installation aléatoire. Les conversations, fichiers et prompts ne sont jamais envoyés.",
-  "settings.analytics.webDescription":
-    "Activé : les métadonnées d’utilisation et de fiabilité sont envoyées aux services analytiques auto-hébergés d’CodeBot avec l’identifiant et l’e-mail de votre compte. Désactivé : les mêmes métadonnées sont envoyées avec un identifiant d’installation aléatoire uniquement. Les conversations, fichiers et prompts ne sont jamais envoyés. Ce réglage s’applique à ce navigateur.",
   "settings.tab.general.title": "Général",
   "settings.tab.general.description": "Choisir le fonctionnement des discussions et ce qu’CodeBot partage.",
   "settings.tab.agents.title": "Agents",
