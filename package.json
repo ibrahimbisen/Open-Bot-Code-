@@ -472,6 +472,7 @@
     "test:server-mode-ui": "bun scripts/fake-codex-app-run.ts scripts/server-mode-ui-e2e.ts",
     "test:server-install": "bun scripts/server-install-check.ts",
     "test:team-api-routes": "bun --preload ./scripts/team-api-routes-e2e-electron.mjs scripts/team-api-routes-e2e.ts",
+    "test:team-data-separation": "bun scripts/team-data-separation-e2e.ts",
     "test:crm-team-api": "bun scripts/crm-team-api-e2e.ts",
     "test:advanced-features": "bun scripts/advanced-features-e2e.ts",
     "test:team-legacy-clients": "bun scripts/team-api-legacy-clients-e2e.ts",
