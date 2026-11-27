@@ -468,6 +468,7 @@
     "test:computer-activity": "bun scripts/computer-activity-e2e.ts",
     "test:cua-driver-foreground-input": "bun scripts/cua-driver-foreground-input-e2e.ts",
     "test:notification-summary": "bun scripts/notification-summary-e2e.ts",
+    "test:no-billing": "bun scripts/no-billing-e2e.ts",
     "test:thread-notifications": "bun scripts/thread-notifications-e2e.ts",
     "test:browser-http-sign-in": "bun scripts/browser-http-sign-in-e2e.ts",
     "test:browser-sign-in": "bun scripts/browser-sign-in-e2e.ts",
