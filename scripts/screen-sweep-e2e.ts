@@ -7,6 +7,7 @@ import type { AppThemePalette } from "@codebot/contracts/app-appearance";
 import { BUILT_IN_THEME_PALETTES } from "@codebot/contracts/app-theme-defaults";
 import { translateFor } from "@codebot/i18n";
 import type { Locator, Page } from "playwright-core";
+import { PROJECT_COLORS } from "../src/renderer/src/features/projects/project-colors";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
 import { FAKE_CODEX_MODEL } from "./dev-automation/bench-fake-codex";
 import "./project-dock-hook";
@@ -453,14 +454,14 @@ async function setup(): Promise<void> {
     return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: model });
   }, FAKE_CODEX_MODEL);
   projectId = await page.evaluate(
-    async ({ name, folder, second, third, secondName, thirdName }) => {
+    async ({ name, folder, second, third, secondName, thirdName, blue, red }) => {
       const existing = (await window.codebot.projects.list()).find((entry) => entry.name === name);
       if (existing) return existing.id;
       const project = await window.codebot.projects.create({
         name,
         mainFolder: folder,
         accessLevel: "normal",
-        color: "#4f8fe0",
+        color: blue,
         defaultRuntime: { provider: "codex", model: "gpt-5.5", reasoningEffort: "low" },
         agents: [{ name: "Dev", role: "Developer" }],
       });
@@ -468,7 +469,7 @@ async function setup(): Promise<void> {
         name: secondName,
         mainFolder: second,
         accessLevel: "strict",
-        color: "#d9534f",
+        color: red,
         agents: [{ name: "Go", role: "Backend developer" }],
       });
       await window.codebot.projects.create({
@@ -486,6 +487,8 @@ async function setup(): Promise<void> {
       third: join(WORKSPACE, "docs"),
       secondName: SECOND_PROJECT,
       thirdName: THIRD_PROJECT,
+      blue: PROJECT_COLORS[6] ?? null,
+      red: PROJECT_COLORS[0] ?? null,
     },
   );
   await reloadApp();
@@ -546,23 +549,16 @@ async function phaseMain(variant: Variant): Promise<void> {
     await shot("chat-code-block");
   });
   await step("chat details steps", async () => {
-    const details = chatPanels()
-      .first()
-      .getByRole("button", { name: english("reply.details.show") })
-      .last();
-    await details.scrollIntoViewIfNeeded();
-    await details.click();
-    await chatPanels()
-      .first()
-      .getByRole("button", { name: english("reply.details.hide") })
-      .last()
-      .waitFor({ state: "visible", timeout: WAIT_MS });
+    const panel = chatPanels().first();
+    const show = panel.getByRole("button", { name: new RegExp(`${english("reply.details.show")}$`) }).last();
+    await show.scrollIntoViewIfNeeded();
+    await show.click();
+    const hide = panel.getByRole("button", { name: new RegExp(`${english("reply.details.hide")}$`) }).last();
+    await hide.waitFor({ state: "visible", timeout: WAIT_MS });
+    await hide.scrollIntoViewIfNeeded();
     await shot("chat-details");
-    await chatPanels()
-      .first()
-      .getByRole("button", { name: english("reply.details.hide") })
-      .last()
-      .click();
+    await hide.dispatchEvent("click");
+    await show.waitFor({ state: "visible", timeout: WAIT_MS });
   });
   await step("slash command list", async () => {
     const editor = chatPanels().first().getByRole("textbox").first();
