@@ -236,6 +236,18 @@ export const messages = {
     "Le tue scelte valgono su tutti i tuoi dispositivi. Il silenzio vale solo per questo telefono.",
   "mobile.settings.notifications.channel": "Notifiche degli agenti ({sound})",
   "mobile.settings.notifications.channelSilent": "Notifiche degli agenti (senza suono)",
+  "mobile.settings.connection.title": "Connessione",
+  "mobile.settings.connection.account": "Account",
+  "mobile.settings.connection.accountService": "Servizio account",
+  "mobile.settings.connection.accountFooter":
+    "L'indirizzo del servizio account viene impostato quando accedi. Esci per usarne un altro.",
+  "mobile.settings.connection.notSignedIn": "Non hai effettuato l'accesso",
+  "mobile.settings.connection.signal": "Indirizzo Signal",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "Facoltativo. Lascia vuoto per usare l'indirizzo Signal fornito dal servizio account. Il tuo server TURN arriva da Signal.",
+  "mobile.settings.connection.save": "Salva",
+  "mobile.settings.connection.saving": "Salvataggio…",
   "mobile.settings.conversations.title": "Conversazioni",
   "mobile.settings.conversations.hiddenChats": "Chat nascoste",
   "mobile.settings.conversations.largeFiles": "Scarica automaticamente i file grandi",
