@@ -3439,6 +3439,12 @@ export async function createApplicationServices({
     },
     crm,
     projects,
+    explorer,
+    slashCommands: service,
+    replies: {
+      rule: replyRule,
+      readTurnStepDetails: (agentId, turnId) => service.readTurnStepDetails(agentId, turnId),
+    },
     hiddenAgents: service,
     routineRunPlaces: service.routineRecords,
     agentNotificationLevels,

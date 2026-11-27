@@ -58,7 +58,7 @@ try {
   await waitFor(
     page,
     "the saved command list",
-    () => page.evaluate((id) => window.codebot.slashCommands.list({ agentId: id }), agent.id),
+    () => page.evaluate((id) => window.codebot.slashCommands.list({ agentId: id }, "local"), agent.id),
     (list) => list.commands.length > 10,
   );
   await page.bringToFront();

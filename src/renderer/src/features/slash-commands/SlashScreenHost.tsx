@@ -28,7 +28,7 @@ function SlashScreen(props: { request: NonNullable<ReturnType<typeof slashScreen
   const loadSessions = () => {
     setState("loading");
     setError(null);
-    window.codebot.slashCommands.listSessions(props.request.agentId).then(
+    window.codebot.slashCommands.listSessions(props.request.agentId, props.request.serverId).then(
       (list) => {
         setSessions(list.sessions);
         setState("ready");
@@ -127,10 +127,10 @@ function SlashScreen(props: { request: NonNullable<ReturnType<typeof slashScreen
     void run(
       id,
       async () => {
-        const result = await window.codebot.slashCommands.resumeSession({
-          agentId: props.request.agentId,
-          sessionId: id,
-        });
+        const result = await window.codebot.slashCommands.resumeSession(
+          { agentId: props.request.agentId, sessionId: id },
+          props.request.serverId,
+        );
         closeSlashScreen();
         threads.open(props.request.agentId, result.task.id);
       },

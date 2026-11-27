@@ -4,6 +4,7 @@ import { createSignal } from "solid-js";
 export interface SlashScreenRequest {
   screen: SlashCommandScreen;
   agentId: string;
+  serverId: string;
   taskId?: string | undefined;
 }
 

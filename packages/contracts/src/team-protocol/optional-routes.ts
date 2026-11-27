@@ -74,6 +74,7 @@ import { CUSTOM_PROVIDER_HARNESS_CHOICE_CODECS } from "./custom-provider-harness
 import { CUSTOM_PROVIDER_HARNESS_CODECS } from "./custom-provider-harness-v1";
 import { DISCORD_ACCESS_CODECS } from "./discord-access-v1";
 import { EVENTS_CODECS } from "./events-v1";
+import { EXPLORER_CODECS } from "./explorer-v1";
 import { FEEDBACK_WITHDRAW_CODECS } from "./feedback-withdraw-v1";
 import { FOCUS_USE_CODECS } from "./focus-use-v1";
 import { GITHUB_SKILLS_CODECS } from "./github-skills-v1";
@@ -143,6 +144,7 @@ import { PROVIDERS_V8_CODECS } from "./providers-v8";
 import { PUSH_NOTIFICATION_THREADS_CODECS } from "./push-notification-threads-v1";
 import { ANDROID_PUSH_NOTIFICATIONS_CODECS } from "./push-notifications-android-v1";
 import { PUSH_NOTIFICATIONS_CODECS } from "./push-notifications-v1";
+import { REPLIES_CODECS } from "./replies-v1";
 import { ROUTINE_FLOW_STOP_CODECS } from "./routine-flow-stop-v1";
 import { ROUTINE_FLOWS_CODECS } from "./routine-flows-v1";
 import { ROUTINE_PAUSE_REASONS_CODECS } from "./routine-pause-reasons-v1";
@@ -161,6 +163,7 @@ import { SIGN_IN_RELAY_DEEP_LINK_CODECS } from "./sign-in-relay-deep-link-v1";
 import { SIGN_IN_RELAY_CODECS } from "./sign-in-relay-v1";
 import { SKILL_LEARNING_CODECS } from "./skill-learning-v1";
 import { SKILLS_ADMIN_CODECS } from "./skills-admin-v1";
+import { SLASH_COMMANDS_CODECS } from "./slash-commands-v1";
 import { STORAGE_CHANNEL_CODECS } from "./storage-channel-v1";
 import { STORAGE_DISK_CODECS } from "./storage-disk-v1";
 import { STORAGE_USER_FILES_CODECS } from "./storage-user-files-v1";
@@ -393,6 +396,9 @@ const CODECS: ReadonlyMap<string, OptionalRouteCodec> = new Map([
   ...INSTANCE_TRANSFER_CHUNKS_CODECS,
   ...INSTANCE_TRANSFER_FULL_COPY_CODECS,
   ...PROJECTS_V1_CODECS,
+  ...SLASH_COMMANDS_CODECS,
+  ...EXPLORER_CODECS,
+  ...REPLIES_CODECS,
 ]);
 
 export function optionalRouteCodec(path: string): OptionalRouteCodec | undefined {

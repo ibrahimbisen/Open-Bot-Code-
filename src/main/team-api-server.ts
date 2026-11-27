@@ -286,6 +286,7 @@ import {
   TEAM_REASONING_EFFORTS_CAPABILITY,
   withLegacyReasoningEfforts,
 } from "@codebot/contracts/team-protocol/reasoning-efforts-v1";
+import { REPLY_RULE_CAPABILITY, TURN_STEP_DETAILS_CAPABILITY } from "@codebot/contracts/team-protocol/replies-v1";
 import { ROUTINE_QUIET_ANSWERS_CAPABILITY } from "@codebot/contracts/team-protocol/routine-quiet-answers-v1";
 import { ROUTINE_RESULTS_WHATSAPP_CAPABILITY } from "@codebot/contracts/team-protocol/routine-results-whatsapp-v1";
 import { ROUTINE_RUN_COMMAND_CAPABILITY } from "@codebot/contracts/team-protocol/routine-run-command-v1";
@@ -297,6 +298,7 @@ import { teamSideRouteCodec } from "@codebot/contracts/team-protocol/side-routes
 import { SIDEBAR_FOLDERS_CAPABILITY, sidebarFoldersEvent } from "@codebot/contracts/team-protocol/sidebar-folders-v1";
 import { SIDEBAR_PINS_CAPABILITY } from "@codebot/contracts/team-protocol/sidebar-pins-v1";
 import { withSkillSuggestionNames } from "@codebot/contracts/team-protocol/skill-learning-v1";
+import { SLASH_COMMANDS_CAPABILITY } from "@codebot/contracts/team-protocol/slash-commands-v1";
 import { STORAGE_CHANNEL_CAPABILITY } from "@codebot/contracts/team-protocol/storage-channel-v1";
 import { STORAGE_DISK_CAPABILITY } from "@codebot/contracts/team-protocol/storage-disk-v1";
 import { STORAGE_USER_FILES_CAPABILITY } from "@codebot/contracts/team-protocol/storage-user-files-v1";
@@ -455,6 +457,7 @@ import { routeCustomAgents } from "./team-api/route-custom-agents";
 import { routeDirect } from "./team-api/route-direct";
 import { routeDiscordAccess } from "./team-api/route-discord-access";
 import { routeEvents } from "./team-api/route-events";
+import { routeExplorer } from "./team-api/route-explorer";
 import { routeFeedbackWithdraw } from "./team-api/route-feedback-withdraw";
 import { routeFiles } from "./team-api/route-files";
 import { routeFocusUse } from "./team-api/route-focus-use";
@@ -513,6 +516,7 @@ import { routeProviderUse } from "./team-api/route-provider-use";
 import { routeProviders } from "./team-api/route-providers";
 import { routePushNotifications } from "./team-api/route-push-notifications";
 import { routeRemoteScreen } from "./team-api/route-remote-screen";
+import { routeReplies } from "./team-api/route-replies";
 import { routeRoutineFlows } from "./team-api/route-routine-flows";
 import { routeRoutinePauseReasons } from "./team-api/route-routine-pause-reasons";
 import { routeRoutineResults } from "./team-api/route-routine-results";
@@ -528,6 +532,7 @@ import { routeSignInRelay } from "./team-api/route-sign-in-relay";
 import { routeSkillLearning } from "./team-api/route-skill-learning";
 import { routeSkillSuggestionSave } from "./team-api/route-skill-suggestion-save";
 import { routeSkillsAdmin } from "./team-api/route-skills-admin";
+import { routeSlashCommands } from "./team-api/route-slash-commands";
 import { routeStorage } from "./team-api/route-storage";
 import { routeTeam } from "./team-api/route-team";
 import { routeThreadMessageSearch } from "./team-api/route-thread-message-search";
@@ -1494,6 +1499,9 @@ export class TeamApiServer {
         return;
       if ((await routeCrm(context, this.#options.crm)) === "handled") return;
       if ((await routeProjects(context, this.#options.projects)) === "handled") return;
+      if ((await routeExplorer(context, this.#options.explorer)) === "handled") return;
+      if ((await routeSlashCommands(context, this.#options.slashCommands)) === "handled") return;
+      if ((await routeReplies(context, this.#options.replies)) === "handled") return;
       if ((await this.#routeEvents(context)) === "handled") return;
       if ((await routeAgentImport(context, this.#options.agentImport, newAgentHidden)) === "handled") return;
       if ((await routeHermesImport(context, this.#options.hermesImport, newAgentHidden)) === "handled") return;
@@ -2886,7 +2894,7 @@ export class TeamApiServer {
           return this.#options.storage !== undefined && this.#options.channels !== undefined;
         if (capability === MACHINE_RESOURCES_CAPABILITY) return this.#options.machine !== undefined;
         if (capability === SERVER_SAFE_MODE_CAPABILITY) return false;
-        if (capability === EXPLORER_CAPABILITY) return false;
+        if (capability === EXPLORER_CAPABILITY) return this.#options.explorer !== undefined;
         if (capability === BACKGROUND_PROCESSES_CAPABILITY) return this.#options.backgroundProcesses !== undefined;
         if (capability === ROUTINES_ONCE_CAPABILITY) return true;
         if (capability === HOSTED_SITES_CAPABILITY) return this.#options.hostedSites !== undefined;
@@ -3025,6 +3033,9 @@ export class TeamApiServer {
           return this.#options.workflows !== undefined && this.#options.workflowFolders !== undefined;
         if (capability === CRM_CAPABILITY) return this.#options.crm !== undefined;
         if (capability === PROJECTS_V1_CAPABILITY) return this.#options.projects !== undefined;
+        if (capability === SLASH_COMMANDS_CAPABILITY) return this.#options.slashCommands !== undefined;
+        if (capability === REPLY_RULE_CAPABILITY || capability === TURN_STEP_DETAILS_CAPABILITY)
+          return this.#options.replies !== undefined;
         if (capability === WORKFLOWS_GITHUB_CAPABILITY) return this.#options.workflows?.github !== undefined;
         if (capability === WORKFLOWS_MEDIA_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_SUNRA_CAPABILITY) return this.#options.workflows !== undefined;

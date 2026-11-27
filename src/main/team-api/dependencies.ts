@@ -110,6 +110,9 @@ import type { VaultService } from "../vault-service";
 import type { VoiceOperationError } from "../voice-model-service";
 import type { WorkflowFileExporter } from "../workflow-file-export";
 import type { WorkflowFoldersService } from "../workflow-folders-service";
+import type { TeamApiExplorer } from "./route-explorer";
+import type { TeamApiReplies } from "./route-replies";
+import type { TeamApiSlashCommands } from "./route-slash-commands";
 
 type TeamApiAgentMethods = Pick<
   AgentService,
@@ -672,6 +675,9 @@ export interface TeamApiOptions {
   workflows?: TeamApiWorkflows;
   crm?: TeamApiCrm;
   projects?: ProjectOperations;
+  explorer?: TeamApiExplorer;
+  slashCommands?: TeamApiSlashCommands;
+  replies?: TeamApiReplies;
   hiddenAgents?: TeamApiHiddenAgents;
   routineRunPlaces?: TeamApiRoutineRunPlaces;
   agentNotificationLevels?: TeamApiAgentNotificationLevels;

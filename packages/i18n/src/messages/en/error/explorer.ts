@@ -13,4 +13,5 @@ export const messages = defineMessages("error.explorer", {
   "error.explorer.gitFailed": "Git reported an error: {detail}",
   "error.explorer.serverUnsupported": "This server cannot show files. Update the server.",
   "error.explorer.clientUnsupported": "This CodeBot version cannot show the files of a server.",
+  "error.explorer.remoteFailed": "The server could not finish this file action. Try again.",
 });
