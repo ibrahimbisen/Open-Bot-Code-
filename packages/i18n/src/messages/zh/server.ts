@@ -301,7 +301,7 @@ export const messages = {
   "server.settings.browsingMemoryLoadFailed": "无法加载浏览设置。",
   "server.settings.rolesTitle": "权限",
   "server.settings.rolesDescription":
-    "选择成员可以使用的助手。成员拥有“所有人”和自己所属角色中最高的访问权限。所有者和管理员可以使用所有助手。",
+    "选择成员可以使用的助手。成员拥有“所有人”和自己所属角色中最高的访问权限。所有者和管理员可以使用所有助手。未设置访问权限时，成员只能使用自己创建的助手。",
   "server.settings.auditTitle": "审计日志",
   "server.settings.auditDescription":
     "该服务器的成员、角色和智能体访问权限的变更，最新的在前。主机保留最近 500 条变更。",

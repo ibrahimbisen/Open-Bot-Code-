@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { isAvatarMimeType } from "@codebot/contracts/avatar-images";
 import { AVATAR_IMAGE_LIMITS, INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
+  type AgentSummary,
   BROWSER_SECRET_RESPONSE_PATH,
   type CreateAgentInput,
   canAdministerServer,
@@ -32,7 +33,7 @@ import { V5_AGENT_MODEL } from "@codebot/contracts/team-protocol/v5-adapter";
 import { V6_AGENT_MODEL } from "@codebot/contracts/team-protocol/v6-adapter";
 import { WORKFLOWS_CAPABILITY } from "@codebot/contracts/team-protocol/workflows-v1";
 import { sourceText } from "@codebot/i18n/source";
-import type { Effect } from "effect";
+import { Effect } from "effect";
 import type { AgentDuplicationFailed } from "../../backend/agent/duplication-gate";
 import { ForbiddenAttentionAnswer, InactiveAttentionRequest } from "../../backend/agent/inactive-attention-request";
 import { runCauseEffect } from "../../backend/effect-boundary";
@@ -219,10 +220,8 @@ export async function routeAgents(
     const input = agentCreate(await readJson(request));
     requireVisibleProvider(input);
     const welcome = capabilities.has(AGENT_WELCOME_CAPABILITY);
-    return json(
-      201,
-      await runCauseEffect(agents.createAgent(input, undefined, undefined, memberSender(member), welcome)),
-    );
+    const claim = (agent: AgentSummary) => Effect.promise(() => context.claimAgents([agent.id])).pipe(Effect.as(agent));
+    return json(201, await runCauseEffect(agents.createAgent(input, claim, undefined, memberSender(member), welcome)));
   }
 
   const agentMatch = url.pathname.match(/^\/v1\/agents\/([^/]+)(?:\/(.*))?$/);
@@ -258,7 +257,9 @@ export async function routeAgents(
     }
     if (method === "POST" && action === "duplicate") {
       const body = await readJson(request);
-      return json(201, await runCauseEffect(duplicateAgent(agentId, stringField(body, "operationId"))));
+      const duplicated = await runCauseEffect(duplicateAgent(agentId, stringField(body, "operationId")));
+      await context.claimAgents([duplicated.agent.id]);
+      return json(201, duplicated);
     }
     if (method === "DELETE" && !action) {
       if (!canAdministerServer(member.role))

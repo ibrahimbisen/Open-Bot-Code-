@@ -21,4 +21,7 @@ export const messages = {
   "error.project.folderMissing": "此文件夹不存在。",
   "error.project.folderProtected": "OpenBot Code 无法使用此文件夹。请选择其他文件夹。",
   "error.project.mainFolderMissing": "此项目的主文件夹丢失：{path}。请恢复该文件夹或选择新的主文件夹。",
+  "error.project.ownerOnly": "只有创建此项目的人可以使用它。",
+  "error.project.memberFolder": "请使用你在此服务器上的项目空间中的文件夹。",
+  "error.project.memberOpenAccess": "只有所有者或管理员可以给项目授予此电脑的完全访问权限。",
 } as const satisfies PartialTranslation<typeof source>;

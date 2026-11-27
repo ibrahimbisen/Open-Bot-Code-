@@ -1846,7 +1846,7 @@ export const messages = {
   "mobile.server.route.roles": "הרשאות",
   "mobile.server.route.role": "תפקיד",
   "mobile.server.roles.description":
-    "יש לבחור את הסוכנים שחברים יכולים להשתמש בהם. בעלים ומנהלים יכולים להשתמש בכל הסוכנים.",
+    "יש לבחור את הסוכנים שחברים יכולים להשתמש בהם. בעלים ומנהלים יכולים להשתמש בכל הסוכנים. בלי גישה מוגדרת, חברים משתמשים רק בסוכנים שהם יצרו.",
   "mobile.server.roles.unsupported": "יש לעדכן את OpenBot Code בשרת הזה כדי לנהל תפקידים.",
   "mobile.server.roles.unavailable": "רק בעלים או מנהל של שרת מקוון יכולים לנהל תפקידים.",
   "mobile.server.roles.loading": "טוען תפקידים…",

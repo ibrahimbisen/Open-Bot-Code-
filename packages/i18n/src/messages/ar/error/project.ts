@@ -22,4 +22,7 @@ export const messages = {
   "error.project.folderProtected": "لا يستطيع OpenBot Code استخدام هذا المجلد. اختر مجلدًا آخر.",
   "error.project.mainFolderMissing":
     "المجلد الرئيسي لهذا المشروع مفقود: {path}. استعد المجلد أو اختر مجلدًا رئيسيًا جديدًا.",
+  "error.project.ownerOnly": "يمكن فقط للشخص الذي أنشأ هذا المشروع استخدامه.",
+  "error.project.memberFolder": "استخدم مجلدًا في مساحة مشاريعك الخاصة على هذا الخادم.",
+  "error.project.memberOpenAccess": "يمكن فقط للمالك أو المسؤول منح مشروع وصولًا كاملًا إلى هذا الكمبيوتر.",
 } as const satisfies PartialTranslation<typeof source>;

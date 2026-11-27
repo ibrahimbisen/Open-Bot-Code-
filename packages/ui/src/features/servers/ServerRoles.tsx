@@ -51,7 +51,7 @@ const LEVEL_LABELS = {
 } as const satisfies Record<AgentAccessLevel, AppTextKey>;
 
 export function everyoneLevel(everyone: AgentAccessLevels, agentId: string): AgentAccessLevel {
-  return everyone[agentId] ?? "manage";
+  return everyone[agentId] ?? "none";
 }
 
 export function roleLevel(role: AgentAccessRole, agentId: string): AgentAccessLevel {

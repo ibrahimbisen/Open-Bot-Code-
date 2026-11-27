@@ -78,6 +78,7 @@ async function send(method: string, path: string, dependencies: TeamRouteDepende
     member: OWNER,
     token: "token-a",
     agentLevel: () => "manage",
+    claimAgents: async () => undefined,
     sessionId: "session-a",
     sessionExpiresAt: "2026-10-18T00:00:00.000Z",
     fromChrome: false,

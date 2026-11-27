@@ -352,7 +352,7 @@ export const messages = defineMessages("server", {
   "server.settings.browsingMemoryLoadFailed": "Could not load the browsing setting.",
   "server.settings.rolesTitle": "Permissions",
   "server.settings.rolesDescription":
-    "Choose the agents that members can use. A member gets the highest access of Everyone and of their roles. Owners and admins can use all agents.",
+    "Choose the agents that members can use. A member gets the highest access of Everyone and of their roles. Owners and admins can use all agents. With no access set, members use only the agents that they created.",
   "server.settings.auditTitle": "Audit log",
   "server.settings.auditDescription":
     "Changes to the members, roles and agent access of this server, newest first. The host keeps the newest 500 changes.",

@@ -22,4 +22,7 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code לא יכול להשתמש בתיקייה הזו. בחר תיקייה אחרת.",
   "error.project.mainFolderMissing":
     "התיקייה הראשית של הפרויקט הזה חסרה: {path}. שחזר את התיקייה או בחר תיקייה ראשית חדשה.",
+  "error.project.ownerOnly": "רק מי שיצר את הפרויקט הזה יכול להשתמש בו.",
+  "error.project.memberFolder": "יש להשתמש בתיקייה במרחב הפרויקטים שלך בשרת הזה.",
+  "error.project.memberOpenAccess": "רק בעלים או מנהל יכולים לתת לפרויקט גישה מלאה למחשב הזה.",
 } as const satisfies PartialTranslation<typeof source>;

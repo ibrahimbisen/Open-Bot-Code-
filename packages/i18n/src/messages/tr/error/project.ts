@@ -23,4 +23,7 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code bu klasörü kullanamıyor. Başka bir klasör seçin.",
   "error.project.mainFolderMissing":
     "Bu projenin ana klasörü eksik: {path}. Klasörü geri yükleyin veya yeni bir ana klasör seçin.",
+  "error.project.ownerOnly": "Bu projeyi yalnızca onu oluşturan kişi kullanabilir.",
+  "error.project.memberFolder": "Bu sunucudaki kendi proje alanınızda bir klasör kullanın.",
+  "error.project.memberOpenAccess": "Bir projeye bu bilgisayara tam erişimi yalnızca sahip veya yönetici verebilir.",
 } as const satisfies PartialTranslation<typeof source>;

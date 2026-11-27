@@ -80,7 +80,6 @@ interface Check {
 }
 
 const checks: Check[] = [];
-const observations: string[] = [];
 let failure: string | undefined;
 
 function check(name: string, passed: boolean, detail?: unknown): void {
@@ -205,6 +204,7 @@ try {
     agentAccess: access,
     agentTasks: agents,
     projects,
+    memberProjectsRoot: join(root, "member-projects"),
     explorer,
   });
   const port = await Effect.runPromise(server.start());
@@ -302,12 +302,15 @@ try {
   });
 
   const projectReads: [string, unknown][] = [
-    [PROJECTS_V1_ROUTES.list, {}],
     [PROJECTS_V1_ROUTES.get, { input: projectId }],
     [PROJECTS_V1_ROUTES.listChats, { input: { projectId } }],
     [PROJECTS_V1_ROUTES.getChat, { input: { agentId, taskId } }],
     [PROJECTS_V1_ROUTES.searchChats, { input: { projectId, query: "secret" } }],
+  ];
+  const projectLists: [string, unknown][] = [
+    [PROJECTS_V1_ROUTES.list, {}],
     [PROJECTS_V1_ROUTES.listActivity, {}],
+    [PROJECTS_V1_ROUTES.searchChats, { input: { query: "secret" } }],
   ];
   const ownerList = await call("POST", PROJECTS_V1_ROUTES.list, { token: ownerToken, body: {} });
   check(
@@ -327,9 +330,21 @@ try {
       if (answer.text.includes(projectId) || answer.text.includes("secret plan")) leaked = true;
     }
     check(
-      `${who} (a member) gets 403 on every project read route and sees no project or chat data of the owner`,
+      `${who} (a member) gets 403 on every read route of the owner's project and sees no project or chat data`,
       Object.values(statuses).every((status) => status === 403) && !leaked,
       statuses,
+    );
+    const listStatuses: Record<string, number> = {};
+    let listLeaked = false;
+    for (const [path, body] of projectLists) {
+      const answer = await call("POST", path, { token, body });
+      listStatuses[path] = answer.status;
+      if (answer.text.includes(projectId) || answer.text.includes("secret plan")) listLeaked = true;
+    }
+    check(
+      `${who} can list their own projects, activity and chat matches, and the lists hold nothing of the owner`,
+      Object.values(listStatuses).every((status) => status === 200) && !listLeaked,
+      listStatuses,
     );
     const roots = await call("POST", EXPLORER_ROUTES.roots, { token, body: { input: { agentId } } });
     const read = await call("POST", EXPLORER_ROUTES.read, {
@@ -343,30 +358,45 @@ try {
     );
     const create = await call("POST", PROJECTS_V1_ROUTES.create, {
       token,
-      body: { input: { name: `${who} project`, mainFolder: folder, accessLevel: "open", agents: [] } },
+      body: { input: { name: `${who} project`, mainFolder: folder, accessLevel: "normal", agents: [] } },
     });
     check(`${who} cannot create a project in the owner's folder`, create.status === 403, create.status);
   }
 
-  const memberView = async (token: string) => {
+  interface ChatTarget {
+    agentId: string;
+    taskId: string;
+    text: string;
+    file: string;
+  }
+  const ownerChat: ChatTarget = {
+    agentId,
+    taskId,
+    text: "Owner question about the secret plan",
+    file: "secret plan",
+  };
+  const memberView = async (token: string, target: ChatTarget = ownerChat) => {
     const listed = await call("GET", TEAM_API_ROUTES.agents.all, { token });
-    const tasks = await call("POST", AGENT_TASKS_ROUTES.list, { token, body: { agentId } });
-    const thread = await call("POST", AGENT_TASKS_ROUTES.read, { token, body: { agentId, taskId } });
-    const conversation = await call("GET", TEAM_API_ROUTES.agent.conversation(agentId), { token });
+    const tasks = await call("POST", AGENT_TASKS_ROUTES.list, { token, body: { agentId: target.agentId } });
+    const thread = await call("POST", AGENT_TASKS_ROUTES.read, {
+      token,
+      body: { agentId: target.agentId, taskId: target.taskId },
+    });
+    const conversation = await call("GET", TEAM_API_ROUTES.agent.conversation(target.agentId), { token });
     const file = await call(
       "GET",
-      `${TEAM_API_ROUTES.workspaceFiles}?botId=${encodeURIComponent(agentId)}&path=${encodeURIComponent("secret-plan.md")}`,
+      `${TEAM_API_ROUTES.workspaceFiles}?botId=${encodeURIComponent(target.agentId)}&path=${encodeURIComponent("secret-plan.md")}`,
       { token },
     );
     return {
-      agentListed: listed.status === 200 && listed.text.includes(agentId),
+      agentListed: listed.status === 200 && listed.text.includes(target.agentId),
       tasks: tasks.status,
-      tasksShowChat: tasks.text.includes(taskId),
+      tasksShowChat: tasks.text.includes(target.taskId),
       thread: thread.status,
-      threadShowsText: thread.text.includes("Owner question about the secret plan"),
+      threadShowsText: thread.text.includes(target.text),
       conversation: conversation.status,
       file: file.status,
-      fileShowsText: file.text.includes("secret plan"),
+      fileShowsText: file.text.includes(target.file),
     };
   };
   const hidden = (view: Awaited<ReturnType<typeof memberView>>) =>
@@ -378,11 +408,18 @@ try {
     view.conversation >= 400 &&
     view.file >= 400 &&
     !view.fileShowsText;
+  const seen = (view: Awaited<ReturnType<typeof memberView>>) =>
+    view.agentListed && view.tasks === 200 && view.tasksShowChat && view.thread === 200 && view.threadShowsText;
 
   const bobDefault = await memberView(bobToken);
-  observations.push(
-    `With no access rule, a member ${bobDefault.agentListed ? "sees" : "does not see"} a project agent and its chats (agent access default "manage" for members): ${JSON.stringify(bobDefault)}`,
+  check(
+    "with no access rule, Bob does not see the owner's agent, its chats, its messages or its project files",
+    hidden(bobDefault),
+    bobDefault,
   );
+  const carolDefault = await memberView(carolToken);
+  check("with no access rule, Carol does not see the owner's agent either", hidden(carolDefault), carolDefault);
+
   const accessState = await call("POST", AGENT_ACCESS_ROUTES.read, { token: ownerToken, body: {} });
   const revision =
     isDynamicRecord(accessState.body) && typeof accessState.body.revision === "number" ? accessState.body.revision : 0;
@@ -390,14 +427,10 @@ try {
     token: ownerToken,
     body: { revision, everyone: { [agentId]: "none" }, roles: [] },
   });
-  check("the owner keeps the project agent private: no member has access", closed.status === 200, closed.status);
+  check("the owner sets an explicit rule: no member has access", closed.status === 200, closed.status);
 
   const bobClosed = await memberView(bobToken);
-  check(
-    "Bob does not see the private agent, its chats, its messages or the files of its project folder",
-    hidden(bobClosed),
-    bobClosed,
-  );
+  check("with the explicit rule, Bob still sees nothing of the owner's agent", hidden(bobClosed), bobClosed);
 
   const afterClose = await call("POST", AGENT_ACCESS_ROUTES.read, { token: ownerToken, body: {} });
   const nextRevision =
@@ -412,19 +445,157 @@ try {
   });
   check("the owner shares the project agent with Bob only", shared.status === 200, shared.status);
   const bobShared = await memberView(bobToken);
-  check(
-    "after the share, Bob sees the agent, its chat and the chat messages",
-    bobShared.agentListed &&
-      bobShared.tasks === 200 &&
-      bobShared.tasksShowChat &&
-      bobShared.thread === 200 &&
-      bobShared.threadShowsText,
-    bobShared,
-  );
+  check("after the share, Bob sees the agent, its chat and the chat messages", seen(bobShared), bobShared);
   const carolShared = await memberView(carolToken);
   check("Carol still sees nothing of the agent that was shared with Bob only", hidden(carolShared), carolShared);
   const bobProjects = await call("POST", PROJECTS_V1_ROUTES.list, { token: bobToken, body: {} });
-  check("the share does not open the project settings to Bob", bobProjects.status === 403, bobProjects.status);
+  const bobOwnerProject = await call("POST", PROJECTS_V1_ROUTES.get, { token: bobToken, body: { input: projectId } });
+  check(
+    "the share does not open the owner's project settings to Bob",
+    bobProjects.status === 200 && !bobProjects.text.includes(projectId) && bobOwnerProject.status === 403,
+    { list: bobProjects.status, get: bobOwnerProject.status },
+  );
+
+  const openProject = await call("POST", PROJECTS_V1_ROUTES.create, {
+    token: bobToken,
+    body: { input: { name: "Bob full access", mainFolder: "bob-open", accessLevel: "open", agents: [] } },
+  });
+  check("Bob cannot give his own project full access to the host", openProject.status === 403, openProject.status);
+  const bobCreated = await call("POST", PROJECTS_V1_ROUTES.create, {
+    token: bobToken,
+    body: {
+      input: { name: "Bob project", mainFolder: "bob-app", accessLevel: "normal", agents: [{ name: "Bea", role: "" }] },
+    },
+  });
+  const bobDetail = isDynamicRecord(bobCreated.body) ? bobCreated.body : null;
+  const bobProject = bobDetail && isDynamicRecord(bobDetail.project) ? bobDetail.project : null;
+  const bobAgents = bobDetail && Array.isArray(bobDetail.agents) ? bobDetail.agents : [];
+  const bobProjectId = bobProject && typeof bobProject.id === "string" ? bobProject.id : "";
+  const bobFolder = bobProject && typeof bobProject.mainFolder === "string" ? bobProject.mainFolder : "";
+  const bobFirstAgent = bobAgents[0];
+  const bobAgentId = isDynamicRecord(bobFirstAgent) && typeof bobFirstAgent.id === "string" ? bobFirstAgent.id : "";
+  check(
+    "Bob (a member) creates his own project in his own project folder",
+    bobCreated.status === 200 &&
+      bobProjectId !== "" &&
+      bobAgentId !== "" &&
+      bobFolder.startsWith(join(await realpath(root), "member-projects", bobId)),
+    { status: bobCreated.status, text: bobCreated.text.slice(0, 300) },
+  );
+  writeFileSync(join(bobFolder, "secret-plan.md"), "# Bob's own notes\n");
+  const bobStarted = await call("POST", PROJECTS_V1_ROUTES.startChat, {
+    token: bobToken,
+    body: { input: { projectId: bobProjectId, agentId: bobAgentId, text: "Bob question about his own notes" } },
+  });
+  const bobChat = isDynamicRecord(bobStarted.body) ? bobStarted.body : null;
+  const bobTaskId = bobChat && typeof bobChat.taskId === "string" ? bobChat.taskId : "";
+  await waitFor(
+    "Bob's chat ends",
+    () => projects.getChat({ agentId: bobAgentId, taskId: bobTaskId }).state,
+    (state) => state === "idle",
+  );
+  check("Bob starts a chat in his own project and it runs", bobStarted.status === 200 && bobTaskId !== "", {
+    status: bobStarted.status,
+  });
+  const bobList = await call("POST", PROJECTS_V1_ROUTES.list, { token: bobToken, body: {} });
+  const bobChats = await call("POST", PROJECTS_V1_ROUTES.listChats, {
+    token: bobToken,
+    body: { input: { projectId: bobProjectId } },
+  });
+  const bobGetChat = await call("POST", PROJECTS_V1_ROUTES.getChat, {
+    token: bobToken,
+    body: { input: { agentId: bobAgentId, taskId: bobTaskId } },
+  });
+  check(
+    "Bob sees his own project and his own chat",
+    bobList.status === 200 &&
+      bobList.text.includes(bobProjectId) &&
+      bobChats.status === 200 &&
+      bobChats.text.includes(bobTaskId) &&
+      bobGetChat.status === 200,
+    { list: bobList.status, chats: bobChats.status, chat: bobGetChat.status },
+  );
+  const bobTarget: ChatTarget = {
+    agentId: bobAgentId,
+    taskId: bobTaskId,
+    text: "Bob question about his own notes",
+    file: "Bob's own notes",
+  };
+  const bobOwn = await memberView(bobToken, bobTarget);
+  check("Bob sees the agent of his own project, its chat and its messages", seen(bobOwn), bobOwn);
+  const bobRoots = await call("POST", EXPLORER_ROUTES.roots, {
+    token: bobToken,
+    body: { input: { agentId: bobAgentId } },
+  });
+  const bobReadsOwn = await call("POST", EXPLORER_ROUTES.read, {
+    token: bobToken,
+    body: { input: { scope: { agentId: bobAgentId }, path: join(bobFolder, "secret-plan.md") } },
+  });
+  check(
+    "Bob opens the file tree of his own project and reads his own file",
+    bobRoots.status === 200 && bobReadsOwn.status === 200 && bobReadsOwn.text.includes("own notes"),
+    { roots: bobRoots.status, read: bobReadsOwn.status },
+  );
+  const bobReadsOwner = await call("POST", EXPLORER_ROUTES.read, {
+    token: bobToken,
+    body: { input: { scope: { agentId: bobAgentId }, path: join(folder, "secret-plan.md") } },
+  });
+  check(
+    "Bob cannot read the owner's file through the file tree of his own project",
+    bobReadsOwner.status >= 400 && !bobReadsOwner.text.includes("secret plan"),
+    bobReadsOwner.status,
+  );
+
+  const carolOfBob = await memberView(carolToken, bobTarget);
+  check("Carol does not see Bob's agent, chat, messages or files", hidden(carolOfBob), carolOfBob);
+  const carolReads: Record<string, number> = {};
+  let carolLeaked = false;
+  for (const [path, body] of [
+    [PROJECTS_V1_ROUTES.get, { input: bobProjectId }],
+    [PROJECTS_V1_ROUTES.listChats, { input: { projectId: bobProjectId } }],
+    [PROJECTS_V1_ROUTES.getChat, { input: { agentId: bobAgentId, taskId: bobTaskId } }],
+    [PROJECTS_V1_ROUTES.startChat, { input: { projectId: bobProjectId, agentId: bobAgentId, text: "Carol here" } }],
+    [EXPLORER_ROUTES.roots, { input: { agentId: bobAgentId } }],
+  ] as const) {
+    const answer = await call("POST", path, { token: carolToken, body });
+    carolReads[path] = answer.status;
+    if (answer.text.includes(bobTaskId) || answer.text.includes("own notes")) carolLeaked = true;
+  }
+  const carolList = await call("POST", PROJECTS_V1_ROUTES.list, { token: carolToken, body: {} });
+  check(
+    "Carol gets 403 on Bob's project, chats and file tree, and her project list does not show it",
+    Object.values(carolReads).every((status) => status === 403) &&
+      !carolLeaked &&
+      carolList.status === 200 &&
+      !carolList.text.includes(bobProjectId),
+    { ...carolReads, list: carolList.status },
+  );
+  const ownerSeesBob = await call("POST", PROJECTS_V1_ROUTES.list, { token: ownerToken, body: {} });
+  check(
+    "the owner (an admin) still sees Bob's project",
+    ownerSeesBob.status === 200 && ownerSeesBob.text.includes(bobProjectId),
+    ownerSeesBob.status,
+  );
+
+  const bobAccess = await call("POST", AGENT_ACCESS_ROUTES.read, { token: ownerToken, body: {} });
+  const bobRevision =
+    isDynamicRecord(bobAccess.body) && typeof bobAccess.body.revision === "number" ? bobAccess.body.revision : 0;
+  const sharedBob = await call("POST", AGENT_ACCESS_ROUTES.set, {
+    token: ownerToken,
+    body: {
+      revision: bobRevision,
+      everyone: { [agentId]: "none", [bobAgentId]: "view" },
+      roles: [{ id: "shared-with-bob", name: "Shared with Bob", memberIds: [bobId], agents: { [agentId]: "view" } }],
+    },
+  });
+  const carolSharedBob = await memberView(carolToken, bobTarget);
+  check(
+    "after the owner shares Bob's agent with everyone, Carol sees its chat",
+    sharedBob.status === 200 && seen(carolSharedBob),
+    carolSharedBob,
+  );
+  const bobStillManages = await memberView(bobToken, bobTarget);
+  check("Bob still has his own agent after the share", seen(bobStillManages), bobStillManages);
 } catch (error) {
   failure = error instanceof Error ? (error.stack ?? error.message) : String(error);
   check("the scenario finished", false, failure);
@@ -439,9 +610,6 @@ try {
 const passed = checks.length > 0 && checks.every((entry) => entry.passed);
 mkdirSync(OUT, { recursive: true });
 const reportPath = join(OUT, "report.json");
-writeFileSync(
-  reportPath,
-  `${JSON.stringify({ passed, checks, observations, ...(failure ? { failure } : {}) }, null, 2)}\n`,
-);
+writeFileSync(reportPath, `${JSON.stringify({ passed, checks, ...(failure ? { failure } : {}) }, null, 2)}\n`);
 process.stdout.write(`Report: ${reportPath}\n`);
 process.exit(passed ? 0 : 1);

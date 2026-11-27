@@ -1,4 +1,6 @@
 import {
+  canAdministerServer,
+  isExplorerScope,
   parseExplorerCreateInput,
   parseExplorerGitCommitInput,
   parseExplorerGitDiffInput,
@@ -10,8 +12,10 @@ import {
   parseExplorerScopeInput,
   parseExplorerWriteInput,
 } from "@codebot/contracts/ipc";
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { EXPLORER_CAPABILITY, EXPLORER_ROUTES } from "@codebot/contracts/team-protocol/explorer-v1";
 import { sourceText } from "@codebot/i18n/source";
+import type { ProjectOperations } from "../../backend/projects/project-operations";
 import type { ExplorerService } from "../explorer/explorer-service";
 import { HttpError } from "./http-error";
 import type { RouteOutcome, TeamApiRequestContext } from "./request-context";
@@ -37,17 +41,30 @@ async function run<A>(operation: () => Promise<A> | A): Promise<A> {
   }
 }
 
+function scopeAgentId(input: unknown): string | null {
+  if (isExplorerScope(input)) return input.agentId;
+  return isDynamicRecord(input) && isExplorerScope(input.scope) ? input.scope.agentId : null;
+}
+
+/** Owners and admins open every file tree. A member opens only the file trees of the projects that they created. */
 export async function routeExplorer(
   context: TeamApiRequestContext,
   explorer: TeamApiExplorer | undefined,
+  projects?: Pick<ProjectOperations, "list">,
 ): Promise<RouteOutcome> {
   const { method, url, capabilities, member, request, json } = context;
   const path = url.pathname;
   if (method !== "POST" || !EXPLORER_PATHS.has(path)) return "unmatched";
   if (!explorer || !capabilities.has(EXPLORER_CAPABILITY))
     throw new HttpError(400, sourceText("error.explorer.serverUnsupported"));
-  requireAdmin(member);
   const input = (await readJson(request)).input;
+  if (!canAdministerServer(member.role)) {
+    const agentId = scopeAgentId(input);
+    const own = projects
+      ?.list()
+      .some((project) => project.ownerId === member.id && agentId !== null && project.agentIds.includes(agentId));
+    if (!own) requireAdmin(member);
+  }
   switch (path) {
     case EXPLORER_ROUTES.roots:
       return json(200, await run(() => explorer.files.roots(parse(parseExplorerScopeInput, input))));

@@ -16,6 +16,8 @@ export interface TeamApiRequestContext {
   readonly sessionExpiresAt: string;
   readonly fromChrome: boolean;
   readonly agentLevel: (agentId: string) => AgentAccessLevel;
+  /** Records the signed-in member as the owner of agents that this request created. */
+  readonly claimAgents: (agentIds: readonly string[]) => Promise<void>;
   readonly json: (status: number, value: object | null) => RouteOutcome;
   readonly empty: (status: number) => RouteOutcome;
 }

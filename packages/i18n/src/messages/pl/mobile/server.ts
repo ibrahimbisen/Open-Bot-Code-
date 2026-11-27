@@ -1558,7 +1558,7 @@ export const messages = {
   "mobile.server.route.roles": "Uprawnienia",
   "mobile.server.route.role": "Rola",
   "mobile.server.roles.description":
-    "Wybierz agentów, z których mogą korzystać członkowie. Właściciele i administratorzy mogą korzystać ze wszystkich agentów.",
+    "Wybierz agentów, z których mogą korzystać członkowie. Właściciele i administratorzy mogą korzystać ze wszystkich agentów. Bez ustawionego dostępu członkowie korzystają tylko z agentów, które sami utworzyli.",
   "mobile.server.roles.unsupported": "Zaktualizuj OpenBot Code na tym serwerze, aby zarządzać rolami.",
   "mobile.server.roles.unavailable": "Rolami może zarządzać tylko właściciel lub administrator serwera online.",
   "mobile.server.roles.loading": "Wczytywanie ról…",

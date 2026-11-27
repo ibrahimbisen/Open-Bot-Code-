@@ -22,4 +22,7 @@ export const messages = defineMessages("error.project", {
   "error.project.folderProtected": "OpenBot Code cannot use this folder. Choose a different folder.",
   "error.project.mainFolderMissing":
     "The main folder of this project is missing: {path}. Restore the folder or choose a new main folder.",
+  "error.project.ownerOnly": "Only the person who created this project can use it.",
+  "error.project.memberFolder": "Use a folder in your own project space on this server.",
+  "error.project.memberOpenAccess": "Only an owner or admin can give a project full access to this computer.",
 });

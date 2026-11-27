@@ -1410,7 +1410,7 @@ export const messages = {
   "mobile.server.route.roles": "Machtigingen",
   "mobile.server.route.role": "Rol",
   "mobile.server.roles.description":
-    "Kies de agents die leden kunnen gebruiken. Eigenaren en beheerders kunnen alle agents gebruiken.",
+    "Kies de agents die leden kunnen gebruiken. Eigenaren en beheerders kunnen alle agents gebruiken. Zonder ingestelde toegang gebruiken leden alleen de agents die ze zelf hebben gemaakt.",
   "mobile.server.roles.unsupported": "Werk OpenBot Code bij op deze server om rollen te beheren.",
   "mobile.server.roles.unavailable": "Alleen een eigenaar of beheerder van een online server kan rollen beheren.",
   "mobile.server.roles.loading": "Rollen laden…",

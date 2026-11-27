@@ -1908,7 +1908,7 @@ export const messages = {
   "mobile.server.route.roles": "الأذونات",
   "mobile.server.route.role": "الدور",
   "mobile.server.roles.description":
-    "اختر الوكلاء الذين يمكن للأعضاء استخدامهم. يمكن للمالكين والمسؤولين استخدام كل الوكلاء.",
+    "اختر الوكلاء الذين يمكن للأعضاء استخدامهم. يمكن للمالكين والمسؤولين استخدام كل الوكلاء. إذا لم يُحدَّد وصول، يستخدم الأعضاء الوكلاء الذين أنشؤوهم فقط.",
   "mobile.server.roles.unsupported": "حدّث OpenBot Code على هذا الخادم لإدارة الأدوار.",
   "mobile.server.roles.unavailable": "يمكن فقط لمالك خادم متصل أو مسؤوله إدارة الأدوار.",
   "mobile.server.roles.loading": "جارٍ تحميل الأدوار…",

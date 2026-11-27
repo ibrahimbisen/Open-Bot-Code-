@@ -2887,6 +2887,12 @@ export class ChannelService {
     });
   }
 
+  #personAgentLevel(personId: string, agentId: string): AgentAccessLevel {
+    const level = this.hooks.personAgentLevel?.(personId, agentId);
+    if (level) return level;
+    return this.hooks.remotePerson?.(personId) ? "none" : "manage";
+  }
+
   readonly #manage = Effect.fn("ChannelService.manage")(function* (
     this: ChannelService,
     channelId: string,
@@ -2950,7 +2956,7 @@ export class ChannelService {
             args,
             agentId,
             this.hooks.agents(),
-            { level: (id) => this.hooks.personAgentLevel?.(person.id, id) ?? "manage" },
+            { level: (id) => this.#personAgentLevel(person.id, id) },
             task ? channelWorkOwners(task, tasks) : new Set([agentId]),
           ),
         );

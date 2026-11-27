@@ -23,4 +23,8 @@ export const messages = {
   "error.project.folderProtected": "OpenBot Code kan deze map niet gebruiken. Kies een andere map.",
   "error.project.mainFolderMissing":
     "De hoofdmap van dit project ontbreekt: {path}. Herstel de map of kies een nieuwe hoofdmap.",
+  "error.project.ownerOnly": "Alleen de persoon die dit project heeft gemaakt, kan het gebruiken.",
+  "error.project.memberFolder": "Gebruik een map in je eigen projectruimte op deze server.",
+  "error.project.memberOpenAccess":
+    "Alleen een eigenaar of beheerder kan een project volledige toegang tot deze computer geven.",
 } as const satisfies PartialTranslation<typeof source>;

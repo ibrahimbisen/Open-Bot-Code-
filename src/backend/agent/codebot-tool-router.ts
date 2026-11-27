@@ -3110,7 +3110,7 @@ export class CodeBotToolRouter {
           agent.id === senderAgentId ||
           requesterIds.every(
             (personId) =>
-              agentAccessRank(this.#channels.hooks.personAgentLevel?.(personId, agent.id) ?? "manage") >=
+              agentAccessRank(this.#channels.hooks.personAgentLevel?.(personId, agent.id) ?? "none") >=
               agentAccessRank("chat"),
           ),
       );
