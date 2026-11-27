@@ -1,3 +1,5 @@
+import { isDynamicRecord } from "@codebot/contracts/runtime-values";
+
 export function isMcpSubsystemDiagnostic(message: string): boolean {
   if (/codebot/i.test(message)) return false;
   return /\b(mcp|rmcp)\b|\bworker quit with (?:fatal|join error|reason):/i.test(message);
@@ -138,6 +140,24 @@ const RUST_LOG_RECORD =
 
 export function isRustLogBelowErrorDiagnostic(message: string): boolean {
   return RUST_LOG_RECORD.test(message);
+}
+
+const STRUCTURED_LEVELS_BELOW_ERROR = new Set(["trace", "debug", "info", "notice", "warn", "warning"]);
+const STRUCTURED_ERROR_LEVEL_NUMBER = 50;
+
+export function isStructuredLogBelowErrorDiagnostic(message: string): boolean {
+  const text = message.trim();
+  if (!text.startsWith("{") || !text.endsWith("}")) return false;
+  let record: unknown;
+  try {
+    record = JSON.parse(text);
+  } catch {
+    return false;
+  }
+  if (!isDynamicRecord(record)) return false;
+  const level = record.level;
+  if (typeof level === "string") return STRUCTURED_LEVELS_BELOW_ERROR.has(level.toLowerCase());
+  return typeof level === "number" && level < STRUCTURED_ERROR_LEVEL_NUMBER;
 }
 
 const PI_WARNING_RECORD = /^Warning: /u;

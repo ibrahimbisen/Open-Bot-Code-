@@ -320,7 +320,9 @@ function ProjectOpenChat(props: { api: DockviewPanelApi; params: ChatPanelParams
     const current = task();
     if (!current) return false;
     if (current.state === "closed" && !(await tasks.reopenTask(agentId(), current.id))) return false;
-    return tasks.sendToTask(agentId(), current.id, text);
+    const sent = await tasks.sendToTask(agentId(), current.id, text);
+    if (sent && (projects.state.drafts[taskId()] ?? "").trim() === text) projects.setDraft(taskId(), "");
+    return sent;
   }
 
   const working = () => {

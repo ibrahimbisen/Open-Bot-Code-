@@ -709,8 +709,9 @@
 
 .project-panel-header {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   min-width: 0;
+  overflow: hidden;
   flex: 0 0 auto;
   align-items: center;
   gap: var(--codebot-space-2);

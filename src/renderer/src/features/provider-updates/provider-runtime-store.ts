@@ -77,6 +77,7 @@ export interface ProviderCliOwners {
   isLocalServer?: () => boolean;
   managesRuntimes?: () => boolean;
   hostConnection?: () => number | undefined;
+  announcesUpdates?: (provider: AgentProviderId) => boolean;
 }
 
 export function createProviderRuntimeStore(
@@ -93,6 +94,11 @@ export function createProviderRuntimeStore(
   let hostReconnected = false;
   const isLocalServer = owners.isLocalServer ?? (() => true);
   const managesRuntimes = owners.managesRuntimes ?? isLocalServer;
+  const announcesUpdates = owners.announcesUpdates ?? (() => true);
+  function announcedUpdate(provider: AgentProviderId): ProviderUpdate {
+    const update = providerUpdate(provider);
+    return announcesUpdates(provider) ? update : { ...update, availableVersion: null };
+  }
   function providerUpdate(provider: AgentProviderId, snapshot = providerRuntimeSnapshot()): ProviderUpdate {
     if (!isManagedRuntimeProvider(provider)) throw new Error("CodeBot does not manage this provider's CLI.");
     const runtime = snapshot.providers[provider];
@@ -352,7 +358,7 @@ export function createProviderRuntimeStore(
   }
 
   createEffect(
-    () => (isLocalServer() ? PROVIDERS.map((provider) => providerUpdate(provider)) : null),
+    () => (isLocalServer() ? PROVIDERS.map((provider) => announcedUpdate(provider)) : null),
     (next) => {
       if (!next) return;
       for (const update of next) {

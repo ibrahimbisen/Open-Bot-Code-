@@ -7,8 +7,15 @@ import { FAKE_CODEX_MODEL, writeFakeCodex } from "./dev-automation/bench-fake-co
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const [script, ...scriptArguments] = process.argv.slice(2);
-if (!script) throw new Error("Usage: bun scripts/fake-codex-app-run.ts <script> [arguments]");
+const RUNNER_FLAGS = ["--keep-first-run", "--markdown", "--steps", "--slash-commands"] as const;
+type RunnerFlag = (typeof RUNNER_FLAGS)[number];
+const isRunnerFlag = (value: string): value is RunnerFlag => RUNNER_FLAGS.some((flag) => flag === value);
+const allArguments = process.argv.slice(2);
+const scriptIndex = allArguments.findIndex((value) => !isRunnerFlag(value));
+const runnerFlags = new Set(allArguments.slice(0, Math.max(0, scriptIndex)));
+const [script, ...scriptArguments] = scriptIndex < 0 ? [] : allArguments.slice(scriptIndex);
+if (!script)
+  throw new Error(`Usage: bun scripts/fake-codex-app-run.ts [${RUNNER_FLAGS.join("] [")}] <script> [arguments]`);
 const OUT = resolve(ROOT, ".codebot-build/fake-codex-app");
 
 async function finishFirstRun(): Promise<void> {
@@ -59,7 +66,25 @@ function stopDevStack(): void {
 }
 
 await mkdir(OUT, { recursive: true });
-const fake = await writeFakeCodex(resolve(OUT, "fake-codex"), { deltaMs: 250, deltas: 12 });
+const fake = await writeFakeCodex(
+  resolve(OUT, "fake-codex"),
+  runnerFlags.has("--markdown")
+    ? {
+        deltaMs: 40,
+        deltas: 70,
+        corpus: "markdown",
+        reasoning: runnerFlags.has("--steps"),
+        commands: runnerFlags.has("--steps"),
+        slashCommands: runnerFlags.has("--slash-commands"),
+      }
+    : {
+        deltaMs: 250,
+        deltas: 12,
+        reasoning: runnerFlags.has("--steps"),
+        commands: runnerFlags.has("--steps"),
+        slashCommands: runnerFlags.has("--slash-commands"),
+      },
+);
 const log = openSync(resolve(OUT, "dev.log"), "w");
 let exited = false;
 const dev = spawn("bun", ["run", "dev"], {
@@ -75,7 +100,7 @@ dev.on("exit", () => {
 let code = 1;
 try {
   await waitForApp(() => exited);
-  await finishFirstRun();
+  if (!runnerFlags.has("--keep-first-run")) await finishFirstRun();
   const result = spawnSync("bun", [script, "--allow-mutations", ...scriptArguments], {
     cwd: ROOT,
     stdio: "inherit",

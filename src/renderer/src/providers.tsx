@@ -83,6 +83,10 @@ const Providers = createSimpleContext({
         isLocalServer: () => activeServer()?.kind === "local",
         managesRuntimes: () => activeServer()?.kind === "local" || providerAdminServerId() !== undefined,
         hostConnection: () => hostConnection(activeServer()),
+        announcesUpdates: (provider) => {
+          const state = agentStatus().providers?.find((candidate) => candidate.id === provider)?.state;
+          return state === "available" || state === "outdated";
+        },
       },
     );
     const hostReadsClaudeKey = createMemo(() => serverSupportsCapability(activeServer(), CLAUDE_API_KEY_CAPABILITY));

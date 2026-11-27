@@ -126,6 +126,7 @@ import {
   isMcpSubsystemDiagnostic,
   isPiWarningDiagnostic,
   isRustLogBelowErrorDiagnostic,
+  isStructuredLogBelowErrorDiagnostic,
   isTelemetryExportDiagnostic,
   isToolCallDiagnostic,
   isUsageLimitDiagnostic,
@@ -4055,6 +4056,7 @@ export class ProviderRuntime implements ProviderPort {
       if (
         isGlogBelowErrorDiagnostic(message) ||
         isRustLogBelowErrorDiagnostic(message) ||
+        isStructuredLogBelowErrorDiagnostic(redacted) ||
         ((client.provider === "pi" || isKeyOnlyProvider(client.provider)) && isPiWarningDiagnostic(message))
       ) {
         stderrLogger.info("A provider logged an info or warning record.", { provider: client.provider, message });
