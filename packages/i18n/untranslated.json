@@ -113,6 +113,22 @@
     "tr",
     "zh"
   ],
+  "billing.credits.activity.codebot": [
+    "ar",
+    "de",
+    "es",
+    "fr",
+    "he",
+    "it",
+    "ja",
+    "ko",
+    "nl",
+    "pl",
+    "pt",
+    "ru",
+    "tr",
+    "zh"
+  ],
   "billing.credits.activity.empty": [
     "ar",
     "de",
@@ -262,22 +278,6 @@
     "zh"
   ],
   "billing.credits.activity.movedTo": [
-    "ar",
-    "de",
-    "es",
-    "fr",
-    "he",
-    "it",
-    "ja",
-    "ko",
-    "nl",
-    "pl",
-    "pt",
-    "ru",
-    "tr",
-    "zh"
-  ],
-  "billing.credits.activity.codebot": [
     "ar",
     "de",
     "es",
@@ -4757,6 +4757,22 @@
     "tr",
     "zh"
   ],
+  "mobile.settings.credits.activity.codebot": [
+    "ar",
+    "de",
+    "es",
+    "fr",
+    "he",
+    "it",
+    "ja",
+    "ko",
+    "nl",
+    "pl",
+    "pt",
+    "ru",
+    "tr",
+    "zh"
+  ],
   "mobile.settings.credits.activity.empty": [
     "ar",
     "de",
@@ -4950,22 +4966,6 @@
     "zh"
   ],
   "mobile.settings.credits.activity.movesWeek": [
-    "ar",
-    "de",
-    "es",
-    "fr",
-    "he",
-    "it",
-    "ja",
-    "ko",
-    "nl",
-    "pl",
-    "pt",
-    "ru",
-    "tr",
-    "zh"
-  ],
-  "mobile.settings.credits.activity.codebot": [
     "ar",
     "de",
     "es",
