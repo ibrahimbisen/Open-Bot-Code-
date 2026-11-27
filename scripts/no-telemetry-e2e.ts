@@ -190,6 +190,7 @@ await check("no analytics endpoint, preference or consent code is left in deskto
     "scripts/mobile-ota.ts",
     "scripts/browser-extension-e2e.ts",
     "scripts/development-environment.ts",
+    "scripts/mobile-account-e2e.ts",
   ];
   const hits: string[] = [];
   for (const root of roots) {

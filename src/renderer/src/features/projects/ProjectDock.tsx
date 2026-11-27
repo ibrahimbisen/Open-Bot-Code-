@@ -119,7 +119,7 @@ export function ProjectDock(props: { projectId: string }) {
       pinned: value.pinned === true,
       toggle: () => {
         panel.api.updateParameters({ pinned: value.pinned !== true });
-        scheduleSave();
+        flushSave();
       },
     };
   }
