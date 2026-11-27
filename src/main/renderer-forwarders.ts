@@ -28,6 +28,7 @@ import {
   TEAM_CHANNEL_ATTENTION_CAPABILITY,
 } from "@codebot/contracts/team-protocol/current";
 import type { MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
+import type { ProjectsWireEvent } from "@codebot/contracts/team-protocol/projects-v1";
 import type { AppFormat, AppTranslate } from "@codebot/i18n";
 import { redactText } from "@codebot/logging";
 import {
@@ -51,6 +52,7 @@ import { BrowserWindow, Notification } from "electron";
 import { isNoUpdateAnswer } from "../backend/agent/routine-quiet-runs";
 import type { AgentService } from "../backend/agent-service";
 import { runCauseEffect } from "../backend/effect-boundary";
+import type { ProjectServiceEvent } from "../backend/projects/project-operations";
 import type { WorkflowNotice } from "../backend/workflows/workflows";
 import type { HostAnalytics } from "./analytics";
 import {
@@ -674,6 +676,33 @@ export function createRendererForwarders({
     for (const target of appWindows()) sendToRenderer(target, IPC_ENDPOINTS.instanceTransfer.uploadProgress, progress);
   }
 
+  function forwardProjectEvent(serverId: string, event: ProjectServiceEvent): void {
+    for (const target of appWindows()) {
+      if (event.type === "projects-changed")
+        sendToRenderer(target, IPC_ENDPOINTS.projects.changed, {
+          serverId,
+          projectId: event.projectId,
+          projects: event.projects,
+        });
+      else if (event.type === "chats-changed")
+        sendToRenderer(target, IPC_ENDPOINTS.projects.chatsChanged, {
+          serverId,
+          projectId: event.projectId,
+          chats: event.chats,
+          removedTaskIds: event.removedTaskIds,
+        });
+      else sendToRenderer(target, IPC_ENDPOINTS.projects.activityChanged, { serverId, activity: event.activity });
+    }
+  }
+
+  function forwardRemoteProjectEvent(serverId: string, event: ProjectsWireEvent): void {
+    // The host sends the same data under wire names; the renderer gets the same IPC events as for a local server.
+    if (event.type === "project-chats-changed") forwardProjectEvent(serverId, { ...event, type: "chats-changed" });
+    else if (event.type === "project-activity-changed")
+      forwardProjectEvent(serverId, { type: "activity-changed", activity: event.activity });
+    else forwardProjectEvent(serverId, event);
+  }
+
   function forwardOwnerTransfersChanged(): void {
     const window = getMainWindow();
     if (!window || window.isDestroyed()) return;
@@ -712,6 +741,8 @@ export function createRendererForwarders({
     forwardAttachmentImportProgress,
     forwardInstanceTransferUploadProgress,
     forwardOwnerTransfersChanged,
+    forwardProjectEvent,
+    forwardRemoteProjectEvent,
   };
 }
 

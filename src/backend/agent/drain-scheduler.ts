@@ -26,6 +26,7 @@ import { incomingAgentExchange } from "../conversation-snapshots";
 import { causeHelpers } from "../effect-boundary";
 import { channelLane, type DeliveryContext, laneChannelId, type MailboxStore, MESSAGING_LANE } from "../mailbox-store";
 import type { MessagingThreads } from "../messaging/messaging-threads";
+import { chatRuntimeOverride } from "../projects/project-context";
 import { decodeTurnResponse } from "../protocol";
 import { ProviderSignInError } from "../provider-client-effects";
 import type { ContextCompaction } from "./context-compaction";
@@ -65,7 +66,12 @@ import type { ThreadLifecycle } from "./thread-lifecycle";
 import type { DeliveryStart } from "./turn-lifecycle";
 import { TurnSlots } from "./turn-slots";
 import type { UsageLimitGate } from "./usage-limit-gate";
-import { checkAgentFolders, codexSandboxPolicy, workspaceWritableRoots } from "./workspace-sandbox";
+import {
+  agentWorkingDirectory,
+  checkAgentFolders,
+  codexSandboxPolicy,
+  workspaceWritableRoots,
+} from "./workspace-sandbox";
 
 export const REMOVED_ENDPOINT_MESSAGE = sourceText("error.agent.endpointRemoved");
 
@@ -861,9 +867,12 @@ export class DrainScheduler {
       }
       const agent = yield* this.#store.getOrCreate(delivery.recipientAgentId).pipe(toDeliveryStartFailed);
       yield* checkAgentFolders(agent);
-      requestedModel = agent.model;
+      const chatRuntime = taskId === null ? null : chatRuntimeOverride(agent.id, taskId);
+      const turnModel = chatRuntime?.model ?? agent.model;
+      const turnEffort = chatRuntime?.reasoningEffort ?? agent.reasoningEffort;
+      requestedModel = turnModel;
       const requireServedModel = (configRevision: number | null) => () => {
-        if (!this.#hooks.servesModel(agent.model, providerForAgent(agent), configRevision))
+        if (!this.#hooks.servesModel(turnModel, providerForAgent(agent), configRevision))
           throw new Error(REMOVED_ENDPOINT_MESSAGE);
       };
       yield* drainStep(requireServedModel(null));
@@ -1085,8 +1094,8 @@ export class DrainScheduler {
               "turn/start",
               {
                 threadId: providerThreadId,
-                model: agent.model,
-                effort: agent.reasoningEffort,
+                model: turnModel,
+                effort: turnEffort,
                 sessionSettings: sessionSettingsOverrides(
                   this.#store.list().find((current) => current.id === agent.id) ?? agent,
                 ),
@@ -1100,7 +1109,7 @@ export class DrainScheduler {
                   (!delivery.replyToMessageId || this.#mailbox.followsUpOwnAnswer(delivery)),
                 wakeAfterCommands: inOwnChat(providerThreadId),
                 input: inputForThread(providerThreadId),
-                cwd: agent.workspacePath,
+                cwd: agentWorkingDirectory(agent),
                 runtimeWorkspaceRoots: workspaceWritableRoots(agent, this.#store.sharedRoot),
                 approvalPolicy: this.#threads.approvalPolicy(agent),
                 approvalsReviewer: "user",
@@ -1141,7 +1150,7 @@ export class DrainScheduler {
       this.#busyRetries.delete(agent.id);
       this.#turnModels.set(laneKey({ agentId: agent.id, taskId: laneId }), {
         turnId: response.turn.id,
-        model: agent.model,
+        model: turnModel,
       });
       for (const item of batch)
         yield* this.#mailbox.markRunning(item.delivery.id, response.turn.id).pipe(toDeliveryStartFailed);

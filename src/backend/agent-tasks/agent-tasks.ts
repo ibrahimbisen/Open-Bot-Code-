@@ -388,7 +388,25 @@ export class AgentTasks implements TaskLanes {
   }
 
   #requireRoom(agentId: string): void {
-    if (this.#store.openTaskIds(agentId).length >= INPUT_LIMITS.agentTasks) throw new AgentThreadLimitError();
+    if (this.#store.openTaskIds(agentId).length < INPUT_LIMITS.agentTasks) return;
+    if (!this.#parkLeastRecentIdleChat(agentId)) throw new AgentThreadLimitError();
+  }
+
+  #parkLeastRecentIdleChat(agentId: string): boolean {
+    if (this.#hooks.agent(agentId)?.projectId === undefined) return false;
+    const work = this.#mailbox.taskWork(agentId);
+    const awaited = this.#mailbox.awaitedThreadRequests();
+    const open = this.#store.list(agentId).filter((task) => task.closedAt === null && task.routineId === null);
+    for (const task of open.reverse()) {
+      if (this.#publicTask(task, work, awaited).state !== "idle") continue;
+      if (this.#mailbox.taskBusy(task.agentId, task.taskId) || this.#requestsLeft(task).length > 0) continue;
+      if (awaited.some((reply) => reply.taskId === task.taskId)) continue;
+      this.#store.park(task.taskId);
+      this.#progress.delete(task.taskId);
+      this.changed(agentId);
+      return true;
+    }
+    return false;
   }
 
   discard(task: AgentThreadRecord): void {

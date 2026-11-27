@@ -168,6 +168,7 @@ interface HostServiceOptions {
   workflows?: ForwardedApiOptions["workflows"];
   workflowFolders?: ForwardedApiOptions["workflowFolders"];
   crm?: ForwardedApiOptions["crm"];
+  projects?: ForwardedApiOptions["projects"];
   hiddenAgents?: ForwardedApiOptions["hiddenAgents"];
   routineRunPlaces?: ForwardedApiOptions["routineRunPlaces"];
   agentNotificationLevels?: AgentNotificationLevelStore;
@@ -516,6 +517,7 @@ export class HostService extends EventEmitter<HostEvents> {
       ...(options.workflows === undefined ? {} : { workflows: options.workflows }),
       ...(options.workflowFolders === undefined ? {} : { workflowFolders: options.workflowFolders }),
       ...(options.crm === undefined ? {} : { crm: options.crm }),
+      ...(options.projects === undefined ? {} : { projects: options.projects }),
       ...(options.hiddenAgents === undefined ? {} : { hiddenAgents: options.hiddenAgents }),
       ...(options.routineRunPlaces === undefined ? {} : { routineRunPlaces: options.routineRunPlaces }),
       ...(options.agentNotificationLevels === undefined

@@ -110,6 +110,8 @@ import { WhatsAppRuntime } from "../backend/messaging/whatsapp/whatsapp-runtime"
 import { PASSWORD_MANAGER_BRANDS } from "../backend/password-vault";
 import { passwordVaultRouter } from "../backend/password-vault-router";
 import { perfTime } from "../backend/perf-probe-hooks";
+import type { ProjectOperations } from "../backend/projects/project-operations";
+import { ProjectService } from "../backend/projects/project-service";
 import { sweepProviderTemp } from "../backend/provider-temp";
 import { routineFlowRoutines } from "../backend/routine-flows/routine-flow-routines";
 import { RoutineFlowStore } from "../backend/routine-flows/routine-flow-store";
@@ -151,7 +153,7 @@ import {
 import { type AgentDefaultsSettingsService, createAgentDefaultsSettings } from "./agent-defaults-settings";
 import { agentDisplayEnvironment, hasSeparateAgentDisplay } from "./agent-display";
 import { AgentDockFailed, AgentDockWindowController, toAgentDockFailed } from "./agent-dock-window";
-import { type AgentFolders, createAgentFolders } from "./agent-folders";
+import { type AgentFolders, createAgentFolders, isProtectedFolder } from "./agent-folders";
 import { type AgentHostSettingsService, createAgentHostSettings } from "./agent-host-settings";
 import { compactScreenshot, fitImageForAgent } from "./agent-image-fit";
 import { AgentImportService } from "./agent-import-service";
@@ -643,6 +645,7 @@ const TEARDOWN_ORDER = {
   routineFlows: 103,
   workflows: 103.5,
   crm: 103.75,
+  projects: 103.8,
   routineFeed: 104,
   mcpOAuthRedirect: 105,
   onePasswordConnector: 106,
@@ -701,6 +704,7 @@ export interface ApplicationServices {
   workflowFiles: WorkflowFileExporter;
   workflowGitHub: WorkflowGitHubDirectory;
   crm: CrmHandle;
+  projects: ProjectOperations;
   routineResults: RoutineResultsHandle;
   providerRuntimes: ProviderRuntimeManager;
   providerCredentials: ProviderCredentialStore;
@@ -2679,6 +2683,13 @@ export async function createApplicationServices({
     crmHandle = null;
     return Effect.runPromise(crm.close());
   });
+  const projects = new ProjectService({
+    database: store.database,
+    agents: service,
+    readerId: () => host.conversationSender()?.id ?? null,
+    isProtectedFolder: (path) => isProtectedFolder(path, [], service.sharedRoot, app.getPath("userData")),
+  });
+  teardown.push(TEARDOWN_ORDER.projects, "the projects", () => projects.stop());
   const routineResultRuntime = await Effect.runPromise(
     createRoutineResults({
       store: new RoutineResultStore(store.database),
@@ -3446,6 +3457,7 @@ export async function createApplicationServices({
       files: workflowFiles,
     },
     crm,
+    projects,
     hiddenAgents: service,
     routineRunPlaces: service.routineRecords,
     agentNotificationLevels,
@@ -4295,6 +4307,7 @@ export async function createApplicationServices({
         rosterLoaded,
         beforeProviderStart: Fiber.join(computerUseWarmUp).pipe(Effect.asVoid),
       });
+      yield* projects.start();
       yield* eventsRuntime.start();
       yield* automation.sync();
       yield* routineFlowRuntime.sweep();
@@ -4519,6 +4532,7 @@ export async function createApplicationServices({
     workflowFiles,
     workflowGitHub,
     crm,
+    projects,
     routineResults: routineResultRuntime,
     providerRuntimes,
     providerCredentials,

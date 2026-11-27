@@ -265,6 +265,7 @@ import { createMockMessaging } from "./mock-messaging";
 import { createMockNearWallet } from "./mock-near-wallet";
 import { createMockOnePasswordConnector } from "./mock-onepassword-connector";
 import { createMockPasswordManagers } from "./mock-password-managers";
+import { createMockProjects, type MockProjectSeed } from "./mock-projects";
 import { createMockProviderRuntimes, type MockProviderRuntimeOptions } from "./mock-provider-runtimes";
 import { createMockReferral } from "./mock-referral";
 import { mockRoutineCalendar } from "./mock-routine-calendar";
@@ -311,6 +312,7 @@ export interface MockCodeBotOptions
   routineRuns?: Record<string, RoutineRun[]>;
   workflows?: MockWorkflowSeed[];
   crm?: MockCrmSeed;
+  projects?: MockProjectSeed[];
   customProviders?: CustomProviderSummary[];
   conversationReads?: Record<string, ConversationReadState>;
   runtimeSnapshot?: AgentRuntimeSnapshot;
@@ -992,8 +994,11 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     };
   }
 
+  const taskChangeListeners = new Set<(agentId: string) => void>();
+
   function emitTasks(agentId: string): void {
     emitAgentEvent({ type: "agent-tasks-changed", snapshot: taskList(agentId) });
+    for (const listener of taskChangeListeners) listener(agentId);
   }
 
   const messagePins = new Map<string, { messageId: string; pinnedAt: string; pinnedBy: MessagePinner }[]>(
@@ -1288,6 +1293,36 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     (agentId) => agents.find((entry) => entry.id === agentId)?.name ?? agentId,
     options.channels,
   );
+  const mockProjects = createMockProjects(options.projects ?? [], {
+    runtime,
+    agents: () => agents,
+    setAgents: (next) => {
+      agents = next;
+      for (const agent of agents) if (!queues.has(agent.id)) queues.set(agent.id, emptyQueue(agent.id));
+      emitAgentEvent({ type: "agents-changed", agents });
+    },
+    newAgent: (fields) => ({ ...createAgentSummary(fields), ...fields }),
+    tasks: (agentId) => tasks.get(agentId) ?? [],
+    setTasks: (agentId, next) => {
+      for (const task of tasks.get(agentId) ?? []) if (!next.includes(task)) taskConversations.delete(task.id);
+      if (next.length === 0) tasks.delete(agentId);
+      else tasks.set(agentId, next);
+    },
+    newTask: createTask,
+    runTurn: (task, text) => {
+      runTaskTurn(task, text);
+    },
+    conversation: taskConversation,
+    unread: (taskId) => taskUnread.get(taskId) ?? 0,
+    setUnread: (taskId, count) => {
+      if (count > 0) taskUnread.set(taskId, count);
+      else taskUnread.delete(taskId);
+    },
+    emitTasks,
+    onTasksChanged: (listener) => {
+      taskChangeListeners.add(listener);
+    },
+  });
   const mockProviderRuntimes = createMockProviderRuntimes(options, runtime);
   const mockVoice = createMockVoice(options, runtime);
   const mockAuth = createMockAuth(options, runtime);
@@ -1711,6 +1746,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       () => emitAgentEvent({ type: "workflow-folders-changed" }),
     ),
     crm: mockCrm(options.crm ?? {}, () => emitAgentEvent({ type: "crm-changed" })),
+    projects: mockProjects.api,
     routineResults: mockRoutineResults(routines, options, (agentId) =>
       emitAgentEvent({ type: "routines-changed", agentId }),
     ),
@@ -3135,8 +3171,10 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       },
       listWorkspaceDirectory: async (input: OpenWorkspaceFileInput) => mockWorkspaceDirectory(input.path),
       sendMessage: async (input: SendMessageInput) => {
-        if (input.taskId)
+        if (input.taskId) {
+          mockProjects.beforeSend(input.agentId, input.taskId);
           return runTaskTurn(findTask(input.agentId, input.taskId), input.text, input.replyToMessageId ?? null);
+        }
         const repeated = input.clientMessageId ? sentReceipts.get(input.clientMessageId) : undefined;
         if (repeated) return repeated;
         const messageId = `mock-message-${messageCounter++}`;
@@ -3460,6 +3498,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       markTaskRead: async (input) => {
         findTask(input.agentId, input.taskId);
         taskUnread.delete(input.taskId);
+        mockProjects.taskRead(input.agentId, input.taskId);
         return {
           taskId: input.taskId,
           unreadCount: 0,

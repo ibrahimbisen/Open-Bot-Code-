@@ -445,6 +445,12 @@ export class AgentThreadStore {
       .run(now, now, taskId, taskId);
   }
 
+  park(taskId: string): void {
+    this.#database.connection
+      .prepare(`UPDATE projection_agent_threads SET archived_at = ? WHERE ${BY_TASK_ID} AND archived_at IS NULL`)
+      .run(new Date().toISOString(), taskId, taskId);
+  }
+
   reopen(taskId: string): void {
     this.#database.connection
       .prepare(`UPDATE projection_agent_threads SET archived_at = NULL, updated_at = ? WHERE ${BY_TASK_ID}`)

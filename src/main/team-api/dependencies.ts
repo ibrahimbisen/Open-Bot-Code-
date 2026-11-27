@@ -31,6 +31,7 @@ import type { ChannelService } from "../../backend/channel-service";
 import type { CrmPeopleOperations } from "../../backend/crm/crm-handle";
 import type { MailboxStore } from "../../backend/mailbox-store";
 import type { MessagingService } from "../../backend/messaging/messaging-service";
+import type { ProjectOperations } from "../../backend/projects/project-operations";
 import type { RoutineFlowsHandle } from "../../backend/routine-flows/routine-flows";
 import type { SidebarLayoutStore } from "../../backend/sidebar-layout-store";
 import type { StorageUsageService } from "../../backend/storage-usage";
@@ -669,6 +670,7 @@ export interface TeamApiOptions {
   routineFlows?: TeamApiRoutineFlows;
   workflows?: TeamApiWorkflows;
   crm?: TeamApiCrm;
+  projects?: ProjectOperations;
   hiddenAgents?: TeamApiHiddenAgents;
   routineRunPlaces?: TeamApiRoutineRunPlaces;
   agentNotificationLevels?: TeamApiAgentNotificationLevels;

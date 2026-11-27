@@ -141,6 +141,8 @@ export function monacoLanguageFor(monaco: Monaco, name: string): string {
   const extension = dot === -1 ? "" : lower.slice(dot + 1);
   const mapped = LANGUAGE_BY_EXTENSION[extension];
   if (mapped) return mapped;
-  const found = monaco.languages.getLanguages().find((language) => language.extensions?.includes(`.${extension}`));
+  const found = monaco.languages
+    .getLanguages()
+    .find((language: MonacoApi.languages.ILanguageExtensionPoint) => language.extensions?.includes(`.${extension}`));
   return found?.id ?? "plaintext";
 }
