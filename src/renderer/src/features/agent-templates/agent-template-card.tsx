@@ -151,7 +151,7 @@ async function drawColumn(
   context.fillText(label, x + 32, pillTop + 38);
   context.font = `500 24px ${FONT}`;
   context.fillStyle = colors.muted;
-  context.fillText("openbot.run", x + pillWidth + 24, pillTop + 38);
+  context.fillText("CodeBot", x + pillWidth + 24, pillTop + 38);
 }
 
 export async function drawLogo(

@@ -48,11 +48,13 @@ import {
 } from "./network-address";
 import { withTimeout } from "./with-timeout";
 
-const MCP_CLIENT_METADATA_URL = "https://openbot.run/oauth/mcp-client.json";
+const MCP_CLIENT_METADATA_URL =
+  process.env.CODEBOT_MCP_CLIENT_METADATA_URL ?? "https://mcp-oauth.codebot.invalid/oauth/mcp-client.json";
 
 const MCP_CLIENT_NAME = "CodeBot";
 
-export const MCP_OAUTH_RELAY_URL = "https://openbot.run/oauth/mcp-callback";
+export const MCP_OAUTH_RELAY_URL =
+  process.env.CODEBOT_MCP_OAUTH_RELAY_URL ?? "https://mcp-oauth.codebot.invalid/oauth/mcp-callback";
 
 interface BuiltInMcpClient {
   resource: string;
@@ -827,8 +829,7 @@ class McpOAuthClientProvider implements OAuthClientProvider {
     const methods = this.#discoveryState?.authorizationServerMetadata?.token_endpoint_auth_methods_supported;
     return {
       client_name: MCP_CLIENT_NAME,
-      client_uri: "https://openbot.run",
-      logo_uri: "https://openbot.run/icon-512x512.png",
+      client_uri: "https://github.com/nightly-labs/openbot",
       redirect_uris: [this.#retryRedirectUrl ?? this.#options.redirectUrl],
       application_type: "native",
       grant_types: ["authorization_code", "refresh_token"],

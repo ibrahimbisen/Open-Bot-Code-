@@ -339,7 +339,7 @@ function clientInfo(client: McpOAuthProxyClient, agentKey: string | null): Clien
     name: "codebot",
     title: name ? `${name} (CodeBot)` : "CodeBot",
     version: client.version,
-    websiteUrl: "https://openbot.run",
+    websiteUrl: "https://github.com/nightly-labs/openbot",
   };
 }
 

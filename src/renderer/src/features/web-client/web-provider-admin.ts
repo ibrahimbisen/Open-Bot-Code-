@@ -149,9 +149,9 @@ const WEB_EXTERNAL_DESTINATIONS: Partial<Record<ExternalDestination, string>> = 
   feedback: "https://x.com/intent/post?text=Feedback%20for%20CodeBot%20%40norbertbodziony%3A%20",
   "report-problem": bugReportFormUrl({ platform: "Web client" }),
   message: "https://x.com/norbertbodziony",
-  changelog: "https://openbot.run/changelog",
-  guides: "https://openbot.run/guides",
-  discord: "https://discord.openbot.run",
+  changelog: "https://github.com/nightly-labs/openbot/releases",
+  guides: "https://github.com/nightly-labs/openbot/tree/main/docs",
+  discord: "https://github.com/nightly-labs/openbot/discussions",
   x: "https://x.com/OpenBot_",
 };
 

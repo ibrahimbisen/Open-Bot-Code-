@@ -59,10 +59,10 @@ import {
 } from "./app-inputs";
 import { stringPayload } from "./validation";
 
-const CODEBOT_SITE = "https://openbot.run";
+const CODEBOT_SITE = "https://github.com/nightly-labs/openbot";
 
 function draftPost(translate: AppTranslate): string {
-  return encodeURIComponent(translate("app.socialFollow.draftPost", { site: "openbot.run" }));
+  return encodeURIComponent(translate("app.socialFollow.draftPost", { site: "github.com/nightly-labs/openbot" }));
 }
 
 const EXTERNAL_DESTINATIONS: Record<ExternalDestination, string | ((translate: AppTranslate) => string)> = {
@@ -74,9 +74,9 @@ const EXTERNAL_DESTINATIONS: Record<ExternalDestination, string | ((translate: A
   feedback: "https://x.com/intent/post?text=Feedback%20for%20CodeBot%20%40norbertbodziony%3A%20",
   "report-problem": () => bugReportFormUrl(feedbackFacts()),
   message: "https://x.com/norbertbodziony",
-  changelog: "https://openbot.run/changelog",
-  guides: "https://openbot.run/guides",
-  discord: "https://discord.openbot.run",
+  changelog: "https://github.com/nightly-labs/openbot/releases",
+  guides: "https://github.com/nightly-labs/openbot/tree/main/docs",
+  discord: "https://github.com/nightly-labs/openbot/discussions",
   github: "https://github.com/nightly-labs/openbot",
   x: "https://x.com/OpenBot_",
   threads: "https://www.threads.com/@openbot.run",

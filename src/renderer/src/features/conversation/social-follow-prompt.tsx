@@ -143,7 +143,9 @@ export function noteSocialFollowReplyCompleted(): void {
 }
 
 function copyDraftPost(): Promise<"copied" | "opened"> {
-  return writeClipboardText(currentText().t("app.socialFollow.draftPost", { site: "openbot.run" })).then(
+  return writeClipboardText(
+    currentText().t("app.socialFollow.draftPost", { site: "github.com/nightly-labs/openbot" }),
+  ).then(
     () => "copied",
     () => "opened",
   );
