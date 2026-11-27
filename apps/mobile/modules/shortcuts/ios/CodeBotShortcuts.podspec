@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.description    = 'Gives the requests of the App Intents to JavaScript and the card of a shortcut session to the snippet.'
   s.license        = 'PolyForm-Noncommercial-1.0.0'
   s.author         = 'CodeBot'
-  s.homepage       = 'https://openbot.run'
+  s.homepage       = 'https://codebot.invalid'
   s.platforms      = { :ios => '16.4' }
   s.swift_version  = '5.9'
   s.source         = { git: '' }

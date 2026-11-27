@@ -61,7 +61,9 @@ export function decodeStoredAddresses(raw: string | null): Partial<ServiceAddres
   }
 }
 
-export function signalOverrideFetch(base: typeof fetch, signalUrl: () => string | null): typeof fetch {
+export type FetchFunction = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
+
+export function signalOverrideFetch(base: FetchFunction, signalUrl: () => string | null): FetchFunction {
   return async (input, init) => {
     const response = await base(input, init);
     const override = signalUrl();

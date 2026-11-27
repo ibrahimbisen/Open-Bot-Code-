@@ -8,6 +8,31 @@ React Native app built with Expo SDK 58, Expo Router, TypeScript 7, Biome, and B
 - Bun 1.4.2 (the version in the root `packageManager`)
 - Expo Go for device testing, including the WebRTC server connection
 
+## Self-hosted services
+
+The app has no built-in server address. It talks to the services of your home server:
+
+- The account service (`apps/auth-api`, Bun and SQLite). The user signs in with Nextcloud: the app opens the
+  browser sheet of the account service, Nextcloud asks for the user name and password, and the app gets a
+  session through the PKCE exchange (`/v1/auth/oidc/start` and `/v1/auth/oidc/exchange`, return link
+  `codebot://auth`). There is no email-code sign-in and no company sign-in.
+- Signal and TURN (`remote/`). The account service gives the Signal address in each session ticket, and Signal
+  gives the TURN servers and their credentials. A Signal address set in Settings > Connection replaces the one in
+  the ticket.
+
+The address of the account service comes from the first sign-in (or a QR code of the desktop app, which carries
+its own address). It is stored in the secure store of the phone. A build can give defaults with these public
+build variables; with none, the sign-in screen asks for the address:
+
+| Variable | Meaning |
+| --- | --- |
+| `EXPO_PUBLIC_CODEBOT_API_URL` | Default address of the account service, for example `https://account.example.com` |
+| `EXPO_PUBLIC_CODEBOT_SIGNAL_URL` | Default Signal address, for example `wss://signal.example.com/v1/signal` |
+| `EXPO_PUBLIC_CODEBOT_UPDATE_URL` | Optional page that the "update required" screen opens |
+| `EXPO_PUBLIC_CODEBOT_DOWNLOAD_URL` | Optional link that the "share the app" quick action sends |
+
+An address must use `https`, or `http` for a host of a local network. Test: `bun run test:mobile-account`.
+
 ## Development
 
 The repository uses Bun’s hoisted linker so native Expo modules resolve to one installation.
@@ -54,8 +79,7 @@ Keyboard Controller 1.22.7 is the version that Expo SDK 58 pins for Expo Go. Cus
 standalone apps must be rebuilt after adding this native dependency; a JavaScript reload alone
 cannot add it to an existing binary. All channels use the fingerprint runtime policy, so these
 updates cannot target older app-version `1.0.0` binaries without Keyboard Controller. Build and
-distribute a binary with the new fingerprint before publishing compatible OTA updates. See
-[over-the-air updates](#over-the-air-updates).
+distribute a binary with the new fingerprint.
 
 Run commands from the repository root:
 
@@ -427,8 +451,7 @@ bun run mobile:doctor
 ## EAS
 
 The project is linked to EAS and has development, preview, and production build profiles in `eas.json`. EAS gives the
-build credentials, the build numbers and the public values of each environment. The app does not use
-EAS Update: see [over-the-air updates](#over-the-air-updates).
+build credentials, the build numbers and the public values of each environment. The app does not use EAS Update.
 
 ```bash
 cd apps/mobile
@@ -623,10 +646,7 @@ See [Fastlane Google Play upload](https://docs.fastlane.tools/actions/upload_to_
 
 ### Android APK
 
-openbot.run offers the Android app as an APK, for a phone with no Google Play: the "Get the APK"
-link on the Android card of the home page, the "Android · APK" entry of its download menu, and the
-second button on `/download/android`. They open `/download/android/latest`, which redirects to the
-file on GitHub.
+The universal APK that Google Play makes from the store bundle can be given to a phone with no Google Play.
 
 The file is the universal APK that Google Play makes from the store bundle. Google Play signs it
 with the app signing key, so it has the signature of the app on Google Play: a user can change
@@ -756,306 +776,8 @@ One-time setup:
    and select Copy Role ID. Add the ID as the environment variable `DISCORD_MOBILE_RELEASE_ROLE_ID`.
 4. A tag ruleset must let GitHub Actions create and delete tags that start with `mobile-announced/`.
 
-## Over-the-air updates
+## Removed features
 
-An over-the-air (OTA) update sends a new JavaScript bundle to the phones that have a store binary.
-It needs no store review. The phones get it from CodeBot's own update server,
-[`apps/mobile-updates`](../mobile-updates/README.md) at `https://updates.openbot.run`, not from EAS
-Update. `expo-updates` is the client in the app.
-
-Version 1.4.8 and earlier binaries ask Expo's server and get no update. A binary cannot change its
-update server, so only a newer store version can get one.
-
-### What an update can change
-
-An update can change the TypeScript of `apps/mobile/src` and of the workspace packages that the app
-imports, and the images and fonts that this code imports.
-
-An update cannot change native code or native settings. Each binary has a runtime version: the
-fingerprint, a hash of all that the native build reads (`fingerprint.config.js`). A phone asks only
-for updates of its own runtime version, and the publish command refuses a commit whose runtime
-version no store build has. A change to one of these makes a new runtime version and thus needs a
-store build:
-
-- `app.json` (also `version`), `app.config.js`, `eas.json`, `.gitignore` and the `scripts` of
-  `apps/mobile/package.json`. Put a new script in the root `package.json`.
-- `modules/`, `plugins/`, `certs/`, `assets/sounds`, and the assets that `app.json` names.
-- A native dependency, and a file in the root `patches/` folder.
-- The share extension code (`src/features/share/extension/share-sender.ts`).
-
-`mobile:release:patch` changes `version`, so it starts a new runtime version. An update goes only to
-the store version that `app.json` has now.
-
-On a pull request, the CI job `Mobile runtime version` says when the change makes a new runtime
-version. After such a change is on `main`, `main` cannot go to the current store build as an update.
-
-### Commands
-
-Run them from the repository root. The publish, rollout and rollback commands start the
-`Mobile OTA update` workflow for the current branch, so push the branch first.
-
-| Command | Use |
-| --- | --- |
-| `bun run mobile:ota:check` | Shows the runtime version of this checkout and the store builds that can get it. It changes nothing. |
-| `bun run mobile:ota:publish -- --platform all --message "Fix the chat scroll"` | Publishes the current branch to all phones of the store builds that can get it. `--platform ios` or `android` selects one platform. `--rollout 10` gives it to 10% of the phones. `--dry-run` runs the checks and the guard, and publishes nothing. |
-| `bun run mobile:ota:rollout -- --platform all --rollout 50` | Changes the percentage of phones that get the current update. |
-| `bun run mobile:ota:rollback -- --platform all` | Takes the current update back. Phones get the earlier update again, or with `--to-embedded` the bundle in their binary. |
-| `bun run mobile:ota:status` | Shows what the update server gives the phones of each store build. It changes nothing. |
-| `bun run mobile:release:ota -- --base <store build tag> --platform all` | Writes the release notes of an update. See [the notes of an update](#release-notes-of-an-update). |
-
-Add `--channel preview` to send an update to internal builds of the `preview` profile only. Such a
-build has no tag, so the guard does not stop this publish: build the preview binary from the same
-commit, or from a commit with the same runtime version (`mobile:ota:check` prints it).
-
-### Publish a fix
-
-1. Merge the fix to `main` with its note file in `changelog.d`.
-2. Run `bun run mobile:ota:check`. When it names the store builds, `main` has no native change since
-   those builds, and all of `main` can go out.
-3. Run `bun run mobile:ota:publish -- --platform all --message "<what the update does>"`.
-4. Follow the workflow in GitHub Actions. It runs the mobile lint, typecheck and tests, the guard,
-   `expo export`, and the upload. Its summary names each update ID and the store builds that get it.
-5. Write the notes with `bun run mobile:release:ota`, and merge that change.
-
-When step 2 says that the checkout needs a store build, `main` has a native change. Then:
-
-1. Make a branch from the commit of the store build. `mobile:ota:check` prints the command, such as
-   `git switch -c mobile-hotfix/1.5.0 <commit>`. Each store build has a tag
-   `mobile-build/<platform>/<version>/<build>/<runtime version>`.
-2. Cherry-pick only the fix. Do not pick a commit that needs native code that the store build does
-   not have: the guard cannot see that the JavaScript calls a module that is not in the binary.
-3. Push the branch and publish from it, as above. The workflow runs only on `main` and on
-   `mobile-hotfix/*` branches.
-
-iOS and Android can have store builds from different commits. Publish each platform from a commit
-that its store build accepts.
-
-### Rollout and rollback
-
-- A rollout change and a rollback do not use the runtime version of the branch. They find the store
-  builds of each platform that have an update now, from the `mobile-build/` tags. So they work from
-  `main` also after a native change, and `--platform all` changes each platform that has an update
-  and names a platform that has none. When two store versions of one platform have an update, or for
-  a build with no tag such as a `preview` build, name the binary: `--platform ios --runtime <version>`.
-  `bun run mobile:ota:status` prints the runtime version of each store build.
-- With `--rollout`, each install has a fixed place, so the same phones stay in the rollout while the
-  percentage grows. The other phones keep the earlier update.
-- A phone does not go back to an older update. So a rollback publishes the earlier bundle again as a
-  new update. With no earlier update, or with `--to-embedded`, the server sends a signed instruction
-  to use the bundle in the binary. A second rollback always returns to the bundle in the binary.
-- A phone takes a rollback as it takes an update: the header comes, and **Update** restarts the app.
-  Without the tap, the next cold start uses the earlier bundle. At a cold start, `expo-updates` on
-  Android reports no pending update for a rollback, so the app fetches it again to show the header.
-- `mobile:ota:rollout` and `mobile:ota:rollback` work from each branch and from a checkout that is
-  not up to date. They run the workflow on `main`.
-- If an update stops at launch, `expo-updates` starts the bundle in the binary and reports the update
-  as failed. The server does not send that update to that phone again.
-- A change reaches all phones after 30 seconds at the latest, which is the cache time of the server.
-
-### How a phone gets an update
-
-The app asks the server at a cold start, and again when it comes back to the foreground, at most
-one time in 15 minutes (`src/features/app-update/model/app-update.ts`). The cold start counts as a
-check, so to see a new update or a rollback at once, close the app fully and open it. It downloads a new bundle in
-the background. The home header then shows **A new CodeBot is ready**, and **Update** restarts the
-app with the new bundle. Without the tap, the next cold start uses it. The bundle is about 25 MB;
-the server sends it compressed, and the phone downloads only the assets that it does not have.
-
-**Settings → About** shows the short update ID after the version and build, and the support log
-names the bundle, the channel and the runtime version.
-
-### Release notes of an update
-
-An update keeps the store version, so its notes get a section with a fourth number: `1.5.0.1` is the
-first update of `1.5.0`.
-
-```bash
-bun run mobile:release:ota -- --base <store build tag or commit> --platform all
-```
-
-`--base` is the tag or commit of the store build, such as a `mobile-build/` tag. Name only the
-platforms whose store has the version: the command stops for a platform that still reviews it, and
-its heading then needs that platform when the store has the version.
-
-The command moves only the note files in `changelog.d` that are new since `--base` into that section.
-The guard has shown that this range has no native change, so no line in it needs a new binary. The
-other files stay for the next store version. See
-[the notes of OTA updates](changelog.d/README.md#ota-updates).
-
-### Rules
-
-- An update must not write data that the bundle in the binary cannot read. A rollback, or a start
-  after a failed update, runs that older bundle with the data that the update wrote. This is true
-  for `SecureStore` keys, files in the cache and the workspace copy.
-- New code that needs a native module must check that the module is there, or use a feature flag of
-  the app version (`useMobileFeature`), so that it does nothing in an older binary.
-- `scripts/mobile-ota.ts` exports with `EXPO_NO_BUNDLE_SPLITTING=1`. Without it, `expo export` of
-  Expo CLI 58 stops at the DOM components with `Asset not found: _expo/static/js/web/__common-…js`.
-  The DOM components of an update are thus one file each, and those in a binary are split. Check the
-  previews of a chat (diagram, PDF, spreadsheet, HTML page, audio) on a phone after a change to a
-  DOM component.
-- Do not change `updates.url`, the certificate or the key ID. Binaries with the old values would get
-  no update.
-
-### One-time setup of over-the-air updates
-
-1. The update server: see [its README](../mobile-updates/README.md#deployment).
-2. In GitHub repository settings, the `release-mobile-ota` environment has the deployment branches
-   `main` and `mobile-hotfix/*`. Add required reviewers there if a second person must approve each
-   publish.
-3. Environment secrets of `release-mobile-ota`:
-   - `MOBILE_OTA_PRIVATE_KEY`: the PEM text of the update signing key.
-   - `MOBILE_OTA_R2_ACCESS_KEY_ID` and `MOBILE_OTA_R2_SECRET_ACCESS_KEY`: an R2 API token with
-     **Object Read & Write** for the bucket `codebot-mobile-updates` only. The token in Cloudflare
-     is `codebot-mobile-ota-publish`. The access key ID is the ID of the token, and the secret
-     access key is the SHA-256 of its value.
-   - `EXPO_TOKEN`: the same token as in `release-ios`. The workflow reads the public values of the
-     EAS environment with it, such as the OpenPanel client. It does not use EAS Update.
-   The workflow also reads the repository variable `CLOUDFLARE_ACCOUNT_ID`.
-4. The release workflows make the `mobile-build/` tags. No tag rule may stop GitHub Actions from
-   making them.
-
-The signing key pair comes from `expo-updates codesigning:generate`. The certificate
-`certs/certificate.pem` is public and in each binary; it is valid until November 2046. The private
-key is only in the GitHub secret and in the backup of the developer who made it: it is never in the
-repository or in Cloudflare. If the key is lost, no update can go to the binaries that have this
-certificate. Then make a new pair, replace the certificate, and release a store build.
-
-### Check before a store release
-
-The release workflows stop when the binary does not have the update server, the channel, the
-certificate, or the runtime version of its commit (`mobile-ota.ts verify-build`). A wrong value in a
-released binary needs a new store build to correct, so also test an update before the store review
-of the first version that uses this server, and after a change to `updates` in `app.json`:
-
-1. Install the build from TestFlight and from the Play internal track.
-2. Publish a small visible change with `--rollout 100`. Only the phones with this new build get it.
-3. Open the app, leave it and come back after 15 minutes, or close and open it two times. Confirm
-   the home header, the restart, the change, and the update ID in **Settings → About**.
-4. Open a chat with a diagram, a PDF and an HTML page, to check the DOM components of the update.
-5. Run `bun run mobile:ota:rollback -- --platform all` and confirm that the change goes away.
-
-## OpenPanel product analytics
-
-The app uses the official [`@openpanel/react-native` SDK](https://openpanel.dev/docs/sdks/react-native)
-and `expo-application`, following the [React Native guide](https://openpanel.dev/guides/react-native-analytics).
-The endpoint is fixed to `https://analytics.openbot.run/api`. No analytics credentials are committed.
-
-### Production configuration
-
-1. In the self-hosted OpenPanel dashboard, open the existing **Codebot** project used by desktop and the website.
-   Do not create or select a separate **Codebot Mobile** project.
-   Create a separate client for CodeBot Mobile with **write** access only. Copy its Client ID and
-   Client Secret. Do not use an organization/root client or a client with read access.
-2. In the Expo dashboard, open the **codebot** project → **Environment variables**, select the
-   **production** environment, and add:
-
-   | Variable | Value |
-   | --- | --- |
-   | `EXPO_PUBLIC_OPENPANEL_CLIENT_ID` | The mobile client's Client ID |
-   | `EXPO_PUBLIC_OPENPANEL_CLIENT_SECRET` | The mobile client's write-only Client Secret |
-   | `EXPO_PUBLIC_APP_ENV` | `production` |
-
-   The production build profile also sets `EXPO_PUBLIC_APP_ENV=production`. Development and preview
-   profiles set their own environment and never send events. Set the variable in the EAS environment
-   too, so production OTA updates use the same gate. Keep the credentials out of development/preview.
-3. Generate the next production native build through the usual approved release process. The new
-   `expo-application` native dependency requires a new binary; do not send this change as an OTA
-   update to a binary that lacks it. Build and deployment are separate operations, not part of setup.
-4. In that build, leave **Settings → General → Privacy → Share product analytics** enabled.
-   Before pairing, events stay in memory and do not appear in OpenPanel. Pair the phone.
-   OpenPanel's Real-time view should then show `mobile_app_opened` and pairing events with
-   `surface=mobile`, the account ID, and the email on its profile. Open a conversation and send
-   a message. Confirm connection and message events, then disable the setting and confirm that new actions do not send events. Repeat on iOS and Android.
-
-React Native requires a Client Secret according to OpenPanel's native SDK guide. In this direct
-native integration it is an **embedded write credential**, not a confidential server secret.
-Expo's `EXPO_PUBLIC_` values are visible in the shipped bundle. Use only a dedicated write client;
-never embed a key for Export, Insights, Manage, or an CodeBot account/session. EAS visibility can hide
-values in its UI but does not hide them in the app. See [OpenPanel client access levels](https://openpanel.dev/docs/api/authentication)
-and [Expo environment variables](https://docs.expo.dev/guides/environment-variables/).
-
-For a local production configuration, put the same variables in the ignored
-`apps/mobile/.env.local`. Ordinary development mode still disables analytics. A missing Client ID,
-missing Client Secret, non-production environment, or web runtime disables the client without
-blocking the app. Tests replace native modules and the HTTP transport; they do not contact OpenPanel.
-
-SDK 1.4.1 declares old peer ranges (`expo-application` 5–7 and `expo-constants` 14–18).
-Expo SDK 58 uses the SDK number for these package versions. Keep the Expo-compatible versions
-installed by `expo install`; do not downgrade them to silence that peer warning. Native verification
-of both platforms is required before release.
-
-### Event catalog
-
-Every event has `surface=mobile`, `platform=ios|android`, `environment=production`,
-`event_schema_version=5`, `app_version` and `build_number`. Operation outcomes use `result` and,
-where available, `duration_ms`. Failure codes are fixed categories, never raw error text.
-
-| Event | Meaning |
-| --- | --- |
-| `mobile_app_opened` | Cold start or return from background, with `signed_in`; iOS inactive overlays do not count as a new visit |
-| `mobile_pairing_action` | Sign-in scanner opened, camera permission result, QR redemption result, scanner cancelled; `entry_point` is `qr` or `link` (a pairing link) |
-| `mobile_connection_action` | Initial connection attempt, reconnection attempt, or connection lost; result, duration and bounded loading stage. From generation 5, the milliseconds from the start of the attempt to the Signal socket (`signal_socket_ms`), the Signal answer (`signal_ms`), the open data channels (`channels_ms`) and the host sign-in (`auth_ms`), when the attempt made a new peer connection; `route`, the candidate types and transports of the selected WebRTC path (for example `relay/tcp -> host/udp`; for a relay candidate, the transport from the phone to the relay); and `vpn` (`off`, `on`, `proxy` for a tunnel address in `198.18.0.0/15` as Clash-type proxy apps use, or `unknown`), also on `lost`. No address or VPN name is sent |
-| `conversation_opened` | One visible-visit outcome and time to readable conversation, including cached/offline reads; failures when no readable conversation is available |
-| `message_send` | Host receipt or failure, attachment count, reply flag, provider/model/reasoning metadata when known |
-| `agent_input_action` | Submission of a structured prompt answer or an approval decision (`accept` or `decline`); no answer contents, command or path |
-| `attachment_action` | Local file selection, upload, removal; result, count and coarse size bucket when known |
-| `agent_action` | Create, update, duplicate or delete |
-| `routine_action` | Create, update or delete, including enabling/disabling through update |
-| `memory_action` | Create, update or delete |
-| `search_action` | One summary when a search screen closes after using a query/filter; final result count, no query |
-| `team_action` | Select, join or leave a server |
-| `conversation_action` | Pin/unpin or hide/unhide, including preference-save failures |
-| `usage_viewed` | Open the agent Usage section or the server Usage page; `scope` is `agent` or `server` |
-| `account_sign_out` | Sign-out result under the initiating account |
-| `account_sign_in_started` | Email sign-in code request (also a resend); `method=email`, `result` is `code_sent` or `failed`, duration |
-| `account_sign_in_completed` | Email sign-in code check; `method=email`, result, duration |
-| `hosted_server_plans_action` | Hosted server plans sheet `viewed` and `closed`, or a server in setup opened (`setup_opened`); `entry_point` is `drawer` or `onboarding` when known. The mobile sheet has no purchase |
-| `onboarding_step` | First-run `step` (`hello`, `server`, `agent`, `look`, `name`, `role`, `task`, `ready`) with `action` `viewed`, `next`, `back` or `skipped` |
-| `onboarding_completed` | First run ended; `skipped` is true when the user skipped it |
-| `notification_settings_action` | Notifications turned on or off, preview, thread replies or Live Activities switched (`enabled`), or the phone's permission prompt answered (`permission` is `granted`, `denied` or `undetermined`) |
-| `live_activity_action` | The app started or ended a Live Activity; updates are not counted |
-| `voice_conversation_action` | Voice mode `start`, or `end` with its duration and `turn_count`; `server_kind=remote` |
-| `voice_turn` | One dictation session: result, listening time in `audio_duration_seconds`, time from stop to final text in `duration_ms`, and `transcription` (`local` or `cloud`) when known; no words |
-| `agent_template_action` | Agent template install from a link; `action=installed`, `entry_point=deep_link`, result, duration |
-| `analytics_preference_changed` | `enabled=false`, sent once before collection stops when the user turns analytics off; the app waits at most 2 seconds for it |
-
-Use a mobile activation funnel from open → successful QR redemption → successful connection →
-conversation load or message send. Measure signed-in D1/D7 retention by CodeBot account ID. Eligible
-pre-session events join that account after sign-in. Unclaimed and expired attempts are not sent, so
-this funnel does not measure all abandoned pairing attempts.
-A message receipt means the host accepted the message, not that the agent finished its work.
-Connection retries are separate attempts; countdown ticks and background suspension are not failures.
-
-The app does not emit host `system_turn_*` events again. Host lifecycle remains attributed to the
-host owner and does not identify which client started the work. Analytics does not change Team API.
-
-The local phone-wide preference is loaded before SDK creation. If it cannot be read, collection
-stays off. Opt-out clears pending events and blocks later sends; it cannot retract a request already
-sent. Account changes reset identity in order, and late results from an old account are discarded.
-Error notifications and failed-action diagnostics use a persistent local queue. Other product
-events still have no disk queue. Transport failures can lose those product events, and collection
-never blocks product actions. Session replay, automatic screen capture, route IDs, QR values, tokens,
-file names, contents, URLs and raw errors are excluded. The SDK's Android referrer and path metadata
-are removed again at the final send filter. Account ID and normalized email identify the profile;
-email is not an event property. The phone preference is independent of desktop/host analytics.
-
-Pre-session events stay in memory for at most 30 minutes from the first buffered event, with a
-limit of 100 events (the oldest is removed when full). Session creation sends eligible events once,
-with their original timestamps, after identifying the account. Reconnects do not replay them.
-Opt-out and process exit discard the buffer. Sign-out ends the previous account's operation scopes;
-new signed-out activity can be claimed by the next sign-in. There is no disk queue.
-Existing anonymous events already sent by older builds are not reassigned by this fix.
-If mobile credentials belong to another project, replace both production variables with credentials
-for a write-only client in **Codebot**, then ship a build or compatible update with those values.
-
-Mobile schema generation 2 adds safe error diagnostics. Native error alerts and chat send errors
-emit `notification_shown`; existing failed actions emit a separate `client_operation_failed`.
-Only fixed cause, source, operation, and provider/model fields are sent. No alert text is sent.
-
-Mobile schema generation 3 adds sign-in, hosted server plans, first-run, notification settings,
-Live Activity, voice, agent template and opt-out events, `entry_point` on pairing, and `scope` on
-`usage_viewed`. The generation comes from `ANALYTICS_GENERATIONS.mobile` in `@codebot/telemetry`.
-The file queue holds at most 1,000 reports, 1 MiB, and seven days, and sends only after a local
-write succeeds. Foreground and host reconnection trigger retries. Opt-out and account changes
-clear this queue.
+Over-the-air updates, product analytics, error reports, billing, credits, referral, hosted server plans and
+store review prompts are removed (decision D7). `updates.enabled` is `false` in `app.json`, and the app
+never calls an upstream server. `apps/mobile-updates` is not used by the app.

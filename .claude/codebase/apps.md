@@ -56,7 +56,7 @@ Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agen
 | `apps/mobile/AGENTS.md` | Phone rules: check limits, HeroUI-first UI, native chrome, catalog text keys, sheet rules. Read first. |
 | `apps/mobile/README.md` | Expo SDK 58, Bun 1.4.2, Node 24, hoisted linker, patches list, Expo Go notes. |
 | `apps/mobile/DESIGN.md` | UI design system. Read before any UI change. |
-| `apps/mobile/app.json` | Expo config. `updates.url` = `https://updates.openbot.run/manifest`. Certificate `./certs/certificate.pem`. Associated domain `applinks:openbot.run`. |
+| `apps/mobile/app.json` | Expo config. Over-the-air updates are off (`updates.enabled` false). No associated domain. |
 | `apps/mobile/app.config.js` | Adds `googleServicesFile` when `google-services.json` exists. |
 | `apps/mobile/package.json` | Name `@codebot/mobile`, version 1.4.14, entry `expo-router/entry`. Scripts: `start`, `ios`, `android`, `lint`, `codegen`, `typecheck`, `doctor`. |
 | `apps/mobile/eas.json` | Build profiles. Sets `EXPO_PUBLIC_APP_ENV` to `development`, `preview`, `production`. |
@@ -287,3 +287,10 @@ Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agen
 - **Generated files.** `apps/auth-api/src/lib/plugin-catalog.generated.ts` and `src/routeTree.gen.ts` are generated. Edit the source, not these files (unverified for each generator).
 - **`tsconfig.tsbuildinfo`** files sit in several app folders. They are build cache. Do not edit them.
 - **Auth-api uses cross-folder imports** (for example `../../../site-router/src/index` in `worker-handler.ts`). Changing `site-router` can change `auth-api` build.
+
+### Mobile sign-in and service addresses (W18)
+
+- `apps/mobile/src/features/auth/model/account-sign-in.ts`: pure Nextcloud sign-in against the account service (config check, PKCE start, browser sheet, exchange). No Expo imports, so `scripts/mobile-account-e2e.ts` runs it on Windows.
+- `.../service-addresses.ts` (pure address rules, Signal override fetch) and `service-address-store.ts` (secure store, `EXPO_PUBLIC_CODEBOT_API_URL` and `EXPO_PUBLIC_CODEBOT_SIGNAL_URL` build defaults). `use-account-sign-in.ts` is the sign-in hook; `sign-in-panes.tsx` has `OptionsPane` and `ServerPane`.
+- Settings > Connection (`features/settings/screens/connection-settings-screen.tsx`) edits the Signal address.
+- Removed: email-code and company sign-in, billing, credits, referral, hosted server plans, analytics preference screen, rating ask, app update header and notes, OTA.
