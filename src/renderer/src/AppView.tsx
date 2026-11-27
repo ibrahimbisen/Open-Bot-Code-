@@ -65,10 +65,9 @@ export function AppAccessGate() {
   const languageStep = createLanguageStep();
   const languageStepShown = () =>
     !languageStep.done() && (languageStep.reopened() || auth.centralAuth().status === "signed_out");
+  const accountResolved = createMemo<boolean>((was) => was === true || auth.centralAuth().status !== "loading");
   const shownAccount = () =>
-    auth.centralAuth().status === "loading" || languageStepShown()
-      ? null
-      : (auth.signedInAccount() ?? LOCAL_PROFILE_USER);
+    !accountResolved() || languageStepShown() ? null : (auth.signedInAccount() ?? LOCAL_PROFILE_USER);
   const workspaceShown = () =>
     !!shownAccount() && (setup.setupState()?.completed === true || !scope.connection.hasContent);
   const splashReady = () =>

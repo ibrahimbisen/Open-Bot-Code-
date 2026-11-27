@@ -187,9 +187,15 @@ direct connection is not possible. Both run from `remote/compose.yaml`. The full
    `REMOTE_AUTH_WEBHOOK_URL=https://signal.example.com/internal/auth-events` and the same
    `REMOTE_AUTH_WEBHOOK_SECRET`. Restart the account service.
 
-4. Point the app at the services. Today the desktop app reads `CODEBOT_AUTH_API_URL=https://account.example.com` and
-   `CODEBOT_REMOTE_SIGNAL_URL=wss://signal.example.com/v1/signal` from its environment (set both). A setting in the app
-   comes with the desktop account flow (W04).
+4. Point the app at the services. In the desktop app open Settings > Profile > Account service, enter
+   `https://account.example.com` and save it, then choose Sign in. The app opens your browser at the Nextcloud
+   sign-in page and returns to a loopback address of the app when you finish. The environment variable
+   `CODEBOT_AUTH_API_URL` overrides the saved address (the field is then read-only).
+   `CODEBOT_REMOTE_SIGNAL_URL=wss://signal.example.com/v1/signal` still comes from the environment.
+
+   Sign-in is optional (decision D9, PRD 11.7). With no address saved the app makes no request to any account
+   service and works with a local profile. Sign out returns to the local profile; the saved address stays. When
+   Nextcloud disables the user, the next check of the service answers 401 and the app signs out.
 
 A ticket for your Signal is signed with your key. A Signal that you do not run cannot accept it, and your
 Signal accepts no ticket from another key set.

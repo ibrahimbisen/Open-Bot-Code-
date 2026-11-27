@@ -1,3 +1,4 @@
+import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
 import { app, net } from "electron";
@@ -61,6 +62,17 @@ export function configuredAccountServiceUrl(): string | null {
 
 export function centralAuthApiUrl(): string {
   return configuredAccountServiceUrl() ?? ACCOUNT_SERVICE_PLACEHOLDER_URL;
+}
+
+export function signInPageOpener(
+  open: (url: string) => Promise<void>,
+  environment: NodeJS.ProcessEnv = process.env,
+  packaged: boolean = app.isPackaged,
+): (url: string) => Promise<void> {
+  const file = environment.CODEBOT_E2E_SIGN_IN_PAGE_FILE;
+  delete environment.CODEBOT_E2E_SIGN_IN_PAGE_FILE;
+  if (!file || packaged) return open;
+  return (url) => writeFile(file, url, "utf8");
 }
 
 export function createCentralAuthManager(options: {
