@@ -1,5 +1,20 @@
 # `apps/auth-api`
 
+## CodeBot account service (`src/bun`)
+
+The Bun entry (`src/bun/server.ts`) is the service that CodeBot runs; see `docs/codebot/account-service.md`.
+- `src/bun` must not import `cloudflare:workers` or `server/request-auth.ts`. The kept TanStack route files
+  (list in `src/bun/routes/remote-access.ts`) run unchanged: `src/bun/compat` replaces `request-auth`,
+  `source-ip` and `@tanstack/solid-router` for them with `Bun.plugin` `build.module`. Add a route by naming its file
+  there, and add each helper that it imports to `compat/request-auth.ts`.
+- Login and the disabled-user check are in `src/bun/login`. Every authenticated request passes
+  `AccountGuard`. Tests: `test:account-login`, `test:account-user-disabled`, `test:account-remote-access`,
+  `test:account-signal`. They use `scripts/oidc-mock-server.ts`; do not call a real provider.
+- CodeBot tables go in `migrations-codebot/`, never in `migrations/`.
+- The member limit is fixed at 1,000: the account service has no plans.
+
+## Upstream Worker notes
+
 The Cloudflare Worker behind accounts, avatars, host configuration, memberships, invitations and
 logical sessions. It never holds chats, files or commands.
 

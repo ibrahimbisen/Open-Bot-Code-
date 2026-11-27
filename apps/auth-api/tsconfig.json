@@ -8,7 +8,7 @@
       "@codebot/renderer-web": ["./src/types/renderer-web.d.ts"],
       "@codebot/ui/features/conversation/MarkdownMessageText": ["./src/types/markdown-message-text.d.ts"]
     },
-    "types": ["@cloudflare/workers-types", "vite/client", "@testing-library/jest-dom"]
+    "types": ["@cloudflare/workers-types", "vite/client", "@testing-library/jest-dom", "bun"]
   },
   "include": [
     "src/**/*.ts",

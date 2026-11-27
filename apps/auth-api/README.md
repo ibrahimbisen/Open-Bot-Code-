@@ -1,5 +1,10 @@
 # CodeBot Auth API
 
+CodeBot runs this package as its own account service: a Bun process with SQLite and Nextcloud sign-in
+(`src/bun`, `bun run --cwd apps/auth-api serve`). Read [the account service guide](../../docs/codebot/account-service.md)
+first. The sections below describe the upstream Cloudflare Worker build. CodeBot does not deploy it, and
+it does not serve email-code sign-in, billing, hosted servers or the public site.
+
 This TanStack Start and Solid 2 package is the central CodeBot account API. It
 runs on Cloudflare Workers, stores account and authentication records in D1,
 and stores account avatars in R2. Users sign in with an eight-character
