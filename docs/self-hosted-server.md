@@ -2,7 +2,7 @@
 
 A self-hosted server is the Linux CodeBot build on your own computer with no screen: a VPS, a home
 server or a cloud VM. It is a normal Remote host of your account. You use it from the desktop app,
-the iPhone app or `openbot.run/app`, as you use a [hosted server](hosted-servers.md). You install
+the iPhone app or `codebot.example/app`, as you use a [hosted server](hosted-servers.md). You install
 and control it from a terminal.
 
 To run it in a container, see [Docker](docker.md).
@@ -12,7 +12,7 @@ To run it in a container, see [Docker](docker.md).
 On Ubuntu 24.04 or 26.04 (x86_64 or arm64) with systemd:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/your-org/codebot/main/scripts/install-server.sh | sudo bash
 sudo codebot login
 ```
 
@@ -28,7 +28,7 @@ In the desktop app, select Add server, then Other options, then New server on an
 The app shows one command with a one-time claim of your account:
 
 ```sh
-{ echo CODEBOT_CLAIM=<claim>; curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh; } | sudo bash -s
+{ echo CODEBOT_CLAIM=<claim>; curl -fsSL https://raw.githubusercontent.com/your-org/codebot/main/scripts/install-server.sh; } | sudo bash -s
 ```
 
 Run it on the server, or give it to an AI agent there with Copy for an AI agent. It asks no
@@ -95,7 +95,7 @@ sign in to CodeBot with that email, the server is in their server list.
 
 ```sh
 printf '{"email":"%s"}' owner@example.com |
-  curl --fail -sS -X POST https://api.openbot.run/v2/admin/server-claims \
+  curl --fail -sS -X POST https://api.codebot.example/v2/admin/server-claims \
     -H @server-claims.header -H 'content-type: application/json' --data-binary @- |
   sed -n 's/.*"claim":"\([A-Za-z0-9_-]*\)".*/\1/p' |
   sudo codebot login --claim --name <name>

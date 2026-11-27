@@ -751,7 +751,7 @@ its input does not count. A dialog that opened while
 the engine did not watch stays unknown: `Page.enable` waits behind it and reports nothing. While a
 dialog is open, the gateway drops pointer and key input and answers `copy` with no text. The desktop
 and web clients show the dialog as a sheet at the top of the page area, named after the site of the
-tab ("openbot.run says"). It dims only the page: the tabs, the address and the chat box stay usable.
+tab ("codebot.example says"). It dims only the page: the tabs, the address and the chat box stay usable.
 A click outside it does not answer it, and OK has the focus. Escape answers Cancel only when the focus
 is on the sheet or the page, not in the chat box or the address. Before the first
 frame, the page area says that the page waits for the answer. The phone shows it in `Alert.alert`.

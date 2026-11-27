@@ -158,7 +158,7 @@ export function supportLogFileText(): string {
   ].join("\n");
 }
 
-export function phoneFeedback(): FeedbackPhone {
+function phoneFeedback(): FeedbackPhone {
   const update = Updates.isEmbeddedLaunch ? null : Updates.updateId?.slice(0, 8);
   return {
     platform: Platform.OS === "android" ? "Android" : "iOS",

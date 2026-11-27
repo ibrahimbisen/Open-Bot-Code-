@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/solid-router";
 import { CLA_PDF_PATH } from "../lib/cla";
 
-const LICENSES_EMAIL = "licenses@openbot.run";
+const LICENSES_EMAIL = "licenses@codebot.example";
 
 export function Cla() {
   return (
@@ -236,8 +236,8 @@ export function Cla() {
       </ul>
       <p>
         This is a legal contract containing Personally Identifiable Information. Please refer to{" "}
-        <Link to="/privacy">https://openbot.run/privacy</Link> for the policy governing how this information is used and
-        shared.
+        <Link to="/privacy">https://codebot.example/privacy</Link> for the policy governing how this information is used
+        and shared.
       </p>
     </>
   );

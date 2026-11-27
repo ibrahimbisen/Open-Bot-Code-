@@ -158,8 +158,8 @@ export interface UpdateDiagnosticEvent {
   errorCode: UpdateFailureCode | null;
 }
 
-export const UPDATE_FIRST_CHECK_DELAY_MS = 12_000;
-export const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1_000;
+const UPDATE_FIRST_CHECK_DELAY_MS = 12_000;
+const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1_000;
 const MAX_LOG_BYTES = 1024 * 1024;
 const MAX_DIAGNOSTIC_EVENTS = 20;
 

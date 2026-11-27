@@ -420,7 +420,7 @@ sends a credential.
 
 A server with no `registration_endpoint` that sets `client_id_metadata_document_supported` gets
 CodeBot's client metadata document (CIMD, SEP-991) as the `client_id`:
-`https://openbot.run/oauth/mcp-client.json`, which `apps/auth-api` serves
+`https://codebot.example/oauth/mcp-client.json`, which `apps/auth-api` serves
 ([`mcp-client[.]json.ts`](../../apps/auth-api/src/routes/oauth/mcp-client%5B.%5Djson.ts)). Its
 `redirect_uris` holds only `http://127.0.0.1:28417/mcp-auth`: ElevenLabs refuses a document that
 also lists a custom scheme such as `codebot://mcp-auth` (#5748). A server that
@@ -434,7 +434,7 @@ address and the issuer that discovery finds. Both must match: any server can nam
 metadata, and the token goes to the server that asked for it. Meta Ads (`https://www.facebook.com/ads`) is one: its registration endpoint answers
 "Dynamic registration is not available for this client", and it refuses every `http` redirect,
 loopback too. Its client is the CodeBot Meta app 1479376854168579, with no secret. Its redirect is
-`https://openbot.run/oauth/mcp-callback`
+`https://codebot.example/oauth/mcp-callback`
 ([`mcp-callback.ts`](../../apps/auth-api/src/routes/oauth/mcp-callback.ts)), which answers 302 to
 `http://127.0.0.1:28417/mcp-auth` with the query unchanged. So the grant still arrives at the MCP
 listener of the computer where the browser runs, and a joined server uses the
@@ -766,7 +766,7 @@ Use `bun run dev:automation` for snapshots and screenshots. Do not drive another
 | --- | --- |
 | A sign-in that returns to a public `https:` address of the provider | The provider finishes it by itself. The host only waits. Nothing comes back to a loopback port. |
 | A sign-in that opens an app on the host, such as Pi, which opens Terminal | The step happens on the host's screen. There is no page address to open somewhere else. |
-| The owner signature of the NEAR Intents wallet | The passkey belongs to the `api.openbot.run` page on the host's browser, and the Agent API checks its origin. The wallet is on this computer only; a joined server has no Crypto tab. |
+| The owner signature of the NEAR Intents wallet | The passkey belongs to the `api.codebot.example` page on the host's browser, and the Agent API checks its origin. The wallet is on this computer only; a joined server has no Crypto tab. |
 | A vault that approves in its desktop app, such as 1Password or Bitwarden | The approval is in the vault app on the host. A relay cannot approve for it. 1Password on a joined server uses a service account token (`onepassword-connector-v1`); Bitwarden uses an API key and the master password (`bitwarden-connector-v1`). Proton Pass signs in on the host and the client opens Proton's page (`password-managers-v1`). |
 | The Slack development return address (`returnUrl`) | Development builds only. It returns to `http://127.0.0.1:<port>/...` on the host, and the relay does not carry it. Use the hosted install. |
 | An agent link for a member who is not an admin | The relay routes are admin only. The link opens as it is, and its callback cannot reach the host. |
@@ -787,7 +787,7 @@ admin that can install agents (`agent-install-v1`), as Discord and the other cha
 There are three parts:
 
 - **Content script** (`src/x-content.ts`, built as one IIFE file, `x-content.js`). It finds the parts of
-  an X page with CSS selectors only. When a reply mentions @OpenBot_ and the server answers `ready`, it
+  an X page with CSS selectors only. When a reply mentions @codebot_x and the server answers `ready`, it
   sets `data-codebot-x` on the reply button, and CSS gives the button the CodeBot look and motion. A
   click (or Cmd/Ctrl+Enter) is stopped in the capture phase. The script reads the post, the posts above
   it and the author's next posts (no replies by other people), gives them to the worker, and clicks the

@@ -2,9 +2,9 @@ import { isNumber } from "@codebot/contracts/runtime-values";
 
 const PREVIEW_WIDTH_STORAGE_KEY = "codebot:project-preview-width:v1";
 
-export const PREVIEW_DEFAULT_FRACTION = 0.5;
-export const PREVIEW_MIN_FRACTION = 0.2;
-export const PREVIEW_MAX_FRACTION = 0.8;
+const PREVIEW_DEFAULT_FRACTION = 0.5;
+const PREVIEW_MIN_FRACTION = 0.2;
+const PREVIEW_MAX_FRACTION = 0.8;
 
 type PreviewStorage = Pick<Storage, "getItem" | "setItem">;
 

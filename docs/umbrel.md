@@ -2,17 +2,17 @@
 
 The Umbrel app runs the [CodeBot image](docker.md) on an [Umbrel](https://umbrel.com) home server. It
 is a [self-hosted server](self-hosted-server.md) of your account. You use it from the desktop app, the
-iPhone app or `openbot.run/app`, as any other server.
+iPhone app or `codebot.example/app`, as any other server.
 
 ## Install
 
 The app is in the CodeBot community app store,
-[nightly-labs/openbot-umbrel-store](https://github.com/nightly-labs/openbot-umbrel-store). It is not in
+[your-org/codebot-umbrel-store](https://github.com/your-org/codebot-umbrel-store). It is not in
 the official Umbrel App Store yet.
 
 1. On your Umbrel, open the **App Store**.
 2. Open the **⋯** menu at the top right and select **Community App Stores**.
-3. Paste `https://github.com/nightly-labs/openbot-umbrel-store` and select **Add**.
+3. Paste `https://github.com/your-org/codebot-umbrel-store` and select **Add**.
 4. Open the **CodeBot** store and install **CodeBot**.
 
 Umbrel keeps the data of an app in a folder with the name of its app id, here `codebot-server`. An
@@ -25,7 +25,7 @@ CodeBot app from another store has another id and does not get that data.
    **Send sign-in code**.
 3. Enter the code that CodeBot sends to the email. The page signs in when the code is complete.
 4. The page shows when the server is online. Then open CodeBot on your computer, on your phone or at
-   `openbot.run/app`, sign in with the same email and select the server.
+   `codebot.example/app`, sign in with the same email and select the server.
 5. Connect a provider from the app, as on a [hosted server](hosted-servers.md#providers).
 
 The server gets the name `CodeBot`. To change it, open Server Settings in the app.
@@ -94,7 +94,7 @@ run the workflow from the Actions tab of the store.
 
 | File | Use |
 | --- | --- |
-| `umbrel-app.yml` | The manifest. Umbrel opens the app on port 4180. The icon is `openbot.run/icon-512x512.png`, except with `--official`. |
+| `umbrel-app.yml` | The manifest. Umbrel opens the app on port 4180. The icon is `codebot.example/icon-512x512.png`, except with `--official`. |
 | `docker-compose.yml` | The container, with the same options as `docker/compose.yaml`. Umbrel sends the requests of the app to the setup page on port 8080. |
 | `data/.gitkeep` | Keeps the source folder of the `/data` bind mount in the app store. Umbrel's linter needs it. |
 | `hooks/pre-start` | Makes the data folder and gives it to UID 1000, the user of the image. |

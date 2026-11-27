@@ -1,6 +1,6 @@
 services:
   codebot:
-    image: ghcr.io/nightly-labs/openbot:${CODEBOT_TAG:-latest}
+    image: ghcr.io/your-org/codebot:${CODEBOT_TAG:-latest}
     container_name: codebot-${CODEBOT_NAME:?}
     restart: unless-stopped
     security_opt:

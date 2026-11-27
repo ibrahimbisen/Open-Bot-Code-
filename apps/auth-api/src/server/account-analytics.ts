@@ -37,7 +37,7 @@ import {
 } from "./credit-codes";
 import type { HostedPoolGroup } from "./hosted-pool-snapshot";
 
-const OPENPANEL_API_URL = "https://analytics.openbot.run/api";
+const OPENPANEL_API_URL = "https://analytics.codebot.example/api";
 export const ACCOUNT_ANALYTICS_SCHEMA_VERSION = 20;
 const SEND_TIMEOUT_MS = 5_000;
 const ACCOUNT_ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/u;

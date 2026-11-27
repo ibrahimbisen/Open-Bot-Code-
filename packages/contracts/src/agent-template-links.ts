@@ -1,4 +1,4 @@
-export const CODEBOT_AGENT_TEMPLATE_ORIGIN = "https://openbot.run";
+export const CODEBOT_AGENT_TEMPLATE_ORIGIN = "https://codebot.example";
 export const CODEBOT_AGENT_TEMPLATE_PATH_PREFIX = "/agents/";
 export const CODEBOT_AGENT_TEMPLATE_HOST = "agents";
 export const WEB_APP_AGENT_TEMPLATE_PARAM = "agent";

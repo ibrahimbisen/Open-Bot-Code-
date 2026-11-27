@@ -5,8 +5,6 @@ import { existingAgentFolders } from "../agent/workspace-sandbox";
 import { agentProjectContext } from "../projects/project-context";
 import { agentLockLevel, type EnforcedLockLevel } from "./lock-level";
 
-export type { EnforcedLockLevel, LockLevel } from "./lock-level";
-
 type LockedAgent = Pick<AgentSummary, "id" | "access" | "additionalFolders" | "excludedFolders" | "workspacePath">;
 
 export interface FolderLock {

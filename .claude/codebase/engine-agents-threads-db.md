@@ -215,7 +215,7 @@
 - `src/backend/projects/project-context.ts` has one type, `AgentProjectContext` (`projectId`, `projectName`, `mainFolder`, `folders`, `accessLevel` of type `ProjectAccessLevel`, `replyRule`, `instructions`).
 - A module-level source function is set with `setAgentProjectContextSource(source)`. `agentProjectContext(agentId)` calls it. Default source returns null.
 - No caller of `setAgentProjectContextSource` exists in the repository (searched all `.ts` files, excluding `node_modules`, at check time). Until a caller sets a source, `agentProjectContext` returns null.
-- Fork code: `projects/project-context.ts` was added in commit `ce1b138cc` ("Add the project contract types and the agent project context"). That commit comes after the rename commit `3377172d0` ("Rename OpenBot to CodeBot").
+- Fork code: `projects/project-context.ts` was added in commit `ce1b138cc` ("Add the project contract types and the agent project context"). That commit comes after the rename commit `3377172d0` ("Rename CodeBot to CodeBot").
 
 ## How to change it
 

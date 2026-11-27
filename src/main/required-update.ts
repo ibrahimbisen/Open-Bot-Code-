@@ -15,7 +15,7 @@ class RequiredUpdateCheckError extends Schema.TaggedError<RequiredUpdateCheckErr
 
 export type RequiredUpdateFetch = (url: URL, init: RequestInit) => Promise<Response>;
 
-export type RequiredUpdateSurface = "desktop" | "host";
+type RequiredUpdateSurface = "desktop" | "host";
 
 export interface RequiredUpdateOptions {
   surface: RequiredUpdateSurface;
@@ -33,7 +33,7 @@ type MinimumVersionAnswer =
   | { readonly found: true; readonly minimumVersion: string | null }
   | { readonly found: false };
 
-export function parseMinimumVersionFile(value: unknown, surface: RequiredUpdateSurface): string | null {
+function parseMinimumVersionFile(value: unknown, surface: RequiredUpdateSurface): string | null {
   return isDynamicRecord(value) ? parseAppMinimumVersion({ minimumVersion: value[surface] }) : null;
 }
 

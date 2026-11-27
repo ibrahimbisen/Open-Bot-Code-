@@ -6,14 +6,14 @@ category: ai
 name: CodeBot
 version: "__VERSION__"
 tagline: A server for your AI agents
-icon: https://openbot.run/icon-512x512.png
+icon: https://codebot.example/icon-512x512.png
 description: >-
   CodeBot runs your AI agents on your Umbrel. Each agent has its own workspace, conversation and
   memory, and keeps working when your computer is off.
 
 
   After the install, open the app and sign in with your CodeBot account. Then use the server from the
-  CodeBot desktop app, the CodeBot phone app or openbot.run/app with the same account, and connect a
+  CodeBot desktop app, the CodeBot phone app or codebot.example/app with the same account, and connect a
   provider such as Claude Code or Codex.
 
 
@@ -32,10 +32,10 @@ description: >-
 releaseNotes: ""
 
 developer: Synthetify Labs
-website: https://openbot.run
+website: https://codebot.example
 dependencies: []
-repo: https://github.com/nightly-labs/openbot
-support: https://github.com/nightly-labs/openbot/issues
+repo: https://github.com/your-org/codebot
+support: https://github.com/your-org/codebot/issues
 
 port: 4180
 gallery: []

@@ -1470,7 +1470,7 @@ export const messages = {
   "mobile.server.update.path.container":
     "На Docker-хосте скачайте новый образ OpenBot Code и пересоздайте контейнер с теми же томами данных. Сначала дождитесь окончания текущей работы. Сохраните существующие тома, чтобы не потерять данные.",
   "mobile.server.update.path.manual":
-    "Эта установка не может обновить себя сама. Попросите администратора хоста поставить совместимый релиз с github.com/nightly-labs/openbot/releases. Сохраните существующие данные OpenBot Code.",
+    "Эта установка не может обновить себя сама. Попросите администратора хоста поставить совместимый релиз с github.com/your-org/codebot/releases. Сохраните существующие данные OpenBot Code.",
   "mobile.server.update.path.unavailable":
     "Это сборка для разработки. Чтобы проверять обновления, используйте установленный релиз OpenBot Code.",
   "mobile.server.update.check": "Проверить обновления",

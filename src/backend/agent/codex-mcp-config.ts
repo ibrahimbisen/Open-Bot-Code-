@@ -88,7 +88,7 @@ function plainKeyPlaceholders(saved: DynamicRecord | null, own: CodexOwnTranspor
     const placeholder =
       entry?.enabled === false && (entry.url === CODEX_PLACEHOLDER_URL || entry.command === CODEX_PLACEHOLDER_COMMAND);
     const renamed = `codebot_${name}`;
-    if (!placeholder || name.startsWith("openbot_") || name === COMPUTER_USE_MCP_SERVER_NAME) return [];
+    if (!placeholder || name.startsWith("codebot_") || name === COMPUTER_USE_MCP_SERVER_NAME) return [];
     return Object.hasOwn(own, renamed) || isReservedMcpServerName(renamed) ? [] : [[name, renamed]];
   });
 }

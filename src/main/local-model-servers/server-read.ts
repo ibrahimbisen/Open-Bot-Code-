@@ -3,7 +3,7 @@ import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contract
 import { Effect, Schema } from "effect";
 import { readLimitedBody } from "../../backend/limited-body";
 
-export const SERVER_READ_FAILURES = [
+const SERVER_READ_FAILURES = [
   "refused",
   "not-found",
   "timeout",
@@ -14,7 +14,6 @@ export const SERVER_READ_FAILURES = [
   "invalid",
   "too-large",
 ] as const;
-export type ServerReadFailureReason = (typeof SERVER_READ_FAILURES)[number];
 
 export class ServerReadFailure extends Schema.TaggedError<ServerReadFailure>()("LocalModelServerReadFailure", {
   reason: Schema.Literals(SERVER_READ_FAILURES),

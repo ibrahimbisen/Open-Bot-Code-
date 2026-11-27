@@ -10,7 +10,7 @@ import { parseStoreBuilds } from "./mobile-ota-lib";
 
 const run = promisify(execFile);
 const PACKAGE = "run.codebot.mobile";
-const INSTALL_PAGE = "https://openbot.run/download/android";
+const INSTALL_PAGE = "https://codebot.example/download/android";
 
 class UsageError extends Error {}
 
@@ -221,7 +221,7 @@ async function commandPublish(args: readonly string[]) {
   if (!state?.assets.includes(release.asset)) {
     summarize([
       `## The Android APK ${version} is missing`,
-      `openbot.run offers the APK of ${version}, but the release \`${release.tag}\` ${state ? `has no \`${release.asset}\`` : "is not on GitHub"}. The download link on the site does not work.`,
+      `codebot.example offers the APK of ${version}, but the release \`${release.tag}\` ${state ? `has no \`${release.asset}\`` : "is not on GitHub"}. The download link on the site does not work.`,
       "Start `Stage the Android APK` with the build number of that version, then run this workflow again.",
     ]);
     return 1;

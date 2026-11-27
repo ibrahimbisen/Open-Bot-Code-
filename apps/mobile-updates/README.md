@@ -1,12 +1,12 @@
 # CodeBot mobile update server
 
-This Worker gives the mobile app its over-the-air updates at `https://updates.openbot.run`. It
+This Worker gives the mobile app its over-the-air updates at `https://updates.codebot.example`. It
 answers the [Expo Updates protocol](https://docs.expo.dev/technical-specs/expo-updates-1/), version
 1, for the `expo-updates` client in each store binary. It replaces EAS Update: the binaries name
 this server in `updates.url` of `apps/mobile/app.json`.
 
 How to publish, roll out and take back an update is in
-[the mobile README](../mobile/README.md#over-the-air-updates). This file describes the server.
+[the mobile README](../mobile/README.md#removed-features). This file describes the server.
 
 ## Routes
 
@@ -84,16 +84,16 @@ One-time setup:
 
 1. `bun run updates:bucket:create` makes the bucket `codebot-mobile-updates`. Make
    `codebot-mobile-updates-test` in the same way for `wrangler dev`.
-2. The route `updates.openbot.run` is a custom domain of the Worker. The first deploy makes its DNS
+2. The route `updates.codebot.example` is a custom domain of the Worker. The first deploy makes its DNS
    record.
 3. In the `cloudflare-production` environment of the repository, add the secret
    `CLOUDFLARE_MOBILE_UPDATES_DEPLOY_TOKEN`: a Cloudflare API token with **Workers Scripts Write**
-   for the account and **Workers Routes Write** for the zone `openbot.run`. A deploy needs no more,
+   for the account and **Workers Routes Write** for the zone `codebot.example`. A deploy needs no more,
    and the token cannot read or write a bucket. Cloudflare has no permission for one Worker only,
    so the token can deploy each Worker of the account: keep it in this environment only. Do not use
    the token of the account Worker. The token in Cloudflare is `codebot-mobile-updates-deploy`.
 4. The publish workflow needs its own credentials. See
-   [the mobile README](../mobile/README.md#one-time-setup-of-over-the-air-updates).
+   [the mobile README](../mobile/README.md#removed-features).
 
 Do not change the domain or the path `/manifest`. Each store binary has the URL, and a binary
 cannot change it.

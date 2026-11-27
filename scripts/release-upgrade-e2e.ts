@@ -34,7 +34,7 @@ declare global {
 }
 
 const logger = createCodeBotLogger("release-upgrade-e2e");
-const REPOSITORY = "nightly-labs/openbot";
+const REPOSITORY = "your-org/codebot";
 const OUT = resolve(import.meta.dirname, "../.codebot-build/release-upgrade-e2e");
 const LAUNCH_LIMIT_MS = 5 * 60_000;
 const TURN_LIMIT_MS = 2 * 60_000;

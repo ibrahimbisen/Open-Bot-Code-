@@ -41,7 +41,7 @@ body:
         - App Store
         - TestFlight
         - Google Play
-        - APK from openbot.run
+        - APK from codebot.example
         - Built from source
         - Other
     validations:

@@ -90,7 +90,7 @@ export const messages = {
   "sitePage.nearSign.failure.failed": "Подписание не завершилось. Попробуйте снова.",
   "sitePage.report.pageTitle": "Пожаловаться на размещённый сайт — OpenBot Code",
   "sitePage.report.title": "Пожаловаться на размещённый сайт",
-  "sitePage.report.intro": "Отправьте жалобу на вредный или незаконный контент по адресу openbot.site.",
+  "sitePage.report.intro": "Отправьте жалобу на вредный или незаконный контент по адресу codebot.example.",
   "sitePage.report.hostnameLabel": "Адрес сайта",
   "sitePage.report.hostnameMissing": "Введите адрес сайта",
   "sitePage.report.reasonLabel": "Причина",

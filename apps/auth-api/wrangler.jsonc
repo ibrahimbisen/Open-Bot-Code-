@@ -19,19 +19,19 @@
   },
   "routes": [
     {
-      "pattern": "openbot.run/*",
+      "pattern": "codebot.example/*",
       "zone_id": "bac5e044ba951c390229f0e93673ebd3"
     },
     {
-      "pattern": "www.openbot.run/*",
+      "pattern": "www.codebot.example/*",
       "zone_id": "bac5e044ba951c390229f0e93673ebd3"
     },
     {
-      "pattern": "api.openbot.run",
+      "pattern": "api.codebot.example",
       "custom_domain": true
     },
     {
-      "pattern": "nearintents.openbot.run",
+      "pattern": "nearintents.codebot.example",
       "custom_domain": true
     }
   ],
@@ -50,18 +50,18 @@
     "BROWSER_EXTENSION_IDS": "eggdpikcggoicfcfdpdihfkinajchpfj",
     "EMAIL_SMTP_HOST": "mail.privateemail.com",
     "EMAIL_SMTP_PORT": "465",
-    "EMAIL_SMTP_USERNAME": "no_reply@openbot.run",
-    "EMAIL_FROM": "no_reply@openbot.run",
-    "EMAIL_REPLY_TO": "hello@openbot.run",
-    "EMAIL_LICENSE_REPLY_TO": "licenses@openbot.run",
+    "EMAIL_SMTP_USERNAME": "no_reply@codebot.example",
+    "EMAIL_FROM": "no_reply@codebot.example",
+    "EMAIL_REPLY_TO": "hello@codebot.example",
+    "EMAIL_LICENSE_REPLY_TO": "licenses@codebot.example",
     "EMAIL_LICENSE_FROM": "",
     "REMOTE_TICKET_KEY_ID": "codebot-remote-1",
-    "REMOTE_SIGNAL_URL": "wss://signal.openbot.run/v1/signal",
-    "REMOTE_SIGNAL_HOMES": "a=wss://signal1.openbot.run/v1/signal,b=wss://signal2.openbot.run/v1/signal,us=wss://signal-us.openbot.run/v1/signal,au=wss://signal-au.openbot.run/v1/signal,sg=wss://signal-sg.openbot.run/v1/signal",
+    "REMOTE_SIGNAL_URL": "wss://signal.codebot.example/v1/signal",
+    "REMOTE_SIGNAL_HOMES": "a=wss://signal1.codebot.example/v1/signal,b=wss://signal2.codebot.example/v1/signal,us=wss://signal-us.codebot.example/v1/signal,au=wss://signal-au.codebot.example/v1/signal,sg=wss://signal-sg.codebot.example/v1/signal",
     "REMOTE_SIGNAL_HOME_LOCATIONS": "a=60.17:24.94,b=60.17:24.94,us=37.34:-121.89,au=-33.87:151.21,sg=1.35:103.82",
     "REMOTE_SIGNAL_HOME_COUNTRIES": "CN=us",
-    "REMOTE_AUTH_WEBHOOK_URL": "https://signal.openbot.run/internal/auth-events",
-    "REMOTE_AUTH_WEBHOOK_URLS": "https://signal1.openbot.run/internal/auth-events,https://signal2.openbot.run/internal/auth-events,https://signal-us.openbot.run/internal/auth-events,https://signal-au.openbot.run/internal/auth-events,https://signal-sg.openbot.run/internal/auth-events",
+    "REMOTE_AUTH_WEBHOOK_URL": "https://signal.codebot.example/internal/auth-events",
+    "REMOTE_AUTH_WEBHOOK_URLS": "https://signal1.codebot.example/internal/auth-events,https://signal2.codebot.example/internal/auth-events,https://signal-us.codebot.example/internal/auth-events,https://signal-au.codebot.example/internal/auth-events,https://signal-sg.codebot.example/internal/auth-events",
     "SIGNAL_ENTRY_ZONE_ID": "bac5e044ba951c390229f0e93673ebd3",
     "HOSTED_SERVERS_ENABLED": "true",
     "HOSTED_SERVERS_ALLOWED_USER_IDS": "*",
@@ -85,7 +85,7 @@
   "send_email": [
     {
       "name": "EMAIL_FALLBACK",
-      "allowed_sender_addresses": ["no_reply@openbot.run"]
+      "allowed_sender_addresses": ["no_reply@codebot.example"]
     }
   ],
   "d1_databases": [
@@ -166,10 +166,10 @@
         "AUTH_EXPOSE_DEVELOPMENT_CODE": "false",
         "EMAIL_SMTP_HOST": "mail.privateemail.com",
         "EMAIL_SMTP_PORT": "465",
-        "EMAIL_SMTP_USERNAME": "no_reply@openbot.run",
-        "EMAIL_FROM": "no_reply@openbot.run",
-        "EMAIL_REPLY_TO": "hello@openbot.run",
-        "EMAIL_LICENSE_REPLY_TO": "licenses@openbot.run",
+        "EMAIL_SMTP_USERNAME": "no_reply@codebot.example",
+        "EMAIL_FROM": "no_reply@codebot.example",
+        "EMAIL_REPLY_TO": "hello@codebot.example",
+        "EMAIL_LICENSE_REPLY_TO": "licenses@codebot.example",
         "EMAIL_LICENSE_FROM": "",
         "SITE_PUBLISH_ENABLED": "false",
         "SITE_COOKIE_ISOLATION_READY": "false",
@@ -262,17 +262,17 @@
         "AUTH_EXPOSE_DEVELOPMENT_CODE": "false",
         "EMAIL_SMTP_HOST": "mail.privateemail.com",
         "EMAIL_SMTP_PORT": "465",
-        "EMAIL_SMTP_USERNAME": "no_reply@openbot.run",
-        "EMAIL_FROM": "no_reply@openbot.run",
-        "EMAIL_REPLY_TO": "hello@openbot.run",
-        "EMAIL_LICENSE_REPLY_TO": "licenses@openbot.run",
+        "EMAIL_SMTP_USERNAME": "no_reply@codebot.example",
+        "EMAIL_FROM": "no_reply@codebot.example",
+        "EMAIL_REPLY_TO": "hello@codebot.example",
+        "EMAIL_LICENSE_REPLY_TO": "licenses@codebot.example",
         "EMAIL_LICENSE_FROM": "",
         "SITE_PUBLISH_ENABLED": "false",
         "SITE_COOKIE_ISOLATION_READY": "false",
         "REMOTE_TICKET_KEY_ID": "codebot-remote-1",
-        "REMOTE_SIGNAL_URL": "wss://signal.openbot.run/v1/signal",
+        "REMOTE_SIGNAL_URL": "wss://signal.codebot.example/v1/signal",
         "REMOTE_SIGNAL_HOMES": "",
-        "REMOTE_AUTH_WEBHOOK_URL": "https://signal.openbot.run/internal/auth-events",
+        "REMOTE_AUTH_WEBHOOK_URL": "https://signal.codebot.example/internal/auth-events",
         "REMOTE_AUTH_WEBHOOK_URLS": "",
         "SIGNAL_ENTRY_ZONE_ID": "",
         "HOSTED_SERVERS_ENABLED": "true",

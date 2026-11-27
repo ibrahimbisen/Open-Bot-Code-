@@ -11,7 +11,7 @@ export const messages = {
   "error.update.notInstalled": "Последний перезапуск не установил обновление. Перезапустите, чтобы повторить попытку.",
   "error.update.downloadFailed": "Не удалось загрузить обновление. Повторите попытку.",
   "error.update.signatureNotConfirmed":
-    "OpenBot Code не удалось проверить обновление. Повторите попытку. Если ошибка повторяется, скачайте OpenBot Code на openbot.run/download.",
+    "OpenBot Code не удалось проверить обновление. Повторите попытку. Если ошибка повторяется, скачайте OpenBot Code на codebot.example/download.",
   "error.update.checkFailed": "Не удалось проверить обновления. Повторите попытку.",
   "error.update.checkStalled": "Проверка обновлений перестала отвечать. Повторите попытку.",
   "error.update.checkOffline":

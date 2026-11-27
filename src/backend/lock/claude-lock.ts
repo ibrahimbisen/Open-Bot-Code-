@@ -19,7 +19,7 @@ import { personalFolders, strictHiddenFolders } from "./personal-folders";
 
 export type ClaudeShellGate = "sandbox" | "container" | "ask";
 
-export interface ClaudeLockContext {
+interface ClaudeLockContext {
   readonly lock: FolderLock;
   readonly cwd: string;
   readonly shell: ClaudeShellGate;
@@ -28,7 +28,7 @@ export interface ClaudeLockContext {
   sessionFolder: string | null;
 }
 
-export type ClaudeLockVerdict =
+type ClaudeLockVerdict =
   | { readonly kind: "allow" }
   | { readonly kind: "deny"; readonly message: string }
   | { readonly kind: "ask"; readonly command: string };
@@ -107,7 +107,7 @@ export function claudeLockSandbox(
   return { ...base, filesystem: { ...base.filesystem, denyRead, allowRead } };
 }
 
-export function claudeLockHooks(context: ClaudeLockContext): NonNullable<Options["hooks"]> {
+function claudeLockHooks(context: ClaudeLockContext): NonNullable<Options["hooks"]> {
   const matcher: HookCallbackMatcher = {
     hooks: [
       async (input) => {
@@ -142,7 +142,7 @@ function noteSessionFolder(context: ClaudeLockContext, sessionId: string, transc
   context.sessionFolder = join(dirname(resolve(transcriptPath)), sessionId);
 }
 
-export const claudeLockVerdict = Effect.fn("ClaudeLock.verdict")(function* (
+const claudeLockVerdict = Effect.fn("ClaudeLock.verdict")(function* (
   context: ClaudeLockContext,
   toolName: string,
   toolInput: unknown,
@@ -224,7 +224,7 @@ function readTargets(toolName: string, input: DynamicRecord, cwd: string): ReadT
   });
 }
 
-export function claudeEnginePath(raw: string, cwd: string, platform: NodeJS.Platform = process.platform): string {
+function claudeEnginePath(raw: string, cwd: string, platform: NodeJS.Platform = process.platform): string {
   const text = raw.trim();
   if (text === "") return resolve(cwd);
   if (text === "~") return homedir();

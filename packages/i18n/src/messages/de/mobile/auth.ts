@@ -36,7 +36,7 @@ export const messages = {
   "mobile.auth.signIn.accountButton": "Mit Nextcloud anmelden",
   "mobile.auth.account.title": "Mit Nextcloud anmelden",
   "mobile.auth.account.description":
-    "Gib die Adresse deines OpenBot-Code-Kontodienstes ein. Nextcloud fragt dann nach deinem Benutzernamen und Passwort.",
+    "Gib die Adresse deines OpenBot Code-Kontodienstes ein. Nextcloud fragt dann nach deinem Benutzernamen und Passwort.",
   "mobile.auth.account.label": "Adresse des Kontodienstes",
   "mobile.auth.account.placeholder": "account.example.com",
   "mobile.auth.account.signalLabel": "Signal-Adresse (optional)",
@@ -49,7 +49,7 @@ export const messages = {
     "Gib die Adresse deines Kontodienstes ein, zum Beispiel account.example.com.",
   "mobile.auth.account.error.invalidSignal":
     "Gib eine Signal-Adresse ein, die mit wss:// beginnt, oder lass das Feld leer.",
-  "mobile.auth.account.error.notAccountService": "Diese Adresse ist kein OpenBot-Code-Kontodienst.",
+  "mobile.auth.account.error.notAccountService": "Diese Adresse ist kein OpenBot Code-Kontodienst.",
   "mobile.auth.account.error.startFailed": "Der Kontodienst konnte die Anmeldung nicht starten. Versuche es erneut.",
   "mobile.auth.account.error.loginFailed": "Die Anmeldung wurde nicht abgeschlossen. Versuche es erneut.",
   "mobile.auth.account.error.wait": "Zu viele Anmeldeversuche. Warte, bevor du es erneut versuchst.",

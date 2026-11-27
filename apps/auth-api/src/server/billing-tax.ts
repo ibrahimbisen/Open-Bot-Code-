@@ -35,7 +35,7 @@ const CUSTOMER_METADATA = {
   checkedAt: "codebot_vat_checked_at",
 } as const;
 
-export function vatTreatment(country: string, validVatId: boolean): VatTreatment {
+function vatTreatment(country: string, validVatId: boolean): VatTreatment {
   if (!isEuVatCountry(country)) return "none";
   if (country === VAT_SELLER_COUNTRY || !validVatId) return "standard";
   return "reverse";

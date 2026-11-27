@@ -108,16 +108,16 @@ export const messages = {
   "marketplace.app.bitwardenTagline": "Bei Websites mit Zugangsdaten aus einem geteilten Ordner anmelden",
   "marketplace.app.protonPassTagline": "Bei Websites mit Zugangsdaten aus einem geteilten Tresor anmelden",
   "marketplace.xApp.title": "X",
-  "marketplace.xApp.tagline": "Antworte auf X mit @openbot_ auf einen Post, und ein Agent erledigt die Arbeit",
+  "marketplace.xApp.tagline": "Antworte auf X mit @codebot_x auf einen Post, und ein Agent erledigt die Arbeit",
   "marketplace.xApp.description":
-    "X fügt diesem Server einen Agenten hinzu, der ebenfalls X heißt. Antworte auf X auf einen beliebigen Post und erwähne @openbot_ mit deinem Wunsch: zusammenfassen, übersetzen, eine Antwort entwerfen, eine Notiz speichern oder eine Erinnerung setzen. Die OpenBot Code-Erweiterung für Chrome liest den Post und sendet ihn an den X-Agenten, und X veröffentlicht deine Antwort wie gewohnt. Die Antwort wartet im X-Chat in OpenBot Code. Der X-Agent veröffentlicht nie Posts, setzt keine Likes, folgt niemandem und sendet keine Nachrichten auf X.",
+    "X fügt diesem Server einen Agenten hinzu, der ebenfalls X heißt. Antworte auf X auf einen beliebigen Post und erwähne @codebot_x mit deinem Wunsch: zusammenfassen, übersetzen, eine Antwort entwerfen, eine Notiz speichern oder eine Erinnerung setzen. Die OpenBot Code-Erweiterung für Chrome liest den Post und sendet ihn an den X-Agenten, und X veröffentlicht deine Antwort wie gewohnt. Die Antwort wartet im X-Chat in OpenBot Code. Der X-Agent veröffentlicht nie Posts, setzt keine Likes, folgt niemandem und sendet keine Nachrichten auf X.",
   "marketplace.xApp.developer": "OpenBot Code",
   "marketplace.xApp.notSetUp": "Nicht eingerichtet",
   "marketplace.xApp.setUp": "Einrichten",
   "marketplace.xApp.howTitle": "So funktioniert es",
   "marketplace.xApp.howReplyTitle": "Auf X antworten.",
   "marketplace.xApp.howReply":
-    "Antworte auf einen beliebigen Post und erwähne @openbot_ mit deinem Wunsch, zum Beispiel „@openbot_ fasse das zusammen“.",
+    "Antworte auf einen beliebigen Post und erwähne @codebot_x mit deinem Wunsch, zum Beispiel „@codebot_x fasse das zusammen“.",
   "marketplace.xApp.howSendTitle": "Die Erweiterung sendet ihn.",
   "marketplace.xApp.howSend":
     "OpenBot Code für Chrome liest den Post und die Posts darüber und sendet sie an den X-Agenten. X veröffentlicht deine Antwort wie gewohnt.",
@@ -129,28 +129,28 @@ export const messages = {
   "marketplace.xApp.extensionDescription": "X funktioniert nur mit der OpenBot Code-Erweiterung für Chrome.",
   "marketplace.xApp.extensionName": "OpenBot Code für Chrome",
   "marketplace.xApp.extensionNote":
-    "Öffne ihre Seitenleiste und melde dich bei diesem Server an. Sie liest einen Post nur, wenn du mit @openbot_ antwortest.",
+    "Öffne ihre Seitenleiste und melde dich bei diesem Server an. Sie liest einen Post nur, wenn du mit @codebot_x antwortest.",
   "marketplace.xApp.getExtension": "Erweiterung holen",
   "marketplace.xApp.stepExtension": "Erweiterung",
   "marketplace.xApp.stepAgent": "Agent",
   "marketplace.xApp.next": "Weiter",
   "marketplace.xApp.extensionStepTitle": "OpenBot Code zu Chrome hinzufügen",
   "marketplace.xApp.extensionStepDescription":
-    "Die Erweiterung liest einen Post auf X, wenn du mit @openbot_ antwortest, und sendet ihn an diesen Server.",
+    "Die Erweiterung liest einen Post auf X, wenn du mit @codebot_x antwortest, und sendet ihn an diesen Server.",
   "marketplace.xApp.extensionStepStore": "Öffne die OpenBot Code-Seite im Chrome Web Store",
   "marketplace.xApp.extensionStepAdd": "Klicke auf „Zu Chrome hinzufügen“",
   "marketplace.xApp.extensionStepSignIn": "Öffne die OpenBot Code-Seitenleiste und melde dich bei diesem Server an",
   "marketplace.xApp.agentStepTitle": "X-Agenten hinzufügen",
   "marketplace.xApp.agentStepDescription":
     "X erhält die Posts, die du von X sendest. OpenBot Code fügt ihn diesem Server hinzu.",
-  "marketplace.xApp.agentDoesReceive": "Erhält jeden Post, den du auf X mit @openbot_ beantwortest",
+  "marketplace.xApp.agentDoesReceive": "Erhält jeden Post, den du auf X mit @codebot_x beantwortest",
   "marketplace.xApp.agentDoesWork":
     "Fasst zusammen, übersetzt, entwirft Antworten, speichert Notizen und setzt Erinnerungen",
   "marketplace.xApp.agentDoesNoPost": "Postet nie auf X: Die Antwort wartet in seinem Chat",
   "marketplace.xApp.addAgent": "Agenten hinzufügen",
   "marketplace.xApp.doneTitle": "X ist bereit",
   "marketplace.xApp.doneDescription":
-    "Antworte auf X auf einen Post und erwähne @openbot_. Die Antwort wartet im X-Chat.",
+    "Antworte auf X auf einen Post und erwähne @codebot_x. Die Antwort wartet im X-Chat.",
   "marketplace.app.onePasswordCategory": "Verwaltung von Anmeldungen und Zugangsdaten",
   "marketplace.app.yourApps": "Deine Apps",
   "marketplace.app.addCustom": "Eigene hinzufügen",

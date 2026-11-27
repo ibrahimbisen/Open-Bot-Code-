@@ -559,7 +559,7 @@ export const messages = {
   "server.update.path.container":
     "Na hoście Docker pobierz nowy obraz OpenBot Code i utwórz kontener ponownie z tymi samymi woluminami danych. Najpierw poczekaj na zakończenie aktywnej pracy. Zachowaj istniejące woluminy, aby nie stracić danych.",
   "server.update.path.manual":
-    "Ta instalacja nie może sama się zastąpić. Poproś administratora hosta o zainstalowanie zgodnego wydania z github.com/nightly-labs/openbot/releases. Zachowaj istniejące dane OpenBot Code.",
+    "Ta instalacja nie może sama się zastąpić. Poproś administratora hosta o zainstalowanie zgodnego wydania z github.com/your-org/codebot/releases. Zachowaj istniejące dane OpenBot Code.",
   "server.update.path.unavailable":
     "To jest kompilacja deweloperska. Użyj zainstalowanego wydania OpenBot Code, aby sprawdzać aktualizacje.",
   "server.update.check": "Sprawdź aktualizacje",

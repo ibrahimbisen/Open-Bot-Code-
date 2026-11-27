@@ -26,7 +26,7 @@ export function WhatsNewOverlay(props: { ready: boolean }) {
       onRetry={whatsNew.retry}
       onOpenChangelog={() => {
         void appPort()
-          .openUrl("https://github.com/nightly-labs/openbot/releases")
+          .openUrl("https://github.com/your-org/codebot/releases")
           .catch((error: unknown) => toast.error(errorMessage(error, t("update.whatsNew.changelogFailed")), { error }));
       }}
     />

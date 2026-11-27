@@ -5,7 +5,7 @@ import type { JSX } from "@solidjs/web";
 import { createEffect, createSignal, onCleanup, onSettled, Show } from "solid-js";
 import { applyMonacoTheme, loadMonaco, type Monaco, monacoLanguageFor } from "./monaco-runtime";
 
-export interface CodeEditorHandle {
+interface CodeEditorHandle {
   focus: () => void;
   revealLine: (line: number) => void;
 }

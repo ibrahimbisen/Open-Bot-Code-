@@ -1767,7 +1767,7 @@ export const messages = {
   "mobile.server.update.path.container":
     "במארח Docker, יש למשוך את תמונת OpenBot Code החדשה וליצור את הקונטיינר מחדש עם אותם כוני נתונים. קודם יש להמתין לסיום עבודה פעילה. כדי לשמור את הנתונים, יש להשאיר את הכוננים הקיימים.",
   "mobile.server.update.path.manual":
-    "ההתקנה הזו לא יכולה להחליף את עצמה. יש לבקש ממנהל המארח להתקין את הגרסה התואמת מ-github.com/nightly-labs/openbot/releases. יש להשאיר את נתוני OpenBot Code הקיימים.",
+    "ההתקנה הזו לא יכולה להחליף את עצמה. יש לבקש ממנהל המארח להתקין את הגרסה התואמת מ-github.com/your-org/codebot/releases. יש להשאיר את נתוני OpenBot Code הקיימים.",
   "mobile.server.update.path.unavailable": "זו בנייה לפיתוח. כדי לבדוק עדכונים, יש להשתמש בגרסת OpenBot Code מותקנת.",
   "mobile.server.update.check": "בדיקת עדכונים",
   "mobile.server.update.start": "עדכון כשאין פעילות",

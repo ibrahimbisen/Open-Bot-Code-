@@ -1,6 +1,6 @@
 import { BENCHMARK_SOURCES, type RoundupComparison } from "./comparison";
 
-const CODEBOT = "https://github.com/nightly-labs/openbot";
+const CODEBOT = "https://github.com/your-org/codebot";
 
 export const BEST_AI_AGENT_APPS: RoundupComparison = {
   kind: "roundup",

@@ -1,4 +1,4 @@
-export const CODEBOT_PLUGIN_ORIGIN = "https://openbot.run";
+export const CODEBOT_PLUGIN_ORIGIN = "https://codebot.example";
 export const CODEBOT_PLUGIN_PATH_PREFIX = "/plugins/";
 export const CODEBOT_PLUGIN_HOST = "plugins";
 export const WEB_APP_PLUGIN_PARAM = "plugin";

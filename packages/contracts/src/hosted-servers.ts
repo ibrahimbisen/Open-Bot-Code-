@@ -107,7 +107,7 @@ const HOSTED_SERVER_CONTACT_BODY = [
   "[Tell us what you need]",
 ].join("\r\n");
 
-export const HOSTED_SERVER_CONTACT_URL = `mailto:hello@openbot.run?subject=${encodeURIComponent(
+export const HOSTED_SERVER_CONTACT_URL = `mailto:hello@codebot.example?subject=${encodeURIComponent(
   HOSTED_SERVER_CONTACT_SUBJECT,
 )}&body=${encodeURIComponent(HOSTED_SERVER_CONTACT_BODY)}`;
 export const HOSTING_DEVELOPER_KEY_HEADER = "CodeBot-Hosting-Developer-Key";
@@ -488,7 +488,7 @@ export function parseServerClaim(value: unknown): ServerClaim | null {
 }
 
 export const INSTALL_SERVER_SCRIPT_URL =
-  "https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh";
+  "https://raw.githubusercontent.com/your-org/codebot/main/scripts/install-server.sh";
 
 function shellWord(value: string): string {
   return `'${value.replaceAll("'", "'\\''")}'`;

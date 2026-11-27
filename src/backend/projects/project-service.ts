@@ -56,7 +56,7 @@ import {
 } from "./project-operations";
 import { ProjectStore } from "./project-store";
 
-export type ProjectAgentHost = Pick<
+type ProjectAgentHost = Pick<
   AgentService,
   | "listAgents"
   | "createProjectAgent"

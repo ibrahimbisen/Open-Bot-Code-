@@ -1,4 +1,4 @@
-export const CODEBOT_MARKETPLACE_ORIGIN = "https://openbot.run";
+export const CODEBOT_MARKETPLACE_ORIGIN = "https://codebot.example";
 export const CODEBOT_MARKETPLACE_PATH = "/marketplace";
 export const CODEBOT_MARKETPLACE_HOST = "marketplace";
 export const WEB_APP_MARKETPLACE_AGENT_PARAM = "marketplaceAgent";

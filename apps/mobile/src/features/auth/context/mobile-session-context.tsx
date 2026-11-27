@@ -10,7 +10,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { loadAnalyticsPreference } from "@/features/analytics/preference";
 import {
   logoutMobileSession,
@@ -75,7 +74,6 @@ export function MobileSessionProvider({ children }: PropsWithChildren) {
       deleteSideQuestions();
     }
     if (sessionRef.current && !session) deletePhoneCopy();
-    mobileAnalytics.setUser(session?.user ?? null);
     sessionRef.current = session;
     setSessionState(session);
   }, []);
@@ -150,7 +148,7 @@ export function MobileSessionProvider({ children }: PropsWithChildren) {
   const signOut = useCallback(async () => {
     const current = sessionRef.current;
     if (!current) return;
-    await mobileAnalytics.operation("account_sign_out", {}, () => logoutMobileSession(current));
+    await logoutMobileSession(current);
     deleteAgentAvatars();
     if (sessionRef.current && sameCredential(sessionRef.current, current)) setCurrentSession(null);
   }, [setCurrentSession]);

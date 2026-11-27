@@ -4,7 +4,7 @@ import { decodeBase64Url, deriveSecret, encodeBase64Url } from "../../server/cry
 const VERSION = "v1";
 const KEY_LABEL = "codebot/account-service/refresh-token/v1";
 
-export class SecretBoxError extends Schema.TaggedError<SecretBoxError>()("SecretBoxError", {}) {}
+class SecretBoxError extends Schema.TaggedError<SecretBoxError>()("SecretBoxError", {}) {}
 
 function boxCall<A>(operation: () => Promise<A>): Effect.Effect<A, SecretBoxError> {
   return Effect.tryPromise({ try: operation, catch: () => new SecretBoxError({}) });

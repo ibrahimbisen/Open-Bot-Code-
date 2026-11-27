@@ -5,9 +5,9 @@ import rootPackage from "../../package.json" with { type: "json" };
 import { X_PAGE_RULES_ROUTE } from "../../packages/contracts/src/browser-extension-x";
 import { lazyLanguageCatalogs } from "../../packages/i18n/src/vite-plugin";
 
-const PRODUCTION_API_URL = "https://api.openbot.run";
-const PRODUCTION_WEB_URL = "https://openbot.run";
-const PRODUCTION_ANALYTICS_URL = "https://analytics.openbot.run/api";
+const PRODUCTION_API_URL = "https://api.codebot.example";
+const PRODUCTION_WEB_URL = "https://codebot.example";
+const PRODUCTION_ANALYTICS_URL = "https://analytics.codebot.example/api";
 
 function loopbackCaptureUrl(value: string | undefined): string | null {
   if (!value || !URL.canParse(value)) return null;

@@ -109,7 +109,7 @@ function servers(
       credential: () => MACHINE_TOKEN,
       listMembers: () => Effect.succeed([]),
       remove: () => Effect.void,
-      apiOrigin: "https://api.openbot.run",
+      apiOrigin: "https://api.codebot.example",
       requestAuthorized: () => Effect.succeed(null),
       downloadAuthorized: () => Effect.succeed(new Uint8Array()),
     },

@@ -1420,7 +1420,7 @@ export class CodeBotToolRouter {
     if (!feedback) return codeBotToolFailure("title and text must not be empty.");
     if (!this.#requestedByPerson(senderAgentId, params.turnId, params.threadId))
       return codeBotToolFailure(
-        "Only a person's message, in your CodeBot chat or a thread they opened, can send feedback. Describe the problem in your reply instead. Do not open an CodeBot issue with GitHub tools, gh, or a browser: the repository closes issues that do not use its forms. A person can report it at https://github.com/nightly-labs/openbot/issues/new/choose.",
+        "Only a person's message, in your CodeBot chat or a thread they opened, can send feedback. Describe the problem in your reply instead. Do not open an CodeBot issue with GitHub tools, gh, or a browser: the repository closes issues that do not use its forms. A person can report it at https://github.com/your-org/codebot/issues/new/choose.",
       );
     if (!sender.signedIn()) return form(FEEDBACK_SIGNED_OUT_NEXT);
     const searchKey = `${senderAgentId}\n${params.turnId}`;
@@ -1583,15 +1583,15 @@ export class CodeBotToolRouter {
         );
       case "notYours":
         return codeBotToolFailure(
-          "This account did not send a report on that issue, or the report was sent before CodeBot could remove reports. Tell the user that only the CodeBot team can remove it now, at https://github.com/nightly-labs/openbot/discussions.",
+          "This account did not send a report on that issue, or the report was sent before CodeBot could remove reports. Tell the user that only the CodeBot team can remove it now, at https://github.com/your-org/codebot/discussions.",
         );
       case "unavailable":
         return codeBotToolFailure(
-          "CodeBot cannot remove a whole issue now. Tell the user to try again later, or to ask the CodeBot team at https://github.com/nightly-labs/openbot/discussions.",
+          "CodeBot cannot remove a whole issue now. Tell the user to try again later, or to ask the CodeBot team at https://github.com/your-org/codebot/discussions.",
         );
       case "moved":
         return codeBotToolFailure(
-          "The issue moved to another public repository, so CodeBot cannot remove the report. Tell the user to ask the CodeBot team at https://github.com/nightly-labs/openbot/discussions.",
+          "The issue moved to another public repository, so CodeBot cannot remove the report. Tell the user to ask the CodeBot team at https://github.com/your-org/codebot/discussions.",
         );
       case "limited":
         return codeBotToolFailure("Too many tries. Wait one minute, then try again once.");
@@ -2397,7 +2397,7 @@ export class CodeBotToolRouter {
         return codeBotToolResult({
           status: "connected",
           app: args.app,
-          next: 'GitHub is already connected for every agent of this server, so no card shows. Do not ask the user to connect it again. Use the GitHub MCP tools; when they are not in your tool list, search your tools for github, or use gh and git, which this connection signs in. When GitHub refuses access to a repository (HTTP 403, "Resource not accessible by integration", "Write access to repository not granted", or "Not Found" for a repository that exists, but not a rate limit), the OpenBotGit app is not installed on it or does not have the permission. Then tell the user: in CodeBot, open Marketplace > Apps > GitHub > Choose repositories, install OpenBotGit on the owner of the repository and select it, then send the request again. To create repositories, an owner of the account also approves the permission request of OpenBotGit on GitHub, in Settings > Applications > Installed GitHub Apps (for an organization, in its settings). Do not try another credential. When something else fails, tell the user in one sentence and call codebot.send_feedback.',
+          next: 'GitHub is already connected for every agent of this server, so no card shows. Do not ask the user to connect it again. Use the GitHub MCP tools; when they are not in your tool list, search your tools for github, or use gh and git, which this connection signs in. When GitHub refuses access to a repository (HTTP 403, "Resource not accessible by integration", "Write access to repository not granted", or "Not Found" for a repository that exists, but not a rate limit), the CodeBotGit app is not installed on it or does not have the permission. Then tell the user: in CodeBot, open Marketplace > Apps > GitHub > Choose repositories, install CodeBotGit on the owner of the repository and select it, then send the request again. To create repositories, an owner of the account also approves the permission request of CodeBotGit on GitHub, in Settings > Applications > Installed GitHub Apps (for an organization, in its settings). Do not try another credential. When something else fails, tell the user in one sentence and call codebot.send_feedback.',
         });
       if (isPasswordManagerId(args.app) && this.#passwordManagerConnected(args.app)) {
         const name = PASSWORD_MANAGER_BRANDS[args.app];

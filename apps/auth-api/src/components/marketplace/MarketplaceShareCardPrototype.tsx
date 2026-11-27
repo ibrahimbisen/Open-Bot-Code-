@@ -9,7 +9,7 @@ const AgentAvatar = lazy(() =>
   import("@codebot/ui/features/agents/AgentAvatar").then((module) => ({ default: module.AgentAvatar })),
 );
 
-const SHARE_HOST = "openbot.run";
+const SHARE_HOST = "codebot.example";
 
 function shareTitle(agent: MarketplaceAgentSummary): string {
   return `${agent.name} — CodeBot agent`;

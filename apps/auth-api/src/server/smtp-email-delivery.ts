@@ -406,7 +406,7 @@ const runSmtpSession = Effect.fn("SmtpEmail.session")(function* (
     );
 
   yield* expect([220], "greeting");
-  yield* writeCommand(writer, "EHLO openbot.run");
+  yield* writeCommand(writer, "EHLO codebot.example");
   const extensions = yield* expect([250], "ehlo");
   if (extensions.some((line) => /^AUTH\b.*\bPLAIN\b/iu.test(line))) {
     yield* writeCommand(writer, `AUTH PLAIN ${encodeBase64(`\0${config.username}\0${config.password}`)}`);
@@ -495,7 +495,7 @@ function createMimeMessage(from: string, message: PreparedEmailMessage): string 
       ...(message.replyTo ? [`Reply-To: <${message.replyTo}>`] : []),
       `Subject: ${encodeHeaderValue(message.content.subject)}`,
       `Date: ${new Date().toUTCString()}`,
-      `Message-ID: <${crypto.randomUUID()}@openbot.run>`,
+      `Message-ID: <${crypto.randomUUID()}@codebot.example>`,
       ...Object.entries(AUTOMATED_EMAIL_HEADERS).map(([name, value]) => `${name}: ${value}`),
       "MIME-Version: 1.0",
       "Content-Type: multipart/alternative;",

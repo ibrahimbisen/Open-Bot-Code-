@@ -174,7 +174,7 @@ await check("no analytics endpoint, preference or consent code is left in deskto
   const roots = ["src", "packages", "remote", "scripts"].map((dir) => join(ROOT, dir));
   const forbidden: Array<[string, RegExp]> = [
     ["OpenPanel client", /openpanel(?!thread)/i],
-    ["analytics capture URL", /analyticsCaptureUrl|analytics\.openbot\.run/],
+    ["analytics capture URL", /analyticsCaptureUrl|analytics\.[a-z0-9-]+\.run/],
     ["analytics preference IPC", /analyticsPreference|analytics-preference|\/v1\/me\/analytics/],
     ["analytics install ID in app info", /analyticsInstallId/],
   ];

@@ -134,7 +134,7 @@ check("No upstream address is in the Docker files, the install script or the hos
     ...hostingFiles().filter((path) => !path.endsWith("release-boat-template.sh")),
   ];
   const found = files.filter((file) =>
-    /nightly-labs|openbot\.run|raw\.githubusercontent/iu.test(readFileSync(file, "utf8")),
+    /your-org|codebot\.example|raw\.githubusercontent/iu.test(readFileSync(file, "utf8")),
   );
   assert.deepEqual(found, []);
 });

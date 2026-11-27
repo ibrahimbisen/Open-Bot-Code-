@@ -4,7 +4,7 @@ export const TRANSIENT_KINDS = ["preview", "browser"] as const;
 
 export type CloseReason = "chat-switch" | "project-switch" | "composer" | "agent-done" | "content-gone";
 
-export type ContentOrigin = "agent" | "user";
+type ContentOrigin = "agent" | "user";
 
 export interface TransientPanel {
   id: string;

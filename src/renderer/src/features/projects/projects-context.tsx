@@ -30,10 +30,10 @@ import { readActiveProjectId, writeActiveProjectId } from "./project-dock-storag
 import { createProjectsPort, type ProjectsPort, projectChatKey } from "./projects-port";
 import { createTemporaryProjectsPort } from "./projects-port-temporary";
 
-export const CHAT_PAGE_SIZE = 40;
+const CHAT_PAGE_SIZE = 40;
 export const RECENT_CHAT_COUNT = 5;
 
-export interface ChatList {
+interface ChatList {
   chats: ProjectChat[];
   nextCursor: string | null;
   loaded: boolean;
@@ -58,7 +58,7 @@ interface ProjectsState {
   drafts: Record<string, string>;
 }
 
-export function sortChats(chats: readonly ProjectChat[]): ProjectChat[] {
+function sortChats(chats: readonly ProjectChat[]): ProjectChat[] {
   return [...chats].sort(
     (left, right) =>
       Number(right.pinned) - Number(left.pinned) ||

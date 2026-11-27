@@ -126,7 +126,7 @@ async function checkSitemap(origin: string): Promise<string[]> {
   const response = await fetch(new URL("/sitemap.xml", origin));
   assert.equal(response.status, 200);
   const xml = await response.text();
-  const urls = [...xml.matchAll(/<loc>https:\/\/codebot\.run([^<]*)<\/loc>/gu)].map((match) => match[1] ?? "");
+  const urls = [...xml.matchAll(/<loc>https:\/\/codebot\.example([^<]*)<\/loc>/gu)].map((match) => match[1] ?? "");
   const expected = SITEMAP_PAGES.flatMap((page) => LOCALES.map((locale) => localizedPath(locale, page)));
   const missing = expected.filter((path) => !urls.includes(path));
   assert.deepEqual(missing, [], "The sitemap does not list these localized pages");

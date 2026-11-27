@@ -86,7 +86,7 @@ export const messages = defineMessages("sitePage", {
   "sitePage.nearSign.failure.failed": "The signature did not finish. Try again.",
   "sitePage.report.pageTitle": "Report a hosted site — OpenBot Code",
   "sitePage.report.title": "Report a hosted site",
-  "sitePage.report.intro": "Send a report about harmful or unlawful content on an openbot.site address.",
+  "sitePage.report.intro": "Send a report about harmful or unlawful content on an codebot.example address.",
   "sitePage.report.hostnameLabel": "Site address",
   "sitePage.report.hostnameMissing": "Enter the site address",
   "sitePage.report.reasonLabel": "Reason",

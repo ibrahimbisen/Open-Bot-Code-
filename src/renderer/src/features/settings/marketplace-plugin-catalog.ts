@@ -64,7 +64,7 @@ const AAVE: MarketplacePluginDetail = {
   installs: 0,
   featured: true,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/aave",
+  shareUrl: "",
 };
 
 const CANVA: MarketplacePluginDetail = {
@@ -105,7 +105,7 @@ const CANVA: MarketplacePluginDetail = {
   installs: 0,
   featured: true,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/canva",
+  shareUrl: "",
 };
 
 const LINEAR: MarketplacePluginDetail = {
@@ -146,7 +146,7 @@ const LINEAR: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/linear",
+  shareUrl: "",
 };
 
 const NOTION: MarketplacePluginDetail = {
@@ -187,7 +187,7 @@ const NOTION: MarketplacePluginDetail = {
   installs: 0,
   featured: true,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/notion",
+  shareUrl: "",
 };
 
 const OBSIDIAN: MarketplacePluginDetail = {
@@ -245,7 +245,7 @@ const OBSIDIAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/obsidian",
+  shareUrl: "",
 };
 
 const ATLASSIAN: MarketplacePluginDetail = {
@@ -285,7 +285,7 @@ const ATLASSIAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/atlassian",
+  shareUrl: "",
 };
 
 const TODOIST: MarketplacePluginDetail = {
@@ -325,7 +325,7 @@ const TODOIST: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/todoist",
+  shareUrl: "",
 };
 
 const TICKTICK: MarketplacePluginDetail = {
@@ -365,7 +365,7 @@ const TICKTICK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ticktick",
+  shareUrl: "",
 };
 
 const TRELLO: MarketplacePluginDetail = {
@@ -405,7 +405,7 @@ const TRELLO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/trello",
+  shareUrl: "",
 };
 
 const COBRAIN: MarketplacePluginDetail = {
@@ -445,7 +445,7 @@ const COBRAIN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/cobrain",
+  shareUrl: "",
 };
 
 const HONCHO: MarketplacePluginDetail = {
@@ -504,7 +504,7 @@ const HONCHO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/honcho",
+  shareUrl: "",
 };
 
 const HINDSIGHT: MarketplacePluginDetail = {
@@ -566,7 +566,7 @@ const HINDSIGHT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/hindsight",
+  shareUrl: "",
 };
 
 const MEM0: MarketplacePluginDetail = {
@@ -610,7 +610,7 @@ const MEM0: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mem0",
+  shareUrl: "",
 };
 
 const FIGMA: MarketplacePluginDetail = {
@@ -665,7 +665,7 @@ const FIGMA: MarketplacePluginDetail = {
   installs: 0,
   featured: true,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/figma",
+  shareUrl: "",
 };
 
 const PAPER: MarketplacePluginDetail = {
@@ -701,7 +701,7 @@ const PAPER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/paper",
+  shareUrl: "",
 };
 
 const HIGGSFIELD: MarketplacePluginDetail = {
@@ -742,7 +742,7 @@ const HIGGSFIELD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/higgsfield",
+  shareUrl: "",
 };
 
 const SUNRA: MarketplacePluginDetail = {
@@ -783,7 +783,7 @@ const SUNRA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/sunra",
+  shareUrl: "",
 };
 
 const ELEVENLABS: MarketplacePluginDetail = {
@@ -824,7 +824,7 @@ const ELEVENLABS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/elevenlabs",
+  shareUrl: "",
 };
 
 const APPLE_APPS: MarketplacePluginDetail = {
@@ -864,7 +864,7 @@ const APPLE_APPS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/apple-apps",
+  shareUrl: "",
 };
 
 const SENTRY: MarketplacePluginDetail = {
@@ -904,7 +904,7 @@ const SENTRY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/sentry",
+  shareUrl: "",
 };
 
 const APPSIGNAL: MarketplacePluginDetail = {
@@ -945,7 +945,7 @@ const APPSIGNAL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/appsignal",
+  shareUrl: "",
 };
 
 const GITLAB: MarketplacePluginDetail = {
@@ -986,7 +986,7 @@ const GITLAB: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/gitlab",
+  shareUrl: "",
 };
 
 const VERCEL: MarketplacePluginDetail = {
@@ -1027,7 +1027,7 @@ const VERCEL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/vercel",
+  shareUrl: "",
 };
 
 const CLOUDFLARE: MarketplacePluginDetail = {
@@ -1067,7 +1067,7 @@ const CLOUDFLARE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/cloudflare",
+  shareUrl: "",
 };
 
 const SUPABASE: MarketplacePluginDetail = {
@@ -1107,7 +1107,7 @@ const SUPABASE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/supabase",
+  shareUrl: "",
 };
 
 const NEON: MarketplacePluginDetail = {
@@ -1150,7 +1150,7 @@ const NEON: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/neon",
+  shareUrl: "",
 };
 
 const PRISMA: MarketplacePluginDetail = {
@@ -1190,7 +1190,7 @@ const PRISMA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/prisma",
+  shareUrl: "",
 };
 
 const NETLIFY: MarketplacePluginDetail = {
@@ -1231,7 +1231,7 @@ const NETLIFY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/netlify",
+  shareUrl: "",
 };
 
 const RAILWAY: MarketplacePluginDetail = {
@@ -1271,7 +1271,7 @@ const RAILWAY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/railway",
+  shareUrl: "",
 };
 
 const RENDER: MarketplacePluginDetail = {
@@ -1329,7 +1329,7 @@ const RENDER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/render",
+  shareUrl: "",
 };
 
 const CLOUD66: MarketplacePluginDetail = {
@@ -1370,7 +1370,7 @@ const CLOUD66: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/cloud66",
+  shareUrl: "",
 };
 
 const CONTEXT7: MarketplacePluginDetail = {
@@ -1405,7 +1405,7 @@ const CONTEXT7: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/context7",
+  shareUrl: "",
 };
 
 const HUGGINGFACE: MarketplacePluginDetail = {
@@ -1440,7 +1440,7 @@ const HUGGINGFACE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/huggingface",
+  shareUrl: "",
 };
 
 const STRIPE: MarketplacePluginDetail = {
@@ -1480,7 +1480,7 @@ const STRIPE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/stripe",
+  shareUrl: "",
 };
 
 const REVENUECAT: MarketplacePluginDetail = {
@@ -1539,7 +1539,7 @@ const REVENUECAT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/revenuecat",
+  shareUrl: "",
 };
 
 const POSTHOG: MarketplacePluginDetail = {
@@ -1597,7 +1597,7 @@ const POSTHOG: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/posthog",
+  shareUrl: "",
 };
 
 const AIRTABLE: MarketplacePluginDetail = {
@@ -1647,7 +1647,7 @@ const AIRTABLE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/airtable",
+  shareUrl: "",
 };
 
 const FIRECRAWL: MarketplacePluginDetail = {
@@ -1705,7 +1705,7 @@ const FIRECRAWL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/firecrawl",
+  shareUrl: "",
 };
 
 const BRAVE_SEARCH: MarketplacePluginDetail = {
@@ -1759,7 +1759,7 @@ const BRAVE_SEARCH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/brave-search",
+  shareUrl: "",
 };
 
 const RESEND: MarketplacePluginDetail = {
@@ -1811,7 +1811,7 @@ const RESEND: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/resend",
+  shareUrl: "",
 };
 
 const OMNISEND: MarketplacePluginDetail = {
@@ -1868,7 +1868,7 @@ const OMNISEND: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/omnisend",
+  shareUrl: "",
 };
 
 const POSTIZ: MarketplacePluginDetail = {
@@ -1927,7 +1927,7 @@ const POSTIZ: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/postiz",
+  shareUrl: "",
 };
 
 const TRYPOST: MarketplacePluginDetail = {
@@ -1939,7 +1939,7 @@ const TRYPOST: MarketplacePluginDetail = {
     "TryPost lets agents list your connected channels, and draft, schedule, queue and publish posts on X, LinkedIn, Instagram, Facebook, TikTok, YouTube, Threads, Bluesky, Mastodon, Pinterest and more. Agents can also read analytics, manage ideas and approvals, and set posting times. Sign in to your TryPost account through the browser and choose a workspace. Agents can publish a post immediately, so review each post before you approve it.",
   category: "automation",
   creatorName: "TryPost",
-  iconUrl: "https://app.trypost.it/images/integrations/openbot.png",
+  iconUrl: null,
   version: "1.0.0",
   prompts: [
     { id: "prompt-week", text: "Which posts are scheduled for this week?" },
@@ -1951,7 +1951,7 @@ const TRYPOST: MarketplacePluginDetail = {
       id: "app-trypost-mcp",
       name: "TryPost",
       description: "Channels, posts, queue, ideas and analytics, over TryPost's MCP server with browser sign-in.",
-      iconUrl: "https://app.trypost.it/images/integrations/openbot.png",
+      iconUrl: null,
       server: {
         name: "trypost",
         transport: "http",
@@ -1967,7 +1967,7 @@ const TRYPOST: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/trypost",
+  shareUrl: "",
 };
 
 const COMPOSIO: MarketplacePluginDetail = {
@@ -2025,7 +2025,7 @@ const COMPOSIO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/composio",
+  shareUrl: "",
 };
 
 const CLICKUP: MarketplacePluginDetail = {
@@ -2065,7 +2065,7 @@ const CLICKUP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/clickup",
+  shareUrl: "",
 };
 
 const COINBASE: MarketplacePluginDetail = {
@@ -2108,7 +2108,7 @@ const COINBASE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/coinbase",
+  shareUrl: "",
 };
 
 const ROBINHOOD: MarketplacePluginDetail = {
@@ -2148,7 +2148,7 @@ const ROBINHOOD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/robinhood",
+  shareUrl: "",
 };
 
 const PLUGIN_1INCH: MarketplacePluginDetail = {
@@ -2183,7 +2183,7 @@ const PLUGIN_1INCH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/1inch",
+  shareUrl: "",
 };
 
 const PLUGIN_21ST: MarketplacePluginDetail = {
@@ -2223,7 +2223,7 @@ const PLUGIN_21ST: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/21st",
+  shareUrl: "",
 };
 
 const PLUGIN_2CHAT: MarketplacePluginDetail = {
@@ -2263,7 +2263,7 @@ const PLUGIN_2CHAT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/2chat",
+  shareUrl: "",
 };
 
 const ADOBE_ANALYTICS: MarketplacePluginDetail = {
@@ -2304,7 +2304,7 @@ const ADOBE_ANALYTICS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/adobe-analytics",
+  shareUrl: "",
 };
 
 const ADSPIRER: MarketplacePluginDetail = {
@@ -2344,7 +2344,7 @@ const ADSPIRER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/adspirer",
+  shareUrl: "",
 };
 
 const AFFINITY: MarketplacePluginDetail = {
@@ -2384,7 +2384,7 @@ const AFFINITY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/affinity",
+  shareUrl: "",
 };
 
 const AGENTMAIL: MarketplacePluginDetail = {
@@ -2424,7 +2424,7 @@ const AGENTMAIL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/agentmail",
+  shareUrl: "",
 };
 
 const AHREFS: MarketplacePluginDetail = {
@@ -2464,7 +2464,7 @@ const AHREFS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ahrefs",
+  shareUrl: "",
 };
 
 const AIRWALLEX: MarketplacePluginDetail = {
@@ -2507,7 +2507,7 @@ const AIRWALLEX: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/airwallex",
+  shareUrl: "",
 };
 
 const AKIFLOW: MarketplacePluginDetail = {
@@ -2547,7 +2547,7 @@ const AKIFLOW: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/akiflow",
+  shareUrl: "",
 };
 
 const ALEPH: MarketplacePluginDetail = {
@@ -2588,7 +2588,7 @@ const ALEPH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/aleph",
+  shareUrl: "",
 };
 
 const ALGOLIA: MarketplacePluginDetail = {
@@ -2628,7 +2628,7 @@ const ALGOLIA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/algolia",
+  shareUrl: "",
 };
 
 const ALLO: MarketplacePluginDetail = {
@@ -2668,7 +2668,7 @@ const ALLO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/allo",
+  shareUrl: "",
 };
 
 const ALPHAVANTAGE: MarketplacePluginDetail = {
@@ -2708,7 +2708,7 @@ const ALPHAVANTAGE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/alphavantage",
+  shareUrl: "",
 };
 
 const AMPLEMARKET: MarketplacePluginDetail = {
@@ -2752,7 +2752,7 @@ const AMPLEMARKET: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/amplemarket",
+  shareUrl: "",
 };
 
 const AMPLITUDE: MarketplacePluginDetail = {
@@ -2792,7 +2792,7 @@ const AMPLITUDE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/amplitude",
+  shareUrl: "",
 };
 
 const ANDO: MarketplacePluginDetail = {
@@ -2832,7 +2832,7 @@ const ANDO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ando",
+  shareUrl: "",
 };
 
 const APIFY: MarketplacePluginDetail = {
@@ -2872,7 +2872,7 @@ const APIFY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/apify",
+  shareUrl: "",
 };
 
 const APOLLO: MarketplacePluginDetail = {
@@ -2912,7 +2912,7 @@ const APOLLO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/apollo",
+  shareUrl: "",
 };
 
 const ARTIE: MarketplacePluginDetail = {
@@ -2952,7 +2952,7 @@ const ARTIE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/artie",
+  shareUrl: "",
 };
 
 const ATLAN: MarketplacePluginDetail = {
@@ -2992,7 +2992,7 @@ const ATLAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/atlan",
+  shareUrl: "",
 };
 
 const ATTIO: MarketplacePluginDetail = {
@@ -3034,7 +3034,7 @@ const ATTIO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/attio",
+  shareUrl: "",
 };
 
 const AWS_KNOWLEDGE: MarketplacePluginDetail = {
@@ -3070,7 +3070,7 @@ const AWS_KNOWLEDGE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/aws-knowledge",
+  shareUrl: "",
 };
 
 const BASE44: MarketplacePluginDetail = {
@@ -3112,7 +3112,7 @@ const BASE44: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/base44",
+  shareUrl: "",
 };
 
 const BASECAMP: MarketplacePluginDetail = {
@@ -3152,7 +3152,7 @@ const BASECAMP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/basecamp",
+  shareUrl: "",
 };
 
 const BEEHIIV: MarketplacePluginDetail = {
@@ -3192,7 +3192,7 @@ const BEEHIIV: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/beehiiv",
+  shareUrl: "",
 };
 
 const BETTERSTACK: MarketplacePluginDetail = {
@@ -3232,7 +3232,7 @@ const BETTERSTACK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/betterstack",
+  shareUrl: "",
 };
 
 const BIRD: MarketplacePluginDetail = {
@@ -3272,7 +3272,7 @@ const BIRD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/bird",
+  shareUrl: "",
 };
 
 const BLOTATO: MarketplacePluginDetail = {
@@ -3312,7 +3312,7 @@ const BLOTATO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/blotato",
+  shareUrl: "",
 };
 
 const BREX: MarketplacePluginDetail = {
@@ -3352,7 +3352,7 @@ const BREX: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/brex",
+  shareUrl: "",
 };
 
 const BRIGHTDATA: MarketplacePluginDetail = {
@@ -3396,7 +3396,7 @@ const BRIGHTDATA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/brightdata",
+  shareUrl: "",
 };
 
 const BROWSERLESS: MarketplacePluginDetail = {
@@ -3437,7 +3437,7 @@ const BROWSERLESS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/browserless",
+  shareUrl: "",
 };
 
 const BUFFER: MarketplacePluginDetail = {
@@ -3477,7 +3477,7 @@ const BUFFER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/buffer",
+  shareUrl: "",
 };
 
 const BUILDKITE: MarketplacePluginDetail = {
@@ -3517,7 +3517,7 @@ const BUILDKITE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/buildkite",
+  shareUrl: "",
 };
 
 const CALENDLY: MarketplacePluginDetail = {
@@ -3558,7 +3558,7 @@ const CALENDLY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/calendly",
+  shareUrl: "",
 };
 
 const CARTESIA: MarketplacePluginDetail = {
@@ -3599,7 +3599,7 @@ const CARTESIA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/cartesia",
+  shareUrl: "",
 };
 
 const CIRCLEBACK: MarketplacePluginDetail = {
@@ -3639,7 +3639,7 @@ const CIRCLEBACK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/circleback",
+  shareUrl: "",
 };
 
 const CLARIFY: MarketplacePluginDetail = {
@@ -3679,7 +3679,7 @@ const CLARIFY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/clarify",
+  shareUrl: "",
 };
 
 const CLERK: MarketplacePluginDetail = {
@@ -3719,7 +3719,7 @@ const CLERK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/clerk",
+  shareUrl: "",
 };
 
 const CLICKHOUSE: MarketplacePluginDetail = {
@@ -3760,7 +3760,7 @@ const CLICKHOUSE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/clickhouse",
+  shareUrl: "",
 };
 
 const CLOSE: MarketplacePluginDetail = {
@@ -3802,7 +3802,7 @@ const CLOSE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/close",
+  shareUrl: "",
 };
 
 const CLOUDINARY: MarketplacePluginDetail = {
@@ -3842,7 +3842,7 @@ const CLOUDINARY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/cloudinary",
+  shareUrl: "",
 };
 
 const CODA: MarketplacePluginDetail = {
@@ -3882,7 +3882,7 @@ const CODA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/coda",
+  shareUrl: "",
 };
 
 const COINGECKO: MarketplacePluginDetail = {
@@ -3919,7 +3919,7 @@ const COINGECKO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/coingecko",
+  shareUrl: "",
 };
 
 const CONVEX: MarketplacePluginDetail = {
@@ -3954,7 +3954,7 @@ const CONVEX: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/convex",
+  shareUrl: "",
 };
 
 const CRAFT: MarketplacePluginDetail = {
@@ -3994,7 +3994,7 @@ const CRAFT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/craft",
+  shareUrl: "",
 };
 
 const CRUSTDATA: MarketplacePluginDetail = {
@@ -4035,7 +4035,7 @@ const CRUSTDATA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/crustdata",
+  shareUrl: "",
 };
 
 const CUSTOMERIO: MarketplacePluginDetail = {
@@ -4076,7 +4076,7 @@ const CUSTOMERIO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/customerio",
+  shareUrl: "",
 };
 
 const DART: MarketplacePluginDetail = {
@@ -4116,7 +4116,7 @@ const DART: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/dart",
+  shareUrl: "",
 };
 
 const DATADOG: MarketplacePluginDetail = {
@@ -4156,7 +4156,7 @@ const DATADOG: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/datadog",
+  shareUrl: "",
 };
 
 const DATADOG_EU: MarketplacePluginDetail = {
@@ -4196,7 +4196,7 @@ const DATADOG_EU: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/datadog-eu",
+  shareUrl: "",
 };
 
 const DATAFORSEO: MarketplacePluginDetail = {
@@ -4237,7 +4237,7 @@ const DATAFORSEO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/dataforseo",
+  shareUrl: "",
 };
 
 const DEALROOM: MarketplacePluginDetail = {
@@ -4278,7 +4278,7 @@ const DEALROOM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/dealroom",
+  shareUrl: "",
 };
 
 const DEEPLEDGER: MarketplacePluginDetail = {
@@ -4318,7 +4318,7 @@ const DEEPLEDGER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/deepledger",
+  shareUrl: "",
 };
 
 const DEEPWIKI: MarketplacePluginDetail = {
@@ -4353,7 +4353,7 @@ const DEEPWIKI: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/deepwiki",
+  shareUrl: "",
 };
 
 const DIDA365: MarketplacePluginDetail = {
@@ -4393,7 +4393,7 @@ const DIDA365: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/dida365",
+  shareUrl: "",
 };
 
 const DIGITALOCEAN: MarketplacePluginDetail = {
@@ -4434,7 +4434,7 @@ const DIGITALOCEAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/digitalocean",
+  shareUrl: "",
 };
 
 const DROPBOX: MarketplacePluginDetail = {
@@ -4474,7 +4474,7 @@ const DROPBOX: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/dropbox",
+  shareUrl: "",
 };
 
 const EDEN: MarketplacePluginDetail = {
@@ -4514,7 +4514,7 @@ const EDEN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/eden",
+  shareUrl: "",
 };
 
 const ERA: MarketplacePluginDetail = {
@@ -4554,7 +4554,7 @@ const ERA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/era",
+  shareUrl: "",
 };
 
 const ETORO: MarketplacePluginDetail = {
@@ -4594,7 +4594,7 @@ const ETORO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/etoro",
+  shareUrl: "",
 };
 
 const EVERNOTE: MarketplacePluginDetail = {
@@ -4634,7 +4634,7 @@ const EVERNOTE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/evernote",
+  shareUrl: "",
 };
 
 const EXA: MarketplacePluginDetail = {
@@ -4668,7 +4668,7 @@ const EXA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/exa",
+  shareUrl: "",
 };
 
 const EXCALIDRAW: MarketplacePluginDetail = {
@@ -4706,7 +4706,7 @@ const EXCALIDRAW: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/excalidraw",
+  shareUrl: "",
 };
 
 const EXTEND: MarketplacePluginDetail = {
@@ -4748,7 +4748,7 @@ const EXTEND: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/extend",
+  shareUrl: "",
 };
 
 const FAL: MarketplacePluginDetail = {
@@ -4792,7 +4792,7 @@ const FAL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/fal",
+  shareUrl: "",
 };
 
 const FANVUE: MarketplacePluginDetail = {
@@ -4832,7 +4832,7 @@ const FANVUE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/fanvue",
+  shareUrl: "",
 };
 
 const FASTMAIL: MarketplacePluginDetail = {
@@ -4872,7 +4872,7 @@ const FASTMAIL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/fastmail",
+  shareUrl: "",
 };
 
 const FATHOM: MarketplacePluginDetail = {
@@ -4914,7 +4914,7 @@ const FATHOM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/fathom",
+  shareUrl: "",
 };
 
 const FEISHU: MarketplacePluginDetail = {
@@ -4954,7 +4954,7 @@ const FEISHU: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/feishu",
+  shareUrl: "",
 };
 
 const FELLOW: MarketplacePluginDetail = {
@@ -4994,7 +4994,7 @@ const FELLOW: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/fellow",
+  shareUrl: "",
 };
 
 const FIREFLIES: MarketplacePluginDetail = {
@@ -5037,7 +5037,7 @@ const FIREFLIES: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/fireflies",
+  shareUrl: "",
 };
 
 const FLOOT: MarketplacePluginDetail = {
@@ -5077,7 +5077,7 @@ const FLOOT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/floot",
+  shareUrl: "",
 };
 
 const FOLK: MarketplacePluginDetail = {
@@ -5119,7 +5119,7 @@ const FOLK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/folk",
+  shareUrl: "",
 };
 
 const FREEE: MarketplacePluginDetail = {
@@ -5159,7 +5159,7 @@ const FREEE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/freee",
+  shareUrl: "",
 };
 
 const FUTU: MarketplacePluginDetail = {
@@ -5201,7 +5201,7 @@ const FUTU: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/futu",
+  shareUrl: "",
 };
 
 const GITBOOK: MarketplacePluginDetail = {
@@ -5241,7 +5241,7 @@ const GITBOOK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/gitbook",
+  shareUrl: "",
 };
 
 const GODADDY: MarketplacePluginDetail = {
@@ -5281,7 +5281,7 @@ const GODADDY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/godaddy",
+  shareUrl: "",
 };
 
 const GOJIBERRY: MarketplacePluginDetail = {
@@ -5321,7 +5321,7 @@ const GOJIBERRY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/gojiberry",
+  shareUrl: "",
 };
 
 const GRAFANA: MarketplacePluginDetail = {
@@ -5363,7 +5363,7 @@ const GRAFANA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/grafana",
+  shareUrl: "",
 };
 
 const GRANOLA: MarketplacePluginDetail = {
@@ -5403,7 +5403,7 @@ const GRANOLA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/granola",
+  shareUrl: "",
 };
 
 const GREENHOUSE: MarketplacePluginDetail = {
@@ -5447,7 +5447,7 @@ const GREENHOUSE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/greenhouse",
+  shareUrl: "",
 };
 
 const GURU: MarketplacePluginDetail = {
@@ -5489,7 +5489,7 @@ const GURU: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/guru",
+  shareUrl: "",
 };
 
 const HARMONIC: MarketplacePluginDetail = {
@@ -5534,7 +5534,7 @@ const HARMONIC: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/harmonic",
+  shareUrl: "",
 };
 
 const HELIUM10: MarketplacePluginDetail = {
@@ -5576,7 +5576,7 @@ const HELIUM10: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/helium10",
+  shareUrl: "",
 };
 
 const HELPSCOUT: MarketplacePluginDetail = {
@@ -5619,7 +5619,7 @@ const HELPSCOUT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/helpscout",
+  shareUrl: "",
 };
 
 const HEX: MarketplacePluginDetail = {
@@ -5659,7 +5659,7 @@ const HEX: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/hex",
+  shareUrl: "",
 };
 
 const HEYREACH: MarketplacePluginDetail = {
@@ -5701,7 +5701,7 @@ const HEYREACH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/heyreach",
+  shareUrl: "",
 };
 
 const HIGHLEVEL: MarketplacePluginDetail = {
@@ -5766,7 +5766,7 @@ const HIGHLEVEL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/highlevel",
+  shareUrl: "",
 };
 
 const HOSPITABLE: MarketplacePluginDetail = {
@@ -5807,7 +5807,7 @@ const HOSPITABLE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/hospitable",
+  shareUrl: "",
 };
 
 const HOSTINGER: MarketplacePluginDetail = {
@@ -5847,7 +5847,7 @@ const HOSTINGER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/hostinger",
+  shareUrl: "",
 };
 
 const HUBSPOT: MarketplacePluginDetail = {
@@ -5906,7 +5906,7 @@ const HUBSPOT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/hubspot",
+  shareUrl: "",
 };
 
 const IBKR: MarketplacePluginDetail = {
@@ -5947,7 +5947,7 @@ const IBKR: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ibkr",
+  shareUrl: "",
 };
 
 const IFTTT: MarketplacePluginDetail = {
@@ -5987,7 +5987,7 @@ const IFTTT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ifttt",
+  shareUrl: "",
 };
 
 const INCIDENTIO: MarketplacePluginDetail = {
@@ -6028,7 +6028,7 @@ const INCIDENTIO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/incidentio",
+  shareUrl: "",
 };
 
 const INSTANTLY: MarketplacePluginDetail = {
@@ -6071,7 +6071,7 @@ const INSTANTLY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/instantly",
+  shareUrl: "",
 };
 
 const INTERCOM: MarketplacePluginDetail = {
@@ -6111,7 +6111,7 @@ const INTERCOM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/intercom",
+  shareUrl: "",
 };
 
 const INVIDEO: MarketplacePluginDetail = {
@@ -6151,7 +6151,7 @@ const INVIDEO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/invideo",
+  shareUrl: "",
 };
 
 const JOBTREAD: MarketplacePluginDetail = {
@@ -6191,7 +6191,7 @@ const JOBTREAD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/jobtread",
+  shareUrl: "",
 };
 
 const KAJABI: MarketplacePluginDetail = {
@@ -6231,7 +6231,7 @@ const KAJABI: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/kajabi",
+  shareUrl: "",
 };
 
 const KENSHO: MarketplacePluginDetail = {
@@ -6271,7 +6271,7 @@ const KENSHO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/kensho",
+  shareUrl: "",
 };
 
 const KIT: MarketplacePluginDetail = {
@@ -6311,7 +6311,7 @@ const KIT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/kit",
+  shareUrl: "",
 };
 
 const KLAVIYO: MarketplacePluginDetail = {
@@ -6354,7 +6354,7 @@ const KLAVIYO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/klaviyo",
+  shareUrl: "",
 };
 
 const KNOWIFY: MarketplacePluginDetail = {
@@ -6396,7 +6396,7 @@ const KNOWIFY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/knowify",
+  shareUrl: "",
 };
 
 const KRISP: MarketplacePluginDetail = {
@@ -6439,7 +6439,7 @@ const KRISP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/krisp",
+  shareUrl: "",
 };
 
 const LARK: MarketplacePluginDetail = {
@@ -6479,7 +6479,7 @@ const LARK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/lark",
+  shareUrl: "",
 };
 
 const LAUNCHDARKLY: MarketplacePluginDetail = {
@@ -6522,7 +6522,7 @@ const LAUNCHDARKLY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/launchdarkly",
+  shareUrl: "",
 };
 
 const LEMLIST: MarketplacePluginDetail = {
@@ -6562,7 +6562,7 @@ const LEMLIST: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/lemlist",
+  shareUrl: "",
 };
 
 const LITTLEBIRD: MarketplacePluginDetail = {
@@ -6604,7 +6604,7 @@ const LITTLEBIRD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/littlebird",
+  shareUrl: "",
 };
 
 const LOCALMCP: MarketplacePluginDetail = {
@@ -6644,7 +6644,7 @@ const LOCALMCP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/localmcp",
+  shareUrl: "",
 };
 
 const LONGBRIDGE: MarketplacePluginDetail = {
@@ -6684,7 +6684,7 @@ const LONGBRIDGE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/longbridge",
+  shareUrl: "",
 };
 
 const LOVABLE: MarketplacePluginDetail = {
@@ -6726,7 +6726,7 @@ const LOVABLE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/lovable",
+  shareUrl: "",
 };
 
 const LUSHA: MarketplacePluginDetail = {
@@ -6769,7 +6769,7 @@ const LUSHA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/lusha",
+  shareUrl: "",
 };
 
 const MAGICPATTERNS: MarketplacePluginDetail = {
@@ -6809,7 +6809,7 @@ const MAGICPATTERNS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/magicpatterns",
+  shareUrl: "",
 };
 
 const MAGNIFIC: MarketplacePluginDetail = {
@@ -6849,7 +6849,7 @@ const MAGNIFIC: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/magnific",
+  shareUrl: "",
 };
 
 const MAILERLITE: MarketplacePluginDetail = {
@@ -6890,7 +6890,7 @@ const MAILERLITE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mailerlite",
+  shareUrl: "",
 };
 
 const MAKE: MarketplacePluginDetail = {
@@ -6932,7 +6932,7 @@ const MAKE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/make",
+  shareUrl: "",
 };
 
 const MASSIVE: MarketplacePluginDetail = {
@@ -6972,7 +6972,7 @@ const MASSIVE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/massive",
+  shareUrl: "",
 };
 
 const MEM: MarketplacePluginDetail = {
@@ -7014,7 +7014,7 @@ const MEM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mem",
+  shareUrl: "",
 };
 
 const MERCURY: MarketplacePluginDetail = {
@@ -7055,7 +7055,7 @@ const MERCURY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mercury",
+  shareUrl: "",
 };
 
 const META_ADS: MarketplacePluginDetail = {
@@ -7100,7 +7100,7 @@ const META_ADS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/meta-ads",
+  shareUrl: "",
 };
 
 const METRICOOL: MarketplacePluginDetail = {
@@ -7143,7 +7143,7 @@ const METRICOOL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/metricool",
+  shareUrl: "",
 };
 
 const MIRO: MarketplacePluginDetail = {
@@ -7183,7 +7183,7 @@ const MIRO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/miro",
+  shareUrl: "",
 };
 
 const MIXPANEL: MarketplacePluginDetail = {
@@ -7223,7 +7223,7 @@ const MIXPANEL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mixpanel",
+  shareUrl: "",
 };
 
 const MOBBIN: MarketplacePluginDetail = {
@@ -7263,7 +7263,7 @@ const MOBBIN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mobbin",
+  shareUrl: "",
 };
 
 const MONARCH: MarketplacePluginDetail = {
@@ -7303,7 +7303,7 @@ const MONARCH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/monarch",
+  shareUrl: "",
 };
 
 const MONDAY: MarketplacePluginDetail = {
@@ -7349,7 +7349,7 @@ const MONDAY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/monday",
+  shareUrl: "",
 };
 
 const MOOMOO: MarketplacePluginDetail = {
@@ -7391,7 +7391,7 @@ const MOOMOO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/moomoo",
+  shareUrl: "",
 };
 
 const MURAL: MarketplacePluginDetail = {
@@ -7431,7 +7431,7 @@ const MURAL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/mural",
+  shareUrl: "",
 };
 
 const NAVAN: MarketplacePluginDetail = {
@@ -7471,7 +7471,7 @@ const NAVAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/navan",
+  shareUrl: "",
 };
 
 const NORTHBEAM: MarketplacePluginDetail = {
@@ -7513,7 +7513,7 @@ const NORTHBEAM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/northbeam",
+  shareUrl: "",
 };
 
 const OMNEKY: MarketplacePluginDetail = {
@@ -7553,7 +7553,7 @@ const OMNEKY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/omneky",
+  shareUrl: "",
 };
 
 const OPENART: MarketplacePluginDetail = {
@@ -7593,7 +7593,7 @@ const OPENART: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/openart",
+  shareUrl: "",
 };
 
 const OPUSCLIP: MarketplacePluginDetail = {
@@ -7633,7 +7633,7 @@ const OPUSCLIP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/opusclip",
+  shareUrl: "",
 };
 
 const OTTER: MarketplacePluginDetail = {
@@ -7673,7 +7673,7 @@ const OTTER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/otter",
+  shareUrl: "",
 };
 
 const PANDADOC: MarketplacePluginDetail = {
@@ -7714,7 +7714,7 @@ const PANDADOC: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/pandadoc",
+  shareUrl: "",
 };
 
 const PARALLEL: MarketplacePluginDetail = {
@@ -7753,7 +7753,7 @@ const PARALLEL: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/parallel",
+  shareUrl: "",
 };
 
 const PENNYLANE: MarketplacePluginDetail = {
@@ -7793,7 +7793,7 @@ const PENNYLANE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/pennylane",
+  shareUrl: "",
 };
 
 const PICSART: MarketplacePluginDetail = {
@@ -7833,7 +7833,7 @@ const PICSART: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/picsart",
+  shareUrl: "",
 };
 
 const PIPEDRIVE: MarketplacePluginDetail = {
@@ -7875,7 +7875,7 @@ const PIPEDRIVE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/pipedrive",
+  shareUrl: "",
 };
 
 const PLANETSCALE: MarketplacePluginDetail = {
@@ -7916,7 +7916,7 @@ const PLANETSCALE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/planetscale",
+  shareUrl: "",
 };
 
 const PLANNINGCENTER: MarketplacePluginDetail = {
@@ -7956,7 +7956,7 @@ const PLANNINGCENTER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/planningcenter",
+  shareUrl: "",
 };
 
 const PLAUD: MarketplacePluginDetail = {
@@ -7996,7 +7996,7 @@ const PLAUD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/plaud",
+  shareUrl: "",
 };
 
 const POSTMAN: MarketplacePluginDetail = {
@@ -8037,7 +8037,7 @@ const POSTMAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/postman",
+  shareUrl: "",
 };
 
 const PROFOUND: MarketplacePluginDetail = {
@@ -8077,7 +8077,7 @@ const PROFOUND: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/profound",
+  shareUrl: "",
 };
 
 const PUBLIC: MarketplacePluginDetail = {
@@ -8119,7 +8119,7 @@ const PUBLIC: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/public",
+  shareUrl: "",
 };
 
 const PYLON: MarketplacePluginDetail = {
@@ -8159,7 +8159,7 @@ const PYLON: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/pylon",
+  shareUrl: "",
 };
 
 const QONTO: MarketplacePluginDetail = {
@@ -8201,7 +8201,7 @@ const QONTO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/qonto",
+  shareUrl: "",
 };
 
 const QUO: MarketplacePluginDetail = {
@@ -8241,7 +8241,7 @@ const QUO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/quo",
+  shareUrl: "",
 };
 
 const RAINDROP: MarketplacePluginDetail = {
@@ -8283,7 +8283,7 @@ const RAINDROP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/raindrop",
+  shareUrl: "",
 };
 
 const RAMP: MarketplacePluginDetail = {
@@ -8323,7 +8323,7 @@ const RAMP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ramp",
+  shareUrl: "",
 };
 
 const READAI: MarketplacePluginDetail = {
@@ -8365,7 +8365,7 @@ const READAI: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/readai",
+  shareUrl: "",
 };
 
 const READWISE: MarketplacePluginDetail = {
@@ -8405,7 +8405,7 @@ const READWISE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/readwise",
+  shareUrl: "",
 };
 
 const REFERO: MarketplacePluginDetail = {
@@ -8445,7 +8445,7 @@ const REFERO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/refero",
+  shareUrl: "",
 };
 
 const RESTREAM: MarketplacePluginDetail = {
@@ -8485,7 +8485,7 @@ const RESTREAM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/restream",
+  shareUrl: "",
 };
 
 const RIVERSIDE: MarketplacePluginDetail = {
@@ -8525,7 +8525,7 @@ const RIVERSIDE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/riverside",
+  shareUrl: "",
 };
 
 const ROAM: MarketplacePluginDetail = {
@@ -8565,7 +8565,7 @@ const ROAM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/roam",
+  shareUrl: "",
 };
 
 const RUNPOD: MarketplacePluginDetail = {
@@ -8607,7 +8607,7 @@ const RUNPOD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/runpod",
+  shareUrl: "",
 };
 
 const RUNWAY: MarketplacePluginDetail = {
@@ -8647,7 +8647,7 @@ const RUNWAY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/runway",
+  shareUrl: "",
 };
 
 const RYZE: MarketplacePluginDetail = {
@@ -8690,7 +8690,7 @@ const RYZE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ryze",
+  shareUrl: "",
 };
 
 const SALESLOFT: MarketplacePluginDetail = {
@@ -8730,7 +8730,7 @@ const SALESLOFT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/salesloft",
+  shareUrl: "",
 };
 
 const SANITY: MarketplacePluginDetail = {
@@ -8770,7 +8770,7 @@ const SANITY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/sanity",
+  shareUrl: "",
 };
 
 const SCRAPECREATORS: MarketplacePluginDetail = {
@@ -8810,7 +8810,7 @@ const SCRAPECREATORS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/scrapecreators",
+  shareUrl: "",
 };
 
 const SEARCHATLAS: MarketplacePluginDetail = {
@@ -8850,7 +8850,7 @@ const SEARCHATLAS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/searchatlas",
+  shareUrl: "",
 };
 
 const SEMRUSH: MarketplacePluginDetail = {
@@ -8890,7 +8890,7 @@ const SEMRUSH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/semrush",
+  shareUrl: "",
 };
 
 const SERANKING: MarketplacePluginDetail = {
@@ -8930,7 +8930,7 @@ const SERANKING: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/seranking",
+  shareUrl: "",
 };
 
 const SERVICEM8: MarketplacePluginDetail = {
@@ -8970,7 +8970,7 @@ const SERVICEM8: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/servicem8",
+  shareUrl: "",
 };
 
 const SMARTLEAD: MarketplacePluginDetail = {
@@ -9013,7 +9013,7 @@ const SMARTLEAD: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/smartlead",
+  shareUrl: "",
 };
 
 const SNAPTRADE: MarketplacePluginDetail = {
@@ -9053,7 +9053,7 @@ const SNAPTRADE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/snaptrade",
+  shareUrl: "",
 };
 
 const SONARQUBE: MarketplacePluginDetail = {
@@ -9094,7 +9094,7 @@ const SONARQUBE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/sonarqube",
+  shareUrl: "",
 };
 
 const SPACEFAST: MarketplacePluginDetail = {
@@ -9134,7 +9134,7 @@ const SPACEFAST: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/spacefast",
+  shareUrl: "",
 };
 
 const SPEKO: MarketplacePluginDetail = {
@@ -9174,7 +9174,7 @@ const SPEKO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/speko",
+  shareUrl: "",
 };
 
 const SQUARE: MarketplacePluginDetail = {
@@ -9214,7 +9214,7 @@ const SQUARE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/square",
+  shareUrl: "",
 };
 
 const STATSIG: MarketplacePluginDetail = {
@@ -9261,7 +9261,7 @@ const STATSIG: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/statsig",
+  shareUrl: "",
 };
 
 const SUNSAMA: MarketplacePluginDetail = {
@@ -9304,7 +9304,7 @@ const SUNSAMA: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/sunsama",
+  shareUrl: "",
 };
 
 const SUPERHUMAN: MarketplacePluginDetail = {
@@ -9346,7 +9346,7 @@ const SUPERHUMAN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/superhuman",
+  shareUrl: "",
 };
 
 const SUPERME: MarketplacePluginDetail = {
@@ -9392,7 +9392,7 @@ const SUPERME: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/superme",
+  shareUrl: "",
 };
 
 const SUPERMEMORY: MarketplacePluginDetail = {
@@ -9432,7 +9432,7 @@ const SUPERMEMORY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/supermemory",
+  shareUrl: "",
 };
 
 const SVELTE: MarketplacePluginDetail = {
@@ -9468,7 +9468,7 @@ const SVELTE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/svelte",
+  shareUrl: "",
 };
 
 const SYNCRO: MarketplacePluginDetail = {
@@ -9508,7 +9508,7 @@ const SYNCRO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/syncro",
+  shareUrl: "",
 };
 
 const TABLEAU: MarketplacePluginDetail = {
@@ -9552,7 +9552,7 @@ const TABLEAU: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/tableau",
+  shareUrl: "",
 };
 
 const TAVILY: MarketplacePluginDetail = {
@@ -9592,7 +9592,7 @@ const TAVILY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/tavily",
+  shareUrl: "",
 };
 
 const TESSIE: MarketplacePluginDetail = {
@@ -9651,7 +9651,7 @@ const TESSIE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/tessie",
+  shareUrl: "",
 };
 
 const TINYFISH: MarketplacePluginDetail = {
@@ -9691,7 +9691,7 @@ const TINYFISH: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/tinyfish",
+  shareUrl: "",
 };
 
 const TRADINGVIEW: MarketplacePluginDetail = {
@@ -9731,7 +9731,7 @@ const TRADINGVIEW: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/tradingview",
+  shareUrl: "",
 };
 
 const TRANSCRIPTAPI: MarketplacePluginDetail = {
@@ -9771,7 +9771,7 @@ const TRANSCRIPTAPI: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/transcriptapi",
+  shareUrl: "",
 };
 
 const TRUTHIFI: MarketplacePluginDetail = {
@@ -9811,7 +9811,7 @@ const TRUTHIFI: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/truthifi",
+  shareUrl: "",
 };
 
 const TURSO: MarketplacePluginDetail = {
@@ -9851,7 +9851,7 @@ const TURSO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/turso",
+  shareUrl: "",
 };
 
 const TWILIO_DOCS: MarketplacePluginDetail = {
@@ -9886,7 +9886,7 @@ const TWILIO_DOCS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/twilio-docs",
+  shareUrl: "",
 };
 
 const TYPEFORM: MarketplacePluginDetail = {
@@ -9930,7 +9930,7 @@ const TYPEFORM: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/typeform",
+  shareUrl: "",
 };
 
 const TYPEFULLY: MarketplacePluginDetail = {
@@ -9970,7 +9970,7 @@ const TYPEFULLY: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/typefully",
+  shareUrl: "",
 };
 
 const UBERSUGGEST: MarketplacePluginDetail = {
@@ -10011,7 +10011,7 @@ const UBERSUGGEST: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ubersuggest",
+  shareUrl: "",
 };
 
 const UPWORK: MarketplacePluginDetail = {
@@ -10055,7 +10055,7 @@ const UPWORK: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/upwork",
+  shareUrl: "",
 };
 
 const VIDEOGEN: MarketplacePluginDetail = {
@@ -10095,7 +10095,7 @@ const VIDEOGEN: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/videogen",
+  shareUrl: "",
 };
 
 const VIDIQ: MarketplacePluginDetail = {
@@ -10135,7 +10135,7 @@ const VIDIQ: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/vidiq",
+  shareUrl: "",
 };
 
 const WEBFLOW: MarketplacePluginDetail = {
@@ -10175,7 +10175,7 @@ const WEBFLOW: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/webflow",
+  shareUrl: "",
 };
 
 const WELLNESSPROJECT: MarketplacePluginDetail = {
@@ -10216,7 +10216,7 @@ const WELLNESSPROJECT: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/wellnessproject",
+  shareUrl: "",
 };
 
 const WHOP: MarketplacePluginDetail = {
@@ -10256,7 +10256,7 @@ const WHOP: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/whop",
+  shareUrl: "",
 };
 
 const WINDSOR: MarketplacePluginDetail = {
@@ -10296,7 +10296,7 @@ const WINDSOR: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/windsor",
+  shareUrl: "",
 };
 
 const WITHINGS: MarketplacePluginDetail = {
@@ -10338,7 +10338,7 @@ const WITHINGS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/withings",
+  shareUrl: "",
 };
 
 const WIX: MarketplacePluginDetail = {
@@ -10379,7 +10379,7 @@ const WIX: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/wix",
+  shareUrl: "",
 };
 
 const WORDPRESS: MarketplacePluginDetail = {
@@ -10419,7 +10419,7 @@ const WORDPRESS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/wordpress",
+  shareUrl: "",
 };
 
 const WORKABLE: MarketplacePluginDetail = {
@@ -10462,7 +10462,7 @@ const WORKABLE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/workable",
+  shareUrl: "",
 };
 
 const WORKOS: MarketplacePluginDetail = {
@@ -10502,7 +10502,7 @@ const WORKOS: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/workos",
+  shareUrl: "",
 };
 
 const WPVIBE: MarketplacePluginDetail = {
@@ -10542,7 +10542,7 @@ const WPVIBE: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/wpvibe",
+  shareUrl: "",
 };
 
 const YNAB: MarketplacePluginDetail = {
@@ -10583,7 +10583,7 @@ const YNAB: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/ynab",
+  shareUrl: "",
 };
 
 const YOU: MarketplacePluginDetail = {
@@ -10623,7 +10623,7 @@ const YOU: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/you",
+  shareUrl: "",
 };
 
 const ZAPIER: MarketplacePluginDetail = {
@@ -10666,7 +10666,7 @@ const ZAPIER: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/zapier",
+  shareUrl: "",
 };
 
 const ZOOMINFO: MarketplacePluginDetail = {
@@ -10709,7 +10709,7 @@ const ZOOMINFO: MarketplacePluginDetail = {
   installs: 0,
   featured: false,
   updatedAt: "2026-11-10T00:00:00.000Z",
-  shareUrl: "https://github.com/nightly-labs/openbot/tree/main/docs/plugins/zoominfo",
+  shareUrl: "",
 };
 
 export const MARKETPLACE_PLUGINS: MarketplacePluginDetail[] = [

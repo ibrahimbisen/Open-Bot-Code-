@@ -11,7 +11,7 @@ export const messages = {
   "error.update.notInstalled": "El último reinicio no instaló la actualización. Reinicia para intentarlo de nuevo.",
   "error.update.downloadFailed": "No se pudo descargar la actualización. Inténtalo de nuevo.",
   "error.update.signatureNotConfirmed":
-    "OpenBot Code no pudo verificar la actualización. Inténtalo de nuevo. Si el error continúa, descarga OpenBot Code desde openbot.run/download.",
+    "OpenBot Code no pudo verificar la actualización. Inténtalo de nuevo. Si el error continúa, descarga OpenBot Code desde codebot.example/download.",
   "error.update.checkFailed": "No se pudieron buscar actualizaciones. Inténtalo de nuevo.",
   "error.update.checkStalled": "La búsqueda de actualizaciones dejó de responder. Inténtalo de nuevo.",
   "error.update.checkOffline":

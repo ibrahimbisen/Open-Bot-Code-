@@ -16,14 +16,14 @@ let
   asset = sources.assets.${system} or (throw "CodeBot has no release for ${system}");
 
   src = fetchurl {
-    url = "https://github.com/nightly-labs/openbot/releases/download/v${version}/${asset.name}";
+    url = "https://github.com/your-org/codebot/releases/download/v${version}/${asset.name}";
     inherit (asset) hash;
   };
 
   meta = {
     description = "Local-first multi-agent desktop workspace for Codex, Claude, Grok and other coding agents";
-    homepage = "https://github.com/nightly-labs/openbot";
-    changelog = "https://github.com/nightly-labs/openbot/releases/tag/v${version}";
+    homepage = "https://github.com/your-org/codebot";
+    changelog = "https://github.com/your-org/codebot/releases/tag/v${version}";
     license = {
       shortName = "polyform-nc-10";
       fullName = "PolyForm Noncommercial License 1.0.0";

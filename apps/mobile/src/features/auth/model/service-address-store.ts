@@ -27,7 +27,7 @@ export function currentServiceAddresses(): ServiceAddresses {
   return current;
 }
 
-export function loadServiceAddresses(): Promise<ServiceAddresses> {
+function loadServiceAddresses(): Promise<ServiceAddresses> {
   loading ??= SecureStore.getItemAsync(SERVICE_ADDRESSES_KEY).then(
     (raw) => {
       publish(resolveServiceAddresses(decodeStoredAddresses(raw), buildAddresses));

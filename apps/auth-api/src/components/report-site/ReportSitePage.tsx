@@ -11,7 +11,7 @@ const REPORT_REASONS = ["phishing", "malware", "abuse", "copyright", "other"] as
 
 const DETAILS_LIMIT = 1_000;
 
-const HOSTNAME_EXAMPLE = "example.openbot.site";
+const HOSTNAME_EXAMPLE = "example.codebot.example";
 
 type ReportStatus = "idle" | "sending" | "sent" | "failed";
 

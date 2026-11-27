@@ -10,7 +10,6 @@ import ArrowRight from "lucide-react-native/icons/arrow-right";
 import CalendarClock from "lucide-react-native/icons/calendar-clock";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Linking, View } from "react-native";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { useMobileSession } from "@/features/auth/context/mobile-session-context";
 import { ChatMarkdown } from "@/features/chat/components/chat-markdown";
 import { SettingsNote, SettingsRow, SettingsSection } from "@/features/settings/components/settings-content";
@@ -186,19 +185,14 @@ function AgentPage({
     onBusy(true);
     setError(null);
     try {
-      const result = await mobileAnalytics.operation(
-        "marketplace_action",
-        { entity: "agent", action: added ? "update" : "install" },
-        () =>
-          installMarketplaceAgent(
-            {
-              listingId: detail.id,
-              ...(added ? { agentId: added.id } : {}),
-              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-              receiptId: Crypto.randomUUID(),
-            },
-            serverId,
-          ),
+      const result = await installMarketplaceAgent(
+        {
+          listingId: detail.id,
+          ...(added ? { agentId: added.id } : {}),
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          receiptId: Crypto.randomUUID(),
+        },
+        serverId,
       );
       setFinished(result.id);
       void haptics.notification("success");

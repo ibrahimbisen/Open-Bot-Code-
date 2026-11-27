@@ -75,7 +75,7 @@ export async function postAnnouncement(
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         username: "CodeBot",
-        avatar_url: "https://openbot.run/icon-512x512.png",
+        avatar_url: "https://codebot.example/icon-512x512.png",
         content,
         allowed_mentions: allowedMentions,
       }),

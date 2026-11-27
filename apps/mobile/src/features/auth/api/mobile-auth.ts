@@ -444,43 +444,6 @@ function serialQueue() {
   };
 }
 
-export async function requestMobileAccount<T>(
-  session: MobileSession,
-  path: string,
-  init: { method?: "GET" | "POST"; body?: string; headers?: Record<string, string> },
-  decode: (value: unknown) => T | null,
-  failure: string,
-  timeoutMs?: number,
-): Promise<T> {
-  return withMobileAuthRequestTimeout(
-    async (signal) => {
-      let response: Response;
-      try {
-        response = await fetch(new URL(path, session.apiUrl).toString(), {
-          method: init.method ?? "GET",
-          headers: {
-            Authorization: `Bearer ${session.sessionToken}`,
-            ...(init.body === undefined ? {} : { "Content-Type": "application/json" }),
-            ...init.headers,
-          },
-          ...(init.body === undefined ? {} : { body: init.body }),
-          signal,
-        });
-      } catch {
-        throw new Error(failure);
-      }
-      await checkMobileAuthorization(response, session);
-      const body = await readResponseBody(response, signal).catch(() => null);
-      if (!response.ok) throw new Error(apiErrorMessage(body) ?? failure);
-      const value = decode(body);
-      if (value === null) throw new Error(failure);
-      return value;
-    },
-    undefined,
-    timeoutMs,
-  );
-}
-
 async function checkMobileAuthorization(response: Response, session: MobileSession): Promise<void> {
   if (response.status !== 401) return;
   await deleteMobileSessionIfCurrent(session.sessionToken);

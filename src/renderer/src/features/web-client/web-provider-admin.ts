@@ -146,11 +146,11 @@ const CODE_LOGIN_POLL_MS = 3000;
 
 const WEB_EXTERNAL_DESTINATIONS: Partial<Record<ExternalDestination, string>> = {
   "opencode-auth": "https://opencode.ai/auth",
-  feedback: "https://github.com/nightly-labs/openbot/discussions",
+  feedback: "https://github.com/your-org/codebot/discussions",
   "report-problem": bugReportFormUrl({ platform: "Web client" }),
-  changelog: "https://github.com/nightly-labs/openbot/releases",
-  guides: "https://github.com/nightly-labs/openbot/tree/main/docs",
-  discord: "https://github.com/nightly-labs/openbot/discussions",
+  changelog: "https://github.com/your-org/codebot/releases",
+  guides: "https://github.com/your-org/codebot/tree/main/docs",
+  discord: "https://github.com/your-org/codebot/discussions",
 };
 
 export function openWebDestination(destination: ExternalDestination): Promise<void> {

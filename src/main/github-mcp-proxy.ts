@@ -29,7 +29,7 @@ const MAX_BODY_BYTES = 4 * 1024 * 1024;
 const MISSING_PERMISSION = "Resource not accessible by integration";
 const REPOSITORY_CREATION_HINT =
   'CodeBot cannot create repositories for this owner. GitHub needs the "Administration: write" permission of the ' +
-  "OpenBotGit app on that account. An owner of the account installs OpenBotGit there, or approves its pending " +
+  "CodeBotGit app on that account. An owner of the account installs CodeBotGit there, or approves its pending " +
   "permission request, in GitHub settings: Applications > Installed GitHub Apps (for an organization, in the " +
   "organization settings). Organization policy can also block repository creation. Tell the user this, and do " +
   "not try another credential. The user can also create the repository on github.com.";
@@ -49,7 +49,7 @@ const singleSignOnHint = (owner: string) =>
   "CodeBot. Do not try another credential. Tell the user to: 1. Open " +
   `https://github.com/orgs/${encodeURIComponent(owner)}/sso in their browser and complete the single sign-on. ` +
   '2. In CodeBot, open Marketplace > Apps > GitHub and click "Disconnect". On the GitHub page that opens, revoke ' +
-  'OpenBotGit. 3. Click "Connect GitHub" and enter the code in the same browser. Then try again.';
+  'CodeBotGit. 3. Click "Connect GitHub" and enter the code in the same browser. Then try again.';
 
 export interface GitHubMcpProxyOptions {
   upstreamUrl: string;

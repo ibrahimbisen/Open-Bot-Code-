@@ -39,7 +39,7 @@ On 2026-11-22 the developer accepted the defaults below ("do all as you see fit"
 | D2 | One workflow format version that the host advertises, in place of one capability for each new field? | Yes (item 9). New rule changes then raise the version. |
 | D3 | Export with a secret in a text field: refuse and list the fields, or redact? | Refuse, as `assertNoSecrets` does for agent templates. |
 | D4 | Put asset files in the workflow file? | Yes, base64, cap at `ATTACHMENT_LIMITS.fileBytes` per file. |
-| D5 | A public workflow gallery on openbot.run? | Out of scope. It would put workflow text on Cloudflare; product constraints say Cloudflare holds no chats or files. |
+| D5 | A public workflow gallery on codebot.example? | Out of scope. It would put workflow text on Cloudflare; product constraints say Cloudflare holds no chats or files. |
 
 ## Phase 1: fix what is wrong now
 

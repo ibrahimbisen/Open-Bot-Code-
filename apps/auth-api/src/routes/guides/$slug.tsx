@@ -14,7 +14,7 @@ export const Route = createFileRoute("/guides/$slug")({
   loader: ({ params }) => {
     if (params.slug === "write-a-guide-for-codebot") {
       throw redirect({
-        href: "https://github.com/nightly-labs/openbot/blob/main/CONTRIBUTING.md",
+        href: "https://github.com/your-org/codebot/blob/main/CONTRIBUTING.md",
         statusCode: 308,
       });
     }

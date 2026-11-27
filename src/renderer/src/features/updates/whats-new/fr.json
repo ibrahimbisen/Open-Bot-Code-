@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Lancez un workflow depuis GitHub : un déclencheur GitHub s’exécute sur les nouveaux tickets, commentaires, pull requests, revues, vérifications échouées ou une mention de @openbotgit.",
+          "Lancez un workflow depuis GitHub : un déclencheur GitHub s’exécute sur les nouveaux tickets, commentaires, pull requests, revues, vérifications échouées ou une mention de @codebotgit.",
           "Modifiez GitHub depuis un workflow : commentez, étiquetez, assignez, relisez, fermez ou créez un ticket en tant qu’app GitHub CodeBot.",
           "La Marketplace a 17 nouveaux agents CodeBot, comme QA Tester, PR Shepherd et Chief of Staff, et 15 nouvelles compétences pour eux.",
           "Utilisation affiche la limite mensuelle d’OpenCode Go dans une troisième barre."
@@ -854,7 +854,7 @@
         "items": [
           "Dérivez une conversation : faites un clic droit sur le dernier message de l’agent dans un tour et sélectionnez Dériver d’ici. Un nouveau fil s’ouvre avec la conversation jusqu’à ce message.",
           "Les réglages de l’agent ont une page Instructions qui affiche le fichier AGENTS.md de l’agent. Quand l’agent modifie ses instructions, la discussion affiche le changement avec Annuler.",
-          "La Marketplace est sur openbot.run. Chaque agent et chaque compétence a sa propre page, et Copier le lien la partage.",
+          "La Marketplace est sur codebot.example. Chaque agent et chaque compétence a sa propre page, et Copier le lien la partage.",
           "Un agent peut répondre à une alerte ou à une confirmation d’un site web que sa propre action de navigateur a ouverte.",
           "Une tâche de canal arrêtée ou échouée a un bouton Annuler la tâche."
         ]

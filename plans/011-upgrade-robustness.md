@@ -180,7 +180,7 @@ Step 3 evidence: the last release that sends an unmarked WebRTC request.
 Where I looked: `git show <tag>:` of `team-webrtc-client-transport.ts` and
 `packages/team-client/src/remote-peer.ts` for each tag, and the mobile release commits. Not confirmed:
 the mobile store dates (from `apps/mobile/CHANGELOG.md` only), that 1.0.0 (`192540e9b2`) is the store
-build, the OTA bundles, and the commit that `openbot.run/app` serves.
+build, the OTA bundles, and the commit that `codebot.example/app` serves.
 
 What the deletion PR must still move, because current code uses it:
 

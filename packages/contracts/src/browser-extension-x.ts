@@ -31,7 +31,7 @@ const SELECTORS_PER_PART = 12;
 const SELECTOR_LENGTH = 300;
 
 export const X_PAGE_RULES_DEFAULT: XPageRules = {
-  mention: "openbot_",
+  mention: "codebot_x",
   selectors: {
     composer: [
       '[data-testid="tweetTextarea_0"]',

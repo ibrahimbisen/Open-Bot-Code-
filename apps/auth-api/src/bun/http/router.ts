@@ -2,9 +2,9 @@ import { apiError } from "./responses";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-export type RouteParams = Readonly<Record<string, string>>;
+type RouteParams = Readonly<Record<string, string>>;
 
-export interface RouteRequest {
+interface RouteRequest {
   request: Request;
   url: URL;
   params: RouteParams;

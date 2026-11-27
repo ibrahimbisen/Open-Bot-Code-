@@ -60,17 +60,17 @@ const EXTERNAL_DESTINATIONS: Record<
   Exclude<ExternalDestination, "download">,
   string | ((translate: AppTranslate) => string)
 > = {
-  "agent-setup": "https://github.com/nightly-labs/openbot/blob/main/docs/TROUBLESHOOTING.md",
+  "agent-setup": "https://github.com/your-org/codebot/blob/main/docs/TROUBLESHOOTING.md",
   "opencode-install": "https://opencode.ai/docs/",
   "opencode-auth": "https://opencode.ai/auth",
   "claude-install": "https://code.claude.com/docs",
   "hermes-install": "https://hermes-agent.nousresearch.com/docs/getting-started/installation",
-  feedback: "https://github.com/nightly-labs/openbot/discussions",
+  feedback: "https://github.com/your-org/codebot/discussions",
   "report-problem": () => bugReportFormUrl(feedbackFacts()),
-  changelog: "https://github.com/nightly-labs/openbot/releases",
-  guides: "https://github.com/nightly-labs/openbot/tree/main/docs",
-  discord: "https://github.com/nightly-labs/openbot/discussions",
-  github: "https://github.com/nightly-labs/openbot",
+  changelog: "https://github.com/your-org/codebot/releases",
+  guides: "https://github.com/your-org/codebot/tree/main/docs",
+  discord: "https://github.com/your-org/codebot/discussions",
+  github: "https://github.com/your-org/codebot",
   "grok-bot-export": GROK_BOT_EXPORT_URL,
   "mac-screen-recording": MAC_PERMISSION_URLS["screen-recording"],
 };

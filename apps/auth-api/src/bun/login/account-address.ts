@@ -6,7 +6,7 @@ const LOCAL_PART_LIMIT = 64;
 const PLAIN_CHARACTER = /^[a-z0-9.!#$%&'*+/?^_`{|}~-]$/u;
 const TAG_LENGTH = 8;
 
-export function identityTag(issuer: string, subject: string): string {
+function identityTag(issuer: string, subject: string): string {
   return createHash("sha256").update(`${issuer}\n${subject}`).digest("hex").slice(0, TAG_LENGTH);
 }
 

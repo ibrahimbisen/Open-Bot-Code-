@@ -41,7 +41,6 @@ Paths are relative to `src/main/` unless shown otherwise.
 | Path | What it owns |
 | --- | --- |
 | `account-service-access.ts` | `safeStorageCipher`, `centralAuthApiUrl` (reads `CODEBOT_AUTH_API_URL`), `createCentralAuthManager`. |
-| `account-service-platform.ts` | `AccountRequestClient` interface, `AccountServicePlatform` (an Effect `Context.Service`), `AccountServiceFailure`. |
 | `account-activity-reporter.ts` | `ACCOUNT_ACTIVITY_PATH` (`/v1/me/activity`), `AccountActivityReporter`, `HostAccountActivity`. |
 | `central-auth-manager.ts` | `CentralAuthManager` (EventEmitter, emits `changed`). Sign-in, session, host credentials, mobile connect, remote tickets. Helpers: `readCentralAuthApiUrl`, `readMobileConnectApiUrl`, `isHostNotOnAccount`, `authApiRateLimit`, `authApiErrorCode`, `isFinalClientError`. About 2,900 lines. |
 | `central-auth-effects.ts` | `CentralAuthOperationError`, `authCall`, `authDecode`, `CentralAuthTransport` service. |
@@ -371,7 +370,7 @@ Paths are relative to `src/main/` unless shown otherwise.
     - `account-service-access.ts` exports `safeStorageCipher` (line 24).
 13. Environment variable names read in this area (names only): `CODEBOT_AUTH_API_URL`, `CODEBOT_MOBILE_AUTH_API_URL`, `CODEBOT_CUA_DRIVER_PATH`, `CUA_DRIVER_PATH`, `CUA_DRIVER_BIN_DIR`, `CUA_DRIVER_RS_INSTALL_DIR`, `CODEBOT_REMOTE_DESKTOP_RUNTIME_PATH`, `CODEBOT_HOSTED_SERVER`, `ELECTRON_RENDERER_URL`, `WAYLAND_DISPLAY`, `XDG_SESSION_TYPE`, `XDG_RUNTIME_DIR`, `APPIMAGE`, and `CODEBOT_DEV_*` names (for example `CODEBOT_DEV_CLIENT_TRANSPORT`, `CODEBOT_DEV_HOST_EMAIL`). Do not copy values from `.env` files.
 14. Persisted files use versioned names, for example `codebot-agent-access-v1.json`, `codebot-analytics-install-id-v1.json`, `codebot-crm-v1.json`, and `custom-agents.json`. Bump the version suffix when the schema changes, as the existing names do.
-15. Interface text that reaches users must use `sourceText(key, params)` from `@codebot/i18n/source`, not a literal. Check `account-service-platform.ts` for the pattern. Dialogs and menus use `language.translate`.
+15. Interface text that reaches users must use `sourceText(key, params)` from `@codebot/i18n/source`, not a literal. Dialogs and menus use `language.translate`.
 
 ## Unverified
 

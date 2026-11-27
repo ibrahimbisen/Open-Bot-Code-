@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Uruchom przepływ pracy z GitHub: wyzwalacz GitHub działa przy nowych zgłoszeniach, komentarzach, pull requestach, recenzjach, nieudanych testach lub wzmiance o @openbotgit.",
+          "Uruchom przepływ pracy z GitHub: wyzwalacz GitHub działa przy nowych zgłoszeniach, komentarzach, pull requestach, recenzjach, nieudanych testach lub wzmiance o @codebotgit.",
           "Zmieniaj GitHub z przepływu pracy: komentuj, dodawaj etykiety, przypisuj, recenzuj, zamykaj lub twórz zgłoszenia jako CodeBot GitHub App.",
           "Marketplace ma 17 nowych agentów CodeBot, takich jak QA Tester, PR Shepherd i Chief of Staff, oraz 15 nowych umiejętności dla nich.",
           "Użycie pokazuje miesięczny limit OpenCode Go jako trzeci pasek."
@@ -854,7 +854,7 @@
         "items": [
           "Rozgałęź rozmowę: kliknij prawym przyciskiem ostatnią wiadomość agenta w turze i wybierz Odgałęź stąd. Otworzy się nowy wątek z rozmową do tej wiadomości.",
           "Ustawienia agenta mają stronę Instrukcje, która pokazuje plik AGENTS.md agenta. Gdy agent zmieni swoje instrukcje, czat pokazuje zmianę z przyciskiem Cofnij.",
-          "Marketplace jest na openbot.run. Każdy agent i umiejętność mają własną stronę, a Kopiuj link pozwala się nią podzielić.",
+          "Marketplace jest na codebot.example. Każdy agent i umiejętność mają własną stronę, a Kopiuj link pozwala się nią podzielić.",
           "Agent może odpowiedzieć na alert lub prośbę o potwierdzenie strony, które otworzyła jego własna akcja w przeglądarce.",
           "Zatrzymane lub nieudane zadanie kanału ma przycisk Anuluj zadanie."
         ]

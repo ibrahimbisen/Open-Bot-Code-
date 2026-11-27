@@ -32,7 +32,7 @@ function parseSavedId(value: unknown): string {
   return value;
 }
 
-export function parseLocalModelServerSettings(input: unknown): LocalModelServerSettings {
+function parseLocalModelServerSettings(input: unknown): LocalModelServerSettings {
   if (!isObject(input)) throw new Error("Invalid local server settings.");
   const gpuStatusUrl = parseGpuStatusUrl(input.gpuStatusUrl);
   if (input.monitored !== undefined && !isBoolean(input.monitored)) throw new Error("Invalid local server settings.");

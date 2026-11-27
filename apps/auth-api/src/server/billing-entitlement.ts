@@ -99,28 +99,6 @@ export interface OwnerLicense {
   entitled: boolean;
 }
 
-export const ownerLicenseForHost = Effect.fn("Billing.ownerLicenseForHost")(function* (
-  database: D1Database,
-  hostId: string,
-  now = Date.now(),
-): Effect.fn.Return<OwnerLicense | null, BillingEntitlementError> {
-  const rows = yield* Effect.tryPromise({
-    try: () =>
-      database
-        .prepare(
-          `SELECT l.user_id AS owner_id, l.users, l.status, l.current_period_end FROM remote_hosts h
-             JOIN licenses l ON l.user_id = h.owner_user_id AND l.status IN ${OPEN_STATUSES_SQL}
-            WHERE h.host_id = ? ORDER BY l.updated_at DESC`,
-        )
-        .bind(hostId)
-        .all<{ owner_id: string; users: number; status: string; current_period_end: number | null }>(),
-    catch: () => new BillingEntitlementError({}),
-  });
-  const row = rows.results.find((license) => licenseEntitled(license, now)) ?? rows.results[0];
-  if (!row) return null;
-  return { ownerId: row.owner_id, users: row.users, entitled: licenseEntitled(row, now) };
-});
-
 export const accountLicense = Effect.fn("Billing.accountLicense")(function* (
   database: D1Database,
   userId: string,

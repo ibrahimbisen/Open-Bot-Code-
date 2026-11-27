@@ -26,11 +26,11 @@ function ReplyArea(props: { state?: "armed" | "leaving"; text: string; label: st
 }
 
 export const ReplyButton: Story = {
-  render: () => <ReplyArea text="Nice thread, thanks." label="Without @OpenBot_" />,
+  render: () => <ReplyArea text="Nice thread, thanks." label="Without @codebot_x" />,
 };
 
 export const ReplyButtonCodeBot: Story = {
-  render: () => <ReplyArea state="armed" text="@OpenBot_ is the claim in this thread true?" label="With @OpenBot_" />,
+  render: () => <ReplyArea state="armed" text="@codebot_x is the claim in this thread true?" label="With @codebot_x" />,
 };
 
 export const ReplyButtonLeaving: Story = {

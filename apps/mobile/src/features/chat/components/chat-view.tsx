@@ -19,9 +19,7 @@ import { KeyboardGestureArea } from "react-native-keyboard-controller";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scheduleOnRN } from "react-native-worklets";
-import { MobileConversationAnalytics } from "@/features/analytics/conversation";
 import { reportMobileNotification } from "@/features/analytics/failure-reports";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { useBrowserFeature } from "@/features/browser/components/use-browser-feature";
 import { channelRecipient } from "@/features/channels/model/channel-draft";
 import type { ApprovalDecision } from "@/features/chat/components/chat-approval-card";
@@ -324,7 +322,6 @@ export function ChatView({
   }, [target, chatBrowserRequests, channelLeadAgentId]);
   const isFocused = useIsFocused();
   const foregroundVisit = useAppForeground();
-  const [conversationAnalytics] = useState(() => new MobileConversationAnalytics(mobileAnalytics));
   const appActive = useAppActive();
   const reducedTransparency = useReducedTransparency();
   const server = useMobileWorkspaceSelector((current) => current.servers.find((item) => item.id === target.serverId));
@@ -798,21 +795,6 @@ export function ChatView({
   );
   const palette = useMemo(() => voicePalette(voiceColors, dark), [voiceColors, dark]);
   const accent = useMemo(() => voiceAccent(palette), [palette]);
-  useEffect(() => {
-    conversationAnalytics.update(
-      isFocused && foregroundVisit,
-      ready,
-      historyLoadFailed || (!serverOnline && server?.initialConnectionPending === false),
-    );
-  }, [
-    conversationAnalytics,
-    isFocused,
-    foregroundVisit,
-    ready,
-    historyLoadFailed,
-    serverOnline,
-    server?.initialConnectionPending,
-  ]);
 
   const seesLatest = !detached && (atLatest || (motion.historyVisible && !motion.userScrolled));
   useEffect(() => {

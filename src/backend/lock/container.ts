@@ -7,10 +7,10 @@ import type { SpawnTarget } from "../process-confinement";
 
 const run = promisify(execFile);
 
-export type ContainerTool = "docker" | "podman";
+type ContainerTool = "docker" | "podman";
 export type ContainerPolicy = "auto" | "always" | "never";
 
-export interface ContainerMount {
+interface ContainerMount {
   readonly host: string;
   readonly readOnly: boolean;
 }
@@ -38,9 +38,9 @@ export interface ContainerPlanInput {
   readonly user?: string | null;
 }
 
-export const CONTAINER_IMAGE_VARIABLE = "CODEBOT_LOCK_CONTAINER_IMAGE";
-export const CONTAINER_POLICY_VARIABLE = "CODEBOT_LOCK_CONTAINER";
-export const DEFAULT_CONTAINER_IMAGE = "docker.io/library/ubuntu:24.04";
+const CONTAINER_IMAGE_VARIABLE = "CODEBOT_LOCK_CONTAINER_IMAGE";
+const CONTAINER_POLICY_VARIABLE = "CODEBOT_LOCK_CONTAINER";
+const DEFAULT_CONTAINER_IMAGE = "docker.io/library/ubuntu:24.04";
 
 const MOUNTS_LABEL = "codebot.lock.mounts";
 const NAME_PREFIX = "codebot-lock-";
@@ -82,7 +82,7 @@ function isFile(path: string): boolean {
   }
 }
 
-export function containerName(projectId: string): string {
+function containerName(projectId: string): string {
   const safe = projectId.replace(/[^A-Za-z0-9_.-]/gu, "-").slice(0, 48);
   const digest = createHash("sha256").update(projectId).digest("hex").slice(0, 8);
   return `${NAME_PREFIX}${safe}-${digest}`;
@@ -120,14 +120,14 @@ function currentUser(): string | null {
     : null;
 }
 
-export function mountsKey(plan: ContainerPlan): string {
+function mountsKey(plan: ContainerPlan): string {
   return createHash("sha256")
     .update(JSON.stringify([plan.image, plan.user, plan.mounts]))
     .digest("hex")
     .slice(0, 16);
 }
 
-export function containerRunArgs(plan: ContainerPlan): string[] {
+function containerRunArgs(plan: ContainerPlan): string[] {
   return [
     "run",
     "--detach",
@@ -155,7 +155,7 @@ export function containerRunArgs(plan: ContainerPlan): string[] {
   ];
 }
 
-export function containerExecArgs(
+function containerExecArgs(
   plan: ContainerPlan,
   command: string,
   args: readonly string[],
@@ -187,7 +187,7 @@ export function containerExecTarget(
   };
 }
 
-export class ContainerError extends Error {
+class ContainerError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "ContainerError";

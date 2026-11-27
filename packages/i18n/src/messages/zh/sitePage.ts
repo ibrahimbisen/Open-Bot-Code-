@@ -81,7 +81,7 @@ export const messages = {
   "sitePage.nearSign.failure.failed": "签名未完成。请重试。",
   "sitePage.report.pageTitle": "举报托管站点 — OpenBot Code",
   "sitePage.report.title": "举报托管站点",
-  "sitePage.report.intro": "举报 openbot.site 地址上的有害或违法内容。",
+  "sitePage.report.intro": "举报 codebot.example 地址上的有害或违法内容。",
   "sitePage.report.hostnameLabel": "站点地址",
   "sitePage.report.hostnameMissing": "请输入站点地址",
   "sitePage.report.reasonLabel": "原因",

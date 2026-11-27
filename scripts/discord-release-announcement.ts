@@ -18,7 +18,7 @@ export function announcementProblems(announcement: string, version: string): str
 }
 
 function changelogUrl(version: string): string {
-  return `https://openbot.run/changelog#${releaseAnchor(version)}`;
+  return `https://codebot.example/changelog#${releaseAnchor(version)}`;
 }
 
 function announcementMessage(highlights: readonly unknown[], version: string, roleId?: string): string {

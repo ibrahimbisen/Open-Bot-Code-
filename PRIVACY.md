@@ -364,7 +364,7 @@ in `codebot-remote-session-reuse-preference-v1.json`.
 The desktop app and the web client keep a copy of the agent and channel pictures that they loaded
 from a joined server, so that the agent pictures show while the server is offline, for example during its
 restart for an update. The desktop app keeps the copies in the `remote-pictures` folder of its data
-folder; the web client keeps the agent pictures in the Cache storage of openbot.run in your browser.
+folder; the web client keeps the agent pictures in the Cache storage of codebot.example in your browser.
 The copies stay on that computer or in that browser. They are deleted when you sign out, when
 another account signs in, when the server leaves your list, and when the server ends your access.
 
@@ -535,7 +535,7 @@ written. For the report, the phone also masks:
 - each server ID, which becomes `server-1`, `server-2`;
 - each network address, which keeps only its kind (`[private-ip]`, `[shared-ip]`, `[public-ip]`,
   `[ipv6]`);
-- each host name that is not an CodeBot service (`openbot.run`), which becomes `[host]`;
+- each host name that is not an CodeBot service (`codebot.example`), which becomes `[host]`;
 - each record ID and hash, which becomes `[id]`, and the name of a user folder.
 
 The message of an error is free text, so it can still hold a word that these rules do not know. The
@@ -546,7 +546,7 @@ of the public GitHub issue. No report about the phone app is sent without this d
 
 The mobile app asks an update server for a newer JavaScript bundle each time it starts, and when
 you come back to it, at most one time in 15 minutes. App versions after 1.4.8 ask CodeBot's server
-`updates.openbot.run`, a Cloudflare Worker; version 1.4.8 and earlier versions ask Expo's server
+`updates.codebot.example`, a Cloudflare Worker; version 1.4.8 and earlier versions ask Expo's server
 `u.expo.dev`. The request has the platform, the runtime version of the build, the build channel, the
 ID of the bundle that runs, a random ID that the update client made for this install, the IDs of
 updates that failed on the phone a short time ago and, after a crash at start, the first 1,024
@@ -680,18 +680,18 @@ removes the connection. Deleting an account removes its provider links and SCIM 
 
 ## Email delivery and infrastructure providers
 
-CodeBot sends sign-in, team invitation, and welcome messages from `no_reply@openbot.run` through the
-configured SMTP provider. A reply goes to `hello@openbot.run`. The provider receives the recipient address and the message content. A sign-in message contains the
+CodeBot sends sign-in, team invitation, and welcome messages from `no_reply@codebot.example` through the
+configured SMTP provider. A reply goes to `hello@codebot.example`. The provider receives the recipient address and the message content. A sign-in message contains the
 one-time code and its expiration time. A team invitation can contain the inviter address, team name,
 role, and invite URL. When the first cloud server plan of an account starts, a welcome message goes
 to the account address. It contains the plan name and the server name. License messages go to the
-account address from `no_reply@openbot.run` through the same provider, and a reply goes to
-`licenses@openbot.run`. When a license has its first
+account address from `no_reply@codebot.example` through the same provider, and a reply goes to
+`licenses@codebot.example`. When a license has its first
 payment, the message contains the license tier, the number of users, the list price when no discount
 applies, the currency, the billing period, and the date of the next payment. When a renewal payment fails, the message contains
 the license tier, the number of users, the amount due, the currency, the date of the next payment
 try, and the link to the Stripe page of the invoice. When a paid license ends, the message contains
-the license tier, the number of users, and whether it ended after a failed payment. The HTML version of a message loads the CodeBot logo from `openbot.run` when
+the license tier, the number of users, and whether it ended after a failed payment. The HTML version of a message loads the CodeBot logo from `codebot.example` when
 the mail client shows images. The image address is the same in every message and identifies no
 recipient.
 
@@ -700,7 +700,7 @@ is spent, Cloudflare Email Service sends the same message instead. It then recei
 recipient address and message content as the SMTP provider. CodeBot does not use it after an
 unconfirmed SMTP send, so you do not get the same message twice.
 
-The contact form on `openbot.run/contact` sends your message to the CodeBot mailbox through the same
+The contact form on `codebot.example/contact` sends your message to the CodeBot mailbox through the same
 SMTP provider. The message contains the email address, topic and text that you enter, and the name and
 company when you enter them. The account service stores none of these values. To limit how many
 messages one address can send, it keeps a hash of your IP address in its rate-limit records. The CodeBot team receives the message
@@ -717,7 +717,7 @@ computer answers each chat; see [Telegram connections](#telegram-connections). C
 email provider can keep their own security, delivery, and network logs under their own policies. These provider logs are outside the
 CodeBot application database and its daily maintenance task.
 
-The public status page at `status.openbot.run` is on GitHub Pages. GitHub serves it and keeps its
+The public status page at `status.codebot.example` is on GitHub Pages. GitHub serves it and keeps its
 own request logs under its own policy. The page has no analytics and no cookies, and it loads
 nothing from other sites. A GitHub Actions workflow checks the CodeBot services about every 5 minutes
 with plain requests that carry no account or user data. Incidents on the page come from issues
@@ -1066,7 +1066,7 @@ asks. The provider's CLI on the host receives the login; no token travels to the
 
 ## Browser extension
 
-The CodeBot browser extension (`apps/browser-extension`) signs in through openbot.run. It opens the
+The CodeBot browser extension (`apps/browser-extension`) signs in through codebot.example. It opens the
 web app in the browser's sign-in window; when you are signed in there and press **Allow**, the web
 app asks the account service for a one-time code and sends it only to the extension's own address,
 which the browser gives to that extension alone. The code lasts two minutes, works once, and works
@@ -1086,7 +1086,7 @@ set up there). The server keeps no recording. The text goes into your draft, and
 you press Send. The extension never sends the recording to CodeBot or to a speech service itself.
 
 On X (x.com and twitter.com), the extension runs a script on the page. It reads only the reply that
-you write. When the reply mentions @OpenBot_ and your server has the X agent, the reply button
+you write. When the reply mentions @codebot_x and your server has the X agent, the reply button
 changes. When you click it, the script reads the post that you answer, the posts above it in the
 conversation and the rest of the author's thread (names, @handles, times, addresses, text and picture
 addresses), but not the replies of other people. X posts your reply at once, and the extension sends
@@ -1096,7 +1096,7 @@ on this computer, also over a browser restart, and tries again for up to 7 days 
 earlier attempt may have reached the server); then it deletes the post and tells you with a browser
 notification. Nothing goes to CodeBot,
 and nothing is sent when you do not click. To find the parts of the page, the extension
-asks openbot.run once an hour for the newest list of page selectors; that request carries only the hash
+asks codebot.example once an hour for the newest list of page selectors; that request carries only the hash
 of the list that it has. Except for shared tabs (below), the extension does not read your tabs or the
 pages you visit.
 
@@ -1140,9 +1140,9 @@ Network traffic can also occur when:
   `User-Agent: CodeBot/<version>` and, when a session starts, the client name `codebot`, the
   CodeBot version and the title `<agent name> (CodeBot)`, so the server can show which agent made a
   change. Nothing else about the user's agents, conversations or files is sent in those requests. The
-  registration names CodeBot's logo at `openbot.run`; an authorization service that shows it on its
-  sign-in page can make the browser load it from `openbot.run`. Meta Ads takes no loopback address,
-  so its sign-in page sends the browser to `https://openbot.run/oauth/mcp-callback` with the grant
+  registration names CodeBot's logo at `codebot.example`; an authorization service that shows it on its
+  sign-in page can make the browser load it from `codebot.example`. Meta Ads takes no loopback address,
+  so its sign-in page sends the browser to `https://codebot.example/oauth/mcp-callback` with the grant
   and the sign-in's random state. The account service keeps nothing and sends the browser on at once
   to `127.0.0.1` on the same computer. The grant cannot be used without a code that only CodeBot on
   that computer holds;
@@ -1266,7 +1266,7 @@ Network traffic can also occur when:
   address that GitHub gives, on GitHub's image host. Agents then reach the
   GitHub MCP server at `api.githubcopilot.com` and GitHub itself through `gh` and `git`, with that
   token. So that GitHub shows the CodeBot app as the author of an agent's work, CodeBot sends that
-  token to the central account service (`api.openbot.run`) about once an hour, and when you open the
+  token to the central account service (`api.codebot.example`) about once an hour, and when you open the
   repository list. The service uses it
   only to ask GitHub which repositories you can push to, and gets back short-lived installation
   tokens for those repositories. When you open the repository list, the service also gives the names
@@ -1275,7 +1275,7 @@ Network traffic can also occur when:
   or commands. Agents reach the GitHub MCP server through a local server on `127.0.0.1`, which adds
   the right token to each call;
 - the user approves a bug report or a feature idea that an agent wrote. Before the card, CodeBot
-  sends the title to the central account service (`api.openbot.run`) with the account session, and the
+  sends the title to the central account service (`api.codebot.example`) with the account session, and the
   service gives the open issues of the CodeBot GitHub App with similar titles, from GitHub search. The service does not store or log the title. The
   agent can then add the report to one of them as a comment. CodeBot shows the title and
   the agent's text first (what happened and the steps, or what the user wants and why). It then sends the text to the central account
@@ -1292,7 +1292,7 @@ Network traffic can also occur when:
   [bug reports about the phone app](#bug-reports-about-the-phone-app)); the service refuses such a
   report without them. The service opens it as a public
   issue, or a comment on the issue that the agent chose, in the
-  `nightly-labs/openbot` repository on GitHub, as the CodeBot GitHub App, so the issue does not show
+  `your-org/codebot` repository on GitHub, as the CodeBot GitHub App, so the issue does not show
   the account. The service does not store or log the text. It adds a hidden owner mark to the end of
   the text: a random value and a keyed hash of that value and the account ID. The mark does not name
   the account, and the service stores nothing for it. When the user removes the report (Fix or remove on the
@@ -1317,11 +1317,11 @@ Network traffic can also occur when:
   owner's passkey public key, the daily budget and the signed owner actions to the NEAR Intents
   Agent API (`api.agentsonintents.com`). When an agent pays, CodeBot sends the recipient, the asset,
   the amount, an idempotency key and the payment grant token. These calls go through the CodeBot
-  account service (`api.openbot.run/v1/near/*`), which adds the CodeBot partner key and passes them
+  account service (`api.codebot.example/v1/near/*`), which adds the CodeBot partner key and passes them
   through in transit only. It does not store or log them. It keeps only the wallet ID, the CodeBot
   account or server that owns it, and the time it was made, so that only that owner can use the
   wallet. The owner signs on the CodeBot page
-  `nearintents.openbot.run/near/sign` in the system browser; the request is in the address fragment, which the
+  `nearintents.codebot.example/near/sign` in the system browser; the request is in the address fragment, which the
   browser does not send to the server, and the page sends the signature back to CodeBot only. The
   agent's reason and the domain of a payment stay on this computer. The chat card and the Crypto tab
   load the icon of the payment's domain from that domain (`/favicon.ico`), with no referrer. Nothing
@@ -1332,7 +1332,7 @@ Network traffic can also occur when:
   OpenCode and Cline, `x.ai/cli` for Grok, `raw.githubusercontent.com/agentclientprotocol/registry` and
   `downloads.cursor.com` (for the download size) for Cursor, `static.devin.ai` (the manifest, and the
   download size) for Devin, and it reads a list of blocked
-  versions from `raw.githubusercontent.com/nightly-labs/openbot`. These requests contain no account, agent,
+  versions from `raw.githubusercontent.com/your-org/codebot`. These requests contain no account, agent,
   conversation or file data;
 - an agent shows a visual reply, an agent checks its page with `html_preview`, or a user opens an
   HTML attachment, shared file or workspace file in the file preview. The page is HTML that the
@@ -1395,7 +1395,7 @@ service, except the webhook route metadata above.
   64,000 characters. The body, marked as data, is the trigger's output and goes to the next steps.
   Remove the trigger, or delete the workflow, to stop its URL.
 - **GitHub triggers** receive the events of the CodeBot GitHub App: issues, comments, pull requests,
-  reviews and checks. GitHub sends each event to CodeBot's Signal service (`signal.openbot.run`).
+  reviews and checks. GitHub sends each event to CodeBot's Signal service (`signal.codebot.example`).
   Signal checks GitHub's signature, reads only the installation and repository IDs, and passes the
   event to every computer that watches the repository, in transit only: it does not store or log it.
   When the Signal connection opens, the computer sends the account service its GitHub sign-in and the
@@ -1460,7 +1460,7 @@ covers what Higgsfield keeps.
 A step with an CodeBot model uses CodeBot credits. When the computer is signed in to an CodeBot
 account, the credits of that account pay; a server pays with its own credits. The computer sends the
 prompt, the model, the size settings and the input pictures to the account service
-(`openbot.run`). The account service holds the credits, sends the same values through CodeBot's
+(`codebot.example`). The account service holds the credits, sends the same values through CodeBot's
 media gateway service, which runs on Cloudflare too, to a media generation processor, and returns the
 result file to the computer, which keeps it. A processor can keep the input pictures for up to three
 days so that it can read them. The account service and the media gateway pass the prompt, the
@@ -1498,7 +1498,7 @@ CodeBot account that connected it, and the Slack app and bot user IDs. It keeps 
 message. It gives the bot token to the computer encrypted to a key that only that computer has.
 
 Slack sends the workspace's events, which contain the Slack messages in the channels CodeBot is in
-and its direct messages, to CodeBot's Signal service (`signal.openbot.run`). Signal checks Slack's
+and its direct messages, to CodeBot's Signal service (`signal.codebot.example`). Signal checks Slack's
 signature and reads only the app ID and the workspace ID, to find the computer, and the type,
 channel type, thread and bot ID of the event, to know whether it addresses CodeBot. It passes each
 request to that computer over its Signal connection, in transit only: it does not store or log the
@@ -1548,7 +1548,7 @@ because the app's secret lives there, and revokes the Discord sign-in token that
 records which CodeBot computer answers the Discord server: the Discord server ID, the computer and the
 CodeBot account that connected it. It keeps no Discord token and no message.
 
-Discord has one bot token for every server, so only CodeBot's Signal service (`signal.openbot.run`)
+Discord has one bot token for every server, so only CodeBot's Signal service (`signal.codebot.example`)
 holds it. Unlike Slack, both directions go through Signal:
 
 - **To the computer.** Signal keeps the bot's connection to Discord. Discord sends it the messages of
@@ -1595,7 +1595,7 @@ has, so Signal cannot read it; a restart of Signal deletes it.
 ## Telegram connections
 
 One CodeBot Telegram bot serves every user. Its token is only in CodeBot's Signal service
-(`signal.openbot.run`); no computer has it. The user connects a chat from CodeBot on their computer:
+(`signal.codebot.example`); no computer has it. The user connects a chat from CodeBot on their computer:
 the account service gives a one-use code, and the browser opens a `t.me` link with it. When the user
 adds the bot to a group, or starts a direct chat with it, Telegram sends the code in that chat.
 Signal then asks the account service to link the chat to the computer. The account service records
@@ -1645,7 +1645,7 @@ access the user gave them. A hosted server that sleeps starts for a message that
 Signal keeps that message in memory for at most 10 minutes, encrypted to a key that only that server
 has, so Signal cannot read it; a restart of Signal deletes it.
 
-Plugin pages on openbot.run show each listing's own icon. The page asks `openbot.run` for that
+Plugin pages on codebot.example show each listing's own icon. The page asks `codebot.example` for that
 picture, and the website fetches it there from the address the plugin catalog holds, so reading a
 plugin page does not connect your browser to the plugin developer's servers.
 
@@ -1766,7 +1766,7 @@ Review folders before deleting them and keep a backup of anything you need.
 
 ## Questions
 
-Use [GitHub Discussions](https://github.com/nightly-labs/openbot/discussions) for privacy questions.
+Use [GitHub Discussions](https://github.com/your-org/codebot/discussions) for privacy questions.
 Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md), without attaching
 credentials, conversations, or unrelated private files.
 
@@ -1785,7 +1785,7 @@ secrets from these steps first. Command output can contain file contents. Reason
 attachment contents are not sent.
 
 Publishing an agent template from the chat makes its instructions, skills, and routines public to
-anyone with the link at `openbot.run/agents/<id>`, with your account name as the creator. CodeBot
+anyone with the link at `codebot.example/agents/<id>`, with your account name as the creator. CodeBot
 stops the publish when a text field looks like a secret. Workspace files and memories are not sent.
 An owner or admin of a server can also publish, update or unpublish an agent of that server from the
 browser client. The host sends the template content and the agent's avatar to that browser for the

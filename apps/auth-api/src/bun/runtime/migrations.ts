@@ -28,7 +28,7 @@ const VERSION_TABLE = `CREATE TABLE IF NOT EXISTS account_schema_migrations (
   PRIMARY KEY (chain, name)
 )`;
 
-export class MigrationError extends Error {
+class MigrationError extends Error {
   constructor(
     readonly chain: string,
     readonly file: string,

@@ -1,6 +1,6 @@
 ---
 name: codebot-site-hosting
-description: Build, publish, replace, list, and delete small static websites hosted by CodeBot. Use when the user asks to host or manage a site on openbot.site.
+description: Build, publish, replace, list, and delete small static websites hosted by CodeBot. Use when the user asks to host or manage a site on codebot.example.
 ---
 
 # CodeBot site hosting

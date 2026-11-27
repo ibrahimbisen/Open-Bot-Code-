@@ -36,7 +36,7 @@ export const MOBILE_ANNOUNCEMENT_FILE = "apps/mobile/release-announcement.json";
 const DOCS = "apps/mobile/README.md#discord-announcement";
 const ROLE_VARIABLE = "DISCORD_MOBILE_RELEASE_ROLE_ID";
 const WEBHOOK_VARIABLE = "DISCORD_MOBILE_RELEASE_WEBHOOK_URL";
-const PRODUCTION_SITE = "https://openbot.run";
+const PRODUCTION_SITE = "https://codebot.example";
 const GITHUB_API = "https://api.github.com";
 export const ANNOUNCED_TAG_PREFIX = "mobile-announced/";
 const FIRST_TAGGED_VERSION = "1.4.7";
@@ -77,7 +77,7 @@ export function mobileAnnouncementProblems(announcement: string, version: string
 }
 
 function changelogUrl(version: string): string {
-  return `https://openbot.run/changelog?platform=mobile#mobile-${releaseAnchor(version)}`;
+  return `https://codebot.example/changelog?platform=mobile#mobile-${releaseAnchor(version)}`;
 }
 
 const storeList = (stores: readonly MobileStore[]) => stores.map((store) => MOBILE_STORE_NAMES[store]).join(" and ");

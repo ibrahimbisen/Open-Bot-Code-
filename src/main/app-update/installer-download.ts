@@ -4,7 +4,7 @@ const MANIFEST_TIMEOUT_MS = 8_000;
 const MANIFEST_MAX_BYTES = 65_536;
 const STABLE_VERSION = /^\d+\.\d+\.\d+$/u;
 
-export function updateManifestName(platform: NodeJS.Platform, arch: string): string | null {
+function updateManifestName(platform: NodeJS.Platform, arch: string): string | null {
   if (platform === "win32") return arch === "x64" ? "latest.yml" : null;
   if (platform === "darwin") return arch === "x64" || arch === "arm64" ? "latest-mac.yml" : null;
   if (platform !== "linux") return null;
@@ -12,25 +12,19 @@ export function updateManifestName(platform: NodeJS.Platform, arch: string): str
   return arch === "arm64" ? "latest-linux-arm64.yml" : null;
 }
 
-export function installerFileName(version: string, platform: NodeJS.Platform, arch: string): string | null {
+function installerFileName(version: string, platform: NodeJS.Platform, arch: string): string | null {
   if (!STABLE_VERSION.test(version) || updateManifestName(platform, arch) === null) return null;
   if (platform === "win32") return `CodeBot-${version}-x64.exe`;
   if (platform === "darwin") return `CodeBot-${version}-${arch}.dmg`;
   return `CodeBot-${version}-${arch === "x64" ? "x86_64" : "arm64"}.AppImage`;
 }
 
-export function updateFileName(version: string, platform: NodeJS.Platform, arch: string): string | null {
-  const installer = installerFileName(version, platform, arch);
-  if (installer === null) return null;
-  return platform === "darwin" ? `CodeBot-${version}-${arch}.zip` : installer;
-}
-
-export function manifestVersion(manifest: string): string | null {
+function manifestVersion(manifest: string): string | null {
   const version = /^version:[ \t]*['"]?([^'"\s]+)['"]?[ \t]*$/mu.exec(manifest)?.[1];
   return version !== undefined && STABLE_VERSION.test(version) ? version : null;
 }
 
-export async function readUpdateManifest(
+async function readUpdateManifest(
   feedUrl: string,
   manifestName: string,
   request: typeof fetch,

@@ -1,6 +1,6 @@
 import type { ProjectMigration } from "./migration";
 
-export const PROJECT_TABLES_SQL = `
+const PROJECT_TABLES_SQL = `
   CREATE TABLE IF NOT EXISTS cb_projects (
     project_id TEXT NOT NULL PRIMARY KEY CHECK(length(project_id) BETWEEN 1 AND 128),
     name TEXT NOT NULL CHECK(length(name) BETWEEN 1 AND 80),

@@ -1,6 +1,6 @@
 # apps/ map
 
-Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agents. Facts come from files read on the day of writing. Items marked (unverified) were not confirmed.
+Scope: `apps/` in the CodeBot repo (CodeBot fork). Read-only map for coding agents. Facts come from files read on the day of writing. Items marked (unverified) were not confirmed.
 
 ## What this area is
 
@@ -80,8 +80,8 @@ Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agen
 | `apps/mobile-updates/scripts/mobile-ota-e2e.ts` | End-to-end check for the OTA flow. |
 | `apps/mobile-updates/wrangler.jsonc` | Worker `codebot-mobile-updates`, entry `src/index.ts`, R2 binding `UPDATES` (private bucket). No write route. |
 | `apps/site-router/README.md` | One-time Cloudflare setup, release order, three launch flags, admin block endpoint. |
-| `apps/site-router/src/index.ts` | `routeRequest` (Effect), `resolveFile`, `assetResponse`, `errorPage`, `acceptsHtml`, `secureHeaders`. Serves `*.openbot.site`. Read-only (`get` only). |
-| `apps/site-router/wrangler.jsonc` | Worker `codebot-site-router`, route `*.openbot.site/*`, R2 binding `SITES`, var `ACCOUNT_ORIGIN`. |
+| `apps/site-router/src/index.ts` | `routeRequest` (Effect), `resolveFile`, `assetResponse`, `errorPage`, `acceptsHtml`, `secureHeaders`. Serves `*.codebot.example`. Read-only (`get` only). |
+| `apps/site-router/wrangler.jsonc` | Worker `codebot-site-router`, route `*.codebot.example/*`, R2 binding `SITES`, var `ACCOUNT_ORIGIN`. |
 | `apps/site-router/r2-lifecycle.json` | Lifecycle rule for the sites bucket (applied by `bun run sites:lifecycle`). |
 | `apps/site-router/package.json` | Scripts: `deploy` (`wrangler deploy --keep-vars`), `dev`, `typecheck`, `cf:typegen`. |
 | `apps/status/src/model.ts` | Status data types (Effect Schema). `SERVICE_IDS`: `accounts`, `connections`, `hosted`, `updates`, `marketplace`. `HISTORY_DAYS` = 90. `StatusState`, `Incident`, `CheckDay`, `StatusFile`, `StateFile`. |
@@ -150,10 +150,10 @@ Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agen
 ### Mobile app
 
 - Expo SDK 58, React Native 0.88.1, Expo Router. Entry `expo-router/entry`.
-- Auth client: `src/features/auth/api/mobile-auth.ts`. It calls `fetch` against `apiUrl` from the session. `mobileAccountApiUrl()` returns `EXPO_PUBLIC_CODEBOT_API_URL` in `__DEV__`, otherwise `CODEBOT_CONTROL_PLANE_ORIGIN` (`https://api.openbot.run`, defined in `packages/contracts/src/invite-links.ts`).
+- Auth client: `src/features/auth/api/mobile-auth.ts`. It calls `fetch` against `apiUrl` from the session. `mobileAccountApiUrl()` returns `EXPO_PUBLIC_CODEBOT_API_URL` in `__DEV__`, otherwise `CODEBOT_CONTROL_PLANE_ORIGIN` (`https://api.codebot.example`, defined in `packages/contracts/src/invite-links.ts`).
 - Session storage: `saveMobileSession` (called in `mobile-auth.ts`; its definition was not found in `apps/mobile/src`) and `readMobileSession` (secure storage, unverified detail).
-- Analytics: OpenPanel at `https://analytics.openbot.run/api` (`src/features/analytics/mobile-analytics.ts`). Failure reports in `failure-reports.ts`. Both only in production env.
-- Updates: `app.json` `updates.url` = `https://updates.openbot.run/manifest`. Certificate `certs/certificate.pem`. Update checks in `src/features/app-update/`.
+- Analytics: OpenPanel at `https://analytics.codebot.example/api` (`src/features/analytics/mobile-analytics.ts`). Failure reports in `failure-reports.ts`. Both only in production env.
+- Updates: `app.json` `updates.url` = `https://updates.codebot.example/manifest`. Certificate `certs/certificate.pem`. Update checks in `src/features/app-update/`.
 - Text: product text uses catalog keys (`mobile.*`) through `useText()` and `currentText()` from `src/shared/lib/text.ts`.
 - Voice: `src/features/voice/model/scribe-realtime.ts` and `live-voice-webrtc.ts` (WebRTC). Native modules in `modules/speech`.
 - Remote desktop: `modules/remote-viewer-proxy`, feature folder `src/features/remote-desktop/`.
@@ -169,7 +169,7 @@ Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agen
 
 ### site-router
 
-- Public read-only Worker for `*.openbot.site`. Reads `SITES` R2 bucket through `get` only.
+- Public read-only Worker for `*.codebot.example`. Reads `SITES` R2 bucket through `get` only.
 - Path: `/_codebot/report` redirects to `<ACCOUNT_ORIGIN>/report-site?hostname=...`. Error pages are plain text, or HTML when `Accept` includes `text/html`, with a strict CSP.
 - Launch flags (set in Cloudflare production vars): `SITE_PUBLISH_ENABLED` (Auth API), `SITE_SERVE_ENABLED` (router), `SITE_COOKIE_ISOLATION_READY`. Missing value means off.
 - The Auth API is the only writer. It applies D1 migration `0016_hosted_sites.sql` before deploy.
@@ -186,7 +186,7 @@ Scope: `apps/` in the CodeBot repo (OpenBot fork). Read-only map for coding agen
 - Permissions: `sidePanel`, `storage`, `identity`, `offscreen`, `alarms`, `notifications`, `tabs`, `tabGroups`, `debugger`, `downloads`.
 - Host permissions: the API origin only (plus `localhost` and `127.0.0.1` in development).
 - X content script: `x-content.js` on `x.com` and `twitter.com`. Rules come from `/v1/browser-extension/x-rules` (`X_PAGE_RULES_ROUTE`).
-- Talks to the API at `https://api.openbot.run` and analytics at `https://analytics.openbot.run/api` in production.
+- Talks to the API at `https://api.codebot.example` and analytics at `https://analytics.codebot.example/api` in production.
 
 ### Chat-app folders (Slack, Discord, Telegram)
 

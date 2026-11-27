@@ -124,7 +124,7 @@ function folderIcon(sets: readonly IconNameSet[], name: string, expanded: boolea
   return undefined;
 }
 
-export function explorerIconName(target: ExplorerIconTarget): string {
+function explorerIconName(target: ExplorerIconTarget): string {
   const loaded = manifest();
   const name = target.name.toLowerCase();
   if (!loaded) {

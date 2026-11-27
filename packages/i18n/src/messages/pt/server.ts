@@ -502,7 +502,7 @@ export const messages = {
   "server.update.path.container":
     "No computador anfitrião do Docker, baixe a nova imagem do OpenBot Code e crie o contêiner de novo com os mesmos volumes de dados. Aguarde o trabalho ativo terminar primeiro. Mantenha os volumes existentes para preservar seus dados.",
   "server.update.path.manual":
-    "Esta instalação não pode se substituir. Peça ao administrador do computador anfitrião para instalar a versão compatível de github.com/nightly-labs/openbot/releases. Mantenha os dados existentes do OpenBot Code.",
+    "Esta instalação não pode se substituir. Peça ao administrador do computador anfitrião para instalar a versão compatível de github.com/your-org/codebot/releases. Mantenha os dados existentes do OpenBot Code.",
   "server.update.path.unavailable":
     "Esta é uma compilação de desenvolvimento. Use uma versão instalada do OpenBot Code para verificar atualizações.",
   "server.update.check": "Buscar atualizações",

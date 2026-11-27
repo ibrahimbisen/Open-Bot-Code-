@@ -215,7 +215,7 @@ function isHostedSiteHostname(value: string): boolean {
       parsed.pathname === "/" &&
       parsed.search === "" &&
       parsed.hash === "" &&
-      value.endsWith(".openbot.site")
+      value.endsWith(".codebot.example")
     );
   } catch {
     return false;
@@ -240,7 +240,7 @@ export function isHostedSiteConversationEventUrl(value: unknown, hostname: unkno
     if (parsed.protocol === "https:") return parsed.hostname === hostname && parsed.port === "";
     if (parsed.protocol !== "http:" || !parsed.port) return false;
     const port = Number(parsed.port);
-    const label = hostname.slice(0, -".openbot.site".length);
+    const label = hostname.slice(0, -".codebot.example".length);
     return (
       Number.isInteger(port) && port >= 1_024 && port <= 65_535 && parsed.hostname === `${label}.codebot.localhost`
     );

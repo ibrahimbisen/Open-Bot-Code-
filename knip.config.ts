@@ -27,6 +27,8 @@ const config: KnipConfig = {
     "packages/contracts/src/team-protocol/provider-aware-codec.ts": ["exports", "types"],
     "src/backend/migrations/[0-9]*.ts": ["exports"],
     "apps/auth-api/src/lib/plugin-catalog.generated.ts": ["exports", "types"],
+    "src/renderer/src/editor-theme.ts": ["exports", "types"],
+    "apps/auth-api/src/bun/compat/*.ts": ["exports", "types"],
   },
   ignoreBinaries: [
     "xterm",
@@ -63,6 +65,7 @@ const config: KnipConfig = {
     "ffmpeg",
     "gdbus",
     "import",
+    "nvidia-smi",
   ],
   workspaces: {
     ".": {

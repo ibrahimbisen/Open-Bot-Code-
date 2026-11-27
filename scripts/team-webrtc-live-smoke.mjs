@@ -4,7 +4,7 @@ app.setName("CodeBot");
 app.exit(await main());
 
 async function main() {
-  const signalUrl = process.env.CODEBOT_REMOTE_SIGNAL_URL ?? "wss://signal.openbot.run/v1/signal";
+  const signalUrl = process.env.CODEBOT_REMOTE_SIGNAL_URL ?? "wss://signal.codebot.example/v1/signal";
   const hostTicket = process.env.CODEBOT_REMOTE_SMOKE_HOST_TICKET;
   const clientTicket = process.env.CODEBOT_REMOTE_SMOKE_CLIENT_TICKET;
   const iceTransportPolicy = process.env.CODEBOT_REMOTE_SMOKE_ICE_POLICY ?? "all";

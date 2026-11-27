@@ -19,7 +19,7 @@ const STORY_PINS: PinnedMessageItem[] = [
     time: "17 Aug, 10:18",
     thread: "Staging review",
     pinnedBy: null,
-    body: "Staging is ready for review.\n\n- URL: `staging.openbot.run`\n- Test account: `launch-review@openbot.run`\n- Password: in the shared vault, item **Staging review**",
+    body: "Staging is ready for review.\n\n- URL: `staging.codebot.example`\n- Test account: `launch-review@codebot.example`\n- Password: in the shared vault, item **Staging review**",
   },
   {
     id: "pin-launch-date",
@@ -44,7 +44,7 @@ const MANY_STORY_PINS: PinnedMessageItem[] = Array.from({ length: 50 }, (_, inde
     index % 7 === 3
       ? "ok"
       : index % 7 === 5
-        ? `https://staging.openbot.run/review/${"launch-checklist-".repeat(12)}${index}`
+        ? `https://staging.codebot.example/review/${"launch-checklist-".repeat(12)}${index}`
         : `${base.body}\n\n${"The reviewers read each step again before the release and report every difference. ".repeat(index % 4)}`;
   const thread =
     index % 6 === 4 ? `Release notes for the macOS, Windows and Linux builds of version 0.${index}` : base.thread;

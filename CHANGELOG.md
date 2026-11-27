@@ -12,11 +12,11 @@ All notable changes to CodeBot will be documented here. The project follows
 
 - A Chrome extension (not in the Chrome Web Store yet). It opens CodeBot in the browser's side panel
   with the screens of the phone app: your pinned agents, your chats, and search. You can chat with an
-  agent, and start and open threads. It signs in through openbot.run in a normal browser tab:
+  agent, and start and open threads. It signs in through codebot.example in a normal browser tab:
   when you are signed in there, you only allow the extension, and the tab closes. After that, signing
   in again opens no page at all. Company sign-in works there too, and an
   email code is the other way. It connects to your servers as the web app does.
-- X in the Chrome extension: install the X agent from the Marketplace, then mention @OpenBot_ in a
+- X in the Chrome extension: install the X agent from the Marketplace, then mention @codebot_x in a
   reply on X. The reply button takes the CodeBot look. When you click it, X posts your reply at once,
   and the post, its thread and your words go to the X agent on your server. Replies by other people are not
   sent. This works also when the side panel is closed. When your server does not answer, the
@@ -85,7 +85,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - An agent can use an image that it made with credits in its next step, for example to edit it or to make a video from it.
 - When you stop an agent while it makes an image or a video with credits, the result still shows in the chat when it is ready. You pay for the job when it starts, so you now get the result.
 - Each account now gets 10 free welcome credits, once and with no end date. You can use them for the images and videos of the models that show them. Paid credits work as before.
-- "What are credits?" explains credits in four short pages: what they pay for, that chats stay free, the price of each model with a link to all prices on openbot.run/credits, and how to get credits. Open it from the Credits item in the left rail or from Help. Ask an agent about credits and it can show the button in the chat.
+- "What are credits?" explains credits in four short pages: what they pay for, that chats stay free, the price of each model with a link to all prices on codebot.example/credits, and how to get credits. Open it from the Credits item in the left rail or from Help. Ask an agent about credits and it can show the button in the chat.
 - A page in the CodeBot browser can ask for your location. The agent's chat now asks you first with Block, Allow always and Allow. Allow holds while the tab stays on the same site. Allow always holds for that site in all agent tabs until CodeBot or the server restarts. On a joined server, it holds in the tabs of the same agent. Before, the browser always blocked the request. A page in a tab that you opened yourself still gets Block. On a joined server, Allow sends the location of your own device, not the location of the server. **Update the server to this version to answer location requests from a joined server.**
 - The sidebar has tabs above the chat list: All, Unread and the folders that you choose. Each tab shows its number of unread chats. Use the sliders button at the end of the tabs to add or remove a tab. Each server keeps its own tabs. This works on this computer, on a joined server and in the web client.
 - You can change the chat of an agent from the agent dock. Click the line under the agent name in the
@@ -129,7 +129,7 @@ All notable changes to CodeBot will be documented here. The project follows
   - An agent step uses the first agent whose provider is connected.
   - A picture step uses your own picture models before CodeBot credit models.
 - Product analytics now count agent image and video generations with credits: the media model, the agent's provider and model, the price, and the answers on the credits and approval cards. Prompts and files are not sent. A joined server must also be on the new version to send these counts.
-- On the credits page of openbot.run, the search is nearer to the title and has the same width as the filters.
+- On the credits page of codebot.example, the search is nearer to the title and has the same width as the filters.
 - The sidebar search field is now round, with the filter button inside it, and the new chat button is a filled round button.
 - When an agent picks no model and the paid credits are too low, it now makes the image or video
   with a model that takes free credits, at settings that fit them. When the agent names a paid model,
@@ -141,13 +141,13 @@ All notable changes to CodeBot will be documented here. The project follows
   and 6.8 credits.
 - The credit packs now show the clip length and resolution of each estimate: "9 videos Seedance 2.5 (5 s, 480p)" and "37 images Nano Banana Pro (1K)".
 - When you have only free credits, the model list on an image or video approval card marks the models that free credits pay for with "Free credits". Models that need paid credits are dimmed, show "Paid credits only", and you cannot pick them. On a joined server, the marks show only when the server and the app both have this version.
-- The credits page on openbot.run now shows a price table for each model type, with the live price at each resolution. A video shows its price for each second, and also the price without sound when it is lower. The models that you cannot use yet show under "Soon".
+- The credits page on codebot.example now shows a price table for each model type, with the live price at each resolution. A video shows its price for each second, and also the price without sound when it is lower. The models that you cannot use yet show under "Soon".
 - In the footer of the website, the column headers are now lighter and the links are grey. When you move the pointer onto a footer link, the link becomes white and shows an underline.
 - Billing > Delete server no longer has an "Immediately" option. Delete server now schedules the deletion for the end of the paid period, and you can stop it with Keep server before that date. When a server already has a scheduled deletion, Delete server is disabled.
 
 ### Fixed
 
-- Chrome extension: an @OpenBot_ reply on the new X website now goes to your X agent. Before, on the
+- Chrome extension: an @codebot_x reply on the new X website now goes to your X agent. Before, on the
   new X website the Reply button did not get the CodeBot look, and the post did not go to the agent.
 - On a computer or server with more than 2,000 stored files, an agent can now put a small new file, such as a markdown report, in a Library folder, and the Library shows the file in that folder. Before, the agent could not find the file, and said that no Library file had its id. The server must also be on the new version.
 - Muse on Windows: Muse now starts with the Muse copy from CodeBot when the Muse installer also put its
@@ -201,7 +201,7 @@ All notable changes to CodeBot will be documented here. The project follows
   a voice conversation in that window did not speak.
 - Chrome extension: show the replies of agents that end a turn with their narration, such as
   OpenCode agents. Before, the chat showed only your own messages.
-- Chrome extension from the Chrome Web Store: "Sign in with openbot.run" works. Before, the account
+- Chrome extension from the Chrome Web Store: "Sign in with codebot.example" works. Before, the account
   service did not know the store ID of the extension and refused the sign-in.
 - Agents now find how to run CodeBot 24/7 on a VPS or another computer. Before, an agent that you
   asked about it said that no such setting exists, and did not show the Add a server steps.
@@ -847,7 +847,7 @@ All notable changes to CodeBot will be documented here. The project follows
   also be on the new version.
 - With the Natural response style, a ChatGPT (Codex) agent no longer writes its opening line again in new words before each step of a long turn. The chat shows the first line, then only new findings, failures and questions. The server must also be on the new version.
 - The X app in Apps, the X link in the sidebar, the "Enjoying CodeBot?" message and the X link at the
-  bottom of openbot.run now show the real X logo. Before, they showed a drawn copy with a different shape.
+  bottom of codebot.example now show the real X logo. Before, they showed a drawn copy with a different shape.
 - An OpenCode agent no longer makes or restarts OpenCode's own automations, which CodeBot cannot show and which can stop with no message. When you ask for a timed or repeated task, the agent makes an CodeBot routine that you see in Routines. The agent can still list, pause and delete automations that it made before. On a joined server, the server must also be on the new version.
 - A Codex agent or routine no longer shows a warning about a 128,000-byte instructions limit when its instructions are large. The warning needed no action, and you could not change the limit. When Codex cannot load the settings of your ChatGPT account, the agent now says so in plain words and tells you to try again or to reconnect ChatGPT in Server settings → Providers. Before, it showed only "failed to load workspace requirements: invalid data". The server must also be on the new version.
 - A phone or browser can connect again to an account with several servers. Before, each server also connected to all other servers of the same account. With about 6 servers these connections used all the connection slots of the account, so the phone showed most servers offline and tried again each minute. A server now connects only as a host. Update each server of the account to this version.
@@ -1600,7 +1600,7 @@ All notable changes to CodeBot will be documented here. The project follows
   again. Before, Gemini sometimes refused calls such as clicking, typing, file uploads or a sign-in
   takeover as "not enabled", and only a switch to another model helped. On a joined server, the
   server must also be on the new version.
-- On Windows, when security software or a device policy stops CodeBot from starting Windows PowerShell, an update now says that CodeBot could not verify it and that you can download CodeBot from openbot.run/download. Before, it said "Could not download the update. Try again.", and each new try failed again.
+- On Windows, when security software or a device policy stops CodeBot from starting Windows PowerShell, an update now says that CodeBot could not verify it and that you can download CodeBot from codebot.example/download. Before, it said "Could not download the update. Try again.", and each new try failed again.
 - When a Claude account cannot use the agent's model (Claude says "There's an issue with the selected model … you may not have access to it"), the agent now tries the same model on the other accounts of the pool. When no other account is ready, it moves to its next backup model. CodeBot does not try that model on that account again until you choose the model again, the account signs in again, or the app restarts. Before, each message failed with this error until you changed the account or the model by hand. Agents with no other pool account and no backup model still show the error. For an agent on a joined server, the server must also be on the new version.
 - A Gemini chat no longer stops working when Google refuses an image in its history with "the file or media data is empty, corrupted, or malformed". Before, each new message in that chat, also a text-only message from a teammate, failed with the same 400 error. CodeBot now starts a new session with the chat history and sends the message again, as it does for "Unable to process input image".
 - An update or restart that waits until the agents are idle no longer waits for an agent's messages and routine runs that cannot start because the provider usage limit is reached. These messages and runs stay in the agent's queue and start after the limit resets. Before, the restart waited until the limit reset, sometimes for hours. On a joined server, the server must also be on the new version.
@@ -2256,10 +2256,10 @@ All notable changes to CodeBot will be documented here. The project follows
   answers before it. When an agent reads the runs of a workflow, it also gets the settings and inputs
   that each step used. Only your own message can make an agent run a step. On a joined server, the
   server must also be on this version.
-- Read the openbot.run home, Teams, Pricing and Contact pages in Arabic, Chinese, Dutch, French,
+- Read the codebot.example home, Teams, Pricing and Contact pages in Arabic, Chinese, Dutch, French,
   German, Hebrew, Italian, Japanese, Korean, Russian, Spanish and Turkish. The language menu shows
   all 15 languages of the app.
-- Show the openbot.run pages from right to left in Arabic and Hebrew.
+- Show the codebot.example pages from right to left in Arabic and Hebrew.
 - Give a server to another CodeBot account. In Server Settings › Members, the owner enters the
   email of the new owner. The new owner gets an email and a message in the app, and the server
   changes hands only when they accept. Agents, routines, chats and data stay on the server, and the
@@ -2285,7 +2285,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - A running Agent step shows what its agent does now, the step before it, and the number of steps
   that are done. The step keeps its size while the text changes. This also works on a joined server,
   with no server update.
-- An invite link (`openbot.run/?ref=CODE`) now opens an invite page. It shows the first name of the
+- An invite link (`codebot.example/?ref=CODE`) now opens an invite page. It shows the first name of the
   person who sent the link, the 10% discount on your first payment, the invite code with a Copy
   button, and the hosted server and license prices with the discount. An unknown code opens the
   normal home page.
@@ -2426,7 +2426,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - When you connect GitHub in Marketplace > Apps > GitHub, agents can still use git on the private
   repositories that your own git or GitHub CLI login reaches, also when the CodeBot GitHub App is not
   installed on them. Before, git fetch and push on these repositories stopped with an error. On
-  repositories where the app is installed, agents still act as `openbotgit[bot]`. On a server, the
+  repositories where the app is installed, agents still act as `codebotgit[bot]`. On a server, the
   server must also be on this version.
 - Close the notification of an agent's question, approval or browser step that ended while the app
   was not connected to its server, for example while the computer was asleep or the server
@@ -2490,7 +2490,7 @@ All notable changes to CodeBot will be documented here. The project follows
   responding, the agent that asked sends the request again one time. Before, the agent stopped and
   said that you must fix the cause, also when you had nothing to fix. A routine that hit this now
   continues instead of ending as blocked.
-- Wrap Chinese and Japanese text correctly in the agent picture on the openbot.run home page.
+- Wrap Chinese and Japanese text correctly in the agent picture on the codebot.example home page.
   Before, a line with no spaces could go past the edge of the picture.
 - Show the discount labels of the order form correctly in Arabic and Hebrew. Before, the minus sign
   showed on the wrong side of the percentage.
@@ -3691,7 +3691,7 @@ All notable changes to CodeBot will be documented here. The project follows
   can select more than one folder, and a folder with folders in it opens its own menu. A dot on the
   button shows that a filter is set. The menu also sorts the chats. The filter works on a joined
   server and in the web client too.
-- Discount links: an openbot.run link with `?promo=CODE` applies that Stripe promotion code at the next
+- Discount links: an codebot.example link with `?promo=CODE` applies that Stripe promotion code at the next
   Checkout in the web client, for a license or a cloud server. When the code is not active or does not
   fit the order, Checkout opens with the code field as before. The desktop app does not apply the code
   from the link: type it in Checkout.
@@ -3739,7 +3739,7 @@ All notable changes to CodeBot will be documented here. The project follows
   be on this version for this part.
 - The app checks the routines for a time zone change only when this computer's time zone changed
   since the last check. Before, each start read the routines of each agent and channel.
-- The desktop app, the web client and openbot.run now use the stable release of SolidJS 2.0 for their
+- The desktop app, the web client and codebot.example now use the stable release of SolidJS 2.0 for their
   interface, in place of a release candidate.
 - When your desktop app or server is older than the oldest version that CodeBot supports, the app
   shows **Update required** in place of your workspace and installs the update when your agents are
@@ -4140,7 +4140,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - An agent now knows that a memory can have at most 500 characters. When it tries to save a longer
   memory, CodeBot tells it the length and the limit, so the agent can save shorter memories on the
   next try. A joined server gets this fix when it runs the new version.
-- The openbot.run website scrolls smoothly at the end of each page. Before, the closing block with
+- The codebot.example website scrolls smoothly at the end of each page. Before, the closing block with
   the agent faces made scrolling slow and choppy on many computers. Now fewer faces move, the faces
   behind the text keep still until you point at one, and no face moves while the page scrolls.
 - The CodeBot browser now shows a page that has no background color of its own on white, as other
@@ -4168,7 +4168,7 @@ All notable changes to CodeBot will be documented here. The project follows
   sometimes said that CodeBot tools, such as chat history search or teammate messages, were not
   available. It searched with Pi's own tool search, which does not find CodeBot tools. The agent now
   knows which search finds them.
-- openbot.run offers the Android APK again from version 1.4.11. Earlier APKs stopped after an
+- codebot.example offers the Android APK again from version 1.4.11. Earlier APKs stopped after an
   install from the file and asked for Google Play.
 - The Obsidian app now connects to the Local REST API plugin with the plugin's default settings.
   Before, each Obsidian tool failed with "Could not connect to the Obsidian Local REST API" until you
@@ -4496,7 +4496,7 @@ All notable changes to CodeBot will be documented here. The project follows
   the file preview, the save dialog now shows the name of the file. Before, it showed an internal ID
   such as `1ec21a6e-….pdf`. This also applies to files from a joined server that you open in the
   desktop app.
-- The home page of openbot.run now offers the installer for an Intel Mac next to the macOS download,
+- The home page of codebot.example now offers the installer for an Intel Mac next to the macOS download,
   in the download menu at the top and on the macOS card. Before, the macOS button always gave the
   installer for Apple silicon, and macOS said that CodeBot was not supported on an Intel Mac.
 - Show the Gemini usage again on a computer that reaches Google only through the system proxy. Before,
@@ -4885,7 +4885,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - When the sidebar shows only avatars, put the pointer on an avatar to see the agent, channel or
   person: its name, its title and its last message. A waiting agent's tooltip also shows its name.
 - A server in the CodeBot Docker image can show a setup page in the browser, with `CODEBOT_SETUP_PAGE_PORT`. The page signs the server in with an email code and shows when it is online. The Umbrel app of CodeBot uses it.
-- You can install CodeBot on an Umbrel home server from the CodeBot community app store, `nightly-labs/openbot-umbrel-store`. The store gets each new release in six hours. See `docs/umbrel.md`.
+- You can install CodeBot on an Umbrel home server from the CodeBot community app store, `your-org/codebot-umbrel-store`. The store gets each new release in six hours. See `docs/umbrel.md`.
 - Ask an agent to put agents on one browser profile, for example "Put Sales and Support on a new
   profile named Client A". The agent can also move agents to the shared profile or to a profile of
   their own. You approve each change on a card, and their open tabs close. Agents also see which
@@ -5130,9 +5130,9 @@ All notable changes to CodeBot will be documented here. The project follows
   they cannot do a task or ask you to connect an app. Before, an agent could stop and ask you to
   connect a service that it could reach itself. After a connect card, the agent also finishes the
   task another way when it can.
-- Send sign-in codes, invitations, welcome emails and license emails from `no_reply@openbot.run`. A
-  reply to a license email goes to `licenses@openbot.run`. A reply to another of these emails goes
-  to `hello@openbot.run`.
+- Send sign-in codes, invitations, welcome emails and license emails from `no_reply@codebot.example`. A
+  reply to a license email goes to `licenses@codebot.example`. A reply to another of these emails goes
+  to `hello@codebot.example`.
 - Add and change custom MCP servers in Marketplace, Apps. Add custom opens the server form, and the
   page of each server has Edit, Test connection, Sign in and the on or off switch. Server settings no
   longer has an MCP section. This works on this computer and on a joined server, also in the web
@@ -5770,7 +5770,7 @@ All notable changes to CodeBot will be documented here. The project follows
   itself, in the agent's chat and in a thread. Your changes stay in the message box, and a note says
   what happened. Before, the app stayed in edit mode and Save showed "This edit has already
   finished.", or the changes were lost.
-- License emails come from `no_reply@openbot.run` again. The previous deploy kept the old sender
+- License emails come from `no_reply@codebot.example` again. The previous deploy kept the old sender
   address on the account service.
 - When the provider process of an agent stops in the middle of an answer, the agent now continues one
   time and gives the complete answer. The chat shows "The agent stopped before it finished its answer.
@@ -6495,7 +6495,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - On the Settings and Server Settings pages, the close button is in the top right corner of the window. Before, it was farther from the edge.
 - The Canvas shows a picture with transparent pixels without a card behind it, at its own shape, so
   the canvas shows through. This applies to an asset and to the result of an image step.
-- The Library on the desktop app and on openbot.run/app shows a folder change at once when it comes from another device or from an agent. Before, it showed after the next storage scan. A joined server must also run this version.
+- The Library on the desktop app and on codebot.example/app shows a folder change at once when it comes from another device or from an agent. Before, it showed after the next storage scan. A joined server must also run this version.
 - The payment page for a license or a server now asks for a billing address and for agreement to the
   Terms of Service. It also has optional fields for your name, a business name and a tax ID.
 - When the main process freezes for 2 seconds or more in two minutes in a row, CodeBot now records which of its functions used the time. The summary stays in `logs/stall-profiles.ndjson`, and its five heaviest functions go out as one analytics event, at most once in 6 hours. It holds function names only, with no paths or data of the user.
@@ -6744,7 +6744,7 @@ All notable changes to CodeBot will be documented here. The project follows
   the messages around it.
 - An agent no longer shows as working for hours after a quiet routine run, when the run's background
   subagents end after the run.
-- On the desktop and on openbot.run/app, a question card in a channel shows only while the agent still
+- On the desktop and on codebot.example/app, a question card in a channel shows only while the agent still
   waits for the answer. Before, a card could stay at "Waiting for you" after the agent stopped
   waiting, and its answer failed with "This prompt is no longer active."
 - Chat history no longer saves unchanged messages again after the app reloads a chat in the background,
@@ -7172,7 +7172,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - On Linux and Windows, CodeBot now completes its shutdown when you close the main window. Before, the process could end in the middle of the shutdown.
 - When GitHub is connected but refuses a write, such as a push or a new repository, the agent now
   tells you how to correct it: in Marketplace > Apps > GitHub, select Choose repositories and install
-  OpenBotGit on the repository. Before, the agent asked you to find a GitHub card that did not show,
+  CodeBotGit on the repository. Before, the agent asked you to find a GitHub card that did not show,
   also in channel chats. A joined server must also be on the new version.
 - In the web client, an agent reply to the open chat no longer moves the "New" line to the reply.
   Before, each reply showed a new line and the chat jumped. A reply that comes while you are away
@@ -7428,7 +7428,7 @@ All notable changes to CodeBot will be documented here. The project follows
   the new version of CodeBot.
 - An agent that answers on WhatsApp now sees the messages and files that CodeBot sent to that chat, also when another chat, a teammate or a routine sent them. Before, the agent said that it could not see the message, and you had to send it again. On a joined server, the server must also be on this version.
 - An image that CodeBot sends to WhatsApp now shows in its full shape in the chat. Before, the chat showed it cropped until you opened it. On a joined server, the server must also be on this version.
-- When an agent cannot publish, replace or delete an openbot.site site, it now gets the reason, for example a source that is not a folder or an unknown site, and can correct the call. Before, a ChatGPT agent saw only "dynamic tool request failed" and tried the same call again.
+- When an agent cannot publish, replace or delete an codebot.example site, it now gets the reason, for example a source that is not a folder or an unknown site, and can correct the call. Before, a ChatGPT agent saw only "dynamic tool request failed" and tried the same call again.
 - When an agent sends a message to a teammate, or stops a teammate's work, with an agent id that has
   a wrong character, the error now names the teammate with an almost equal id, so the agent can try
   again. Before, the agent got only "Unknown CodeBot agent" and could tell you that the work was
@@ -7526,7 +7526,7 @@ All notable changes to CodeBot will be documented here. The project follows
 ### Added
 
 - Agents now add CodeBot as a co-author to the git commits that they make, with the line
-  `Co-authored-by: CodeBot <335604065+openbotgit[bot]@users.noreply.github.com>`. You stay the
+  `Co-authored-by: CodeBot <codebot@users.noreply.invalid>`. You stay the
   author. To turn it off, open **Settings > Agents** and turn off **Credit CodeBot in commits**.
 - The agent dock can float at the edge of the screen on Linux. It stays above other windows and on
   all workspaces, and clicks outside its agents go to the window under it. On an X11 desktop it
@@ -7579,7 +7579,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - An owner or admin of a joined server now sees the programs that agents left running on the server,
   such as a dev server, in Server Settings > Storage, with "Stop". The command lines are redacted. The
   server must be on this version.
-- The browser app (`openbot.run/app`) now shows the Workflows page for a joined server. The server
+- The browser app (`codebot.example/app`) now shows the Workflows page for a joined server. The server
   must be on this version.
 - An owner or admin of a joined server can now turn the server's providers off and on in Server
   Settings > Providers, in the desktop app and in the browser app. The server must be on this version.
@@ -7605,20 +7605,20 @@ All notable changes to CodeBot will be documented here. The project follows
 - An owner or admin of a joined server now sees the local model servers and ACP agents that the server
   finds, with "Add", in Server Settings > Providers, in the desktop app and in the browser app. The
   server must be on this version.
-- In the browser app (`openbot.run/app`), voice conversations can now use Codex live voice of a joined
+- In the browser app (`codebot.example/app`), voice conversations can now use Codex live voice of a joined
   server. The server must be on this version. Turn on "Codex live voice" in Settings. The voice goes from the browser to
   OpenAI. Dictation stays in the desktop app.
 - An owner or admin of a joined server can now export and import the server in Server Settings >
-  Transfer in the browser app (`openbot.run/app`). The server must be on this version.
-- In the browser app (`openbot.run/app`), the skills of an agent now show their marketplace
+  Transfer in the browser app (`codebot.example/app`). The server must be on this version.
+- In the browser app (`codebot.example/app`), the skills of an agent now show their marketplace
   descriptions and icons.
-- In the browser app (`openbot.run/app`), the search now has the "Routines" filter for a joined server. The
+- In the browser app (`codebot.example/app`), the search now has the "Routines" filter for a joined server. The
   server must be on this version.
 - On a joined server, the Hermes import and the local model detection now say that they read the
   server, not this computer.
 - Right-click an agent in the sidebar to mark its chat read or unread. **Mark unread** makes the newest
   reply unread, and the chat stays unread until you open it again. **Mark read** also reads its threads.
-- The pricing page on openbot.run asks you to accept the privacy policy, the terms and the right of withdrawal before you go to Checkout. The buy button stays off until you tick the box.
+- The pricing page on codebot.example asks you to accept the privacy policy, the terms and the right of withdrawal before you go to Checkout. The buy button stays off until you tick the box.
 - New setting "Learn from my browsing" in Server settings → General → Agents. It is off by default.
   When it is on and you control an agent's browser, the agent learns how sites work from the pages and
   buttons you use. Typed text, field values and password fields are not kept. The steps stay on this
@@ -7933,7 +7933,7 @@ All notable changes to CodeBot will be documented here. The project follows
   as a short summary of its facts, and the chat shows it in full. This applies to voice conversations
   on the phone and on the computer.
 - When you type `@` in the dock chat, the list of agents now shows above the message box, not behind the chat.
-- In the browser app (`openbot.run/app`), a joined server, such as an CodeBot server on a VPS, now
+- In the browser app (`codebot.example/app`), a joined server, such as an CodeBot server on a VPS, now
   shows the context meter with "Compact now" for agent chats and side threads, and "Delete history"
   for agent chats. Channels show "New conversation", "Compact context" and "Delete history". Before,
   only the desktop app showed these settings. The server must be on this version.
@@ -7949,7 +7949,7 @@ All notable changes to CodeBot will be documented here. The project follows
   - The provider account in the new agent form, for an owner or admin.
   - Messaging places, Telegram chats and Slack workspaces as workflow triggers and outputs, for an
     owner or admin.
-- In the browser app (`openbot.run/app`), a joined server now has these features. Before, only the
+- In the browser app (`codebot.example/app`), a joined server now has these features. Before, only the
   desktop app had them. The server must be on this version:
   - The "Files" filter of the search, and search results in side threads.
   - Custom ACP agents in Server Settings > Providers, for an owner or admin.
@@ -7969,7 +7969,7 @@ All notable changes to CodeBot will be documented here. The project follows
   on this version.
 - On a joined server, an owner or admin can now send a workflow output to an CodeBot channel. The
   server must be on this version.
-- In the browser app (`openbot.run/app`), the sidebar now shows the unread count of an agent after
+- In the browser app (`codebot.example/app`), the sidebar now shows the unread count of an agent after
   "Mark as unread", and the unread dot of the server shows only when a chat has unread messages.
 - On Windows, when CodeBot stops an idle Cursor agent, or another agent that starts from a `.cmd` file, it now stops all of the agent's processes and MCP servers. Before, some of them could keep running in the background and use memory (#6470).
 - A chat no longer stops working after a model refuses an image because it is too large. CodeBot now starts a new session with the chat history, and the agent continues the task on your next message. Before, each new message to that agent failed with "Inline image exceeds maximum dimensions" until you started a new chat.
@@ -7982,7 +7982,7 @@ All notable changes to CodeBot will be documented here. The project follows
   tools, or `gh` and `git`, instead.
 - Keep template placeholders such as `{{name}}` and links such as `[[Page]]` in a Pi agent's reply.
   Before, the chat and each quote of the reply showed `[redacted-unscanned]` in their place.
-- On Linux, Arabic text in the app and on openbot.run now uses Noto Sans Arabic when it is
+- On Linux, Arabic text in the app and on codebot.example now uses Noto Sans Arabic when it is
   installed. Before, the system often drew Arabic in a font that was hard to read.
 - Agents find their saved memories when they ask for more than 10 results. Before, the search failed
   and told the agent to change its search words, so the agent could not recall the memory.
@@ -8164,7 +8164,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - Codex no longer shows "The agent could not continue" when you turn on an under-development feature, such as `async_compaction`, in the Codex `config.toml`. This Codex warning does not stop the agent. CodeBot now writes it to the log only.
 - When agent settings or an avatar cannot be saved, the error now shows only where you made the change: in the settings panel, or in the message box for a model or fast mode change. It gives the reason from the server. If you close the panel before the save ends, a notification shows the error. Before, the same error also showed as a message in the chat.
 - A menu in Settings that shows its current value again no longer makes the window stop responding. Before, a menu such as "Requests an hour" in Settings › Agents › Local scripts could save its own value again and again after you changed another setting, and you had to restart CodeBot.
-- The Download page on openbot.run opens again. Before, the Download button in the top bar showed "This page could not load", and a direct link to the page showed an empty page.
+- The Download page on codebot.example opens again. Before, the Download button in the top bar showed "This page could not load", and a direct link to the page showed an empty page.
 - When a Muse or ChatGPT sign-in fails, the provider row now shows the reason from the provider, such
   as a Meta account that has no payment method. Before, the row showed only "CodeBot could not
   connect Muse. Try again."
@@ -8539,14 +8539,14 @@ All notable changes to CodeBot will be documented here. The project follows
 - Find models now fills the context window, the max output and the accepted inputs of each custom provider model when the endpoint lists them, as OpenRouter, vLLM and gateways in the models.dev format do. A value that you typed or saved stays. A line under the list tells you which values come from the endpoint.
 - Connect GitLab.com from the Apps marketplace with browser sign-in, so agents can work with projects, issues, merge requests, repositories and CI pipelines. For a self-hosted GitLab, add its MCP server address in the MCP servers settings.
 - A thread tab now shows Load older messages when the thread has more than its newest 100 messages. Before, the older messages of a long thread could not be shown. On a joined server, this needs a host on this version.
-- Read the openbot.run home page in Polish. Open `openbot.run/pl`, or set Polish as the first
+- Read the codebot.example home page in Polish. Open `codebot.example/pl`, or set Polish as the first
   language of your browser. The header, the menu and the footer of the home page are in Polish too.
-- Read the Teams, Pricing and Contact pages of openbot.run in Polish, at `openbot.run/pl/teams`,
-  `openbot.run/pl/pricing` and `openbot.run/pl/contact`. Links on a Polish page go to the Polish pages.
-- Choose English or Polish with the language button in the openbot.run header, on the home, Teams,
+- Read the Teams, Pricing and Contact pages of codebot.example in Polish, at `codebot.example/pl/teams`,
+  `codebot.example/pl/pricing` and `codebot.example/pl/contact`. Links on a Polish page go to the Polish pages.
+- Choose English or Polish with the language button in the codebot.example header, on the home, Teams,
   Pricing and Contact pages. The website keeps your choice for one year.
-- The openbot.run footer links to CodeBot on Threads, LinkedIn, Reddit, Instagram, TikTok and Facebook.
-- The openbot.run home page shows two more features: multiplayer mode, where people and agents work
+- The codebot.example footer links to CodeBot on Threads, LinkedIn, Reddit, Instagram, TikTok and Facebook.
+- The codebot.example home page shows two more features: multiplayer mode, where people and agents work
   in shared channels, and workflows, which join agents, models and approval steps.
 - Connect Omnisend from the Apps marketplace with browser sign-in, so agents can read campaign reports and work with contacts, segments, campaigns and automations. Select read-only access on the Omnisend consent screen when agents only need reports.
 - Connect ElevenLabs from the Apps marketplace with browser sign-in to turn text into speech, work with voices, and manage ElevenLabs voice agents. Each generation uses ElevenLabs credits.
@@ -8634,9 +8634,9 @@ All notable changes to CodeBot will be documented here. The project follows
 - Ping a Slack user that an CodeBot post mentions as `<@user ID>`, for example a question from an
   agent to a teammate. Before, the post showed the mention as text and sent no notification.
   Channels, `@here`, `@everyone` and user groups still get no ping.
-- New text on the openbot.run home page: the first section, the agent section and the feature
+- New text on the codebot.example home page: the first section, the agent section and the feature
   section.
-- The openbot.run header shows the menu button up to a window width of 1100px, not 900px, so that the
+- The codebot.example header shows the menu button up to a window width of 1100px, not 900px, so that the
   links do not overlap the logo in Polish.
 - A theme change now moves across the window in a soft wave of color, instead of a sudden switch.
 - When you click Download or Restart on the update button in the sidebar, a ring of color moves
@@ -8744,7 +8744,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - A chat opens with less work when its draft has no tags. Before, the message box read its scroll
   position each time a list of the chat loaded (skills, MCP servers, tabs and threads), and each read
   laid out the window again.
-- After you add CodeBot to Slack or Discord, the "Open CodeBot" button on the openbot.run return
+- After you add CodeBot to Slack or Discord, the "Open CodeBot" button on the codebot.example return
   page now shows also when a browser extension or a script error stops the rest of the page. Before,
   the page showed only "Return to CodeBot", and the connection did not finish.
 - The desktop log now records why a Slack or Discord connection from the browser did not finish.
@@ -8809,7 +8809,7 @@ All notable changes to CodeBot will be documented here. The project follows
   before. Text with a line break, a bracket or a quote is still entered in one piece, so code
   editors do not add closing brackets to it.
 - On a phone, the website language menu went past the left edge of the screen. It now stays on the screen.
-- The agent pages of the Marketplace on openbot.run open again. Before, a click on an agent showed
+- The agent pages of the Marketplace on codebot.example open again. Before, a click on an agent showed
   "Not in the Marketplace", because the site accepted only agent ids in one form, and the agents that
   CodeBot curates use a different form. Links to these agents in the app work again too.
 
@@ -8954,10 +8954,10 @@ All notable changes to CodeBot will be documented here. The project follows
   and outputs from the mobile app.
 - An agent can send files, such as an image that you attached, to a WhatsApp, Slack, Discord or Telegram chat when it posts there on its own. The files must be in the agent's workspace or the CodeBot shared directory. On WhatsApp, JPEG, PNG and WebP images arrive as photos that the recipient can save.
 - Choose the reasoning efforts of each custom provider model, such as Low, High and Max. OpenCode and Pi show only those efforts and send the one you select. Pi custom models can now reason. With no effort selected, OpenCode keeps Low, Medium and High, and Pi does not reason.
-- Let agents create a repository with the GitHub connection. The OpenBotGit app now asks for the
+- Let agents create a repository with the GitHub connection. The CodeBotGit app now asks for the
   Administration permission, because GitHub needs it to create a repository. An owner of each
   account approves the request in GitHub. Until then, the agent explains why creation failed and
-  what to do. The `openbotgit[bot]` tokens never get this permission, so a user with push access
+  what to do. The `codebotgit[bot]` tokens never get this permission, so a user with push access
   cannot change repository settings through them.
 - Connect Proton Pass in the Marketplace, on this computer or on a server. Click Connect and sign in
   to Proton in your browser. CodeBot then makes a "Shared with CodeBot" vault and a read-only access
@@ -9183,8 +9183,8 @@ All notable changes to CodeBot will be documented here. The project follows
   starts with the model of a new LLM step. A Condition step saved before shows "Auto": the server
   chooses its model until you choose one.
 - Chat colors. Pick a chat color for an agent in its settings, and one for yourself in Settings → General. The color tints the chat bubbles, and everyone on the server sees it. The avatar keeps its own color.
-- The website has the CodeBot Contributor License Agreement at openbot.run/cla. You can read it on
-  the page or download the PDF to fill in, sign and email to licenses@openbot.run. The site footer
+- The website has the CodeBot Contributor License Agreement at codebot.example/cla. You can read it on
+  the page or download the PDF to fill in, sign and email to licenses@codebot.example. The site footer
   links to it.
 - A guide that compares chat history with saved workspace files in CodeBot, using a recurring research task and plain explanations of model changes and agent handoffs.
 - The Usage page shows the CPU and memory use of the server to owners and admins. A click shows the
@@ -9606,7 +9606,7 @@ All notable changes to CodeBot will be documented here. The project follows
   default model.
 - Hermes Agent from Nous Research is a provider. CodeBot uses the `hermes` that you installed, with your own `~/.hermes` memories, skills and sign-ins. Sign in with a Nous Portal plan, or set up other providers with `hermes setup`. The model menu groups the models by the Hermes provider.
 - Add a guide to installing CodeBot on a VPS with Ubuntu or Docker, including account setup, updates and backups.
-- Send license emails from `licenses@openbot.run`. A license or a bundle gets a thank-you email at its
+- Send license emails from `licenses@codebot.example`. A license or a bundle gets a thank-you email at its
   first payment, with the license, the seats, the list price with its currency and interval, and the
   date of the next payment. A discounted license shows no price. A license with a free trial gets it
   when the first payment is made, also after a failed payment at the trial end.
@@ -9669,7 +9669,7 @@ All notable changes to CodeBot will be documented here. The project follows
   saves its state before it quits. Before, the desktop app stopped at once.
 - The main log now says how CodeBot quit: from the menu, with ⌘Q, from the tray, for an update or by
   a signal.
-- Agents that have no photo now show a soft plush bot instead of the flat drawing, in the app, the web client and on openbot.run. When you choose a new face or colour, the old plush shrinks away and the new one pops out.
+- Agents that have no photo now show a soft plush bot instead of the flat drawing, in the app, the web client and on codebot.example. When you choose a new face or colour, the old plush shrinks away and the new one pops out.
 - The plush shows what an agent does on its face, with no coloured rings or glow round it. A working agent looks up while three felt dots pulse, an agent that waits for you shows a felt dot, a failed turn lowers its eyes and shakes "no" once, and an asleep agent closes its eyes as z's rise. When you point at a resting agent or move the keyboard focus to it, it shows a different friendly face each time (a wink, wide eyes or a curious look) until you move away.
 - In agent settings you now choose the shape and the eyes of an agent's face separately. The shuffle button picks a new pair. If the colour is Automatic, new eyes keep the colour that shows, and that colour becomes the chosen one.
 - The avatar colour list shows each colour one time, in one row.
@@ -9782,7 +9782,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - Some agents install with an active routine, such as the weekday morning brief of Chief of Staff.
   A routine asks once for its setup and sends nothing when there is nothing new.
 - Start a workflow from GitHub. A GitHub trigger runs on new issues, comments, labels, pull requests,
-  reviews, merges, closes, assignments, failed checks, or a mention of `@openbotgit`, in a repository
+  reviews, merges, closes, assignments, failed checks, or a mention of `@codebotgit`, in a repository
   that the CodeBot GitHub App can see. A second event for the same issue waits for the first run, and
   events for other issues run at the same time. The trigger shows the newest 50 events and why each
   one started a run, waited, or was skipped.
@@ -9818,7 +9818,7 @@ All notable changes to CodeBot will be documented here. The project follows
   With 100 ms network latency, the web workspace is ready about 250 ms sooner.
 - On the web, a switch to another server is about 2.5 times faster. The app uses the connection
   that it already keeps to that server for notifications, and it does not wait for the old server's
-  session to end. On openbot.run, a switch took 0.7 to 1.0 seconds, against 1.7 to 2.8 seconds
+  session to end. On codebot.example, a switch took 0.7 to 1.0 seconds, against 1.7 to 2.8 seconds
   before.
 
 ### Removed
@@ -9893,9 +9893,9 @@ All notable changes to CodeBot will be documented here. The project follows
 - Disconnect Grok, Muse and Cursor from Settings > Providers, in the ⋯ menu of their sign-in, as
   Claude and Codex already do. On this computer, the CLI in your terminal also signs out. A joined
   server must run this version to disconnect them.
-- The Marketplace is now on openbot.run at `/marketplace`, with the Agents, Skills and Apps tabs.
+- The Marketplace is now on codebot.example at `/marketplace`, with the Agents, Skills and Apps tabs.
   Each agent and each skill has its own page. A shared link shows a picture of that listing.
-- Agent and skill pages in the app have Copy link. The link opens the same listing on openbot.run,
+- Agent and skill pages in the app have Copy link. The link opens the same listing on codebot.example,
   and its button opens it in the app. A link never adds the agent or the skill: you still press Add.
 - The Agents tab in the app shows Featured agents, and a switch between Verified and Public agents.
 
@@ -9942,7 +9942,7 @@ All notable changes to CodeBot will be documented here. The project follows
   - Codex goals are off. CodeBot has no control to pause or stop a goal.
   - OpenCode no longer gets its tools that rename or move a session, or that make or list worktrees.
 - The agent page in the app shows the skills, routines and information of the agent in sections.
-- `openbot.run/plugins` now opens the Apps tab of the Marketplace.
+- `codebot.example/plugins` now opens the Apps tab of the Marketplace.
 - When an agent's browser action matches more than one element, the browser still sends no input,
   and the error now lists up to five of the matches with their text and the text of their item.
   The agent can then act on the intended item, for example one lesson in a calendar, or ask you.
@@ -10223,7 +10223,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - A desktop notification for an agent on another server now shows also when the list of its agents cannot be read at that moment.
 - Picture in Picture now shows the page of a joined server's browser. Before, the floating window stayed empty and dark.
 - Picture in Picture now follows the tab that the agent changes to on a joined server.
-- Keep the web app on screen when openbot.run gets an update. Before, the page could go blank and
+- Keep the web app on screen when codebot.example gets an update. Before, the page could go blank and
   load again after an update.
 - Connect the web app to your server again within about 30 seconds after the server comes back.
   Before, the web app could wait up to 2 minutes, and you had to reconnect from Settings.
@@ -10271,9 +10271,9 @@ All notable changes to CodeBot will be documented here. The project follows
   Checkout with the same server, license, users, billing period and currency, so you do not choose
   again. When the order does not fit the account, such as another currency than your other plans,
   the app shows the order filled in and you confirm it.
-- Update the Privacy Policy, Terms & Conditions and Commercial License Agreement on openbot.run.
-  Add the Data Processing Addendum at openbot.run/dpa. openbot.run/privacy shows the Privacy Policy too.
-  openbot.run/commerciallicense and openbot.run/branding open the existing pages.
+- Update the Privacy Policy, Terms & Conditions and Commercial License Agreement on codebot.example.
+  Add the Data Processing Addendum at codebot.example/dpa. codebot.example/privacy shows the Privacy Policy too.
+  codebot.example/commerciallicense and codebot.example/branding open the existing pages.
 - The site footer links to the Terms, the Commercial License Agreement and the DPA.
 - When you add a server for work, the dialog now tells you why it does not let you choose fewer people: everyone who uses your servers now needs a seat on the license.
 - Prices in PLN are 4 times the EUR price, so they are round amounts. The Starter license costs 40 zł a month, and the Team license costs 100 zł a month for 2 users and 60 zł for each extra user. A new hosted server costs 80 zł (Starter), 200 zł (Standard) or 400 zł (Pro) a month, not 90, 220 or 440 zł.
@@ -10577,7 +10577,7 @@ All notable changes to CodeBot will be documented here. The project follows
   so the vault can be their memory. Install the Local REST API plugin in Obsidian, turn on its HTTP
   server, and type its API key in the connect dialog.
 - Add Neon, Prisma, Netlify, Railway, Atlassian (Jira and Confluence), Todoist and Hugging Face to the Apps catalog. Sign in in the browser to connect each of them, except Hugging Face: it reads public Hub data and needs no account. Neon, Prisma, Netlify, Railway, Atlassian and Todoist give agents write access, so agents can change or delete data there. Each listing says what agents can change.
-- The website has the CodeBot Commercial License Agreement at openbot.run/commercial-license. The
+- The website has the CodeBot Commercial License Agreement at codebot.example/commercial-license. The
   Terms & Conditions link to it.
 - Give an agent more than one conversation. Click + in the chat header to start a new thread. Each thread has its own tab
   and runs at the same time as the other threads of the agent. The agent keeps its main chat.
@@ -10605,7 +10605,7 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Changed
 
-- Update the Terms & Conditions on openbot.run/terms. They now describe free non-commercial use,
+- Update the Terms & Conditions on codebot.example/terms. They now describe free non-commercial use,
   Commercial Licenses (Starter and Team seats), hosted server plans, the refund and withdrawal rules,
   30-day hosted server data retention after expiry, and Marketplace content reports. The minimum
   age is now 16.
@@ -10697,7 +10697,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - Keep the provider session of a thread when its delete fails and you restore it. Before, the restored thread started a
   new session and lost its thread instructions.
 - A message steered into a Claude turn just as the turn ends now shows its answer one time. Before, the answer showed again in the chat after CodeBot started again.
-- The browser client at openbot.run/app now shows the custom images of agents. Before, it showed the
+- The browser client at codebot.example/app now shows the custom images of agents. Before, it showed the
   generated avatar for each agent with a custom image.
 - An agent with Full access no longer asks before each Computer Use action. Workspace only and Ask
   first agents still ask.
@@ -10891,7 +10891,7 @@ All notable changes to CodeBot will be documented here. The project follows
   name and expiry of a card, and delete items. The chat shows each change, and the Vault shows
   which agent added an item. On the secure password card, Save to Vault keeps the password that you
   type.
-- openbot.run has provider pages for Muse Code, Pi, Inception and ACP agents such as Goose, Qwen
+- codebot.example has provider pages for Muse Code, Pi, Inception and ACP agents such as Goose, Qwen
   Code and GitHub Copilot CLI.
 - The steps row above an agent's answer now opens a trace of the turn. Each thought, tool call and
   subagent is a bar on one timeline, with the duration, cost and tokens of the turn. You can search
@@ -10924,7 +10924,7 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Changed
 
-- The Linux docs and the Linux download page on openbot.run now name Ubuntu 26.04 LTS. CodeBot
+- The Linux docs and the Linux download page on codebot.example now name Ubuntu 26.04 LTS. CodeBot
   0.48.1 runs on Ubuntu 26.04 with the Electron sandbox on.
 - When nothing comes from the provider for a minute during a turn, the activity line says "Waiting for {provider}…" and stops its shine. A notice above the message box says how long the provider has sent no update. Before, the line looked busy the whole time, also with no internet.
 - When the computer has no network during a turn and nothing comes from the provider for 5 seconds, a "No internet connection" notice shows above the message box, and the activity line says that it waits.
@@ -10950,10 +10950,10 @@ All notable changes to CodeBot will be documented here. The project follows
   memory, approvals, secrets, private details, safety checks and the browser do not change.
 - A focused field shows a grey border, and a focused button shows a thin grey ring. They no longer
   show a blue glow.
-- The comparison pages on openbot.run now list all the providers that CodeBot runs, including Muse
+- The comparison pages on codebot.example now list all the providers that CodeBot runs, including Muse
   Code, Pi, Inception and ACP agents, and 11 app languages. New rows compare backup models and
   logins and payments, and most pages also compare voice and Slack, Discord and Telegram.
-- The home page and `llms.txt` on openbot.run now name the new providers and backup models.
+- The home page and `llms.txt` on codebot.example now name the new providers and backup models.
 
 ### Fixed
 
@@ -11071,7 +11071,7 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Changed
 
-- Each plugin page on openbot.run now shows what an agent can do with the plugin, how to connect it to CodeBot, common questions, and the sources for each statement.
+- Each plugin page on codebot.example now shows what an agent can do with the plugin, how to connect it to CodeBot, common questions, and the sources for each statement.
 - The guides "CodeBot 101" and "WTF Is CodeBot?" now have the titles "How to Use CodeBot: Set Up Your First AI Agent" and "What Is CodeBot? Models, Providers and Agents Explained". Their addresses did not change.
 - A message that you send no longer shows "Sending…" or turns grey. Only a failed send shows: "Not sent" and its reason beside the time, with Retry, Edit and Dismiss buttons.
 - Product analytics on turns sends how the turn is paid for: a plan, an API key, a free model, or your own endpoint. It does not send keys or accounts. The privacy policy lists the new data.
@@ -11154,7 +11154,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - When a site refuses a sign-in from the server, the agent shows a card that says so. In the desktop
   app, the card has one main button, "Sign in on this computer". After the sign-in, the card shows
   that you are signed in, and the agent continues.
-- The website has a privacy policy at openbot.run/privacy-policy. The "Privacy policy" link in the
+- The website has a privacy policy at codebot.example/privacy-policy. The "Privacy policy" link in the
   site footer opens it. Before, the footer linked to the privacy notes on GitHub.
 
 ### Changed
@@ -11258,7 +11258,7 @@ All notable changes to CodeBot will be documented here. The project follows
   Zoom In and Zoom Out.
 - You can choose a GIF as an agent picture, a profile picture or a server logo. An animated GIF
   stays animated. CodeBot stores it as an animated WebP.
-- The home page of openbot.run has the LaserFlow light beam from React Bits again. It falls onto the
+- The home page of codebot.example has the LaserFlow light beam from React Bits again. It falls onto the
   app preview and spreads along the top of the preview, in a soft violet haze. The light moves toward
   the pointer. The app preview has no shadow or glow around it.
 - The beam has a different colour, width, spread, haze and smoke on each visit. The smoke can be
@@ -11303,7 +11303,7 @@ All notable changes to CodeBot will be documented here. The project follows
   and the web client. Before, only the computer that runs the agent showed the setting, so a hosted
   server had no way to set it. Members do not see it. The server must also run this version.
 - You can install CodeBot with Nix on x64 or arm64 Linux and on Apple silicon:
-  `nix run github:nightly-labs/openbot`. Nix installs CodeBot updates. A copy that Nix installed does
+  `nix run github:your-org/codebot`. Nix installs CodeBot updates. A copy that Nix installed does
   not update itself; Settings shows that Nix installs its updates.
 - Gemini agents now show how full their context is, next to the send button. When the context is
   80% full, CodeBot compacts it: the agent continues in a new session that starts from the recent
@@ -11534,14 +11534,14 @@ All notable changes to CodeBot will be documented here. The project follows
   phone connection, channels, server export and import, help links and the Usage view. It sends no
   names, message text, IDs, links, prices or email addresses.
 - Licenses now appear in the billing analytics of the account service, with the number of users.
-- The web app at `openbot.run/app` now sends the same product analytics as the desktop app. Its
+- The web app at `codebot.example/app` now sends the same product analytics as the desktop app. Its
   setting is now **Share product analytics** in account settings.
 - When you turn off **Share product analytics**, the app sends one last event that records the
   change. Then it stops all analytics.
 
 ### Fixed
 
-- Center the hero of the openbot.run download page, as on the other site pages. The title is now
+- Center the hero of the codebot.example download page, as on the other site pages. The title is now
   the same size as the other page titles, so it shows on one line on a wide screen.
 - A remote session stays connected when Signal restarts and the account service is slow to answer.
   Before, the session closed and the device showed it as offline.
@@ -11640,11 +11640,11 @@ All notable changes to CodeBot will be documented here. The project follows
   joined servers. App Settings no longer shows it. Before, the App Settings value applied only to
   agents on your computer, so a server's agents could stop at 64 memories while App Settings showed
   a higher limit. Global search also finds "Memories per agent".
-- The top of the openbot.run home page no longer shows a grid behind the title.
+- The top of the codebot.example home page no longer shows a grid behind the title.
 - In the web app, an account with no server now sees Create a hosted server as the first action.
   Download CodeBot and Join with invitation are still there.
 - Show the License section in Billing also when licenses are not for sale. A purchase then shows a
-  message with the address to contact: licenses@openbot.run.
+  message with the address to contact: licenses@codebot.example.
 
 ### Fixed
 
@@ -11982,7 +11982,7 @@ All notable changes to CodeBot will be documented here. The project follows
   `--display-size` at the install or `CODEBOT_DISPLAY_SIZE` in `/opt/CodeBot/hosted/codebot.env`,
   and in Docker with the `CODEBOT_DISPLAY_SIZE` variable. The default stays 1280x800.
 - Ask the agent a side question from the composer "+" menu. The agent reads the chat and answers in the side panel. The question and the answer do not go into the chat, and closing the tab deletes them. Side questions work only on the computer that runs the agent.
-- Add a public status page at status.openbot.run. It shows the state of sign-in, connections,
+- Add a public status page at status.codebot.example. It shows the state of sign-in, connections,
   hosted servers, desktop update downloads and the Marketplace, 90 days of history, incidents and
   planned maintenance. It has an RSS feed, and the site footer links to it.
 - Click the quote in a reply to go to the original message. The chat scrolls to it, loads older
@@ -12213,7 +12213,7 @@ All notable changes to CodeBot will be documented here. The project follows
 ### Changed
 
 - The license names Synthetify Labs spółka z ograniczoną odpowiedzialnością as the licensor. For a
-  commercial license, write to licenses@openbot.run. The macOS and Windows app copyright
+  commercial license, write to licenses@codebot.example. The macOS and Windows app copyright
   also names Synthetify Labs.
 - The desktop window has a page rail at the left and a darker frame. The sidebar, the chat and the side panel sit in one card. The rail opens Agents, Routines, Schedule, Usage, Marketplace and Settings, and it shows the plan limits of each provider as rings.
 - Settings is now a page of the window, not a dialog, with a search for settings. Server settings is a separate page: open it from the server menu. When you select a different server, the server settings page shows that server.
@@ -12233,7 +12233,7 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Added
 
-- Add a contact form at `openbot.run/contact`. The Contact buttons on the website open it, and the
+- Add a contact form at `codebot.example/contact`. The Contact buttons on the website open it, and the
   message goes to the CodeBot team by email.
 - A new customer now gets a "Welcome to CodeBot!" email when the plan of their first cloud server
   starts. The email shows the plan, the server name, and a link to the web app.
@@ -12315,9 +12315,9 @@ All notable changes to CodeBot will be documented here. The project follows
 - Routines can run one time, at a local date and time. After the run, the routine stays as a paused record. You can cancel it before it runs. A run missed while CodeBot was closed runs one time at start, unless you set it to skip. A restart does not run it again. Agents use this schedule for reminders, not a yearly schedule. Only the desktop app on the computer that runs CodeBot shows one-time routines for now.
 - Several instances on one Docker host: `codebot-instance backup`, `verify`, `restore` and `backups` back up all data of an instance, check the backup in a temporary folder, and restore it with the same agents and conversations. To back up an instance each day, turn on its timer with `systemctl enable --now codebot-instance-backup@<name>.timer`.
 - Settings → Dynamic Island has a Servers list. Turn off a server to hide its agent activity and requests from the island. The server stays connected and its desktop notifications continue. A switch sets whether servers that you add later show in the island.
-- Add links to the CodeBot Discord community on openbot.run: a "Discord" item in the Resources
+- Add links to the CodeBot Discord community on codebot.example: a "Discord" item in the Resources
   column of the footer, and a Discord icon next to the GitHub and X icons.
-- Add discord.openbot.run, a short address that opens the CodeBot Discord community.
+- Add discord.codebot.example, a short address that opens the CodeBot Discord community.
 - Agents fill forms in the built-in browser faster. They can fill up to 16 text fields in one step. They do not use this step for password, verification code, or card fields.
 - Send agent notifications to the CodeBot app on Android phones. The phone gets the same events as
   an iPhone: a finished task, an error, a question, an approval, or a step in the browser. The
@@ -12336,7 +12336,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - The model picker in a conversation shows only the providers that are ready to use. Select + to connect another provider in Settings.
 - A disputed payment for a hosted server ends its plan at once. The server stops and keeps its disk. A refund keeps the plan and the server running.
 - After you delete an agent, a notice with an Undo button shows for 8 seconds. Press Undo to get the agent back in the same place. CodeBot deletes the agent only when the time ends. The time stops while the pointer is on the notice.
-- The "Contact" button in the openbot.run header is now "Community". It opens the CodeBot Discord
+- The "Contact" button in the codebot.example header is now "Community". It opens the CodeBot Discord
   community instead of the CodeBot account on X.
 - Docker and hosted servers now include bubblewrap. Codex recommends the system copy instead of its bundled copy.
 - Docker documentation explains browser access and how to check a new release before upgrading a self-hosted server. It includes the release metadata source, deployment-file review and cold backup steps.
@@ -12450,7 +12450,7 @@ All notable changes to CodeBot will be documented here. The project follows
 ### Changed
 
 - The "MCP" link in the Server settings header no longer shows a background on hover. Only the text gets brighter.
-- The openbot.run home page now shows the iPhone and Android apps next to macOS, Windows and Linux. The "Available on" line and the footer list them, and the download menu has a "Phone apps" group with links to TestFlight and Google Play.
+- The codebot.example home page now shows the iPhone and Android apps next to macOS, Windows and Linux. The "Available on" line and the footer list them, and the download menu has a "Phone apps" group with links to TestFlight and Google Play.
 - On an iPhone or an Android phone, the main download button of the home page now opens the phone app's store page. Before, it offered the Mac or Linux installer, which a phone cannot open.
 - When you restart a hosted server, the dialog stays open and shows the restart: the server stops, starts, and is back online. You can hide the dialog; a notification then tells you when the server is back or did not start. If the server does not start, "Try again" restarts it from the dialog.
 - Connect on a provider row now uses the easiest sign-in for the place you are in. On this computer, it opens your browser. On a server, from the app, it opens the sign-in page in your browser and sends the result to the server. In a browser tab, it shows a code. The other way to sign in is in the row's ⋯ menu.
@@ -12464,7 +12464,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - When a joined server has a new CodeBot version, a dialog now shows the update steps: download, restart, and back online. One click starts the update. An admin can let the restart wait until agents are idle, restart at once, or cancel the restart. You can hide the dialog while the server updates; a notice keeps the status and opens the dialog again.
 - In Server settings > Updates, "Update when idle" and "Restart now" open the same dialog.
 - The update dialog opens each time you enter a server that has a new version. An update button next to the server name in the sidebar opens it again.
-- The openbot.run website now keeps the first visit of your browser (source, first page, day and campaign tags) in the browser. When you sign in on the web, or open the page after a desktop checkout, CodeBot saves it on your account for product analytics. It contains no referrer, IP address or identifier. [PRIVACY.md](https://github.com/nightly-labs/openbot/blob/main/PRIVACY.md) describes it.
+- The codebot.example website now keeps the first visit of your browser (source, first page, day and campaign tags) in the browser. When you sign in on the web, or open the page after a desktop checkout, CodeBot saves it on your account for product analytics. It contains no referrer, IP address or identifier. [PRIVACY.md](https://github.com/your-org/codebot/blob/main/PRIVACY.md) describes it.
 
 ### Fixed
 
@@ -13254,13 +13254,13 @@ All notable changes to CodeBot will be documented here. The project follows
 - Each agent has a "While working" setting in its settings panel. It uses the app default, or it always queues or always steers for that agent.
 - A message that cannot steer waits in the queue with a "Not steered" label and the reason. Grok, OpenCode, Gemini, Cursor, Cline and custom agents cannot steer a running turn. The message starts when the current turn ends.
 - A message that could not be sent stays in the chat with Retry, Edit and Dismiss. Retry does not send the message two times, also when the first attempt reached the server and only its answer was lost. A server on an older version cannot detect a repeated message, so for it the chat offers only Edit and Dismiss. If you quit or restart before such a message is sent, its text is back in the composer when you return; nothing sends it again on its own.
-- openbot.run has a new /providers section with one page for each coding agent that CodeBot runs:
+- codebot.example has a new /providers section with one page for each coding agent that CodeBot runs:
   Claude Code, Codex, Gemini, Grok, Cursor, OpenCode, Cline, and local models from Ollama or
   LM Studio. Each page shows how to set the agent up in CodeBot, what CodeBot adds to it, the
   vendor's own apps and where they run, and answers to common questions. The footer, the provider
   tile on the home page and the matchup comparisons link to these pages.
-- openbot.run has a Markdown copy of each guide, news post, comparison and provider page, at the page URL with `.md` added. `/llms-full.txt` holds all of them in one file for AI assistants.
-- The openbot.run FAQ now says what the source license permits.
+- codebot.example has a Markdown copy of each guide, news post, comparison and provider page, at the page URL with `.md` added. `/llms-full.txt` holds all of them in one file for AI assistants.
+- The codebot.example FAQ now says what the source license permits.
 - A folder chip, such as `research/eyeliner/`, now opens a folder view in the file panel. The view shows the files with their size and date. Select a file to open it, and select **Back** to go back to the folder.
 - The file panel can show the source of a Markdown file. It also has **Download file** for each file, and **Show file in Finder** on the desktop.
 - Add a calendar feed for routines in Server Settings > Routines. Apple Calendar (On My Mac) and other calendar apps that read the feed on this computer can subscribe to the next 30 days of runs of active routines, for all agents or for one agent. The private URL works only on this computer, and **New URL** stops the old one.
@@ -13354,15 +13354,15 @@ All notable changes to CodeBot will be documented here. The project follows
   Connect. Connect opens the app in Marketplace and starts its sign-in there. You can dismiss the
   card and undo.
 - When an agent needs GitHub and it is not connected, the agent shows a GitHub card in the chat.
-- The openbot.run home page shows what CodeBot does, answers common questions, and links to each comparison.
-- An official Docker image, `ghcr.io/nightly-labs/openbot`, for `linux/amd64` and `linux/arm64`. It
+- The codebot.example home page shows what CodeBot does, answers common questions, and links to each comparison.
+- An official Docker image, `ghcr.io/your-org/codebot`, for `linux/amd64` and `linux/arm64`. It
   runs CodeBot as a self-hosted server with the Electron sandbox on. Sign it in with
   `docker exec -it codebot codebot login`. See `docs/docker.md`.
-- openbot.run has a download page for each system: `/download/macos`, `/download/windows` and
+- codebot.example has a download page for each system: `/download/macos`, `/download/windows` and
   `/download/linux`. Each page gives the system requirements, the install steps and the known limits,
   and `/download` links to all three.
-- openbot.run has a download for Linux on arm64.
-- openbot.run has four new pages in /compare: Codex vs Claude Code, Claude Code vs Antigravity,
+- codebot.example has a download for Linux on arm64.
+- codebot.example has four new pages in /compare: Codex vs Claude Code, Claude Code vs Antigravity,
   Cursor vs Claude Code, and the best AI agent apps of 2026. Each pair page compares the two apps
   from their official sources, and shows how CodeBot runs both as one team. The roundup lists 13
   apps and links each one to its comparisons. The Codex, Antigravity and roundup pages show a
@@ -13387,11 +13387,11 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Changed
 
-- On openbot.run, News, Guides, Compare and Plugins in the header now open their pages when you
+- On codebot.example, News, Guides, Compare and Plugins in the header now open their pages when you
   click them. Hover over them to see the panel.
-- The openbot.run footer names Synthetify Labs as the owner.
+- The codebot.example footer names Synthetify Labs as the owner.
 - A chat now shows consecutive messages to and from other agents as one row, such as "7 messages with 7 agents". Click the agents to see each message.
-- The openbot.run footer links to the self-hosted server guide.
+- The codebot.example footer links to the self-hosted server guide.
 - The direct installer links are now `/download/<os>/latest`. An old `/download/<os>` link opens the
   download page for that system, not the installer.
 - The Schedule view of a server is now called Routines, the same name as in agent and channel
@@ -13406,9 +13406,9 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Fixed
 
-- The openbot.run home page title reads "Meet CodeBot" to search engines, and its text shows when JavaScript is off.
-- The openbot.run home page title shows sooner: it no longer waits for the page script.
-- `www.openbot.run` and `http://openbot.run` now go to `https://openbot.run`.
+- The codebot.example home page title reads "Meet CodeBot" to search engines, and its text shows when JavaScript is off.
+- The codebot.example home page title shows sooner: it no longer waits for the page script.
+- `www.codebot.example` and `http://codebot.example` now go to `https://codebot.example`.
 - Page addresses that end in `/` now redirect permanently to the address without it.
 - The guides, news, plugins and changelog pages have clearer titles in search results.
 - The server member count now uses the singular form for one member. Before, a server with one
@@ -13497,15 +13497,15 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Added
 
-- Compare CodeBot with ChatGPT dots on openbot.run/compare.
-- Each comparison on openbot.run/compare has a "Where you can use it" row. It shows the countries
+- Compare CodeBot with ChatGPT dots on codebot.example/compare.
+- Each comparison on codebot.example/compare has a "Where you can use it" row. It shows the countries
   and languages of each product, and that CodeBot has no region lock.
 - A script on your computer can now run an agent's routine and give it a payload, for example to wake the agent when a long build ends. Turn on Local scripts in the agent's settings, then use Copy run command on a routine. The setting is off by default.
-- The openbot.run header menu has a Compare section, and each comparison links to the other comparisons.
+- The codebot.example header menu has a Compare section, and each comparison links to the other comparisons.
 - Install CodeBot as a server on a Linux computer with no screen, such as a VPS, from a terminal:
-  `curl -fsSL https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh | sudo bash`.
+  `curl -fsSL https://raw.githubusercontent.com/your-org/codebot/main/scripts/install-server.sh | sudo bash`.
   Sign it in with `sudo codebot login`, and use it from the desktop app, the iPhone app or
-  openbot.run/app. The `codebot` command also shows the status and the log, changes the server name,
+  codebot.example/app. The `codebot` command also shows the status and the log, changes the server name,
   installs updates, and removes CodeBot with `sudo codebot uninstall`. The install also works on Debian
   12, Debian 13 and Ubuntu 26.04. See docs/self-hosted-server.md.
 - CodeBot writes provider diagnostics to `logs/providers/providers.log` in its data folder: state changes, CLI checks, start times, model list results and provider errors. CodeBot removes credentials from each line, and does not write environment values, tool output or conversation text to the file.
@@ -13513,10 +13513,10 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Changed
 
-- The comparisons on openbot.run/compare include Cursor CLI and hosted CodeBot servers in the EU,
+- The comparisons on codebot.example/compare include Cursor CLI and hosted CodeBot servers in the EU,
   Claude Cowork's move to cloud-only tasks on 6 October 2026, and Manus 2.0.
-- News, guide and comparison pages on openbot.run load faster: their artwork is WebP and about 3% of its old size.
-- Search results show fuller descriptions of the plugin pages and shorter descriptions of the comparison pages on openbot.run.
+- News, guide and comparison pages on codebot.example load faster: their artwork is WebP and about 3% of its old size.
+- Search results show fuller descriptions of the plugin pages and shorter descriptions of the comparison pages on codebot.example.
 - "The selected agent model is unavailable." now gives the cause: the provider is not connected, the provider listed no models (with its last error), or the provider does not list that model.
 
 ## [0.28.0] - 2026-10-02
@@ -13537,7 +13537,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - Brazilian Portuguese for the desktop app and web client. Select Português (Brasil) in Settings, or use your system language.
 - More of the desktop app and the web client is in Turkish, including server settings, providers, marketplace, routines, usage and remote desktop.
 - Cline is a provider. Its free models have a limit for each model, and the provider of a free model can use your prompts to train models. Select Download on the Cline row in More providers, then sign in with your Cline account in the browser, or set `CLINE_API_KEY`. Cline agents stay on this computer: team members do not see them.
-- You can run your own account service, Signal and TURN for remote access. Start the app with `CODEBOT_AUTH_API_URL` and `CODEBOT_REMOTE_SIGNAL_URL`. Invitations for your service are `codebot://join` links. See [Self-hosted remote access](https://github.com/nightly-labs/openbot/blob/main/docs/self-hosting.md). ([#1263](https://github.com/nightly-labs/openbot/issues/1263))
+- You can run your own account service, Signal and TURN for remote access. Start the app with `CODEBOT_AUTH_API_URL` and `CODEBOT_REMOTE_SIGNAL_URL`. Invitations for your service are `codebot://join` links. See [Self-hosted remote access](https://github.com/your-org/codebot/blob/main/docs/self-hosting.md). ([#1263](https://github.com/your-org/codebot/issues/1263))
 - A Schedule view shows the routines of all agents and channels on a server in a day or week calendar, with past results and planned runs. Open it from the server menu or the command palette.
 - Restart a provider from its menu in Settings, and restart all custom agents from the Custom agents section. CodeBot waits until no agent of that provider works, then starts the provider again and reads its version, sign-in state and models again. Agents of other providers continue to work, and messages sent during the wait run after the restart.
 - Restart CodeBot when no agent works, from Settings > Updates. New routine runs wait until the restart and run after it. When an update is downloaded, the same action installs it.
@@ -13576,10 +13576,10 @@ All notable changes to CodeBot will be documented here. The project follows
 
 ### Fixed
 
-- A custom ACP agent that is slow to start now shows its models. Model discovery waited only 5 seconds for it. ([#1230](https://github.com/nightly-labs/openbot/issues/1230))
+- A custom ACP agent that is slow to start now shows its models. Model discovery waited only 5 seconds for it. ([#1230](https://github.com/your-org/codebot/issues/1230))
 - The **Open CodeBot** button on the page that Slack returns to after you install CodeBot is now in the
   middle of the card.
-- A link to a file that an agent edited now opens the file. Before, a link to a file outside the agent's workspace, a link with a line number such as `page.tsx:12`, a `~/` path or a `file://` link showed "not found" or an error. A file outside the workspace opens only for an agent with Full access, and "Open file externally" shows it in the file manager. ([#1240](https://github.com/nightly-labs/openbot/issues/1240))
+- A link to a file that an agent edited now opens the file. Before, a link to a file outside the agent's workspace, a link with a line number such as `page.tsx:12`, a `~/` path or a `file://` link showed "not found" or an error. A file outside the workspace opens only for an agent with Full access, and "Open file externally" shows it in the file manager. ([#1240](https://github.com/your-org/codebot/issues/1240))
 - A link to a file that was moved or deleted now says so. Before, it told you to ask the agent to create the file.
 - A long error after a failed provider update ran out of its notification. Now it stays inside, stops after three lines, and "Show details" shows the full text.
 - When the Dynamic Island width or height changes, the logo and the greeting now move with the black
@@ -13600,10 +13600,10 @@ All notable changes to CodeBot will be documented here. The project follows
 - When CodeBot stops an ACP agent (because it is idle, to restart it, or at quit), the errors that
   the agent writes while it stops go to the log. Before, CodeBot showed each of them as a "Provider
   error" message. When an agent stops on its own, CodeBot still shows its errors.
-- A provider CLI download no longer fails with "another instance is replacing it" when no other CodeBot runs. When another program holds the new files open, CodeBot now waits for a moment, and then tells you to close that program. ([#1264](https://github.com/nightly-labs/openbot/issues/1264))
-- A failed update notification now closes when the CLI is updated later. Retry on a provider row now removes the old error text, and the custom provider row no longer shows a second Retry next to Add. ([#1264](https://github.com/nightly-labs/openbot/issues/1264))
-- On a busy computer, a provider CLI that answers slowly no longer shows as broken. CodeBot now waits 10 seconds for its version, says that it did not answer in time, keeps the last known version, and tries again by itself. ([#1258](https://github.com/nightly-labs/openbot/issues/1258))
-- A provider refresh no longer marks a connected provider as failed while its models stay in the model list. ([#1258](https://github.com/nightly-labs/openbot/issues/1258))
+- A provider CLI download no longer fails with "another instance is replacing it" when no other CodeBot runs. When another program holds the new files open, CodeBot now waits for a moment, and then tells you to close that program. ([#1264](https://github.com/your-org/codebot/issues/1264))
+- A failed update notification now closes when the CLI is updated later. Retry on a provider row now removes the old error text, and the custom provider row no longer shows a second Retry next to Add. ([#1264](https://github.com/your-org/codebot/issues/1264))
+- On a busy computer, a provider CLI that answers slowly no longer shows as broken. CodeBot now waits 10 seconds for its version, says that it did not answer in time, keeps the last known version, and tries again by itself. ([#1258](https://github.com/your-org/codebot/issues/1258))
+- A provider refresh no longer marks a connected provider as failed while its models stay in the model list. ([#1258](https://github.com/your-org/codebot/issues/1258))
 - A desktop chat no longer shows an empty bubble when an agent ends its turn without an answer, for
   example after it reads a teammate update that needs no reply. The phone app and channels already
   hid these rows.
@@ -13667,7 +13667,7 @@ All notable changes to CodeBot will be documented here. The project follows
 - With Grok, an MCP server from `~/.claude.json`, `~/.cursor/mcp.json` or `.mcp.json` that needs
   an OAuth sign-in no longer shows a "Provider error". Before, Grok's `worker quit with fatal …
   AuthRequired` line showed as an error, but the chat worked without that server.
-- An agent that another agent creates now gets the provider, model, and reasoning effort of that agent, unless the request names different ones. Before, each new teammate started on the default model. ([#1201](https://github.com/nightly-labs/openbot/issues/1201))
+- An agent that another agent creates now gets the provider, model, and reasoning effort of that agent, unless the request names different ones. Before, each new teammate started on the default model. ([#1201](https://github.com/your-org/codebot/issues/1201))
 - Keep the other devices connected to a desktop when one phone reconnects. Before, a late network
   message from the old connection of that phone could disconnect every device from the desktop.
 - Keep the web client connected through a short network change. Before, it made a new connection
@@ -13759,7 +13759,7 @@ All notable changes to CodeBot will be documented here. The project follows
   tools, and `gh` and `git` sign in as you, in the repositories where you install the CodeBot GitHub
   App. The panel lists these repositories. You do not need a personal access token.
 - In the repositories where you can push, GitHub shows the issues, pull requests and comments that
-  an agent makes with the GitHub tools as `openbotgit[bot]`, not as you. CodeBot gets short-lived tokens for this from
+  an agent makes with the GitHub tools as `codebotgit[bot]`, not as you. CodeBot gets short-lived tokens for this from
   the CodeBot account service, which keeps no token. `gh` still acts as you.
 - Use remote desktop on a Linux x64 host in an X11 session, including a hosted server. Wayland is not supported.
 - On a hosted server, remote desktop shows the full server desktop with its window manager, so a click moves between windows.
@@ -14166,16 +14166,16 @@ All notable changes to CodeBot will be documented here. The project follows
 - Show the images of an agent message in a gallery when the message has two or more images. Click
   an image in a chat to open it in a viewer. In the viewer, you can go to the next image and
   download the image.
-- Read the changelog on openbot.run/changelog. It shows the changes of each release, and the steps
+- Read the changelog on codebot.example/changelog. It shows the changes of each release, and the steps
   to do after an upgrade. The Releases link in the footer now opens this page.
 - Compare CodeBot with Grok Bot, Muse, Hermes Agent, OpenClaw, Manus, Claude Cowork and Devin on
-  openbot.run/compare. The Grok Bot article moved from News to this section. The old link opens the
+  codebot.example/compare. The Grok Bot article moved from News to this section. The old link opens the
   new page.
-- Open News, Guides and Plugins on openbot.run from a navigation menu that shows the latest
+- Open News, Guides and Plugins on codebot.example from a navigation menu that shows the latest
   articles. On a narrow screen, a menu button opens the same sections.
-- Show the reading progress of each section on news, guides and comparison pages on openbot.run.
+- Show the reading progress of each section on news, guides and comparison pages on codebot.example.
   You can share a link to one section.
-- Show an animated 404 page on openbot.run, with links to the main sections.
+- Show an animated 404 page on codebot.example, with links to the main sections.
 
 ### Changed
 
@@ -14309,9 +14309,9 @@ contains all changes of 0.21.1.
 ### Added
 
 - Publish an agent as a template that other people can add. Press Publish in the agent chat header.
-  CodeBot sends the instructions, the routines and the skills to openbot.run. Files and memories are
+  CodeBot sends the instructions, the routines and the skills to codebot.example. Files and memories are
   not sent, and a field that looks like a secret stops the publish. The link opens a page at
-  `openbot.run/agents/<id>`. Add to CodeBot shows the template in the app, and CodeBot adds the agent
+  `codebot.example/agents/<id>`. Add to CodeBot shows the template in the app, and CodeBot adds the agent
   only when you click Add agent. Unpublish removes the template. A new publish keeps the same link.
 - Edit a routine schedule with chips in the routine panel and in the routine card in the chat.
 
@@ -14421,7 +14421,7 @@ contains all changes of 0.21.1.
 
 ### Added
 
-- Use CodeBot in a web browser at openbot.run/app with your account and your connected hosts.
+- Use CodeBot in a web browser at codebot.example/app with your account and your connected hosts.
 - Set the Dynamic Island width and height in the new Dynamic Island settings tab on macOS.
 
 ### Changed
@@ -14587,11 +14587,11 @@ contains all changes of 0.21.1.
 - Connect an MCP server before it is installed: the install dialog tests the configuration, and
   only a configuration that answers is saved.
 - Open a Marketplace plugin from an `codebot://plugins/<slug>` link on its own detail page.
-- Publish plugin pages on openbot.run from the shipped catalog: fourteen listings, each with its
+- Publish plugin pages on codebot.example from the shipped catalog: fourteen listings, each with its
   own mark.
 - Give each agent one silhouette and a face that matches the work, in the sidebar and the activity
   indicator.
-- List Marketplace plugins in the landing header on openbot.run.
+- List Marketplace plugins in the landing header on codebot.example.
 
 ### Changed
 
@@ -14724,7 +14724,7 @@ contains all changes of 0.21.1.
 
 ### Changed
 
-- Repository moved to `nightly-labs/openbot`; release links and the update feed follow it.
+- Repository moved to `your-org/codebot`; release links and the update feed follow it.
 - Tighten agent-to-agent communication prompts and route agent instructions instead of
   front-loading them.
 - Stop the two animations that burn idle CPU, and add `dev:cpu` to measure it.
@@ -14752,7 +14752,7 @@ contains all changes of 0.21.1.
   translated yet reads English rather than disappearing. The Japanese catalog is a first draft.
 - Preview audio, video, SVG, and email files in the file panel and the attachment lightbox. Audio
   and video keep `previewKind: "none"` on the wire, so no released Team API adapter changes meaning.
-- Read `/news` and `/guides` on openbot.run: article pages, an RSS feed, a sitemap, and structured
+- Read `/news` and `/guides` on codebot.example: article pages, an RSS feed, a sitemap, and structured
   data, with article artwork drawn from the title.
 - Say what CodeBot costs on the landing page.
 
@@ -14774,7 +14774,7 @@ contains all changes of 0.21.1.
   restart.
 - Move switches and camera panels with their own motion, and animate an article background
   continuously.
-- **openbot.run now reports the five UTM tags on a campaign link** (`utm_source`, `utm_medium`,
+- **codebot.example now reports the five UTM tags on a campaign link** (`utm_source`, `utm_medium`,
   `utm_campaign`, `utm_content`, `utm_term`), which the previous privacy note said were never
   transmitted. Every other query parameter and the hash are still dropped, so an invitation token
   cannot reach analytics. This is the public website only: the desktop application is unchanged, and

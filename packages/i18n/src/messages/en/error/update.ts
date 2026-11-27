@@ -9,7 +9,7 @@ export const messages = defineMessages("error.update", {
   "error.update.notInstalled": "The last restart did not install the update. Restart to try again.",
   "error.update.downloadFailed": "Could not download the update. Try again.",
   "error.update.signatureNotConfirmed":
-    "OpenBot Code could not verify the update. Try again. If this error continues, download OpenBot Code from openbot.run/download.",
+    "OpenBot Code could not verify the update. Try again. If this error continues, download OpenBot Code from codebot.example/download.",
   "error.update.checkFailed": "Could not check for updates. Try again.",
   "error.update.checkStalled": "The update check stopped responding. Try again.",
   "error.update.checkOffline": "Could not reach the update service. Check your internet connection, then try again.",

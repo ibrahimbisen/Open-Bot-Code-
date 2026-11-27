@@ -7,7 +7,7 @@ export class RateLimited extends Schema.TaggedError<RateLimited>()("RateLimited"
   retryAfterSeconds: Schema.Number,
 }) {}
 
-export class RateLimitStoreError extends Schema.TaggedError<RateLimitStoreError>()("RateLimitStoreError", {}) {}
+class RateLimitStoreError extends Schema.TaggedError<RateLimitStoreError>()("RateLimitStoreError", {}) {}
 
 export const enforceRateLimit = Effect.fn("AccountRateLimit.enforce")(function* (
   database: D1Database,

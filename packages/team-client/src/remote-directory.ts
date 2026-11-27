@@ -501,8 +501,8 @@ export class RemoteTeamDirectoryClient {
       const origin = new URL(this.#apiUrl).origin;
       const publicWebsiteInvite =
         this.#authentication.kind === "browser" &&
-        origin === "https://openbot.run" &&
-        inviteOrigin === "https://api.openbot.run";
+        origin === "https://codebot.example" &&
+        inviteOrigin === "https://api.codebot.example";
       if (inviteOrigin !== origin && !publicWebsiteInvite) {
         return yield* directoryFailure(sourceText("error.remote.inviteOtherService"));
       }

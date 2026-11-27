@@ -63,7 +63,7 @@ function decodeUtf16(bytes: Uint8Array, bigEndian: boolean): string {
   return (bigEndian ? even.swap16() : even).toString("utf16le");
 }
 
-export function platformLineEnding(): ExplorerLineEnding {
+function platformLineEnding(): ExplorerLineEnding {
   return EOL === "\r\n" ? "crlf" : "lf";
 }
 

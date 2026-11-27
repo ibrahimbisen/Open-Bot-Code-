@@ -9,7 +9,7 @@ export interface AppUpdateIpcDependencies {
   updateFeed: Pick<UpdateFeedService, "current" | "setSavedUrl">;
 }
 
-export function parseSetAppUpdateFeedInput(input: unknown): SetAppUpdateFeedInput {
+function parseSetAppUpdateFeedInput(input: unknown): SetAppUpdateFeedInput {
   if (!isObject(input) || (input.url !== null && !isString(input.url))) {
     throw new Error("The update server URL is required.");
   }

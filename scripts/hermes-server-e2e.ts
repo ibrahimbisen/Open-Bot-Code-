@@ -230,7 +230,7 @@ function startMockModel(requests: string[]) {
 }
 
 async function host(): Promise<void> {
-  const image = argument("--image") ?? "ghcr.io/nightly-labs/openbot:latest";
+  const image = argument("--image") ?? "ghcr.io/your-org/codebot:latest";
   const tag = randomBytes(4).toString("hex");
   const testImage = `codebot-hermes-server-e2e:${tag}`;
   const volume = `codebot-hermes-server-e2e-${tag}`;

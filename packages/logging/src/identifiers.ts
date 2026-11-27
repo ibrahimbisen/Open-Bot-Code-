@@ -1,6 +1,6 @@
 function serviceHost(host: string): boolean {
   const name = host.toLowerCase();
-  return name === "localhost" || name === "openbot.run" || name.endsWith(".openbot.run");
+  return name === "localhost" || name === "codebot.example" || name.endsWith(".codebot.example");
 }
 
 const URL_HOST = /\b([a-z][a-z0-9+.-]{0,31}:\/\/)([^\s/:?#[\]"'<>]{1,255})/giu;

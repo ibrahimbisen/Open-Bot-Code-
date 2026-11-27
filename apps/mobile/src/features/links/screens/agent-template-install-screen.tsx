@@ -12,7 +12,6 @@ import { type PropsWithChildren, useEffect, useRef, useState } from "react";
 import { Pressable, View } from "react-native";
 import { useCSSVariable } from "uniwind";
 import { BloubAvatarPreview } from "@/features/agents/components/bloub-avatar";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { useMobileSession } from "@/features/auth/context/mobile-session-context";
 import { ThinkingTextGradient } from "@/features/chat/components/thinking-text-gradient";
 import { SettingsRow, SettingsSection } from "@/features/settings/components/settings-content";
@@ -76,15 +75,13 @@ function AgentTemplateInstall({ request }: { request?: string }) {
     setInstalling(true);
     setError(null);
     try {
-      await mobileAnalytics.operation("agent_template_action", { action: "installed", entry_point: "deep_link" }, () =>
-        workspace.installAgentTemplate(
-          {
-            templateId: detail.id,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            expectedUpdatedAt: detail.updatedAt,
-          },
-          target,
-        ),
+      await workspace.installAgentTemplate(
+        {
+          templateId: detail.id,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          expectedUpdatedAt: detail.updatedAt,
+        },
+        target,
       );
       workspace.selectServer(target);
       void workspace.refreshServer(target).catch(() => undefined);

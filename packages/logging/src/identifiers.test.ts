@@ -19,10 +19,10 @@ describe("maskIdentifiers", () => {
       "GET https://[host]:8443/v1/me -> failed",
     );
     expect(maskIdentifiers("wss://user@my-server.internal/socket")).toBe("wss://[host]/socket");
-    expect(maskIdentifiers("Failed to resolve nas.anna.pl, then anna-pages.openbot.site.")).toBe(
+    expect(maskIdentifiers("Failed to resolve nas.anna.pl, then anna-pages.codebot.example.")).toBe(
       "Failed to resolve [host], then [host].",
     );
-    const service = "GET https://api.openbot.run/v1/me and turn2.openbot.run and http://localhost:8081/status";
+    const service = "GET https://api.codebot.example/v1/me and turn2.codebot.example and http://localhost:8081/status";
     expect(maskIdentifiers(service)).toBe(service);
   });
 

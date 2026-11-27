@@ -36,11 +36,11 @@ newest version that is not blocked, also when that version is older. A CLI that 
 
 ## One-time GitHub setup
 
-Create the `release` environment in `nightly-labs/openbot`, then add these environment secrets:
+Create the `release` environment in `your-org/codebot`, then add these environment secrets:
 
 - `CSC_LINK` — a base64-encoded Developer ID Application `.p12` file.
 - `MAC_PROVISIONING_PROFILE` — the base64-encoded Developer ID provisioning profile for
-  `app.codebot.desktop`, with the `applinks:openbot.run` entitlement.
+  `app.codebot.desktop`, with the `applinks:codebot.example` entitlement.
 - `CSC_KEY_PASSWORD` — the application `.p12` export password.
 - `CSC_INSTALLER_LINK` — a base64-encoded **Developer ID Installer** `.p12` file for team `ZTRDTUL87R`.
 - `CSC_INSTALLER_KEY_PASSWORD` — the installer `.p12` export password.
@@ -58,16 +58,16 @@ The Docker image needs no secret: the `docker-publish` job pushes with `GITHUB_T
 even when the source repository is public. A successful push does not confirm public access.
 
 After the first push, a package administrator must open the
-[CodeBot package](https://github.com/orgs/nightly-labs/packages/container/package/codebot):
+[CodeBot package](https://github.com/orgs/your-org/packages/container/package/codebot):
 
 1. Open **Package settings** and set **Change visibility** to **Public**.
-2. Check that the package is linked to `nightly-labs/openbot`. The Dockerfile sets the
+2. Check that the package is linked to `your-org/codebot`. The Dockerfile sets the
    `org.opencontainers.image.source` label for this link.
-3. Under **Manage Actions access**, check that `nightly-labs/openbot` has write access.
+3. Under **Manage Actions access**, check that `your-org/codebot` has write access.
 
 If **Public** is disabled by organization administrators, an organization owner must enable
 **Public** under **Package creation** in the
-[organization package settings](https://github.com/organizations/nightly-labs/settings/packages).
+[organization package settings](https://github.com/organizations/your-org/settings/packages).
 Make CodeBot public, then restore the previous organization policy. Existing public packages stay
 public when this creation permission is disabled again.
 
@@ -79,8 +79,8 @@ Check access with an empty Docker configuration, so a saved login cannot hide th
 
 ```sh
 anonymous_config=$(mktemp -d)
-docker --config "$anonymous_config" manifest inspect ghcr.io/nightly-labs/openbot:latest
-docker --config "$anonymous_config" manifest inspect ghcr.io/nightly-labs/openbot:0.30.0
+docker --config "$anonymous_config" manifest inspect ghcr.io/your-org/codebot:latest
+docker --config "$anonymous_config" manifest inspect ghcr.io/your-org/codebot:0.30.0
 rm -rf "$anonymous_config"
 ```
 
@@ -93,7 +93,7 @@ place. Correct the package settings, then run the failed job again.
 After GitHub publication, `Publish boat server snapshot` builds the Linux x64 release into a boat
 named snapshot (`codebot-server-production-<version>` with dots replaced by hyphens), then selects
 it for new production servers. It uses the tagged hosting scripts,
-the published `SHA256SUMS-linux.txt`, and `https://api.openbot.run`. The builder checks the AppImage
+the published `SHA256SUMS-linux.txt`, and `https://api.codebot.example`. The builder checks the AppImage
 checksum and installed version and requires an empty host profile before saving the snapshot.
 Existing servers and the test Worker do not change.
 
@@ -140,7 +140,7 @@ A tag build signs the Windows release with Azure Artifact Signing. It needs no s
   certificate each day with the same subject.
 - The Entra app registration `codebot-release-signing` has the **Artifact Signing Certificate Profile
   Signer** role on that profile only. Its federated credential trusts the subject
-  `repo:nightly-labs@100160810/codebot@1332461149:environment:release`, because this repository uses
+  `repo:your-org@100160810/codebot@1332461149:environment:release`, because this repository uses
   GitHub's immutable OIDC subject format. A dry run has no environment, so it cannot sign.
 - The `windows` job logs in with `azure/login`, caches a token for the signing service, and runs
   `bun run dist:win --config electron-builder.windows-signing.yml`, then runs `az account clear`, so
@@ -460,14 +460,14 @@ A fix with no native change can go to the phones of a store version with no stor
 over-the-air update: `bun run mobile:ota:publish`. Its notes get a section with a fourth number, such
 as `1.5.0.1`, from `bun run mobile:release:ota`; the store version and `app.json` do not change. The
 steps, the limits and the rollback are in
-[the mobile README](../apps/mobile/README.md#over-the-air-updates).
+[the mobile README](../apps/mobile/README.md#removed-features).
 
 The same step sets that version for the store in `MOBILE_LATEST_VERSIONS` and in the `upTo` of each
 feature in `apps/auth-api/src/server/mobile-features-config.ts`. The merge deploys the account
 service. An app with an older version then shows the update header on home. Set it only after the
 store has the build: before, Update opens a store page that cannot install the version.
 
-The Android version in `MOBILE_LATEST_VERSIONS` is also the version of the APK that openbot.run
+The Android version in `MOBILE_LATEST_VERSIONS` is also the version of the APK that codebot.example
 offers for a phone with no Google Play. The APK of a store build is a draft GitHub release, which is
 not public. The merge of this step makes it public (the `Publish the Android APK` workflow), before
 the account service deploys. That workflow fails when the version has no draft
@@ -606,7 +606,7 @@ workflow on that branch (Step 2c). It sends one real message to each provider
 ([Live provider test](provider-live-e2e.md)). Do not push the tag when it has a stop.
 
 Pushing the version tag runs `.github/workflows/release.yml`.
-The tag workflow builds nothing until `https://openbot.run/join` and the Apple association file return
+The tag workflow builds nothing until `https://codebot.example/join` and the Apple association file return
 direct `200` responses: `/join` with `Cache-Control: no-store`, and the association file as
 `application/json` with the exact app IDs and paths: `/join` for the desktop app, and `/join` and
 `/agents/*` for the mobile app.
@@ -640,13 +640,13 @@ The workflow:
 10. builds a Docker image (`docker/Dockerfile`) from each Linux AppImage on a runner of that
     architecture, after it checks the AppImage against its `SHA256SUMS` file. It starts each image
     with `docker/seccomp.json`, waits for `codebot status`, and stops it, which must exit with 0;
-11. after the GitHub Release is published, pushes both images to `ghcr.io/nightly-labs/openbot`
+11. after the GitHub Release is published, pushes both images to `ghcr.io/your-org/codebot`
     with the tags `<version>-amd64` and `<version>-arm64`, joins them under `<version>`, `v<version>`,
     `latest` and `sha-<commit>`, and attests the build provenance of that image. It then checks
     anonymous access to both architectures. See [Docker](docker.md).
 
 Users can verify a downloaded artifact with
-`gh attestation verify <file> --repo nightly-labs/openbot`.
+`gh attestation verify <file> --repo your-org/codebot`.
 
 Before a tag, run the release path without publishing:
 
@@ -805,7 +805,7 @@ To stop a bad release on each path at once, before the patch is ready, make the 
 the latest one:
 
 ```sh
-gh release edit vX.Y.(Z-1) --latest --repo nightly-labs/openbot
+gh release edit vX.Y.(Z-1) --latest --repo your-org/codebot
 ```
 
 electron-updater then sees an older version and offers no update. The update script of hosted and
@@ -920,15 +920,15 @@ Before creating the first tag or any later release:
 14. confirm `CHANGELOG.md` and `.github/release-announcement.json` describe the version and the
     working tree is clean;
 15. create and push the version commit, and create the tag locally, only after CI passes on `main`;
-16. read the running Signal commit of both machines from `curl -fsS https://signal1.openbot.run/health/live`
-    and `curl -fsS https://signal2.openbot.run/health/live`, not from `signal.openbot.run`, which reaches only
+16. read the running Signal commit of both machines from `curl -fsS https://signal1.codebot.example/health/live`
+    and `curl -fsS https://signal2.codebot.example/health/live`, not from `signal.codebot.example`, which reaches only
     the entry machine. If a commit is missing or `unknown`, or if `git diff --quiet <running commit> <new tag> -- remote packages/contracts/src/signal-protocol`
     finds changes for either commit, deploy Signal from the local tag before you push the tag. Compare with the running
     commit, not with the previous tag: an earlier release can have left Signal behind. Pushing the tag starts the
     release workflow, and nothing in it waits for Signal. Use the Signal-only procedure in
     [self-hosting.md](self-hosting.md);
     the `.agents/skills/signal-deploy/` skill adds the checks before and after it.
-    Confirm that `/health/live` of `signal1.openbot.run` and of `signal2.openbot.run` shows the tag commit. A client
+    Confirm that `/health/live` of `signal1.codebot.example` and of `signal2.codebot.example` shows the tag commit. A client
     that needs a newer Signal fails until then: v0.33.0 shipped webhook routines while Signal was older
     than #1520, so every webhook route answered 404 (#1661);
 17. push the tag.

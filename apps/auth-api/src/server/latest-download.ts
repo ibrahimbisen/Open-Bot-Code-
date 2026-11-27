@@ -11,7 +11,7 @@ interface DownloadManifestConfig {
   manifest: "latest-linux-arm64.yml" | "latest-linux.yml" | "latest-mac.yml" | "latest.yml";
 }
 
-const RELEASES_BASE_URL = "https://github.com/nightly-labs/openbot/releases";
+const RELEASES_BASE_URL = "https://github.com/your-org/codebot/releases";
 
 const DOWNLOAD_PLATFORMS = ["linux", "macos", "windows"] as const satisfies readonly AvailableDownloadPlatform[];
 

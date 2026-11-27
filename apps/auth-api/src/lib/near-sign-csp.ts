@@ -1,5 +1,5 @@
 export const NEAR_SIGN_PATH = "/near/sign";
-const NEAR_PASSKEY_WALLET_HOST = "nearintents.openbot.run";
+const NEAR_PASSKEY_WALLET_HOST = "nearintents.codebot.example";
 
 export function passkeyWalletHostResponse(request: Request, siteUrl: string): Response | null {
   const url = new URL(request.url);

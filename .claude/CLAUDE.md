@@ -1,6 +1,6 @@
 # CodeBot: start here
 
-CodeBot (visible name "OpenBot Code", decision D18) is a fork of OpenBot: TypeScript, Bun, Electron,
+CodeBot (visible name "OpenBot Code", decision D18) is a fork of the upstream project that NOTICE names: TypeScript, Bun, Electron,
 SolidJS. The root `AGENTS.md` holds the repository rules and applies in full. This folder adds a
 codebase map so that a new agent can find code without hours of reading.
 
@@ -46,6 +46,6 @@ point that was not confirmed.
 - Commit at least every 30 to 45 minutes (`WIP:` is permitted). A usage limit can stop you at any time.
 - Keep `TASKS.md` in your worktree current. After a restart, read it and `git log` first.
 - Cross-platform only: no Windows-only paths, shells or tools; keep the macOS and Linux branches.
-- No calls to upstream OpenBot servers. Keep `LICENSE` and `NOTICE`.
+- No calls to upstream servers. Keep `LICENSE` and `NOTICE`.
 
 When a map file is wrong, correct it in the same change as your code.

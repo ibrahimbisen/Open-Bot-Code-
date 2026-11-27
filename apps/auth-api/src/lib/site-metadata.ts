@@ -1,14 +1,14 @@
 import { faqStructuredData, type LandingQuestion } from "./landing-faq";
 import { CODEBOT_ALTERNATE_DOWNLOAD_LINKS, CODEBOT_DOWNLOAD_LINKS, CODEBOT_LINKS } from "./landing-links";
 
-export const CODEBOT_SITE_URL = "https://openbot.run/";
+export const CODEBOT_SITE_URL = "https://codebot.example/";
 export const CODEBOT_SITE_TITLE = "CodeBot: Run a team of AI agents on your computer";
 export const CODEBOT_SITE_DESCRIPTION =
   "A free desktop app that runs AI agents as a team on your own computer, with the ChatGPT, Claude, Gemini or Grok plan you already pay for, or your own model.";
 export const CODEBOT_SOCIAL_IMAGE_URL = `${CODEBOT_SITE_URL}codebot-social.png`;
-export const CODEBOT_X_HANDLE = "@OpenBot_";
-const CODEBOT_X_URL = "https://x.com/OpenBot_";
-const CODEBOT_REPOSITORY_URL = "https://github.com/nightly-labs/openbot";
+export const CODEBOT_X_HANDLE = "@codebot_x";
+const CODEBOT_X_URL = "https://codebot.example/x";
+const CODEBOT_REPOSITORY_URL = "https://github.com/your-org/codebot";
 const CODEBOT_PRODUCT_HUNT_URL = "https://www.producthunt.com/products/codebot-3";
 const CODEBOT_LICENSE_URL = "https://polyformproject.org/licenses/noncommercial/1.0.0/";
 const CODEBOT_ORGANIZATION_ID = `${CODEBOT_SITE_URL}#organization`;
@@ -60,7 +60,7 @@ export function pageSocialImageMeta(image: PageSocialImage, siteUrl: string) {
   } as const;
 }
 
-const CODEBOT_PRODUCTION_HOSTS = new Set(["openbot.run", "api.openbot.run"]);
+const CODEBOT_PRODUCTION_HOSTS = new Set(["codebot.example", "api.codebot.example"]);
 
 export function siteUrlForPage(pageUrl: URL): string {
   return CODEBOT_PRODUCTION_HOSTS.has(pageUrl.hostname) ? CODEBOT_SITE_URL : `${pageUrl.origin}/`;

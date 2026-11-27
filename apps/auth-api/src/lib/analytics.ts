@@ -32,7 +32,7 @@ import { localizedPagePath, TRANSLATED_SITE_LOCALES } from "./site-paths";
 import { TEAMS_ROUTE } from "./teams-page";
 import { TERMS_ROUTE } from "./terms";
 
-const OPENPANEL_API_URL = "https://analytics.openbot.run/api";
+const OPENPANEL_API_URL = "https://analytics.codebot.example/api";
 const OPENPANEL_CLIENT_ID = "6c989975-87ef-4f0c-857e-ab449a65b5c2";
 const ANALYTICS_SCHEMA_VERSION = 10;
 
@@ -271,7 +271,7 @@ const EVENT_PROPERTY_ALLOWLIST = {
 const PENDING_EVENT_LIMIT = 4;
 
 function shouldEnableLandingAnalytics(hostname: string, productionBuild: boolean): boolean {
-  return productionBuild && hostname === "openbot.run";
+  return productionBuild && hostname === "codebot.example";
 }
 
 class LandingAnalytics {

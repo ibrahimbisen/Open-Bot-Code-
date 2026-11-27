@@ -18,7 +18,7 @@ const WATCH_SYNC_MS = 80;
 const GIT_REFRESH_MS = 450;
 const FOCUS_REFRESH_MS = 2_000;
 
-export interface ExplorerDirectoryState {
+interface ExplorerDirectoryState {
   entries: ExplorerEntry[];
   total: number;
   more: boolean;
@@ -38,7 +38,7 @@ export interface ExplorerSessionState {
   gitLoaded: boolean;
 }
 
-export type ExplorerChangeListener = (change: ExplorerChange) => void;
+type ExplorerChangeListener = (change: ExplorerChange) => void;
 
 export interface ExplorerSession {
   readonly serverId: string;

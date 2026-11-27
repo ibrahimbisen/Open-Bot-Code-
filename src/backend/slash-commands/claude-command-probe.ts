@@ -10,7 +10,7 @@ import type { ClaudeCustomNaming } from "./slash-command-entries";
 import { decodeClaudeSlashCommands, type EngineSlashCommand, isEngineSlashCommand } from "./slash-command-rows";
 
 export const CLAUDE_COMMAND_PROBE_TIMEOUT_MS = 60_000;
-export const CLAUDE_COMMAND_PROBE_FOLDER_PREFIX = "codebot-slash-probe-";
+const CLAUDE_COMMAND_PROBE_FOLDER_PREFIX = "codebot-slash-probe-";
 
 export interface ClaudeCommandProbeResult {
   readonly engineVersion: string | null;

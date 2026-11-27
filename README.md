@@ -238,7 +238,7 @@ Use `bun run dev` for the desktop app. Use `bun run storybook` for shared UI tes
 | `bun run release:patch` | Create the next patch version commit and tag. |
 | `bun run mobile:release` | Open the mobile release menu: prepare a version, build it, mark it available or skipped on a store (with its flags), write the Discord highlights, and see the live state. Each step that changes files opens its pull request. |
 | `bun run mobile:release:patch` | Move the iPhone app notes from `apps/mobile/changelog.d` into `apps/mobile/CHANGELOG.md` and set the next patch version in `app.json`. Also `mobile:release:minor` and `mobile:release:major`. |
-| `bun run mobile:ota:check` | Show the native runtime version of this checkout and the mobile store builds that can get it as an over-the-air update. Read-only. See [over-the-air updates](apps/mobile/README.md#over-the-air-updates). |
+| `bun run mobile:ota:check` | Show the native runtime version of this checkout and the mobile store builds that can get it as an over-the-air update. Read-only. Over-the-air updates are removed in the mobile app (see [removed features](apps/mobile/README.md#removed-features)). |
 | `bun run mobile:ota:publish -- --platform <ios\|android\|all> --message <text>` | Start the `Mobile OTA update` workflow for the current branch (`main` or `mobile-hotfix/*`): it sends the JavaScript bundle to the phones of the store builds with the same runtime version, with no store review. `--rollout <1-100>` limits the phones, `--dry-run` publishes nothing. `mobile:ota:rollout` changes the percentage, `mobile:ota:rollback` takes the update back, and `mobile:ota:status` shows what the update server gives each store build. |
 | `bun run mobile:release:ota -- --base <store build tag> --platform <ios\|android\|all>` | Move the note files that are new since the store build into an over-the-air section of `apps/mobile/CHANGELOG.md`, such as `1.5.0.1`. The store version does not change. |
 | `bun run test:mobile-ota` | Run the mobile update server (`apps/mobile-updates`) on a local R2 bucket with the real publish commands, and ask for updates as a phone does: signatures, file hashes, rollout, rollback and the publish guard. Offline; writes `.codebot-build/mobile-ota-e2e/report.json`. |
@@ -262,9 +262,6 @@ records, and public assets. It does not carry chats, files, commands, or remote 
 The development runner advertises both Mobile Connect and its Signal service on the preferred private
 LAN interface. Restart the runner after changing networks so newly generated QR codes contain the
 current address.
-
-Production mobile analytics setup and required OpenPanel credentials are documented in
-[CodeBot Mobile](apps/mobile/README.md#openpanel-product-analytics).
 
 `mobile:go:tunnel` exposes only the Expo development server. It does not expose the local account
 API, Signal, or TURN. A phone on 5G cannot use the default LAN addresses. For a test across networks,

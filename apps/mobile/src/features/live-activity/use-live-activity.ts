@@ -26,7 +26,6 @@ import { encodeLiveActivityBytes } from "@codebot/team-client/live-activity-seal
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Alert } from "react-native";
 import { showFailureAlert } from "@/features/analytics/failure-reports";
-import { mobileAnalytics } from "@/features/analytics/mobile-analytics";
 import { useLiveActivitiesPreference } from "@/features/settings/model/live-activities";
 import {
   effectiveServerNotificationSetting,
@@ -172,7 +171,7 @@ export function useLiveActivity({
           setPushToken(token);
           setActivityStartedAt(startedAt);
         },
-        change: (action) => mobileAnalytics.track("live_activity_action", { action }),
+        change: () => undefined,
         shown: (props, startedAt) => {
           if (disposed.current) return;
           const failure = props ? shownFailures.current.get(props) : undefined;

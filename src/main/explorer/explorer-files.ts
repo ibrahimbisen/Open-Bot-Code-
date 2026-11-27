@@ -291,5 +291,3 @@ export function createExplorerFiles({ roots, trash, reveal, fileUrl }: ExplorerF
     },
   };
 }
-
-export type ExplorerFiles = ReturnType<typeof createExplorerFiles>;

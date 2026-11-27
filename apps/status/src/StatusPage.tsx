@@ -32,8 +32,8 @@ import {
 } from "./model";
 import "./status.css";
 
-export const ISSUES_URL = "https://github.com/nightly-labs/openbot/issues?q=label%3Astatus";
-const SITE_URL = "https://openbot.run";
+export const ISSUES_URL = "https://github.com/your-org/codebot/issues?q=label%3Astatus";
+const SITE_URL = "https://codebot.example";
 const LATE_CHECK_MS = 30 * 60_000;
 
 type Range = 30 | 90;
@@ -274,7 +274,7 @@ export function StatusPage(props: StatusPageProps) {
 
       <footer class="status-footer">
         <a class="status-link" href={SITE_URL}>
-          openbot.run
+          codebot.example
         </a>
         <span class="status-muted">Times are in UTC. The page updates every minute.</span>
       </footer>

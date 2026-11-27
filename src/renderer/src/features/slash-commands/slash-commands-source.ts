@@ -13,12 +13,12 @@ export interface SlashCommandTarget {
   serverId: string;
 }
 
-export function slashCommandsAffect(change: SlashCommandsChanged, target: SlashCommandTarget): boolean {
+function slashCommandsAffect(change: SlashCommandsChanged, target: SlashCommandTarget): boolean {
   if (change.agentId === null) return true;
   return change.agentId === target.agentId && change.taskId === (target.taskId ?? null);
 }
 
-export function createSlashCommands(target: () => SlashCommandTarget | undefined) {
+function createSlashCommands(target: () => SlashCommandTarget | undefined) {
   const [commands, setCommands] = createSignal<SlashCommandEntry[] | undefined>(undefined);
   let request = 0;
   const load = (current: SlashCommandTarget) => {

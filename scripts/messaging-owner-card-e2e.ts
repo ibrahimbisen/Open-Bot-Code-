@@ -209,7 +209,7 @@ const agents = new AgentService({
         sent.push(feedback);
         return {
           status: "sent" as const,
-          url: "https://github.com/nightly-labs/openbot/issues/9001",
+          url: "https://github.com/your-org/codebot/issues/9001",
           number: 9001,
           comment: false,
         };

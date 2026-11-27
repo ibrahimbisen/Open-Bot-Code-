@@ -2,7 +2,7 @@ import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contract
 
 export type AccountEnvironment = Record<string, string | undefined>;
 
-export type LoginProviderConfig =
+type LoginProviderConfig =
   | {
       kind: "oidc";
       issuerUrl: string;
@@ -300,7 +300,7 @@ function insecureForm(protocol: string): string {
   return protocol === "https:" ? "http:" : protocol === "wss:" ? "ws:" : protocol;
 }
 
-export function isLoopbackHost(hostname: string): boolean {
+function isLoopbackHost(hostname: string): boolean {
   return hostname === "127.0.0.1" || hostname === "localhost" || hostname === "[::1]";
 }
 

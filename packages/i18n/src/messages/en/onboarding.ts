@@ -26,7 +26,7 @@ export const messages = defineMessages("onboarding", {
   "onboarding.setup.defaultProvider": "Default provider",
   "onboarding.setup.defaultProviderHint": "Used for new local agents. You can change it for each agent later.",
   "onboarding.setup.invitation": "Host invitation",
-  "onboarding.setup.invitationPlaceholder": "Paste an https://openbot.run/join invitation link",
+  "onboarding.setup.invitationPlaceholder": "Paste an https://codebot.example/join invitation link",
   "onboarding.setup.otherInvitation": "Use another invitation",
   "onboarding.setup.joinNote":
     "You will join as {email}. Email invitations only work for the address that received them.",

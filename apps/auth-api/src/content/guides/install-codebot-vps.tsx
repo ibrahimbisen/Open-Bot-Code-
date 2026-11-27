@@ -84,7 +84,7 @@ export function InstallCodeBotVPS() {
       <pre>
         <code>
           {
-            "curl -fsSL \\\n  https://raw.githubusercontent.com/nightly-labs/openbot/main/scripts/install-server.sh |\n  sudo bash"
+            "curl -fsSL \\\n  https://raw.githubusercontent.com/your-org/codebot/main/scripts/install-server.sh |\n  sudo bash"
           }
         </code>
       </pre>
@@ -134,7 +134,7 @@ export function InstallCodeBotVPS() {
       <pre>
         <code>
           {
-            "mkdir codebot-vps\ncd codebot-vps\ncurl -fsSLO \\\n  https://raw.githubusercontent.com/nightly-labs/openbot/main/docker/compose.yaml\ncurl -fsSLO \\\n  https://raw.githubusercontent.com/nightly-labs/openbot/main/docker/seccomp.json\nsudo docker compose up -d"
+            "mkdir codebot-vps\ncd codebot-vps\ncurl -fsSLO \\\n  https://raw.githubusercontent.com/your-org/codebot/main/docker/compose.yaml\ncurl -fsSLO \\\n  https://raw.githubusercontent.com/your-org/codebot/main/docker/seccomp.json\nsudo docker compose up -d"
           }
         </code>
       </pre>

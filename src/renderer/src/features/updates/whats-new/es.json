@@ -819,7 +819,7 @@
       {
         "type": "added",
         "items": [
-          "Inicia un flujo de trabajo desde GitHub: un activador de GitHub se ejecuta con issues nuevos, comentarios, pull requests, revisiones, comprobaciones fallidas o una mención de @openbotgit.",
+          "Inicia un flujo de trabajo desde GitHub: un activador de GitHub se ejecuta con issues nuevos, comentarios, pull requests, revisiones, comprobaciones fallidas o una mención de @codebotgit.",
           "Cambia GitHub desde un flujo de trabajo: comenta, etiqueta, asigna, revisa, cierra o crea un issue como la GitHub App de CodeBot.",
           "El Marketplace tiene 17 agentes nuevos de CodeBot, como QA Tester, PR Shepherd y Chief of Staff, y 15 habilidades nuevas para ellos.",
           "Uso muestra el límite mensual de OpenCode Go como una tercera barra."
@@ -854,7 +854,7 @@
         "items": [
           "Ramifica una conversación: haz clic derecho en el último mensaje del agente de un turno y selecciona Ramificar desde aquí. Se abre un hilo nuevo con la conversación hasta ese mensaje.",
           "Los ajustes del agente tienen una página Instrucciones que muestra el archivo AGENTS.md del agente. Cuando el agente cambia sus instrucciones, el chat muestra el cambio con Deshacer.",
-          "El Marketplace está en openbot.run. Cada agente y cada habilidad tienen su propia página, y Copiar enlace la comparte.",
+          "El Marketplace está en codebot.example. Cada agente y cada habilidad tienen su propia página, y Copiar enlace la comparte.",
           "Un agente puede responder a una alerta o una confirmación de un sitio web que abrió su propia acción del navegador.",
           "Una tarea de canal detenida o fallida tiene un botón Cancelar tarea."
         ]

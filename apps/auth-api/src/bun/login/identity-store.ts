@@ -60,7 +60,7 @@ function identityRecord(row: IdentityRow): IdentityRecord {
   };
 }
 
-export function accountUser(row: UserRow): AuthUser {
+function accountUser(row: UserRow): AuthUser {
   return {
     id: row.id,
     email: row.email,

@@ -40,7 +40,7 @@ concurrency:
 jobs:
   upgrade:
     name: Upgrade from ${{ matrix.label }}
-    if: github.repository == 'nightly-labs/openbot'
+    if: github.repository == 'your-org/codebot'
     runs-on: macos-15
     timeout-minutes: 45
     permissions:
@@ -104,7 +104,7 @@ jobs:
 
   large-database:
     name: Upgrade a large database
-    if: github.repository == 'nightly-labs/openbot'
+    if: github.repository == 'your-org/codebot'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:

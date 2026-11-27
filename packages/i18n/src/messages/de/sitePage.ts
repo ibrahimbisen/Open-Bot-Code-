@@ -91,7 +91,7 @@ export const messages = {
   "sitePage.report.pageTitle": "Gehostete Website melden — OpenBot Code",
   "sitePage.report.title": "Gehostete Website melden",
   "sitePage.report.intro":
-    "Sende eine Meldung über schädliche oder rechtswidrige Inhalte auf einer openbot.site-Adresse.",
+    "Sende eine Meldung über schädliche oder rechtswidrige Inhalte auf einer codebot.example-Adresse.",
   "sitePage.report.hostnameLabel": "Website-Adresse",
   "sitePage.report.hostnameMissing": "Gib die Website-Adresse ein",
   "sitePage.report.reasonLabel": "Grund",
