@@ -1,12 +1,9 @@
-import { type ChildProcess, spawn } from "node:child_process";
-import { type DynamicRecord, isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import {
   type AccountService,
   api,
   Checks,
   closeAll,
   freePort,
-  ROOT,
   registerHost,
   signIn,
   startAccountService,
@@ -14,6 +11,7 @@ import {
   textField,
 } from "./account-e2e-support";
 import { type OidcMock, startOidcMock } from "./oidc-mock-server";
+import { connect, iceUrls, type SignalProcess, startSignal, stopSignal } from "./signal-e2e-support";
 
 const CLIENT_ID = "codebot-e2e";
 const CLIENT_SECRET = "e2e-client-secret-2b6f8d0a4c71";
@@ -22,128 +20,9 @@ const SESSION_SECRET = "e2e-signal-session-secret-with-48-bytes-minimum-01234567
 const TURN_SECRET = "e2e-turn-shared-secret-with-48-bytes-minimum-0123456789ab";
 const TURN_HOST = "turn.codebot-test.example";
 const ALICE = { user: "alice", password: "alice-password-1" };
-const START_LIMIT_MS = 30_000;
 const WAIT_LIMIT_MS = 20_000;
 
 const checks = new Checks();
-
-interface SignalProcess {
-  child: ChildProcess;
-  logs: string[];
-  exited: Promise<number | null>;
-}
-
-interface Peer {
-  messages: DynamicRecord[];
-  closed: Promise<{ code: number; reason: string }>;
-  send(message: DynamicRecord): void;
-  next(type: string): Promise<DynamicRecord>;
-  close(): void;
-}
-
-async function startSignal(input: {
-  port: number;
-  healthPort: number;
-  jwksUrl: string;
-  controlPlaneUrl: string;
-}): Promise<SignalProcess> {
-  const child = spawn(process.execPath, ["--no-env-file", "remote/api/src/index.ts"], {
-    cwd: ROOT,
-    stdio: ["ignore", "pipe", "pipe"],
-    env: {
-      ...process.env,
-      REMOTE_TLS_DISABLED: "true",
-      REMOTE_SIGNAL_HOST: "127.0.0.1",
-      REMOTE_SIGNAL_PORT: String(input.port),
-      REMOTE_HEALTH_PORT: String(input.healthPort),
-      REMOTE_TICKET_JWKS_URL: input.jwksUrl,
-      REMOTE_CONTROL_PLANE_URL: input.controlPlaneUrl,
-      REMOTE_SESSION_SECRET: SESSION_SECRET,
-      REMOTE_AUTH_WEBHOOK_SECRET: WEBHOOK_SECRET,
-      TURN_SHARED_SECRET: TURN_SECRET,
-      TURN_HOST,
-    },
-  });
-  const logs: string[] = [];
-  const keep = (chunk: Buffer) => {
-    for (const line of chunk.toString("utf8").split(/\r?\n/u)) if (line) logs.push(line);
-  };
-  child.stdout?.on("data", keep);
-  child.stderr?.on("data", keep);
-  const exited = new Promise<number | null>((done) => child.once("exit", (code) => done(code)));
-  const deadline = Date.now() + START_LIMIT_MS;
-  for (;;) {
-    const answer = await fetch(`http://127.0.0.1:${input.healthPort}/health/ready`).catch(() => null);
-    if (answer?.ok) break;
-    if (child.exitCode !== null || Date.now() > deadline) {
-      child.kill();
-      throw new Error(`Signal did not start.\n${logs.join("\n")}`);
-    }
-    await new Promise((next) => setTimeout(next, 200));
-  }
-  return { child, logs, exited };
-}
-
-async function stopSignal(signal: SignalProcess): Promise<void> {
-  if (signal.child.exitCode !== null) return;
-  signal.child.kill();
-  await Promise.race([signal.exited, new Promise((done) => setTimeout(done, 10_000))]);
-}
-
-function connect(url: string): Promise<Peer> {
-  return new Promise((ready, reject) => {
-    const socket = new WebSocket(url);
-    const messages: DynamicRecord[] = [];
-    const waiting: { type: string; resolve: (message: DynamicRecord) => void }[] = [];
-    let closeResolve: (value: { code: number; reason: string }) => void = () => undefined;
-    const closed = new Promise<{ code: number; reason: string }>((done) => {
-      closeResolve = done;
-    });
-    socket.addEventListener("message", (event) => {
-      const parsed = isString(event.data) ? JSON.parse(event.data) : null;
-      if (!isDynamicRecord(parsed)) return;
-      messages.push(parsed);
-      const index = waiting.findIndex((entry) => entry.type === parsed.type);
-      const entry = index >= 0 ? waiting.splice(index, 1)[0] : undefined;
-      entry?.resolve(parsed);
-    });
-    socket.addEventListener("close", (event) => closeResolve({ code: event.code, reason: event.reason }));
-    socket.addEventListener("error", () => reject(new Error("The Signal socket failed.")));
-    socket.addEventListener("open", () =>
-      ready({
-        messages,
-        closed,
-        send: (message) => socket.send(JSON.stringify(message)),
-        next: (type) => {
-          const found = messages.find((message) => message.type === type);
-          if (found) return Promise.resolve(found);
-          return new Promise((resolve, rejectNext) => {
-            const timer = setTimeout(() => rejectNext(new Error(`No ${type} message arrived.`)), WAIT_LIMIT_MS);
-            waiting.push({
-              type,
-              resolve: (message) => {
-                clearTimeout(timer);
-                resolve(message);
-              },
-            });
-          });
-        },
-        close: () => socket.close(),
-      }),
-    );
-  });
-}
-
-function iceUrls(message: DynamicRecord): string[] {
-  const servers = Array.isArray(message.iceServers) ? message.iceServers : [];
-  const urls: string[] = [];
-  for (const server of servers) {
-    if (!isDynamicRecord(server)) continue;
-    const list = Array.isArray(server.urls) ? server.urls : [server.urls];
-    for (const url of list) if (isString(url)) urls.push(url);
-  }
-  return urls;
-}
 
 async function main(): Promise<void> {
   const accountPort = await freePort();
@@ -176,6 +55,10 @@ async function main(): Promise<void> {
       healthPort,
       jwksUrl: `${service.origin}/.well-known/jwks.json`,
       controlPlaneUrl: service.origin,
+      sessionSecret: SESSION_SECRET,
+      webhookSecret: WEBHOOK_SECRET,
+      turnSecret: TURN_SECRET,
+      turnHost: TURN_HOST,
     });
     resources.signal = signal;
     checks.add("the self-hosted Signal starts with the key set of the account service", true);
