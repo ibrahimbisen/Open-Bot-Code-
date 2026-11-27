@@ -3,15 +3,12 @@
     "version": "0.79.0",
     "date": "2026-11-25",
     "notices": [
-      "Aggiorna anche ogni server a cui ti sei unito a questa versione. Gli strumenti per immagini e video con crediti, le richieste di posizione e molte delle correzioni qui sotto funzionano su un server solo se il server ha questa versione."
+      "Aggiorna anche ogni server a cui ti sei unito a questa versione. Le richieste di posizione e molte delle correzioni qui sotto funzionano su un server solo se il server ha questa versione."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Gli agenti possono creare immagini e video con i crediti di CodeBot e modificare le tue foto. La scheda di approvazione mostra il modello, il prezzo e il prompt. Puoi scegliere un altro modello prima di consentire. La voce Credits nella barra a sinistra mostra il tuo saldo. Un proprietario o un amministratore può attivare o disattivare «Gli agenti possono usare crediti».",
-          "Gli agenti possono pagare i siti in crypto da un wallet NEAR Intents. Collegalo in Impostazioni server › Vault › Crypto con una passkey, poi fai un deposito. Ogni pagamento attende la tua approvazione nella chat, a meno che tu non scelga «Consenti sempre» per quel sito. Un budget giornaliero limita quanto possono spendere gli agenti. Il wallet vale solo per questo computer e i pagamenti usano fondi reali.",
-          "Ogni account riceve 10 crediti gratuiti di benvenuto. Puoi anche riscattare un codice nella pagina Credits con Redeem code.",
           "La scheda del browser di un agente può chiedere la tua posizione. La chat ti chiede prima, e tu scegli Blocca, Consenti sempre o Consenti. Prima il browser bloccava sempre la richiesta.",
           "La barra laterale ha schede sopra l’elenco delle chat: Tutte, Non lette e le cartelle che scegli. Ogni scheda mostra le sue chat non lette."
         ]
@@ -20,7 +17,6 @@
         "type": "changed",
         "items": [
           "Un nuovo passaggio di un flusso di lavoro ora parte con un modello che può funzionare. Un passaggio di testo usa il tuo modello preferito, o il modello abituale di un provider collegato.",
-          "Se hai solo crediti gratuiti, l’elenco dei modelli di una scheda di approvazione contrassegna con «Crediti gratuiti» i modelli che pagano con i crediti gratuiti.",
           "Il pannello laterale può dividersi in massimo tre gruppi, uno sopra l’altro. Trascina la linea tra due gruppi per cambiarne le altezze."
         ]
       },
@@ -73,15 +69,13 @@
     "version": "0.77.0",
     "date": "2026-11-23",
     "notices": [
-      "Aggiorna a questa versione anche ogni server a cui ti sei unito. Su un server, i modelli CodeBot che usano crediti, i flussi di lavoro in pausa ed esportati, le chat WhatsApp in sola lettura, le richieste di posizione e la scelta del server Signal funzionano solo se il server ha questa versione.",
+      "Aggiorna a questa versione anche ogni server a cui ti sei unito. Su un server, i flussi di lavoro in pausa ed esportati, le chat WhatsApp in sola lettura, le richieste di posizione e la scelta del server Signal funzionano solo se il server ha questa versione.",
       "Dopo questo aggiornamento, una versione precedente di CodeBot non può aprire i tuoi dati."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Acquista crediti CodeBot per te o per un server dal pulsante Credits nella barra delle pagine o in Impostazioni → Fatturazione. Una licenza a pagamento dà anche crediti gratuiti ogni mese.",
-          "I passaggi di immagini e video di un flusso di lavoro possono usare i modelli CodeBot pagati dai tuoi crediti, senza un altro accesso. Imposta Lotto su un passaggio per ottenere fino a 4 risultati nello stesso momento.",
           "Metti in pausa un flusso di lavoro dal menu del flusso di lavoro. Puoi anche esportare un flusso di lavoro in un file e importarlo su un altro computer o server.",
           "Scrivi {{ in un passaggio del flusso di lavoro per aggiungere un campo di un passaggio precedente. Anche i trigger Pianificazione, GitHub, Discord, Telegram e Slack ora forniscono campi.",
           "Un agente può chiedere la tua posizione quando una richiesta la richiede, ad esempio «ristoranti vicino a me». Non viene inviato nulla finché non rispondi.",
@@ -197,7 +191,6 @@
       {
         "type": "added",
         "items": [
-          "Condividi il tuo link di invito in Impostazioni > Invite friends. La scheda mostra il tuo credito e gli amici che si sono uniti. Un amico ottiene il 10% di sconto su ogni pagamento, e tu ottieni come credito il 10% di ogni fattura pagata del tuo amico.",
           "Metti i nodi di una tela del flusso di lavoro in un gruppo. Selezionali e premi Raggruppa (⌘G). Comprimi un gruppo in una sola scheda a pila, e premi Separa (⇧⌘G) per terminarlo.",
           "Dai a un passaggio video della tela del flusso di lavoro qualsiasi durata che il suo modello Sunra o Higgsfield supporta. Seleziona Personalizzata nel menu Durata e usa il cursore.",
           "Apri il Marketplace dalla riga App nelle impostazioni di un agente. Connetti un’app, oppure aggiungi il tuo server MCP con Aggiungi personalizzata.",

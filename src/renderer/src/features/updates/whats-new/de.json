@@ -3,15 +3,12 @@
     "version": "0.79.0",
     "date": "2026-11-25",
     "notices": [
-      "Aktualisiere auch jeden verbundenen Server auf diese Version. Die Bild- und Videowerkzeuge mit Credits, Standortanfragen und viele der Korrekturen unten funktionieren auf einem Server nur, wenn der Server diese Version hat."
+      "Aktualisiere auch jeden verbundenen Server auf diese Version. Standortanfragen und viele der Korrekturen unten funktionieren auf einem Server nur, wenn der Server diese Version hat."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Agenten können mit CodeBot-Credits Bilder und Videos erstellen und deine Bilder bearbeiten. Die Genehmigungskarte zeigt das Modell, den Preis und die Anweisung. Du kannst ein anderes Modell wählen, bevor du zustimmst. Der Eintrag Credits in der linken Leiste zeigt dein Guthaben. Ein Inhaber oder ein Admin kann „Agenten dürfen Credits verwenden“ ein- oder ausschalten.",
-          "Agenten können Websites mit Krypto aus einer NEAR-Intents-Wallet bezahlen. Verbinde sie in Servereinstellungen › Vault › Krypto mit einem Passkey und zahle dann Guthaben ein. Jede Zahlung wartet im Chat auf deine Genehmigung, außer du wählst für diese Website „Immer erlauben“. Ein Tagesbudget begrenzt, was Agenten ausgeben können. Die Wallet gilt nur für diesen Computer, und Zahlungen verwenden echtes Geld.",
-          "Jedes Konto erhält 10 kostenlose Willkommens-Credits. Du kannst auch auf der Seite Credits einen Credit-Code mit „Redeem code“ einlösen.",
           "Der Browser-Tab eines Agenten kann nach deinem Standort fragen. Der Chat fragt dich zuerst, und du wählst „Blockieren“, „Immer erlauben“ oder „Erlauben“. Vorher blockierte der Browser die Anfrage immer.",
           "Die Seitenleiste hat über der Chatliste Tabs: Alle, Ungelesen und die Ordner, die du auswählst. Jeder Tab zeigt seine ungelesenen Chats."
         ]
@@ -20,7 +17,6 @@
         "type": "changed",
         "items": [
           "Ein neuer Workflow-Schritt startet jetzt mit einem Modell, das laufen kann. Ein Textschritt nutzt dein bevorzugtes Modell oder das übliche Modell eines verbundenen Anbieters.",
-          "Wenn du nur kostenlose Credits hast, markiert die Modellliste einer Genehmigungskarte die Modelle, die kostenlose Credits bezahlen, mit „Gratis-Credits“.",
           "Das Seitenpanel kann sich in bis zu drei Gruppen teilen, eine über der anderen. Ziehe die Linie zwischen zwei Gruppen, um ihre Höhen zu ändern."
         ]
       },
@@ -73,15 +69,13 @@
     "version": "0.77.0",
     "date": "2026-11-23",
     "notices": [
-      "Aktualisiere auch jeden verbundenen Server auf diese Version. Auf einem Server funktionieren Modelle mit CodeBot-Credits, pausierte und exportierte Workflows, schreibgeschützte WhatsApp-Chats, Standortanfragen und die Wahl des Signal-Servers nur, wenn der Server diese Version hat.",
+      "Aktualisiere auch jeden verbundenen Server auf diese Version. Auf einem Server funktionieren pausierte und exportierte Workflows, schreibgeschützte WhatsApp-Chats, Standortanfragen und die Wahl des Signal-Servers nur, wenn der Server diese Version hat.",
       "Nach diesem Update kann eine ältere Version von CodeBot deine Daten nicht öffnen."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Kaufe CodeBot-Credits für dich selbst oder für einen Server über die Schaltfläche „Credits“ in der Fensterleiste oder unter Einstellungen → Abrechnung. Eine bezahlte Lizenz gibt außerdem jeden Monat kostenlose Credits.",
-          "Bild- und Videoschritte in einem Workflow können CodeBot-Modelle nutzen, die deine Credits bezahlen, ohne eine weitere Anmeldung. Stelle bei einem Schritt „Anzahl“ ein, um bis zu 4 Ergebnisse gleichzeitig zu erzeugen.",
           "Pausiere einen Workflow über das Workflow-Menü. Du kannst einen Workflow auch in eine Datei exportieren und auf einem anderen Computer oder Server importieren.",
           "Tippe {{ in einem Workflow-Schritt, um ein Feld aus einem früheren Schritt einzufügen. Auslöser für Zeitplan, GitHub, Discord, Telegram und Slack liefern jetzt ebenfalls Felder.",
           "Ein Agent kann nach deinem Standort fragen, wenn eine Anfrage ihn braucht, zum Beispiel „Restaurants in meiner Nähe“. Es wird nichts gesendet, bis du antwortest.",
@@ -197,7 +191,6 @@
       {
         "type": "added",
         "items": [
-          "Teile deinen Einladungslink unter Einstellungen > Invite friends. Der Tab zeigt dein Guthaben und die Freunde, die beigetreten sind. Ein Freund erhält 10 % Rabatt auf jede Zahlung, und du erhältst 10 % jeder bezahlten Rechnung deines Freundes als Guthaben.",
           "Lege Knoten eines Workflow-Canvas in eine Gruppe. Wähle sie aus und drücke Gruppieren (⌘G). Klappe eine Gruppe zu einer einzigen Stapelkarte zusammen, und drücke Gruppierung aufheben (⇧⌘G), um sie zu beenden.",
           "Gib einem Videoschritt auf dem Workflow-Canvas jede Länge, die sein Sunra- oder Higgsfield-Modell unterstützt. Wähle im Menü Länge die Option Eigene und nutze den Schieberegler.",
           "Öffne den Marketplace über die Zeile Apps in den Einstellungen eines Agenten. Verbinde eine App, oder füge mit Eigene hinzufügen deinen eigenen MCP-Server hinzu.",

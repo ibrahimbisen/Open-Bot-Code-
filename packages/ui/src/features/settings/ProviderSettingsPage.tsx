@@ -459,7 +459,7 @@ function RowStatus(props: { option: ProviderPickerOption }) {
     }
     if (option.lastError) return { variant: "warning-light", text: t("provider.settings.badge.error") };
     if (option.state === "outdated") return { variant: "warning-light", text: t("provider.status.updateRequired") };
-    if (runtime && providerUpdateAvailable(runtime, option.availableVersion ?? null)) {
+    if (option.state === "available" && runtime && providerUpdateAvailable(runtime, option.availableVersion ?? null)) {
       return { variant: "warning-light", text: t("provider.status.updateAvailable") };
     }
     return null;

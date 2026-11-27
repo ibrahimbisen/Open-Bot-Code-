@@ -48,6 +48,12 @@ const FIRST_CHAT = "Explain the server";
 const LANGUAGE_STEP_KEY = "codebot:language-step-done";
 const PREVIEW_WIDTH_KEY = "codebot:project-preview-width:v1";
 const RAIL_FIXED = new Set([english("app.rail.more"), english("app.rail.settings"), "Projects", "Help"]);
+const POINTER_MEDIA = [
+  { name: "hover", value: "hover" },
+  { name: "any-hover", value: "hover" },
+  { name: "pointer", value: "fine" },
+  { name: "any-pointer", value: "fine" },
+];
 
 const SERVER_SOURCE = `import { createServer } from "node:http";
 
@@ -82,6 +88,8 @@ function shortTheme(palette: AppThemePalette): string {
 
 const ONLY = process.argv.find((value) => value.startsWith("--only="))?.slice("--only=".length) ?? null;
 const SKIP_FRESH = process.argv.includes("--skip-fresh");
+const STEPS = process.argv.find((value) => value.startsWith("--steps="))?.slice("--steps=".length) ?? null;
+const STEP_FILTER = STEPS === null ? null : new RegExp(STEPS, "i");
 
 const ALL_VARIANTS: Variant[] = [
   ...BUILT_IN_THEME_PALETTES.map((palette) => ({ palette, theme: shortTheme(palette), width: 1280, height: 800 })),
@@ -149,6 +157,7 @@ async function shot(name: string, options: { settle?: boolean; keepMouse?: boole
 
 async function step(name: string, run: () => Promise<void>): Promise<void> {
   const label = current ? `${current.theme} ${current.width}x${current.height}: ${name}` : name;
+  if (STEP_FILTER !== null && run !== setup && !STEP_FILTER.test(name)) return;
   try {
     await run();
     checks.push({ name: label, passed: true });
@@ -228,6 +237,7 @@ async function applyVariant(variant: Variant): Promise<void> {
     deviceScaleFactor: 1,
     mobile: false,
   });
+  await viewport.send("Emulation.setEmulatedMedia", { features: POINTER_MEDIA });
   await page.evaluate(
     (palette) => window.codebot.setAppAppearancePreference({ appearance: palette.scheme, palette: palette.id }),
     variant.palette,
@@ -928,6 +938,7 @@ async function main(): Promise<void> {
     server.close();
     await closeBrowserTabs().catch(() => undefined);
     await viewport.send("Emulation.clearDeviceMetricsOverride").catch(() => undefined);
+    await viewport.send("Emulation.setEmulatedMedia", { features: [] }).catch(() => undefined);
     await page
       .evaluate(() => window.codebot.setAppAppearancePreference({ appearance: "dark", palette: "codebot-dark" }))
       .catch(() => undefined);

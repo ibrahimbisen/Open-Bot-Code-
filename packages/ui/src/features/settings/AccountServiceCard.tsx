@@ -1,7 +1,6 @@
 import type { AccountServiceSettings, CentralAuthState } from "@codebot/contracts/ipc";
 import {
   Button,
-  Field,
   Input,
   Item,
   ItemActions,
@@ -80,18 +79,17 @@ export function AccountServiceCard(props: AccountServiceCardProps) {
             <ItemDescription>
               {fixed() ? t("account.service.address.fixed") : t("account.service.address.description")}
             </ItemDescription>
-            <Field label={t("account.service.address.title")}>
-              <Input
-                type="url"
-                size="sm"
-                autocomplete="off"
-                spellcheck={false}
-                placeholder={t("account.service.address.placeholder")}
-                value={address()}
-                disabled={fixed() || signedIn()}
-                onInput={(event) => setAddress(event.currentTarget.value)}
-              />
-            </Field>
+            <Input
+              type="url"
+              size="sm"
+              autocomplete="off"
+              spellcheck={false}
+              aria-label={t("account.service.address.title")}
+              placeholder={t("account.service.address.placeholder")}
+              value={address()}
+              disabled={fixed() || signedIn()}
+              onInput={(event) => setAddress(event.currentTarget.value)}
+            />
           </ItemContent>
           <ItemActions>
             <Button

@@ -288,7 +288,6 @@ const answer = (message) => {
     case "config/batchWrite": return write({ id: message.id, result: {} });
     case "thread/start": {
       const id = prefix + "thread-" + (++threads);
-      const id = prefix + "thread-" + (++threads);
       if (params.cwd) threadFolders.set(id, params.cwd);
       write({ id: message.id, result: { thread: { id, turns: [] } } });
       return reportSlashCommands(id);

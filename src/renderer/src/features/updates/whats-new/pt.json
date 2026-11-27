@@ -3,15 +3,12 @@
     "version": "0.79.0",
     "date": "2026-11-25",
     "notices": [
-      "Atualize também para esta versão cada servidor em que você entrou. As ferramentas de imagem e vídeo com créditos, os pedidos de localização e muitas das correções abaixo funcionam em um servidor só quando o servidor tem esta versão."
+      "Atualize também para esta versão cada servidor em que você entrou. Os pedidos de localização e muitas das correções abaixo funcionam em um servidor só quando o servidor tem esta versão."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Os agentes podem criar imagens e vídeos com créditos do CodeBot e editar suas imagens. O cartão de aprovação mostra o modelo, o preço e o prompt. Você pode escolher outro modelo antes de permitir. O item Credits na barra da esquerda mostra seu saldo. Um proprietário ou administrador pode ativar ou desativar “Os agentes podem usar créditos”.",
-          "Os agentes podem pagar em sites com cripto a partir de uma carteira NEAR Intents. Conecte-a em Configurações do servidor › Vault › Cripto com uma chave de acesso e depois faça um depósito. Cada pagamento espera sua aprovação no chat, a menos que você escolha “Sempre permitir” para esse site. Um orçamento diário limita o que os agentes podem gastar. A carteira serve apenas para este computador, e os pagamentos usam fundos reais.",
-          "Cada conta recebe 10 créditos grátis de boas-vindas. Você também pode resgatar um código de crédito na página Credits com Redeem code.",
           "A aba do navegador de um agente pode pedir sua localização. O chat pergunta primeiro, e você escolhe Bloquear, Permitir sempre ou Permitir. Antes, o navegador sempre bloqueava o pedido.",
           "A barra lateral tem abas acima da lista de chats: Todos, Não lidas e as pastas que você escolher. Cada aba mostra os chats não lidos dela."
         ]
@@ -20,7 +17,6 @@
         "type": "changed",
         "items": [
           "Uma nova etapa de fluxo de trabalho agora começa com um modelo que pode rodar. Uma etapa de texto usa seu modelo preferido, ou o modelo habitual de um provedor conectado.",
-          "Quando você tem só créditos grátis, a lista de modelos de um cartão de aprovação marca com “Créditos grátis” os modelos pagos pelos créditos grátis.",
           "O painel lateral pode se dividir em até três grupos, um acima do outro. Arraste a linha entre dois grupos para mudar a altura deles."
         ]
       },
@@ -73,15 +69,13 @@
     "version": "0.77.0",
     "date": "2026-11-23",
     "notices": [
-      "Atualize também para esta versão cada servidor em que você entrou. Em um servidor, os modelos de créditos do CodeBot, os fluxos de trabalho pausados e exportados, os chats do WhatsApp somente leitura, os pedidos de localização e a escolha do servidor do Signal funcionam só quando o servidor tem esta versão.",
+      "Atualize também para esta versão cada servidor em que você entrou. Em um servidor, os fluxos de trabalho pausados e exportados, os chats do WhatsApp somente leitura, os pedidos de localização e a escolha do servidor do Signal funcionam só quando o servidor tem esta versão.",
       "Depois desta atualização, uma versão mais antiga do CodeBot não consegue abrir os seus dados."
     ],
     "groups": [
       {
         "type": "added",
         "items": [
-          "Compre créditos do CodeBot para você ou para um servidor pelo botão Credits na barra de páginas ou em Configurações → Cobrança. Uma licença paga também dá créditos grátis todo mês.",
-          "As etapas de imagem e vídeo de um fluxo de trabalho podem usar modelos do CodeBot que os seus créditos pagam, sem outro login. Defina Lote em uma etapa para gerar até 4 resultados ao mesmo tempo.",
           "Pause um fluxo de trabalho pelo menu do fluxo de trabalho. Você também pode exportar um fluxo de trabalho para um arquivo e importá-lo em outro computador ou servidor.",
           "Digite {{ em uma etapa do fluxo de trabalho para adicionar um campo de uma etapa anterior. Os gatilhos Agendamento, GitHub, Discord, Telegram e Slack agora também fornecem campos.",
           "Um agente pode pedir sua localização quando um pedido precisar dela, como “restaurantes perto de mim”. Nada é enviado até você responder.",
@@ -197,7 +191,6 @@
       {
         "type": "added",
         "items": [
-          "Compartilhe seu link de convite em Configurações > Invite friends. A aba mostra seu crédito e os amigos que entraram. Um amigo ganha 10% de desconto em cada pagamento, e você ganha 10% de cada fatura paga do seu amigo, como crédito.",
           "Coloque nós de um canvas de fluxo de trabalho em um grupo. Selecione-os e pressione Agrupar (⌘G). Recolha um grupo em um único cartão empilhado, e pressione Desagrupar (⇧⌘G) para encerrá-lo.",
           "Dê a uma etapa de vídeo no canvas do fluxo de trabalho qualquer duração que o modelo do Sunra ou do Higgsfield aceite. Selecione Personalizada no menu Duração e use o controle deslizante.",
           "Abra a Loja pela linha Apps nas configurações de um agente. Conecte um app ou adicione seu próprio servidor MCP com Adicionar personalizado.",
