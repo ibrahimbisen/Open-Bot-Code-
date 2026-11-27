@@ -151,3 +151,9 @@ a place in the list above.
   two drawn eyes) for now, in a different color. The default logo color stays blue (`#84aadd`); lavender,
   the OpenBot color, stays a choice in Settings. `scripts/codebot/generate-brand-icons.ts` and
   `scripts/generate-logo-color-icons.ts` draw every icon file from `packages/brand/src/app-logo-shape.ts`.
+
+- **D21. Switch servers like OpenBot.** The owner decided on 2026-11-26 that the "This computer / Home
+  server" tabs at the top of the Projects column go away. The user switches between this computer and a
+  home server the OpenBot way: the server menu at the bottom of the icon rail (Servers list with Local
+  and each joined or home server, Add a server, Server settings, Hide server, Server layout). The Projects
+  screen then shows the projects of the active server. No credits or buy-credits rows (D7).
