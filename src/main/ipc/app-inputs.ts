@@ -40,7 +40,6 @@ import type {
   SaveSetupInput,
   SetAgentDockInteractiveInput,
   SetAgentDockXWaylandInput,
-  SetAnalyticsPreferenceInput,
   SetAppAppearancePreferenceInput,
   SetAppInterfaceSizePreferenceInput,
   SetAppLanguagePreferenceInput,
@@ -116,12 +115,6 @@ export function parseSetup(input: unknown): SaveSetupInput {
 export function parseProviderId(input: unknown): AgentProviderId {
   if (!isAgentProvider(input)) throw new Error("Unknown provider.");
   return input;
-}
-
-export function parseAnalyticsPreference(input: unknown): SetAnalyticsPreferenceInput {
-  if (!isDynamicRecord(input) || !isBoolean(input.enabled)) throw new Error("Analytics preference is required.");
-  if (input.chosen !== undefined && !isBoolean(input.chosen)) throw new Error("Analytics choice is not valid.");
-  return { enabled: input.enabled, ...(input.chosen ? { chosen: true } : {}) };
 }
 
 function isCount(value: unknown, max: number): value is number {

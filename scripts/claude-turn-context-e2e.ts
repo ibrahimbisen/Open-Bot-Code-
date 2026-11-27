@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
@@ -13,18 +13,21 @@ import type { ClaudeCliInfo } from "../src/backend/cli";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-turn-context-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-turn-context-"));
 const home = join(root, "home");
 const messageLog = join(root, "claude-messages.jsonl");
-const claudeExecutable = join(root, "claude");
+const claudeExecutable = standInPath(join(root, "claude"));
 const CLAUDE_MODEL = defaultProviderModel("claude");
 const MEMORIES = 6;
 const memoryText = (index: number) =>
   `Fact ${index}: ${"The user ships each release on Friday after a tested database backup. ".repeat(4)}`;
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 
@@ -242,7 +245,7 @@ function describe(name: string, message: LoggedMessage): TurnReport {
   };
 }
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
 
 async function run(release: "before" | "after"): Promise<void> {
   const userData = join(root, `user-data-${release}`);
@@ -338,7 +341,7 @@ try {
 } finally {
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   for (const run of report.runs)
     process.stdout.write(
       `${run.release}: ${run.afterRefreshContextCharacters} turn context characters after the refresh\n`,

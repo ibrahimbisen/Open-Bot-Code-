@@ -195,7 +195,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "서버에 빠르게 연결",
   "settings.keepRemoteSessions.description":
     "참여 중인 서버와의 연결을 실행 사이에도 유지해요. CodeBot이 약 1초 더 빨리 시작돼요. CodeBot을 종료해도 CodeBot 서비스가 연결을 닫지 않아요.",
-  "settings.permissions.title": "권한",
   "settings.notifications.whatYouHear": "알림 받을 내용",
   "settings.notifications.allDevices": "내 모든 기기",
   "settings.notifications.thisComputer": "이 컴퓨터",
@@ -308,10 +307,6 @@ export const messages = {
   "settings.agentDock.agents.description": "{server}의 에이전트입니다. 서버마다 독이 따로 있습니다.",
   "settings.agentDock.agents.empty": "이 서버에는 아직 에이전트가 없습니다.",
   "settings.analytics.title": "분석 데이터를 내 계정에 연결",
-  "settings.analytics.description":
-    "켜짐: 사용 및 안정성 메타데이터를 계정 ID 및 이메일과 함께 CodeBot의 자체 호스팅 분석 서비스로 보내요. 나와 에이전트가 방문한 웹사이트, 도구 사용 현황, 하루 단위 설정 요약도 함께 보내요. 꺼짐: 턴 수와 토큰 수 같은 기본 사용 현황만 임의의 설치 ID와 함께 보내요. 채팅, 파일, 프롬프트는 절대 보내지 않아요.",
-  "settings.analytics.webDescription":
-    "켜짐: 사용 및 안정성 메타데이터를 계정 ID 및 이메일과 함께 CodeBot의 자체 호스팅 분석 서비스로 보내요. 꺼짐: 같은 메타데이터를 임의의 설치 ID만 함께 보내요. 채팅, 파일, 프롬프트는 절대 보내지 않아요. 이 설정은 이 브라우저에 적용돼요.",
   "settings.tab.general.title": "일반",
   "settings.tab.general.description": "채팅 동작과 CodeBot이 공유하는 내용을 설정해요.",
   "settings.tab.agents.title": "에이전트",

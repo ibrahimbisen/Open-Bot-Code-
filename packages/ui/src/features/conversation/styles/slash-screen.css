@@ -1,0 +1,79 @@
+.provider-more-dialog.slash-screen {
+  width: min(480px, 100%);
+}
+
+.slash-screen-description {
+  margin: 0;
+  padding: 0 var(--codebot-space-3) var(--codebot-space-2);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+}
+
+.slash-screen-error {
+  margin: 0 var(--codebot-space-3) var(--codebot-space-2);
+  color: var(--codebot-danger);
+  font-size: var(--codebot-text-sm);
+}
+
+.ui-button.slash-screen-row {
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+}
+
+.slash-screen-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--codebot-accent-text);
+}
+
+.slash-screen-mark svg {
+  width: 16px;
+  height: 16px;
+}
+
+.slash-screen-meta {
+  color: var(--codebot-text-muted);
+}
+
+.slash-screen-badge {
+  padding: 0 var(--codebot-space-2);
+  border-radius: var(--codebot-radius-sm);
+  background: var(--codebot-bg-control);
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  white-space: nowrap;
+}
+
+.slash-screen-status {
+  display: flex;
+  align-items: center;
+  gap: var(--codebot-space-2);
+}
+
+.slash-screen-failed {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--codebot-space-2);
+  padding-inline-end: var(--codebot-space-3);
+}
+
+.slash-screen-spinner {
+  width: 14px;
+  height: 14px;
+  animation: slash-screen-spin 0.9s linear infinite;
+}
+
+@keyframes slash-screen-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slash-screen-spinner {
+    animation: none;
+  }
+}

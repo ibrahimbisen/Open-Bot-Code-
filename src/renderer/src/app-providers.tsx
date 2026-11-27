@@ -4,6 +4,7 @@ import { type ParentProps, Show, untrack } from "solid-js";
 import { AnsweredPromptsProvider } from "./answered-prompts";
 import { AppBootstrap } from "./app-bootstrap";
 import { AuthProvider } from "./features/account/account-context";
+import { AdvancedFeaturesProvider } from "./features/advanced/advanced-features-context";
 import { AgentTasksProvider } from "./features/agent-tasks/agent-tasks-context";
 import { AgentThreadsProvider } from "./features/agent-threads/agent-threads-context";
 import { AgentActionsProvider } from "./features/agents/agent-actions";
@@ -29,6 +30,7 @@ import { ProviderDetectionProvider } from "./features/custom-providers/provider-
 import { DynamicIslandBridge } from "./features/dynamic-island/dynamic-island-bridge";
 import { DynamicIslandProvider } from "./features/dynamic-island/dynamic-island-context";
 import { SetupProvider } from "./features/onboarding/onboarding-context";
+import { ProjectsProvider } from "./features/projects/projects-context";
 import { RemoteDesktopProvider } from "./features/remote-desktop/remote-desktop-context";
 import { ServerScopeProvider } from "./features/servers/server-scope";
 import { ServerSelectionProvider } from "./features/servers/server-selection";
@@ -81,30 +83,32 @@ export function AppProviders(props: ParentProps<AppProps>): JSX.Element {
                       <CustomAgentsProvider>
                         <ProviderDetectionProvider>
                           <ServersProvider>
-                            <DynamicIslandProvider>
-                              <ServerSettingsProvider>
-                                <RemoteDesktopProvider>
-                                  <ServerSwitchProvider>
-                                    <AnsweredPromptsProvider>
-                                      <UiErrorsProvider>
-                                        <UsageProvider>
-                                          <WindowPageProvider>
-                                            <AgentReadTrackingProvider>
-                                              <Show when={!props.chatWindow}>
-                                                <AppBootstrap />
-                                              </Show>
-                                              <ServerScopeBoundary stableConversation={stableConversation}>
-                                                {props.children}
-                                              </ServerScopeBoundary>
-                                            </AgentReadTrackingProvider>
-                                          </WindowPageProvider>
-                                        </UsageProvider>
-                                      </UiErrorsProvider>
-                                    </AnsweredPromptsProvider>
-                                  </ServerSwitchProvider>
-                                </RemoteDesktopProvider>
-                              </ServerSettingsProvider>
-                            </DynamicIslandProvider>
+                            <AdvancedFeaturesProvider>
+                              <DynamicIslandProvider>
+                                <ServerSettingsProvider>
+                                  <RemoteDesktopProvider>
+                                    <ServerSwitchProvider>
+                                      <AnsweredPromptsProvider>
+                                        <UiErrorsProvider>
+                                          <UsageProvider>
+                                            <WindowPageProvider>
+                                              <AgentReadTrackingProvider>
+                                                <Show when={!props.chatWindow}>
+                                                  <AppBootstrap />
+                                                </Show>
+                                                <ServerScopeBoundary stableConversation={stableConversation}>
+                                                  {props.children}
+                                                </ServerScopeBoundary>
+                                              </AgentReadTrackingProvider>
+                                            </WindowPageProvider>
+                                          </UsageProvider>
+                                        </UiErrorsProvider>
+                                      </AnsweredPromptsProvider>
+                                    </ServerSwitchProvider>
+                                  </RemoteDesktopProvider>
+                                </ServerSettingsProvider>
+                              </DynamicIslandProvider>
+                            </AdvancedFeaturesProvider>
                           </ServersProvider>
                         </ProviderDetectionProvider>
                       </CustomAgentsProvider>
@@ -117,6 +121,15 @@ export function AppProviders(props: ParentProps<AppProps>): JSX.Element {
         </AuthProvider>
       </I18nProvider>
     </PlatformProvider>
+  );
+}
+
+function ProjectsScope(props: ParentProps): JSX.Element {
+  const platform = usePlatform();
+  return (
+    <Show when={!platform.chatWindow} fallback={props.children}>
+      <ProjectsProvider>{props.children}</ProjectsProvider>
+    </Show>
   );
 }
 
@@ -164,7 +177,7 @@ function ScopedProviders(props: ParentProps<ScopedConversationProps>): JSX.Eleme
                                       <DynamicIslandBridge />
                                       <ServerBrowserWindowBridge />
                                     </Show>
-                                    {props.children}
+                                    <ProjectsScope>{props.children}</ProjectsScope>
                                   </ServerScopeProvider>
                                 </AgentActionsProvider>
                               </ServerSelectionProvider>

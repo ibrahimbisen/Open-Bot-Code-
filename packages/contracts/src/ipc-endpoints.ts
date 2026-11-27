@@ -9,6 +9,7 @@ import type {
   AcpRegistryInstallInput,
   AcpRegistryOperation,
 } from "./ipc-acp-registry";
+import type { AdvancedFeatureSettings, SetAdvancedFeatureInput } from "./ipc-advanced-features";
 import type { AgentAccessChange, AgentAccessSnapshot } from "./ipc-agent-access";
 import type {
   AddedAgent,
@@ -148,7 +149,6 @@ import type {
   UpdateAgentInput,
 } from "./ipc-agents";
 import type {
-  AnalyticsPreference,
   AppInfo,
   AppSetupState,
   BackgroundProcess,
@@ -172,7 +172,6 @@ import type {
   RendererTimingReport,
   SaveSetupInput,
   SentMessageStats,
-  SetAnalyticsPreferenceInput,
   SetCompanySignInEnabledInput,
   TestCompanySignInInput,
   TestCompanySignInResult,
@@ -183,6 +182,7 @@ import type {
   VerifyEmailCodeInput,
 } from "./ipc-app-auth";
 import type { AppBehaviorPreference, AppBehaviorPreferenceChange } from "./ipc-app-behavior";
+import type { AppUpdateFeed, SetAppUpdateFeedInput } from "./ipc-app-update";
 import type {
   AgentApproval,
   ApprovalAutomationPreference,
@@ -361,6 +361,29 @@ import type {
   WebhookTestResult,
 } from "./ipc-events";
 import type {
+  ExplorerChange,
+  ExplorerCreateInput,
+  ExplorerDirectory,
+  ExplorerEntry,
+  ExplorerFile,
+  ExplorerGitCommitFiles,
+  ExplorerGitCommitInput,
+  ExplorerGitDiff,
+  ExplorerGitDiffInput,
+  ExplorerGitLog,
+  ExplorerGitLogInput,
+  ExplorerGitStatus,
+  ExplorerGitStatusInput,
+  ExplorerListInput,
+  ExplorerPathInput,
+  ExplorerRenameInput,
+  ExplorerRoots,
+  ExplorerScope,
+  ExplorerWatchInput,
+  ExplorerWriteInput,
+  ExplorerWriteResult,
+} from "./ipc-explorer";
+import type {
   ExternalLinkBrowser,
   ExternalLinkBrowsers,
   ExternalLinkFallback,
@@ -387,6 +410,16 @@ import type {
   InstanceTransferUploadProgress,
 } from "./ipc-instance-transfer";
 import type { LibraryFolderAction, LibraryFoldersSnapshot } from "./ipc-library-folders";
+import type {
+  LocalModelServerCandidate,
+  LocalModelServerRefreshInput,
+  LocalModelServerScanInput,
+  LocalModelServerStatus,
+  LocalModelServerTestInput,
+  LocalModelServerTestResult,
+  LocalModelServerWatchInput,
+  SaveLocalModelServerSettingsInput,
+} from "./ipc-local-model-servers";
 import type { MachineAlertSettings, MachineMetrics } from "./ipc-machine-resources";
 import type {
   AgentPublicationPreview,
@@ -467,6 +500,33 @@ import type {
   OnePasswordHostConnectInput,
 } from "./ipc-onepassword-connector";
 import type { PasswordManagerConnectInput, PasswordManagerId, PasswordManagerStatus } from "./ipc-password-managers";
+import type {
+  ChooseProjectFolderInput,
+  CreateProjectAgentInput,
+  CreateProjectInput,
+  ListProjectChatsInput,
+  ProjectActivity,
+  ProjectActivityChangedEvent,
+  ProjectAgentRef,
+  ProjectChat,
+  ProjectChatRef,
+  ProjectChatSearchPage,
+  ProjectChatsChangedEvent,
+  ProjectChatsPage,
+  ProjectDetail,
+  ProjectFolderChange,
+  ProjectFolderChoice,
+  ProjectFolderInput,
+  ProjectSummary,
+  ProjectsChangedEvent,
+  SearchProjectChatsInput,
+  SetProjectChatArchivedInput,
+  SetProjectChatPinnedInput,
+  SetProjectChatRuntimeInput,
+  StartProjectChatInput,
+  UpdateProjectAgentInput,
+  UpdateProjectInput,
+} from "./ipc-projects";
 import type { PromptCacheTtl, PromptCacheTtlSetting } from "./ipc-prompt-cache";
 import type {
   DetectedModelServer,
@@ -502,6 +562,7 @@ import type {
   RemoteNetworkRouteState,
   RemoteSessionReusePreference,
 } from "./ipc-remote-sessions";
+import type { ReplyRuleSettings, TurnStepDetails, TurnStepDetailsInput } from "./ipc-replies";
 import type {
   ResendRoutineResultInput,
   RoutineResultConnectionOption,
@@ -545,6 +606,14 @@ import type {
   SubmitSkillInput,
   UninstallSkillInput,
 } from "./ipc-skills";
+import type {
+  ResumableSessionList,
+  ResumeSessionInput,
+  ResumeSessionResult,
+  SlashCommandChatInput,
+  SlashCommandList,
+  SlashCommandsChanged,
+} from "./ipc-slash-commands";
 import type {
   ClearStorageInput,
   DeleteStoredFileInput,
@@ -737,10 +806,6 @@ export const IPC_ENDPOINTS = {
     getSetupState: request<undefined, AppSetupState>()("app:get-setup-state"),
     saveSetup: request<SaveSetupInput, AppSetupState>()("app:save-setup"),
     setupState: event<AppSetupState>()("app:setup-state"),
-    getAnalyticsPreference: request<undefined, AnalyticsPreference>()("app:get-analytics-preference"),
-    getAnalyticsDefault: request<undefined, AnalyticsPreference>()("app:get-analytics-default"),
-    analyticsPreference: event<AnalyticsPreference>()("app:analytics-preference"),
-    setAnalyticsPreference: request<SetAnalyticsPreferenceInput, AnalyticsPreference>()("app:set-analytics-preference"),
     reportRendererTiming: request<RendererTimingReport, void>()("app:report-renderer-timing"),
     getApprovalAutomation: request<undefined, ApprovalAutomationPreference>()("app:get-approval-automation"),
     approvalAutomation: event<ApprovalAutomationPreference>()("app:approval-automation"),
@@ -940,6 +1005,12 @@ export const IPC_ENDPOINTS = {
     list: scopedQuery<BackgroundProcess[] | null, "required">()("background-processes:list"),
     stop: scopedRequest<string, void, "required">()("background-processes:stop"),
   },
+  slashCommands: {
+    list: request<SlashCommandChatInput, SlashCommandList>()("slash-commands:list"),
+    listSessions: request<string, ResumableSessionList>()("slash-commands:list-sessions"),
+    resumeSession: request<ResumeSessionInput, ResumeSessionResult>()("slash-commands:resume-session"),
+    changed: event<SlashCommandsChanged>()("slash-commands:changed"),
+  },
   skills: {
     localList: request<undefined, MarketplaceSkillDetail[]>()("skills:local-list"),
     localGet: request<LocalSkillRevisionInput, MarketplaceSkillDetail>()("skills:local-get"),
@@ -974,6 +1045,17 @@ export const IPC_ENDPOINTS = {
       "provider-detection:set-settings",
     ),
     scanAgents: scopedQuery<DetectedAcpAgent[], "required">()("provider-detection:scan-agents"),
+  },
+  localModelServers: {
+    list: request<undefined, LocalModelServerStatus[]>()("local-model-servers:list"),
+    refresh: request<LocalModelServerRefreshInput, LocalModelServerStatus[]>()("local-model-servers:refresh"),
+    watch: request<LocalModelServerWatchInput, void>()("local-model-servers:watch"),
+    test: request<LocalModelServerTestInput, LocalModelServerTestResult>()("local-model-servers:test"),
+    scanHost: request<LocalModelServerScanInput, LocalModelServerCandidate[]>()("local-model-servers:scan-host"),
+    saveSettings: request<SaveLocalModelServerSettingsInput, LocalModelServerStatus[]>()(
+      "local-model-servers:save-settings",
+    ),
+    statuses: event<LocalModelServerStatus[]>()("local-model-servers:statuses"),
   },
   acpRegistry: {
     search: scopedRequest<string, AcpRegistryEntry[]>()("acp-registry:search"),
@@ -1205,6 +1287,10 @@ export const IPC_ENDPOINTS = {
     setUpdateSettings: scopedRequest<HostUpdateSettingsChange, HostUpdateStatus, "required">()(
       "host-admin:set-update-settings",
     ),
+    getAdvancedFeatures: scopedQuery<AdvancedFeatureSettings, "required">()("host-admin:get-advanced-features"),
+    setAdvancedFeature: scopedRequest<SetAdvancedFeatureInput, AdvancedFeatureSettings, "required">()(
+      "host-admin:set-advanced-feature",
+    ),
     getTimezone: scopedQuery<HostTimezoneSettings, "required">()("host-admin:get-timezone"),
     setTimezone: scopedRequest<string | null, HostTimezoneSettings, "required">()("host-admin:set-timezone"),
     getSignalHome: scopedQuery<HostSignalHomeSettings, "required">()("host-admin:get-signal-home"),
@@ -1420,6 +1506,10 @@ export const IPC_ENDPOINTS = {
     restartNow: request<undefined, UpdateStatus>()("update:restart-now"),
     event: event<UpdateStatus>()("update:event"),
     preference: event<UpdatePreference>()("update:preference-event"),
+  },
+  appUpdate: {
+    getFeed: request<undefined, AppUpdateFeed>()("app-update:get-feed"),
+    setFeedUrl: request<SetAppUpdateFeedInput, AppUpdateFeed>()("app-update:set-feed-url"),
   },
   notifications: {
     getPreference: request<undefined, NotificationPreference>()("notifications:get-preference"),
@@ -1645,6 +1735,32 @@ export const IPC_ENDPOINTS = {
     sourceSync: scopedRequest<CrmSourceInput, CrmApplyResult>()("crm:source-sync"),
     settings: scopedQuery<CrmSettings>()("crm:settings"),
     setSettings: scopedRequest<CrmSettings, CrmSettings>()("crm:set-settings"),
+  },
+  projects: {
+    list: scopedQuery<ProjectSummary[]>()("projects:list"),
+    get: scopedRequest<string, ProjectDetail>()("projects:get"),
+    create: scopedRequest<CreateProjectInput, ProjectDetail>()("projects:create"),
+    update: scopedRequest<UpdateProjectInput, ProjectDetail>()("projects:update"),
+    archive: scopedRequest<string, ProjectSummary>()("projects:archive"),
+    restore: scopedRequest<string, ProjectSummary>()("projects:restore"),
+    delete: scopedRequest<string, void>()("projects:delete"),
+    chooseFolder: request<ChooseProjectFolderInput, ProjectFolderChoice>()("projects:choose-folder"),
+    addFolder: scopedRequest<ProjectFolderInput, ProjectFolderChange>()("projects:add-folder"),
+    removeFolder: scopedRequest<ProjectFolderInput, ProjectFolderChange>()("projects:remove-folder"),
+    createAgent: scopedRequest<CreateProjectAgentInput, ProjectDetail>()("projects:create-agent"),
+    updateAgent: scopedRequest<UpdateProjectAgentInput, ProjectDetail>()("projects:update-agent"),
+    removeAgent: scopedRequest<ProjectAgentRef, ProjectDetail>()("projects:remove-agent"),
+    listChats: scopedRequest<ListProjectChatsInput, ProjectChatsPage>()("projects:list-chats"),
+    getChat: scopedRequest<ProjectChatRef, ProjectChat>()("projects:get-chat"),
+    searchChats: scopedRequest<SearchProjectChatsInput, ProjectChatSearchPage>()("projects:search-chats"),
+    startChat: scopedRequest<StartProjectChatInput, ProjectChat>()("projects:start-chat"),
+    setChatArchived: scopedRequest<SetProjectChatArchivedInput, ProjectChat>()("projects:set-chat-archived"),
+    setChatPinned: scopedRequest<SetProjectChatPinnedInput, ProjectChat>()("projects:set-chat-pinned"),
+    setChatRuntime: scopedRequest<SetProjectChatRuntimeInput, ProjectChat>()("projects:set-chat-runtime"),
+    listActivity: scopedQuery<ProjectActivity[]>()("projects:list-activity"),
+    changed: event<ProjectsChangedEvent>()("projects:changed"),
+    chatsChanged: event<ProjectChatsChangedEvent>()("projects:chats-changed"),
+    activityChanged: event<ProjectActivityChangedEvent>()("projects:activity-changed"),
   },
   routineResults: {
     options: scopedQuery<RoutineResultConnectionOption[], "required">()("routine-results:options"),
@@ -1976,6 +2092,31 @@ export const IPC_ENDPOINTS = {
     disconnect: request<string, void>()("remote-desktop:disconnect"),
     event: event<RemoteDesktopSession[]>()("remote-desktop:event"),
   },
+  explorer: {
+    roots: scopedRequest<ExplorerScope, ExplorerRoots, "required">()("explorer:roots"),
+    list: scopedRequest<ExplorerListInput, ExplorerDirectory, "required">()("explorer:list"),
+    stat: scopedRequest<ExplorerPathInput, ExplorerEntry | null, "required">()("explorer:stat"),
+    read: scopedRequest<ExplorerPathInput, ExplorerFile, "required">()("explorer:read"),
+    write: scopedRequest<ExplorerWriteInput, ExplorerWriteResult, "required">()("explorer:write"),
+    create: scopedRequest<ExplorerCreateInput, ExplorerEntry, "required">()("explorer:create"),
+    rename: scopedRequest<ExplorerRenameInput, ExplorerEntry, "required">()("explorer:rename"),
+    trash: scopedRequest<ExplorerPathInput, void, "required">()("explorer:trash"),
+    reveal: scopedRequest<ExplorerPathInput, void, "required">()("explorer:reveal"),
+    watch: scopedRequest<ExplorerWatchInput, void, "required">()("explorer:watch"),
+    unwatch: scopedRequest<ExplorerScope, void, "required">()("explorer:unwatch"),
+    changed: event<ExplorerChange>()("explorer:changed"),
+    gitStatus: scopedRequest<ExplorerGitStatusInput, ExplorerGitStatus, "required">()("explorer:git-status"),
+    gitLog: scopedRequest<ExplorerGitLogInput, ExplorerGitLog, "required">()("explorer:git-log"),
+    gitCommitFiles: scopedRequest<ExplorerGitCommitInput, ExplorerGitCommitFiles, "required">()(
+      "explorer:git-commit-files",
+    ),
+    gitDiff: scopedRequest<ExplorerGitDiffInput, ExplorerGitDiff, "required">()("explorer:git-diff"),
+  },
+  replies: {
+    getRule: scopedQuery<ReplyRuleSettings>()("replies:get-rule"),
+    setRule: scopedRequest<ReplyRuleSettings, ReplyRuleSettings>()("replies:set-rule"),
+    readTurnSteps: scopedRequest<TurnStepDetailsInput, TurnStepDetails>()("replies:read-turn-steps"),
+  },
 } as const;
 
 export type IpcEndpoints = typeof IPC_ENDPOINTS;
@@ -1993,8 +2134,10 @@ export const IPC_GROUP_PATHS = {
   macAutomation: "macAutomation",
   backgroundProcesses: "backgroundProcesses",
   skills: "skills",
+  slashCommands: "slashCommands",
   customProviders: "customProviders",
   providerDetection: "providerDetection",
+  localModelServers: "localModelServers",
   customAgents: "customAgents",
   acpRegistry: "acpRegistry",
   providerAdmin: "providerAdmin",
@@ -2008,12 +2151,14 @@ export const IPC_GROUP_PATHS = {
   routineFeed: "routineFeed",
   workflows: "workflows",
   crm: "crm",
+  projects: "projects",
   routineResults: "routineResults",
   localServers: "localServers",
   marketplaceAgents: "marketplaceAgents",
   agentTemplates: "agentTemplates",
   auth: "auth",
   update: "update",
+  appUpdate: "appUpdate",
   notifications: "notifications",
   agent: "agent",
   agentMemories: "agent",
@@ -2039,6 +2184,8 @@ export const IPC_GROUP_PATHS = {
   host: "host",
   events: "events",
   remoteDesktop: "remoteDesktop",
+  explorer: "explorer",
+  replies: "replies",
 } as const satisfies { readonly [Group in keyof IpcEndpoints]: string | null };
 
 export type IpcGroupName = keyof IpcEndpoints;

@@ -39,7 +39,6 @@ import { setShowAgentSteps, useShowAgentSteps } from "../../agent-steps-preferen
 import { setChatBubbleStyle, useChatBubbleStyle } from "../../chat-bubble-style-preference";
 import { setCompactMessageActions, useCompactMessageActions } from "../../compact-message-actions-preference";
 import { playSoundChoice, readTaskSound, setTaskSound } from "../../completion-sound";
-import { webReportsEnabled } from "../../error-reports";
 import { useLayout } from "../../layout";
 import { currentDevicePlatform, setSendShortcutMode, useSendShortcutMode } from "../../send-shortcut-preference";
 import { setVoiceTalkKey, useVoiceTalkKey } from "../conversation/voice-talk-key";
@@ -48,7 +47,6 @@ import { type LiveVoiceAccountChoice, LiveVoiceAccountRow } from "../settings/Li
 import { MotionSwitches } from "../settings/MotionSwitches";
 import { SettingsKeyboardTab } from "../settings/SettingsKeyboardTab";
 import type { WebAccountCalls } from "./web-account";
-import { sendWebAnalyticsChoice, setWebAnalyticsEnabled } from "./web-analytics";
 import { setWebChatBackground, useWebChatBackground } from "./web-chat-background";
 import { setWebLiveVoice, useWebLiveVoice } from "./web-live-voice";
 import type { WebNotificationSettings } from "./web-notification-settings";
@@ -95,7 +93,6 @@ export interface WebAccountSettingsProps {
 }
 
 export default function WebAccountSettings(props: WebAccountSettingsProps) {
-  const [reportsEnabled, setReportsEnabled] = createSignal(webReportsEnabled());
   const { t, errorMessage } = useText();
   const saveChatColor = (color: AvatarColor | null) =>
     void props.calls
@@ -347,21 +344,6 @@ export default function WebAccountSettings(props: WebAccountSettingsProps) {
                   <LiveVoiceAccountRow choice={choice()} disabled={!webLiveVoice()} selectMount={modalElement} />
                 )}
               </Show>
-            </ItemGroup>
-          </SettingsSection>
-          <SettingsSection title={t("settings.analytics.title")}>
-            <ItemGroup class="settings-modal-card">
-              <SwitchField
-                checked={reportsEnabled()}
-                onChange={(value) => {
-                  setReportsEnabled(setWebAnalyticsEnabled(value));
-                  sendWebAnalyticsChoice(props.calls)
-                    .then(() => setReportsEnabled(webReportsEnabled()))
-                    .catch(() => undefined);
-                }}
-                label={t("settings.analytics.title")}
-                description={t("settings.analytics.webDescription")}
-              />
             </ItemGroup>
           </SettingsSection>
           <SettingsSection

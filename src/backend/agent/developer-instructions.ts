@@ -24,8 +24,12 @@ import {
 import { redactSecrets, redactText } from "@codebot/logging";
 import { automationRunCommand } from "../automation-command";
 import type { HomeSkill } from "../home-skills";
+import { lockInstructions } from "../lock/lock-prompt";
 import { PASSWORD_MANAGER_BRAND_NAMES } from "../password-vault";
 import { COMPUTER_USE_GUIDE_URI, piComputerUseGuideStep } from "../pi-mcp-names";
+import { agentProjectContext } from "../projects/project-context";
+import { projectInstructionLines, projectWorkingDirectoryText } from "../projects/project-prompt";
+import { replyRuleInstruction } from "./reply-rule";
 import { ROUTINE_NO_UPDATE_MARKER, ROUTINE_NO_UPDATE_TOOL } from "./routine-quiet-runs";
 import type { PromptInstructionsFile } from "./workspace-instructions";
 import { existingAgentFolders, workspaceExcludedFolders } from "./workspace-sandbox";
@@ -56,8 +60,8 @@ const WAYLAND_FOREGROUND_REFUSAL_RULE =
 const X11_FOREGROUND_RULE =
   " On this desktop, CodeBot sends each click, key and scroll with delivery_mode foreground for you, so the app comes to the front for that action: do not set delivery_mode. When an action answers foreground_unavailable, do not send it again in any delivery mode or with scope desktop. Where the window offers an accessibility action, such as set_value on a text field, use it. Otherwise tell the user in one plain sentence, without the driver's reason, that you cannot type or click in that app.";
 
-function inputRefusalRules(onWayland: boolean, foregroundInput: boolean): string {
-  if (process.platform === "darwin")
+function inputRefusalRules(platform: NodeJS.Platform, onWayland: boolean, foregroundInput: boolean): string {
+  if (platform === "darwin")
     return MACOS_UNRESOLVED_WINDOW_RULE + MACOS_IPHONE_MIRRORING_RULE + BACKGROUND_REFUSAL_RULE;
   if (foregroundInput) return X11_FOREGROUND_RULE;
   return onWayland ? BACKGROUND_REFUSAL_RULE + WAYLAND_FOREGROUND_REFUSAL_RULE : BACKGROUND_REFUSAL_RULE;
@@ -130,8 +134,10 @@ export interface DeveloperInstructionOptions {
   instructionsFile?: PromptInstructionsFile | null;
   instructionsFileInTurns?: boolean;
   responseStyle?: ResponseStyle;
+  replyRule?: string;
   memoryReview?: boolean;
   skillRevision?: boolean;
+  platform?: NodeJS.Platform;
 }
 
 export type InstructionsFileText = Pick<PromptInstructionsFile, "fileName" | "text" | "truncated">;
@@ -394,11 +400,14 @@ export function developerInstructions(
       description: agent.description.trim(),
     }),
   );
-  const folders = existingAgentFolders(agent);
+  const project = agentProjectContext(agent.id);
+  const folders = existingAgentFolders(agent).filter((folder) => folder !== project?.mainFolder);
   const excluded = workspaceExcludedFolders(agent);
   const instructionsFileName = options.instructionsFileName ?? "AGENTS.md";
   const style = options.responseStyle ?? DEFAULT_RESPONSE_STYLE;
+  const platform = options.platform ?? process.platform;
   return [
+    ...replyRuleInstruction(options.replyRule),
     STYLE_OPENING[style],
     `${
       options.catalogAsMcpTools
@@ -410,7 +419,7 @@ export function developerInstructions(
         : // OpenCode Code Mode puts only the direct tools under `tools.codebot`. A model that read
           agent.provider === "opencode"
           ? ` In execute, tools.codebot and tools.codebot_browser have only your listed tools; run each other tool as tools.codebot.tool_call({ name: "codebot.create_agent", arguments: {…} }), never as tools.codebot.create_agent or tools.codebot_browser.click. Send execute code as plain JavaScript, never in a \`\`\` fence; when execute fails with "The called value is not a function" at line 1, col 1, remove the fence and send the code again. Call ${ROUTINE_NO_UPDATE_TOOL} in execute as tools.codebot.${ROUTINE_NO_UPDATE_TOOL}({}), never as a separate tool; when OpenCode refuses it with "No tool named", answer only ${ROUTINE_NO_UPDATE_MARKER}.${
-              process.platform === "win32"
+              platform === "win32"
                 ? " In execute, write Windows paths with forward slashes, such as C:/Users/…: JavaScript drops a single backslash. In shell commands, use only straight quotes and plain hyphens: OpenCode refuses a command with a curly quote or an en or em dash (invalid-structure). Write such a character as $([char]0x2013) inside double quotes, or read the text from a file."
                 : ""
             }`
@@ -472,7 +481,7 @@ export function developerInstructions(
           "When an MCP server's tools are missing or fail with an authorization, sign-in, or client registration error, describe and call codebot.test_mcp_server with the server name: CodeBot then shows a Sign in card in this chat. Do not send the user to /mcp or Server settings to sign in.",
         ]
       : []),
-    `Check a build, deploy, or other job of up to ~15 minutes in this turn at growing intervals; ${longJobStart()}. For longer waits, open one with codebot.await_event, say what you wait for, and end your turn. For a repeated or timed request, such as every morning or remind me, create a routine with codebot.create_routine, or codebot.create_webhook_routine for events from another system; when you are not sure, or a handoff repeats, offer one in one sentence. Schedule only in CodeBot, never with provider scheduling such as Claude routines, /schedule, /loop, cron tools, or cloud agents: the user cannot see or stop that work. When an CodeBot routine tool fails, report it; do not schedule another way. When the user corrects a fact that one of your routines uses, such as a path, update that routine with codebot.update_routine and say so: its runs miss older chat. Give times in the user's timezone.`,
+    `Check a build, deploy, or other job of up to ~15 minutes in this turn at growing intervals; ${longJobStart(platform)}. For longer waits, open one with codebot.await_event, say what you wait for, and end your turn. For a repeated or timed request, such as every morning or remind me, create a routine with codebot.create_routine, or codebot.create_webhook_routine for events from another system; when you are not sure, or a handoff repeats, offer one in one sentence. Schedule only in CodeBot, never with provider scheduling such as Claude routines, /schedule, /loop, cron tools, or cloud agents: the user cannot see or stop that work. When an CodeBot routine tool fails, report it; do not schedule another way. When the user corrects a fact that one of your routines uses, such as a path, update that routine with codebot.update_routine and say so: its runs miss older chat. Give times in the user's timezone.`,
     ...(agent.provider === "claude"
       ? [
           `When a background-job wake has nothing new for the user, such as one check that ended and the next that started, call codebot.${ROUTINE_NO_UPDATE_TOOL}, not a text answer; a result they wait for is a report.`,
@@ -495,16 +504,22 @@ export function developerInstructions(
       : options.sectionTeammates
         ? sectionTeammateInstructions(options.sectionTeammates)
         : []),
-    `Your working directory, for your own persistent files, is ${agent.workspacePath}. The shared directory, for files that other CodeBot agents need, is ${sharedRoot}. You can change files and run commands in both.${
+    `${
+      project
+        ? projectWorkingDirectoryText(project, agent.workspacePath)
+        : `Your working directory, for your own persistent files, is ${agent.workspacePath}.`
+    } The shared directory, for files that other CodeBot agents need, is ${sharedRoot}. You can change files and run commands in both.${
       options.workspaceSkills?.length
         ? ` Your workspace skills, each at ${join(agent.workspacePath, ".agents", "skills", "<name>", "SKILL.md")}: ${options.workspaceSkills.slice(0, MAX_HOME_SKILLS_IN_INSTRUCTIONS).join(", ")}.`
         : ""
     }`,
+    ...(project ? projectInstructionLines(project) : []),
     ...(folders.length
       ? [
           `The user also gave you these folders to work in: ${folders.join(", ")}. You can change files and run commands in them. They belong to the user: keep your own files in your working directory.`,
         ]
       : []),
+    ...lockInstructions(agent, folders),
     agentProviderDescriptor(agent.provider).foldersInFullAccess
       ? folderToolsInstruction(workspaceAccessEnforced(agent), folders.length > 0)
       : workspaceAccessEnforced(agent)
@@ -531,11 +546,13 @@ export function developerInstructions(
     agentComputerUseEnabled(agent) && options.computerUseNotReady
       ? computerUseNotReadyRule(options.serverHost === true)
       : agentComputerUseEnabled(agent)
-        ? `Use ${COMPUTER_USE_MCP_SERVER_NAME} for every GUI task outside the embedded browser, never ${agent.provider === "claude" ? "" : "Codex Computer Use, the Sky computer use service, or "}another desktop-control plugin: they show no CodeBot cursor and can fight this one for the pointer.${options.agentCursorDrawn ? " CodeBot draws your cursor at each point that you click, scroll or move_cursor to in another app, also when the driver refuses its own cursor overlay." : ""}${options.computerUseOnWayland ? " On this Wayland desktop, video recording can be unavailable: when start_recording with record_video true answers video_active false and does not ask you to install ffmpeg, call stop_recording and do not try video again; tell the user in one plain sentence, without the driver's reason, that CodeBot cannot record video on this desktop, and offer screenshots instead." : ""}${options.computerUseInputRefused ? " On this desktop, CodeBot cannot send keys or clicks to other apps. Where a window offers an accessibility action, such as set_value on a text field, use it. When typing, a key or a click is refused, do not retry it and do not change its delivery mode; tell the user in one plain sentence, without the driver's reason, that CodeBot cannot type or click in apps on this desktop, and say that you can still read windows and take screenshots." : inputRefusalRules(options.computerUseOnWayland === true, options.computerUseForegroundInput === true)}${process.platform === "win32" ? WINDOWS_MENU_RULE : ""} After each action, read its structuredContent, or its JSON copy at the end of the result text: refused or suspected_noop means that the action did not happen, so do not report it as done; unverifiable means read the window again and report what you saw; a delivery.mode of foreground took the screen from the user. browser_consent_required means that CodeBot cannot use the user's own browser profiles: do not call browser_prepare; say so in one plain sentence and continue in codebot_browser, with request_takeover for a sign-in. Select a window by its title and size, never the first match: most windows are small empty helpers. Pixel coordinates apply only to the main display; on another display, use the element token, or the element_index with the window_id and snapshot_id of the same read. Take the shortest path and do not repeat reads; use query or include_screenshot false when you only need an element. Read ${COMPUTER_USE_GUIDE_URI} before the first GUI action of a conversation.${agent.provider === "pi" || isKeyOnlyProvider(agent.provider) ? ` ${piComputerUseGuideStep()}` : ""}`
+        ? `Use ${COMPUTER_USE_MCP_SERVER_NAME} for every GUI task outside the embedded browser, never ${agent.provider === "claude" ? "" : "Codex Computer Use, the Sky computer use service, or "}another desktop-control plugin: they show no CodeBot cursor and can fight this one for the pointer.${options.agentCursorDrawn ? " CodeBot draws your cursor at each point that you click, scroll or move_cursor to in another app, also when the driver refuses its own cursor overlay." : ""}${options.computerUseOnWayland ? " On this Wayland desktop, video recording can be unavailable: when start_recording with record_video true answers video_active false and does not ask you to install ffmpeg, call stop_recording and do not try video again; tell the user in one plain sentence, without the driver's reason, that CodeBot cannot record video on this desktop, and offer screenshots instead." : ""}${options.computerUseInputRefused ? " On this desktop, CodeBot cannot send keys or clicks to other apps. Where a window offers an accessibility action, such as set_value on a text field, use it. When typing, a key or a click is refused, do not retry it and do not change its delivery mode; tell the user in one plain sentence, without the driver's reason, that CodeBot cannot type or click in apps on this desktop, and say that you can still read windows and take screenshots." : inputRefusalRules(platform, options.computerUseOnWayland === true, options.computerUseForegroundInput === true)}${platform === "win32" ? WINDOWS_MENU_RULE : ""} After each action, read its structuredContent, or its JSON copy at the end of the result text: refused or suspected_noop means that the action did not happen, so do not report it as done; unverifiable means read the window again and report what you saw; a delivery.mode of foreground took the screen from the user. browser_consent_required means that CodeBot cannot use the user's own browser profiles: do not call browser_prepare; say so in one plain sentence and continue in codebot_browser, with request_takeover for a sign-in. Select a window by its title and size, never the first match: most windows are small empty helpers. Pixel coordinates apply only to the main display; on another display, use the element token, or the element_index with the window_id and snapshot_id of the same read. Take the shortest path and do not repeat reads; use query or include_screenshot false when you only need an element. Read ${COMPUTER_USE_GUIDE_URI} before the first GUI action of a conversation.${agent.provider === "pi" || isKeyOnlyProvider(agent.provider) ? ` ${piComputerUseGuideStep()}` : ""}`
         : options.computerUseInOwnChat
           ? "This conversation runs next to your own chat, and only your own chat uses Computer Use. Here, do not control desktop applications outside the embedded browser or use another desktop-control plugin; when the task needs one, say so, so that the user can continue that step in your own chat."
           : "The user turned Computer Use off for you. Do not control desktop applications outside the embedded browser or use a desktop-control plugin. Delegate such work to a teammate with Computer Use on (codebot.read_agent shows it); when none has it, say that the user can turn it on in your settings.",
-    ...(agentAutomationAllowed(agent, agentDefaults) ? [automationInstructions(agent.id, automationRoot)] : []),
+    ...(agentAutomationAllowed(agent, agentDefaults)
+      ? [automationInstructions(agent.id, automationRoot, platform)]
+      : []),
     ...(agentQuickAcknowledgementEnabled(agent, agentDefaults)
       ? [
           "Before a long task, such as a fix, a build, research, or a change in many files, describe and call codebot.acknowledge_request first: it shows the user one acknowledgement line and your plan, and the work starts when the user presses start, or after the wait that the user set. Do not call it for a quick answer, a question, a small change, a routine run, or an external chat. The card is your first line; after it, do not repeat the plan as prose.",
@@ -581,21 +598,21 @@ function memoryInstructions(
   ];
 }
 
-function longJobStart() {
-  if (process.platform === "win32") return "run your own long job detached (nohup) to outlive the call";
-  if (process.platform === "darwin")
+function longJobStart(platform: NodeJS.Platform) {
+  if (platform === "win32") return "run your own long job detached (nohup) to outlive the call";
+  if (platform === "darwin")
     return "detach your own long job: nohup perl -MPOSIX -e 'setsid; exec @ARGV' ... >log 2>&1 &";
   return "detach your own long job: setsid nohup ... >log 2>&1 &";
 }
 
-function automationInstructions(agentId: string, root: string): string {
+function automationInstructions(agentId: string, root: string, platform: NodeJS.Platform): string {
   const command = automationRunCommand({
     root,
     agentId,
     routineId: "<routineId>",
     payload: "<what happened>",
     waitId: "<waitId>",
-    platform: process.platform,
+    platform,
   });
   return `The user lets local scripts wake you through one of your routines. Use this instead of polling when a command must run after your turn ends, such as a long build, a download, or a worker CLI. Create a paused routine (active false) with codebot.create_routine whose instruction says what to do with the result, or reuse one that list_routines shows. Start the long command in its own process group, as for any long job, so that it continues after your turn, and run this command after it in the same detached process, also when the long command fails (join them with ";", not "&&"), with a short payload such as the exit status and the log path: ${command} Before you end your turn, open a wait with codebot.await_event and put its waitId in the command, so that the run continues the user's request; leave out waitId when no request waits for the result. Then end your turn. CodeBot runs the routine and adds the payload to its task. The command reads a secret token from a file: never print, copy, or send the token, and do not use this for work that ends within your turn.`;
 }

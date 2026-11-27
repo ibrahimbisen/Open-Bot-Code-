@@ -17,14 +17,6 @@ export function readDevelopmentRemoteDebuggingPort(value: string | undefined): s
   return Number.isInteger(port) && port >= 1_024 && port <= 65_535 ? String(port) : null;
 }
 
-export function readAnalyticsCaptureUrl(value: string | undefined): string | null {
-  const trimmed = value?.trim();
-  if (!trimmed || !URL.canParse(trimmed)) return null;
-  const url = new URL(trimmed);
-  const loopback = url.hostname === "127.0.0.1" || url.hostname === "localhost";
-  return url.protocol === "http:" && loopback && url.pathname === "/" ? url.origin : null;
-}
-
 export function developmentInstanceIdForWorktree(projectRoot: string): string {
   return `wt-${createHash("sha256").update(projectRoot).digest("hex")}`;
 }

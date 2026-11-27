@@ -201,7 +201,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "Быстрое подключение к серверам",
   "settings.keepRemoteSessions.description":
     "Сохранять подключение к серверам между запусками. CodeBot запускается примерно на секунду быстрее. При выходе из CodeBot сервис CodeBot не закрывает подключение.",
-  "settings.permissions.title": "Разрешения",
   "settings.notifications.whatYouHear": "О чём вы получаете уведомления",
   "settings.notifications.allDevices": "Все мои устройства",
   "settings.notifications.thisComputer": "Этот компьютер",
@@ -314,10 +313,6 @@ export const messages = {
   "settings.agentDock.agents.description": "Агенты сервера {server}. У каждого сервера свой док.",
   "settings.agentDock.agents.empty": "На этом сервере пока нет агентов.",
   "settings.analytics.title": "Связывать аналитику с моим аккаунтом",
-  "settings.analytics.description":
-    "Вкл.: метаданные об использовании и надёжности отправляются в собственную аналитику CodeBot вместе с ID аккаунта и почтой, а также сайты, которые посещаете вы и ваши агенты, использование инструментов и ежедневная сводка настройки. Выкл.: отправляется только базовое использование, например ходы и число токенов, со случайным ID установки. Чаты, файлы и промпты никогда не отправляются.",
-  "settings.analytics.webDescription":
-    "Вкл.: метаданные об использовании и надёжности отправляются в собственную аналитику CodeBot вместе с ID аккаунта и почтой. Выкл.: те же метаданные отправляются только со случайным ID установки. Чаты, файлы и промпты никогда не отправляются. Настройка действует для этого браузера.",
   "settings.tab.general.title": "Основные",
   "settings.tab.general.description": "Как работают чаты и чем делится CodeBot.",
   "settings.tab.agents.title": "Агенты",

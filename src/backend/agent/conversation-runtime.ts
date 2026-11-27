@@ -690,9 +690,12 @@ export class ConversationRuntime {
     return agentId && threadId && this.openClientFor(externalThreadId) === client ? { agentId, threadId } : null;
   }
 
+  threadBound: ((externalThreadId: string) => void) | null = null;
+
   bindThread(externalThreadId: string, agentId: string, publicThreadId?: string): void {
     if (publicThreadId) this.#publicThreads.set(externalThreadId, publicThreadId);
     this.#threadToAgent.set(externalThreadId, agentId);
+    this.threadBound?.(externalThreadId);
   }
 
   unbindThread(externalThreadId: string): void {

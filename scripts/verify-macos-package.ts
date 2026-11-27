@@ -40,8 +40,6 @@ const executablePath = resolve(contentsPath, "MacOS/CodeBot");
 const resourcesPath = resolve(contentsPath, "Resources");
 const packagedIconPath = resolve(resourcesPath, "icon.icns");
 const sourceIconPath = resolve("build/icon-production.icns");
-const packagedIconCatalogPath = resolve(resourcesPath, "Assets.car");
-const sourceIconCatalogPath = resolve("build/macos/Assets.car");
 const plistPath = resolve(contentsPath, "Info.plist");
 const voiceRuntimePath = resolve(resourcesPath, "voice/runtime");
 const voiceRuntimeLibraries = ["sherpa-onnx.node", "libsherpa-onnx-c-api.dylib", "libonnxruntime.dylib"];
@@ -106,7 +104,6 @@ await Promise.all(
 );
 assertCuaDriverSignature(resolve(cuaDriverPath, "cua-driver"));
 await verifyPackagedIcon(packagedIconPath, sourceIconPath);
-await verifyPackagedIconCatalog(packagedIconCatalogPath, sourceIconCatalogPath);
 await Promise.all(["codex", "claude", "grok"].map((name) => assertAbsent(resolve(resourcesPath, name))));
 await assertAbsent(resolve(resourcesPath, "cloudflared"));
 await assertAbsent(
@@ -119,12 +116,7 @@ expectEqual(plist.CFBundleDisplayName, "CodeBot", "display name");
 expectEqual(plist.CFBundleExecutable, "CodeBot", "executable name");
 expectEqual(plist.CFBundleIdentifier, "app.codebot.desktop", "bundle identifier");
 expectEqual(plist.CFBundleIconFile, "icon.icns", "application icon");
-expectEqual(plist.CFBundleIconName, "Icon", "macOS 26 application icon");
 expectEqual(plist.LSMinimumSystemVersion, "13.0", "minimum macOS version");
-expectEqual(plist.ElectronTeamID, "ZTRDTUL87R", "Apple Team ID");
-if (!Array.isArray(plist.NSUserActivityTypes) || !plist.NSUserActivityTypes.includes("NSUserActivityTypeBrowsingWeb")) {
-  throw new Error("The Universal Links activity type is missing.");
-}
 if (!plist.ElectronAsarIntegrity) throw new Error("ASAR integrity metadata is missing.");
 expectEqual(
   plist.NSMicrophoneUsageDescription,
@@ -239,13 +231,6 @@ async function verifyPackagedIcon(packagedPath: string, sourcePath: string): Pro
     await Promise.all(EXPECTED_MACOS_ICON_FILES.map((name) => access(join(iconSetPath, name))));
   } finally {
     await rm(iconRoot, { recursive: true, force: true });
-  }
-}
-
-async function verifyPackagedIconCatalog(packagedPath: string, sourcePath: string): Promise<void> {
-  const [packagedCatalog, sourceCatalog] = await Promise.all([readFile(packagedPath), readFile(sourcePath)]);
-  if (!packagedCatalog.equals(sourceCatalog)) {
-    throw new Error("The packaged macOS icon catalog does not match build/macos/Assets.car.");
   }
 }
 

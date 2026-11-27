@@ -851,6 +851,14 @@
   width: 100%;
 }
 
+:where(.ui-button).message-code-fold {
+  width: 100%;
+  justify-content: center;
+  border-top: 1px solid var(--codebot-border);
+  border-radius: 0;
+  color: var(--codebot-text-muted);
+}
+
 .message-code-frame:has(> .scroll-edges-view:focus-visible) {
   outline-offset: -2px;
 }

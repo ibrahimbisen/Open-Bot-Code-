@@ -6,6 +6,11 @@ import { ClaudeAgentClient } from "../src/backend/claude-client";
 import { runInLoginShell } from "../src/backend/cli";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 
+if (process.platform === "win32") {
+  process.stdout.write("macOS and Linux only: Windows has no login shell.\n");
+  process.exit(1);
+}
+
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-session-login-path-e2e");
 const report: { passed: boolean; sessionPath?: string; error?: string } = { passed: false };
 

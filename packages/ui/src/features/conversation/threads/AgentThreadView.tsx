@@ -8,6 +8,9 @@ import type {
   InstalledSkill,
   QueueDelivery,
   ResponseStyle,
+  SlashCommandEntry,
+  SlashCommandScreen,
+  TurnStepDetail,
 } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import { isAgentTaskActive } from "@codebot/team-client/agent-tasks";
@@ -81,6 +84,7 @@ import {
 } from "@codebot/ui/features/conversation/SelectionActions";
 import { SubagentGroup } from "@codebot/ui/features/conversation/Subagents";
 import type { SendShortcut } from "@codebot/ui/features/conversation/send-shortcut";
+import type { TurnActivityCounts } from "@codebot/ui/features/conversation/turn-summary";
 import { ComposerVoiceControls, type VoicePhase } from "@codebot/ui/features/conversation/VoiceRecordingMorph";
 import { type TextValue, useText } from "@codebot/ui/text";
 import type { JSX } from "@solidjs/web";
@@ -184,6 +188,8 @@ export interface AgentThreadViewProps {
   messages: readonly AgentMessage[];
   skills?: InstalledSkill[] | undefined;
   skillsLoadFailed?: boolean | undefined;
+  slashCommands?: SlashCommandEntry[] | undefined;
+  onSlashScreen?: ((screen: SlashCommandScreen) => void) | undefined;
   mcpServers?: ComposerMcpServer[] | undefined;
   browserTabs?: ComposerBrowserTab[] | undefined;
   threads?: ComposerThread[] | undefined;
@@ -233,6 +239,8 @@ export interface AgentThreadViewProps {
     | undefined;
   stepsAbove?: ((messageId: string) => AgentStep[] | undefined) | undefined;
   factsAbove?: ((messageId: string) => AgentStepsFacts | undefined) | undefined;
+  activityAbove?: ((messageId: string) => TurnActivityCounts | undefined) | undefined;
+  loadDetailsAbove?: ((messageId: string) => (() => Promise<readonly TurnStepDetail[]>) | undefined) | undefined;
   traceAbove?: ((messageId: string) => AgentStepsTrace) | undefined;
   activeSteps?: readonly AgentStep[] | undefined;
   backgroundWorkSince?: number | undefined;
@@ -824,9 +832,10 @@ export function AgentThreadView(props: AgentThreadViewProps) {
                     <AgentStepsDisclosure
                       steps={steps()}
                       defaultOpen={props.stepsOpenByDefault ?? false}
-                      list={!stepsInRow()}
                       trace={message().kind === "thinking" ? undefined : props.traceAbove?.(message().id)}
                       facts={props.factsAbove?.(message().id)}
+                      activity={props.activityAbove?.(message().id)}
+                      loadDetails={props.loadDetailsAbove?.(message().id)}
                     />
                   )}
                 </Show>
@@ -1149,6 +1158,8 @@ export function AgentThreadView(props: AgentThreadViewProps) {
               agents={props.agents}
               skills={props.skills}
               skillsLoadFailed={props.skillsLoadFailed}
+              slashCommands={props.slashCommands}
+              onSlashScreen={props.onSlashScreen}
               mcpServers={props.mcpServers}
               browserTabs={props.browserTabs}
               threads={otherThreads()}

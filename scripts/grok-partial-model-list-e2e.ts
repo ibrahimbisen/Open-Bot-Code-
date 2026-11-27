@@ -1,18 +1,20 @@
 import assert from "node:assert/strict";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS } from "@codebot/contracts/ipc";
 import { Effect } from "effect";
 import type { AgentBrowserHost } from "../src/backend/agent/turn-lifecycle";
 import { installFakeAgent, readJsonl } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/grok-partial-model-list-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-grok-partial-list-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
-const fakeGrok = join(root, "grok");
+const fakeGrok = standInPath(join(root, "grok"));
 const logPath = join(root, "grok.jsonl");
 const controlPath = join(root, "control.json");
 const MODEL = "grok-4.7";
@@ -174,7 +176,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
   if (!report.passed) process.exitCode = 1;
 }

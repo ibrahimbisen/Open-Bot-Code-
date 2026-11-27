@@ -10,3 +10,6 @@ the engine that CodeBot keeps.
 | [decisions.md](decisions.md) | Choices made for the owner, and the work packages |
 | [agent-brief.md](agent-brief.md) | Rules for build agents |
 | [upstream-sync.md](upstream-sync.md) | How to take changes from upstream OpenBot |
+| [updates.md](updates.md) | Application updates from your server and the one-command release |
+| [unsigned-builds.md](unsigned-builds.md) | How to open unsigned builds on macOS and Windows |
+| [windows-test-status.md](windows-test-status.md) | Result of each check and offline test suite on Windows |

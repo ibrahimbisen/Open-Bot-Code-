@@ -3,7 +3,7 @@ import { Button, ChevronRight, Spinner } from "@codebot/ui";
 import { AgentAvatar } from "@codebot/ui/features/agents/AgentAvatar";
 import { useText } from "@codebot/ui/text";
 import { createUniqueId, For, Show } from "solid-js";
-import { AnalyticsConsentRow, ConsentNotice } from "./AnalyticsConsent";
+import { ConsentNotice } from "./AnalyticsConsent";
 import type { OnboardingAvatarVariant } from "./onboarding-avatars";
 
 export interface FirstRunChoiceProps {
@@ -13,8 +13,6 @@ export interface FirstRunChoiceProps {
   reason: string;
   onStartFree: () => void;
   onUsePlan: () => void;
-  analytics: boolean;
-  onAnalyticsChange: (enabled: boolean) => void;
   onOpenTerms: () => void;
   onOpenPrivacy: () => void;
 }
@@ -75,12 +73,6 @@ export function FirstRunChoice(props: FirstRunChoiceProps) {
           </span>
           <ChevronRight class="first-run-choice-row-chevron" aria-hidden="true" />
         </Button>
-        <AnalyticsConsentRow
-          checked={props.analytics}
-          disabled={props.disabled}
-          agents={props.team.slice(2, 5)}
-          onChange={(enabled) => props.onAnalyticsChange(enabled)}
-        />
       </div>
       <ConsentNotice onOpenTerms={() => props.onOpenTerms()} onOpenPrivacy={() => props.onOpenPrivacy()} />
       <Show when={props.reason}>

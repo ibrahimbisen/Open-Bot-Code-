@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { AGENT_PROVIDERS, defaultProviderModel } from "@codebot/contracts/ipc";
@@ -13,16 +13,19 @@ import type { HostMemory, HostMemoryLevel } from "../src/backend/host-memory";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-background-hold-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-background-hold-"));
 const userData = join(root, "user-data");
 const home = join(root, "home");
 const processLog = join(root, "claude-processes.jsonl");
-const claudeExecutable = join(root, "claude");
+const claudeExecutable = standInPath(join(root, "claude"));
 const CLAUDE_MODEL = defaultProviderModel("claude");
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 
@@ -293,7 +296,7 @@ function step(name: string, check: () => void): void {
   entry.passed = true;
 }
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
 const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
@@ -431,7 +434,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   for (const entry of report.steps) process.stdout.write(`${entry.passed ? "PASS" : "FAIL"} ${entry.name}\n`);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);

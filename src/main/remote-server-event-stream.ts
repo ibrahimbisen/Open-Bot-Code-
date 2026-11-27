@@ -19,6 +19,7 @@ import type { HostRestartEvent } from "@codebot/contracts/team-protocol/host-upd
 import type { LiveVoiceEvent } from "@codebot/contracts/team-protocol/live-voice-v1";
 import type { MachineAlertEvent } from "@codebot/contracts/team-protocol/machine-resources-v1";
 import { optionalTeamEvent, optionalTeamEventToCurrent } from "@codebot/contracts/team-protocol/optional-events";
+import { type ProjectsWireEvent, projectsWireEvent } from "@codebot/contracts/team-protocol/projects-v1";
 import {
   addPromptQuestionDetails,
   TEAM_PROMPT_DETAIL_CAPABILITY,
@@ -99,6 +100,7 @@ export interface RemoteEventStreamOptions {
   onHostAppearance: (serverId: string, event: HostAppearanceEvent) => void;
   onMachineAlert: (serverId: string, event: MachineAlertEvent) => void;
   onLiveVoice: (serverId: string, event: LiveVoiceEvent) => void;
+  onProjectEvent?: (serverId: string, event: ProjectsWireEvent) => void;
   onOffline: (serverId: string) => void;
   onChanged: () => void;
 }
@@ -120,6 +122,7 @@ export class RemoteEventStream {
   readonly #onHostAppearance: RemoteEventStreamOptions["onHostAppearance"];
   readonly #onMachineAlert: RemoteEventStreamOptions["onMachineAlert"];
   readonly #onLiveVoice: RemoteEventStreamOptions["onLiveVoice"];
+  readonly #onProjectEvent: RemoteEventStreamOptions["onProjectEvent"];
   readonly #onOffline: RemoteEventStreamOptions["onOffline"];
   readonly #onChanged: RemoteEventStreamOptions["onChanged"];
   readonly #controllers = new Map<string, AbortController>();
@@ -151,6 +154,7 @@ export class RemoteEventStream {
     this.#onHostAppearance = options.onHostAppearance;
     this.#onMachineAlert = options.onMachineAlert;
     this.#onLiveVoice = options.onLiveVoice;
+    this.#onProjectEvent = options.onProjectEvent;
     this.#onOffline = options.onOffline;
     this.#onChanged = options.onChanged;
   }
@@ -534,6 +538,11 @@ export class RemoteEventStream {
           }
           try {
             const value = JSON.parse(message.data);
+            const projectEvent = projectsWireEvent(value);
+            if (projectEvent) {
+              this.#onProjectEvent?.(serverId, projectEvent);
+              return;
+            }
             const optional = optionalTeamEvent(value, { agentTaskUiBlocks: true });
             const decoded = optional
               ? { kind: "known" as const, event: optionalTeamEventToCurrent(optional) }

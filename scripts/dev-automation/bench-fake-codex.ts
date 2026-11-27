@@ -265,8 +265,14 @@ process.stdin.on("data", (chunk) => {
 process.stdin.on("end", () => process.exit(0));
 `;
 
+async function writeWindowsLauncher(directory: string): Promise<string> {
+  const launcher = join(directory, "codex.cmd");
+  await writeFile(launcher, `@"${process.execPath}" "%~dp0codex" %*\r\n`);
+  return launcher;
+}
+
 export async function writeFakeCodex(directory: string, options: FakeCodexOptions): Promise<FakeCodex> {
-  await rm(directory, { recursive: true, force: true });
+  await rm(directory, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 });
   await mkdir(join(directory, "codex-home"), { recursive: true });
   const path = join(directory, "codex");
   const logPath = join(directory, "codex.jsonl");
@@ -274,10 +280,11 @@ export async function writeFakeCodex(directory: string, options: FakeCodexOption
   await writeFile(join(directory, "package.json"), '{ "type": "commonjs" }\n');
   await chmod(path, 0o755);
   await writeFile(logPath, "");
+  const executable = process.platform === "win32" ? await writeWindowsLauncher(directory) : path;
   return {
     logPath,
     environment: {
-      CODEBOT_CODEX_PATH: path,
+      CODEBOT_CODEX_PATH: executable,
       CODEX_HOME: join(directory, "codex-home"),
       CODEBOT_BENCH_CODEX_LOG: logPath,
       CODEBOT_BENCH_CODEX_DELTA_MS: String(options.deltaMs),

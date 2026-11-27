@@ -512,6 +512,22 @@
   color: var(--codebot-accent);
 }
 
+.app-settings-modal-shell .settings-modal-update-server-form {
+  display: flex;
+  align-items: center;
+  gap: var(--codebot-space-2);
+  margin-block: var(--codebot-space-2);
+}
+
+.app-settings-modal-shell .settings-modal-update-server-input {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.app-settings-modal-shell .settings-modal-update-server-source {
+  overflow-wrap: anywhere;
+}
+
 .app-settings-modal-shell .settings-modal-error {
   color: var(--codebot-danger);
 }
@@ -862,4 +878,36 @@
 .settings-modal-page :where(.ui-button, .ui-input, .ui-textarea, .ui-native-select) {
   font-size: var(--codebot-text-md);
   line-height: var(--codebot-leading-md);
+}
+
+.reply-rule-field {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: var(--codebot-space-2);
+}
+
+.reply-rule-input {
+  width: 100%;
+  min-height: 72px;
+  resize: vertical;
+}
+
+.reply-rule-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--codebot-space-2);
+}
+
+.reply-rule-hint {
+  color: var(--codebot-text-muted);
+  font-size: var(--codebot-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.reply-rule-actions {
+  display: flex;
+  gap: var(--codebot-space-2);
 }

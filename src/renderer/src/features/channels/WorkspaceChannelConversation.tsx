@@ -5,6 +5,7 @@ import { usePlatform } from "../../platform";
 import { quitShortcutHintShown } from "../../quit-shortcut-hint";
 import { useTurns } from "../../turns";
 import { useAuth } from "../account/account-context";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useAgents } from "../agents/agents-context";
 import { useBrowserTabs } from "../browser/browser-context";
 import { useConnectors } from "../connectors/connectors-context";
@@ -50,6 +51,7 @@ function DesktopChannelConversation(props: { channelId: string; account: () => C
   const auth = useAuth();
   const { teamPresence, readerMemberId } = usePresence();
   const { activeServer, activeServerSupportsCapability, joinServerOpen } = useServers();
+  const advanced = useAdvancedFeatures();
   const { serverSettingsOpen } = useServerSettings();
   const {
     appSettingsOpen,
@@ -134,7 +136,11 @@ function DesktopChannelConversation(props: { channelId: string; account: () => C
       platform={platform.appInfo()?.platform}
       connectors={connectors.active}
       appSettingOpener={appSettingRowOpener(
-        () => ({ platform: platform.appInfo()?.platform, chatWindow: platform.chatWindow !== null }),
+        () => ({
+          platform: platform.appInfo()?.platform,
+          chatWindow: platform.chatWindow !== null,
+          advanced: advanced.settings(),
+        }),
         openAppSettingRow,
       )}
       agentStatus={shownAgentStatus()}
@@ -164,7 +170,11 @@ function DesktopChannelConversation(props: { channelId: string; account: () => C
       openLinksInBrowser={generalSettings().externalLinkTarget.kind === "codebot"}
       remoteDesktopSessionActive={Boolean(activeRemoteDesktopSession())}
       remoteDesktopVisible={remoteDesktopWorkspaceVisible()}
-      remoteDesktopEnabled={!platform.landingPreview && activeServerSupportsCapability("remote-desktop")}
+      remoteDesktopEnabled={
+        advanced.enabled("remoteDesktop") &&
+        !platform.landingPreview &&
+        activeServerSupportsCapability("remote-desktop")
+      }
       prompt={view.prompt()}
       promptUiBlock={view.promptUiBlock()}
       approval={view.approval()}

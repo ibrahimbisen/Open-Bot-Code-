@@ -4,11 +4,18 @@ import { homedir, tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
 import { workspaceTemporaryPaths } from "./agent/workspace-sandbox";
+import { type ContainerPlan, containerExecTarget } from "./lock/container";
+import { strictHiddenFolders } from "./lock/personal-folders";
+import { bubblewrapArgs, findBubblewrap, seatbeltReadRules, strictReadableFolders } from "./lock/strict-confinement";
 import { isPathInside } from "./path-containment";
 
 export interface ProcessConfinement {
   readonly writableRoots: readonly string[];
   readonly excludedFolders?: readonly string[];
+  readonly lockLevel?: "normal" | "strict";
+  readonly readableFolders?: readonly string[];
+  readonly container?: ContainerPlan;
+  readonly environmentNames?: readonly string[];
 }
 
 export interface ProviderStatePaths {
@@ -475,7 +482,16 @@ export function confineSpawnTarget(
       PROJECT_SETTINGS.filter((name) => name.includes("/")).map((name) => join(root, name)),
     ),
   ];
-  if (canConfineProcesses(platform)) {
+  const strict = confinement.lockLevel === "strict";
+  if (confinement.container)
+    return containerExecTarget(confinement.container, target, undefined, confinement.environmentNames ?? []);
+  if (platform === "linux") {
+    const program = findBubblewrap();
+    if (!program) throw new ProcessConfinementUnavailableError(unavailable("bubblewrap (bwrap)"));
+    const [command, ...args] = bubblewrapArgsFor(program, target, writable, protectedPaths, confinement, strict);
+    return { command: command ?? program, args, windowsVerbatimArguments: false };
+  }
+  if (platform === "darwin") {
     if (!existsSync(SANDBOX_EXEC)) throw new ProcessConfinementUnavailableError(unavailable("macOS sandbox-exec"));
     return {
       command: SANDBOX_EXEC,
@@ -489,6 +505,7 @@ export function confineSpawnTarget(
           state.lockFolders ?? [],
           state.lockFilesIn ?? [],
           held,
+          strict ? strictReadRules(target, writable, confinement) : [],
         ),
         target.command,
         ...target.args,
@@ -500,7 +517,32 @@ export function confineSpawnTarget(
 }
 
 export function canConfineProcesses(platform: NodeJS.Platform = process.platform): boolean {
-  return platform === "darwin";
+  return platform === "darwin" || (platform === "linux" && findBubblewrap() !== null);
+}
+
+function strictReadRules(target: SpawnTarget, writable: readonly string[], confinement: ProcessConfinement): string[] {
+  const readable = [...writable, ...(confinement.readableFolders ?? []), ...strictReadableFolders(target.command, [])];
+  return seatbeltReadRules(strictHiddenFolders(), readable, sbplString, realPaths);
+}
+
+function bubblewrapArgsFor(
+  program: string,
+  target: SpawnTarget,
+  writable: readonly string[],
+  protectedPaths: readonly string[],
+  confinement: ProcessConfinement,
+  strict: boolean,
+): string[] {
+  return bubblewrapArgs({
+    program,
+    command: target.command,
+    args: target.args,
+    writable,
+    protectedPaths,
+    readable: [...(confinement.readableFolders ?? []), ...strictReadableFolders(target.command, [])],
+    strict,
+    home: homedir(),
+  });
 }
 
 function unavailable(tool: string): string {
@@ -515,6 +557,7 @@ function seatbeltProfile(
   lockFolders: readonly string[],
   lockFilesIn: readonly string[],
   held: readonly string[],
+  readRules: readonly string[],
 ): string {
   const writableReal = unique(writable.flatMap(realPaths));
   const allowed = writableReal.map((path) => `(subpath ${sbplString(path)})`);
@@ -541,6 +584,7 @@ function seatbeltProfile(
   return [
     "(version 1)",
     "(allow default)",
+    ...readRules,
     "(deny file-write*)",
     `(allow file-write* ${allowed.join(" ")})`,
     ...(files.length > 0 ? [`(allow file-write-data ${files.join(" ")})`] : []),

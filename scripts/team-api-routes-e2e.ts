@@ -8,7 +8,6 @@ import {
   readdirSync,
   readFileSync,
   realpathSync,
-  rmSync,
   statSync,
   writeFileSync,
 } from "node:fs";
@@ -588,7 +587,6 @@ import { RoutineResultError } from "../src/backend/routine-results/routine-resul
 import type { OwnedRoutineRecord } from "../src/backend/routine-store";
 import { TeamChatStore } from "../src/backend/team-chat-store";
 import { resolveSharedFile as resolveSharedFileOnDisk } from "../src/backend/workspace-paths";
-import { HostAccountActivity } from "../src/main/account-activity-reporter";
 import type { AgentAccessState } from "../src/main/agent-access-store";
 import { createAgentDefaultsPreferenceStore } from "../src/main/agent-defaults-preference-store";
 import { createAgentDefaultsSettings } from "../src/main/agent-defaults-settings";
@@ -672,6 +670,9 @@ import { VaultService } from "../src/main/vault-service";
 import { VaultStore } from "../src/main/vault-store";
 import { VoiceOperationError } from "../src/main/voice-model-service";
 import { emptyInstanceTransferService } from "./instance-transfer-e2e-fixture";
+import { removeTestFolder } from "./test-folder";
+
+const PRIVATE_FILE_MODE = process.platform === "win32" ? 0o666 : 0o600;
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/team-api-routes-e2e");
 const APP_VERSION = "0.43.0";
@@ -800,7 +801,6 @@ const calls: RecordedCall[] = [];
 const logged: string[] = [];
 const uploads: AttachmentDataInput[] = [];
 let clock = Date.now();
-let reportMemberUse: (memberId: string) => void = () => undefined;
 const routineResultOptions: RoutineResultConnectionOption[] = [
   {
     connectionId: "slack-acme",
@@ -870,7 +870,7 @@ function list(value: Json | undefined): Json[] {
 }
 
 function startDisk(volumes: Json | undefined): boolean {
-  const root = parse(realpathSync(homedir())).root;
+  const root = parse(realpathSync.native(homedir())).root;
   return list(volumes).some((volume) => field(volume, "path") === root);
 }
 
@@ -2831,7 +2831,6 @@ try {
   });
   server = new TeamApiServer({
     appVersion: APP_VERSION,
-    onMemberUse: (memberId) => reportMemberUse(memberId),
     agentImport,
     libraryFolders,
     store,
@@ -3557,51 +3556,6 @@ try {
     { redeemedServerIds, serverId },
   );
   assert.ok(typeof bobToken === "string" && typeof bobId === "string", "bob did not join.");
-
-  {
-    const sends: string[][] = [];
-    const activity = new HostAccountActivity({
-      analyticsOn: true,
-      resolveOwner: () => null,
-      memberAccountId: (memberId) => store.getMemberAccountId(memberId),
-      send: (accounts) => Effect.sync(() => sends.push([...accounts])),
-    });
-    reportMemberUse = (memberId) => activity.memberUsed(memberId);
-    const bobAccount = store.getMemberAccountId(bobId);
-    await call("GET", TEAM_API_ROUTES.me, { token: bobToken });
-    await activity.idle();
-    const afterRead = sends.length;
-    await call("POST", TEAM_API_ROUTES.team.invites, { token: bobToken, json: { role: "member" } });
-    await call("POST", TEAM_API_ROUTES.team.invites, { token: bobToken, json: { role: "member" } });
-    await call("PUT", TEAM_API_ROUTES.me, { token: adaToken, json: {} });
-    await activity.idle();
-    check(
-      "a member's client use reports the member's account once a day, and a read or a member with no account reports nothing",
-      bobAccount !== null && afterRead === 0 && isDeepStrictEqual(sends, [[bobAccount]]),
-      { afterRead, sends, bobAccount },
-    );
-
-    const offSends: string[][] = [];
-    const offActivity = new HostAccountActivity({
-      analyticsOn: false,
-      resolveOwner: () => null,
-      memberAccountId: (memberId) => store.getMemberAccountId(memberId),
-      send: (accounts) => Effect.sync(() => offSends.push([...accounts])),
-    });
-    reportMemberUse = (memberId) => offActivity.memberUsed(memberId);
-    await call("POST", TEAM_API_ROUTES.team.invites, { token: bobToken, json: { role: "member" } });
-    await offActivity.idle();
-    const whileOff = offSends.length;
-    offActivity.setAnalyticsOn(true);
-    await call("POST", TEAM_API_ROUTES.team.invites, { token: bobToken, json: { role: "member" } });
-    await offActivity.idle();
-    check(
-      "a host with analytics off reports no member, and reports again when analytics is turned on",
-      whileOff === 0 && isDeepStrictEqual(offSends, [[bobAccount]]),
-      { whileOff, offSends },
-    );
-    reportMemberUse = () => undefined;
-  }
 
   const seatInvite = await runCauseEffect(store.createInvite("member"));
   const fourth = await call("POST", TEAM_API_ROUTES.join.server, {
@@ -4625,8 +4579,8 @@ try {
     mkdirSync(join(root, "workspaces", "agent-ada"), { recursive: true });
     mkdirSync(join(root, "CodeBot", "Shared"), { recursive: true });
     writeFileSync(join(projects, "notes.txt"), "not a folder\n");
-    const app = realpathSync(join(projects, "app"));
-    const build = realpathSync(join(projects, "app", "build"));
+    const app = realpathSync.native(join(projects, "app"));
+    const build = realpathSync.native(join(projects, "app", "build"));
     const compatibility = await call("GET", TEAM_API_ROUTES.compatibility, { protocol: TEAM_PROTOCOL_V9 });
     const older = await call("GET", TEAM_API_ROUTES.compatibility, { protocol: 8 });
     check(
@@ -4677,8 +4631,8 @@ try {
     check(
       "an admin lists the folders in a host folder, without files and hidden folders",
       browse.status === 200 &&
-        field(browse.body, "path") === realpathSync(projects) &&
-        field(browse.body, "parentPath") === realpathSync(root) &&
+        field(browse.body, "path") === realpathSync.native(projects) &&
+        field(browse.body, "parentPath") === realpathSync.native(root) &&
         isDeepStrictEqual(field(browse.body, "entries"), [{ name: "app", path: app }]) &&
         field(browse.body, "truncated") === false,
       summary(browse),
@@ -4696,8 +4650,8 @@ try {
     check(
       "a browse without a path lists the home folder, names the home folder and the start disk, and a missing folder gets 404 folderUnavailable",
       home.status === 200 &&
-        field(home.body, "path") === realpathSync(homedir()) &&
-        field(home.body, "home") === realpathSync(homedir()) &&
+        field(home.body, "path") === realpathSync.native(homedir()) &&
+        field(home.body, "home") === realpathSync.native(homedir()) &&
         startDisk(field(home.body, "volumes")) &&
         errorIs(gone, 404, sourceText("error.team.folderUnavailable")),
       [summary(home).status, field(home.body, "volumes"), summary(gone)],
@@ -4814,8 +4768,8 @@ try {
     const v10 = { capabilities: [CHANNEL_FOLDERS_CAPABILITY], protocol: TEAM_PROTOCOL_V10 };
     const shared = join(root, "channel-shared-work");
     mkdirSync(join(shared, "docs"), { recursive: true });
-    const work = realpathSync(shared);
-    const docs = realpathSync(join(shared, "docs"));
+    const work = realpathSync.native(shared);
+    const docs = realpathSync.native(join(shared, "docs"));
     const compatibility = await call("GET", TEAM_API_ROUTES.compatibility, { protocol: TEAM_PROTOCOL_V10 });
     const older = await call("GET", TEAM_API_ROUTES.compatibility, { protocol: TEAM_PROTOCOL_V9 });
     check(
@@ -12370,7 +12324,7 @@ try {
         field(started.body, "chunkBytes") === INSTANCE_TRANSFER_CHUNK_BYTES &&
         isDeepStrictEqual(field(started.body, "received"), []) &&
         isDeepStrictEqual(uploads(), [`${uploadId}.part`]) &&
-        (statSync(join(transferUploads, `${uploadId}.part`)).mode & 0o777) === 0o600,
+        (statSync(join(transferUploads, `${uploadId}.part`)).mode & 0o777) === PRIVATE_FILE_MODE,
       summary(started),
     );
     const wrongDigest = await sendPart(adaToken, uploadId, 0, firstPart, "0".repeat(64));
@@ -16840,7 +16794,7 @@ try {
   if (channelService) await Effect.runPromise(channelService.stop());
   if (server) await Effect.runPromise(server.stop());
   database.close();
-  rmSync(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 
 const failed = checks.filter((item) => !item.passed);

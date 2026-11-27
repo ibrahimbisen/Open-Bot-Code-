@@ -17,7 +17,6 @@ coverage/
 !.env.example
 !apps/auth-api/.env.production
 !apps/auth-api/.env.dev
-!remote/.env.production
 *.key
 *.p12
 *.pem

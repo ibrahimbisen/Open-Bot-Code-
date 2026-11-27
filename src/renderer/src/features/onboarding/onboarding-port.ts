@@ -6,7 +6,6 @@ export interface OnboardingPort {
   onSetupState: CodeBotDesktopApi["onSetupState"];
   servers: Pick<CodeBotDesktopApi["servers"], "previewInvite">;
   openUrl: CodeBotDesktopApi["openUrl"];
-  getAnalyticsDefault: CodeBotDesktopApi["getAnalyticsDefault"];
 }
 
 export function onboardingPort(): OnboardingPort {

@@ -164,8 +164,11 @@ export function createAgentTasks(options: AgentTasksOptions) {
     dropHiddenConversations();
   }
 
-  function showConversations(taskIds: readonly string[]): void {
-    const next = new Set(taskIds);
+  const shownByOwner = new Map<string, readonly string[]>();
+
+  function showConversations(taskIds: readonly string[], owner = "threads"): void {
+    shownByOwner.set(owner, taskIds);
+    const next = new Set([...shownByOwner.values()].flat());
     for (const taskId of shown) {
       if (next.has(taskId) || !untrack(() => state.conversations[taskId])) continue;
       hidden.delete(taskId);

@@ -5,6 +5,20 @@ import { isDynamicRecord, isNumber, isOneOf } from "./runtime-values";
 export const CONVERSATION_TRACE_STEP_KINDS = ["reasoning", "tool", "message"] as const;
 export type ConversationTraceStepKind = (typeof CONVERSATION_TRACE_STEP_KINDS)[number];
 
+export const CONVERSATION_TRACE_ACTIVITIES = [
+  "editing",
+  "running",
+  "reading",
+  "searching",
+  "browsing",
+  "delegating",
+  "working",
+] as const;
+export type ConversationTraceActivity = (typeof CONVERSATION_TRACE_ACTIVITIES)[number];
+
+export const CONVERSATION_TRACE_TARGET_LIMIT = 16;
+const ACTIVITY_LIMIT = 32;
+
 export interface ConversationTraceStep {
   id: string;
   kind: ConversationTraceStepKind;
@@ -15,6 +29,13 @@ export interface ConversationTraceStep {
   endedAt: string | null;
   failed?: true | undefined;
   error?: string | undefined;
+  activity?: string | undefined;
+  targets?: string[] | undefined;
+}
+
+export function traceStepActivity(step: Pick<ConversationTraceStep, "activity">): ConversationTraceActivity | null {
+  if (step.activity === undefined) return null;
+  return isOneOf(CONVERSATION_TRACE_ACTIVITIES, step.activity) ? step.activity : "working";
 }
 
 export interface ConversationTurnTrace {
@@ -58,7 +79,12 @@ function isConversationTraceStep(value: unknown): value is ConversationTraceStep
         value.recipientAgentIds.every(isIdentifier))) &&
     isBoundedString(value.startedAt, TIME_LIMIT) &&
     isNullableBoundedString(value.endedAt, TIME_LIMIT) &&
-    (value.failed === undefined || value.failed === true)
+    (value.failed === undefined || value.failed === true) &&
+    (value.activity === undefined || isBoundedString(value.activity, ACTIVITY_LIMIT)) &&
+    (value.targets === undefined ||
+      (Array.isArray(value.targets) &&
+        value.targets.length <= CONVERSATION_TRACE_TARGET_LIMIT &&
+        value.targets.every((target) => isBoundedString(target, CONVERSATION_TRACE_TEXT_LIMIT))))
   );
 }
 

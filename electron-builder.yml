@@ -19,9 +19,8 @@ electronFuses:
   loadBrowserProcessSpecificV8Snapshot: false
   grantFileProtocolExtraPrivileges: false
 publish:
-  provider: github
-  owner: nightly-labs
-  repo: codebot
+  provider: generic
+  url: ${env.CODEBOT_UPDATE_URL}
 files:
   - out/**/*
   - package.json
@@ -89,8 +88,6 @@ mac:
   hardenedRuntime: true
   icon: build/icon-production.icns
   extraResources:
-    - from: build/macos/Assets.car
-      to: Assets.car
     - from: build/icon-production-macos-safe-area.png
       to: icons/icon-production-macos-safe-area.png
     - from: build/icon-dev-macos-safe-area.png
@@ -113,8 +110,6 @@ mac:
   entitlementsInherit: build/entitlements.mac.inherit.plist
   darkModeSupport: true
   extendInfo:
-    CFBundleIconName: Icon
-    ElectronTeamID: ZTRDTUL87R
     NSMicrophoneUsageDescription: CodeBot uses the microphone to transcribe voice prompts locally on this Mac.
     NSLocationUsageDescription: CodeBot shares the location of this Mac with a page in the CodeBot browser only when you allow it.
     NSLocationWhenInUseUsageDescription: CodeBot shares the location of this Mac with a page in the CodeBot browser only when you allow it.
@@ -125,8 +120,6 @@ mac:
     NSCalendarsUsageDescription: CodeBot lets the commands that an agent runs use your calendars.
     NSRemindersFullAccessUsageDescription: CodeBot lets the commands that an agent runs read and change your reminders.
     NSRemindersUsageDescription: CodeBot lets the commands that an agent runs use your reminders.
-    NSUserActivityTypes:
-      - NSUserActivityTypeBrowsingWeb
   target:
     - dmg
     - zip

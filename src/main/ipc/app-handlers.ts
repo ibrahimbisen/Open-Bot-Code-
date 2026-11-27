@@ -1,7 +1,6 @@
 import { bugReportFormUrl } from "@codebot/contracts/feedback";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import {
-  type AnalyticsPreference,
   type AppInfo,
   type AppSetupState,
   type AppVariant,
@@ -12,7 +11,7 @@ import {
   GROK_BOT_EXPORT_URL,
 } from "@codebot/contracts/ipc";
 import type { AppTranslate } from "@codebot/i18n";
-import { analyticsOnByDefault } from "@codebot/telemetry";
+import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
 import { app, type BrowserWindow, dialog, type OpenDialogOptions, type WebContents } from "electron";
 import { version as developmentVersion } from "../../../package.json";
@@ -21,7 +20,6 @@ import type { BrowserHost } from "../../backend/browser-host";
 import type { MailboxStore } from "../../backend/mailbox-store";
 import type { AgentDefaultsPreferenceStore } from "../agent-defaults-preference-store";
 import type { AgentMemoryLimitSetting } from "../agent-memory-limit-preference-store";
-import type { AnalyticsPreferenceService } from "../analytics-preference-service";
 import type { AppBehaviorService } from "../app-behavior-service";
 import type { AppearanceService } from "../appearance-service";
 import type { ApprovalAutomation } from "../approval-automation-store";
@@ -43,7 +41,6 @@ import { readSetupState, writeSetupState } from "../setup-store";
 import { systemHourCycle } from "../system-hour-cycle";
 import type { UpdateService } from "../update-service";
 import {
-  parseAnalyticsPreference,
   parseAppAppearancePreference,
   parseAppBehaviorPreferenceChange,
   parseAppInterfaceSizePreference,
@@ -65,7 +62,10 @@ function draftPost(translate: AppTranslate): string {
   return encodeURIComponent(translate("app.socialFollow.draftPost", { site: "github.com/nightly-labs/openbot" }));
 }
 
-const EXTERNAL_DESTINATIONS: Record<ExternalDestination, string | ((translate: AppTranslate) => string)> = {
+const EXTERNAL_DESTINATIONS: Record<
+  Exclude<ExternalDestination, "download">,
+  string | ((translate: AppTranslate) => string)
+> = {
   "agent-setup": "https://github.com/nightly-labs/openbot/blob/main/docs/TROUBLESHOOTING.md",
   "opencode-install": "https://opencode.ai/docs/",
   "opencode-auth": "https://opencode.ai/auth",
@@ -94,12 +94,11 @@ const EXTERNAL_DESTINATIONS: Record<ExternalDestination, string | ((translate: A
   "instagram-post": "https://www.instagram.com/",
   "tiktok-post": "https://www.tiktok.com/upload",
   "grok-bot-export": GROK_BOT_EXPORT_URL,
-  download: DOWNLOAD_URL,
   "mac-screen-recording": MAC_PERMISSION_URLS["screen-recording"],
 };
 
 import { runCauseEffect } from "../../backend/effect-boundary";
-import { DOWNLOAD_URL } from "../download-url";
+import { downloadUrl } from "../download-url";
 import { openHttpLink } from "../message-link-relay";
 import type { ResourceMonitor } from "../resource-monitor";
 import type { StartupTiming } from "../startup-timing";
@@ -112,7 +111,6 @@ export interface AppIpcDependencies {
   browser: BrowserHost;
   updater: UpdateService;
   setupFile: string;
-  analyticsPreferences: AnalyticsPreferenceService;
   approvalAutomation: ApprovalAutomation;
   busyMessageMode: BusyMessageModePreferenceStore;
   agentDefaults: AgentDefaultsPreferenceStore;
@@ -131,8 +129,6 @@ export interface AppIpcDependencies {
   interfaceSize: InterfaceSizeService;
   initializeAgent: () => Promise<void>;
   appVariant: AppVariant;
-  analyticsCaptureUrl: string | null;
-  analyticsInstallId: string | null;
   dynamicIslandAvailable: boolean;
   getMainWindow: () => BrowserWindow | null;
   isMainWindow: (sender: WebContents) => boolean;
@@ -149,7 +145,6 @@ export function appIpcHandlers({
   browser,
   updater,
   setupFile,
-  analyticsPreferences,
   approvalAutomation,
   busyMessageMode,
   agentDefaults,
@@ -168,8 +163,6 @@ export function appIpcHandlers({
   interfaceSize,
   initializeAgent,
   appVariant,
-  analyticsCaptureUrl,
-  analyticsInstallId,
   dynamicIslandAvailable,
   getMainWindow,
   isMainWindow,
@@ -195,8 +188,6 @@ export function appIpcHandlers({
           version,
           platform,
           variant: appVariant,
-          ...(analyticsCaptureUrl ? { analyticsCaptureUrl } : {}),
-          ...(analyticsInstallId ? { analyticsInstallId } : {}),
           ...(softwareRendering ? { softwareRendering } : {}),
           ...(hourCycle ? { hourCycle } : {}),
           ...(aboveAppsSupport ? { aboveAppsSupport } : {}),
@@ -204,21 +195,6 @@ export function appIpcHandlers({
         };
       }),
       getSetupState: handler(() => runCauseEffect(readSetupState(setupFile))),
-      getAnalyticsPreference: handler(() =>
-        runCauseEffect(
-          readSetupState(setupFile).pipe(Effect.flatMap((setup) => analyticsPreferences.read(setup.completed))),
-        ),
-      ),
-      getAnalyticsDefault: handler(
-        (): AnalyticsPreference => ({
-          enabled:
-            analyticsPreferences.accountAnswer() ??
-            analyticsOnByDefault(app.getLocaleCountryCode(), Intl.DateTimeFormat().resolvedOptions().timeZone),
-        }),
-      ),
-      setAnalyticsPreference: payloadHandler(parseAnalyticsPreference, (parsed) =>
-        runCauseEffect(analyticsPreferences.set(parsed.enabled, parsed.chosen === true)),
-      ),
       reportRendererTiming: eventPayloadHandler(parseRendererTimingReport, (event, report) => {
         if (report.workspaceReady && isMainWindow(event.sender)) startup?.workspaceReady();
         resources.observeRendererTiming(report);
@@ -268,14 +244,17 @@ export function appIpcHandlers({
         runCauseEffect(interfaceSize.set(parsed)),
       ),
       saveSetup: payloadHandler(parseSetup, async (input): Promise<AppSetupState> => {
-        const before = await runCauseEffect(readSetupState(setupFile));
-        await runCauseEffect(analyticsPreferences.saveDefault(before.completed));
         const state = await runCauseEffect(writeSetupState(setupFile, input));
         await runCauseEffect(service.setPreferredProvider(input.preferredProvider, input.preferredModel));
         await initializeAgent();
         return state;
       }),
-      openExternal: payloadHandler(parseExternalDestination, (parsed) => {
+      openExternal: payloadHandler(parseExternalDestination, async (parsed) => {
+        if (parsed === "download") {
+          const installer = await downloadUrl();
+          if (installer === null) throw new Error(sourceText("error.appUpdate.noServer"));
+          return openLink(installer);
+        }
         const target = EXTERNAL_DESTINATIONS[parsed];
         return openLink(typeof target === "string" ? target : target(language.translate));
       }),

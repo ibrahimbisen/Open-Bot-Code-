@@ -20,3 +20,25 @@ export function documentColorScheme(): DocumentColorScheme {
   }
   return scheme();
 }
+
+function readThemeStamp(): string {
+  const style = document.documentElement.style;
+  return [
+    read(),
+    style.getPropertyValue("--codebot-editor-bg"),
+    style.getPropertyValue("--codebot-syntax-keyword"),
+  ].join(",");
+}
+
+let stamp: (() => string) | undefined;
+
+export function documentThemeStamp(): string {
+  if (!stamp) {
+    const [current, setCurrent] = createSignal<string>(readThemeStamp());
+    new MutationObserver(() => setCurrent(readThemeStamp())).observe(document.documentElement, {
+      attributeFilter: [ATTRIBUTE, "style"],
+    });
+    stamp = current;
+  }
+  return stamp();
+}

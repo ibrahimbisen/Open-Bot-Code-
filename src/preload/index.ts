@@ -4,6 +4,7 @@ import {
   type AttachmentImportEvent,
   type CodeBotDesktopApi,
   decodeAddedAgent,
+  decodeAdvancedFeatureSettings,
   decodeAgentAccessSnapshot,
   decodeAgentAdminSettings,
   decodeAgentBackupModelSettings,
@@ -167,7 +168,6 @@ import {
   decodeAgentDefaults,
   decodeAgentImportSkill,
   decodeAgentMemoryLimitPreference,
-  decodeAnalyticsPreference,
   decodeAppAppearancePreference,
   decodeAppBehaviorPreference,
   decodeAppInfo,
@@ -233,6 +233,7 @@ import {
   decodeVoid,
   decodeWorkflowNotificationOpenedEvent,
 } from "./app-decoding";
+import { decodeAppUpdateFeed } from "./app-update-decoding";
 import { decodeBackgroundProcesses } from "./background-process-decoding";
 import {
   decodeBrowserBounds,
@@ -304,7 +305,25 @@ import {
   decodeDynamicIslandPreference,
   decodeDynamicIslandPresentation,
 } from "./dynamic-island-decoding";
+import {
+  decodeExplorerChange,
+  decodeExplorerDirectory,
+  decodeExplorerEntry,
+  decodeExplorerEntryOrNull,
+  decodeExplorerFile,
+  decodeExplorerGitCommitFiles,
+  decodeExplorerGitDiff,
+  decodeExplorerGitLog,
+  decodeExplorerGitStatus,
+  decodeExplorerRoots,
+  decodeExplorerWriteResult,
+} from "./explorer-decoding";
 import { decodeHostReleaseStatusFromMain } from "./host-release-decoding";
+import {
+  decodeLocalModelServerCandidates,
+  decodeLocalModelServerStatuses,
+  decodeLocalModelServerTestResult,
+} from "./local-model-servers-decoding";
 import { decodeMacAutomationResults } from "./mac-automation-decoding";
 import {
   decodeAddOrchestratorReply,
@@ -321,7 +340,22 @@ import {
   decodePasswordManagerResponse,
   decodePasswordManagerResponses,
 } from "./password-manager-decoding";
+import {
+  decodeProjectActivityChangedEvent,
+  decodeProjectActivityList,
+  decodeProjectChat,
+  decodeProjectChatSearchPage,
+  decodeProjectChatsChangedEvent,
+  decodeProjectChatsPage,
+  decodeProjectDetail,
+  decodeProjectFolderChange,
+  decodeProjectFolderChoice,
+  decodeProjectSummaries,
+  decodeProjectSummary,
+  decodeProjectsChangedEvent,
+} from "./project-decoding";
 import { decodeProviderRuntimeSnapshot } from "./provider-runtime";
+import { decodeReplyRuleFromMain, decodeTurnStepDetailsFromMain } from "./reply-decoding";
 import {
   decodeRoutineResultDeliveries,
   decodeRoutineResultDestination,
@@ -347,6 +381,12 @@ import {
   decodeSubmission,
   decodeSubmissions,
 } from "./skills-decoding";
+import {
+  decodeResumableSessionList,
+  decodeResumeSessionResult,
+  decodeSlashCommandList,
+  decodeSlashCommandsChanged,
+} from "./slash-command-decoding";
 import {
   decodeDirectConversation,
   decodeDirectConversationPage,
@@ -760,10 +800,6 @@ const codebotApi: CodeBotDesktopApi = {
     getSetupState: decodeAppSetupState,
     saveSetup: decodeAppSetupState,
     setupState: decodeAppSetupState,
-    getAnalyticsPreference: decodeAnalyticsPreference,
-    getAnalyticsDefault: decodeAnalyticsPreference,
-    analyticsPreference: decodeAnalyticsPreference,
-    setAnalyticsPreference: decodeAnalyticsPreference,
     reportRendererTiming: decodeVoid,
     getApprovalAutomation: decodeApprovalAutomationPreference,
     approvalAutomation: decodeApprovalAutomationPreference,
@@ -884,6 +920,12 @@ const codebotApi: CodeBotDesktopApi = {
   macAutomation: bridgeGroup(IPC_ENDPOINTS.macAutomation, {
     request: decodeMacAutomationResults,
   }),
+  slashCommands: bridgeGroup(IPC_ENDPOINTS.slashCommands, {
+    list: decodeSlashCommandList,
+    listSessions: decodeResumableSessionList,
+    resumeSession: decodeResumeSessionResult,
+    changed: decodeSlashCommandsChanged,
+  }),
   backgroundProcesses: bridgeGroup(IPC_ENDPOINTS.backgroundProcesses, {
     list: decodeBackgroundProcesses,
     stop: decodeVoid,
@@ -942,6 +984,32 @@ const codebotApi: CodeBotDesktopApi = {
     sourceSync: decodeCrmApplyResult,
     settings: decodeCrmSettings,
     setSettings: decodeCrmSettings,
+  }),
+  projects: bridgeGroup(IPC_ENDPOINTS.projects, {
+    list: decodeProjectSummaries,
+    get: decodeProjectDetail,
+    create: decodeProjectDetail,
+    update: decodeProjectDetail,
+    archive: decodeProjectSummary,
+    restore: decodeProjectSummary,
+    delete: decodeVoid,
+    chooseFolder: decodeProjectFolderChoice,
+    addFolder: decodeProjectFolderChange,
+    removeFolder: decodeProjectFolderChange,
+    createAgent: decodeProjectDetail,
+    updateAgent: decodeProjectDetail,
+    removeAgent: decodeProjectDetail,
+    listChats: decodeProjectChatsPage,
+    getChat: decodeProjectChat,
+    searchChats: decodeProjectChatSearchPage,
+    startChat: decodeProjectChat,
+    setChatArchived: decodeProjectChat,
+    setChatPinned: decodeProjectChat,
+    setChatRuntime: decodeProjectChat,
+    listActivity: decodeProjectActivityList,
+    changed: decodeProjectsChangedEvent,
+    chatsChanged: decodeProjectChatsChangedEvent,
+    activityChanged: decodeProjectActivityChangedEvent,
   }),
   routineResults: bridgeGroup(IPC_ENDPOINTS.routineResults, {
     options: decodeRoutineResultOptions,
@@ -1145,6 +1213,15 @@ const codebotApi: CodeBotDesktopApi = {
     getSettings: decodeProviderDetectionSettings,
     setSettings: decodeProviderDetectionSettings,
   }),
+  localModelServers: bridgeGroup(IPC_ENDPOINTS.localModelServers, {
+    list: decodeLocalModelServerStatuses,
+    refresh: decodeLocalModelServerStatuses,
+    watch: decodeVoid,
+    test: decodeLocalModelServerTestResult,
+    scanHost: decodeLocalModelServerCandidates,
+    saveSettings: decodeLocalModelServerStatuses,
+    statuses: decodeLocalModelServerStatuses,
+  }),
   providerAdmin: bridgeGroup(IPC_ENDPOINTS.providerAdmin, {
     startCodeLogin: decodeProviderCodeLoginStart,
     submitCodeLogin: decodeAgentStatusFromMain,
@@ -1266,6 +1343,8 @@ const codebotApi: CodeBotDesktopApi = {
     startUpdate: decodeHostUpdateStatus,
     cancelUpdate: decodeHostUpdateStatus,
     setUpdateSettings: decodeHostUpdateStatus,
+    getAdvancedFeatures: decodeAdvancedFeatureSettings,
+    setAdvancedFeature: decodeAdvancedFeatureSettings,
     getTimezone: decodeHostTimezoneSettings,
     setTimezone: decodeHostTimezoneSettings,
     getVoiceModel: decodeHostVoiceModel,
@@ -1558,6 +1637,10 @@ const codebotApi: CodeBotDesktopApi = {
     event: decodeUpdateStatus,
     preference: decodeUpdatePreference,
   }),
+  appUpdate: bridgeGroup(IPC_ENDPOINTS.appUpdate, {
+    getFeed: decodeAppUpdateFeed,
+    setFeedUrl: decodeAppUpdateFeed,
+  }),
   notifications: bridgeGroup(IPC_ENDPOINTS.notifications, {
     getPreference: decodeNotificationPreference,
     setPreference: decodeNotificationPreference,
@@ -1659,6 +1742,29 @@ const codebotApi: CodeBotDesktopApi = {
     selectDisplay: decodeVoid,
     disconnect: decodeVoid,
     event: decodeRemoteDesktopSessions,
+  }),
+  explorer: bridgeGroup(IPC_ENDPOINTS.explorer, {
+    roots: decodeExplorerRoots,
+    list: decodeExplorerDirectory,
+    stat: decodeExplorerEntryOrNull,
+    read: decodeExplorerFile,
+    write: decodeExplorerWriteResult,
+    create: decodeExplorerEntry,
+    rename: decodeExplorerEntry,
+    trash: decodeVoid,
+    reveal: decodeVoid,
+    watch: decodeVoid,
+    unwatch: decodeVoid,
+    changed: decodeExplorerChange,
+    gitStatus: decodeExplorerGitStatus,
+    gitLog: decodeExplorerGitLog,
+    gitCommitFiles: decodeExplorerGitCommitFiles,
+    gitDiff: decodeExplorerGitDiff,
+  }),
+  replies: bridgeGroup(IPC_ENDPOINTS.replies, {
+    getRule: decodeReplyRuleFromMain,
+    setRule: decodeReplyRuleFromMain,
+    readTurnSteps: decodeTurnStepDetailsFromMain,
   }),
 };
 

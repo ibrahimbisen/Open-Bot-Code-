@@ -18,7 +18,7 @@ export function buildContentSecurityPolicy(
     `img-src 'self' data: codebot-attachment: codebot-remote-attachment: codebot-avatar: codebot-remote-avatar: codebot-server-logo: codebot-remote-server-logo: https:${developmentImageSources}`,
     "font-src 'self' data:",
     "media-src 'self' blob: codebot-attachment: codebot-remote-attachment:",
-    `connect-src 'self' codebot-attachment: codebot-remote-attachment: https://analytics.openbot.run ws://127.0.0.1:*${selfHostedSignalSource}${developmentSources}`,
+    `connect-src 'self' codebot-attachment: codebot-remote-attachment: ws://127.0.0.1:*${selfHostedSignalSource}${developmentSources}`,
     "object-src 'none'",
     "frame-src 'self' codebot-attachment: codebot-remote-attachment: codebot-visual: codebot-remote-visual: http://127.0.0.1:* http://localhost:*",
     "base-uri 'none'",

@@ -1,9 +1,22 @@
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { KnipConfig } from "knip";
 
 const CSS_IMPORT = /@import\s+["']([^"']+)["']/g;
 
 function compileCss(text: string): string {
   return [...text.matchAll(CSS_IMPORT)].map(([, specifier]) => `import "${specifier}";`).join("\n");
+}
+
+const RENDERER_ROOT = "src/renderer";
+const PAGE_MODULE = /<script\b[^>]*\bsrc=["']\/([^"']+)["']/g;
+
+function rendererPageModules(): string[] {
+  const root = join(import.meta.dirname, RENDERER_ROOT);
+  return readdirSync(root)
+    .filter((name) => name.endsWith(".html"))
+    .flatMap((name) => [...readFileSync(join(root, name), "utf8").matchAll(PAGE_MODULE)])
+    .map(([, source]) => `${RENDERER_ROOT}/${source}`);
 }
 
 const config: KnipConfig = {
@@ -55,6 +68,7 @@ const config: KnipConfig = {
     ".": {
       entry: ["scripts/**/*.ts", "tools/**/*.ts", "src/renderer/stories/prototype-support.tsx"],
       project: ["src/**/*.{ts,tsx,css}", "scripts/**/*.ts", "tools/**/*.ts"],
+      "electron-vite": { entry: rendererPageModules() },
       ignoreDependencies: [
         "@speed-highlight/core",
         "class-variance-authority",
@@ -109,7 +123,7 @@ const config: KnipConfig = {
       ],
     },
     "remote/api": {
-      entry: ["src/capacity-report.ts"],
+      entry: ["src/index.ts"],
       project: ["src/**/*.ts"],
     },
     "packages/i18n": {

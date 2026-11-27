@@ -19,6 +19,7 @@ import { createEffect, createMemo, createSignal, Loading, onCleanup, Show, untra
 import { actionToast } from "./action-toast";
 import { appPort } from "./app-port";
 import { useAuth } from "./features/account/account-context";
+import { useAdvancedFeatures } from "./features/advanced/advanced-features-context";
 import { useAgents } from "./features/agents/agents-context";
 import { desktopBrowserProfileCalls } from "./features/browser/browser-profiles-port";
 import { createBrowserProfilesStore } from "./features/browser/stores/browser-profiles-store";
@@ -50,6 +51,7 @@ import type { HostProviderSettings } from "./features/settings/ProviderSettingsS
 import { useSettings } from "./features/settings/settings-context";
 import { settingsPort } from "./features/settings/settings-port";
 import { useSidebar } from "./features/sidebar/sidebar-context";
+import { SlashScreenHost } from "./features/slash-commands/SlashScreenHost";
 import { codexLiveAccess as codexLiveAccessOf } from "./features/speech/codex-live-access";
 import { useUpdates } from "./features/updates/updates-context";
 import { useWhatsNew } from "./features/updates/whats-new-context";
@@ -85,6 +87,7 @@ export function WorkspaceOverlays(props: AccountProps) {
   return (
     <>
       <SharedAgentInstall />
+      <SlashScreenHost />
       <JoinServer account={props.account} />
       <AddServer />
       <CreateLocalServer />
@@ -303,6 +306,7 @@ function RestartServer() {
 }
 
 function ServerSettings() {
+  const advanced = useAdvancedFeatures();
   const windowPage = useWindowPage();
   const usageRows = usePlanLimitRows();
   const platform = usePlatform();
@@ -656,10 +660,11 @@ function ServerSettings() {
           open={serverSettingsOpen() && windowPage.settingsPlacement("server") !== undefined}
           page={windowPage.settingsPlacement("server")}
           sectionQuery={windowPage.serverSettingsQuery()}
+          remoteDesktopSupported={advanced.enabled("remoteDesktop")}
           openFirstSectionRequest={windowPage.openFirstServerSectionRequest()}
           onFirstSectionOpened={() => windowPage.setServerSettingsQuery("")}
           onOpenMarketplaceApps={
-            server().id === activeServer()?.id
+            advanced.enabled("marketplace") && server().id === activeServer()?.id
               ? () => {
                   windowPage.setServerSettingsQuery("");
                   setPendingPluginConnect(false);
@@ -752,7 +757,7 @@ function ServerSettings() {
                 : undefined
           }
           routineFeed={
-            server().kind === "local"
+            advanced.enabled("routines") && server().kind === "local"
               ? { api: appPort().routineFeed, listAgents: () => appPort().agent.listAgents(server().id) }
               : undefined
           }

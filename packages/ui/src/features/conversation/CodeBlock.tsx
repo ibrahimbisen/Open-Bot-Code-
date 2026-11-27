@@ -7,6 +7,8 @@ import { ScrollEdges } from "../../components/ScrollEdges";
 import { useText } from "../../text";
 import type { MessageCodeBlock } from "./DataTable";
 
+export const CODE_FOLD_LINES = 20;
+
 export interface CodeToken {
   text: string;
   type?: ShjToken | undefined;
@@ -136,6 +138,9 @@ export function CodeBlock(props: {
   const { t } = useText();
   const [lines, setLines] = createSignal<CodeLine[]>(untrack(() => plainCodeLines(props.block.code)));
   const [copied, setCopied] = createSignal(false);
+  const [unfolded, setUnfolded] = createSignal(false);
+  const folds = () => lines().length > CODE_FOLD_LINES;
+  const shownLines = () => (folds() && !unfolded() ? lines().slice(0, CODE_FOLD_LINES) : lines());
   let highlightRun = 0;
   let highlighted: HighlightedCode | undefined;
   let copiedTimer: ReturnType<typeof setTimeout> | undefined;
@@ -183,7 +188,7 @@ export function CodeBlock(props: {
     <ScrollEdges axis="x" class="message-code-frame" viewClass="message-code-scroll" dir="ltr">
       <pre class="message-code-pre">
         <code>
-          <For each={lines()}>
+          <For each={shownLines()}>
             {(line, lineIndex) => (
               <span class="message-code-line">
                 <span class="message-code-line-number" aria-hidden="true">
@@ -236,6 +241,18 @@ export function CodeBlock(props: {
         </div>
       </header>
       {props.body ? props.body(code) : code}
+      <Show when={folds()}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="xs"
+          class="message-code-fold"
+          aria-expanded={unfolded() ? "true" : "false"}
+          onClick={() => setUnfolded(!unfolded())}
+        >
+          {unfolded() ? t("reply.code.showLess") : t("reply.code.showAll", { count: lines().length })}
+        </Button>
+      </Show>
     </section>
   );
 }

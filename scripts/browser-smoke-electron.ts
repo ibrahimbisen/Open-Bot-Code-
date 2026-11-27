@@ -1669,7 +1669,10 @@ async function main(): Promise<void> {
     );
     const prematureRecordingRestart = await callBrowserTool(browser, "recording_start", { tabId: v2Tab.id });
     if (prematureRecordingRestart.success || !toolError(prematureRecordingRestart).includes("recording_stop")) {
-      throw new Error("V2 recording restart replaced an unclaimed completed artifact.");
+      const leftover = await callBrowserTool(browser, "recording_stop", { tabId: v2Tab.id });
+      throw new Error(
+        `V2 recording restart replaced an unclaimed completed artifact. restart=${prematureRecordingRestart.success} stop=${toolError(leftover)}`,
+      );
     }
     const aggregateRecording = await callBrowserTool(browser, "recording_start", { tabId: tab.id });
     if (aggregateRecording.success || !toolError(aggregateRecording).includes("in total")) {

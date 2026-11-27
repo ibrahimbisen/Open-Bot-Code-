@@ -156,12 +156,6 @@ export function createServerMembersSection(
     return limit !== null && activeMembers().length >= limit;
   };
   const inviteBlocked = () => membersFull();
-  createEffect(
-    () => inviteBlocked() && canManage(),
-    (full) => {
-      if (full) desktopAnalytics.track("limit_reached", { kind: "members", action: "shown" });
-    },
-  );
   const trackInvite = (action: "invite_link_copied" | "invite_qr_shown") =>
     desktopAnalytics.track("team_action", {
       action,

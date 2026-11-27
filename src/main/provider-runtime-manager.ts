@@ -59,6 +59,11 @@ import { runCauseEffect } from "../backend/effect-boundary";
 import { sha256File } from "../backend/file-hash";
 import { type McpToolRuntimes, NO_MCP_TOOL_RUNTIMES } from "../backend/mcp-provider-shapes";
 import { measureTree } from "../backend/storage-usage";
+import {
+  type BlockedVersions,
+  ProviderBlocklist,
+  type ProviderBlocklistOptions,
+} from "./app-update/provider-blocklist";
 import type { HermesInstaller } from "./hermes-installer";
 import { isSafeLinkTarget } from "./provider-runtime-archive";
 import {
@@ -70,12 +75,7 @@ import {
   type RuntimeTarget,
 } from "./provider-runtime-descriptors";
 import { ProviderRuntimeFailure, runtimeIO, runtimeSync } from "./provider-runtime-effects";
-import {
-  type BlockedVersions,
-  fetchBlockedVersions,
-  latestRelease,
-  readLimitedBody,
-} from "./provider-runtime-releases";
+import { latestRelease, readLimitedBody } from "./provider-runtime-releases";
 
 const execFileAsync = promisify(execFile);
 const logger = createCodeBotLogger("provider-runtimes");
@@ -115,6 +115,7 @@ export interface ProviderRuntimeManagerOptions {
   heldStageWaitMs?: number;
   hermesInstaller?: HermesInstaller;
   heldSourceWaitsMs?: readonly number[];
+  blocklist?: ProviderBlocklistOptions;
   updateRuntime?: (
     runtime: ManagedRuntimeId,
     install: () => Effect.Effect<string, ProviderRuntimeFailure>,
@@ -159,6 +160,7 @@ export class ProviderRuntimeManager extends EventEmitter<ProviderRuntimeManagerE
     signal: AbortSignal,
     onWait: () => void,
   ) => Effect.Effect<void, ProviderRuntimeFailure>;
+  readonly #blocklist: ProviderBlocklist;
   #blocked: BlockedVersions = new Map();
   #check: Deferred.Deferred<void, ProviderRuntimeFailure> | null = null;
   readonly #scope = Scope.makeUnsafe();
@@ -188,6 +190,7 @@ export class ProviderRuntimeManager extends EventEmitter<ProviderRuntimeManagerE
       });
     this.#heldStageWaitMs = options.heldStageWaitMs ?? HELD_STAGE_WAIT_MS;
     this.#heldSourceWaitsMs = options.heldSourceWaitsMs ?? HELD_SOURCE_WAITS_MS;
+    this.#blocklist = new ProviderBlocklist(options.blocklist ?? { bundledPath: null, remoteUrl: () => null });
     this.#hermesInstaller = options.hermesInstaller ?? null;
     this.#hermesInstaller?.on("status", () => {
       this.#revision += 1;
@@ -214,6 +217,7 @@ export class ProviderRuntimeManager extends EventEmitter<ProviderRuntimeManagerE
   initialize(): Effect.Effect<ProviderRuntimeSnapshot, ProviderRuntimeFailure> {
     return Effect.gen({ self: this }, function* (): Effect.fn.Return<ProviderRuntimeSnapshot, ProviderRuntimeFailure> {
       yield* runtimeIO(async () => await mkdir(this.#root, { recursive: true }));
+      this.#blocked = yield* this.#blocklist.bundled();
       yield* this.#removeAbandonedStagingEffect();
       yield* Effect.forEach(RUNTIMES, (runtime) => this.#inspectEffect(runtime, true), {
         concurrency: "unbounded",
@@ -406,7 +410,7 @@ export class ProviderRuntimeManager extends EventEmitter<ProviderRuntimeManagerE
     return Effect.gen({ self: this }, function* (): Effect.fn.Return<void, ProviderRuntimeFailure> {
       const [blocked, releases] = yield* Effect.all(
         [
-          Effect.result(fetchBlockedVersions(this.#fetch)),
+          this.#blocklist.read(this.#fetch),
           Effect.forEach(
             PROVIDERS,
             (provider) =>
@@ -424,7 +428,7 @@ export class ProviderRuntimeManager extends EventEmitter<ProviderRuntimeManagerE
         ],
         { concurrency: "unbounded" },
       );
-      if (Result.isSuccess(blocked)) this.#blocked = blocked.success;
+      this.#blocked = blocked;
       yield* this.#startAutomaticUpdates(target);
       yield* Effect.forEach(
         this.#stopping ? [] : PROVIDERS.filter((provider) => !this.#tasks.has(provider)),
@@ -703,7 +707,7 @@ export class ProviderRuntimeManager extends EventEmitter<ProviderRuntimeManagerE
   }
   #findLatestRelease(provider: ManagedProviderId, target: RuntimeTarget): Effect.Effect<void> {
     const lookups = [
-      fetchBlockedVersions(this.#fetch).pipe(
+      this.#blocklist.read(this.#fetch).pipe(
         Effect.tap((blocked) =>
           Effect.sync(() => {
             this.#blocked = blocked;

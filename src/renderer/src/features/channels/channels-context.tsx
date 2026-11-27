@@ -8,6 +8,7 @@ import { MESSAGE_DELETE_CAPABILITY } from "@codebot/contracts/team-protocol/mess
 import { createContext, type ParentProps, untrack, useContext } from "solid-js";
 import { noteAgentRequest } from "../../agent-requests";
 import { useAuth } from "../account/account-context";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useAgents } from "../agents/agents-context";
 import { useDirectMessages } from "../conversation/direct-messages-context";
 import { saveRemoteFrameChannels } from "../servers/remote-workspace-frame";
@@ -34,6 +35,7 @@ export function ChannelsControllerProvider(props: ParentProps<{ controller: Chan
 
 export function ChannelsProvider(props: ParentProps) {
   const { activeServer, activeServerId, activeServerSupportsCapability } = useServers();
+  const advanced = useAdvancedFeatures();
   const { agentList, setAgentSetupOpen } = useAgents();
   const { clearDirectSelection, setDirectTyping } = useDirectMessages();
   const windowPage = useWindowPage();
@@ -73,7 +75,7 @@ export function ChannelsProvider(props: ParentProps) {
         writeChannelSelection(accountKey(), selectionServerId, channelId);
       }
     },
-    supported: () => activeServerSupportsCapability(CHANNEL_CHATS_CAPABILITY),
+    supported: () => advanced.enabled("channels") && activeServerSupportsCapability(CHANNEL_CHATS_CAPABILITY),
     deletionSupported: () => activeServer()?.kind !== "remote" || serverRoleCanAdminister(activeServer()),
     taskCancelSupported: () => activeServerSupportsCapability(CHANNEL_TASK_CANCEL_CAPABILITY),
     isolationSupported: () => activeServerSupportsCapability(CHANNEL_ISOLATION_CAPABILITY),

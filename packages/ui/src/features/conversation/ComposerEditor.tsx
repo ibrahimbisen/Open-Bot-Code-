@@ -6,8 +6,8 @@ import {
   serializeChatTagReference,
 } from "@codebot/contracts/chat-tag-references";
 import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
-import type { DraftAttachment } from "@codebot/contracts/ipc";
-import { AppWindow, Badge, Blocks, Listbox, Puzzle, Split, UsersRound } from "@codebot/ui";
+import type { DraftAttachment, SlashCommandEntry, SlashCommandScreen } from "@codebot/contracts/ipc";
+import { AppWindow, Badge, Blocks, Listbox, Puzzle, Slash, Split, UsersRound } from "@codebot/ui";
 import { usesTouchLayout } from "@codebot/ui/utils";
 import { Dynamic, type JSX, Portal } from "@solidjs/web";
 import {
@@ -66,6 +66,7 @@ import {
   pickerOptionText,
   referenceMatches,
   skillMatchRank,
+  slashCommandMatchRank,
 } from "./composer-picker";
 import {
   type AttachmentTokenActions,
@@ -113,6 +114,8 @@ interface ComposerEditorProps {
   quoteRequest?: QuoteRequest | undefined;
   onOpenQuote?: ((messageId: string, text: string) => void) | undefined;
   skillsLoadFailed?: boolean | undefined;
+  slashCommands?: SlashCommandEntry[] | undefined;
+  onSlashScreen?: ((screen: SlashCommandScreen) => void) | undefined;
   onValueChange: (value: string) => void;
   onSubmit: () => void;
   onSteer?: (() => void) | undefined;
@@ -151,7 +154,7 @@ interface MentionContext {
   query: string;
   start: number;
   end: number;
-  trigger: "@" | "$";
+  trigger: "@" | "$" | "/";
 }
 
 const DICTATION_INTERIM_WORDS = 2;
@@ -271,6 +274,17 @@ export function ComposerEditor(props: ComposerEditorProps) {
       showSlug: (nameCounts.get(skill.name.toLocaleLowerCase()) ?? 0) > 1,
     }));
   });
+  const matchingCommands = createMemo(() => {
+    const context = mention();
+    if (context?.trigger !== "/") return [];
+    const query = context.query.trim().toLocaleLowerCase();
+    const ranked = (props.slashCommands ?? []).flatMap((command) => {
+      const rank = slashCommandMatchRank(command, query);
+      return rank === null ? [] : [{ command, rank }];
+    });
+    ranked.sort((left, right) => left.rank - right.rank || left.command.name.localeCompare(right.command.name));
+    return ranked.map(({ command }) => command);
+  });
   const matchingMcpServers = createMemo(() => {
     const query = mention()?.query.trim().toLocaleLowerCase() ?? "";
     return (props.mcpServers ?? []).filter(
@@ -335,6 +349,14 @@ export function ComposerEditor(props: ComposerEditorProps) {
   });
   const pickerSections = createMemo<PickerSection[]>(() => {
     const trigger = mention()?.trigger;
+    if (trigger === "/")
+      return [
+        {
+          id: "commands",
+          title: null,
+          options: matchingCommands().map((command) => ({ type: "command" as const, command })),
+        },
+      ].filter((section) => section.options.length > 0);
     if (trigger === "$")
       return [
         {
@@ -387,6 +409,10 @@ export function ComposerEditor(props: ComposerEditorProps) {
   });
   const pickerStatus = createMemo(() => {
     const context = mention();
+    if (context?.trigger === "/" && matchingOptions().length === 0)
+      return (props.slashCommands ?? []).length === 0
+        ? t("slash.picker.none")
+        : t("slash.picker.noMatch", { query: context.query.trim() });
     if (context?.trigger !== "$" || matchingOptions().length > 0 || skillProblems().length > 0) return null;
     if (requestedMentionStart() !== context.start && context.query.trim()) return null;
     if (usableSkills().length === 0)
@@ -710,6 +736,11 @@ export function ComposerEditor(props: ComposerEditorProps) {
     const selection = readEditorSelection(editor);
     if (!selection || selection.anchor !== selection.focus) return null;
     const beforeCaret = editorText(editor).slice(0, selection.focus);
+    const command = props.slashCommands === undefined ? null : beforeCaret.match(/^\/([^\s/\uFFFC]{0,60})$/u);
+    if (command) {
+      const query = command[1] ?? "";
+      return { query, start: 0, end: beforeCaret.length, trigger: "/" };
+    }
     const match = beforeCaret.match(/(?:^|\s)([@$])([^@$\n\uFFFC]{0,60})$/u);
     if (!match) return null;
     const trigger = match[1] === "$" ? "$" : "@";
@@ -756,20 +787,30 @@ export function ComposerEditor(props: ComposerEditorProps) {
     const range = rangeFromTextOffsets(editor, context.start, context.end);
     if (!range) return;
     range.deleteContents();
+    if (option.type === "command" && option.command.screen !== null && props.onSlashScreen) {
+      const screen = option.command.screen;
+      setMention(null);
+      emitValue();
+      editor.focus();
+      props.onSlashScreen(screen);
+      return;
+    }
     const token =
-      option.type === "agent"
-        ? createMentionToken(option.agent)
-        : option.type === "everyone"
-          ? document.createTextNode(EVERYONE_MENTION)
-          : option.type === "skill"
-            ? createSkillToken(option.skill)
-            : option.type === "mcp"
-              ? createMcpToken(option.server)
-              : option.type === "tab"
-                ? createTabToken(option.tab)
-                : option.type === "thread"
-                  ? createThreadToken(option.thread)
-                  : createAttachmentToken(option.attachment, attachmentTokenActions);
+      option.type === "command"
+        ? document.createTextNode(`/${option.command.name}`)
+        : option.type === "agent"
+          ? createMentionToken(option.agent)
+          : option.type === "everyone"
+            ? document.createTextNode(EVERYONE_MENTION)
+            : option.type === "skill"
+              ? createSkillToken(option.skill)
+              : option.type === "mcp"
+                ? createMcpToken(option.server)
+                : option.type === "tab"
+                  ? createTabToken(option.tab)
+                  : option.type === "thread"
+                    ? createThreadToken(option.thread)
+                    : createAttachmentToken(option.attachment, attachmentTokenActions);
     const trailingSpace = document.createTextNode(" ");
     range.insertNode(trailingSpace);
     range.insertNode(token);
@@ -868,8 +909,15 @@ export function ComposerEditor(props: ComposerEditorProps) {
       return true;
     }
     if ((event.key === "Enter" && !event.shiftKey) || event.key === "Tab") {
-      event.preventDefault();
       const option = options[activeOption()];
+      if (
+        event.key === "Enter" &&
+        option?.type === "command" &&
+        option.command.screen === null &&
+        option.command.name === context.query
+      )
+        return false;
+      event.preventDefault();
       if (option) insertOption(option);
       return true;
     }
@@ -1187,7 +1235,11 @@ export function ComposerEditor(props: ComposerEditorProps) {
                 ref={bindPickerList}
                 class="mention-picker-list"
                 aria-label={t(
-                  mention()?.trigger === "$" ? "composer.picker.skillLabel" : "composer.picker.mentionLabel",
+                  mention()?.trigger === "$"
+                    ? "composer.picker.skillLabel"
+                    : mention()?.trigger === "/"
+                      ? "slash.picker.label"
+                      : "composer.picker.mentionLabel",
                 )}
                 options={pickerSections()}
                 optionGroupChildren="options"
@@ -1249,6 +1301,10 @@ export function ComposerEditor(props: ComposerEditorProps) {
                       ) : option.type === "everyone" ? (
                         <span class="mention-picker-skill-icon" aria-hidden="true">
                           <UsersRound />
+                        </span>
+                      ) : option.type === "command" ? (
+                        <span class="mention-picker-skill-icon" aria-hidden="true">
+                          <Slash />
                         </span>
                       ) : option.type === "skill" ? (
                         <span class="mention-picker-skill-icon" aria-hidden="true">

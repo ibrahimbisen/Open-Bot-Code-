@@ -1,7 +1,9 @@
 import {
+  type AdvancedFeatureSettings,
   type AgentAccessChange,
   type AgentAccessSnapshot,
   type AgentProviderRef,
+  decodeAdvancedFeatureSettings,
   decodeAgentAccessSnapshot,
   decodeHostAgentMemoryLimit,
   decodeHostBrowsingMemory,
@@ -17,6 +19,7 @@ import {
   decodePromptCacheTtlSetting,
   decodeProviderModelVisibility,
   decodeServerAuditLog,
+  decodeSetAdvancedFeatureInput,
   type HostPersonality,
   type HostTurnLimitsInput,
   type HostUpdateSettingsChange,
@@ -53,6 +56,10 @@ import {
   type UpdateRestartMode,
 } from "@codebot/contracts/ipc";
 import { isOneOf } from "@codebot/contracts/runtime-values";
+import {
+  ADVANCED_FEATURES_CAPABILITY,
+  ADVANCED_FEATURES_ROUTES,
+} from "@codebot/contracts/team-protocol/advanced-features-v1";
 import { AGENT_ACCESS_CAPABILITY, AGENT_ACCESS_ROUTES } from "@codebot/contracts/team-protocol/agent-access-v1";
 import {
   AGENT_MEMORY_LIMIT_CAPABILITY,
@@ -135,6 +142,7 @@ import { SKILL_LEARNING_CAPABILITY, SKILL_LEARNING_ROUTES } from "@codebot/contr
 import { sourceText } from "@codebot/i18n/source";
 import { Effect, Result } from "effect";
 import { runCauseEffect } from "../../backend/effect-boundary";
+import type { AdvancedFeaturesControl } from "../advanced-features-store";
 import { type AgentAccessStore, agentAccessSnapshot } from "../agent-access-store";
 import type { AgentMemoryLimitSetting } from "../agent-memory-limit-preference-store";
 import type { BrowsingMemoryPreferenceStore } from "../browsing-memory-preference-store";
@@ -196,6 +204,7 @@ interface HostAdminIpcDependencies {
   promptCacheTtl: Pick<PromptCacheTtlPreferenceStore, "get" | "set">;
   claudeUserSetup: ClaudeUserSetupControl;
   cacheExpiryCompaction: CacheExpiryCompactionControl;
+  advancedFeatures: AdvancedFeaturesControl;
   claudeCompactWindow: ClaudeCompactWindowControl;
   providerEnvironment: Pick<ProviderEnvironmentControl, "get" | "set">;
   modelVisibility: Pick<ModelVisibility, "settings" | "set">;
@@ -226,6 +235,7 @@ export function hostAdminIpcHandlers({
   promptCacheTtl,
   claudeUserSetup,
   cacheExpiryCompaction,
+  advancedFeatures,
   claudeCompactWindow,
   providerEnvironment,
   modelVisibility,
@@ -309,6 +319,13 @@ export function hostAdminIpcHandlers({
       throw new Error(sourceText("error.team.claudeUserSetupUnsupported"));
     return runCauseEffect(
       remoteServers.request(serverId, route, decodeClaudeUserSetupResponse, { method: "POST", body }),
+    );
+  }
+  function remoteAdvancedFeatures(serverId: string, route: string, body: object) {
+    if (!remoteServers.supportsCapability(serverId, ADVANCED_FEATURES_CAPABILITY))
+      throw new Error(sourceText("error.advanced.unsupported"));
+    return runCauseEffect(
+      remoteServers.request(serverId, route, decodeAdvancedFeatureSettings, { method: "POST", body }),
     );
   }
   function remoteCacheExpiryCompaction(serverId: string, route: string, body: { enabled?: boolean }) {
@@ -586,6 +603,14 @@ export function hostAdminIpcHandlers({
       setClaudeUserSetup: scopedHandler(parseClaudeUserSetup, {
         local: (enabled) => runCauseEffect(claudeUserSetup.set(enabled)),
         remote: (enabled, serverId) => remoteClaudeUserSetup(serverId, CLAUDE_USER_SETUP_ROUTES.update, { enabled }),
+      }),
+      getAdvancedFeatures: scopedQueryHandler({
+        local: (): AdvancedFeatureSettings => advancedFeatures.get(),
+        remote: (serverId) => remoteAdvancedFeatures(serverId, ADVANCED_FEATURES_ROUTES.settings, {}),
+      }),
+      setAdvancedFeature: scopedHandler(decodeSetAdvancedFeatureInput, {
+        local: (change) => runCauseEffect(advancedFeatures.set(change)),
+        remote: (change, serverId) => remoteAdvancedFeatures(serverId, ADVANCED_FEATURES_ROUTES.update, change),
       }),
       getCacheExpiryCompaction: scopedQueryHandler({
         local: () => cacheExpiryCompaction.get(),

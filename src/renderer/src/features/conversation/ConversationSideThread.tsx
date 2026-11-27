@@ -1,4 +1,4 @@
-import { canPreviewAttachment } from "@codebot/contracts/ipc";
+import { canPreviewAttachment, LOCAL_SERVER_ID } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import { classifyFailure } from "@codebot/telemetry";
 import { Input } from "@codebot/ui";
@@ -19,6 +19,7 @@ import { useCompactMessageActions } from "../../compact-message-actions-preferen
 import { usePlatform } from "../../platform";
 import { deviceQuoteShortcut } from "../../send-shortcut-preference";
 import { remoteAgentError } from "../agents/agent-error-text";
+import { createSlashCommandsFor } from "../slash-commands/slash-commands-source";
 import { useThreadVisualReplyCard } from "./ChatVisualReply";
 import { latestVisibleAgentMessageId } from "./conversation-read-state";
 import { conversationRuntime } from "./conversation-runtime";
@@ -29,6 +30,7 @@ import { useThreadMcpSignInCard } from "./McpSignInChatCard";
 import { useMessageBackdropAction } from "./message-backdrop";
 import { naturalThreadRows } from "./narration-rows";
 import { useThreadSettingLinkCard } from "./SettingLinkChatCard";
+import { stepDetailsLoader } from "./step-details-loader";
 import { createTurnSteps } from "./turn-steps";
 import { createTurnStreamHold } from "./turn-stream-hold";
 import { useTurnTrace } from "./turn-trace";
@@ -116,6 +118,13 @@ export function ConversationSideThread(props: { threadId: string; resizer: JSX.E
   );
   const fromThread = (open: () => void) => openFileFromThread(props.threadId, open);
   const draftKey = () => threadComposer.sideDraftKey(props.threadId);
+  const slash = createSlashCommandsFor(() => {
+    const agent = view.agent;
+    const task = thread()?.task;
+    return agent && task
+      ? { agentId: agent.id, taskId: task.id, serverId: view.server?.id ?? LOCAL_SERVER_ID }
+      : undefined;
+  });
   const shownAt = untrack(besideFocusRequest);
   const focusRequest = () => {
     const request = besideFocusRequest();
@@ -248,6 +257,8 @@ export function ConversationSideThread(props: { threadId: string; resizer: JSX.E
             messages={shownMessages()}
             skills={installedSkills()}
             skillsLoadFailed={installedSkillsLoadFailed()}
+            slashCommands={slash.commands()}
+            onSlashScreen={slash.openScreen}
             mcpServers={mcpServers()}
             browserTabs={taggableBrowserTabs()}
             threads={taggableThreads()}
@@ -303,6 +314,15 @@ export function ConversationSideThread(props: { threadId: string; resizer: JSX.E
             focusMessage={current().thread.focusMessage}
             stepsAbove={turnSteps.stepsAbove}
             factsAbove={turnSteps.factsAbove}
+            activityAbove={turnSteps.activityAbove}
+            loadDetailsAbove={(messageId) =>
+              stepDetailsLoader({
+                agentId: view.agent?.id,
+                turnId: turnSteps.turnIdAbove(messageId),
+                server: view.server,
+                hosted: view.runtime !== undefined,
+              })
+            }
             traceAbove={turnTrace}
             activeSteps={turnSteps.activeSteps()}
             backgroundWorkSince={threadBackgroundWorkSince(current().thread.task?.id)}

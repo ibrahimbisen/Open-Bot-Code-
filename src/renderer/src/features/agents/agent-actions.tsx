@@ -420,6 +420,7 @@ const AgentActions = createSimpleContext({
     }
 
     return {
+      addNewAgent,
       createAgent,
       editAgent,
       duplicateAgent,

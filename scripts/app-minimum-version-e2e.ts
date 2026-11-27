@@ -166,14 +166,14 @@ function waitForStatus(updater: FakeUpdater, label: string, done: (status: Updat
 
 function requiredUpdate(
   updater: FakeUpdater,
-  apiOrigin: string,
+  updateFolder: string,
   setRequired: (required: boolean) => void,
   fetchOverride?: RequiredUpdateFetch,
 ) {
   return new RequiredUpdate({
     surface: "desktop",
     currentVersion: updater.status.currentVersion,
-    resolveApiUrl: (path) => new URL(path, apiOrigin).toString(),
+    feedUrl: () => `${updateFolder}/`,
     updater,
     setRequired,
     log: () => undefined,
@@ -210,14 +210,10 @@ try {
   const closedPort = await freePort();
   const closed = `http://127.0.0.1:${closedPort}`;
 
-  const realApp = new FakeUpdater("0.0.1");
-  const realOutcome = await run(requiredUpdate(realApp, origin, () => undefined));
-  assert.equal(realOutcome, APP_MINIMUM_VERSIONS.desktop ? "required" : "supported");
-
   const old = new FakeUpdater("0.0.1");
   const oldRequired: boolean[] = [];
   assert.equal(
-    await run(requiredUpdate(old, origin, (r) => oldRequired.push(r), answer({ minimumVersion: MINIMUM }))),
+    await run(requiredUpdate(old, origin, (r) => oldRequired.push(r), answer({ desktop: MINIMUM, host: MINIMUM }))),
     "required",
   );
   assert.equal(old.status.requiredVersion, MINIMUM);
@@ -230,7 +226,7 @@ try {
   const freshOutcomes = [
     await run(requiredUpdate(fresh, closed, (r) => freshRequired.push(r))),
     await run(requiredUpdate(fresh, origin, (r) => freshRequired.push(r), answer({}, 503))),
-    await run(requiredUpdate(fresh, origin, (r) => freshRequired.push(r), answer({ minimumVersion: { major: 99 } }))),
+    await run(requiredUpdate(fresh, origin, (r) => freshRequired.push(r), answer({ desktop: { major: 99 } }))),
   ];
   assert.deepEqual(freshOutcomes, ["unknown", "unknown", "supported"]);
   assert.equal(fresh.status.requiredVersion, undefined);
@@ -239,7 +235,7 @@ try {
   const tenant = new FakeUpdater("0.0.1");
   tenant.status = { ...tenant.status, managedByHost: true };
   assert.equal(
-    await run(requiredUpdate(tenant, origin, () => undefined, answer({ minimumVersion: MINIMUM }))),
+    await run(requiredUpdate(tenant, origin, () => undefined, answer({ desktop: MINIMUM, host: MINIMUM }))),
     "supported",
   );
 
@@ -256,7 +252,12 @@ try {
     graceMs: 0,
     automaticSpreadMs: 0,
   });
-  const hostCheck = requiredUpdate(host, origin, (r) => requested.setRequired(r), answer({ minimumVersion: MINIMUM }));
+  const hostCheck = requiredUpdate(
+    host,
+    origin,
+    (r) => requested.setRequired(r),
+    answer({ desktop: MINIMUM, host: MINIMUM }),
+  );
   assert.equal(await run(hostCheck), "required");
   const waiting = await waitForStatus(
     host,
@@ -276,7 +277,6 @@ try {
     decisions,
     routes,
     client: {
-      realRoute: realOutcome,
       belowThenOffline: { requiredVersion: old.status.requiredVersion, setRequired: oldRequired },
       neverConfirmed: freshOutcomes,
       installAfterTurn: { waitedFor: waiting.scheduledRestart?.waitingFor ?? [], installs: host.installs },

@@ -31,6 +31,7 @@ import { answeredRequestId } from "./routine-quiet-runs";
 import { stopRunningSubagents } from "./subagent-updates";
 import { isCodexMissingRollout, isCodexRolloutPending, providerForAgent } from "./thread-items";
 import type { ThreadLifecycle } from "./thread-lifecycle";
+import { agentWorkingDirectory } from "./workspace-sandbox";
 
 type UnresolvedDelivery = DeliveryContext["delivery"];
 
@@ -235,7 +236,7 @@ export class BootRecovery {
           .readHistory(
             {
               threadId: session.externalSessionId,
-              cwd: agent.workspacePath,
+              cwd: agentWorkingDirectory(agent),
               items: delivery.turnId ? "none" : "full",
             },
             (fragment) =>
@@ -502,7 +503,7 @@ export class BootRecovery {
             externalSessionId: session.externalSessionId,
             agentId: agent.id,
             publicThreadId,
-            cwd: typeof params.cwd === "string" ? params.cwd : agent.workspacePath,
+            cwd: typeof params.cwd === "string" ? params.cwd : agentWorkingDirectory(agent),
             retired: session.state === "inactive",
             findDelivery: (deliveryId) => this.#mailbox.deliveryForProviderMessage(agent.id, deliveryId),
             findMessageDelivery: (messageId) => this.#mailbox.deliveryForMessage(messageId, agent.id),

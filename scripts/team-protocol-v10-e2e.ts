@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { generateKeyPairSync, randomBytes, randomUUID, sign } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
@@ -51,6 +51,7 @@ import { MailboxStore } from "../src/backend/mailbox-store";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamWebRtcChannel } from "../src/main/team-webrtc-bridge";
 import { readWebHostCompatibility } from "../src/renderer/src/features/web-client/web-host-compatibility";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/team-protocol-v10-e2e");
 const FIXTURES = resolve(import.meta.dirname, "../packages/contracts/src/team-protocol/fixtures");
@@ -740,7 +741,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 
 process.stdout.write(`Team API protocol 10 passed. Report: ${join(OUT, "report.json")}\n`);

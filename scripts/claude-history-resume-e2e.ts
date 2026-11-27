@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
@@ -10,6 +10,7 @@ import { claudeHistoryReader } from "../src/backend/claude-history";
 import { CodeBotDatabase } from "../src/backend/codebot-database";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { importProviderHistory } from "../src/backend/provider-history-import";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-history-resume-e2e");
 const TURNS = 200;
@@ -177,7 +178,7 @@ async function run(): Promise<void> {
     report.passed = true;
   } finally {
     database.close();
-    await rm(root, { recursive: true, force: true });
+    await removeTestFolder(root);
   }
 }
 

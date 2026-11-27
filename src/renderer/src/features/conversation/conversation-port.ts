@@ -49,6 +49,7 @@ export interface ConversationPort {
     | "sendDirectMessage"
     | "setDirectTyping"
   >;
+  replies: Pick<CodeBotDesktopApi["replies"], "readTurnSteps">;
   storage: Pick<CodeBotDesktopApi["storage"], "openLocation">;
   hostAdmin: Pick<CodeBotDesktopApi["hostAdmin"], "getAgentAccess">;
   browserDock: Pick<CodeBotDesktopApi["browserDock"], "publishPresentation" | "onAction" | "onShown">;

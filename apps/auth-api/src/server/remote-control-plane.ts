@@ -5,7 +5,6 @@ import {
   type HostKeyHandover,
   hostKeyHandoverStatement,
 } from "@codebot/contracts/host-key-handover";
-import { DEFAULT_TEAM_MEMBER_LIMIT } from "@codebot/contracts/input-limits";
 import { isAvatarColor } from "@codebot/contracts/ipc";
 import { isSignalHomeId } from "@codebot/contracts/ipc-host-signal-home";
 import type { MobileConnectHostBinding } from "@codebot/contracts/mobile-connect";
@@ -63,12 +62,7 @@ import {
 import { sourceText } from "@codebot/i18n/source";
 import { Context, Effect, Layer, Option, Result, Schema } from "effect";
 import { importJWK, type JWK, type JWTPayload, SignJWT } from "jose";
-import {
-  getServerEntitlement,
-  type OwnerLicense,
-  ownerLicenseForHost,
-  SERVER_MEMBER_LIMIT_SQL,
-} from "./billing-entitlement";
+import type { OwnerLicense } from "./billing-entitlement";
 import { decodeBase64Url, hmacSha256, importHmacSha256Key, randomToken, sha256 } from "./crypto";
 import { CUSTOM_SERVER_OFFER_COLUMNS, type CustomServerOfferRow, customServerPayment } from "./custom-server-offers";
 import type { GitHubInstallationTokensError, GitHubRepositoryRoute } from "./github-installation-tokens";
@@ -82,6 +76,7 @@ const AUTH_EVENT_RETRY_MS = 60_000;
 const AUTH_EVENT_SEND_CONCURRENCY = 6;
 const AUTH_EVENT_CLAIM_MS = 2 * 60_000;
 const MAX_OUTSTANDING_INVITES_PER_HOST = 50;
+const ACCOUNT_MEMBER_LIMIT = 1_000;
 const MAX_PERMANENT_INVITES_PER_HOST = 5;
 const MAX_TELEGRAM_LINK_CODES_PER_HOST = 10;
 const OWNER_TRANSFER_TTL_MS = 7 * 24 * 60 * 60 * 1_000;
@@ -3439,37 +3434,17 @@ export class RemoteControlPlane {
 
   readonly #ownerLicense = Effect.fn("RemoteControlPlane.ownerLicense")(function* (
     this: RemoteControlPlane,
-    hostId: string,
+    _hostId: string,
   ): Effect.fn.Return<OwnerLicense | null, RemoteFailure, RemoteDependencies> {
-    const dependencies = yield* RemoteDependencies;
-    return yield* ownerLicenseForHost(dependencies.database, hostId, dependencies.now()).pipe(
-      Effect.mapError(() => new RemoteOperationError({})),
-    );
+    return yield* Effect.succeed(null);
   });
 
   readonly #memberLimit = Effect.fn("RemoteControlPlane.memberLimit")(function* (
     this: RemoteControlPlane,
-    hostId: string,
-    license: OwnerLicense | null,
+    _hostId: string,
+    _license: OwnerLicense | null,
   ): Effect.fn.Return<MemberLimit, RemoteFailure, RemoteDependencies> {
-    const dependencies = yield* RemoteDependencies;
-    const custom = yield* remoteCall(() =>
-      dependencies.database.prepare(SERVER_MEMBER_LIMIT_SQL).bind(hostId).first<{ member_limit: number }>(),
-    );
-    const below = (limit: number) => license !== null && license.users < limit;
-    if (custom) return { limit: custom.member_limit, fromLicense: false, licenseRaises: below(custom.member_limit) };
-    const plan = yield* getServerEntitlement(dependencies.database, hostId, dependencies.now()).pipe(
-      Effect.mapError((error) => (error instanceof RemoteControlPlaneError ? error : new RemoteOperationError({}))),
-    );
-    if (plan?.hosted) return { limit: plan.memberLimit, fromLicense: false, licenseRaises: below(plan.memberLimit) };
-    if (license?.entitled && license.users > (plan?.memberLimit ?? 0))
-      return { limit: license.users, fromLicense: true, licenseRaises: true };
-    const limit = plan?.memberLimit ?? DEFAULT_TEAM_MEMBER_LIMIT;
-    return {
-      limit,
-      fromLicense: false,
-      licenseRaises: below(limit) || (license?.entitled === true && plan !== null && license.users === limit),
-    };
+    return yield* Effect.succeed({ limit: ACCOUNT_MEMBER_LIMIT, fromLicense: false, licenseRaises: false });
   });
 
   #assertRole<Row extends RemoteMembershipRow>(membership: Row | null, roles: RemoteMemberRole[]): Row {

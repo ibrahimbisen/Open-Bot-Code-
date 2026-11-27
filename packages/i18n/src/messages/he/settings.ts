@@ -191,7 +191,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "חיבור מהיר לשרתים",
   "settings.keepRemoteSessions.description":
     "שמירת החיבור לשרתים שהצטרפו אליהם בין הפעלות. CodeBot מתחיל מהר יותר בערך בשנייה. כשיוצאים מ-CodeBot, שירות CodeBot אינו סוגר את החיבור.",
-  "settings.permissions.title": "הרשאות",
   "settings.notifications.whatYouHear": "על מה מתקבלות התראות",
   "settings.notifications.allDevices": "כל המכשירים שלי",
   "settings.notifications.thisComputer": "המחשב הזה",
@@ -301,10 +300,6 @@ export const messages = {
   "settings.agentDock.agents.description": "הסוכנים של {server}. לכל שרת יש מעגן משלו.",
   "settings.agentDock.agents.empty": "עדיין אין סוכנים בשרת הזה.",
   "settings.analytics.title": "קישור הניתוח לחשבון שלי",
-  "settings.analytics.description":
-    "פעיל: מטא-נתונים על שימוש ואמינות נשלחים לניתוח הנתונים המאורח בעצמו של CodeBot יחד עם מזהה החשבון והאימייל שלך, עם האתרים שבהם מבקרים המשתמש והסוכנים, שימוש בכלים וסיכום יומי של ההגדרות שלך. כבוי: רק שימוש בסיסי, כמו תורות וספירת אסימונים, נשלח עם מזהה התקנה אקראי. צ'אטים, קבצים והנחיות לא נשלחים לעולם.",
-  "settings.analytics.webDescription":
-    "פעיל: מטא-נתונים על שימוש ואמינות נשלחים לניתוח הנתונים המאורח בעצמו של CodeBot יחד עם מזהה החשבון והאימייל שלך. כבוי: אותם מטא-נתונים נשלחים עם מזהה התקנה אקראי בלבד. צ'אטים, קבצים והנחיות לא נשלחים לעולם. ההגדרה הזו חלה על הדפדפן הזה.",
   "settings.tab.general.title": "כללי",
   "settings.tab.general.description": "בחירה איך צ'אטים פועלים ומה CodeBot משתף.",
   "settings.tab.agents.title": "סוכנים",

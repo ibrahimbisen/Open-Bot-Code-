@@ -3,6 +3,7 @@ import { CHANNEL_DELETE_CAPABILITY, CHANNEL_TASK_CANCEL_CAPABILITY } from "../ip
 import { MCP_SERVERS_CAPABILITY } from "../ipc-mcp-servers";
 import { STORAGE_CAPABILITY } from "../ipc-storage";
 import { ACP_REGISTRY_CAPABILITY } from "./acp-registry-v1";
+import { ADVANCED_FEATURES_CAPABILITY } from "./advanced-features-v1";
 import { AGENT_ACCESS_CAPABILITY } from "./agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_CAPABILITY } from "./agent-active-queues-v1";
 import { AGENT_ADMIN_CAPABILITY } from "./agent-admin-v1";
@@ -109,6 +110,7 @@ import { CUSTOM_PROVIDER_HARNESS_CHOICE_CAPABILITY } from "./custom-provider-har
 import { CUSTOM_PROVIDER_HARNESS_CAPABILITY } from "./custom-provider-harness-v1";
 import { DISCORD_ACCESS_CAPABILITY } from "./discord-access-v1";
 import { EVENTS_CAPABILITY } from "./events-v1";
+import { EXPLORER_CAPABILITY } from "./explorer-v1";
 import { FEEDBACK_WITHDRAW_CAPABILITY } from "./feedback-withdraw-v1";
 import { FOCUS_USE_CAPABILITY } from "./focus-use-v1";
 import { GITHUB_SKILLS_CAPABILITY } from "./github-skills-v1";
@@ -160,6 +162,7 @@ import { PASSWORD_MANAGERS_CAPABILITY } from "./password-managers-v1";
 import { PENDING_APPROVAL_CAPABILITY } from "./pending-approval-v1";
 import { PENDING_PROMPTS_CAPABILITY } from "./pending-prompts-v1";
 import { PHONE_FEEDBACK_CAPABILITY } from "./phone-feedback-v1";
+import { PROJECTS_V1_CAPABILITY } from "./projects-v1";
 import { PROMPT_CACHE_TTL_CAPABILITY, PROMPT_CACHE_TTL_PI_CAPABILITY } from "./prompt-cache-ttl-v1";
 import { TEAM_PROMPT_DETAIL_CAPABILITY } from "./prompt-detail-v1";
 import { TEAM_PROMPT_MULTI_SELECT_CAPABILITY } from "./prompt-multi-select-v1";
@@ -311,6 +314,7 @@ export const TEAM_MEMBER_LEAVE_CAPABILITY = "member-leave-v1";
 export const TEAM_QUEUE_WINDOW_CAPABILITY = "queue-window-v1";
 export {
   ACP_REGISTRY_CAPABILITY,
+  ADVANCED_FEATURES_CAPABILITY,
   AGENT_ACCESS_CAPABILITY,
   AGENT_ACTIVE_QUEUES_CAPABILITY,
   AGENT_ADMIN_CAPABILITY,
@@ -397,6 +401,7 @@ export {
   CUSTOM_PROVIDER_HARNESS_CHOICE_CAPABILITY,
   DISCORD_ACCESS_CAPABILITY,
   EVENTS_CAPABILITY,
+  EXPLORER_CAPABILITY,
   FEEDBACK_WITHDRAW_CAPABILITY,
   FOCUS_USE_CAPABILITY,
   HOST_ADMIN_CAPABILITY,
@@ -435,6 +440,7 @@ export {
   PASSWORD_MANAGERS_CAPABILITY,
   PENDING_APPROVAL_CAPABILITY,
   PHONE_FEEDBACK_CAPABILITY,
+  PROJECTS_V1_CAPABILITY,
   PROMPT_CACHE_TTL_CAPABILITY,
   PROMPT_CACHE_TTL_PI_CAPABILITY,
   PROVIDER_ACCOUNT_RELAY_CAPABILITY,
@@ -876,6 +882,9 @@ const TEAM_CAPABILITY_REGISTRY = [
   [TEAM_BROWSER_VIEW_DIALOG_CAPABILITY, V10],
   [BROWSER_HTTP_SIGN_IN_CAPABILITY, V10],
   [CHANNEL_COMPACT_AVAILABILITY_CAPABILITY, V10],
+  [EXPLORER_CAPABILITY, V10],
+  [PROJECTS_V1_CAPABILITY, V10],
+  [ADVANCED_FEATURES_CAPABILITY, V10],
 ] as const satisfies readonly (readonly [string, TeamCapabilityPlacement])[];
 
 export const TEAM_CURRENT_CAPABILITIES = TEAM_CAPABILITY_REGISTRY.map(([capability]) => capability);

@@ -317,7 +317,6 @@ function ChannelAnswer(props: { id: string; agent: number; body: string; first: 
             <AgentStepsDisclosure
               steps={STEPS}
               defaultOpen={false}
-              list={false}
               trace={{ spans: () => FINISHED, keyboard: "mac" }}
               facts={{ durationMs: TURN_LENGTH, failed: FINISHED.filter((span) => span.failed).length }}
             />

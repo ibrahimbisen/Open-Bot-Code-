@@ -151,3 +151,55 @@ export const FailedSteps: Story = {
     </div>
   ),
 };
+
+const WORK_STEPS: AgentStep[] = [
+  {
+    id: "w1",
+    kind: "progress",
+    text: "Read src/total.ts",
+    activity: "reading",
+    targets: ["src/total.ts"],
+    detailId: "d1",
+  },
+  {
+    id: "w2",
+    kind: "progress",
+    text: "Edited src/total.ts",
+    activity: "editing",
+    targets: ["src/total.ts"],
+    detailId: "d2",
+  },
+  { id: "w3", kind: "progress", text: "Edited README.md", activity: "editing", targets: ["README.md"], detailId: "d3" },
+  { id: "w4", kind: "progress", text: "Ran bun test", activity: "running", targets: [], detailId: "d4" },
+];
+
+const WORK_DETAILS = [
+  {
+    stepId: "d2",
+    diffs: [
+      {
+        path: "src/total.ts",
+        diff: "@@ -1,3 +1,4 @@\n export function total(items: number[]): number {\n-  return items.reduce((sum, item) => sum + item, 0);\n+  const sum = items.reduce((total, item) => total + item, 0);\n+  return Math.round(sum * 100) / 100;\n }",
+      },
+    ],
+  },
+  {
+    stepId: "d4",
+    input: "bun test",
+    output: Array.from({ length: 30 }, (_, index) => `ok ${index + 1} - case ${index + 1}`).join("\n"),
+  },
+];
+
+export const ShortWithDetails: Story = {
+  render: () => (
+    <div style={{ width: "640px" }}>
+      <AgentStepsDisclosure
+        steps={WORK_STEPS}
+        defaultOpen={false}
+        activity={{ reading: 1, editing: 2, running: 1 }}
+        facts={{ durationMs: 21_000, failed: 0 }}
+        loadDetails={async () => WORK_DETAILS}
+      />
+    </div>
+  ),
+};

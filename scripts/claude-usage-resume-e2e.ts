@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { EventEmitter } from "node:events";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -13,6 +13,8 @@ import type { ClaudeCliInfo } from "../src/backend/cli";
 import type { AppServerNotification, AppServerRequest, RequestId, ResponseDecoder } from "../src/backend/protocol";
 import { providerSync } from "../src/backend/provider-client-effects";
 import type { ReadProviderHistory } from "../src/backend/provider-history";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-usage-resume-e2e");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-usage-resume-"));
@@ -20,7 +22,7 @@ const userData = join(root, "user-data");
 const home = join(root, "home");
 const sessionsDir = join(root, "claude-sessions");
 const spawnLog = join(root, "claude-spawns.jsonl");
-const claudeExecutable = join(root, "claude");
+const claudeExecutable = standInPath(join(root, "claude"));
 const CLAUDE_MODEL = defaultProviderModel("claude");
 const USAGE_MODEL = `${CLAUDE_MODEL}[1m]`;
 const UNCACHED = 10;
@@ -29,6 +31,7 @@ const OUTPUT = 20;
 const REQUEST_COST = 0.01;
 
 process.env.HOME = home;
+process.env.USERPROFILE = home;
 process.env.CODEBOT_CLAUDE_PATH = claudeExecutable;
 mkdirSync(home, { recursive: true });
 mkdirSync(sessionsDir, { recursive: true });
@@ -257,7 +260,7 @@ function sum(entries: UsageTokens[]): UsageTokens {
   return total;
 }
 
-await writeFile(claudeExecutable, STAND_IN_CLAUDE, { mode: 0o755 });
+await writeStandInScript(claudeExecutable, STAND_IN_CLAUDE);
 const database = new CodeBotDatabase(userData);
 const store = new AgentStore(userData, home, database);
 const mailbox = new MailboxStore(userData, store.sharedRoot, store.database);
@@ -408,7 +411,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   for (const turn of report.turns) process.stdout.write(`${turn.passed ? "PASS" : "FAIL"} ${turn.name}\n`);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);
   if (report.error) process.stdout.write(`${report.error}\n`);

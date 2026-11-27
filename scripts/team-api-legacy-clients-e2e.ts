@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { generateKeyPairSync, randomBytes, randomUUID, sign, verify } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import {
@@ -86,6 +86,7 @@ import { MailboxStore } from "../src/backend/mailbox-store";
 import { SidebarLayoutStore } from "../src/backend/sidebar-layout-store";
 import type { TeamApiBrowser } from "../src/main/team-api/dependencies";
 import type { TeamWebRtcChannel } from "../src/main/team-webrtc-bridge";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/team-api-legacy-clients-e2e");
 const FIXTURES = resolve(import.meta.dirname, "../packages/contracts/src/team-protocol/fixtures");
@@ -1945,7 +1946,7 @@ try {
   database.close();
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 
 process.stdout.write(`Team API v1-v3, v7, v8 and v9 clients passed. Report: ${join(OUT, "report.json")}\n`);

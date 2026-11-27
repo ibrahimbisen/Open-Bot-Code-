@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { agentSteersTurns } from "@codebot/contracts/agent-providers";
@@ -12,6 +12,8 @@ import { type AppServerNotification, getRecord, getString, isRecord } from "../s
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { CustomAgentStore } from "../src/main/custom-agent-store";
 import { installFakeAgent, readJsonl, startThread, stopClients, xorCipher } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/custom-agent-steer-e2e");
 const TURN_TIMEOUT_MS = 20_000;
@@ -116,7 +118,7 @@ const requests = async (log: string) =>
 const cancelled = async (log: string) => (await readJsonl<LogEntry>(log)).some((entry) => entry.event === "cancel");
 
 try {
-  const executable = join(root, "bin", "fake-acp-agent");
+  const executable = standInPath(join(root, "bin", "fake-acp-agent"));
   const workspace = join(root, "workspace");
   await mkdir(workspace);
   await installFakeAgent(executable, "custom-agent-steer");
@@ -241,6 +243,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

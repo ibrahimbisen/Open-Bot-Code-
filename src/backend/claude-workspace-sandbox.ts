@@ -184,7 +184,7 @@ function isClaudeSettingsFile(path: string): boolean {
 
 const MAX_LINKS = 40;
 
-const resolveExisting = Effect.fn("ClaudeWorkspace.resolveExisting")(function* (
+export const resolveExisting = Effect.fn("ClaudeWorkspace.resolveExisting")(function* (
   path: string,
   links = 0,
 ): Effect.fn.Return<string, ProviderClientOperationError> {

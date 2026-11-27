@@ -2,11 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { isDynamicRecord, isString } from "@codebot/contracts/runtime-values";
 import { createCodeBotLogger } from "@codebot/logging";
-import { roleIdProblems } from "./discord-announcement";
-import { ANNOUNCEMENT_FILE, announcementProblems, ROLE_VARIABLE } from "./discord-release-announcement";
-import { unpublishedCatalogEntries } from "./publish-production-catalog";
-import { releaseNotesProblems } from "./release-notes";
-import { whatsNewTranslationProblems } from "./whats-new-translations";
+import { validUpdateFeedUrl } from "../src/main/app-update/update-feed";
 
 const logger = createCodeBotLogger("release-preflight");
 
@@ -14,102 +10,23 @@ const packageJson = JSON.parse(await readFile("package.json", "utf8"));
 if (!isDynamicRecord(packageJson) || !isString(packageJson.version)) {
   throw new Error("package.json has no valid version.");
 }
-const changelog = await readFile("CHANGELOG.md", "utf8");
 const failures: string[] = [];
 
 if (!/^\d+\.\d+\.\d+$/.test(packageJson.version)) failures.push("package version is not semver");
-failures.push(...releaseNotesProblems(changelog, packageJson.version));
-failures.push(...announcementProblems(await readFile(ANNOUNCEMENT_FILE, "utf8"), packageJson.version));
-failures.push(...whatsNewTranslationProblems(packageJson.version));
 if (run("git", ["status", "--porcelain"])) failures.push("working tree is not clean");
-if (run("git", ["rev-list", "--left-right", "--count", "origin/main...HEAD"]) !== "0\t0") {
-  failures.push("main is not synchronized with origin/main");
+if (run("git", ["tag", "--list", `codebot-v${packageJson.version}`])) {
+  failures.push(`tag codebot-v${packageJson.version} already exists`);
 }
-if (run("git", ["tag", "--list", `v${packageJson.version}`])) {
-  failures.push(`tag v${packageJson.version} already exists`);
-}
-
-let releaseSecrets = "";
-try {
-  releaseSecrets = run("gh", ["secret", "list", "--env", "release"]);
-} catch {
-  failures.push("GitHub release secrets could not be inspected");
-}
-for (const name of [
-  "CSC_LINK",
-  "CSC_KEY_PASSWORD",
-  "CSC_INSTALLER_LINK",
-  "CSC_INSTALLER_KEY_PASSWORD",
-  "APPLE_ID",
-  "APPLE_APP_SPECIFIC_PASSWORD",
-  "APPLE_TEAM_ID",
-  "MAC_PROVISIONING_PROFILE",
-  "DISCORD_RELEASE_WEBHOOK_URL",
-]) {
-  if (!releaseSecrets.split("\n").some((line) => line.startsWith(`${name}\t`))) {
-    failures.push(`GitHub release secret ${name} is missing`);
-  }
-}
-try {
-  const roleId = run("gh", [
-    "variable",
-    "list",
-    "--json",
-    "name,value",
-    "--jq",
-    `.[] | select(.name == "${ROLE_VARIABLE}") | .value`,
-  ]);
-  failures.push(...roleIdProblems(`GitHub repository variable ${ROLE_VARIABLE}`, roleId, true));
-} catch {
-  failures.push(`GitHub repository variable ${ROLE_VARIABLE} could not be inspected`);
-}
-
-try {
-  const productionSecrets = run("gh", ["secret", "list", "--env", "cloudflare-production"]);
-  for (const name of ["BOAT_TEMPLATE_API_KEY", "CLOUDFLARE_PRODUCTION_DEPLOY_TOKEN"]) {
-    if (!productionSecrets.split("\n").some((line) => line.startsWith(`${name}\t`))) {
-      failures.push(`GitHub cloudflare-production secret ${name} is missing`);
-    }
-  }
-  if (!run("gh", ["variable", "get", "CLOUDFLARE_ACCOUNT_ID", "--env", "cloudflare-production"])) {
-    failures.push("GitHub cloudflare-production variable CLOUDFLARE_ACCOUNT_ID is missing");
-  }
-  const environment = JSON.parse(run("gh", ["api", "repos/{owner}/{repo}/environments/cloudflare-production"]));
-  if (!isDynamicRecord(environment)) throw new Error("Invalid production environment response.");
-  const policy = environment.deployment_branch_policy;
-  if (isDynamicRecord(policy) && policy.custom_branch_policies === true) {
-    const tags = run("gh", [
-      "api",
-      "repos/{owner}/{repo}/environments/cloudflare-production/deployment-branch-policies",
-      "--paginate",
-      "--jq",
-      '.branch_policies[] | select(.type == "tag") | .name',
-    ]).split("\n");
-    if (!tags.includes("v*.*.*")) failures.push("Allow tag pattern v*.*.* in cloudflare-production.");
-  } else if (isDynamicRecord(policy) && policy.protected_branches === true) {
-    failures.push("Use main and tag pattern v*.*.* deployment rules in cloudflare-production.");
-  }
-} catch {
-  failures.push("The hosted release environment settings could not be verified.");
-}
-
-try {
-  const unpublished = await unpublishedCatalogEntries();
-  if (unpublished.length > 0) {
-    failures.push(
-      `the live Marketplace does not have the catalog on main (${unpublished.length} entries, such as ${unpublished.slice(0, 5).join(", ")}); run \`bun run marketplace:publish:production -- --apply --confirm-production\``,
-    );
-  }
-} catch (error) {
-  failures.push(
-    `The live Marketplace catalog could not be checked: ${error instanceof Error ? error.message : String(error)}`,
-  );
+const updateUrl = process.env.CODEBOT_UPDATE_URL;
+if (updateUrl === undefined || updateUrl.trim() === "") {
+  failures.push("CODEBOT_UPDATE_URL is not set, so the build has no update server (users can set it in Settings)");
+} else if (validUpdateFeedUrl(updateUrl) === null) {
+  failures.push("CODEBOT_UPDATE_URL is not a valid update server URL");
 }
 
 if (failures.length > 0) {
   logger.error("CodeBot release preflight failed:\n");
   for (const failure of failures) logger.error(`- ${failure}`);
-  logger.error("\nNo release tag was created.");
   process.exitCode = 1;
 } else {
   logger.info(`CodeBot v${packageJson.version} release preflight passed.`);

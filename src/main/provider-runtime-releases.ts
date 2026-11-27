@@ -1,4 +1,4 @@
-import { MANAGED_RUNTIME_PROVIDERS, type ManagedProviderId } from "@codebot/contracts/ipc";
+import type { ManagedProviderId } from "@codebot/contracts/ipc";
 import { type DynamicRecord, isDynamicRecord, isNumber, isString } from "@codebot/contracts/runtime-values";
 import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
@@ -22,17 +22,12 @@ export interface LatestReleaseContext {
   fetch: Fetch;
 }
 
-const BLOCKED_VERSIONS_URL =
-  "https://raw.githubusercontent.com/nightly-labs/openbot/main/provider-runtime-blocklist.json";
-
 const REQUEST_TIMEOUT_MS = 30_000;
 const MAX_METADATA_BYTES = 4 * 1024 * 1024;
 const VERSION = /^\d+\.\d+\.\d+$/u;
 const CURSOR_DATE = /^\d{4}\.\d{2}\.\d{2}$/u;
 const CURSOR_BUILD = /^\d{4}\.\d{2}\.\d{2}(?:-\d{2}-\d{2}-\d{2})?-[0-9a-f]{7,40}$/u;
 const HEADERS = { "User-Agent": "CodeBot-runtime-installer" };
-
-export type BlockedVersions = ReadonlyMap<ManagedProviderId, ReadonlySet<string>>;
 
 const ACP_REGISTRY_TARGETS: Record<RuntimeTarget, string> = {
   "darwin-arm64": "darwin-aarch64",
@@ -381,20 +376,6 @@ export function latestRelease(
 ): Effect.Effect<RuntimeSpec, ProviderRuntimeFailure> {
   return LATEST_RELEASES[provider](context);
 }
-export const fetchBlockedVersions = Effect.fn("ProviderRelease.fetchBlockedVersions")(function* (
-  fetch: Fetch,
-): Effect.fn.Return<BlockedVersions, ProviderRuntimeFailure> {
-  const value = yield* fetchJsonEffect(fetch, BLOCKED_VERSIONS_URL);
-  if (!(value.schemaVersion === 1 && isDynamicRecord(value.blocked))) {
-    return yield* new ProviderRuntimeFailure({ cause: new Error(sourceText("error.provider.blockedListShape")) });
-  }
-  const blocked = new Map<ManagedProviderId, ReadonlySet<string>>();
-  for (const provider of MANAGED_RUNTIME_PROVIDERS) {
-    const versions = value.blocked[provider];
-    if (Array.isArray(versions)) blocked.set(provider, new Set(versions.filter(isString)));
-  }
-  return blocked;
-});
 
 const npmArtifactEffect = Effect.fn("ProviderRelease.npmArtifact")(function* (
   fetch: Fetch,

@@ -707,14 +707,13 @@ described above.
 
 ## Releases
 
-Releases are tag-driven. `bun run release:patch`, `release:minor`, or `release:major` prepares the
-version and changelog. After review, commit, preflight, and tag the release; pushing the tag builds a
-signed and notarized macOS ARM64 and x64 release, a signed Windows x64 release, and unsigned Linux x64
-and arm64 AppImages in GitHub Actions. After the release is published, the workflow pushes the Docker
-image to `ghcr.io/nightly-labs/openbot`.
-Installed builds check GitHub Releases for updates and expose download/restart controls in the account
-popover. Release signing secrets and the complete procedure are documented in
-[docs/RELEASING.md](docs/RELEASING.md).
+CodeBot updates come from a folder on your own server, not from GitHub Releases. `bun run release:patch`,
+`release:minor`, or `release:major` prepares the version and changelog. Then `bun run release:codebot`
+builds the installer for the computer that you run it on and uploads it and the update metadata to the
+update folder (`--target-dir`, `--webdav` or `--scp`). Installed builds check the folder at start and every
+hour, download in the background, and show "Restart to update". The update folder, the settings and
+the unsigned-build steps are in [docs/codebot/updates.md](docs/codebot/updates.md) and
+[docs/codebot/unsigned-builds.md](docs/codebot/unsigned-builds.md).
 
 ## Contributing
 

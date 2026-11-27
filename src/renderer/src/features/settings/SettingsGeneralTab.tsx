@@ -32,6 +32,7 @@ import { OwnChatColorTrigger } from "@codebot/ui/features/settings/ChatColorSett
 import { FontSelect } from "@codebot/ui/features/settings/FontSelect";
 import { LanguageSelect } from "@codebot/ui/features/settings/LanguageSelect";
 import { LogoColorPicker } from "@codebot/ui/features/settings/LogoColorPicker";
+import { ReplyViewSelect, replyViewOf } from "@codebot/ui/features/settings/ReplyViewSelect";
 import { SendShortcutSelect } from "@codebot/ui/features/settings/SendShortcutSelect";
 import { SidebarChatOrderSelect } from "@codebot/ui/features/settings/SidebarChatOrderSelect";
 import { useText } from "@codebot/ui/text";
@@ -46,6 +47,7 @@ import { useLogoColorChoice } from "../../logo-color";
 import { ChatBackdropSetting } from "./ChatBackdropSetting";
 import { ExternalLinkSelect } from "./ExternalLinkSelect";
 import { MotionSwitches } from "./MotionSwitches";
+import { ReplyRuleSetting } from "./ReplyRuleSetting";
 
 const interfaceSizeOptions = [...APP_INTERFACE_SIZES];
 const quitGuardOptions = [...QUIT_GUARDS];
@@ -110,13 +112,20 @@ export function SettingsGeneralTab(props: SettingsGeneralTabProps) {
                 />
               </ItemActions>
             </Item>
-            <SwitchField
-              data-settings-row="settings.showAgentSteps.title"
-              checked={props.value.showAgentSteps}
-              onChange={(checked) => props.onUpdateSetting("showAgentSteps", checked)}
-              label={i18n.t("settings.showAgentSteps.title")}
-              description={i18n.t("settings.showAgentSteps.description")}
-            />
+            <Item data-settings-row="settings.showAgentSteps.title" class="settings-modal-row">
+              <ItemContent>
+                <ItemTitle>{i18n.t("reply.view.title")}</ItemTitle>
+                <ItemDescription>{i18n.t("reply.view.description")}</ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <ReplyViewSelect
+                  value={replyViewOf(props.value.showAgentSteps)}
+                  onChange={(view) => props.onUpdateSetting("showAgentSteps", view === "detailed")}
+                  mount={props.selectMount}
+                />
+              </ItemActions>
+            </Item>
+            <ReplyRuleSetting />
             <SwitchField
               data-settings-row="settings.compactMessageActions.title"
               checked={props.value.compactMessageActions}
@@ -138,18 +147,6 @@ export function SettingsGeneralTab(props: SettingsGeneralTabProps) {
                 />
               </ItemActions>
             </Item>
-          </ItemGroup>
-        </SettingsSection>
-
-        <SettingsSection title={i18n.t("settings.permissions.title")}>
-          <ItemGroup class="settings-modal-card">
-            <SwitchField
-              data-settings-row="settings.analytics.title"
-              checked={props.value.productAnalytics}
-              onChange={(checked) => props.onUpdateSetting("productAnalytics", checked)}
-              label={i18n.t("settings.analytics.title")}
-              description={i18n.t("settings.analytics.description")}
-            />
           </ItemGroup>
         </SettingsSection>
       </Show>

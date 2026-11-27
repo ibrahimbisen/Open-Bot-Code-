@@ -1,5 +1,10 @@
 # Releasing CodeBot
 
+> CodeBot does not publish through GitHub Releases. The update folder, the release command
+> (`bun run release:codebot`) and unsigned builds are in [codebot/updates.md](codebot/updates.md) and
+> [codebot/unsigned-builds.md](codebot/unsigned-builds.md). The GitHub Actions release workflow, its
+> secrets and its signing steps below are upstream text and do not apply to CodeBot.
+
 For iOS builds uploaded to TestFlight through GitHub Actions, see
 [the mobile release guide](../apps/mobile/README.md#github-actions-testflight-release). For Android
 builds uploaded to Google Play, see
@@ -756,13 +761,6 @@ such as the SHA-512 or the size of a file.
 
 1. Push the tag. The release goes to 10% of the installs.
 2. Wait about one day. Then examine the release:
-   - Run the [release regression report](../.agents/skills/openpanel/SKILL.md#release-regression-report):
-     `gh workflow run release-regression.yml`. It posts to the private Discord channel. It compares
-     the two newest releases that each have 30 computers in the last 14 days. For some hours, a
-     10% stage can have fewer. When the report says that there is nothing to compare, or it does not
-     name the new release, wait and run it again.
-   - With the `openpanel` skill, compare `system_unclean_exit` (by `previous_app_version`) and
-     `system_startup` of the new and the previous version. The report does not show unclean exits.
    - Read the new crash reports and feedback for the new version.
 3. When the numbers are good, release to all installs:
 
@@ -868,35 +866,6 @@ How the apps use it:
 - A failed check never blocks. A failed request (offline, timeout, error status) keeps the last
   confirmed state. An answer with no readable minimum removes the block.
 - An install that cannot update itself (a Linux package, Nix) shows only the download page.
-
-## Release health after publishing
-
-Before a staged rollout goes to 100%, run the release health check. It compares how the new release
-starts and keeps running with the release before it, over the same hours after each GitHub Release was
-published, from production analytics. Run it with the read-only ClickHouse access of the `openpanel`
-skill (`.agents/skills/openpanel/SKILL.md`):
-
-```sh
-MAIN="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"
-./node_modules/.bin/dotenvx run -q -f apps/auth-api/.env.dev -fk "$MAIN/.env.keys" -- \
-  bun scripts/release-health.ts <version>
-```
-
-It prints a table per platform and for servers, and writes `.codebot-build/release-health/report.json`.
-The metrics are finished starts, crashes, startup crashes, quit hangs, and update arrivals: the share
-of the computers that started an update install and then started a version other than the one that
-installed it, before the end of the window. An install of an older release that a computer downloaded
-earlier counts for the window in which it started. The thresholds are in the script header.
-
-- Exit code 0: no metric is clearly worse. Raise the rollout.
-- Exit code 1: a metric is clearly worse. Keep the rollout where it is, find the cause, and publish a
-  patch version if the release is bad.
-- Exit code 3: not enough data yet. Run it again later. The previous release gets the same number of
-  hours, so a check soon after the release is fair, but it needs 200 starts in each group.
-
-`.github/workflows/release-health.yml` runs the check for the newest release every two hours in its
-first 72 hours. When a metric is worse, or the check fails, it posts to the private release regression
-Discord channel, not to the public release channel.
 
 Before working this checklist, audit the changes since the last released tag with the
 `.agents/skills/release-upgrade-safety/` skill: it covers the upgrade and data-loss hazards an

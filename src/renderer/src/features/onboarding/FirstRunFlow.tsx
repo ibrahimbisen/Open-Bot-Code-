@@ -22,7 +22,6 @@ export interface FirstRunFlowProps extends SetupProviderProps {
   state: AppSetupState;
   platform: DesktopPlatform;
   onSave: (provider: AgentProviderId, model: AgentModelId | null, journey: OnboardingJourney) => Promise<void>;
-  onAnalyticsChoice: (enabled: boolean, chosen: boolean) => void;
   onProviderStepShown?: () => void;
   logoVariant?: AppLogoVariant;
   existingServers?: readonly FirstRunServer[];
@@ -42,8 +41,6 @@ interface FirstRunState {
   saving: boolean;
   finishWhenReady: boolean;
   skipped: boolean;
-  analytics: boolean;
-  analyticsTouched: boolean;
   startNew: boolean;
   openingServer: string | null;
 }
@@ -56,19 +53,9 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
     saving: false,
     finishWhenReady: false,
     skipped: false,
-    analytics: false,
-    analyticsTouched: false,
     startNew: false,
     openingServer: null,
   });
-  void onboardingPort()
-    .getAnalyticsDefault()
-    .then(({ enabled }) =>
-      setState((current) => {
-        if (!current.analyticsTouched) current.analytics = enabled;
-      }),
-    )
-    .catch(() => undefined);
   const [screenElement, setScreenElement] = createSignal<HTMLElement | undefined>();
   const providers = createSetupProviders(props, undefined, { includeFree: () => state.path !== "plan" });
   const next = createSetupNext(providers);
@@ -79,7 +66,7 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
   let freeStartRequested = false;
 
   const stepsFor = (path: FirstRunPath): FirstRunStep[] => {
-    const permissions: FirstRunStep[] = props.platform === "darwin" ? ["computer"] : [];
+    const permissions: FirstRunStep[] = [];
     return path === "plan" ? ["choose", "plan", ...permissions] : ["choose", ...permissions];
   };
   const steps = () => stepsFor(state.path);
@@ -144,11 +131,7 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
   );
 
   const existingShown = () =>
-    state.step === "choose" &&
-    !state.startNew &&
-    state.path === null &&
-    !state.analyticsTouched &&
-    (props.existingServers?.length ?? 0) > 0;
+    state.step === "choose" && !state.startNew && state.path === null && (props.existingServers?.length ?? 0) > 0;
   const shownStep = () => (existingShown() ? "existing" : state.step);
 
   function trackStep(
@@ -170,7 +153,6 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
 
   function startFree(): void {
     const fromPlan = state.step === "plan";
-    if (!fromPlan) props.onAnalyticsChoice(state.analytics, state.analyticsTouched);
     trackStep(fromPlan ? "skipped" : "next", "free");
     providers.chooseProvider(FREE_PROVIDER);
     setState((current) => {
@@ -191,7 +173,6 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
 
   function usePlan(): void {
     if (providers.selectedProvider() === FREE_PROVIDER && !providers.customSelected()) providers.clearChoice();
-    props.onAnalyticsChoice(state.analytics, state.analyticsTouched);
     trackStep("next", "plan");
     setState((current) => {
       current.path = "plan";
@@ -248,7 +229,6 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
 
   async function openServer(server: FirstRunServer): Promise<void> {
     if (state.openingServer !== null || !props.onOpenServer) return;
-    props.onAnalyticsChoice(state.analytics, state.analyticsTouched);
     trackStep("next", "existing");
     setState((current) => {
       current.openingServer = server.id;
@@ -382,13 +362,6 @@ export function FirstRunFlow(props: FirstRunFlowProps) {
                         reason={blockedReason()}
                         onStartFree={startFree}
                         onUsePlan={usePlan}
-                        analytics={state.analytics}
-                        onAnalyticsChange={(enabled) =>
-                          setState((current) => {
-                            current.analytics = enabled;
-                            current.analyticsTouched = true;
-                          })
-                        }
                         onOpenTerms={() => void onboardingPort().openUrl(TERMS_URL)}
                         onOpenPrivacy={() => void onboardingPort().openUrl(PRIVACY_URL)}
                       />

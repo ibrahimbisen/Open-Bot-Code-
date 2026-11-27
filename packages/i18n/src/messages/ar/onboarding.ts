@@ -92,12 +92,6 @@ export const messages = {
   "onboarding.existing.startNewDetail": "أنشئ فريقًا جديدًا هنا. تحتفظ خوادمك بوكلائها ومحادثاتها.",
   "onboarding.existing.openFailed": "تعذّر على CodeBot فتح {name}.",
   "onboarding.consent.notice": "بالمتابعة، أنت توافق على {terms} وتُقرّ بـ {privacy}.",
-  "onboarding.consent.analyticsTitle": "ساعد في تحسين CodeBot",
-  "onboarding.consent.analyticsDetail":
-    "اربط استخدام الميزات بحسابك وبريدك الإلكتروني، وشارك المواقع التي تزورها واستخدام الأدوات وملخصًا يوميًا لإعدادك. من دون ذلك، يُرسل الاستخدام الأساسي فقط، مع معرّف تثبيت عشوائي. لا تُرسل دردشاتك أو ملفاتك أو مطالباتك أبدًا.",
-  "onboarding.consent.thanksTitle": "شكرًا لك! الفريق مدين لك.",
-  "onboarding.consent.thanksToast": "شكرًا لمساعدتك في تحسين CodeBot 💜",
-  "onboarding.consent.thanksToastDetail": "يمكنك تغيير هذا في أي وقت في الإعدادات.",
   "onboarding.consent.termsLink": "شروط الخدمة",
   "onboarding.consent.privacyLink": "سياسة الخصوصية",
   "onboarding.plan.title": "اربط خطتك",

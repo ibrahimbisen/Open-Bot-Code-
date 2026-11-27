@@ -1,4 +1,4 @@
-import type { ConversationMemoryChange } from "@codebot/contracts/ipc";
+import type { ConversationMemoryChange, TurnStepDetail } from "@codebot/contracts/ipc";
 import { countConversationMemoryChanges } from "@codebot/contracts/ipc";
 import type { JSX } from "@solidjs/web";
 import { createEffect, createMemo, createSignal, createUniqueId, For, onSettled, Show } from "solid-js";
@@ -8,16 +8,29 @@ import { Brain, ChevronRight, Puzzle, Sparkles } from "../../icons";
 import { type TextValue, useText } from "../../text";
 import { prefersReducedMotion } from "../../utils";
 import { ActivityShine } from "./ActivityShine";
+import { CodeBlock } from "./CodeBlock";
 import { useDuration } from "./Subagents";
 import { type TraceKeyboard, type TraceSpan, TraceWaterfallDialog } from "./TraceWaterfall";
+import { type TurnActivityCounts, turnSummaryLine } from "./turn-summary";
 
 export type AgentStep =
   | { id: string; kind: "thinking"; text: string }
-  | { id: string; kind: "progress"; text: string; error?: string | undefined }
+  | {
+      id: string;
+      kind: "progress";
+      text: string;
+      error?: string | undefined;
+      activity?: string | undefined;
+      targets?: readonly string[] | undefined;
+      detailId?: string | undefined;
+    }
   | { id: string; kind: "memory"; change: ConversationMemoryChange }
   | { id: string; kind: "memory-summary"; text: string };
 
 const STEPS_MAX_HEIGHT = 220;
+const DETAILS_MAX_HEIGHT = 480;
+
+export type StepDetails = ReadonlyMap<string, TurnStepDetail>;
 
 const MEMORY_ACTION_LABEL = {
   saved: "chat.steps.saved",
@@ -31,6 +44,8 @@ export function AgentStepList(props: {
   live: boolean;
   id?: string;
   focus?: { id: string } | null | undefined;
+  details?: StepDetails | undefined;
+  loadingDetails?: boolean | undefined;
 }) {
   const { t } = useText();
   const [contentHeight, setContentHeight] = createSignal(0);
@@ -50,9 +65,10 @@ export function AgentStepList(props: {
       step?.scrollIntoView({ block: "center", behavior: prefersReducedMotion() ? "auto" : "smooth" });
     },
   );
-  const capped = () => contentHeight() > STEPS_MAX_HEIGHT;
+  const maxHeight = () => (props.details === undefined ? STEPS_MAX_HEIGHT : DETAILS_MAX_HEIGHT);
+  const capped = () => contentHeight() > maxHeight();
   const scrolls = () => !props.live && capped();
-  const offset = () => (props.live && capped() ? STEPS_MAX_HEIGHT - contentHeight() : 0);
+  const offset = () => (props.live && capped() ? maxHeight() - contentHeight() : 0);
   return (
     <section
       id={props.id}
@@ -61,6 +77,7 @@ export function AgentStepList(props: {
       data-capped={capped() ? "" : undefined}
       data-scrolls={scrolls() ? "" : undefined}
       tabindex={scrolls() ? 0 : undefined}
+      style={{ "max-height": `${maxHeight()}px` }}
     >
       <ol ref={content} class="agent-steps-list" style={{ transform: `translateY(${offset()}px)` }}>
         <For each={props.steps} keyed={(step) => step.id}>
@@ -72,12 +89,74 @@ export function AgentStepList(props: {
               data-focused={props.focus?.id === step().id ? "" : undefined}
             >
               <StepIcon kind={step().kind} />
-              <StepBody step={step()} newest={props.live && index() === props.steps.length - 1} />
+              <div class="agent-step-main">
+                <StepBody step={step()} newest={props.live && index() === props.steps.length - 1} />
+                <StepDetailView step={step()} details={props.details} loading={props.loadingDetails === true} />
+              </div>
             </li>
           )}
         </For>
       </ol>
     </section>
+  );
+}
+
+function StepDetailView(props: { step: AgentStep; details: StepDetails | undefined; loading: boolean }) {
+  const { t } = useText();
+  const detail = () => {
+    const step = props.step;
+    return step.kind === "progress" && step.detailId !== undefined ? props.details?.get(step.detailId) : undefined;
+  };
+  const pending = () => props.step.kind === "progress" && props.loading && props.step.detailId !== undefined;
+  return (
+    <>
+      <Show when={pending()}>
+        <span class="agent-step-detail-note">{t("reply.details.loading")}</span>
+      </Show>
+      <Show when={detail()}>
+        {(found) => (
+          <div class="agent-step-detail">
+            <Show when={found().input}>
+              {(input) => (
+                <StepCode
+                  label={t("reply.details.input")}
+                  code={input()}
+                  language="bash"
+                  shortened={found().inputTruncated === true}
+                />
+              )}
+            </Show>
+            <Show when={found().output}>
+              {(output) => (
+                <StepCode
+                  label={t("reply.details.output")}
+                  code={output()}
+                  language="plain"
+                  shortened={found().outputTruncated === true}
+                />
+              )}
+            </Show>
+            <For each={found().diffs ?? []}>
+              {(diff) => (
+                <StepCode label={diff.path} code={diff.diff} language="diff" shortened={diff.truncated === true} />
+              )}
+            </For>
+          </div>
+        )}
+      </Show>
+    </>
+  );
+}
+
+function StepCode(props: { label: string; code: string; language: string; shortened: boolean }) {
+  const { t } = useText();
+  return (
+    <div class="agent-step-code">
+      <CodeBlock block={{ type: "code", code: props.code, language: props.language, filename: props.label }} />
+      <Show when={props.shortened}>
+        <span class="agent-step-detail-note">{t("reply.details.shortened")}</span>
+      </Show>
+    </div>
   );
 }
 
@@ -174,7 +253,7 @@ function StepIcon(props: { kind: AgentStep["kind"] }) {
   );
 }
 
-function stepsSummary(steps: readonly AgentStep[], text: TextValue): string {
+function stepsSummary(steps: readonly AgentStep[], text: TextValue, activity: TurnActivityCounts | undefined): string {
   const work = steps.filter((step) => step.kind === "thinking" || step.kind === "progress").length;
   const changes = steps.flatMap((step) => (step.kind === "memory" ? [step.change] : []));
   const counts = countConversationMemoryChanges(changes);
@@ -187,8 +266,9 @@ function stepsSummary(steps: readonly AgentStep[], text: TextValue): string {
     ].filter((part): part is string => part !== null),
   );
   const fallback = steps.find((step) => step.kind === "memory-summary");
+  const activityLine = activity ? turnSummaryLine(activity, text) : "";
   return [
-    work > 0 ? text.t("chat.steps.count", { count: work }) : null,
+    activityLine || (work > 0 ? text.t("chat.steps.count", { count: work }) : null),
     changes.length > 0 ? text.t("chat.steps.memory", { changes: memory }) : null,
     fallback?.kind === "memory-summary" ? text.sourceText(fallback.text) : null,
   ]
@@ -213,7 +293,8 @@ export function AgentStepsDisclosure(props: {
   defaultOpen: boolean;
   trace?: AgentStepsTrace | undefined;
   facts?: AgentStepsFacts | undefined;
-  list?: boolean | undefined;
+  activity?: TurnActivityCounts | undefined;
+  loadDetails?: (() => Promise<readonly TurnStepDetail[]>) | undefined;
 }) {
   const text = useText();
   const duration = useDuration();
@@ -222,11 +303,23 @@ export function AgentStepsDisclosure(props: {
   const [choice, setChoice] = createSignal<boolean>();
   const [traceOpenedAt, setTraceOpenedAt] = createSignal<number | null>(null);
   const [traceUsed, setTraceUsed] = createSignal(false);
-  const open = () => props.list !== false && (choice() ?? props.defaultOpen);
+  const open = () => choice() ?? props.defaultOpen;
+  const [details, setDetails] = createSignal<StepDetails>();
+  const [loadingDetails, setLoadingDetails] = createSignal(false);
+  let detailsRequested = false;
+  createEffect(open, (isOpen) => {
+    if (!isOpen || detailsRequested || !props.loadDetails) return;
+    detailsRequested = true;
+    setLoadingDetails(true);
+    void props
+      .loadDetails()
+      .then((loaded) => setDetails(new Map(loaded.map((detail) => [detail.stepId, detail]))))
+      .catch(() => setDetails(new Map()))
+      .finally(() => setLoadingDetails(false));
+  });
   const [focus, setFocus] = createSignal<{ id: string } | null>(null);
   const isStep = (id: string) => props.steps.some((step) => step.id === id);
-  const canSelectSpan = (id: string) =>
-    (props.list !== false && isStep(id)) || (props.trace?.canSelectSpan?.(id) ?? false);
+  const canSelectSpan = (id: string) => isStep(id) || (props.trace?.canSelectSpan?.(id) ?? false);
   const selectSpan = (id: string) => {
     setTraceOpenedAt(null);
     if (!isStep(id)) {
@@ -236,27 +329,17 @@ export function AgentStepsDisclosure(props: {
     setChoice(true);
     setFocus({ id });
   };
-  const opensTrace = () => props.trace !== undefined && !open();
-  const expanded = () => {
-    if (opensTrace()) return undefined;
-    return open() ? "true" : "false";
-  };
   const controls = () => {
     if (!open()) return undefined;
     return panelId;
   };
-  const popup = () => {
-    if (opensTrace()) return "dialog";
-    return undefined;
-  };
   const activate = () => {
-    if (opensTrace()) {
-      setTraceUsed(true);
-      setTraceOpenedAt(Date.now());
-      return;
-    }
     setFocus(null);
     setChoice(!open());
+  };
+  const openTrace = () => {
+    setTraceUsed(true);
+    setTraceOpenedAt(Date.now());
   };
   return (
     <div class="agent-steps" data-open={open() ? "" : undefined}>
@@ -264,12 +347,11 @@ export function AgentStepsDisclosure(props: {
         type="button"
         variant="ghost"
         class="agent-steps-header"
-        aria-expanded={expanded()}
+        aria-expanded={open() ? "true" : "false"}
         aria-controls={controls()}
-        aria-haspopup={popup()}
         onClick={activate}
       >
-        <span class="agent-steps-summary">{stepsSummary(props.steps, text)}</span>
+        <span class="agent-steps-summary">{stepsSummary(props.steps, text, props.activity)}</span>
         <Show when={props.facts}>
           {(facts) => (
             <>
@@ -280,6 +362,7 @@ export function AgentStepsDisclosure(props: {
             </>
           )}
         </Show>
+        <span class="agent-steps-details-label">{text.t(open() ? "reply.details.hide" : "reply.details.show")}</span>
         <ChevronRight class="agent-steps-chevron" aria-hidden="true" />
       </Button>
       <Show when={traceUsed() && props.trace}>
@@ -302,7 +385,21 @@ export function AgentStepsDisclosure(props: {
       </Show>
       <Show when={open()}>
         <div class="agent-steps-panel">
-          <AgentStepList id={panelId} steps={props.steps} live={false} focus={focus()} />
+          <div class="agent-steps-panel-body">
+            <Show when={props.trace}>
+              <Button type="button" variant="ghost" size="xs" class="agent-steps-timeline" onClick={openTrace}>
+                {text.t("reply.details.timeline")}
+              </Button>
+            </Show>
+            <AgentStepList
+              id={panelId}
+              steps={props.steps}
+              live={false}
+              focus={focus()}
+              details={details() ?? (props.loadDetails ? new Map() : undefined)}
+              loadingDetails={loadingDetails()}
+            />
+          </div>
         </div>
       </Show>
     </div>

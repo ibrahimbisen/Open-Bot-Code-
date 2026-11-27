@@ -103,6 +103,9 @@ import type {
   RespondToApprovalInput,
   RespondToBrowserTakeoverInput,
   RespondToPromptInput,
+  ResumableSessionList,
+  ResumeSessionInput,
+  ResumeSessionResult,
   Routine,
   RoutineRun,
   RunQueuedMessageAsTaskInput,
@@ -123,6 +126,9 @@ import type {
   SidebarLayoutSnapshot,
   SidebarSection,
   SignOutMcpServerInput,
+  SlashCommandChatInput,
+  SlashCommandList,
+  SlashCommandsChanged,
   StartAgentTaskInput,
   SteerQueuedMessageInput,
   TestChannelRoutineInput,
@@ -167,6 +173,7 @@ import {
   type SkillLearningMode,
   sameAgentBrowserProfile,
   sameAgentModelChoice,
+  type TurnStepDetails,
   WORKFLOW_CATALOG_PROVIDERS,
   WORKFLOW_MEDIA_CATALOG_MAX,
   WORKFLOW_MEDIA_SERVICE_ACCOUNT_MAX,
@@ -182,7 +189,6 @@ import {
   type WorkflowMediaProviders,
   type WorkflowMediaSpecs,
   workflowCatalogSource,
-  workspaceAccessEnforced,
 } from "@codebot/contracts/ipc";
 import type { DynamicRecord } from "@codebot/contracts/runtime-values";
 import { AGENT_THREAD_READS_LIMIT } from "@codebot/contracts/team-protocol/agent-thread-reads-v1";
@@ -283,6 +289,7 @@ import { isBalanceDiagnostic, isPlanLimitDiagnostic, providerResetDelayMs } from
 import { type AgentClientFactory, ProviderRuntime, toProviderOperationFailed } from "./agent/provider-runtime";
 import { ProviderSignInWaits } from "./agent/provider-sign-in-waits";
 import { QueueControls } from "./agent/queue-controls";
+import { agentReplyRule } from "./agent/reply-rule";
 import {
   type FollowsUpOwnAnswer,
   quietRoutineRun,
@@ -349,6 +356,7 @@ import { readUsageReportInWorker } from "./database/usage-report-reader";
 import { reportOriginalFailure } from "./effect-boundary";
 import type { HostMemory } from "./host-memory";
 import type { SignInRegion } from "./kimi-region";
+import { lockEnforced } from "./lock/lock-level";
 import { type MailboxStore, MESSAGING_LANE } from "./mailbox-store";
 import { toMcpOperationError } from "./mcp-effects";
 import type { McpSignInAddressOutcome, McpSignInOpener } from "./mcp-oauth-provider";
@@ -375,8 +383,12 @@ import { RoutineRecords } from "./routine-records";
 import type { ImportedRoutineRun, RoutineHoldWindow } from "./routine-store";
 import { type RoutineDueSource, RoutineTimer } from "./routine-timer";
 import type { SidebarLayoutStore } from "./sidebar-layout-store";
+import { ClaudeSessionResume } from "./slash-commands/claude-session-resume";
+import { SLASH_COMMAND_CATALOG_FILE, SlashCommandCatalog } from "./slash-commands/slash-command-catalog";
+import { SlashCommands, type SlashCommandsFailed } from "./slash-commands/slash-commands";
 import { shortenDiagnostic } from "./stderr-diagnostics";
 import { extractJsonObject } from "./structured-output";
+import { TURN_STEP_DETAILS_FILE, TurnStepDetailsStore } from "./turn-step-details-store";
 import type { UserBrowsingLog } from "./user-browsing-log";
 import type { VaultItems } from "./vault-items";
 import { generateHiggsfieldMedia, HIGGSFIELD_MCP_HOST, readHiggsfieldCredits } from "./workflows/higgsfield-media";
@@ -418,6 +430,19 @@ interface AgentServiceEvents {
   toolUsage: [usage: ToolUsageSignal];
   workflowRun: [end: WorkflowRunEnd];
   liveVoice: [event: VoiceLiveEvent, memberId: string | null];
+  taskRead: [agentId: string, taskId: string, unreadCount: number];
+  slashCommandsChanged: [change: SlashCommandsChanged];
+}
+
+export interface ProjectAgentCreation {
+  projectId: string;
+  name: string;
+  role: string;
+  provider?: AgentProvider;
+  model?: string;
+  reasoningEffort?: AgentReasoningEffort;
+  providerAccountId?: string;
+  avatarSeed: string;
 }
 
 export interface AgentServiceOptions {
@@ -476,6 +501,7 @@ export interface AgentServiceOptions {
   approvalAutomation?: ApprovalAutomationPolicy | undefined;
   busyMessageMode?: () => BusyMessageMode;
   responseStyle?: () => ResponseStyle;
+  replyRule?: () => string | null;
   agentMemoryLimit?: () => number;
   memoryReviewInterval?: () => number;
   timezone?: () => string;
@@ -542,6 +568,8 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly channels: ChannelService;
   readonly messaging: MessagingThreads;
   readonly #profileSave: ProfileSave;
+  readonly #slashCommands: SlashCommands;
+  readonly #claudeResume: ClaudeSessionResume;
   readonly #profileClients = new ProfileClients();
   readonly #warmGenerations = new WarmGenerations({
     ownerFor: (provider) => this.#providers.currentClient(provider),
@@ -600,6 +628,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   readonly #boot: BootRecovery;
   readonly #deltas: DeltaBuffer;
   readonly #turn: TurnLifecycle;
+  readonly #stepDetails: TurnStepDetailsStore;
   readonly #compaction: ContextCompaction;
   readonly #duplication: DuplicationGate;
   readonly #removal: AgentRemoval;
@@ -913,6 +942,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
               if (threadId && notification.method === "turn/started") this.#codexIdleSessions.busy(threadId, client);
               else if (threadId) this.#codexIdleSessions.idle(threadId, client);
             }
+            if (this.#slashCommands.handleNotification(client, notification)) return;
             if (notification.method === "codebot/sessionSettings/updated") {
               const threadId = getString(notification.params, "threadId");
               const agentId = threadId ? this.#conversation.agentForThread(threadId) : undefined;
@@ -1212,7 +1242,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       ...(approvalAutomation === undefined ? {} : { approvalAutomation }),
       workspaceSandboxed: (agentId) => {
         const agent = store.get(agentId);
-        return agent !== undefined && workspaceAccessEnforced(agent);
+        return agent !== undefined && lockEnforced(agent);
       },
       confinedWritesAllowed: (agentId, paths) => {
         const agent = store.get(agentId);
@@ -1384,6 +1414,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       ...(options.computerUseInputRefused ? { computerUseInputRefused: options.computerUseInputRefused } : {}),
       ...(options.computerUseForegroundInput ? { computerUseForegroundInput: true } : {}),
       ...(options.responseStyle ? { responseStyle: options.responseStyle } : {}),
+      replyRule: (agentId) => agentReplyRule(agentId, options.replyRule?.()),
       memoryReview: () => this.#memoryReview.running(),
       skillRevision: () => options.skillLearning?.() === "automatic",
       sectionTeammates: (agentId) => this.sectionTeammates(agentId),
@@ -1869,6 +1900,29 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         },
       },
     });
+    this.#slashCommands = new SlashCommands({
+      catalog: new SlashCommandCatalog(join(store.database.userDataPath, SLASH_COMMAND_CATALOG_FILE)),
+      agent: (agentId) => this.#store.get(agentId),
+      hasTask: (agentId, taskId) => this.#tasks.has(agentId, taskId),
+      chatOfThread: (externalThreadId) => this.#slashCommandChat(externalThreadId),
+      clientOfAgent: (agent) => this.#providers.clientForAgent(agent),
+      claudeClient: () => this.#providers.currentClient("claude"),
+      changed: (change) => this.emit("slashCommandsChanged", change),
+      fork: (work) => {
+        Effect.runFork(work.pipe(Effect.forkIn(this.#scope, { startImmediately: true })));
+      },
+    });
+    this.#conversation.threadBound = (externalThreadId) => this.#slashCommands.threadBound(externalThreadId);
+    this.#claudeResume = new ClaudeSessionResume({
+      database: store.database,
+      agent: (agentId) => this.#store.get(agentId),
+      client: (agent) => this.#providers.clientForAgent(agent),
+      tasks: (agentId) => this.#tasks.snapshot(agentId).tasks,
+      createTask: (agentId, title) => this.#tasks.create(agentId, title, "user"),
+      closeTask: (task) => this.#tasks.delete(task),
+      publicTask: (task) => this.#tasks.publicTask(task),
+      changed: (agentId) => this.#tasks.changed(agentId),
+    });
     this.#sessionSettings = new SessionSettings({
       store,
       providers: this.#providers,
@@ -1937,6 +1991,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         fromChrome: (deliveryId) => this.#fromChrome.has(deliveryId),
       },
     });
+    this.#stepDetails = new TurnStepDetailsStore(join(store.database.userDataPath, TURN_STEP_DETAILS_FILE));
     this.#turn = new TurnLifecycle({
       store,
       mailbox,
@@ -1968,6 +2023,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
           ? { checkFinish: (agentId: string, input: FinishCheckInput) => this.#checkFinish(agentId, input) }
           : {}),
         emitToolUsage: (usage) => this.emit("toolUsage", usage),
+        recordStepDetail: (record) => this.#stepDetails.record(record),
         turnModel: (agentId, turnId) => this.#drain.modelForTurn(agentId, turnId),
         mayFailOver: (agentId) => this.#mayFailOver(agentId),
         backupReadyAt: (agentId) => this.#backupReadyAt(agentId),
@@ -2304,6 +2360,10 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       if (standingProfileChanged(agent, agent, defaults, previous)) this.#conversation.unloadAgentThreads(agent.id);
     }
     this.#emit({ type: "agents-changed", agents: this.listAgents() });
+  }
+
+  readTurnStepDetails(agentId: string, turnId: string): TurnStepDetails {
+    return { turnId, steps: this.#stepDetails.read(agentId, turnId) };
   }
 
   responseStyleChanged(): void {
@@ -3715,6 +3775,28 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     return agent;
   }
 
+  #slashCommandChat(externalThreadId: string): { agentId: string; taskId: string | null } | null {
+    const agentId = this.#conversation.agentForThread(externalThreadId);
+    const agent = agentId === undefined ? undefined : this.#store.get(agentId);
+    if (!agent) return null;
+    const threadId = this.#conversation.publicThreadId(agent.id, externalThreadId);
+    if (threadId === agent.threadId) return { agentId: agent.id, taskId: null };
+    const task = this.#tasks.snapshot(agent.id).tasks.find((candidate) => candidate.threadId === threadId);
+    return task ? { agentId: agent.id, taskId: task.id } : null;
+  }
+
+  listSlashCommands(input: SlashCommandChatInput): Effect.Effect<SlashCommandList, SlashCommandsFailed> {
+    return this.#slashCommands.list(input);
+  }
+
+  listResumableSessions(agentId: string): Effect.Effect<ResumableSessionList, SlashCommandsFailed> {
+    return this.#claudeResume.list(agentId);
+  }
+
+  resumeAgentSession(input: ResumeSessionInput): Effect.Effect<ResumeSessionResult, SlashCommandsFailed> {
+    return this.#claudeResume.resume(input.agentId, input.sessionId);
+  }
+
   readAgentSessionSettings(agentId: string): Effect.Effect<AgentSessionSettings, AgentLifecycleFailed> {
     return this.#sessionSettings
       .read(agentId)
@@ -4191,8 +4273,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     }
     if (previous?.pendingRuntime && !agent.pendingRuntime) this.#drain.scheduleDrain(agent.id);
     if (profileChanged) this.#conversation.unloadAgentThreads(agent.id);
-    if (previous && workspaceAccessEnforced(previous) && !workspaceAccessEnforced(agent))
-      this.#attention.answerGrantedRequests();
+    if (previous && lockEnforced(previous) && !lockEnforced(agent)) this.#attention.answerGrantedRequests();
     this.#emit({ type: "agents-changed", agents: this.listAgents() });
     if (
       providerChanged ||
@@ -4346,7 +4427,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
           (choice) =>
             !sameAgentModelChoice(choice, current) &&
             this.#modelChoiceReady(choice) &&
-            !(workspaceAccessEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
+            !(lockEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
         )
         .map(usageLimitOf),
     );
@@ -4481,7 +4562,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       (choice) =>
         !sameAgentModelChoice(choice, current) &&
         this.#usageLimitReady(choice) &&
-        !(workspaceAccessEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
+        !(lockEnforced(agent) && workspaceOnlyUnavailable(choice.provider)),
     );
   }
 
@@ -4836,6 +4917,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
         const agent = this.#conversation.requireKnownAgent(agentId);
         if (threadId !== target.threadId || snapshot.activeTurnId || mainChatBusy(agent)) throw busy();
         const revision = this.#store.database.deleteThreadHistory({ agentId, threadId });
+        this.#stepDetails.deleteThread(threadId);
         this.#conversation.forgetDeletedHistory(threadId);
         snapshot.messages = [];
         snapshot.revision = revision;
@@ -5004,6 +5086,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
 
   #deleteChannelThreadHistory(agentId: string, threadId: string): void {
     const revision = this.#store.database.deleteThreadHistory({ agentId, threadId });
+    this.#stepDetails.deleteThread(threadId);
     this.#conversation.forgetDeletedHistory(threadId);
     const loaded = this.#conversation.executionSnapshot(threadId);
     if (!loaded) return;
@@ -5234,6 +5317,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
   deleteAgent(agentId: string): Effect.Effect<void, AgentLifecycleFailed> {
     return Effect.sync(() => this.#planContinuation.cancel(agentId)).pipe(
       Effect.andThen(this.#removal.delete(agentId)),
+      Effect.tap(() => Effect.sync(() => this.#stepDetails.deleteAgent(agentId))),
       Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "deleteAgent", cause: failure.cause })),
     );
   }
@@ -6001,6 +6085,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
       if (session) this.#images.interrupt(agentId, session, snapshot.activeTurnId);
     }
     yield* this.#turn.dispose();
+    this.#stepDetails.close();
     yield* this.#usageLimits.dispose();
     this.#drain.dispose();
     this.#queue.dispose();
@@ -6649,10 +6734,91 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     options?: ConversationMarkerExclusions,
   ): AgentTaskReadState {
     const task = this.#tasks.require(input.agentId, input.taskId);
-    return {
+    const state = {
       taskId: task.taskId,
       ...this.#reader.markThreadRead(memberId, task.threadId, input.throughMessageId, options),
     };
+    this.emit("taskRead", task.agentId, task.taskId, state.unreadCount);
+    return state;
+  }
+
+  attentionThreadIds(): Set<string> {
+    const attention = this.#attention.runtimeAttention();
+    return new Set([
+      ...attention.pendingPrompts.filter((prompt) => prompt.detached !== true).map((prompt) => prompt.threadId),
+      ...attention.pendingApprovals.map((approval) => approval.threadId),
+      ...attention.pendingBrowserTakeovers.map((takeover) => takeover.threadId),
+    ]);
+  }
+
+  taskReadStates(
+    memberId: string,
+    threadIds: readonly string[],
+    options?: ConversationMarkerExclusions,
+  ): Map<string, ConversationReadState> {
+    return new Map(threadIds.map((threadId) => [threadId, this.#reader.readThread(memberId, threadId, options)]));
+  }
+
+  readonly createProjectAgent = Effect.fn("AgentService.createProjectAgent")(function* (
+    this: AgentService,
+    input: ProjectAgentCreation,
+  ): Effect.fn.Return<AgentSummary, AgentLifecycleFailed> {
+    let agent = yield* this.#store
+      .createAgent({
+        name: input.name,
+        description: "",
+        avatarSeed: input.avatarSeed,
+        avatarHue: null,
+        projectId: input.projectId,
+      })
+      .pipe(
+        Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "create agent", cause: failure.cause })),
+      );
+    const result = yield* Effect.result(
+      Effect.gen({ self: this }, function* () {
+        yield* this.#prepareAgentWorkspace(agent);
+        agent = yield* this.#assignNewAgentModel(
+          agent,
+          {
+            name: input.name,
+            description: "",
+            avatarSeed: input.avatarSeed,
+            avatarHue: null,
+            ...(input.provider ? { provider: input.provider } : {}),
+            ...(input.model ? { model: input.model } : {}),
+            ...(input.reasoningEffort ? { reasoningEffort: input.reasoningEffort } : {}),
+            ...(input.providerAccountId ? { providerAccountId: input.providerAccountId } : {}),
+          },
+          false,
+          true,
+        );
+        agent = yield* this.#store
+          .updateAgent({ agentId: agent.id, title: input.role })
+          .pipe(
+            Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "create agent", cause: failure.cause })),
+          );
+        yield* this.#store
+          .ensureThreadId(agent.id)
+          .pipe(
+            Effect.mapError((failure) => new AgentLifecycleFailed({ operation: "create agent", cause: failure.cause })),
+          );
+        return this.#store.get(agent.id) ?? agent;
+      }).pipe(
+        Effect.catchDefect((cause) => Effect.fail(new AgentLifecycleFailed({ operation: "create agent", cause }))),
+      ),
+    );
+    if (Result.isFailure(result)) {
+      yield* Effect.result(this.#removal.deleteData(agent));
+      this.#emit({ type: "agents-changed", agents: this.listAgents() });
+      return yield* result.failure;
+    }
+    this.#emit({ type: "agents-changed", agents: this.listAgents() });
+    return result.success;
+  }, Effect.uninterruptible).bind(this);
+
+  agentProjectChanged(agentIds: readonly string[]): void {
+    for (const agentId of agentIds) this.#conversation.unloadAgentThreads(agentId);
+    this.#emit({ type: "agents-changed", agents: this.listAgents() });
   }
 
   readonly deleteTask = Effect.fn("AgentService.deleteTask")(function* (
@@ -6917,7 +7083,13 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     yield* lifecycleStep("validate message recipient", validateRecipient);
     const taskId = input.taskId;
     const task = taskId
-      ? yield* lifecycleStep("find message task", () => this.#tasks.requireOpen(agent.id, taskId))
+      ? yield* lifecycleStep("find message task", () => {
+          if (agent.projectId !== undefined && this.#tasks.has(agent.id, taskId)) {
+            const known = this.#tasks.require(agent.id, taskId);
+            if (known.closedAt !== null) this.#tasks.reopen(known);
+          }
+          return this.#tasks.requireOpen(agent.id, taskId);
+        })
       : null;
     const receipt = yield* this.#mailbox
       .enqueue({
@@ -7615,7 +7787,10 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     if (event.type === "turn-started") this.#steerAfterTurnStart(event.agentId, event.threadId);
     if (this.channels?.event(event) || this.messaging?.event(event, this.#scope) || this.#tasks?.event(event)) return;
     this.emit("event", event, memberId);
-    if (event.type === "status") this.#providerStatusChanged(event.status);
+    if (event.type === "status") {
+      this.#providerStatusChanged(event.status);
+      this.#slashCommands?.providerStatus(event.status);
+    }
   }
 
   readonly #forgetExecutionThread = Effect.fn("AgentService.forgetExecutionThread")(function* (
@@ -7642,6 +7817,7 @@ export class AgentService extends EventEmitter<AgentServiceEvents> {
     }
     this.#conversation.forgetExecutionThread(threadId);
     this.#turn.fileHistory.forgetThread(threadId);
+    this.#stepDetails.deleteThread(threadId);
   }, Effect.uninterruptible);
 }
 
@@ -7749,5 +7925,5 @@ function failureMessages(error: unknown): string[] {
 }
 
 function localWorkspaceAccess(agent: AgentSummary): { allowOutside: boolean; allowedRoots: readonly string[] } {
-  return { allowOutside: !workspaceAccessEnforced(agent), allowedRoots: effectiveAgentFolders(agent) };
+  return { allowOutside: !lockEnforced(agent), allowedRoots: effectiveAgentFolders(agent) };
 }

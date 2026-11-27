@@ -652,7 +652,7 @@ function isPrivateIpv4(address: string): boolean {
 async function waitForDevelopmentApi(portValue: string | undefined, child: ChildProcess): Promise<void> {
   const port = readPort(portValue);
   if (!port) throw new Error("The development API port is missing.");
-  const deadline = Date.now() + 30_000;
+  const deadline = Date.now() + 240_000;
   while (Date.now() < deadline) {
     if (child.exitCode !== null) throw new Error("The development Auth API stopped before it became ready.");
     try {
@@ -669,7 +669,7 @@ async function waitForDevelopmentApi(portValue: string | undefined, child: Child
 async function waitForDevelopmentRemote(portValue: string | undefined, child: ChildProcess): Promise<void> {
   const port = readPort(portValue);
   if (!port) throw new Error("The development Signal health port is missing.");
-  const deadline = Date.now() + 30_000;
+  const deadline = Date.now() + 240_000;
   while (Date.now() < deadline) {
     if (child.exitCode !== null) throw new Error("The development Signal service stopped before it became ready.");
     try {

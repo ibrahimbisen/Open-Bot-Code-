@@ -26,6 +26,8 @@ import { runCauseEffect } from "./effect-boundary";
 
 const roots: string[] = [];
 
+const MODE_AFTER_OWNER_ONLY_CHMOD = process.platform === "win32" ? 0o666 : 0o600;
+
 afterEach(async () => {
   await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
 });
@@ -125,7 +127,7 @@ describe("CodeBotDatabase", () => {
     expect(database.connection.prepare("PRAGMA journal_mode").get()).toMatchObject({
       journal_mode: "wal",
     });
-    expect((await stat(database.path)).mode & 0o777).toBe(0o600);
+    expect((await stat(database.path)).mode & 0o777).toBe(MODE_AFTER_OWNER_ONLY_CHMOD);
     expect(database.connection.prepare("SELECT version FROM schema_migrations ORDER BY version").all()).toEqual([
       { version: 8 },
       { version: 9 },

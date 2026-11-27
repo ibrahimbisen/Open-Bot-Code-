@@ -7,7 +7,7 @@ import { Sidebar } from "@codebot/ui/features/sidebar/Sidebar";
 import { sidebarChannelWaits } from "@codebot/ui/features/sidebar/sidebar-agent-states";
 import { teamMemberName } from "@codebot/ui/features/team/TeamPersonAvatar";
 import { useText } from "@codebot/ui/text";
-import { createEffect, createMemo, createSignal, onSettled } from "solid-js";
+import { createEffect, createMemo, createSignal, onSettled, Show } from "solid-js";
 import { appPort } from "../../app-port";
 import { type ChatHistoryEntry, chatHistoryKeys } from "../../chat-history";
 import { useLayout } from "../../layout";
@@ -15,6 +15,7 @@ import { DirectConversation } from "../../lazy-views";
 import { useNavigation } from "../../navigation";
 import { usePlatform } from "../../platform";
 import { useTurns } from "../../turns";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useAgentTasks } from "../agent-tasks/agent-tasks-context";
 import { useAgentThreads } from "../agent-threads/agent-threads-context";
 import type { ThreadWaits } from "../agent-threads/conversation-threads";
@@ -32,6 +33,7 @@ import { useServerSettings } from "../servers/server-settings";
 import { serverUpdateBadge, showServerUpdate } from "../servers/server-update-flow";
 import { useServers } from "../servers/servers-context";
 import { useSettings } from "../settings/settings-context";
+import { StatusBarMount } from "../status-bar/StatusBarMount";
 import { usePresence } from "../team/team-context";
 import { SidebarUpdateIsland } from "../updates/SidebarUpdateIsland";
 import { useWindowPage } from "../window/window-page-context";
@@ -44,6 +46,7 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
   const layout = useLayout();
   const platform = usePlatform();
   const channels = useChannels();
+  const advanced = useAdvancedFeatures();
   const windowPage = useWindowPage();
   const serverScope = useServerScope();
   const { activeServer, activeServerId, activeServerSupportsCapability } = useServers();
@@ -138,11 +141,15 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
 
   const channelsListed = () => channels.supported();
   const sidebarChannels = () =>
-    !channels.state.listed && (!serverScope.loaded() || channels.supported()) && serverScope.frameChannels().length > 0
-      ? serverScope.frameChannels()
-      : channelsListed()
-        ? channels.state.channels
-        : [];
+    !advanced.enabled("channels")
+      ? []
+      : !channels.state.listed &&
+          (!serverScope.loaded() || channels.supported()) &&
+          serverScope.frameChannels().length > 0
+        ? serverScope.frameChannels()
+        : channelsListed()
+          ? channels.state.channels
+          : [];
   const visibleChannels = createMemo(() => sidebarChannels().filter((channel) => !channel.archived));
 
   const { agentStates: sidebarAgentStates, agentMoods } = createAgentActivity();
@@ -302,9 +309,19 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
               onOpenStorage={(serverId) => openServerSettings(serverId, null, "storage")}
             />
             <SidebarUpdateIsland />
+            <Show when={!platform.landingPreview}>
+              <StatusBarMount
+                onManageMachines={
+                  activeServer()?.kind === "local"
+                    ? () => openServerSettings(activeServerId(), null, "local-models")
+                    : undefined
+                }
+              />
+            </Show>
           </>
         }
         onOpenMarketplace={() => setSkillsMarketplaceOpen(true)}
+        marketplaceSupported={advanced.enabled("marketplace")}
         agentsConnecting={agentListConnecting()}
         emptyAction={
           agentList().length === 0 && agentListSettled()

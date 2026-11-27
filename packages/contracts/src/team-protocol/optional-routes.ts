@@ -1,5 +1,6 @@
 import { ACP_REGISTRY_CODECS } from "./acp-registry-v1";
 import type { OptionalRouteCodec } from "./admin-wire";
+import { ADVANCED_FEATURES_CODECS } from "./advanced-features-v1";
 import { AGENT_ACCESS_CODECS } from "./agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_CODECS } from "./agent-active-queues-v1";
 import { AGENT_ADMIN_CODECS } from "./agent-admin-v1";
@@ -115,6 +116,7 @@ import { PASSWORD_MANAGERS_CODECS } from "./password-managers-v1";
 import { PENDING_APPROVAL_CODECS } from "./pending-approval-v1";
 import { PENDING_PROMPTS_CODECS } from "./pending-prompts-v1";
 import { PHONE_FEEDBACK_CODECS } from "./phone-feedback-v1";
+import { PROJECTS_V1_CODECS } from "./projects-v1";
 import { PROMPT_CACHE_TTL_CODECS } from "./prompt-cache-ttl-v1";
 import { PROVIDER_ACCOUNT_CODE_CODECS } from "./provider-account-code-v1";
 import { PROVIDER_ACCOUNT_KEYS_CODECS } from "./provider-account-keys-v1";
@@ -218,6 +220,7 @@ const CODECS: ReadonlyMap<string, OptionalRouteCodec> = new Map([
   ...HOST_ADMIN_CODECS,
   ...HOST_UPDATE_CODECS,
   ...HOST_TIMEZONE_CODECS,
+  ...ADVANCED_FEATURES_CODECS,
   ...HOST_VOICE_MODEL_CODECS,
   ...HOST_SIGNAL_HOME_CODECS,
   ...HOST_TURN_LIMITS_CODECS,
@@ -389,6 +392,7 @@ const CODECS: ReadonlyMap<string, OptionalRouteCodec> = new Map([
   ...VAULT_V4_CODECS,
   ...INSTANCE_TRANSFER_CHUNKS_CODECS,
   ...INSTANCE_TRANSFER_FULL_COPY_CODECS,
+  ...PROJECTS_V1_CODECS,
 ]);
 
 export function optionalRouteCodec(path: string): OptionalRouteCodec | undefined {

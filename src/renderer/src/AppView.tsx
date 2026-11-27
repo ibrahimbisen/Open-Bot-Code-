@@ -12,7 +12,6 @@ import { useSetupProviderProps } from "./features/onboarding/setup-provider-prop
 import { useServerScope } from "./features/servers/server-scope";
 import { useServerSelection } from "./features/servers/server-selection";
 import { useServers } from "./features/servers/servers-context";
-import { useSettings } from "./features/settings/settings-context";
 import { useUpdates } from "./features/updates/updates-context";
 import { WhatsNewOverlay } from "./features/updates/WhatsNewOverlay";
 import { QuitShortcutHint } from "./features/window/QuitShortcutHint";
@@ -44,7 +43,6 @@ export function AppAccessGate() {
   const scope = useServerScope();
   const setupProviders = useSetupProviderProps();
   const detection = useProviderDetection();
-  const settings = useSettings();
   const { joinRemoteDuringSetup, openServerDuringSetup } = useServerSelection();
   const { servers } = useServers();
   const accountServers = createMemo(() =>
@@ -150,12 +148,6 @@ export function AppAccessGate() {
                             }
                             platform={platform.appInfo()?.platform ?? "darwin"}
                             onSave={setup.saveSetup}
-                            onAnalyticsChoice={(enabled, chosen) =>
-                              settings.updateGeneralSettings(
-                                { ...settings.generalSettings(), productAnalytics: enabled },
-                                { analyticsChosen: chosen },
-                              )
-                            }
                             onProviderStepShown={detection.scanOnce}
                             logoVariant={platform.appInfo()?.variant ?? "production"}
                             existingServers={accountServers()}

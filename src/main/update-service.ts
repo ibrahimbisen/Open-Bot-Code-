@@ -49,7 +49,35 @@ export type UpdateAdapter = {
   on(event: "error", listener: (error: Error) => void): unknown;
   quitAndInstall: (isSilent?: boolean, isForceRunAfter?: boolean) => void;
   isUserWithinRollout?: (info: UpdateInfo) => boolean | Promise<boolean>;
+  setFeedURL?: (options: { provider: "generic"; url: string }) => void;
 };
+
+export interface UpdateCheckTimers {
+  set(callback: () => void, delayMs: number): unknown;
+  clear(timer: unknown): void;
+}
+
+function systemCheckTimers(): UpdateCheckTimers {
+  const timers = new Set<ReturnType<typeof setTimeout>>();
+  return {
+    set: (callback, delayMs) => {
+      const timer = setTimeout(() => {
+        timers.delete(timer);
+        callback();
+      }, delayMs);
+      timer.unref?.();
+      timers.add(timer);
+      return timer;
+    },
+    clear: (timer) => {
+      for (const candidate of timers) {
+        if (candidate !== timer) continue;
+        clearTimeout(candidate);
+        timers.delete(candidate);
+      }
+    },
+  };
+}
 
 export function createDisabledUpdateAdapter(): UpdateAdapter {
   return {
@@ -100,8 +128,11 @@ interface UpdateServiceEvents {
 interface UpdateServiceOptions {
   currentVersion: string;
   enabled: boolean;
+  feedConfigured?: boolean;
   autoDownload: boolean;
   beforeInstall: () => Promise<void>;
+  checkTimers?: UpdateCheckTimers;
+  redactLog?: ((text: string) => string) | undefined;
   checkSiblingInstances?: (() => Effect.Effect<readonly CodeBotSiblingInstance[], SiblingScanFailed>) | undefined;
   currentUid?: number | undefined;
   platform?: NodeJS.Platform;
@@ -127,7 +158,8 @@ export interface UpdateDiagnosticEvent {
   errorCode: UpdateFailureCode | null;
 }
 
-const DEFAULT_CHECK_INTERVAL = 4 * 60 * 1_000;
+export const UPDATE_FIRST_CHECK_DELAY_MS = 12_000;
+export const UPDATE_CHECK_INTERVAL_MS = 60 * 60 * 1_000;
 const MAX_LOG_BYTES = 1024 * 1024;
 const MAX_DIAGNOSTIC_EVENTS = 20;
 
@@ -172,13 +204,16 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       | "installRecordPath"
       | "logDirectory"
       | "notInstalledVersion"
+      | "redactLog"
       | "shipItDirectory"
       | "updaterCacheDirectory"
     > & {
       phaseTimeoutsMs: Record<UpdateBusyPhase, number>;
+      checkTimers: UpdateCheckTimers;
     };
   #status: UpdateStatus;
-  #checkTimer: ReturnType<typeof setTimeout> | null = null;
+  #feedConfigured: boolean;
+  #checkTimer: { readonly timer: unknown } | null = null;
   #phaseTimer: ReturnType<typeof setTimeout> | null = null;
   #started = false;
   #checksScheduled = false;
@@ -214,11 +249,13 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     super();
     this.#updater = updater;
     this.#autoDownload = options.autoDownload;
+    this.#feedConfigured = options.feedConfigured ?? true;
     this.#options = {
       ...options,
       platform: options.platform ?? process.platform,
-      initialCheckDelayMs: options.initialCheckDelayMs ?? 12_000,
-      checkIntervalMs: options.checkIntervalMs ?? DEFAULT_CHECK_INTERVAL,
+      initialCheckDelayMs: options.initialCheckDelayMs ?? UPDATE_FIRST_CHECK_DELAY_MS,
+      checkIntervalMs: options.checkIntervalMs ?? UPDATE_CHECK_INTERVAL_MS,
+      checkTimers: options.checkTimers ?? systemCheckTimers(),
       phaseTimeoutsMs: {
         checking: options.checkTimeoutMs ?? DEFAULT_PHASE_TIMEOUTS.checking,
         downloading: options.downloadStallTimeoutMs ?? DEFAULT_PHASE_TIMEOUTS.downloading,
@@ -228,13 +265,12 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     if (options.notInstalledVersion)
       logger.warn(`The last update restart did not install CodeBot ${options.notInstalledVersion}.`);
     this.#status = {
-      phase: options.enabled ? "idle" : "unsupported",
       currentVersion: options.currentVersion,
       availableVersion: null,
       progress: null,
       checkedAt: null,
-      message: options.enabled ? null : unsupportedMessage(),
       errorCode: null,
+      ...this.#restingState(),
     };
     this.on("diagnostic", (event) => {
       const directory = this.#options.logDirectory;
@@ -244,6 +280,16 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       write.addObserver(() => this.#logWrites.delete(write));
     });
     this.#recordStatus();
+  }
+
+  get #active(): boolean {
+    return this.#options.enabled && this.#feedConfigured;
+  }
+
+  #restingState(): Pick<UpdateStatus, "phase" | "message"> {
+    if (!this.#options.enabled) return { phase: "unsupported", message: unsupportedMessage() };
+    if (!this.#feedConfigured) return { phase: "unsupported", message: NO_UPDATE_SERVER_MESSAGE };
+    return { phase: "idle", message: null };
   }
 
   flushLog(): Effect.Effect<void> {
@@ -280,7 +326,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       if (this.#operation === "install" && this.#installHandedOver && this.#isInstallLive()) {
         this.#installGeneration += 1;
         this.#activeInstall = null;
-        logUpdateFailure("CodeBot update install failed.", error);
+        this.#logFailure("CodeBot update install failed.", error);
         this.#setError("install_failed", INSTALL_FAILED_MESSAGE);
         return;
       }
@@ -297,7 +343,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     }
 
     this.#checksScheduled = scheduleChecks;
-    if (scheduleChecks && this.#options.enabled) {
+    if (scheduleChecks && this.#active) {
       this.#scheduleCheck(this.#options.initialCheckDelayMs);
     }
   }
@@ -305,7 +351,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
   resume(): void {
     if (!this.#started) return;
     if (!this.#phaseTimer) this.#armPhaseTimer();
-    if (!this.#checksScheduled || !this.#options.enabled || this.#checkTimer) return;
+    if (!this.#checksScheduled || !this.#active || this.#checkTimer) return;
     this.#scheduleCheck(this.#options.initialCheckDelayMs);
   }
 
@@ -349,7 +395,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     enabled: boolean,
   ) {
     this.#autoDownload = enabled;
-    if (enabled && this.#options.enabled && this.#status.phase === "available") {
+    if (enabled && this.#active && this.#status.phase === "available") {
       yield* Effect.forkIn(this.downloadUpdate(), this.#workScope, { startImmediately: true });
     }
   });
@@ -369,14 +415,44 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       }
     }
     this.#downloadedVersion = null;
-    this.#setStatus({
-      phase: this.#options.enabled ? "idle" : "unsupported",
-      availableVersion: null,
-      progress: null,
-      message: null,
-      errorCode: null,
-    });
-    if (!managed && this.#options.enabled) this.#scheduleCheck(this.#options.initialCheckDelayMs);
+    this.#setStatus({ availableVersion: null, progress: null, errorCode: null, ...this.#restingState() });
+    if (!managed && this.#active) this.#scheduleCheck(this.#options.initialCheckDelayMs);
+  }
+
+  setFeed(configured: boolean): void {
+    if (!this.#options.enabled || this.#installStarted) {
+      this.#feedConfigured = configured;
+      return;
+    }
+    const pendingCheck = this.#checkRequest;
+    this.#feedConfigured = configured;
+    this.#checkGeneration += 1;
+    this.#downloadGeneration += 1;
+    this.#activeDownload = null;
+    this.#cancellationToken?.cancel();
+    this.#cancellationToken = null;
+    this.#downloadedVersion = null;
+    this.#requestedVersion = null;
+    this.#rolloutMiss = null;
+    this.#stagedVersion = null;
+    this.#clearCheckTimer();
+    if (this.#managedByHost) return;
+    this.#setStatus({ availableVersion: null, progress: null, errorCode: null, ...this.#restingState() });
+    if (!configured || !this.#started || !this.#checksScheduled) return;
+    if (!pendingCheck) {
+      this.#scheduleCheck(0);
+      return;
+    }
+    this.#fork(
+      Deferred.await(pendingCheck).pipe(
+        Effect.ignore,
+        Effect.andThen(
+          Effect.sync(() => {
+            if (this.#active && !this.#checkTimer && this.#status.phase === "idle") this.#scheduleCheck(0);
+          }),
+        ),
+      ),
+    );
   }
 
   setHostState(state: HostUpdateState): void {
@@ -412,7 +488,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
 
   #check(joinOutstandingRequest: boolean): Effect.Effect<UpdateStatus, UpdateOperationFailure> {
     return Effect.gen({ self: this }, function* () {
-      if (this.#managedByHost || !this.#options.enabled || this.#teardownCommitted) return this.getStatus();
+      if (this.#managedByHost || !this.#active || this.#teardownCommitted) return this.getStatus();
       if (this.#status.phase === "ready") return yield* this.#checkSupersedingRelease();
       if (["checking", "downloading", "installing"].includes(this.#status.phase)) {
         if (this.#status.phase === "downloading" && !joinOutstandingRequest) {
@@ -496,7 +572,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
   downloadUpdate(): Effect.Effect<UpdateStatus, UpdateOperationFailure> {
     return Effect.gen({ self: this }, function* () {
       if (this.#managedByHost) return this.getStatus();
-      if (!this.#options.enabled || this.#teardownCommitted || !this.#canDownload()) return this.getStatus();
+      if (!this.#active || this.#teardownCommitted || !this.#canDownload()) return this.getStatus();
       if (this.#downloadInFlight) return this.getStatus();
       this.#downloadInFlight = true;
       const generation = ++this.#downloadGeneration;
@@ -517,7 +593,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
           ),
         );
         if (Result.isFailure(result) && this.#downloadGeneration === generation) {
-          logUpdateFailure("CodeBot update download failed.", result.failure.cause);
+          this.#logFailure("CodeBot update download failed.", result.failure.cause);
           this.#activeDownload = null;
           this.#setError("download_failed", downloadFailureMessage(result.failure.cause));
         }
@@ -632,7 +708,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
         }),
       );
       if (Result.isFailure(installed) && this.#installGeneration === generation) {
-        logUpdateFailure("CodeBot update install failed.", installed.failure.cause);
+        this.#logFailure("CodeBot update install failed.", installed.failure.cause);
         this.#setError("install_failed", INSTALL_FAILED_MESSAGE);
         return yield* new UpdateOperationFailure({ cause: new Error(sourceText("error.update.restartFailed")) });
       }
@@ -649,8 +725,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
 
   stop(): Effect.Effect<void> {
     return Effect.sync(() => {
-      if (this.#checkTimer) clearTimeout(this.#checkTimer);
-      this.#checkTimer = null;
+      this.#clearCheckTimer();
       if (this.#status.phase !== "installing") this.#clearPhaseTimer();
     });
   }
@@ -662,7 +737,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       this.#checkRequest = request;
       this.#rolloutMiss = null;
       return yield* updateIO(() => this.#updater.checkForUpdates()).pipe(
-        Effect.tapError(({ cause }) => Effect.sync(() => logUpdateFailure("CodeBot update check failed.", cause))),
+        Effect.tapError(({ cause }) => Effect.sync(() => this.#logFailure("CodeBot update check failed.", cause))),
         Effect.onExit((exit) =>
           Effect.gen({ self: this }, function* () {
             yield* Deferred.done(request, exit);
@@ -713,7 +788,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     return Effect.gen({ self: this }, function* () {
       if (this.#cancellationToken && !this.#cancellationToken.cancelled) return this.#cancellationToken;
       const checked = yield* Effect.result(updateIO(() => this.#updater.checkForUpdates()));
-      if (Result.isFailure(checked)) logUpdateFailure("CodeBot update check failed.", checked.failure.cause);
+      if (Result.isFailure(checked)) this.#logFailure("CodeBot update check failed.", checked.failure.cause);
       this.#cancellationToken = Result.isSuccess(checked) ? (checked.success?.cancellationToken ?? null) : null;
       return this.#cancellationToken;
     });
@@ -742,9 +817,32 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
   }
 
   #scheduleCheck(delayMs: number): void {
-    if (this.#checkTimer) clearTimeout(this.#checkTimer);
-    this.#checkTimer = setTimeout(() => this.#fork(this.#check(false)), delayMs);
-    this.#checkTimer.unref?.();
+    this.#clearCheckTimer();
+    const scheduled = {
+      timer: this.#options.checkTimers.set(() => {
+        if (this.#checkTimer === scheduled) this.#checkTimer = null;
+        this.#fork(this.#check(false));
+      }, delayMs),
+    };
+    this.#checkTimer = scheduled;
+  }
+
+  #clearCheckTimer(): void {
+    if (this.#checkTimer) this.#options.checkTimers.clear(this.#checkTimer.timer);
+    this.#checkTimer = null;
+  }
+
+  #logFailure(text: string, error: unknown): void {
+    const fields = typeof error === "object" && error !== null ? error : {};
+    const message = error instanceof Error ? error.message : error;
+    logger.warn(
+      text,
+      toLogValue({
+        code: "code" in fields ? fields.code : undefined,
+        statusCode: "statusCode" in fields ? fields.statusCode : undefined,
+        message: typeof message === "string" ? (this.#options.redactLog?.(message) ?? message) : message,
+      }),
+    );
   }
 
   #fork(work: Effect.Effect<unknown, UpdateOperationFailure>): void {
@@ -844,6 +942,7 @@ const CHECK_STALLED_MESSAGE = sourceText("error.update.checkStalled");
 const CHECK_OFFLINE_MESSAGE = sourceText("error.update.checkOffline");
 const CHECK_SERVICE_MESSAGE = sourceText("error.update.checkUnavailable");
 const CHECK_NO_RELEASE_MESSAGE = sourceText("error.update.checkNoRelease");
+const NO_UPDATE_SERVER_MESSAGE = sourceText("error.appUpdate.noServer");
 
 const OFFLINE_ERROR_CODES = [
   "EAI_AGAIN",
@@ -876,18 +975,6 @@ function describeCheckFailure(error: unknown) {
   if (status === 429 || status >= 500) return CHECK_SERVICE_MESSAGE;
   if (code === "ERR_UPDATER_LATEST_VERSION_NOT_FOUND") return CHECK_SERVICE_MESSAGE;
   return errorMessage("check_failed");
-}
-
-function logUpdateFailure(text: string, error: unknown): void {
-  const fields = typeof error === "object" && error !== null ? error : {};
-  logger.warn(
-    text,
-    toLogValue({
-      code: "code" in fields ? fields.code : undefined,
-      statusCode: "statusCode" in fields ? fields.statusCode : undefined,
-      message: error instanceof Error ? error.message : error,
-    }),
-  );
 }
 
 function isOnReadOnlyVolume(bundlePath: string): Effect.Effect<boolean> {

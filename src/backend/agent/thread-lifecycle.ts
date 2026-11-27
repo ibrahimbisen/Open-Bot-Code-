@@ -15,7 +15,6 @@ import {
   GITHUB_CONNECTOR_MCP_SERVER_ID,
   type McpServerConfig,
   type ResponseStyle,
-  workspaceAccessEnforced,
 } from "@codebot/contracts/ipc";
 import { type DynamicRecord, isDynamicRecord } from "@codebot/contracts/runtime-values";
 import { sourceText } from "@codebot/i18n/source";
@@ -26,6 +25,8 @@ import type { AgentStore } from "../agent-store";
 import type { ProviderSession } from "../database/provider-sessions";
 import { causeHelpers } from "../effect-boundary";
 import { type HomeSkill, listHomeSkills, skillFolderNames, userSkillFolderNames } from "../home-skills";
+import { agentFolderLock, type FolderLock, folderLockParam } from "../lock/folder-lock";
+import { agentLockLevel, lockEnforced } from "../lock/lock-level";
 import type { MailboxStore } from "../mailbox-store";
 import type { McpOperationError } from "../mcp-effects";
 import {
@@ -78,6 +79,7 @@ import {
 import { decodeCapturedSteps, readCapturedSteps } from "./handoff-tool-steps";
 import { mcpFallbackRunsServer } from "./mcp-tools";
 import { isProviderTimeout } from "./provider-status";
+import { agentReplyRule } from "./reply-rule";
 import { sessionSettingsIdentity } from "./session-settings";
 import { isArchivedThreadError, isMissingProviderSessionError, providerLabel } from "./thread-items";
 import { toolCatalogNames, visibleDynamicTools } from "./tool-catalog";
@@ -88,6 +90,7 @@ import {
   promptInstructionsFile,
 } from "./workspace-instructions";
 import {
+  agentWorkingDirectory,
   type CodexApprovalPolicy,
   checkAgentFolders,
   codexApprovalPolicy,
@@ -175,6 +178,7 @@ export interface ThreadLifecycleOptions {
   computerUseInputRefused?: () => boolean;
   computerUseForegroundInput?: boolean;
   responseStyle?: () => ResponseStyle;
+  replyRule?: (agentId: string) => string;
   memoryReview?: () => boolean;
   skillRevision?: () => boolean;
   sectionTeammates?: (agentId: string) => SectionTeammates | null;
@@ -209,6 +213,8 @@ export class ThreadLifecycle {
   readonly #computerUseInputRefused: () => boolean;
   readonly #computerUseForegroundInput: boolean;
   readonly #responseStyle: () => ResponseStyle;
+  readonly #replyRule: (agentId: string) => string;
+  readonly #givenReplyRules = new Map<string, string>();
   readonly #memoryReview: () => boolean;
   readonly #skillRevision: () => boolean;
   readonly #sectionTeammates: (agentId: string) => SectionTeammates | null;
@@ -252,6 +258,7 @@ export class ThreadLifecycle {
     this.#computerUseInputRefused = options.computerUseInputRefused ?? (() => false);
     this.#computerUseForegroundInput = options.computerUseForegroundInput ?? false;
     this.#responseStyle = options.responseStyle ?? (() => DEFAULT_RESPONSE_STYLE);
+    this.#replyRule = options.replyRule ?? ((agentId) => agentReplyRule(agentId, null));
     this.#memoryReview = options.memoryReview ?? (() => false);
     this.#skillRevision = options.skillRevision ?? (() => false);
     this.#sectionTeammates = options.sectionTeammates ?? (() => null);
@@ -451,7 +458,8 @@ export class ThreadLifecycle {
       const turnContext = yield* this.#turnContextKey(currentAgent, client);
       if (
         this.#conversation.loadedClientFor(session.externalSessionId) !== client ||
-        this.#turnContextChanged(client, session.externalSessionId, turnContext)
+        this.#turnContextChanged(client, session.externalSessionId, turnContext) ||
+        this.#replyRuleChanged(session.externalSessionId, currentAgent.id)
       ) {
         const resumed = yield* Effect.result(this.resumeThread(currentAgent, client, session.externalSessionId));
         if (Result.isFailure(resumed)) {
@@ -645,7 +653,7 @@ export class ThreadLifecycle {
       ...config,
       model: agent.model,
       effort: agent.reasoningEffort,
-      cwd: agent.workspacePath,
+      cwd: agentWorkingDirectory(agent),
       runtimeWorkspaceRoots: workspaceWritableRoots(agent, this.#store.sharedRoot),
       approvalPolicy: this.approvalPolicy(agent),
       approvalsReviewer: "user",
@@ -750,6 +758,7 @@ export class ThreadLifecycle {
       return yield* prepared.failure;
     }
     this.#rememberTurnContext(client, externalThreadId, givenContext);
+    this.#givenReplyRules.set(externalThreadId, this.#replyRule(agent.id));
     this.#conversation.bindThread(externalThreadId, agent.id, publicThreadId);
     this.#conversation.markThreadLoaded(externalThreadId, client);
     this.#conversation.ensureSnapshot(agent.id, publicThreadId);
@@ -947,7 +956,7 @@ export class ThreadLifecycle {
             agent.name,
             agent.title,
             agent.description,
-            ...(workspaceAccessEnforced(agent) ? ["workspace"] : []),
+            ...(lockEnforced(agent) ? [`lock-${agentLockLevel(agent)}`] : []),
             ...(folders.length ? [["folders", ...folders]] : []),
             ...(excluded.length ? [["excluded", ...excluded]] : []),
             ...(agentAutomationAllowed(agent, this.#store.agentDefaults()) ? ["automation"] : []),
@@ -1004,6 +1013,7 @@ export class ThreadLifecycle {
       this.#sectionTeammates(agent.id),
       this.#passwordVaultConnected(),
       file && [file.fileName, file.text, file.truncated],
+      agentFolderLock(agent, this.#store.sharedRoot),
     ]);
   }).bind(this);
 
@@ -1013,6 +1023,11 @@ export class ThreadLifecycle {
 
   #rememberTurnContext(client: AgentClient, externalThreadId: string, key: string): void {
     if (client.turnContext === true) this.#givenTurnContext.set(externalThreadId, key);
+  }
+
+  #replyRuleChanged(externalThreadId: string, agentId: string): boolean {
+    const given = this.#givenReplyRules.get(externalThreadId);
+    return given !== undefined && given !== this.#replyRule(agentId);
   }
 
   #turnContextChanged(client: AgentClient, externalThreadId: string, current: string): boolean {
@@ -1040,14 +1055,18 @@ export class ThreadLifecycle {
     return agentMcpServers(this.#mcpServers(agent.id), agentComputerUseEnabled(agent));
   }
 
-  #workspaceOnlyParam(agent: AgentSummary, client: AgentClient): { workspaceOnly?: true; excludedFolders?: string[] } {
-    if (
-      agentProviderDescriptor(client.provider).workspaceEnforcement !== "tool-sandbox" ||
-      !workspaceAccessEnforced(agent)
-    )
+  #workspaceOnlyParam(
+    agent: AgentSummary,
+    client: AgentClient,
+  ): { workspaceOnly?: true; excludedFolders?: string[]; folderLock?: FolderLock } {
+    if (agentProviderDescriptor(client.provider).workspaceEnforcement !== "tool-sandbox" || !lockEnforced(agent))
       return {};
     const excluded = workspaceExcludedFolders(agent);
-    return { workspaceOnly: true, ...(excluded.length ? { excludedFolders: excluded } : {}) };
+    return {
+      workspaceOnly: true,
+      ...(excluded.length ? { excludedFolders: excluded } : {}),
+      ...folderLockParam(agent, this.#store.sharedRoot),
+    };
   }
 
   #computerUseParam(agent: AgentSummary, client: AgentClient): { computerUse?: false } {
@@ -1180,6 +1199,7 @@ export class ThreadLifecycle {
       computerUseInputRefused: this.#computerUseInputRefused(),
       computerUseForegroundInput: this.#computerUseForegroundInput,
       responseStyle: this.#responseStyle(),
+      replyRule: this.#replyRule(agent.id),
       memoryReview: this.#memoryReview(),
       skillRevision: this.#skillRevision(),
       memoryLimit: this.#memories.limit(),
@@ -1253,7 +1273,7 @@ export class ThreadLifecycle {
     agent: AgentSummary,
     client: AgentClient,
   ) {
-    const enforced = workspaceAccessEnforced(agent);
+    const enforced = lockEnforced(agent);
     const read =
       client.provider === "claude" && enforced
         ? []
@@ -1299,7 +1319,7 @@ export class ThreadLifecycle {
       threadId: externalThreadId,
       model: agent.model,
       effort: agent.reasoningEffort,
-      cwd: agent.workspacePath,
+      cwd: agentWorkingDirectory(agent),
       runtimeWorkspaceRoots: workspaceWritableRoots(agent, this.#store.sharedRoot),
       approvalPolicy: this.approvalPolicy(agent),
       approvalsReviewer: "user",
@@ -1355,6 +1375,7 @@ export class ThreadLifecycle {
       response = yield* client.request("thread/resume", params, decodeRecordResponse).pipe(toThreadOperationFailed);
     } else response = resumed.success;
     this.#rememberTurnContext(client, externalThreadId, givenContext);
+    this.#givenReplyRules.set(externalThreadId, this.#replyRule(agent.id));
     this.#conversation.markThreadLoaded(externalThreadId, client);
     yield* this.#nameSession(client, externalThreadId, agent, getString(getRecord(response, "thread"), "name"));
     yield* this.#archiveRetries.retry(client);
@@ -1433,6 +1454,7 @@ export class ThreadLifecycle {
     this.#conversation.unbindThread(externalThreadId);
     this.#conversation.unloadThread(externalThreadId);
     this.#givenTurnContext.delete(externalThreadId);
+    this.#givenReplyRules.delete(externalThreadId);
     this.#compaction.forgetThread(externalThreadId);
     this.#pendingHandoffs.delete(externalThreadId);
   }
@@ -1571,6 +1593,7 @@ export class ThreadLifecycle {
     resumes = false,
   ) {
     this.#givenTurnContext.delete(externalThreadId);
+    this.#givenReplyRules.delete(externalThreadId);
     if (!client?.releaseThread) return;
     yield* client
       .releaseThread(externalThreadId, resumes)

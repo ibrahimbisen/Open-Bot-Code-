@@ -1,4 +1,4 @@
-import type { AppInfo, SettingLinkId } from "@codebot/contracts/ipc";
+import type { AdvancedFeatureSettings, AppInfo, SettingLinkId } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import type { AgentSettingLinkId } from "@codebot/ui/features/conversation/agent-setting-links";
 import { type SettingsTab, settingsTabShown } from "./settings-tabs";
@@ -46,7 +46,7 @@ const TARGETS: Record<Exclude<AppSettingLinkId, "island.show">, AppSettingLinkTa
   "dock.agents": { tab: "agent-dock", row: "settings.agentDock.agents.title" },
   "computer-use.permissions": { tab: "computer-use", row: "computerUse.permissions.title" },
   "updates.track": { tab: "updates", row: "settings.updates.track.title" },
-  "updates.auto-install": { tab: "updates", row: "settings.updates.autoInstall.title" },
+  "updates.auto-install": { tab: "updates", row: "appUpdate.autoRestart.title" },
 };
 
 export function appSettingLinkTarget(
@@ -61,7 +61,11 @@ export function appSettingLinkTarget(
 }
 
 export function appSettingRowOpener(
-  surface: () => { platform: AppInfo["platform"] | undefined; chatWindow: boolean },
+  surface: () => {
+    platform: AppInfo["platform"] | undefined;
+    chatWindow: boolean;
+    advanced: AdvancedFeatureSettings | undefined;
+  },
   openRow: (tab: SettingsTab, row: AppTextKey) => void,
 ): (settingId: AppSettingLinkId) => (() => void) | undefined {
   return (settingId) => {

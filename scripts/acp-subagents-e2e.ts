@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { ConversationSubagent } from "@codebot/contracts/ipc";
@@ -12,6 +12,8 @@ import { runCauseEffect } from "../src/backend/effect-boundary";
 import { type AppServerNotification, getString } from "../src/backend/protocol";
 import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/acp-subagents-e2e");
 const WAIT_MS = 20_000;
@@ -90,7 +92,7 @@ function save(name: string, lists: readonly ConversationSubagent[][]): Card[] {
 }
 
 async function fakeCli(name: string, style: string, log: string): Promise<AgentCliInfo> {
-  const executable = join(root, name, "bin", name);
+  const executable = standInPath(join(root, name, "bin", name));
   await installFakeAgent(executable, "subagents", { FAKE_STYLE: style, FAKE_LOG: log });
   return { executable, version: "1.0.0", source: "managed" };
 }
@@ -253,7 +255,7 @@ try {
   report.passed = true;
 } finally {
   await stopClients(clients);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

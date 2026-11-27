@@ -60,6 +60,7 @@ import {
   isRecord,
   type ThreadItem,
 } from "../protocol";
+import type { TurnStepDetailRecord } from "../turn-step-details-store";
 import type { AgentMemories } from "./agent-memories";
 import { answerFilePaths } from "./answer-file-paths";
 import type { AttentionBrowserHost, AttentionRegistry, CodexSubagentParent } from "./attention-registry";
@@ -108,6 +109,7 @@ import {
   writesNoAnswer,
 } from "./routine-quiet-runs";
 import { type SkillLoad, skillLoads, skillLoadTokens } from "./skill-loads";
+import { STEP_DETAIL_CONTENT_KEY } from "./step-detail-keys";
 import {
   endCodexChild,
   foldCodexChildItem,
@@ -133,6 +135,8 @@ import {
   toolUsage,
   toThreadItem,
 } from "./thread-items";
+import { traceStepFacts } from "./trace-step-facts";
+import { stepDetail, stepDetailBytes, stepInputParts, withinTurnBudget } from "./turn-step-details";
 import { type ToolOutcome, TurnTraces, traceMessage } from "./turn-traces";
 import { collectProviderUsage } from "./usage-collection";
 import { USAGE_LIMIT_METHOD, type UsageLimitGate } from "./usage-limit-gate";
@@ -268,6 +272,7 @@ export interface TurnHooks {
   redactMcp(text: string): string;
   checkFinish?(agentId: string, input: FinishCheckInput): Effect.Effect<FinishCheckResult | null>;
   emitToolUsage(usage: ToolUsageSignal): void;
+  recordStepDetail?(record: TurnStepDetailRecord): void;
   turnModel(agentId: string, turnId: string): string | null;
   mayFailOver(agentId: string): boolean;
   backupReadyAt(agentId: string): number | null;
@@ -1516,7 +1521,14 @@ export class TurnLifecycle {
         if (item.type === "subAgentActivity") this.#applyCodexSubagentActivity(agentId, threadId, turnId, item);
         const threadItem = toThreadItem(item);
         if (!threadItem) return;
-        yield* this.#applyItem(agentId, threadId, turnId, threadItem, notification.method === "item/completed");
+        yield* this.#applyItem(
+          agentId,
+          threadId,
+          turnId,
+          threadItem,
+          notification.method === "item/completed",
+          getArray(params, "filePaths"),
+        );
         return;
       }
       case PLAN_UPDATED_METHOD: {
@@ -3409,6 +3421,7 @@ export class TurnLifecycle {
     turnId: string,
     item: ThreadItem,
     completed: boolean,
+    filePaths: readonly unknown[] = [],
   ) {
     const usage = completed ? toolUsage(item) : null;
     if (usage) this.#hooks.emitToolUsage({ ...usage, agentId, turnId });
@@ -3421,7 +3434,8 @@ export class TurnLifecycle {
       else openTools.add(item.id);
     }
     const failure = completed ? toolFailureText(item, (text) => this.#hooks.redactMcp(text)) : null;
-    this.#observeTraceStep(turnId, item, completed, toolProgress, failure);
+    this.#observeTraceStep(turnId, item, completed, toolProgress, failure, filePaths);
+    this.#captureStepDetail(agentId, threadId, turnId, item, completed, filePaths);
     if (toolProgress) {
       const activity = toolActivity(item, completed);
       this.#emitTurnProgress(
@@ -3642,6 +3656,7 @@ export class TurnLifecycle {
     completed: boolean,
     toolProgress: string | null,
     failure: string | null,
+    filePaths: readonly unknown[] = [],
   ): void {
     if (!isString(item.id)) return;
     if (isToolItem(item)) {
@@ -3654,6 +3669,7 @@ export class TurnLifecycle {
         text: toolProgress,
         error: failure,
         ...toolTraceDetail(item),
+        ...traceStepFacts(item, filePaths),
         ...(this.#hooks.checkFinish === undefined
           ? {}
           : {
@@ -3663,6 +3679,37 @@ export class TurnLifecycle {
       });
     } else if (item.type === "agentMessage")
       this.#traces.observe(turnId, item.id, item.phase === "commentary" ? "reasoning" : "message", { completed });
+  }
+
+  #captureStepDetail(
+    agentId: string,
+    threadId: string,
+    turnId: string,
+    item: ThreadItem,
+    completed: boolean,
+    filePaths: readonly unknown[],
+  ): void {
+    const record = this.#hooks.recordStepDetail;
+    if (!record || !isString(item.id) || !isToolItem(item)) return;
+    const redact = (text: string) => redactText(this.#hooks.redactMcp(text));
+    const { activity } = traceStepFacts(item, filePaths);
+    if (!completed) {
+      if (!this.#traces.hasStepInput(turnId, item.id) || item[STEP_DETAIL_CONTENT_KEY] !== undefined)
+        this.#traces.keepStepInput(turnId, item.id, stepInputParts(item, activity, filePaths, redact));
+      return;
+    }
+    const kept = this.#traces.takeStepInput(turnId, item.id);
+    if (!kept) return;
+    const found = stepDetail(item.id, item, activity, kept.started, filePaths, redact);
+    if (!found) return;
+    const detail = withinTurnBudget(found, kept.usedBytes);
+    const bytes = stepDetailBytes(detail);
+    this.#traces.addDetailBytes(turnId, bytes);
+    try {
+      record({ agentId, threadId: this.#conversation.publicThreadId(agentId, threadId), turnId, detail, bytes });
+    } catch (error) {
+      logger.warn("The details of a step could not be saved.", { error });
+    }
   }
 
   #attachTrace(

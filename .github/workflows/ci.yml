@@ -343,9 +343,9 @@ jobs:
         if: ${{ !cancelled() }}
         run: bun run test:crm-team-api
 
-      - name: Run the account activity reporter E2E test
+      - name: Run the no telemetry E2E test
         if: ${{ !cancelled() }}
-        run: bun run test:account-activity-reporter
+        run: bun run test:no-telemetry
 
       - name: Run the release version comparator E2E test
         if: ${{ !cancelled() }}
@@ -776,10 +776,6 @@ jobs:
         if: ${{ !cancelled() }}
         run: bun run test:credit-media-agent-tools
 
-      - name: Run the credit media analytics E2E test
-        if: ${{ !cancelled() }}
-        run: bun run test:credit-media-analytics
-
       - name: Run the workflow paid media E2E test
         if: ${{ !cancelled() }}
         run: bun run test:workflow-paid-media
@@ -896,10 +892,6 @@ jobs:
         if: ${{ !cancelled() }}
         run: bun run test:agent-api-keys
 
-      - name: Run the remote connect analytics E2E test
-        if: ${{ !cancelled() }}
-        run: bun run test:remote-connect-analytics
-
       - name: Run the memory review E2E test
         if: ${{ !cancelled() }}
         run: bun run test:memory-review
@@ -1010,7 +1002,6 @@ jobs:
             .codebot-build/workflow-model-steps-e2e/
             .codebot-build/credit-media-workflow-e2e/
             .codebot-build/credit-media-agent-tools-e2e/
-            .codebot-build/credit-media-analytics-e2e/
             .codebot-build/workflow-paid-media-e2e/
             .codebot-build/credit-media-payer-switch-e2e/
             .codebot-build/workflow-discord-e2e/
@@ -1039,7 +1030,6 @@ jobs:
             .codebot-build/pi-sign-in-watch-e2e/
             .codebot-build/provider-launch-order-e2e/
             .codebot-build/agent-api-keys-e2e/
-            .codebot-build/remote-connect-analytics-e2e/
             .codebot-build/memory-review-e2e/
             .codebot-build/skill-revision-e2e.json
           if-no-files-found: ignore

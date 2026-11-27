@@ -1,6 +1,18 @@
-import type { DraftAttachment } from "@codebot/contracts/ipc";
+import type { DraftAttachment, SlashCommandEntry } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
-import { Bot, File, Folder, Plug, type Puzzle, ShieldCheck, Store, UsersRound } from "@codebot/ui";
+import {
+  Blocks,
+  Bot,
+  File,
+  Folder,
+  Plug,
+  Puzzle,
+  ShieldCheck,
+  Slash,
+  SquareTerminal,
+  Store,
+  UsersRound,
+} from "@codebot/ui";
 import type { ComposerAgent, ComposerBrowserTab, ComposerMcpServer, ComposerSkill, ComposerThread } from "../../data";
 import type { TextValue } from "../../text";
 import { browserDisplayUrl } from "../browser/browser-suggestions";
@@ -17,7 +29,8 @@ export type PickerOption =
   | { type: "mcp"; server: ComposerMcpServer }
   | { type: "attachment"; attachment: DraftAttachment }
   | { type: "tab"; tab: ComposerBrowserTab }
-  | { type: "thread"; thread: ComposerThread; snippet?: string | undefined };
+  | { type: "thread"; thread: ComposerThread; snippet?: string | undefined }
+  | { type: "command"; command: SlashCommandEntry };
 
 export interface PickerSection {
   id: string;
@@ -31,6 +44,7 @@ export function pickerOptionKey(option: PickerOption): string {
   if (option.type === "skill") return `skill:${option.skill.skillId}`;
   if (option.type === "tab") return `tab:${option.tab.id}`;
   if (option.type === "thread") return `thread:${option.thread.id}`;
+  if (option.type === "command") return `command:${option.command.name}`;
   return option.type === "mcp" ? `mcp:${option.server.id}` : `attachment:${option.attachment.id}`;
 }
 
@@ -43,6 +57,7 @@ export function pickerOptionText(option: PickerOption, t: TextValue["t"]): strin
   }
   if (option.type === "tab") return t("composer.picker.option.tab", { name: tabTitle(option.tab) });
   if (option.type === "thread") return t("composer.picker.option.thread", { name: option.thread.title });
+  if (option.type === "command") return t("slash.picker.option", { name: option.command.name });
   return option.type === "mcp"
     ? t("composer.picker.option.mcp", { name: option.server.name })
     : t("composer.picker.option.file", { name: option.attachment.name });
@@ -54,6 +69,7 @@ export function pickerOptionName(option: PickerOption, t: TextValue["t"]): strin
   if (option.type === "skill") return option.skill.name;
   if (option.type === "tab") return tabTitle(option.tab);
   if (option.type === "thread") return option.thread.title;
+  if (option.type === "command") return `/${option.command.name}`;
   return option.type === "mcp" ? option.server.name : option.attachment.name;
 }
 
@@ -68,6 +84,7 @@ export function pickerOptionDescription(
   if (option.type === "mcp") return mcpServerDescription(option.server);
   if (option.type === "tab") return browserDisplayUrl(option.tab.url) || undefined;
   if (option.type === "thread") return option.snippet ?? threadDetail(option.thread);
+  if (option.type === "command") return commandDescription(option.command);
   return option.agent.description.trim() || option.agent.title.trim() || undefined;
 }
 
@@ -123,6 +140,7 @@ export function pickerOptionBadge(
   if (option.type === "everyone") return { label: t("composer.picker.badge.channel"), icon: UsersRound };
   if (option.type === "attachment") return { label: t("composer.picker.badge.file"), icon: File };
   if (option.type === "mcp") return { label: MCP_BADGE, icon: Plug };
+  if (option.type === "command") return commandBadge(option.command, t);
   switch (option.skill.origin ?? "marketplace") {
     case "local":
       return { label: t("composer.picker.badge.custom"), icon: Folder };
@@ -151,4 +169,31 @@ export function skillMatchRank(skill: ComposerSkill, query: string): number | nu
 function skillDescription(skill: ComposerSkill): string | undefined {
   const description = skill.description?.trim();
   return description || undefined;
+}
+
+function commandDescription(command: SlashCommandEntry): string | undefined {
+  const text = [command.argumentHint, command.description].filter((part) => part.trim()).join(" ");
+  return text || undefined;
+}
+
+function commandBadge(command: SlashCommandEntry, t: TextValue["t"]): { label: string; icon?: typeof Puzzle } | null {
+  if (command.terminalOnly) return { label: t("slash.badge.terminal"), icon: SquareTerminal };
+  if (command.source === "project") return { label: t("slash.badge.project"), icon: Folder };
+  if (command.source === "user") return { label: t("slash.badge.user"), icon: Folder };
+  if (command.source === "plugin") return { label: command.plugin ?? t("slash.badge.plugin"), icon: Blocks };
+  if (command.source === "mcp") return { label: t("slash.badge.mcp"), icon: Plug };
+  if (command.source === "host") return { label: t("slash.badge.host"), icon: Slash };
+  if (command.kind === "skill") return { label: t("slash.badge.skill"), icon: Puzzle };
+  return null;
+}
+
+export function slashCommandMatchRank(command: SlashCommandEntry, query: string): number | null {
+  if (!query) return 0;
+  const name = command.name.toLocaleLowerCase();
+  const aliases = command.aliases.map((alias) => alias.toLocaleLowerCase());
+  if (name === query || aliases.includes(query)) return 0;
+  if (name.startsWith(query) || aliases.some((alias) => alias.startsWith(query))) return 1;
+  if (name.split(/[:\s_-]+/u).some((word) => word.startsWith(query))) return 2;
+  if (name.includes(query) || aliases.some((alias) => alias.includes(query))) return 3;
+  return command.description.toLocaleLowerCase().includes(query) ? 4 : null;
 }

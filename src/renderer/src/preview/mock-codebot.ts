@@ -37,7 +37,6 @@ import {
   type AgentTask,
   type AgentTasksSnapshot,
   type AgentTemplatePublication,
-  type AnalyticsPreference,
   type AppAppearancePreference,
   type AppBehaviorPreference,
   type AppInfo,
@@ -191,6 +190,7 @@ import {
   sameCustomProviderOrigin,
   savedCustomModelId,
   type TeamPresenceSnapshot,
+  type TurnStepDetails,
   type UpdateAgentInput,
   type UpdatePreference,
   type UpdateQueuedMessageInput,
@@ -235,13 +235,16 @@ import {
   STORY_USAGE,
   withStoryForeignProvider,
 } from "./fixtures";
+import { createMockAdvancedFeatures } from "./mock-advanced-features";
 import { mockAgentAnalytics, mockHostAnalytics } from "./mock-agent-analytics";
+import { createMockAppUpdate, type MockAppUpdateOptions } from "./mock-app-update";
 import { createMockAuth, type MockAuthOptions } from "./mock-auth";
 import { createMockBitwardenConnector } from "./mock-bitwarden-connector";
 import { createMockBrowser, type MockBrowserOptions } from "./mock-browser";
 import { createMockChannels, type MockChannelSeed } from "./mock-channels";
 import { type MockCrmSeed, mockCrm } from "./mock-crm";
 import { createMockEvents } from "./mock-events";
+import { createMockExplorer } from "./mock-explorer";
 import { createMockGitHubConnector } from "./mock-github-connector";
 import { createMockHostPersonality } from "./mock-host-personality";
 import { createMockHostSignalHome } from "./mock-host-signal-home";
@@ -249,15 +252,19 @@ import { createMockHostTimezone } from "./mock-host-timezone";
 import { createMockHostTurnLimits } from "./mock-host-turn-limits";
 import { createMockHostUpdate, type MockHostUpdateOptions } from "./mock-host-update";
 import { createMockHostVoiceModel } from "./mock-host-voice-model";
+import { createMockLocalModelServers } from "./mock-local-model-servers";
 import { createMockMessaging } from "./mock-messaging";
 import { createMockOnePasswordConnector } from "./mock-onepassword-connector";
 import { createMockPasswordManagers } from "./mock-password-managers";
+import { createMockProjects, type MockProjectSeed } from "./mock-projects";
 import { createMockProviderRuntimes, type MockProviderRuntimeOptions } from "./mock-provider-runtimes";
+import { createMockReplies } from "./mock-replies";
 import { mockRoutineCalendar } from "./mock-routine-calendar";
 import { createMockRoutineFeed } from "./mock-routine-feed";
 import { type MockRoutineResultsOptions, mockRoutineResults } from "./mock-routine-results";
 import { applySidebarLayoutAction } from "./mock-sidebar-layout";
 import { createMockSkills, type MockSkillsOptions } from "./mock-skills";
+import { createMockSlashCommands } from "./mock-slash-commands";
 import { createMockStorage } from "./mock-storage";
 import { clone, type Listener, type MockRuntime, matchesQuery } from "./mock-support";
 import { createMockTeam, type MockTeamOptions } from "./mock-team";
@@ -273,10 +280,9 @@ export interface MockCodeBotOptions
     MockTeamOptions,
     MockSkillsOptions,
     MockHostUpdateOptions,
+    MockAppUpdateOptions,
     MockRoutineResultsOptions {
   appInfo?: AppInfo;
-  analyticsPreference?: AnalyticsPreference;
-  analyticsDefault?: boolean;
   languagePreference?: AppLanguagePreference;
   setupState?: AppSetupState;
   agentStatus?: AgentStatus;
@@ -287,6 +293,7 @@ export interface MockCodeBotOptions
   queues?: Record<string, QueueDelivery[]>;
   tasks?: Record<string, AgentTask[]>;
   taskConversations?: Record<string, ConversationSnapshot>;
+  turnStepDetails?: TurnStepDetails[];
   pinnedMessages?: Record<string, (string | { messageId: string; pinnedBy: MessagePinner })[]>;
   taskUnread?: Record<string, number>;
   updateStatus?: UpdateStatus;
@@ -296,6 +303,7 @@ export interface MockCodeBotOptions
   routineRuns?: Record<string, RoutineRun[]>;
   workflows?: MockWorkflowSeed[];
   crm?: MockCrmSeed;
+  projects?: MockProjectSeed[];
   customProviders?: CustomProviderSummary[];
   conversationReads?: Record<string, ConversationReadState>;
   runtimeSnapshot?: AgentRuntimeSnapshot;
@@ -493,7 +501,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       message: null,
     };
   };
-  let analyticsPreference = clone<AnalyticsPreference>(options.analyticsPreference ?? { enabled: true });
   let approvalAutomation = clone<ApprovalAutomationPreference>(DEFAULT_APPROVAL_AUTOMATION_PREFERENCE);
   let busyMessageMode: BusyMessageModePreference = { mode: DEFAULT_BUSY_MESSAGE_MODE };
   let agentDefaults: AgentDefaults = { ...DEFAULT_AGENT_DEFAULTS };
@@ -975,8 +982,11 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     };
   }
 
+  const taskChangeListeners = new Set<(agentId: string) => void>();
+
   function emitTasks(agentId: string): void {
     emitAgentEvent({ type: "agent-tasks-changed", snapshot: taskList(agentId) });
+    for (const listener of taskChangeListeners) listener(agentId);
   }
 
   const messagePins = new Map<string, { messageId: string; pinnedAt: string; pinnedBy: MessagePinner }[]>(
@@ -1271,6 +1281,36 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     (agentId) => agents.find((entry) => entry.id === agentId)?.name ?? agentId,
     options.channels,
   );
+  const mockProjects = createMockProjects(options.projects ?? [], {
+    runtime,
+    agents: () => agents,
+    setAgents: (next) => {
+      agents = next;
+      for (const agent of agents) if (!queues.has(agent.id)) queues.set(agent.id, emptyQueue(agent.id));
+      emitAgentEvent({ type: "agents-changed", agents });
+    },
+    newAgent: (fields) => ({ ...createAgentSummary(fields), ...fields }),
+    tasks: (agentId) => tasks.get(agentId) ?? [],
+    setTasks: (agentId, next) => {
+      for (const task of tasks.get(agentId) ?? []) if (!next.includes(task)) taskConversations.delete(task.id);
+      if (next.length === 0) tasks.delete(agentId);
+      else tasks.set(agentId, next);
+    },
+    newTask: createTask,
+    runTurn: (task, text) => {
+      runTaskTurn(task, text);
+    },
+    conversation: taskConversation,
+    unread: (taskId) => taskUnread.get(taskId) ?? 0,
+    setUnread: (taskId, count) => {
+      if (count > 0) taskUnread.set(taskId, count);
+      else taskUnread.delete(taskId);
+    },
+    emitTasks,
+    onTasksChanged: (listener) => {
+      taskChangeListeners.add(listener);
+    },
+  });
   const mockProviderRuntimes = createMockProviderRuntimes(options, runtime);
   const mockVoice = createMockVoice(options, runtime);
   const mockAuth = createMockAuth(options, runtime);
@@ -1325,13 +1365,6 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       return clone(setupState);
     },
     onSetupState: () => () => undefined,
-    getAnalyticsPreference: async () => clone(analyticsPreference),
-    getAnalyticsDefault: async () => ({ enabled: options.analyticsDefault ?? false }),
-    setAnalyticsPreference: async ({ enabled }) => {
-      analyticsPreference = { enabled };
-      return clone(analyticsPreference);
-    },
-    onAnalyticsPreference: () => () => undefined,
     reportRendererTiming: async () => undefined,
     getApprovalAutomation: async () => clone(approvalAutomation),
     onApprovalAutomation: (listener) => {
@@ -1466,6 +1499,13 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     macAutomation: {
       request: async (targets) => targets.map((target) => ({ target, status: "granted" })),
     },
+    slashCommands: createMockSlashCommands({
+      resume: (agentId, title) => {
+        const task = createTask(agentId, title);
+        emitTasks(agentId);
+        return task;
+      },
+    }),
     backgroundProcesses: {
       list: async () => clone(backgroundProcesses),
       stop: async (id) => {
@@ -1693,6 +1733,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       () => emitAgentEvent({ type: "workflow-folders-changed" }),
     ),
     crm: mockCrm(options.crm ?? {}, () => emitAgentEvent({ type: "crm-changed" })),
+    projects: mockProjects.api,
     routineResults: mockRoutineResults(routines, options, (agentId) =>
       emitAgentEvent({ type: "routines-changed", agentId }),
     ),
@@ -1841,6 +1882,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
         return clone(detectionSettings);
       },
     },
+    localModelServers: createMockLocalModelServers(),
     messaging: createMockMessaging(() => agents[0]?.id ?? "preview-agent"),
     providerAdmin: {
       startCodeLogin: (provider) => api.startProviderCodeLogin(provider),
@@ -3068,8 +3110,10 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       },
       listWorkspaceDirectory: async (input: OpenWorkspaceFileInput) => mockWorkspaceDirectory(input.path),
       sendMessage: async (input: SendMessageInput) => {
-        if (input.taskId)
+        if (input.taskId) {
+          mockProjects.beforeSend(input.agentId, input.taskId);
           return runTaskTurn(findTask(input.agentId, input.taskId), input.text, input.replyToMessageId ?? null);
+        }
         const repeated = input.clientMessageId ? sentReceipts.get(input.clientMessageId) : undefined;
         if (repeated) return repeated;
         const messageId = `mock-message-${messageCounter++}`;
@@ -3393,6 +3437,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       markTaskRead: async (input) => {
         findTask(input.agentId, input.taskId);
         taskUnread.delete(input.taskId);
+        mockProjects.taskRead(input.agentId, input.taskId);
         return {
           taskId: input.taskId,
           unreadCount: 0,
@@ -3588,6 +3633,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       },
       onPreference: () => () => undefined,
     },
+    appUpdate: createMockAppUpdate(options),
     notifications: {
       getPreference: async () => ({ desktopNotifications: true, messagePreview: true }),
       setPreference: async (input) => ({ ...input }),
@@ -3618,6 +3664,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
     },
     host: mockTeam.host,
     events: mockEvents,
+    explorer: createMockExplorer(),
     hostAdmin: {
       updateIdentity: async (input, serverId) => {
         const { appearance, ...identity } = input;
@@ -3634,6 +3681,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       restartHost: async () => {},
       ...createMockHostUpdate(options),
       ...createMockHostTimezone(),
+      ...createMockAdvancedFeatures(),
       ...createMockHostSignalHome(),
       ...createMockHostVoiceModel(),
       ...hostTurnLimits,
@@ -3865,6 +3913,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
       onUploadProgress: () => () => undefined,
     },
     remoteDesktop: mockTeam.remoteDesktop,
+    replies: createMockReplies(options.turnStepDetails).api,
   };
 
   return {

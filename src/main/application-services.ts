@@ -51,8 +51,6 @@ import { sourceText } from "@codebot/i18n/source";
 import { createCodeBotLogger, redactSecrets, registerSecretValue, toLogValue } from "@codebot/logging";
 import { REMOTE_ACCOUNT_CHECK_INTERVAL_MS } from "@codebot/team-client";
 import { installRemoteSyncProfileSink } from "@codebot/team-client/sync-profile";
-import { ANALYTICS_GENERATIONS, openPanelTransport, ReportQueue } from "@codebot/telemetry";
-import { fileReportStorage } from "@codebot/telemetry/node";
 import { makeWASocket } from "@codebot/whatsapp/baileys";
 import { makeCodeBotSignalRepository } from "@codebot/whatsapp/signal-repository";
 import { Effect, Fiber, Schema } from "effect";
@@ -73,6 +71,7 @@ import {
   systemPreferences,
   webContents,
 } from "electron";
+import { advancedFeatureEnabled, configureAdvancedFeatureGate } from "../backend/agent/advanced-feature-gate";
 import { toAgentRemovalFailed } from "../backend/agent/agent-removal";
 import { pasteCodeLoginSupported } from "../backend/agent/cli-code-login";
 import { toMcpGatewayFailed } from "../backend/agent/mcp-gateway";
@@ -108,6 +107,8 @@ import { WhatsAppRuntime } from "../backend/messaging/whatsapp/whatsapp-runtime"
 import { PASSWORD_MANAGER_BRANDS } from "../backend/password-vault";
 import { passwordVaultRouter } from "../backend/password-vault-router";
 import { perfTime } from "../backend/perf-probe-hooks";
+import type { ProjectOperations } from "../backend/projects/project-operations";
+import { ProjectService } from "../backend/projects/project-service";
 import { sweepProviderTemp } from "../backend/provider-temp";
 import { routineFlowRoutines } from "../backend/routine-flows/routine-flow-routines";
 import { RoutineFlowStore } from "../backend/routine-flows/routine-flow-store";
@@ -135,9 +136,14 @@ import {
   type WorkflowsHandle,
   workflowNoticeEvent,
 } from "../backend/workflows/workflows";
-import { ACCOUNT_ACTIVITY_PATH, HostAccountActivity } from "./account-activity-reporter";
 import { centralAuthApiUrl, createCentralAuthManager, safeStorageCipher } from "./account-service-access";
 import { type AcpRegistry, createAcpRegistry } from "./acp-registry";
+import {
+  ADVANCED_FEATURES_PREFERENCE_FILE,
+  type AdvancedFeaturesControl,
+  advancedFeaturesControl,
+  createAdvancedFeaturesPreferenceStore,
+} from "./advanced-features-store";
 import { AGENT_ACCESS_FILE, AgentAccessStore } from "./agent-access-store";
 import { type AgentAdminSettingsService, createAgentAdminSettings } from "./agent-admin-settings";
 import { checkDatabaseIntegrityInHost, spawnAgentDatabaseHost } from "./agent-database-host-process";
@@ -148,7 +154,7 @@ import {
 import { type AgentDefaultsSettingsService, createAgentDefaultsSettings } from "./agent-defaults-settings";
 import { agentDisplayEnvironment, hasSeparateAgentDisplay } from "./agent-display";
 import { AgentDockFailed, AgentDockWindowController, toAgentDockFailed } from "./agent-dock-window";
-import { type AgentFolders, createAgentFolders } from "./agent-folders";
+import { type AgentFolders, createAgentFolders, isProtectedFolder } from "./agent-folders";
 import { type AgentHostSettingsService, createAgentHostSettings } from "./agent-host-settings";
 import { compactScreenshot, fitImageForAgent } from "./agent-image-fit";
 import { AgentImportService } from "./agent-import-service";
@@ -163,13 +169,15 @@ import {
 import { AgentNotificationLevelStore, OWNER_NOTIFICATION_KEY } from "./agent-notification-level-store";
 import { AgentTemplateService } from "./agent-template-service";
 import { HostAnalytics } from "./analytics";
-import { readAnalyticsInstallId } from "./analytics-install-id";
-import { analyticsInventoryDayStore, collectAnalyticsInventory } from "./analytics-inventory";
-import { catalogPluginSlug, isReportedMcpServerName, loadCatalogPluginServers } from "./analytics-plugin-catalog";
-import { AnalyticsPreferenceService } from "./analytics-preference-service";
-import { readAnalyticsPreference, saveAnalyticsDefault } from "./analytics-preference-store";
-import { providerAuthKind } from "./analytics-provider-auth";
+import { catalogPluginSlug, loadCatalogPluginServers } from "./analytics-plugin-catalog";
 import { AppBehaviorService } from "./app-behavior-service";
+import {
+  PROVIDER_BLOCKLIST_FILE,
+  readBuildUpdateUrl,
+  UPDATE_FEED_FILE,
+  UPDATE_URL_ENVIRONMENT_VARIABLE,
+} from "./app-update/update-feed";
+import { UpdateFeedService } from "./app-update/update-feed-service";
 import { AppearanceService } from "./appearance-service";
 import { ApprovalAutomation, readApprovalAutomation } from "./approval-automation-store";
 import { AttachmentPreviews } from "./attachment-previews";
@@ -248,6 +256,8 @@ import {
 } from "./development-remote-bootstrap";
 import { performDynamicIslandCriticalAction } from "./dynamic-island-actions";
 import { DynamicIslandFailed, DynamicIslandWindowController, toDynamicIslandFailed } from "./dynamic-island-window";
+import { createDesktopExplorer } from "./explorer/explorer-desktop";
+import type { ExplorerService } from "./explorer/explorer-service";
 import {
   createExternalLinkPreferenceStore,
   ExternalLinkOpener,
@@ -297,6 +307,7 @@ import {
   setAboveAppsXWayland,
   usesX11Windows,
 } from "./linux-wayland-output";
+import { LocalModelServerMonitor } from "./local-model-servers/monitor";
 import { localRoutineFeedDocument } from "./local-routine-calendar";
 import {
   formatLocalServerMembersRequest,
@@ -408,13 +419,13 @@ import {
 } from "./remote-session-reuse-preference-store";
 import { remoteSyncProfileFile } from "./remote-sync-profile-file";
 import { sendToRenderer } from "./renderer-ipc";
+import { REPLY_RULE_PREFERENCE_FILE, ReplyRulePreferenceStore } from "./reply-rule-preference-store";
 import { RequestedUpdate, RequestedUpdateRefusal } from "./requested-update";
 import { RequiredUpdate } from "./required-update";
 import { ResourceMonitor } from "./resource-monitor";
 import { StatementTimings } from "./resource-summary";
 import { RoutineFeedServer } from "./routine-feed-server";
 import { clearRoutineHold, ROUTINE_HOLD_FILE, takeRoutineHold, writeRoutineHold } from "./routine-hold-file";
-import type { UncleanExitProperties } from "./run-marker";
 import { ScreenCapturer } from "./screen-capture";
 import type { SecretStorageCipher } from "./secret-storage-cipher";
 import { SERVER_AUDIT_FILE, ServerAuditStore, serverAuditNames } from "./server-audit-store";
@@ -494,9 +505,6 @@ import { sizeWorkflowPicture } from "./workflow-picture-size";
 
 const logger = createCodeBotLogger("application-services");
 const SETUP_FILE = "codebot-setup-v2.json";
-const ANALYTICS_PREFERENCE_FILE = "codebot-analytics-preference-v1.json";
-const ANALYTICS_INVENTORY_FILE = "codebot-analytics-inventory-v1.json";
-const ANALYTICS_INSTALL_ID_FILE = "codebot-analytics-install-id-v1.json";
 const APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v3.json";
 const V2_APPROVAL_AUTOMATION_FILE = "codebot-approval-automation-v2.json";
 const ROUTINE_FEED_FILE = "codebot-routine-feed-v1.json";
@@ -569,6 +577,7 @@ const TEARDOWN_ORDER = {
   agentDock: 20.5,
   machineAlerts: 21,
   themePalettes: 22,
+  explorer: 22.5,
   providerAccountsHost: 27,
   providerHostSignIns: 28,
   mcpHostSignIns: 29,
@@ -579,6 +588,7 @@ const TEARDOWN_ORDER = {
   browserDock: 42,
   browserView: 45,
   providerDetection: 48,
+  localModelServers: 48.5,
   providerRuntimes: 50,
   localServers: 57,
   remoteServers: 60,
@@ -596,6 +606,7 @@ const TEARDOWN_ORDER = {
   routineFlows: 103,
   workflows: 103.5,
   crm: 103.75,
+  projects: 103.8,
   routineFeed: 104,
   mcpOAuthRedirect: 105,
   onePasswordConnector: 106,
@@ -608,7 +619,6 @@ const TEARDOWN_ORDER = {
   processLauncher: 110.25,
   cuaDriver: 110.5,
   mcpOAuth: 111,
-  analytics: 112,
   centralAuth: 115,
   trace: 120,
   providerLog: 121,
@@ -622,14 +632,12 @@ export interface ApplicationServiceContext {
   windows: MainWindowController;
   appIconPath: string;
   appVariant: AppVariant;
-  analyticsCaptureUrl: string | null;
   developmentRemoteRole: DevelopmentRemoteRole | null;
   developmentTestClientEnabled: boolean;
   serverMode: ServerModeEnvironment | null;
   localServerChild: LocalServerChildEnvironment | null;
   localServerControl: Readable | null;
   systemTimezone: () => string;
-  previousUncleanExit: UncleanExitProperties | null;
   macHapticFeedback: MacHapticFeedback;
   teardown: TeardownRegistry;
   forwardCentralAuth: (state: CentralAuthState) => void;
@@ -650,6 +658,7 @@ export interface ApplicationServices {
   workflowFiles: WorkflowFileExporter;
   workflowGitHub: WorkflowGitHubDirectory;
   crm: CrmHandle;
+  projects: ProjectOperations;
   routineResults: RoutineResultsHandle;
   providerRuntimes: ProviderRuntimeManager;
   providerCredentials: ProviderCredentialStore;
@@ -675,20 +684,20 @@ export interface ApplicationServices {
   browserDock: BrowserDockOverlay;
   browserView: BrowserViewClient;
   updater: UpdateService;
+  updateFeed: UpdateFeedService;
   describeRestartReadiness: () => RestartReadiness;
   hostUpdateCoordinator: HostUpdateCoordinator;
   requestedUpdate: RequestedUpdate;
   idleRestart: IdleRestart;
   requiredUpdate: RequiredUpdate | null;
   setupFile: string;
-  analyticsPreferences: AnalyticsPreferenceService;
-  analyticsInstallId: string | null;
   updatePreferenceFile: string;
   approvalAutomation: ApprovalAutomation;
   agentAdminSettings: AgentAdminSettingsService;
   agentHostSettings: AgentHostSettingsService;
   agentDefaultsSettings: AgentDefaultsSettingsService;
   agentFolders: AgentFolders;
+  explorer: ExplorerService;
   channelFolders: ChannelFolders;
   agentInstructions: AgentInstructionsFiles;
   browserProfiles: BrowserProfileService;
@@ -712,9 +721,11 @@ export interface ApplicationServices {
   hostSignalHome: HostSignalHomeService;
   hostTurnLimits: HostTurnLimitsPreferenceStore;
   serverPersonality: ServerPersonalityPreferenceStore;
+  replyRule: ReplyRulePreferenceStore;
   promptCacheTtl: PromptCacheTtlPreferenceStore;
   claudeUserSetup: ClaudeUserSetupControl;
   cacheExpiryCompaction: CacheExpiryCompactionControl;
+  advancedFeatures: AdvancedFeaturesControl;
   claudeCompactWindow: ClaudeCompactWindowControl;
   providerEnvironment: ProviderEnvironmentControl;
   modelVisibility: ModelVisibility;
@@ -744,6 +755,7 @@ export interface ApplicationServices {
   acpRegistry: AcpRegistry;
   providerDetection: ProviderDetection;
   providerDetectionSettings: ProviderDetectionSettingsStore;
+  localModelServerMonitor: LocalModelServerMonitor;
   marketplaceAgents: AgentMarketplaceService;
   agentTemplates: AgentTemplateService;
   agentImport: AgentImportService;
@@ -985,14 +997,12 @@ export async function createApplicationServices({
   windows,
   appIconPath,
   appVariant,
-  analyticsCaptureUrl,
   developmentRemoteRole,
   developmentTestClientEnabled,
   serverMode: serverModeEnvironment,
   localServerChild,
   localServerControl,
   systemTimezone,
-  previousUncleanExit,
   macHapticFeedback,
   teardown,
   forwardCentralAuth,
@@ -1424,7 +1434,6 @@ export async function createApplicationServices({
   });
   browser.onChanged((tabs, activeTabId) => forwardBrowserDisplayState(LOCAL_SERVER_ID, { tabs, activeTabId }));
   const setupFile = join(app.getPath("userData"), SETUP_FILE);
-  const analyticsPreferenceFile = join(app.getPath("userData"), ANALYTICS_PREFERENCE_FILE);
   const updatePreferenceFile = join(app.getPath("userData"), UPDATE_PREFERENCE_FILE);
   const routineHoldFile = join(app.getPath("userData"), ROUTINE_HOLD_FILE);
   const logoColor = new LogoColorService({ path: join(app.getPath("userData"), LOGO_COLOR_PREFERENCE_FILE) });
@@ -1481,11 +1490,15 @@ export async function createApplicationServices({
   const serverPersonality = new ServerPersonalityPreferenceStore(
     join(app.getPath("userData"), SERVER_PERSONALITY_PREFERENCE_FILE),
   );
+  const replyRule = new ReplyRulePreferenceStore(join(app.getPath("userData"), REPLY_RULE_PREFERENCE_FILE));
   const promptCacheTtl = new PromptCacheTtlPreferenceStore(
     join(app.getPath("userData"), PROMPT_CACHE_TTL_PREFERENCE_FILE),
   );
   const claudeUserSetup = createClaudeUserSetupPreferenceStore(
     join(app.getPath("userData"), CLAUDE_USER_SETUP_PREFERENCE_FILE),
+  );
+  const advancedFeaturesStore = createAdvancedFeaturesPreferenceStore(
+    join(app.getPath("userData"), ADVANCED_FEATURES_PREFERENCE_FILE),
   );
   const cacheExpiryCompaction = createCacheExpiryCompactionPreferenceStore(
     join(app.getPath("userData"), CACHE_EXPIRY_COMPACTION_PREFERENCE_FILE),
@@ -1533,9 +1546,11 @@ export async function createApplicationServices({
       hostSignalHome.load(),
       hostTurnLimits.load(),
       serverPersonality.load(),
+      replyRule.load(),
       promptCacheTtl.load(),
       claudeUserSetup.load(),
       cacheExpiryCompaction.load(),
+      advancedFeaturesStore.load(),
       crmPreference.load(),
       claudeCompactWindow.load(),
       providerEnvironment.load(),
@@ -1554,9 +1569,6 @@ export async function createApplicationServices({
     runCauseEffect(mcpAccessStore.load()),
     runCauseEffect(loadPreferences),
   ]);
-  const analyticsPreference = await Effect.runPromise(
-    readAnalyticsPreference(analyticsPreferenceFile, setupState.completed),
-  );
   teardown.push(TEARDOWN_ORDER.themePalettes, "the theme palette watch", palettesWatch);
   if (!rolesLoaded)
     logger.warn("The roles file did not load. Members get no access to agents until an admin saves the roles.");
@@ -1578,6 +1590,13 @@ export async function createApplicationServices({
   forgetSignedOutSessions(centralAuth.getState());
   centralAuth.on("changed", forgetSignedOutSessions);
   const updatePreference = await runCauseEffect(readUpdatePreference(updatePreferenceFile));
+  const updateFeed = new UpdateFeedService({
+    storePath: join(app.getPath("userData"), UPDATE_FEED_FILE),
+    environmentUrl: process.env[UPDATE_URL_ENVIRONMENT_VARIABLE],
+    buildUrl: readBuildUpdateUrl(app.isPackaged ? join(process.resourcesPath, "app-update.yml") : null),
+    log: (message) => logger.info(message),
+  });
+  await runCauseEffect(updateFeed.load());
   const approvalAutomationFile = join(app.getPath("userData"), APPROVAL_AUTOMATION_FILE);
   const approvalAutomation = new ApprovalAutomation({
     path: approvalAutomationFile,
@@ -1614,6 +1633,12 @@ export async function createApplicationServices({
     root: providerRuntimesRoot,
     downloadRoot: providerDownloads,
     hermesInstaller,
+    blocklist: {
+      bundledPath: app.isPackaged
+        ? join(process.resourcesPath, PROVIDER_BLOCKLIST_FILE)
+        : resolve(PROVIDER_BLOCKLIST_FILE),
+      remoteUrl: () => updateFeed.fileUrl(PROVIDER_BLOCKLIST_FILE),
+    },
     updateRuntime: (runtime, install, signal, onWait) => {
       if (isManagedToolRuntime(runtime)) return install().pipe(Effect.asVoid);
       return service
@@ -1673,6 +1698,13 @@ export async function createApplicationServices({
   );
   teardown.push(TEARDOWN_ORDER.providerDetection, "model server discovery", () =>
     Effect.runPromise(providerDetection.close()),
+  );
+  const localModelServerMonitor = new LocalModelServerMonitor({
+    entries: () => customProviders.localServers(),
+    catalog: modelReleaseCatalog,
+  });
+  teardown.push(TEARDOWN_ORDER.localModelServers, "local model server monitor", () =>
+    Effect.runPromise(localModelServerMonitor.close()),
   );
   const providerCredentials = new ProviderCredentialStore(
     join(app.getPath("userData"), PROVIDER_CREDENTIAL_FILE),
@@ -2180,7 +2212,7 @@ export async function createApplicationServices({
         ...githubConnector.agentEnvironment(inherited, gitConfig),
       }),
     },
-    computerUseMcpServer: () => cuaDriver.mcpServerForProviders(),
+    computerUseMcpServer: () => (advancedFeatureEnabled("computerUse") ? cuaDriver.mcpServerForProviders() : null),
     githubConnector: {
       mcpServer: () => githubConnector.mcpServer(),
       mcpAuthorization: () => githubConnector.mcpAuthorization().pipe(toMcpGatewayFailed),
@@ -2225,6 +2257,7 @@ export async function createApplicationServices({
     },
     skillLearner: () => localSkillLearner(skills),
     responseStyle: () => serverPersonality.responseStyle(),
+    replyRule: () => replyRule.rule(),
     timezone: () => serverTimezone.effective(),
     chosenTimezone: () => serverTimezone.get().timezone,
     extraRoutineSources: () => (workflowTriggers ? [workflowTriggers] : []),
@@ -2256,6 +2289,8 @@ export async function createApplicationServices({
   const agentMemoryLimitSetting = reloadingAgentMemoryLimit(agentMemoryLimit, service);
   promptCacheTtl.onChange(() => service.notifyProviderSettingsChanged());
   const cacheExpiryCompactionSetting = cacheExpiryCompactionControl(cacheExpiryCompaction);
+  const advancedFeatures = advancedFeaturesControl(advancedFeaturesStore);
+  configureAdvancedFeatureGate(() => advancedFeatures.get());
   const claudeUserSetupSetting = claudeUserSetupControl(claudeUserSetup, () => service.notifyProviderSettingsChanged());
   const claudeCompactWindowSetting = claudeCompactWindowControl(claudeCompactWindow, () =>
     service.notifyProviderSettingsChanged(),
@@ -2509,6 +2544,13 @@ export async function createApplicationServices({
     crmHandle = null;
     return Effect.runPromise(crm.close());
   });
+  const projects = new ProjectService({
+    database: store.database,
+    agents: service,
+    readerId: () => host.conversationSender()?.id ?? null,
+    isProtectedFolder: (path) => isProtectedFolder(path, [], service.sharedRoot, app.getPath("userData")),
+  });
+  teardown.push(TEARDOWN_ORDER.projects, "the projects", () => projects.stop());
   const routineResultRuntime = await Effect.runPromise(
     createRoutineResults({
       store: new RoutineResultStore(store.database),
@@ -2785,6 +2827,8 @@ export async function createApplicationServices({
   const agentHostSettings = createAgentHostSettings({ agents: service, busyMessageMode, agentDefaults });
   const agentDefaultsSettings = createAgentDefaultsSettings({ agents: service, agentDefaults, busyMessageMode });
   const agentFolders = createAgentFolders({ service, userDataPath: app.getPath("userData") });
+  const explorer = createDesktopExplorer(service);
+  teardown.push(TEARDOWN_ORDER.explorer, "the file tree watch", () => explorer.close());
   const channelFolders = createChannelFolders({
     service,
     userDataPath: app.getPath("userData"),
@@ -2852,6 +2896,7 @@ export async function createApplicationServices({
     arch: process.arch,
     environment: process.env,
     installationMode,
+    feedUrl: () => updateFeed.url(),
     updateStatus: () => ({
       phase: requestedUpdate?.snapshot().phase ?? "unsupported",
       managedByHost: requestedUpdate?.snapshot().remoteUpdates === "managed",
@@ -3125,32 +3170,7 @@ export async function createApplicationServices({
   };
   const remoteDesktopRuntimeCredentials = { username: "codebot", password: randomBytes(32).toString("base64url") };
   const attachmentPreviews = new AttachmentPreviews(join(app.getPath("userData"), "attachment-previews"));
-  const resolveHostOwner = () => {
-    const state = centralAuth.getState();
-    if (state.status !== "signed_in") return null;
-    const storedOwner = teamStore.getOwnerAnalyticsIdentity();
-    if (storedOwner) return storedOwner.id === state.user.id ? storedOwner : null;
-    const ownerEmail = teamStore.getOwnerEmail();
-    return !teamStore.configured || ownerEmail?.trim().toLowerCase() === state.user.email.trim().toLowerCase()
-      ? state.user
-      : null;
-  };
-  const accountActivity = new HostAccountActivity({
-    analyticsOn: analyticsPreference.enabled,
-    resolveOwner: resolveHostOwner,
-    memberAccountId: (memberId) => teamStore.getMemberAccountId(memberId),
-    send: (accounts) =>
-      centralAuth.requestAuthorized(
-        ACCOUNT_ACTIVITY_PATH,
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ accounts }) },
-        (value) => value,
-      ),
-  });
-  service.on("event", (event) => {
-    if (event.type === "turn-started") accountActivity.turnStarted();
-  });
   const host = new HostService({
-    onMemberUse: (memberId) => accountActivity.memberUsed(memberId),
     appVersion: app.getVersion(),
     store: teamStore,
     agents: service,
@@ -3232,6 +3252,7 @@ export async function createApplicationServices({
       files: workflowFiles,
     },
     crm,
+    projects,
     hiddenAgents: service,
     routineRunPlaces: service.routineRecords,
     agentNotificationLevels,
@@ -3299,6 +3320,7 @@ export async function createApplicationServices({
       browsingMemory,
       promptCacheTtl,
       claudeUserSetup: claudeUserSetupSetting,
+      advancedFeatures,
       cacheExpiryCompaction: cacheExpiryCompactionSetting,
       claudeCompactWindow: claudeCompactWindowSetting,
       providerEnvironment: providerEnvironmentSetting,
@@ -3313,9 +3335,7 @@ export async function createApplicationServices({
             })),
           ),
         set: (input) =>
-          readSetupState(setupFile).pipe(
-            Effect.flatMap((before) => saveAnalyticsDefault(analyticsPreferenceFile, before.completed)),
-            Effect.flatMap(() => writeSetupState(setupFile, input)),
+          writeSetupState(setupFile, input).pipe(
             Effect.tap(() => service.setPreferredProvider(input.preferredProvider, input.preferredModel)),
             Effect.tap((state) =>
               Effect.sync(() => {
@@ -3506,33 +3526,7 @@ export async function createApplicationServices({
   } else if (signedInState.status === "signed_out") {
     await runCauseEffect(host.applySignedInAccount(null));
   }
-  const analyticsPlatform = process.platform;
-  if (analyticsPlatform !== "darwin" && analyticsPlatform !== "win32" && analyticsPlatform !== "linux") {
-    throw new Error(`Unsupported analytics platform: ${analyticsPlatform}`);
-  }
   performance.mark("codebot:services.remote-desktop");
-  const analyticsEnabled = (app.isPackaged && appVariant === "production") || analyticsCaptureUrl !== null;
-  const analyticsInstallId = analyticsEnabled
-    ? await Effect.runPromise(
-        readAnalyticsInstallId(join(app.getPath("userData"), ANALYTICS_INSTALL_ID_FILE), Date.now()),
-      )
-    : null;
-  const failureReports = analyticsEnabled
-    ? new ReportQueue(
-        fileReportStorage(join(app.getPath("userData"), "codebot-error-reports-v1.json")),
-        openPanelTransport({
-          clientId: "6c989975-87ef-4f0c-857e-ab449a65b5c2",
-          origin: "codebot-app://app",
-          ...(analyticsCaptureUrl ? { endpoint: `${analyticsCaptureUrl}/track` } : {}),
-        }),
-        {
-          surface: "desktop_host",
-          app_version: app.getVersion(),
-          platform: analyticsPlatform,
-          event_schema_version: ANALYTICS_GENERATIONS.desktop_host,
-        },
-      )
-    : undefined;
   const trace = new TraceFile({ directory: join(app.getPath("userData"), "logs") });
   teardown.push(TEARDOWN_ORDER.trace, "the trace file", () => Effect.runPromise(trace.close()));
   const resourceMonitor = new ResourceMonitor({
@@ -3549,75 +3543,7 @@ export async function createApplicationServices({
     Effect.runPromise(resourceMonitor.close()),
   );
   service.on("event", (event) => resourceMonitor.observeAgentEvent(event));
-  const analytics = new HostAnalytics({
-    ...(failureReports ? { reports: failureReports } : {}),
-    enabled: analyticsEnabled,
-    ...(analyticsCaptureUrl ? { apiUrl: analyticsCaptureUrl } : {}),
-    trackingEnabled: analyticsPreference.enabled,
-    installId: analyticsInstallId,
-    appVersion: app.getVersion(),
-    platform: analyticsPlatform,
-    resolveOwner: resolveHostOwner,
-    resolveAgent: (agentId) => service.listAgents().find((agent) => agent.id === agentId) ?? null,
-    resolveProviderAuth: (agent) =>
-      providerAuthKind(agent, {
-        account: (provider) => service.getProviderAccountKind(provider),
-        hasApiKey: (provider) => providerCredentials.status(provider) === "saved",
-        customProviderIds: () => customProviders.list().map((provider) => provider.id),
-        envKey: (name) => Boolean(process.env[name]?.trim()),
-      }),
-    resolveTurnUsage: (agentId, turnId, since) => service.getTurnUsage(agentId, turnId, since),
-    resolveTurnTiming: (turnId) => service.takeTurnTiming(turnId),
-    resolveMcpServer: (name) => {
-      const configs = service.listMcpServers().filter((server) => isReportedMcpServerName(server.name, name));
-      if (configs.length === 0) return null;
-      const slugs = new Set(configs.map((config) => catalogPluginSlug(config, catalogPluginServers, homedir())));
-      const [slug] = slugs;
-      return { slug: slugs.size === 1 && slug ? slug : null };
-    },
-    resolveRoutineRun: (agentId, routineId, runId) => {
-      const run = service.listRoutineRuns({ agentId, routineId }).find((item) => item.id === runId);
-      const routine = service.routineRecords.get({ kind: "agent", id: agentId }, routineId);
-      if (!run || !routine) return null;
-      return {
-        runKind: run.kind,
-        runSource: run.source ?? null,
-        triggerType: routine.trigger.kind === "webhook" ? "webhook" : routine.trigger.schedule.kind,
-      };
-    },
-    resolveInventory: () =>
-      collectAnalyticsInventory({
-        agents: () => service.listAgents(),
-        routines: (agentId) => service.listRoutines(agentId),
-        enabledWebhookRoutineCount: (agentId) =>
-          service.routineRecords
-            .list({ kind: "agent", id: agentId })
-            .filter((routine) => routine.active && routine.trigger.kind === "webhook").length,
-        webhookRouteCount: () => service.routineRecords.routes.list().length,
-        workflowCount: () => workflowStore.list().length,
-        skills: (agentId) => skills.listInstalledForChatTags(agentId),
-        mcpServers: () => service.listMcpServers(),
-        pluginSlug: (config) => catalogPluginSlug(config, catalogPluginServers, homedir()),
-        computerUseEnabled: () => cuaDriver.mcpServerForProviders() !== null,
-      }),
-    inventoryDay: analyticsInventoryDayStore(join(app.getPath("userData"), ANALYTICS_INVENTORY_FILE)),
-    resources: resourceMonitor,
-    uncleanExit: previousUncleanExit,
-  });
-  teardown.push(TEARDOWN_ORDER.analytics, "host analytics", () => Effect.runPromise(analytics.close()));
-  const analyticsPreferences = new AnalyticsPreferenceService({
-    path: analyticsPreferenceFile,
-    account: centralAuth,
-    setTrackingEnabled: (enabled) => {
-      accountActivity.setAnalyticsOn(enabled);
-      analytics.setTrackingEnabled(enabled);
-    },
-    followed: (enabled) => {
-      for (const window of BrowserWindow.getAllWindows())
-        sendToRenderer(window, IPC_ENDPOINTS.app.analyticsPreference, { enabled });
-    },
-  });
-  analytics.flushPending();
+  const analytics = new HostAnalytics();
   service.on("failure", (failure) => analytics.handleFailure(failure));
   reportWebhookDelivery = (report) => analytics.handleWebhookDelivery(report);
   resourceMonitor.start(
@@ -3857,7 +3783,7 @@ export async function createApplicationServices({
       write: (line) => process.stdout.write(line),
     });
   }
-  configureAttachmentProtocol({ mailbox, agents: service, remoteServers });
+  configureAttachmentProtocol({ mailbox, agents: service, remoteServers, explorerFile: explorer.fileResponse });
   configureServerLogoProtocols({ teamStore, remoteServers });
   const browserView = new BrowserViewClient({
     servers: remoteServers,
@@ -4005,6 +3931,7 @@ export async function createApplicationServices({
     updateAdapter = new HostedUpdateAdapter({
       currentVersion,
       arch: process.arch,
+      feedUrl: () => updateFeed.url(),
       ...(containerInstaller ? { paths: CONTAINER_UPDATE_PATHS } : {}),
     });
   } else if (updatesEnabled) {
@@ -4020,6 +3947,8 @@ export async function createApplicationServices({
   const updater = new UpdateService(updateAdapter, {
     currentVersion,
     enabled: updaterEnabled,
+    feedConfigured: updateFeed.url() !== null,
+    redactLog: (text) => updateFeed.redact(text),
     autoDownload: updatePreference.autoDownload,
     beforeInstall: prepareForUpdateInstall,
     ...(app.isPackaged
@@ -4061,6 +3990,7 @@ export async function createApplicationServices({
     appImagePath,
     updaterCacheDirectory,
   });
+  updateFeed.connect(updateAdapter, updater);
   teardown.push(TEARDOWN_ORDER.updater, "the update service", () => Effect.runPromise(updater.stop()));
   const agentInitialization = new AgentInitializationGate((rosterLoaded) =>
     Effect.gen(function* () {
@@ -4069,6 +3999,7 @@ export async function createApplicationServices({
         rosterLoaded,
         beforeProviderStart: Fiber.join(computerUseWarmUp).pipe(Effect.asVoid),
       });
+      yield* projects.start();
       yield* eventsRuntime.start();
       yield* automation.sync();
       yield* routineFlowRuntime.sweep();
@@ -4145,13 +4076,14 @@ export async function createApplicationServices({
       ? new RequiredUpdate({
           surface: serverModeEnvironment ? "host" : "desktop",
           currentVersion,
-          resolveApiUrl: (path) => centralAuth.resolveApiUrl(path),
+          feedUrl: () => updateFeed.url(),
           updater,
           setRequired: (required) => remoteUpdate.setRequired(required),
           log: (message) => logger.info(message),
         })
       : null;
   if (requiredUpdate) {
+    updateFeed.on("change", () => requiredUpdate.refresh());
     teardown.push(TEARDOWN_ORDER.requiredUpdate, "the minimum version check", () =>
       Effect.runPromise(requiredUpdate.dispose()),
     );
@@ -4243,6 +4175,7 @@ export async function createApplicationServices({
     workflowFiles,
     workflowGitHub,
     crm,
+    projects,
     routineResults: routineResultRuntime,
     providerRuntimes,
     providerCredentials,
@@ -4268,15 +4201,15 @@ export async function createApplicationServices({
     browserDock,
     browserView,
     updater,
+    updateFeed,
     setupFile,
-    analyticsPreferences,
-    analyticsInstallId,
     updatePreferenceFile,
     approvalAutomation,
     agentAdminSettings,
     agentHostSettings,
     agentDefaultsSettings,
     agentFolders,
+    explorer,
     channelFolders,
     agentInstructions,
     browserProfiles,
@@ -4300,8 +4233,10 @@ export async function createApplicationServices({
     hostSignalHome,
     hostTurnLimits,
     serverPersonality,
+    replyRule,
     promptCacheTtl,
     claudeUserSetup: claudeUserSetupSetting,
+    advancedFeatures,
     cacheExpiryCompaction: cacheExpiryCompactionSetting,
     claudeCompactWindow: claudeCompactWindowSetting,
     providerEnvironment: providerEnvironmentSetting,
@@ -4337,6 +4272,7 @@ export async function createApplicationServices({
     acpRegistry,
     providerDetection,
     providerDetectionSettings,
+    localModelServerMonitor,
     marketplaceAgents,
     agentTemplates,
     agentImport,

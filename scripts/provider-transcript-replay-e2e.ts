@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { isAgentProvider } from "@codebot/contracts/agent-providers";
@@ -8,6 +8,8 @@ import { NO_PROVIDER_CREDENTIALS, requireProviderDriver } from "../src/backend/p
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
 import type { TranscriptLine } from "./provider-fakes/transcript-proxy";
 import { REDACTED } from "./provider-fakes/transcript-redaction";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/provider-transcript-replay-e2e");
 const TRANSCRIPTS = resolve(import.meta.dirname, "provider-fakes/transcripts");
@@ -54,7 +56,7 @@ try {
       });
 
     const name = file.replace(/\.jsonl$/, "");
-    const executable = join(root, name, "bin", provider);
+    const executable = standInPath(join(root, name, "bin", provider));
     const workspace = join(root, name, "workspace");
     const log = join(root, name, "replay.jsonl");
     await mkdir(workspace, { recursive: true });
@@ -102,6 +104,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${report.passed ? "PASS" : "FAIL"} ${join(OUT, "report.json")}\n`);
 }

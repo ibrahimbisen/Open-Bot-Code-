@@ -3,7 +3,6 @@ import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 export interface SettingsPort {
   getAgentDefaults: CodeBotDesktopApi["getAgentDefaults"];
   getAgentMemoryLimitPreference: CodeBotDesktopApi["getAgentMemoryLimitPreference"];
-  getAnalyticsPreference: CodeBotDesktopApi["getAnalyticsPreference"];
   getAppBehaviorPreference: CodeBotDesktopApi["getAppBehaviorPreference"];
   getApprovalAutomation: CodeBotDesktopApi["getApprovalAutomation"];
   getBusyMessageModePreference: CodeBotDesktopApi["getBusyMessageModePreference"];
@@ -14,11 +13,9 @@ export interface SettingsPort {
   getRemoteNetworkRoute: CodeBotDesktopApi["getRemoteNetworkRoute"];
   getRemoteSessionReusePreference: CodeBotDesktopApi["getRemoteSessionReusePreference"];
   onAgentMemoryLimitPreference: CodeBotDesktopApi["onAgentMemoryLimitPreference"];
-  onAnalyticsPreference: CodeBotDesktopApi["onAnalyticsPreference"];
   onApprovalAutomation: CodeBotDesktopApi["onApprovalAutomation"];
   onOpenSettings: CodeBotDesktopApi["onOpenSettings"];
   onOpenUpdateSettings: CodeBotDesktopApi["onOpenUpdateSettings"];
-  setAnalyticsPreference: CodeBotDesktopApi["setAnalyticsPreference"];
   setAppBehaviorPreference: CodeBotDesktopApi["setAppBehaviorPreference"];
   setExternalLinkPreference: CodeBotDesktopApi["setExternalLinkPreference"];
   setRemoteNetworkRoute: CodeBotDesktopApi["setRemoteNetworkRoute"];
@@ -31,6 +28,7 @@ export interface SettingsPort {
     CodeBotDesktopApi["dynamicIsland"],
     "getBuiltInDisplayGeometry" | "getPreference" | "onPreference" | "setPreference" | "setXWayland"
   >;
+  replies: Pick<CodeBotDesktopApi["replies"], "getRule" | "setRule">;
   notifications: Pick<CodeBotDesktopApi["notifications"], "getPreference" | "openSettings" | "setPreference" | "test">;
   update: Pick<CodeBotDesktopApi["update"], "getPreference" | "onPreference" | "setPreference">;
 }

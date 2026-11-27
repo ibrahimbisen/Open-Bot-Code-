@@ -135,7 +135,6 @@ interface MemberAuditActor {
 type ForwardedApiOptions = ConstructorParameters<typeof TeamApiServer>[0];
 
 interface HostServiceOptions {
-  onMemberUse?: ForwardedApiOptions["onMemberUse"];
   channels?: ChannelService;
   mcpServers?: ForwardedApiOptions["mcpServers"];
   mcpServerOwners?: ForwardedApiOptions["mcpServerOwners"];
@@ -167,6 +166,7 @@ interface HostServiceOptions {
   workflows?: ForwardedApiOptions["workflows"];
   workflowFolders?: ForwardedApiOptions["workflowFolders"];
   crm?: ForwardedApiOptions["crm"];
+  projects?: ForwardedApiOptions["projects"];
   hiddenAgents?: ForwardedApiOptions["hiddenAgents"];
   routineRunPlaces?: ForwardedApiOptions["routineRunPlaces"];
   agentNotificationLevels?: AgentNotificationLevelStore;
@@ -476,7 +476,6 @@ export class HostService extends EventEmitter<HostEvents> {
           })
         : undefined;
     this.#api = new TeamApiServer({
-      ...(options.onMemberUse === undefined ? {} : { onMemberUse: options.onMemberUse }),
       appVersion: options.appVersion,
       store: options.store,
       agents: options.agents,
@@ -514,6 +513,7 @@ export class HostService extends EventEmitter<HostEvents> {
       ...(options.workflows === undefined ? {} : { workflows: options.workflows }),
       ...(options.workflowFolders === undefined ? {} : { workflowFolders: options.workflowFolders }),
       ...(options.crm === undefined ? {} : { crm: options.crm }),
+      ...(options.projects === undefined ? {} : { projects: options.projects }),
       ...(options.hiddenAgents === undefined ? {} : { hiddenAgents: options.hiddenAgents }),
       ...(options.routineRunPlaces === undefined ? {} : { routineRunPlaces: options.routineRunPlaces }),
       ...(options.agentNotificationLevels === undefined

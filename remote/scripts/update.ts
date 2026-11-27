@@ -2,10 +2,10 @@ import { spawn } from "node:child_process";
 import { resolve } from "node:path";
 
 const root = resolve(import.meta.dir, "../..");
-const compose = ["compose", "-f", "remote/compose.yaml"];
+const compose = ["compose", "--env-file", "remote/.env.self-hosted", "-f", "remote/compose.yaml"];
 
-await run("docker", [...compose, "build", "remote-api", "capacity-report", "coturn"], root);
-await run("docker", [...compose, "up", "-d", "--no-build", "--no-deps", "remote-api", "capacity-report"], root);
+await run("docker", [...compose, "build", "remote-api", "coturn"], root);
+await run("docker", [...compose, "up", "-d", "--no-build", "--no-deps", "remote-api"], root);
 
 const coturnExists = (await capture("docker", ["inspect", "codebot-coturn"], root)).code === 0;
 if (coturnExists) {

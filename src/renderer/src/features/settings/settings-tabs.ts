@@ -1,4 +1,5 @@
-import type { AppInfo } from "@codebot/contracts/ipc";
+import type { AdvancedFeatureSettings, AppInfo } from "@codebot/contracts/ipc";
+import { ADVANCED_FEATURE_IDS } from "@codebot/contracts/ipc";
 import type { AppTextKey } from "@codebot/i18n";
 import {
   Bell,
@@ -11,10 +12,12 @@ import {
   PanelTop,
   Power,
   Settings,
+  SlidersHorizontal,
   Smartphone,
   UserRound,
 } from "@codebot/ui";
 import { SHORTCUT_COMMANDS, SHORTCUT_TITLES } from "@codebot/ui/features/settings/keyboard-shortcuts";
+import { ADVANCED_FEATURE_TEXT } from "../advanced/advanced-feature-text";
 
 export type SettingsTab =
   | "general"
@@ -28,7 +31,8 @@ export type SettingsTab =
   | "computer-use"
   | "profile"
   | "mobile-connect"
-  | "updates";
+  | "updates"
+  | "advanced-features";
 
 type SettingsRow = {
   titleKey: AppTextKey;
@@ -64,7 +68,6 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
         descriptionKey: "settings.compactMessageActions.description",
       },
       { titleKey: "settings.externalLinks.title", descriptionKey: "settings.externalLinks.description" },
-      { titleKey: "settings.analytics.title", descriptionKey: "settings.analytics.description" },
     ],
   },
   {
@@ -233,12 +236,20 @@ export const navItems: ReadonlyArray<SettingsNavItem> = [
     group: "settings.sections.group.thisComputer",
     rows: [
       { titleKey: "settings.updates.track.title", descriptionKey: "settings.updates.track.description" },
+      { titleKey: "appUpdate.server.title", descriptionKey: "appUpdate.server.description" },
       { titleKey: "settings.updates.idleRestart.title" },
       { titleKey: "settings.updates.autoDownload.title", descriptionKey: "settings.updates.autoDownload.description" },
-      { titleKey: "settings.updates.autoInstall.title", descriptionKey: "settings.updates.autoInstall.description" },
+      { titleKey: "appUpdate.autoRestart.title", descriptionKey: "appUpdate.autoRestart.description" },
       { titleKey: "settings.updates.allowRemote.title", descriptionKey: "settings.updates.allowRemote.description" },
       { titleKey: "settings.updates.managed.title", descriptionKey: "settings.updates.managed.description" },
     ],
+  },
+  {
+    value: "advanced-features",
+    titleKey: "advanced.tab.title",
+    descriptionKey: "advanced.tab.description",
+    icon: SlidersHorizontal,
+    rows: ADVANCED_FEATURE_IDS.map((id) => ({ titleKey: ADVANCED_FEATURE_TEXT[id].title })),
   },
 ];
 
@@ -250,8 +261,13 @@ export function navItem(tab: SettingsTab): SettingsNavItem {
 
 export function settingsTabShown(
   tab: SettingsTab,
-  window: { platform: AppInfo["platform"] | undefined; chatWindow: boolean },
+  window: {
+    platform: AppInfo["platform"] | undefined;
+    chatWindow: boolean;
+    advanced: AdvancedFeatureSettings | undefined;
+  },
 ): boolean {
+  if (tab === "computer-use") return window.advanced?.computerUse === true;
   if (tab === "dynamic-island") return dynamicIslandSettingsShown(window.platform, window.chatWindow);
   if (tab === "agent-dock") return window.platform !== undefined && !window.chatWindow;
   return true;

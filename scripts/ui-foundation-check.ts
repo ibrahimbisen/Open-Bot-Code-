@@ -15,6 +15,10 @@ function matches(source: string, expression: RegExp): number {
   return source.match(expression)?.length ?? 0;
 }
 
+function portableLabel(labelRoot: string, path: string): string {
+  return relative(labelRoot, path).split(sep).join("/");
+}
+
 export interface UiFoundationReport {
   readonly failures: readonly string[];
   readonly manualCompositeCount: number;
@@ -76,7 +80,7 @@ export function checkUiFoundation(
   for (const file of sourceFiles.filter((path) => /\.(?:ts|tsx)$/.test(path))) {
     if (insideUi(file) || /\.test\.tsx?$/u.test(file)) continue;
     const source = readFileSync(file, "utf8");
-    const label = relative(labelRoot, file);
+    const label = portableLabel(labelRoot, file);
 
     if (/<(?:button|input|textarea|select)\b/u.test(source)) {
       failures.push(`${label}: use a components/ui control instead of a native element`);
@@ -110,7 +114,7 @@ export function checkUiFoundation(
   const complexApiPath = resolve(uiRoot, "complex.tsx");
   if (/export const \w+\s*=\s*\w+Primitive\s*;/u.test(readFileSync(complexApiPath, "utf8"))) {
     failures.push(
-      `${relative(labelRoot, complexApiPath)}: a Kobalte namespace must go through an adapter, not a direct alias`,
+      `${portableLabel(labelRoot, complexApiPath)}: a Kobalte namespace must go through an adapter, not a direct alias`,
     );
   }
 
@@ -143,7 +147,7 @@ export function checkUiFoundation(
     for (const name of [...declared].sort()) {
       if (named.has(name)) continue;
       if (families.some((prefix) => name.startsWith(prefix) && name.length > prefix.length)) continue;
-      failures.push(`${relative(labelRoot, path)}: .${name} is not reachable from any markup; delete the rule`);
+      failures.push(`${portableLabel(labelRoot, path)}: .${name} is not reachable from any markup; delete the rule`);
     }
   }
   const colorLiteralCount =

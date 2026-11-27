@@ -32,6 +32,7 @@ import {
 import { isString } from "@codebot/contracts/runtime-values";
 import { TEAM_API_ROUTES } from "@codebot/contracts/team-api-routes";
 import { ACP_REGISTRY_CAPABILITY } from "@codebot/contracts/team-protocol/acp-registry-v1";
+import { ADVANCED_FEATURES_CAPABILITY } from "@codebot/contracts/team-protocol/advanced-features-v1";
 import { AGENT_ACCESS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-access-v1";
 import { AGENT_ACTIVE_QUEUES_CAPABILITY } from "@codebot/contracts/team-protocol/agent-active-queues-v1";
 import { AGENT_ARCHIVED_THREADS_CAPABILITY } from "@codebot/contracts/team-protocol/agent-archived-threads-v1";
@@ -225,6 +226,7 @@ import { CUSTOM_AGENTS_CAPABILITY } from "@codebot/contracts/team-protocol/custo
 import { CUSTOM_PROVIDER_EDIT_CAPABILITY } from "@codebot/contracts/team-protocol/custom-provider-edit-v1";
 import { CUSTOM_PROVIDER_HARNESS_CHOICE_CAPABILITY } from "@codebot/contracts/team-protocol/custom-provider-harness-choice-v1";
 import { CUSTOM_PROVIDER_HARNESS_CAPABILITY } from "@codebot/contracts/team-protocol/custom-provider-harness-v1";
+import { EXPLORER_CAPABILITY } from "@codebot/contracts/team-protocol/explorer-v1";
 import { FOCUS_USE_INTERVAL_MS } from "@codebot/contracts/team-protocol/focus-use-v1";
 import { GITHUB_SKILLS_CAPABILITY } from "@codebot/contracts/team-protocol/github-skills-v1";
 import { HERMES_IMPORT_CAPABILITY } from "@codebot/contracts/team-protocol/hermes-import-v1";
@@ -259,6 +261,7 @@ import { MODEL_STEERING_CAPABILITY } from "@codebot/contracts/team-protocol/mode
 import { MODEL_VISIBILITY_KEPT_CAPABILITY } from "@codebot/contracts/team-protocol/model-visibility-kept-v1";
 import { type OptionalTeamEvent, optionalTeamEvent } from "@codebot/contracts/team-protocol/optional-events";
 import { OWNER_TRANSFER_CAPABILITY } from "@codebot/contracts/team-protocol/owner-transfer-v1";
+import { PROJECTS_V1_CAPABILITY, type ProjectsWireEvent } from "@codebot/contracts/team-protocol/projects-v1";
 import {
   TEAM_PROMPT_DETAIL_CAPABILITY,
   withPromptQuestionDetails,
@@ -345,6 +348,7 @@ import { runCauseEffect } from "../backend/effect-boundary";
 import { McpServerError } from "../backend/mcp-server-store";
 import { perfCount } from "../backend/perf-probe-hooks";
 import { canConfineProcesses } from "../backend/process-confinement";
+import type { ProjectServiceEvent } from "../backend/projects/project-operations";
 import { StoredStateFailure } from "../backend/stored-state-effects";
 import type { TeamChatStore } from "../backend/team-chat-store";
 import { agentAccessLevel } from "./agent-access-store";
@@ -377,6 +381,7 @@ import {
   stringField,
 } from "./team-api/request-helpers";
 import { routeAcpRegistry } from "./team-api/route-acp-registry";
+import { routeAdvancedFeatures } from "./team-api/route-advanced-features";
 import { routeAgentAccess } from "./team-api/route-agent-access";
 import { routeAgentActiveQueues } from "./team-api/route-agent-active-queues";
 import {
@@ -480,6 +485,7 @@ import { routePasswordManagers } from "./team-api/route-password-managers";
 import { routePendingApproval } from "./team-api/route-pending-approval";
 import { routePendingPrompts } from "./team-api/route-pending-prompts";
 import { routePhoneFeedback } from "./team-api/route-phone-feedback";
+import { routeProjects } from "./team-api/route-projects";
 import { routePromptCacheTtl } from "./team-api/route-prompt-cache-ttl";
 import {
   routeLiveVoiceAccount,
@@ -640,6 +646,7 @@ export class TeamApiServer {
   readonly #liveVoiceSessions = new TeamLiveVoiceSessions();
   #stopNotificationLevelsListener: (() => void) | null = null;
   #stopSidebarPinsListener: (() => void) | null = null;
+  #stopProjectsListener: (() => void) | null = null;
   #localTypingAgentId: string | null = null;
   readonly #reportedUnrepresentableAgents = new Set<string>();
   readonly #representableAgents = new Map<string, Map<string, { json: string; representable: boolean }>>();
@@ -747,6 +754,8 @@ export class TeamApiServer {
       this.#options.agentNotificationLevels?.subscribe((memberId) => this.#sendNotificationLevels(memberId)) ?? null;
     this.#stopSidebarPinsListener =
       this.#options.sidebarPins?.subscribe((memberId) => this.#sendSidebarPins(memberId)) ?? null;
+    this.#stopProjectsListener =
+      this.#options.projects?.subscribe((event) => this.#sendProjectEvent(projectsWireFrom(event))) ?? null;
     this.#heartbeat = setInterval(() => {
       for (const [client, connection] of this.#eventClients) {
         if (!this.#options.store.authenticate(connection.token)) {
@@ -776,6 +785,8 @@ export class TeamApiServer {
     this.#stopClientBrowserListener = null;
     this.#stopNotificationLevelsListener?.();
     this.#stopNotificationLevelsListener = null;
+    this.#stopProjectsListener?.();
+    this.#stopProjectsListener = null;
     this.#stopSidebarPinsListener?.();
     this.#stopSidebarPinsListener = null;
     yield* Scope.close(this.#legacyConversationScope, Exit.void);
@@ -853,7 +864,6 @@ export class TeamApiServer {
   #recordClientUse(sessionId: string | null, memberId: string): void {
     const now = Date.now();
     this.#lastClientUseAt = now;
-    this.#options.onMemberUse?.(memberId);
     if (!sessionId) return;
     this.#sessionUse.set(sessionId, { memberId, at: now });
     pruneSessions(this.#sessionUse, now);
@@ -983,6 +993,19 @@ export class TeamApiServer {
       const member = this.#connectionMember(connection);
       const hidden = this.hiddenAgentIds(eventProtocol(connection.capabilities), connection.capabilities, member);
       client.send(JSON.stringify({ type: "agent-notification-levels-changed", ...levels.snapshot(memberId, hidden) }));
+    }
+  }
+
+  #sendProjectEvent(event: ProjectsWireEvent): void {
+    const payload = JSON.stringify(event);
+    for (const [client, connection] of this.#eventClients) {
+      if (
+        !connection.capabilities.has(PROJECTS_V1_CAPABILITY) ||
+        client.readyState !== webSockets.WebSocket.OPEN ||
+        !canAdministerServer(this.#connectionMember(connection).role)
+      )
+        continue;
+      client.send(payload);
     }
   }
 
@@ -1379,6 +1402,7 @@ export class TeamApiServer {
       if ((await routeClaudeUserSetup(context, this.#options.admin)) === "handled") return;
       if ((await routeClaudeCompactWindow(context, this.#options.admin)) === "handled") return;
       if ((await routeCacheExpiryCompaction(context, this.#options.admin)) === "handled") return;
+      if ((await routeAdvancedFeatures(context, this.#options.admin)) === "handled") return;
       if ((await routeProviderEnvironment(context, this.#options.admin)) === "handled") return;
       if ((await routeProviderDetection(context, this.#options.admin)) === "handled") return;
       if ((await routeModelVisibility(context, this.#options.admin)) === "handled") return;
@@ -1455,6 +1479,7 @@ export class TeamApiServer {
       )
         return;
       if ((await routeCrm(context, this.#options.crm)) === "handled") return;
+      if ((await routeProjects(context, this.#options.projects)) === "handled") return;
       if ((await this.#routeEvents(context)) === "handled") return;
       if ((await routeAgentImport(context, this.#options.agentImport, newAgentHidden)) === "handled") return;
       if ((await routeHermesImport(context, this.#options.hermesImport, newAgentHidden)) === "handled") return;
@@ -2848,6 +2873,7 @@ export class TeamApiServer {
           return this.#options.storage !== undefined && this.#options.channels !== undefined;
         if (capability === MACHINE_RESOURCES_CAPABILITY) return this.#options.machine !== undefined;
         if (capability === SERVER_SAFE_MODE_CAPABILITY) return false;
+        if (capability === EXPLORER_CAPABILITY) return false;
         if (capability === BACKGROUND_PROCESSES_CAPABILITY) return this.#options.backgroundProcesses !== undefined;
         if (capability === ROUTINES_ONCE_CAPABILITY) return true;
         if (capability === AGENT_ADMIN_CAPABILITY) return this.#options.admin?.agents !== undefined;
@@ -2946,6 +2972,7 @@ export class TeamApiServer {
         if (capability === CLAUDE_USER_SETUP_CAPABILITY) return this.#options.admin?.claudeUserSetup !== undefined;
         if (capability === CLAUDE_COMPACT_WINDOW_CAPABILITY)
           return this.#options.admin?.claudeCompactWindow !== undefined;
+        if (capability === ADVANCED_FEATURES_CAPABILITY) return this.#options.admin?.advancedFeatures !== undefined;
         if (capability === CACHE_EXPIRY_COMPACTION_CAPABILITY)
           return this.#options.admin?.cacheExpiryCompaction !== undefined;
         if (capability === PROVIDER_ENVIRONMENT_CAPABILITY)
@@ -2981,6 +3008,7 @@ export class TeamApiServer {
         if (capability === WORKFLOW_FOLDERS_CAPABILITY)
           return this.#options.workflows !== undefined && this.#options.workflowFolders !== undefined;
         if (capability === CRM_CAPABILITY) return this.#options.crm !== undefined;
+        if (capability === PROJECTS_V1_CAPABILITY) return this.#options.projects !== undefined;
         if (capability === WORKFLOWS_GITHUB_CAPABILITY) return this.#options.workflows?.github !== undefined;
         if (capability === WORKFLOWS_MEDIA_CAPABILITY) return this.#options.workflows !== undefined;
         if (capability === WORKFLOWS_SUNRA_CAPABILITY) return this.#options.workflows !== undefined;
@@ -3182,6 +3210,12 @@ function eventEncodingKey(capabilities: ReadonlySet<string>, options: { preserve
 
 function isLegacyConversationClient(connection: EventClientState): boolean {
   return connection.includeConversationEvents && !connection.capabilities.has("agent-runtime-snapshots");
+}
+
+function projectsWireFrom(event: ProjectServiceEvent): ProjectsWireEvent {
+  if (event.type === "projects-changed") return event;
+  if (event.type === "chats-changed") return { ...event, type: "project-chats-changed" };
+  return { type: "project-activity-changed", activity: event.activity };
 }
 
 function optionalEventAgentId(event: OptionalTeamEvent): string | null {

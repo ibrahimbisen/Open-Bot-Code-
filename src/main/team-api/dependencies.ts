@@ -31,12 +31,14 @@ import type { ChannelService } from "../../backend/channel-service";
 import type { CrmPeopleOperations } from "../../backend/crm/crm-handle";
 import type { MailboxStore } from "../../backend/mailbox-store";
 import type { MessagingService } from "../../backend/messaging/messaging-service";
+import type { ProjectOperations } from "../../backend/projects/project-operations";
 import type { RoutineFlowsHandle } from "../../backend/routine-flows/routine-flows";
 import type { SidebarLayoutStore } from "../../backend/sidebar-layout-store";
 import type { StorageUsageService } from "../../backend/storage-usage";
 import type { TeamChatStore } from "../../backend/team-chat-store";
 import type { WorkflowsHandle } from "../../backend/workflows/workflows";
 import type { AcpRegistry } from "../acp-registry";
+import type { AdvancedFeaturesControl } from "../advanced-features-store";
 import type { AgentAccessStore } from "../agent-access-store";
 import type { AgentAdminSettingsService } from "../agent-admin-settings";
 import type { AgentDefaultsSettingsService } from "../agent-defaults-settings";
@@ -482,6 +484,7 @@ export interface TeamApiAdmin {
   promptCacheTtl?: Pick<PromptCacheTtlPreferenceStore, "get" | "set">;
   claudeUserSetup?: ClaudeUserSetupControl;
   cacheExpiryCompaction?: CacheExpiryCompactionControl;
+  advancedFeatures?: AdvancedFeaturesControl;
   claudeCompactWindow?: ClaudeCompactWindowControl;
   providerEnvironment?: Pick<ProviderEnvironmentControl, "get" | "set">;
   providerDetection?: {
@@ -626,7 +629,6 @@ export type TeamApiAgentAccess = Pick<AgentAccessStore, "copyAgent" | "get" | "l
 export type TeamApiServerAudit = Pick<ServerAuditStore, "read">;
 
 export interface TeamApiOptions {
-  onMemberUse?: ((memberId: string) => void) | undefined;
   events?: HostEventsApi | undefined;
   channels?: ChannelService | undefined;
   mcpServers?: TeamApiMcpServers | undefined;
@@ -658,6 +660,7 @@ export interface TeamApiOptions {
   routineFlows?: TeamApiRoutineFlows;
   workflows?: TeamApiWorkflows;
   crm?: TeamApiCrm;
+  projects?: ProjectOperations;
   hiddenAgents?: TeamApiHiddenAgents;
   routineRunPlaces?: TeamApiRoutineRunPlaces;
   agentNotificationLevels?: TeamApiAgentNotificationLevels;

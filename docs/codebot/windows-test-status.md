@@ -1,0 +1,122 @@
+# Test status on Windows
+
+Upstream CI runs on Ubuntu and macOS only. This file records the result of each check and each
+offline test suite on Windows. Work package W20 keeps it current (PRD items 19.1 and 19.5).
+
+- Computer: Windows 11 Pro (x64), Bun 1.4.2, Node.js 26.13.1.
+- Each run uses a sandbox profile: `cb_sandbox <name>` in Git Bash (see [agent-brief.md](agent-brief.md)).
+- No run on macOS or Linux was possible on this computer (no WSL, no Docker). Each change keeps the
+  POSIX branch of the code and of the test; "POSIX" in the notes says what stays the same there.
+
+Result values: `pass`, `fail` (with the exact reason), `not run yet`, `not run` (with the reason).
+
+## Checks
+
+| Check | Result on Windows | Notes |
+| --- | --- | --- |
+| `bun run test:desktop` | pass | 103 files, 2298 tests. See [Vitest corrections](#vitest-corrections). |
+| `bun run knip:check` | fail, not a Windows problem | The 18 unused files, 9 unused exports and 1 unused type that only Windows reported are gone: see [knip corrections](#knip-corrections). One finding stays: `src/backend/projects/project-context.ts` is an unused file. Commit `ce1b138cc` on `main` added it and no module imports it yet, so each platform reports it. With that file moved away, knip exits with code 0 on Windows. The 7 configuration hints are not errors. |
+| `bun run check:agent-context` | pass | `instructions.claude` 16939 and `instructions.codex` 17144 bytes, the same as the baseline. See [Agent context correction](#agent-context-correction). |
+
+| `bun run typecheck:node`, `typecheck:renderer` | pass | |
+| `bun run check:ui` | pass | |
+| `bun run i18n:check` | pass | The info line about English key order is not an error. |
+| `bun run lint` (Biome) | pass | No errors; warnings only. The changed files also pass `biome check`. |
+| `bun run build`, `bun run verify:preload` | pass | |
+
+## Vitest corrections
+
+Before W20, 9 tests in 4 files failed on Windows, also on unmodified upstream.
+
+| Test file | Cause on Windows | Correction |
+| --- | --- | --- |
+| `scripts/ui-foundation-check.test.ts` (4 tests) | `scripts/ui-foundation-check.ts` made each label with `path.relative`, which gives `\` on Windows. | The check now writes each label with `/` on every platform. The test did not change. POSIX: the label text is the same as before. |
+| `src/backend/codebot-database.test.ts` (1 test) | Windows has no POSIX permission bits. After `chmod 0o600`, Node.js reports `0o666` for a file that is not read-only. The failed assertion also left the database open, which made the cleanup fail with `EBUSY`. | The test expects `0o600` on POSIX and `0o666` on Windows. On Windows, the folder ACL of the user profile keeps the file private; CodeBot does not set an ACL. |
+| `src/main/file-preview-pages.test.ts` (3 tests) | A file symbolic link needs the "Create symbolic links" privilege (administrator or Developer Mode). Without it, `symlink` fails with `EPERM`. | The fixture also makes two folder links (a junction on Windows, a symbolic link on POSIX), which need no privilege. The test asserts that the preview refuses a file behind each folder link. The file links stay: the fixture skips them only on Windows and only for `EPERM`. |
+| `src/main/provider-runtime-failure-log.test.ts` (1 test) | The log line shows the home folder as `~`, and the rest of the path keeps the separator of the platform: `~\proxy.conf`. The test expected `~/proxy.conf`. | The test expects `~` with the platform separator, as the JSON log line writes it. It also asserts that the JSON form of the home path is not in the line. |
+
+## knip corrections
+
+The electron-vite plugin of knip 6.42.1 reads the folder of each renderer HTML page with
+`path.posix.dirname`. `electron.vite.config.ts` gives the page as a Windows path with backslashes, so
+the folder was `.`, and the module of the page (`/src/index.tsx`) resolved to a file that does not
+exist. knip then reported the 7 page modules, and each file and export that only they use, as unused.
+
+`knip.config.ts` now reads the `<script src>` of each `src/renderer/*.html` file and gives these
+modules to the electron-vite plugin as its entries. POSIX: the plugin finds the same modules by
+itself, so the result does not change. The entries belong to the plugin, not to the workspace `entry`
+list, so knip does not report them as redundant on POSIX.
+
+## Agent context correction
+
+`developerInstructions()` read `process.platform` for three texts: the rule for a long job, the
+Computer Use rules and the automation command. The baseline in `tools/agent-context/budget.json` comes
+from Linux, so the check measured 512 bytes more on Windows, and it would measure more on macOS too.
+
+`developerInstructions()` now has a `platform` option, with `process.platform` as the default, so the
+product text does not change. The fixture of `scripts/agent-context-budget.ts` sets it to `linux`. The
+baseline did not change. The text that only Windows or macOS gets is not in the counts, as before in CI.
+
+## Stand-in programs
+
+A provider E2E script gives CodeBot a stand-in program in place of a provider CLI. Before W20, each
+stand-in was a POSIX script with a `#!` line, which Windows cannot start. Two modules now hold the
+cross-platform parts:
+
+- `scripts/stand-in-program.ts`
+  - `standInPath(path)` gives the path that the script gives to CodeBot: `path` on macOS and Linux,
+    `path.cmd` on Windows.
+  - `writeStandInScript(path, source)` writes a CommonJS program. POSIX: one file with `#!<runtime>`
+    and mode 755, as before. Windows: `<name>.stand-in.cjs` and a `.cmd` wrapper that starts it with
+    the same runtime (Bun).
+  - `writeStandInLauncher(path, module, env)` starts a module file with environment values.
+    POSIX: the same `#!/bin/sh` file as before. Windows: a `.cmd` wrapper, and the values in
+    `<name>.stand-in-env.cjs`, which the runtime loads with `-r`. Thus a value can have quotes, `%`
+    or `&`. `scripts/provider-fakes/host.ts` (`installFakeAgent`) uses it.
+  - The wrapper has `@chcp 65001>nul` when a path in it is not ASCII, so a user name such as
+    `Jörg` works.
+- `scripts/test-folder.ts`
+  - `removeTestFolder(path)` removes the temporary folder of a script. On Windows a file that is
+    open cannot be removed, and two things keep files open after a test: Bun 1.4.2 keeps the files
+    of a closed `node:sqlite` database open while a prepared statement object is alive, and the
+    stand-in behind a `.cmd` wrapper ends a moment after `taskkill`. When the folder is in use, a
+    small detached process removes it after the script exits. POSIX: one `rm` call, as before.
+
+## Provider fakes E2E
+
+First run on Windows (2026-11-26). The final results come at the end of this work package.
+
+| Suite | Result on Windows | Notes |
+| --- | --- | --- |
+| `test:custom-agents` | pass | |
+| `test:custom-agents:login-path` | not applicable | The suite checks that CodeBot starts an agent with the `PATH` of the login shell. Windows has no login shell. |
+| `test:acp-directories` | pass | |
+| `test:acp-flavors` | pass | |
+| `test:acp-turn-stall` | pass | |
+| `test:agent-database-host-start` | pass | The script now waits for the host processes to end before it removes its folder. |
+| `test:acp-mcp-names` | pass | |
+| `test:provider-conformance` | pass | |
+| `test:provider-transcript-replay` | pass | |
+| `test:opencode-expired-key` | pass | |
+| `test:opencode-downgraded-session` | pass | |
+| `test:cline-free-models` | pass | |
+| `test:cline-plan-limit-failover` | pass | |
+
+## Other offline suites
+
+Run on Windows on 2026-11-26, one at a time, in a sandbox profile. Logs: `.codebot-build/w20/s5-*.log`.
+
+| Suite | Result on Windows | Notes |
+| --- | --- | --- |
+| `test:api` | pass | 89 tests. |
+| `test:automation-cli` | pass | |
+| `test:team-api-routes` | pass | The scripts now close files before they remove their folder, and the folder browser keeps the root of a drive (`C:\`). |
+| `test:team-legacy-clients` | pass | |
+| `test:team-protocol-v10` | pass | |
+| `test:signal` | pass | 43 checks. |
+| `test:browser` | fail, environment | Two runs stopped at "Current display surface not available for capture" (no presented frame). A third run passed that step and stopped at "Recorder produced an empty video": the recorder captures the window of the page with `getDisplayMedia`, and in this session (no visible, unlocked desktop) the window gives no frames. Not changed: the cause is the display of this computer, not the code. Run it again on a computer with an active desktop. |
+| `test:workspace-only` (10.8) | not run | `scripts/filesystem-smoke.ts --workspace-only` now builds PowerShell commands on Windows and skips the providers that Workspace only cannot confine on this platform. It needs a provider that is signed in (codex or claude CLI). The sandbox profile has none, and the run must not spend model tokens. On this computer it stops with "ChatGPT is not downloaded". |
+| `test:pi-mcp-workspace-only` | not applicable | The script stops by design: Workspace only for Pi runs on macOS only. |
+| `test:claude:login-path`, `test:custom-agents:login-path` | not applicable | Windows has no login shell. The scripts say so and exit 1. |
+
+The converted Claude stand-in scripts (15) and the 13 provider fake suites pass; see their tables.

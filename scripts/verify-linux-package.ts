@@ -181,8 +181,8 @@ try {
 } catch (error) {
   if (requireUpdateMetadata) throw error;
 }
-if (updateMetadata !== null && !updateMetadata.includes("provider: github")) {
-  throw new Error("The packaged update provider is not GitHub.");
+if (updateMetadata !== null && !updateMetadata.includes("provider: generic")) {
+  throw new Error("The packaged update provider is not the generic provider.");
 }
 
 const fuses = await getCurrentFuseWire(executablePath);

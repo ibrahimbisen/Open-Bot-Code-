@@ -121,12 +121,10 @@ answers 503 and writes no receipt, so the sender retries after the restart.
 `HostEventsService` gives each request that it processed, and each test event, to its `onDelivery`
 option as a `WebhookDeliveryReport`: owner kind, format, result, ignored reason, status, body size,
 handle time and, for a request with a valid signature, the delivery age. The application services
-send it as `system_webhook_delivery`, at most 60 each minute (`HostAnalytics.handleWebhookDelivery`).
+give it to `HostAnalytics.handleWebhookDelivery`, which does nothing.
 The report has no route ID, delivery ID, secret, event type or body. A request that Signal refuses
 before the host does not reach it: Signal counts its answers by status and its waits for the host in
-`/metrics` (`codebot_remote_webhook_*`), and the capacity reporter sends the change of each 5 minutes
-in `signal_capacity`. `bun run test:webhook-analytics` checks the host side. See
-[ANALYTICS.md](../../ANALYTICS.md).
+`/metrics` (`codebot_remote_webhook_*`).
 
 ### Workflow webhook triggers
 

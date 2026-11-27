@@ -7,7 +7,7 @@ import { createCodeBotLogger, toLogValue } from "@codebot/logging";
 import { Effect } from "effect";
 import { app, type BrowserWindow, dialog, shell } from "electron";
 import { runCauseEffect } from "../backend/effect-boundary";
-import { DOWNLOAD_URL, RELEASES_URL } from "./download-url";
+import { hasDownloadSource, openDownload, openUpdateFolder, updateFolderUrl } from "./download-url";
 import { UPDATE_HANDOVER_FILE } from "./update-install-guard";
 import { readUpdatePreference, UPDATE_PREFERENCE_FILE } from "./update-preference-store";
 import {
@@ -60,12 +60,14 @@ async function createRecoveryUpdater(
   beforeInstall: NewerDatabaseRecoveryOptions["beforeInstall"],
 ): Promise<UpdateService | null> {
   const currentVersion = app.getVersion();
+  const feedUrl = updateFolderUrl();
   if (
     !app.isPackaged ||
     isNixStoreInstall() ||
     !supportsInstalledUpdates(process.platform) ||
     !existsSync(join(process.resourcesPath, "app-update.yml")) ||
-    !isValidSemver(currentVersion)
+    !isValidSemver(currentVersion) ||
+    feedUrl === null
   ) {
     return null;
   }
@@ -75,6 +77,7 @@ async function createRecoveryUpdater(
   if (!preference?.autoDownload) return null;
   const adapter = await loadElectronUpdater();
   if (!adapter) return null;
+  adapter.setFeedURL?.({ provider: "generic", url: feedUrl });
   return new UpdateService(adapter, {
     currentVersion,
     enabled: true,
@@ -168,36 +171,43 @@ async function showUpdating(
   app.quit();
 }
 
-async function showUpdateRequired(translate: AppTranslate): Promise<void> {
+interface RecoveryLink {
+  label: string;
+  open: () => Promise<unknown>;
+}
+
+async function showRecoveryLinks(message: string, detail: string, links: RecoveryLink[], quit: string): Promise<void> {
   const { response } = await dialog.showMessageBox({
     type: "warning",
-    message: translate("startup.newerDataTitle"),
-    detail: translate("startup.newerDataBody", { version: app.getVersion() }),
-    buttons: [
-      translate("startup.newerDataDownload"),
-      translate("startup.newerDataGuide"),
-      translate("startup.newerDataQuit"),
-    ],
+    message,
+    detail,
+    buttons: [...links.map((link) => link.label), quit],
     defaultId: 0,
-    cancelId: 2,
+    cancelId: links.length,
   });
-  if (response === 0) await shell.openExternal(DOWNLOAD_URL);
-  if (response === 1) await shell.openExternal(GUIDE_URL);
+  await links[response]?.open();
+}
+
+function guideLink(translate: AppTranslate): RecoveryLink {
+  return { label: translate("startup.newerDataGuide"), open: () => shell.openExternal(GUIDE_URL) };
+}
+
+async function showUpdateRequired(translate: AppTranslate): Promise<void> {
+  const download = { label: translate("startup.newerDataDownload"), open: () => openDownload() };
+  await showRecoveryLinks(
+    translate("startup.newerDataTitle"),
+    translate("startup.newerDataBody", { version: app.getVersion() }),
+    [...(hasDownloadSource() ? [download] : []), guideLink(translate)],
+    translate("startup.newerDataQuit"),
+  );
 }
 
 async function showLatestDidNotStart(translate: AppTranslate, loopVersion: string): Promise<void> {
-  const { response } = await dialog.showMessageBox({
-    type: "warning",
-    message: translate("startup.newerDataLoopTitle"),
-    detail: translate("startup.newerDataLoopBody", { version: app.getVersion(), loopVersion }),
-    buttons: [
-      translate("startup.newerDataReleases"),
-      translate("startup.newerDataGuide"),
-      translate("startup.newerDataQuit"),
-    ],
-    defaultId: 0,
-    cancelId: 2,
-  });
-  if (response === 0) await shell.openExternal(RELEASES_URL);
-  if (response === 1) await shell.openExternal(GUIDE_URL);
+  const releases = { label: translate("startup.newerDataReleases"), open: () => openUpdateFolder() };
+  await showRecoveryLinks(
+    translate("startup.newerDataLoopTitle"),
+    translate("startup.newerDataLoopBody", { version: app.getVersion(), loopVersion }),
+    [...(hasDownloadSource() ? [releases] : []), guideLink(translate)],
+    translate("startup.newerDataQuit"),
+  );
 }

@@ -56,7 +56,6 @@ import { requestNotificationPermission, showRetainedNotification } from "./deskt
 import {
   developmentUserDataName,
   developmentWorktreeColor,
-  readAnalyticsCaptureUrl,
   readDevelopmentInstanceId,
   readDevelopmentProfile,
   readDevelopmentRemoteDebuggingPort,
@@ -76,6 +75,7 @@ import { agentImportIpcHandlers } from "./ipc/agent-import-handlers";
 import { agentInstructionsIpcHandlers } from "./ipc/agent-instructions-handlers";
 import { agentTemplateIpcHandlers } from "./ipc/agent-template-handlers";
 import { appIpcHandlers } from "./ipc/app-handlers";
+import { appUpdateIpcHandlers } from "./ipc/app-update-handlers";
 import { attachmentIpcHandlers } from "./ipc/attachment-handlers";
 import { backgroundProcessIpcHandlers } from "./ipc/background-process-handlers";
 import { bitwardenConnectorIpcHandlers } from "./ipc/bitwarden-connector-handlers";
@@ -91,9 +91,11 @@ import { customProviderIpcHandlers } from "./ipc/custom-provider-handlers";
 import { registerIpcGroups } from "./ipc/define-ipc-group";
 import { dynamicIslandIpcHandlers } from "./ipc/dynamic-island-handlers";
 import { eventsIpcHandlers } from "./ipc/events-handlers";
+import { explorerIpcHandlers } from "./ipc/explorer-handlers";
 import { githubConnectorIpcHandlers } from "./ipc/github-connector-handlers";
 import { hostAdminIpcHandlers } from "./ipc/host-admin-handlers";
 import { instanceTransferIpcHandlers } from "./ipc/instance-transfer-handlers";
+import { localModelServersIpcHandlers } from "./ipc/local-model-servers-handlers";
 import { localServerIpcHandlers } from "./ipc/local-server-handlers";
 import { macAutomationIpcHandlers } from "./ipc/mac-automation-handlers";
 import { marketplaceAgentIpcHandlers } from "./ipc/marketplace-agent-handlers";
@@ -105,14 +107,17 @@ import { notificationIpcHandlers } from "./ipc/notification-handlers";
 import { onePasswordConnectorIpcHandlers } from "./ipc/onepassword-connector-handlers";
 import { passwordManagersIpcHandlers } from "./ipc/password-managers-handlers";
 import { pluginIpcHandlers } from "./ipc/plugin-handlers";
+import { projectIpcHandlers } from "./ipc/project-handlers";
 import { providerAdminIpcHandlers } from "./ipc/provider-admin-handlers";
 import { providerDetectionIpcHandlers } from "./ipc/provider-detection-handlers";
 import { providerIpcHandlers } from "./ipc/provider-handlers";
+import { replyIpcHandlers } from "./ipc/reply-handlers";
 import { routineFeedIpcHandlers } from "./ipc/routine-feed-handlers";
 import { routineIpcHandlers } from "./ipc/routine-handlers";
 import { routineResultIpcHandlers } from "./ipc/routine-result-handlers";
 import { sharedTableIpcHandlers } from "./ipc/shared-table-handlers";
 import { skillIpcHandlers } from "./ipc/skill-handlers";
+import { slashCommandIpcHandlers } from "./ipc/slash-command-handlers";
 import { storageIpcHandlers } from "./ipc/storage-handlers";
 import { teamIpcHandlers } from "./ipc/team-handlers";
 import { updateIpcHandlers } from "./ipc/update-handlers";
@@ -286,7 +291,6 @@ const inviteLinkOptions = {
 const developmentRemoteDebuggingPort = !app.isPackaged
   ? readDevelopmentRemoteDebuggingPort(process.env.CODEBOT_DEV_REMOTE_DEBUGGING_PORT)
   : null;
-const analyticsCaptureUrl = !app.isPackaged ? readAnalyticsCaptureUrl(process.env.CODEBOT_ANALYTICS_CAPTURE_URL) : null;
 app.commandLine.appendSwitch("disable-features", "FedCm");
 if (developmentRemoteDebuggingPort) {
   app.commandLine.appendSwitch("remote-debugging-port", developmentRemoteDebuggingPort);
@@ -465,7 +469,6 @@ protocol.registerSchemesAsPrivileged([
 let services: ApplicationServices | null = null;
 let activeRemotePrincipalId: string | null = null;
 let centralAuthGeneration = 0;
-let activeAnalyticsPrincipalId: string | null = null;
 let previousCentralAuthStatus: CentralAuthState["status"] | null = null;
 const remoteAccountGate = Semaphore.makeUnsafe(1);
 const macHapticFeedback = new MacHapticFeedback();
@@ -526,6 +529,7 @@ const {
   forwardBitwardenConnectorStatus,
   forwardPasswordManagerStatus,
   forwardVaultState,
+  forwardSlashCommandsChanged,
   forwardHostStatus,
   forwardRemoteDesktopSessions,
   forwardServers,
@@ -536,6 +540,8 @@ const {
   forwardAttachmentImportProgress,
   forwardInstanceTransferUploadProgress,
   forwardOwnerTransfersChanged,
+  forwardProjectEvent,
+  forwardRemoteProjectEvent,
 } = createRendererForwarders({
   getMainWindow: () => windowHolder.current,
   getChatWindows: () => windows.getChatWindows(),
@@ -711,9 +717,8 @@ function registerIpcHandlers({
   browserDock,
   browserView,
   updater,
+  updateFeed,
   setupFile,
-  analyticsPreferences,
-  analyticsInstallId,
   updatePreferenceFile,
   requestedUpdate,
   idleRestart,
@@ -723,6 +728,7 @@ function registerIpcHandlers({
   agentHostSettings,
   agentDefaultsSettings,
   agentFolders,
+  explorer,
   channelFolders,
   agentInstructions,
   browserProfiles,
@@ -744,8 +750,10 @@ function registerIpcHandlers({
   serverTimezone,
   hostTurnLimits,
   serverPersonality,
+  replyRule,
   promptCacheTtl,
   claudeUserSetup,
+  advancedFeatures,
   cacheExpiryCompaction,
   claudeCompactWindow,
   providerEnvironment,
@@ -778,6 +786,8 @@ function registerIpcHandlers({
   acpRegistry,
   providerDetection,
   providerDetectionSettings,
+  localModelServerMonitor,
+  customProviders,
   marketplaceAgents,
   agentTemplates,
   agentImport,
@@ -803,6 +813,7 @@ function registerIpcHandlers({
   workflows,
   workflowGitHub,
   crm,
+  projects,
   routineResults,
 }: ApplicationServices): void {
   const getDialogParent = () => windows.getChatWindows().find((window) => window.isFocused()) ?? windowHolder.current;
@@ -814,7 +825,6 @@ function registerIpcHandlers({
       browser,
       updater,
       setupFile,
-      analyticsPreferences,
       approvalAutomation,
       busyMessageMode,
       agentDefaults,
@@ -833,8 +843,6 @@ function registerIpcHandlers({
       interfaceSize,
       initializeAgent: () => runCauseEffect(agentInitialization.start()),
       appVariant,
-      analyticsCaptureUrl,
-      analyticsInstallId,
       dynamicIslandAvailable: dynamicIsland.available,
       getMainWindow: getDialogParent,
       isMainWindow: (sender) => {
@@ -903,13 +911,20 @@ function registerIpcHandlers({
     ...onePasswordConnectorIpcHandlers({ onePasswordConnector, remoteServers }),
     ...bitwardenConnectorIpcHandlers({ bitwardenConnector, remoteServers }),
     ...passwordManagersIpcHandlers({ passwordManagers, remoteServers, openExternal: openLink }),
+    ...slashCommandIpcHandlers({ service }),
     ...vaultIpcHandlers({ vault, getMainWindow: getDialogParent, translate: language.translate, remoteServers }),
     ...routineFeedIpcHandlers({ routineFeed }),
     ...eventsIpcHandlers({ events, remoteServers }),
+    ...explorerIpcHandlers({
+      explorer,
+      remoteServers,
+      windowOf: (contents) => BrowserWindow.fromWebContents(contents),
+    }),
     ...localServerIpcHandlers({ localServers }),
     ...customProviderIpcHandlers(customProviderChanges),
     ...customAgentIpcHandlers({ changes: customAgentChanges, remoteServers }),
     ...acpRegistryIpcHandlers(acpRegistry, remoteServers),
+    ...localModelServersIpcHandlers({ monitor: localModelServerMonitor, customProviders }),
     ...providerDetectionIpcHandlers({
       detection: providerDetection,
       settings: providerDetectionSettings,
@@ -944,6 +959,7 @@ function registerIpcHandlers({
       idleRestart,
       describeReadiness: describeRestartReadiness,
     }),
+    ...appUpdateIpcHandlers({ updateFeed }),
     ...notificationIpcHandlers({
       notificationPreference,
       translate: language.translate,
@@ -965,6 +981,7 @@ function registerIpcHandlers({
       takePendingListing: () => takePendingDeepLink("marketplace")?.link ?? null,
     }),
     ...memoryIpcHandlers({ service, remoteServers }),
+    ...replyIpcHandlers({ replyRule, service, remoteServers }),
     ...sharedTableIpcHandlers({ service, remoteServers }),
     ...routineIpcHandlers({ service, remoteServers }),
     ...workflowIpcHandlers({
@@ -978,6 +995,13 @@ function registerIpcHandlers({
       translate: language.translate,
     }),
     ...crmIpcHandlers({ crm, remoteServers }),
+    ...projectIpcHandlers({
+      projects,
+      remoteServers,
+      sender: () => host.conversationSender(),
+      getMainWindow: getDialogParent,
+      translate: language.translate,
+    }),
     ...routineResultIpcHandlers({ routineResults, remoteServers }),
     ...channelMemoryIpcHandlers({ service, remoteServers }),
     ...channelRoutineIpcHandlers({ service, remoteServers }),
@@ -1006,6 +1030,7 @@ function registerIpcHandlers({
       machineAlerts,
       promptCacheTtl,
       claudeUserSetup,
+      advancedFeatures,
       cacheExpiryCompaction,
       claudeCompactWindow,
       providerEnvironment,
@@ -1209,14 +1234,6 @@ function forwardCentralAuth(state: CentralAuthState): void {
     previousCentralAuthStatus === "error" ||
     previousCentralAuthStatus === "signed_in";
   previousCentralAuthStatus = state.status;
-  if (state.status === "signed_in") {
-    if (activeAnalyticsPrincipalId && activeAnalyticsPrincipalId !== state.user.id) services?.analytics.clear();
-    activeAnalyticsPrincipalId = state.user.id;
-    services?.analyticsPreferences.followAccount(state.user);
-  } else if (state.status === "signed_out") {
-    if (activeAnalyticsPrincipalId) services?.analytics.clear();
-    activeAnalyticsPrincipalId = null;
-  }
   services?.host.unbindChangedAccount(state.status === "signed_in" ? state.user : null);
   const generation = ++centralAuthGeneration;
   void runCauseEffect(
@@ -1260,7 +1277,6 @@ function forwardCentralAuth(state: CentralAuthState): void {
             host.unbindChangedAccount(null);
             return;
           }
-          services?.analytics.flushPending();
         }
         if (services)
           yield* services.remoteServers
@@ -1474,14 +1490,12 @@ if (!hasSingleInstanceLock) {
         windows,
         appIconPath,
         appVariant,
-        analyticsCaptureUrl,
         developmentRemoteRole,
         developmentTestClientEnabled,
         serverMode,
         localServerChild,
         localServerControl,
         systemTimezone,
-        previousUncleanExit,
         macHapticFeedback,
         teardown,
         forwardCentralAuth,
@@ -1502,7 +1516,6 @@ if (!hasSingleInstanceLock) {
         teardown.push(0, "app archive watch", watchAppArchive(process.resourcesPath, built.language.translate));
       }
       const appliedAccount = built.appliedAccount;
-      activeAnalyticsPrincipalId = centralAuthPrincipalId(appliedAccount);
       activeRemotePrincipalId = centralAuthPrincipalId(appliedAccount);
       const currentAccount = built.centralAuth.getState();
       if (currentAccount.status === "signed_out" && !localServerChild)
@@ -1512,8 +1525,6 @@ if (!hasSingleInstanceLock) {
         centralAuthPrincipalId(currentAccount) !== centralAuthPrincipalId(appliedAccount)
       ) {
         forwardCentralAuth(currentAccount);
-      } else if (currentAccount.status === "signed_in") {
-        built.analyticsPreferences.followAccount(currentAccount.user);
       }
       const {
         service,
@@ -1540,6 +1551,8 @@ if (!hasSingleInstanceLock) {
       });
       service.on("event", (event) => trace.observeAgentEvent(event));
       service.on("event", (event) => forwardAgentEvent("local", event));
+      built.projects.subscribe((event) => forwardProjectEvent("local", event));
+      built.remoteServers.on("projectEvent", (serverId, event) => forwardRemoteProjectEvent(serverId, event));
       let webhookAgentIds = new Set(service.listAgents().map((agent) => agent.id));
       const onRoutineEvent = (event: AgentEvent): void => {
         switch (event.type) {
@@ -1588,6 +1601,7 @@ if (!hasSingleInstanceLock) {
       service.on("toolUsage", (usage) => built.analytics.handleToolUsage(usage));
       service.on("workflowRun", (end) => built.analytics.handleWorkflowRun(end));
       service.on("liveVoice", forwardVoiceLiveEvent);
+      service.on("slashCommandsChanged", forwardSlashCommandsChanged);
       built.browser.onSiteVisited((visit) => built.analytics.handleSiteVisit(visit));
       sidebarLayout.on("changed", (layout) => forwardAgentEvent("local", { type: "sidebar-layout-changed", layout }));
       built.sidebarPins.subscribe((key) => {

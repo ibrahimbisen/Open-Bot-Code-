@@ -202,7 +202,6 @@ export const messages = {
   "settings.keepRemoteSessions.title": "Szybkie połączenie z serwerami",
   "settings.keepRemoteSessions.description":
     "Zachowuj połączenie z dołączonymi serwerami między uruchomieniami. CodeBot startuje około sekundy szybciej. Gdy zamkniesz CodeBot, usługa CodeBot nie zamyka połączenia.",
-  "settings.permissions.title": "Uprawnienia",
   "settings.notifications.whatYouHear": "O czym dostajesz powiadomienia",
   "settings.notifications.allDevices": "Wszystkie moje urządzenia",
   "settings.notifications.thisComputer": "Ten komputer",
@@ -315,10 +314,6 @@ export const messages = {
   "settings.agentDock.agents.description": "Agenci serwera {server}. Każdy serwer ma własny dok.",
   "settings.agentDock.agents.empty": "Ten serwer nie ma jeszcze agentów.",
   "settings.analytics.title": "Łącz analitykę z moim kontem",
-  "settings.analytics.description":
-    "Włączone: metadane użycia i niezawodności trafiają do samodzielnie hostowanej analityki CodeBot wraz z ID konta i adresem e-mail, a także strony odwiedzane przez Ciebie i Twoich agentów, użycie narzędzi i dzienne podsumowanie konfiguracji. Wyłączone: trafia tylko podstawowe użycie, takie jak tury i liczba tokenów, z losowym ID instalacji. Czaty, pliki i prompty nigdy nie są wysyłane.",
-  "settings.analytics.webDescription":
-    "Włączone: metadane użycia i niezawodności trafiają do samodzielnie hostowanej analityki CodeBot wraz z ID konta i adresem e-mail. Wyłączone: te same metadane trafiają tylko z losowym ID instalacji. Czaty, pliki i prompty nigdy nie są wysyłane. To ustawienie dotyczy tej przeglądarki.",
   "settings.tab.general.title": "Ogólne",
   "settings.tab.general.description": "Określ, jak działają czaty i co udostępnia CodeBot.",
   "settings.tab.agents.title": "Agenci",

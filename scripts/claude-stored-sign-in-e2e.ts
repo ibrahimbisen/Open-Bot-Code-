@@ -1,15 +1,17 @@
 import assert from "node:assert/strict";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { chmod, mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { runCauseEffect } from "../src/backend/effect-boundary";
 import { BUILT_IN_PROVIDER_DRIVERS, NO_PROVIDER_CREDENTIALS } from "../src/backend/provider-drivers";
+import { standInPath, writeStandInScript } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/claude-stored-sign-in-e2e");
 const REPORT = join(OUT, "report.json");
 const root = await mkdtemp(join(tmpdir(), "codebot-claude-stored-sign-in-"));
-const executable = join(root, "claude.cjs");
+const executable = standInPath(join(root, "claude.cjs"));
 const logPath = join(root, "claude.jsonl");
 for (const name of ["ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CONFIG_DIR"]) delete process.env[name];
 process.env.FAKE_CLAUDE_LOG = logPath;
@@ -89,8 +91,7 @@ const SIGNED_OUT = { account: null, requiresOpenaiAuth: false };
 
 const report: { cases: CaseResult[]; result?: "pass" | "fail"; error?: string } = { cases: [] };
 try {
-  await writeFile(executable, FAKE_CLAUDE);
-  await chmod(executable, 0o755);
+  await writeStandInScript(executable, FAKE_CLAUDE);
 
   const stored = await runCase("stored", { credentials: credential("refresh-e2e"), settings });
   report.cases.push(stored);
@@ -128,7 +129,7 @@ try {
   report.error = error instanceof Error ? error.message : String(error);
   throw error;
 } finally {
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   mkdirSync(OUT, { recursive: true });
   writeFileSync(REPORT, `${JSON.stringify(report, null, 2)}\n`);
 }

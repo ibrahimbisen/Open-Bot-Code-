@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { AgentClient } from "../src/backend/agent-client";
 import { requireProviderDriver } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/pi-idle-release-e2e");
 
@@ -54,7 +56,7 @@ async function step(name: string, threads: Record<string, string>): Promise<void
 }
 
 try {
-  const executable = join(root, "bin", "pi");
+  const executable = standInPath(join(root, "bin", "pi"));
   await installFakeAgent(executable, "pi-idle", { FAKE_LOG: log, FAKE_DIR: root });
   const client = requireProviderDriver("deepseek").createClient(
     { executable, version: "1.4.0", source: "managed" },
@@ -103,6 +105,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }

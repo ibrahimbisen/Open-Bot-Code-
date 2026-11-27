@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { sourceText } from "@codebot/i18n/source";
@@ -17,6 +17,8 @@ import {
   requireProviderDriver,
 } from "../src/backend/provider-drivers";
 import { installFakeAgent, readJsonl, runTurn, startThread, stopClients } from "./provider-fakes/host";
+import { standInPath } from "./stand-in-program";
+import { removeTestFolder } from "./test-folder";
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/opencode-service-failure-e2e");
 const WAIT_MS = 30_000;
@@ -56,7 +58,7 @@ async function startWithActivationFailures(
 ): Promise<StartReport> {
   const folder = join(root, name);
   const log = join(folder, "fake.jsonl");
-  const executable = join(folder, "runtime", "opencode", "bin", "opencode");
+  const executable = standInPath(join(folder, "runtime", "opencode", "bin", "opencode"));
   await installFakeAgent(executable, "opencode-plugin-activation", {
     FAKE_LOG: log,
     FAKE_OPENCODE_ACTIVATION_FAILURES: String(activationFailures),
@@ -118,7 +120,7 @@ async function startWithActivationFailures(
 try {
   const workspace = join(root, "workspace");
   await mkdir(workspace);
-  const executable = join(root, "opencode", "bin", "opencode");
+  const executable = standInPath(join(root, "opencode", "bin", "opencode"));
   await installFakeAgent(executable, "opencode-service-failure");
   const cli: AgentCliInfo = { executable, version: "2.1.3", source: "managed" };
   const client = requireProviderDriver("opencode").createClient(cli, 10_000, NO_PROVIDER_CREDENTIALS);
@@ -158,6 +160,6 @@ try {
   await stopClients(clients);
   await mkdir(OUT, { recursive: true });
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
-  await rm(root, { recursive: true, force: true });
+  await removeTestFolder(root);
 }
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

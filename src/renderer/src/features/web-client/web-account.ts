@@ -4,7 +4,6 @@ import { currentText } from "@codebot/ui/text";
 
 export interface WebAccountCalls {
   updateName: (name: string) => Promise<void>;
-  updateAnalytics: (enabled: boolean, ageMs: number) => Promise<boolean | null>;
   updateAvatar: (image: AvatarImageInput | null) => Promise<void>;
   setChatColor: (color: AvatarColor | null) => Promise<void>;
   listSessions: () => Promise<AccountSession[]>;
@@ -45,12 +44,6 @@ export function createWebAccountCalls(
     async updateName(name) {
       await request("v1/me/profile", { method: "PATCH", body: JSON.stringify({ name }) });
       await onAccountChanged();
-    },
-    async updateAnalytics(enabled, ageMs) {
-      const response = await request("v1/me/analytics", { method: "PUT", body: JSON.stringify({ enabled, ageMs }) });
-      const user = await response.json().catch(() => null);
-      await onAccountChanged();
-      return isDynamicRecord(user) && isBoolean(user.analyticsEnabled) ? user.analyticsEnabled : null;
     },
     async updateAvatar(image) {
       await request(

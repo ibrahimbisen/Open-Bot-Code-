@@ -6,6 +6,7 @@ import { WHATSAPP_CONNECTOR_CAPABILITY } from "@codebot/contracts/team-protocol/
 import { resolveCreationModel } from "@codebot/ui/features/agents/agent-creation-model";
 import { createMemo } from "solid-js";
 import { createSimpleContext } from "../../simple-context";
+import { useAdvancedFeatures } from "../advanced/advanced-features-context";
 import { useAgents } from "../agents/agents-context";
 import { useCustomAgents } from "../custom-agents/custom-agents-context";
 import { useCustomProviders } from "../custom-providers/custom-providers-context";
@@ -16,6 +17,7 @@ import { useServers } from "../servers/servers-context";
 import { useSidebar } from "../sidebar/sidebar-context";
 import { hostBitwardenConnectorPort } from "./bitwarden-connector-port";
 import {
+  CHAT_APP_CONNECTOR_IDS,
   type ConnectorRegistry,
   createConnectorRegistry,
   createConnectorSet,
@@ -32,6 +34,7 @@ const context = createSimpleContext({
   name: "ConnectorsProvider",
   init: () => {
     const { activeServer, hostStatus } = useServers();
+    const advanced = useAdvancedFeatures();
     const { publishLocalServer } = useServerSettings();
     const { agentList, agentStatus, modelOptions, serverSetupChoice, developmentCreation } = useAgents();
     const { setupState } = useSetup();
@@ -111,7 +114,11 @@ const context = createSimpleContext({
         },
         options,
       );
-      return createConnectorRegistry(server, { computer, server: host });
+      return createConnectorRegistry(
+        server,
+        { computer, server: host },
+        (id) => CHAT_APP_CONNECTOR_IDS.has(id) && !advanced.enabled("chatApps"),
+      );
     };
     return {
       active: registry(activeServer),
