@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import { chmod, mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
@@ -288,7 +289,6 @@ const answer = (message) => {
     case "config/batchWrite": return write({ id: message.id, result: {} });
     case "thread/start": {
       const id = prefix + "thread-" + (++threads);
-      const id = prefix + "thread-" + (++threads);
       if (params.cwd) threadFolders.set(id, params.cwd);
       write({ id: message.id, result: { thread: { id, turns: [] } } });
       return reportSlashCommands(id);
@@ -339,6 +339,13 @@ process.stdin.on("data", (chunk) => {
 process.stdin.on("end", () => process.exit(0));
 `;
 
+// A syntax error in the generated script only shows in the app as "Codex CLI was found but could not be started".
+function assertFakeCodexStarts(path: string): void {
+  const result = spawnSync(process.execPath, [path, "--version"], { encoding: "utf8", timeout: 30_000 });
+  if (result.status === 0) return;
+  throw new Error(`The fake Codex script does not start: ${result.stderr || result.error?.message || result.status}`);
+}
+
 async function writeWindowsLauncher(directory: string): Promise<string> {
   const launcher = join(directory, "codex.cmd");
   await writeFile(launcher, `@"${process.execPath}" "%~dp0codex" %*\r\n`);
@@ -354,6 +361,7 @@ export async function writeFakeCodex(directory: string, options: FakeCodexOption
   await writeFile(join(directory, "package.json"), '{ "type": "commonjs" }\n');
   await chmod(path, 0o755);
   await writeFile(logPath, "");
+  assertFakeCodexStarts(path);
   const executable = process.platform === "win32" ? await writeWindowsLauncher(directory) : path;
   return {
     logPath,
