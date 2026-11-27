@@ -1,0 +1,256 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  create-release:
+    name: Create draft release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun and install dependencies
+        uses: ./.github/actions/setup-bun
+        with:
+          install: ignore-scripts
+
+      - name: Compute the version
+        id: version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          version="$(bun scripts/codebot/ci-version.ts "$BUILD_NUMBER")"
+          echo "Release version: $version"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if draft="$(gh release view "v$VERSION" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft 2>/dev/null)"; then
+            if [ "$draft" != "true" ]; then
+              echo "::error::Release v$VERSION is already published."
+              exit 1
+            fi
+            gh release delete "v$VERSION" --repo "$GITHUB_REPOSITORY" --yes
+          fi
+          gh release create "v$VERSION" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "OpenBot Code v$VERSION" \
+            --generate-notes \
+            --draft
+
+  build-macos:
+    name: Build macOS
+    needs: create-release
+    runs-on: macos-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.create-release.outputs.version }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun and install dependencies
+        uses: ./.github/actions/setup-bun
+
+      - name: Set the release version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: test "$(bun scripts/codebot/ci-version.ts "$BUILD_NUMBER" --write)" = "$VERSION"
+
+      - name: Import the signing certificate
+        id: signing
+        env:
+          CSC_LINK_BASE64: ${{ secrets.CSC_LINK_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          if [ -n "$CSC_LINK_BASE64" ] && [ -n "$CSC_KEY_PASSWORD" ]; then
+            certificate="$RUNNER_TEMP/codebot-signing.p12"
+            printf '%s' "$CSC_LINK_BASE64" | base64 --decode > "$certificate"
+            echo "CSC_LINK=$certificate" >> "$GITHUB_ENV"
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+            if [ -n "$APPLE_ID" ] && [ -n "$APPLE_APP_SPECIFIC_PASSWORD" ] && [ -n "$APPLE_TEAM_ID" ]; then
+              echo "notarize=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "::warning::The Apple notarization secrets are not set. The macOS app is signed but not notarized."
+              echo "notarize=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "::warning::The macOS signing secrets are not set. The macOS app is not signed and cannot install updates by itself."
+            echo "CSC_IDENTITY_AUTO_DISCOVERY=false" >> "$GITHUB_ENV"
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "notarize=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Prepare the voice runtime
+        run: bun run voice:prepare-runtime
+
+      - name: Install the Computer Use driver
+        run: bun run prepare:cua-driver
+
+      - name: Build the app
+        run: bun run build
+
+      - name: Package the DMG and the update ZIP
+        env:
+          SIGNED: ${{ steps.signing.outputs.signed }}
+          NOTARIZE: ${{ steps.signing.outputs.notarize }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          if [ "$SIGNED" = "true" ]; then
+            bun scripts/codebot/electron-builder.ts --mac --arm64 --publish never "--config.mac.notarize=$NOTARIZE"
+          else
+            bun scripts/codebot/electron-builder.ts --mac --arm64 --publish never --config.mac.identity=null --config.mac.notarize=false
+          fi
+
+      - name: Verify the update files
+        run: bun run verify:update-artifacts macos
+
+      - name: Upload the macOS files to the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          shopt -s nullglob
+          files=(dist/*.dmg dist/*.dmg.blockmap dist/*.zip dist/*.zip.blockmap dist/latest-mac.yml)
+          gh release upload "v$VERSION" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber
+
+  build-windows:
+    name: Build Windows
+    needs: create-release
+    runs-on: windows-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.create-release.outputs.version }}
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun and install dependencies
+        uses: ./.github/actions/setup-bun
+
+      - name: Set the release version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: test "$(bun scripts/codebot/ci-version.ts "$BUILD_NUMBER" --write)" = "$VERSION"
+
+      - name: Prepare the voice runtime
+        run: bun run voice:prepare-runtime
+
+      - name: Install the Computer Use driver
+        run: bun scripts/install-cua-driver.ts win32 x64
+
+      - name: Build the app
+        run: bun run build
+
+      - name: Package the installer
+        run: bun scripts/codebot/electron-builder.ts --win nsis --x64 --publish never
+
+      - name: Verify the update files
+        run: bun run verify:update-artifacts windows
+
+      - name: Upload the Windows files to the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          shopt -s nullglob
+          files=(dist/*.exe dist/*.exe.blockmap dist/latest.yml)
+          gh release upload "v$VERSION" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber
+
+  build-linux:
+    name: Build Linux
+    needs: create-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.create-release.outputs.version }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun and install dependencies
+        uses: ./.github/actions/setup-bun
+
+      - name: Set the release version
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: test "$(bun scripts/codebot/ci-version.ts "$BUILD_NUMBER" --write)" = "$VERSION"
+
+      - name: Prepare the voice runtime
+        run: bun run voice:prepare-runtime
+
+      - name: Install the Computer Use driver
+        run: bun scripts/install-cua-driver.ts linux x64
+
+      - name: Build the app
+        run: bun run build
+
+      - name: Package the AppImage
+        run: bun scripts/codebot/electron-builder.ts --linux AppImage --x64 --publish never
+
+      - name: Verify the update files
+        run: bun run verify:update-artifacts linux
+
+      - name: Upload the Linux files to the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          shopt -s nullglob
+          files=(dist/*.AppImage dist/latest-linux.yml)
+          gh release upload "v$VERSION" "${files[@]}" --repo "$GITHUB_REPOSITORY" --clobber
+
+  publish-release:
+    name: Publish release
+    needs: [create-release, build-macos, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.create-release.outputs.version }}
+        run: gh release edit "v$VERSION" --repo "$GITHUB_REPOSITORY" --draft=false --latest

@@ -10,6 +10,7 @@ import {
   externalLinkAppName,
   GROK_BOT_EXPORT_URL,
 } from "@codebot/contracts/ipc";
+import { RELEASES_PAGE_URL } from "@codebot/contracts/release-repository";
 import type { AppTranslate } from "@codebot/i18n";
 import { sourceText } from "@codebot/i18n/source";
 import { Effect } from "effect";
@@ -67,7 +68,7 @@ const EXTERNAL_DESTINATIONS: Record<
   "hermes-install": "https://hermes-agent.nousresearch.com/docs/getting-started/installation",
   feedback: "https://github.com/your-org/codebot/discussions",
   "report-problem": () => bugReportFormUrl(feedbackFacts()),
-  changelog: "https://github.com/your-org/codebot/releases",
+  changelog: RELEASES_PAGE_URL,
   guides: "https://github.com/your-org/codebot/tree/main/docs",
   discord: "https://github.com/your-org/codebot/discussions",
   github: "https://github.com/your-org/codebot",

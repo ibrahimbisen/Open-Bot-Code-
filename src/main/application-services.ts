@@ -176,6 +176,7 @@ import { AgentTemplateService } from "./agent-template-service";
 import { HostAnalytics } from "./analytics";
 import { catalogPluginSlug, loadCatalogPluginServers } from "./analytics-plugin-catalog";
 import { AppBehaviorService } from "./app-behavior-service";
+import { installsUpdatesInPlace, readMacSignature } from "./app-update/mac-signature";
 import {
   PROVIDER_BLOCKLIST_FILE,
   readBuildUpdateUrl,
@@ -259,6 +260,7 @@ import {
   readDevelopmentHostEmail,
   startDevelopmentRemoteRole,
 } from "./development-remote-bootstrap";
+import { openReleaseDownload } from "./download-url";
 import { performDynamicIslandCriticalAction } from "./dynamic-island-actions";
 import { DynamicIslandFailed, DynamicIslandWindowController, toDynamicIslandFailed } from "./dynamic-island-window";
 import { createDesktopExplorer } from "./explorer/explorer-desktop";
@@ -3938,6 +3940,7 @@ export async function createApplicationServices({
   let updaterEnabled = updatesEnabled;
   let updaterCacheDirectory: string | undefined;
   let appImagePath: string | undefined;
+  let manualDownload: ((version: string) => Promise<void>) | undefined;
   if (updatesEnabled && hostedInstaller) {
     updateAdapter = new HostedUpdateAdapter({
       currentVersion,
@@ -3951,6 +3954,14 @@ export async function createApplicationServices({
       updateAdapter = realAdapter;
       updaterCacheDirectory = electronUpdaterCacheDirectory();
       appImagePath = process.env.APPIMAGE?.trim() || undefined;
+      const signature =
+        process.platform === "darwin" ? await readMacSignature(join(app.getPath("exe"), "..", "..", "..")) : null;
+      if (!installsUpdatesInPlace(process.platform, signature)) {
+        logger.info("This macOS build has no Developer ID signature. Updates open the download page.");
+        manualDownload = async (version) => {
+          await openReleaseDownload(version);
+        };
+      }
     } else {
       updaterEnabled = false;
     }
@@ -4000,6 +4011,7 @@ export async function createApplicationServices({
       : {}),
     appImagePath,
     updaterCacheDirectory,
+    manualDownload,
   });
   updateFeed.connect(updateAdapter, updater);
   teardown.push(TEARDOWN_ORDER.updater, "the update service", () => Effect.runPromise(updater.stop()));

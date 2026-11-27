@@ -3,7 +3,8 @@ import type { messages as source } from "../en/appUpdate";
 
 export const messages = {
   "appUpdate.server.title": "更新服务器",
-  "appUpdate.server.description": "你服务器上存放 OpenBot Code 安装程序和更新文件的文件夹。",
+  "appUpdate.server.description":
+    "留空则从 OpenBot Code 的 GitHub 发布页获取更新。要使用你自己的服务器，请输入存放安装程序和更新文件的文件夹 URL。",
   "appUpdate.server.urlLabel": "更新服务器 URL",
   "appUpdate.server.placeholder": "https://example.com/codebot-updates/",
   "appUpdate.server.source.settings": "OpenBot Code 从此 URL 获取更新。",

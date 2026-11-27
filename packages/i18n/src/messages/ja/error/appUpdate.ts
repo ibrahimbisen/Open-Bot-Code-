@@ -10,4 +10,6 @@ export const messages = {
     "アップデートサーバーの URL には https:// を使ってください。http:// は、同じネットワーク内のコンピューターにのみ許可されます。",
   "error.appUpdate.urlNotSaved":
     "OpenBot Code はアップデートサーバーの URL を保存できませんでした。もう一度お試しください。",
+  "error.appUpdate.manualDownload":
+    "この Mac ビルドは署名されていないため、OpenBot Code はアップデートを自動でインストールできません。［ダウンロード］を選択してダウンロードページを開き、新しいバージョンを手動でインストールしてください。",
 } as const satisfies PartialTranslation<typeof source>;

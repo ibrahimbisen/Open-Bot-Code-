@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { app, shell } from "electron";
 import { installerDownloadUrl } from "./app-update/installer-download";
+import { releasePageUrl } from "./app-update/release-repository";
 import { resolveInstalledUpdateFeed, UPDATE_FEED_FILE } from "./app-update/update-feed";
 
 export function updateFolderUrl(): string | null {
@@ -31,6 +32,16 @@ export async function openDownload(version?: string | null): Promise<boolean> {
 export async function openUpdateFolder(): Promise<boolean> {
   const url = updateFolderUrl();
   if (url === null) return false;
+  await shell.openExternal(url);
+  return true;
+}
+
+export async function openReleaseDownload(version?: string | null): Promise<boolean> {
+  const feedUrl = updateFolderUrl();
+  if (feedUrl === null) return false;
+  const url =
+    releasePageUrl(feedUrl, version) ??
+    (await installerDownloadUrl({ feedUrl, version, platform: process.platform, arch: process.arch }));
   await shell.openExternal(url);
   return true;
 }

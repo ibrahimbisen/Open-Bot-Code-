@@ -1,3 +1,4 @@
+import { RELEASES_PAGE_URL } from "@codebot/contracts/release-repository";
 import { toast } from "@codebot/ui";
 import { WhatsNewDialog } from "@codebot/ui/features/updates/WhatsNewDialog";
 import { useText } from "@codebot/ui/text";
@@ -26,7 +27,7 @@ export function WhatsNewOverlay(props: { ready: boolean }) {
       onRetry={whatsNew.retry}
       onOpenChangelog={() => {
         void appPort()
-          .openUrl("https://github.com/your-org/codebot/releases")
+          .openUrl(RELEASES_PAGE_URL)
           .catch((error: unknown) => toast.error(errorMessage(error, t("update.whatsNew.changelogFailed")), { error }));
       }}
     />

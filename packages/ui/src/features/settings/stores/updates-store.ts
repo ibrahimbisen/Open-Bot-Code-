@@ -54,7 +54,10 @@ export function createSettingsUpdatesStore(props: UpdatesStoreProps) {
       case "checking":
         return t("settings.updates.status.checking");
       case "available":
-        return t("settings.updates.status.available", { target: targetUpdate() });
+        return errorMessage(
+          props.updateStatus.message,
+          t("settings.updates.status.available", { target: targetUpdate() }),
+        );
       case "downloading":
         return props.updateStatus.progress === null
           ? t("settings.updates.status.downloading", { target: targetUpdate() })

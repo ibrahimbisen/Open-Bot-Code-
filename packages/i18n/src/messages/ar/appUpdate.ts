@@ -3,7 +3,8 @@ import type { messages as source } from "../en/appUpdate";
 
 export const messages = {
   "appUpdate.server.title": "خادم التحديث",
-  "appUpdate.server.description": "المجلد على خادمك الذي يحتوي على مثبّتات OpenBot Code وملفات التحديث.",
+  "appUpdate.server.description":
+    "اترك هذا الحقل فارغًا للحصول على التحديثات من إصدارات OpenBot Code على GitHub. لاستخدام خادمك الخاص، أدخل عنوان URL للمجلد الذي يحتوي على المثبّتات وملفات التحديث.",
   "appUpdate.server.urlLabel": "عنوان URL لخادم التحديث",
   "appUpdate.server.placeholder": "https://example.com/codebot-updates/",
   "appUpdate.server.source.settings": "يحصل OpenBot Code على التحديثات من عنوان URL هذا.",

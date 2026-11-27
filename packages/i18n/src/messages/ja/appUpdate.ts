@@ -3,7 +3,8 @@ import type { messages as source } from "../en/appUpdate";
 
 export const messages = {
   "appUpdate.server.title": "アップデートサーバー",
-  "appUpdate.server.description": "サーバー上の、OpenBot Code のインストーラーとアップデートファイルがあるフォルダー。",
+  "appUpdate.server.description":
+    "空欄のままにすると、OpenBot Code の GitHub リリースからアップデートを取得します。独自のサーバーを使うには、インストーラーとアップデートファイルがあるフォルダーの URL を入力してください。",
   "appUpdate.server.urlLabel": "アップデートサーバーの URL",
   "appUpdate.server.placeholder": "https://example.com/codebot-updates/",
   "appUpdate.server.source.settings": "OpenBot Code はこの URL からアップデートを取得します。",

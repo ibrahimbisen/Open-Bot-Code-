@@ -9,4 +9,6 @@ export const messages = {
   "error.appUpdate.urlInsecure":
     "Gebruik https:// voor de URL van de updateserver. http:// is alleen toegestaan voor een computer in je eigen netwerk.",
   "error.appUpdate.urlNotSaved": "OpenBot Code kon de URL van de updateserver niet opslaan. Probeer het opnieuw.",
+  "error.appUpdate.manualDownload":
+    "Deze Mac-build is niet ondertekend, dus OpenBot Code kan updates niet zelf installeren. Kies Downloaden om de downloadpagina te openen en installeer de nieuwe versie daarna zelf.",
 } as const satisfies PartialTranslation<typeof source>;

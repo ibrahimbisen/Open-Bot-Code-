@@ -11,6 +11,7 @@ import type {
   UpdateCustomProviderInput,
 } from "@codebot/contracts/ipc";
 import { decodeRegistryEntries, decodeRegistryInstallResult, decodeRegistryOperations } from "@codebot/contracts/ipc";
+import { RELEASES_PAGE_URL } from "@codebot/contracts/release-repository";
 import { ACP_REGISTRY_ROUTES } from "@codebot/contracts/team-protocol/acp-registry-v1";
 import { CLAUDE_API_KEY_CAPABILITY } from "@codebot/contracts/team-protocol/claude-api-key-v1";
 import { CODEX_API_KEY_CAPABILITY } from "@codebot/contracts/team-protocol/codex-api-key-v1";
@@ -148,7 +149,7 @@ const WEB_EXTERNAL_DESTINATIONS: Partial<Record<ExternalDestination, string>> = 
   "opencode-auth": "https://opencode.ai/auth",
   feedback: "https://github.com/your-org/codebot/discussions",
   "report-problem": bugReportFormUrl({ platform: "Web client" }),
-  changelog: "https://github.com/your-org/codebot/releases",
+  changelog: RELEASES_PAGE_URL,
   guides: "https://github.com/your-org/codebot/tree/main/docs",
   discord: "https://github.com/your-org/codebot/discussions",
 };

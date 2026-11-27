@@ -69,6 +69,7 @@
     "./app-minimum-version": "./src/app-minimum-version.ts",
     "./marketplace-links": "./src/marketplace-links.ts",
     "./plugin-links": "./src/plugin-links.ts",
+    "./release-repository": "./src/release-repository.ts",
     "./release-version": "./src/release-version.ts",
     "./runtime-values": "./src/runtime-values.ts",
     "./server-setup": "./src/server-setup.ts",

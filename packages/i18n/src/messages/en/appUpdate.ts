@@ -3,7 +3,7 @@ import { defineMessages } from "../../message";
 export const messages = defineMessages("appUpdate", {
   "appUpdate.server.title": "Update server",
   "appUpdate.server.description":
-    "The folder on your server that has the OpenBot Code installers and the update files.",
+    "Leave this empty to get updates from the GitHub releases of OpenBot Code. To use your own server, enter the URL of the folder that has the installers and the update files.",
   "appUpdate.server.urlLabel": "Update server URL",
   "appUpdate.server.placeholder": "https://example.com/codebot-updates/",
   "appUpdate.server.source.settings": "OpenBot Code gets updates from this URL.",

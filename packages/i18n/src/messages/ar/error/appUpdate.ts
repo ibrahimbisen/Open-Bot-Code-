@@ -8,4 +8,6 @@ export const messages = {
   "error.appUpdate.urlInsecure":
     "استخدم https:// لعنوان URL لخادم التحديث. يُسمح بـ http:// فقط لكمبيوتر على شبكتك الخاصة.",
   "error.appUpdate.urlNotSaved": "تعذّر على OpenBot Code حفظ عنوان URL لخادم التحديث. حاول مرة أخرى.",
+  "error.appUpdate.manualDownload":
+    "إصدار Mac هذا غير موقّع، لذلك لا يستطيع OpenBot Code تثبيت التحديثات بنفسه. اختر تنزيل لفتح صفحة التنزيل، ثم ثبّت الإصدار الجديد يدويًا.",
 } as const satisfies PartialTranslation<typeof source>;

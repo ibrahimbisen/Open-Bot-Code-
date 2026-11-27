@@ -145,6 +145,7 @@ interface UpdateServiceOptions {
   installRecordPath?: string | undefined;
   notInstalledVersion?: string | null | undefined;
   updaterCacheDirectory?: string | undefined;
+  manualDownload?: ((version: string) => Promise<void>) | undefined;
   initialCheckDelayMs?: number;
   checkIntervalMs?: number;
   checkTimeoutMs?: number;
@@ -203,6 +204,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       | "handoverPath"
       | "installRecordPath"
       | "logDirectory"
+      | "manualDownload"
       | "notInstalledVersion"
       | "redactLog"
       | "shipItDirectory"
@@ -395,7 +397,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     enabled: boolean,
   ) {
     this.#autoDownload = enabled;
-    if (enabled && this.#active && this.#status.phase === "available") {
+    if (enabled && !this.#options.manualDownload && this.#active && this.#status.phase === "available") {
       yield* Effect.forkIn(this.downloadUpdate(), this.#workScope, { startImmediately: true });
     }
   });
@@ -533,7 +535,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
           });
         }
       }
-      if (this.#autoDownload && this.#status.phase === "available")
+      if (this.#autoDownload && !this.#options.manualDownload && this.#status.phase === "available")
         yield* Effect.forkIn(this.downloadUpdate(), this.#workScope, { startImmediately: true });
       return this.getStatus();
     });
@@ -573,6 +575,12 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
     return Effect.gen({ self: this }, function* () {
       if (this.#managedByHost) return this.getStatus();
       if (!this.#active || this.#teardownCommitted || !this.#canDownload()) return this.getStatus();
+      const { manualDownload } = this.#options;
+      if (manualDownload) {
+        const version = this.#status.availableVersion;
+        if (version !== null) yield* updateIO(() => manualDownload(version));
+        return this.getStatus();
+      }
       if (this.#downloadInFlight) return this.getStatus();
       this.#downloadInFlight = true;
       const generation = ++this.#downloadGeneration;
@@ -799,7 +807,7 @@ export class UpdateService extends EventEmitter<UpdateServiceEvents> {
       phase: "available",
       availableVersion: version,
       progress: null,
-      message: null,
+      message: this.#options.manualDownload ? MANUAL_DOWNLOAD_MESSAGE : null,
       errorCode: null,
       checkedAt: new Date().toISOString(),
     });
@@ -943,6 +951,7 @@ const CHECK_OFFLINE_MESSAGE = sourceText("error.update.checkOffline");
 const CHECK_SERVICE_MESSAGE = sourceText("error.update.checkUnavailable");
 const CHECK_NO_RELEASE_MESSAGE = sourceText("error.update.checkNoRelease");
 const NO_UPDATE_SERVER_MESSAGE = sourceText("error.appUpdate.noServer");
+const MANUAL_DOWNLOAD_MESSAGE = sourceText("error.appUpdate.manualDownload");
 
 const OFFLINE_ERROR_CODES = [
   "EAI_AGAIN",

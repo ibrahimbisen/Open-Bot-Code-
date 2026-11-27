@@ -10,4 +10,6 @@ export const messages = {
   "error.appUpdate.urlInsecure":
     "Użyj https:// dla adresu URL serwera aktualizacji. http:// jest dozwolone tylko dla komputera w Twojej własnej sieci.",
   "error.appUpdate.urlNotSaved": "OpenBot Code nie mógł zapisać adresu URL serwera aktualizacji. Spróbuj ponownie.",
+  "error.appUpdate.manualDownload":
+    "Ta wersja dla Maca nie jest podpisana, więc OpenBot Code nie może sam instalować aktualizacji. Wybierz Pobierz, aby otworzyć stronę pobierania, a potem zainstaluj nową wersję ręcznie.",
 } as const satisfies PartialTranslation<typeof source>;

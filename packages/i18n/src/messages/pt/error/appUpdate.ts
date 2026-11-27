@@ -10,4 +10,6 @@ export const messages = {
     "Use https:// para a URL do servidor de atualização. http:// só é permitido para um computador na sua própria rede.",
   "error.appUpdate.urlNotSaved":
     "O OpenBot Code não conseguiu salvar a URL do servidor de atualização. Tente novamente.",
+  "error.appUpdate.manualDownload":
+    "Esta versão para Mac não está assinada, por isso o OpenBot Code não consegue instalar atualizações sozinho. Selecione Baixar para abrir a página de download e instale a nova versão manualmente.",
 } as const satisfies PartialTranslation<typeof source>;

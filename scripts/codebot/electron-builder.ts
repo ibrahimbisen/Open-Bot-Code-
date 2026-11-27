@@ -1,12 +1,14 @@
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
+import { RELEASE_FEED_URL } from "../../src/main/app-update/release-repository";
 import { validUpdateFeedUrl } from "../../src/main/app-update/update-feed";
 
 const ENVIRONMENT_VARIABLE = "CODEBOT_UPDATE_URL";
 
 function resolveFeedUrl(value: string | undefined): string {
-  const text = value?.trim() ?? "";
+  if (value === undefined) return RELEASE_FEED_URL;
+  const text = value.trim();
   if (text === "") return "";
   const url = validUpdateFeedUrl(text);
   if (url === null) {

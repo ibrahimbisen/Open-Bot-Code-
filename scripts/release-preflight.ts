@@ -14,13 +14,13 @@ const failures: string[] = [];
 
 if (!/^\d+\.\d+\.\d+$/.test(packageJson.version)) failures.push("package version is not semver");
 if (run("git", ["status", "--porcelain"])) failures.push("working tree is not clean");
-if (run("git", ["tag", "--list", `codebot-v${packageJson.version}`])) {
-  failures.push(`tag codebot-v${packageJson.version} already exists`);
+if (run("git", ["tag", "--list", `v${packageJson.version}`])) {
+  failures.push(`tag v${packageJson.version} already exists`);
 }
 const updateUrl = process.env.CODEBOT_UPDATE_URL;
-if (updateUrl === undefined || updateUrl.trim() === "") {
-  failures.push("CODEBOT_UPDATE_URL is not set, so the build has no update server (users can set it in Settings)");
-} else if (validUpdateFeedUrl(updateUrl) === null) {
+if (updateUrl !== undefined && updateUrl.trim() === "") {
+  failures.push("CODEBOT_UPDATE_URL is empty, so the build has no update server (users can set it in Settings)");
+} else if (updateUrl !== undefined && validUpdateFeedUrl(updateUrl) === null) {
   failures.push("CODEBOT_UPDATE_URL is not a valid update server URL");
 }
 

@@ -3,7 +3,8 @@ import type { messages as source } from "../en/appUpdate";
 
 export const messages = {
   "appUpdate.server.title": "업데이트 서버",
-  "appUpdate.server.description": "서버에서 OpenBot Code 설치 프로그램과 업데이트 파일이 있는 폴더입니다.",
+  "appUpdate.server.description":
+    "비워 두면 OpenBot Code의 GitHub 릴리스에서 업데이트를 받습니다. 자체 서버를 사용하려면 설치 프로그램과 업데이트 파일이 있는 폴더의 URL을 입력하세요.",
   "appUpdate.server.urlLabel": "업데이트 서버 URL",
   "appUpdate.server.placeholder": "https://example.com/codebot-updates/",
   "appUpdate.server.source.settings": "OpenBot Code는 이 URL에서 업데이트를 받습니다.",
