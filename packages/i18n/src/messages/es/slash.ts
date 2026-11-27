@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/slash";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "slash.picker.label": "Comandos",
+  "slash.picker.option": "Comando /{name}",
+  "slash.picker.none": "El motor aún no ha informado de sus comandos. OpenBot Code los lee cuando el motor se inicia.",
+  "slash.picker.noMatch": "Ningún comando coincide con «{query}».",
+  "slash.badge.project": "Proyecto",
+  "slash.badge.user": "Usuario",
+  "slash.badge.plugin": "Plugin",
+  "slash.badge.mcp": "MCP",
+  "slash.badge.skill": "Skill",
+  "slash.badge.host": "OpenBot Code",
+  "slash.badge.terminal": "Solo terminal",
+  "slash.screen.close": "Cerrar",
+  "slash.screen.loading": "Cargando…",
+  "slash.model.title": "Elegir el modelo",
+  "slash.model.description": "{name} usa este modelo desde el próximo mensaje.",
+  "slash.model.empty": "No hay modelos disponibles para este agente.",
+  "slash.model.failed": "El modelo no cambió.",
+  "slash.effort.title": "Nivel de razonamiento",
+  "slash.effort.description": "Cuánto piensa {name} antes de responder.",
+  "slash.effort.unsupported": "El modelo de este agente no tiene niveles de razonamiento.",
+  "slash.effort.failed": "El nivel de razonamiento no cambió.",
+  "slash.resume.title": "Reanudar un chat",
+  "slash.resume.description":
+    "Chats que el motor guardó para la carpeta de {name}. Un chat reanudado se abre como un chat nuevo.",
+  "slash.resume.empty": "El motor no tiene chats guardados para esta carpeta.",
+  "slash.resume.failed": "OpenBot Code no pudo leer los chats guardados.",
+  "slash.resume.retry": "Reintentar",
+  "slash.resume.inUse": "Abierto en OpenBot Code",
+  "slash.resume.untitled": "Chat sin título",
+  "slash.resume.branch": "Rama {name}",
+  "slash.resume.updated": "Actualizado {time}",
+  "slash.resume.openFailed": "El chat no se abrió.",
+} as const satisfies PartialTranslation<typeof source>;

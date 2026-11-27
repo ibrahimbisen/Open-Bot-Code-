@@ -242,6 +242,18 @@ export const messages = {
     "Deine Auswahl gilt auf allen deinen Geräten. Stummschalten gilt nur für dieses Telefon.",
   "mobile.settings.notifications.channel": "Agenten-Benachrichtigungen ({sound})",
   "mobile.settings.notifications.channelSilent": "Agenten-Benachrichtigungen (ohne Ton)",
+  "mobile.settings.connection.title": "Verbindung",
+  "mobile.settings.connection.account": "Konto",
+  "mobile.settings.connection.accountService": "Kontodienst",
+  "mobile.settings.connection.accountFooter":
+    "Die Adresse des Kontodienstes wird bei der Anmeldung festgelegt. Melde dich ab, um eine andere zu verwenden.",
+  "mobile.settings.connection.notSignedIn": "Nicht angemeldet",
+  "mobile.settings.connection.signal": "Signal-Adresse",
+  "mobile.settings.connection.signalPlaceholder": "wss://signal.example.com/v1/signal",
+  "mobile.settings.connection.signalHint":
+    "Optional. Lass das Feld leer, um die Signal-Adresse zu verwenden, die der Kontodienst vorgibt. Dein TURN-Server kommt von Signal.",
+  "mobile.settings.connection.save": "Speichern",
+  "mobile.settings.connection.saving": "Wird gespeichert…",
   "mobile.settings.conversations.title": "Unterhaltungen",
   "mobile.settings.conversations.hiddenChats": "Ausgeblendete Chats",
   "mobile.settings.conversations.largeFiles": "Große Dateien automatisch laden",

@@ -32,6 +32,30 @@ export const messages = {
   "mobile.auth.signIn.helpStep1": "1. Abre OpenBot Code en tu equipo.",
   "mobile.auth.signIn.helpStep2": "2. Ve a Ajustes → Conexión móvil.",
   "mobile.auth.signIn.helpStep3": "3. Elige Añadir teléfono → Sí, iniciar sesión y escanea el código aquí.",
+  "mobile.auth.signIn.accountButton": "Iniciar sesión con Nextcloud",
+  "mobile.auth.account.title": "Iniciar sesión con Nextcloud",
+  "mobile.auth.account.description":
+    "Introduce la dirección de tu servicio de cuentas de OpenBot Code. Después Nextcloud te pide tu nombre de usuario y contraseña.",
+  "mobile.auth.account.label": "Dirección del servicio de cuentas",
+  "mobile.auth.account.placeholder": "account.example.com",
+  "mobile.auth.account.signalLabel": "Dirección de Signal (opcional)",
+  "mobile.auth.account.signalPlaceholder": "Dirección de Signal (opcional)",
+  "mobile.auth.account.continue": "Continuar con Nextcloud",
+  "mobile.auth.account.waiting": "Esperando a Nextcloud…",
+  "mobile.auth.account.tryAgainIn": "Inténtalo de nuevo en {time}",
+  "mobile.auth.account.useQrCode": "Escanear un código QR en su lugar",
+  "mobile.auth.account.error.invalidAddress":
+    "Introduce la dirección de tu servicio de cuentas, por ejemplo account.example.com.",
+  "mobile.auth.account.error.invalidSignal":
+    "Introduce una dirección de Signal que empiece por wss://, o deja el campo vacío.",
+  "mobile.auth.account.error.notAccountService": "Esta dirección no es un servicio de cuentas de OpenBot Code.",
+  "mobile.auth.account.error.startFailed":
+    "El servicio de cuentas no pudo iniciar el inicio de sesión. Inténtalo de nuevo.",
+  "mobile.auth.account.error.loginFailed": "El inicio de sesión no terminó. Inténtalo de nuevo.",
+  "mobile.auth.account.error.wait": "Demasiados intentos de inicio de sesión. Espera antes de intentarlo de nuevo.",
+  "mobile.auth.account.error.providerUnreachable":
+    "El servicio de cuentas no pudo conectar con Nextcloud. Inténtalo más tarde.",
+  "mobile.auth.account.error.refused": "Nextcloud no permitió este inicio de sesión.",
   "mobile.auth.done.title": "Conectado",
   "mobile.auth.done.body": "Has iniciado sesión.",
   "mobile.auth.error.sessionEnded": "Tu sesión terminó. Vuelve a iniciar sesión.",

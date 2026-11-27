@@ -1,4 +1,37 @@
 import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/panel";
 
-export const messages = {} as const satisfies PartialTranslation<typeof source>;
+export const messages = {
+  "panel.dock.label": "Panels",
+  "panel.add": "Ein Panel hinzufügen",
+  "panel.add.otherChat": "Chat aus einem anderen Projekt",
+  "panel.add.file": "Datei",
+  "panel.add.diff": "Änderungen",
+  "panel.add.browser": "Browser",
+  "panel.add.preview": "Vorschau",
+  "panel.split.right": "Nach rechts teilen",
+  "panel.split.down": "Nach unten teilen",
+  "panel.maximize": "Das Panel maximieren",
+  "panel.restore": "Die Panelgröße wiederherstellen",
+  "panel.close": "Das Panel schließen",
+  "panel.pin": "Das Panel anheften, damit es geöffnet bleibt",
+  "panel.unpin": "Das Panel lösen",
+  "panel.preview.loading": "Die Vorschau wird geladen",
+  "panel.preview.failed": "Die Vorschau konnte nicht geöffnet werden.",
+  "panel.browser.label": "Browser-Panel",
+  "panel.browser.starting": "Der Browser wird geöffnet",
+  "panel.browser.failed": "Die Browserseite konnte nicht geöffnet werden.",
+  "panel.browser.closed": "Diese Browserseite wurde geschlossen.",
+  "panel.browser.takeControl": "Die Seite übernehmen",
+  "panel.browser.handControl": "Steuerung an den Agenten übergeben",
+  "panel.browser.userControls": "Du steuerst diese Seite",
+  "panel.browser.agentControls": "Der Agent steuert diese Seite",
+  "panel.header.model": "Modell dieses Chats",
+  "panel.header.modelLocked": "Das Modell kann jetzt nicht geändert werden.",
+  "panel.header.files": "Dateien des Projekts",
+  "panel.draft.agent": "Agent",
+  "panel.chat.noAgent": "Dieses Projekt hat keinen Agenten. Füge in den Projekteinstellungen einen Agenten hinzu.",
+  "panel.picker.title": "Einen Chat in einem Panel öffnen",
+  "panel.picker.description": "Wähle ein Projekt und dann einen Chat. Das Panel zeigt den Projektnamen.",
+  "panel.picker.project": "Projekt",
+} as const satisfies PartialTranslation<typeof source>;
