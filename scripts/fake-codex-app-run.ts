@@ -7,13 +7,19 @@ import { FAKE_CODEX_MODEL, writeFakeCodex } from "./dev-automation/bench-fake-co
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const [script, ...scriptArguments] = process.argv.slice(2);
-if (!script) throw new Error("Usage: bun scripts/fake-codex-app-run.ts <script> [arguments]");
+const RUN_FLAGS = new Set(["--restart", "--codex-limits"]);
+const runArguments = process.argv.slice(2);
+const runFlags = new Set(runArguments.filter((value, index) => index < 2 && RUN_FLAGS.has(value)));
+const restart = runFlags.has("--restart");
+const [requested, ...scriptArguments] = runArguments.slice(runFlags.size);
+if (!requested)
+  throw new Error("Usage: bun scripts/fake-codex-app-run.ts [--restart] [--codex-limits] <script> [arguments]");
+const script: string = requested;
 const OUT = resolve(ROOT, ".codebot-build/fake-codex-app");
 
 async function finishFirstRun(): Promise<void> {
-  process.argv.push("--allow-mutations");
-  const session = await connectChannelE2e("fake-codex-app-run");
+  if (!process.argv.includes("--allow-mutations")) process.argv.push("--allow-mutations");
+  const session = await connectWhenRendererIsUp();
   try {
     await session.page.evaluate((model) => {
       window.localStorage.setItem("codebot:language-step-done", "true");
@@ -24,6 +30,18 @@ async function finishFirstRun(): Promise<void> {
   }
 }
 const START_TIMEOUT_MS = 240_000;
+
+async function connectWhenRendererIsUp(): Promise<Awaited<ReturnType<typeof connectChannelE2e>>> {
+  const deadline = Date.now() + START_TIMEOUT_MS;
+  for (;;) {
+    try {
+      return await connectChannelE2e("fake-codex-app-run");
+    } catch (error) {
+      if (Date.now() > deadline) throw error;
+      await new Promise((done) => setTimeout(done, 2_000));
+    }
+  }
+}
 
 function appInstances() {
   return readDevInstanceRecords().filter((record) => record.service === "app" && resolve(record.projectRoot) === ROOT);
@@ -61,29 +79,60 @@ function stopDevStack(): void {
 await mkdir(OUT, { recursive: true });
 const fake = await writeFakeCodex(resolve(OUT, "fake-codex"), { deltaMs: 250, deltas: 12 });
 const log = openSync(resolve(OUT, "dev.log"), "w");
-let exited = false;
-const dev = spawn("bun", ["run", "dev"], {
-  cwd: ROOT,
-  env: { ...process.env, ...fake.environment, CODEBOT_DEV_REMOTE_ROLE: "none" },
-  stdio: ["ignore", log, log],
-  shell: process.platform === "win32",
-});
-dev.on("exit", () => {
-  exited = true;
-});
 
-let code = 1;
-try {
-  await waitForApp(() => exited);
-  await finishFirstRun();
-  const result = spawnSync("bun", [script, "--allow-mutations", ...scriptArguments], {
+function startDevStack(): { isExited: () => boolean } {
+  let exited = false;
+  const dev = spawn("bun", ["run", "dev"], {
+    cwd: ROOT,
+    env: {
+      ...process.env,
+      ...fake.environment,
+      ...(runFlags.has("--codex-limits") ? { CODEBOT_BENCH_CODEX_LIMITS: "1" } : {}),
+      CODEBOT_DEV_REMOTE_ROLE: "none",
+    },
+    stdio: ["ignore", log, log],
+    shell: process.platform === "win32",
+  });
+  dev.on("exit", () => {
+    exited = true;
+  });
+  return { isExited: () => exited };
+}
+
+async function waitForStop(): Promise<void> {
+  const deadline = Date.now() + START_TIMEOUT_MS;
+  while (appInstances().length > 0) {
+    if (Date.now() > deadline) throw new Error("Timed out while the dev app stopped.");
+    await new Promise((done) => setTimeout(done, 500));
+  }
+}
+
+function runScript(phase: string[]): number {
+  const result = spawnSync("bun", [script, "--allow-mutations", ...phase, ...scriptArguments], {
     cwd: ROOT,
     stdio: "inherit",
     shell: process.platform === "win32",
   });
-  code = result.status ?? 1;
+  return result.status ?? 1;
+}
+
+let code = 1;
+try {
+  const first = startDevStack();
+  await waitForApp(first.isExited);
+  await finishFirstRun();
+  code = runScript(restart ? ["--phase=first"] : []);
+  if (restart && code === 0) {
+    stopDevStack();
+    await waitForStop();
+    const second = startDevStack();
+    await waitForApp(second.isExited);
+    await finishFirstRun();
+    code = runScript(["--phase=second"]);
+  }
 } catch (error) {
-  process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);
+  process.stderr.write(`${error instanceof Error ? error.message : String(error)}
+`);
 } finally {
   stopDevStack();
   closeSync(log);

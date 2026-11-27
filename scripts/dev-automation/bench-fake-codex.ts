@@ -104,6 +104,9 @@ const DELTAS = Number(process.env.CODEBOT_BENCH_CODEX_DELTAS || "400");
 const MARKDOWN = process.env.CODEBOT_BENCH_CODEX_CORPUS === "markdown";
 const REASONING = process.env.CODEBOT_BENCH_CODEX_REASONING === "1";
 const COMMANDS = process.env.CODEBOT_BENCH_CODEX_COMMANDS === "1";
+const LIMITS = process.env.CODEBOT_BENCH_CODEX_LIMITS === "1";
+const LONG_CODE = Array.from({ length: 30 }, (_, index) => "  const line" + (index + 1) + " = " + (index + 1) + ";").join("\\n");
+const threadFolders = new Map();
 const REASONING_DELTAS = 40;
 const COMMAND_COUNT = 5;
 const COMMAND_OUTPUT_DELTAS = 4;
@@ -183,12 +186,34 @@ const commandSteps = (threadId, turnId) => {
   }
   return steps;
 };
-const stream = (threadId, turnId) => {
+const editSteps = (threadId, turnId) => {
+  const folder = threadFolders.get(threadId);
+  if (!folder) return [];
+  const path = require("node:path").join(folder, "agent-notes.md");
+  const before = fs.existsSync(path) ? fs.readFileSync(path, "utf8") : "";
+  const after = before + "Line written by the agent in turn " + turnId + ".\\n";
+  const diff = "@@ -0,0 +1 @@\\n+Line written by the agent in turn " + turnId + ".\\n";
+  const item = { type: "fileChange", id: "edit-" + turnId, status: "inProgress", changes: [{ path, kind: { type: before ? "update" : "add" }, diff }] };
+  return [
+    () => write({ method: "item/started", params: { threadId, turnId, item } }),
+    () => {
+      fs.writeFileSync(path, after);
+      write({ method: "item/completed", params: { threadId, turnId, item: { ...item, status: "completed" } } });
+    },
+  ];
+};
+const stream = (threadId, turnId, prompt) => {
   const itemId = "message-" + turnId;
   const turn = { threadId, itemId, text: "", sent: 0, reasoningDeltas: 0, commandOutputDeltas: 0, timer: undefined };
   running.set(turnId, turn);
   const startMessage = () => write({ method: "item/started", params: { threadId, turnId, item: { type: "agentMessage", id: itemId, text: "", phase: "final_answer" } } });
-  const steps = [...(REASONING ? reasoningSteps(threadId, turnId) : []), ...(COMMANDS ? commandSteps(threadId, turnId) : [])];
+  const withSteps = prompt.includes("[steps]");
+  const steps = [
+    ...(REASONING || withSteps ? reasoningSteps(threadId, turnId) : []),
+    ...(COMMANDS || withSteps ? commandSteps(threadId, turnId) : []),
+    ...(prompt.includes("[edit]") ? editSteps(threadId, turnId) : []),
+  ];
+  const tail = prompt.includes("[long-code]") ? ["\\n\\n\\u0060\\u0060\\u0060ts\\n" + LONG_CODE + "\\n\\u0060\\u0060\\u0060\\n"] : [];
   if (steps.length > 0) steps.push(startMessage);
   else startMessage();
   log({ streamStarted: turnId, at: Date.now() });
@@ -196,7 +221,12 @@ const stream = (threadId, turnId) => {
   turn.timer = setInterval(() => {
     const step = steps.shift();
     if (step) return step(turn);
-    if (turn.sent >= DELTAS) return finish(turnId, "completed");
+    if (turn.sent >= DELTAS) {
+      const extra = tail.shift();
+      if (extra === undefined) return finish(turnId, "completed");
+      turn.text += extra;
+      return write({ method: "item/agentMessage/delta", params: { threadId, turnId, itemId, delta: extra } });
+    }
     const delta = nextDelta(turn.sent);
     turn.sent += 1;
     turn.text += delta;
@@ -220,13 +250,24 @@ const answer = (message) => {
       sideProcess = (params.clientInfo || {}).name === "codebot-profile";
       return write({ id: message.id, result: {} });
     case "account/read": return write({ id: message.id, result: { account: { type: "chatgpt", email: "codex@example.com" } } });
-    case "account/rateLimits/read": return write({ id: message.id, result: { rateLimits: { limitId: "codex", primary: null, secondary: null }, rateLimitsByLimitId: null } });
+    case "account/rateLimits/read": {
+      const now = Math.floor(Date.now() / 1000);
+      const primary = LIMITS ? { usedPercent: 37, windowDurationMins: 300, resetsAt: now + 2 * 3600 } : null;
+      const secondary = LIMITS ? { usedPercent: 62, windowDurationMins: 10080, resetsAt: now + 3 * 86400 } : null;
+      return write({ id: message.id, result: { rateLimits: { limitId: "codex", primary, secondary }, rateLimitsByLimitId: null } });
+    }
     case "model/list": return write({ id: message.id, result: { data: [{ model: "gpt-5.5", displayName: "GPT-5.5", supportedReasoningEfforts: [{ reasoningEffort: "low" }], defaultReasoningEffort: "low" }] } });
     case "plugin/list": return write({ id: message.id, result: { marketplaces: [] } });
     case "config/read": return write({ id: message.id, result: config });
     case "config/batchWrite": return write({ id: message.id, result: {} });
-    case "thread/start": return write({ id: message.id, result: { thread: { id: prefix + "thread-" + (++threads), turns: [] } } });
-    case "thread/resume": return write({ id: message.id, result: { thread: { id: params.threadId, turns: [] } } });
+    case "thread/start": {
+      const id = prefix + "thread-" + (++threads);
+      if (params.cwd) threadFolders.set(id, params.cwd);
+      return write({ id: message.id, result: { thread: { id, turns: [] } } });
+    }
+    case "thread/resume":
+      if (params.cwd) threadFolders.set(params.threadId, params.cwd);
+      return write({ id: message.id, result: { thread: { id: params.threadId, turns: [] } } });
     case "thread/unsubscribe": return write({ id: message.id, result: { status: "Unsubscribed" } });
     case "thread/name/set":
     case "thread/archive":
@@ -240,7 +281,8 @@ const answer = (message) => {
       write({ id: message.id, result: { turn: { id: turnId, status: "inProgress", items: [] } } });
       write({ method: "turn/started", params: { threadId: params.threadId, turn: { id: turnId } } });
       if (sideProcess) return answerSideTurn(params.threadId, turnId);
-      return stream(params.threadId, turnId);
+      if (params.cwd) threadFolders.set(params.threadId, params.cwd);
+      return stream(params.threadId, turnId, (params.input || []).map((item) => item.text || "").join("\\n"));
     }
     case "turn/interrupt": {
       if (!running.has(params.turnId)) return write({ id: message.id, error: { code: -32600, message: "No active turn." } });

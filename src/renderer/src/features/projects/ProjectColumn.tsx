@@ -162,9 +162,9 @@ export function ProjectColumn(props: { project: ProjectSummary }) {
             </SlidingTabs.List>
           </SlidingTabs.Root>
           <div class="project-tools-body" id="project-tools-body">
-            <Show when={shownTool() === "files" ? projectSlots.projectFiles : projectSlots.projectGit}>
+            <Show when={shownTool() === "files" ? projectSlots.projectFiles : projectSlots.projectGit} keyed>
               {(slot) =>
-                slot()({
+                slot({
                   get project() {
                     return props.project;
                   },
