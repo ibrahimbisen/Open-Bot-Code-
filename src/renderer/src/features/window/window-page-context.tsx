@@ -26,7 +26,7 @@ export function windowPageKind(page: WindowPage): WindowPageKind {
   return page === "agents" || page === "tasks" ? "agents" : "titled";
 }
 
-export interface PricingPagePlacement {
+interface PricingPagePlacement {
   mount: () => HTMLElement | undefined;
   open: (leave: () => void) => void;
   close: () => void;
