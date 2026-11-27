@@ -46,5 +46,5 @@ export function solidBubbleTakesDarkText(color: AvatarColor): boolean {
     0.2126 * linearChannel((value >> 16) & 0xff) +
     0.7152 * linearChannel((value >> 8) & 0xff) +
     0.0722 * linearChannel(value & 0xff);
-  return 1.05 / (luminance + 0.05) < 3;
+  return (luminance + 0.05) / 0.057 > 1.05 / (luminance + 0.05);
 }

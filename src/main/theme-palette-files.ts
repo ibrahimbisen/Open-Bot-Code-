@@ -98,28 +98,58 @@ export const watchThemePalettes = Effect.fn("ThemePaletteFiles.watch")(function*
   return () => watcher.close();
 });
 
+const WRITTEN_MARKER_FILE = ".built-in.json";
+
+const decodeWrittenFiles = Schema.decodeUnknownOption(
+  Schema.fromJsonString(Schema.Record(Schema.String, Schema.String)),
+);
+
+function builtInFileText(palette: AppThemePalette): string {
+  const file = { name: palette.name, appearance: palette.scheme, colors: palette.colors };
+  return `${JSON.stringify(file, null, 2)}\n`;
+}
+
+async function readMarker<T>(path: string, decode: (text: string) => Option.Option<T>, fallback: T): Promise<T> {
+  return readFile(path, "utf8").then(
+    (text) => Option.getOrElse(decode(text), () => fallback),
+    () => fallback,
+  );
+}
+
 export const seedThemePalettes = Effect.fn("ThemePaletteFiles.seed")(function* (directory: string) {
   yield* Effect.tryPromise(async () => {
     await mkdir(directory, { recursive: true });
     const markerPath = join(directory, SEEDED_MARKER_FILE);
-    const seeded = new Set(
-      await readFile(markerPath, "utf8").then(
-        (text) => Option.getOrElse(decodeSeededIds(text), (): readonly string[] => []),
-        (): readonly string[] => [],
-      ),
-    );
-    const missing = BUILT_IN_THEME_PALETTES.filter((palette) => !seeded.has(palette.id));
-    if (missing.length === 0) return;
-    for (const palette of missing) {
-      const file = { name: palette.name, appearance: palette.scheme, colors: palette.colors };
-      await writeFile(join(directory, `${palette.id}.json`), `${JSON.stringify(file, null, 2)}\n`, {
-        encoding: "utf8",
-        flag: "wx",
-      }).catch((error: NodeJS.ErrnoException) => {
-        if (error.code !== "EEXIST") throw error;
-      });
-      seeded.add(palette.id);
+    const writtenPath = join(directory, WRITTEN_MARKER_FILE);
+    const seeded = new Set(await readMarker(markerPath, decodeSeededIds, []));
+    const written: Record<string, string> = { ...(await readMarker(writtenPath, decodeWrittenFiles, {})) };
+    let changed = false;
+    for (const palette of BUILT_IN_THEME_PALETTES) {
+      const text = builtInFileText(palette);
+      const path = join(directory, `${palette.id}.json`);
+      if (!seeded.has(palette.id)) {
+        const created = await writeFile(path, text, { encoding: "utf8", flag: "wx" }).then(
+          () => true,
+          (error: NodeJS.ErrnoException) => {
+            if (error.code !== "EEXIST") throw error;
+            return false;
+          },
+        );
+        if (created) written[palette.id] = text;
+        seeded.add(palette.id);
+        changed = true;
+        continue;
+      }
+      const previous = written[palette.id];
+      if (previous === undefined || previous === text) continue;
+      const current = await readFile(path, "utf8").catch(() => null);
+      if (current !== previous) continue;
+      await writeFile(path, text, "utf8");
+      written[palette.id] = text;
+      changed = true;
     }
+    if (!changed) return;
+    await writeFile(writtenPath, `${JSON.stringify(written, null, 2)}\n`, "utf8");
     await writeFile(markerPath, `${JSON.stringify([...seeded].sort())}\n`, "utf8");
   }).pipe(
     Effect.catch((error) =>

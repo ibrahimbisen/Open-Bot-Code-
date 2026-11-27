@@ -84,7 +84,11 @@ export function applyThemePalette(palette: AppThemePalette | null): void {
   const style = document.documentElement.style;
   for (const name of applied) style.removeProperty(name);
   applied = [];
-  if (palette === null) return;
+  if (palette === null) {
+    delete document.documentElement.dataset.codebotPalette;
+    return;
+  }
+  document.documentElement.dataset.codebotPalette = palette.id;
   for (const [name, value] of Object.entries(paletteTokens(palette))) {
     style.setProperty(name, value);
     applied.push(name);

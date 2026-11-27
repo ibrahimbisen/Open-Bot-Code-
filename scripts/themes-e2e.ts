@@ -456,8 +456,53 @@ const address = server.address();
 assert.ok(address && typeof address === "object");
 const pageUrl = `http://127.0.0.1:${address.port}/`;
 
+async function passOnboarding() {
+  const next = page.locator(".language-wheel-continue");
+  if (!(await next.isVisible())) return;
+  await next.click();
+  await next.waitFor({ state: "hidden", timeout: WAIT_MS });
+}
+
+function builtInText(palette: AppThemePalette): string {
+  return `${JSON.stringify({ name: palette.name, appearance: palette.scheme, colors: palette.colors }, null, 2)}\n`;
+}
+
+async function refreshBuiltInFiles() {
+  const markerPath = join(themes, ".built-in.json");
+  const written: Record<string, string> = existsSync(markerPath) ? JSON.parse(readFileSync(markerPath, "utf8")) : {};
+  const stale = BUILT_IN_THEME_PALETTES.filter((palette) => {
+    const file = join(themes, `${palette.id}.json`);
+    return !existsSync(file) || readFileSync(file, "utf8") !== builtInText(palette);
+  });
+  if (stale.length > 0) logger.info(`Refreshing ${stale.length} built-in palette files that hold older values.`);
+  if (stale.length === 0) return;
+  for (const palette of stale) {
+    writeFileSync(join(themes, `${palette.id}.json`), builtInText(palette));
+    written[palette.id] = builtInText(palette);
+  }
+  writeFileSync(markerPath, `${JSON.stringify(written, null, 2)}\n`);
+  await page.waitForFunction(
+    async (expected) => {
+      const { palettes } = await window.codebot.getAppAppearancePreference();
+      return expected.every((item) =>
+        palettes.some(
+          (shown) => shown.id === item.id && shown.name === item.name && shown.colors.textMuted === item.textMuted,
+        ),
+      );
+    },
+    BUILT_IN_THEME_PALETTES.map((palette) => ({
+      id: palette.id,
+      name: palette.name,
+      textMuted: palette.colors.textMuted,
+    })),
+    { timeout: WAIT_MS },
+  );
+}
+
 let completed = false;
 let failure: string | undefined;
+await passOnboarding();
+await refreshBuiltInFiles();
 const original = await page.evaluate(() => window.codebot.getAppAppearancePreference());
 const viewport = await page.context().newCDPSession(page);
 try {
@@ -543,6 +588,7 @@ try {
   );
   await eachTheme("chat", {
     "chat reply": ".message-entry-agent .ui-bubble-content",
+    "own message": ".message-entry-user .ui-bubble-content",
     "code block": ".message-code-block",
     "chat tabs": ".dv-tabs-and-actions-container",
   });
@@ -616,14 +662,21 @@ try {
     pageUrl,
     { timeout: WAIT_MS },
   );
-  await page.getByRole("button", { name: en["panel.add"], exact: true }).first().click();
-  await page.getByRole("menu").first().waitFor({ state: "visible" });
-  await eachTheme("dock", {
-    "dock panel": ".dv-groupview, .dv-tabs-and-actions-container",
-    "browser frame": ".project-browser-panel",
-    "panel menu": "[role=menu]",
-  });
-  await page.keyboard.press("Escape");
+  await eachTheme(
+    "dock",
+    {
+      "dock panel": ".dv-groupview, .dv-tabs-and-actions-container",
+      "browser frame": ".project-browser-panel",
+    },
+    async (palette) => {
+      await page.getByRole("button", { name: en["panel.add"], exact: true }).first().click();
+      await page.getByRole("menu").first().waitFor({ state: "visible" });
+      await settle();
+      await checkParts("dock", palette, { "panel menu": "[role=menu]" });
+      await page.keyboard.press("Escape");
+      await page.getByRole("menu").first().waitFor({ state: "hidden" });
+    },
+  );
 
   await openAppearanceSettings();
   await eachTheme("settings", {
