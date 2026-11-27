@@ -341,6 +341,11 @@ import {
   decodeExplorerWriteResult,
 } from "./explorer-decoding";
 import { decodeHostReleaseStatusFromMain } from "./host-release-decoding";
+import {
+  decodeLocalModelServerCandidates,
+  decodeLocalModelServerStatuses,
+  decodeLocalModelServerTestResult,
+} from "./local-model-servers-decoding";
 import { decodeMacAutomationResults } from "./mac-automation-decoding";
 import {
   decodeAddOrchestratorReply,
@@ -1293,6 +1298,15 @@ const codebotApi: CodeBotDesktopApi = {
     discoverModels: decodeDiscoverModelsResult,
     getSettings: decodeProviderDetectionSettings,
     setSettings: decodeProviderDetectionSettings,
+  }),
+  localModelServers: bridgeGroup(IPC_ENDPOINTS.localModelServers, {
+    list: decodeLocalModelServerStatuses,
+    refresh: decodeLocalModelServerStatuses,
+    watch: decodeVoid,
+    test: decodeLocalModelServerTestResult,
+    scanHost: decodeLocalModelServerCandidates,
+    saveSettings: decodeLocalModelServerStatuses,
+    statuses: decodeLocalModelServerStatuses,
   }),
   providerAdmin: bridgeGroup(IPC_ENDPOINTS.providerAdmin, {
     startCodeLogin: decodeProviderCodeLoginStart,

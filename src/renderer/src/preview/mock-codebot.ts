@@ -261,6 +261,7 @@ import { createMockHostVoiceModel } from "./mock-host-voice-model";
 import { createMockHostedServers } from "./mock-hosted-servers";
 import { createMockLicense } from "./mock-license";
 import { createMockLinkAccount } from "./mock-link-account";
+import { createMockLocalModelServers } from "./mock-local-model-servers";
 import { createMockMessaging } from "./mock-messaging";
 import { createMockNearWallet } from "./mock-near-wallet";
 import { createMockOnePasswordConnector } from "./mock-onepassword-connector";
@@ -1944,6 +1945,7 @@ export function createMockCodeBot(options: MockCodeBotOptions = {}): MockCodeBot
         return clone(detectionSettings);
       },
     },
+    localModelServers: createMockLocalModelServers(),
     messaging: createMockMessaging(() => agents[0]?.id ?? "preview-agent"),
     providerAdmin: {
       startCodeLogin: (provider) => api.startProviderCodeLogin(provider),

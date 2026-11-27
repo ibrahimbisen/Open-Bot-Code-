@@ -146,8 +146,12 @@ try {
   const agentFolder = join(root, "tools");
   const marker = join(root, "started");
   await mkdir(agentFolder);
-  await writeFile(join(agentFolder, "goose"), `#!/bin/sh\ntouch "${marker}"\n`);
-  await chmod(join(agentFolder, "goose"), 0o755);
+  const agentProgram = join(agentFolder, process.platform === "win32" ? "goose.cmd" : "goose");
+  await writeFile(
+    agentProgram,
+    process.platform === "win32" ? `@type nul > "${marker}"\r\n` : `#!/bin/sh\ntouch "${marker}"\n`,
+  );
+  await chmod(agentProgram, 0o755);
   await runCauseEffect(
     settings.set({
       enabled: true,
@@ -167,7 +171,7 @@ try {
   assert.equal(primary.seen.length, 1, "The redirect target gets only the direct request.");
   assert.equal(primary.seen[0]?.authorization, null, "A scan sends no key.");
   const agents = await Effect.runPromise(detection.scanAgents());
-  const goose = agents.find((agent) => agent.command === join(agentFolder, "goose"));
+  const goose = agents.find((agent) => agent.command === agentProgram);
   assert.ok(goose, "The agent in the listed folder is found.");
   await assert.rejects(stat(marker), { code: "ENOENT" }, "The scan does not start the agent.");
   report.scan = {

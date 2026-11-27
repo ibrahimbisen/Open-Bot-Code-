@@ -325,6 +325,7 @@ import {
   setAboveAppsXWayland,
   usesX11Windows,
 } from "./linux-wayland-output";
+import { LocalModelServerMonitor } from "./local-model-servers/monitor";
 import { localRoutineFeedDocument } from "./local-routine-calendar";
 import {
   formatLocalServerMembersRequest,
@@ -628,6 +629,7 @@ const TEARDOWN_ORDER = {
   browserDock: 42,
   browserView: 45,
   providerDetection: 48,
+  localModelServers: 48.5,
   providerRuntimes: 50,
   localServers: 57,
   remoteServers: 60,
@@ -811,6 +813,7 @@ export interface ApplicationServices {
   acpRegistry: AcpRegistry;
   providerDetection: ProviderDetection;
   providerDetectionSettings: ProviderDetectionSettingsStore;
+  localModelServerMonitor: LocalModelServerMonitor;
   marketplaceAgents: AgentMarketplaceService;
   agentTemplates: AgentTemplateService;
   agentImport: AgentImportService;
@@ -1795,6 +1798,13 @@ export async function createApplicationServices({
   );
   teardown.push(TEARDOWN_ORDER.providerDetection, "model server discovery", () =>
     Effect.runPromise(providerDetection.close()),
+  );
+  const localModelServerMonitor = new LocalModelServerMonitor({
+    entries: () => customProviders.localServers(),
+    catalog: modelReleaseCatalog,
+  });
+  teardown.push(TEARDOWN_ORDER.localModelServers, "local model server monitor", () =>
+    Effect.runPromise(localModelServerMonitor.close()),
   );
   const providerCredentials = new ProviderCredentialStore(
     join(app.getPath("userData"), PROVIDER_CREDENTIAL_FILE),
@@ -4639,6 +4649,7 @@ export async function createApplicationServices({
     acpRegistry,
     providerDetection,
     providerDetectionSettings,
+    localModelServerMonitor,
     marketplaceAgents,
     agentTemplates,
     agentImport,

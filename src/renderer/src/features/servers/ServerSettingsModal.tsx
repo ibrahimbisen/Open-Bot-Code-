@@ -34,6 +34,7 @@ import {
   KeyRound,
   Monitor,
   RefreshCw,
+  Server,
   Settings,
   SettingsSection,
   ShieldCheck,
@@ -75,6 +76,7 @@ import type { HostProviderEnvironmentOptions, ProviderEnvironmentSource } from "
 import type { HostDefaultProviderOptions, HostDefaultProviderSource } from "../settings/provider-host-default";
 import type { HostModelVisibilityOptions, ProviderModelVisibilitySource } from "../settings/provider-model-visibility";
 import type { HostPromptCacheTtlOptions, ProviderPromptCacheSource } from "../settings/provider-prompt-cache";
+import { LocalModelServersSettings } from "../status-bar/LocalModelServersSettings";
 import { type ServerVaultOptions, ServerVaultPanel } from "../vault/ServerVaultPanel";
 import { createServerAgentsSection, type ServerAgentDefaultsOptions } from "./ServerAgentsSection";
 import { createServerAuditSection, type ServerAuditOptions } from "./ServerAuditSection";
@@ -202,6 +204,7 @@ export type ServerSettingsSection =
   | "transfer"
   | "routines"
   | "browser-profiles"
+  | "local-models"
   | "experimental";
 type Section = ServerSettingsSection;
 
@@ -223,6 +226,7 @@ const sections = {
   transfer: { title: "server.settings.transferTitle", description: "server.settings.transferDescription" },
   routines: { title: "server.settings.routinesTitle", description: "server.settings.routinesDescription" },
   "browser-profiles": { title: "browser.profiles.title", description: "browser.profiles.subtitle" },
+  "local-models": { title: "localServer.settings.title", description: "localServer.settings.description" },
   experimental: {
     title: "server.settings.experimentalTitle",
     description: "server.settings.experimentalDescription",
@@ -286,6 +290,7 @@ const NAV_SECTIONS: ReadonlyArray<{ value: Section; icon: typeof Settings; group
   { value: "desktop", icon: Monitor, group: "server.settings.group.server" },
   { value: "import", icon: Download, group: "server.settings.group.server" },
   { value: "transfer", icon: ArrowLeftRight, group: "server.settings.group.server" },
+  { value: "local-models", icon: Server, group: "server.settings.group.server" },
   { value: "experimental", icon: FlaskConical, group: "server.settings.group.server" },
 ];
 
@@ -449,6 +454,8 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
         return Boolean(props.routineFeed);
       case "browser-profiles":
         return Boolean(props.browserProfiles);
+      case "local-models":
+        return local();
       case "experimental":
         return Boolean(crmHost());
     }
@@ -647,6 +654,7 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
         value === "transfer" ||
         value === "routines" ||
         value === "browser-profiles" ||
+        value === "local-models" ||
         value === "experimental"
       )
         setSection(value);
@@ -968,6 +976,15 @@ export function ServerSettingsModal(props: ServerSettingsModalProps) {
               <ServerBrowserProfilesPanel {...browserProfiles()} menuMount={modalElement()} />
             </Tabs.Content>
           )}
+        </Show>
+        <Show when={local()}>
+          <Tabs.Content
+            value="local-models"
+            class="settings-modal-tab-panel server-settings-panel"
+            data-tab="local-models"
+          >
+            <LocalModelServersSettings />
+          </Tabs.Content>
         </Show>
         <Show when={crmHost()}>
           {(crm) => (

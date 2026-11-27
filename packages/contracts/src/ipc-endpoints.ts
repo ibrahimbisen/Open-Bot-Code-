@@ -439,6 +439,16 @@ import type {
 } from "./ipc-instance-transfer";
 import type { LibraryFolderAction, LibraryFoldersSnapshot } from "./ipc-library-folders";
 import type { LinkAccountStatus } from "./ipc-link-account";
+import type {
+  LocalModelServerCandidate,
+  LocalModelServerRefreshInput,
+  LocalModelServerScanInput,
+  LocalModelServerStatus,
+  LocalModelServerTestInput,
+  LocalModelServerTestResult,
+  LocalModelServerWatchInput,
+  SaveLocalModelServerSettingsInput,
+} from "./ipc-local-model-servers";
 import type { MachineAlertSettings, MachineMetrics } from "./ipc-machine-resources";
 import type {
   AgentPublicationPreview,
@@ -1078,6 +1088,17 @@ export const IPC_ENDPOINTS = {
       "provider-detection:set-settings",
     ),
     scanAgents: scopedQuery<DetectedAcpAgent[], "required">()("provider-detection:scan-agents"),
+  },
+  localModelServers: {
+    list: request<undefined, LocalModelServerStatus[]>()("local-model-servers:list"),
+    refresh: request<LocalModelServerRefreshInput, LocalModelServerStatus[]>()("local-model-servers:refresh"),
+    watch: request<LocalModelServerWatchInput, void>()("local-model-servers:watch"),
+    test: request<LocalModelServerTestInput, LocalModelServerTestResult>()("local-model-servers:test"),
+    scanHost: request<LocalModelServerScanInput, LocalModelServerCandidate[]>()("local-model-servers:scan-host"),
+    saveSettings: request<SaveLocalModelServerSettingsInput, LocalModelServerStatus[]>()(
+      "local-model-servers:save-settings",
+    ),
+    statuses: event<LocalModelServerStatus[]>()("local-model-servers:statuses"),
   },
   acpRegistry: {
     search: scopedRequest<string, AcpRegistryEntry[]>()("acp-registry:search"),
@@ -2232,6 +2253,7 @@ export const IPC_GROUP_PATHS = {
   skills: "skills",
   customProviders: "customProviders",
   providerDetection: "providerDetection",
+  localModelServers: "localModelServers",
   customAgents: "customAgents",
   acpRegistry: "acpRegistry",
   providerAdmin: "providerAdmin",

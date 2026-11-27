@@ -67,6 +67,7 @@ export type HostedServersDesktopApi = GroupApi<IpcEndpoints["hostedServers"]>;
 export type CustomProvidersDesktopApi = GroupApi<IpcEndpoints["customProviders"]>;
 
 export type ProviderDetectionDesktopApi = GroupApi<IpcEndpoints["providerDetection"]>;
+export type LocalModelServersDesktopApi = GroupApi<IpcEndpoints["localModelServers"]>;
 export type CustomAgentsDesktopApi = GroupApi<IpcEndpoints["customAgents"]>;
 
 export type ProviderAdminDesktopApi = GroupApi<IpcEndpoints["providerAdmin"]>;

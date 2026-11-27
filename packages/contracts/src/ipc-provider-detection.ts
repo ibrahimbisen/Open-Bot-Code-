@@ -23,6 +23,7 @@ export const PROVIDER_DETECTION_LIMITS = {
 export const DEFAULT_MODEL_SERVERS = {
   ollama: { name: "Ollama", baseUrl: "http://127.0.0.1:11434/v1" },
   lmstudio: { name: "LM Studio", baseUrl: "http://127.0.0.1:1234/v1" },
+  vllm: { name: "vLLM", baseUrl: "http://127.0.0.1:8000/v1" },
 } as const;
 
 export type DefaultModelServerId = keyof typeof DEFAULT_MODEL_SERVERS;

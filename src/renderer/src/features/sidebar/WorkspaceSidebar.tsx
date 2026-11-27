@@ -35,6 +35,7 @@ import { useServerSettings } from "../servers/server-settings";
 import { serverUpdateBadge, showServerUpdate } from "../servers/server-update-flow";
 import { useServers } from "../servers/servers-context";
 import { useSettings } from "../settings/settings-context";
+import { StatusBarMount } from "../status-bar/StatusBarMount";
 import { usePresence } from "../team/team-context";
 import { SidebarUpdateIsland } from "../updates/SidebarUpdateIsland";
 import { useWindowPage } from "../window/window-page-context";
@@ -345,6 +346,15 @@ export function WorkspaceSidebar(props: { peopleEnabled: boolean }) {
               />
             </Show>
             <SidebarUpdateIsland />
+            <Show when={!platform.landingPreview}>
+              <StatusBarMount
+                onManageMachines={
+                  activeServer()?.kind === "local"
+                    ? () => openServerSettings(activeServerId(), null, "local-models")
+                    : undefined
+                }
+              />
+            </Show>
           </>
         }
         onOpenMarketplace={() => setSkillsMarketplaceOpen(true)}
