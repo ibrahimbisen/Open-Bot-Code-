@@ -673,7 +673,7 @@
 }
 
 .codebot-dock-theme [role="tab"] {
-  min-width: 0;
+  min-width: 72px;
   flex: 0 1 auto;
 }
 
@@ -825,6 +825,12 @@
   .project-panel-header > .provider-model-picker {
     min-width: 88px;
     flex-shrink: 1;
+  }
+}
+
+@container project-chat-panel (max-width: 240px) {
+  .project-panel-title {
+    display: none;
   }
 }
 

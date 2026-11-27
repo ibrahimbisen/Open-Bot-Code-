@@ -48,12 +48,6 @@ const FIRST_CHAT = "Explain the server";
 const LANGUAGE_STEP_KEY = "codebot:language-step-done";
 const PREVIEW_WIDTH_KEY = "codebot:project-preview-width:v1";
 const RAIL_FIXED = new Set([english("app.rail.more"), english("app.rail.settings"), "Projects", "Help"]);
-const POINTER_MEDIA = [
-  { name: "hover", value: "hover" },
-  { name: "any-hover", value: "hover" },
-  { name: "pointer", value: "fine" },
-  { name: "any-pointer", value: "fine" },
-];
 
 const SERVER_SOURCE = `import { createServer } from "node:http";
 
@@ -237,7 +231,6 @@ async function applyVariant(variant: Variant): Promise<void> {
     deviceScaleFactor: 1,
     mobile: false,
   });
-  await viewport.send("Emulation.setEmulatedMedia", { features: POINTER_MEDIA });
   await page.evaluate(
     (palette) => window.codebot.setAppAppearancePreference({ appearance: palette.scheme, palette: palette.id }),
     variant.palette,
@@ -709,7 +702,13 @@ async function phaseMain(variant: Variant): Promise<void> {
     await shot("dock-two-panels");
   });
   await step("dock with three panels", async () => {
-    await (await groupActions(1)).getByRole("button", { name: english("panel.split.down"), exact: true }).click();
+    const group = await groupActions(1);
+    const splitDown = group.getByRole("button", { name: english("panel.split.down"), exact: true });
+    if (await visible(splitDown)) await splitDown.click();
+    else {
+      await group.getByRole("tab").first().click();
+      await page.evaluate(() => window.__codebotProjectDock?.split("below"));
+    }
     await until(
       "three chat panels",
       () => chatPanels().count(),
@@ -938,7 +937,6 @@ async function main(): Promise<void> {
     server.close();
     await closeBrowserTabs().catch(() => undefined);
     await viewport.send("Emulation.clearDeviceMetricsOverride").catch(() => undefined);
-    await viewport.send("Emulation.setEmulatedMedia", { features: [] }).catch(() => undefined);
     await page
       .evaluate(() => window.codebot.setAppAppearancePreference({ appearance: "dark", palette: "codebot-dark" }))
       .catch(() => undefined);

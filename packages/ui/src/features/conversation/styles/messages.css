@@ -268,7 +268,7 @@
   align-items: flex-start;
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none) and (pointer: coarse) {
   .message-actions,
   .message-time,
   .message-steps {

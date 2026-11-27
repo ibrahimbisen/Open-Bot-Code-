@@ -73,7 +73,7 @@
   }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none) and (pointer: coarse) {
   .media-generation-actions,
   .media-generation-bar {
     opacity: 1;

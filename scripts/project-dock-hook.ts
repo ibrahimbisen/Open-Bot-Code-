@@ -15,6 +15,7 @@ export interface ProjectDockHook {
     placement: "active" | "right" | "below";
   }): void;
   closeTransient(reason: string): void;
+  split(direction: "right" | "below"): void;
   closeActive(): void;
   panelCount(): number;
 }

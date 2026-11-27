@@ -325,7 +325,7 @@
   scale: 1;
 }
 
-@media (hover: none) {
+@media (hover: none) and (pointer: coarse) {
   .ui-image-remove-button {
     opacity: 1;
     scale: 1;
