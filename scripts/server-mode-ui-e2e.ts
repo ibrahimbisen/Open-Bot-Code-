@@ -148,7 +148,7 @@ try {
   const welcome = page.locator(".server-onboarding-screen");
   if (await welcome.isVisible().catch(() => false)) {
     await shot("home-server-welcome");
-    await welcome.getByText("OpenCode", { exact: true }).click({ timeout: UI_WAIT_MS });
+    await welcome.getByText("Codex", { exact: true }).first().click({ timeout: UI_WAIT_MS });
     await welcome.getByRole("button", { name: /^(Continue|Use free models)/ }).click({ timeout: UI_WAIT_MS });
     await welcome.waitFor({ state: "detached", timeout: SERVER_WAIT_MS });
   }

@@ -3,7 +3,7 @@ import { closeSync, openSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { resolve } from "node:path";
 import { connectChannelE2e } from "./channel-e2e-support";
-import { writeFakeCodex } from "./dev-automation/bench-fake-codex";
+import { FAKE_CODEX_MODEL, writeFakeCodex } from "./dev-automation/bench-fake-codex";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -15,10 +15,10 @@ async function finishFirstRun(): Promise<void> {
   process.argv.push("--allow-mutations");
   const session = await connectChannelE2e("fake-codex-app-run");
   try {
-    await session.page.evaluate(() => {
+    await session.page.evaluate((model) => {
       window.localStorage.setItem("codebot:language-step-done", "true");
-      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: null });
-    });
+      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: model });
+    }, FAKE_CODEX_MODEL);
   } finally {
     await session.close();
   }
@@ -59,7 +59,7 @@ function stopDevStack(): void {
 }
 
 await mkdir(OUT, { recursive: true });
-const fake = await writeFakeCodex(resolve(OUT, "fake-codex"), { deltaMs: 20, deltas: 12 });
+const fake = await writeFakeCodex(resolve(OUT, "fake-codex"), { deltaMs: 250, deltas: 12 });
 const log = openSync(resolve(OUT, "dev.log"), "w");
 let exited = false;
 const dev = spawn("bun", ["run", "dev"], {

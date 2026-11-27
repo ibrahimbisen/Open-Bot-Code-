@@ -3,8 +3,9 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { mkdtemp } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
-import type { Page } from "playwright-core";
+import type { CDPSession, Page } from "playwright-core";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
+import { FAKE_CODEX_MODEL } from "./dev-automation/bench-fake-codex";
 
 interface Check {
   name: string;
@@ -37,7 +38,11 @@ async function step(name: string, run: () => Promise<string | undefined>): Promi
   }
 }
 
+let overrideSession: CDPSession | undefined;
+
 async function setWindowSize(page: Page, width: number, height: number): Promise<void> {
+  await overrideSession?.detach().catch(() => undefined);
+  overrideSession = undefined;
   const session = await page.context().newCDPSession(page);
   const target = await session.send("Browser.getWindowForTarget").catch(() => undefined);
   if (target) {
@@ -52,8 +57,10 @@ async function setWindowSize(page: Page, width: number, height: number): Promise
   const size = await page.evaluate(() => [window.innerWidth, window.innerHeight]);
   if (Math.abs((size[0] ?? 0) - width) >= 40) {
     await session.send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 0, mobile: false });
+    overrideSession = session;
+  } else {
+    await session.detach();
   }
-  await session.detach();
   await page.waitForTimeout(800);
 }
 
@@ -141,10 +148,10 @@ async function main(): Promise<void> {
   const screens: string[] = [];
   try {
     await clearViewport(page);
-    await page.evaluate(() => {
+    await page.evaluate((model) => {
       window.localStorage.setItem("codebot:language-step-done", "true");
-      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: null });
-    });
+      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: model });
+    }, FAKE_CODEX_MODEL);
     await setWindowSize(page, 1280, 800);
     await page.evaluate((input) => window.codebot.projects.create(input), {
       name,
@@ -178,7 +185,10 @@ async function main(): Promise<void> {
     for (const theme of ["dark", "light"] as const) {
       await setTheme(page, theme);
       await step(`960x640 ${theme}: composer and chat header fit with no dock panel`, async () => {
-        await page.waitForTimeout(500);
+        await page
+          .locator(".project-chat-panel:visible button[aria-label*='Send message' i]")
+          .first()
+          .waitFor({ state: "visible", timeout: WAIT_MS });
         const detail = assertFits(await measure(page));
         screens.push(await shot(page, `layout-960x640-${theme}-chat`));
         return detail;

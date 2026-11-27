@@ -267,6 +267,12 @@ async function main(): Promise<void> {
       );
       chat = chats[0];
       assert.ok(chat, "no chat");
+      await until(
+        page,
+        "first turn done",
+        () => column(page).locator(".project-chat-row").first().innerText(),
+        (text) => !/running|queued/i.test(text),
+      );
       return `chat ${chat.chatId}`;
     });
     assert.ok(chat, "setup failed");
@@ -388,7 +394,19 @@ async function main(): Promise<void> {
         () => column(page).locator(".project-chat-row").count(),
         (count) => count >= 1,
       );
-      await page.waitForTimeout(2500);
+      await until(
+        page,
+        "second turn running",
+        () => column(page).locator(".project-chat-row").first().innerText(),
+        (text) => /running|queued/i.test(text),
+      );
+      await until(
+        page,
+        "second turn done",
+        () => column(page).locator(".project-chat-row").first().innerText(),
+        (text) => !/running|queued/i.test(text),
+      );
+      await page.waitForTimeout(800);
       assert.equal(await previews(page).count(), 1, "pinned preview closed");
     });
 
@@ -498,6 +516,12 @@ async function main(): Promise<void> {
         (text) => !/running|queued/i.test(text),
       );
       await sendInChat(page, "Second message");
+      await until(
+        page,
+        "second turn running",
+        () => column(page).locator(".project-chat-row").filter({ hasText: "Open the page" }).first().innerText(),
+        (text) => /running|queued/i.test(text),
+      );
       await page.evaluate(
         ({ url, agentId, threadId }) =>
           window.codebot.browser.open({ url, ownerAgentId: agentId, ownerThreadId: threadId, focus: true }),

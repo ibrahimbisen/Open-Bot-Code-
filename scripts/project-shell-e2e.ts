@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import type { Page } from "playwright-core";
 import { connectChannelE2e, writeReport } from "./channel-e2e-support";
+import { FAKE_CODEX_MODEL } from "./dev-automation/bench-fake-codex";
 
 interface Check {
   name: string;
@@ -171,10 +172,10 @@ async function main(): Promise<void> {
   const screens: string[] = [];
   try {
     await clearViewport(page);
-    await page.evaluate(() => {
+    await page.evaluate((model) => {
       window.localStorage.setItem("codebot:language-step-done", "true");
-      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: null });
-    });
+      return window.codebot.saveSetup({ preferredProvider: "codex", preferredModel: model });
+    }, FAKE_CODEX_MODEL);
     await page.reload();
     await leftBar(page).waitFor({ state: "visible", timeout: WAIT_MS });
     await closeBlockingDialogs(page);
