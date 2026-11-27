@@ -229,6 +229,7 @@ import { CUSTOM_AGENTS_CAPABILITY } from "@codebot/contracts/team-protocol/custo
 import { CUSTOM_PROVIDER_EDIT_CAPABILITY } from "@codebot/contracts/team-protocol/custom-provider-edit-v1";
 import { CUSTOM_PROVIDER_HARNESS_CHOICE_CAPABILITY } from "@codebot/contracts/team-protocol/custom-provider-harness-choice-v1";
 import { CUSTOM_PROVIDER_HARNESS_CAPABILITY } from "@codebot/contracts/team-protocol/custom-provider-harness-v1";
+import { EXPLORER_CAPABILITY } from "@codebot/contracts/team-protocol/explorer-v1";
 import { FOCUS_USE_INTERVAL_MS } from "@codebot/contracts/team-protocol/focus-use-v1";
 import { GITHUB_SKILLS_CAPABILITY } from "@codebot/contracts/team-protocol/github-skills-v1";
 import { HERMES_IMPORT_CAPABILITY } from "@codebot/contracts/team-protocol/hermes-import-v1";
@@ -2861,6 +2862,7 @@ export class TeamApiServer {
           return this.#options.storage !== undefined && this.#options.channels !== undefined;
         if (capability === MACHINE_RESOURCES_CAPABILITY) return this.#options.machine !== undefined;
         if (capability === SERVER_SAFE_MODE_CAPABILITY) return false;
+        if (capability === EXPLORER_CAPABILITY) return false;
         if (capability === BACKGROUND_PROCESSES_CAPABILITY) return this.#options.backgroundProcesses !== undefined;
         if (capability === ROUTINES_ONCE_CAPABILITY) return true;
         if (capability === HOSTED_SITES_CAPABILITY) return this.#options.hostedSites !== undefined;

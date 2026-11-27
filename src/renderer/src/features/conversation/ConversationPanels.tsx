@@ -465,9 +465,11 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
     else void props.onOpenSearchMessage?.(messageId);
   }
   const channelBrowserPane = () => !channel || channel.browserOwner() !== null || browserTabs().length > 0;
+  const explorerAgentId = () => (!channel && props.server?.kind === "local" ? (props.agent?.id ?? null) : null);
   const sidePanelPanes = createMemo((): SidePanelPane[] => [
     ...(props.browserEnabled !== false && channelBrowserPane() ? (["browser"] as const) : []),
     ...(filesServer() && filesSource() ? (["files"] as const) : []),
+    ...(explorerAgentId() ? (["explorer"] as const) : []),
     ...(props.agent && !channel && props.threads ? (["threads"] as const) : []),
     ...(props.agent || channel ? (["settings"] as const) : []),
   ]);
@@ -701,6 +703,27 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
       )}
     </Show>
   );
+  const explorerPane = (split: boolean) => (
+    <Show when={explorerAgentId()}>
+      {(agentId) => (
+        <Loading>
+          <ExplorerPane
+            serverId={props.server?.id ?? LOCAL_SERVER_ID}
+            scope={{ agentId: agentId() }}
+            canReveal
+            chatSince={chatStartedAt()}
+            resizer={paneResizer(split, "explorer-panel")}
+            onOpenLink={(url) => void openExternalMessageUrl(url)}
+          />
+        </Loading>
+      )}
+    </Show>
+  );
+  const chatStartedAt = () => {
+    const first = props.messages[0]?.createdAt;
+    const parsed = first === undefined ? Number.NaN : Date.parse(first);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
   const questionPane = (split: boolean) => (
     <Show when={props.agent}>
       {(agent) => (
@@ -934,6 +957,7 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
   );
   const splitPane = (pane: SidePanelPane) => {
     if (pane === "files") return filesPane(true);
+    if (pane === "explorer") return explorerPane(true);
     if (pane === "question") return questionPane(true);
     if (pane === "threads") return threadsPane(true);
     if (pane === "subagent") return subagentPane(true);
@@ -1059,6 +1083,8 @@ export function ConversationPanels(panelProps: { onOpenUsage?: ((trigger: HTMLBu
       </Show>
 
       <Show when={activeRightPanel() === "files"}>{filesPane(false)}</Show>
+
+      <Show when={activeRightPanel() === "explorer"}>{explorerPane(false)}</Show>
 
       <Show when={activeRightPanel() === "question"}>{questionPane(false)}</Show>
 
@@ -1200,5 +1226,6 @@ const BrowserFullViewAdapter = lazy(() => import("./BrowserFullViewAdapter"));
 const BrowserWindowBridge = lazy(() => import("./BrowserWindowBridge"));
 const FilePreviewPanel = lazy(() => import("./FilePreviewPanel"));
 const ChatFilesPanel = lazy(() => import("../files/ChatFilesPanel"));
+const ExplorerPane = lazy(() => import("../explorer/ExplorerPane"));
 
 const BrowserPreviewSidebar = lazy(() => import("./BrowserPreviewSidebar"));

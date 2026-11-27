@@ -109,6 +109,7 @@ import { CUSTOM_PROVIDER_HARNESS_CHOICE_CAPABILITY } from "./custom-provider-har
 import { CUSTOM_PROVIDER_HARNESS_CAPABILITY } from "./custom-provider-harness-v1";
 import { DISCORD_ACCESS_CAPABILITY } from "./discord-access-v1";
 import { EVENTS_CAPABILITY } from "./events-v1";
+import { EXPLORER_CAPABILITY } from "./explorer-v1";
 import { FEEDBACK_WITHDRAW_CAPABILITY } from "./feedback-withdraw-v1";
 import { FOCUS_USE_CAPABILITY } from "./focus-use-v1";
 import { GITHUB_SKILLS_CAPABILITY } from "./github-skills-v1";
@@ -397,6 +398,7 @@ export {
   CUSTOM_PROVIDER_HARNESS_CHOICE_CAPABILITY,
   DISCORD_ACCESS_CAPABILITY,
   EVENTS_CAPABILITY,
+  EXPLORER_CAPABILITY,
   FEEDBACK_WITHDRAW_CAPABILITY,
   FOCUS_USE_CAPABILITY,
   HOST_ADMIN_CAPABILITY,
@@ -876,6 +878,7 @@ const TEAM_CAPABILITY_REGISTRY = [
   [TEAM_BROWSER_VIEW_DIALOG_CAPABILITY, V10],
   [BROWSER_HTTP_SIGN_IN_CAPABILITY, V10],
   [CHANNEL_COMPACT_AVAILABILITY_CAPABILITY, V10],
+  [EXPLORER_CAPABILITY, V10],
 ] as const satisfies readonly (readonly [string, TeamCapabilityPlacement])[];
 
 export const TEAM_CURRENT_CAPABILITIES = TEAM_CAPABILITY_REGISTRY.map(([capability]) => capability);

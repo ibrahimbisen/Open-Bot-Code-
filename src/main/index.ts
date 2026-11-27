@@ -97,6 +97,7 @@ import { customProviderIpcHandlers } from "./ipc/custom-provider-handlers";
 import { registerIpcGroups } from "./ipc/define-ipc-group";
 import { dynamicIslandIpcHandlers } from "./ipc/dynamic-island-handlers";
 import { eventsIpcHandlers } from "./ipc/events-handlers";
+import { explorerIpcHandlers } from "./ipc/explorer-handlers";
 import { githubConnectorIpcHandlers } from "./ipc/github-connector-handlers";
 import { hostAdminIpcHandlers } from "./ipc/host-admin-handlers";
 import { hostedServerIpcHandlers } from "./ipc/hosted-server-handlers";
@@ -745,6 +746,7 @@ function registerIpcHandlers({
   agentHostSettings,
   agentDefaultsSettings,
   agentFolders,
+  explorer,
   channelFolders,
   agentInstructions,
   browserProfiles,
@@ -950,6 +952,11 @@ function registerIpcHandlers({
     ...creditsIpcHandlers({ credits }),
     ...routineFeedIpcHandlers({ routineFeed }),
     ...eventsIpcHandlers({ events, remoteServers }),
+    ...explorerIpcHandlers({
+      explorer,
+      remoteServers,
+      windowOf: (contents) => BrowserWindow.fromWebContents(contents),
+    }),
     ...hostedServerIpcHandlers({ hostedServers }),
     ...localServerIpcHandlers({ localServers }),
     ...customProviderIpcHandlers(customProviderChanges),

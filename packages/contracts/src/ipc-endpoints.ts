@@ -382,6 +382,29 @@ import type {
   WebhookTestResult,
 } from "./ipc-events";
 import type {
+  ExplorerChange,
+  ExplorerCreateInput,
+  ExplorerDirectory,
+  ExplorerEntry,
+  ExplorerFile,
+  ExplorerGitCommitFiles,
+  ExplorerGitCommitInput,
+  ExplorerGitDiff,
+  ExplorerGitDiffInput,
+  ExplorerGitLog,
+  ExplorerGitLogInput,
+  ExplorerGitStatus,
+  ExplorerGitStatusInput,
+  ExplorerListInput,
+  ExplorerPathInput,
+  ExplorerRenameInput,
+  ExplorerRoots,
+  ExplorerScope,
+  ExplorerWatchInput,
+  ExplorerWriteInput,
+  ExplorerWriteResult,
+} from "./ipc-explorer";
+import type {
   ExternalLinkBrowser,
   ExternalLinkBrowsers,
   ExternalLinkFallback,
@@ -2117,6 +2140,26 @@ export const IPC_ENDPOINTS = {
     disconnect: request<string, void>()("remote-desktop:disconnect"),
     event: event<RemoteDesktopSession[]>()("remote-desktop:event"),
   },
+  explorer: {
+    roots: scopedRequest<ExplorerScope, ExplorerRoots, "required">()("explorer:roots"),
+    list: scopedRequest<ExplorerListInput, ExplorerDirectory, "required">()("explorer:list"),
+    stat: scopedRequest<ExplorerPathInput, ExplorerEntry | null, "required">()("explorer:stat"),
+    read: scopedRequest<ExplorerPathInput, ExplorerFile, "required">()("explorer:read"),
+    write: scopedRequest<ExplorerWriteInput, ExplorerWriteResult, "required">()("explorer:write"),
+    create: scopedRequest<ExplorerCreateInput, ExplorerEntry, "required">()("explorer:create"),
+    rename: scopedRequest<ExplorerRenameInput, ExplorerEntry, "required">()("explorer:rename"),
+    trash: scopedRequest<ExplorerPathInput, void, "required">()("explorer:trash"),
+    reveal: scopedRequest<ExplorerPathInput, void, "required">()("explorer:reveal"),
+    watch: scopedRequest<ExplorerWatchInput, void, "required">()("explorer:watch"),
+    unwatch: scopedRequest<ExplorerScope, void, "required">()("explorer:unwatch"),
+    changed: event<ExplorerChange>()("explorer:changed"),
+    gitStatus: scopedRequest<ExplorerGitStatusInput, ExplorerGitStatus, "required">()("explorer:git-status"),
+    gitLog: scopedRequest<ExplorerGitLogInput, ExplorerGitLog, "required">()("explorer:git-log"),
+    gitCommitFiles: scopedRequest<ExplorerGitCommitInput, ExplorerGitCommitFiles, "required">()(
+      "explorer:git-commit-files",
+    ),
+    gitDiff: scopedRequest<ExplorerGitDiffInput, ExplorerGitDiff, "required">()("explorer:git-diff"),
+  },
 } as const;
 
 export type IpcEndpoints = typeof IPC_ENDPOINTS;
@@ -2189,6 +2232,7 @@ export const IPC_GROUP_PATHS = {
   host: "host",
   events: "events",
   remoteDesktop: "remoteDesktop",
+  explorer: "explorer",
 } as const satisfies { readonly [Group in keyof IpcEndpoints]: string | null };
 
 export type IpcGroupName = keyof IpcEndpoints;

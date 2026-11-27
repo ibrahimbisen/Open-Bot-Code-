@@ -11,6 +11,7 @@ import { applicationContentType } from "./application-content-type";
 import { attachmentCorsHeaders, attachmentDocumentHeaders, chatVisualResponse } from "./chat-visual-protocol";
 import { inlineContentDisposition } from "./content-disposition";
 import { buildContentSecurityPolicy, readSelfHostedSignalOrigin } from "./content-security-policy";
+import { isExplorerFileRequest } from "./explorer/explorer-protocol";
 import { filePreviewPages } from "./file-preview-pages";
 import { bytesResponse, fileResponse } from "./file-response";
 import { canAnswerRemoteRanges } from "./remote-attachment-cache";
@@ -61,6 +62,7 @@ export interface AttachmentProtocolDependencies {
   mailbox: MailboxStore;
   agents: AgentService;
   remoteServers: RemoteServerManager;
+  explorerFile: (request: Request) => Promise<Response>;
 }
 
 function asksForPreview(url: URL): boolean {
@@ -71,11 +73,17 @@ function asksToOpen(url: URL): boolean {
   return url.searchParams.get("open") === "1";
 }
 
-export function configureAttachmentProtocol({ mailbox, agents, remoteServers }: AttachmentProtocolDependencies): void {
+export function configureAttachmentProtocol({
+  mailbox,
+  agents,
+  remoteServers,
+  explorerFile,
+}: AttachmentProtocolDependencies): void {
   const logger = createCodeBotLogger("attachment-protocol");
   session.defaultSession.protocol.handle("codebot-attachment", async (request) => {
     try {
       const url = new URL(request.url);
+      if (isExplorerFileRequest(url)) return await explorerFile(request);
       const id = url.pathname.split("/").filter(Boolean).at(-1);
       const attachment = id ? await runCauseEffect(mailbox.resolveAttachment(id)) : null;
       if (!attachment) return new Response("Not found", { status: 404 });
