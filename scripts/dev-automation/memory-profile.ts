@@ -1,20 +1,12 @@
-import { execFile } from "node:child_process";
 import { createWriteStream } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import { promisify } from "node:util";
 import type { Logger } from "@codebot/logging";
 import type { Browser, CDPSession, Page } from "playwright-core";
-import {
-  collectDescendants,
-  type MemoryReport,
-  PROCESS_TABLE_PS_ARGS,
-  parseProcessTable,
-  summarizeMemory,
-} from "./cpu-sampling";
+import { type MemoryReport, summarizeMemory } from "./cpu-sampling";
 import { describeTarget } from "./page-url";
+import { readProcessTree } from "./process-table";
 
-const run = promisify(execFile);
 const BYTES_PER_MB = 1_024 * 1_024;
 
 export interface PageMemory {
@@ -80,8 +72,7 @@ export async function profileMemory(options: MemoryProfileOptions): Promise<Memo
     logger.warn("no registry record published a pid, so process memory is not reported.");
     return { ...summarizeMemory([], label), pages };
   }
-  const { stdout } = await run("ps", PROCESS_TABLE_PS_ARGS, { maxBuffer: 16 * BYTES_PER_MB });
-  return { ...summarizeMemory(collectDescendants(parseProcessTable(stdout), rootPid), label), pages };
+  return { ...summarizeMemory(await readProcessTree(rootPid), label), pages };
 }
 
 export async function writeHeapSnapshot(page: Page, outPath: string, logger: Logger): Promise<void> {

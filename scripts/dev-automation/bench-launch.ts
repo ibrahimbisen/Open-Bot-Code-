@@ -8,12 +8,14 @@ import { findAvailablePort } from "../dev-services";
 import { withoutElectronRuntimeFlags } from "../electron-spawn-env";
 import { withDevPortAllocation } from "./port-allocation";
 import { type DevStackRecord, removeDevStackRecord, writeDevStackRecord } from "./stack-registry";
+import { stopWindowsProcessTree } from "./windows-process-table";
 
 const DEFAULT_BENCH_DEBUG_PORT = 9_433;
 const DEFAULT_BENCH_INSPECT_PORT = 9_449;
 
 export interface BenchApp {
   pid: number;
+  spawnedAt: number;
   remoteDebuggingPort: number;
   inspectorPort: number;
   stop: () => Promise<void>;
@@ -53,6 +55,24 @@ function signalGroup(child: ChildProcess, signal: NodeJS.Signals): void {
   } catch {}
 }
 
+const WINDOWS_STOP_TIMEOUT_MS = 20_000;
+
+async function stopWindowsApp(child: ChildProcess, logger: Logger): Promise<void> {
+  const running = await stopWindowsProcessTree(child, WINDOWS_STOP_TIMEOUT_MS);
+  if (running.length > 0) logger.warn(`the bench app left these processes running: ${running.join(", ")}`);
+  await waitForExit(child, 5_000);
+}
+
+async function stopPosixApp(child: ChildProcess, logger: Logger): Promise<void> {
+  child.kill("SIGTERM");
+  if (!(await waitForExit(child, 15_000))) {
+    logger.warn("the bench app did not quit in 15 s; stopping its process group");
+    signalGroup(child, "SIGKILL");
+    await waitForExit(child, 5_000);
+  }
+  signalGroup(child, "SIGTERM");
+}
+
 export async function launchBenchApp(options: LaunchBenchAppOptions): Promise<BenchApp> {
   const { projectRoot, instanceId, logger } = options;
   if (!existsSync(join(projectRoot, "out", "main", "index.js"))) {
@@ -60,7 +80,7 @@ export async function launchBenchApp(options: LaunchBenchAppOptions): Promise<Be
   }
   const executable = electronExecutable(projectRoot);
   const startedAt = Date.now();
-  const { child, record } = await withDevPortAllocation(async (records) => {
+  const { child, record, spawnedAt } = await withDevPortAllocation(async (records) => {
     const held = new Set(records.flatMap((stack) => stack.ports.map((entry) => entry.port)));
     const reserved = new Set<number>();
     const remoteDebuggingPort = await findAvailablePort(DEFAULT_BENCH_DEBUG_PORT, reserved, held);
@@ -72,6 +92,7 @@ export async function launchBenchApp(options: LaunchBenchAppOptions): Promise<Be
       logFile = openSync(options.logPath, "a", 0o600);
     }
     const linuxCi = process.platform === "linux" && process.env.CI === "true";
+    const spawnTime = Date.now();
     const spawned = spawn(
       executable,
       [`--inspect=127.0.0.1:${inspectorPort}`, ...(linuxCi ? ["--no-sandbox"] : []), projectRoot],
@@ -103,7 +124,7 @@ export async function launchBenchApp(options: LaunchBenchAppOptions): Promise<Be
       processes: [{ name: "app", pid: spawned.pid, startedAt: Date.now() }],
     };
     writeDevStackRecord(stack);
-    return { child: spawned, record: stack };
+    return { child: spawned, record: stack, spawnedAt: spawnTime };
   });
   const pid = child.pid ?? 0;
   const [debugPort, inspectPort] = record.ports;
@@ -111,18 +132,14 @@ export async function launchBenchApp(options: LaunchBenchAppOptions): Promise<Be
   let stopped = false;
   return {
     pid,
+    spawnedAt,
     remoteDebuggingPort: debugPort?.port ?? 0,
     inspectorPort: inspectPort?.port ?? 0,
     stop: async () => {
       if (stopped) return;
       stopped = true;
-      child.kill("SIGTERM");
-      if (!(await waitForExit(child, 15_000))) {
-        logger.warn("the bench app did not quit in 15 s; stopping its process group");
-        signalGroup(child, "SIGKILL");
-        await waitForExit(child, 5_000);
-      }
-      signalGroup(child, "SIGTERM");
+      if (process.platform === "win32") await stopWindowsApp(child, logger);
+      else await stopPosixApp(child, logger);
       removeDevStackRecord(record);
     },
   };

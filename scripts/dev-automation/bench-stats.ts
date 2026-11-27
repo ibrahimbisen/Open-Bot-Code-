@@ -226,6 +226,9 @@ const HEADLINE_METRICS: readonly string[] = [
   "render.framesOver17ms",
   "render.framesOver50ms",
   "render.calls",
+  "host.cpu",
+  "host.mem.free",
+  "window.visible",
 ];
 
 function formatSpread(value: Spread | null): string {

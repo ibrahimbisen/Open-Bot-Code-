@@ -158,6 +158,8 @@
     "dev:memory": "bun scripts/dev-automation/cli.ts memory",
     "dev:bench": "tsx scripts/dev-automation/bench.ts",
     "dev:bench:hotspots": "tsx scripts/dev-automation/bench-hotspots.ts",
+    "test:bench-harness": "tsx scripts/bench-harness-e2e.ts",
+    "bench:compare": "tsx scripts/bench-compare.ts",
     "bench:team-api-broadcast": "bun --preload ./scripts/team-api-routes-e2e-electron.mjs scripts/team-api-broadcast-bench.ts",
     "bench:browser-tools": "tsx scripts/browser-tools-bench.ts",
     "bench:hermes-prompt-settings": "bun scripts/hermes-prompt-settings-bench.ts",

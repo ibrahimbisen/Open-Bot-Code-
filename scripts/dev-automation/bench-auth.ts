@@ -5,7 +5,8 @@ import { join } from "node:path";
 import type { Logger } from "@codebot/logging";
 import type { Page } from "playwright-core";
 import { withoutElectronRuntimeFlags } from "../electron-spawn-env";
-import { isSameWorktree, readDevStackRecords } from "./stack-registry";
+import { isSameWorktree, readDevStackRecords, removeDevStackRecord } from "./stack-registry";
+import { stopWindowsProcessTree } from "./windows-process-table";
 
 const API_READY_TIMEOUT_MS = 180_000;
 const API_STOP_TIMEOUT_MS = 20_000;
@@ -37,8 +38,19 @@ function worktreeApiPort(projectRoot: string, supervisorPid?: number): number | 
   return null;
 }
 
-function stopStarted(child: ChildProcess): Promise<void> {
+async function stopWindowsSupervisor(child: ChildProcess, logger: Logger): Promise<void> {
+  const supervisorPid = child.pid;
+  const running = await stopWindowsProcessTree(child, API_STOP_TIMEOUT_MS);
+  if (running.length > 0) {
+    logger.warn(`the Auth API left these processes running: ${running.join(", ")}. Run \`bun run dev:stop\`.`);
+    return;
+  }
+  if (supervisorPid !== undefined) removeDevStackRecord({ supervisorPid });
+}
+
+function stopStarted(child: ChildProcess, logger: Logger): Promise<void> {
   if (child.exitCode !== null || child.signalCode !== null) return Promise.resolve();
+  if (process.platform === "win32") return stopWindowsSupervisor(child, logger);
   return new Promise((resolveStop) => {
     const timer = setTimeout(() => {
       if (child.pid !== undefined) {
@@ -56,11 +68,25 @@ function stopStarted(child: ChildProcess): Promise<void> {
   });
 }
 
+const API_START_ATTEMPTS = 3;
+
+/** The first start after a build can stop on slow caches; a second start works. */
 export async function ensureBenchAuthApi(
   projectRoot: string,
   logDirectory: string,
   logger: Logger,
 ): Promise<BenchAuthApi> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await startBenchAuthApi(projectRoot, logDirectory, logger);
+    } catch (error) {
+      if (attempt >= API_START_ATTEMPTS) throw error;
+      logger.warn(`Auth API start ${attempt} failed (${error instanceof Error ? error.message : error}); trying again`);
+    }
+  }
+}
+
+async function startBenchAuthApi(projectRoot: string, logDirectory: string, logger: Logger): Promise<BenchAuthApi> {
   const running = worktreeApiPort(projectRoot);
   if (running !== null && (await isLive(running))) {
     logger.info(`using this worktree's Auth API on :${running}`);
@@ -72,7 +98,7 @@ export async function ensureBenchAuthApi(
   logger.info(`starting the Auth API (log: ${logPath})`);
   const child = spawn("bun", ["scripts/dev-services.ts", "api"], {
     cwd: projectRoot,
-    detached: true,
+    detached: process.platform !== "win32",
     stdio: ["ignore", "pipe", "pipe"],
     env: withoutElectronRuntimeFlags(process.env),
   });
@@ -86,10 +112,10 @@ export async function ensureBenchAuthApi(
     const port = worktreeApiPort(projectRoot, supervisorPid);
     if (port !== null && (await isLive(port))) {
       logger.info(`Auth API ready on :${port}`);
-      return { url: `http://127.0.0.1:${port}`, stop: () => stopStarted(child) };
+      return { url: `http://127.0.0.1:${port}`, stop: () => stopStarted(child, logger) };
     }
     if (Date.now() > deadline) {
-      await stopStarted(child);
+      await stopStarted(child, logger);
       throw new Error(`The Auth API did not become ready in ${API_READY_TIMEOUT_MS} ms. See ${logPath}.`);
     }
     await wait(500);
