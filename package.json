@@ -237,6 +237,8 @@
     "test:dock-layout": "bun scripts/fake-codex-app-run.ts --restart scripts/dock-layout-e2e.ts",
     "test:explorer-screen": "bun scripts/fake-codex-app-run.ts scripts/explorer-screen-e2e.ts",
     "test:reply-details": "bun scripts/fake-codex-app-run.ts scripts/reply-details-e2e.ts",
+    "test:chat-manage": "bun scripts/fake-codex-app-run.ts scripts/chat-manage-e2e.ts",
+    "test:hidden-features": "bun scripts/fake-codex-app-run.ts scripts/hidden-features-e2e.ts",
     "test:usage-limits-screen": "bun scripts/fake-codex-app-run.ts --codex-limits scripts/usage-limits-screen-e2e.ts",
     "test:local-server-settings": "bun scripts/fake-codex-app-run.ts scripts/local-server-settings-e2e.ts",
     "test:screens": "bun scripts/fake-codex-app-run.ts --keep-first-run --markdown --steps --slash-commands scripts/screen-sweep-e2e.ts",
