@@ -596,6 +596,35 @@ try {
   );
   const bobStillManages = await memberView(bobToken, bobTarget);
   check("Bob still has his own agent after the share", seen(bobStillManages), bobStillManages);
+
+  const bobAgent = await call("POST", TEAM_API_ROUTES.agents.all, {
+    token: bobToken,
+    body: {
+      name: "Bob helper",
+      description: "",
+      avatarSeed: "bob-helper",
+      avatarHue: null,
+      initialMessage: "Bob first message to his helper",
+    },
+  });
+  const helperId = isDynamicRecord(bobAgent.body) && typeof bobAgent.body.id === "string" ? bobAgent.body.id : "";
+  const bobLists = await call("GET", TEAM_API_ROUTES.agents.all, { token: bobToken });
+  const carolLists = await call("GET", TEAM_API_ROUTES.agents.all, { token: carolToken });
+  const carolHelper = await call("GET", TEAM_API_ROUTES.agent.conversation(helperId), { token: carolToken });
+  const bobHelper = await call("PATCH", TEAM_API_ROUTES.agent.one(helperId), {
+    token: bobToken,
+    body: { name: "Bob helper 2" },
+  });
+  check(
+    "Bob creates his own agent outside a project, manages it, and Carol does not see it",
+    bobAgent.status === 201 &&
+      helperId !== "" &&
+      bobLists.text.includes(helperId) &&
+      bobHelper.status === 200 &&
+      !carolLists.text.includes(helperId) &&
+      carolHelper.status >= 400,
+    { create: bobAgent.status, patch: bobHelper.status, carol: carolHelper.status },
+  );
 } catch (error) {
   failure = error instanceof Error ? (error.stack ?? error.message) : String(error);
   check("the scenario finished", false, failure);

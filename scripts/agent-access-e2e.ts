@@ -457,7 +457,7 @@ try {
   const ownerToken = await login(OWNER);
 
   const setup = await step(
-    "setup: an owner, a member, and four agents; with no roles the member gets every agent",
+    "setup: an owner, a member, and four agents; with no roles the member gets no agent of the owner",
     async () => {
       const { agents, team } = current();
       const create = async (name: string) =>
@@ -483,11 +483,8 @@ try {
       const mine = await readAccess(memberToken);
       assert.equal(mine.everyone, undefined, "A member reads the Everyone levels.");
       assert.equal(mine.roles, undefined, "A member reads the roles.");
-      assert.deepEqual(
-        Object.values(mine.mine),
-        ["manage", "manage", "manage", "manage"],
-        "With no roles a member must manage every agent.",
-      );
+      assert.deepEqual(mine.mine, {}, "With no roles a member must not get the agents of other people.");
+      assert.deepEqual(await listedIds(memberToken), [], "With no roles a member lists the agents of other people.");
       return { ids: { legal, finance, ops, general }, memberId, memberToken };
     },
     ({ ids, memberId }) => ({ ids, memberId }),
@@ -505,7 +502,7 @@ try {
   const legalRole = { id: "legal", name: "Legal", agents: { [legal]: "chat" as const }, memberIds: [setup.memberId] };
   const restricted: AgentAccessChange = {
     revision: 0,
-    everyone: { [legal]: "none", [finance]: "none", [ops]: "view" },
+    everyone: { [legal]: "none", [finance]: "none", [ops]: "view", [general]: "manage" },
     roles: [legalRole],
   };
 
@@ -532,9 +529,8 @@ try {
     const memberName = auditName(setup.memberId);
     assert.deepEqual(auditLines(log), [
       "agent-level Legal Legal none->chat",
-      "agent-level Everyone Ops manage->view",
-      "agent-level Everyone Finance manage->none",
-      "agent-level Everyone Legal manage->none",
+      "agent-level Everyone General none->manage",
+      "agent-level Everyone Ops none->view",
       `role-member Legal ${memberName} added`,
       "role-created Legal",
     ]);
@@ -650,7 +646,7 @@ try {
     };
   });
 
-  await step("manage: the member changes an agent that Everyone does not list", async () => {
+  await step("manage: the member changes an agent that Everyone can manage", async () => {
     const patched = await call("PATCH", TEAM_API_ROUTES.agent.one(general), {
       token: setup.memberToken,
       body: { name: "General 2" },
@@ -714,7 +710,7 @@ try {
     assert.deepEqual(mine, { revision: 1, mine: { [legal]: "chat", [ops]: "view", [general]: "manage" } });
     const { log } = await readAudit(ownerToken);
     assert.ok(log, "The owner cannot read the audit log after a restart.");
-    assert.equal(log.entries.length, 6, "The audit log did not persist.");
+    assert.equal(log.entries.length, 5, "The audit log did not persist.");
     socket = await openEvents(setup.memberToken);
     return { ...mine, auditEntries: log.entries.length };
   });
@@ -733,7 +729,7 @@ try {
     const { log } = await readAudit(ownerToken);
     const memberName = auditName(setup.memberId);
     assert.ok(log, "The owner cannot read the audit log.");
-    assert.equal(log.entries.length, 7);
+    assert.equal(log.entries.length, 6);
     assert.equal(auditLines(log)[0], `role-member Legal ${memberName} removed`);
     return { agents: 2, legal: response.status, audit: auditLines(log)[0] };
   });
@@ -745,10 +741,14 @@ try {
     assert.equal(saved.status, 200, `Saving the roles returned ${saved.status}.`);
     const stored = access.get(team.getIdentity()?.serverId ?? "");
     assert.equal(stored.revision, 3);
-    assert.deepEqual(stored.everyone, { [legal]: "none", [ops]: "view" }, "The deleted agent kept its level.");
+    assert.deepEqual(
+      stored.everyone,
+      { [legal]: "none", [ops]: "view", [general]: "manage" },
+      "The deleted agent kept its level.",
+    );
     const { log } = await readAudit(ownerToken);
     assert.ok(log, "The owner cannot read the audit log.");
-    assert.equal(log.entries.length, 7, `The save of a deleted agent's levels was logged: ${auditLines(log)[0]}.`);
+    assert.equal(log.entries.length, 6, `The save of a deleted agent's levels was logged: ${auditLines(log)[0]}.`);
     return { everyone: stored.everyone, auditEntries: log.entries.length };
   });
 
@@ -767,11 +767,35 @@ try {
     return { copy: stored.everyone[copy], role: stored.roles[0]?.agents[copy] };
   });
 
+  await step("owner record: a member manages the agent that they created, even when Everyone closes it", async () => {
+    const { agents, access, team } = current();
+    const serverId = team.getIdentity()?.serverId ?? "";
+    const notes = (
+      await runCauseEffect(
+        agents.createAgentProfile({ name: "Notes", description: "Notes", avatarSeed: "notes", avatarHue: null }),
+      )
+    ).id;
+    assert.ok(!(await listedIds(setup.memberToken)).includes(notes), "The member sees an agent of the owner.");
+    await Effect.runPromise(access.claimAgents(serverId, [notes], setup.memberId));
+    const stored = access.get(serverId);
+    const saved = await setAccess(ownerToken, {
+      revision: stored.revision,
+      everyone: { ...stored.everyone, [notes]: "none" },
+      roles: stored.roles,
+    });
+    assert.equal(saved.status, 200, `Saving the roles returned ${saved.status}.`);
+    const mine = await readAccess(setup.memberToken);
+    assert.equal(mine.mine[notes], "manage", "The member does not manage the agent that they created.");
+    assert.ok((await listedIds(setup.memberToken)).includes(notes), "The member does not list their own agent.");
+    assert.equal(access.get(serverId).owners?.[notes], setup.memberId, "A roles save dropped the owner record.");
+    return { level: mine.mine[notes] };
+  });
+
   report.passed = true;
 } finally {
   for (const socket of sockets) socket.close();
   await stopHost();
-  await rm(root, { recursive: true, force: true });
+  await rm(root, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }).catch(() => undefined);
   mkdirSync(OUT, { recursive: true });
   writeFileSync(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);
   process.stdout.write(`Report: ${join(OUT, "report.json")}\n`);
