@@ -1,4 +1,5 @@
 import {
+  type AccountServiceSettings,
   type AccountUsage,
   type AccountUsageLimit,
   type AvatarColor,
@@ -8,41 +9,18 @@ import {
   withReadCredits,
 } from "@codebot/contracts/ipc";
 import { currentText } from "@codebot/ui/text";
-import { createMemo, createSignal, createStore, flush, onCleanup, onSettled } from "solid-js";
+import { createMemo, createSignal, createStore, flush, onSettled } from "solid-js";
 import { type DesktopAnalyticsProperties, desktopAnalytics } from "../../analytics";
 import { createSimpleContext } from "../../simple-context";
 import { accountPort } from "./account-port";
 
 type MobileConnectAction = DesktopAnalyticsProperties<"mobile_connect_action">["action"];
 
-const AUTH_SUCCESS_HOLD_MS = 600;
-
-function authFailureCode(value: string | undefined): string {
-  switch (value) {
-    case "auth_api_error":
-    case "code_recently_sent":
-    case "email_delivery_failed":
-    case "email_delivery_not_configured":
-    case "email_delivery_rate_limited":
-    case "email_sign_in_failed":
-    case "email_sign_in_start_failed":
-    case "invalid_email":
-    case "invalid_sign_in_code":
-    case "rate_limited":
-    case "sign_in_code_expired":
-    case "too_many_code_attempts":
-    case "unauthorized":
-      return value;
-    default:
-      return "unknown";
-  }
-}
-
 const Auth = createSimpleContext({
   name: "Auth",
   init: () => {
     const [centralAuth, setCentralAuth] = createSignal<CentralAuthState>({ status: "loading" });
-    const [authSuccessVisible, setAuthSuccessVisible] = createSignal(false);
+    const [serviceSettings, setServiceSettings] = createSignal<AccountServiceSettings | null>(null);
     const [accountUsageState, setAccountUsageState] = createStore<{
       targetKey: string | null;
       data: AccountUsage | null;
@@ -50,29 +28,11 @@ const Auth = createSimpleContext({
     }>({ targetKey: null, data: null, refreshRevision: 0 });
     let accountUsageRequestGeneration = 0;
     let accountUsageEventIds = new Set<string>();
-    let authSuccessTimer: ReturnType<typeof setTimeout> | undefined;
     let knownMobileDevices: ReadonlySet<string> | null = null;
-
-    onCleanup(() => {
-      if (authSuccessTimer !== undefined) clearTimeout(authSuccessTimer);
-    });
 
     function applyCentralAuthState(state: CentralAuthState): void {
       desktopAnalytics.setUser(state.status === "signed_in" ? state.user : null);
       if (state.status !== "signed_in") knownMobileDevices = null;
-      const completedCodeChallenge = centralAuth().status === "code_sent" && state.status === "signed_in";
-      if (state.status !== "signed_in") {
-        if (authSuccessTimer !== undefined) clearTimeout(authSuccessTimer);
-        authSuccessTimer = undefined;
-        setAuthSuccessVisible(false);
-      } else if (completedCodeChallenge) {
-        if (authSuccessTimer !== undefined) clearTimeout(authSuccessTimer);
-        setAuthSuccessVisible(true);
-        authSuccessTimer = setTimeout(() => {
-          authSuccessTimer = undefined;
-          setAuthSuccessVisible(false);
-        }, AUTH_SUCCESS_HOLD_MS);
-      }
       setCentralAuth(state);
     }
 
@@ -80,6 +40,10 @@ const Auth = createSimpleContext({
       const unsubscribe = accountPort().auth.onEvent((state) => {
         flush(() => applyCentralAuthState(state));
       });
+      void accountPort()
+        .auth.getServiceSettings()
+        .then(setServiceSettings)
+        .catch(() => setServiceSettings(null));
       void accountPort()
         .auth.getState()
         .then(setCentralAuth)
@@ -95,49 +59,24 @@ const Auth = createSimpleContext({
       return unsubscribe;
     });
 
-    async function requestEmailCode(email: string): Promise<void> {
-      const analytics = desktopAnalytics.anonymousScope();
-      try {
-        const state = await accountPort().auth.requestEmailCode(email);
-        analytics.track("account_sign_in_started", {
-          result: state.status === "code_sent" || state.status === "company_sign_in" ? state.status : "failed",
-          ...(state.status === "error" ? { failure_code: authFailureCode(state.issue.code) } : {}),
-        });
-        applyCentralAuthState(state);
-      } catch (error) {
-        analytics.track("account_sign_in_started", {
-          result: "failed",
-          failure_code: "request_failed",
-        });
-        throw error;
-      }
+    async function signIn(): Promise<void> {
+      applyCentralAuthState(await accountPort().auth.signIn());
     }
 
-    async function openCompanySignIn(): Promise<void> {
-      applyCentralAuthState(await accountPort().auth.openCompanySignIn());
+    async function cancelSignIn(): Promise<void> {
+      applyCentralAuthState(await accountPort().auth.cancelSignIn());
+    }
+
+    async function setServiceUrl(url: string | null): Promise<AccountServiceSettings> {
+      const settings = await accountPort().auth.setServiceUrl(url);
+      setServiceSettings(settings);
+      applyCentralAuthState(await accountPort().auth.getState());
+      return settings;
     }
 
     async function retryCentralAccount(): Promise<void> {
       applyCentralAuthState({ status: "loading" });
       applyCentralAuthState(await accountPort().auth.retry());
-    }
-
-    async function verifyEmailCode(challengeId: string, code: string): Promise<void> {
-      const anonymousAnalytics = desktopAnalytics.anonymousScope();
-      try {
-        const state = await accountPort().auth.verifyEmailCode({ challengeId, code });
-        applyCentralAuthState(state);
-        desktopAnalytics.track("account_sign_in_completed", {
-          result: state.status === "signed_in" ? "succeeded" : "failed",
-          ...("issue" in state ? { failure_code: authFailureCode(state.issue?.code) } : {}),
-        });
-      } catch (error) {
-        anonymousAnalytics.track("account_sign_in_completed", {
-          result: "failed",
-          failure_code: "verification_failed",
-        });
-        throw error;
-      }
     }
 
     async function logoutCentralAccount(): Promise<void> {
@@ -263,7 +202,7 @@ const Auth = createSimpleContext({
       const state = centralAuth();
       return state.status === "signed_in" ? state.user : null;
     });
-    const visibleSignedInAccount = createMemo(() => (authSuccessVisible() ? null : signedInAccount()));
+    const visibleSignedInAccount = signedInAccount;
 
     return {
       centralAuth,
@@ -276,10 +215,11 @@ const Auth = createSimpleContext({
       invalidateAccountUsage,
       applyAccountUsage,
       refreshAccountUsage,
-      requestEmailCode,
-      openCompanySignIn,
+      signIn,
+      cancelSignIn,
+      setServiceUrl,
+      serviceSettings,
       retryCentralAccount,
-      verifyEmailCode,
       logoutCentralAccount,
       updateAccountName,
       updateAccountAvatar,

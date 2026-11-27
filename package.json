@@ -538,6 +538,7 @@
     "test:account-user-disabled": "bun scripts/account-user-disabled-e2e.ts",
     "test:account-remote-access": "bun scripts/account-remote-access-e2e.ts",
     "test:account-signal": "bun scripts/account-signal-e2e.ts",
+    "test:account-desktop": "bun scripts/account-desktop-e2e.ts",
     "test:mobile-share-sender": "bun scripts/mobile-share-sender-e2e.ts",
     "test:mobile-ota": "bun apps/mobile-updates/scripts/mobile-ota-e2e.ts",
     "test:release-script": "bun scripts/release-script-e2e.ts",

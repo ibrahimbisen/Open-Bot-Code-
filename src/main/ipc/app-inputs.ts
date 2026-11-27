@@ -50,7 +50,6 @@ import type {
   SubmitSkillInput,
   UninstallSkillInput,
   UpdatePreferenceChange,
-  VerifyEmailCodeInput,
 } from "@codebot/contracts/ipc";
 import {
   decodeExternalLinkTarget,
@@ -417,14 +416,6 @@ export function parseExternalDestination(input: unknown): ExternalDestination {
     throw new Error("Unknown external destination.");
   }
   return input;
-}
-
-export function parseEmailCodeVerification(input: unknown): VerifyEmailCodeInput {
-  if (!isObject(input)) throw new Error("Sign-in code details are required.");
-  return {
-    challengeId: requireString(input.challengeId, "challengeId", INPUT_LIMITS.identifier),
-    code: requireString(input.code, "code", 32),
-  };
 }
 
 export function parseProfileName(input: unknown): string {

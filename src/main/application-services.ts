@@ -136,7 +136,12 @@ import {
   type WorkflowsHandle,
   workflowNoticeEvent,
 } from "../backend/workflows/workflows";
-import { centralAuthApiUrl, createCentralAuthManager, safeStorageCipher } from "./account-service-access";
+import {
+  centralAuthApiUrl,
+  createCentralAuthManager,
+  safeStorageCipher,
+  signInPageOpener,
+} from "./account-service-access";
 import { type AcpRegistry, createAcpRegistry } from "./acp-registry";
 import {
   ADVANCED_FEATURES_PREFERENCE_FILE,
@@ -1190,7 +1195,7 @@ export async function createApplicationServices({
   });
   teardown.push(TEARDOWN_ORDER.agentDock, "the agent dock", () => agentDock.destroy());
   const centralAuth = createCentralAuthManager({
-    companySignInBrowser: { open: (url) => shell.openExternal(url), language: () => language },
+    companySignInBrowser: { open: signInPageOpener((url) => shell.openExternal(url)), language: () => language },
     confirmSessionAtStart: false,
   });
   teardown.push(TEARDOWN_ORDER.centralAuth, "the account runtime", () => Effect.runPromise(centralAuth.dispose()));

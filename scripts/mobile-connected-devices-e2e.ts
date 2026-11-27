@@ -62,6 +62,24 @@ function publishHost(database: DatabaseSync, input: { hostId: string; deviceKey:
     .run(randomUUID(), input.hostId, input.userId, now, now);
 }
 
+async function developmentSessionToken(apiUrl: string, email: string): Promise<string> {
+  const headers = { "Content-Type": "application/json" };
+  const sent = await (
+    await fetch(`${apiUrl}/v1/auth/email/start`, { method: "POST", headers, body: JSON.stringify({ email }) })
+  ).json();
+  const verified = await (
+    await fetch(`${apiUrl}/v1/auth/email/verify`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        challengeId: stringField(sent, "challengeId"),
+        code: stringField(sent, "developmentCode"),
+      }),
+    })
+  ).json();
+  return stringField(verified, "sessionToken");
+}
+
 function startAccountServer(databasePath: string): Promise<{ child: ChildProcess; port: number }> {
   const child = spawn(process.execPath, [SERVER, databasePath], { stdio: ["ignore", "pipe", "inherit"] });
   return new Promise((resolvePort, reject) => {
@@ -96,10 +114,12 @@ try {
     decrypt: (value) => value.toString(),
   });
   try {
-    await runCauseEffect(desktop.initialize());
-    const sent = await runCauseEffect(desktop.requestEmailCode("owner@example.com"));
-    if (sent.status !== "code_sent" || !sent.developmentCode) throw new Error("The desktop got no sign-in code.");
-    const signedIn = await runCauseEffect(desktop.verifyEmailCode(sent.challengeId, sent.developmentCode));
+    const sessionToken = await developmentSessionToken(apiUrl, "owner@example.com");
+    await writeFile(
+      join(root, "session.bin"),
+      Buffer.from(JSON.stringify({ version: 2, sessionToken })).toString("base64"),
+    );
+    const signedIn = await runCauseEffect(desktop.initialize());
     if (signedIn.status !== "signed_in") throw new Error("The desktop did not sign in.");
     const userId = signedIn.user.id;
 

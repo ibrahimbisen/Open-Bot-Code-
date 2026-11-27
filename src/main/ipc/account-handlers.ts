@@ -2,10 +2,11 @@ import { INPUT_LIMITS } from "@codebot/contracts/input-limits";
 import { LOCAL_SERVER_ID, type TestCompanySignInInput } from "@codebot/contracts/ipc";
 import { sourceText } from "@codebot/i18n/source";
 import { runCauseEffect } from "../../backend/effect-boundary";
+import { accountServiceSettingsStore } from "../account-service-access";
 import type { CentralAuthManager } from "../central-auth-manager";
 import type { HostService } from "../host-service";
 import { createHostedMobileConnect, createHostedMobileConnectLink } from "../mobile-connect-host";
-import { parseChatColor, parseEmailCodeVerification, parseProfileName } from "./app-inputs";
+import { parseChatColor, parseProfileName } from "./app-inputs";
 import { parseAvatarImage } from "./avatar-inputs";
 import { handler, type IpcGroupHandlers, payloadHandler } from "./define-ipc-group";
 import { isObject, requireString, stringPayload } from "./validation";
@@ -31,11 +32,16 @@ export function accountIpcHandlers({
     auth: {
       getState: handler(() => centralAuth.getState()),
       retry: handler(() => runCauseEffect(centralAuth.retry())),
-      requestEmailCode: payloadHandler(stringPayload("email", INPUT_LIMITS.email), (email) =>
-        runCauseEffect(centralAuth.requestEmailCode(email)),
-      ),
-      verifyEmailCode: payloadHandler(parseEmailCodeVerification, (verification) =>
-        runCauseEffect(centralAuth.verifyEmailCode(verification.challengeId, verification.code)),
+      signIn: handler(() => runCauseEffect(centralAuth.signIn())),
+      cancelSignIn: handler(() => runCauseEffect(centralAuth.cancelSignIn())),
+      getServiceSettings: handler(() => accountServiceSettingsStore().read()),
+      setServiceUrl: payloadHandler(
+        (input: unknown) => (input === null ? null : requireString(input, "url", INPUT_LIMITS.browserUrl)),
+        async (url) => {
+          const settings = accountServiceSettingsStore().write(url);
+          await runCauseEffect(centralAuth.setApiUrl(settings.url));
+          return settings;
+        },
       ),
       updateName: payloadHandler(parseProfileName, (name) => runCauseEffect(centralAuth.updateName(name))),
       updateAvatar: payloadHandler(parseAvatarImage, (parsed) => runCauseEffect(centralAuth.updateAvatar(parsed))),
@@ -60,7 +66,6 @@ export function accountIpcHandlers({
         runCauseEffect(centralAuth.revokeMobileConnectedDevice(sessionId)),
       ),
       logout: handler(() => runCauseEffect(centralAuth.logout())),
-      openCompanySignIn: handler(() => runCauseEffect(centralAuth.openCompanySignIn())),
       getCompanySignIn: payloadHandler(stringPayload("serverId"), (serverId) =>
         runCauseEffect(centralAuth.companySignInSettings(hostId(serverId))),
       ),

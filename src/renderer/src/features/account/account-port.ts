@@ -13,8 +13,10 @@ export interface AccountPort {
     | "listMobileConnectedDevices"
     | "logout"
     | "onEvent"
-    | "openCompanySignIn"
-    | "requestEmailCode"
+    | "signIn"
+    | "cancelSignIn"
+    | "getServiceSettings"
+    | "setServiceUrl"
     | "retry"
     | "revokeAccountSession"
     | "revokeMobileConnectedDevice"
@@ -22,7 +24,6 @@ export interface AccountPort {
     | "updateAvatar"
     | "updateChatColor"
     | "updateName"
-    | "verifyEmailCode"
   >;
 }
 

@@ -313,6 +313,7 @@
     "./features/settings/SettingsDialogShell": "./src/features/settings/SettingsDialogShell.tsx",
     "./features/settings/SettingsMobileConnectTab": "./src/features/settings/SettingsMobileConnectTab.tsx",
     "./features/settings/SettingsProfileTab": "./src/features/settings/SettingsProfileTab.tsx",
+    "./features/settings/AccountServiceCard": "./src/features/settings/AccountServiceCard.tsx",
     "./features/settings/SettingsUpdateServerRow": "./src/features/settings/SettingsUpdateServerRow.tsx",
     "./features/settings/SettingsUpdatesTab": "./src/features/settings/SettingsUpdatesTab.tsx",
     "./features/settings/app-settings": "./src/features/settings/app-settings.ts",

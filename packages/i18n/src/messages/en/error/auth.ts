@@ -7,6 +7,15 @@ export const messages = defineMessages("error.auth", {
   "error.auth.networkBlocked":
     "A firewall or proxy on this network blocked CodeBot from reaching {host}. Ask your network administrator to allow {host}, then try again.",
   "error.auth.signInFirst": "Sign in to CodeBot first.",
+  "error.auth.accountServiceNotConfigured": "Enter the address of your account service first.",
+  "error.auth.accountServiceUrlInvalid": "The account service address must start with https:// and have no path.",
+  "error.auth.accountServiceFixed":
+    "The environment variable CODEBOT_AUTH_API_URL sets the account service. Remove it to change the address here.",
+  "error.auth.signInFailed": "The sign-in did not finish. Try again.",
+  "error.auth.signInCancelled": "The sign-in was cancelled or refused.",
+  "error.auth.signInTimeout": "The sign-in took too long. Start it again.",
+  "error.auth.signInBrowserFailed": "CodeBot could not open your browser for the sign-in.",
+  "error.auth.signInUnavailable": "This CodeBot cannot open a browser for the sign-in.",
   "error.auth.signInRequired": "Sign in is required.",
   "error.auth.chatColorUnavailable": "The account service does not support chat colors yet. Try again later.",
   "error.auth.accountChangedDuringRegister": "The signed-in account changed while this server was being registered.",

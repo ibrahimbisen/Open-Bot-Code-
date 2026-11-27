@@ -113,4 +113,21 @@ export const messages = defineMessages("account", {
   "account.language.next": "Next language",
   "account.language.continue": "Continue",
   "account.language.change": "Change language",
+  "account.service.title": "Account service",
+  "account.service.description":
+    "Sign in is optional. Without it, CodeBot works on this computer with a local profile.",
+  "account.service.address.title": "Service address",
+  "account.service.address.description":
+    "The address of the account service on your server, for example https://account.example.com.",
+  "account.service.address.fixed": "The environment variable CODEBOT_AUTH_API_URL sets this address.",
+  "account.service.address.placeholder": "https://account.example.com",
+  "account.service.address.save": "Save",
+  "account.service.saveFailed": "Could not save the address.",
+  "account.service.signIn.title": "Sign in with Nextcloud",
+  "account.service.signIn.description":
+    "Your browser opens the Nextcloud sign-in page. Use your Nextcloud user name and password there.",
+  "account.service.signIn.waiting": "Finish the sign-in in your browser.",
+  "account.service.signIn.action": "Sign in",
+  "account.service.signIn.cancel": "Cancel",
+  "account.service.signInFailed": "Could not start the sign-in.",
 });

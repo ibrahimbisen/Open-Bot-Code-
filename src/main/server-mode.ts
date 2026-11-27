@@ -18,7 +18,6 @@ import type { ServerMemory } from "./server-memory";
 
 const CONTROL_SOCKET_FILE = "control.sock";
 const MAX_BODY_BYTES = 4096;
-const MAX_EMAIL_LENGTH = 254;
 const DEFAULT_SERVER_NAME = "CodeBot";
 
 export interface ServerModeEnvironment {
@@ -55,16 +54,7 @@ export interface ServerModeOptions {
   version: string;
   centralAuth: Pick<
     CentralAuthManager,
-    | "getState"
-    | "requestEmailCode"
-    | "cancelCompanySignIn"
-    | "verifyEmailCode"
-    | "hasSession"
-    | "retry"
-    | "canPersistSession"
-    | "redeemServerClaim"
-    | "logout"
-    | "createMobileConnect"
+    "getState" | "hasSession" | "retry" | "canPersistSession" | "redeemServerClaim" | "logout" | "createMobileConnect"
   >;
   host: Pick<
     HostService,
@@ -177,41 +167,18 @@ export class ServerMode {
 
   readonly setupRequest = (
     action: ServerSetupAction,
-    body: URLSearchParams,
+    _body: URLSearchParams,
   ): Effect.Effect<ServerModeAnswer, RemoteWorkflowError> => {
     switch (action) {
       case "status":
         return Effect.sync(() => this.#status());
       case "login_start":
-        return Effect.suspend(
-          () => this.#setupRefusal(["signed_out", "code_sent"]) ?? this.#startLogin(body.get("email") ?? "", null),
-        );
       case "login_verify":
-        return Effect.suspend(
-          () =>
-            this.#setupRefusal(["code_sent"]) ??
-            this.#verifySetupLogin(body.get("challenge") ?? "", body.get("code") ?? ""),
-        );
+        return Effect.succeed(failure(410, "email_sign_in_removed"));
       case "retry":
         return this.#retrySetup();
     }
   };
-
-  #setupRefusal(allowed: readonly CentralAuthState["status"][]): Effect.Effect<Answer> | null {
-    const { centralAuth } = this.#options;
-    const status = centralAuth.getState().status;
-    if (status === "signed_in") return Effect.succeed(failure(409, "signed_in"));
-    if (centralAuth.hasSession() || !allowed.includes(status)) return Effect.succeed(failure(409, `account_${status}`));
-    return null;
-  }
-
-  #verifySetupLogin(challenge: string, code: string): Effect.Effect<Answer, RemoteWorkflowError> {
-    const state = this.#options.centralAuth.getState();
-    if (state.status === "code_sent" && state.challengeId !== challenge.trim()) {
-      return Effect.succeed(failure(409, "challenge_replaced", sourceText("error.auth.codeNotVerified")));
-    }
-    return this.#verifyLogin(challenge, code, null);
-  }
 
   #retrySetup(): Effect.Effect<Answer, RemoteWorkflowError> {
     return Effect.suspend(() => {
@@ -244,16 +211,15 @@ export class ServerMode {
     switch (route) {
       case "GET /v1/status":
         return this.#status();
-      case "POST /v1/login/start":
-        return runCauseEffect(this.#startLogin(body.get("email") ?? "", body.get("name")));
-      case "POST /v1/login/verify":
-        return runCauseEffect(this.#verifyLogin(body.get("challenge") ?? "", body.get("code") ?? "", body.get("name")));
       case "POST /v1/login/claim":
         return runCauseEffect(this.#claimLogin(body.get("claim") ?? "", body.get("name")));
       case "POST /v1/name":
         return runCauseEffect(this.#rename(body.get("name") ?? ""));
       case "POST /v1/mobile-connect":
         return runCauseEffect(this.#mobileConnect());
+      case "POST /v1/login/start":
+      case "POST /v1/login/verify":
+        return failure(410, "email_sign_in_removed");
       case "POST /v1/logout":
         await runCauseEffect(
           this.#options.centralAuth.logout().pipe(Effect.mapError(({ cause }) => new RemoteWorkflowError({ cause }))),
@@ -295,51 +261,6 @@ export class ServerMode {
     };
   }
 
-  readonly #startLogin = Effect.fn("ServerMode.startLogin")(function* (
-    this: ServerMode,
-    email: string,
-    name: string | null,
-  ): Effect.fn.Return<Answer, RemoteWorkflowError> {
-    const normalized = email.trim();
-    if (!normalized.includes("@") || normalized.length > MAX_EMAIL_LENGTH) return failure(400, "invalid_email");
-    if (name !== null && !parseServerName(name)) return nameFailure(name);
-    if (this.#options.centralAuth.getState().status === "signed_in") return failure(409, "signed_in");
-    const state = yield* this.#options.centralAuth
-      .requestEmailCode(normalized)
-      .pipe(Effect.mapError(({ cause }) => new RemoteWorkflowError({ cause })));
-    if (state.status === "code_sent" && !state.issue) {
-      return {
-        status: 200,
-        lines: { challenge: state.challengeId, expires_at: state.expiresAt, resend_at: state.resendAvailableAt },
-      };
-    }
-    if (state.status === "company_sign_in") {
-      yield* this.#options.centralAuth.cancelCompanySignIn();
-      return failure(409, "company_sign_in_required");
-    }
-    return issueFailure(state);
-  });
-
-  readonly #verifyLogin = Effect.fn("ServerMode.verifyLogin")(function* (
-    this: ServerMode,
-    challenge: string,
-    code: string,
-    name: string | null,
-  ): Effect.fn.Return<Answer, RemoteWorkflowError> {
-    if (!challenge.trim() || !code.trim()) return failure(400, "invalid_request");
-    if (this.#options.centralAuth.getState().status === "signed_in") return failure(409, "signed_in");
-    if (name !== null) {
-      const serverName = parseServerName(name);
-      if (!serverName) return nameFailure(name);
-      this.#pendingName = serverName;
-    }
-    const state = yield* this.#options.centralAuth
-      .verifyEmailCode(challenge.trim(), code.trim())
-      .pipe(Effect.mapError(({ cause }) => new RemoteWorkflowError({ cause })));
-    if (state.status === "signed_in") return this.#status();
-    return issueFailure(state);
-  });
-
   readonly #claimLogin = Effect.fn("ServerMode.claimLogin")(function* (
     this: ServerMode,
     claim: string,
@@ -354,7 +275,7 @@ export class ServerMode {
     const { centralAuth } = this.#options;
     const status = centralAuth.getState().status;
     if (status === "signed_in") return failure(409, "signed_in");
-    if (status !== "signed_out" && status !== "code_sent") return failure(409, `account_${status}`);
+    if (status !== "signed_out") return failure(409, `account_${status}`);
     if (!centralAuth.canPersistSession()) return failure(409, "session_not_storable");
     const previousName = this.#pendingName;
     if (serverName) this.#pendingName = serverName;

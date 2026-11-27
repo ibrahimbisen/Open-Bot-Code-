@@ -155,6 +155,7 @@ import { MessageLinkRelay, openMessageLink } from "./message-link-relay";
 import { recoverFromNewerDatabase } from "./newer-database-recovery";
 import { removeOrcaPaneEnvironment } from "./orca-pane-environment";
 import { flushMainLog, startMainLog } from "./provider-log";
+import { disconnectRemoteSessionsOnAccountChange } from "./remote-account-change";
 import { notifyRemoteControlStarted } from "./remote-control-question";
 import { watchRemoteHostDirectory } from "./remote-server-host-directory";
 import { createRendererForwarders } from "./renderer-forwarders";
@@ -1241,16 +1242,25 @@ function forwardCentralAuth(state: CentralAuthState): void {
       Effect.gen(function* () {
         if (generation !== centralAuthGeneration) return;
         const nextPrincipalId = state.status === "signed_in" ? state.user.id : null;
-        if (activeRemotePrincipalId && activeRemotePrincipalId !== nextPrincipalId && services) {
-          yield* services.remoteServers
-            .disconnectRemoteSessions()
-            .pipe(
-              Effect.catch((error) =>
-                Effect.sync(() =>
-                  logger.error("Unable to disconnect the previous account's remote sessions:", toLogValue(error.cause)),
+        if (services) {
+          const remoteServers = services.remoteServers;
+          yield* disconnectRemoteSessionsOnAccountChange({
+            activePrincipalId: activeRemotePrincipalId,
+            nextPrincipalId,
+            disconnectRemoteSessions: () =>
+              remoteServers
+                .disconnectRemoteSessions()
+                .pipe(
+                  Effect.catch((error) =>
+                    Effect.sync(() =>
+                      logger.error(
+                        "Unable to disconnect the previous account's remote sessions:",
+                        toLogValue(error.cause),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            );
+          });
         }
         if (generation !== centralAuthGeneration) return;
         activeRemotePrincipalId = nextPrincipalId;

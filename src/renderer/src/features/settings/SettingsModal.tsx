@@ -24,6 +24,7 @@ import {
   Tabs,
   TriangleAlert,
 } from "@codebot/ui";
+import type { AccountServiceModel } from "@codebot/ui/features/settings/AccountServiceCard";
 import type { GeneralSettingsValue } from "@codebot/ui/features/settings/app-settings";
 import {
   SettingsDialogShell,
@@ -93,6 +94,7 @@ export interface SettingsModalProps {
   onSetRemoteNetworkRoute?: (route: RemoteNetworkRoute) => Promise<RemoteNetworkRouteState>;
   onListAccountSessions?: () => Promise<AccountSession[]>;
   onRevokeAccountSession?: (sessionId: string) => Promise<void>;
+  accountService?: AccountServiceModel | undefined;
   onSignOut?: (() => Promise<void>) | undefined;
   processAvatarFile?: (file: File) => Promise<AvatarImageInput>;
   codexLiveAccess?: CodexLiveAccess | undefined;
@@ -368,6 +370,7 @@ export function SettingsModal(props: SettingsModalProps) {
             canListSessions={Boolean(props.onListAccountSessions)}
             canRevokeSession={Boolean(props.onRevokeAccountSession)}
             onSignOut={props.onSignOut}
+            service={props.accountService}
           />
         </Tabs.Content>
 

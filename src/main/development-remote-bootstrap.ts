@@ -108,36 +108,14 @@ export const startDevelopmentRemoteRole = Effect.fn("DevelopmentRemote.startRole
 });
 
 const ensureDevelopmentAccount = Effect.fn("DevelopmentRemote.ensureAccount")(function* (
-  manager: Pick<CentralAuthManager, "initialize" | "logout" | "requestEmailCode" | "verifyEmailCode">,
+  manager: Pick<CentralAuthManager, "initialize">,
   email: string,
 ) {
   const initialized = yield* manager.initialize().pipe(toRemoteWorkflowError);
   if (initialized.status === "signed_in" && initialized.user.email === email) return initialized.user;
-  if (initialized.status === "signed_in") yield* manager.logout().pipe(toRemoteWorkflowError);
-  let challenge = yield* manager.requestEmailCode(email).pipe(toRemoteWorkflowError);
-  if (
-    challenge.status === "error" &&
-    challenge.issue.code === "code_recently_sent" &&
-    challenge.issue.retryAfterSeconds !== undefined &&
-    challenge.issue.retryAfterSeconds > 0 &&
-    challenge.issue.retryAfterSeconds <= 60
-  ) {
-    yield* Effect.sleep(challenge.issue.retryAfterSeconds * 1000);
-    challenge = yield* manager.requestEmailCode(email).pipe(toRemoteWorkflowError);
-  }
-  if (challenge.status === "error")
-    return yield* new RemoteWorkflowError({ cause: new Error(challenge.issue.message) });
-  if (challenge.status !== "code_sent" || !challenge.developmentCode)
-    return yield* new RemoteWorkflowError({
-      cause: new Error("The local account API did not return a development sign-in code."),
-    });
-  const verified = yield* manager
-    .verifyEmailCode(challenge.challengeId, challenge.developmentCode)
-    .pipe(toRemoteWorkflowError);
-  if (verified.status === "error") return yield* new RemoteWorkflowError({ cause: new Error(verified.issue.message) });
-  if (verified.status !== "signed_in")
-    return yield* new RemoteWorkflowError({ cause: new Error("The local development account could not sign in.") });
-  return verified.user;
+  return yield* new RemoteWorkflowError({
+    cause: new Error("The development remote account needs a signed-in session. Email-code sign-in was removed."),
+  });
 });
 
 const writeDevelopmentRemoteConnection = Effect.fn("DevelopmentRemote.writeConnection")(
