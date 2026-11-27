@@ -171,21 +171,6 @@ try {
   meRevoked = false;
   await writeFile(storagePath, storedWithProfile);
 
-  const switching = manager({
-    encrypt: () => {
-      throw new Error("Error while encrypting the text provided to safeStorage.encryptString.");
-    },
-  });
-  results.beforeSignIn = (await runCauseEffect(switching.initialize())).status;
-  results.signIn = (await runCauseEffect(switching.verifyEmailCode("challenge-1", "123456"))).status;
-  await runCauseEffect(switching.dispose());
-  assert.equal(results.signIn, "signed_in");
-  await assert.rejects(readFile(storagePath), { code: "ENOENT" }, "the previous session must not stay on disk");
-  const afterSignIn = manager();
-  results.afterFailedSignInWrite = (await runCauseEffect(afterSignIn.initialize())).status;
-  await runCauseEffect(afterSignIn.dispose());
-  assert.equal(results.afterFailedSignInWrite, "signed_out");
-
   assert.ok(
     logLines.some((line) => line.includes('"decrypt"')),
     "the decrypt failure must be logged",

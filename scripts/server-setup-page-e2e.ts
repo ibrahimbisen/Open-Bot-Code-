@@ -35,31 +35,6 @@ const sentCodes: string[] = [];
 const verifiedCodes: string[] = [];
 const centralAuth: ServerModeOptions["centralAuth"] = {
   getState: () => structuredClone(account),
-  requestEmailCode: (email: string) =>
-    Effect.sync(() => {
-      sentCodes.push(email);
-      account = {
-        status: "code_sent",
-        challengeId: CHALLENGE,
-        email,
-        expiresAt: Date.now() + 600_000,
-        resendAvailableAt: Date.now() + 30_000,
-      };
-      return structuredClone(account);
-    }),
-  verifyEmailCode: (challengeId: string, code: string) =>
-    Effect.sync(() => {
-      verifiedCodes.push(code);
-      if (account.status !== "code_sent") return structuredClone(account);
-      if (challengeId !== CHALLENGE || code !== CODE) {
-        account = { ...account, issue: { code: "invalid_sign_in_code", message: "The code is not valid." } };
-        return structuredClone(account);
-      }
-      account = { status: "signed_in", user: { id: "user-e2e", email: account.email, name: null, avatarUrl: null } };
-      session = true;
-      setTimeout(() => void runCauseEffect(serverMode.publish()), 0);
-      return structuredClone(account);
-    }),
   hasSession: () => session,
   retry: () =>
     Effect.sync(() => {
@@ -70,7 +45,6 @@ const centralAuth: ServerModeOptions["centralAuth"] = {
       }
       return structuredClone(account);
     }),
-  cancelCompanySignIn: () => Effect.sync(() => structuredClone(account)),
   canPersistSession: () => true,
   redeemServerClaim: () => Effect.succeed(null),
   logout: () =>

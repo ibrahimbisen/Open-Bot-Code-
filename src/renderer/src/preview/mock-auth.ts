@@ -27,6 +27,7 @@ export function createMockAuth(options: MockAuthOptions, { emit }: MockRuntime) 
   };
   let authState = clone<CentralAuthState>(options.authState ?? defaultAuthState);
   let mobileConnectLink: MobileConnectLink | null = null;
+  let serviceUrl: string | null = "https://account.example.com";
   let accountSessions: AccountSession[] = [
     {
       sessionId: "22222222-2222-4222-8222-222222222222",
@@ -79,27 +80,24 @@ export function createMockAuth(options: MockAuthOptions, { emit }: MockRuntime) 
   const auth: CodeBotDesktopApi["auth"] = {
     getState: async () => clone(authState),
     retry: async () => clone(authState),
-    requestEmailCode: async (email) => {
-      authState = {
-        status: "code_sent",
-        challengeId: "mock-challenge",
-        email,
-        expiresAt: Date.now() + 600_000,
-        resendAvailableAt: Date.now() + 60_000,
-        developmentCode: "2345-6789",
-      };
-      return clone(authState);
-    },
-    verifyEmailCode: async () => {
-      const email = authState.status === "code_sent" ? authState.email : "person@example.com";
+    signIn: async () => {
       const user: CentralAuthUser = {
         id: "user-1",
-        email,
+        email: "person@example.com",
         name: "Norbert",
         avatarUrl: null,
       };
-      authState = { status: "signed_in", user };
+      emitAuthState({ status: "signed_in", user });
       return clone(authState);
+    },
+    cancelSignIn: async () => {
+      emitAuthState({ status: "signed_out" });
+      return clone(authState);
+    },
+    getServiceSettings: async () => ({ url: serviceUrl, fixedByEnvironment: false }),
+    setServiceUrl: async (url) => {
+      serviceUrl = url;
+      return { url: serviceUrl, fixedByEnvironment: false };
     },
     updateName: async (name) => {
       if (authState.status !== "signed_in") return clone(authState);
@@ -164,7 +162,6 @@ export function createMockAuth(options: MockAuthOptions, { emit }: MockRuntime) 
       emitAuthState(authState);
       return clone(authState);
     },
-    openCompanySignIn: async () => clone(authState),
     getCompanySignIn: async () => clone(companySignIn),
     testCompanySignIn: async (input) => {
       companySignIn = {

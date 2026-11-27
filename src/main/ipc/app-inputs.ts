@@ -53,7 +53,6 @@ import type {
   SubmitSkillInput,
   UninstallSkillInput,
   UpdatePreferenceChange,
-  VerifyEmailCodeInput,
 } from "@codebot/contracts/ipc";
 import {
   decodeExternalLinkTarget,
@@ -94,7 +93,6 @@ import {
   QUIT_GUARDS,
   RENDERER_TIMING_LIMITS,
 } from "@codebot/contracts/ipc";
-import { isReferralCode } from "@codebot/contracts/referral";
 import {
   type DynamicRecord,
   isBoolean,
@@ -445,15 +443,6 @@ export function parseExternalDestination(input: unknown): ExternalDestination {
     throw new Error("Unknown external destination.");
   }
   return input;
-}
-
-export function parseEmailCodeVerification(input: unknown): VerifyEmailCodeInput {
-  if (!isObject(input)) throw new Error("Sign-in code details are required.");
-  return {
-    challengeId: requireString(input.challengeId, "challengeId", INPUT_LIMITS.identifier),
-    code: requireString(input.code, "code", 32),
-    ...(isReferralCode(input.referralCode) ? { referralCode: input.referralCode } : {}),
-  };
 }
 
 export function parseProfileName(input: unknown): string {

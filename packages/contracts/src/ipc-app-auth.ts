@@ -199,6 +199,7 @@ export type CentralAuthState =
       issue?: CentralAuthIssue | undefined;
     }
   | { status: "company_sign_in"; email: string; issue?: CentralAuthIssue | undefined }
+  | { status: "browser_sign_in"; issue?: CentralAuthIssue | undefined }
   | { status: "signed_in"; user: CentralAuthUser }
   | { status: "error"; issue: CentralAuthIssue };
 
@@ -276,11 +277,17 @@ export function decodeTestCompanySignInResult(value: unknown): TestCompanySignIn
   return { email: requiredString(decodeRecord(value, "company sign-in test"), "email") };
 }
 
-export interface VerifyEmailCodeInput {
-  challengeId: string;
-  code: string;
-  referralCode?: string;
+export interface AccountServiceSettings {
+  url: string | null;
+  fixedByEnvironment: boolean;
 }
+
+export const LOCAL_PROFILE_USER: CentralAuthUser = {
+  id: "local-profile",
+  email: "",
+  name: null,
+  avatarUrl: null,
+};
 
 export type MacPermissionId = "screen-recording" | "accessibility";
 

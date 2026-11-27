@@ -169,6 +169,7 @@ import type {
   UpdateAgentInput,
 } from "./ipc-agents";
 import type {
+  AccountServiceSettings,
   AppInfo,
   AppSetupState,
   BackgroundProcess,
@@ -199,7 +200,6 @@ import type {
   UpdatePreferenceChange,
   UpdateRestartMode,
   UpdateStatus,
-  VerifyEmailCodeInput,
 } from "./ipc-app-auth";
 import type { AppBehaviorPreference, AppBehaviorPreferenceChange } from "./ipc-app-behavior";
 import type { AppUpdateFeed, SetAppUpdateFeedInput } from "./ipc-app-update";
@@ -1591,8 +1591,10 @@ export const IPC_ENDPOINTS = {
   auth: {
     getState: request<undefined, CentralAuthState>()("auth:get-state"),
     retry: request<undefined, CentralAuthState>()("auth:retry"),
-    requestEmailCode: request<string, CentralAuthState>()("auth:request-email-code"),
-    verifyEmailCode: request<VerifyEmailCodeInput, CentralAuthState>()("auth:verify-email-code"),
+    signIn: request<undefined, CentralAuthState>()("auth:sign-in"),
+    cancelSignIn: request<undefined, CentralAuthState>()("auth:cancel-sign-in"),
+    getServiceSettings: request<undefined, AccountServiceSettings>()("auth:get-service-settings"),
+    setServiceUrl: request<string | null, AccountServiceSettings>()("auth:set-service-url"),
     updateName: request<string, CentralAuthState>()("auth:update-name"),
     updateAvatar: request<AvatarImageInput | null, CentralAuthState>()("auth:update-avatar"),
     updateChatColor: request<AvatarColor | null, CentralAuthState>()("auth:update-chat-color"),
@@ -1606,7 +1608,6 @@ export const IPC_ENDPOINTS = {
     revokeAccountSession: request<string, void>()("auth:revoke-account-session"),
     revokeMobileConnectedDevice: request<string, void>()("auth:revoke-mobile-connected-device"),
     logout: request<undefined, CentralAuthState>()("auth:logout"),
-    openCompanySignIn: request<undefined, CentralAuthState>()("auth:open-company-sign-in"),
     getCompanySignIn: request<string, CompanySignInSettings>()("auth:company-sign-in:get"),
     testCompanySignIn: request<TestCompanySignInInput, TestCompanySignInResult>()("auth:company-sign-in:test"),
     cancelCompanySignInTest: request<undefined, void>()("auth:company-sign-in:cancel-test"),

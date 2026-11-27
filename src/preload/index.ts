@@ -168,6 +168,7 @@ import {
 } from "./agent-dock-decoding";
 import { decodeScopedAgentEvent } from "./agent-event-decoding";
 import {
+  decodeAccountServiceSettings,
   decodeAccountSessions,
   decodeAgentDefaults,
   decodeAgentImportSkill,
@@ -1084,8 +1085,10 @@ const codebotApi: CodeBotDesktopApi = {
   auth: bridgeGroup(IPC_ENDPOINTS.auth, {
     getState: decodeCentralAuthState,
     retry: decodeCentralAuthState,
-    requestEmailCode: decodeCentralAuthState,
-    verifyEmailCode: decodeCentralAuthState,
+    signIn: decodeCentralAuthState,
+    cancelSignIn: decodeCentralAuthState,
+    getServiceSettings: decodeAccountServiceSettings,
+    setServiceUrl: decodeAccountServiceSettings,
     updateName: decodeCentralAuthState,
     updateAvatar: decodeCentralAuthState,
     updateChatColor: decodeCentralAuthState,
@@ -1099,7 +1102,6 @@ const codebotApi: CodeBotDesktopApi = {
     revokeAccountSession: decodeVoid,
     revokeMobileConnectedDevice: decodeVoid,
     logout: decodeCentralAuthState,
-    openCompanySignIn: decodeCentralAuthState,
     getCompanySignIn: decodeCompanySignInSettings,
     testCompanySignIn: decodeTestCompanySignInResult,
     cancelCompanySignInTest: decodeVoid,

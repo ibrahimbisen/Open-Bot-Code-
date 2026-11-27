@@ -1,3 +1,4 @@
+import { LOCAL_PROFILE_USER } from "@codebot/contracts/ipc";
 import { AppLoadingScreen } from "@codebot/ui/features/account/AppLoadingScreen";
 import { UpdateRequiredScreen } from "@codebot/ui/features/updates/UpdateRequiredScreen";
 import { useText } from "@codebot/ui/text";
@@ -17,7 +18,7 @@ import { WhatsNewOverlay } from "./features/updates/WhatsNewOverlay";
 import { QuitShortcutHint } from "./features/window/QuitShortcutHint";
 import { startsAfterRestart } from "./features/window/restarted-start";
 import { useI18n } from "./i18n-context";
-import { AccountLogin, FirstRunFlow, InitialSetup, LanguageStep } from "./lazy-views";
+import { FirstRunFlow, InitialSetup, LanguageStep } from "./lazy-views";
 import { usePlatform } from "./platform";
 import { reportWorkspaceReady } from "./renderer-timing";
 import { startupLoadingScene } from "./startup-animation-preference";
@@ -61,13 +62,17 @@ export function AppAccessGate() {
   const [splashOpen, setSplashOpen] = createSignal(false);
   const splashMoving = () => splashShown() && !splashOpen();
   const [workspaceReady, setWorkspaceReady] = createSignal(false);
-  const workspaceShown = () =>
-    !!auth.visibleSignedInAccount() && (setup.setupState()?.completed === true || !scope.connection.hasContent);
-  const splashReady = () =>
-    started() && auth.centralAuth().status !== "loading" && (!workspaceShown() || workspaceReady() || updateRequired());
   const languageStep = createLanguageStep();
   const languageStepShown = () =>
     !languageStep.done() && (languageStep.reopened() || auth.centralAuth().status === "signed_out");
+  const shownAccount = () =>
+    auth.centralAuth().status === "loading" || languageStepShown()
+      ? null
+      : (auth.signedInAccount() ?? LOCAL_PROFILE_USER);
+  const workspaceShown = () =>
+    !!shownAccount() && (setup.setupState()?.completed === true || !scope.connection.hasContent);
+  const splashReady = () =>
+    started() && auth.centralAuth().status !== "loading" && (!workspaceShown() || workspaceReady() || updateRequired());
   createEffect(
     () => auth.centralAuth().status === "signed_in",
     (signedIn) => {
@@ -94,26 +99,10 @@ export function AppAccessGate() {
       </Show>
       <Show when={started() && !updateRequired()}>
         <Show
-          when={auth.visibleSignedInAccount()}
+          when={shownAccount()}
           fallback={
             <Loading fallback={<LoadingScreen />}>
-              <Show
-                when={languageStepShown()}
-                fallback={
-                  <AccountLogin
-                    variant={platform.appInfo()?.variant ?? "production"}
-                    state={auth.centralAuth()}
-                    onRetry={auth.retryCentralAccount}
-                    onRequestEmailCode={auth.requestEmailCode}
-                    onVerifyEmailCode={auth.verifyEmailCode}
-                    inviteField
-                    onReset={auth.logoutCentralAccount}
-                    onOpenCompanySignIn={auth.openCompanySignIn}
-                    language={i18n.locale()}
-                    onChangeLanguage={languageStep.reopen}
-                  />
-                }
-              >
+              <Show when={languageStepShown()} fallback={<LoadingScreen />}>
                 <LanguageStep
                   variant={platform.appInfo()?.variant ?? "production"}
                   reopened={languageStep.reopened()}
@@ -191,7 +180,7 @@ export function AppAccessGate() {
           !platform.chatWindow &&
           !updateRequired() &&
           !splashShown() &&
-          !!auth.visibleSignedInAccount() &&
+          !!shownAccount() &&
           (setup.setupState()?.completed === true || !scope.connection.hasContent)
         }
       />

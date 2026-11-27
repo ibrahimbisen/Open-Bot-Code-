@@ -1093,6 +1093,15 @@ function AppSettings(props: AccountProps) {
         onListAccountSessions={auth.listAccountSessions}
         onRevokeAccountSession={auth.revokeAccountSession}
         onSignOut={platform.landingPreview ? undefined : auth.logoutCentralAccount}
+        accountService={{
+          state: auth.centralAuth(),
+          settings: auth.serviceSettings(),
+          onSaveUrl: async (url: string | null) => {
+            await auth.setServiceUrl(url);
+          },
+          onSignIn: auth.signIn,
+          onCancelSignIn: auth.cancelSignIn,
+        }}
         billingApi={appPort().billing}
         referralApi={appPort().referral}
         licenseApi={appPort().license}

@@ -25,6 +25,7 @@ import {
 } from "@codebot/contracts/hosted-servers";
 import { parseHostedSiteList, parseHostedSiteSummary } from "@codebot/contracts/hosted-sites";
 import {
+  type AccountServiceSettings,
   type AccountSession,
   AGENT_DEFAULT_KEYS,
   type AgentDefaults,
@@ -317,6 +318,13 @@ export function decodeChatWindowTargets(value: unknown): ChatWindowTarget[] {
   });
 }
 
+export function decodeAccountServiceSettings(value: unknown): AccountServiceSettings {
+  const settings = decodeRecord(value, "account service settings");
+  const url = settings.url;
+  if (url !== null && !isString(url)) throw new Error("Invalid account service address.");
+  return { url, fixedByEnvironment: requiredBoolean(settings, "fixedByEnvironment") };
+}
+
 export function decodeCentralAuthState(value: unknown): CentralAuthState {
   const state = decodeRecord(value, "account state");
   switch (state.status) {
@@ -348,6 +356,10 @@ export function decodeCentralAuthState(value: unknown): CentralAuthState {
         ...(issue === undefined ? {} : { issue: decodeCentralAuthIssue(issue) }),
       };
     }
+    case "browser_sign_in":
+      return state.issue === undefined
+        ? { status: "browser_sign_in" }
+        : { status: "browser_sign_in", issue: decodeCentralAuthIssue(state.issue) };
     case "signed_in":
       return { status: "signed_in", user: decodeCentralAuthUser(state.user) };
     case "error":

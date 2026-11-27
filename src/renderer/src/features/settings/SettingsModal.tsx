@@ -39,6 +39,7 @@ import { CreditsSection } from "@codebot/ui/features/credits/CreditsSection";
 import { createCreditsStore } from "@codebot/ui/features/credits/credits-store";
 import { ReferralPanel } from "@codebot/ui/features/referral/ReferralPanel";
 import { createReferralStore } from "@codebot/ui/features/referral/referral-store";
+import type { AccountServiceModel } from "@codebot/ui/features/settings/AccountServiceCard";
 import type { GeneralSettingsValue } from "@codebot/ui/features/settings/app-settings";
 import {
   SettingsDialogShell,
@@ -110,6 +111,7 @@ export interface SettingsModalProps {
   onSetRemoteNetworkRoute?: (route: RemoteNetworkRoute) => Promise<RemoteNetworkRouteState>;
   onListAccountSessions?: () => Promise<AccountSession[]>;
   onRevokeAccountSession?: (sessionId: string) => Promise<void>;
+  accountService?: AccountServiceModel | undefined;
   onSignOut?: (() => Promise<void>) | undefined;
   processAvatarFile?: (file: File) => Promise<AvatarImageInput>;
   billingApi?: BillingDesktopApi;
@@ -432,6 +434,7 @@ export function SettingsModal(props: SettingsModalProps) {
             canListSessions={Boolean(props.onListAccountSessions)}
             canRevokeSession={Boolean(props.onRevokeAccountSession)}
             onSignOut={props.onSignOut}
+            service={props.accountService}
           />
         </Tabs.Content>
 

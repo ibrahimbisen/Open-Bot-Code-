@@ -71,7 +71,6 @@ import {
   decodeAcceptedRemoteInvite,
   decodeCentralAuthUser,
   decodeCreatedRemoteInvite,
-  decodeEmailChallenge,
   decodeMobileConnectedDevices,
   decodeMobileConnectLinkResponse,
   decodeRecordHealth,
@@ -99,7 +98,7 @@ interface CentralAuthEvents {
 type AuthFetcher = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;
 
 interface CentralAuthManagerOptions {
-  apiUrl: string;
+  apiUrl: string | null;
   mobileConnectApiUrl?: string;
   storagePath: string;
   encrypt: (value: string) => Buffer;
@@ -110,7 +109,6 @@ interface CentralAuthManagerOptions {
   startupRetryWindowMs?: number;
   startupRequestTimeoutMs?: number;
   startupRetryDelaysMs?: readonly number[];
-  emailCodeRequestTimeoutMs?: number;
   companySignInBrowser?: CompanySignInBrowser | null;
   confirmSessionAtStart?: boolean;
 }
@@ -142,12 +140,6 @@ function storedSessionFailure(stage: StoredSessionStage, error: unknown) {
   return { stage, error: error instanceof Error ? error.name : typeof error, code };
 }
 
-interface EmailCodeRequest {
-  email: string;
-  idempotencyKey: string;
-  pending: Deferred.Deferred<CentralAuthState, CentralAuthOperationError> | null;
-}
-
 const TELEGRAM_BOT_USERNAME = /^[A-Za-z0-9_]{5,32}$/u;
 
 const STARTUP_RETRY_WINDOW_MS = 30_000;
@@ -155,22 +147,6 @@ const STARTUP_REQUEST_TIMEOUT_MS = 3_000;
 const STARTUP_RETRY_DELAYS_MS = [250, 500, 1_000, 2_000] as const;
 const UNAVAILABLE_RETRY_DELAYS_MS = [5_000, 10_000, 20_000, 30_000, 60_000] as const;
 const MAX_UNAVAILABLE_RETRY_AFTER_SECONDS = 60 * 60;
-const EMAIL_CODE_REQUEST_TIMEOUT_MS = 35_000;
-const RESEND_FALLBACK_DELAY_MS = 60_000;
-const DEFINITIVE_EMAIL_CODE_REQUEST_FAILURES = new Set([
-  "email_delivery_failed",
-  "email_delivery_rate_limited",
-  "idempotency_conflict",
-  "idempotency_key_completed",
-  "invalid_email",
-  "invalid_idempotency_key",
-  "sign_in_code_expired",
-]);
-const UNCERTAIN_EMAIL_CODE_REQUEST_FAILURES = new Set([
-  "email_delivery_pending",
-  "email_delivery_timeout",
-  "email_delivery_unknown",
-]);
 const remoteTicketJwksSchema = z.object({
   keys: z.array(z.object({ kty: z.string() }).loose()).min(1),
 });
@@ -227,7 +203,6 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     CentralAuthTransport
   > | null = null;
   #initialization: Deferred.Deferred<CentralAuthState, CentralAuthOperationError> | null = null;
-  #emailCodeRequest: EmailCodeRequest | null = null;
   #profileRefresh: Deferred.Deferred<CentralAuthState, CentralAuthOperationError> | null = null;
   #profileRefreshGeneration = 0;
   #companySignInCancel: Deferred.Deferred<void> | null = null;
@@ -236,20 +211,30 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   #unavailableRetryFailures = 0;
   #disposed = false;
 
+  #apiUrl: string;
+  #mobileConnectApiUrl: string | null;
+  #configured: boolean;
+
   constructor(options: CentralAuthManagerOptions) {
     super();
-    const fetcher = detectBlockingNetwork(options.fetch ?? fetch, options.apiUrl);
+    this.#configured = options.apiUrl !== null;
+    this.#apiUrl = options.apiUrl ?? UNCONFIGURED_API_URL;
+    this.#mobileConnectApiUrl = options.mobileConnectApiUrl ?? null;
+    const fetcher = notConfiguredGuard(
+      detectBlockingNetwork(options.fetch ?? fetch, () => this.#apiUrl),
+      () => this.#configured,
+    );
     this.#transport = CentralAuthTransport.layer(fetcher);
     this.#options = {
       ...options,
-      mobileConnectApiUrl: options.mobileConnectApiUrl ?? options.apiUrl,
+      apiUrl: this.#apiUrl,
+      mobileConnectApiUrl: "",
       canPersist: options.canPersist ?? (() => true),
       keyringChanged: options.keyringChanged ?? (() => false),
       fetch: fetcher,
       startupRetryWindowMs: options.startupRetryWindowMs ?? STARTUP_RETRY_WINDOW_MS,
       startupRequestTimeoutMs: options.startupRequestTimeoutMs ?? STARTUP_REQUEST_TIMEOUT_MS,
       startupRetryDelaysMs: options.startupRetryDelaysMs ?? STARTUP_RETRY_DELAYS_MS,
-      emailCodeRequestTimeoutMs: options.emailCodeRequestTimeoutMs ?? EMAIL_CODE_REQUEST_TIMEOUT_MS,
       companySignInBrowser: options.companySignInBrowser ?? null,
       confirmSessionAtStart: options.confirmSessionAtStart ?? false,
     };
@@ -282,6 +267,30 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
       );
     });
   }
+
+  get #mobileApiUrl(): string {
+    return this.#mobileConnectApiUrl ?? this.#apiUrl;
+  }
+
+  isConfigured(): boolean {
+    return this.#configured;
+  }
+
+  readonly setApiUrl = Effect.fn("CentralAuth.setApiUrl")(
+    function* (this: CentralAuthManager, apiUrl: string | null) {
+      const changed = apiUrl !== (this.#configured ? this.#apiUrl : null);
+      if (!changed) return this.getState();
+      this.#endCompanySignIn();
+      this.#cancelUnavailableRetry();
+      this.stopProfileRefresh();
+      if (this.#sessionToken) yield* this.#clearStoredSessionEffect();
+      this.#configured = apiUrl !== null;
+      this.#apiUrl = apiUrl ?? UNCONFIGURED_API_URL;
+      this.#mobileConnectApiUrl = null;
+      return this.#setState({ status: "signed_out" });
+    },
+    (operation) => this.#owned(operation),
+  ).bind(this);
 
   getState(): CentralAuthState {
     return structuredClone(this.#state);
@@ -349,7 +358,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   }
 
   resolveApiUrl(path: string): string {
-    return new URL(path, this.#options.apiUrl).toString();
+    return new URL(path, this.#apiUrl).toString();
   }
 
   requestAuthorized<T>(
@@ -372,7 +381,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
           cause: new AuthApiError(401, "unauthorized", sourceText("error.auth.signInRequired")),
         });
       const response = yield* CentralAuthTransport.use((transport) =>
-        transport.fetch(new URL(path, this.#options.apiUrl), {
+        transport.fetch(new URL(path, this.#apiUrl), {
           headers: { Authorization: `Bearer ${this.#sessionToken}` },
           signal: AbortSignal.timeout(timeoutMs),
         }),
@@ -433,7 +442,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
         });
       }
       return {
-        qrData: createMobileConnectUrl({ apiUrl: this.#options.mobileConnectApiUrl, ticket: result.ticket, host }),
+        qrData: createMobileConnectUrl({ apiUrl: this.#mobileApiUrl, ticket: result.ticket, host }),
         expiresAt,
       };
     },
@@ -520,7 +529,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   #mobileConnectLinkView(stored: StoredMobileConnectLink): MobileConnectLink {
     return {
       url: createMobileConnectUrl({
-        apiUrl: this.#options.mobileConnectApiUrl,
+        apiUrl: this.#mobileApiUrl,
         ticket: stored.token,
         host: stored.host,
       }),
@@ -713,7 +722,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     ): Effect.fn.Return<Response, CentralAuthOperationError, CentralAuthTransport> {
       const headers = yield* this.#relayHeaders(caller, init.headers);
       return yield* CentralAuthTransport.use((transport) =>
-        transport.fetch(new URL(path, this.#options.apiUrl), { ...init, headers, redirect: "error" }),
+        transport.fetch(new URL(path, this.#apiUrl), { ...init, headers, redirect: "error" }),
       );
     },
     (operation) => this.#owned(operation),
@@ -742,7 +751,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     ): Effect.fn.Return<Uint8Array, CentralAuthOperationError, CentralAuthTransport> {
       const headers = yield* this.#hostHeaders(hostId, undefined);
       const response = yield* CentralAuthTransport.use((transport) =>
-        transport.fetch(new URL(path, this.#options.apiUrl), { headers, signal: AbortSignal.timeout(timeoutMs) }),
+        transport.fetch(new URL(path, this.#apiUrl), { headers, signal: AbortSignal.timeout(timeoutMs) }),
       );
       if (!response.ok)
         return yield* new CentralAuthOperationError({
@@ -1176,7 +1185,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     this: CentralAuthManager,
   ): Effect.fn.Return<z.infer<typeof remoteTicketJwksSchema>, CentralAuthOperationError, CentralAuthTransport> {
     const response = yield* CentralAuthTransport.use((transport) =>
-      transport.fetch(new URL("/.well-known/jwks.json", this.#options.apiUrl), {
+      transport.fetch(new URL("/.well-known/jwks.json", this.#apiUrl), {
         signal: AbortSignal.timeout(10_000),
       }),
     );
@@ -1507,7 +1516,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
         return yield* new CentralAuthOperationError({
           cause: new AuthApiError(401, "unauthorized", sourceText("error.auth.signInRequired")),
         });
-      const url = new URL(`/v2/remote/hosts/${encodeURIComponent(hostId)}/logo`, this.#options.apiUrl);
+      const url = new URL(`/v2/remote/hosts/${encodeURIComponent(hostId)}/logo`, this.#apiUrl);
       url.searchParams.set("v", version);
       const response = yield* CentralAuthTransport.use((transport) =>
         transport.fetch(url, {
@@ -1668,6 +1677,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   readonly #initialize = Effect.fn("CentralAuth.initialize")(function* (
     this: CentralAuthManager,
   ): Effect.fn.Return<CentralAuthState, CentralAuthOperationError, CentralAuthTransport> {
+    if (!this.#configured) return this.#setState({ status: "signed_out" });
     this.#setState({ status: "loading" });
     let keyringChanged = false;
     if (this.#options.canPersist()) {
@@ -1746,159 +1756,14 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     if (JSON.stringify(user) !== JSON.stringify(this.#state.user)) this.#setState({ status: "signed_in", user });
   });
 
-  readonly requestEmailCode = Effect.fn("CentralAuth.requestEmailCode")(
-    function* (this: CentralAuthManager, email: string) {
-      const normalizedEmail = email.trim().toLowerCase();
-      const existingRequest = this.#emailCodeRequest;
-      if (existingRequest?.email === normalizedEmail && existingRequest.pending)
-        return yield* Deferred.await(existingRequest.pending);
-      const request: EmailCodeRequest =
-        existingRequest?.email === normalizedEmail
-          ? existingRequest
-          : { email: normalizedEmail, idempotencyKey: randomUUID(), pending: null };
-      this.#emailCodeRequest = request;
-      const pending = Deferred.makeUnsafe<CentralAuthState, CentralAuthOperationError>();
-      request.pending = pending;
-      return yield* this.#performEmailCodeRequest(request).pipe(Effect.onExit((exit) => Deferred.done(pending, exit)));
-    },
-    (operation) => this.#owned(operation),
-  ).bind(this);
-
-  readonly #performEmailCodeRequest = Effect.fn("CentralAuth.performEmailCodeRequest")(function* (
-    this: CentralAuthManager,
-    request: EmailCodeRequest,
-  ): Effect.fn.Return<CentralAuthState, CentralAuthOperationError, CentralAuthTransport> {
-    const existingChallenge = this.#state.status === "code_sent" ? this.#state : null;
-    if (existingChallenge) {
-      const { issue: _previousIssue, ...challenge } = existingChallenge;
-      this.#setState(challenge);
-    } else {
-      this.#setState({ status: "signing_in" });
-    }
-    return yield* Effect.gen({ self: this }, function* () {
-      const result = yield* this.#requestEffect(
-        "/v1/auth/email/start",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Idempotency-Key": request.idempotencyKey,
-          },
-          body: JSON.stringify({ email: request.email }),
-        },
-        decodeEmailChallenge,
-        this.#options.emailCodeRequestTimeoutMs,
-      );
-      if (!result.challengeId || !Number.isFinite(result.expiresAt)) {
-        return yield* new CentralAuthOperationError({
-          cause: new Error("The account service returned an invalid sign-in challenge."),
-        });
-      }
-      if (this.#emailCodeRequest === request) this.#emailCodeRequest = null;
-      return this.#setState({
-        status: "code_sent",
-        challengeId: result.challengeId,
-        email: request.email,
-        expiresAt: result.expiresAt,
-        resendAvailableAt: result.resendAt ?? Math.min(result.expiresAt, Date.now() + RESEND_FALLBACK_DELAY_MS),
-        ...(result.developmentCode ? { developmentCode: result.developmentCode } : {}),
-      });
-    })
-      .pipe(
-        Effect.catch(({ cause: error }) =>
-          Effect.sync(() => {
-            if (error instanceof AuthApiError && error.code === "company_sign_in_required") {
-              if (this.#emailCodeRequest === request) this.#emailCodeRequest = null;
-              return this.#startCompanySignIn(request.email);
-            }
-            if (isDefinitiveEmailCodeRequestFailure(error) && this.#emailCodeRequest === request) {
-              this.#emailCodeRequest = null;
-            }
-            const issue = emailCodeRequestIssue(error);
-            if (existingChallenge && !UNCERTAIN_EMAIL_CODE_REQUEST_FAILURES.has(issue.code)) {
-              return this.#setState({ ...existingChallenge, issue });
-            }
-            return this.#setState({
-              status: "error",
-              issue,
-            });
-          }),
-        ),
-      )
-      .pipe(
-        Effect.ensuring(
-          Effect.sync(() => {
-            if (this.#emailCodeRequest === request) request.pending = null;
-          }).pipe(Effect.orDie),
-        ),
-      );
-  });
-
-  readonly verifyEmailCode = Effect.fn("CentralAuth.verifyEmailCode")(
-    function* (
-      this: CentralAuthManager,
-      challengeId: string,
-      code: string,
-      referralCode?: string,
-    ): Effect.fn.Return<CentralAuthState, CentralAuthOperationError, CentralAuthTransport> {
-      const challenge = this.#state.status === "code_sent" ? this.#state : null;
-      if (challenge) {
-        const { issue: _previousIssue, ...pendingChallenge } = challenge;
-        this.#setState(pendingChallenge);
-      }
-      let sessionApplied = false;
-      return yield* Effect.gen({ self: this }, function* () {
-        const session = yield* this.#requestEffect(
-          "/v1/auth/email/verify",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ challengeId, code, ...(referralCode ? { referralCode } : {}) }),
-          },
-          decodeSessionResponse,
-        );
-        if (this.#sessionAccountId !== null && this.#sessionAccountId !== session.user.id) {
-          this.#teamHostTokens.clear();
-        }
-        this.#sessionToken = session.sessionToken;
-        this.#mobileConnectLink = null;
-        sessionApplied = true;
-        yield* this.#writeStoredSession();
-        return this.#setState({
-          status: "signed_in",
-          user: this.#resolveUserAvatar(session.user),
-        });
-      }).pipe(
-        Effect.catch(({ cause: error }) =>
-          Effect.gen({ self: this }, function* () {
-            if (sessionApplied || !challenge) yield* this.#clearStoredSessionEffect();
-            if (challenge) {
-              return this.#setState({
-                ...challenge,
-                issue: centralAuthIssue(error, "email_sign_in_failed", sourceText("error.auth.codeNotVerified")),
-              });
-            }
-            return this.#setState({
-              status: "error",
-              issue: centralAuthIssue(error, "email_sign_in_failed", sourceText("error.auth.codeNotVerified")),
-            });
-          }),
-        ),
-      );
-    },
-    (operation) => this.#owned(operation),
-  ).bind(this);
-
-  openCompanySignIn(): Effect.Effect<CentralAuthState> {
-    return Effect.sync(() =>
-      this.#state.status === "company_sign_in" ? this.#startCompanySignIn(this.#state.email) : this.getState(),
-    );
+  signIn(): Effect.Effect<CentralAuthState> {
+    return Effect.sync(() => this.#startBrowserSignIn());
   }
 
-  cancelCompanySignIn(): Effect.Effect<CentralAuthState> {
+  cancelSignIn(): Effect.Effect<CentralAuthState> {
     return Effect.sync(() => {
       this.#endCompanySignIn();
-      if (this.#state.status !== "company_sign_in") return this.getState();
+      if (this.#state.status !== "browser_sign_in") return this.getState();
       return this.#setState({ status: "signed_out" });
     });
   }
@@ -1913,47 +1778,55 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     this.#companySignInTestCancel = null;
   }
 
-  #startCompanySignIn(email: string): CentralAuthState {
+  #startBrowserSignIn(): CentralAuthState {
     this.#endCompanySignIn();
+    if (this.#state.status === "signed_in") return this.getState();
+    if (!this.#configured) {
+      return this.#setState({
+        status: "browser_sign_in",
+        issue: {
+          code: "account_service_not_configured",
+          message: sourceText("error.auth.accountServiceNotConfigured"),
+        },
+      });
+    }
     const browser = this.#options.companySignInBrowser;
     if (!browser) {
       return this.#setState({
-        status: "company_sign_in",
-        email,
-        issue: { code: "company_sign_in_unavailable", message: sourceText("error.auth.companySignInUnavailable") },
+        status: "browser_sign_in",
+        issue: { code: "sign_in_unavailable", message: sourceText("error.auth.signInUnavailable") },
       });
     }
     const cancel = Deferred.makeUnsafe<void>();
     this.#companySignInCancel = cancel;
-    const state = this.#setState({ status: "company_sign_in", email });
-    Effect.runFork(this.#owned(this.#runCompanySignIn(browser, email, cancel)));
+    const state = this.#setState({ status: "browser_sign_in" });
+    Effect.runFork(this.#owned(this.#runBrowserSignIn(browser, cancel)));
     return state;
   }
 
-  readonly #runCompanySignIn = Effect.fn("CentralAuth.runCompanySignIn")(function* (
+  readonly #runBrowserSignIn = Effect.fn("CentralAuth.runBrowserSignIn")(function* (
     this: CentralAuthManager,
     browser: CompanySignInBrowser,
-    email: string,
     cancel: Deferred.Deferred<void>,
   ): Effect.fn.Return<void, never, CentralAuthTransport> {
     const verifier = randomBytes(32).toString("base64url");
     const challenge = createHash("sha256").update(verifier).digest("base64url");
     const signedIn = yield* Effect.gen({ self: this }, function* () {
-      const params = yield* awaitCompanySignIn(browser, cancel, (returnTo, clientState) =>
+      const params = yield* awaitCompanySignIn(browser, cancel, (redirectUri, state) =>
         this.#requestEffect(
-          "/v1/auth/company/start",
+          "/v1/auth/oidc/start",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, returnTo, clientState, clientChallenge: challenge }),
+            body: JSON.stringify({ redirectUri, codeChallenge: challenge, state }),
           },
           decodeAuthorizationUrl,
         ),
       );
       const code = params.get("code");
-      if (!code) return yield* new CompanySignInBrowserError({ code: "company_sign_in_failed" });
+      if (!code) return yield* new CompanySignInBrowserError({ code: "sign_in_failed" });
       const session = yield* this.#requestEffect(
-        "/v1/auth/company/exchange",
+        "/v1/auth/oidc/exchange",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1976,7 +1849,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     const failure = signedIn.failure;
     if (failure instanceof CompanySignInBrowserError && failure.code === "cancelled") return;
     this.#companySignInCancel = null;
-    this.#setState({ status: "company_sign_in", email, issue: companySignInIssue(failure) });
+    this.#setState({ status: "browser_sign_in", issue: browserSignInIssue(failure) });
   });
 
   readonly companySignInSettings = Effect.fn("CentralAuth.companySignInSettings")(
@@ -2233,7 +2106,6 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
     function* (
       this: CentralAuthManager,
     ): Effect.fn.Return<CentralAuthState, CentralAuthOperationError, CentralAuthTransport> {
-      this.#emailCodeRequest = null;
       this.#endCompanySignIn();
       this.#endCompanySignInTest();
       if (this.#sessionToken) {
@@ -2359,7 +2231,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   ): Effect.fn.Return<T, CentralAuthOperationError, CentralAuthTransport> {
     const deadline = AbortSignal.timeout(timeoutMs);
     const response = yield* CentralAuthTransport.use((transport) =>
-      transport.fetch(new URL(path, this.#options.apiUrl), {
+      transport.fetch(new URL(path, this.#apiUrl), {
         ...init,
         signal: deadline,
       }),
@@ -2474,7 +2346,7 @@ export class CentralAuthManager extends EventEmitter<CentralAuthEvents> {
   #resolveUserAvatar(user: CentralAuthUser): CentralAuthUser {
     return {
       ...user,
-      avatarUrl: user.avatarUrl ? new URL(user.avatarUrl, this.#options.apiUrl).toString() : null,
+      avatarUrl: user.avatarUrl ? new URL(user.avatarUrl, this.#apiUrl).toString() : null,
     };
   }
 
@@ -2725,9 +2597,38 @@ const INTERCEPTED_TLS_CODES = new Set([
   "ERR_CERT_COMMON_NAME_INVALID",
 ]);
 
-function detectBlockingNetwork(fetcher: AuthFetcher, apiUrl: string): AuthFetcher {
+const UNCONFIGURED_API_URL = "http://account-service.invalid";
+
+function notConfiguredGuard(fetcher: AuthFetcher, configured: () => boolean): AuthFetcher {
+  return async (input, init) => {
+    if (!configured()) throw new TypeError("fetch failed");
+    return fetcher(input, init);
+  };
+}
+
+function browserSignInErrorKey(
+  code: string,
+):
+  | "error.auth.signInFailed"
+  | "error.auth.signInTimeout"
+  | "error.auth.signInCancelled"
+  | "error.auth.signInBrowserFailed" {
+  switch (code) {
+    case "timeout":
+      return "error.auth.signInTimeout";
+    case "access_denied":
+      return "error.auth.signInCancelled";
+    case "browser_failed":
+    case "listener_failed":
+      return "error.auth.signInBrowserFailed";
+    default:
+      return "error.auth.signInFailed";
+  }
+}
+
+function detectBlockingNetwork(fetcher: AuthFetcher, apiUrl: () => string): AuthFetcher {
   const blocked = () =>
-    new NetworkBlockedError(sourceText("error.auth.networkBlocked", { host: new URL(apiUrl).host }));
+    new NetworkBlockedError(sourceText("error.auth.networkBlocked", { host: new URL(apiUrl()).host }));
   return async (input, init) => {
     let response: Response;
     try {
@@ -2794,28 +2695,6 @@ function serviceUnavailableText(error: unknown): { message: string; reference: s
   return { message: sourceText("error.auth.serviceUnavailable"), reference: "auth/unavailable" };
 }
 
-function emailCodeRequestIssue(error: unknown): CentralAuthIssue {
-  if (error instanceof AuthApiError || error instanceof NetworkBlockedError) {
-    return centralAuthIssue(error, "email_sign_in_start_failed", sourceText("error.auth.codeNotSent"));
-  }
-  if (error instanceof DOMException && error.name === "TimeoutError") {
-    return {
-      code: "email_delivery_timeout",
-      message: sourceText("error.auth.deliveryTimeout"),
-    };
-  }
-  if (error instanceof TypeError || (error instanceof DOMException && error.name === "AbortError")) {
-    return {
-      code: "email_delivery_unknown",
-      message: sourceText("error.auth.deliveryInterrupted"),
-    };
-  }
-  return {
-    code: "email_delivery_unknown",
-    message: sourceText("error.auth.deliveryUnknown"),
-  };
-}
-
 function companySignInPath(hostId: string): string {
   return `/v2/remote/hosts/${encodeURIComponent(hostId)}/company-sign-in`;
 }
@@ -2830,14 +2709,11 @@ function companySignInError(code: string): AuthApiError {
   return new AuthApiError(400, code, sourceText(companySignInErrorKey(code)));
 }
 
-function companySignInIssue(failure: CentralAuthOperationError | CompanySignInBrowserError): CentralAuthIssue {
-  if (failure instanceof CompanySignInBrowserError) return authApiIssue(companySignInError(failure.code));
-  return centralAuthIssue(failure.cause, "company_sign_in_failed", sourceText("error.auth.companySignInFailed"));
-}
-
-function isDefinitiveEmailCodeRequestFailure(error: unknown): boolean {
-  if (!(error instanceof AuthApiError)) return false;
-  return DEFINITIVE_EMAIL_CODE_REQUEST_FAILURES.has(error.code);
+function browserSignInIssue(failure: CentralAuthOperationError | CompanySignInBrowserError): CentralAuthIssue {
+  if (failure instanceof CompanySignInBrowserError) {
+    return authApiIssue(new AuthApiError(400, failure.code, sourceText(browserSignInErrorKey(failure.code))));
+  }
+  return centralAuthIssue(failure.cause, "sign_in_failed", sourceText("error.auth.signInFailed"));
 }
 
 function parseRetryAfterSeconds(value: string | null): number | undefined {
