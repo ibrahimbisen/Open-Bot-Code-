@@ -16,7 +16,7 @@ the Team API). Server mode uses this path and adds no second one.
   (`routeToServer`, `scopedHandler`).
 - The home server is a normal CodeBot engine that starts in server mode on Linux. A desktop joins it
   as a server, with an invite or the sign-in of the account service (see `account-service.md`).
-- The switch "This computer / Home server" (18.4) selects `local` or the joined server. It sets the
+- The server menu at the bottom of the icon rail (18.4, D21) selects `local` or the joined server (the home server). It sets the
   active server of the screen; the rest of the screen does not change.
 
 ## What the screen can do on a joined server

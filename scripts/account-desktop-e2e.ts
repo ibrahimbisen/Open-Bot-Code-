@@ -277,7 +277,7 @@ try {
     user?.name === "Alice Example" && user.email.startsWith("alice@"),
     { user },
   );
-  await page.getByText("Alice Example").first().waitFor({ timeout: 20_000 });
+  await page.getByText("Alice Example").and(page.locator(":visible")).first().waitFor({ timeout: 20_000 });
   await shot(page, "05-signed-in");
 
   const sessionFileState = await page.evaluate(async () => {
@@ -288,8 +288,8 @@ try {
     sessionFileState,
   });
 
-  await page.getByRole("button", { name: "Sign out" }).scrollIntoViewIfNeeded();
-  await page.getByRole("button", { name: "Sign out" }).click();
+  await page.getByRole("button", { name: "Sign out" }).and(page.locator(":visible")).scrollIntoViewIfNeeded();
+  await page.getByRole("button", { name: "Sign out" }).and(page.locator(":visible")).click();
   await waitFor("sign-out", async () => (await authStatus(page)) === "signed_out");
   const afterSignOut = await page.evaluate(() => window.codebot.auth.getServiceSettings());
   checks.add(
