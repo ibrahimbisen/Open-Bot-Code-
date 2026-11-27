@@ -53,6 +53,19 @@ function readable(color: string, background: string): string {
   return adjusted;
 }
 
+export function mixHex(color: string, other: string, percentOther: number): string {
+  return mix(color, other, percentOther);
+}
+
+export function readableOnAll(color: string, backgrounds: readonly string[], minimum = MIN_SYNTAX_CONTRAST): string {
+  const average = backgrounds.reduce((sum, item) => sum + luminance(item), 0) / Math.max(1, backgrounds.length);
+  const target = average > 0.4 ? "#000000" : "#ffffff";
+  const passes = (value: string) => backgrounds.every((item) => contrastRatio(value, item) >= minimum);
+  let adjusted = color;
+  for (let step = 1; step <= 50 && !passes(adjusted); step += 1) adjusted = mix(color, target, step * 2);
+  return adjusted;
+}
+
 function alpha(color: string, percent: number): string {
   return `${color.slice(0, 7)}${channel((percent / 100) * 255)}`;
 }

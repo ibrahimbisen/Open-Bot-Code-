@@ -338,10 +338,9 @@ async function checkParts(view: string, palette: AppThemePalette, parts: Record<
       );
     const failing = result.samples.filter((sample) => sample.ratio < minimum(palette, sample));
     const worst = [...result.samples].sort((a, b) => a.ratio - b.ratio)[0];
-    const strict = NEW_PALETTE_IDS.has(palette.id);
     record(
-      `${label} text is readable${strict ? "" : " (report only)"}`,
-      !strict || failing.length === 0,
+      `${label} text is readable`,
+      failing.length === 0,
       failing.length === 0
         ? `${result.texts} texts, lowest ${worst?.ratio.toFixed(2) ?? "-"}`
         : failing
@@ -426,6 +425,18 @@ async function ensureProject() {
       agents: [{ name: "Dev", role: "Developer" }],
     });
     await page.reload();
+  } else {
+    // Archive the chats of earlier runs so the chat list does not grow with each run.
+    const archived = await page.evaluate(async (name) => {
+      const project = (await window.codebot.projects.list()).find((entry) => entry.name === name);
+      if (!project) return 0;
+      const { chats } = await window.codebot.projects.listChats({ projectId: project.id, limit: 100 });
+      const old = chats.filter((chat) => !chat.archived);
+      for (const chat of old)
+        await window.codebot.projects.setChatArchived({ agentId: chat.agentId, taskId: chat.taskId, archived: true });
+      return old.length;
+    }, PROJECT);
+    if (archived > 0) await page.reload();
   }
   await projectList().waitFor({ state: "visible", timeout: WAIT_MS });
   await dismissToasts();

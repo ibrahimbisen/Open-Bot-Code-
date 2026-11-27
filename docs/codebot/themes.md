@@ -32,7 +32,12 @@ At first start CodeBot writes the built-in palettes there, so you can copy and e
 The values are original. They are not copied from a VS Code theme file. They are in
 `packages/contracts/src/app-theme-defaults.ts`. In the five new palettes, text, muted text, accent,
 success, warning and danger have a contrast of at least 4.5 on each background. In High Contrast,
-text and muted text have at least 7 (WCAG AAA). CodeBot writes each built-in file only once: the file
+text and muted text have at least 7 (WCAG AAA). The app also makes the text colours readable: when a
+palette applies, muted text, dim text, accent text, success, warning and danger text and the code
+colours of chat code blocks are moved toward the text colour until they reach 4.5 on every background,
+also on selected rows and accent-tinted cards (`src/renderer/src/theme-palette.ts`). This keeps the
+two original palettes and palette files that users write readable. The default look without a palette
+does not change. CodeBot writes each built-in file only once: the file
 `.seeded.json` lists the files that it wrote. A file that you delete stays deleted, and a file that
 you edit is never replaced. A palette that a new version adds is written at the next start. The file
 `.built-in.json` keeps the text that CodeBot wrote for each built-in file. When a new version changes a
@@ -112,7 +117,8 @@ The test:
   list, the chat list, a chat with a code block, the file tree, Monaco (background and keyword
   color), a dock panel, the browser frame, the panel menu, Settings and the New project dialog. Each
   background must follow the light or dark appearance, and each text must have a contrast of 4.5 (3
-  for large text, 7 in High Contrast). For the two original palettes the contrast is only reported;
+  for large text, 7 in High Contrast). This applies to all seven palettes, the two original ones too.
+  It archives the chats of earlier runs first, so the chat list shows one chat;
 - takes a screenshot of each view in each palette: `main`, `chat`, `editor`, `dock`, `settings` and
   `dialog`;
 - adds a palette file and checks that it shows in Settings without a restart.

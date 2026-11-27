@@ -40,11 +40,21 @@ function linearChannel(value: number): number {
   return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
 }
 
-export function solidBubbleTakesDarkText(color: AvatarColor): boolean {
+function solidLuminance(color: AvatarColor): number {
   const value = Number.parseInt(color.slice(1), 16);
-  const luminance =
+  return (
     0.2126 * linearChannel((value >> 16) & 0xff) +
     0.7152 * linearChannel((value >> 8) & 0xff) +
-    0.0722 * linearChannel(value & 0xff);
+    0.0722 * linearChannel(value & 0xff)
+  );
+}
+
+export function solidBubbleTakesDarkText(color: AvatarColor): boolean {
+  return 1.05 / (solidLuminance(color) + 0.05) < 3;
+}
+
+/** Theme palettes pick whichever text colour has the higher contrast on the bubble. */
+export function solidBubbleReadsBetterDark(color: AvatarColor): boolean {
+  const luminance = solidLuminance(color);
   return (luminance + 0.05) / 0.057 > 1.05 / (luminance + 0.05);
 }
