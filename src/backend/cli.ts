@@ -1396,7 +1396,7 @@ export function cliSpawnTarget(
     return { command: executable, args: [...argv], windowsVerbatimArguments: false };
   }
 
-  const commandLine = [`"${executable.replaceAll("%", "%%")}"`, ...argv.map(batchArgument)].join(" ");
+  const commandLine = [`"${executable.replaceAll("%", "%%cd:~,%")}"`, ...argv.map(batchArgument)].join(" ");
   return {
     command: process.env.ComSpec?.trim() || "cmd.exe",
     args: ["/d", "/s", "/c", `"${commandLine}"`],
@@ -1453,7 +1453,7 @@ const readCliVersion = Effect.fn("Cli.readVersion")(function* (
       target
         ? execFileAsync(
             process.env.ComSpec?.trim() || "cmd.exe",
-            ["/d", "/s", "/c", `""${candidate.replaceAll("%", "%%")}" ${args.join(" ")}"`],
+            ["/d", "/s", "/c", `""${candidate.replaceAll("%", "%%cd:~,%")}" ${args.join(" ")}"`],
             {
               signal,
               timeout,

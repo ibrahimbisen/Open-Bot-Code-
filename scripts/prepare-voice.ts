@@ -98,7 +98,7 @@ async function prepareRuntime(runtime: RuntimePackage): Promise<void> {
     const archivePath = join(workRoot, "package.tgz");
     const extractRoot = join(workRoot, "extract");
     await Promise.all([writeFile(archivePath, archive), mkdir(extractRoot)]);
-    execFileSync("tar", ["-xzf", archivePath, "-C", extractRoot], { stdio: "inherit" });
+    execFileSync("tar", ["-xzf", "package.tgz", "-C", "extract"], { stdio: "inherit", cwd: workRoot });
     await rm(runtimeMarker, { force: true });
     await rm(runtimeRoot, { recursive: true, force: true });
     await mkdir(runtimeRoot, { recursive: true });
