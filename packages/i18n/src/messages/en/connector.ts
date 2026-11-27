@@ -15,11 +15,11 @@ export const messages = defineMessages("connector", {
   "connector.github.connectedAs": "Connected as @{login}",
   "connector.github.repositoriesTitle": "Repositories",
   "connector.github.repositoriesDescription":
-    "Agents can use only the repositories where the CodeBot GitHub App is installed.",
+    "Agents can use only the repositories where the OpenBot Code GitHub App is installed.",
   "connector.github.chooseRepositories": "Choose repositories",
   "connector.github.repositoriesLoading": "Reading the repositories from GitHub",
-  "connector.github.repositoriesFailed": "CodeBot could not read the repositories from GitHub.",
-  "connector.github.noRepositories": "The CodeBot GitHub App is not installed on a repository yet.",
+  "connector.github.repositoriesFailed": "OpenBot Code could not read the repositories from GitHub.",
+  "connector.github.noRepositories": "The OpenBot Code GitHub App is not installed on a repository yet.",
   "connector.github.moreRepositories": { one: "And {count} more repository", other: "And {count} more repositories" },
   "connector.github.private": "Private",
   "connector.github.disconnect": "Disconnect",
@@ -28,7 +28,7 @@ export const messages = defineMessages("connector", {
   "connector.github.expiredTitle": "The GitHub connection expired",
   "connector.github.expiredDescription": "Connect again as @{login} to give agents GitHub again.",
   "connector.github.reconnect": "Reconnect",
-  "connector.github.actionFailed": "CodeBot could not change the GitHub connection.",
+  "connector.github.actionFailed": "OpenBot Code could not change the GitHub connection.",
   "connector.github.statusConnected": "Connected",
   "connector.github.statusConnecting": "Connecting",
   "connector.github.statusExpired": "Expired",
@@ -38,7 +38,7 @@ export const messages = defineMessages("connector", {
   "connector.github.noMatch": "No repository matches “{query}”.",
   "connector.github.stepSignIn": "Sign in",
   "connector.github.stepConnected": "Connected",
-  "connector.github.requestingCode": "CodeBot asks GitHub for a code.",
+  "connector.github.requestingCode": "OpenBot Code asks GitHub for a code.",
   "connector.github.codeLabel": "Code {code}",
   "connector.github.failedTitle": "GitHub did not connect",
   "connector.github.cancelConnecting": "Cancel connecting GitHub",
@@ -51,7 +51,7 @@ export const messages = defineMessages("connector", {
   "connector.github.disconnectConfirmTitle": "Disconnect GitHub?",
   "connector.github.disconnectConfirmDescription": "Disconnect removes the sign-in of @{login} from this computer.",
   "connector.github.disconnectEffectTools": "Every agent loses the GitHub tools, gh and git.",
-  "connector.github.disconnectEffectRevoke": "Then GitHub opens, where you can revoke CodeBot.",
+  "connector.github.disconnectEffectRevoke": "Then GitHub opens, where you can revoke OpenBot Code.",
   "connector.github.disconnectEffectKept": "Chats, files and agent memory stay on this computer.",
   "connector.github.descriptionHost":
     "Every agent on {host} can use your GitHub repositories, issues and pull requests, and gh and git.",
@@ -65,7 +65,7 @@ export const messages = defineMessages("connector", {
   "connector.github.close": "Close",
   "connector.dangerZone": "Danger zone",
   "connector.statusUnknown": "Unknown",
-  "connector.readFailed": "CodeBot could not read the state of this connection.",
+  "connector.readFailed": "OpenBot Code could not read the state of this connection.",
 
   "connector.slack.title": "Slack",
   "connector.slack.description":
@@ -89,10 +89,10 @@ export const messages = defineMessages("connector", {
   "connector.slack.disconnectAllSummary":
     "Every workspace disconnects. People can no longer reach your agents through @CodeBot.",
   "connector.slack.disconnectAllSummaryOrchestrator":
-    "Every workspace disconnects. The Slack Orchestrator and its conversations are deleted from CodeBot.",
+    "Every workspace disconnects. The Slack Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.slack.missingScopes":
-    "CodeBot does not have these permissions in Slack: {scopes}. Disconnect the workspace, then connect it again.",
-  "connector.slack.retryAt": "Slack asked CodeBot to wait. It tries again at {time}.",
+    "OpenBot Code does not have these permissions in Slack: {scopes}. Disconnect the workspace, then connect it again.",
+  "connector.slack.retryAt": "Slack asked OpenBot Code to wait. It tries again at {time}.",
   "connector.slack.reconnect": "Reconnect",
   "connector.slack.pause": "Pause",
   "connector.slack.resume": "Resume",
@@ -103,12 +103,12 @@ export const messages = defineMessages("connector", {
   "connector.slack.orchestratorNone": "No agent answers yet",
   "connector.slack.orchestratorNoneDescription": "Add the Slack Orchestrator, or Slack gets no answer.",
   "connector.slack.inviteNote":
-    "CodeBot joins every public channel by itself, and each new one. For a private channel, invite it: /invite @CodeBot.",
+    "OpenBot Code joins every public channel by itself, and each new one. For a private channel, invite it: /invite @CodeBot.",
   "connector.slack.stepWorkspace": "Workspace",
   "connector.slack.stepAgent": "Agent",
   "connector.slack.connectTitle": "Connect a Slack workspace",
   "connector.slack.connectDescription":
-    "CodeBot installs one app in the workspace, named CodeBot, and it joins every public channel.",
+    "OpenBot Code installs one app in the workspace, named OpenBot Code, and it joins every public channel.",
   "connector.slack.connectStepBrowser": "Slack opens in your browser",
   "connector.slack.connectStepAllow": "Select the workspace in the top-right corner, then Allow",
   "connector.slack.connectStepReturn": "This dialog continues when Slack is done",
@@ -123,17 +123,17 @@ export const messages = defineMessages("connector", {
   "connector.slack.orchestratorDoesDelegate": "Gives each task to the agent that fits best",
   "connector.slack.orchestratorDoesAnswer": "Posts the answer in the Slack thread",
   "connector.slack.orchestratorModel": "Model",
-  "connector.slack.doneTitle": "CodeBot is in {workspace}",
+  "connector.slack.doneTitle": "OpenBot Code is in {workspace}",
   "connector.slack.doneDescription": "Mention @CodeBot in any public channel, or send it a direct message.",
   "connector.slack.done": "Done",
   "connector.slack.disconnectTitle": "Disconnect {workspace}?",
   "connector.slack.disconnectDescription":
-    "CodeBot stops answering in {workspace} and removes its Slack token from this computer.",
+    "OpenBot Code stops answering in {workspace} and removes its Slack token from this computer.",
   "connector.slack.disconnectDescriptionHost":
-    "CodeBot stops answering in {workspace} and removes its Slack token from {host}.",
+    "OpenBot Code stops answering in {workspace} and removes its Slack token from {host}.",
   "connector.slack.disconnectEffect": "People in {workspace} can no longer reach your agents through @CodeBot.",
-  "connector.slack.removeEffectKept": "The conversations and the Slack Orchestrator stay in CodeBot.",
-  "connector.slack.removeEffectDeleted": "The Slack Orchestrator and its conversations are deleted from CodeBot.",
+  "connector.slack.removeEffectKept": "The conversations and the Slack Orchestrator stay in OpenBot Code.",
+  "connector.slack.removeEffectDeleted": "The Slack Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.slack.keep": "Keep connected",
   "connector.slack.close": "Close",
   "connector.slack.addWorkspace": "Add workspace",
@@ -162,16 +162,16 @@ export const messages = defineMessages("connector", {
   "connector.discord.addAgent": "Add agent",
   "connector.discord.actionFailed": "Discord did not accept the change",
   "connector.discord.workspaceTitle": "Discord servers",
-  "connector.discord.workspaceDescription": "Mention @CodeBot in a channel. Reply to CodeBot to continue.",
+  "connector.discord.workspaceDescription": "Mention @CodeBot in a channel. Reply to OpenBot Code to continue.",
   "connector.discord.disconnectWorkspace": "Disconnect",
   "connector.discord.disconnectAllTitle": "Disconnect Discord",
   "connector.discord.disconnectAllSummary":
     "Every server disconnects. People can no longer reach your agents through @CodeBot.",
   "connector.discord.disconnectAllSummaryOrchestrator":
-    "Every server disconnects. The Discord Orchestrator and its conversations are deleted from CodeBot.",
+    "Every server disconnects. The Discord Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.discord.missingScopes":
-    "CodeBot does not have these permissions in Discord: {scopes}. Disconnect the Discord server, then connect it again.",
-  "connector.discord.retryAt": "Discord asked CodeBot to wait. It tries again at {time}.",
+    "OpenBot Code does not have these permissions in Discord: {scopes}. Disconnect the Discord server, then connect it again.",
+  "connector.discord.retryAt": "Discord asked OpenBot Code to wait. It tries again at {time}.",
   "connector.discord.reconnect": "Reconnect",
   "connector.discord.pause": "Pause",
   "connector.discord.resume": "Resume",
@@ -181,11 +181,11 @@ export const messages = defineMessages("connector", {
     "This agent receives every request from Discord. It answers short ones itself, gives other work to the right agent, and replies with the answer in the channel.",
   "connector.discord.orchestratorNone": "No agent answers yet",
   "connector.discord.orchestratorNoneDescription": "Add the Discord Orchestrator, or Discord gets no answer.",
-  "connector.discord.channelsNote": "CodeBot sees the channels that its role can view.",
+  "connector.discord.channelsNote": "OpenBot Code sees the channels that its role can view.",
   "connector.discord.stepWorkspace": "Discord server",
   "connector.discord.stepAgent": "Agent",
   "connector.discord.connectTitle": "Connect a Discord server",
-  "connector.discord.connectDescription": "CodeBot adds one bot, named CodeBot, to the Discord server.",
+  "connector.discord.connectDescription": "OpenBot Code adds one bot, named OpenBot Code, to the Discord server.",
   "connector.discord.connectStepBrowser": "Discord opens in your browser",
   "connector.discord.connectStepAllow": "Select the server, then Authorize",
   "connector.discord.connectStepReturn": "This dialog continues when Discord is done",
@@ -200,17 +200,18 @@ export const messages = defineMessages("connector", {
   "connector.discord.orchestratorDoesDelegate": "Gives each task to the agent that fits best",
   "connector.discord.orchestratorDoesAnswer": "Replies with the answer in the Discord channel",
   "connector.discord.orchestratorModel": "Model",
-  "connector.discord.doneTitle": "CodeBot is in {workspace}",
-  "connector.discord.doneDescription": "Mention @CodeBot in a channel. Reply to CodeBot to continue.",
+  "connector.discord.doneTitle": "OpenBot Code is in {workspace}",
+  "connector.discord.doneDescription": "Mention @CodeBot in a channel. Reply to OpenBot Code to continue.",
   "connector.discord.done": "Done",
   "connector.discord.disconnectTitle": "Disconnect {workspace}?",
   "connector.discord.disconnectDescription":
-    "CodeBot stops answering in {workspace} and removes the Discord connection from this computer.",
+    "OpenBot Code stops answering in {workspace} and removes the Discord connection from this computer.",
   "connector.discord.disconnectDescriptionHost":
-    "CodeBot stops answering in {workspace} and removes the Discord connection from {host}.",
+    "OpenBot Code stops answering in {workspace} and removes the Discord connection from {host}.",
   "connector.discord.disconnectEffect": "People in {workspace} can no longer reach your agents through @CodeBot.",
-  "connector.discord.removeEffectKept": "The conversations and the Discord Orchestrator stay in CodeBot.",
-  "connector.discord.removeEffectDeleted": "The Discord Orchestrator and its conversations are deleted from CodeBot.",
+  "connector.discord.removeEffectKept": "The conversations and the Discord Orchestrator stay in OpenBot Code.",
+  "connector.discord.removeEffectDeleted":
+    "The Discord Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.discord.keep": "Keep connected",
   "connector.discord.close": "Close",
   "connector.discord.addWorkspace": "Add Discord server",
@@ -222,24 +223,25 @@ export const messages = defineMessages("connector", {
     one: "{count} Discord server · Discord Orchestrator answers",
     other: "{count} Discord servers · Discord Orchestrator answers",
   },
-  "connector.discord.accessTitle": "Who can use CodeBot",
-  "connector.discord.accessDescription": "CodeBot answers only these people. It ignores mentions from others.",
+  "connector.discord.accessTitle": "Who can use OpenBot Code",
+  "connector.discord.accessDescription": "OpenBot Code answers only these people. It ignores mentions from others.",
   "connector.discord.accessEveryone": "Everyone in the server",
-  "connector.discord.accessEveryoneDescription": "Anyone who can post in a channel that CodeBot sees can mention it.",
+  "connector.discord.accessEveryoneDescription":
+    "Anyone who can post in a channel that OpenBot Code sees can mention it.",
   "connector.discord.accessRoles": "Members with {roles}",
   "connector.discord.accessChoose": "Choose roles",
-  "connector.discord.accessDialogTitle": "Who can use CodeBot in {workspace}?",
-  "connector.discord.accessDialogDescription": "With no role selected, everyone can mention CodeBot.",
+  "connector.discord.accessDialogTitle": "Who can use OpenBot Code in {workspace}?",
+  "connector.discord.accessDialogDescription": "With no role selected, everyone can mention OpenBot Code.",
   "connector.discord.accessLoading": "Loading roles…",
   "connector.discord.accessLoadFailed": "Discord roles did not load",
   "connector.discord.accessNoRoles": "This server has no roles to pick.",
   "connector.discord.accessRoleDeleted": "{role} (deleted)",
   "connector.discord.accessSave": "Save",
-  "connector.discord.accessHostUpdate": "Update CodeBot on {host} to choose roles.",
+  "connector.discord.accessHostUpdate": "Update OpenBot Code on {host} to choose roles.",
 
   "connector.telegram.title": "Telegram",
   "connector.telegram.description":
-    "Add the CodeBot bot to a Telegram group or open a direct chat with it. The Telegram Orchestrator asks the right agent and answers.",
+    "Add the OpenBot Code bot to a Telegram group or open a direct chat with it. The Telegram Orchestrator asks the right agent and answers.",
   "connector.telegram.statusConnected": "Connected",
   "connector.telegram.statusAttention": "Needs attention",
   "connector.telegram.summaryConnected": {
@@ -262,30 +264,30 @@ export const messages = defineMessages("connector", {
   "connector.telegram.groupDescription": "People mention the bot or reply to its messages.",
   "connector.telegram.directDescription": "Every message in this chat goes to the Telegram Orchestrator.",
   "connector.telegram.helpRemoved":
-    "The CodeBot bot is no longer in this chat. Disconnect the chat, then add the bot again.",
+    "The OpenBot Code bot is no longer in this chat. Disconnect the chat, then add the bot again.",
   "connector.telegram.helpRelayUnavailable":
-    "CodeBot cannot receive Telegram messages on this computer. Sign in, give this computer a name in Server settings, and keep CodeBot open.",
+    "OpenBot Code cannot receive Telegram messages on this computer. Sign in, give this computer a name in Server settings, and keep OpenBot Code open.",
   "connector.telegram.helpRelayUnavailableHost":
-    "CodeBot on {host} cannot receive Telegram messages. On {host}, sign in, give the server a name in Server settings, and keep CodeBot open.",
-  "connector.telegram.helpError": "CodeBot cannot reach this chat. Reconnect, or disconnect the chat.",
+    "OpenBot Code on {host} cannot receive Telegram messages. On {host}, sign in, give the server a name in Server settings, and keep OpenBot Code open.",
+  "connector.telegram.helpError": "OpenBot Code cannot reach this chat. Reconnect, or disconnect the chat.",
   "connector.telegram.helpNotLinked": "This chat is not linked to this server. Select Reconnect to link it.",
-  "connector.telegram.retryAt": "Telegram asked CodeBot to wait. It tries again at {time}.",
+  "connector.telegram.retryAt": "Telegram asked OpenBot Code to wait. It tries again at {time}.",
   "connector.telegram.pause": "Pause",
   "connector.telegram.resume": "Resume",
   "connector.telegram.reconnect": "Reconnect",
   "connector.telegram.disconnectChat": "Disconnect",
   "connector.telegram.disconnectAllTitle": "Disconnect Telegram",
   "connector.telegram.disconnectAllSummary":
-    "Every chat disconnects. People can no longer reach your agents through the CodeBot bot.",
+    "Every chat disconnects. People can no longer reach your agents through the OpenBot Code bot.",
   "connector.telegram.disconnectAllSummaryOrchestrator":
-    "Every chat disconnects. The Telegram Orchestrator and its conversations are deleted from CodeBot.",
+    "Every chat disconnects. The Telegram Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.telegram.rowAction": "{action}: {name}",
   "connector.telegram.linkChat": "Link a chat",
   "connector.telegram.addToGroup": "Add to a group",
   "connector.telegram.openDirectChat": "Open a direct chat",
   "connector.telegram.orchestratorTitle": "Telegram Orchestrator",
   "connector.telegram.orchestratorDescription":
-    "This agent receives the messages for CodeBot from all your Telegram chats. It answers short ones itself, gives other work to the right agent, and posts the answer in the chat.",
+    "This agent receives the messages for OpenBot Code from all your Telegram chats. It answers short ones itself, gives other work to the right agent, and posts the answer in the chat.",
   "connector.telegram.orchestratorNone": "No agent answers yet",
   "connector.telegram.orchestratorNoneDescription": "Add the Telegram Orchestrator, or Telegram gets no answer.",
   "connector.telegram.mentionNote":
@@ -294,28 +296,29 @@ export const messages = defineMessages("connector", {
   "connector.telegram.stepAgent": "Agent",
   "connector.telegram.connectTitle": "Link a Telegram chat",
   "connector.telegram.connectDescription":
-    "Add the CodeBot bot to a group, or open a direct chat with it. One bot serves all your chats.",
+    "Add the OpenBot Code bot to a group, or open a direct chat with it. One bot serves all your chats.",
   "connector.telegram.connectStepBrowser": "Telegram opens in your browser",
   "connector.telegram.connectStepPick": "Select the group, or press Start in the direct chat",
   "connector.telegram.connectStepReturn": "This dialog continues when the chat is linked",
   "connector.telegram.connectWaiting": "Waiting for Telegram. Select the chat in Telegram.",
   "connector.telegram.agentStepTitle": "Add the Telegram Orchestrator",
   "connector.telegram.agentStepDescription":
-    "This new agent answers the messages for CodeBot in {chat} and in each chat that you link later.",
+    "This new agent answers the messages for OpenBot Code in {chat} and in each chat that you link later.",
   "connector.telegram.orchestratorName": "Telegram Orchestrator",
   "connector.telegram.orchestratorRole": "Answers in Telegram and asks the team",
-  "connector.telegram.orchestratorDoesReceive": "Receives every Telegram message for CodeBot first",
+  "connector.telegram.orchestratorDoesReceive": "Receives every Telegram message for OpenBot Code first",
   "connector.telegram.orchestratorDoesDelegate": "Gives each task to the agent that fits best",
   "connector.telegram.orchestratorDoesAnswer": "Posts the answer in the Telegram chat",
   "connector.telegram.orchestratorModel": "Model",
-  "connector.telegram.doneTitle": "CodeBot is in {chat}",
+  "connector.telegram.doneTitle": "OpenBot Code is in {chat}",
   "connector.telegram.done": "Done",
   "connector.telegram.disconnectTitle": "Disconnect {chat}?",
-  "connector.telegram.leaveDescription": "The CodeBot bot leaves {chat}, and CodeBot stops answering there.",
-  "connector.telegram.disconnectEffect": "People in {chat} can no longer reach your agents through the CodeBot bot.",
-  "connector.telegram.removeEffectKept": "The conversations and the Telegram Orchestrator stay in CodeBot.",
+  "connector.telegram.leaveDescription": "The OpenBot Code bot leaves {chat}, and OpenBot Code stops answering there.",
+  "connector.telegram.disconnectEffect":
+    "People in {chat} can no longer reach your agents through the OpenBot Code bot.",
+  "connector.telegram.removeEffectKept": "The conversations and the Telegram Orchestrator stay in OpenBot Code.",
   "connector.telegram.removeEffectDeleted":
-    "This is the last chat, so the Telegram Orchestrator and its conversations are deleted from CodeBot.",
+    "This is the last chat, so the Telegram Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.telegram.keep": "Keep connected",
   "connector.telegram.close": "Close",
   "connector.whatsapp.title": "WhatsApp",
@@ -343,15 +346,17 @@ export const messages = defineMessages("connector", {
   "connector.whatsapp.actionFailed": "WhatsApp did not accept the change",
   "connector.whatsapp.numbersTitle": "Numbers",
   "connector.whatsapp.linkNumber": "Link a number",
-  "connector.whatsapp.ownNumberNote": "Your “Message yourself” chat and the people you allow reach CodeBot.",
+  "connector.whatsapp.ownNumberNote": "Your “Message yourself” chat and the people you allow reach OpenBot Code.",
   "connector.whatsapp.dedicatedNote":
-    "Your “Message yourself” chat and the people you allow reach CodeBot. Other people get a code to give you.",
+    "Your “Message yourself” chat and the people you allow reach OpenBot Code. Other people get a code to give you.",
   "connector.whatsapp.helpLoggedOut": "WhatsApp removed this computer from the linked devices. Link the number again.",
   "connector.whatsapp.helpLoggedOutHost":
     "WhatsApp removed this server from the linked devices. Link the number again.",
-  "connector.whatsapp.helpError": "CodeBot cannot reach WhatsApp on this number. Reconnect, or disconnect the number.",
-  "connector.whatsapp.helpKeysUnreadable": "CodeBot cannot read the saved keys of this number. Link the number again.",
-  "connector.whatsapp.retryAt": "WhatsApp asked CodeBot to wait. It tries again at {time}.",
+  "connector.whatsapp.helpError":
+    "OpenBot Code cannot reach WhatsApp on this number. Reconnect, or disconnect the number.",
+  "connector.whatsapp.helpKeysUnreadable":
+    "OpenBot Code cannot read the saved keys of this number. Link the number again.",
+  "connector.whatsapp.retryAt": "WhatsApp asked OpenBot Code to wait. It tries again at {time}.",
   "connector.whatsapp.pause": "Pause",
   "connector.whatsapp.resume": "Resume",
   "connector.whatsapp.reconnect": "Reconnect",
@@ -361,20 +366,20 @@ export const messages = defineMessages("connector", {
   "connector.whatsapp.disconnectAllSummary":
     "Every number disconnects. People can no longer reach your agents through WhatsApp.",
   "connector.whatsapp.disconnectAllSummaryOrchestrator":
-    "Every number disconnects. The WhatsApp Orchestrator and its conversations are deleted from CodeBot.",
+    "Every number disconnects. The WhatsApp Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.whatsapp.rowAction": "{action}: {name}",
   "connector.whatsapp.ownNumber": "Personal number",
   "connector.whatsapp.ownNumberDescription":
-    "Only your “Message yourself” chat and the people you allow can write. Other people get no reply. When it is off, CodeBot replies to unknown people with a code.",
+    "Only your “Message yourself” chat and the people you allow can write. Other people get no reply. When it is off, OpenBot Code replies to unknown people with a code.",
   "connector.whatsapp.workingMessage": "“Working on it…” message",
   "connector.whatsapp.workingMessageDescription":
-    "CodeBot posts it while the agent works, then replaces it with the answer. A request that waits for an earlier request gets a waiting message too. On a personal number, only your “Message yourself” chat gets these messages. Turn off to post only the answer.",
+    "OpenBot Code posts it while the agent works, then replaces it with the answer. A request that waits for an earlier request gets a waiting message too. On a personal number, only your “Message yourself” chat gets these messages. Turn off to post only the answer.",
   "connector.whatsapp.statusReactions": "Status reactions",
   "connector.whatsapp.statusReactionsDescription":
-    "CodeBot reacts with 👀 when a message arrives and with ✅ when the answer is ready. Turn off to send no reactions.",
+    "OpenBot Code reacts with 👀 when a message arrives and with ✅ when the answer is ready. Turn off to send no reactions.",
   "connector.whatsapp.orchestratorTitle": "WhatsApp Orchestrator",
   "connector.whatsapp.orchestratorDescription":
-    "This agent receives the messages for CodeBot from all your linked numbers. It answers short ones itself, gives other work to the right agent, and answers in WhatsApp.",
+    "This agent receives the messages for OpenBot Code from all your linked numbers. It answers short ones itself, gives other work to the right agent, and answers in WhatsApp.",
   "connector.whatsapp.orchestratorNone": "No agent answers yet",
   "connector.whatsapp.orchestratorNoneDescription": "Add the WhatsApp Orchestrator, or WhatsApp gets no answer.",
   "connector.whatsapp.note":
@@ -387,10 +392,10 @@ export const messages = defineMessages("connector", {
   "connector.whatsapp.kindLabel": "Number",
   "connector.whatsapp.kindPersonal": "My personal number",
   "connector.whatsapp.kindPersonalDescription":
-    "CodeBot answers only your “Message yourself” chat and the people you allow. Other people get no reply.",
-  "connector.whatsapp.kindDedicated": "A number only for CodeBot",
+    "OpenBot Code answers only your “Message yourself” chat and the people you allow. Other people get no reply.",
+  "connector.whatsapp.kindDedicated": "A number only for OpenBot Code",
   "connector.whatsapp.kindDedicatedDescription":
-    "CodeBot replies from this number to each unknown person, with a code to give you. You approve them here.",
+    "OpenBot Code replies from this number to each unknown person, with a code to give you. You approve them here.",
   "connector.whatsapp.methodLabel": "How to link",
   "connector.whatsapp.methodQr": "QR code",
   "connector.whatsapp.methodCode": "Pairing code",
@@ -415,26 +420,26 @@ export const messages = defineMessages("connector", {
   "connector.whatsapp.failedTimeout": "The code expired before the phone used it.",
   "connector.whatsapp.failedRefused": "WhatsApp refused the link. Wait a few minutes, then try again.",
   "connector.whatsapp.failedBusy": "Another link is running. Wait for it to end, then try again.",
-  "connector.whatsapp.failedUnavailable": "CodeBot cannot reach WhatsApp. Check the internet connection.",
+  "connector.whatsapp.failedUnavailable": "OpenBot Code cannot reach WhatsApp. Check the internet connection.",
   "connector.whatsapp.tryAgain": "Try again",
   "connector.whatsapp.agentStepTitle": "Add the WhatsApp Orchestrator",
   "connector.whatsapp.agentStepDescription":
-    "This new agent answers the messages for CodeBot on {number} and on each number that you link later.",
+    "This new agent answers the messages for OpenBot Code on {number} and on each number that you link later.",
   "connector.whatsapp.orchestratorName": "WhatsApp Orchestrator",
   "connector.whatsapp.orchestratorRole": "Answers in WhatsApp and asks the team",
-  "connector.whatsapp.orchestratorDoesReceive": "Receives every WhatsApp message for CodeBot first",
+  "connector.whatsapp.orchestratorDoesReceive": "Receives every WhatsApp message for OpenBot Code first",
   "connector.whatsapp.orchestratorDoesDelegate": "Gives each task to the agent that fits best",
   "connector.whatsapp.orchestratorDoesAnswer": "Answers in the WhatsApp chat",
   "connector.whatsapp.orchestratorModel": "Model",
-  "connector.whatsapp.doneTitle": "CodeBot is linked to {number}",
+  "connector.whatsapp.doneTitle": "OpenBot Code is linked to {number}",
   "connector.whatsapp.done": "Done",
   "connector.whatsapp.disconnectTitle": "Disconnect {number}?",
   "connector.whatsapp.disconnectDescription":
-    "CodeBot logs out of WhatsApp on {number}. If CodeBot was off, also remove the device in WhatsApp > Linked devices.",
+    "OpenBot Code logs out of WhatsApp on {number}. If OpenBot Code was off, also remove the device in WhatsApp > Linked devices.",
   "connector.whatsapp.disconnectEffect": "People can no longer reach your agents through {number}.",
-  "connector.whatsapp.removeEffectKept": "The conversations and the WhatsApp Orchestrator stay in CodeBot.",
+  "connector.whatsapp.removeEffectKept": "The conversations and the WhatsApp Orchestrator stay in OpenBot Code.",
   "connector.whatsapp.removeEffectDeleted":
-    "This is the last number, so the WhatsApp Orchestrator and its conversations are deleted from CodeBot.",
+    "This is the last number, so the WhatsApp Orchestrator and its conversations are deleted from OpenBot Code.",
   "connector.whatsapp.keep": "Keep linked",
   "connector.whatsapp.close": "Close",
   "connector.whatsapp.sendersTitle": "Who can write to {number}",
@@ -458,7 +463,7 @@ export const messages = defineMessages("connector", {
     "People in this group can give work to your agents when they mention the number or reply to its messages.",
   "connector.whatsapp.groupSearch": "Search groups",
   "connector.whatsapp.groupsLoading": "Reading the groups…",
-  "connector.whatsapp.groupsLoadFailed": "CodeBot could not read the groups",
+  "connector.whatsapp.groupsLoadFailed": "OpenBot Code could not read the groups",
   "connector.whatsapp.groupsEmpty": "This number is in no group.",
   "connector.whatsapp.groupsNoMatch": "No group has this name.",
   "connector.whatsapp.groupAdded": "Added",
@@ -471,9 +476,9 @@ export const messages = defineMessages("connector", {
   "connector.whatsapp.deny": "Deny",
   "connector.onePassword.title": "1Password",
   "connector.onePassword.description":
-    "Share a dedicated 1Password vault with CodeBot through a service account, so agents can sign in to sites in the CodeBot browser.",
+    "Share a dedicated 1Password vault with OpenBot Code through a service account, so agents can sign in to sites in the OpenBot Code browser.",
   "connector.onePassword.howItWorks":
-    "Connecting sets up a “Shared with CodeBot” vault in your 1Password account and a service account that can read only that vault. CodeBot fills saved logins in its browser on this computer, so only the items you move into that vault are ever shared. Agents never see a password.",
+    "Connecting sets up a “Shared with CodeBot” vault in your 1Password account and a service account that can read only that vault. OpenBot Code fills saved logins in its browser on this computer, so only the items you move into that vault are ever shared. Agents never see a password.",
   "connector.onePassword.connect": "Connect 1Password",
   "connector.onePassword.setupTitle": "Set up",
   "connector.onePassword.stepCliTitle": "Install the 1Password CLI",
@@ -481,20 +486,20 @@ export const messages = defineMessages("connector", {
   "connector.onePassword.stepCliInstalling": "Downloading the 1Password CLI from 1Password",
   "connector.onePassword.stepCliReady": "Version {version} is installed.",
   "connector.onePassword.stepCliMissing":
-    "CodeBot downloads it from 1Password into its own folder. It needs no administrator password.",
+    "OpenBot Code downloads it from 1Password into its own folder. It needs no administrator password.",
   "connector.onePassword.stepCliManual":
-    "CodeBot cannot install it on this computer. Install it from 1Password, then come back to this page.",
+    "OpenBot Code cannot install it on this computer. Install it from 1Password, then come back to this page.",
   "connector.onePassword.installCli": "Install",
   "connector.onePassword.stepAppTitle": "Turn on the CLI integration",
   "connector.onePassword.stepAppDescription":
     "In the 1Password app, open Settings > Developer and turn on “Integrate with 1Password CLI”.",
   "connector.onePassword.stepAppReady": "The 1Password app lets the CLI create the shared vault.",
   "connector.onePassword.openApp": "Open 1Password",
-  "connector.onePassword.openAppFailed": "CodeBot could not open 1Password.",
+  "connector.onePassword.openAppFailed": "OpenBot Code could not open 1Password.",
   "connector.onePassword.checkAgain": "Check again",
   "connector.onePassword.stepVaultTitle": "Create the shared vault",
   "connector.onePassword.stepVaultDescription":
-    "CodeBot creates the vault “Shared with CodeBot” and a service account that can only read it. 1Password asks you to approve.",
+    "OpenBot Code creates the vault “Shared with CodeBot” and a service account that can only read it. 1Password asks you to approve.",
   "connector.onePassword.useTokenDescription":
     "Instead of these steps, paste a service account token from 1Password.com.",
   "connector.onePassword.useTokenAction": "Use token",
@@ -504,7 +509,7 @@ export const messages = defineMessages("connector", {
   "connector.onePassword.approveInApp": "Approve the request in the 1Password app",
   "connector.onePassword.cancel": "Cancel",
   "connector.onePassword.chooseAccountTitle": "Choose an account",
-  "connector.onePassword.chooseAccountDescription": "CodeBot creates the shared vault in the account you choose.",
+  "connector.onePassword.chooseAccountDescription": "OpenBot Code creates the shared vault in the account you choose.",
   "connector.onePassword.useAccount": "Use this account",
   "connector.onePassword.vaultTitle": "Shared vault",
   "connector.onePassword.vaultDescription":
@@ -514,14 +519,14 @@ export const messages = defineMessages("connector", {
   "connector.onePassword.disconnect": "Disconnect",
   "connector.onePassword.disconnectTitle": "Disconnect 1Password",
   "connector.onePassword.disconnectSummary":
-    "CodeBot forgets the token. The vault and the service account stay in 1Password; remove them there if you no longer need them.",
-  "connector.onePassword.actionFailed": "CodeBot could not change the 1Password connection.",
+    "OpenBot Code forgets the token. The vault and the service account stay in 1Password; remove them there if you no longer need them.",
+  "connector.onePassword.actionFailed": "OpenBot Code could not change the 1Password connection.",
   "connector.onePassword.statusConnected": "Connected",
   "connector.onePassword.statusConnecting": "Connecting",
   "connector.onePassword.descriptionHost":
-    "Share a dedicated 1Password vault with CodeBot on {host} through a service account, so agents on {host} can sign in to sites in its browser.",
+    "Share a dedicated 1Password vault with OpenBot Code on {host} through a service account, so agents on {host} can sign in to sites in its browser.",
   "connector.onePassword.howItWorksHost":
-    "{host} connects with a service account token. On 1Password.com, create a service account that can read only the vault you share with CodeBot, then paste its token here. {host} checks the token and keeps it; this computer does not. Agents never see a password.",
+    "{host} connects with a service account token. On 1Password.com, create a service account that can read only the vault you share with OpenBot Code, then paste its token here. {host} checks the token and keeps it; this computer does not. Agents never see a password.",
   "connector.onePassword.disconnectSummaryHost":
     "{host} forgets the token. The vault and the service account stay in 1Password; remove them there if you no longer need them.",
   "connector.bitwarden.title": "Bitwarden",
@@ -529,24 +534,24 @@ export const messages = defineMessages("connector", {
   "connector.bitwarden.setup":
     "Install the Bitwarden CLI and sign in with bw login. Create a folder named Shared with CodeBot and put only the logins that agents may use in it. Run bw unlock --raw and paste the session key below. Do not paste your master password.",
   "connector.bitwarden.scope":
-    "All agents on this computer can use matching logins in Shared with CodeBot. CodeBot uses exact HTTPS origins. It does not use items that require a master password prompt or a custom URI match rule.",
+    "All agents on this computer can use matching logins in Shared with CodeBot. OpenBot Code uses exact HTTPS origins. It does not use items that require a master password prompt or a custom URI match rule.",
   "connector.bitwarden.session":
-    "The session key stays in memory. Connect again after 8 hours without vault use or after CodeBot exits. Disconnect stops CodeBot access; it does not lock other Bitwarden clients.",
+    "The session key stays in memory. Connect again after 8 hours without vault use or after OpenBot Code exits. Disconnect stops OpenBot Code access; it does not lock other Bitwarden clients.",
   "connector.bitwarden.sessionKey": "Bitwarden session key",
   "connector.bitwarden.connect": "Connect Bitwarden",
   "connector.bitwarden.disconnect": "Disconnect Bitwarden",
   "connector.bitwarden.disconnectAction": "Disconnect",
   "connector.bitwarden.disconnectSummary":
-    "CodeBot forgets the session key. Agents can no longer fill logins from Bitwarden. Other Bitwarden clients stay unlocked.",
+    "OpenBot Code forgets the session key. Agents can no longer fill logins from Bitwarden. Other Bitwarden clients stay unlocked.",
   "connector.bitwarden.disconnectSummaryHost":
     "{host} removes the API key and the master password. Agents on {host} can no longer fill logins from Bitwarden.",
   "connector.bitwarden.connected": "Connected",
-  "connector.bitwarden.actionFailed": "CodeBot could not change the Bitwarden connection.",
+  "connector.bitwarden.actionFailed": "OpenBot Code could not change the Bitwarden connection.",
   "connector.bitwarden.descriptionHost": "Fill browser logins on {host} from Bitwarden or Vaultwarden.",
   "connector.bitwarden.setupHost":
     "{host} signs in with its own Bitwarden CLI. In your vault, create a folder named Shared with CodeBot and put only the logins that agents may use in it. In the web vault, open Settings › Security › Keys and view your API key. Enter the server address, client_id, client_secret and your master password below.",
   "connector.bitwarden.scopeHost":
-    "All agents on {host} can use matching logins in Shared with CodeBot. CodeBot uses exact HTTPS origins. It does not use items that require a master password prompt or a custom URI match rule.",
+    "All agents on {host} can use matching logins in Shared with CodeBot. OpenBot Code uses exact HTTPS origins. It does not use items that require a master password prompt or a custom URI match rule.",
   "connector.bitwarden.sessionHost":
     "{host} keeps the API key and the master password encrypted, so it can unlock again after a restart. This computer does not keep them. Disconnect removes them from {host}. {host} must reach the server address over HTTPS.",
   "connector.bitwarden.serverUrl": "Server address",
@@ -570,18 +575,19 @@ export const messages = defineMessages("connector", {
   "connector.protonPass.keyPlaceholder": "pst_…",
   "connector.protonPass.setupTitle": "Set up",
   "connector.protonPass.setupDescription":
-    "Connect opens the Proton sign-in in your browser. Then CodeBot makes the shared vault and keeps only a read-only key for it.",
+    "Connect opens the Proton sign-in in your browser. Then OpenBot Code makes the shared vault and keeps only a read-only key for it.",
   "connector.protonPass.setupDescriptionHost":
     "Connect opens the Proton sign-in in your browser. Then {host} makes the shared vault and keeps only a read-only key for it.",
   "connector.protonPass.vaultName": "Shared with CodeBot",
-  "connector.protonPass.vaultSetup": "CodeBot makes this vault when you connect. Move logins into it to share them.",
+  "connector.protonPass.vaultSetup":
+    "OpenBot Code makes this vault when you connect. Move logins into it to share them.",
   "connector.protonPass.showSteps": "Show steps",
   "connector.protonPass.stepsLabel": "Connect steps",
   "connector.protonPass.stepSignIn": "Sign in",
   "connector.protonPass.stepVault": "Make the shared vault",
   "connector.protonPass.stepDone": "Done",
   "connector.protonPass.signInTitle": "Sign in to Proton",
-  "connector.protonPass.signInStarting": "CodeBot starts the sign-in. The Proton page opens in your browser.",
+  "connector.protonPass.signInStarting": "OpenBot Code starts the sign-in. The Proton page opens in your browser.",
   "connector.protonPass.signInDescription":
     "The sign-in is open in your browser. Proton asks for your password and your second factor.",
   "connector.protonPass.signInDescriptionHost":
@@ -592,7 +598,7 @@ export const messages = defineMessages("connector", {
   "connector.protonPass.continue": "Continue",
   "connector.protonPass.setupStepTitle": "Making the shared vault",
   "connector.protonPass.setupStepDescription":
-    "CodeBot makes the vault “{vault}” and a read-only key for it. Then it signs out of your Proton session.",
+    "OpenBot Code makes the vault “{vault}” and a read-only key for it. Then it signs out of your Proton session.",
   "connector.protonPass.doneTitle": "Proton Pass is connected",
   "connector.protonPass.doneDescription": "Move logins into “{vault}” to let agents sign in with them.",
   "connector.protonPass.failedTitle": "Proton Pass did not connect",
@@ -620,9 +626,9 @@ export const messages = defineMessages("connector", {
   "connector.protonPass.keyNoExpiry": "Read only. Does not expire.",
   "connector.protonPass.disconnectTitle": "Disconnect Proton Pass",
   "connector.protonPass.disconnectSummary":
-    "CodeBot deletes its access key on this computer. The vault and its logins stay in your Proton account.",
+    "OpenBot Code deletes its access key on this computer. The vault and its logins stay in your Proton account.",
   "connector.protonPass.disconnectSummaryHost":
-    "CodeBot deletes its access key on {host}. The vault and its logins stay in your Proton account.",
+    "OpenBot Code deletes its access key on {host}. The vault and its logins stay in your Proton account.",
   "connector.protonPass.disconnect": "Disconnect",
-  "connector.protonPass.actionFailed": "CodeBot could not change the Proton Pass connection.",
+  "connector.protonPass.actionFailed": "OpenBot Code could not change the Proton Pass connection.",
 });

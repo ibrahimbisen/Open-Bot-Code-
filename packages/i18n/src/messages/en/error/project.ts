@@ -1,7 +1,8 @@
 import { defineMessages } from "../../../message";
 
 export const messages = defineMessages("error.project", {
-  "error.project.serverTooOld": "This server does not support projects. Update CodeBot on the computer that runs it.",
+  "error.project.serverTooOld":
+    "This server does not support projects. Update OpenBot Code on the computer that runs it.",
   "error.project.remoteFailed": "The server could not finish this project action. Try again.",
   "error.project.replyUnsupported": "This server cannot share reply settings. Update the server.",
   "error.project.replyFailed": "The server could not save the reply rule. Try again.",
@@ -18,7 +19,7 @@ export const messages = defineMessages("error.project", {
   "error.project.chatNotFound": "This chat no longer exists.",
   "error.project.cursorInvalid": "This part of the chat list is no longer valid. Load the chats again.",
   "error.project.folderMissing": "This folder does not exist.",
-  "error.project.folderProtected": "CodeBot cannot use this folder. Choose a different folder.",
+  "error.project.folderProtected": "OpenBot Code cannot use this folder. Choose a different folder.",
   "error.project.mainFolderMissing":
     "The main folder of this project is missing: {path}. Restore the folder or choose a new main folder.",
 });

@@ -375,7 +375,7 @@ const CONNECTING_STATUS: AgentStatus = {
   message: null,
   fullAccess: true,
 };
-const WEB_APP_INFO: AppInfo = { name: "CodeBot", version: "web", platform: "darwin", variant: "production" };
+const WEB_APP_INFO: AppInfo = { name: "OpenBot Code", version: "web", platform: "darwin", variant: "production" };
 const PHONE_QUERY = "(max-width: 720px)";
 const QUEUE_EDIT_ACCOUNT_KEY = "codebot.web.queue-edit-account";
 const SEARCH_ROUTINE_REQUESTS = 4;
@@ -2802,7 +2802,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                 <>
                   <ServerMenu
                     rail
-                    serverName={workspace.state.host?.name ?? "CodeBot"}
+                    serverName={workspace.state.host?.name ?? "OpenBot Code"}
                     servers={shownServers()}
                     hiddenServers={hiddenServers()}
                     view={layout.serverView()}
@@ -3112,7 +3112,7 @@ function WebWorkspaceFrame(props: WebWorkspaceProps) {
                             !pausedAgentIds().has(agent.id) && (workspace.state.reads[agent.id]?.unreadCount ?? 0) > 0,
                         ) || channels.hasUnread()
                       }
-                      serverName={workspace.state.host?.name ?? "CodeBot"}
+                      serverName={workspace.state.host?.name ?? "OpenBot Code"}
                       serverUpdate={(() => {
                         const id = server()?.id;
                         const badge = id ? serverUpdateBadge(id) : null;

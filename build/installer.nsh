@@ -38,7 +38,7 @@
 !macroend
 
 !macro customInstall
-  WriteRegStr SHCTX "Software\Classes\codebot" "" "URL:CodeBot invitations"
+  WriteRegStr SHCTX "Software\Classes\codebot" "" "URL:OpenBot Code invitations"
   WriteRegStr SHCTX "Software\Classes\codebot" "URL Protocol" ""
   WriteRegStr SHCTX "Software\Classes\codebot\DefaultIcon" "" "$appExe,0"
   WriteRegStr SHCTX "Software\Classes\codebot\shell\open\command" "" '"$appExe" "%1"'

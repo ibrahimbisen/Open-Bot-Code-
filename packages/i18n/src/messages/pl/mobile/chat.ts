@@ -4,7 +4,7 @@ import type { messages as source } from "../../en/mobile/chat";
 export const messages = {
   "mobile.chat.dictation.microphoneOffTitle": "Dostęp do mikrofonu jest wyłączony",
   "mobile.chat.dictation.microphoneOffMessage":
-    "Aby dyktować wiadomość, zezwól CodeBot na używanie mikrofonu i rozpoznawania mowy w Ustawieniach.",
+    "Aby dyktować wiadomość, zezwól OpenBot Code na używanie mikrofonu i rozpoznawania mowy w Ustawieniach.",
   "mobile.chat.dictation.stopped": "Dyktowanie zatrzymane",
   "mobile.chat.dictation.tryAgain": "Spróbuj ponownie.",
   "mobile.chat.dictation.unavailable": "Dyktowanie jest niedostępne",
@@ -211,7 +211,8 @@ export const messages = {
     "Pobieranie zostało przerwane. Rozpocznie się ponownie po połączeniu z serwerem.",
   "mobile.chat.attachment.openFailed": "Nie udało się otworzyć załącznika",
   "mobile.chat.attachment.photosNeedUpdate": "Zapisywanie zdjęć wymaga najnowszej wersji aplikacji.",
-  "mobile.chat.attachment.photosPermission": "Zezwól CodeBot na dodawanie zdjęć w Ustawieniach, aby zapisać ten obraz.",
+  "mobile.chat.attachment.photosPermission":
+    "Zezwól OpenBot Code na dodawanie zdjęć w Ustawieniach, aby zapisać ten obraz.",
   "mobile.chat.attachment.imageUnavailable": "Obraz jest niedostępny. Spróbuj ponownie.",
   "mobile.chat.attachment.saveImageFailed": "Nie udało się zapisać obrazu",
   "mobile.chat.attachment.copyImageFailed": "Nie można skopiować obrazu",
@@ -244,9 +245,9 @@ export const messages = {
   "mobile.chat.attachment.unsupported":
     "{name}: wybierz obrazy, dźwięk MP3, wideo MOV lub MP4, archiwa ZIP, PDF, dokumenty Office, EML, tekst, Markdown, dane lub pliki źródłowe.",
   "mobile.chat.attachment.hostRejectsType":
-    "{name}: komputer hosta nie przyjmuje plików {type}. Zaktualizuj tam CodeBot, aby je załączać.",
+    "{name}: komputer hosta nie przyjmuje plików {type}. Zaktualizuj tam OpenBot Code, aby je załączać.",
   "mobile.chat.attachment.hostRejects":
-    "{name}: komputer hosta nie przyjmuje tych plików. Zaktualizuj tam CodeBot, aby je załączać.",
+    "{name}: komputer hosta nie przyjmuje tych plików. Zaktualizuj tam OpenBot Code, aby je załączać.",
   "mobile.chat.attachment.nameTooLong": "Wybierz plik o krótszej nazwie.",
   "mobile.chat.attachment.damaged": "Załącznik jest uszkodzony. Wybierz go ponownie.",
   "mobile.chat.attachment.tooLarge": "{name} ma ponad {limit}.",
@@ -297,14 +298,14 @@ export const messages = {
   "mobile.chat.liveVoice.voiceServerFailed":
     "Serwer głosowy nie mógł odczytać odpowiedzi. Sprawdź go w Ustawienia > Głos.",
   "mobile.chat.liveVoice.gptUnsupported":
-    "Ten serwer nie obsługuje GPT Live Voice. Zaktualizuj CodeBot na komputerze, na którym działa.",
+    "Ten serwer nie obsługuje GPT Live Voice. Zaktualizuj OpenBot Code na komputerze, na którym działa.",
   "mobile.chat.liveVoice.gptFailed":
     "Nie udało się uruchomić GPT Live Voice. Wyłącz wyciszenie, aby spróbować ponownie.",
   "mobile.chat.liveVoice.gptEnded": "GPT Live Voice zatrzymał się. Wyłącz wyciszenie, aby uruchomić go ponownie.",
   "mobile.chat.liveVoice.gptFailedTitle": "Nie udało się uruchomić GPT Live Voice",
   "mobile.chat.liveVoice.gptEndedTitle": "GPT Live Voice zatrzymał się",
   "mobile.chat.liveVoice.gptMicrophoneOff":
-    "Zezwól CodeBot na użycie mikrofonu w Ustawieniach. Potem wyłącz wyciszenie, aby spróbować ponownie.",
+    "Zezwól OpenBot Code na użycie mikrofonu w Ustawieniach. Potem wyłącz wyciszenie, aby spróbować ponownie.",
   "mobile.chat.composer.addAttachment": "Dodaj załącznik",
   "mobile.chat.composer.ask": "Zapytaj: {name}",
   "mobile.chat.composer.stopFailed": "Nie udało się zatrzymać agenta. Mógł już skończyć.",
@@ -334,7 +335,7 @@ export const messages = {
     "Jego pytania i odpowiedzi są tylko na tym telefonie. Nie można ich przywrócić.",
   "mobile.chat.sideQuestion.notFound": "Tego agenta nie ma już na serwerze.",
   "mobile.chat.sideQuestion.unsupported":
-    "Ten host nie może odpowiadać na pytania poboczne. Zaktualizuj CodeBot na hoście.",
+    "Ten host nie może odpowiadać na pytania poboczne. Zaktualizuj OpenBot Code na hoście.",
   "mobile.chat.pins.title": "Przypięte wiadomości",
   "mobile.chat.pins.emptyTitle": "Brak przypiętych wiadomości",
   "mobile.chat.pins.emptyBody": "Przytrzymaj wiadomość i stuknij Przypnij, aby zachować ją tutaj.",
@@ -343,7 +344,7 @@ export const messages = {
   "mobile.chat.pins.unpin": "Odepnij",
   "mobile.chat.pins.failed": "Przypięcie się nie zmieniło.",
   "mobile.chat.pins.loadFailed": "Nie udało się wczytać przypiętych wiadomości.",
-  "mobile.chat.pins.unsupported": "Ten host nie może przypinać wiadomości. Zaktualizuj CodeBot na hoście.",
+  "mobile.chat.pins.unsupported": "Ten host nie może przypinać wiadomości. Zaktualizuj OpenBot Code na hoście.",
   "mobile.chat.pins.mainChat": "Czat główny",
   "mobile.chat.pins.thread": "Wątek boczny",
   "mobile.chat.pins.pinnedBy": "Przypięte przez: {name}",
@@ -441,7 +442,8 @@ export const messages = {
   "mobile.chat.imageGallery.saveAll": "Zapisz wszystkie",
   "mobile.chat.imageGallery.saved": "Zapisano w Zdjęciach",
   "mobile.chat.imageGallery.shareAll": "Udostępnij wszystkie",
-  "mobile.chat.imageGallery.photosPermission": "Pozwól CodeBot dodawać zdjęcia w Ustawieniach, aby zapisać te obrazy.",
+  "mobile.chat.imageGallery.photosPermission":
+    "Pozwól OpenBot Code dodawać zdjęcia w Ustawieniach, aby zapisać te obrazy.",
   "mobile.chat.imageGallery.saveFailed": "Nie udało się zapisać obrazów",
   "mobile.chat.imageGallery.shareFailed": "Nie udało się udostępnić obrazów",
   "mobile.chat.imageGallery.shareNeedsUpdate": "Udostępnianie wielu obrazów wymaga najnowszej wersji aplikacji.",
@@ -451,7 +453,7 @@ export const messages = {
   "mobile.chat.video.loading": "Wczytywanie {name}",
   "mobile.chat.video.share": "Udostępnij: {name}",
   "mobile.chat.video.save": "Zapisz {name} w Zdjęciach",
-  "mobile.chat.video.photosPermission": "Zezwól CodeBot na dodawanie zdjęć w Ustawieniach, aby zapisać ten film.",
+  "mobile.chat.video.photosPermission": "Zezwól OpenBot Code na dodawanie zdjęć w Ustawieniach, aby zapisać ten film.",
   "mobile.chat.video.saveFailed": "Nie udało się zapisać filmu",
   "mobile.chat.audio.play": "Odtwórz: {name}",
   "mobile.chat.audio.pause": "Wstrzymaj: {name}",
@@ -466,28 +468,28 @@ export const messages = {
   "mobile.chat.browserSecret.ended": "To żądanie logowania zostało zakończone. Poproś agenta o ponowną próbę.",
   "mobile.chat.browserSecret.oneTimeCode": "Kod jednorazowy",
   "mobile.chat.browserSecret.takeoverTitle": "Przejęcie przeglądarki",
-  "mobile.chat.browserSecret.takeoverBody": "Wykonaj ten krok w przeglądarce na komputerze z CodeBot.",
+  "mobile.chat.browserSecret.takeoverBody": "Wykonaj ten krok w przeglądarce na komputerze z OpenBot Code.",
   "mobile.chat.browserSecret.signInBlockedTitle": "Zaloguj się na swoim komputerze",
   "mobile.chat.browserSecret.signInBlockedBody":
-    "Ta witryna nie akceptuje logowania z serwera. Otwórz ten czat w aplikacji CodeBot na komputer i zaloguj się tam.",
+    "Ta witryna nie akceptuje logowania z serwera. Otwórz ten czat w aplikacji OpenBot Code na komputer i zaloguj się tam.",
   "mobile.chat.browserSecret.takeoverReload":
-    "CodeBot nie mógł dokończyć wpisywania hasła ani kodu. Wpisz na stronie to, czego brakuje. Potem odśwież stronę, zanim wybierzesz „Gotowe”.",
+    "OpenBot Code nie mógł dokończyć wpisywania hasła ani kodu. Wpisz na stronie to, czego brakuje. Potem odśwież stronę, zanim wybierzesz „Gotowe”.",
   "mobile.chat.browserSecret.takeoverFailed": "Nie udało się zrealizować żądania.",
   "mobile.chat.browserSecret.done": "Gotowe",
   "mobile.chat.browserSecret.submitOnce": "Wyślij jednorazowo do {origin}. Ta wartość nie trafi do czatu.",
   "mobile.chat.browserSecret.submitFailed": "Nie udało się zrealizować żądania. Sprawdź połączenie i spróbuj ponownie.",
   "mobile.chat.browserSecret.vaultSkip.agentScript":
-    "CodeBot nie użył Twoich zapisanych danych logowania, ponieważ agent uruchomił skrypt na tej stronie. Aby ich użyć, poproś agenta o ponowne załadowanie strony i ponowną próbę.",
+    "OpenBot Code nie użył Twoich zapisanych danych logowania, ponieważ agent uruchomił skrypt na tej stronie. Aby ich użyć, poproś agenta o ponowne załadowanie strony i ponowną próbę.",
   "mobile.chat.browserSecret.vaultSkip.fieldKind":
-    "CodeBot nie użył Twoich zapisanych danych logowania, ponieważ agent wybrał niewłaściwe pole na stronie.",
+    "OpenBot Code nie użył Twoich zapisanych danych logowania, ponieważ agent wybrał niewłaściwe pole na stronie.",
   "mobile.chat.browserSecret.vaultSkip.loginChoice":
-    "CodeBot nie użył zapisanych danych logowania, ponieważ agent nie wybrał żadnych z danych logowania zapisanych dla tej witryny. Powiedz agentowi, którego konta ma użyć.",
+    "OpenBot Code nie użył zapisanych danych logowania, ponieważ agent nie wybrał żadnych z danych logowania zapisanych dla tej witryny. Powiedz agentowi, którego konta ma użyć.",
   "mobile.chat.browserSecret.vaultSkip.noPassword":
-    "CodeBot nie użył Twoich zapisanych danych logowania, ponieważ nie zawierają hasła do tej witryny.",
+    "OpenBot Code nie użył Twoich zapisanych danych logowania, ponieważ nie zawierają hasła do tej witryny.",
   "mobile.chat.browserSecret.vaultSkip.noAuthenticatorKey":
-    "CodeBot nie użył Twoich zapisanych danych logowania, ponieważ nie zawierają klucza aplikacji uwierzytelniającej.",
+    "OpenBot Code nie użył Twoich zapisanych danych logowania, ponieważ nie zawierają klucza aplikacji uwierzytelniającej.",
   "mobile.chat.browserSecret.vaultSkip.vaultUnreadable":
-    "CodeBot nie użył zapisanych danych logowania, ponieważ nie mógł odczytać Twojego menedżera haseł.",
+    "OpenBot Code nie użył zapisanych danych logowania, ponieważ nie mógł odczytać Twojego menedżera haseł.",
   "mobile.chat.browserSecret.submit": "Wyślij",
   "mobile.chat.browserSecret.takeOver": "Przejmij",
   "mobile.chat.starter.title": "Od czego zaczniemy?",
@@ -570,14 +572,14 @@ export const messages = {
   "mobile.chat.approval.effect.permissions":
     "„Zezwól” daje agentowi {name} te uprawnienia na serwerze {server}. „Odmów” zachowuje obecne uprawnienia.",
   "mobile.chat.approval.partial":
-    "{server} wysyła na telefon tylko początek tego żądania. Aby na nie zezwolić, zaktualizuj CodeBot na serwerze {server} albo otwórz ten czat w aplikacji CodeBot na komputerze. Odmówić możesz tutaj.",
+    "{server} wysyła na telefon tylko początek tego żądania. Aby na nie zezwolić, zaktualizuj OpenBot Code na serwerze {server} albo otwórz ten czat w aplikacji OpenBot Code na komputerze. Odmówić możesz tutaj.",
   "mobile.chat.approval.loading": "Wczytywanie całego żądania…",
   "mobile.chat.approval.loadFailed": "Nie udało się wczytać całego żądania. Odmówić możesz tutaj.",
   "mobile.chat.approval.retry": "Spróbuj ponownie",
   "mobile.chat.approval.report.bugHeadline": "Znalazłeś błąd? Naprawmy go.",
   "mobile.chat.approval.report.ideaHeadline": "Masz pomysł? Zróbmy to.",
   "mobile.chat.approval.report.dontSend": "Nie teraz",
-  "mobile.chat.approval.report.send": "Wyślij do zespołu CodeBot",
+  "mobile.chat.approval.report.send": "Wyślij do zespołu OpenBot Code",
   "mobile.chat.approval.report.phoneAdds": "Ten telefon dodaje do zgłoszenia:",
   "mobile.chat.approval.allow": "Zezwól",
   "mobile.chat.approval.deny": "Odmów",
@@ -736,14 +738,14 @@ export const messages = {
   "mobile.chat.threads.renameSave": "Zapisz",
   "mobile.chat.threads.name": "Nazwa wątku",
   "mobile.chat.threads.renameUnavailable":
-    "Nie możesz teraz zmienić nazwy tego wątku. Połącz się z serwerem lub zaktualizuj CodeBot na hoście.",
+    "Nie możesz teraz zmienić nazwy tego wątku. Połącz się z serwerem lub zaktualizuj OpenBot Code na hoście.",
   "mobile.chat.threads.delete.action": "Usuń",
   "mobile.chat.threads.delete.title": "Usunąć ten wątek?",
   "mobile.chat.threads.delete.body":
-    "CodeBot usuwa wątek, jego wiadomości i pliki na zawsze. Główny czat się nie zmienia.",
-  "mobile.chat.threads.filesUnsupported": "Ten host nie przyjmuje plików w wątku. Zaktualizuj CodeBot na hoście.",
+    "OpenBot Code usuwa wątek, jego wiadomości i pliki na zawsze. Główny czat się nie zmienia.",
+  "mobile.chat.threads.filesUnsupported": "Ten host nie przyjmuje plików w wątku. Zaktualizuj OpenBot Code na hoście.",
   "mobile.chat.threads.unsupported":
-    "Ten host nie może zmieniać nazw ani usuwać wątków. Zaktualizuj CodeBot na hoście.",
+    "Ten host nie może zmieniać nazw ani usuwać wątków. Zaktualizuj OpenBot Code na hoście.",
   "mobile.chat.threads.error.rename": "Nie udało się zmienić nazwy wątku.",
   "mobile.chat.threads.error.delete": "Nie udało się usunąć wątku.",
   "mobile.chat.channelWork.working": "Pracuje w kanale {channel}",
@@ -762,7 +764,7 @@ export const messages = {
   "mobile.chat.locationRequest.declined": "Nie udostępniono",
   "mobile.chat.locationRequest.unavailable": "Telefon nie znalazł Twojej lokalizacji. Spróbuj ponownie.",
   "mobile.chat.locationRequest.deniedTitle": "Dostęp do lokalizacji jest wyłączony",
-  "mobile.chat.locationRequest.denied": "Aby udostępnić lokalizację, pozwól CodeBot jej używać w Ustawieniach.",
+  "mobile.chat.locationRequest.denied": "Aby udostępnić lokalizację, pozwól OpenBot Code jej używać w Ustawieniach.",
   "mobile.chat.locationRequest.openSettings": "Otwórz Ustawienia",
   "mobile.chat.appSuggestion.skip": "Pomiń",
   "mobile.chat.appSuggestion.skipNamed": "Pomiń {name}",

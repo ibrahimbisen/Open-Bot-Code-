@@ -1,44 +1,44 @@
 import { defineMessages } from "../../../message";
 
 export const messages = defineMessages("error.connector", {
-  "error.connector.githubUnavailable": "This build of CodeBot has no GitHub App.",
+  "error.connector.githubUnavailable": "This build of OpenBot Code has no GitHub App.",
   "error.connector.githubDenied": "The GitHub sign-in was refused.",
   "error.connector.githubCodeExpired": "The GitHub code expired. Connect GitHub again.",
   "error.connector.githubDeviceFlowDisabled": "The GitHub App does not allow device sign-in.",
   "error.connector.githubClientUnknown": "GitHub does not know the Client ID of this GitHub App.",
   "error.connector.githubUnexpected": "GitHub sent an unexpected answer: {detail}",
-  "error.connector.githubUnreachable": "CodeBot cannot reach GitHub: {detail}",
+  "error.connector.githubUnreachable": "OpenBot Code cannot reach GitHub: {detail}",
   "error.connector.githubOffline":
-    "CodeBot cannot reach GitHub. Check the internet connection and the DNS settings of the computer or server that runs CodeBot, then try again.",
+    "OpenBot Code cannot reach GitHub. Check the internet connection and the DNS settings of the computer or server that runs OpenBot Code, then try again.",
   "error.connector.githubExpired": "The GitHub connection expired. Connect GitHub again.",
   "error.connector.githubFileUnreadable": "The GitHub connection file is unreadable.",
   "error.connector.githubFileTooLarge": "The GitHub connection file is too large.",
   "error.connector.onePasswordCliMissing":
-    "CodeBot cannot find the 1Password CLI. Install it and turn on its integration in the 1Password app, or use a service account token.",
+    "OpenBot Code cannot find the 1Password CLI. Install it and turn on its integration in the 1Password app, or use a service account token.",
   "error.connector.onePasswordCliInstallFailed":
-    "CodeBot could not install the 1Password CLI. Check the connection to the internet, then try again.",
+    "OpenBot Code could not install the 1Password CLI. Check the connection to the internet, then try again.",
   "error.connector.onePasswordCliSignedOut":
     "The 1Password CLI is not signed in. Turn on its integration in the 1Password app, then connect again.",
   "error.connector.onePasswordAppUnreachable":
-    "CodeBot cannot reach the 1Password app. Open 1Password and unlock it. In Settings > Developer, make sure that “Integrate with 1Password CLI” is on. Then try again.",
+    "OpenBot Code cannot reach the 1Password app. Open 1Password and unlock it. In Settings > Developer, make sure that “Integrate with 1Password CLI” is on. Then try again.",
   "error.connector.onePasswordCliFailed": "The 1Password CLI failed: {detail}",
   "error.connector.onePasswordCliForbidden":
     "Your 1Password account does not let you create the shared vault or a service account. Ask an owner or administrator of the account for this permission, or ask them for a service account token and click “Use token”.",
   "error.connector.onePasswordUnexpected": "1Password sent an unexpected answer: {detail}",
   "error.connector.onePasswordTokenRejected": "1Password did not accept the service account token.",
   "error.connector.onePasswordUnreachable":
-    "CodeBot cannot reach 1Password. Check the internet connection, then try again.",
+    "OpenBot Code cannot reach 1Password. Check the internet connection, then try again.",
   "error.connector.onePasswordRateLimited": "1Password received too many requests. Wait a few minutes, then try again.",
   "error.connector.onePasswordNoVault":
     "The service account cannot read a vault. Give it access to a vault, then try again.",
   "error.connector.onePasswordReadFailed":
-    "CodeBot cannot read your logins in 1Password. Disconnect 1Password, then connect it again.",
+    "OpenBot Code cannot read your logins in 1Password. Disconnect 1Password, then connect it again.",
   "error.connector.onePasswordFileUnreadable": "The 1Password connection file is unreadable.",
   "error.connector.onePasswordFileTooLarge": "The 1Password connection file is too large.",
   "error.connector.bitwardenFailed":
     "Could not read Bitwarden. Install the bw CLI, sign in, unlock it, and create one folder named Shared with CodeBot. Connect with a new session key.",
   "error.connector.bitwardenCliMissing":
-    "CodeBot cannot find the Bitwarden CLI. Install bw, make sure that it works in a new terminal, then connect again.",
+    "OpenBot Code cannot find the Bitwarden CLI. Install bw, make sure that it works in a new terminal, then connect again.",
   "error.connector.bitwardenFolderMissing":
     "Bitwarden must have exactly one folder named Shared with CodeBot. Create it or remove the extra one, then connect again.",
   "error.connector.bitwardenHostInput":
@@ -52,7 +52,7 @@ export const messages = defineMessages("error.connector", {
   "error.connector.bitwardenCliInstallFailed":
     "Could not install the Bitwarden CLI on this server. Check its network connection, then connect again.",
   "error.connector.bitwardenFileUnreadable": "The Bitwarden connection file is unreadable.",
-  "error.connector.passwordManagerUnknown": "CodeBot does not know this password manager.",
+  "error.connector.passwordManagerUnknown": "OpenBot Code does not know this password manager.",
   "error.connector.passwordManagerMethod": "This password manager cannot connect this way.",
   "error.connector.passwordManagerNoSignIn": "No sign-in page is open. Connect again.",
   "error.connector.protonPassFailed": "Could not connect Proton Pass. Connect again.",

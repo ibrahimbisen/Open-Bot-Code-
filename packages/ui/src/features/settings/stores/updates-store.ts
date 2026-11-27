@@ -23,7 +23,7 @@ export function createSettingsUpdatesStore(props: UpdatesStoreProps) {
     props.updateStatus.currentVersion || props.appInfo?.version || currentText().t("settings.updates.versionUnknown");
   const targetUpdate = () =>
     props.updateStatus.availableVersion
-      ? `CodeBot v${props.updateStatus.availableVersion}`
+      ? `OpenBot Code v${props.updateStatus.availableVersion}`
       : currentText().t("settings.updates.target.latest");
   const hostMessage = () => {
     const { t, errorMessage } = currentText();
@@ -68,7 +68,7 @@ export function createSettingsUpdatesStore(props: UpdatesStoreProps) {
         return t("settings.updates.status.installing", { target: targetUpdate() });
       case "up-to-date":
         return props.updateStatus.stagedVersion
-          ? t("settings.updates.status.staged", { target: `CodeBot v${props.updateStatus.stagedVersion}` })
+          ? t("settings.updates.status.staged", { target: `OpenBot Code v${props.updateStatus.stagedVersion}` })
           : t("settings.updates.status.upToDate");
       case "error":
         return errorMessage(props.updateStatus.message, t("settings.updates.status.checkFailed"));

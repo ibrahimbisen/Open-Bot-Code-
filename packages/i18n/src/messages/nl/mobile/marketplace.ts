@@ -65,13 +65,13 @@ export const messages = {
   "mobile.marketplace.facts.accessMac": "Alleen Mac",
   "mobile.marketplace.permission.admin": "Alleen eigenaren en beheerders kunnen installeren uit de marktplaats.",
   "mobile.marketplace.permission.unavailable":
-    "Deze server is offline, of de CodeBot-versie is hiervoor te oud. Werk CodeBot bij op de computer waarop de server draait.",
+    "Deze server is offline, of de OpenBot Code-versie is hiervoor te oud. Werk OpenBot Code bij op de computer waarop de server draait.",
   "mobile.marketplace.error.agentUnsupported":
-    "Werk CodeBot bij op de server om agents uit de marktplaats toe te voegen.",
+    "Werk OpenBot Code bij op de server om agents uit de marktplaats toe te voegen.",
   "mobile.marketplace.error.agentUpdateUnsupported":
-    "Werk CodeBot bij op de server om agents uit de marktplaats bij te werken.",
+    "Werk OpenBot Code bij op de server om agents uit de marktplaats bij te werken.",
   "mobile.marketplace.error.signInUnsupported":
-    "Werk CodeBot bij op de server om vanaf je telefoon in te loggen bij apps.",
+    "Werk OpenBot Code bij op de server om vanaf je telefoon in te loggen bij apps.",
   "mobile.marketplace.agent.add": "Voeg agent toe",
   "mobile.marketplace.agent.adding": "Agent toevoegen",
   "mobile.marketplace.agent.update": "Werk agent bij",
@@ -109,7 +109,7 @@ export const messages = {
   "mobile.marketplace.app.stepReturn": "Kom hier terug. {name} wordt verbonden op je server.",
   "mobile.marketplace.app.stepBlank": "De laatste pagina laadt niet. Dat is juist.",
   "mobile.marketplace.app.stepCopy": "Tik op de adresbalk en kopieer het volledige adres.",
-  "mobile.marketplace.app.stepPaste": "Ga terug naar CodeBot en plak het adres hieronder.",
+  "mobile.marketplace.app.stepPaste": "Ga terug naar OpenBot Code en plak het adres hieronder.",
   "mobile.marketplace.app.openSignIn": "Open inlogpagina",
   "mobile.marketplace.app.keySecure": "De sleutel gaat alleen naar je server, via een versleutelde verbinding.",
   "mobile.marketplace.app.connecting": "Verbinden",
@@ -119,11 +119,11 @@ export const messages = {
   "mobile.marketplace.app.connectFailed": "De app is niet verbonden.",
   "mobile.marketplace.app.linkInvalid": "Gebruik een https-link op {hostname}.",
   "mobile.marketplace.app.docs": "Vraag een sleutel aan",
-  "mobile.marketplace.app.local": "Deze app draait op de computer met CodeBot. Stel de app in op die computer.",
+  "mobile.marketplace.app.local": "Deze app draait op de computer met OpenBot Code. Stel de app in op die computer.",
   "mobile.marketplace.app.needsMac":
-    "Deze app werkt alleen op een Mac waarop CodeBot draait, en deze server is geen Mac.",
+    "Deze app werkt alleen op een Mac waarop OpenBot Code draait, en deze server is geen Mac.",
   "mobile.marketplace.app.relayUnsupported":
-    "Voor deze app moet je inloggen in een browser. Werk CodeBot bij op de server, of verbind de app op de computer.",
+    "Voor deze app moet je inloggen in een browser. Werk OpenBot Code bij op de server, of verbind de app op de computer.",
   "mobile.marketplace.app.waiting": "Wachten op de inlogpagina…",
   "mobile.marketplace.app.openAgain": "Open de inlogpagina opnieuw",
   "mobile.marketplace.app.pasteLabel": "Adres na het inloggen",

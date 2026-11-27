@@ -2,14 +2,14 @@ import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/webClient";
 
 export const messages = {
-  "webClient.loading": "Chargement d’CodeBot…",
+  "webClient.loading": "Chargement d’OpenBot Code…",
   "webClient.loadingLine.wake": "Réveil des agents…",
   "webClient.loadingLine.coffee": "Café servi aux agents…",
   "webClient.loadingLine.tokens": "On compte les jetons sur les doigts…",
   "webClient.loadingLine.prompts": "On démêle les prompts…",
   "webClient.loadingLine.sleepy": "On demande gentiment au dormeur…",
   "webClient.loadingLine.almost": "Presque prêt. Probablement.",
-  "webClient.slowLoad.title": "CodeBot met plus de temps que d’habitude",
+  "webClient.slowLoad.title": "OpenBot Code met plus de temps que d’habitude",
   "webClient.slowLoad.body": "Vérifiez votre connexion internet, puis rechargez la page.",
   "webClient.slowLoad.reload": "Recharger",
   "webClient.login.failed": "La connexion a échoué.",
@@ -21,9 +21,9 @@ export const messages = {
   "webClient.pane.navigation": "Navigation de l’espace de travail",
   "webClient.pane.chat": "Discussion",
   "webClient.pane.workspace": "Espace de travail",
-  "webClient.phoneApp.title": "Utilisez l’app CodeBot",
+  "webClient.phoneApp.title": "Utilisez l’app OpenBot Code",
   "webClient.phoneApp.description":
-    "Sur un téléphone, CodeBot fonctionne mieux dans l’app. Connectez-vous avec le même e-mail.",
+    "Sur un téléphone, OpenBot Code fonctionne mieux dans l’app. Connectez-vous avec le même e-mail.",
   "webClient.phoneApp.ios": "Télécharger pour iPhone",
   "webClient.phoneApp.android": "Télécharger pour Android",
   "webClient.phoneApp.continue": "Continuer dans le navigateur",
@@ -32,18 +32,19 @@ export const messages = {
   "webClient.notice.hostsFailed": "Impossible de charger vos serveurs",
   "webClient.notice.connectComputer": "Connectez un serveur",
   "webClient.connect.description":
-    "Lancez CodeBot sur votre ordinateur pour discuter avec vos agents depuis ce navigateur. Vous pouvez aussi rejoindre un serveur avec une invitation.",
+    "Lancez OpenBot Code sur votre ordinateur pour discuter avec vos agents depuis ce navigateur. Vous pouvez aussi rejoindre un serveur avec une invitation.",
   "webClient.connect.descriptionHosted":
-    "Créez un serveur hébergé pour discuter avec vos agents depuis ce navigateur. Vous pouvez aussi lancer CodeBot sur votre ordinateur ou rejoindre un serveur avec une invitation.",
-  "webClient.connect.stepInstall": "Installez et ouvrez CodeBot sur votre ordinateur.",
+    "Créez un serveur hébergé pour discuter avec vos agents depuis ce navigateur. Vous pouvez aussi lancer OpenBot Code sur votre ordinateur ou rejoindre un serveur avec une invitation.",
+  "webClient.connect.stepInstall": "Installez et ouvrez OpenBot Code sur votre ordinateur.",
   "webClient.connect.stepSignIn": "Connectez-vous avec votre adresse e-mail.",
-  "webClient.connect.stepRemote": "Dans CodeBot, ouvrez Réglages du serveur > Membres et activez Publier ce serveur.",
-  "webClient.notice.download": "Télécharger CodeBot",
+  "webClient.connect.stepRemote":
+    "Dans OpenBot Code, ouvrez Réglages du serveur > Membres et activez Publier ce serveur.",
+  "webClient.notice.download": "Télécharger OpenBot Code",
   "webClient.notice.createServer": "Créer un serveur hébergé",
   "webClient.notice.join": "Rejoindre par invitation",
   "webClient.notice.refreshHosts": "Actualiser les serveurs",
   "webClient.otherTab.title": "{name} est ouvert dans un autre onglet",
-  "webClient.otherTab.description": "CodeBot ne peut utiliser un serveur que dans un onglet à la fois.",
+  "webClient.otherTab.description": "OpenBot Code ne peut utiliser un serveur que dans un onglet à la fois.",
   "webClient.otherTab.useHere": "Utiliser ici",
   "webClient.agent.modelsFailed": "Impossible de charger les modèles du serveur.",
   "webClient.agent.refreshFailed":
@@ -53,7 +54,7 @@ export const messages = {
   "webClient.error.usageOffline": "Connectez-vous à votre serveur pour voir l’utilisation.",
   "webClient.error.desktopOnly": "Cette action est disponible dans l’application de bureau.",
   "webClient.settings.preferences.title": "Préférences",
-  "webClient.settings.preferences.description": "Choisissez la langue et les sons d’CodeBot dans ce navigateur.",
+  "webClient.settings.preferences.description": "Choisissez la langue et les sons d’OpenBot Code dans ce navigateur.",
   "webClient.error.checkConversation": "Vérifiez la conversation avant d’envoyer à nouveau.",
   "webClient.error.hostReported": "Le serveur a signalé une erreur. Vérifiez la conversation et l’état du serveur.",
   "webClient.error.requestFailed": "La requête a échoué.",
@@ -82,7 +83,7 @@ export const messages = {
   "webClient.error.identityChanged": "L’identité du serveur a changé. Connexion refusée.",
   "webClient.error.connectionUnavailable": "La connexion au serveur n’est pas disponible.",
   "webClient.error.incompatible":
-    "Ce serveur n’est pas compatible avec CodeBot web. Mettez le serveur à jour et rechargez cette page.",
+    "Ce serveur n’est pas compatible avec OpenBot Code web. Mettez le serveur à jour et rechargez cette page.",
   "webClient.error.sendUnconfirmed":
     "La livraison du message n’est pas confirmée. Actualisez avant de l’envoyer à nouveau.",
   "webClient.error.fileType": "Mettez le serveur à jour pour joindre ce type de fichier.",
@@ -90,7 +91,7 @@ export const messages = {
   "webClient.error.duplication": "Ce serveur ne prend pas en charge la duplication d’agents.",
   "webClient.error.connectServerFirst": "Connectez-vous d’abord à ce serveur.",
   "webClient.error.agentInstallNotAllowed":
-    "Seul un propriétaire ou un administrateur peut ajouter un agent ici, et le serveur doit exécuter une version récente d’CodeBot.",
+    "Seul un propriétaire ou un administrateur peut ajouter un agent ici, et le serveur doit exécuter une version récente d’OpenBot Code.",
   "webClient.error.linkDesktopOnly": "Ce lien s’ouvre uniquement dans l’application de bureau.",
   "webClient.error.saveEndpointOffline": "Connectez-vous à votre serveur pour enregistrer un point de terminaison.",
   "webClient.error.removeEndpointOffline": "Connectez-vous à votre serveur pour supprimer un point de terminaison.",

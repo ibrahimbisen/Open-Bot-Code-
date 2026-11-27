@@ -2,13 +2,13 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/status/host";
 
 export const messages = {
-  "status.host.registered": "この CodeBot を WebRTC アクセス用に登録しました。",
+  "status.host.registered": "この OpenBot Code を WebRTC アクセス用に登録しました。",
   "status.host.keyRotated": "サーバーキーを変更しました。ペアリング済みのデバイスはそのままです。",
   "status.host.identityUpdated": "サーバーの ID を更新しました。",
   "status.host.starting": "WebRTC ホストを起動しています…",
-  "status.host.ready": "この CodeBot は WebRTC 接続の準備ができています。",
-  "status.host.signalLost": "現在、ほかのデバイスからこの CodeBot に接続できません。再接続しています。",
-  "status.host.stopping": "この CodeBot を非公開にしています…",
-  "status.host.private": "この CodeBot は非公開です。",
-  "status.host.removed": "この CodeBot はアカウントから削除されました。共有するには、もう一度公開してください。",
+  "status.host.ready": "この OpenBot Code は WebRTC 接続の準備ができています。",
+  "status.host.signalLost": "現在、ほかのデバイスからこの OpenBot Code に接続できません。再接続しています。",
+  "status.host.stopping": "この OpenBot Code を非公開にしています…",
+  "status.host.private": "この OpenBot Code は非公開です。",
+  "status.host.removed": "この OpenBot Code はアカウントから削除されました。共有するには、もう一度公開してください。",
 } as const satisfies PartialTranslation<typeof source>;

@@ -1006,7 +1006,7 @@ export class HostService extends EventEmitter<HostEvents> {
   readonly register = Effect.fn("HostService.register")(function* (this: HostService) {
     if (this.#boundAccountId !== this.#signedInAccountId()) return;
     if (!this.#options.store.configured) {
-      yield* this.configure({ serverName: "CodeBot" }, true);
+      yield* this.configure({ serverName: "OpenBot Code" }, true);
       return;
     }
     const register = this.#options.registerRemoteHost;

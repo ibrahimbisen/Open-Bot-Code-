@@ -12,7 +12,7 @@ export const messages = {
   "server.connection.cachedHint":
     "読み込み済みのコンテンツと下書きは保持されます。再接続後にサーバーの操作が再開されます。",
   "server.connection.computerOffline":
-    "{name} はオフラインです。そのコンピューターの電源が入っていて CodeBot が開いていること、また「サーバーの設定」>「メンバー」で「このサーバーを公開」がオンになっていることを確認してください。",
+    "{name} はオフラインです。そのコンピューターの電源が入っていて OpenBot Code が開いていること、また「サーバーの設定」>「メンバー」で「このサーバーを公開」がオンになっていることを確認してください。",
   "server.connection.conversationFailed": "会話を読み込めませんでした。もう一度お試しください。",
   "server.connection.panelsFailed": "一部のワークスペースパネルを読み込めませんでした。もう一度お試しください。",
   "server.connection.retry": "再試行",
@@ -21,19 +21,20 @@ export const messages = {
   "server.connection.details": "詳細",
 
   "server.status.steps": "接続の手順",
-  "server.status.updateCause": "{name} は CodeBot {version} をインストールするために再起動しています。",
-  "server.status.updateCauseNoVersion": "{name} は CodeBot のアップデートをインストールするために再起動しています。",
+  "server.status.updateCause": "{name} は OpenBot Code {version} をインストールするために再起動しています。",
+  "server.status.updateCauseNoVersion":
+    "{name} は OpenBot Code のアップデートをインストールするために再起動しています。",
   "server.status.connectCause": "このアプリは {name} に接続しています。",
   "server.status.connectionCause": "このアプリは {name} との接続を失いました。自動的に再接続します。",
   "server.status.stepUpdate": "アップデートをインストール",
-  "server.status.stepUpdateDetail": "CodeBot が停止し、アップデートをインストールして、もう一度起動します。",
+  "server.status.stepUpdateDetail": "OpenBot Code が停止し、アップデートをインストールして、もう一度起動します。",
   "server.status.stepConnect": "接続",
   "server.status.stepConnectDetail": "このアプリがサーバーへの接続を開きます。",
   "server.status.stepLoad": "ワークスペースを読み込む",
   "server.status.stepLoadDetail": "エージェントとチャットをサーバーから読み込みます。",
   "server.status.elapsed": "経過時間: {time}",
-  "server.compatibility.updateClientTitle": "この CodeBot アプリを更新してください",
-  "server.compatibility.updateHostTitle": "{name} の CodeBot を更新してください",
+  "server.compatibility.updateClientTitle": "この OpenBot Code アプリを更新してください",
+  "server.compatibility.updateHostTitle": "{name} の OpenBot Code を更新してください",
   "server.compatibility.unsafeDataTitle": "ホストが安全でないデータを返しました",
   "server.compatibility.cannotConnectTitle": "{name} に接続できません",
   "server.compatibility.safeModeTitle": "{name} が起動しません",
@@ -42,7 +43,7 @@ export const messages = {
   "server.compatibility.updateHostDescription":
     "ホストはこのアプリより古いプロトコルにのみ対応しています。ホストを更新してから、もう一度お試しください。",
   "server.compatibility.unsafeDataDescription":
-    "既知のペイロードが無効だったため、CodeBot はこの接続を停止しました。現在のワークスペースのデータは変更されていません。",
+    "既知のペイロードが無効だったため、OpenBot Code はこの接続を停止しました。現在のワークスペースのデータは変更されていません。",
   "server.compatibility.clientVersion": "クライアントのバージョン",
   "server.compatibility.hostVersion": "ホストのバージョン",
   "server.compatibility.negotiatedProtocol": "ネゴシエートされたプロトコル",
@@ -83,12 +84,12 @@ export const messages = {
   "server.local.creating": "サーバーを作成中…",
   "server.local.createFailed": "サーバーを作成できませんでした。",
   "server.local.createFailedRetry":
-    "問題が発生しました。もう一度お試しください。再び失敗する場合は、CodeBot を再起動してください。",
+    "問題が発生しました。もう一度お試しください。再び失敗する場合は、OpenBot Code を再起動してください。",
   "server.local.limitReached":
     "このコンピューターに作成できるサーバーは最大 {limit} 台です。新しく作成するには、1 台を削除してください。",
   "server.local.deleteConfirmTitle": "{name} を削除しますか？",
   "server.local.deleteConfirmDescription":
-    "CodeBot はサーバーを停止し、エージェント、チャット、ファイルをゴミ箱に移動します。",
+    "OpenBot Code はサーバーを停止し、エージェント、チャット、ファイルをゴミ箱に移動します。",
   "server.local.deleting": "サーバーを削除中…",
   "server.local.deletedTitle": "{name} を削除しました",
   "server.role.admin": "管理者",
@@ -144,13 +145,13 @@ export const messages = {
   "server.settings.identityLocalOnly":
     "このサーバーの名前とロゴは、サーバーを実行しているコンピューターでのみ変更できます。",
   "server.settings.publicationLocalOnly": "公開設定はローカルサーバーでのみ変更できます。",
-  "server.compatibility.versionMismatchTitle": "{name} の CodeBot のバージョンが異なります",
+  "server.compatibility.versionMismatchTitle": "{name} の OpenBot Code のバージョンが異なります",
   "server.compatibility.versionMismatchDescription":
     "この接続はプロトコル {protocol} を使用しています。一部の新しい機能は使用できない場合があります。クライアント {clientVersion}、ホスト {hostVersion}。",
   "server.compatibility.versionMismatchUpdateHostDescription":
-    "すべての機能を使うには、{name} の CodeBot を更新してください。この接続はプロトコル {protocol} を使用しています。クライアント {clientVersion}、ホスト {hostVersion}。",
+    "すべての機能を使うには、{name} の OpenBot Code を更新してください。この接続はプロトコル {protocol} を使用しています。クライアント {clientVersion}、ホスト {hostVersion}。",
   "server.compatibility.versionMismatchUpdateClientDescription":
-    "すべての機能を使うには、この CodeBot アプリを更新してください。この接続はプロトコル {protocol} を使用しています。クライアント {clientVersion}、ホスト {hostVersion}。",
+    "すべての機能を使うには、この OpenBot Code アプリを更新してください。この接続はプロトコル {protocol} を使用しています。クライアント {clientVersion}、ホスト {hostVersion}。",
   "server.connection.failedTitle": "接続に失敗しました",
   "server.connection.failedDescription":
     "このサーバーに接続できませんでした。ホストがオンラインであることを確認して、もう一度お試しください。",
@@ -169,7 +170,7 @@ export const messages = {
   "server.settings.desktopDescription": "このサーバーのデスクトップを設定、または接続します。",
   "server.settings.storageTitle": "ストレージ",
   "server.settings.storageDescription":
-    "CodeBot がこのサーバーのディスクに保存しているものを確認し、空き容量を増やします。",
+    "OpenBot Code がこのサーバーのディスクに保存しているものを確認し、空き容量を増やします。",
   "server.settings.importTitle": "インポート",
   "server.settings.importDescription": "Grok Bot または Hermes Agent からこのサーバーにエージェントを移動します。",
   "server.settings.transferTitle": "移行",
@@ -204,9 +205,9 @@ export const messages = {
   "server.settings.nameTooLong": "{limit} 文字以内で入力してください。",
   "server.settings.actionFailedTitle": "サーバーの操作に失敗しました",
   "server.settings.actionFailed": "サーバーの操作に失敗しました。",
-  "server.settings.imageReadFailed": "CodeBot はこの画像を読み込めませんでした。",
+  "server.settings.imageReadFailed": "OpenBot Code はこの画像を読み込めませんでした。",
   "server.settings.copyFailedTitle": "コピーに失敗しました",
-  "server.settings.copyFailed": "CodeBot はこの値をコピーできませんでした。",
+  "server.settings.copyFailed": "OpenBot Code はこの値をコピーできませんでした。",
   "server.settings.unavailableTitle": "サーバーの設定を利用できません",
   "server.settings.reset": "リセット",
   "server.settings.unsavedChanges": "未保存の変更",
@@ -246,7 +247,7 @@ export const messages = {
   "server.settings.appearanceColorOption": "サーバーの色: {color}",
   "server.settings.appearanceReset": "形と色をリセット",
   "server.settings.access": "アクセス",
-  "server.companySignIn.desktopOnly": "シングルサインオンは CodeBot デスクトップアプリで設定します。",
+  "server.companySignIn.desktopOnly": "シングルサインオンは OpenBot Code デスクトップアプリで設定します。",
   "server.settings.publish": "このサーバーを公開",
   "server.settings.published": "サーバーは公開されています",
   "server.settings.setUpDesktopTitle": "リモートデスクトップを設定",
@@ -354,7 +355,7 @@ export const messages = {
   "server.settings.restartTitle": "再起動",
   "server.settings.restarting": "再起動中…",
   "server.settings.restartedTitle": "{name} を再起動しています",
-  "server.settings.restartHiddenDescription": "サーバーが戻ると、CodeBot は自動で再接続します。",
+  "server.settings.restartHiddenDescription": "サーバーが戻ると、OpenBot Code は自動で再接続します。",
   "server.settings.restartHide": "隠す",
   "server.settings.restartProgressTitle": "{name} を再起動しています",
   "server.settings.restartProgressDescription": "{time} · 通常は約 1 分です。このウィンドウは隠せます。",
@@ -410,7 +411,7 @@ export const messages = {
     other: "このサーバーのメンバーは上限の {count} 人です。新しい人を招待するには、メンバーを削除してください。",
   },
   "server.invite.qrLabel": "招待の QR コード",
-  "server.invite.qrDescription": "CodeBot Mobile でこのコードをスキャンすると、このサーバーに参加できます。",
+  "server.invite.qrDescription": "OpenBot Code Mobile でこのコードをスキャンすると、このサーバーに参加できます。",
   "server.invite.accepted": "招待が承諾されました",
   "server.invite.expired": "招待の期限が切れました",
   "server.invite.sent": "招待を送信しました",
@@ -418,7 +419,7 @@ export const messages = {
   "server.invite.acceptedDescription":
     "メンバーがこのサーバーに参加しました。別のユーザーを招待するには、新しいリンクを作成してください。",
   "server.invite.expiredDescription": "ユーザーを招待するには、新しいリンクを作成してください。",
-  "server.invite.linkReadyDescription": "リンクを共有するか、CodeBot Mobile で QR コードをスキャンしてください。",
+  "server.invite.linkReadyDescription": "リンクを共有するか、OpenBot Code Mobile で QR コードをスキャンしてください。",
   "server.invite.pendingTitle": "保留中の招待",
   "server.invite.pendingCount": "保留中 {total} 件",
   "server.invite.noPending": "保留中の招待はありません。",
@@ -443,7 +444,7 @@ export const messages = {
   "server.desktop.connectionUnavailable": "接続を利用できません",
   "server.desktop.hostOffline": "ホストはオフラインです",
   "server.desktop.hostOfflineDescription": "デスクトップを開く前に、ホストに再接続してください。",
-  "server.desktop.hostUpdateDescription": "リモート操作を使用するには、ホストの CodeBot を更新してください。",
+  "server.desktop.hostUpdateDescription": "リモート操作を使用するには、ホストの OpenBot Code を更新してください。",
   "server.desktop.serviceAvailable": "サービスを利用できます",
   "server.desktop.serviceNotReady": "サービスの準備ができていません",
   "server.desktop.serviceNotReadyDescription":
@@ -457,7 +458,7 @@ export const messages = {
   "server.desktop.accessMembers": "すべてのメンバー",
   "server.desktop.askLabel": "このコンピューターで確認する",
   "server.desktop.askDescription":
-    "各セッションは、このコンピューターの前にいるユーザーが許可するまで待機します。30 秒以内に応答がない場合、CodeBot は拒否します。",
+    "各セッションは、このコンピューターの前にいるユーザーが許可するまで待機します。30 秒以内に応答がない場合、OpenBot Code は拒否します。",
   "server.desktop.activeTitle": "アクティブなリモートデスクトップセッション: {active}",
   "server.desktop.activeDescription": "すべてのセッションをすぐに終了します。メンバーは再度リクエストできます。",
   "server.desktop.stopAll": "すべてのリモート操作を停止",
@@ -469,9 +470,10 @@ export const messages = {
   "server.settings.providersSwitchNote": "AI プロバイダーを管理するには {name} に切り替えてください。",
   "server.settings.providersSwitch": "このサーバーに切り替える",
   "server.settings.updatesTitle": "アップデート",
-  "server.settings.updatesDescription": "このサーバーを実行しているコンピューターの CodeBot をアップデートします。",
-  "server.update.hostTitle": "{name} の CodeBot",
-  "server.update.version": "CodeBot {version}",
+  "server.settings.updatesDescription":
+    "このサーバーを実行しているコンピューターの OpenBot Code をアップデートします。",
+  "server.update.hostTitle": "{name} の OpenBot Code",
+  "server.update.version": "OpenBot Code {version}",
   "server.update.status.idle": "アップデートを確認して最新のリリースを見つけます。",
   "server.update.status.checking": "アップデートを確認しています…",
   "server.update.status.available": "{version} を利用できます。",
@@ -479,29 +481,29 @@ export const messages = {
   "server.update.status.downloadingUnknown": "{version} をダウンロードしています…",
   "server.update.status.ready": "{version} をダウンロードしました。",
   "server.update.status.installing": "{name} はアップデートをインストールするため再起動しています。",
-  "server.update.status.upToDate": "{name} の CodeBot は最新です。",
+  "server.update.status.upToDate": "{name} の OpenBot Code は最新です。",
   "server.update.status.checkFailed": "{name} はアップデートを確認できませんでした。もう一度お試しください。",
   "server.update.status.downloadFailed":
     "{name} はアップデートをダウンロードできませんでした。もう一度お試しください。",
   "server.update.status.installFailed":
-    "{name} はアップデートをインストールできませんでした。そのコンピューターで他のユーザーが CodeBot を実行していないことを確認してから、もう一度お試しください。",
+    "{name} はアップデートをインストールできませんでした。そのコンピューターで他のユーザーが OpenBot Code を実行していないことを確認してから、もう一度お試しください。",
   "server.update.releaseCheckFailed":
     "{name} はリリースフィードを読み取れませんでした。ホストのネットワーク接続を確認してから、もう一度お試しください。",
   "server.update.releaseUnavailable":
     "このビルドではリリースを確認できません。互換性のあるリリースを確認するよう、ホストの管理者に依頼してください。",
   "server.update.externalTitle": "インストールはホストが管理します",
   "server.update.path.hostManager":
-    "CodeBot Host Manager は、すべてのユーザーがアイドル状態のときにアップデートをインストールします。アップデートが始まらない場合は、Host Manager の状態を確認するようホストの管理者に依頼してください。",
+    "OpenBot Code Host Manager は、すべてのユーザーがアイドル状態のときにアップデートをインストールします。アップデートが始まらない場合は、Host Manager の状態を確認するようホストの管理者に依頼してください。",
   "server.update.path.hosted":
     "ホスティングサービスはバックグラウンドでアップデートをダウンロードします。ダウンロードしたアップデートは、次にサーバーが起動したときに適用されます。サーバーを停止して再開する前に、実行中の作業が終わるのを待ってください。古いバージョンのままの場合は、ホストの管理者に連絡してください。",
   "server.update.path.system":
-    "ホストで sudo codebot update を実行して、最新のリリースをインストールしてください。このコマンドは CodeBot を停止します。先に実行中の作業が終わるのを待ってください。自動ダウンロードされたアップデートは次回の起動時にインストールされます。",
+    "ホストで sudo codebot update を実行して、最新のリリースをインストールしてください。このコマンドは OpenBot Code を停止します。先に実行中の作業が終わるのを待ってください。自動ダウンロードされたアップデートは次回の起動時にインストールされます。",
   "server.update.path.container":
-    "Docker ホストで新しい CodeBot イメージを pull し、同じデータボリュームでコンテナーを再作成してください。先に実行中の作業が終わるのを待ってください。データを保持するため、既存のボリュームはそのまま残してください。",
+    "Docker ホストで新しい OpenBot Code イメージを pull し、同じデータボリュームでコンテナーを再作成してください。先に実行中の作業が終わるのを待ってください。データを保持するため、既存のボリュームはそのまま残してください。",
   "server.update.path.manual":
-    "このインストールは自分自身を置き換えられません。github.com/nightly-labs/openbot/releases から互換性のあるリリースをインストールするよう、ホストの管理者に依頼してください。既存の CodeBot のデータは残してください。",
+    "このインストールは自分自身を置き換えられません。github.com/nightly-labs/openbot/releases から互換性のあるリリースをインストールするよう、ホストの管理者に依頼してください。既存の OpenBot Code のデータは残してください。",
   "server.update.path.unavailable":
-    "これは開発ビルドです。アップデートを確認するには、インストール済みの CodeBot リリースを使用してください。",
+    "これは開発ビルドです。アップデートを確認するには、インストール済みの OpenBot Code リリースを使用してください。",
   "server.update.check": "アップデートを確認",
   "server.update.start": "アイドル時にアップデート",
   "server.update.restartNow": "今すぐ再起動",
@@ -511,39 +513,40 @@ export const messages = {
   "server.update.requestedBy": "{member} がこのアップデートを依頼しました。",
   "server.update.automatic": "{name} はアップデートを自動的にインストールします。",
   "server.update.autoDownloadTitle": "アップデートを自動的にダウンロードする",
-  "server.update.autoDownloadDescription": "{name} は CodeBot の新しいバージョンが公開されるたびにダウンロードします。",
+  "server.update.autoDownloadDescription":
+    "{name} は OpenBot Code の新しいバージョンが公開されるたびにダウンロードします。",
   "server.update.autoInstallTitle": "アップデートを自動的にインストールする",
   "server.update.autoInstallDescription":
     "{name} は、エージェントがアイドル状態になると、ダウンロードしたアップデートを適用して再起動します。メンバーの接続は短時間切れ、自動的に再接続されます。",
   "server.update.waitingFor": "{reasons} を待っています。",
   "server.update.disabledTitle": "リモートアップデートはオフです",
   "server.update.disabledDescription":
-    "{name} のユーザーが、サーバーメンバーからのアップデートをオフにしました。CodeBot をアップデートするか、そのコンピューターで「設定」>「アップデート」を開いて「サーバーのメンバーからのアップデートを許可する」をオンにするよう依頼してください。",
+    "{name} のユーザーが、サーバーメンバーからのアップデートをオフにしました。OpenBot Code をアップデートするか、そのコンピューターで「設定」>「アップデート」を開いて「サーバーのメンバーからのアップデートを許可する」をオンにするよう依頼してください。",
   "server.update.managedTitle": "アップデートは Host Manager が管理しています",
   "server.update.managedDescription":
-    "CodeBot Host Manager が {name} をアップデートします。ホストの管理者に連絡してください。",
+    "OpenBot Code Host Manager が {name} をアップデートします。ホストの管理者に連絡してください。",
   "server.update.unsupportedTitle": "{name} は自身をアップデートできません",
   "server.update.unsupportedDescription":
-    "この CodeBot ビルドにはアップデーターがありません。{name} に新しいバージョンをインストールしてください。",
+    "この OpenBot Code ビルドにはアップデーターがありません。{name} に新しいバージョンをインストールしてください。",
   "server.update.restarting": "再起動中…",
   "server.update.loadFailed": "{name} のアップデート状態を読み込めませんでした。",
   "server.update.hostAction": "ホストをアップデート",
-  "server.update.dialog.offerTitle": "{name} を CodeBot {version} にアップデート",
+  "server.update.dialog.offerTitle": "{name} を OpenBot Code {version} にアップデート",
   "server.update.dialog.offerDescription":
-    "{name} は CodeBot {current} を使用しています。まずアップデートをダウンロードしてから再起動します。",
+    "{name} は OpenBot Code {current} を使用しています。まずアップデートをダウンロードしてから再起動します。",
   "server.update.dialog.offerReadyDescription":
-    "{name} は CodeBot {current} を使用しています。アップデートはダウンロード済みです。{name} はインストールのため再起動します。",
+    "{name} は OpenBot Code {current} を使用しています。アップデートはダウンロード済みです。{name} はインストールのため再起動します。",
   "server.update.dialog.progressTitle": "{name} をアップデートしています",
   "server.update.dialog.progressDescription": "{time} · このウィンドウは非表示にできます。",
-  "server.update.dialog.doneTitle": "{name} は CodeBot {version} になりました",
+  "server.update.dialog.doneTitle": "{name} は OpenBot Code {version} になりました",
   "server.update.dialog.doneDescription": "アップデートには {time} かかりました。",
   "server.update.dialog.failedTitle": "{name} をアップデートできませんでした",
   "server.update.dialog.restartFailed":
     "{name} がオンラインに戻りません。ホストを確認してから、もう一度お試しください。",
   "server.update.dialog.notInstalled":
-    "{name} は CodeBot {current} のまま再起動しました。もう一度アップデートをお試しください。",
+    "{name} は OpenBot Code {current} のまま再起動しました。もう一度アップデートをお試しください。",
   "server.update.dialog.steps": "アップデートの手順",
-  "server.update.dialog.downloadStep": "CodeBot {version} をダウンロード",
+  "server.update.dialog.downloadStep": "OpenBot Code {version} をダウンロード",
   "server.update.dialog.downloadPending": "ダウンロード中もエージェントは作業を続けます。",
   "server.update.dialog.downloadPreparing": "ダウンロードを準備しています…",
   "server.update.dialog.downloadRunning": "{progress} · エージェントは作業を続けています。",
@@ -552,10 +555,10 @@ export const messages = {
   "server.update.dialog.restartPending": "メンバーの接続が約 1 分間切れます。",
   "server.update.dialog.restartWaiting": "{reasons} の完了を待っています。",
   "server.update.dialog.restartSoon": "まもなく再起動が始まります。",
-  "server.update.dialog.restartRunning": "CodeBot {version} を起動しています…",
+  "server.update.dialog.restartRunning": "OpenBot Code {version} を起動しています…",
   "server.update.dialog.onlineStep": "オンラインに復帰",
   "server.update.dialog.onlinePending": "メンバーは自動的に再接続します。",
-  "server.update.dialog.onlineDone": "{time} 後に CodeBot {version} になりました。",
+  "server.update.dialog.onlineDone": "{time} 後に OpenBot Code {version} になりました。",
   "server.update.dialog.waitIdle": "エージェントがアイドル状態になるまで待つ",
   "server.update.dialog.waitIdleDescription":
     "再起動は、エージェントのターンとルーティンの実行が終わるまで待機します。",
@@ -581,14 +584,14 @@ export const messages = {
   "server.update.reason.fileTransfer": "ファイル転送",
   "server.update.reason.browserControl": "エージェントによるブラウザー操作",
   "server.update.reason.updateOperation": "別のアップデート手順",
-  "server.update.reason.initialization": "CodeBot の起動",
+  "server.update.reason.initialization": "OpenBot Code の起動",
   "server.update.reason.other": "その他の作業",
   "server.restartNotice.waitingTitle": "{name} はアップデートをインストールするため再起動します",
-  "server.restartNotice.waitingVersionTitle": "{name} は CodeBot {version} をインストールするため再起動します",
+  "server.restartNotice.waitingVersionTitle": "{name} は OpenBot Code {version} をインストールするため再起動します",
   "server.restartNotice.waitingDescription":
-    "再起動は、エージェントがアイドル状態になるまで待ちます。接続は短時間切れ、その後 CodeBot が自動的に再接続します。",
+    "再起動は、エージェントがアイドル状態になるまで待ちます。接続は短時間切れ、その後 OpenBot Code が自動的に再接続します。",
   "server.restartNotice.restartingTitle": "{name} はアップデートをインストールするため再起動しています",
-  "server.restartNotice.restartingDescription": "{name} が復帰すると、CodeBot が自動的に再接続します。",
+  "server.restartNotice.restartingDescription": "{name} が復帰すると、OpenBot Code が自動的に再接続します。",
   "server.restartNotice.backTitle": "{name} がオンラインに戻りました",
   "server.settings.personalityTitle": "パーソナリティ",
   "server.settings.personalityDescription": "このサーバーのエージェントの話し方を選びます。",
@@ -625,7 +628,7 @@ export const messages = {
   "server.ownerTransfer.incomingStays":
     "サーバー上のプロバイダーのサインイン、保存したキー、Vault のログイン、ブラウザーのサインイン、接続したアプリはそのまま残り、あなたが使えます。",
   "server.ownerTransfer.incomingMachine":
-    "サーバーを動かしているコンピューターにまだサインインできる人は、あなたの CodeBot アカウントを使えます。そのコンピューターのパスワードと SSH キーを変更してください。",
+    "サーバーを動かしているコンピューターにまだサインインできる人は、あなたの OpenBot Code アカウントを使えます。そのコンピューターのパスワードと SSH キーを変更してください。",
   "server.ownerTransfer.later": "後で",
   "server.ownerTransfer.decline": "拒否",
   "server.ownerTransfer.accept": "承認",

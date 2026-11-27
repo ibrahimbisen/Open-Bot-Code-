@@ -17,8 +17,8 @@ export const messages = {
   "notification.channelMessage": "Hat eine Nachricht gesendet.",
   "notification.usageLimit.title": "Das {provider}-Konto hat sein Limit erreicht",
   "notification.usageLimit.body": {
-    one: "{count} Agent wartet. CodeBot versucht es später erneut.",
-    other: "{count} Agenten warten. CodeBot versucht es später erneut.",
+    one: "{count} Agent wartet. OpenBot Code versucht es später erneut.",
+    other: "{count} Agenten warten. OpenBot Code versucht es später erneut.",
   },
   "notification.usageLimit.bodyResets": {
     one: "{count} Agent wartet. Das Limit wird {reset} zurückgesetzt.",
@@ -30,7 +30,7 @@ export const messages = {
   "notification.machineAlert.body":
     "Der Warnwert von {level} wurde überschritten. Siehe Servereinstellungen → Speicher.",
   "notification.test": "Benachrichtigungen funktionieren.",
-  "notification.welcome": "CodeBot informiert dich hier, wenn ein Agent dich braucht.",
+  "notification.welcome": "OpenBot Code informiert dich hier, wenn ein Agent dich braucht.",
   "notification.toast.region": "Benachrichtigungen",
   "notification.toast.close": "Benachrichtigung schließen",
 } as const satisfies PartialTranslation<typeof source>;

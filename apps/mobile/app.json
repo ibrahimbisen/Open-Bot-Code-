@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "CodeBot",
+    "name": "OpenBot Code",
     "slug": "codebot",
     "platforms": ["ios", "android"],
     "version": "1.4.14",
@@ -13,7 +13,7 @@
       "appleTeamId": "8A47NKRZSJ",
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocalNetworkUsageDescription": "Allow CodeBot to connect to your desktop during local development.",
+        "NSLocalNetworkUsageDescription": "Allow OpenBot Code to connect to your desktop during local development.",
         "NSAppTransportSecurity": {
           "NSAllowsLocalNetworking": true
         },
@@ -70,8 +70,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow CodeBot to use your camera to scan QR codes.",
-          "microphonePermission": "Allow CodeBot to use the microphone to dictate messages.",
+          "cameraPermission": "Allow OpenBot Code to use your camera to scan QR codes.",
+          "microphonePermission": "Allow OpenBot Code to use the microphone to dictate messages.",
           "recordAudioAndroid": false,
           "barcodeScannerEnabled": true
         }
@@ -79,16 +79,16 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow CodeBot to access the photos you choose to share.",
-          "cameraPermission": "Allow CodeBot to use your camera to add photos.",
-          "microphonePermission": "Allow CodeBot to use the microphone to dictate messages."
+          "photosPermission": "Allow OpenBot Code to access the photos you choose to share.",
+          "cameraPermission": "Allow OpenBot Code to use your camera to add photos.",
+          "microphonePermission": "Allow OpenBot Code to use the microphone to dictate messages."
         }
       ],
       [
         "expo-media-library",
         {
-          "photosPermission": "Allow CodeBot to access the photos you choose to share.",
-          "savePhotosPermission": "Allow CodeBot to save images and videos you download from a chat to your photo library.",
+          "photosPermission": "Allow OpenBot Code to access the photos you choose to share.",
+          "savePhotosPermission": "Allow OpenBot Code to save images and videos you download from a chat to your photo library.",
           "granularPermissions": ["photo"]
         }
       ],
@@ -115,13 +115,13 @@
       [
         "expo-local-authentication",
         {
-          "faceIDPermission": "Allow CodeBot to use Face ID to unlock the app."
+          "faceIDPermission": "Allow OpenBot Code to use Face ID to unlock the app."
         }
       ],
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Allow CodeBot to send your current location to an agent when you tap Share once, so it can answer questions about places near you.",
+          "locationWhenInUsePermission": "Allow OpenBot Code to send your current location to an agent when you tap Share once, so it can answer questions about places near you.",
           "locationAlwaysAndWhenInUsePermission": false,
           "locationAlwaysPermission": false,
           "locationFullAccuracyPermission": false,
@@ -224,15 +224,15 @@
       [
         "expo-speech-recognition",
         {
-          "microphonePermission": "Allow CodeBot to use the microphone to dictate messages.",
-          "speechRecognitionPermission": "Allow CodeBot to turn your speech into message text."
+          "microphonePermission": "Allow OpenBot Code to use the microphone to dictate messages.",
+          "speechRecognitionPermission": "Allow OpenBot Code to turn your speech into message text."
         }
       ],
       [
         "@config-plugins/react-native-webrtc",
         {
-          "cameraPermission": "Allow CodeBot to use your camera to scan QR codes.",
-          "microphonePermission": "Allow CodeBot to use the microphone to dictate messages."
+          "cameraPermission": "Allow OpenBot Code to use your camera to scan QR codes.",
+          "microphonePermission": "Allow OpenBot Code to use the microphone to dictate messages."
         }
       ],
       [

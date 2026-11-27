@@ -4,5 +4,5 @@ import type { messages as source } from "../../en/error/storage";
 export const messages = {
   "error.storage.unsupported": "Deze server ondersteunt geen opslag.",
   "error.storage.agentMissing": "De agent bestaat niet.",
-  "error.storage.unreadableFile": "CodeBot kan {path} niet lezen. Het bestand is beschadigd.",
+  "error.storage.unreadableFile": "OpenBot Code kan {path} niet lezen. Het bestand is beschadigd.",
 } as const satisfies PartialTranslation<typeof source>;

@@ -17,9 +17,9 @@ export const messages = {
   "dialog.saveExportSkill": "エクスポート用スキルを保存",
   "dialog.saveTransfer": "移行ファイルを保存",
   "dialog.chooseTransfer": "移行ファイルを選択",
-  "dialog.filter.transfer": "CodeBot 移行ファイル",
+  "dialog.filter.transfer": "OpenBot Code 移行ファイル",
   "dialog.saveWorkflow": "ワークフローファイルを保存",
-  "dialog.filter.workflow": "CodeBot ワークフローファイル",
+  "dialog.filter.workflow": "OpenBot Code ワークフローファイル",
   "dialog.chooseExternalLinkApp": "ブラウザーを選択",
   "dialog.filter.applications": "アプリケーション",
 } as const satisfies PartialTranslation<typeof source>;

@@ -16,11 +16,11 @@ export const messages = {
   "connector.github.connectedAs": "Подключено как @{login}",
   "connector.github.repositoriesTitle": "Репозитории",
   "connector.github.repositoriesDescription":
-    "Агенты могут использовать только те репозитории, где установлено приложение CodeBot GitHub App.",
+    "Агенты могут использовать только те репозитории, где установлено приложение OpenBot Code GitHub App.",
   "connector.github.chooseRepositories": "Выбрать репозитории",
   "connector.github.repositoriesLoading": "Чтение репозиториев с GitHub",
-  "connector.github.repositoriesFailed": "CodeBot не удалось прочитать репозитории с GitHub.",
-  "connector.github.noRepositories": "Приложение CodeBot GitHub App пока не установлено ни в один репозиторий.",
+  "connector.github.repositoriesFailed": "OpenBot Code не удалось прочитать репозитории с GitHub.",
+  "connector.github.noRepositories": "Приложение OpenBot Code GitHub App пока не установлено ни в один репозиторий.",
   "connector.github.moreRepositories": {
     one: "И ещё {count} репозиторий",
     few: "И ещё {count} репозитория",
@@ -34,7 +34,7 @@ export const messages = {
   "connector.github.expiredTitle": "Подключение к GitHub истекло",
   "connector.github.expiredDescription": "Подключитесь снова как @{login}, чтобы вернуть агентам доступ к GitHub.",
   "connector.github.reconnect": "Переподключить",
-  "connector.github.actionFailed": "CodeBot не удалось изменить подключение к GitHub.",
+  "connector.github.actionFailed": "OpenBot Code не удалось изменить подключение к GitHub.",
   "connector.github.statusConnected": "Подключено",
   "connector.github.statusConnecting": "Подключение",
   "connector.github.statusExpired": "Истекло",
@@ -49,7 +49,7 @@ export const messages = {
   "connector.github.noMatch": "Нет репозиториев по запросу «{query}».",
   "connector.github.stepSignIn": "Вход",
   "connector.github.stepConnected": "Подключено",
-  "connector.github.requestingCode": "CodeBot запрашивает код у GitHub.",
+  "connector.github.requestingCode": "OpenBot Code запрашивает код у GitHub.",
   "connector.github.codeLabel": "Код {code}",
   "connector.github.failedTitle": "GitHub не подключился",
   "connector.github.cancelConnecting": "Отменить подключение к GitHub",
@@ -64,7 +64,7 @@ export const messages = {
   "connector.github.disconnectConfirmTitle": "Отключить GitHub?",
   "connector.github.disconnectConfirmDescription": "При отключении вход @{login} будет удалён с этого компьютера.",
   "connector.github.disconnectEffectTools": "Все агенты потеряют инструменты GitHub, gh и git.",
-  "connector.github.disconnectEffectRevoke": "Затем откроется GitHub, где можно отозвать доступ CodeBot.",
+  "connector.github.disconnectEffectRevoke": "Затем откроется GitHub, где можно отозвать доступ OpenBot Code.",
   "connector.github.disconnectEffectKept": "Чаты, файлы и память агентов останутся на этом компьютере.",
   "connector.github.descriptionHost":
     "Каждый агент на сервере {host} может работать с вашими репозиториями, задачами и пул-реквестами GitHub, а также с gh и git.",
@@ -80,7 +80,7 @@ export const messages = {
   "connector.github.close": "Закрыть",
   "connector.dangerZone": "Опасная зона",
   "connector.statusUnknown": "Неизвестно",
-  "connector.readFailed": "CodeBot не смог прочитать состояние этого подключения.",
+  "connector.readFailed": "OpenBot Code не смог прочитать состояние этого подключения.",
 
   "connector.slack.title": "Slack",
   "connector.slack.description":
@@ -106,10 +106,10 @@ export const messages = {
   "connector.slack.disconnectAllSummary":
     "Все рабочие пространства будут отключены. Связаться с вашими агентами через @CodeBot будет нельзя.",
   "connector.slack.disconnectAllSummaryOrchestrator":
-    "Все рабочие пространства будут отключены. Оркестратор Slack и его разговоры будут удалены из CodeBot.",
+    "Все рабочие пространства будут отключены. Оркестратор Slack и его разговоры будут удалены из OpenBot Code.",
   "connector.slack.missingScopes":
-    "У CodeBot нет этих разрешений в Slack: {scopes}. Отключите рабочее пространство и подключите его снова.",
-  "connector.slack.retryAt": "Slack попросил CodeBot подождать. Следующая попытка в {time}.",
+    "У OpenBot Code нет этих разрешений в Slack: {scopes}. Отключите рабочее пространство и подключите его снова.",
+  "connector.slack.retryAt": "Slack попросил OpenBot Code подождать. Следующая попытка в {time}.",
   "connector.slack.reconnect": "Переподключить",
   "connector.slack.pause": "Приостановить",
   "connector.slack.resume": "Возобновить",
@@ -120,12 +120,12 @@ export const messages = {
   "connector.slack.orchestratorNone": "Пока никто не отвечает",
   "connector.slack.orchestratorNoneDescription": "Добавьте Оркестратора Slack, иначе Slack не получит ответа.",
   "connector.slack.inviteNote":
-    "CodeBot сам присоединяется ко всем публичным каналам и к каждому новому. В закрытый канал его нужно пригласить: /invite @CodeBot.",
+    "OpenBot Code сам присоединяется ко всем публичным каналам и к каждому новому. В закрытый канал его нужно пригласить: /invite @CodeBot.",
   "connector.slack.stepWorkspace": "Рабочее пространство",
   "connector.slack.stepAgent": "Агент",
   "connector.slack.connectTitle": "Подключение рабочего пространства Slack",
   "connector.slack.connectDescription":
-    "CodeBot устанавливает в рабочее пространство одно приложение с названием CodeBot, и оно присоединяется ко всем публичным каналам.",
+    "OpenBot Code устанавливает в рабочее пространство одно приложение с названием OpenBot Code, и оно присоединяется ко всем публичным каналам.",
   "connector.slack.connectStepBrowser": "Slack откроется в браузере",
   "connector.slack.connectStepAllow": "Выберите рабочее пространство в правом верхнем углу, затем нажмите «Разрешить»",
   "connector.slack.connectStepReturn": "Это окно продолжит работу, когда Slack закончит",
@@ -140,17 +140,17 @@ export const messages = {
   "connector.slack.orchestratorDoesDelegate": "Передаёт каждую задачу наиболее подходящему агенту",
   "connector.slack.orchestratorDoesAnswer": "Публикует ответ в ветке Slack",
   "connector.slack.orchestratorModel": "Модель",
-  "connector.slack.doneTitle": "CodeBot теперь в {workspace}",
+  "connector.slack.doneTitle": "OpenBot Code теперь в {workspace}",
   "connector.slack.doneDescription": "Упомяните @CodeBot в любом публичном канале или напишите ему личным сообщением.",
   "connector.slack.done": "Готово",
   "connector.slack.disconnectTitle": "Отключить {workspace}?",
   "connector.slack.disconnectDescription":
-    "CodeBot перестанет отвечать в {workspace} и удалит свой токен Slack с этого компьютера.",
+    "OpenBot Code перестанет отвечать в {workspace} и удалит свой токен Slack с этого компьютера.",
   "connector.slack.disconnectDescriptionHost":
-    "CodeBot перестанет отвечать в {workspace} и удалит свой токен Slack с {host}.",
+    "OpenBot Code перестанет отвечать в {workspace} и удалит свой токен Slack с {host}.",
   "connector.slack.disconnectEffect": "Люди из {workspace} больше не смогут обращаться к вашим агентам через @CodeBot.",
-  "connector.slack.removeEffectKept": "Диалоги и Оркестратор Slack останутся в CodeBot.",
-  "connector.slack.removeEffectDeleted": "Оркестратор Slack и его диалоги будут удалены из CodeBot.",
+  "connector.slack.removeEffectKept": "Диалоги и Оркестратор Slack останутся в OpenBot Code.",
+  "connector.slack.removeEffectDeleted": "Оркестратор Slack и его диалоги будут удалены из OpenBot Code.",
   "connector.slack.keep": "Оставить подключённым",
   "connector.slack.close": "Закрыть",
   "connector.slack.addWorkspace": "Добавить пространство",
@@ -185,16 +185,16 @@ export const messages = {
   "connector.discord.addAgent": "Добавить агента",
   "connector.discord.actionFailed": "Discord не принял изменение",
   "connector.discord.workspaceTitle": "Серверы Discord",
-  "connector.discord.workspaceDescription": "Упомяните @CodeBot в канале. Ответьте CodeBot, чтобы продолжить.",
+  "connector.discord.workspaceDescription": "Упомяните @CodeBot в канале. Ответьте OpenBot Code, чтобы продолжить.",
   "connector.discord.disconnectWorkspace": "Отключить",
   "connector.discord.disconnectAllTitle": "Отключить Discord",
   "connector.discord.disconnectAllSummary":
     "Все серверы будут отключены. Связаться с вашими агентами через @CodeBot будет нельзя.",
   "connector.discord.disconnectAllSummaryOrchestrator":
-    "Все серверы будут отключены. Оркестратор Discord и его разговоры будут удалены из CodeBot.",
+    "Все серверы будут отключены. Оркестратор Discord и его разговоры будут удалены из OpenBot Code.",
   "connector.discord.missingScopes":
-    "У CodeBot нет этих разрешений в Discord: {scopes}. Отключите сервер Discord и подключите его снова.",
-  "connector.discord.retryAt": "Discord попросил CodeBot подождать. Следующая попытка в {time}.",
+    "У OpenBot Code нет этих разрешений в Discord: {scopes}. Отключите сервер Discord и подключите его снова.",
+  "connector.discord.retryAt": "Discord попросил OpenBot Code подождать. Следующая попытка в {time}.",
   "connector.discord.reconnect": "Переподключить",
   "connector.discord.pause": "Приостановить",
   "connector.discord.resume": "Возобновить",
@@ -204,11 +204,12 @@ export const messages = {
     "Этот агент получает все запросы из Discord. Короткие он обрабатывает сам, остальную работу передаёт нужному агенту и отвечает в канале.",
   "connector.discord.orchestratorNone": "Пока никто не отвечает",
   "connector.discord.orchestratorNoneDescription": "Добавьте Оркестратора Discord, иначе Discord не получит ответа.",
-  "connector.discord.channelsNote": "CodeBot видит каналы, доступные его роли.",
+  "connector.discord.channelsNote": "OpenBot Code видит каналы, доступные его роли.",
   "connector.discord.stepWorkspace": "Сервер Discord",
   "connector.discord.stepAgent": "Агент",
   "connector.discord.connectTitle": "Подключение сервера Discord",
-  "connector.discord.connectDescription": "CodeBot добавляет на сервер Discord одного бота с названием CodeBot.",
+  "connector.discord.connectDescription":
+    "OpenBot Code добавляет на сервер Discord одного бота с названием OpenBot Code.",
   "connector.discord.connectStepBrowser": "Discord откроется в браузере",
   "connector.discord.connectStepAllow": "Выберите сервер, затем нажмите «Авторизовать»",
   "connector.discord.connectStepReturn": "Это окно продолжит работу, когда Discord закончит",
@@ -223,18 +224,18 @@ export const messages = {
   "connector.discord.orchestratorDoesDelegate": "Передаёт каждую задачу наиболее подходящему агенту",
   "connector.discord.orchestratorDoesAnswer": "Отвечает в канале Discord",
   "connector.discord.orchestratorModel": "Модель",
-  "connector.discord.doneTitle": "CodeBot теперь в {workspace}",
-  "connector.discord.doneDescription": "Упомяните @CodeBot в канале. Ответьте CodeBot, чтобы продолжить.",
+  "connector.discord.doneTitle": "OpenBot Code теперь в {workspace}",
+  "connector.discord.doneDescription": "Упомяните @CodeBot в канале. Ответьте OpenBot Code, чтобы продолжить.",
   "connector.discord.done": "Готово",
   "connector.discord.disconnectTitle": "Отключить {workspace}?",
   "connector.discord.disconnectDescription":
-    "CodeBot перестанет отвечать в {workspace} и удалит подключение к Discord с этого компьютера.",
+    "OpenBot Code перестанет отвечать в {workspace} и удалит подключение к Discord с этого компьютера.",
   "connector.discord.disconnectDescriptionHost":
-    "CodeBot перестанет отвечать в {workspace} и удалит подключение к Discord с {host}.",
+    "OpenBot Code перестанет отвечать в {workspace} и удалит подключение к Discord с {host}.",
   "connector.discord.disconnectEffect":
     "Люди из {workspace} больше не смогут обращаться к вашим агентам через @CodeBot.",
-  "connector.discord.removeEffectKept": "Диалоги и Оркестратор Discord останутся в CodeBot.",
-  "connector.discord.removeEffectDeleted": "Оркестратор Discord и его диалоги будут удалены из CodeBot.",
+  "connector.discord.removeEffectKept": "Диалоги и Оркестратор Discord останутся в OpenBot Code.",
+  "connector.discord.removeEffectDeleted": "Оркестратор Discord и его диалоги будут удалены из OpenBot Code.",
   "connector.discord.keep": "Оставить подключённым",
   "connector.discord.close": "Закрыть",
   "connector.discord.addWorkspace": "Добавить сервер Discord",
@@ -250,24 +251,24 @@ export const messages = {
     many: "{count} серверов Discord · отвечает Оркестратор Discord",
     other: "{count} сервера Discord · отвечает Оркестратор Discord",
   },
-  "connector.discord.accessTitle": "Кто может использовать CodeBot",
-  "connector.discord.accessDescription": "CodeBot отвечает только этим людям. Упоминания от других он игнорирует.",
+  "connector.discord.accessTitle": "Кто может использовать OpenBot Code",
+  "connector.discord.accessDescription": "OpenBot Code отвечает только этим людям. Упоминания от других он игнорирует.",
   "connector.discord.accessEveryone": "Все на сервере",
   "connector.discord.accessEveryoneDescription":
-    "Упомянуть CodeBot может любой, кто может писать в канале, который видит CodeBot.",
+    "Упомянуть OpenBot Code может любой, кто может писать в канале, который видит OpenBot Code.",
   "connector.discord.accessRoles": "Участники с ролями: {roles}",
   "connector.discord.accessChoose": "Выбрать роли",
-  "connector.discord.accessDialogTitle": "Кто может использовать CodeBot в {workspace}?",
-  "connector.discord.accessDialogDescription": "Если роль не выбрана, упомянуть CodeBot могут все.",
+  "connector.discord.accessDialogTitle": "Кто может использовать OpenBot Code в {workspace}?",
+  "connector.discord.accessDialogDescription": "Если роль не выбрана, упомянуть OpenBot Code могут все.",
   "connector.discord.accessLoading": "Загрузка ролей…",
   "connector.discord.accessLoadFailed": "Роли Discord не загрузились",
   "connector.discord.accessNoRoles": "На этом сервере нет ролей для выбора.",
   "connector.discord.accessRoleDeleted": "{role} (удалена)",
   "connector.discord.accessSave": "Сохранить",
-  "connector.discord.accessHostUpdate": "Обновите CodeBot на {host}, чтобы выбрать роли.",
+  "connector.discord.accessHostUpdate": "Обновите OpenBot Code на {host}, чтобы выбрать роли.",
   "connector.telegram.title": "Telegram",
   "connector.telegram.description":
-    "Добавьте бота CodeBot в группу Telegram или откройте с ним личный чат. Оркестратор Telegram спрашивает нужного агента и отвечает.",
+    "Добавьте бота OpenBot Code в группу Telegram или откройте с ним личный чат. Оркестратор Telegram спрашивает нужного агента и отвечает.",
   "connector.telegram.statusConnected": "Подключено",
   "connector.telegram.statusAttention": "Требует внимания",
   "connector.telegram.summaryConnected": {
@@ -295,31 +296,33 @@ export const messages = {
   "connector.telegram.chatsTitle": "Чаты",
   "connector.telegram.groupDescription": "Люди упоминают бота или отвечают на его сообщения.",
   "connector.telegram.directDescription": "Каждое сообщение в этом чате получает Оркестратор Telegram.",
-  "connector.telegram.helpRemoved": "Бота CodeBot больше нет в этом чате. Отключите чат, затем снова добавьте бота.",
+  "connector.telegram.helpRemoved":
+    "Бота OpenBot Code больше нет в этом чате. Отключите чат, затем снова добавьте бота.",
   "connector.telegram.helpRelayUnavailable":
-    "CodeBot не может получать сообщения Telegram на этом компьютере. Войдите в аккаунт, задайте компьютеру имя в настройках сервера и не закрывайте CodeBot.",
+    "OpenBot Code не может получать сообщения Telegram на этом компьютере. Войдите в аккаунт, задайте компьютеру имя в настройках сервера и не закрывайте OpenBot Code.",
   "connector.telegram.helpRelayUnavailableHost":
-    "CodeBot на {host} не может получать сообщения Telegram. На {host} войдите в аккаунт, задайте серверу имя в настройках сервера и не закрывайте CodeBot.",
-  "connector.telegram.helpError": "CodeBot не может связаться с этим чатом. Подключите его заново или отключите чат.",
+    "OpenBot Code на {host} не может получать сообщения Telegram. На {host} войдите в аккаунт, задайте серверу имя в настройках сервера и не закрывайте OpenBot Code.",
+  "connector.telegram.helpError":
+    "OpenBot Code не может связаться с этим чатом. Подключите его заново или отключите чат.",
   "connector.telegram.helpNotLinked":
     "Этот чат не связан с этим сервером. Выберите «Переподключить», чтобы связать его.",
-  "connector.telegram.retryAt": "Telegram попросил CodeBot подождать. Следующая попытка в {time}.",
+  "connector.telegram.retryAt": "Telegram попросил OpenBot Code подождать. Следующая попытка в {time}.",
   "connector.telegram.pause": "Приостановить",
   "connector.telegram.resume": "Возобновить",
   "connector.telegram.reconnect": "Переподключить",
   "connector.telegram.disconnectChat": "Отключить",
   "connector.telegram.disconnectAllTitle": "Отключить Telegram",
   "connector.telegram.disconnectAllSummary":
-    "Все чаты будут отключены. Связаться с вашими агентами через бота CodeBot будет нельзя.",
+    "Все чаты будут отключены. Связаться с вашими агентами через бота OpenBot Code будет нельзя.",
   "connector.telegram.disconnectAllSummaryOrchestrator":
-    "Все чаты будут отключены. Оркестратор Telegram и его разговоры будут удалены из CodeBot.",
+    "Все чаты будут отключены. Оркестратор Telegram и его разговоры будут удалены из OpenBot Code.",
   "connector.telegram.rowAction": "{action}: {name}",
   "connector.telegram.linkChat": "Привязать чат",
   "connector.telegram.addToGroup": "Добавить в группу",
   "connector.telegram.openDirectChat": "Открыть личный чат",
   "connector.telegram.orchestratorTitle": "Оркестратор Telegram",
   "connector.telegram.orchestratorDescription":
-    "Этот агент получает сообщения для CodeBot из всех ваших чатов Telegram. Короткие он обрабатывает сам, остальную работу передаёт нужному агенту и публикует ответ в чате.",
+    "Этот агент получает сообщения для OpenBot Code из всех ваших чатов Telegram. Короткие он обрабатывает сам, остальную работу передаёт нужному агенту и публикует ответ в чате.",
   "connector.telegram.orchestratorNone": "Пока никто не отвечает",
   "connector.telegram.orchestratorNoneDescription": "Добавьте Оркестратора Telegram, иначе Telegram не получит ответа.",
   "connector.telegram.mentionNote":
@@ -328,29 +331,29 @@ export const messages = {
   "connector.telegram.stepAgent": "Агент",
   "connector.telegram.connectTitle": "Привязка чата Telegram",
   "connector.telegram.connectDescription":
-    "Добавьте бота CodeBot в группу или откройте с ним личный чат. Один бот обслуживает все ваши чаты.",
+    "Добавьте бота OpenBot Code в группу или откройте с ним личный чат. Один бот обслуживает все ваши чаты.",
   "connector.telegram.connectStepBrowser": "Telegram откроется в браузере",
   "connector.telegram.connectStepPick": "Выберите группу или нажмите «Старт» в личном чате",
   "connector.telegram.connectStepReturn": "Это окно продолжит работу, когда чат будет привязан",
   "connector.telegram.connectWaiting": "Ожидание Telegram. Выберите чат в Telegram.",
   "connector.telegram.agentStepTitle": "Добавьте Оркестратора Telegram",
   "connector.telegram.agentStepDescription":
-    "Этот новый агент отвечает на сообщения для CodeBot в {chat} и в каждом чате, который вы привяжете позже.",
+    "Этот новый агент отвечает на сообщения для OpenBot Code в {chat} и в каждом чате, который вы привяжете позже.",
   "connector.telegram.orchestratorName": "Оркестратор Telegram",
   "connector.telegram.orchestratorRole": "Отвечает в Telegram и обращается к команде",
-  "connector.telegram.orchestratorDoesReceive": "Первым получает каждое сообщение Telegram для CodeBot",
+  "connector.telegram.orchestratorDoesReceive": "Первым получает каждое сообщение Telegram для OpenBot Code",
   "connector.telegram.orchestratorDoesDelegate": "Передаёт каждую задачу наиболее подходящему агенту",
   "connector.telegram.orchestratorDoesAnswer": "Публикует ответ в чате Telegram",
   "connector.telegram.orchestratorModel": "Модель",
-  "connector.telegram.doneTitle": "CodeBot теперь в {chat}",
+  "connector.telegram.doneTitle": "OpenBot Code теперь в {chat}",
   "connector.telegram.done": "Готово",
   "connector.telegram.disconnectTitle": "Отключить {chat}?",
-  "connector.telegram.leaveDescription": "Бот CodeBot покинет {chat}, и CodeBot перестанет там отвечать.",
+  "connector.telegram.leaveDescription": "Бот OpenBot Code покинет {chat}, и OpenBot Code перестанет там отвечать.",
   "connector.telegram.disconnectEffect":
-    "Люди из {chat} больше не смогут обращаться к вашим агентам через бота CodeBot.",
-  "connector.telegram.removeEffectKept": "Диалоги и Оркестратор Telegram останутся в CodeBot.",
+    "Люди из {chat} больше не смогут обращаться к вашим агентам через бота OpenBot Code.",
+  "connector.telegram.removeEffectKept": "Диалоги и Оркестратор Telegram останутся в OpenBot Code.",
   "connector.telegram.removeEffectDeleted":
-    "Это последний чат, поэтому Оркестратор Telegram и его диалоги будут удалены из CodeBot.",
+    "Это последний чат, поэтому Оркестратор Telegram и его диалоги будут удалены из OpenBot Code.",
   "connector.telegram.keep": "Оставить подключённым",
   "connector.telegram.close": "Закрыть",
   "connector.whatsapp.title": "WhatsApp",
@@ -385,16 +388,16 @@ export const messages = {
   "connector.whatsapp.numbersTitle": "Номера",
   "connector.whatsapp.linkNumber": "Привязать номер",
   "connector.whatsapp.ownNumberNote":
-    "CodeBot получает сообщения из вашего чата «Сообщение себе» и от людей, которым вы разрешили писать.",
+    "OpenBot Code получает сообщения из вашего чата «Сообщение себе» и от людей, которым вы разрешили писать.",
   "connector.whatsapp.dedicatedNote":
-    "CodeBot получает сообщения из вашего чата «Сообщение себе» и от людей, которым вы разрешили писать. Остальные получают код, который нужно передать вам.",
+    "OpenBot Code получает сообщения из вашего чата «Сообщение себе» и от людей, которым вы разрешили писать. Остальные получают код, который нужно передать вам.",
   "connector.whatsapp.helpLoggedOut": "WhatsApp удалил этот компьютер из связанных устройств. Привяжите номер заново.",
   "connector.whatsapp.helpLoggedOutHost": "WhatsApp удалил этот сервер из связанных устройств. Привяжите номер заново.",
   "connector.whatsapp.helpError":
-    "CodeBot не может связаться с WhatsApp на этом номере. Переподключите или отключите номер.",
+    "OpenBot Code не может связаться с WhatsApp на этом номере. Переподключите или отключите номер.",
   "connector.whatsapp.helpKeysUnreadable":
-    "CodeBot не может прочитать сохранённые ключи этого номера. Привяжите номер заново.",
-  "connector.whatsapp.retryAt": "WhatsApp попросил CodeBot подождать. Следующая попытка в {time}.",
+    "OpenBot Code не может прочитать сохранённые ключи этого номера. Привяжите номер заново.",
+  "connector.whatsapp.retryAt": "WhatsApp попросил OpenBot Code подождать. Следующая попытка в {time}.",
   "connector.whatsapp.pause": "Приостановить",
   "connector.whatsapp.resume": "Возобновить",
   "connector.whatsapp.reconnect": "Переподключить",
@@ -404,20 +407,20 @@ export const messages = {
   "connector.whatsapp.disconnectAllSummary":
     "Все номера будут отключены. Связаться с вашими агентами через WhatsApp будет нельзя.",
   "connector.whatsapp.disconnectAllSummaryOrchestrator":
-    "Все номера будут отключены. Оркестратор WhatsApp и его разговоры будут удалены из CodeBot.",
+    "Все номера будут отключены. Оркестратор WhatsApp и его разговоры будут удалены из OpenBot Code.",
   "connector.whatsapp.rowAction": "{action}: {name}",
   "connector.whatsapp.ownNumber": "Личный номер",
   "connector.whatsapp.ownNumberDescription":
-    "Писать могут только вы в чате «Сообщение себе» и люди, которым вы разрешили. Другие люди не получают ответа. Если выключено, CodeBot отвечает незнакомым людям кодом.",
+    "Писать могут только вы в чате «Сообщение себе» и люди, которым вы разрешили. Другие люди не получают ответа. Если выключено, OpenBot Code отвечает незнакомым людям кодом.",
   "connector.whatsapp.workingMessage": "Сообщение «Уже работаю…»",
   "connector.whatsapp.workingMessageDescription":
-    "CodeBot отправляет его, пока агент работает, а затем заменяет ответом. Запрос, который ждёт предыдущий, тоже получает сообщение об ожидании. На личном номере эти сообщения получает только чат «Сообщение себе». Выключите, чтобы отправлять только ответ.",
+    "OpenBot Code отправляет его, пока агент работает, а затем заменяет ответом. Запрос, который ждёт предыдущий, тоже получает сообщение об ожидании. На личном номере эти сообщения получает только чат «Сообщение себе». Выключите, чтобы отправлять только ответ.",
   "connector.whatsapp.statusReactions": "Реакции статуса",
   "connector.whatsapp.statusReactionsDescription":
-    "CodeBot ставит 👀, когда приходит сообщение, и ✅, когда ответ готов. Выключите, чтобы не отправлять реакции.",
+    "OpenBot Code ставит 👀, когда приходит сообщение, и ✅, когда ответ готов. Выключите, чтобы не отправлять реакции.",
   "connector.whatsapp.orchestratorTitle": "Оркестратор WhatsApp",
   "connector.whatsapp.orchestratorDescription":
-    "Этот агент получает сообщения для CodeBot со всех ваших привязанных номеров. Короткие он обрабатывает сам, остальную работу передаёт нужному агенту и отвечает в WhatsApp.",
+    "Этот агент получает сообщения для OpenBot Code со всех ваших привязанных номеров. Короткие он обрабатывает сам, остальную работу передаёт нужному агенту и отвечает в WhatsApp.",
   "connector.whatsapp.orchestratorNone": "Пока никто не отвечает",
   "connector.whatsapp.orchestratorNoneDescription": "Добавьте Оркестратора WhatsApp, иначе WhatsApp не получит ответа.",
   "connector.whatsapp.note":
@@ -430,10 +433,10 @@ export const messages = {
   "connector.whatsapp.kindLabel": "Номер",
   "connector.whatsapp.kindPersonal": "Мой личный номер",
   "connector.whatsapp.kindPersonalDescription":
-    "CodeBot отвечает только в вашем чате «Сообщение себе» и людям, которым вы разрешили. Другие люди не получают ответа.",
-  "connector.whatsapp.kindDedicated": "Номер только для CodeBot",
+    "OpenBot Code отвечает только в вашем чате «Сообщение себе» и людям, которым вы разрешили. Другие люди не получают ответа.",
+  "connector.whatsapp.kindDedicated": "Номер только для OpenBot Code",
   "connector.whatsapp.kindDedicatedDescription":
-    "CodeBot отвечает с этого номера каждому незнакомому человеку кодом, который нужно передать вам. Вы одобряете их здесь.",
+    "OpenBot Code отвечает с этого номера каждому незнакомому человеку кодом, который нужно передать вам. Вы одобряете их здесь.",
   "connector.whatsapp.methodLabel": "Способ привязки",
   "connector.whatsapp.methodQr": "QR-код",
   "connector.whatsapp.methodCode": "Код привязки",
@@ -459,26 +462,27 @@ export const messages = {
   "connector.whatsapp.failedTimeout": "Срок действия кода истёк до того, как телефон его использовал.",
   "connector.whatsapp.failedRefused": "WhatsApp отклонил привязку. Подождите несколько минут и повторите попытку.",
   "connector.whatsapp.failedBusy": "Уже идёт другая привязка. Дождитесь её завершения и повторите попытку.",
-  "connector.whatsapp.failedUnavailable": "CodeBot не может связаться с WhatsApp. Проверьте подключение к интернету.",
+  "connector.whatsapp.failedUnavailable":
+    "OpenBot Code не может связаться с WhatsApp. Проверьте подключение к интернету.",
   "connector.whatsapp.tryAgain": "Повторить",
   "connector.whatsapp.agentStepTitle": "Добавьте Оркестратора WhatsApp",
   "connector.whatsapp.agentStepDescription":
-    "Этот новый агент отвечает на сообщения для CodeBot на {number} и на каждом номере, который вы привяжете позже.",
+    "Этот новый агент отвечает на сообщения для OpenBot Code на {number} и на каждом номере, который вы привяжете позже.",
   "connector.whatsapp.orchestratorName": "Оркестратор WhatsApp",
   "connector.whatsapp.orchestratorRole": "Отвечает в WhatsApp и обращается к команде",
-  "connector.whatsapp.orchestratorDoesReceive": "Первым получает каждое сообщение WhatsApp для CodeBot",
+  "connector.whatsapp.orchestratorDoesReceive": "Первым получает каждое сообщение WhatsApp для OpenBot Code",
   "connector.whatsapp.orchestratorDoesDelegate": "Передаёт каждую задачу наиболее подходящему агенту",
   "connector.whatsapp.orchestratorDoesAnswer": "Отвечает в чате WhatsApp",
   "connector.whatsapp.orchestratorModel": "Модель",
-  "connector.whatsapp.doneTitle": "CodeBot привязан к {number}",
+  "connector.whatsapp.doneTitle": "OpenBot Code привязан к {number}",
   "connector.whatsapp.done": "Готово",
   "connector.whatsapp.disconnectTitle": "Отключить {number}?",
   "connector.whatsapp.disconnectDescription":
-    "CodeBot выйдет из WhatsApp на {number}. Если CodeBot был выключен, также удалите устройство в WhatsApp > Связанные устройства.",
+    "OpenBot Code выйдет из WhatsApp на {number}. Если OpenBot Code был выключен, также удалите устройство в WhatsApp > Связанные устройства.",
   "connector.whatsapp.disconnectEffect": "Люди больше не смогут обращаться к вашим агентам через {number}.",
-  "connector.whatsapp.removeEffectKept": "Диалоги и Оркестратор WhatsApp останутся в CodeBot.",
+  "connector.whatsapp.removeEffectKept": "Диалоги и Оркестратор WhatsApp останутся в OpenBot Code.",
   "connector.whatsapp.removeEffectDeleted":
-    "Это последний номер, поэтому Оркестратор WhatsApp и его диалоги будут удалены из CodeBot.",
+    "Это последний номер, поэтому Оркестратор WhatsApp и его диалоги будут удалены из OpenBot Code.",
   "connector.whatsapp.keep": "Оставить привязанным",
   "connector.whatsapp.close": "Закрыть",
   "connector.whatsapp.sendersTitle": "Кто может писать на {number}",
@@ -502,7 +506,7 @@ export const messages = {
     "Участники этой группы могут поручать работу вашим агентам, когда упоминают этот номер или отвечают на его сообщения.",
   "connector.whatsapp.groupSearch": "Поиск групп",
   "connector.whatsapp.groupsLoading": "Загрузка групп…",
-  "connector.whatsapp.groupsLoadFailed": "CodeBot не смог прочитать группы",
+  "connector.whatsapp.groupsLoadFailed": "OpenBot Code не смог прочитать группы",
   "connector.whatsapp.groupsEmpty": "Этот номер не состоит ни в одной группе.",
   "connector.whatsapp.groupsNoMatch": "Нет группы с таким названием.",
   "connector.whatsapp.groupAdded": "Добавлена",
@@ -515,9 +519,9 @@ export const messages = {
   "connector.whatsapp.deny": "Отклонить",
   "connector.onePassword.title": "1Password",
   "connector.onePassword.description":
-    "Дайте CodeBot доступ к отдельному хранилищу 1Password через сервисный аккаунт, чтобы агенты могли входить на сайты в браузере CodeBot.",
+    "Дайте OpenBot Code доступ к отдельному хранилищу 1Password через сервисный аккаунт, чтобы агенты могли входить на сайты в браузере OpenBot Code.",
   "connector.onePassword.howItWorks":
-    "При подключении в вашем аккаунте 1Password создаётся хранилище «Shared with CodeBot» и сервисный аккаунт, который может читать только его. CodeBot подставляет сохранённые логины в своём браузере на этом компьютере, поэтому общими становятся только записи, которые вы переместите в это хранилище. Агенты никогда не видят пароль.",
+    "При подключении в вашем аккаунте 1Password создаётся хранилище «Shared with CodeBot» и сервисный аккаунт, который может читать только его. OpenBot Code подставляет сохранённые логины в своём браузере на этом компьютере, поэтому общими становятся только записи, которые вы переместите в это хранилище. Агенты никогда не видят пароль.",
   "connector.onePassword.connect": "Подключить 1Password",
   "connector.onePassword.setupTitle": "Настройка",
   "connector.onePassword.stepCliTitle": "Установите 1Password CLI",
@@ -525,20 +529,20 @@ export const messages = {
   "connector.onePassword.stepCliInstalling": "Загрузка 1Password CLI с сайта 1Password",
   "connector.onePassword.stepCliReady": "Установлена версия {version}.",
   "connector.onePassword.stepCliMissing":
-    "CodeBot скачает его с сайта 1Password в свою папку. Пароль администратора не нужен.",
+    "OpenBot Code скачает его с сайта 1Password в свою папку. Пароль администратора не нужен.",
   "connector.onePassword.stepCliManual":
-    "CodeBot не может установить его на этом компьютере. Установите его с сайта 1Password и вернитесь на эту страницу.",
+    "OpenBot Code не может установить его на этом компьютере. Установите его с сайта 1Password и вернитесь на эту страницу.",
   "connector.onePassword.installCli": "Установить",
   "connector.onePassword.stepAppTitle": "Включите интеграцию с CLI",
   "connector.onePassword.stepAppDescription":
     "В приложении 1Password откройте «Настройки» > «Разработчик» и включите «Integrate with 1Password CLI».",
   "connector.onePassword.stepAppReady": "Приложение 1Password позволяет CLI создать общее хранилище.",
   "connector.onePassword.openApp": "Открыть 1Password",
-  "connector.onePassword.openAppFailed": "CodeBot не смог открыть 1Password.",
+  "connector.onePassword.openAppFailed": "OpenBot Code не смог открыть 1Password.",
   "connector.onePassword.checkAgain": "Проверить снова",
   "connector.onePassword.stepVaultTitle": "Создайте общее хранилище",
   "connector.onePassword.stepVaultDescription":
-    "CodeBot создаёт хранилище «Shared with CodeBot» и сервисный аккаунт, который может только читать его. 1Password попросит вас подтвердить.",
+    "OpenBot Code создаёт хранилище «Shared with CodeBot» и сервисный аккаунт, который может только читать его. 1Password попросит вас подтвердить.",
   "connector.onePassword.useTokenDescription": "Вместо этих шагов вставьте токен сервисного аккаунта с 1Password.com.",
   "connector.onePassword.useTokenAction": "Использовать токен",
   "connector.onePassword.tokenLabel": "Токен сервисного аккаунта",
@@ -547,7 +551,7 @@ export const messages = {
   "connector.onePassword.approveInApp": "Подтвердите запрос в приложении 1Password",
   "connector.onePassword.cancel": "Отмена",
   "connector.onePassword.chooseAccountTitle": "Выберите аккаунт",
-  "connector.onePassword.chooseAccountDescription": "CodeBot создаст общее хранилище в выбранном вами аккаунте.",
+  "connector.onePassword.chooseAccountDescription": "OpenBot Code создаст общее хранилище в выбранном вами аккаунте.",
   "connector.onePassword.useAccount": "Использовать этот аккаунт",
   "connector.onePassword.vaultTitle": "Общее хранилище",
   "connector.onePassword.vaultDescription":
@@ -562,14 +566,14 @@ export const messages = {
   "connector.onePassword.disconnect": "Отключить",
   "connector.onePassword.disconnectTitle": "Отключить 1Password",
   "connector.onePassword.disconnectSummary":
-    "CodeBot забудет токен. Хранилище и сервисный аккаунт останутся в 1Password; если они больше не нужны, удалите их там.",
-  "connector.onePassword.actionFailed": "CodeBot не удалось изменить подключение к 1Password.",
+    "OpenBot Code забудет токен. Хранилище и сервисный аккаунт останутся в 1Password; если они больше не нужны, удалите их там.",
+  "connector.onePassword.actionFailed": "OpenBot Code не удалось изменить подключение к 1Password.",
   "connector.onePassword.statusConnected": "Подключено",
   "connector.onePassword.statusConnecting": "Подключение",
   "connector.onePassword.descriptionHost":
-    "Предоставьте CodeBot на {host} доступ к отдельному хранилищу 1Password через сервисный аккаунт, чтобы агенты на {host} могли входить на сайты в его браузере.",
+    "Предоставьте OpenBot Code на {host} доступ к отдельному хранилищу 1Password через сервисный аккаунт, чтобы агенты на {host} могли входить на сайты в его браузере.",
   "connector.onePassword.howItWorksHost":
-    "{host} подключается по токену сервисного аккаунта. На 1Password.com создайте сервисный аккаунт, который может читать только хранилище, открытое для CodeBot, и вставьте сюда его токен. {host} проверяет токен и хранит его; этот компьютер его не хранит. Агенты никогда не видят пароль.",
+    "{host} подключается по токену сервисного аккаунта. На 1Password.com создайте сервисный аккаунт, который может читать только хранилище, открытое для OpenBot Code, и вставьте сюда его токен. {host} проверяет токен и хранит его; этот компьютер его не хранит. Агенты никогда не видят пароль.",
   "connector.onePassword.disconnectSummaryHost":
     "{host} забудет токен. Хранилище и сервисный аккаунт останутся в 1Password; если они больше не нужны, удалите их там.",
   "connector.bitwarden.title": "Bitwarden",
@@ -577,24 +581,24 @@ export const messages = {
   "connector.bitwarden.setup":
     "Установите Bitwarden CLI и войдите командой bw login. Создайте папку Shared with CodeBot и положите в неё только те логины, которые разрешено использовать агентам. Выполните bw unlock --raw и вставьте ключ сессии ниже. Не вставляйте мастер-пароль.",
   "connector.bitwarden.scope":
-    "Все агенты на этом компьютере могут использовать подходящие логины из Shared with CodeBot. CodeBot сопоставляет точные источники HTTPS. Записи, для которых нужен запрос мастер-пароля или особое правило сопоставления URI, не используются.",
+    "Все агенты на этом компьютере могут использовать подходящие логины из Shared with CodeBot. OpenBot Code сопоставляет точные источники HTTPS. Записи, для которых нужен запрос мастер-пароля или особое правило сопоставления URI, не используются.",
   "connector.bitwarden.session":
-    "Ключ сессии хранится в памяти. Подключитесь снова, если хранилищем не пользовались 8 часов или CodeBot был закрыт. Отключение прекращает доступ CodeBot, но не блокирует другие клиенты Bitwarden.",
+    "Ключ сессии хранится в памяти. Подключитесь снова, если хранилищем не пользовались 8 часов или OpenBot Code был закрыт. Отключение прекращает доступ OpenBot Code, но не блокирует другие клиенты Bitwarden.",
   "connector.bitwarden.sessionKey": "Ключ сессии Bitwarden",
   "connector.bitwarden.connect": "Подключить Bitwarden",
   "connector.bitwarden.disconnect": "Отключить Bitwarden",
   "connector.bitwarden.disconnectAction": "Отключить",
   "connector.bitwarden.disconnectSummary":
-    "CodeBot забудет ключ сеанса. Агенты больше не смогут подставлять логины из Bitwarden. Другие клиенты Bitwarden останутся разблокированными.",
+    "OpenBot Code забудет ключ сеанса. Агенты больше не смогут подставлять логины из Bitwarden. Другие клиенты Bitwarden останутся разблокированными.",
   "connector.bitwarden.disconnectSummaryHost":
     "{host} удалит ключ API и мастер-пароль. Агенты на {host} больше не смогут подставлять логины из Bitwarden.",
   "connector.bitwarden.connected": "Подключено",
-  "connector.bitwarden.actionFailed": "CodeBot не удалось изменить подключение к Bitwarden.",
+  "connector.bitwarden.actionFailed": "OpenBot Code не удалось изменить подключение к Bitwarden.",
   "connector.bitwarden.descriptionHost": "Заполнять логины в браузере на {host} из Bitwarden или Vaultwarden.",
   "connector.bitwarden.setupHost":
     "{host} входит через свой Bitwarden CLI. В хранилище создайте папку с именем Shared with CodeBot и положите в неё только логины, которые могут использовать агенты. В веб-хранилище откройте Настройки › Безопасность › Ключи и посмотрите ключ API. Ниже введите адрес сервера, client_id, client_secret и мастер-пароль.",
   "connector.bitwarden.scopeHost":
-    "Все агенты на {host} могут использовать подходящие логины из Shared with CodeBot. CodeBot использует точные HTTPS-источники. Он не использует элементы, которые запрашивают мастер-пароль, и элементы с собственным правилом сопоставления URI.",
+    "Все агенты на {host} могут использовать подходящие логины из Shared with CodeBot. OpenBot Code использует точные HTTPS-источники. Он не использует элементы, которые запрашивают мастер-пароль, и элементы с собственным правилом сопоставления URI.",
   "connector.bitwarden.sessionHost":
     "{host} хранит ключ API и мастер-пароль в зашифрованном виде, чтобы снова разблокировать хранилище после перезапуска. Этот компьютер их не хранит. Отключение удаляет их с {host}. {host} должен подключаться к адресу сервера по HTTPS.",
   "connector.bitwarden.serverUrl": "Адрес сервера",
@@ -618,19 +622,19 @@ export const messages = {
   "connector.protonPass.keyPlaceholder": "pst_…",
   "connector.protonPass.setupTitle": "Настройка",
   "connector.protonPass.setupDescription":
-    "Кнопка «Подключить» открывает вход в Proton в браузере. Затем CodeBot создаёт общее хранилище и хранит только ключ для чтения.",
+    "Кнопка «Подключить» открывает вход в Proton в браузере. Затем OpenBot Code создаёт общее хранилище и хранит только ключ для чтения.",
   "connector.protonPass.setupDescriptionHost":
     "Кнопка «Подключить» открывает вход в Proton в браузере. Затем {host} создаёт общее хранилище и хранит только ключ для чтения.",
   "connector.protonPass.vaultName": "Shared with CodeBot",
   "connector.protonPass.vaultSetup":
-    "CodeBot создаёт это хранилище при подключении. Переместите в него учётные данные, чтобы поделиться ими.",
+    "OpenBot Code создаёт это хранилище при подключении. Переместите в него учётные данные, чтобы поделиться ими.",
   "connector.protonPass.showSteps": "Показать шаги",
   "connector.protonPass.stepsLabel": "Шаги подключения",
   "connector.protonPass.stepSignIn": "Вход",
   "connector.protonPass.stepVault": "Создание хранилища",
   "connector.protonPass.stepDone": "Готово",
   "connector.protonPass.signInTitle": "Вход в Proton",
-  "connector.protonPass.signInStarting": "CodeBot начинает вход. Страница Proton откроется в браузере.",
+  "connector.protonPass.signInStarting": "OpenBot Code начинает вход. Страница Proton откроется в браузере.",
   "connector.protonPass.signInDescription": "Вход открыт в браузере. Proton запросит пароль и второй фактор.",
   "connector.protonPass.signInDescriptionHost":
     "Вход для {host} открыт в браузере. Proton запросит пароль и второй фактор.",
@@ -640,7 +644,7 @@ export const messages = {
   "connector.protonPass.continue": "Продолжить",
   "connector.protonPass.setupStepTitle": "Создание общего хранилища",
   "connector.protonPass.setupStepDescription":
-    "CodeBot создаёт хранилище «{vault}» и ключ для чтения. Затем завершает сеанс Proton.",
+    "OpenBot Code создаёт хранилище «{vault}» и ключ для чтения. Затем завершает сеанс Proton.",
   "connector.protonPass.doneTitle": "Proton Pass подключён",
   "connector.protonPass.doneDescription": "Переместите учётные данные в «{vault}», чтобы агенты могли входить с ними.",
   "connector.protonPass.failedTitle": "Proton Pass не подключён",
@@ -674,9 +678,9 @@ export const messages = {
   "connector.protonPass.keyNoExpiry": "Только чтение. Бессрочно.",
   "connector.protonPass.disconnectTitle": "Отключить Proton Pass",
   "connector.protonPass.disconnectSummary":
-    "CodeBot удаляет свой ключ доступа на этом компьютере. Хранилище и его учётные данные остаются в вашем аккаунте Proton.",
+    "OpenBot Code удаляет свой ключ доступа на этом компьютере. Хранилище и его учётные данные остаются в вашем аккаунте Proton.",
   "connector.protonPass.disconnectSummaryHost":
-    "CodeBot удаляет свой ключ доступа на {host}. Хранилище и его учётные данные остаются в вашем аккаунте Proton.",
+    "OpenBot Code удаляет свой ключ доступа на {host}. Хранилище и его учётные данные остаются в вашем аккаунте Proton.",
   "connector.protonPass.disconnect": "Отключить",
-  "connector.protonPass.actionFailed": "CodeBot не смог изменить подключение Proton Pass.",
+  "connector.protonPass.actionFailed": "OpenBot Code не смог изменить подключение Proton Pass.",
 } as const satisfies PartialTranslation<typeof source>;

@@ -17,10 +17,10 @@ export const messages = {
   "notification.channelMessage": "Nowa wiadomość.",
   "notification.usageLimit.title": "Konto {provider} osiągnęło limit",
   "notification.usageLimit.body": {
-    one: "{count} agent czeka. CodeBot spróbuje ponownie później.",
-    few: "{count} agentów czeka. CodeBot spróbuje ponownie później.",
-    many: "{count} agentów czeka. CodeBot spróbuje ponownie później.",
-    other: "{count} agenta czeka. CodeBot spróbuje ponownie później.",
+    one: "{count} agent czeka. OpenBot Code spróbuje ponownie później.",
+    few: "{count} agentów czeka. OpenBot Code spróbuje ponownie później.",
+    many: "{count} agentów czeka. OpenBot Code spróbuje ponownie później.",
+    other: "{count} agenta czeka. OpenBot Code spróbuje ponownie później.",
   },
   "notification.usageLimit.bodyResets": {
     one: "{count} agent czeka. Reset: {reset}.",
@@ -33,7 +33,7 @@ export const messages = {
   "notification.machineAlert.cpu": "{server}: CPU obciążony w {percent}",
   "notification.machineAlert.body": "Przekroczono poziom alertu {level}. Zobacz Ustawienia serwera > Pamięć dyskowa.",
   "notification.test": "Powiadomienia działają.",
-  "notification.welcome": "CodeBot powiadomi cię tutaj, gdy agent będzie cię potrzebować.",
+  "notification.welcome": "OpenBot Code powiadomi cię tutaj, gdy agent będzie cię potrzebować.",
   "notification.toast.region": "Powiadomienia",
   "notification.toast.close": "Zamknij powiadomienie",
 } as const satisfies PartialTranslation<typeof source>;

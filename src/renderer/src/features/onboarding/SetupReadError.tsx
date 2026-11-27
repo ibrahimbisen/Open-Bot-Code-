@@ -4,7 +4,7 @@ import { useText } from "@codebot/ui/text";
 import { usePlatform } from "../../platform";
 import { useSetup } from "./onboarding-context";
 
-const PRODUCT_NAME = "CodeBot";
+const PRODUCT_NAME = "OpenBot Code";
 
 export function SetupReadError() {
   const { t } = useText();

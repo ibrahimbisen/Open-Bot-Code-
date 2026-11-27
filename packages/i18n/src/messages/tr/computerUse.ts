@@ -3,14 +3,14 @@ import type { messages as source } from "../en/computerUse";
 
 export const messages = {
   "computerUse.permission.screenRecording.title": "Ekran Kaydı",
-  "computerUse.permission.screenRecording.description": "CodeBot'un uygulama pencerelerini görmesini sağlar.",
+  "computerUse.permission.screenRecording.description": "OpenBot Code'un uygulama pencerelerini görmesini sağlar.",
   "computerUse.permission.screenRecording.pane": "Ekran ve Sistem Sesi Kaydı",
   "computerUse.permission.accessibility.title": "Erişilebilirlik",
-  "computerUse.permission.accessibility.description": "CodeBot'un tıklamasını ve yazmasını sağlar.",
+  "computerUse.permission.accessibility.description": "OpenBot Code'un tıklamasını ve yazmasını sağlar.",
   "computerUse.permission.accessibility.pane": "Erişilebilirlik",
-  "computerUse.error.check": "CodeBot, Bilgisayar Kullanımını denetleyemedi.",
-  "computerUse.error.openSettings": "CodeBot, Sistem Ayarlarını açamadı.",
-  "computerUse.error.startDriver": "CodeBot, Bilgisayar Kullanımı sürücüsünü başlatamadı.",
+  "computerUse.error.check": "OpenBot Code, Bilgisayar Kullanımını denetleyemedi.",
+  "computerUse.error.openSettings": "OpenBot Code, Sistem Ayarlarını açamadı.",
+  "computerUse.error.startDriver": "OpenBot Code, Bilgisayar Kullanımı sürücüsünü başlatamadı.",
   "computerUse.checkAgain": "Tekrar kontrol et",
   "computerUse.checking": "Bilgisayar Kullanımı denetleniyor",
   "computerUse.unavailable.title": "Bilgisayar Kullanımı henüz mevcut değil",
@@ -18,16 +18,16 @@ export const messages = {
   "computerUse.permissions.description": "İzinler macOS tarafından yönetilir.",
   "computerUse.ready.title": "Bilgisayar Kullanımı hazır",
   "computerUse.ready.description":
-    "CodeBot bu bilgisayardaki uygulamaları görebilir ve onlarla etkileşime girebilir. Bu sistem fazladan izin istemez.",
+    "OpenBot Code bu bilgisayardaki uygulamaları görebilir ve onlarla etkileşime girebilir. Bu sistem fazladan izin istemez.",
   "computerUse.limited.title": "Bilgisayar Kullanımı bu masaüstünde sınırlı",
   "computerUse.openSettingsFailed.title": "Sistem Ayarları açılamadı",
   "computerUse.restartRequired.title": "Yeniden başlatma gerekli",
   "computerUse.restartRequired.description":
-    "macOS hâlâ tıklamayı ve yazmayı engelliyor. Yeniden başlattıktan sonra yine olursa CodeBot'u Erişilebilirlik'ten kaldırıp yeniden ekleyin.",
-  "computerUse.restartRequired.action": "CodeBot'u yeniden başlat",
+    "macOS hâlâ tıklamayı ve yazmayı engelliyor. Yeniden başlattıktan sonra yine olursa OpenBot Code'u Erişilebilirlik'ten kaldırıp yeniden ekleyin.",
+  "computerUse.restartRequired.action": "OpenBot Code'u yeniden başlat",
   "computerUse.compact.title": "Bilgisayar Kullanımını etkinleştir",
   "computerUse.compact.description":
-    "CodeBot'un bu bilgisayardaki uygulamaları görmesine ve etkileşime girmesine izin verin.",
+    "OpenBot Code'un bu bilgisayardaki uygulamaları görmesine ve etkileşime girmesine izin verin.",
   "computerUse.granted": "Verildi",
   "computerUse.opening": "Açılıyor…",
   "computerUse.manage": "Yönet",
@@ -44,5 +44,5 @@ export const messages = {
   "computerUse.help.showInFinder": "Finder'da göster",
   "computerUse.help.revealFailed": "Uygulama Finder'da gösterilemedi.",
   "computerUse.help.dragFailed": "Uygulama sürüklenemedi.",
-  "computerUse.highlight.working": "CodeBot {title} içinde çalışıyor",
+  "computerUse.highlight.working": "OpenBot Code {title} içinde çalışıyor",
 } as const satisfies PartialTranslation<typeof source>;

@@ -26,13 +26,13 @@ export const messages = {
   "prompt.approval.alwaysAllow": "Immer erlauben",
   "prompt.approval.deny": "Ablehnen",
   "prompt.approval.cut":
-    "Diese Karte zeigt nur den Anfang der Anfrage und bietet daher nur Ablehnen an. Wenn Erlauben nicht bald erscheint, aktualisiere CodeBot auf dem Server.",
+    "Diese Karte zeigt nur den Anfang der Anfrage und bietet daher nur Ablehnen an. Wenn Erlauben nicht bald erscheint, aktualisiere OpenBot Code auf dem Server.",
   "prompt.approval.report.bugHeadline": "Einen Fehler gefunden? Lass ihn uns beheben.",
   "prompt.approval.report.ideaHeadline": "Eine Idee? Lass sie uns umsetzen.",
   "prompt.approval.report.dontSend": "Nicht jetzt",
-  "prompt.approval.report.send": "An das CodeBot-Team senden",
+  "prompt.approval.report.send": "An das OpenBot Code-Team senden",
   "prompt.approval.report.phoneOnly":
-    "Öffne diesen Chat in der CodeBot-Telefon-App und sende den Bericht dort. Das Telefon fügt seine Version, sein System und sein Supportprotokoll hinzu. Wenn sich das Telefon nicht verbinden kann, öffne in der Telefon-App Einstellungen > Support und melde das Problem auf GitHub.",
+    "Öffne diesen Chat in der OpenBot Code-Telefon-App und sende den Bericht dort. Das Telefon fügt seine Version, sein System und sein Supportprotokoll hinzu. Wenn sich das Telefon nicht verbinden kann, öffne in der Telefon-App Einstellungen > Support und melde das Problem auf GitHub.",
   "prompt.approval.title.command": "Befehl ausführen",
   "prompt.approval.title.fileChange": "Dateien ändern",
   "prompt.approval.title.permissions": "Berechtigungen erteilen",
@@ -45,7 +45,7 @@ export const messages = {
   "prompt.browser.title.pending": "Schließe den Schritt auf {host} ab",
   "prompt.browser.cancelled": "Abgebrochen",
   "prompt.browser.reload":
-    "CodeBot konnte das Passwort oder den Code nicht vollständig eingeben. Prüfe die Seite und gib ein, was fehlt. Schließe die Anmeldung ab und lade die Browserseite neu, bevor du „Fertig“ wählst. Die Seitenprüfung bleibt gesperrt, bis die Seite neu geladen wurde.",
+    "OpenBot Code konnte das Passwort oder den Code nicht vollständig eingeben. Prüfe die Seite und gib ein, was fehlt. Schließe die Anmeldung ab und lade die Browserseite neu, bevor du „Fertig“ wählst. Die Seitenprüfung bleibt gesperrt, bis die Seite neu geladen wurde.",
   "prompt.browser.continuing": "{name} fährt fort.",
   "prompt.browser.cancelledBody": "Der Browserschritt wurde abgebrochen.",
   "prompt.browser.pendingBody":
@@ -58,9 +58,9 @@ export const messages = {
   "prompt.browser.signInBlocked.title": "{host} hat die Anmeldung von {server} blockiert",
   "prompt.browser.signInBlocked.cancelledTitle": "Anmeldung bei {host} abgebrochen",
   "prompt.browser.signInBlocked.body":
-    "Melde dich auf diesem Computer an. CodeBot sendet nur die Anmeldung für {host} an {server}, und {name} fährt fort.",
+    "Melde dich auf diesem Computer an. OpenBot Code sendet nur die Anmeldung für {host} an {server}, und {name} fährt fort.",
   "prompt.browser.signInBlocked.desktopBody":
-    "{host} akzeptiert keine Anmeldung vom Server. Öffne diesen Chat in der CodeBot-Desktop-App auf deinem Computer und melde dich dort an. Dann fährt {name} fort.",
+    "{host} akzeptiert keine Anmeldung vom Server. Öffne diesen Chat in der OpenBot Code-Desktop-App auf deinem Computer und melde dich dort an. Dann fährt {name} fort.",
   "prompt.browser.signInBlocked.cancelledBody": "Die Anmeldung wurde abgebrochen.",
   "prompt.browser.signInBlocked.waiting": "Warten auf die Anmeldung",
   "prompt.browser.signInBlocked.waitingButton": "Warten auf die Anmeldung…",

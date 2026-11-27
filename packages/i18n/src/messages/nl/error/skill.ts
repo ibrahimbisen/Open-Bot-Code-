@@ -47,7 +47,7 @@ export const messages = {
   "error.skill.ownSkillExists":
     "Deze agent heeft al een eigen vaardigheid met de naam {slug}. Vraag de agent om die vaardigheid te hernoemen of te verwijderen en voeg deze vaardigheid daarna opnieuw toe.",
   "error.skill.managedSlug":
-    "CodeBot geeft elke agent een eigen vaardigheid {slug}. Geef deze vaardigheid een andere naam.",
+    "OpenBot Code geeft elke agent een eigen vaardigheid {slug}. Geef deze vaardigheid een andere naam.",
   "error.skill.templateMarkdownTooLarge":
     "{name}: SKILL.md is groter dan 64 KB. Maak het korter voordat je publiceert.",
   "error.skill.localNoRevisions": "De lokale vaardigheid heeft geen gepubliceerde revisies.",
@@ -66,12 +66,13 @@ export const messages = {
   "error.skill.pathSymlink": "Paden van vaardigheden kunnen geen symbolische links bevatten.",
   "error.skill.folderNotRead": "{provider} leest {folder} niet. Kopieer deze map naar {target}.",
   "error.skill.githubLinkInvalid": "Plak een link naar een GitHub-repository of -map.",
-  "error.skill.githubNotFound": "CodeBot kan {repository} niet openen. De repository is privé of bestaat niet.",
+  "error.skill.githubNotFound": "OpenBot Code kan {repository} niet openen. De repository is privé of bestaat niet.",
   "error.skill.githubNoSkills": "Er staat geen SKILL.md in {folder}.",
-  "error.skill.githubUnavailable": "CodeBot kan GitHub nu niet lezen. Probeer het later opnieuw.",
+  "error.skill.githubUnavailable": "OpenBot Code kan GitHub nu niet lezen. Probeer het later opnieuw.",
   "error.skill.githubRateLimited":
-    "GitHub beperkt hoe vaak CodeBot het zonder account kan lezen. Probeer het over een uur opnieuw.",
-  "error.skill.githubTooLarge": "CodeBot kan niet alle bestanden van {repository} lezen. De repository is te groot.",
+    "GitHub beperkt hoe vaak OpenBot Code het zonder account kan lezen. Probeer het over een uur opnieuw.",
+  "error.skill.githubTooLarge":
+    "OpenBot Code kan niet alle bestanden van {repository} lezen. De repository is te groot.",
   "error.skill.githubHostTooOld": "Werk deze server bij om vaardigheden van GitHub toe te voegen.",
   "error.skill.publishGithub":
     "{name} komt van GitHub. Je kunt alleen vaardigheden publiceren die je zelf hebt gemaakt.",

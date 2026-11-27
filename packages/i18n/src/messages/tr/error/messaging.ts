@@ -5,20 +5,21 @@ export const messages = {
   "error.messaging.notConnected": "Bu Slack çalışma alanı bağlı değil.",
   "error.messaging.unsupported": "Bu bilgisayar Slack'e bağlanamıyor.",
   "error.messaging.relayUnavailable":
-    "CodeBot bu bilgisayarda Slack etkinliklerini alamıyor. Oturum açın, bu bilgisayara bir ad verin ve tekrar deneyin.",
+    "OpenBot Code bu bilgisayarda Slack etkinliklerini alamıyor. Oturum açın, bu bilgisayara bir ad verin ve tekrar deneyin.",
   "error.messaging.discordNotConnected": "Bu Discord sunucusu bağlı değil.",
   "error.messaging.discordUnsupported": "Bu bilgisayar Discord'a bağlanamıyor.",
   "error.messaging.discordRelayUnavailable":
-    "CodeBot bu bilgisayarda Discord etkinliklerini alamıyor. Oturum açın, bu bilgisayara bir ad verin ve tekrar deneyin.",
+    "OpenBot Code bu bilgisayarda Discord etkinliklerini alamıyor. Oturum açın, bu bilgisayara bir ad verin ve tekrar deneyin.",
   "error.messaging.discordRolesUnsupported":
-    "CodeBot henüz Discord rollerini listeleyemiyor. Daha sonra yeniden deneyin.",
+    "OpenBot Code henüz Discord rollerini listeleyemiyor. Daha sonra yeniden deneyin.",
   "error.messaging.telegramNotConnected": "Bu Telegram sohbeti bağlı değil.",
   "error.messaging.telegramUnsupported": "Bu bilgisayar Telegram'a bağlanamıyor.",
   "error.messaging.telegramRelayUnavailable":
-    "CodeBot bu bilgisayarda Telegram'a ulaşamıyor. Oturum açın, bu bilgisayara bir ad verin ve tekrar deneyin.",
+    "OpenBot Code bu bilgisayarda Telegram'a ulaşamıyor. Oturum açın, bu bilgisayara bir ad verin ve tekrar deneyin.",
   "error.messaging.telegramRelayUnreachable":
-    "CodeBot bu bilgisayardan hizmetine bağlanamıyor. İnternet bağlantısını, VPN'i, proxy'yi veya güvenlik duvarını kontrol edin ve tekrar deneyin.",
-  "error.messaging.telegramServiceUnavailable": "CodeBot şu anda Telegram'ı bağlayamıyor. Daha sonra tekrar deneyin.",
+    "OpenBot Code bu bilgisayardan hizmetine bağlanamıyor. İnternet bağlantısını, VPN'i, proxy'yi veya güvenlik duvarını kontrol edin ve tekrar deneyin.",
+  "error.messaging.telegramServiceUnavailable":
+    "OpenBot Code şu anda Telegram'ı bağlayamıyor. Daha sonra tekrar deneyin.",
   "error.messaging.whatsappNotConnected": "Bu WhatsApp numarası bağlı değil.",
   "error.messaging.whatsappUnsupported": "Bu bilgisayar WhatsApp'a bağlanamıyor.",
   "error.messaging.whatsappTooManySenders": "Bir WhatsApp numarası en fazla 200 kişiye ve gruba izin verebilir.",

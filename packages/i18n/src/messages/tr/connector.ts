@@ -16,11 +16,11 @@ export const messages = {
   "connector.github.connectedAs": "@{login} olarak bağlandı",
   "connector.github.repositoriesTitle": "Depolar",
   "connector.github.repositoriesDescription":
-    "Ajanlar yalnızca CodeBot GitHub Uygulamasının yüklü olduğu depoları kullanabilir.",
+    "Ajanlar yalnızca OpenBot Code GitHub Uygulamasının yüklü olduğu depoları kullanabilir.",
   "connector.github.chooseRepositories": "Depoları seç",
   "connector.github.repositoriesLoading": "Depolar GitHub'dan okunuyor",
-  "connector.github.repositoriesFailed": "CodeBot depoları GitHub'dan okuyamadı.",
-  "connector.github.noRepositories": "CodeBot GitHub Uygulaması henüz bir depoya yüklenmedi.",
+  "connector.github.repositoriesFailed": "OpenBot Code depoları GitHub'dan okuyamadı.",
+  "connector.github.noRepositories": "OpenBot Code GitHub Uygulaması henüz bir depoya yüklenmedi.",
   "connector.github.moreRepositories": {
     one: "Ve {count} depo daha",
     other: "Ve {count} depo daha",
@@ -32,7 +32,7 @@ export const messages = {
   "connector.github.expiredTitle": "GitHub bağlantısının süresi doldu",
   "connector.github.expiredDescription": "Ajanlara yeniden GitHub erişimi vermek için @{login} olarak tekrar bağlanın.",
   "connector.github.reconnect": "Yeniden bağlan",
-  "connector.github.actionFailed": "CodeBot GitHub bağlantısını değiştiremedi.",
+  "connector.github.actionFailed": "OpenBot Code GitHub bağlantısını değiştiremedi.",
   "connector.github.statusConnected": "Bağlandı",
   "connector.github.statusConnecting": "Bağlanıyor",
   "connector.github.statusExpired": "Süresi doldu",
@@ -45,7 +45,7 @@ export const messages = {
   "connector.github.noMatch": "“{query}” ile eşleşen depo bulunamadı.",
   "connector.github.stepSignIn": "Oturum aç",
   "connector.github.stepConnected": "Bağlandı",
-  "connector.github.requestingCode": "CodeBot GitHub'dan bir kod istiyor.",
+  "connector.github.requestingCode": "OpenBot Code GitHub'dan bir kod istiyor.",
   "connector.github.codeLabel": "Kod {code}",
   "connector.github.failedTitle": "GitHub bağlanamadı",
   "connector.github.cancelConnecting": "GitHub bağlantısını iptal et",
@@ -58,7 +58,7 @@ export const messages = {
   "connector.github.disconnectConfirmTitle": "GitHub bağlantısı kesilsin mi?",
   "connector.github.disconnectConfirmDescription": "Bağlantıyı kesmek @{login} oturumunu bu bilgisayardan kaldırır.",
   "connector.github.disconnectEffectTools": "Tüm ajanlar GitHub araçlarını, gh ve git erişimini kaybeder.",
-  "connector.github.disconnectEffectRevoke": "Ardından CodeBot yetkisini kaldırabileceğiniz GitHub açılır.",
+  "connector.github.disconnectEffectRevoke": "Ardından OpenBot Code yetkisini kaldırabileceğiniz GitHub açılır.",
   "connector.github.disconnectEffectKept": "Sohbetler, dosyalar ve ajan belleği bu bilgisayarda kalır.",
   "connector.github.descriptionHost":
     "{host} sunucusundaki her ajan GitHub depolarınızı, sorunlarınızı (issues), çekme isteklerinizi (pull requests), gh ve git araçlarını kullanabilir.",
@@ -73,7 +73,7 @@ export const messages = {
   "connector.github.close": "Kapat",
   "connector.dangerZone": "Tehlikeli bölge",
   "connector.statusUnknown": "Bilinmiyor",
-  "connector.readFailed": "CodeBot bu bağlantının durumunu okuyamadı.",
+  "connector.readFailed": "OpenBot Code bu bağlantının durumunu okuyamadı.",
 
   "connector.slack.title": "Slack",
   "connector.slack.description":
@@ -97,10 +97,10 @@ export const messages = {
   "connector.slack.disconnectAllSummary":
     "Tüm çalışma alanlarının bağlantısı kesilir. Kimse ajanlarınıza artık @CodeBot üzerinden ulaşamaz.",
   "connector.slack.disconnectAllSummaryOrchestrator":
-    "Tüm çalışma alanlarının bağlantısı kesilir. Slack Düzenleyicisi ve sohbetleri CodeBot'tan silinir.",
+    "Tüm çalışma alanlarının bağlantısı kesilir. Slack Düzenleyicisi ve sohbetleri OpenBot Code'dan silinir.",
   "connector.slack.missingScopes":
-    "CodeBot Slack'te şu izinlere sahip değil: {scopes}. Çalışma alanı bağlantısını kesin, ardından tekrar bağlayın.",
-  "connector.slack.retryAt": "Slack CodeBot'tan beklemesini istedi. {time} saatinde tekrar deneyecek.",
+    "OpenBot Code Slack'te şu izinlere sahip değil: {scopes}. Çalışma alanı bağlantısını kesin, ardından tekrar bağlayın.",
+  "connector.slack.retryAt": "Slack OpenBot Code'dan beklemesini istedi. {time} saatinde tekrar deneyecek.",
   "connector.slack.reconnect": "Yeniden bağlan",
   "connector.slack.pause": "Duraklat",
   "connector.slack.resume": "Sürdür",
@@ -111,12 +111,12 @@ export const messages = {
   "connector.slack.orchestratorNone": "Henüz yanıt veren bir ajan yok",
   "connector.slack.orchestratorNoneDescription": "Slack Düzenleyicisini ekleyin, aksi takdirde Slack yanıt alamaz.",
   "connector.slack.inviteNote":
-    "CodeBot her genel kanala ve her yeni kanala kendiliğinden katılır. Özel bir kanal için onu davet edin: /invite @CodeBot.",
+    "OpenBot Code her genel kanala ve her yeni kanala kendiliğinden katılır. Özel bir kanal için onu davet edin: /invite @CodeBot.",
   "connector.slack.stepWorkspace": "Çalışma alanı",
   "connector.slack.stepAgent": "Ajan",
   "connector.slack.connectTitle": "Bir Slack çalışma alanına bağlanın",
   "connector.slack.connectDescription":
-    "CodeBot çalışma alanına CodeBot adında bir uygulama yükler ve her genel kanala katılır.",
+    "OpenBot Code çalışma alanına OpenBot Code adında bir uygulama yükler ve her genel kanala katılır.",
   "connector.slack.connectStepBrowser": "Slack tarayıcınızda açılır",
   "connector.slack.connectStepAllow": "Sağ üst köşeden çalışma alanını seçin, ardından İzin Ver'e tıklayın",
   "connector.slack.connectStepReturn": "Slack işlemi tamamlandığında bu iletişim kutusu devam eder",
@@ -130,17 +130,17 @@ export const messages = {
   "connector.slack.orchestratorDoesDelegate": "Her görevi en uygun ajana iletir",
   "connector.slack.orchestratorDoesAnswer": "Yanıtı Slack ileti dizisinde paylaşır",
   "connector.slack.orchestratorModel": "Model",
-  "connector.slack.doneTitle": "CodeBot {workspace} içinde",
+  "connector.slack.doneTitle": "OpenBot Code {workspace} içinde",
   "connector.slack.doneDescription": "Herhangi bir genel kanalda @CodeBot'tan bahsedin veya doğrudan mesaj gönderin.",
   "connector.slack.done": "Bitti",
   "connector.slack.disconnectTitle": "{workspace} bağlantısı kesilsin mi?",
   "connector.slack.disconnectDescription":
-    "CodeBot {workspace} içinde yanıt vermeyi durdurur ve Slack belirtecini bu bilgisayardan kaldırır.",
+    "OpenBot Code {workspace} içinde yanıt vermeyi durdurur ve Slack belirtecini bu bilgisayardan kaldırır.",
   "connector.slack.disconnectDescriptionHost":
-    "CodeBot {workspace} içinde yanıt vermeyi durdurur ve Slack belirtecini {host} sunucusundan kaldırır.",
+    "OpenBot Code {workspace} içinde yanıt vermeyi durdurur ve Slack belirtecini {host} sunucusundan kaldırır.",
   "connector.slack.disconnectEffect": "{workspace} içindeki kişiler artık @CodeBot aracılığıyla ajanlarınıza ulaşamaz.",
-  "connector.slack.removeEffectKept": "Konuşmalar ve Slack Düzenleyicisi CodeBot'ta kalır.",
-  "connector.slack.removeEffectDeleted": "Slack Düzenleyicisi ve konuşmaları CodeBot'tan silinir.",
+  "connector.slack.removeEffectKept": "Konuşmalar ve Slack Düzenleyicisi OpenBot Code'da kalır.",
+  "connector.slack.removeEffectDeleted": "Slack Düzenleyicisi ve konuşmaları OpenBot Code'dan silinir.",
   "connector.slack.keep": "Bağlı tut",
   "connector.slack.close": "Kapat",
   "connector.slack.addWorkspace": "Çalışma alanı ekle",
@@ -170,16 +170,16 @@ export const messages = {
   "connector.discord.actionFailed": "Discord değişikliği kabul etmedi",
   "connector.discord.workspaceTitle": "Discord sunucuları",
   "connector.discord.workspaceDescription":
-    "Bir kanalda @CodeBot'tan bahsedin. Devam etmek için CodeBot'a yanıt verin.",
+    "Bir kanalda @CodeBot'tan bahsedin. Devam etmek için OpenBot Code'a yanıt verin.",
   "connector.discord.disconnectWorkspace": "Bağlantıyı kes",
   "connector.discord.disconnectAllTitle": "Discord bağlantısını kes",
   "connector.discord.disconnectAllSummary":
     "Tüm sunucuların bağlantısı kesilir. Kimse ajanlarınıza artık @CodeBot üzerinden ulaşamaz.",
   "connector.discord.disconnectAllSummaryOrchestrator":
-    "Tüm sunucuların bağlantısı kesilir. Discord Düzenleyicisi ve sohbetleri CodeBot'tan silinir.",
+    "Tüm sunucuların bağlantısı kesilir. Discord Düzenleyicisi ve sohbetleri OpenBot Code'dan silinir.",
   "connector.discord.missingScopes":
-    "CodeBot Discord'da şu izinlere sahip değil: {scopes}. Discord sunucusu bağlantısını kesin, ardından tekrar bağlayın.",
-  "connector.discord.retryAt": "Discord CodeBot'tan beklemesini istedi. {time} saatinde tekrar deneyecek.",
+    "OpenBot Code Discord'da şu izinlere sahip değil: {scopes}. Discord sunucusu bağlantısını kesin, ardından tekrar bağlayın.",
+  "connector.discord.retryAt": "Discord OpenBot Code'dan beklemesini istedi. {time} saatinde tekrar deneyecek.",
   "connector.discord.reconnect": "Yeniden bağlan",
   "connector.discord.pause": "Duraklat",
   "connector.discord.resume": "Sürdür",
@@ -190,11 +190,11 @@ export const messages = {
   "connector.discord.orchestratorNone": "Henüz yanıt veren bir ajan yok",
   "connector.discord.orchestratorNoneDescription":
     "Discord Düzenleyicisini ekleyin, aksi takdirde Discord yanıt alamaz.",
-  "connector.discord.channelsNote": "CodeBot, rolünün görebildiği kanalları görür.",
+  "connector.discord.channelsNote": "OpenBot Code, rolünün görebildiği kanalları görür.",
   "connector.discord.stepWorkspace": "Discord sunucusu",
   "connector.discord.stepAgent": "Ajan",
   "connector.discord.connectTitle": "Bir Discord sunucusuna bağlanın",
-  "connector.discord.connectDescription": "CodeBot, Discord sunucusuna CodeBot adında bir bot ekler.",
+  "connector.discord.connectDescription": "OpenBot Code, Discord sunucusuna OpenBot Code adında bir bot ekler.",
   "connector.discord.connectStepBrowser": "Discord tarayıcınızda açılır",
   "connector.discord.connectStepAllow": "Sunucuyu seçin, ardından Yetkilendir'e tıklayın",
   "connector.discord.connectStepReturn": "Discord işlemi tamamlandığında bu iletişim kutusu devam eder",
@@ -208,18 +208,19 @@ export const messages = {
   "connector.discord.orchestratorDoesDelegate": "Her görevi en uygun ajana iletir",
   "connector.discord.orchestratorDoesAnswer": "Yanıtı Discord kanalında verir",
   "connector.discord.orchestratorModel": "Model",
-  "connector.discord.doneTitle": "CodeBot {workspace} içinde",
-  "connector.discord.doneDescription": "Bir kanalda @CodeBot'tan bahsedin. Devam etmek için CodeBot'a yanıt verin.",
+  "connector.discord.doneTitle": "OpenBot Code {workspace} içinde",
+  "connector.discord.doneDescription":
+    "Bir kanalda @CodeBot'tan bahsedin. Devam etmek için OpenBot Code'a yanıt verin.",
   "connector.discord.done": "Bitti",
   "connector.discord.disconnectTitle": "{workspace} bağlantısı kesilsin mi?",
   "connector.discord.disconnectDescription":
-    "CodeBot {workspace} içinde yanıt vermeyi bırakır ve Discord bağlantısını bu bilgisayardan kaldırır.",
+    "OpenBot Code {workspace} içinde yanıt vermeyi bırakır ve Discord bağlantısını bu bilgisayardan kaldırır.",
   "connector.discord.disconnectDescriptionHost":
-    "CodeBot {workspace} içinde yanıt vermeyi bırakır ve Discord bağlantısını {host} sunucusundan kaldırır.",
+    "OpenBot Code {workspace} içinde yanıt vermeyi bırakır ve Discord bağlantısını {host} sunucusundan kaldırır.",
   "connector.discord.disconnectEffect":
     "{workspace} içindeki kişiler artık @CodeBot aracılığıyla ajanlarınıza ulaşamaz.",
-  "connector.discord.removeEffectKept": "Konuşmalar ve Discord Düzenleyicisi CodeBot'ta kalır.",
-  "connector.discord.removeEffectDeleted": "Discord Düzenleyicisi ve konuşmaları CodeBot'tan silinir.",
+  "connector.discord.removeEffectKept": "Konuşmalar ve Discord Düzenleyicisi OpenBot Code'da kalır.",
+  "connector.discord.removeEffectDeleted": "Discord Düzenleyicisi ve konuşmaları OpenBot Code'dan silinir.",
   "connector.discord.keep": "Bağlı tut",
   "connector.discord.close": "Kapat",
   "connector.discord.addWorkspace": "Discord sunucusu ekle",
@@ -231,24 +232,25 @@ export const messages = {
     one: "{count} Discord sunucusu · Discord Düzenleyicisi yanıtlıyor",
     other: "{count} Discord sunucusu · Discord Düzenleyicisi yanıtlıyor",
   },
-  "connector.discord.accessTitle": "CodeBot'u kimler kullanabilir",
+  "connector.discord.accessTitle": "OpenBot Code'u kimler kullanabilir",
   "connector.discord.accessDescription":
-    "CodeBot yalnızca bu kişilere yanıt verir. Diğerlerinin bahsetmelerini yok sayar.",
+    "OpenBot Code yalnızca bu kişilere yanıt verir. Diğerlerinin bahsetmelerini yok sayar.",
   "connector.discord.accessEveryone": "Sunucudaki herkes",
-  "connector.discord.accessEveryoneDescription": "CodeBot'un gördüğü bir kanala yazabilen herkes ondan bahsedebilir.",
+  "connector.discord.accessEveryoneDescription":
+    "OpenBot Code'un gördüğü bir kanala yazabilen herkes ondan bahsedebilir.",
   "connector.discord.accessRoles": "{roles} rolüne sahip üyeler",
   "connector.discord.accessChoose": "Rolleri seç",
-  "connector.discord.accessDialogTitle": "{workspace} içinde CodeBot'u kimler kullanabilir?",
-  "connector.discord.accessDialogDescription": "Hiçbir rol seçilmezse herkes CodeBot'tan bahsedebilir.",
+  "connector.discord.accessDialogTitle": "{workspace} içinde OpenBot Code'u kimler kullanabilir?",
+  "connector.discord.accessDialogDescription": "Hiçbir rol seçilmezse herkes OpenBot Code'dan bahsedebilir.",
   "connector.discord.accessLoading": "Roller yükleniyor…",
   "connector.discord.accessLoadFailed": "Discord rolleri yüklenmedi",
   "connector.discord.accessNoRoles": "Bu sunucuda seçilecek rol yok.",
   "connector.discord.accessRoleDeleted": "{role} (silindi)",
   "connector.discord.accessSave": "Kaydet",
-  "connector.discord.accessHostUpdate": "Rol seçmek için {host} üzerindeki CodeBot'u güncelleyin.",
+  "connector.discord.accessHostUpdate": "Rol seçmek için {host} üzerindeki OpenBot Code'u güncelleyin.",
   "connector.telegram.title": "Telegram",
   "connector.telegram.description":
-    "CodeBot botunu bir Telegram grubuna ekleyin veya botla doğrudan bir sohbet açın. Telegram Düzenleyicisi doğru ajana sorar ve yanıtlar.",
+    "OpenBot Code botunu bir Telegram grubuna ekleyin veya botla doğrudan bir sohbet açın. Telegram Düzenleyicisi doğru ajana sorar ve yanıtlar.",
   "connector.telegram.statusConnected": "Bağlandı",
   "connector.telegram.statusAttention": "Dikkat gerekiyor",
   "connector.telegram.summaryConnected": {
@@ -271,30 +273,31 @@ export const messages = {
   "connector.telegram.groupDescription": "Kullanıcılar bottan bahseder veya mesajlarını yanıtlar.",
   "connector.telegram.directDescription": "Bu sohbetteki her mesaj Telegram Düzenleyicisine gider.",
   "connector.telegram.helpRemoved":
-    "CodeBot botu artık bu sohbette değil. Sohbetin bağlantısını kesin, sonra botu yeniden ekleyin.",
+    "OpenBot Code botu artık bu sohbette değil. Sohbetin bağlantısını kesin, sonra botu yeniden ekleyin.",
   "connector.telegram.helpRelayUnavailable":
-    "CodeBot bu bilgisayarda Telegram mesajlarını alamıyor. Oturum açın, Sunucu ayarlarında bu bilgisayara bir ad verin ve CodeBot'u açık tutun.",
+    "OpenBot Code bu bilgisayarda Telegram mesajlarını alamıyor. Oturum açın, Sunucu ayarlarında bu bilgisayara bir ad verin ve OpenBot Code'u açık tutun.",
   "connector.telegram.helpRelayUnavailableHost":
-    "{host} üzerindeki CodeBot Telegram mesajlarını alamıyor. {host} üzerinde oturum açın, Sunucu ayarlarında sunucuya bir ad verin ve CodeBot'u açık tutun.",
-  "connector.telegram.helpError": "CodeBot bu sohbete ulaşamıyor. Yeniden bağlanın veya sohbetin bağlantısını kesin.",
+    "{host} üzerindeki OpenBot Code Telegram mesajlarını alamıyor. {host} üzerinde oturum açın, Sunucu ayarlarında sunucuya bir ad verin ve OpenBot Code'u açık tutun.",
+  "connector.telegram.helpError":
+    "OpenBot Code bu sohbete ulaşamıyor. Yeniden bağlanın veya sohbetin bağlantısını kesin.",
   "connector.telegram.helpNotLinked": "Bu sohbet bu sunucuya bağlı değil. Bağlamak için Yeniden bağlan'ı seçin.",
-  "connector.telegram.retryAt": "Telegram CodeBot'tan beklemesini istedi. {time} saatinde tekrar deneyecek.",
+  "connector.telegram.retryAt": "Telegram OpenBot Code'dan beklemesini istedi. {time} saatinde tekrar deneyecek.",
   "connector.telegram.pause": "Duraklat",
   "connector.telegram.resume": "Sürdür",
   "connector.telegram.reconnect": "Yeniden bağlan",
   "connector.telegram.disconnectChat": "Bağlantıyı kes",
   "connector.telegram.disconnectAllTitle": "Telegram bağlantısını kes",
   "connector.telegram.disconnectAllSummary":
-    "Tüm sohbetlerin bağlantısı kesilir. Kimse ajanlarınıza artık CodeBot botu üzerinden ulaşamaz.",
+    "Tüm sohbetlerin bağlantısı kesilir. Kimse ajanlarınıza artık OpenBot Code botu üzerinden ulaşamaz.",
   "connector.telegram.disconnectAllSummaryOrchestrator":
-    "Tüm sohbetlerin bağlantısı kesilir. Telegram Düzenleyicisi ve sohbetleri CodeBot'tan silinir.",
+    "Tüm sohbetlerin bağlantısı kesilir. Telegram Düzenleyicisi ve sohbetleri OpenBot Code'dan silinir.",
   "connector.telegram.rowAction": "{action}: {name}",
   "connector.telegram.linkChat": "Sohbet bağla",
   "connector.telegram.addToGroup": "Bir gruba ekle",
   "connector.telegram.openDirectChat": "Doğrudan sohbet aç",
   "connector.telegram.orchestratorTitle": "Telegram Düzenleyicisi",
   "connector.telegram.orchestratorDescription":
-    "Bu ajan tüm Telegram sohbetlerinizden CodeBot'a gelen mesajları alır. Kısa olanları kendisi yanıtlar, diğer işleri doğru ajana iletir ve yanıtı sohbette paylaşır.",
+    "Bu ajan tüm Telegram sohbetlerinizden OpenBot Code'a gelen mesajları alır. Kısa olanları kendisi yanıtlar, diğer işleri doğru ajana iletir ve yanıtı sohbette paylaşır.",
   "connector.telegram.orchestratorNone": "Henüz yanıt veren bir ajan yok",
   "connector.telegram.orchestratorNoneDescription":
     "Telegram Düzenleyicisini ekleyin, aksi takdirde Telegram yanıt alamaz.",
@@ -304,30 +307,30 @@ export const messages = {
   "connector.telegram.stepAgent": "Ajan",
   "connector.telegram.connectTitle": "Bir Telegram sohbeti bağlayın",
   "connector.telegram.connectDescription":
-    "CodeBot botunu bir gruba ekleyin veya botla doğrudan bir sohbet açın. Tek bir bot tüm sohbetlerinize hizmet eder.",
+    "OpenBot Code botunu bir gruba ekleyin veya botla doğrudan bir sohbet açın. Tek bir bot tüm sohbetlerinize hizmet eder.",
   "connector.telegram.connectStepBrowser": "Telegram tarayıcınızda açılır",
   "connector.telegram.connectStepPick": "Grubu seçin veya doğrudan sohbette Başlat'a dokunun",
   "connector.telegram.connectStepReturn": "Sohbet bağlandığında bu iletişim kutusu devam eder",
   "connector.telegram.connectWaiting": "Telegram bekleniyor. Telegram'da sohbeti seçin.",
   "connector.telegram.agentStepTitle": "Telegram Düzenleyicisini ekleyin",
   "connector.telegram.agentStepDescription":
-    "Bu yeni ajan, {chat} içinde ve daha sonra bağladığınız her sohbette CodeBot'a gelen mesajları yanıtlar.",
+    "Bu yeni ajan, {chat} içinde ve daha sonra bağladığınız her sohbette OpenBot Code'a gelen mesajları yanıtlar.",
   "connector.telegram.orchestratorName": "Telegram Düzenleyicisi",
   "connector.telegram.orchestratorRole": "Telegram'da yanıt verir ve ekibe sorar",
-  "connector.telegram.orchestratorDoesReceive": "CodeBot'a gelen her Telegram mesajını ilk olarak alır",
+  "connector.telegram.orchestratorDoesReceive": "OpenBot Code'a gelen her Telegram mesajını ilk olarak alır",
   "connector.telegram.orchestratorDoesDelegate": "Her görevi en uygun ajana iletir",
   "connector.telegram.orchestratorDoesAnswer": "Yanıtı Telegram sohbetinde paylaşır",
   "connector.telegram.orchestratorModel": "Model",
-  "connector.telegram.doneTitle": "CodeBot {chat} içinde",
+  "connector.telegram.doneTitle": "OpenBot Code {chat} içinde",
   "connector.telegram.done": "Bitti",
   "connector.telegram.disconnectTitle": "{chat} bağlantısı kesilsin mi?",
   "connector.telegram.leaveDescription":
-    "CodeBot botu {chat} sohbetinden ayrılır ve CodeBot orada yanıt vermeyi bırakır.",
+    "OpenBot Code botu {chat} sohbetinden ayrılır ve OpenBot Code orada yanıt vermeyi bırakır.",
   "connector.telegram.disconnectEffect":
-    "{chat} içindeki kişiler artık CodeBot botu aracılığıyla ajanlarınıza ulaşamaz.",
-  "connector.telegram.removeEffectKept": "Konuşmalar ve Telegram Düzenleyicisi CodeBot'ta kalır.",
+    "{chat} içindeki kişiler artık OpenBot Code botu aracılığıyla ajanlarınıza ulaşamaz.",
+  "connector.telegram.removeEffectKept": "Konuşmalar ve Telegram Düzenleyicisi OpenBot Code'da kalır.",
   "connector.telegram.removeEffectDeleted":
-    "Bu son sohbet olduğundan Telegram Düzenleyicisi ve konuşmaları CodeBot'tan silinir.",
+    "Bu son sohbet olduğundan Telegram Düzenleyicisi ve konuşmaları OpenBot Code'dan silinir.",
   "connector.telegram.keep": "Bağlı tut",
   "connector.telegram.close": "Kapat",
   "connector.whatsapp.title": "WhatsApp",
@@ -355,16 +358,17 @@ export const messages = {
   "connector.whatsapp.actionFailed": "WhatsApp değişikliği kabul etmedi",
   "connector.whatsapp.numbersTitle": "Numaralar",
   "connector.whatsapp.linkNumber": "Numara bağla",
-  "connector.whatsapp.ownNumberNote": "“Kendine mesaj gönder” sohbetiniz ve izin verdiğiniz kişiler CodeBot'a ulaşır.",
+  "connector.whatsapp.ownNumberNote":
+    "“Kendine mesaj gönder” sohbetiniz ve izin verdiğiniz kişiler OpenBot Code'a ulaşır.",
   "connector.whatsapp.dedicatedNote":
-    "“Kendine mesaj gönder” sohbetiniz ve izin verdiğiniz kişiler CodeBot'a ulaşır. Diğer kişiler size iletmeleri için bir kod alır.",
+    "“Kendine mesaj gönder” sohbetiniz ve izin verdiğiniz kişiler OpenBot Code'a ulaşır. Diğer kişiler size iletmeleri için bir kod alır.",
   "connector.whatsapp.helpLoggedOut": "WhatsApp bu bilgisayarı bağlı cihazlardan kaldırdı. Numarayı yeniden bağlayın.",
   "connector.whatsapp.helpLoggedOutHost": "WhatsApp bu sunucuyu bağlı cihazlardan kaldırdı. Numarayı yeniden bağlayın.",
   "connector.whatsapp.helpError":
-    "CodeBot bu numarada WhatsApp'a ulaşamıyor. Yeniden bağlanın veya numaranın bağlantısını kesin.",
+    "OpenBot Code bu numarada WhatsApp'a ulaşamıyor. Yeniden bağlanın veya numaranın bağlantısını kesin.",
   "connector.whatsapp.helpKeysUnreadable":
-    "CodeBot bu numaranın kayıtlı anahtarlarını okuyamıyor. Numarayı yeniden bağlayın.",
-  "connector.whatsapp.retryAt": "WhatsApp CodeBot'tan beklemesini istedi. {time} saatinde tekrar deneyecek.",
+    "OpenBot Code bu numaranın kayıtlı anahtarlarını okuyamıyor. Numarayı yeniden bağlayın.",
+  "connector.whatsapp.retryAt": "WhatsApp OpenBot Code'dan beklemesini istedi. {time} saatinde tekrar deneyecek.",
   "connector.whatsapp.pause": "Duraklat",
   "connector.whatsapp.resume": "Sürdür",
   "connector.whatsapp.reconnect": "Yeniden bağlan",
@@ -374,20 +378,20 @@ export const messages = {
   "connector.whatsapp.disconnectAllSummary":
     "Tüm numaraların bağlantısı kesilir. Kimse ajanlarınıza artık WhatsApp üzerinden ulaşamaz.",
   "connector.whatsapp.disconnectAllSummaryOrchestrator":
-    "Tüm numaraların bağlantısı kesilir. WhatsApp Düzenleyicisi ve sohbetleri CodeBot'tan silinir.",
+    "Tüm numaraların bağlantısı kesilir. WhatsApp Düzenleyicisi ve sohbetleri OpenBot Code'dan silinir.",
   "connector.whatsapp.rowAction": "{action}: {name}",
   "connector.whatsapp.ownNumber": "Kişisel numara",
   "connector.whatsapp.ownNumberDescription":
-    "Yalnızca “Kendine mesaj gönder” sohbetiniz ve izin verdiğiniz kişiler yazabilir. Diğer kişiler yanıt almaz. Kapalıyken CodeBot tanımadığınız kişilere bir kodla yanıt verir.",
+    "Yalnızca “Kendine mesaj gönder” sohbetiniz ve izin verdiğiniz kişiler yazabilir. Diğer kişiler yanıt almaz. Kapalıyken OpenBot Code tanımadığınız kişilere bir kodla yanıt verir.",
   "connector.whatsapp.workingMessage": "“Üzerinde çalışılıyor…” mesajı",
   "connector.whatsapp.workingMessageDescription":
-    "CodeBot bunu ajan çalışırken gönderir, sonra yanıtla değiştirir. Önceki bir isteği bekleyen istek de bir bekleme mesajı alır. Kişisel numarada bu mesajları yalnızca “Kendine mesaj gönder” sohbetiniz alır. Yalnızca yanıtı göndermek için kapatın.",
+    "OpenBot Code bunu ajan çalışırken gönderir, sonra yanıtla değiştirir. Önceki bir isteği bekleyen istek de bir bekleme mesajı alır. Kişisel numarada bu mesajları yalnızca “Kendine mesaj gönder” sohbetiniz alır. Yalnızca yanıtı göndermek için kapatın.",
   "connector.whatsapp.statusReactions": "Durum tepkileri",
   "connector.whatsapp.statusReactionsDescription":
-    "CodeBot bir mesaj geldiğinde 👀, yanıt hazır olduğunda ✅ tepkisi verir. Hiç tepki göndermemek için kapatın.",
+    "OpenBot Code bir mesaj geldiğinde 👀, yanıt hazır olduğunda ✅ tepkisi verir. Hiç tepki göndermemek için kapatın.",
   "connector.whatsapp.orchestratorTitle": "WhatsApp Düzenleyicisi",
   "connector.whatsapp.orchestratorDescription":
-    "Bu ajan bağlı tüm numaralarınızdan CodeBot'a gelen mesajları alır. Kısa olanları kendisi yanıtlar, diğer işleri doğru ajana iletir ve WhatsApp'ta yanıt verir.",
+    "Bu ajan bağlı tüm numaralarınızdan OpenBot Code'a gelen mesajları alır. Kısa olanları kendisi yanıtlar, diğer işleri doğru ajana iletir ve WhatsApp'ta yanıt verir.",
   "connector.whatsapp.orchestratorNone": "Henüz yanıt veren bir ajan yok",
   "connector.whatsapp.orchestratorNoneDescription":
     "WhatsApp Düzenleyicisini ekleyin, aksi takdirde WhatsApp yanıt alamaz.",
@@ -403,10 +407,10 @@ export const messages = {
   "connector.whatsapp.kindLabel": "Numara",
   "connector.whatsapp.kindPersonal": "Kişisel numaram",
   "connector.whatsapp.kindPersonalDescription":
-    "CodeBot yalnızca “Kendine mesaj gönder” sohbetinizi ve izin verdiğiniz kişileri yanıtlar. Diğer kişiler yanıt almaz.",
-  "connector.whatsapp.kindDedicated": "Yalnızca CodeBot için bir numara",
+    "OpenBot Code yalnızca “Kendine mesaj gönder” sohbetinizi ve izin verdiğiniz kişileri yanıtlar. Diğer kişiler yanıt almaz.",
+  "connector.whatsapp.kindDedicated": "Yalnızca OpenBot Code için bir numara",
   "connector.whatsapp.kindDedicatedDescription":
-    "CodeBot bu numaradan tanımadığınız her kişiye, size iletmesi için bir kodla yanıt verir. Onları burada onaylarsınız.",
+    "OpenBot Code bu numaradan tanımadığınız her kişiye, size iletmesi için bir kodla yanıt verir. Onları burada onaylarsınız.",
   "connector.whatsapp.methodLabel": "Bağlama yöntemi",
   "connector.whatsapp.methodQr": "QR kodu",
   "connector.whatsapp.methodCode": "Eşleme kodu",
@@ -431,26 +435,26 @@ export const messages = {
   "connector.whatsapp.failedTimeout": "Telefon kullanmadan önce kodun süresi doldu.",
   "connector.whatsapp.failedRefused": "WhatsApp bağlantıyı reddetti. Birkaç dakika bekleyin, sonra tekrar deneyin.",
   "connector.whatsapp.failedBusy": "Başka bir bağlama işlemi sürüyor. Bitmesini bekleyin, sonra tekrar deneyin.",
-  "connector.whatsapp.failedUnavailable": "CodeBot WhatsApp'a ulaşamıyor. İnternet bağlantısını kontrol edin.",
+  "connector.whatsapp.failedUnavailable": "OpenBot Code WhatsApp'a ulaşamıyor. İnternet bağlantısını kontrol edin.",
   "connector.whatsapp.tryAgain": "Tekrar dene",
   "connector.whatsapp.agentStepTitle": "WhatsApp Düzenleyicisini ekleyin",
   "connector.whatsapp.agentStepDescription":
-    "Bu yeni ajan, {number} üzerinde ve daha sonra bağladığınız her numarada CodeBot'a gelen mesajları yanıtlar.",
+    "Bu yeni ajan, {number} üzerinde ve daha sonra bağladığınız her numarada OpenBot Code'a gelen mesajları yanıtlar.",
   "connector.whatsapp.orchestratorName": "WhatsApp Düzenleyicisi",
   "connector.whatsapp.orchestratorRole": "WhatsApp'ta yanıt verir ve ekibe sorar",
-  "connector.whatsapp.orchestratorDoesReceive": "CodeBot'a gelen her WhatsApp mesajını ilk olarak alır",
+  "connector.whatsapp.orchestratorDoesReceive": "OpenBot Code'a gelen her WhatsApp mesajını ilk olarak alır",
   "connector.whatsapp.orchestratorDoesDelegate": "Her görevi en uygun ajana iletir",
   "connector.whatsapp.orchestratorDoesAnswer": "Yanıtı WhatsApp sohbetinde paylaşır",
   "connector.whatsapp.orchestratorModel": "Model",
-  "connector.whatsapp.doneTitle": "CodeBot {number} ile bağlandı",
+  "connector.whatsapp.doneTitle": "OpenBot Code {number} ile bağlandı",
   "connector.whatsapp.done": "Bitti",
   "connector.whatsapp.disconnectTitle": "{number} bağlantısı kesilsin mi?",
   "connector.whatsapp.disconnectDescription":
-    "CodeBot {number} üzerinde WhatsApp oturumunu kapatır. CodeBot kapalıysa cihazı WhatsApp > Bağlı cihazlar bölümünden de kaldırın.",
+    "OpenBot Code {number} üzerinde WhatsApp oturumunu kapatır. OpenBot Code kapalıysa cihazı WhatsApp > Bağlı cihazlar bölümünden de kaldırın.",
   "connector.whatsapp.disconnectEffect": "Kişiler artık {number} üzerinden ajanlarınıza ulaşamaz.",
-  "connector.whatsapp.removeEffectKept": "Konuşmalar ve WhatsApp Düzenleyicisi CodeBot'ta kalır.",
+  "connector.whatsapp.removeEffectKept": "Konuşmalar ve WhatsApp Düzenleyicisi OpenBot Code'da kalır.",
   "connector.whatsapp.removeEffectDeleted":
-    "Bu son numara olduğundan WhatsApp Düzenleyicisi ve konuşmaları CodeBot'tan silinir.",
+    "Bu son numara olduğundan WhatsApp Düzenleyicisi ve konuşmaları OpenBot Code'dan silinir.",
   "connector.whatsapp.keep": "Bağlı tut",
   "connector.whatsapp.close": "Kapat",
   "connector.whatsapp.sendersTitle": "{number} için kimler yazabilir",
@@ -474,7 +478,7 @@ export const messages = {
     "Bu gruptaki kişiler numarayı etiketlediğinde veya mesajlarını yanıtladığında ajanlarınıza iş verebilir.",
   "connector.whatsapp.groupSearch": "Grup ara",
   "connector.whatsapp.groupsLoading": "Gruplar okunuyor…",
-  "connector.whatsapp.groupsLoadFailed": "CodeBot grupları okuyamadı",
+  "connector.whatsapp.groupsLoadFailed": "OpenBot Code grupları okuyamadı",
   "connector.whatsapp.groupsEmpty": "Bu numara hiçbir grupta değil.",
   "connector.whatsapp.groupsNoMatch": "Bu adda bir grup yok.",
   "connector.whatsapp.groupAdded": "Eklendi",
@@ -487,9 +491,9 @@ export const messages = {
   "connector.whatsapp.deny": "Reddet",
   "connector.onePassword.title": "1Password",
   "connector.onePassword.description":
-    "Ajanların CodeBot tarayıcısında sitelere oturum açabilmesi için özel bir 1Password kasasını bir hizmet hesabı aracılığıyla CodeBot ile paylaşın.",
+    "Ajanların OpenBot Code tarayıcısında sitelere oturum açabilmesi için özel bir 1Password kasasını bir hizmet hesabı aracılığıyla OpenBot Code ile paylaşın.",
   "connector.onePassword.howItWorks":
-    "Bağlanma, 1Password hesabınızda “Shared with CodeBot” adlı bir kasa ve yalnızca bu kasayı okuyabilen bir hizmet hesabı oluşturur. CodeBot kayıtlı girişleri bu bilgisayardaki kendi tarayıcısında doldurur; bu nedenle yalnızca o kasaya taşıdığınız öğeler paylaşılır. Ajanlar hiçbir zaman parola görmez.",
+    "Bağlanma, 1Password hesabınızda “Shared with CodeBot” adlı bir kasa ve yalnızca bu kasayı okuyabilen bir hizmet hesabı oluşturur. OpenBot Code kayıtlı girişleri bu bilgisayardaki kendi tarayıcısında doldurur; bu nedenle yalnızca o kasaya taşıdığınız öğeler paylaşılır. Ajanlar hiçbir zaman parola görmez.",
   "connector.onePassword.connect": "1Password'e bağlan",
   "connector.onePassword.setupTitle": "Kurulum",
   "connector.onePassword.stepCliTitle": "1Password CLI'yi yükleyin",
@@ -497,20 +501,20 @@ export const messages = {
   "connector.onePassword.stepCliInstalling": "1Password CLI, 1Password'den indiriliyor",
   "connector.onePassword.stepCliReady": "{version} sürümü yüklü.",
   "connector.onePassword.stepCliMissing":
-    "CodeBot bunu 1Password'den kendi klasörüne indirir. Yönetici parolası gerekmez.",
+    "OpenBot Code bunu 1Password'den kendi klasörüne indirir. Yönetici parolası gerekmez.",
   "connector.onePassword.stepCliManual":
-    "CodeBot bunu bu bilgisayara yükleyemiyor. 1Password'den yükleyin, ardından bu sayfaya dönün.",
+    "OpenBot Code bunu bu bilgisayara yükleyemiyor. 1Password'den yükleyin, ardından bu sayfaya dönün.",
   "connector.onePassword.installCli": "Yükle",
   "connector.onePassword.stepAppTitle": "CLI entegrasyonunu açın",
   "connector.onePassword.stepAppDescription":
     "1Password uygulamasında Settings > Developer bölümünü açın ve “Integrate with 1Password CLI” seçeneğini açın.",
   "connector.onePassword.stepAppReady": "1Password uygulaması, CLI'nin paylaşılan kasayı oluşturmasına izin veriyor.",
   "connector.onePassword.openApp": "1Password'ü aç",
-  "connector.onePassword.openAppFailed": "CodeBot, 1Password'ü açamadı.",
+  "connector.onePassword.openAppFailed": "OpenBot Code, 1Password'ü açamadı.",
   "connector.onePassword.checkAgain": "Tekrar denetle",
   "connector.onePassword.stepVaultTitle": "Paylaşılan kasayı oluşturun",
   "connector.onePassword.stepVaultDescription":
-    "CodeBot, “Shared with CodeBot” kasasını ve yalnızca onu okuyabilen bir hizmet hesabı oluşturur. 1Password sizden onay ister.",
+    "OpenBot Code, “Shared with CodeBot” kasasını ve yalnızca onu okuyabilen bir hizmet hesabı oluşturur. 1Password sizden onay ister.",
   "connector.onePassword.useTokenDescription":
     "Bu adımlar yerine 1Password.com'dan bir hizmet hesabı belirteci yapıştırın.",
   "connector.onePassword.useTokenAction": "Belirteç kullan",
@@ -520,7 +524,7 @@ export const messages = {
   "connector.onePassword.approveInApp": "İsteği 1Password uygulamasında onaylayın",
   "connector.onePassword.cancel": "İptal",
   "connector.onePassword.chooseAccountTitle": "Bir hesap seçin",
-  "connector.onePassword.chooseAccountDescription": "CodeBot paylaşılan kasayı seçtiğiniz hesapta oluşturur.",
+  "connector.onePassword.chooseAccountDescription": "OpenBot Code paylaşılan kasayı seçtiğiniz hesapta oluşturur.",
   "connector.onePassword.useAccount": "Bu hesabı kullan",
   "connector.onePassword.vaultTitle": "Paylaşılan kasa",
   "connector.onePassword.vaultDescription":
@@ -533,14 +537,14 @@ export const messages = {
   "connector.onePassword.disconnect": "Bağlantıyı kes",
   "connector.onePassword.disconnectTitle": "1Password bağlantısını kes",
   "connector.onePassword.disconnectSummary":
-    "CodeBot belirteci unutur. Kasa ve hizmet hesabı 1Password'de kalır; artık gerekmiyorsa onları orada kaldırın.",
-  "connector.onePassword.actionFailed": "CodeBot 1Password bağlantısını değiştiremedi.",
+    "OpenBot Code belirteci unutur. Kasa ve hizmet hesabı 1Password'de kalır; artık gerekmiyorsa onları orada kaldırın.",
+  "connector.onePassword.actionFailed": "OpenBot Code 1Password bağlantısını değiştiremedi.",
   "connector.onePassword.statusConnected": "Bağlandı",
   "connector.onePassword.statusConnecting": "Bağlanıyor",
   "connector.onePassword.descriptionHost":
-    "Ayrı bir 1Password kasasını bir hizmet hesabıyla {host} üzerindeki CodeBot ile paylaşın; böylece {host} üzerindeki ajanlar onun tarayıcısında sitelere oturum açabilir.",
+    "Ayrı bir 1Password kasasını bir hizmet hesabıyla {host} üzerindeki OpenBot Code ile paylaşın; böylece {host} üzerindeki ajanlar onun tarayıcısında sitelere oturum açabilir.",
   "connector.onePassword.howItWorksHost":
-    "{host} bir hizmet hesabı belirteciyle bağlanır. 1Password.com'da yalnızca CodeBot ile paylaştığınız kasayı okuyabilen bir hizmet hesabı oluşturun ve belirtecini buraya yapıştırın. {host} belirteci denetler ve saklar; bu bilgisayar saklamaz. Ajanlar hiçbir zaman parola görmez.",
+    "{host} bir hizmet hesabı belirteciyle bağlanır. 1Password.com'da yalnızca OpenBot Code ile paylaştığınız kasayı okuyabilen bir hizmet hesabı oluşturun ve belirtecini buraya yapıştırın. {host} belirteci denetler ve saklar; bu bilgisayar saklamaz. Ajanlar hiçbir zaman parola görmez.",
   "connector.onePassword.disconnectSummaryHost":
     "{host} belirteci unutur. Kasa ve hizmet hesabı 1Password'de kalır; artık gerekmiyorsa onları orada kaldırın.",
   "connector.bitwarden.title": "Bitwarden",
@@ -548,25 +552,25 @@ export const messages = {
   "connector.bitwarden.setup":
     "Bitwarden CLI'yi yükleyin ve bw login ile oturum açın. Shared with CodeBot adlı bir klasör oluşturun ve içine yalnızca ajanların kullanabileceği girişleri koyun. bw unlock --raw komutunu çalıştırın ve oturum anahtarını aşağıya yapıştırın. Ana parolanızı yapıştırmayın.",
   "connector.bitwarden.scope":
-    "Bu bilgisayardaki tüm ajanlar Shared with CodeBot içindeki eşleşen girişleri kullanabilir. CodeBot tam HTTPS kaynaklarını kullanır. Ana parola istemi veya özel URI eşleştirme kuralı gerektiren öğeleri kullanmaz.",
+    "Bu bilgisayardaki tüm ajanlar Shared with CodeBot içindeki eşleşen girişleri kullanabilir. OpenBot Code tam HTTPS kaynaklarını kullanır. Ana parola istemi veya özel URI eşleştirme kuralı gerektiren öğeleri kullanmaz.",
   "connector.bitwarden.session":
-    "Oturum anahtarı bellekte kalır. Kasa 8 saat kullanılmazsa veya CodeBot kapanırsa tekrar bağlanın. Bağlantıyı kesmek CodeBot erişimini durdurur; diğer Bitwarden istemcilerini kilitlemez.",
+    "Oturum anahtarı bellekte kalır. Kasa 8 saat kullanılmazsa veya OpenBot Code kapanırsa tekrar bağlanın. Bağlantıyı kesmek OpenBot Code erişimini durdurur; diğer Bitwarden istemcilerini kilitlemez.",
   "connector.bitwarden.sessionKey": "Bitwarden oturum anahtarı",
   "connector.bitwarden.connect": "Bitwarden'a bağlan",
   "connector.bitwarden.disconnect": "Bitwarden bağlantısını kes",
   "connector.bitwarden.disconnectAction": "Bağlantıyı kes",
   "connector.bitwarden.disconnectSummary":
-    "CodeBot oturum anahtarını unutur. Ajanlar artık Bitwarden'dan giriş bilgisi dolduramaz. Diğer Bitwarden istemcilerinin kilidi açık kalır.",
+    "OpenBot Code oturum anahtarını unutur. Ajanlar artık Bitwarden'dan giriş bilgisi dolduramaz. Diğer Bitwarden istemcilerinin kilidi açık kalır.",
   "connector.bitwarden.disconnectSummaryHost":
     "{host} API anahtarını ve ana parolayı kaldırır. {host} üzerindeki ajanlar artık Bitwarden'dan giriş bilgisi dolduramaz.",
   "connector.bitwarden.connected": "Bağlandı",
-  "connector.bitwarden.actionFailed": "CodeBot Bitwarden bağlantısını değiştiremedi.",
+  "connector.bitwarden.actionFailed": "OpenBot Code Bitwarden bağlantısını değiştiremedi.",
   "connector.bitwarden.descriptionHost":
     "{host} üzerindeki tarayıcı girişlerini Bitwarden veya Vaultwarden'dan doldurun.",
   "connector.bitwarden.setupHost":
     "{host} kendi Bitwarden CLI'si ile oturum açar. Kasanızda Shared with CodeBot adlı bir klasör oluşturun ve içine yalnızca ajanların kullanabileceği girişleri koyun. Web kasasında Ayarlar › Güvenlik › Anahtarlar'ı açın ve API anahtarınızı görüntüleyin. Aşağıya sunucu adresini, client_id, client_secret ve ana parolanızı girin.",
   "connector.bitwarden.scopeHost":
-    "{host} üzerindeki tüm ajanlar Shared with CodeBot içindeki eşleşen girişleri kullanabilir. CodeBot tam HTTPS kaynaklarını kullanır. Ana parola isteyen öğeleri veya özel URI eşleşme kuralı olan öğeleri kullanmaz.",
+    "{host} üzerindeki tüm ajanlar Shared with CodeBot içindeki eşleşen girişleri kullanabilir. OpenBot Code tam HTTPS kaynaklarını kullanır. Ana parola isteyen öğeleri veya özel URI eşleşme kuralı olan öğeleri kullanmaz.",
   "connector.bitwarden.sessionHost":
     "{host}, yeniden başlatmadan sonra kilidi tekrar açabilmek için API anahtarını ve ana parolayı şifreli olarak saklar. Bu bilgisayar bunları saklamaz. Bağlantıyı kesmek bunları {host} üzerinden kaldırır. {host} sunucu adresine HTTPS ile ulaşabilmelidir.",
   "connector.bitwarden.serverUrl": "Sunucu adresi",
@@ -591,19 +595,19 @@ export const messages = {
   "connector.protonPass.keyPlaceholder": "pst_…",
   "connector.protonPass.setupTitle": "Kurulum",
   "connector.protonPass.setupDescription":
-    "Bağla, Proton oturum açma sayfasını tarayıcınızda açar. Sonra CodeBot paylaşılan kasayı oluşturur ve yalnızca salt okunur bir anahtar saklar.",
+    "Bağla, Proton oturum açma sayfasını tarayıcınızda açar. Sonra OpenBot Code paylaşılan kasayı oluşturur ve yalnızca salt okunur bir anahtar saklar.",
   "connector.protonPass.setupDescriptionHost":
     "Bağla, Proton oturum açma sayfasını tarayıcınızda açar. Sonra {host} paylaşılan kasayı oluşturur ve yalnızca salt okunur bir anahtar saklar.",
   "connector.protonPass.vaultName": "Shared with CodeBot",
   "connector.protonPass.vaultSetup":
-    "CodeBot bu kasayı bağlandığınızda oluşturur. Paylaşmak için oturum bilgilerini buraya taşıyın.",
+    "OpenBot Code bu kasayı bağlandığınızda oluşturur. Paylaşmak için oturum bilgilerini buraya taşıyın.",
   "connector.protonPass.showSteps": "Adımları göster",
   "connector.protonPass.stepsLabel": "Bağlantı adımları",
   "connector.protonPass.stepSignIn": "Oturum aç",
   "connector.protonPass.stepVault": "Paylaşılan kasayı oluştur",
   "connector.protonPass.stepDone": "Bitti",
   "connector.protonPass.signInTitle": "Proton’da oturum açın",
-  "connector.protonPass.signInStarting": "CodeBot oturum açmayı başlatıyor. Proton sayfası tarayıcınızda açılır.",
+  "connector.protonPass.signInStarting": "OpenBot Code oturum açmayı başlatıyor. Proton sayfası tarayıcınızda açılır.",
   "connector.protonPass.signInDescription":
     "Oturum açma tarayıcınızda açık. Proton parolanızı ve ikinci faktörünüzü ister.",
   "connector.protonPass.signInDescriptionHost":
@@ -614,7 +618,7 @@ export const messages = {
   "connector.protonPass.continue": "Devam",
   "connector.protonPass.setupStepTitle": "Paylaşılan kasa oluşturuluyor",
   "connector.protonPass.setupStepDescription":
-    "CodeBot “{vault}” kasasını ve onun için salt okunur bir anahtar oluşturur. Sonra Proton oturumunuzu kapatır.",
+    "OpenBot Code “{vault}” kasasını ve onun için salt okunur bir anahtar oluşturur. Sonra Proton oturumunuzu kapatır.",
   "connector.protonPass.doneTitle": "Proton Pass bağlandı",
   "connector.protonPass.doneDescription":
     "Ajanların oturum açabilmesi için oturum bilgilerini “{vault}” kasasına taşıyın.",
@@ -644,9 +648,9 @@ export const messages = {
   "connector.protonPass.keyNoExpiry": "Salt okunur. Süresi dolmaz.",
   "connector.protonPass.disconnectTitle": "Proton Pass bağlantısını kes",
   "connector.protonPass.disconnectSummary":
-    "CodeBot bu bilgisayardaki erişim anahtarını siler. Kasa ve içindeki oturum bilgileri Proton hesabınızda kalır.",
+    "OpenBot Code bu bilgisayardaki erişim anahtarını siler. Kasa ve içindeki oturum bilgileri Proton hesabınızda kalır.",
   "connector.protonPass.disconnectSummaryHost":
-    "CodeBot {host} üzerindeki erişim anahtarını siler. Kasa ve içindeki oturum bilgileri Proton hesabınızda kalır.",
+    "OpenBot Code {host} üzerindeki erişim anahtarını siler. Kasa ve içindeki oturum bilgileri Proton hesabınızda kalır.",
   "connector.protonPass.disconnect": "Bağlantıyı kes",
-  "connector.protonPass.actionFailed": "CodeBot, Proton Pass bağlantısını değiştiremedi.",
+  "connector.protonPass.actionFailed": "OpenBot Code, Proton Pass bağlantısını değiştiremedi.",
 } as const satisfies PartialTranslation<typeof source>;

@@ -2,27 +2,27 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/mobile/link";
 
 export const messages = {
-  "mobile.link.connectFailed": "CodeBot bağlanamadı. Tekrar deneyin.",
+  "mobile.link.connectFailed": "OpenBot Code bağlanamadı. Tekrar deneyin.",
   "mobile.link.invite.signInTitle": "Bu sunucuya katılmak için oturum açın",
   "mobile.link.invite.signInDescription":
-    "Bilgisayarınızdaki CodeBot'ta QR kodunu tarayın. Ardından daveti inceleyebilirsiniz.",
+    "Bilgisayarınızdaki OpenBot Code'da QR kodunu tarayın. Ardından daveti inceleyebilirsiniz.",
   "mobile.link.invite.cancel": "Daveti iptal et",
   "mobile.link.pairing.title": "Bu telefonu bağlayın",
   "mobile.link.pairing.alreadySignedIn":
     "Zaten oturum açtınız. Başka bir hesap bağlamadan önce Ayarlar'dan oturumu kapatın.",
   "mobile.link.pairing.description": "Yalnızca bu Mobile Connect bağlantısını masaüstünüzden istediyseniz devam edin.",
   "mobile.link.pairing.accountService":
-    "Bu bağlantı CodeBot hesap hizmetine değil, {origin} adresindeki hesap hizmetine bağlanır.",
+    "Bu bağlantı OpenBot Code hesap hizmetine değil, {origin} adresindeki hesap hizmetine bağlanır.",
   "mobile.link.pairing.connect": "Bağlan",
   "mobile.link.plugin.title": "Eklenti sayfasını aç",
-  "mobile.link.plugin.description": "Bu eklentiyi CodeBot web sitesinde görüntüleyin.",
+  "mobile.link.plugin.description": "Bu eklentiyi OpenBot Code web sitesinde görüntüleyin.",
   "mobile.link.plugin.openFailed": "Eklenti sayfası açılamadı.",
   "mobile.link.plugin.view": "Eklentiyi görüntüle",
   "mobile.link.unavailable.title": "Bağlantı kullanılamıyor",
   "mobile.link.unavailable.description": "Bu bağlantı geçersiz, artık kullanılamıyor veya mobilde desteklenmiyor.",
   "mobile.link.template.signInTitle": "Bu ajanı eklemek için oturum açın",
   "mobile.link.template.signInDescription":
-    "Bilgisayarınızdaki CodeBot'ta QR kodunu tarayın. Ardından ajanı eklemeden önce inceleyebilirsiniz.",
+    "Bilgisayarınızdaki OpenBot Code'da QR kodunu tarayın. Ardından ajanı eklemeden önce inceleyebilirsiniz.",
   "mobile.link.template.loading": "Ajan yükleniyor…",
   "mobile.link.template.creator": "{name} tarafından",
   "mobile.link.template.section.instructions": "Talimatlar",
@@ -34,7 +34,8 @@ export const messages = {
   "mobile.link.template.skill.marketplace": "Pazaryeri becerisi, sürüm {version}",
   "mobile.link.template.server.title": "Sunucuya ekle",
   "mobile.link.template.server.footer": "Yalnızca sahip veya yönetici olduğunuz sunucular listelenir.",
-  "mobile.link.template.server.updateRequired": "Paylaşılan ajanları eklemek için bu sunucudaki CodeBot'u güncelleyin.",
+  "mobile.link.template.server.updateRequired":
+    "Paylaşılan ajanları eklemek için bu sunucudaki OpenBot Code'u güncelleyin.",
   "mobile.link.template.server.none":
     "Paylaşılan bir ajan eklemek için bir sunucunun sahibi veya yöneticisi olmalısınız.",
   "mobile.link.template.install.action": "Ajan ekle",
@@ -45,5 +46,5 @@ export const messages = {
   "mobile.link.template.error.title": "Ajan yüklenemedi",
   "mobile.link.template.error.loadFailed": "Paylaşılan ajan okunamadı. Tekrar deneyin.",
   "mobile.link.template.error.unsupported":
-    "Bu sunucu paylaşılan ajanları ekleyemiyor. Sunucuyu çalıştıran bilgisayardaki CodeBot'u güncelleyin.",
+    "Bu sunucu paylaşılan ajanları ekleyemiyor. Sunucuyu çalıştıran bilgisayardaki OpenBot Code'u güncelleyin.",
 } as const satisfies PartialTranslation<typeof source>;

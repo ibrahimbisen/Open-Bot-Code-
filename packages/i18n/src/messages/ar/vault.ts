@@ -4,9 +4,9 @@ import type { messages as source } from "../en/vault";
 export const messages = {
   "vault.items.title": "العناصر المحفوظة",
   "vault.items.description":
-    "يمكن لكل وكيل على هذا الخادم استخدام هذه العناصر. يكتب CodeBot كلمات المرور وأرقام البطاقات ورموز الأمان في الصفحة، لذا لا يراها الوكلاء أبدًا. يقرأ الوكلاء مفاتيح API من ملف، لا من الدردشة.",
+    "يمكن لكل وكيل على هذا الخادم استخدام هذه العناصر. يكتب OpenBot Code كلمات المرور وأرقام البطاقات ورموز الأمان في الصفحة، لذا لا يراها الوكلاء أبدًا. يقرأ الوكلاء مفاتيح API من ملف، لا من الدردشة.",
   "vault.items.scopedDescription":
-    "كل عنصر مخصص للوكلاء الذين تختارهم. يكتب CodeBot كلمات المرور وأرقام البطاقات ورموز الأمان في الصفحة، لذا لا يراها الوكلاء أبدًا. يقرأ الوكلاء مفاتيح API من ملف، لا من الدردشة. يعمل كل الوكلاء كمستخدم النظام نفسه، لذا يمكن للوكيل أيضًا قراءة ملف مفتاح API مخصص لوكلاء آخرين.",
+    "كل عنصر مخصص للوكلاء الذين تختارهم. يكتب OpenBot Code كلمات المرور وأرقام البطاقات ورموز الأمان في الصفحة، لذا لا يراها الوكلاء أبدًا. يقرأ الوكلاء مفاتيح API من ملف، لا من الدردشة. يعمل كل الوكلاء كمستخدم النظام نفسه، لذا يمكن للوكيل أيضًا قراءة ملف مفتاح API مخصص لوكلاء آخرين.",
   "vault.agents.label": "الوكلاء",
   "vault.agents.all": "كل الوكلاء",
   "vault.agents.some": "{chosen} من {total}",
@@ -101,18 +101,18 @@ export const messages = {
   "vault.importMenu": "استيراد من CSV",
   "vault.importTitle": "استيراد من ملف CSV",
   "vault.importDescription":
-    "استورد بيانات الدخول من ملف CSV يصدّره 1Password أو Bitwarden أو Chrome أو Edge أو Firefox أو Safari أو Apple Passwords أو LastPass أو Proton Pass. يقرأ CodeBot الملف على هذا الحاسوب ولا يرفعه.",
+    "استورد بيانات الدخول من ملف CSV يصدّره 1Password أو Bitwarden أو Chrome أو Edge أو Firefox أو Safari أو Apple Passwords أو LastPass أو Proton Pass. يقرأ OpenBot Code الملف على هذا الحاسوب ولا يرفعه.",
   "vault.importChoose": "اختيار ملف CSV",
   "vault.importDone": "المستورد: {imported}. المتخطى: {skipped}.",
   "vault.unavailableTitle": "لا يمكن لهذا الحاسوب حفظ الأسرار",
   "vault.unavailableDescription":
-    "يشفّر CodeBot الخزنة باستخدام مخزن الأسرار في النظام. أعدّ سلسلة مفاتيح، ثم افتح هذه الصفحة مرة أخرى.",
-  "vault.unreadableTitle": "لا يمكن لـ CodeBot قراءة الخزنة",
+    "يشفّر OpenBot Code الخزنة باستخدام مخزن الأسرار في النظام. أعدّ سلسلة مفاتيح، ثم افتح هذه الصفحة مرة أخرى.",
+  "vault.unreadableTitle": "لا يمكن لـ OpenBot Code قراءة الخزنة",
   "vault.unreadableDescription":
-    "ملف الخزنة موجود على هذا الحاسوب، لكن لا يمكن لـ CodeBot فك تشفيره. قد يحدث ذلك عند تغيّر سلسلة مفاتيح النظام. أعد تعيين الخزنة للبدء من جديد دون عناصر.",
+    "ملف الخزنة موجود على هذا الحاسوب، لكن لا يمكن لـ OpenBot Code فك تشفيره. قد يحدث ذلك عند تغيّر سلسلة مفاتيح النظام. أعد تعيين الخزنة للبدء من جديد دون عناصر.",
   "vault.reset": "إعادة تعيين الخزنة",
   "vault.resetTitle": "إعادة تعيين الخزنة؟",
-  "vault.resetDescription": "يحذف CodeBot ملف الخزنة وكل العناصر فيه. لا يمكنك التراجع عن ذلك.",
+  "vault.resetDescription": "يحذف OpenBot Code ملف الخزنة وكل العناصر فيه. لا يمكنك التراجع عن ذلك.",
   "vault.request.private": "يُحفظ في خزنتك. لا يراه {agent} أبدًا.",
   "vault.request.privateUnnamed": "يُحفظ في خزنتك. لا يراه الوكيل أبدًا.",
   "vault.request.addLogin": "إضافة بيانات دخول",
@@ -136,7 +136,7 @@ export const messages = {
   },
   "vault.twoStep.setupTitle": "إعداد رمز التحقق بخطوتين",
   "vault.twoStep.setupIntro":
-    "على {site}، فعّل التحقق بخطوتين باستخدام تطبيق مصادقة. عندما يعرض الموقع رمز QR، أعطِ CodeBot مفتاحه.",
+    "على {site}، فعّل التحقق بخطوتين باستخدام تطبيق مصادقة. عندما يعرض الموقع رمز QR، أعطِ OpenBot Code مفتاحه.",
   "vault.twoStep.keyLabel": "مفتاح الإعداد أو رابط otpauth://",
   "vault.twoStep.keyHint": "تعرضه معظم المواقع أسفل رمز QR، باسم ”لا يمكنك المسح؟“ أو ”أدخل المفتاح يدويًا“.",
   "vault.twoStep.keyInvalid": "هذا ليس مفتاح تحقق بخطوتين.",

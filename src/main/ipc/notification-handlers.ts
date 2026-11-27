@@ -30,7 +30,7 @@ export function notificationIpcHandlers({
       }),
       test: handler(() => {
         if (!Notification.isSupported()) throw new Error(sourceText("error.app.notificationsUnsupported"));
-        showRetainedNotification(new Notification({ title: "CodeBot", body: translate("notification.test") }));
+        showRetainedNotification(new Notification({ title: "OpenBot Code", body: translate("notification.test") }));
       }),
       openSettings: handler(async () => {
         const url = notificationSettingsUrl(process.platform);

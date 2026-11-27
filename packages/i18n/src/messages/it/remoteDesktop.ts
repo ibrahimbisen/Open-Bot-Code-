@@ -9,7 +9,7 @@ export const messages = {
   "remoteDesktop.workspaceLabel": "Controllo remoto",
   "remoteDesktop.displayLabel": "Schermo remoto",
   "remoteDesktop.selectDisplay": "Seleziona schermo",
-  "remoteDesktop.backToCodeBot": "Torna a CodeBot",
+  "remoteDesktop.backToCodeBot": "Torna a OpenBot Code",
   "remoteDesktop.disconnect": "Disconnetti",
   "remoteDesktop.viewerTitle": "Desktop remoto Sunshine",
   "remoteDesktop.viewerLoadFailed": "Impossibile caricare il visualizzatore Moonlight.",
@@ -20,7 +20,7 @@ export const messages = {
   "remoteDesktop.openFailed": "Impossibile aprire il desktop",
   "remoteDesktop.notSharingTitle": "{name} non sta condividendo lo schermo",
   "remoteDesktop.notSharingDescription":
-    "Il server impedisce a CodeBot di registrare lo schermo. Su quel server apri Impostazioni di Sistema → Privacy e sicurezza → Registrazione schermo, attiva CodeBot, poi riprova da qui.",
+    "Il server impedisce a OpenBot Code di registrare lo schermo. Su quel server apri Impostazioni di Sistema → Privacy e sicurezza → Registrazione schermo, attiva OpenBot Code, poi riprova da qui.",
   "remoteDesktop.setup.check.screenRecording": "Registrazione schermo",
   "remoteDesktop.setup.check.accessibility": "Accessibilità",
   "remoteDesktop.setup.check.service": "Servizio Sunshine",
@@ -41,7 +41,7 @@ export const messages = {
   "remoteDesktop.setup.startFailed": "Impossibile avviare il test del desktop remoto.",
   "remoteDesktop.setup.connectionLost": "La connessione di prova è stata persa.",
   "remoteDesktop.setup.hostUpdateRequired":
-    "Aggiorna CodeBot sul server per controllare i permessi e testare il desktop remoto.",
+    "Aggiorna OpenBot Code sul server per controllare i permessi e testare il desktop remoto.",
   "remoteDesktop.setup.permissions": "Permessi",
   "remoteDesktop.setup.checked": "Controllato",
   "remoteDesktop.setup.checkAgain": "Controlla di nuovo",
@@ -76,12 +76,12 @@ export const messages = {
   "remoteDesktop.setup.finishTest": "Termina il test",
   "remoteDesktop.host.questionTitle": "{name} vuole controllare questo computer",
   "remoteDesktop.host.questionDetail":
-    "{name} vedrà il tuo schermo e potrà usare mouse e tastiera. Se non rispondi entro 30 secondi, CodeBot rifiuta la richiesta.",
+    "{name} vedrà il tuo schermo e potrà usare mouse e tastiera. Se non rispondi entro 30 secondi, OpenBot Code rifiuta la richiesta.",
   "remoteDesktop.host.allow": "Consenti",
   "remoteDesktop.host.deny": "Rifiuta",
   "remoteDesktop.host.startedTitle": "Controllo remoto avviato",
   "remoteDesktop.host.startedBody": "{name} ora controlla questo computer.",
-  "remoteDesktop.host.trayTooltip": "CodeBot: controllo remoto attivo",
+  "remoteDesktop.host.trayTooltip": "OpenBot Code: controllo remoto attivo",
   "remoteDesktop.host.trayControlledBy": "{name} controlla questo computer",
   "remoteDesktop.host.stopAll": "Interrompi tutto il controllo remoto",
 } as const satisfies PartialTranslation<typeof source>;

@@ -80,12 +80,12 @@ export const messages = {
   "composer.voice.transcribing": "Transcription de la demande vocale",
   "composer.voice.start": "Créer une demande à la voix",
   "composer.voice.blocked":
-    "L’accès au microphone est bloqué. Autorisez CodeBot à utiliser le microphone dans les réglages du système.",
+    "L’accès au microphone est bloqué. Autorisez OpenBot Code à utiliser le microphone dans les réglages du système.",
   "composer.voice.noMicrophone": "Aucun microphone n’est disponible.",
-  "composer.voice.startFailed": "CodeBot n’a pas pu démarrer l’enregistrement vocal.",
+  "composer.voice.startFailed": "OpenBot Code n’a pas pu démarrer l’enregistrement vocal.",
   "composer.voice.microphoneUnavailable":
-    "CodeBot n’a pas pu ouvrir le microphone. Fermez les autres apps qui l’utilisent, vérifiez qu’il est branché et autorisé dans les réglages du système, puis réessayez.",
-  "composer.voice.transcribeFailed": "CodeBot n’a pas pu transcrire cet enregistrement.",
+    "OpenBot Code n’a pas pu ouvrir le microphone. Fermez les autres apps qui l’utilisent, vérifiez qu’il est branché et autorisé dans les réglages du système, puis réessayez.",
+  "composer.voice.transcribeFailed": "OpenBot Code n’a pas pu transcrire cet enregistrement.",
   "composer.reply.toYou": "Réponse à votre message",
   "composer.reply.toAgent": "Réponse à l’agent",
   "composer.reply.attachment": "Pièce jointe",

@@ -14,10 +14,11 @@ export const messages = {
   "mobile.server.drawer.hiddenServers": "Servidores ocultos",
   "mobile.server.drawer.hideFailed": "No se pudo ocultar {name}",
   "mobile.server.drawer.showFailed": "No se pudo mostrar {name}",
-  "mobile.server.drawer.actionFailed": "CodeBot no pudo completar esta acción. Inténtalo de nuevo.",
+  "mobile.server.drawer.actionFailed": "OpenBot Code no pudo completar esta acción. Inténtalo de nuevo.",
   "mobile.server.drawer.moveUp": "Subir",
   "mobile.server.drawer.moveDown": "Bajar",
-  "mobile.server.drawer.orderHint": "CodeBot se abre en el primer servidor. El orden se guarda en este dispositivo.",
+  "mobile.server.drawer.orderHint":
+    "OpenBot Code se abre en el primer servidor. El orden se guarda en este dispositivo.",
   "mobile.server.drawer.title": "Servidores",
   "mobile.server.drawer.serverSettings": "Ajustes del servidor",
   "mobile.server.drawer.serverListHint": "Muestra u oculta los servidores",
@@ -33,13 +34,12 @@ export const messages = {
     "Arrastra los controles para mover herramientas. Las herramientas sin fijar solo aparecen al editar. El orden se guarda en este dispositivo.",
   "mobile.server.drawer.doneEditingSidebar": "Terminar de editar",
   "mobile.server.drawer.join": "Unirse a un servidor",
-  "mobile.server.drawer.add": "Añadir un servidor",
   "mobile.server.drawer.settings": "Ajustes",
   "mobile.server.drawer.close": "Cerrar el panel de servidores",
   "mobile.server.invite.noExpiry": "{role} · Sin caducidad",
   "mobile.server.invite.expires": "{role} · Caduca el {date}",
-  "mobile.server.invite.loadFailed": "CodeBot no pudo cargar esta invitación.",
-  "mobile.server.invite.joinFailed": "CodeBot no pudo unirse a este servidor.",
+  "mobile.server.invite.loadFailed": "OpenBot Code no pudo cargar esta invitación.",
+  "mobile.server.invite.joinFailed": "OpenBot Code no pudo unirse a este servidor.",
   "mobile.server.invite.checking": "Comprobando la invitación…",
   "mobile.server.invite.unavailable": "Invitación no disponible",
   "mobile.server.invite.verifying": "Verificando la identidad del servidor.",
@@ -57,32 +57,12 @@ export const messages = {
   "mobile.server.join.inviteLink": "Enlace de invitación",
   "mobile.server.join.joining": "Uniéndote…",
   "mobile.server.join.submit": "Unirse al servidor",
-  "mobile.server.hosted.loading": "Cargando planes…",
-  "mobile.server.hosted.loadFailed": "No se pudieron cargar los planes. Inténtalo de nuevo.",
-  "mobile.server.hosted.wakeFailed": "No se pudo iniciar el servidor. Inténtalo de nuevo.",
   "mobile.server.hosted.restartFailed": "No se pudo reiniciar el servidor. Inténtalo de nuevo.",
-  "mobile.server.hosted.unavailable": "Los servidores en la nube no están disponibles para esta cuenta.",
-  "mobile.server.hosted.defaultName": "Servidor en la nube",
-  "mobile.server.hosted.monthly": "Mensual",
-  "mobile.server.hosted.yearly": "Anual",
-  "mobile.server.hosted.plan.starter": "Starter",
-  "mobile.server.hosted.plan.standard": "Standard",
-  "mobile.server.hosted.plan.pro": "Pro",
-  "mobile.server.hosted.plan.starterSummary": "Para un agente y algunas rutinas.",
-  "mobile.server.hosted.plan.standardSummary": "Para un equipo pequeño con rutinas diarias.",
-  "mobile.server.hosted.plan.proSummary": "Para muchos agentes y trabajo intensivo con el navegador.",
-  "mobile.server.hosted.members": { one: "Hasta {count} miembro", other: "Hasta {count} miembros" },
-  "mobile.server.hosted.storage": { one: "{count} GB de almacenamiento", other: "{count} GB de almacenamiento" },
-  "mobile.server.hosted.sites": { one: "Hasta {count} sitio alojado", other: "Hasta {count} sitios alojados" },
-  "mobile.server.hosted.speedBase": "Velocidad base",
-  "mobile.server.hosted.speedFaster": "{factor}× más rápido",
-  "mobile.server.hosted.joinHint": "Usa una invitación del propietario de un servidor.",
-  "mobile.server.hosted.join": "Unirse a un servidor",
   "mobile.server.local.option": "Nuevo servidor local en el ordenador",
   "mobile.server.local.optionHint": "En el ordenador que ejecuta {name}, con sus propios agentes, chats y archivos.",
   "mobile.server.local.title": "Nuevo servidor",
   "mobile.server.local.description":
-    "El servidor se ejecuta en el ordenador que ejecuta {name}, con sus propios agentes, chats y archivos. Está disponible mientras CodeBot se ejecuta en ese ordenador.",
+    "El servidor se ejecuta en el ordenador que ejecuta {name}, con sus propios agentes, chats y archivos. Está disponible mientras OpenBot Code se ejecuta en ese ordenador.",
   "mobile.server.local.nameLabel": "Nombre del servidor",
   "mobile.server.local.nameTooShort": "Usa al menos {limit} caracteres.",
   "mobile.server.local.create": "Crear",
@@ -94,75 +74,13 @@ export const messages = {
   "mobile.server.local.createdOn": "{name} se ejecuta en el mismo ordenador que {computer}.",
   "mobile.server.local.waiting": "Esperando a que {name} esté en línea…",
   "mobile.server.local.notPublished":
-    "{name} se ejecuta, pero este teléfono aún no puede abrirlo. Comprueba que CodeBot en el ordenador que ejecuta {computer} tiene la sesión iniciada y está en línea.",
+    "{name} se ejecuta, pero este teléfono aún no puede abrirlo. Comprueba que OpenBot Code en el ordenador que ejecuta {computer} tiene la sesión iniciada y está en línea.",
   "mobile.server.local.open": "Abrir servidor",
   "mobile.server.local.ownerOnly": "Solo el propietario puede crear un servidor en este ordenador.",
-  "mobile.server.local.unsupported": "Actualiza CodeBot en este ordenador para crear un servidor aquí.",
+  "mobile.server.local.unsupported": "Actualiza OpenBot Code en este ordenador para crear un servidor aquí.",
   "mobile.server.local.deleteOffline":
-    "Solo el ordenador de este servidor puede eliminarlo. Abre CodeBot en ese ordenador e inténtalo de nuevo.",
-  "mobile.server.hosted.intro.title": "Tus agentes, siempre activos",
-  "mobile.server.hosted.intro.description":
-    "Un servidor en la nube ejecuta tus agentes y rutinas cuando tu equipo está apagado. CodeBot lo configura y lo mantiene en marcha.",
-  "mobile.server.hosted.planFacts": "{members} · {storage} · {sites} · {speed}",
-  "mobile.server.hosted.steps.title": "Añádelo en tu ordenador",
-  "mobile.server.hosted.steps.open": "Abre CodeBot en tu ordenador.",
-  "mobile.server.hosted.steps.settings": "Ve a Ajustes → Servidores alojados.",
-  "mobile.server.hosted.steps.add": "Selecciona Añadir servidor y elige un plan.",
-  "mobile.server.hosted.plansToggle": "Qué incluye cada plan",
-  "mobile.server.hosted.computer.add": "Añadir un servidor en la nube",
-  "mobile.server.hosted.computer.addHint":
-    "En CodeBot, abre Ajustes → Servidores alojados y selecciona Añadir servidor.",
-  "mobile.server.hosted.computer.change": "Cambiar de plan",
-  "mobile.server.hosted.computer.changeHint": "En CodeBot, abre Ajustes → Facturación.",
-  "mobile.server.hosted.yourServers": "Tus servidores",
-  "mobile.server.hosted.currentPlan": "Tu plan",
-  "mobile.server.hosted.soldOut": "Agotado",
-  "mobile.server.hosted.serverPlan": "{plan} · {interval}",
-  "mobile.server.hosted.serverPlanEnds": "{plan} · {interval} · Termina el {date}",
-  "mobile.server.hosted.serverDataKept": "{plan} · Datos guardados hasta el {date}",
-  "mobile.server.hosted.state.payment": "Pago pendiente",
-  "mobile.server.hosted.state.setup": "Configurando",
-  "mobile.server.hosted.state.restoring": "Restaurando datos",
-  "mobile.server.hosted.state.starting": "Iniciando",
-  "mobile.server.hosted.state.running": "En ejecución",
-  "mobile.server.hosted.state.stopped": "Detenido",
-  "mobile.server.hosted.state.planEnded": "Plan finalizado",
-  "mobile.server.hosted.state.failed": "No se pudo iniciar",
-  "mobile.server.hosted.paymentTitle": "Esperando el pago",
-  "mobile.server.hosted.paymentDescription": "La configuración empieza cuando se confirma el pago.",
-  "mobile.server.hosted.progressTitle": "Configurando {name}",
-  "mobile.server.hosted.progressDescription": "CodeBot prepara una máquina privada para ti.",
-  "mobile.server.hosted.closeHint":
-    "Puedes cerrar este panel. La configuración continúa y el servidor aparecerá en tu lista cuando esté listo.",
-  "mobile.server.hosted.readyTitle": "{name} está listo",
-  "mobile.server.hosted.readyDescription":
-    "Funciona incluso cuando tu equipo está apagado y se vuelve a iniciar cuando lo usas.",
-  "mobile.server.hosted.open": "Abrir servidor",
-  "mobile.server.hosted.failedTitle": "El servidor no pudo iniciarse",
-  "mobile.server.hosted.failedDescription":
-    "Inténtalo de nuevo. Si vuelve a fallar, elimina el servidor en Ajustes en CodeBot en tu equipo.",
-  "mobile.server.hosted.retrying": "Iniciando…",
-  "mobile.server.hosted.expiredTitle": "La página de pago ha caducado",
-  "mobile.server.hosted.expiredDescription": "El servidor no se pagó, así que se eliminó.",
-  "mobile.server.hosted.step.payment": "Confirmar el pago",
-  "mobile.server.hosted.step.create": "Crear la máquina",
-  "mobile.server.hosted.step.start": "Iniciar CodeBot",
-  "mobile.server.hosted.step.connect": "Conectar con tu cuenta",
-  "mobile.server.hosted.detail.payment": "Esperando a Stripe",
-  "mobile.server.hosted.detail.reserve": "Reservando una máquina privada",
-  "mobile.server.hosted.detail.copy": "Copiando CodeBot a la máquina",
-  "mobile.server.hosted.detail.key": "Añadiendo una clave de inicio de sesión de un solo uso",
-  "mobile.server.hosted.detail.boot": "Encendiendo la máquina",
-  "mobile.server.hosted.detail.app": "Iniciando CodeBot",
-  "mobile.server.hosted.detail.wait": "Esperando la respuesta de CodeBot",
-  "mobile.server.hosted.detail.signIn": "Iniciando sesión con tu identidad",
-  "mobile.server.hosted.detail.publish": "Añadiendo el servidor a tu cuenta",
-  "mobile.server.hosted.detail.check": "Comprobando la conexión",
-  "mobile.server.hosted.stepDone": "completado",
-  "mobile.server.hosted.stepActive": "en curso",
-  "mobile.server.hosted.stepPending": "sin iniciar",
-  "mobile.server.hosted.stepFailed": "fallido",
-  "mobile.server.scan.notInvitation": "Este código QR no es una invitación de CodeBot.",
+    "Solo el ordenador de este servidor puede eliminarlo. Abre OpenBot Code en ese ordenador e inténtalo de nuevo.",
+  "mobile.server.scan.notInvitation": "Este código QR no es una invitación de OpenBot Code.",
   "mobile.server.scan.title": "Escanear invitación",
   "mobile.server.role.owner": "propietario",
   "mobile.server.role.admin": "administrador",
@@ -202,7 +120,7 @@ export const messages = {
   "mobile.server.routines.status.paused": "En pausa",
   "mobile.server.routines.status.failed": "Fallida",
   "mobile.server.routines.status.completed": "Completada",
-  "mobile.server.threads.unsupported": "Este host no admite hilos. Actualiza CodeBot en el host.",
+  "mobile.server.threads.unsupported": "Este host no admite hilos. Actualiza OpenBot Code en el host.",
   "mobile.server.threads.ask": "¿Qué quieres que se haga?",
   "mobile.server.threads.chooseAgent": "Iniciar el hilo con",
   "mobile.server.threads.agentLabel": "Iniciar el hilo con {name}",
@@ -269,7 +187,7 @@ export const messages = {
     "El servidor se detiene y se vuelve a iniciar. Tarda alrededor de un minuto. Los turnos de agentes en curso se detienen y los miembros pierden la conexión hasta que el servidor vuelva. Los archivos y chats se conservan.",
   "mobile.server.settings.restartConfirm": "Reiniciar",
   "mobile.server.settings.restarted": "{name} se está reiniciando",
-  "mobile.server.settings.restartUnsupported": "Actualiza CodeBot en este servidor para reiniciarlo desde aquí.",
+  "mobile.server.settings.restartUnsupported": "Actualiza OpenBot Code en este servidor para reiniciarlo desde aquí.",
   "mobile.server.settings.leaveTitle": "¿Salir de {name}?",
   "mobile.server.settings.leaveBody": "Necesitarás otra invitación para volver a unirte.",
   "mobile.server.settings.leave": "Salir del servidor",
@@ -281,7 +199,7 @@ export const messages = {
   "mobile.server.settings.show": "Mostrar servidor",
   "mobile.server.settings.deleteTitle": "¿Eliminar {name}?",
   "mobile.server.settings.deleteBody":
-    "CodeBot detiene el servidor en su ordenador y mueve sus agentes, chats y archivos a la papelera de ese ordenador. El servidor sale de la lista de servidores en todos tus dispositivos.",
+    "OpenBot Code detiene el servidor en su ordenador y mueve sus agentes, chats y archivos a la papelera de ese ordenador. El servidor sale de la lista de servidores en todos tus dispositivos.",
   "mobile.server.settings.delete": "Eliminar servidor",
   "mobile.server.settings.name": "Nombre del servidor",
   "mobile.server.settings.nameLength": "Usa entre {min} y {max} caracteres.",
@@ -295,7 +213,7 @@ export const messages = {
   "mobile.server.settings.identityNotAllowed":
     "Solo un propietario o un administrador puede cambiar el nombre y el logotipo del servidor.",
   "mobile.server.settings.identityUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su nombre y logotipo.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su nombre y logotipo.",
   "mobile.server.settings.identityOffline": "Conéctate a este servidor para cambiar su nombre y logotipo.",
   "mobile.server.settings.appearance": "Forma y color",
   "mobile.server.settings.appearanceShape": "Forma",
@@ -362,7 +280,7 @@ export const messages = {
   "mobile.server.storage.category.caches": "Archivos del servidor en caché",
   "mobile.server.storage.category.runtimes": "Entornos de ejecución de proveedores",
   "mobile.server.storage.category.logs": "Registros",
-  "mobile.server.storage.total": "CodeBot en {name}",
+  "mobile.server.storage.total": "OpenBot Code en {name}",
   "mobile.server.storage.used": "Usado",
   "mobile.server.storage.byType": "Almacenamiento por tipo",
   "mobile.server.storage.free": "{size} libres en este disco",
@@ -384,10 +302,10 @@ export const messages = {
   "mobile.server.storage.clearTitle.caches": "¿Borrar los archivos del servidor en caché?",
   "mobile.server.storage.clearTitle.logs": "¿Borrar los registros?",
   "mobile.server.storage.clearBody.caches":
-    "Copias de archivos del servidor. CodeBot los descarga de nuevo cuando los abres.",
+    "Copias de archivos del servidor. OpenBot Code los descarga de nuevo cuando los abres.",
   "mobile.server.storage.clearBody.logs": "Registros de diagnóstico. Los nuevos registros se inician de inmediato.",
   "mobile.server.storage.clearFailed": "No se pudieron borrar los datos",
-  "mobile.server.storage.clearFailedBody": "CodeBot no pudo borrar estos datos en el servidor.",
+  "mobile.server.storage.clearFailedBody": "OpenBot Code no pudo borrar estos datos en el servidor.",
   "mobile.server.storage.noFiles": "No hay archivos almacenados en este servidor.",
   "mobile.server.library.type.all": "Todos",
   "mobile.server.library.type.images": "Imágenes",
@@ -477,7 +395,8 @@ export const messages = {
   "mobile.server.settings.timezoneSaveFailed": "No se pudo guardar la zona horaria. Inténtalo de nuevo.",
   "mobile.server.settings.timezoneUnavailable":
     "Conéctate a este servidor como propietario o administrador para cambiar su zona horaria.",
-  "mobile.server.settings.timezoneUnsupported": "Actualiza CodeBot en este servidor para cambiar aquí su zona horaria.",
+  "mobile.server.settings.timezoneUnsupported":
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su zona horaria.",
   "mobile.server.settings.signalHomeAutomatic": "Automático",
   "mobile.server.settings.signalHomeNearest": "El servidor de Signal más cercano",
   "mobile.server.settings.signalHomeInUse": "En uso: {name}",
@@ -486,7 +405,7 @@ export const messages = {
   "mobile.server.settings.signalHomeUnavailable":
     "Conéctate a este servidor como propietario o administrador para cambiar su servidor de Signal.",
   "mobile.server.settings.signalHomeUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su servidor de Signal.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su servidor de Signal.",
   "mobile.server.settings.signalHomeDescription":
     "Los miembros se conectan a este servidor a través de este servidor de Signal. Un servidor de Signal con menos latencia da conexiones más rápidas.",
   "mobile.server.settings.signalHomeFallback":
@@ -508,7 +427,7 @@ export const messages = {
   "mobile.server.settings.voiceModelSaveFailed":
     "No se pudo cambiar el modelo de reconocimiento de voz. Inténtalo de nuevo.",
   "mobile.server.settings.voiceModelUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su reconocimiento de voz.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su reconocimiento de voz.",
   "mobile.server.settings.voiceModelReady": "Listo",
   "mobile.server.settings.voiceModelDownloading": "Descargando: {percent}",
   "mobile.server.settings.voiceModelSize": "Descarga de {size}",
@@ -532,7 +451,7 @@ export const messages = {
     "El servidor usa la clave nueva. Esta app pasa a ella cuando se vuelva a cargar la lista de servidores.",
   "mobile.server.settings.keyChangeFailed": "No se pudo cambiar la clave del servidor. Inténtalo de nuevo.",
   "mobile.server.settings.keyOwnerOnly": "Solo el propietario puede cambiar la clave del servidor.",
-  "mobile.server.settings.keyUnsupported": "Actualiza CodeBot en este servidor para cambiar su clave aquí.",
+  "mobile.server.settings.keyUnsupported": "Actualiza OpenBot Code en este servidor para cambiar su clave aquí.",
   "mobile.server.settings.turnLimit": "Hilos a la vez",
   "mobile.server.settings.turnLimitDescription":
     "Cuántos hilos de agentes pueden ejecutarse a la vez en este servidor. Más hilos usan más memoria.",
@@ -542,7 +461,7 @@ export const messages = {
   "mobile.server.settings.turnLimitsLoadFailed": "No se pudieron cargar los límites de hilos de este servidor.",
   "mobile.server.settings.turnLimitsSaveFailed": "No se pudo guardar el límite de hilos. Inténtalo de nuevo.",
   "mobile.server.settings.turnLimitsUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su límite de hilos.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su límite de hilos.",
   "mobile.server.settings.agentTaskLimit": "Hilos en paralelo por agente",
   "mobile.server.settings.agentTaskLimitDescription":
     "Cuántos hilos puede ejecutar a la vez cada agente que no tiene un límite propio.",
@@ -552,7 +471,7 @@ export const messages = {
   "mobile.server.settings.memoryLimitLoadFailed": "No se pudo cargar el límite de recuerdos de este servidor.",
   "mobile.server.settings.memoryLimitSaveFailed": "No se pudo guardar el límite de recuerdos. Inténtalo de nuevo.",
   "mobile.server.settings.memoryLimitUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su límite de recuerdos.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su límite de recuerdos.",
   "mobile.server.settings.mediaApprovalCredits": "Preguntar antes de gastar más de",
   "mobile.server.settings.mediaApprovalCreditsUnit": "créditos",
   "mobile.server.settings.mediaApprovalCreditsLoadFailed":
@@ -560,7 +479,7 @@ export const messages = {
   "mobile.server.settings.mediaApprovalCreditsSaveFailed":
     "No se pudo guardar el límite de aprobación de créditos. Inténtalo de nuevo.",
   "mobile.server.settings.mediaApprovalCreditsUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su límite de aprobación de créditos.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su límite de aprobación de créditos.",
   "mobile.server.settings.mediaApprovalAgents": "Los agentes pueden usar créditos",
   "mobile.server.settings.mediaApprovalAgentsSaveFailed":
     "No se pudo cambiar el uso de créditos por los agentes. Inténtalo de nuevo.",
@@ -585,7 +504,8 @@ export const messages = {
     "Cuando controlas el navegador de un agente, el agente aprende cómo funcionan los sitios a partir de las páginas y los botones que usas. El texto que escribes no se guarda.",
   "mobile.server.settings.browsingMemoryLoadFailed": "No se pudo cargar el ajuste de navegación.",
   "mobile.server.settings.learningSaveFailed": "No se pudo guardar este ajuste. Inténtalo de nuevo.",
-  "mobile.server.settings.learningUnsupported": "Actualiza CodeBot en este servidor para cambiar aquí este ajuste.",
+  "mobile.server.settings.learningUnsupported":
+    "Actualiza OpenBot Code en este servidor para cambiar aquí este ajuste.",
   "mobile.server.settings.responseStyleDescription":
     "Natural: los agentes envían actualizaciones breves mientras trabajan y el chat las muestra. Clásico: los agentes responden una vez, al terminar.",
   "mobile.server.settings.responseStyleNatural": "Natural",
@@ -593,17 +513,17 @@ export const messages = {
   "mobile.server.settings.personalityLoadFailed": "No se pudo cargar la personalidad del servidor.",
   "mobile.server.settings.personalitySaveFailed": "No se pudo guardar el estilo de respuesta. Inténtalo de nuevo.",
   "mobile.server.settings.personalityUnsupported":
-    "Actualiza CodeBot en este servidor para cambiar aquí su estilo de respuesta.",
+    "Actualiza OpenBot Code en este servidor para cambiar aquí su estilo de respuesta.",
   "mobile.server.settings.agentsUnavailable":
     "Conéctate a este servidor como propietario o administrador para cambiar los ajustes de los agentes.",
   "mobile.server.route.browserProfiles": "Perfiles del navegador",
   "mobile.server.browserProfiles.unavailable":
     "Solo el propietario o un administrador de un servidor en línea puede gestionar sus perfiles del navegador.",
   "mobile.server.browserProfiles.unsupported":
-    "Actualiza CodeBot en este servidor para gestionar sus perfiles del navegador aquí.",
+    "Actualiza OpenBot Code en este servidor para gestionar sus perfiles del navegador aquí.",
   "mobile.server.browserProfiles.loading": "Cargando perfiles del navegador…",
-  "mobile.server.browserProfiles.loadFailed": "CodeBot no pudo cargar los perfiles del navegador.",
-  "mobile.server.browserProfiles.saveFailed": "CodeBot no pudo cambiar el perfil del navegador.",
+  "mobile.server.browserProfiles.loadFailed": "OpenBot Code no pudo cargar los perfiles del navegador.",
+  "mobile.server.browserProfiles.saveFailed": "OpenBot Code no pudo cambiar el perfil del navegador.",
   "mobile.server.browserProfiles.description":
     "Cada perfil guarda sus propios inicios de sesión, cookies y datos de sitios en el ordenador que ejecuta el servidor. Los agentes que usan un mismo perfil comparten sus inicios de sesión.",
   "mobile.server.browserProfiles.shared": "Compartido",
@@ -638,13 +558,14 @@ export const messages = {
   "mobile.server.browserProfiles.deleteBody":
     "Esto elimina los inicios de sesión, las cookies y los datos de sitios del perfil. Sus pestañas abiertas se cerrarán.",
   "mobile.server.browserProfiles.deleteAgents": "Estos agentes pasan al perfil compartido: {agents}.",
-  "mobile.server.browserProxies.unsupported": "Actualiza CodeBot en este servidor para gestionar sus proxies aquí.",
+  "mobile.server.browserProxies.unsupported":
+    "Actualiza OpenBot Code en este servidor para gestionar sus proxies aquí.",
   "mobile.server.browserProxies.loading": "Cargando proxies…",
-  "mobile.server.browserProxies.loadFailed": "CodeBot no pudo cargar los proxies.",
-  "mobile.server.browserProxies.saveFailed": "CodeBot no pudo cambiar el proxy.",
+  "mobile.server.browserProxies.loadFailed": "OpenBot Code no pudo cargar los proxies.",
+  "mobile.server.browserProxies.saveFailed": "OpenBot Code no pudo cambiar el proxy.",
   "mobile.server.browserProxies.title": "Proxies",
   "mobile.server.browserProxies.sectionHint":
-    "Un perfil con proxy abre sus páginas a través de ese proxy. Un miembro comparte un ordenador desde la app de escritorio de CodeBot.",
+    "Un perfil con proxy abre sus páginas a través de ese proxy. Un miembro comparte un ordenador desde la app de escritorio de OpenBot Code.",
   "mobile.server.browserProxies.limit": "Un servidor puede tener como máximo {limit} proxies.",
   "mobile.server.browserProxies.add": "Añadir proxy",
   "mobile.server.browserProxies.new": "Nuevo proxy",
@@ -672,7 +593,7 @@ export const messages = {
   "mobile.server.browserProxies.addressInvalid":
     "Esto no es una dirección de proxy. Usa socks5://host:1080, http://user:password@host:3128 o host:port:user:password.",
   "mobile.server.browserProxies.computerHint":
-    "Las páginas de los perfiles que usan este ordenador salen por su conexión a internet mientras su miembro lo comparte desde la app de escritorio de CodeBot. El ordenador solo abre direcciones públicas de internet.",
+    "Las páginas de los perfiles que usan este ordenador salen por su conexión a internet mientras su miembro lo comparte desde la app de escritorio de OpenBot Code. El ordenador solo abre direcciones públicas de internet.",
   "mobile.server.browserProxies.profilesTitle": "Perfiles",
   "mobile.server.browserProxies.delete": "Eliminar proxy",
   "mobile.server.browserProxies.deleteHint": "Eliminar pasa los perfiles de este proxy a «Automático».",
@@ -689,11 +610,12 @@ export const messages = {
   "mobile.server.browserProxies.change": "Cambiar proxy",
   "mobile.server.browserProxies.choiceHint":
     "«Automático» usa los ajustes de proxy del equipo que ejecuta el servidor. Un cambio cierra las pestañas abiertas del perfil.",
-  "mobile.server.browserProxies.shareHint": "Para usar tu ordenador, compártelo en la app de escritorio de CodeBot.",
+  "mobile.server.browserProxies.shareHint":
+    "Para usar tu ordenador, compártelo en la app de escritorio de OpenBot Code.",
   "mobile.server.route.connectors": "Conectores",
   "mobile.server.connectors.unavailable":
     "Conéctate a este servidor como propietario o administrador para gestionar sus conectores.",
-  "mobile.server.connectors.unsupported": "Actualiza CodeBot en este servidor para gestionar sus conectores aquí.",
+  "mobile.server.connectors.unsupported": "Actualiza OpenBot Code en este servidor para gestionar sus conectores aquí.",
   "mobile.server.connectors.loading": "Cargando conectores…",
   "mobile.server.connectors.localOnly": "Solo en la app de escritorio",
   "mobile.server.connectors.statusConnected": "Conectado",
@@ -742,7 +664,7 @@ export const messages = {
   "mobile.server.connectors.github.title": "GitHub",
   "mobile.server.connectors.github.description":
     "Todos los agentes de {host} pueden usar tus repositorios, incidencias y solicitudes de incorporación de GitHub, además de gh y git.",
-  "mobile.server.connectors.github.unavailable": "CodeBot en este servidor no puede conectar GitHub.",
+  "mobile.server.connectors.github.unavailable": "OpenBot Code en este servidor no puede conectar GitHub.",
   "mobile.server.connectors.github.connect": "Conectar GitHub",
   "mobile.server.connectors.github.codeTitle": "Escribe este código en GitHub",
   "mobile.server.connectors.github.codeFooter":
@@ -752,12 +674,12 @@ export const messages = {
   "mobile.server.connectors.github.connectedAs": "Conectado como @{login}",
   "mobile.server.connectors.github.chooseRepositories": "Elegir repositorios",
   "mobile.server.connectors.github.repositoriesFooter":
-    "Los agentes solo pueden usar los repositorios donde está instalada la aplicación de GitHub de CodeBot.",
+    "Los agentes solo pueden usar los repositorios donde está instalada la aplicación de GitHub de OpenBot Code.",
   "mobile.server.connectors.github.repositoriesTitle": "Repositorios",
   "mobile.server.connectors.github.repositoriesLoading": "Leyendo los repositorios de GitHub",
-  "mobile.server.connectors.github.repositoriesFailed": "CodeBot no pudo leer los repositorios de GitHub.",
+  "mobile.server.connectors.github.repositoriesFailed": "OpenBot Code no pudo leer los repositorios de GitHub.",
   "mobile.server.connectors.github.noRepositories":
-    "La aplicación de GitHub de CodeBot aún no está instalada en ningún repositorio.",
+    "La aplicación de GitHub de OpenBot Code aún no está instalada en ningún repositorio.",
   "mobile.server.connectors.github.moreRepositories": {
     one: "Y {count} repositorio más",
     other: "Y {count} repositorios más",
@@ -771,12 +693,12 @@ export const messages = {
   "mobile.server.connectors.github.disconnect": "Desconectar GitHub",
   "mobile.server.connectors.github.disconnectTitle": "¿Desconectar GitHub?",
   "mobile.server.connectors.github.disconnectBody":
-    "Esto quita el inicio de sesión de @{login} de {host}, y todos los agentes pierden las herramientas de GitHub, gh y git. Después se abre GitHub, donde puedes revocar el acceso de CodeBot.",
+    "Esto quita el inicio de sesión de @{login} de {host}, y todos los agentes pierden las herramientas de GitHub, gh y git. Después se abre GitHub, donde puedes revocar el acceso de OpenBot Code.",
   "mobile.server.connectors.onePassword.title": "1Password",
   "mobile.server.connectors.onePassword.description":
-    "Comparte con CodeBot en {host} una bóveda exclusiva de 1Password mediante una cuenta de servicio, para que los agentes de {host} puedan iniciar sesión en sitios desde su navegador.",
+    "Comparte con OpenBot Code en {host} una bóveda exclusiva de 1Password mediante una cuenta de servicio, para que los agentes de {host} puedan iniciar sesión en sitios desde su navegador.",
   "mobile.server.connectors.onePassword.howItWorks":
-    "En 1Password.com, crea una cuenta de servicio que solo pueda leer la bóveda que compartes con CodeBot y pega aquí su token. {host} comprueba el token y lo guarda; este teléfono no. Los agentes nunca ven una contraseña.",
+    "En 1Password.com, crea una cuenta de servicio que solo pueda leer la bóveda que compartes con OpenBot Code y pega aquí su token. {host} comprueba el token y lo guarda; este teléfono no. Los agentes nunca ven una contraseña.",
   "mobile.server.connectors.onePassword.token": "Token de cuenta de servicio",
   "mobile.server.connectors.onePassword.tokenPlaceholder": "ops_…",
   "mobile.server.connectors.onePassword.connect": "Conectar 1Password",
@@ -796,9 +718,9 @@ export const messages = {
     "{host} olvida el token. La bóveda y la cuenta de servicio permanecen en 1Password; elimínalas allí si ya no las necesitas.",
   "mobile.server.connectors.protonPass.title": "Proton Pass",
   "mobile.server.connectors.protonPass.description":
-    "Comparte una bóveda de Proton Pass con CodeBot en {host} para que los agentes de {host} puedan iniciar sesión en sitios desde su navegador.",
+    "Comparte una bóveda de Proton Pass con OpenBot Code en {host} para que los agentes de {host} puedan iniciar sesión en sitios desde su navegador.",
   "mobile.server.connectors.protonPass.keyHelp":
-    "En Proton Pass, crea una clave de acceso que solo pueda leer la bóveda que compartes con CodeBot y pégala aquí. {host} guarda la clave; este teléfono no.",
+    "En Proton Pass, crea una clave de acceso que solo pueda leer la bóveda que compartes con OpenBot Code y pégala aquí. {host} guarda la clave; este teléfono no.",
   "mobile.server.connectors.protonPass.keyPlaceholder": "pst_…",
   "mobile.server.connectors.protonPass.plan":
     "Tu plan de Proton no incluye la herramienta de línea de comandos de Proton Pass. Necesita un plan de Proton que incluya Pass Plus. Otros planes de pago, como Mail Plus, no la incluyen. Cambia el plan de tu cuenta y vuelve a conectar.",
@@ -850,7 +772,7 @@ export const messages = {
   },
   "mobile.server.connectors.slack.connect": "Conectar Slack",
   "mobile.server.connectors.slack.connectFooter":
-    "Slack se abre en un navegador. Selecciona el espacio de trabajo en la esquina superior derecha y después Permitir. CodeBot instala una aplicación llamada CodeBot, que se une a todos los canales públicos.",
+    "Slack se abre en un navegador. Selecciona el espacio de trabajo en la esquina superior derecha y después Permitir. OpenBot Code instala una aplicación llamada OpenBot Code, que se une a todos los canales públicos.",
   "mobile.server.connectors.slack.add": "Añadir espacio de trabajo",
   "mobile.server.connectors.slack.limit": {
     one: "Puedes conectar como máximo {count} espacio de trabajo.",
@@ -860,14 +782,15 @@ export const messages = {
   "mobile.server.connectors.slack.workspaceDescription":
     "Las personas mencionan a @CodeBot o le envían un mensaje directo.",
   "mobile.server.connectors.slack.missingScopes":
-    "CodeBot no tiene estos permisos en Slack: {scopes}. Desconecta el espacio de trabajo y vuelve a conectarlo.",
-  "mobile.server.connectors.slack.retryAt": "Slack pidió a CodeBot que esperara. Lo intentará de nuevo a las {time}.",
+    "OpenBot Code no tiene estos permisos en Slack: {scopes}. Desconecta el espacio de trabajo y vuelve a conectarlo.",
+  "mobile.server.connectors.slack.retryAt":
+    "Slack pidió a OpenBot Code que esperara. Lo intentará de nuevo a las {time}.",
   "mobile.server.connectors.slack.helpInvalidToken":
-    "Slack ya no acepta CodeBot en este espacio de trabajo. Puede que se haya desinstalado. Conecta el espacio de trabajo de nuevo.",
+    "Slack ya no acepta OpenBot Code en este espacio de trabajo. Puede que se haya desinstalado. Conecta el espacio de trabajo de nuevo.",
   "mobile.server.connectors.slack.helpSecretStorage":
-    "CodeBot no puede leer los tokens guardados en {host}. Desconecta el espacio de trabajo y vuelve a conectarlo.",
+    "OpenBot Code no puede leer los tokens guardados en {host}. Desconecta el espacio de trabajo y vuelve a conectarlo.",
   "mobile.server.connectors.slack.helpRelay":
-    "CodeBot en {host} no puede recibir eventos de Slack. En {host}, inicia sesión, ponle un nombre al servidor en Ajustes del servidor y mantén CodeBot abierto.",
+    "OpenBot Code en {host} no puede recibir eventos de Slack. En {host}, inicia sesión, ponle un nombre al servidor en Ajustes del servidor y mantén OpenBot Code abierto.",
   "mobile.server.connectors.slack.helpNotLinked":
     "Este espacio de trabajo no está vinculado a {host}. Toca Reconectar para vincularlo.",
   "mobile.server.connectors.slack.orchestratorTitle": "Orquestador de Slack",
@@ -876,14 +799,14 @@ export const messages = {
   "mobile.server.connectors.slack.orchestratorNone": "Añade el Orquestador de Slack o Slack no recibirá respuesta.",
   "mobile.server.connectors.slack.addAgent": "Añadir Orquestador de Slack",
   "mobile.server.connectors.slack.note":
-    "CodeBot se une automáticamente a todos los canales públicos y a los nuevos. Para un canal privado, invítalo: /invite @CodeBot.",
+    "OpenBot Code se une automáticamente a todos los canales públicos y a los nuevos. Para un canal privado, invítalo: /invite @CodeBot.",
   "mobile.server.connectors.slack.disconnectTitle": "¿Desconectar {workspace}?",
   "mobile.server.connectors.slack.disconnectBody":
-    "CodeBot deja de responder en {workspace} y elimina su token de Slack de {host}.",
+    "OpenBot Code deja de responder en {workspace} y elimina su token de Slack de {host}.",
   "mobile.server.connectors.slack.disconnectKept":
-    "Las conversaciones y el Orquestador de Slack permanecen en CodeBot.",
+    "Las conversaciones y el Orquestador de Slack permanecen en OpenBot Code.",
   "mobile.server.connectors.slack.disconnectDeleted":
-    "El Orquestador de Slack y sus conversaciones se eliminan de CodeBot.",
+    "El Orquestador de Slack y sus conversaciones se eliminan de OpenBot Code.",
   "mobile.server.connectors.slack.agentPromptTitle": "¿Añadir el Orquestador de Slack?",
   "mobile.server.connectors.slack.agentPromptBody":
     "Este nuevo agente responde a todo lo que las personas envían a @CodeBot en {workspace}.",
@@ -897,7 +820,7 @@ export const messages = {
   },
   "mobile.server.connectors.discord.connect": "Conectar Discord",
   "mobile.server.connectors.discord.connectFooter":
-    "Discord se abre en un navegador. Selecciona el servidor de Discord y después Autorizar. CodeBot añade un bot llamado CodeBot.",
+    "Discord se abre en un navegador. Selecciona el servidor de Discord y después Autorizar. OpenBot Code añade un bot llamado OpenBot Code.",
   "mobile.server.connectors.discord.add": "Añadir servidor de Discord",
   "mobile.server.connectors.discord.limit": {
     one: "Puedes conectar como máximo {count} servidor de Discord.",
@@ -905,17 +828,17 @@ export const messages = {
   },
   "mobile.server.connectors.discord.workspaceTitle": "Servidor de Discord",
   "mobile.server.connectors.discord.workspaceDescription":
-    "Menciona a @CodeBot en un canal. Responde a CodeBot para continuar.",
+    "Menciona a @CodeBot en un canal. Responde a OpenBot Code para continuar.",
   "mobile.server.connectors.discord.missingScopes":
-    "CodeBot no tiene estos permisos en Discord: {scopes}. Desconecta el servidor de Discord y vuelve a conectarlo.",
+    "OpenBot Code no tiene estos permisos en Discord: {scopes}. Desconecta el servidor de Discord y vuelve a conectarlo.",
   "mobile.server.connectors.discord.retryAt":
-    "Discord pidió a CodeBot que esperara. Lo intentará de nuevo a las {time}.",
+    "Discord pidió a OpenBot Code que esperara. Lo intentará de nuevo a las {time}.",
   "mobile.server.connectors.discord.helpInvalidToken":
-    "Discord ya no acepta CodeBot en este servidor de Discord. Puede que se haya eliminado. Conecta el servidor de Discord de nuevo.",
+    "Discord ya no acepta OpenBot Code en este servidor de Discord. Puede que se haya eliminado. Conecta el servidor de Discord de nuevo.",
   "mobile.server.connectors.discord.helpSecretStorage":
-    "CodeBot no puede leer los tokens guardados en {host}. Desconecta el servidor de Discord y vuelve a conectarlo.",
+    "OpenBot Code no puede leer los tokens guardados en {host}. Desconecta el servidor de Discord y vuelve a conectarlo.",
   "mobile.server.connectors.discord.helpRelay":
-    "CodeBot en {host} no puede recibir eventos de Discord. En {host}, inicia sesión, ponle un nombre al servidor en Ajustes del servidor y mantén CodeBot abierto.",
+    "OpenBot Code en {host} no puede recibir eventos de Discord. En {host}, inicia sesión, ponle un nombre al servidor en Ajustes del servidor y mantén OpenBot Code abierto.",
   "mobile.server.connectors.discord.helpNotLinked":
     "Este servidor de Discord no está vinculado a {host}. Toca Reconectar para vincularlo.",
   "mobile.server.connectors.discord.orchestratorTitle": "Orquestador de Discord",
@@ -924,21 +847,21 @@ export const messages = {
   "mobile.server.connectors.discord.orchestratorNone":
     "Añade el Orquestador de Discord o Discord no recibirá respuesta.",
   "mobile.server.connectors.discord.addAgent": "Añadir Orquestador de Discord",
-  "mobile.server.connectors.discord.note": "CodeBot ve los canales que su rol puede ver.",
+  "mobile.server.connectors.discord.note": "OpenBot Code ve los canales que su rol puede ver.",
   "mobile.server.connectors.discord.disconnectTitle": "¿Desconectar {workspace}?",
   "mobile.server.connectors.discord.disconnectBody":
-    "CodeBot deja de responder en {workspace} y elimina la conexión de Discord de {host}.",
+    "OpenBot Code deja de responder en {workspace} y elimina la conexión de Discord de {host}.",
   "mobile.server.connectors.discord.disconnectKept":
-    "Las conversaciones y el Orquestador de Discord permanecen en CodeBot.",
+    "Las conversaciones y el Orquestador de Discord permanecen en OpenBot Code.",
   "mobile.server.connectors.discord.disconnectDeleted":
-    "El Orquestador de Discord y sus conversaciones se eliminan de CodeBot.",
+    "El Orquestador de Discord y sus conversaciones se eliminan de OpenBot Code.",
   "mobile.server.connectors.discord.agentPromptTitle": "¿Añadir el Orquestador de Discord?",
   "mobile.server.connectors.discord.agentPromptBody":
     "Este nuevo agente responde a todo lo que las personas envían a @CodeBot en {workspace}.",
   "mobile.server.connectors.discord.installFailed": "Discord no terminó la autorización. Inténtalo de nuevo.",
   "mobile.server.connectors.telegram.title": "Telegram",
   "mobile.server.connectors.telegram.description":
-    "Añade el bot de CodeBot a un grupo de Telegram o abre un chat directo con él. El Orquestador de Telegram consulta al agente adecuado y responde.",
+    "Añade el bot de OpenBot Code a un grupo de Telegram o abre un chat directo con él. El Orquestador de Telegram consulta al agente adecuado y responde.",
   "mobile.server.connectors.telegram.attention": {
     one: "{count} chat requiere atención",
     other: "{count} chats requieren atención",
@@ -948,15 +871,15 @@ export const messages = {
   "mobile.server.connectors.telegram.groupDescription": "Las personas mencionan al bot o responden a sus mensajes.",
   "mobile.server.connectors.telegram.directDescription": "Cada mensaje de este chat va al Orquestador de Telegram.",
   "mobile.server.connectors.telegram.helpRemoved":
-    "El bot de CodeBot ya no está en este chat. Desconecta el chat y vuelve a añadir el bot.",
+    "El bot de OpenBot Code ya no está en este chat. Desconecta el chat y vuelve a añadir el bot.",
   "mobile.server.connectors.telegram.helpRelay":
-    "CodeBot en {host} no puede recibir mensajes de Telegram. En {host}, inicia sesión, ponle un nombre al servidor en Ajustes del servidor y mantén CodeBot abierto.",
+    "OpenBot Code en {host} no puede recibir mensajes de Telegram. En {host}, inicia sesión, ponle un nombre al servidor en Ajustes del servidor y mantén OpenBot Code abierto.",
   "mobile.server.connectors.telegram.helpError":
-    "CodeBot no puede acceder a este chat. Vuelve a conectar o desconecta el chat.",
+    "OpenBot Code no puede acceder a este chat. Vuelve a conectar o desconecta el chat.",
   "mobile.server.connectors.telegram.helpNotLinked":
     "Este chat no está vinculado a {host}. Toca Reconectar para vincularlo.",
   "mobile.server.connectors.telegram.retryAt":
-    "Telegram pidió a CodeBot que esperara. Lo intentará de nuevo a las {time}.",
+    "Telegram pidió a OpenBot Code que esperara. Lo intentará de nuevo a las {time}.",
   "mobile.server.connectors.telegram.linkTitle": "Vincular un chat",
   "mobile.server.connectors.telegram.linkAnother": "Vincular otro chat",
   "mobile.server.connectors.telegram.linkFooter":
@@ -969,17 +892,17 @@ export const messages = {
   "mobile.server.connectors.telegram.openDirectChat": "Abrir un chat directo",
   "mobile.server.connectors.telegram.orchestratorTitle": "Orquestador de Telegram",
   "mobile.server.connectors.telegram.orchestratorDescription":
-    "Este agente recibe los mensajes para CodeBot de todos tus chats de Telegram. Responde él mismo a los cortos, asigna el resto del trabajo al agente adecuado y publica la respuesta en el chat.",
+    "Este agente recibe los mensajes para OpenBot Code de todos tus chats de Telegram. Responde él mismo a los cortos, asigna el resto del trabajo al agente adecuado y publica la respuesta en el chat.",
   "mobile.server.connectors.telegram.orchestratorNone":
     "Añade el Orquestador de Telegram o Telegram no recibirá respuesta.",
   "mobile.server.connectors.telegram.addAgent": "Añadir Orquestador de Telegram",
   "mobile.server.connectors.telegram.disconnectTitle": "¿Desconectar {chat}?",
   "mobile.server.connectors.telegram.disconnectBody":
-    "El bot de CodeBot sale de {chat} y CodeBot deja de responder allí.",
+    "El bot de OpenBot Code sale de {chat} y OpenBot Code deja de responder allí.",
   "mobile.server.connectors.telegram.disconnectKept":
-    "Las conversaciones y el Orquestador de Telegram permanecen en CodeBot.",
+    "Las conversaciones y el Orquestador de Telegram permanecen en OpenBot Code.",
   "mobile.server.connectors.telegram.disconnectDeleted":
-    "Es el último chat, así que el Orquestador de Telegram y sus conversaciones se eliminan de CodeBot.",
+    "Es el último chat, así que el Orquestador de Telegram y sus conversaciones se eliminan de OpenBot Code.",
   "mobile.server.connectors.whatsapp.title": "WhatsApp",
   "mobile.server.connectors.whatsapp.description":
     "Vincula un número de WhatsApp a este servidor. El Orquestador de WhatsApp consulta al agente adecuado y responde.",
@@ -990,30 +913,30 @@ export const messages = {
   "mobile.server.connectors.whatsapp.numbersTitle": "Números",
   "mobile.server.connectors.whatsapp.linkNumber": "Vincular un número",
   "mobile.server.connectors.whatsapp.ownNumberNote":
-    "Tu chat «Envíate un mensaje» y las personas que permitas pueden contactar con CodeBot.",
+    "Tu chat «Envíate un mensaje» y las personas que permitas pueden contactar con OpenBot Code.",
   "mobile.server.connectors.whatsapp.dedicatedNote":
-    "Tu chat «Envíate un mensaje» y las personas que permitas pueden contactar con CodeBot. Las demás reciben un código para dártelo.",
+    "Tu chat «Envíate un mensaje» y las personas que permitas pueden contactar con OpenBot Code. Las demás reciben un código para dártelo.",
   "mobile.server.connectors.whatsapp.helpLoggedOut":
     "WhatsApp quitó este servidor de los dispositivos vinculados. Vuelve a vincular el número.",
   "mobile.server.connectors.whatsapp.helpError":
-    "CodeBot no puede acceder a WhatsApp en este número. Vuelve a conectar o desconecta el número.",
+    "OpenBot Code no puede acceder a WhatsApp en este número. Vuelve a conectar o desconecta el número.",
   "mobile.server.connectors.whatsapp.helpKeysUnreadable":
-    "CodeBot no puede leer las claves guardadas de este número. Vuelve a vincular el número.",
+    "OpenBot Code no puede leer las claves guardadas de este número. Vuelve a vincular el número.",
   "mobile.server.connectors.whatsapp.retryAt":
-    "WhatsApp pidió a CodeBot que esperara. Lo intentará de nuevo a las {time}.",
+    "WhatsApp pidió a OpenBot Code que esperara. Lo intentará de nuevo a las {time}.",
   "mobile.server.connectors.whatsapp.linkAgain": "Volver a vincular",
   "mobile.server.connectors.whatsapp.ownNumber": "Número personal",
   "mobile.server.connectors.whatsapp.ownNumberDescription":
-    "Solo pueden escribir tu chat «Envíate un mensaje» y las personas que permitas. Las demás no reciben respuesta. Si está desactivado, CodeBot responde a las personas desconocidas con un código.",
+    "Solo pueden escribir tu chat «Envíate un mensaje» y las personas que permitas. Las demás no reciben respuesta. Si está desactivado, OpenBot Code responde a las personas desconocidas con un código.",
   "mobile.server.connectors.whatsapp.workingMessage": "Mensaje «Trabajando en ello…»",
   "mobile.server.connectors.whatsapp.workingMessageDescription":
-    "CodeBot lo envía mientras el agente trabaja y luego lo sustituye por la respuesta. Una solicitud que espera a otra anterior también recibe un mensaje de espera. Con un número personal, solo tu chat «Envíate un mensaje» recibe estos mensajes. Desactívalo para enviar solo la respuesta.",
+    "OpenBot Code lo envía mientras el agente trabaja y luego lo sustituye por la respuesta. Una solicitud que espera a otra anterior también recibe un mensaje de espera. Con un número personal, solo tu chat «Envíate un mensaje» recibe estos mensajes. Desactívalo para enviar solo la respuesta.",
   "mobile.server.connectors.whatsapp.statusReactions": "Reacciones de estado",
   "mobile.server.connectors.whatsapp.statusReactionsDescription":
-    "CodeBot reacciona con 👀 cuando llega un mensaje y con ✅ cuando la respuesta está lista. Desactívalas para no enviar reacciones.",
+    "OpenBot Code reacciona con 👀 cuando llega un mensaje y con ✅ cuando la respuesta está lista. Desactívalas para no enviar reacciones.",
   "mobile.server.connectors.whatsapp.orchestratorTitle": "Orquestador de WhatsApp",
   "mobile.server.connectors.whatsapp.orchestratorDescription":
-    "Este agente recibe los mensajes para CodeBot de todos tus números vinculados. Responde él mismo a los cortos, asigna el resto del trabajo al agente adecuado y responde en WhatsApp.",
+    "Este agente recibe los mensajes para OpenBot Code de todos tus números vinculados. Responde él mismo a los cortos, asigna el resto del trabajo al agente adecuado y responde en WhatsApp.",
   "mobile.server.connectors.whatsapp.orchestratorNone":
     "Añade el Orquestador de WhatsApp o WhatsApp no recibirá respuesta.",
   "mobile.server.connectors.whatsapp.addAgent": "Añadir el Orquestador de WhatsApp",
@@ -1023,14 +946,14 @@ export const messages = {
   "mobile.server.connectors.whatsapp.linkDescription":
     "Selecciona el número y luego vincula este servidor desde WhatsApp en tu teléfono.",
   "mobile.server.connectors.whatsapp.codeOnly":
-    "En un teléfono, vincula con un código de vinculación. Para escanear un código QR, usa CodeBot en un ordenador.",
+    "En un teléfono, vincula con un código de vinculación. Para escanear un código QR, usa OpenBot Code en un ordenador.",
   "mobile.server.connectors.whatsapp.kindLabel": "Número",
   "mobile.server.connectors.whatsapp.kindPersonal": "Mi número personal",
   "mobile.server.connectors.whatsapp.kindPersonalDescription":
-    "CodeBot solo responde a tu chat «Envíate un mensaje» y a las personas que permitas. Las demás personas no reciben respuesta.",
-  "mobile.server.connectors.whatsapp.kindDedicated": "Un número solo para CodeBot",
+    "OpenBot Code solo responde a tu chat «Envíate un mensaje» y a las personas que permitas. Las demás personas no reciben respuesta.",
+  "mobile.server.connectors.whatsapp.kindDedicated": "Un número solo para OpenBot Code",
   "mobile.server.connectors.whatsapp.kindDedicatedDescription":
-    "CodeBot responde desde este número a cada persona desconocida con un código para dártelo. Tú las apruebas aquí.",
+    "OpenBot Code responde desde este número a cada persona desconocida con un código para dártelo. Tú las apruebas aquí.",
   "mobile.server.connectors.whatsapp.phoneLabel": "Número de teléfono",
   "mobile.server.connectors.whatsapp.phoneDescription": "Con el código de país, por ejemplo +44 7700 900123.",
   "mobile.server.connectors.whatsapp.phoneInvalid": "Escribe el número de teléfono con su código de país.",
@@ -1050,20 +973,20 @@ export const messages = {
   "mobile.server.connectors.whatsapp.failedBusy":
     "Hay otra vinculación en curso. Espera a que termine y vuelve a intentarlo.",
   "mobile.server.connectors.whatsapp.failedUnavailable":
-    "CodeBot no puede acceder a WhatsApp. Comprueba la conexión a internet.",
+    "OpenBot Code no puede acceder a WhatsApp. Comprueba la conexión a internet.",
   "mobile.server.connectors.whatsapp.tryAgain": "Reintentar",
   "mobile.server.connectors.whatsapp.agentStepDescription":
-    "Este nuevo agente responde a los mensajes para CodeBot en {number} y en cada número que vincules más adelante.",
-  "mobile.server.connectors.whatsapp.doneTitle": "CodeBot está vinculado a {number}",
+    "Este nuevo agente responde a los mensajes para OpenBot Code en {number} y en cada número que vincules más adelante.",
+  "mobile.server.connectors.whatsapp.doneTitle": "OpenBot Code está vinculado a {number}",
   "mobile.server.connectors.whatsapp.done": "Listo",
   "mobile.server.connectors.whatsapp.disconnectTitle": "¿Desconectar {number}?",
   "mobile.server.connectors.whatsapp.disconnectBody":
-    "CodeBot cierra la sesión de WhatsApp en {number}. Si CodeBot estaba apagado, quita también el dispositivo en WhatsApp > Dispositivos vinculados.",
+    "OpenBot Code cierra la sesión de WhatsApp en {number}. Si OpenBot Code estaba apagado, quita también el dispositivo en WhatsApp > Dispositivos vinculados.",
   "mobile.server.connectors.whatsapp.disconnectEffect": "Nadie podrá contactar con tus agentes a través de {number}.",
   "mobile.server.connectors.whatsapp.removeEffectKept":
-    "Las conversaciones y el Orquestador de WhatsApp permanecen en CodeBot.",
+    "Las conversaciones y el Orquestador de WhatsApp permanecen en OpenBot Code.",
   "mobile.server.connectors.whatsapp.removeEffectDeleted":
-    "Es el último número, así que el Orquestador de WhatsApp y sus conversaciones se eliminan de CodeBot.",
+    "Es el último número, así que el Orquestador de WhatsApp y sus conversaciones se eliminan de OpenBot Code.",
   "mobile.server.connectors.whatsapp.keep": "Mantener vinculado",
   "mobile.server.connectors.whatsapp.sendersTitle": "Quién puede escribir a {number}",
   "mobile.server.connectors.whatsapp.sendersDescription":
@@ -1076,7 +999,7 @@ export const messages = {
   "mobile.server.connectors.whatsapp.makeReadOnly": "Hacer solo lectura",
   "mobile.server.connectors.whatsapp.allowWork": "Permitir dar tareas",
   "mobile.server.connectors.whatsapp.readOnlyDetail":
-    "Solo lectura: los agentes pueden leer este chat y CodeBot nunca escribe en él.",
+    "Solo lectura: los agentes pueden leer este chat y OpenBot Code nunca escribe en él.",
   "mobile.server.connectors.whatsapp.addContact": "Añadir contacto",
   "mobile.server.connectors.whatsapp.addGroup": "Añadir grupo",
   "mobile.server.connectors.whatsapp.contactTitle": "Añadir un contacto",
@@ -1091,7 +1014,7 @@ export const messages = {
     "Las personas de este grupo pueden asignar trabajo a tus agentes cuando mencionan el número o responden a sus mensajes.",
   "mobile.server.connectors.whatsapp.groupSearch": "Buscar grupos",
   "mobile.server.connectors.whatsapp.groupsLoading": "Leyendo los grupos…",
-  "mobile.server.connectors.whatsapp.groupsLoadFailed": "CodeBot no pudo leer los grupos",
+  "mobile.server.connectors.whatsapp.groupsLoadFailed": "OpenBot Code no pudo leer los grupos",
   "mobile.server.connectors.whatsapp.groupsEmpty": "Este número no está en ningún grupo.",
   "mobile.server.connectors.whatsapp.groupsNoMatch": "Ningún grupo tiene este nombre.",
   "mobile.server.connectors.whatsapp.groupAdded": "Añadido",
@@ -1115,10 +1038,10 @@ export const messages = {
   "mobile.server.providers.runtimesFailed": "No se pudieron cargar las descargas de este servidor.",
   "mobile.server.providers.unavailable":
     "Conéctate a este servidor como propietario o administrador para gestionar sus proveedores.",
-  "mobile.server.providers.unsupported": "Actualiza CodeBot en este servidor para gestionar aquí sus proveedores.",
+  "mobile.server.providers.unsupported": "Actualiza OpenBot Code en este servidor para gestionar aquí sus proveedores.",
   "mobile.server.providers.signInUnsupported":
     "Este servidor no puede iniciar sesión en este proveedor desde el teléfono.",
-  "mobile.server.providers.actionFailed": "CodeBot no pudo completar esta acción. Inténtalo de nuevo.",
+  "mobile.server.providers.actionFailed": "OpenBot Code no pudo completar esta acción. Inténtalo de nuevo.",
   "mobile.server.providers.openFailed": "No se pudo abrir la página de inicio de sesión.",
   "mobile.server.providers.copyFailed": "No se pudo copiar el código.",
   "mobile.server.providers.statusLabel": "Estado",
@@ -1127,10 +1050,10 @@ export const messages = {
   "mobile.server.providers.connect": "Conectar",
   "mobile.server.providers.reconnect": "Reconectar",
   "mobile.server.providers.connectHint":
-    "El servidor inicia el inicio de sesión. Luego CodeBot muestra los pasos y tú los completas en este teléfono.",
+    "El servidor inicia el inicio de sesión. Luego OpenBot Code muestra los pasos y tú los completas en este teléfono.",
   "mobile.server.providers.relayHint":
-    "CodeBot abre la página de inicio de sesión del proveedor en este teléfono. Si tienes que copiar algo de vuelta, CodeBot muestra antes los pasos.",
-  "mobile.server.providers.connectOnComputer": "Conecta este proveedor en CodeBot en un ordenador.",
+    "OpenBot Code abre la página de inicio de sesión del proveedor en este teléfono. Si tienes que copiar algo de vuelta, OpenBot Code muestra antes los pasos.",
+  "mobile.server.providers.connectOnComputer": "Conecta este proveedor en OpenBot Code en un ordenador.",
   "mobile.server.providers.signInTo": "Iniciar sesión en {name}",
   "mobile.server.providers.starting": "Iniciando sesión en el servidor…",
   "mobile.server.providers.openPage": "Abrir página de acceso",
@@ -1141,15 +1064,15 @@ export const messages = {
     "En ChatGPT en un ordenador, abre la configuración de seguridad y activa el inicio de sesión con código de dispositivo para Codex. En una cuenta de trabajo, lo activa el administrador del espacio de trabajo.",
   "mobile.server.providers.codeStepCopy": "Copia el código.",
   "mobile.server.providers.codeStepEnter": "Abre la página de inicio de sesión e introduce el código.",
-  "mobile.server.providers.codeStepReturn": "Vuelve a CodeBot. El inicio de sesión termina solo.",
+  "mobile.server.providers.codeStepReturn": "Vuelve a OpenBot Code. El inicio de sesión termina solo.",
   "mobile.server.providers.pasteStepSignIn": "Abre la página de inicio de sesión e inicia sesión.",
   "mobile.server.providers.pasteStepCopy": "Copia el código que muestra la página.",
-  "mobile.server.providers.pasteStepReturn": "Vuelve a CodeBot y pega el código abajo.",
+  "mobile.server.providers.pasteStepReturn": "Vuelve a OpenBot Code y pega el código abajo.",
   "mobile.server.providers.relayStepSignIn": "Abre la página de inicio de sesión e inicia sesión.",
   "mobile.server.providers.relayStepBlank": "La última página no carga. Es lo correcto.",
   "mobile.server.providers.relayStepCopy": "Toca la barra de direcciones y copia la dirección completa.",
-  "mobile.server.providers.relayStepReturn": "Vuelve a CodeBot y pega la dirección abajo.",
-  "mobile.server.providers.linkHint": "Inicia sesión en la página. CodeBot continúa solo.",
+  "mobile.server.providers.relayStepReturn": "Vuelve a OpenBot Code y pega la dirección abajo.",
+  "mobile.server.providers.linkHint": "Inicia sesión en la página. OpenBot Code continúa solo.",
   "mobile.server.providers.relayWaiting": "Esperando la página de acceso del servidor…",
   "mobile.server.providers.code": "Código de la página",
   "mobile.server.providers.codePlaceholder": "Pega el código aquí",
@@ -1214,7 +1137,7 @@ export const messages = {
   "mobile.server.providers.accountsPooledHint":
     "Los agentes comparten estas cuentas. Una cuenta nueva inicia sesión en su página en este teléfono.",
   "mobile.server.providers.accountsPooledOnComputer":
-    "Los agentes comparten estas cuentas. Añade una cuenta en CodeBot en un ordenador.",
+    "Los agentes comparten estas cuentas. Añade una cuenta en OpenBot Code en un ordenador.",
   "mobile.server.providers.inUse": "En uso",
   "mobile.server.providers.notInPool": "Fuera del grupo",
   "mobile.server.providers.leaveOutOfPool": "Sacar del grupo",
@@ -1273,7 +1196,7 @@ export const messages = {
   "mobile.server.providers.disconnect": "Desconectar",
   "mobile.server.providers.disconnectTitle": "¿Desconectar {name}?",
   "mobile.server.providers.disconnectBody":
-    "CodeBot cierra la sesión de {provider} en el servidor. Sus agentes esperan hasta que vuelvas a conectar {provider}.",
+    "OpenBot Code cierra la sesión de {provider} en el servidor. Sus agentes esperan hasta que vuelvas a conectar {provider}.",
   "mobile.server.providers.resetUsage": "Restablecer uso",
   "mobile.server.providers.resettingUsage": "Restableciendo…",
   "mobile.server.providers.resetUsageTitle": "¿Restablecer el uso de {name}?",
@@ -1291,7 +1214,7 @@ export const messages = {
   "mobile.server.providers.sectionRuntime": "Entorno de ejecución",
   "mobile.server.providers.updateTo": "Actualizar a {version}",
   "mobile.server.providers.versionInstalledByUser": "{version} · instalada por ti",
-  "mobile.server.providers.versionDownloaded": "{version} · descargada por CodeBot",
+  "mobile.server.providers.versionDownloaded": "{version} · descargada por OpenBot Code",
   "mobile.server.providers.keyFree": "Gratis",
   "mobile.server.providers.keyOptional": "Opcional. Una clave añade modelos de pago.",
   "mobile.server.providers.geminiKeyInUse":
@@ -1310,18 +1233,18 @@ export const messages = {
   "mobile.server.providers.defaultForNew": "Predeterminado para agentes nuevos",
   "mobile.server.providers.startsWith": "Los agentes nuevos empiezan con {name}.",
   "mobile.server.providers.connectFirst": "Primero conecta {name}.",
-  "mobile.server.mcp.unsupported": "Actualiza CodeBot en este servidor para gestionar sus servidores MCP aquí.",
+  "mobile.server.mcp.unsupported": "Actualiza OpenBot Code en este servidor para gestionar sus servidores MCP aquí.",
   "mobile.server.mcp.unavailable":
     "Conéctate a este servidor como propietario o administrador para gestionar sus servidores MCP.",
   "mobile.server.mcp.accessUnsupported":
-    "Actualiza CodeBot en este servidor para elegir quién recibe sus servidores MCP.",
+    "Actualiza OpenBot Code en este servidor para elegir quién recibe sus servidores MCP.",
   "mobile.server.mcp.loading": "Cargando servidores MCP…",
   "mobile.server.mcp.gone": "Este servidor MCP ya no está en este servidor.",
   "mobile.server.mcp.addTitle": "Añadir servidor MCP",
   "mobile.server.mcp.addConfirm": "Añadir",
   "mobile.server.mcp.name": "Nombre",
   "mobile.server.mcp.namePlaceholder": "Nombre del servidor MCP",
-  "mobile.server.mcp.nameReserved": "CodeBot ya usa el nombre {name}.",
+  "mobile.server.mcp.nameReserved": "OpenBot Code ya usa el nombre {name}.",
   "mobile.server.mcp.transport": "Transporte",
   "mobile.server.mcp.stdio": "Comando (STDIO)",
   "mobile.server.mcp.http": "URL (HTTP)",
@@ -1332,12 +1255,12 @@ export const messages = {
   "mobile.server.mcp.command": "Comando",
   "mobile.server.mcp.commandHint": "Solo el programa. Pon cada palabra que sigue en Argumentos.",
   "mobile.server.mcp.arguments": "Argumentos",
-  "mobile.server.mcp.argumentsHint": "CodeBot da cada argumento al programa como una palabra.",
+  "mobile.server.mcp.argumentsHint": "OpenBot Code da cada argumento al programa como una palabra.",
   "mobile.server.mcp.addArgument": "Añadir argumento",
   "mobile.server.mcp.argument": "Argumento {position}",
   "mobile.server.mcp.removeArgument": "Quitar argumento {position}",
   "mobile.server.mcp.environment": "Variables de entorno",
-  "mobile.server.mcp.environmentHint": "CodeBot da estas variables al servidor MCP cuando se inicia.",
+  "mobile.server.mcp.environmentHint": "OpenBot Code da estas variables al servidor MCP cuando se inicia.",
   "mobile.server.mcp.addVariable": "Añadir variable",
   "mobile.server.mcp.variableKey": "Nombre de la variable {position}",
   "mobile.server.mcp.variableValue": "Valor de la variable {position}",
@@ -1353,7 +1276,7 @@ export const messages = {
   "mobile.server.mcp.url": "URL del servidor",
   "mobile.server.mcp.urlInvalid": "Escribe una dirección http o https.",
   "mobile.server.mcp.headers": "Encabezados",
-  "mobile.server.mcp.headersHint": "CodeBot envía estos encabezados con cada solicitud.",
+  "mobile.server.mcp.headersHint": "OpenBot Code envía estos encabezados con cada solicitud.",
   "mobile.server.mcp.addHeader": "Añadir encabezado",
   "mobile.server.mcp.headerName": "Nombre del encabezado {position}",
   "mobile.server.mcp.headerValue": "Valor del encabezado {position}",
@@ -1370,7 +1293,7 @@ export const messages = {
   "mobile.server.mcp.testFailed": "El servidor MCP no respondió.",
   "mobile.server.mcp.connected": { one: "Conectado · {count} herramienta", other: "Conectado · {count} herramientas" },
   "mobile.server.mcp.signInOnComputer":
-    "Este servidor MCP pide iniciar sesión. Inicia sesión desde CodeBot en un ordenador y vuelve a probar.",
+    "Este servidor MCP pide iniciar sesión. Inicia sesión desde OpenBot Code en un ordenador y vuelve a probar.",
   "mobile.server.mcp.signIn": "Iniciar sesión",
   "mobile.server.mcp.signInHere":
     "Este servidor MCP te pide que inicies sesión. Toca Iniciar sesión y vuelve a probar.",
@@ -1427,8 +1350,8 @@ export const messages = {
   "mobile.server.settings.updates": "Actualizaciones",
   "mobile.server.settings.updateAvailable": "Actualización disponible",
   "mobile.server.route.updates": "Actualizaciones",
-  "mobile.server.update.hostTitle": "CodeBot en {name}",
-  "mobile.server.update.version": "CodeBot {version}",
+  "mobile.server.update.hostTitle": "OpenBot Code en {name}",
+  "mobile.server.update.version": "OpenBot Code {version}",
   "mobile.server.update.status.idle": "Busca actualizaciones para encontrar la versión más reciente.",
   "mobile.server.update.status.checking": "Buscando actualizaciones…",
   "mobile.server.update.status.available": "{version} está disponible.",
@@ -1436,28 +1359,28 @@ export const messages = {
   "mobile.server.update.status.downloadingUnknown": "Descargando {version}…",
   "mobile.server.update.status.ready": "{version} se ha descargado.",
   "mobile.server.update.status.installing": "{name} se está reiniciando para instalar la actualización.",
-  "mobile.server.update.status.upToDate": "CodeBot está actualizado en {name}.",
+  "mobile.server.update.status.upToDate": "OpenBot Code está actualizado en {name}.",
   "mobile.server.update.status.checkFailed": "{name} no pudo buscar actualizaciones. Inténtalo de nuevo.",
   "mobile.server.update.status.downloadFailed": "{name} no pudo descargar la actualización. Inténtalo de nuevo.",
   "mobile.server.update.status.installFailed":
-    "{name} no pudo instalar la actualización. Asegúrate de que ningún otro usuario de ese equipo esté ejecutando CodeBot y vuelve a intentarlo.",
+    "{name} no pudo instalar la actualización. Asegúrate de que ningún otro usuario de ese equipo esté ejecutando OpenBot Code y vuelve a intentarlo.",
   "mobile.server.update.releaseCheckFailed":
     "{name} no pudo leer la fuente de versiones. Comprueba la conexión de red del host y vuelve a intentarlo.",
   "mobile.server.update.releaseUnavailable":
     "Esta versión no puede buscar nuevas versiones. Pide al administrador del host que busque una versión compatible.",
   "mobile.server.update.externalTitle": "El host controla la instalación",
   "mobile.server.update.path.hostManager":
-    "CodeBot Host Manager instala las actualizaciones cuando todos los usuarios están inactivos. Si una actualización no comienza, pide al administrador del host que compruebe el estado de Host Manager.",
+    "OpenBot Code Host Manager instala las actualizaciones cuando todos los usuarios están inactivos. Si una actualización no comienza, pide al administrador del host que compruebe el estado de Host Manager.",
   "mobile.server.update.path.hosted":
     "El servicio alojado descarga actualizaciones en segundo plano. Una actualización descargada se inicia cuando el servidor vuelve a iniciarse. Espera a que termine el trabajo activo antes de detener y reanudar el servidor. Si continúa con una versión antigua, contacta con el administrador del host.",
   "mobile.server.update.path.system":
-    "En el host, ejecuta sudo codebot update para instalar la versión más reciente. Este comando detiene CodeBot. Espera primero a que termine el trabajo activo. Las descargas automáticas se instalan en el siguiente arranque.",
+    "En el host, ejecuta sudo codebot update para instalar la versión más reciente. Este comando detiene OpenBot Code. Espera primero a que termine el trabajo activo. Las descargas automáticas se instalan en el siguiente arranque.",
   "mobile.server.update.path.container":
-    "En el host de Docker, descarga la nueva imagen de CodeBot y vuelve a crear el contenedor con los mismos volúmenes de datos. Espera primero a que termine el trabajo activo. Conserva los volúmenes existentes para preservar tus datos.",
+    "En el host de Docker, descarga la nueva imagen de OpenBot Code y vuelve a crear el contenedor con los mismos volúmenes de datos. Espera primero a que termine el trabajo activo. Conserva los volúmenes existentes para preservar tus datos.",
   "mobile.server.update.path.manual":
-    "Esta instalación no puede reemplazarse a sí misma. Pide al administrador del host que instale la versión compatible de github.com/nightly-labs/openbot/releases. Conserva los datos existentes de CodeBot.",
+    "Esta instalación no puede reemplazarse a sí misma. Pide al administrador del host que instale la versión compatible de github.com/nightly-labs/openbot/releases. Conserva los datos existentes de OpenBot Code.",
   "mobile.server.update.path.unavailable":
-    "Esta es una versión de desarrollo. Usa una versión instalada de CodeBot para buscar actualizaciones.",
+    "Esta es una versión de desarrollo. Usa una versión instalada de OpenBot Code para buscar actualizaciones.",
   "mobile.server.update.check": "Buscar actualizaciones",
   "mobile.server.update.start": "Actualizar sin actividad",
   "mobile.server.update.restartNow": "Reiniciar ahora",
@@ -1467,27 +1390,28 @@ export const messages = {
   "mobile.server.update.requestedBy": "{member} solicitó esta actualización.",
   "mobile.server.update.automatic": "{name} instala las actualizaciones automáticamente.",
   "mobile.server.update.autoDownloadTitle": "Descargar actualizaciones automáticamente",
-  "mobile.server.update.autoDownloadDescription": "{name} descarga cada nueva versión de CodeBot cuando se publica.",
+  "mobile.server.update.autoDownloadDescription":
+    "{name} descarga cada nueva versión de OpenBot Code cuando se publica.",
   "mobile.server.update.autoInstallTitle": "Instalar actualizaciones automáticamente",
   "mobile.server.update.autoInstallDescription":
     "{name} se reinicia con una actualización descargada cuando sus agentes están inactivos. Los miembros se desconectan brevemente y vuelven a conectarse automáticamente.",
   "mobile.server.update.waitingFor": "Esperando {reasons}.",
   "mobile.server.update.disabledTitle": "Las actualizaciones remotas están desactivadas",
   "mobile.server.update.disabledDescription":
-    "El usuario de {name} desactivó las actualizaciones de los miembros del servidor. Pídele que actualice CodeBot o que abra Ajustes > Actualizaciones en su equipo y active «Permitir actualizaciones de los miembros del servidor».",
+    "El usuario de {name} desactivó las actualizaciones de los miembros del servidor. Pídele que actualice OpenBot Code o que abra Ajustes > Actualizaciones en su equipo y active «Permitir actualizaciones de los miembros del servidor».",
   "mobile.server.update.managedTitle": "Un Host Manager controla las actualizaciones",
   "mobile.server.update.managedDescription":
-    "CodeBot Host Manager actualiza {name}. Contacta con el administrador del host.",
+    "OpenBot Code Host Manager actualiza {name}. Contacta con el administrador del host.",
   "mobile.server.update.unsupportedTitle": "{name} no puede actualizarse por sí mismo",
   "mobile.server.update.unsupportedDescription":
-    "Esta versión de CodeBot no tiene actualizador. Instala una nueva versión en {name}.",
+    "Esta versión de OpenBot Code no tiene actualizador. Instala una nueva versión en {name}.",
   "mobile.server.update.restarting": "Reiniciando…",
   "mobile.server.update.loadFailed": "No se cargó el estado de actualización de {name}.",
-  "mobile.server.update.dialog.offerTitle": "Actualizar {name} a CodeBot {version}",
+  "mobile.server.update.dialog.offerTitle": "Actualizar {name} a OpenBot Code {version}",
   "mobile.server.update.dialog.offerDescription":
-    "{name} usa CodeBot {current}. Primero descarga la actualización y luego se reinicia.",
+    "{name} usa OpenBot Code {current}. Primero descarga la actualización y luego se reinicia.",
   "mobile.server.update.dialog.offerReadyDescription":
-    "{name} usa CodeBot {current}. La actualización está descargada. {name} se reinicia para instalarla.",
+    "{name} usa OpenBot Code {current}. La actualización está descargada. {name} se reinicia para instalarla.",
   "mobile.server.update.dialog.waitIdleDescription":
     "El reinicio espera a que terminen los turnos de agente y las ejecuciones de rutinas.",
   "mobile.server.update.dialog.updateNow": "Actualizar ahora",
@@ -1503,10 +1427,10 @@ export const messages = {
   "mobile.server.update.reason.fileTransfer": "una transferencia de archivos",
   "mobile.server.update.reason.browserControl": "control del navegador por un agente",
   "mobile.server.update.reason.updateOperation": "otro paso de actualización",
-  "mobile.server.update.reason.initialization": "el inicio de CodeBot",
+  "mobile.server.update.reason.initialization": "el inicio de OpenBot Code",
   "mobile.server.update.reason.other": "otro trabajo",
   "mobile.server.update.actionFailed": "La acción del servidor falló.",
-  "mobile.server.update.unavailable": "Conéctate a este servidor para ver sus actualizaciones de CodeBot.",
+  "mobile.server.update.unavailable": "Conéctate a este servidor para ver sus actualizaciones de OpenBot Code.",
   "mobile.server.update.loading": "Cargando actualizaciones…",
   "mobile.server.route.sites": "Sitios",
   "mobile.server.settings.sites": "Sitios",
@@ -1528,13 +1452,13 @@ export const messages = {
   "mobile.server.sites.deleteDescription": "Esta dirección devolverá 410 Gone inmediatamente.",
   "mobile.server.sites.deleteFailed": "No se pudo eliminar el sitio.",
   "mobile.server.sites.openFailed": "No se pudo abrir el sitio.",
-  "mobile.server.sites.unsupported": "Actualiza CodeBot en este servidor para ver sus sitios aquí.",
+  "mobile.server.sites.unsupported": "Actualiza OpenBot Code en este servidor para ver sus sitios aquí.",
   "mobile.server.sites.offline": "Conéctate a este servidor para ver sus sitios.",
   "mobile.server.route.roles": "Permisos",
   "mobile.server.route.role": "Rol",
   "mobile.server.roles.description":
     "Elige los agentes que pueden usar los miembros. Los propietarios y administradores pueden usar todos los agentes.",
-  "mobile.server.roles.unsupported": "Actualiza CodeBot en este servidor para gestionar roles.",
+  "mobile.server.roles.unsupported": "Actualiza OpenBot Code en este servidor para gestionar roles.",
   "mobile.server.roles.unavailable":
     "Solo un propietario o administrador de un servidor en línea puede gestionar roles.",
   "mobile.server.roles.loading": "Cargando roles…",
@@ -1575,7 +1499,7 @@ export const messages = {
   "mobile.server.route.audit": "Registro de auditoría",
   "mobile.server.audit.description":
     "Cambios en los miembros, los roles y el acceso a agentes de este servidor, los más recientes primero. El host guarda los 500 cambios más recientes.",
-  "mobile.server.audit.unsupported": "Actualiza CodeBot en este servidor para ver su registro de auditoría.",
+  "mobile.server.audit.unsupported": "Actualiza OpenBot Code en este servidor para ver su registro de auditoría.",
   "mobile.server.audit.unavailable":
     "Solo un propietario o administrador de un servidor en línea puede ver el registro de auditoría.",
   "mobile.server.audit.loading": "Cargando cambios…",
@@ -1603,7 +1527,7 @@ export const messages = {
   "mobile.server.audit.agentLevel": "{agent} para {role}: {change}",
   "mobile.server.settings.importAgents": "Importar agentes",
   "mobile.server.route.import": "Importar agentes",
-  "mobile.server.import.unsupported": "Actualiza CodeBot en este servidor para importar agentes aquí.",
+  "mobile.server.import.unsupported": "Actualiza OpenBot Code en este servidor para importar agentes aquí.",
   "mobile.server.import.unavailable": "Conéctate a este servidor para importar agentes.",
   "mobile.server.import.count.agent": { one: "{count} agente", other: "{count} agentes" },
   "mobile.server.import.count.channel": { one: "{count} canal", other: "{count} canales" },
@@ -1612,10 +1536,11 @@ export const messages = {
   "mobile.server.import.count.memory": { one: "{count} recuerdo", other: "{count} recuerdos" },
   "mobile.server.import.count.file": { one: "{count} archivo", other: "{count} archivos" },
   "mobile.server.import.sourceTitle": "¿Dónde están tus agentes ahora?",
-  "mobile.server.import.sourceLede": "CodeBot los copia a este servidor. Verás cada elemento antes de que cambie nada.",
+  "mobile.server.import.sourceLede":
+    "OpenBot Code los copia a este servidor. Verás cada elemento antes de que cambie nada.",
   "mobile.server.import.hermesNote": "Exporta un archivo .zip desde Hermes.",
   "mobile.server.import.grokNote": "En la nube. Un agente de exportación allí crea un archivo .zip.",
-  "mobile.server.import.transfer": "Otro servidor de CodeBot",
+  "mobile.server.import.transfer": "Otro servidor de OpenBot Code",
   "mobile.server.import.transferNote": "Usa Transferir para trasladar agentes y ajustes juntos.",
   "mobile.server.import.grokLede":
     "Un agente de exportación en Grok Bot reúne nombres, instrucciones, avatares, habilidades, rutinas, recuerdos y los archivos que incluyas en un solo archivo .zip.",
@@ -1678,7 +1603,7 @@ export const messages = {
   "mobile.server.route.transferExport": "Exportar",
   "mobile.server.route.transferImport": "Importar",
   "mobile.server.route.transferCopy": "Copiar a otro servidor",
-  "mobile.server.transfer.unsupported": "Actualiza CodeBot en este servidor para transferirlo aquí.",
+  "mobile.server.transfer.unsupported": "Actualiza OpenBot Code en este servidor para transferirlo aquí.",
   "mobile.server.transfer.unavailable": "Conéctate a este servidor como propietario o administrador para transferirlo.",
   "mobile.server.transfer.title": "Trasladar este servidor a otro equipo",
   "mobile.server.transfer.lede": "Sus agentes, sus habilidades, rutinas, recuerdos y archivos van en un solo archivo.",
@@ -1721,8 +1646,8 @@ export const messages = {
   "mobile.server.transfer.reading": "Leyendo el archivo…",
   "mobile.server.transfer.sending": "Enviando el archivo… {percent} %",
   "mobile.server.transfer.openFailed": "No se pudo abrir el archivo.",
-  "mobile.server.transfer.source": "CodeBot {version} · exportado el {date}",
-  "mobile.server.transfer.sourceNoDate": "CodeBot {version}",
+  "mobile.server.transfer.source": "OpenBot Code {version} · exportado el {date}",
+  "mobile.server.transfer.sourceNoDate": "OpenBot Code {version}",
   "mobile.server.transfer.importWarnings": "Antes de empezar la importación",
   "mobile.server.transfer.importAgents": "Agentes del archivo",
   "mobile.server.transfer.nameExists": "Nombre ya en uso",
@@ -1764,7 +1689,7 @@ export const messages = {
     "Conéctate a otro servidor como propietario o administrador para copiar agentes en él.",
   "mobile.server.route.ownerTransfer": "Transferir propiedad",
   "mobile.server.ownerTransfer.unavailable": "Conéctate a este servidor como propietario para transferir la propiedad.",
-  "mobile.server.ownerTransfer.hosted": "CodeBot aloja este servidor, así que su propietario no puede cambiar.",
+  "mobile.server.ownerTransfer.hosted": "OpenBot Code aloja este servidor, así que su propietario no puede cambiar.",
   "mobile.server.ownerTransfer.lede":
     "El nuevo propietario recibe un correo y debe aceptar con la sesión iniciada con ese correo. Después se te quita de este servidor.",
   "mobile.server.ownerTransfer.email": "Correo del nuevo propietario",
@@ -1790,7 +1715,7 @@ export const messages = {
   "mobile.server.ownerTransfer.cancelFailed": "No se canceló la transferencia.",
   "mobile.server.ownerTransfer.incomingTitle": "¿Ser propietario de {server}?",
   "mobile.server.ownerTransfer.incomingBody":
-    "{name} quiere hacerte propietario de {server}. Tendrás control total del servidor, y sus agentes, chats, rutinas e inicios de sesión guardados se quedan en él. {name} pierde el acceso. Quien todavía pueda iniciar sesión en el ordenador que ejecuta el servidor puede usar tu cuenta de CodeBot. Cambia sus contraseñas y claves SSH.",
+    "{name} quiere hacerte propietario de {server}. Tendrás control total del servidor, y sus agentes, chats, rutinas e inicios de sesión guardados se quedan en él. {name} pierde el acceso. Quien todavía pueda iniciar sesión en el ordenador que ejecuta el servidor puede usar tu cuenta de OpenBot Code. Cambia sus contraseñas y claves SSH.",
   "mobile.server.ownerTransfer.accept": "Aceptar",
   "mobile.server.ownerTransfer.decline": "Rechazar",
   "mobile.server.ownerTransfer.accepted": "Ahora eres propietario de {server}.",

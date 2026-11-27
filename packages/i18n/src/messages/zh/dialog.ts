@@ -20,9 +20,9 @@ export const messages = {
   "dialog.saveExportSkill": "保存导出的技能",
   "dialog.saveTransfer": "保存传输文件",
   "dialog.chooseTransfer": "选择传输文件",
-  "dialog.filter.transfer": "CodeBot 传输文件",
+  "dialog.filter.transfer": "OpenBot Code 传输文件",
   "dialog.saveWorkflow": "保存工作流文件",
-  "dialog.filter.workflow": "CodeBot 工作流文件",
+  "dialog.filter.workflow": "OpenBot Code 工作流文件",
   "dialog.chooseExternalLinkApp": "选择浏览器",
   "dialog.filter.applications": "应用程序",
 } as const satisfies PartialTranslation<typeof source>;

@@ -79,12 +79,12 @@ export const messages = {
   "composer.voice.transcribing": "Sesli istem metne dönüştürülüyor",
   "composer.voice.start": "Sesle istem oluştur",
   "composer.voice.blocked":
-    "Mikrofon erişimi engellendi. Sistem ayarlarından CodeBot'un mikrofonu kullanmasına izin verin.",
+    "Mikrofon erişimi engellendi. Sistem ayarlarından OpenBot Code'un mikrofonu kullanmasına izin verin.",
   "composer.voice.noMicrophone": "Kullanılabilir mikrofon yok.",
-  "composer.voice.startFailed": "CodeBot ses kaydını başlatamadı.",
+  "composer.voice.startFailed": "OpenBot Code ses kaydını başlatamadı.",
   "composer.voice.microphoneUnavailable":
-    "CodeBot mikrofonu açamadı. Mikrofonu kullanan diğer uygulamaları kapatın, bağlı olduğundan ve sistem ayarlarında izin verildiğinden emin olun, sonra tekrar deneyin.",
-  "composer.voice.transcribeFailed": "CodeBot bu kaydı metne dönüştüremedi.",
+    "OpenBot Code mikrofonu açamadı. Mikrofonu kullanan diğer uygulamaları kapatın, bağlı olduğundan ve sistem ayarlarında izin verildiğinden emin olun, sonra tekrar deneyin.",
+  "composer.voice.transcribeFailed": "OpenBot Code bu kaydı metne dönüştüremedi.",
   "composer.reply.toYou": "Mesajınıza yanıt veriliyor",
   "composer.reply.toAgent": "Ajana yanıt veriliyor",
   "composer.reply.attachment": "Ek",

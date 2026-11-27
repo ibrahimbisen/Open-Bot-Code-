@@ -8,7 +8,7 @@ import { useText } from "../../text";
 import { restartReasonKey } from "./restart-reasons";
 import { presentUpdateStatus } from "./update-status";
 
-const PRODUCT_NAME = "CodeBot";
+const PRODUCT_NAME = "OpenBot Code";
 
 export interface UpdateRequiredScreenProps {
   status: UpdateStatus;

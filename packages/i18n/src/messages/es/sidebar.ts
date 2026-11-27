@@ -162,7 +162,7 @@ export const messages = {
   "sidebar.delete.pending": "Eliminando…",
   "sidebar.delete.title": "¿Eliminar {name}?",
   "sidebar.delete.agentDescription":
-    "Esto elimina de la aplicación el agente y su conversación de CodeBot. Se eliminan su cola, recuerdos, rutinas y espacio de trabajo. El historial guardado por separado por el proveedor CLI conectado no se elimina.",
+    "Esto elimina de la aplicación el agente y su conversación de OpenBot Code. Se eliminan su cola, recuerdos, rutinas y espacio de trabajo. El historial guardado por separado por el proveedor CLI conectado no se elimina.",
   "sidebar.delete.channelDescription":
     "Esto detiene el canal. Su historial permanece en Canales eliminados solo para consulta. Puedes restaurarlo desde allí. Los agentes miembros se conservan.",
   "sidebar.delete.sectionDescription":

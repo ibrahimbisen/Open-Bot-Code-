@@ -4,24 +4,24 @@ import type { messages as source } from "../../en/mobile/share";
 export const messages = {
   "mobile.share.signInTitle": "Connectez-vous pour partager",
   "mobile.share.signInDescription":
-    "Scannez le code QR dans CodeBot sur votre ordinateur. Vous pourrez ensuite choisir l’agent qui reçoit ce que vous avez partagé.",
+    "Scannez le code QR dans OpenBot Code sur votre ordinateur. Vous pourrez ensuite choisir l’agent qui reçoit ce que vous avez partagé.",
   "mobile.share.reading": "Lecture du contenu partagé…",
-  "mobile.share.readFailed": "CodeBot n’a pas pu lire ce que vous avez partagé. Partagez-le à nouveau.",
+  "mobile.share.readFailed": "OpenBot Code n’a pas pu lire ce que vous avez partagé. Partagez-le à nouveau.",
   "mobile.share.content": "À partager",
   "mobile.share.footer":
     "La discussion s’ouvre avec ce contenu dans le champ de message. Rien n’est envoyé tant que vous ne l’envoyez pas.",
-  "mobile.share.sendFooter": "CodeBot envoie ceci à l’agent, puis ouvre la discussion.",
+  "mobile.share.sendFooter": "OpenBot Code envoie ceci à l’agent, puis ouvre la discussion.",
   "mobile.share.lastUsed": "Utilisé en dernier",
   "mobile.share.noAgents": "Aucun agent",
   "mobile.share.chooseAgent": "Choisissez un agent",
   "mobile.share.action": "Partager avec {name}",
   "mobile.share.extension.send": "Envoyer",
-  "mobile.share.extension.footer": "CodeBot envoie ceci à l’agent maintenant. L’app ne s’ouvre pas.",
+  "mobile.share.extension.footer": "OpenBot Code envoie ceci à l’agent maintenant. L’app ne s’ouvre pas.",
   "mobile.share.extension.message": "Ajouter un message",
   "mobile.share.extension.sending": "Envoi à {name}…",
   "mobile.share.extension.sent": "Envoyé à {name}",
-  "mobile.share.extension.failed": "CodeBot n’a pas pu envoyer ceci. Ouvre l’app pour l’envoyer depuis là.",
+  "mobile.share.extension.failed": "OpenBot Code n’a pas pu envoyer ceci. Ouvre l’app pour l’envoyer depuis là.",
   "mobile.share.extension.unconfirmed":
     "Le serveur n’a pas confirmé le message. Vérifie le chat avant de l’envoyer à nouveau.",
-  "mobile.share.extension.openApp": "Ouvrir CodeBot",
+  "mobile.share.extension.openApp": "Ouvrir OpenBot Code",
 } as const satisfies PartialTranslation<typeof source>;

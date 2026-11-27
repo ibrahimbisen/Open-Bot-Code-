@@ -4,9 +4,9 @@ import type { messages as source } from "../en/vault";
 export const messages = {
   "vault.items.title": "פריטים שמורים",
   "vault.items.description":
-    "כל סוכן בשרת הזה יכול להשתמש בפריטים האלה. CodeBot מקליד סיסמאות, מספרי כרטיס וקודי אבטחה בעמוד, כך שהסוכנים אינם רואים אותם. סוכנים קוראים מפתחות API מקובץ ולא מהצ'אט.",
+    "כל סוכן בשרת הזה יכול להשתמש בפריטים האלה. OpenBot Code מקליד סיסמאות, מספרי כרטיס וקודי אבטחה בעמוד, כך שהסוכנים אינם רואים אותם. סוכנים קוראים מפתחות API מקובץ ולא מהצ'אט.",
   "vault.items.scopedDescription":
-    "כל פריט מיועד לסוכנים שבחרת. CodeBot מקליד סיסמאות, מספרי כרטיס וקודי אבטחה בעמוד, כך שהסוכנים אינם רואים אותם. סוכנים קוראים מפתחות API מקובץ ולא מהצ'אט. כל הסוכנים פועלים כאותו משתמש מערכת, ולכן סוכן יכול לקרוא גם קובץ מפתח API שמיועד לסוכנים אחרים.",
+    "כל פריט מיועד לסוכנים שבחרת. OpenBot Code מקליד סיסמאות, מספרי כרטיס וקודי אבטחה בעמוד, כך שהסוכנים אינם רואים אותם. סוכנים קוראים מפתחות API מקובץ ולא מהצ'אט. כל הסוכנים פועלים כאותו משתמש מערכת, ולכן סוכן יכול לקרוא גם קובץ מפתח API שמיועד לסוכנים אחרים.",
   "vault.agents.label": "סוכנים",
   "vault.agents.all": "כל הסוכנים",
   "vault.agents.some": "{chosen} מתוך {total}",
@@ -101,18 +101,18 @@ export const messages = {
   "vault.importMenu": "ייבוא מ-CSV",
   "vault.importTitle": "ייבוא מקובץ CSV",
   "vault.importDescription":
-    "אפשר לייבא התחברויות מקובץ CSV שיוצא מ-1Password, Bitwarden, Chrome, Edge, Firefox, Safari, Apple Passwords, LastPass או Proton Pass. CodeBot קורא את הקובץ במחשב הזה ואינו מעלה אותו.",
+    "אפשר לייבא התחברויות מקובץ CSV שיוצא מ-1Password, Bitwarden, Chrome, Edge, Firefox, Safari, Apple Passwords, LastPass או Proton Pass. OpenBot Code קורא את הקובץ במחשב הזה ואינו מעלה אותו.",
   "vault.importChoose": "בחירת קובץ CSV",
   "vault.importDone": "יובאו: {imported}. דולגו: {skipped}.",
   "vault.unavailableTitle": "המחשב הזה אינו יכול לשמור סודות",
   "vault.unavailableDescription":
-    "CodeBot מצפין את הכספת באמצעות אחסון הסודות של המערכת. יש להגדיר מחזיקת מפתחות ולפתוח את העמוד הזה שוב.",
-  "vault.unreadableTitle": "CodeBot אינו יכול לקרוא את הכספת",
+    "OpenBot Code מצפין את הכספת באמצעות אחסון הסודות של המערכת. יש להגדיר מחזיקת מפתחות ולפתוח את העמוד הזה שוב.",
+  "vault.unreadableTitle": "OpenBot Code אינו יכול לקרוא את הכספת",
   "vault.unreadableDescription":
-    "קובץ הכספת נמצא במחשב הזה, אבל CodeBot אינו מצליח לפענח אותו. זה יכול לקרות כששרשרת המפתחות של המערכת משתנה. איפוס הכספת מתחיל מחדש בלי פריטים.",
+    "קובץ הכספת נמצא במחשב הזה, אבל OpenBot Code אינו מצליח לפענח אותו. זה יכול לקרות כששרשרת המפתחות של המערכת משתנה. איפוס הכספת מתחיל מחדש בלי פריטים.",
   "vault.reset": "איפוס הכספת",
   "vault.resetTitle": "לאפס את הכספת?",
-  "vault.resetDescription": "CodeBot מוחק את קובץ הכספת ואת כל הפריטים שבו. אי אפשר לבטל את הפעולה.",
+  "vault.resetDescription": "OpenBot Code מוחק את קובץ הכספת ואת כל הפריטים שבו. אי אפשר לבטל את הפעולה.",
   "vault.request.private": "נשמר בכספת שלך. {agent} אינו רואה אותו לעולם.",
   "vault.request.privateUnnamed": "נשמר בכספת שלך. הסוכן אינו רואה אותו לעולם.",
   "vault.request.addLogin": "הוספת התחברות",
@@ -133,7 +133,7 @@ export const messages = {
   },
   "vault.twoStep.setupTitle": "הגדרת קוד דו־שלבי",
   "vault.twoStep.setupIntro":
-    "ב־{site}, יש להפעיל אימות דו־שלבי עם אפליקציית אימות. כשהאתר מציג קוד QR, יש למסור ל־CodeBot את המפתח שלו.",
+    "ב־{site}, יש להפעיל אימות דו־שלבי עם אפליקציית אימות. כשהאתר מציג קוד QR, יש למסור ל־OpenBot Code את המפתח שלו.",
   "vault.twoStep.keyLabel": "מפתח הגדרה או קישור otpauth://",
   "vault.twoStep.keyHint": "רוב האתרים מציגים אותו מתחת לקוד ה־QR, בתור „לא ניתן לסרוק?” או „הזנת המפתח ידנית”.",
   "vault.twoStep.keyInvalid": "זה לא מפתח אימות דו־שלבי.",

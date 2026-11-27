@@ -2,45 +2,45 @@ import type { PartialTranslation } from "../../../message";
 import type { messages as source } from "../../en/error/connector";
 
 export const messages = {
-  "error.connector.githubUnavailable": "Deze build van CodeBot heeft geen GitHub-app.",
+  "error.connector.githubUnavailable": "Deze build van OpenBot Code heeft geen GitHub-app.",
   "error.connector.githubDenied": "Het inloggen bij GitHub is geweigerd.",
   "error.connector.githubCodeExpired": "De GitHub-code is verlopen. Verbind GitHub opnieuw.",
   "error.connector.githubDeviceFlowDisabled": "De GitHub-app staat inloggen via een apparaat niet toe.",
   "error.connector.githubClientUnknown": "GitHub kent de Client ID van deze GitHub-app niet.",
   "error.connector.githubUnexpected": "GitHub gaf een onverwacht antwoord: {detail}",
-  "error.connector.githubUnreachable": "CodeBot kan GitHub niet bereiken: {detail}",
+  "error.connector.githubUnreachable": "OpenBot Code kan GitHub niet bereiken: {detail}",
   "error.connector.githubOffline":
-    "CodeBot kan GitHub niet bereiken. Controleer de internetverbinding en de DNS-instellingen van de computer of server waarop CodeBot draait en probeer het opnieuw.",
+    "OpenBot Code kan GitHub niet bereiken. Controleer de internetverbinding en de DNS-instellingen van de computer of server waarop OpenBot Code draait en probeer het opnieuw.",
   "error.connector.githubExpired": "De verbinding met GitHub is verlopen. Verbind GitHub opnieuw.",
   "error.connector.githubFileUnreadable": "Het verbindingsbestand van GitHub is onleesbaar.",
   "error.connector.githubFileTooLarge": "Het verbindingsbestand van GitHub is te groot.",
   "error.connector.onePasswordCliMissing":
-    "CodeBot kan de 1Password-CLI niet vinden. Installeer deze en zet de integratie aan in de 1Password-app, of gebruik een token van een serviceaccount.",
+    "OpenBot Code kan de 1Password-CLI niet vinden. Installeer deze en zet de integratie aan in de 1Password-app, of gebruik een token van een serviceaccount.",
   "error.connector.onePasswordCliInstallFailed":
-    "CodeBot kon de 1Password-CLI niet installeren. Controleer de internetverbinding en probeer het opnieuw.",
+    "OpenBot Code kon de 1Password-CLI niet installeren. Controleer de internetverbinding en probeer het opnieuw.",
   "error.connector.onePasswordCliSignedOut":
     "De 1Password-CLI is niet ingelogd. Zet de integratie aan in de 1Password-app en verbind opnieuw.",
   "error.connector.onePasswordAppUnreachable":
-    "CodeBot kan de 1Password-app niet bereiken. Open 1Password en ontgrendel het. Controleer in Instellingen > Ontwikkelaar dat “Integreren met 1Password CLI” aan staat. Probeer het dan opnieuw.",
+    "OpenBot Code kan de 1Password-app niet bereiken. Open 1Password en ontgrendel het. Controleer in Instellingen > Ontwikkelaar dat “Integreren met 1Password CLI” aan staat. Probeer het dan opnieuw.",
   "error.connector.onePasswordCliFailed": "De 1Password-CLI is mislukt: {detail}",
   "error.connector.onePasswordCliForbidden":
     "Je 1Password-account staat niet toe dat je de gedeelde kluis of een serviceaccount maakt. Vraag een eigenaar of beheerder van het account om deze toestemming, of vraag om een token van een serviceaccount en klik op “Gebruik token”.",
   "error.connector.onePasswordUnexpected": "1Password gaf een onverwacht antwoord: {detail}",
   "error.connector.onePasswordTokenRejected": "1Password heeft het token van het serviceaccount niet geaccepteerd.",
   "error.connector.onePasswordUnreachable":
-    "CodeBot kon geen verbinding maken met 1Password. Controleer de internetverbinding en probeer het opnieuw.",
+    "OpenBot Code kon geen verbinding maken met 1Password. Controleer de internetverbinding en probeer het opnieuw.",
   "error.connector.onePasswordRateLimited":
     "1Password heeft te veel verzoeken ontvangen. Wacht een paar minuten en probeer het opnieuw.",
   "error.connector.onePasswordNoVault":
     "Het serviceaccount kan geen kluis lezen. Geef het toegang tot een kluis en probeer het opnieuw.",
   "error.connector.onePasswordReadFailed":
-    "CodeBot kan je logins in 1Password niet lezen. Verbreek de verbinding met 1Password en maak daarna opnieuw verbinding.",
+    "OpenBot Code kan je logins in 1Password niet lezen. Verbreek de verbinding met 1Password en maak daarna opnieuw verbinding.",
   "error.connector.onePasswordFileUnreadable": "Het verbindingsbestand van 1Password is onleesbaar.",
   "error.connector.onePasswordFileTooLarge": "Het verbindingsbestand van 1Password is te groot.",
   "error.connector.bitwardenFailed":
     "Kan Bitwarden niet lezen. Installeer de bw-CLI, log in, ontgrendel deze en maak één map met de naam Shared with CodeBot. Verbind met een nieuwe sessiesleutel.",
   "error.connector.bitwardenCliMissing":
-    "CodeBot kan de Bitwarden CLI niet vinden. Installeer bw, controleer dat het in een nieuwe terminal werkt en maak daarna opnieuw verbinding.",
+    "OpenBot Code kan de Bitwarden CLI niet vinden. Installeer bw, controleer dat het in een nieuwe terminal werkt en maak daarna opnieuw verbinding.",
   "error.connector.bitwardenFolderMissing":
     "Bitwarden moet precies één map met de naam Shared with CodeBot hebben. Maak die map of verwijder de extra map en maak daarna opnieuw verbinding.",
   "error.connector.bitwardenHostInput":
@@ -54,7 +54,7 @@ export const messages = {
   "error.connector.bitwardenCliInstallFailed":
     "Kan de Bitwarden-CLI niet installeren op deze server. Controleer de netwerkverbinding en verbind opnieuw.",
   "error.connector.bitwardenFileUnreadable": "Het verbindingsbestand van Bitwarden is onleesbaar.",
-  "error.connector.passwordManagerUnknown": "CodeBot kent deze wachtwoordbeheerder niet.",
+  "error.connector.passwordManagerUnknown": "OpenBot Code kent deze wachtwoordbeheerder niet.",
   "error.connector.passwordManagerMethod": "Deze wachtwoordbeheerder kan niet op deze manier verbinden.",
   "error.connector.passwordManagerNoSignIn": "Er is geen aanmeldpagina open. Verbind opnieuw.",
   "error.connector.protonPassFailed": "Kan Proton Pass niet verbinden. Verbind opnieuw.",

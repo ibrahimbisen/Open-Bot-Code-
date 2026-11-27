@@ -145,5 +145,5 @@ function isLoopbackHost(host: string | undefined): boolean {
 }
 
 function callbackPage(locale: string, message: string): string {
-  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><title>CodeBot</title></head><body style="font-family:system-ui;padding:2rem"><p>${message}</p></body></html>`;
+  return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><title>OpenBot Code</title></head><body style="font-family:system-ui;padding:2rem"><p>${message}</p></body></html>`;
 }

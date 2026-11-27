@@ -113,7 +113,7 @@ async function drawColumn(
   await drawLogo(context, x, 92, 44, colors);
   context.fillStyle = colors.primary;
   context.font = `600 28px ${FONT}`;
-  context.fillText("CodeBot", x + 58, 124);
+  context.fillText("OpenBot Code", x + 58, 124);
 
   let y = 154;
   context.font = `700 60px ${FONT}`;
@@ -140,7 +140,7 @@ async function drawColumn(
     y += lineHeight;
   }
 
-  const label = "Add to CodeBot";
+  const label = "Add to OpenBot Code";
   context.font = `600 24px ${FONT}`;
   const pillWidth = context.measureText(label).width + 64;
   context.fillStyle = colors.primary;
@@ -151,7 +151,7 @@ async function drawColumn(
   context.fillText(label, x + 32, pillTop + 38);
   context.font = `500 24px ${FONT}`;
   context.fillStyle = colors.muted;
-  context.fillText("CodeBot", x + pillWidth + 24, pillTop + 38);
+  context.fillText("OpenBot Code", x + pillWidth + 24, pillTop + 38);
 }
 
 export async function drawLogo(

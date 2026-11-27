@@ -42,7 +42,7 @@ export const messages = {
   "mobile.browser.status.ended": "התצוגה החיה הסתיימה.",
   "mobile.browser.status.offline": "השרת לא מחובר.",
   "mobile.browser.status.noTab": "אין ל-{name} לשונית דפדפן פתוחה.",
-  "mobile.browser.status.unsupported": "השרת הזה לא יכול להציג את הדפדפן שלו בטלפון. יש לעדכן בו את CodeBot.",
+  "mobile.browser.status.unsupported": "השרת הזה לא יכול להציג את הדפדפן שלו בטלפון. יש לעדכן בו את OpenBot Code.",
   "mobile.browser.status.off": "הדפדפן אינו זמין בגרסה הזו של האפליקציה.",
   "mobile.browser.notice.copied": "הועתק לטלפון.",
   "mobile.browser.notice.nothingSelected": "לא נבחר דבר בדף.",
@@ -96,5 +96,5 @@ export const messages = {
   "mobile.browser.httpSignIn.username": "שם משתמש",
   "mobile.browser.httpSignIn.password": "סיסמה",
   "mobile.browser.httpSignIn.submit": "התחברות",
-  "mobile.browser.httpSignIn.failed": "CodeBot לא הצליח לשלוח את ההתחברות.",
+  "mobile.browser.httpSignIn.failed": "OpenBot Code לא הצליח לשלוח את ההתחברות.",
 } as const satisfies PartialTranslation<typeof source>;

@@ -12,7 +12,7 @@ export const messages = {
   "server.connection.cachedHint":
     "Geladene Inhalte und Entwürfe bleiben erhalten. Serveraktionen werden nach dem erneuten Verbinden fortgesetzt.",
   "server.connection.computerOffline":
-    "{name} ist offline. Prüfe, ob sein Computer eingeschaltet und CodeBot geöffnet ist und Server veröffentlichen unter Servereinstellungen > Mitglieder aktiviert ist.",
+    "{name} ist offline. Prüfe, ob sein Computer eingeschaltet und OpenBot Code geöffnet ist und Server veröffentlichen unter Servereinstellungen > Mitglieder aktiviert ist.",
   "server.connection.conversationFailed": "Die Unterhaltung konnte nicht geladen werden. Versuche es erneut.",
   "server.connection.panelsFailed":
     "Einige Bereiche des Arbeitsbereichs konnten nicht geladen werden. Versuche es erneut.",
@@ -22,20 +22,20 @@ export const messages = {
   "server.connection.details": "Details",
 
   "server.status.steps": "Verbindungsschritte",
-  "server.status.updateCause": "{name} startet neu, um CodeBot {version} zu installieren.",
-  "server.status.updateCauseNoVersion": "{name} startet neu, um ein CodeBot-Update zu installieren.",
+  "server.status.updateCause": "{name} startet neu, um OpenBot Code {version} zu installieren.",
+  "server.status.updateCauseNoVersion": "{name} startet neu, um ein OpenBot Code-Update zu installieren.",
   "server.status.connectCause": "Diese App verbindet sich mit {name}.",
   "server.status.connectionCause":
     "Diese App hat die Verbindung zu {name} verloren. Sie verbindet sich automatisch erneut.",
   "server.status.stepUpdate": "Update installieren",
-  "server.status.stepUpdateDetail": "CodeBot stoppt, installiert das Update und startet wieder.",
+  "server.status.stepUpdateDetail": "OpenBot Code stoppt, installiert das Update und startet wieder.",
   "server.status.stepConnect": "Verbinden",
   "server.status.stepConnectDetail": "Diese App öffnet eine Verbindung zum Server.",
   "server.status.stepLoad": "Arbeitsbereich laden",
   "server.status.stepLoadDetail": "Agenten und Chats werden vom Server geladen.",
   "server.status.elapsed": "Vergangen: {time}",
-  "server.compatibility.updateClientTitle": "Diese CodeBot-App aktualisieren",
-  "server.compatibility.updateHostTitle": "CodeBot auf {name} aktualisieren",
+  "server.compatibility.updateClientTitle": "Diese OpenBot Code-App aktualisieren",
+  "server.compatibility.updateHostTitle": "OpenBot Code auf {name} aktualisieren",
   "server.compatibility.unsafeDataTitle": "Der Host hat unsichere Daten zurückgegeben",
   "server.compatibility.cannotConnectTitle": "Verbindung mit {name} nicht möglich",
   "server.compatibility.safeModeTitle": "{name} startet nicht",
@@ -44,7 +44,7 @@ export const messages = {
   "server.compatibility.updateHostDescription":
     "Der Host unterstützt nur ältere Protokolle als diese App. Aktualisiere den Host und versuche es erneut.",
   "server.compatibility.unsafeDataDescription":
-    "CodeBot hat diese Verbindung beendet, weil Daten eines bekannten Nachrichtentyps ungültig waren. Deine aktuellen Arbeitsbereichsdaten wurden nicht geändert.",
+    "OpenBot Code hat diese Verbindung beendet, weil Daten eines bekannten Nachrichtentyps ungültig waren. Deine aktuellen Arbeitsbereichsdaten wurden nicht geändert.",
   "server.compatibility.clientVersion": "Client-Version",
   "server.compatibility.hostVersion": "Host-Version",
   "server.compatibility.negotiatedProtocol": "Ausgehandeltes Protokoll",
@@ -84,12 +84,12 @@ export const messages = {
   "server.local.creating": "Server wird erstellt…",
   "server.local.createFailed": "Der Server konnte nicht erstellt werden.",
   "server.local.createFailedRetry":
-    "Etwas ist schiefgelaufen. Versuche es erneut. Wenn es wieder fehlschlägt, starte CodeBot neu.",
+    "Etwas ist schiefgelaufen. Versuche es erneut. Wenn es wieder fehlschlägt, starte OpenBot Code neu.",
   "server.local.limitReached":
     "Auf diesem Computer sind höchstens {limit} Server möglich. Löschen Sie einen, um einen neuen zu erstellen.",
   "server.local.deleteConfirmTitle": "{name} löschen?",
   "server.local.deleteConfirmDescription":
-    "CodeBot stoppt den Server und verschiebt seine Agenten, Chats und Dateien in den Papierkorb.",
+    "OpenBot Code stoppt den Server und verschiebt seine Agenten, Chats und Dateien in den Papierkorb.",
   "server.local.deleting": "Server wird gelöscht…",
   "server.local.deletedTitle": "{name} gelöscht",
   "server.role.admin": "Administrator",
@@ -145,13 +145,13 @@ export const messages = {
   "server.settings.identityLocalOnly":
     "Name und Logo dieses Servers können nur auf dem Computer geändert werden, auf dem er läuft.",
   "server.settings.publicationLocalOnly": "Nur der lokale Server kann die Veröffentlichung ändern.",
-  "server.compatibility.versionMismatchTitle": "Unterschiedliche CodeBot-Versionen auf {name}",
+  "server.compatibility.versionMismatchTitle": "Unterschiedliche OpenBot Code-Versionen auf {name}",
   "server.compatibility.versionMismatchDescription":
     "Die Verbindung verwendet Protokoll {protocol}. Einige neuere Funktionen sind möglicherweise nicht verfügbar. Client {clientVersion}; Host {hostVersion}.",
   "server.compatibility.versionMismatchUpdateHostDescription":
-    "Aktualisiere CodeBot auf {name}, um alle Funktionen zu verwenden. Die Verbindung verwendet Protokoll {protocol}. Client {clientVersion}; Host {hostVersion}.",
+    "Aktualisiere OpenBot Code auf {name}, um alle Funktionen zu verwenden. Die Verbindung verwendet Protokoll {protocol}. Client {clientVersion}; Host {hostVersion}.",
   "server.compatibility.versionMismatchUpdateClientDescription":
-    "Aktualisiere diese CodeBot-App, um alle Funktionen zu verwenden. Die Verbindung verwendet Protokoll {protocol}. Client {clientVersion}; Host {hostVersion}.",
+    "Aktualisiere diese OpenBot Code-App, um alle Funktionen zu verwenden. Die Verbindung verwendet Protokoll {protocol}. Client {clientVersion}; Host {hostVersion}.",
   "server.connection.failedTitle": "Die Verbindung ist fehlgeschlagen",
   "server.connection.failedDescription":
     "Die Verbindung mit diesem Server konnte nicht hergestellt werden. Prüfe, ob der Host online ist, und versuche es erneut.",
@@ -171,7 +171,7 @@ export const messages = {
   "server.settings.desktopDescription": "Richte den Desktop dieses Servers ein oder verbinde dich damit.",
   "server.settings.storageTitle": "Speicher",
   "server.settings.storageDescription":
-    "Sieh nach, was CodeBot auf der Festplatte dieses Servers speichert, und gib Speicherplatz frei.",
+    "Sieh nach, was OpenBot Code auf der Festplatte dieses Servers speichert, und gib Speicherplatz frei.",
   "server.settings.importTitle": "Importieren",
   "server.settings.importDescription": "Verschiebe deine Agenten von Grok Bot oder Hermes Agent auf diesen Server.",
   "server.settings.transferTitle": "Übertragung",
@@ -206,9 +206,9 @@ export const messages = {
   "server.settings.nameTooLong": "Verwende höchstens {limit} Zeichen.",
   "server.settings.actionFailedTitle": "Serveraktion fehlgeschlagen",
   "server.settings.actionFailed": "Die Serveraktion ist fehlgeschlagen.",
-  "server.settings.imageReadFailed": "CodeBot konnte dieses Bild nicht lesen.",
+  "server.settings.imageReadFailed": "OpenBot Code konnte dieses Bild nicht lesen.",
   "server.settings.copyFailedTitle": "Kopieren fehlgeschlagen",
-  "server.settings.copyFailed": "CodeBot konnte diesen Wert nicht kopieren.",
+  "server.settings.copyFailed": "OpenBot Code konnte diesen Wert nicht kopieren.",
   "server.settings.unavailableTitle": "Servereinstellungen nicht verfügbar",
   "server.settings.reset": "Zurücksetzen",
   "server.settings.unsavedChanges": "Nicht gespeicherte Änderungen",
@@ -248,7 +248,7 @@ export const messages = {
   "server.settings.appearanceColorOption": "Serverfarbe: {color}",
   "server.settings.appearanceReset": "Form und Farbe zurücksetzen",
   "server.settings.access": "Zugriff",
-  "server.companySignIn.desktopOnly": "Richte Single Sign-on in der CodeBot-Desktop-App ein.",
+  "server.companySignIn.desktopOnly": "Richte Single Sign-on in der OpenBot Code-Desktop-App ein.",
   "server.settings.publish": "Server veröffentlichen",
   "server.settings.published": "Server ist veröffentlicht",
   "server.settings.setUpDesktopTitle": "Remotedesktop einrichten",
@@ -359,7 +359,8 @@ export const messages = {
   "server.settings.restartTitle": "Neu starten",
   "server.settings.restarting": "Wird neu gestartet…",
   "server.settings.restartedTitle": "{name} startet neu",
-  "server.settings.restartHiddenDescription": "CodeBot verbindet sich automatisch wieder, wenn der Server zurück ist.",
+  "server.settings.restartHiddenDescription":
+    "OpenBot Code verbindet sich automatisch wieder, wenn der Server zurück ist.",
   "server.settings.restartHide": "Ausblenden",
   "server.settings.restartProgressTitle": "{name} wird neu gestartet",
   "server.settings.restartProgressDescription": "{time} · meist etwa eine Minute. Du kannst dieses Fenster ausblenden.",
@@ -423,7 +424,7 @@ export const messages = {
       "Dieser Server hat die maximale Anzahl von {count} Mitgliedern. Entferne ein Mitglied, um eine neue Person einzuladen.",
   },
   "server.invite.qrLabel": "Einladungs-QR-Code",
-  "server.invite.qrDescription": "Scanne diesen Code in CodeBot Mobile, um diesem Server beizutreten.",
+  "server.invite.qrDescription": "Scanne diesen Code in OpenBot Code Mobile, um diesem Server beizutreten.",
   "server.invite.accepted": "Einladung angenommen",
   "server.invite.expired": "Einladung abgelaufen",
   "server.invite.sent": "Einladung gesendet",
@@ -431,7 +432,7 @@ export const messages = {
   "server.invite.acceptedDescription":
     "Das Mitglied ist diesem Server beigetreten. Erstelle einen neuen Link, um eine weitere Person einzuladen.",
   "server.invite.expiredDescription": "Erstelle einen neuen Link, um jemanden einzuladen.",
-  "server.invite.linkReadyDescription": "Teile den Link oder scanne den QR-Code in CodeBot Mobile.",
+  "server.invite.linkReadyDescription": "Teile den Link oder scanne den QR-Code in OpenBot Code Mobile.",
   "server.invite.pendingTitle": "Ausstehende Einladungen",
   "server.invite.pendingCount": "{total} ausstehend",
   "server.invite.noPending": "Keine ausstehenden Einladungen.",
@@ -460,7 +461,7 @@ export const messages = {
   "server.desktop.connectionUnavailable": "Verbindung nicht verfügbar",
   "server.desktop.hostOffline": "Host ist offline",
   "server.desktop.hostOfflineDescription": "Verbinde dich erneut mit dem Host, bevor du seinen Desktop öffnest.",
-  "server.desktop.hostUpdateDescription": "Aktualisiere CodeBot auf dem Host, um die Fernsteuerung zu verwenden.",
+  "server.desktop.hostUpdateDescription": "Aktualisiere OpenBot Code auf dem Host, um die Fernsteuerung zu verwenden.",
   "server.desktop.serviceAvailable": "Dienst verfügbar",
   "server.desktop.serviceNotReady": "Dienst nicht bereit",
   "server.desktop.serviceNotReadyDescription":
@@ -475,7 +476,7 @@ export const messages = {
   "server.desktop.accessMembers": "Alle Mitglieder",
   "server.desktop.askLabel": "Auf diesem Computer fragen",
   "server.desktop.askDescription":
-    "Jede Sitzung wartet, bis eine Person an diesem Computer sie erlaubt. Ohne Antwort innerhalb von 30 Sekunden lehnt CodeBot sie ab.",
+    "Jede Sitzung wartet, bis eine Person an diesem Computer sie erlaubt. Ohne Antwort innerhalb von 30 Sekunden lehnt OpenBot Code sie ab.",
   "server.desktop.activeTitle": "Aktive Remotedesktop-Sitzungen: {active}",
   "server.desktop.activeDescription": "Beendet jede Sitzung sofort. Mitglieder können erneut fragen.",
   "server.desktop.stopAll": "Alle Fernsteuerungen beenden",
@@ -487,9 +488,9 @@ export const messages = {
   "server.settings.providersSwitchNote": "Wechsle zu {name}, um seine KI-Anbieter zu verwalten.",
   "server.settings.providersSwitch": "Zu diesem Server wechseln",
   "server.settings.updatesTitle": "Updates",
-  "server.settings.updatesDescription": "Aktualisiere CodeBot auf dem Computer, auf dem dieser Server läuft.",
-  "server.update.hostTitle": "CodeBot auf {name}",
-  "server.update.version": "CodeBot {version}",
+  "server.settings.updatesDescription": "Aktualisiere OpenBot Code auf dem Computer, auf dem dieser Server läuft.",
+  "server.update.hostTitle": "OpenBot Code auf {name}",
+  "server.update.version": "OpenBot Code {version}",
   "server.update.status.idle": "Suche nach Updates, um die neueste Version zu finden.",
   "server.update.status.checking": "Updates werden gesucht…",
   "server.update.status.available": "{version} ist verfügbar.",
@@ -497,28 +498,28 @@ export const messages = {
   "server.update.status.downloadingUnknown": "{version} wird heruntergeladen…",
   "server.update.status.ready": "{version} wurde heruntergeladen.",
   "server.update.status.installing": "{name} wird neu gestartet, um das Update zu installieren.",
-  "server.update.status.upToDate": "CodeBot ist auf {name} aktuell.",
+  "server.update.status.upToDate": "OpenBot Code ist auf {name} aktuell.",
   "server.update.status.checkFailed": "{name} konnte nicht nach Updates suchen. Versuche es erneut.",
   "server.update.status.downloadFailed": "{name} konnte das Update nicht herunterladen. Versuche es erneut.",
   "server.update.status.installFailed":
-    "{name} konnte das Update nicht installieren. Stelle sicher, dass kein anderer Benutzer dieses Computers CodeBot ausführt, und versuche es erneut.",
+    "{name} konnte das Update nicht installieren. Stelle sicher, dass kein anderer Benutzer dieses Computers OpenBot Code ausführt, und versuche es erneut.",
   "server.update.releaseCheckFailed":
     "{name} konnte den Versions-Feed nicht lesen. Prüfe die Netzwerkverbindung des Hosts und versuche es erneut.",
   "server.update.releaseUnavailable":
     "Diese Version kann nicht nach neuen Versionen suchen. Bitte den Host-Administrator, nach einer kompatiblen Version zu suchen.",
   "server.update.externalTitle": "Der Host steuert die Installation",
   "server.update.path.hostManager":
-    "CodeBot Host Manager installiert Updates, wenn alle Benutzer inaktiv sind. Bitte den Host-Administrator, den Status von Host Manager zu prüfen, wenn ein Update nicht startet.",
+    "OpenBot Code Host Manager installiert Updates, wenn alle Benutzer inaktiv sind. Bitte den Host-Administrator, den Status von Host Manager zu prüfen, wenn ein Update nicht startet.",
   "server.update.path.hosted":
     "Der gehostete Dienst lädt Updates im Hintergrund herunter. Ein heruntergeladenes Update startet beim nächsten Serverstart. Warte, bis aktive Aufgaben beendet sind, bevor du den Server stoppst und fortsetzt. Bleibt er bei einer alten Version, kontaktiere den Host-Administrator.",
   "server.update.path.system":
-    "Führe auf dem Host sudo codebot update aus, um die neueste Version zu installieren. Dieser Befehl beendet CodeBot. Warte zuerst, bis aktive Aufgaben beendet sind. Automatische Downloads werden beim nächsten Systemstart installiert.",
+    "Führe auf dem Host sudo codebot update aus, um die neueste Version zu installieren. Dieser Befehl beendet OpenBot Code. Warte zuerst, bis aktive Aufgaben beendet sind. Automatische Downloads werden beim nächsten Systemstart installiert.",
   "server.update.path.container":
-    "Lade auf dem Docker-Host das neue CodeBot-Image herunter und erstelle den Container mit denselben Datenvolumes neu. Warte zuerst, bis aktive Aufgaben beendet sind. Behalte die vorhandenen Volumes, um deine Daten zu erhalten.",
+    "Lade auf dem Docker-Host das neue OpenBot Code-Image herunter und erstelle den Container mit denselben Datenvolumes neu. Warte zuerst, bis aktive Aufgaben beendet sind. Behalte die vorhandenen Volumes, um deine Daten zu erhalten.",
   "server.update.path.manual":
-    "Diese Installation kann sich nicht selbst ersetzen. Bitte den Host-Administrator, die kompatible Version von github.com/nightly-labs/openbot/releases zu installieren. Behalte die vorhandenen CodeBot-Daten.",
+    "Diese Installation kann sich nicht selbst ersetzen. Bitte den Host-Administrator, die kompatible Version von github.com/nightly-labs/openbot/releases zu installieren. Behalte die vorhandenen OpenBot Code-Daten.",
   "server.update.path.unavailable":
-    "Dies ist eine Entwicklungsversion. Verwende eine installierte CodeBot-Version, um nach Updates zu suchen.",
+    "Dies ist eine Entwicklungsversion. Verwende eine installierte OpenBot Code-Version, um nach Updates zu suchen.",
   "server.update.check": "Nach Updates suchen",
   "server.update.start": "Im Leerlauf aktualisieren",
   "server.update.restartNow": "Jetzt neu starten",
@@ -528,36 +529,38 @@ export const messages = {
   "server.update.requestedBy": "{member} hat dieses Update angefordert.",
   "server.update.automatic": "{name} installiert Updates automatisch.",
   "server.update.autoDownloadTitle": "Updates automatisch herunterladen",
-  "server.update.autoDownloadDescription": "{name} lädt jede neue CodeBot-Version herunter, sobald sie erscheint.",
+  "server.update.autoDownloadDescription": "{name} lädt jede neue OpenBot Code-Version herunter, sobald sie erscheint.",
   "server.update.autoInstallTitle": "Updates automatisch installieren",
   "server.update.autoInstallDescription":
     "{name} startet mit einem heruntergeladenen Update neu, sobald seine Agenten inaktiv sind. Mitglieder werden kurz getrennt und automatisch erneut verbunden.",
   "server.update.waitingFor": "Warten auf {reasons}.",
   "server.update.disabledTitle": "Remote-Updates sind deaktiviert",
   "server.update.disabledDescription":
-    "Der Benutzer von {name} hat Updates durch Servermitglieder deaktiviert. Bitte ihn, CodeBot zu aktualisieren oder auf seinem Computer Einstellungen > Updates zu öffnen und „Updates durch Servermitglieder erlauben“ zu aktivieren.",
+    "Der Benutzer von {name} hat Updates durch Servermitglieder deaktiviert. Bitte ihn, OpenBot Code zu aktualisieren oder auf seinem Computer Einstellungen > Updates zu öffnen und „Updates durch Servermitglieder erlauben“ zu aktivieren.",
   "server.update.managedTitle": "Ein Host Manager steuert Updates",
-  "server.update.managedDescription": "CodeBot Host Manager aktualisiert {name}. Kontaktiere den Host-Administrator.",
+  "server.update.managedDescription":
+    "OpenBot Code Host Manager aktualisiert {name}. Kontaktiere den Host-Administrator.",
   "server.update.unsupportedTitle": "{name} kann sich nicht selbst aktualisieren",
   "server.update.unsupportedDescription":
-    "Diese CodeBot-Version hat keine Update-Funktion. Installiere eine neue Version auf {name}.",
+    "Diese OpenBot Code-Version hat keine Update-Funktion. Installiere eine neue Version auf {name}.",
   "server.update.restarting": "Wird neu gestartet…",
   "server.update.loadFailed": "Der Update-Status von {name} wurde nicht geladen.",
   "server.update.hostAction": "Host aktualisieren",
-  "server.update.dialog.offerTitle": "{name} auf CodeBot {version} aktualisieren",
+  "server.update.dialog.offerTitle": "{name} auf OpenBot Code {version} aktualisieren",
   "server.update.dialog.offerDescription":
-    "{name} nutzt CodeBot {current}. Zuerst wird das Update heruntergeladen, dann startet {name} neu.",
+    "{name} nutzt OpenBot Code {current}. Zuerst wird das Update heruntergeladen, dann startet {name} neu.",
   "server.update.dialog.offerReadyDescription":
-    "{name} nutzt CodeBot {current}. Das Update ist heruntergeladen. {name} startet neu, um es zu installieren.",
+    "{name} nutzt OpenBot Code {current}. Das Update ist heruntergeladen. {name} startet neu, um es zu installieren.",
   "server.update.dialog.progressTitle": "{name} wird aktualisiert",
   "server.update.dialog.progressDescription": "{time} · Du kannst dieses Fenster ausblenden.",
-  "server.update.dialog.doneTitle": "{name} nutzt jetzt CodeBot {version}",
+  "server.update.dialog.doneTitle": "{name} nutzt jetzt OpenBot Code {version}",
   "server.update.dialog.doneDescription": "Das Update hat {time} gedauert.",
   "server.update.dialog.failedTitle": "{name} wurde nicht aktualisiert",
   "server.update.dialog.restartFailed": "{name} ist nicht wieder online. Prüfe den Host und versuche es dann erneut.",
-  "server.update.dialog.notInstalled": "{name} wurde mit CodeBot {current} neu gestartet. Versuche das Update erneut.",
+  "server.update.dialog.notInstalled":
+    "{name} wurde mit OpenBot Code {current} neu gestartet. Versuche das Update erneut.",
   "server.update.dialog.steps": "Update-Schritte",
-  "server.update.dialog.downloadStep": "CodeBot {version} herunterladen",
+  "server.update.dialog.downloadStep": "OpenBot Code {version} herunterladen",
   "server.update.dialog.downloadPending": "Agenten arbeiten während des Downloads weiter.",
   "server.update.dialog.downloadPreparing": "Download wird vorbereitet…",
   "server.update.dialog.downloadRunning": "{progress} · Agenten arbeiten weiter.",
@@ -566,10 +569,10 @@ export const messages = {
   "server.update.dialog.restartPending": "Mitglieder verlieren die Verbindung für etwa eine Minute.",
   "server.update.dialog.restartWaiting": "Warten auf {reasons}.",
   "server.update.dialog.restartSoon": "Der Neustart beginnt gleich.",
-  "server.update.dialog.restartRunning": "CodeBot {version} wird gestartet…",
+  "server.update.dialog.restartRunning": "OpenBot Code {version} wird gestartet…",
   "server.update.dialog.onlineStep": "Wieder online",
   "server.update.dialog.onlinePending": "Mitglieder verbinden sich automatisch erneut.",
-  "server.update.dialog.onlineDone": "Nach {time} auf CodeBot {version}.",
+  "server.update.dialog.onlineDone": "Nach {time} auf OpenBot Code {version}.",
   "server.update.dialog.waitIdle": "Warten, bis die Agenten inaktiv sind",
   "server.update.dialog.waitIdleDescription":
     "Der Neustart wartet, bis Agentendurchläufe und Routinen-Ausführungen abgeschlossen sind.",
@@ -595,15 +598,15 @@ export const messages = {
   "server.update.reason.fileTransfer": "eine Dateiübertragung",
   "server.update.reason.browserControl": "Browsersteuerung durch einen Agenten",
   "server.update.reason.updateOperation": "einen weiteren Update-Schritt",
-  "server.update.reason.initialization": "den Start von CodeBot",
+  "server.update.reason.initialization": "den Start von OpenBot Code",
   "server.update.reason.other": "andere Aufgaben",
   "server.restartNotice.waitingTitle": "{name} startet neu, um ein Update zu installieren",
-  "server.restartNotice.waitingVersionTitle": "{name} startet neu, um CodeBot {version} zu installieren",
+  "server.restartNotice.waitingVersionTitle": "{name} startet neu, um OpenBot Code {version} zu installieren",
   "server.restartNotice.waitingDescription":
-    "Der Neustart wartet, bis seine Agenten inaktiv sind. Du wirst kurz getrennt. Danach verbindet sich CodeBot automatisch erneut.",
+    "Der Neustart wartet, bis seine Agenten inaktiv sind. Du wirst kurz getrennt. Danach verbindet sich OpenBot Code automatisch erneut.",
   "server.restartNotice.restartingTitle": "{name} wird neu gestartet, um ein Update zu installieren",
   "server.restartNotice.restartingDescription":
-    "CodeBot verbindet sich automatisch erneut, sobald {name} wieder verfügbar ist.",
+    "OpenBot Code verbindet sich automatisch erneut, sobald {name} wieder verfügbar ist.",
   "server.restartNotice.backTitle": "{name} ist wieder online",
   "server.settings.personalityTitle": "Persönlichkeit",
   "server.settings.personalityDescription": "Lege fest, wie die Agenten auf diesem Server mit dir sprechen.",
@@ -640,7 +643,7 @@ export const messages = {
   "server.ownerTransfer.incomingStays":
     "Anmeldungen bei Anbietern, gespeicherte Schlüssel, Vault-Logins, Browser-Anmeldungen und verbundene Apps auf dem Server bleiben dort, und du kannst sie nutzen.",
   "server.ownerTransfer.incomingMachine":
-    "Wer sich noch an dem Computer anmelden kann, auf dem der Server läuft, kann dein CodeBot-Konto nutzen. Ändere dort die Passwörter und SSH-Schlüssel.",
+    "Wer sich noch an dem Computer anmelden kann, auf dem der Server läuft, kann dein OpenBot Code-Konto nutzen. Ändere dort die Passwörter und SSH-Schlüssel.",
   "server.ownerTransfer.later": "Später",
   "server.ownerTransfer.decline": "Ablehnen",
   "server.ownerTransfer.accept": "Annehmen",

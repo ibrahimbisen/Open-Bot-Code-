@@ -25,6 +25,10 @@ interface Finding {
 
 const UPSTREAM_NAME = ["o", "p", "e", "n", "b", "o", "t"].join("");
 const NAME_PATTERN = new RegExp(UPSTREAM_NAME, "i");
+const VISIBLE_NAME = new RegExp(
+  `${UPSTREAM_NAME.charAt(0).toUpperCase()}${UPSTREAM_NAME.slice(1, 4)}Bot Code(?![A-Za-z0-9])`,
+  "g",
+);
 const SERVER_PATTERN = new RegExp(
   [
     `${UPSTREAM_NAME}\\.(?:run|site)\\b`,
@@ -64,6 +68,10 @@ function isAllowedLine(value: unknown): value is AllowedLine {
   return isDynamicRecord(value) && isString(value.path) && isString(value.contains) && isString(value.reason);
 }
 
+function withoutVisibleName(text: string): string {
+  return text.replace(VISIBLE_NAME, "");
+}
+
 function trackedFiles(): string[] {
   return execFileSync("git", ["ls-files", "-z"], { cwd: projectRoot, encoding: "utf8", maxBuffer: 256 * 1_024 * 1_024 })
     .split("\0")
@@ -84,17 +92,18 @@ function findings(allowlist: Allowlist): Finding[] {
     }
     if (content.subarray(0, BINARY_PROBE_BYTES).includes(0)) continue;
     const text = content.toString("utf8");
-    if (!NAME_PATTERN.test(text)) continue;
+    if (!NAME_PATTERN.test(withoutVisibleName(text))) continue;
     const allowedLines = allowlist.lines.filter((entry) => entry.path === path);
     const lines = text.split("\n");
     for (const [index, line] of lines.entries()) {
-      if (!NAME_PATTERN.test(line)) continue;
+      const checked = withoutVisibleName(line);
+      if (!NAME_PATTERN.test(checked)) continue;
       if (allowedLines.some((entry) => line.includes(entry.contains))) continue;
       found.push({
         path,
         line: index + 1,
         text: line.trim().slice(0, TEXT_LIMIT),
-        kind: SERVER_PATTERN.test(line) ? "server" : "name",
+        kind: SERVER_PATTERN.test(checked) ? "server" : "name",
       });
     }
   }

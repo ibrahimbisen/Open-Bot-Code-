@@ -2,39 +2,39 @@ import type { PartialTranslation } from "../../message";
 import type { messages as source } from "../en/startup";
 
 export const messages = {
-  "startup.failedTitle": "CodeBot no pudo iniciarse",
+  "startup.failedTitle": "OpenBot Code no pudo iniciarse",
   "startup.failedBody":
     "{message}\n\nTus datos locales no se han restablecido ni sobrescrito. Consulta la guía de solución de problemas para recuperarlos.",
-  "startup.archiveChangedTitle": "Se cambiaron archivos de CodeBot",
+  "startup.archiveChangedTitle": "Se cambiaron archivos de OpenBot Code",
   "startup.archiveChangedBody":
-    "Otro programa cambió el archivo app.asar de CodeBot. CodeBot funciona ahora, pero no se abrirá después de cerrarlo.\n\nPara repararlo, vuelve a instalar CodeBot. Tus datos locales se conservan.",
-  "startup.archiveChangedDownload": "Descargar CodeBot",
+    "Otro programa cambió el archivo app.asar de OpenBot Code. OpenBot Code funciona ahora, pero no se abrirá después de cerrarlo.\n\nPara repararlo, vuelve a instalar OpenBot Code. Tus datos locales se conservan.",
+  "startup.archiveChangedDownload": "Descargar OpenBot Code",
   "startup.filesDamagedBody":
-    "Algunos archivos de CodeBot están dañados o faltan.\n\nPara repararlo, vuelve a instalar CodeBot. Tus datos locales se conservan.",
-  "startup.newerDataUpdatingTitle": "Actualizando CodeBot",
+    "Algunos archivos de OpenBot Code están dañados o faltan.\n\nPara repararlo, vuelve a instalar OpenBot Code. Tus datos locales se conservan.",
+  "startup.newerDataUpdatingTitle": "Actualizando OpenBot Code",
   "startup.newerDataUpdatingBody":
-    "Una versión más reciente de CodeBot guardó tus datos. CodeBot instala la última versión y luego se abre de nuevo.\n\nTus datos locales no se restablecieron ni se sobrescribieron.",
-  "startup.newerDataTitle": "Instala la última versión de CodeBot",
+    "Una versión más reciente de OpenBot Code guardó tus datos. OpenBot Code instala la última versión y luego se abre de nuevo.\n\nTus datos locales no se restablecieron ni se sobrescribieron.",
+  "startup.newerDataTitle": "Instala la última versión de OpenBot Code",
   "startup.newerDataBody":
-    "Una versión más reciente de CodeBot guardó tus datos y esta versión ({version}) no puede abrirlos. Instala la última versión para abrir tus datos.\n\nTus datos locales no se restablecieron ni se sobrescribieron.",
-  "startup.newerDataDownload": "Descargar CodeBot",
+    "Una versión más reciente de OpenBot Code guardó tus datos y esta versión ({version}) no puede abrirlos. Instala la última versión para abrir tus datos.\n\nTus datos locales no se restablecieron ni se sobrescribieron.",
+  "startup.newerDataDownload": "Descargar OpenBot Code",
   "startup.newerDataGuide": "Abrir guía",
   "startup.newerDataQuit": "Salir",
-  "startup.newerDataLoopTitle": "La última versión de CodeBot no se abrió",
+  "startup.newerDataLoopTitle": "La última versión de OpenBot Code no se abrió",
   "startup.newerDataLoopBody":
-    "Una versión más reciente de CodeBot guardó tus datos y esta versión ({version}) no puede abrirlos. CodeBot {loopVersion} se detuvo antes de abrirse varias veces seguidas, así que no se vuelve a instalar.\n\nInstala una versión más reciente que {loopVersion} cuando esté disponible. Para obtener ayuda, abre la guía.\n\nTus datos locales no se restablecieron ni se sobrescribieron.",
+    "Una versión más reciente de OpenBot Code guardó tus datos y esta versión ({version}) no puede abrirlos. OpenBot Code {loopVersion} se detuvo antes de abrirse varias veces seguidas, así que no se vuelve a instalar.\n\nInstala una versión más reciente que {loopVersion} cuando esté disponible. Para obtener ayuda, abre la guía.\n\nTus datos locales no se restablecieron ni se sobrescribieron.",
   "startup.newerDataReleases": "Ver versiones",
-  "startup.recoveryWindowTitle": "Recuperación de CodeBot",
-  "startup.recoveryTitle": "CodeBot no se abrió",
+  "startup.recoveryWindowTitle": "Recuperación de OpenBot Code",
+  "startup.recoveryTitle": "OpenBot Code no se abrió",
   "startup.recoveryBody": {
-    one: "CodeBot {version} se detuvo antes de abrirse, {count} vez seguida. Tus datos locales no se restablecieron ni se sobrescribieron.",
+    one: "OpenBot Code {version} se detuvo antes de abrirse, {count} vez seguida. Tus datos locales no se restablecieron ni se sobrescribieron.",
     other:
-      "CodeBot {version} se detuvo antes de abrirse, {count} veces seguidas. Tus datos locales no se restablecieron ni se sobrescribieron.",
+      "OpenBot Code {version} se detuvo antes de abrirse, {count} veces seguidas. Tus datos locales no se restablecieron ni se sobrescribieron.",
   },
   "startup.recoveryHint":
     "Vuelve a intentarlo o instala la última versión que se abrió. Para obtener ayuda, exporta el diagnóstico y envía el archivo con tu informe.",
   "startup.recoveryHintLatest":
-    "CodeBot no encontró una versión anterior que pueda abrir tus datos. Vuelve a intentarlo o instala la última versión. Para obtener ayuda, exporta el diagnóstico y envía el archivo con tu informe.",
+    "OpenBot Code no encontró una versión anterior que pueda abrir tus datos. Vuelve a intentarlo o instala la última versión. Para obtener ayuda, exporta el diagnóstico y envía el archivo con tu informe.",
   "startup.recoveryRetry": "Reintentar",
   "startup.recoveryPreviousVersion": "Descargar versión anterior",
   "startup.recoveryLatestVersion": "Descargar última versión",
@@ -42,5 +42,5 @@ export const messages = {
   "startup.recoveryOpenDataFolder": "Abrir carpeta de datos",
   "startup.recoveryQuit": "Salir",
   "startup.recoveryDiagnosticsSaved": "El archivo de diagnóstico se guardó.",
-  "startup.recoveryActionFailed": "CodeBot no pudo realizar esta acción.",
+  "startup.recoveryActionFailed": "OpenBot Code no pudo realizar esta acción.",
 } as const satisfies PartialTranslation<typeof source>;

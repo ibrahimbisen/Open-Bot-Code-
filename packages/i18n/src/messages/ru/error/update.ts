@@ -4,36 +4,38 @@ import type { messages as source } from "../../en/error/update";
 export const messages = {
   "error.update.unsupported": "Обновления доступны в установленных сборках для компьютера.",
   "error.update.notReady": "Обновление не готово к установке.",
-  "error.update.restartFailed": "CodeBot не смог перезапуститься для установки обновления.",
+  "error.update.restartFailed": "OpenBot Code не смог перезапуститься для установки обновления.",
   "error.update.downloadStalled": "Загрузка обновления перестала отвечать. Повторите попытку.",
   "error.update.installFailed":
-    "Не удалось установить обновление. Закройте и снова откройте CodeBot, затем повторите попытку.",
+    "Не удалось установить обновление. Закройте и снова откройте OpenBot Code, затем повторите попытку.",
   "error.update.notInstalled": "Последний перезапуск не установил обновление. Перезапустите, чтобы повторить попытку.",
   "error.update.downloadFailed": "Не удалось загрузить обновление. Повторите попытку.",
   "error.update.signatureNotConfirmed":
-    "CodeBot не удалось проверить обновление. Повторите попытку. Если ошибка повторяется, скачайте CodeBot на openbot.run/download.",
+    "OpenBot Code не удалось проверить обновление. Повторите попытку. Если ошибка повторяется, скачайте OpenBot Code на openbot.run/download.",
   "error.update.checkFailed": "Не удалось проверить обновления. Повторите попытку.",
   "error.update.checkStalled": "Проверка обновлений перестала отвечать. Повторите попытку.",
   "error.update.checkOffline":
     "Не удалось связаться со службой обновлений. Проверьте подключение к интернету и повторите попытку.",
-  "error.update.checkUnavailable": "Служба обновлений не ответила. CodeBot сам повторит попытку через несколько минут.",
+  "error.update.checkUnavailable":
+    "Служба обновлений не ответила. OpenBot Code сам повторит попытку через несколько минут.",
   "error.update.checkNoRelease":
-    "Для этой платформы не найдено опубликованных обновлений. CodeBot сам повторит попытку через несколько минут.",
-  "error.update.managedByNix": "Обновления этой копии CodeBot устанавливает Nix. Обновите её через Nix.",
+    "Для этой платформы не найдено опубликованных обновлений. OpenBot Code сам повторит попытку через несколько минут.",
+  "error.update.managedByNix": "Обновления этой копии OpenBot Code устанавливает Nix. Обновите её через Nix.",
   "error.update.managedByHost":
     "Обновления на этом Mac устанавливает хост. Обновление остаётся готовым до начала обслуживания хоста.",
   "error.update.siblingSession":
-    "Из этого приложения всё ещё запущена другая сессия CodeBot. Сначала закройте CodeBot во всех других учётных записях macOS, затем установите обновление снова.",
+    "Из этого приложения всё ещё запущена другая сессия OpenBot Code. Сначала закройте OpenBot Code во всех других учётных записях macOS, затем установите обновление снова.",
   "error.update.siblingSessionSameAccount":
-    "В этой учётной записи всё ещё работает другой процесс CodeBot. Завершите его, затем установите обновление снова.",
-  "error.update.siblingCheckFailed": "Не удалось проверить другие сессии CodeBot. Повторите попытку перед установкой.",
+    "В этой учётной записи всё ещё работает другой процесс OpenBot Code. Завершите его, затем установите обновление снова.",
+  "error.update.siblingCheckFailed":
+    "Не удалось проверить другие сессии OpenBot Code. Повторите попытку перед установкой.",
   "error.update.readOnlyLocation":
-    "CodeBot не может устанавливать обновления из этого места. Закройте CodeBot. В Finder перетащите CodeBot в папку «Программы» (если он уже там, перетащите его наружу и обратно). Затем откройте CodeBot и установите обновление снова.",
+    "OpenBot Code не может устанавливать обновления из этого места. Закройте OpenBot Code. В Finder перетащите OpenBot Code в папку «Программы» (если он уже там, перетащите его наружу и обратно). Затем откройте OpenBot Code и установите обновление снова.",
   "error.update.appImageMissing":
-    "CodeBot не может установить обновление, потому что его файл AppImage был перемещён, переименован или заменён. Закройте CodeBot, затем снова откройте файл AppImage.",
+    "OpenBot Code не может установить обновление, потому что его файл AppImage был перемещён, переименован или заменён. Закройте OpenBot Code, затем снова откройте файл AppImage.",
   "error.update.appImageReadOnly":
-    "CodeBot не может устанавливать обновления в папку своего файла AppImage. Закройте CodeBot, переместите файл AppImage в папку внутри домашней папки, затем откройте его и снова установите обновление.",
+    "OpenBot Code не может устанавливать обновления в папку своего файла AppImage. Закройте OpenBot Code, переместите файл AppImage в папку внутри домашней папки, затем откройте его и снова установите обновление.",
   "error.update.remoteDisabled": "Обновления от администраторов сервера отключены на этом компьютере.",
-  "error.update.restartStarted": "CodeBot уже перезапускается для установки обновления.",
-  "error.update.alreadyRestarting": "CodeBot уже перезапускается.",
+  "error.update.restartStarted": "OpenBot Code уже перезапускается для установки обновления.",
+  "error.update.alreadyRestarting": "OpenBot Code уже перезапускается.",
 } as const satisfies PartialTranslation<typeof source>;

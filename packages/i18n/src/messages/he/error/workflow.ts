@@ -6,16 +6,17 @@ export const messages = {
   "error.workflow.versionMissing": "הגרסה הזו של תהליך העבודה כבר לא קיימת.",
   "error.workflow.annotation": "אי אפשר לחבר טקסט, הערות וצורות.",
   "error.workflow.port": "שלב לא יכול לקבל סוג קלט כזה.",
-  "error.workflow.unknownValue": "ה-CodeBot הזה לא מכיר הגדרה של שלב. יש לעדכן את CodeBot ולנסות שוב.",
+  "error.workflow.unknownValue": "ה-OpenBot Code הזה לא מכיר הגדרה של שלב. יש לעדכן את OpenBot Code ולנסות שוב.",
   "error.workflow.branch": "רק לתנאי יכולים להיות חיבורי כן ולא.",
   "error.workflow.conditionBranch": "כל חיבור היוצא מתנאי חייב להיות כן או לא.",
   "error.workflow.duplicateEdge": "שני השלבים האלה כבר מחוברים כך.",
-  "error.workflow.serverTooOld": "השרת הזה אינו תומך בתהליכי עבודה. יש לעדכן את CodeBot במחשב שמפעיל אותו.",
-  "error.workflow.newerSteps": "בתהליך העבודה הזה יש שלבים מ-CodeBot חדש יותר. יש לעדכן את CodeBot כדי לשנות אותו.",
-  "error.workflow.nodeUnsupported": "הגרסה הזו של CodeBot עדיין לא יכולה להריץ שלבי תמונה, קובץ והודעה.",
-  "error.workflow.interrupted": "CodeBot נעצר בזמן שהשלב הזה רץ. יש להריץ אותו שוב.",
+  "error.workflow.serverTooOld": "השרת הזה אינו תומך בתהליכי עבודה. יש לעדכן את OpenBot Code במחשב שמפעיל אותו.",
+  "error.workflow.newerSteps":
+    "בתהליך העבודה הזה יש שלבים מ-OpenBot Code חדש יותר. יש לעדכן את OpenBot Code כדי לשנות אותו.",
+  "error.workflow.nodeUnsupported": "הגרסה הזו של OpenBot Code עדיין לא יכולה להריץ שלבי תמונה, קובץ והודעה.",
+  "error.workflow.interrupted": "OpenBot Code נעצר בזמן שהשלב הזה רץ. יש להריץ אותו שוב.",
   "error.workflow.agentMissing": "יש לבחור סוכן לשלב הזה.",
-  "error.workflow.handoffFailed": "CodeBot לא הצליח לשלוח את השלב הזה לסוכן שלו.",
+  "error.workflow.handoffFailed": "OpenBot Code לא הצליח לשלוח את השלב הזה לסוכן שלו.",
   "error.workflow.agentStepEnded": "ההודעה של הסוכן לשלב הזה הוסרה לפני שהוא ענה.",
   "error.workflow.agentStepStopped": "הסוכן נעצר לפני שענה על השלב הזה. יש להריץ את השלב שוב.",
   "error.workflow.conditionUnclear": "המודל לא ענה כן או לא.",
@@ -38,7 +39,7 @@ export const messages = {
   "error.workflow.modelImageType": "שלב מודל יכול לקרוא רק תמונות PNG,‏ JPEG,‏ GIF ו-WebP. חבר תמונה מאחד הסוגים האלה.",
   "error.workflow.modelUnavailable": "המודל של השלב הזה לא זמין. יש לבחור מודל אחר לשלב הזה.",
   "error.workflow.providerBusy": "הספק עמוס. יש להמתין כמה דקות ואז להריץ את השלב שוב.",
-  "error.workflow.providerOffline": "ל-CodeBot אין גישה לספק. יש לבדוק את החיבור לאינטרנט ואז להריץ את השלב שוב.",
+  "error.workflow.providerOffline": "ל-OpenBot Code אין גישה לספק. יש לבדוק את החיבור לאינטרנט ואז להריץ את השלב שוב.",
   "error.workflow.providerBilling":
     "אין יתרה בחשבון, או שהתוכנית שלו לא כוללת את המודל הזה. יש לבדוק את התוכנית, או לבחור מודל אחר.",
   "error.workflow.modelRefused": "הספק לא מאפשר את המודל הזה לחשבון הזה. יש לבחור מודל אחר.",
@@ -64,7 +65,7 @@ export const messages = {
   "error.workflow.noDecision": "השלב הזה לא ממתין להחלטה.",
   "error.workflow.outputPlaceMissing": "יש לבחור מקום הודעות לפלט הזה.",
   "error.workflow.outputChannelMissing": "בחרו ערוץ לפלט הזה.",
-  "error.workflow.outputChannelFailed": "CodeBot לא הצליח לפרסם את התוצאה בערוץ. הריצו את השלב שוב.",
+  "error.workflow.outputChannelFailed": "OpenBot Code לא הצליח לפרסם את התוצאה בערוץ. הריצו את השלב שוב.",
   "error.workflow.discordNoMessage":
     "הפלט הזה פועל על הודעת Discord שהפעילה את ההרצה. יש להפעיל את ההרצה מאזכור ב-Discord, או לבחור ״פרסום בערוץ״.",
   "error.workflow.slackNoMessage":
@@ -73,7 +74,7 @@ export const messages = {
     "הפלט הזה פועל על הודעת Telegram שהפעילה את ההרצה. יש להפעיל את ההרצה מאזכור ב-Telegram, או לבחור ״פרסום בצ'אט״.",
   "error.workflow.outputConnectionOff": "חיבור ההודעות של הפלט הזה כבוי או הוסר. יש לבחור מקום מחדש.",
   "error.workflow.outputNotRunning": "חיבור ההודעות אינו פועל כעת. יש לנסות שוב כשיפעל.",
-  "error.workflow.outputRefused": "המקום דחה את הפרסום. יש לוודא ש-CodeBot יכול לפרסם שם.",
+  "error.workflow.outputRefused": "המקום דחה את הפרסום. יש לוודא ש-OpenBot Code יכול לפרסם שם.",
   "error.workflow.outputUncertain": "הפרסום נעצר באמצע. ייתכן שחלק ממנו נמצא במקום. יש לבדוק שם לפני שמנסים שוב.",
   "error.workflow.tooLarge": "תהליך העבודה הזה גדול מדי לשמירה. יש להסיר חלק מהציורים או מהטקסטים הארוכים ולנסות שוב.",
   "error.workflow.tooLargeToSend": "תהליך העבודה הזה גדול מדי לשליחה למחשב אחר. יש לפתוח אותו במחשב שמפעיל את השרת.",
@@ -89,11 +90,13 @@ export const messages = {
   "error.workflow.githubChoiceMissing": "יש לבחור את התוויות או את האדם לפלט הזה.",
   "error.workflow.githubChoseNothing": "המודל לא בחר תווית או אדם מהמאגר הזה.",
   "error.workflow.githubNotConnected": "יש לחבר את GitHub במחשב שמפעיל את תהליך העבודה הזה.",
-  "error.workflow.githubNoAccess": "ל-CodeBot GitHub App אין גישה למאגר או לפריט הזה. יש לפתוח את GitHub ולתת לו גישה.",
-  "error.workflow.githubNoWrite": "CodeBot GitHub App לא יכול לשנות את המאגר הזה. יש לפתוח את GitHub ולתת לו גישה.",
+  "error.workflow.githubNoAccess":
+    "ל-OpenBot Code GitHub App אין גישה למאגר או לפריט הזה. יש לפתוח את GitHub ולתת לו גישה.",
+  "error.workflow.githubNoWrite":
+    "OpenBot Code GitHub App לא יכול לשנות את המאגר הזה. יש לפתוח את GitHub ולתת לו גישה.",
   "error.workflow.githubLocked": "השיחה הזו נעולה ב-GitHub.",
   "error.workflow.githubRefused": "GitHub דחה את השינוי: {detail}",
-  "error.workflow.githubUnreachable": "CodeBot לא הצליח להגיע ל-GitHub. יש להריץ את השלב שוב.",
+  "error.workflow.githubUnreachable": "OpenBot Code לא הצליח להגיע ל-GitHub. יש להריץ את השלב שוב.",
   "error.workflow.githubUncertain":
     "השינוי נעצר באמצע. ייתכן שהוא נמצא ב-GitHub. יש לבדוק שם לפני שמריצים את השלב שוב.",
   "error.workflow.githubNoEvent": "ב-GitHub אין issue או pull request שהטריגר הזה מתחיל מהם.",
@@ -106,7 +109,7 @@ export const messages = {
     "Sunra משתמש בתמונות קלט רק עם חשבון אישי. צריך לבחור את החשבון האישי ב-Sunra או להסיר את חיבורי התמונות.",
   "error.workflow.sunraFailed": "Sunra לא הצליח ליצור את הקובץ: {reason}",
   "error.workflow.sunraTimeout":
-    "Sunra לא סיים את הקובץ בזמן. כדאי לבדוק את הפרויקט CodeBot ב-sunra.ai לפני שמריצים את השלב שוב.",
+    "Sunra לא סיים את הקובץ בזמן. כדאי לבדוק את הפרויקט OpenBot Code ב-sunra.ai לפני שמריצים את השלב שוב.",
   "error.workflow.higgsfieldSignIn": "יש להתחבר ל-Higgsfield ב״אפליקציות״ כדי להשתמש במודלים של Higgsfield.",
   "error.workflow.higgsfieldNoCredits":
     "בחשבון Higgsfield אין מספיק קרדיטים. אפשר להוסיף קרדיטים ב-higgsfield.ai/pricing ואז להריץ את השלב שוב.",

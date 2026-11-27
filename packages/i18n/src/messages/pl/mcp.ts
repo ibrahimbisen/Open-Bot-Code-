@@ -10,10 +10,10 @@ export const messages = {
   "mcp.connect.useKey": "Użyj klucza API zamiast tego",
   "mcp.connect.useSignIn": "Zaloguj się zamiast tego",
   "mcp.connect.keyDescription":
-    "Wklej dane uwierzytelniające z konta {name}. CodeBot połączy się za ich pomocą i przechowa je na: {host}.",
+    "Wklej dane uwierzytelniające z konta {name}. OpenBot Code połączy się za ich pomocą i przechowa je na: {host}.",
   "mcp.connect.thisComputer": "ten komputer",
   "mcp.connect.noCredentialDescription":
-    "{name} nie wymaga danych uwierzytelniających. CodeBot połączy się raz, aby sprawdzić, jakie narzędzia oferuje.",
+    "{name} nie wymaga danych uwierzytelniających. OpenBot Code połączy się raz, aby sprawdzić, jakie narzędzia oferuje.",
   "mcp.connect.connect": "Połącz",
   "mcp.connect.required": "Wymagane.",
   "mcp.connect.keptOn": "Przechowywane na: {host}.",
@@ -24,7 +24,7 @@ export const messages = {
   "mcp.local.address": "Adres",
   "mcp.local.docs": "Instrukcja konfiguracji",
   "mcp.signIn.description":
-    "Zaloguj się do konta {name}. CodeBot otrzyma narzędzia dostępne dla tego konta, ale nie hasło.",
+    "Zaloguj się do konta {name}. OpenBot Code otrzyma narzędzia dostępne dla tego konta, ale nie hasło.",
   "mcp.signIn.waiting": "Oczekiwanie na przeglądarkę…",
   "mcp.signIn.continue": "Przejdź do {name}",
   "mcp.signIn.pageDescription": "Ta strona jest otwarta w przeglądarce na: {host}. Zaloguj się tutaj.",
@@ -65,7 +65,7 @@ export const messages = {
   "mcp.panel.editTitle": "Edytuj serwer MCP",
   "mcp.panel.enable": "Włącz {name}",
   "mcp.panel.detailsTitle": "Szczegóły",
-  "mcp.panel.detailsDescription": "Nazwij ten serwer i wybierz, jak CodeBot ma się z nim łączyć.",
+  "mcp.panel.detailsDescription": "Nazwij ten serwer i wybierz, jak OpenBot Code ma się z nim łączyć.",
   "mcp.panel.transport": "Transport",
   "mcp.panel.name": "Nazwa",
   "mcp.panel.namePlaceholder": "Nazwa serwera MCP",
@@ -110,20 +110,20 @@ export const messages = {
   "mcp.panel.useAddress": "Użyj tego adresu",
   "mcp.panel.signInTo": "Zaloguj się do {name}",
   "mcp.panel.signInWaiting": {
-    one: "Dokończ logowanie w przeglądarce. CodeBot przestanie czekać po {count} minucie.",
-    few: "Dokończ logowanie w przeglądarce. CodeBot przestanie czekać po {count} minutach.",
-    many: "Dokończ logowanie w przeglądarce. CodeBot przestanie czekać po {count} minutach.",
-    other: "Dokończ logowanie w przeglądarce. CodeBot przestanie czekać po {count} minuty.",
+    one: "Dokończ logowanie w przeglądarce. OpenBot Code przestanie czekać po {count} minucie.",
+    few: "Dokończ logowanie w przeglądarce. OpenBot Code przestanie czekać po {count} minutach.",
+    many: "Dokończ logowanie w przeglądarce. OpenBot Code przestanie czekać po {count} minutach.",
+    other: "Dokończ logowanie w przeglądarce. OpenBot Code przestanie czekać po {count} minuty.",
   },
   "mcp.panel.signInWaitingOn": {
-    one: "Otwieranie strony logowania na: {host}. CodeBot przestanie czekać po {count} minucie.",
-    few: "Otwieranie strony logowania na: {host}. CodeBot przestanie czekać po {count} minutach.",
-    many: "Otwieranie strony logowania na: {host}. CodeBot przestanie czekać po {count} minutach.",
-    other: "Otwieranie strony logowania na: {host}. CodeBot przestanie czekać po {count} minuty.",
+    one: "Otwieranie strony logowania na: {host}. OpenBot Code przestanie czekać po {count} minucie.",
+    few: "Otwieranie strony logowania na: {host}. OpenBot Code przestanie czekać po {count} minutach.",
+    many: "Otwieranie strony logowania na: {host}. OpenBot Code przestanie czekać po {count} minutach.",
+    other: "Otwieranie strony logowania na: {host}. OpenBot Code przestanie czekać po {count} minuty.",
   },
   "mcp.panel.appTitle": "Aplikacja logowania",
   "mcp.panel.appDescription":
-    "Użyj aplikacji OAuth zarejestrowanej u dostawcy serwera. CodeBot używa jej, gdy serwer nie może sam zarejestrować CodeBot. Zostaw puste, aby CodeBot zarejestrował się sam.",
+    "Użyj aplikacji OAuth zarejestrowanej u dostawcy serwera. OpenBot Code używa jej, gdy serwer nie może sam zarejestrować OpenBot Code. Zostaw puste, aby OpenBot Code zarejestrował się sam.",
   "mcp.panel.appSaveFirst": "Najpierw zapisz ten serwer. Potem możesz dodać aplikację logowania.",
   "mcp.panel.appUrlChanged":
     "Najpierw zapisz nowy adres URL serwera. Aplikacja logowania należy do zapisanego adresu URL.",
@@ -147,18 +147,19 @@ export const messages = {
   "mcp.panel.appSaved": "Aplikacja zapisana. Zaloguj się, aby jej użyć.",
   "mcp.panel.appRemoved": "Aplikacja usunięta.",
   "mcp.signIn.relayDescription":
-    "Zaloguj się na {page} w przeglądarce. Gdy skończysz, CodeBot wyśle logowanie do {host}.",
+    "Zaloguj się na {page} w przeglądarce. Gdy skończysz, OpenBot Code wyśle logowanie do {host}.",
   "mcp.signIn.relayOpenDescription":
-    "Zaloguj się na {page} w przeglądarce. Gdy skończysz, wklej tutaj wyświetlany adres. CodeBot wyśle wtedy logowanie do {host}.",
+    "Zaloguj się na {page} w przeglądarce. Gdy skończysz, wklej tutaj wyświetlany adres. OpenBot Code wyśle wtedy logowanie do {host}.",
   "mcp.signIn.relayDeviceDescription":
     "Zaloguj się na {page} w przeglądarce i zakończ tam logowanie. {host} sam wykryje logowanie.",
   "mcp.signIn.relayOpen": "Otwórz stronę logowania",
   "mcp.signIn.relayCopy": "Kopiuj link",
-  "mcp.signIn.relayPasteHint": "Jeśli przeglądarka nie wróci do CodeBot, skopiuj wyświetlany adres i wklej go tutaj.",
+  "mcp.signIn.relayPasteHint":
+    "Jeśli przeglądarka nie wróci do OpenBot Code, skopiuj wyświetlany adres i wklej go tutaj.",
   "mcp.signIn.relayPasteRequired":
-    "CodeBot nie może sam odebrać logowania z przeglądarki. Gdy skończysz, skopiuj wyświetlany adres i wklej go tutaj.",
+    "OpenBot Code nie może sam odebrać logowania z przeglądarki. Gdy skończysz, skopiuj wyświetlany adres i wklej go tutaj.",
   "mcp.signIn.relayAddress": "Adres z przeglądarki",
   "mcp.signIn.relaySend": "Wyślij",
   "mcp.panel.callbackUrlRelayed":
-    "Strona logowania otwiera się w twojej przeglądarce, a CodeBot na twoim komputerze wysyła logowanie do {host}. Dodaj dokładnie ten adres URL do dozwolonych adresów przekierowania aplikacji.",
+    "Strona logowania otwiera się w twojej przeglądarce, a OpenBot Code na twoim komputerze wysyła logowanie do {host}. Dodaj dokładnie ten adres URL do dozwolonych adresów przekierowania aplikacji.",
 } as const satisfies PartialTranslation<typeof source>;

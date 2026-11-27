@@ -17,9 +17,9 @@ export const messages = {
   "dialog.saveExportSkill": "Salvar a habilidade de exportação",
   "dialog.saveTransfer": "Salvar o arquivo de transferência",
   "dialog.chooseTransfer": "Escolher um arquivo de transferência",
-  "dialog.filter.transfer": "Arquivos de transferência do CodeBot",
+  "dialog.filter.transfer": "Arquivos de transferência do OpenBot Code",
   "dialog.saveWorkflow": "Salvar o arquivo do fluxo de trabalho",
-  "dialog.filter.workflow": "Arquivos de fluxo de trabalho do CodeBot",
+  "dialog.filter.workflow": "Arquivos de fluxo de trabalho do OpenBot Code",
   "dialog.chooseExternalLinkApp": "Escolha um navegador",
   "dialog.filter.applications": "Aplicativos",
 } as const satisfies PartialTranslation<typeof source>;

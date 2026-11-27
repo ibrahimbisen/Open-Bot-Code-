@@ -45,7 +45,7 @@ export const messages = defineMessages("error.skill", {
   "error.skill.tooManySkills": "An agent can have up to {limit} skills.",
   "error.skill.ownSkillExists":
     "This agent already has its own skill named {slug}. Ask the agent to rename or delete that skill, then add this skill again.",
-  "error.skill.managedSlug": "CodeBot gives every agent its own {slug} skill. Give this skill a different name.",
+  "error.skill.managedSlug": "OpenBot Code gives every agent its own {slug} skill. Give this skill a different name.",
   "error.skill.templateMarkdownTooLarge": "{name}: SKILL.md is larger than 64 KB. Shorten it before publishing.",
   "error.skill.localNoRevisions": "Local skill has no published revisions.",
   "error.skill.localNotFound": "This local skill does not exist. Check its ID in the list of local skills.",
@@ -61,12 +61,13 @@ export const messages = defineMessages("error.skill", {
   "error.skill.pathSymlink": "Skill paths cannot contain symbolic links.",
   "error.skill.folderNotRead": "{provider} does not read {folder}. Copy this folder to {target}.",
   "error.skill.githubLinkInvalid": "Paste a link to a GitHub repository or folder.",
-  "error.skill.githubNotFound": "CodeBot cannot open {repository}. The repository is private, or it does not exist.",
+  "error.skill.githubNotFound":
+    "OpenBot Code cannot open {repository}. The repository is private, or it does not exist.",
   "error.skill.githubNoSkills": "There is no SKILL.md in {folder}.",
-  "error.skill.githubUnavailable": "CodeBot cannot read GitHub now. Try again later.",
+  "error.skill.githubUnavailable": "OpenBot Code cannot read GitHub now. Try again later.",
   "error.skill.githubRateLimited":
-    "GitHub limits how often CodeBot can read it without an account. Try again in one hour.",
-  "error.skill.githubTooLarge": "CodeBot cannot read all files of {repository}. The repository is too large.",
+    "GitHub limits how often OpenBot Code can read it without an account. Try again in one hour.",
+  "error.skill.githubTooLarge": "OpenBot Code cannot read all files of {repository}. The repository is too large.",
   "error.skill.githubHostTooOld": "Update this server to add skills from GitHub.",
   "error.skill.publishGithub": "{name} comes from GitHub. You can publish only the skills that you made.",
 });

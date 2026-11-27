@@ -17,12 +17,12 @@ export const messages = {
   "notification.channelMessage": "أرسل رسالة.",
   "notification.usageLimit.title": "بلغ حساب {provider} حدّه",
   "notification.usageLimit.body": {
-    zero: "لا وكلاء في الانتظار. سيعيد CodeBot المحاولة لاحقًا.",
-    one: "وكيل واحد في الانتظار. سيعيد CodeBot المحاولة لاحقًا.",
-    two: "وكيلان في الانتظار. سيعيد CodeBot المحاولة لاحقًا.",
-    few: "{count} وكلاء في الانتظار. سيعيد CodeBot المحاولة لاحقًا.",
-    many: "{count} وكيلًا في الانتظار. سيعيد CodeBot المحاولة لاحقًا.",
-    other: "{count} وكيل في الانتظار. سيعيد CodeBot المحاولة لاحقًا.",
+    zero: "لا وكلاء في الانتظار. سيعيد OpenBot Code المحاولة لاحقًا.",
+    one: "وكيل واحد في الانتظار. سيعيد OpenBot Code المحاولة لاحقًا.",
+    two: "وكيلان في الانتظار. سيعيد OpenBot Code المحاولة لاحقًا.",
+    few: "{count} وكلاء في الانتظار. سيعيد OpenBot Code المحاولة لاحقًا.",
+    many: "{count} وكيلًا في الانتظار. سيعيد OpenBot Code المحاولة لاحقًا.",
+    other: "{count} وكيل في الانتظار. سيعيد OpenBot Code المحاولة لاحقًا.",
   },
   "notification.usageLimit.bodyResets": {
     zero: "لا وكلاء في الانتظار. يُعاد التعيين {reset}.",
@@ -37,7 +37,7 @@ export const messages = {
   "notification.machineAlert.cpu": "{server}: المعالج مشغول بنسبة {percent}",
   "notification.machineAlert.body": "تجاوز مستوى التنبيه البالغ {level}. راجع إعدادات الخادم > التخزين.",
   "notification.test": "الإشعارات تعمل.",
-  "notification.welcome": "سيخبرك CodeBot هنا عندما يحتاج إليك وكيل.",
+  "notification.welcome": "سيخبرك OpenBot Code هنا عندما يحتاج إليك وكيل.",
   "notification.toast.region": "الإشعارات",
   "notification.toast.close": "إغلاق الإشعار",
 } as const satisfies PartialTranslation<typeof source>;

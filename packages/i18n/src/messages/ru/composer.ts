@@ -79,12 +79,12 @@ export const messages = {
   "composer.voice.transcribing": "Расшифровка голосового запроса",
   "composer.voice.start": "Создать запрос голосом",
   "composer.voice.blocked":
-    "Доступ к микрофону заблокирован. Разрешите CodeBot использовать микрофон в системных настройках.",
+    "Доступ к микрофону заблокирован. Разрешите OpenBot Code использовать микрофон в системных настройках.",
   "composer.voice.noMicrophone": "Микрофон недоступен.",
-  "composer.voice.startFailed": "CodeBot не удалось начать запись голоса.",
+  "composer.voice.startFailed": "OpenBot Code не удалось начать запись голоса.",
   "composer.voice.microphoneUnavailable":
-    "CodeBot не удалось открыть микрофон. Закройте другие приложения, которые его используют, проверьте, что он подключён и разрешён в системных настройках, и повторите попытку.",
-  "composer.voice.transcribeFailed": "CodeBot не удалось расшифровать эту запись.",
+    "OpenBot Code не удалось открыть микрофон. Закройте другие приложения, которые его используют, проверьте, что он подключён и разрешён в системных настройках, и повторите попытку.",
+  "composer.voice.transcribeFailed": "OpenBot Code не удалось расшифровать эту запись.",
   "composer.reply.toYou": "Ответ на ваше сообщение",
   "composer.reply.toAgent": "Ответ агенту",
   "composer.reply.attachment": "Вложение",

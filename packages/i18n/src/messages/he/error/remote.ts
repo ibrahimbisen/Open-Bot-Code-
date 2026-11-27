@@ -17,14 +17,14 @@ export const messages = {
   "error.remote.sessionCapacity": "במארח כבר יש ארבעה סשנים פעילים.",
   "error.remote.linuxNeedsX11": "שולחן עבודה מרוחק ב-Linux דורש סשן X11. Wayland אינו נתמך.",
   "error.remote.runtimeMissing":
-    "סביבת הריצה של Sunshine ו-Moonlight Web חסרה או שאינה נתמכת במארח הזה. יש להתקין את גרסת CodeBot המלאה ב-Mac, במארח Windows x64 או במארח Linux x64, ואז להפעיל מחדש את CodeBot.",
+    "סביבת הריצה של Sunshine ו-Moonlight Web חסרה או שאינה נתמכת במארח הזה. יש להתקין את גרסת OpenBot Code המלאה ב-Mac, במארח Windows x64 או במארח Linux x64, ואז להפעיל מחדש את OpenBot Code.",
   "error.remote.testActive": "בדיקת שולחן עבודה מרוחק פעילה. יש לנסות שוב כשהיא תסתיים.",
   "error.remote.screenRecordingDenied":
-    "המארח לא אישר ל-CodeBot להקליט את המסך שלו. יש לאשר הקלטת מסך במארח ולנסות שוב.",
+    "המארח לא אישר ל-OpenBot Code להקליט את המסך שלו. יש לאשר הקלטת מסך במארח ולנסות שוב.",
   "error.remote.windowsSessionDisconnected":
     "הסשן של Windows במארח מנותק, ולכן אין מסך לשיתוף. יש להיכנס ל-Windows במסך של המארח ולנסות שוב.",
   "error.remote.windowsCaptureDenied":
-    "Windows במארח לא מאפשר ל-CodeBot להקליט את המסך שלו. יש לבטל את נעילת Windows במסך של המארח, לסגור כל בקשת הרשאת מנהל ולנסות שוב. אם הבעיה נמשכת, יש להפעיל מחדש את המארח.",
+    "Windows במארח לא מאפשר ל-OpenBot Code להקליט את המסך שלו. יש לבטל את נעילת Windows במסך של המארח, לסגור כל בקשת הרשאת מנהל ולנסות שוב. אם הבעיה נמשכת, יש להפעיל מחדש את המארח.",
   "error.remote.macScreenLocked":
     "ה-Mac נעול, ולכן אינו יכול לשתף את המסך שלו. יש לבטל את נעילת ה-Mac במסך שלו ולנסות שוב.",
   "error.remote.streamTooSlowLowerQuality":
@@ -44,7 +44,7 @@ export const messages = {
   "error.remote.moonlightStartFailed":
     "Moonlight Web לא הופעל במארח. יש לבדוק את יומני שולחן העבודה המרוחק במארח ולנסות שוב.",
   "error.remote.pairingFailed":
-    "Moonlight לא הצליח להתאים את עצמו ל-Sunshine במארח. יש לנסות שוב. אם הבעיה נמשכת, יש להפעיל מחדש את CodeBot במארח.",
+    "Moonlight לא הצליח להתאים את עצמו ל-Sunshine במארח. יש לנסות שוב. אם הבעיה נמשכת, יש להפעיל מחדש את OpenBot Code במארח.",
   "error.remote.runtimeStartFailed":
     "סביבת הריצה של שולחן עבודה מרוחק לא הופעלה במארח. יש לבדוק את יומני שולחן העבודה המרוחק במארח ולנסות שוב.",
   "error.remote.hostUnreachable": "אי אפשר להגיע למארח.",
@@ -52,7 +52,7 @@ export const messages = {
   "error.remote.invalidData": "המארח החזיר נתונים לא תקינים.",
   "error.remote.unsafeData": "המארח החזיר נתונים שהאפליקציה לא יכלה להשתמש בהם בבטחה.",
   "error.remote.requestFailedStatus": "הבקשה לשרת המרוחק נכשלה ({status}).",
-  "error.remote.appUpdateRequired": "יש לעדכן את אפליקציית CodeBot לפני החיבור למארח.",
+  "error.remote.appUpdateRequired": "יש לעדכן את אפליקציית OpenBot Code לפני החיבור למארח.",
   "error.remote.identityNotVerified": "לא ניתן היה לאמת את זהות השרת.",
   "error.remote.webRtcUnavailable": "שכבת התעבורה WebRTC אינה זמינה.",
   "error.remote.invalidCompatibility": "המארח החזיר מידע תאימות לא תקין.",
@@ -70,8 +70,8 @@ export const messages = {
   "error.remote.inviteAcceptedOtherHost": "שירות החשבונות אישר מארח אחר.",
   "error.remote.inviteIdentityChanged": "זהות מארח ההזמנה השתנתה בזמן אישור ההזמנה.",
   "error.remote.localServerRemove": "אי אפשר להסיר את השרת המקומי.",
-  "error.remote.desktopSetupHostUpdate": "יש לעדכן את CodeBot במארח כדי לבדוק את הגדרת שולחן העבודה המרוחק.",
-  "error.remote.desktopTestHostUpdate": "יש לעדכן את CodeBot במארח כדי לבדוק את הגדרת שולחן העבודה המרוחק.",
+  "error.remote.desktopSetupHostUpdate": "יש לעדכן את OpenBot Code במארח כדי לבדוק את הגדרת שולחן העבודה המרוחק.",
+  "error.remote.desktopTestHostUpdate": "יש לעדכן את OpenBot Code במארח כדי לבדוק את הגדרת שולחן העבודה המרוחק.",
   "error.remote.viewerProxyUnavailable": "שרת הביניים המקומי של מציג שולחן העבודה המרוחק אינו זמין.",
   "error.remote.viewerTransportInvalid": "שכבת התעבורה של מציג שולחן העבודה המרוחק אינה תקינה.",
   "error.remote.viewerProxyNoPort": "שרת הביניים המקומי של המציג המרוחק לא קיבל פורט.",
@@ -89,12 +89,12 @@ export const messages = {
   "error.remote.requestTimeout": "הבקשה המרוחקת חרגה ממגבלת הזמן.",
   "error.remote.requestFailed": "הבקשה המרוחקת נכשלה.",
   "error.remote.hostKeyMissing":
-    "CodeBot לא יכול לאמת את השרת הזה, כי מפתח האבטחה שלו חסר או השתנה. בקשו מבעל השרת לבדוק את השרת.",
+    "OpenBot Code לא יכול לאמת את השרת הזה, כי מפתח האבטחה שלו חסר או השתנה. בקשו מבעל השרת לבדוק את השרת.",
   "error.remote.connectionNotStarted":
-    "CodeBot לא הצליח להתחיל את החיבור לשרת הזה. אם הבעיה נמשכת, צאו מ-CodeBot ופתחו אותו שוב.",
+    "OpenBot Code לא הצליח להתחיל את החיבור לשרת הזה. אם הבעיה נמשכת, צאו מ-OpenBot Code ופתחו אותו שוב.",
   "error.remote.connectionServiceUnreachable":
-    "המחשב הזה לא מצליח להגיע לשירות החיבור של CodeBot. יש לבדוק את החיבור שלו לאינטרנט. CodeBot יתחבר שוב אוטומטית.",
-  "error.remote.serverAnswerTimeout": "השרת לא ענה בזמן. CodeBot יתחבר שוב אוטומטית.",
+    "המחשב הזה לא מצליח להגיע לשירות החיבור של OpenBot Code. יש לבדוק את החיבור שלו לאינטרנט. OpenBot Code יתחבר שוב אוטומטית.",
+  "error.remote.serverAnswerTimeout": "השרת לא ענה בזמן. OpenBot Code יתחבר שוב אוטומטית.",
   "error.remote.signInConnectionClosed":
     "החיבור לשרת נסגר במהלך הכניסה. אם זה חוזר, ודאו שהתאריך והשעה נכונים בשרת ובמכשיר הזה.",
   "error.remote.connectionCancelled": "החיבור המרוחק בוטל.",
@@ -146,11 +146,11 @@ export const messages = {
   "error.remote.permanentInviteNoEmail": "אי אפשר לשלוח הזמנות קבועות באימייל.",
   "error.remote.selfHostedInviteNoEmail":
     "אי אפשר לשלוח באימייל הזמנה משירות חשבונות באירוח עצמי. יש להעתיק את הקישור.",
-  "error.remote.inviteOtherService": "ההזמנה הזו שייכת לשירות CodeBot אחר.",
+  "error.remote.inviteOtherService": "ההזמנה הזו שייכת לשירות OpenBot Code אחר.",
   "error.remote.inviteFingerprintMismatch": "זהות מארח ההזמנה אינה תואמת לטביעת האצבע שלה.",
   "error.remote.inviteHostKeyMissing": "מפתח מארח ההזמנה חסר.",
   "error.remote.inviteKeyConflict": "ההזמנה סותרת את מפתח המארח המהימן.",
-  "error.remote.serviceRequestFailed": "הבקשה לשירות CodeBot נכשלה.",
+  "error.remote.serviceRequestFailed": "הבקשה לשירות OpenBot Code נכשלה.",
   "error.remote.downloadTimeout": "הורדת הקובץ המצורף חרגה ממגבלת הזמן. יש לנסות שוב.",
   "error.remote.attachmentConnectionClosed": "חיבור הקובץ המצורף נסגר.",
   "error.remote.tooManyDownloads": "יותר מדי הורדות של קבצים מצורפים.",
@@ -176,7 +176,7 @@ export const messages = {
   "error.remote.signalInvalidMessage": "Signal החזיר הודעה לא תקינה.",
   "error.remote.sessionInvalid": "הסשן המרוחק אינו תקין.",
   "error.remote.ticketInvalid": "כרטיס החיבור אינו תקין.",
-  "error.remote.mobileUpdateRequired": "יש לעדכן את CodeBot לנייד או את אפליקציית שולחן העבודה לפני החיבור.",
+  "error.remote.mobileUpdateRequired": "יש לעדכן את OpenBot Code לנייד או את אפליקציית שולחן העבודה לפני החיבור.",
   "error.remote.connectionStepFailed": "לא ניתן היה להשלים את שלב החיבור הזה.",
   "error.remote.signalNotConnected": "Signal אינו מחובר.",
   "error.remote.signalFrameUnreadable": "Signal שלח מסגרת שהצד הזה לא יכול לקרוא.",
@@ -184,34 +184,34 @@ export const messages = {
   "error.remote.dataChannelFailed": "ערוץ {kind} נכשל.",
   "error.remote.hostBusy": "המארח עסוק בחיבור אחר. יש לנסות שוב בעוד רגע.",
   "error.remote.signalPermissionDenied": "לחשבון שלך אין גישה למארח הזה. יש לבקש גישה מהבעלים.",
-  "error.remote.signalRateLimited": "יותר מדי ניסיונות חיבור. CodeBot ינסה שוב בעוד {seconds} שניות.",
+  "error.remote.signalRateLimited": "יותר מדי ניסיונות חיבור. OpenBot Code ינסה שוב בעוד {seconds} שניות.",
   "error.remote.signalProtocolError":
-    "Signal והאפליקציה הזו לא מסכימים על פרוטוקול החיבור. יש לעדכן את CodeBot ולנסות שוב.",
+    "Signal והאפליקציה הזו לא מסכימים על פרוטוקול החיבור. יש לעדכן את OpenBot Code ולנסות שוב.",
   "error.remote.signalRefused": "Signal דחה את החיבור.",
   "error.remote.signalClosed": "החיבור ל-Signal נסגר לפני שהמארח ענה.",
   "error.remote.relayUnavailable": "Signal לא שלח שרתי ממסר לחיבור הזה. יש לנסות שוב מאוחר יותר.",
   "error.remote.iceFailed": "לא ניתן היה ליצור חיבור ישיר למארח. חומת אש, VPN או שרת proxy יכולים לחסום אותו.",
   "error.remote.iceDisconnected": "החיבור הישיר למארח אבד.",
   "error.remote.webrtcBlocked":
-    "המכשיר הזה חוסם את החיבור ש-CodeBot צריך. אם מצב נעילה מופעל, כבה אותו עבור CodeBot בהגדרות > פרטיות ואבטחה > מצב נעילה.",
-  "error.remote.directoryUnreachable": "CodeBot לא הצליח להגיע לשירות CodeBot. יש לבדוק את החיבור.",
-  "error.remote.directoryTimeout": "שירות CodeBot לא ענה בזמן. יש לנסות שוב.",
+    "המכשיר הזה חוסם את החיבור ש-OpenBot Code צריך. אם מצב נעילה מופעל, כבה אותו עבור OpenBot Code בהגדרות > פרטיות ואבטחה > מצב נעילה.",
+  "error.remote.directoryUnreachable": "OpenBot Code לא הצליח להגיע לשירות OpenBot Code. יש לבדוק את החיבור.",
+  "error.remote.directoryTimeout": "שירות OpenBot Code לא ענה בזמן. יש לנסות שוב.",
   "error.remote.inviteAlreadyUsed": "ההזמנה הזו כבר נוצלה. יש לבקש הזמנה חדשה.",
   "error.remote.inviteNotFound": "ההזמנה הזו אינה קיימת או שפג תוקפה. יש לבקש הזמנה חדשה.",
   "error.remote.licenseUsersFull": "ברישיון של בעל השרת אין משתמש פנוי. יש לבקש מהבעלים להוסיף משתמש לרישיון.",
   "error.remote.memberLimitReached": "המארח הזה הגיע למגבלת החברים. יש לבקש מהבעלים לפנות מקום.",
-  "error.remote.hostNotRegistered": "המארח הזה כבר אינו רשום בשירות CodeBot.",
+  "error.remote.hostNotRegistered": "המארח הזה כבר אינו רשום בשירות OpenBot Code.",
   "error.remote.membershipEnded": "אינך עוד חבר במארח הזה. יש לבקש הזמנה חדשה מהבעלים.",
   "error.remote.membershipChanged": "מישהו שינה את החבר הזה באותו זמן. יש לטעון את החברים מחדש ולנסות שוב.",
   "error.remote.accountSessionInactive": "ההתחברות שלך כבר לא פעילה. יש להתחבר שוב.",
   "error.remote.hostOtherAccount": "המארח הזה שייך לחשבון אחר.",
-  "error.remote.remoteNotConfigured": "חיבורים מרוחקים אינם מוגדרים בשירות CodeBot הזה.",
+  "error.remote.remoteNotConfigured": "חיבורים מרוחקים אינם מוגדרים בשירות OpenBot Code הזה.",
   "error.remote.hostRefused": "המארח דחה את הבקשה ({status}).",
   "error.remote.formUnavailable": "הטופס הזה כבר לא זמין.",
   "error.remote.hostedServerRemoval": "יש להשתמש בחיוב כדי למחוק שרת מתארח.",
   "error.remote.hostRemoved": "הבעלים הסיר את השרת הזה מהחשבון.",
   "error.remote.ownerTransferSelf": "השרת הזה כבר בבעלותך. הזן את כתובת האימייל של הבעלים החדש.",
-  "error.remote.ownerTransferHosted": "שרת ש-CodeBot מארחת לא יכול להחליף בעלים.",
+  "error.remote.ownerTransferHosted": "שרת ש-OpenBot Code מארחת לא יכול להחליף בעלים.",
   "error.remote.ownerTransferInvalid": "העברת הבעלות הזו כבר לא זמינה. בקש מהבעלים לשלוח אותה שוב.",
   "error.remote.channelsUnsupported": "יש לעדכן את שרת שולחן העבודה הזה כדי להשתמש בערוצים.",
   "error.remote.channelDeleteUnsupported": "יש לעדכן את שרת שולחן העבודה הזה כדי למחוק ערוצים.",
@@ -219,11 +219,11 @@ export const messages = {
   "error.remote.taskHistoryRefreshFailed": "המשימה שונתה, אבל לא ניתן היה לרענן את היסטוריית הצ'אט.",
   "error.remote.serverNotLoaded": "לא ניתן היה לטעון את השרת. יש לנסות שוב.",
   "error.remote.localServerNotStarted":
-    "השרת במחשב הזה לא הופעל. יש לנסות שוב. אם הוא לא מופעל, יש להפעיל מחדש את CodeBot במחשב הזה.",
+    "השרת במחשב הזה לא הופעל. יש לנסות שוב. אם הוא לא מופעל, יש להפעיל מחדש את OpenBot Code במחשב הזה.",
   "error.remote.localServerNotFound": "השרת הזה אינו במחשב הזה.",
   "error.remote.localServerAccountRemovalFailed":
     "השרת נמחק במחשב שלו, אבל החשבון עדיין מציג אותו. יש למחוק אותו שוב כדי להסיר אותו מהחשבון.",
   "error.remote.localServerLimit": "אפשר לקיים עד {limit} שרתים במחשב הזה. יש למחוק אחד כדי ליצור שרת נוסף.",
   "error.remote.localServersReadOnly":
-    "הגרסה הזו של CodeBot לא יכולה לקרוא את רשימת השרתים במחשב הזה. יש לעדכן את CodeBot.",
+    "הגרסה הזו של OpenBot Code לא יכולה לקרוא את רשימת השרתים במחשב הזה. יש לעדכן את OpenBot Code.",
 } as const satisfies PartialTranslation<typeof source>;

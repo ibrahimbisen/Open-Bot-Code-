@@ -10,8 +10,8 @@ export const messages = {
   "error.voice.modelUnavailable": "Het spraakmodel is niet beschikbaar.",
   "error.voice.transcriptionTimedOut": "De spraaktranscriptie duurde te lang.",
   "error.voice.prepareRequired":
-    "Lokale spraaktranscriptie is niet beschikbaar. Voer `bun run voice:prepare` uit en start CodeBot opnieuw.",
-  "error.voice.transcriptionFailed": "CodeBot kon deze opname niet transcriberen.",
+    "Lokale spraaktranscriptie is niet beschikbaar. Voer `bun run voice:prepare` uit en start OpenBot Code opnieuw.",
+  "error.voice.transcriptionFailed": "OpenBot Code kon deze opname niet transcriberen.",
   "error.voice.videoModelMissing": "Er is geen spraakherkenningsmodel voor opnamen ingesteld in Instellingen → Spraak.",
   "error.voice.videoModelMissingServer":
     "Er is geen spraakherkenningsmodel ingesteld op deze server. Een eigenaar of beheerder kan een model instellen in de serverinstellingen, bij Spraakherkenning.",
@@ -28,9 +28,9 @@ export const messages = {
   "error.voice.speech.runtimeUnavailable": "Lokale spraakuitvoer is niet beschikbaar op dit platform.",
   "error.voice.speech.modelRequired": "Download het spraakuitvoermodel in Instellingen → Spraak.",
   "error.voice.speech.timedOut": "Het voorlezen van het antwoord duurde te lang.",
-  "error.voice.speech.failed": "CodeBot kon het antwoord niet voorlezen.",
+  "error.voice.speech.failed": "OpenBot Code kon het antwoord niet voorlezen.",
   "error.voice.speech.providerRefused": "{provider} weigerde de audio te maken: {reason}",
-  "error.voice.recordingNotKept": "CodeBot kon de spraakopname niet bewaren.",
+  "error.voice.recordingNotKept": "OpenBot Code kon de spraakopname niet bewaren.",
   "error.voice.live.timedOut": "Codex live spraak is niet op tijd gestart. Probeer het opnieuw.",
   "error.voice.live.failed": "Live spraak is gestopt: {reason}",
   "error.voice.live.disconnected": "Live spraak is verbroken.",

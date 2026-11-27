@@ -28,7 +28,8 @@ export const messages = {
   "status.agent.screenCaptureScreen": "Het hoofdscherm vastleggen en de afbeelding naar het model van de agent sturen.",
   "status.agent.screenCaptureChannel":
     "De afbeelding verschijnt in het kanaal {channel}, en elk lid van deze server dat het kanaal leest, kan haar zien.",
-  "status.agent.screenCapturePermissionNext": "macOS kan je daarna vragen om schermopname toe te staan voor CodeBot.",
+  "status.agent.screenCapturePermissionNext":
+    "macOS kan je daarna vragen om schermopname toe te staan voor OpenBot Code.",
   "status.agent.screenCaptureDisplay":
     "Het beeldscherm {name} vastleggen en de afbeelding naar het model van de agent sturen.",
   "status.agent.screenCaptureWindow":
@@ -44,7 +45,7 @@ export const messages = {
   "status.agent.sendIdea": "Dit wordt een openbaar GitHub-issue. Je naam wordt niet getoond.",
   "status.agent.feedbackRecentErrors": "Recente fouten in de chat:",
   "status.agent.feedbackSameAs": "Wordt toegevoegd aan issue #{issue}",
-  "status.agent.feedbackSent": "Naar het CodeBot-team gestuurd: {title}",
+  "status.agent.feedbackSent": "Naar het OpenBot Code-team gestuurd: {title}",
   "status.agent.feedbackWithdrawn": "Verwijderd van GitHub: {title}",
   "status.agent.feedbackWithdrawCommand": "Melding #{issue} van GitHub verwijderen",
   "status.agent.feedbackWithdrawReason":
@@ -52,14 +53,14 @@ export const messages = {
   "status.agent.feedbackWithdrawing": "Je melding wordt van GitHub verwijderd…",
   "status.agent.browserProfileNamed":
     "Verplaats {agents} naar het browserprofiel {profile}. Ze krijgen de aanmeldingen en cookies ervan. Hun open tabbladen sluiten.",
-  "status.agent.commitCoAuthorOff": "Stop met CodeBot als co-auteur toevoegen aan de commits van alle agenten.",
-  "status.agent.commitCoAuthorOn": "Voeg CodeBot weer als co-auteur toe aan de commits van alle agenten.",
+  "status.agent.commitCoAuthorOff": "Stop met OpenBot Code als co-auteur toevoegen aan de commits van alle agenten.",
+  "status.agent.commitCoAuthorOn": "Voeg OpenBot Code weer als co-auteur toe aan de commits van alle agenten.",
   "status.agent.browserProfileNew":
     "Maak het nieuwe browserprofiel {profile} en verplaats {agents} ernaartoe. Het heeft geen aanmeldingen. Hun open tabbladen sluiten.",
   "status.agent.browserProfileShared":
     "Verplaats {agents} naar het gedeelde browserprofiel. Ze krijgen de aanmeldingen en cookies ervan. Hun open tabbladen sluiten.",
   "status.agent.browserProfileOwn": "Geef {agents} elk een eigen browserprofiel. Hun open tabbladen sluiten.",
-  "status.agent.feedbackSending": "Je feedback wordt naar het CodeBot-team gestuurd…",
+  "status.agent.feedbackSending": "Je feedback wordt naar het OpenBot Code-team gestuurd…",
   "status.agent.workflowDelete": "Verwijder de workflow {title} met zijn runs en versies. Zijn open stappen stoppen.",
   "status.agent.deleteAgents": "Verwijder {agents} met hun chats en bestanden. Je kunt dit niet ongedaan maken.",
   "status.agent.vaultCardFillFrames": "De kaartvelden staan in frames van {origins}.",
@@ -113,9 +114,9 @@ export const messages = {
   "status.agent.memoryChangesWithConflicts":
     "Geheugen: {saved} opgeslagen, {updated} bijgewerkt, {forgotten} vergeten, {notChanged} niet gewijzigd omdat een andere thread ze eerst heeft gewijzigd.",
   "status.agent.mcpServerAdd":
-    "De MCP-server {name} toevoegen: {target}. Elke agent op deze server krijgt de tools ervan. CodeBot maakt verbinding om hem te testen.",
+    "De MCP-server {name} toevoegen: {target}. Elke agent op deze server krijgt de tools ervan. OpenBot Code maakt verbinding om hem te testen.",
   "status.agent.mcpServerChange":
-    "De MCP-server {name} wijzigen naar {target}. Elke agent op deze server krijgt de tools ervan. CodeBot maakt verbinding om hem te testen.",
+    "De MCP-server {name} wijzigen naar {target}. Elke agent op deze server krijgt de tools ervan. OpenBot Code maakt verbinding om hem te testen.",
   "status.agent.mcpServerHeaders": "Het wijzigt ook deze headers: {names}.",
   "status.agent.mcpServerEnable": "De MCP-server {name} aanzetten voor elke agent op deze server.",
   "status.agent.mcpServerDisable": "De MCP-server {name} uitzetten voor elke agent op deze server.",

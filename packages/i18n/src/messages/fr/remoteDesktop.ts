@@ -9,7 +9,7 @@ export const messages = {
   "remoteDesktop.workspaceLabel": "Contrôle à distance",
   "remoteDesktop.displayLabel": "Écran distant",
   "remoteDesktop.selectDisplay": "Choisir l’écran",
-  "remoteDesktop.backToCodeBot": "Retour à CodeBot",
+  "remoteDesktop.backToCodeBot": "Retour à OpenBot Code",
   "remoteDesktop.disconnect": "Déconnecter",
   "remoteDesktop.viewerTitle": "Bureau à distance Sunshine",
   "remoteDesktop.viewerLoadFailed": "Impossible de charger la visionneuse Moonlight.",
@@ -20,7 +20,7 @@ export const messages = {
   "remoteDesktop.openFailed": "Impossible d’ouvrir le bureau",
   "remoteDesktop.notSharingTitle": "{name} ne partage pas son écran",
   "remoteDesktop.notSharingDescription":
-    "Le serveur empêche CodeBot d’enregistrer son écran. Sur ce serveur, ouvrez Réglages Système → Confidentialité et sécurité → Enregistrement de l’écran, activez CodeBot, puis réessayez ici.",
+    "Le serveur empêche OpenBot Code d’enregistrer son écran. Sur ce serveur, ouvrez Réglages Système → Confidentialité et sécurité → Enregistrement de l’écran, activez OpenBot Code, puis réessayez ici.",
   "remoteDesktop.setup.check.screenRecording": "Enregistrement de l’écran",
   "remoteDesktop.setup.check.accessibility": "Accessibilité",
   "remoteDesktop.setup.check.service": "Service Sunshine",
@@ -41,7 +41,7 @@ export const messages = {
   "remoteDesktop.setup.startFailed": "Impossible de lancer le test du bureau à distance.",
   "remoteDesktop.setup.connectionLost": "La connexion de test a été perdue.",
   "remoteDesktop.setup.hostUpdateRequired":
-    "Mettez à jour CodeBot sur le serveur pour vérifier les autorisations et tester le bureau à distance.",
+    "Mettez à jour OpenBot Code sur le serveur pour vérifier les autorisations et tester le bureau à distance.",
   "remoteDesktop.setup.permissions": "Autorisations",
   "remoteDesktop.setup.checked": "Vérifié à",
   "remoteDesktop.setup.checkAgain": "Revérifier",
@@ -76,12 +76,12 @@ export const messages = {
   "remoteDesktop.setup.finishTest": "Terminer le test",
   "remoteDesktop.host.questionTitle": "{name} veut contrôler cet ordinateur",
   "remoteDesktop.host.questionDetail":
-    "{name} verra votre écran et pourra utiliser votre souris et votre clavier. Sans réponse sous 30 secondes, CodeBot refuse la demande.",
+    "{name} verra votre écran et pourra utiliser votre souris et votre clavier. Sans réponse sous 30 secondes, OpenBot Code refuse la demande.",
   "remoteDesktop.host.allow": "Autoriser",
   "remoteDesktop.host.deny": "Refuser",
   "remoteDesktop.host.startedTitle": "Contrôle à distance démarré",
   "remoteDesktop.host.startedBody": "{name} contrôle maintenant cet ordinateur.",
-  "remoteDesktop.host.trayTooltip": "CodeBot : contrôle à distance actif",
+  "remoteDesktop.host.trayTooltip": "OpenBot Code : contrôle à distance actif",
   "remoteDesktop.host.trayControlledBy": "{name} contrôle cet ordinateur",
   "remoteDesktop.host.stopAll": "Arrêter tout contrôle à distance",
 } as const satisfies PartialTranslation<typeof source>;

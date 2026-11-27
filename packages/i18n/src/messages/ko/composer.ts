@@ -72,12 +72,13 @@ export const messages = {
   "composer.voice.requesting": "마이크 접근 권한 요청 중",
   "composer.voice.transcribing": "음성 프롬프트 받아쓰는 중",
   "composer.voice.start": "음성으로 프롬프트 만들기",
-  "composer.voice.blocked": "마이크 접근이 차단되어 있어요. 시스템 설정에서 CodeBot의 마이크 사용을 허용해 주세요.",
+  "composer.voice.blocked":
+    "마이크 접근이 차단되어 있어요. 시스템 설정에서 OpenBot Code의 마이크 사용을 허용해 주세요.",
   "composer.voice.noMicrophone": "사용할 수 있는 마이크가 없어요.",
-  "composer.voice.startFailed": "CodeBot이 음성 녹음을 시작하지 못했어요.",
+  "composer.voice.startFailed": "OpenBot Code가 음성 녹음을 시작하지 못했어요.",
   "composer.voice.microphoneUnavailable":
-    "CodeBot이 마이크를 열지 못했어요. 마이크를 사용하는 다른 앱을 닫고, 마이크가 연결되어 있고 시스템 설정에서 허용되어 있는지 확인한 뒤 다시 시도해 주세요.",
-  "composer.voice.transcribeFailed": "CodeBot이 이 녹음을 받아쓰지 못했어요.",
+    "OpenBot Code가 마이크를 열지 못했어요. 마이크를 사용하는 다른 앱을 닫고, 마이크가 연결되어 있고 시스템 설정에서 허용되어 있는지 확인한 뒤 다시 시도해 주세요.",
+  "composer.voice.transcribeFailed": "OpenBot Code가 이 녹음을 받아쓰지 못했어요.",
   "composer.reply.toYou": "내 메시지에 답장하는 중",
   "composer.reply.toAgent": "에이전트에게 답장하는 중",
   "composer.reply.attachment": "첨부 파일",
