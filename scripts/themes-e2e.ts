@@ -1,7 +1,14 @@
 import assert from "node:assert/strict";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { createServer } from "node:http";
 import { join, resolve } from "node:path";
-import { CODEBOT_DARK_PALETTE, CODEBOT_LIGHT_PALETTE } from "@codebot/contracts/app-theme-defaults";
+import type { AppThemePalette } from "@codebot/contracts/app-appearance";
+import {
+  BUILT_IN_THEME_PALETTES,
+  CODEBOT_DARK_PALETTE,
+  CODEBOT_HIGH_CONTRAST_PALETTE,
+  CODEBOT_LIGHT_PALETTE,
+} from "@codebot/contracts/app-theme-defaults";
 import type { CodeBotDesktopApi } from "@codebot/contracts/ipc";
 import { en } from "@codebot/i18n";
 import { createCodeBotLogger } from "@codebot/logging";
@@ -10,6 +17,7 @@ import { contrastRatio, monacoThemeData } from "../src/renderer/src/editor-theme
 import { assertMutationAllowed, connectToDevApp } from "./dev-automation/cdp-client";
 import { readDevInstanceRecords } from "./dev-automation/instance-registry";
 import { resolveDevelopmentAppDataRoot } from "./development-state-paths";
+import { STAND_IN_REPLY } from "./themes-stand-in";
 
 declare global {
   interface Window {
@@ -18,7 +26,11 @@ declare global {
 }
 
 const OUT = resolve(import.meta.dirname, "../.codebot-build/themes");
-const SCREENS = resolve(import.meta.dirname, "../.codebot-build/w16/screens");
+const SCREENS = join(OUT, "screens");
+const WORKSPACE = join(OUT, "workspace");
+const PROJECT = "Theme demo";
+const PROMPT = "Add a total helper";
+const WAIT_MS = 60_000;
 const CUSTOM_ID = "e2e-custom-theme";
 const CUSTOM_COLORS = {
   canvas: "#102030",
@@ -34,6 +46,28 @@ const CUSTOM_COLORS = {
   warning: "#f2b84b",
   danger: "#ff6b81",
 };
+const SERVER_SOURCE = `import { createServer } from "node:http";
+
+interface Route {
+  path: string;
+  handler: (request: Request) => Response;
+}
+
+const routes: Route[] = [
+  { path: "/health", handler: () => new Response("ok") },
+  { path: "/count", handler: () => Response.json({ count: 42, ratio: 0.5 }) },
+];
+
+// Start the server on the first free port.
+export function start(port = 3000): void {
+  const pattern = /^\\/api\\/(\\w+)$/;
+  createServer((req, res) => {
+    const match = pattern.exec(req.url ?? "");
+    res.end(match ? \`route \${match[1]}\` : "not found");
+  }).listen(port);
+  console.log(\`listening on \${port}\`, routes.length);
+}
+`;
 
 interface Check {
   name: string;
@@ -41,11 +75,29 @@ interface Check {
   detail?: string;
 }
 
+interface TextSample {
+  text: string;
+  ratio: number;
+  large: boolean;
+  color: string;
+  background: string;
+}
+
+interface PartAudit {
+  found: boolean;
+  background: number[];
+  luminance: number;
+  texts: number;
+  samples: TextSample[];
+}
+
 const checks: Check[] = [];
+const screenshots: string[] = [];
+const measured: Record<string, Record<string, { background: string; minContrast: number; texts: number }>> = {};
 
 function record(name: string, condition: boolean, detail?: string) {
   checks.push({ name, passed: condition, ...(detail === undefined ? {} : { detail }) });
-  assert.ok(condition, `${name}${detail === undefined ? "" : `: ${detail}`}`);
+  if (!condition) process.stdout.write(`FAIL ${name}${detail === undefined ? "" : `: ${detail}`}\n`);
 }
 
 const instances = readDevInstanceRecords().filter(
@@ -69,8 +121,11 @@ const themes = join(resolveDevelopmentAppDataRoot(), instance.profile, "themes")
 const customFile = join(themes, `${CUSTOM_ID}.json`);
 const page: Page = session.page;
 
-mkdirSync(OUT, { recursive: true });
+rmSync(SCREENS, { recursive: true, force: true });
 mkdirSync(SCREENS, { recursive: true });
+mkdirSync(join(WORKSPACE, "src"), { recursive: true });
+writeFileSync(join(WORKSPACE, "src", "server.ts"), SERVER_SOURCE);
+writeFileSync(join(WORKSPACE, "README.md"), "# Theme demo\n\nA small project for the theme test.\n");
 
 function state() {
   return page.evaluate(() => {
@@ -106,18 +161,218 @@ async function setTheme(change: Parameters<CodeBotDesktopApi["setAppAppearancePr
   await page.evaluate((next) => window.codebot.setAppAppearancePreference(next), change);
 }
 
-async function shot(name: string) {
+async function settle() {
   await page.waitForFunction(
     () =>
       !document
         .getAnimations()
         .some(
           (animation) =>
+            animation.playState === "running" &&
+            animation.timeline instanceof DocumentTimeline &&
             animation.effect instanceof KeyframeEffect &&
-            (animation.effect.pseudoElement ?? "").startsWith("::view-transition"),
+            ((animation.effect.pseudoElement ?? "").startsWith("::view-transition") ||
+              animation.effect.getComputedTiming().iterations !== Number.POSITIVE_INFINITY),
         ),
+    undefined,
+    { timeout: WAIT_MS },
   );
-  await page.screenshot({ path: join(SCREENS, `${name}.png`) });
+}
+
+async function applyPalette(palette: AppThemePalette) {
+  await setTheme({ appearance: palette.scheme, palette: palette.id });
+  await waitForScheme(palette.scheme, palette.colors.canvas);
+  await page.waitForFunction(
+    (canvas) => {
+      const editor = document.querySelector(".monaco-editor .monaco-editor-background");
+      if (!editor) return true;
+      const probe = document.createElement("div");
+      probe.style.backgroundColor = canvas;
+      document.body.append(probe);
+      const expected = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return getComputedStyle(editor).backgroundColor === expected;
+    },
+    palette.colors.canvas,
+    { timeout: WAIT_MS },
+  );
+  await settle();
+}
+
+async function shot(name: string) {
+  await settle();
+  const path = join(SCREENS, `${name}.png`);
+  await page.screenshot({ path });
+  screenshots.push(path);
+}
+
+function audit(selector: string): Promise<PartAudit> {
+  return page.evaluate((target) => {
+    const parse = (value: string): number[] => {
+      const numbers = (value.match(/-?[\d.]+(e-?\d+)?%?/g) ?? []).map((part) =>
+        part.endsWith("%") ? Number.parseFloat(part) / 100 : Number.parseFloat(part),
+      );
+      if (value.startsWith("color(srgb")) {
+        const [r = 0, g = 0, b = 0, a = 1] = numbers;
+        return [r * 255, g * 255, b * 255, a];
+      }
+      const [r = 0, g = 0, b = 0, a = 1] = numbers;
+      return [r, g, b, a];
+    };
+    const over = (top: number[], base: number[]): number[] => {
+      const alpha = top[3] ?? 1;
+      return [0, 1, 2].map((index) => (top[index] ?? 0) * alpha + (base[index] ?? 0) * (1 - alpha)).concat(1);
+    };
+    const channel = (value: number) => {
+      const scaled = value / 255;
+      return scaled <= 0.03928 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = (color: number[]) =>
+      0.2126 * channel(color[0] ?? 0) + 0.7152 * channel(color[1] ?? 0) + 0.0722 * channel(color[2] ?? 0);
+    const ratio = (first: number[], second: number[]) => {
+      const [light = 0, dark = 0] = [luminance(first), luminance(second)].sort((a, b) => b - a);
+      return (light + 0.05) / (dark + 0.05);
+    };
+    const pageBase = parse(getComputedStyle(document.body).backgroundColor);
+    const background = (element: Element): number[] => {
+      const layers: number[][] = [];
+      for (let node: Element | null = element; node; node = node.parentElement) {
+        const color = parse(getComputedStyle(node).backgroundColor);
+        if ((color[3] ?? 0) > 0) layers.push(color);
+        if ((color[3] ?? 0) >= 0.999) break;
+      }
+      let result = (pageBase[3] ?? 0) >= 0.999 ? pageBase : [0, 0, 0, 1];
+      for (const layer of layers.reverse()) result = over(layer, result);
+      return result;
+    };
+    const opacity = (element: Element) => {
+      let value = 1;
+      for (let node: Element | null = element; node; node = node.parentElement)
+        value *= Number.parseFloat(getComputedStyle(node).opacity);
+      return value;
+    };
+    const hex = (color: number[]) =>
+      `#${color
+        .slice(0, 3)
+        .map((part) => Math.round(part).toString(16).padStart(2, "0"))
+        .join("")}`;
+    const roots = [...document.querySelectorAll(target)].filter((element) => element.getClientRects().length > 0);
+    const root = roots[0];
+    if (!root) return { found: false, background: [], luminance: 0, texts: 0, samples: [] };
+    const rootBackground = background(root);
+    const samples: TextSample[] = [];
+    const seen = new Set<Element>();
+    const candidates: [Element, string][] = [];
+    for (const element of roots) {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+        const text = (node.textContent ?? "").trim();
+        if (text && node.parentElement) candidates.push([node.parentElement, text]);
+      }
+      for (const field of element.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea"))
+        if (field.value.trim() && !field.closest(".monaco-editor")) candidates.push([field, field.value.trim()]);
+    }
+    for (const [parent, text] of candidates) {
+      {
+        if (seen.has(parent)) continue;
+        seen.add(parent);
+        const style = getComputedStyle(parent);
+        if (style.visibility !== "visible" || parent.getClientRects().length === 0) continue;
+        const box = parent.getBoundingClientRect();
+        if (box.width < 1 || box.height < 1 || box.bottom < 0 || box.top > innerHeight) continue;
+        if (parent.closest("[aria-disabled=true], :disabled, [inert], .sr-only")) continue;
+        if (parent.closest("[aria-hidden=true]") && !parent.closest(".monaco-editor")) continue;
+        if (parent.closest(".minimap, .decorationsOverviewRuler")) continue;
+        const fade = opacity(parent);
+        if (fade < 0.05) continue;
+        const under = background(parent);
+        const color = parse(style.color);
+        const shown = over([...color.slice(0, 3), (color[3] ?? 1) * fade], under);
+        const size = Number.parseFloat(style.fontSize);
+        const weight = Number.parseInt(style.fontWeight, 10);
+        samples.push({
+          text: text.slice(0, 40),
+          ratio: ratio(shown, under),
+          large: size >= 24 || (size >= 18.66 && weight >= 700),
+          color: hex(shown),
+          background: hex(under),
+        });
+      }
+    }
+    return {
+      found: true,
+      background: rootBackground,
+      luminance: luminance(rootBackground),
+      texts: samples.length,
+      samples,
+    };
+  }, selector);
+}
+
+function minimum(palette: AppThemePalette, sample: TextSample): 3 | 4.5 | 7 {
+  if (palette.id === CODEBOT_HIGH_CONTRAST_PALETTE.id) return sample.large ? 4.5 : 7;
+  return sample.large ? 3 : 4.5;
+}
+
+const OWN_MESSAGE = "own message";
+
+const NEW_PALETTE_IDS = new Set(
+  BUILT_IN_THEME_PALETTES.filter(
+    (item) => item.id !== CODEBOT_DARK_PALETTE.id && item.id !== CODEBOT_LIGHT_PALETTE.id,
+  ).map((item) => item.id),
+);
+
+async function checkParts(view: string, palette: AppThemePalette, parts: Record<string, string>) {
+  for (const [part, selector] of Object.entries(parts)) {
+    const result = await audit(selector);
+    const label = `${palette.id} ${view}: ${part}`;
+    record(`${label} is shown`, result.found, selector);
+    if (!result.found) continue;
+    const dark = palette.scheme === "dark";
+    const chatColored = part === OWN_MESSAGE && palette.id !== CODEBOT_HIGH_CONTRAST_PALETTE.id;
+    if (!chatColored)
+      record(
+        `${label} background follows the ${palette.scheme} theme`,
+        dark ? result.luminance < 0.2 : result.luminance > 0.55,
+        `luminance ${result.luminance.toFixed(3)}`,
+      );
+    const failing = result.samples.filter((sample) => sample.ratio < minimum(palette, sample));
+    const worst = [...result.samples].sort((a, b) => a.ratio - b.ratio)[0];
+    record(
+      `${label} text is readable`,
+      failing.length === 0,
+      failing.length === 0
+        ? `${result.texts} texts, lowest ${worst?.ratio.toFixed(2) ?? "-"}`
+        : failing
+            .slice(0, 4)
+            .map((item) => `"${item.text}" ${item.color} on ${item.background} = ${item.ratio.toFixed(2)}`)
+            .join("; "),
+    );
+    measured[palette.id] ??= {};
+    const entry = measured[palette.id];
+    if (entry)
+      entry[`${view}: ${part}`] = {
+        background: `rgb(${result.background
+          .slice(0, 3)
+          .map((value) => Math.round(value))
+          .join(", ")})`,
+        minContrast: Number((worst?.ratio ?? 0).toFixed(2)),
+        texts: result.texts,
+      };
+  }
+}
+
+async function eachTheme(
+  view: string,
+  parts: Record<string, string>,
+  extra?: (palette: AppThemePalette) => Promise<void>,
+) {
+  for (const palette of BUILT_IN_THEME_PALETTES) {
+    await applyPalette(palette);
+    await checkParts(view, palette, parts);
+    if (extra) await extra(palette);
+    await shot(`${view}-${palette.id}`);
+  }
 }
 
 function settingsTitle() {
@@ -142,26 +397,150 @@ async function closeSettings() {
   await settingsTitle().waitFor({ state: "hidden" });
 }
 
+async function dismissToasts() {
+  await page.evaluate(() => {
+    for (const button of document.querySelectorAll<HTMLElement>(".ui-toaster li button[aria-label]")) button.click();
+  });
+  await page
+    .locator(".ui-toaster li")
+    .first()
+    .waitFor({ state: "detached", timeout: 5_000 })
+    .catch(() => undefined);
+}
+
+const projectList = () => page.getByRole("navigation", { name: en["project.list.label"] });
+const projectButton = () => projectList().getByRole("button", { name: `Open the project ${PROJECT}`, exact: true });
+const column = () => page.locator("#project-column");
+
+async function ensureProject() {
+  const exists = await page.evaluate(
+    async ({ name }) => (await window.codebot.projects.list()).some((project) => project.name === name),
+    { name: PROJECT },
+  );
+  if (!exists) {
+    await page.evaluate((input) => window.codebot.projects.create(input), {
+      name: PROJECT,
+      mainFolder: WORKSPACE,
+      accessLevel: "open" as const,
+      agents: [{ name: "Dev", role: "Developer" }],
+    });
+    await page.reload();
+  } else {
+    // Archive the chats of earlier runs so the chat list does not grow with each run.
+    const archived = await page.evaluate(async (name) => {
+      const project = (await window.codebot.projects.list()).find((entry) => entry.name === name);
+      if (!project) return 0;
+      const { chats } = await window.codebot.projects.listChats({ projectId: project.id, limit: 100 });
+      const old = chats.filter((chat) => !chat.archived);
+      for (const chat of old)
+        await window.codebot.projects.setChatArchived({ agentId: chat.agentId, taskId: chat.taskId, archived: true });
+      return old.length;
+    }, PROJECT);
+    if (archived > 0) await page.reload();
+  }
+  await projectList().waitFor({ state: "visible", timeout: WAIT_MS });
+  await dismissToasts();
+  await projectButton().click();
+  await column().waitFor({ state: "visible", timeout: WAIT_MS });
+  const tabs = page.locator(".project-dock-view .dv-tab");
+  for (let count = await tabs.count(); count > 1; count = await tabs.count()) {
+    await page.getByRole("button", { name: en["panel.close"], exact: true }).first().click();
+    await page.waitForFunction(([selector, before]) => document.querySelectorAll(selector).length < before, [
+      ".project-dock-view .dv-tab",
+      count,
+    ] as const);
+  }
+}
+
+async function sendCodePrompt() {
+  const editor = page.locator(".project-chat-panel:visible").first().getByRole("textbox").first();
+  await editor.click();
+  await page.keyboard.type(PROMPT);
+  await page.keyboard.press("Enter");
+  await page.locator(".message-code-block").first().waitFor({ state: "visible", timeout: WAIT_MS });
+}
+
+const server = createServer((_request, response) => {
+  response.setHeader("content-type", "text/html");
+  response.end(
+    "<!doctype html><title>Theme page</title><h1>Theme test page</h1><p>The browser frame follows the theme.</p>",
+  );
+});
+await new Promise<void>((done) => server.listen(0, "127.0.0.1", done));
+const address = server.address();
+assert.ok(address && typeof address === "object");
+const pageUrl = `http://127.0.0.1:${address.port}/`;
+
+async function passOnboarding() {
+  const next = page.locator(".language-wheel-continue");
+  if (!(await next.isVisible())) return;
+  await next.click();
+  await next.waitFor({ state: "hidden", timeout: WAIT_MS });
+}
+
+function builtInText(palette: AppThemePalette): string {
+  return `${JSON.stringify({ name: palette.name, appearance: palette.scheme, colors: palette.colors }, null, 2)}\n`;
+}
+
+async function refreshBuiltInFiles() {
+  const markerPath = join(themes, ".built-in.json");
+  const written: Record<string, string> = existsSync(markerPath) ? JSON.parse(readFileSync(markerPath, "utf8")) : {};
+  const stale = BUILT_IN_THEME_PALETTES.filter((palette) => {
+    const file = join(themes, `${palette.id}.json`);
+    return !existsSync(file) || readFileSync(file, "utf8") !== builtInText(palette);
+  });
+  if (stale.length > 0) logger.info(`Refreshing ${stale.length} built-in palette files that hold older values.`);
+  if (stale.length === 0) return;
+  for (const palette of stale) {
+    writeFileSync(join(themes, `${palette.id}.json`), builtInText(palette));
+    written[palette.id] = builtInText(palette);
+  }
+  writeFileSync(markerPath, `${JSON.stringify(written, null, 2)}\n`);
+  await page.waitForFunction(
+    async (expected) => {
+      const { palettes } = await window.codebot.getAppAppearancePreference();
+      return expected.every((item) =>
+        palettes.some(
+          (shown) => shown.id === item.id && shown.name === item.name && shown.colors.textMuted === item.textMuted,
+        ),
+      );
+    },
+    BUILT_IN_THEME_PALETTES.map((palette) => ({
+      id: palette.id,
+      name: palette.name,
+      textMuted: palette.colors.textMuted,
+    })),
+    { timeout: WAIT_MS },
+  );
+}
+
 let completed = false;
+let failure: string | undefined;
+await passOnboarding();
+await refreshBuiltInFiles();
 const original = await page.evaluate(() => window.codebot.getAppAppearancePreference());
+const viewport = await page.context().newCDPSession(page);
 try {
-  for (const palette of [CODEBOT_DARK_PALETTE, CODEBOT_LIGHT_PALETTE]) {
+  for (const palette of BUILT_IN_THEME_PALETTES) {
     const file = join(themes, `${palette.id}.json`);
     record(`themes folder holds ${palette.id}.json`, existsSync(file));
+    if (!existsSync(file)) continue;
     const parsed = JSON.parse(readFileSync(file, "utf8"));
-    record(
-      `${palette.id}.json is a valid palette file`,
-      parsed.appearance === palette.scheme && parsed.name === palette.name,
-    );
+    record(`${palette.id}.json is a valid palette file`, parsed.appearance === palette.scheme, parsed.name);
     record(
       `${palette.id} is listed in the preference`,
       original.palettes.some((item) => item.id === palette.id),
     );
   }
+  record(
+    "Visible theme names use the product name",
+    BUILT_IN_THEME_PALETTES.every((palette) => palette.name.startsWith("OpenBot Code ")),
+  );
 
-  for (const palette of [CODEBOT_DARK_PALETTE, CODEBOT_LIGHT_PALETTE]) {
+  for (const palette of BUILT_IN_THEME_PALETTES) {
     const data = monacoThemeData(palette);
     const background = palette.colors.canvas;
+    const body = palette.id === CODEBOT_HIGH_CONTRAST_PALETTE.id ? 7 : 4.5;
     record(
       `${palette.id} editor theme uses the ${palette.scheme} base`,
       data.base === (palette.scheme === "dark" ? "vs-dark" : "vs"),
@@ -172,26 +551,24 @@ try {
       const ratio = contrastRatio(`#${rule.foreground}`, background);
       record(`${palette.id} editor token ${rule.token || "default"} is readable`, ratio >= 4.5, ratio.toFixed(2));
     }
-    record(`${palette.id} editor text contrast is at least 4.5`, contrastRatio(palette.colors.text, background) >= 4.5);
+    if (!NEW_PALETTE_IDS.has(palette.id)) continue;
+    for (const surface of ["canvas", "frame", "sidebar", "surface"] as const) {
+      const text = contrastRatio(palette.colors.text, palette.colors[surface]);
+      const muted = contrastRatio(palette.colors.textMuted, palette.colors[surface]);
+      record(`${palette.id} text on ${surface} is at least ${body}`, text >= body, text.toFixed(2));
+      record(`${palette.id} muted text on ${surface} is at least ${body}`, muted >= body, muted.toFixed(2));
+      for (const role of ["accent", "success", "warning", "danger"] as const) {
+        const value = contrastRatio(palette.colors[role], palette.colors[surface]);
+        record(`${palette.id} ${role} on ${surface} is at least 4.5`, value >= 4.5, value.toFixed(2));
+      }
+    }
+    const onAccent = contrastRatio(palette.colors.accentForeground, palette.colors.accent);
+    record(`${palette.id} text on accent is at least ${body}`, onAccent >= body, onAccent.toFixed(2));
   }
-
-  await setTheme({ appearance: "dark", palette: null });
-  let shown = await waitForScheme("dark", "#1a1a1a");
-  record("Dark shows the dark scheme and editor tokens", shown.scheme === "dark" && shown.editorKeyword !== "");
-  await shot("chat-dark");
-
-  await setTheme({ appearance: "light", palette: null });
-  shown = await waitForScheme("light", CODEBOT_LIGHT_PALETTE.colors.canvas);
-  record("Light shows the light scheme and editor tokens", shown.scheme === "light" && shown.canvas === "#f5f5f6");
-  record("Light page background is the light canvas", shown.body === "rgb(245, 245, 246)", shown.body);
-  await shot("chat-light");
-  await openAppearanceSettings();
-  await shot("settings-light");
-  await closeSettings();
 
   await setTheme({ appearance: "system", palette: null });
   await page.emulateMedia({ colorScheme: "dark" });
-  shown = await waitForScheme("dark", "#1a1a1a");
+  let shown = await waitForScheme("dark", "#1a1a1a");
   record("System follows a dark operating system", shown.scheme === "dark");
   await page.emulateMedia({ colorScheme: "light" });
   shown = await waitForScheme("light", "#f5f5f6");
@@ -199,15 +576,140 @@ try {
   await page.emulateMedia({ colorScheme: "dark" });
   shown = await waitForScheme("dark", "#1a1a1a");
   record("System follows the change back to dark", shown.scheme === "dark");
-
   await page.emulateMedia({ colorScheme: null });
-  await setTheme({ palette: CODEBOT_LIGHT_PALETTE.id });
-  shown = await waitForScheme("light", CODEBOT_LIGHT_PALETTE.colors.canvas);
-  record("The light palette file applies the light scheme", shown.scheme === "light");
-  await setTheme({ palette: CODEBOT_DARK_PALETTE.id });
-  shown = await waitForScheme("dark", CODEBOT_DARK_PALETTE.colors.canvas);
-  await shot("chat-dark-palette");
-  record("The dark palette file applies the dark scheme", shown.scheme === "dark");
+
+  await viewport.send("Emulation.setDeviceMetricsOverride", {
+    width: 1440,
+    height: 900,
+    deviceScaleFactor: 0,
+    mobile: false,
+  });
+  await ensureProject();
+
+  await column().getByRole("button", { name: en["project.chat.new"], exact: true }).click();
+  await page.locator(".project-chat-panel:visible").first().waitFor({ state: "visible", timeout: WAIT_MS });
+  await eachTheme("main", {
+    "left bar": "nav[aria-label='Pages']",
+    "project list": "aside:has(nav[aria-label='Project list'])",
+    "chat list": "#project-column",
+    "chat panel": ".project-chat-panel",
+  });
+
+  await sendCodePrompt();
+  const reply = page.locator(".message-entry-agent").last();
+  record(
+    "The chat shows the reply with a code block",
+    (await reply.innerText()).includes(STAND_IN_REPLY.split("\n")[4] ?? "-"),
+  );
+  await eachTheme("chat", {
+    "chat reply": ".message-entry-agent .ui-bubble-content",
+    [OWN_MESSAGE]: ".message-entry-user .ui-bubble-content",
+    "code block": ".message-code-block",
+    "chat tabs": ".dv-tabs-and-actions-container",
+  });
+
+  const sourceFile = page.getByRole("treeitem", { name: "server.ts" });
+  if (!(await sourceFile.isVisible())) await page.getByRole("treeitem", { name: "src" }).click();
+  await sourceFile.click();
+  await page.locator(".monaco-editor .view-lines").first().waitFor({ state: "visible", timeout: WAIT_MS });
+  await page.locator(".monaco-editor .view-line").filter({ hasText: "createServer" }).first().waitFor();
+  await eachTheme(
+    "editor",
+    {
+      "file tree": "[role=tree][aria-label='File tree']",
+      "project tools": "[role=tablist][aria-label='Project tools']",
+      "monaco editor": ".monaco-editor .view-lines",
+      "monaco line numbers": ".monaco-editor .margin",
+    },
+    async (palette) => {
+      const editorBackground = await page.evaluate(() => {
+        const element = document.querySelector(".monaco-editor .monaco-editor-background");
+        return element ? getComputedStyle(element).backgroundColor : "";
+      });
+      const expected = palette.colors.canvas;
+      const rgb = `rgb(${[1, 3, 5].map((index) => Number.parseInt(expected.slice(index, index + 2), 16)).join(", ")})`;
+      record(`${palette.id} Monaco background is the palette canvas`, editorBackground === rgb, editorBackground);
+      const keyword = monacoThemeData(palette).rules.find((rule) => rule.token === "keyword")?.foreground ?? "";
+      const keywordRgb = `rgb(${[0, 2, 4].map((index) => Number.parseInt(keyword.slice(index, index + 2), 16)).join(", ")})`;
+      const keywordShown = await page
+        .waitForFunction(
+          (wanted) => {
+            const span = [...document.querySelectorAll(".monaco-editor .view-line span span")].find(
+              (element) => element.textContent === "import",
+            );
+            const color = span ? getComputedStyle(span).color : "";
+            return color === wanted ? color : false;
+          },
+          keywordRgb,
+          { timeout: 10_000 },
+        )
+        .then(async (handle) => String(await handle.jsonValue()))
+        .catch(() => "");
+      record(`${palette.id} Monaco keyword uses the theme colour`, keywordShown === keywordRgb, keywordShown);
+    },
+  );
+
+  const chat = await page.evaluate(async (name) => {
+    const project = (await window.codebot.projects.list()).find((entry) => entry.name === name);
+    if (!project) return null;
+    const first = (await window.codebot.projects.listChats({ projectId: project.id, limit: 1 })).chats[0];
+    return first ? { projectId: project.id, agentId: first.agentId } : null;
+  }, PROJECT);
+  assert.ok(chat, "The theme project has no chat.");
+  await page.evaluate(
+    ({ projectId, agentId, url }) =>
+      window.__codebotProjectDock?.openContent({
+        kind: "browser",
+        projectId,
+        title: "Browser",
+        data: { origin: "user", url, agentId },
+        activate: true,
+        pinned: true,
+      }),
+    { ...chat, url: pageUrl },
+  );
+  const browserAddress = page
+    .locator(".project-browser-panel")
+    .getByRole("textbox", { name: en["browser.address.label"] });
+  await browserAddress.waitFor({ state: "visible", timeout: WAIT_MS });
+  await page.waitForFunction(
+    async (url) => (await window.codebot.browser.listTabs()).some((tab) => tab.url === url),
+    pageUrl,
+    { timeout: WAIT_MS },
+  );
+  await eachTheme(
+    "dock",
+    {
+      "dock panel": ".dv-groupview, .dv-tabs-and-actions-container",
+      "browser frame": ".project-browser-panel",
+    },
+    async (palette) => {
+      await page.getByRole("button", { name: en["panel.add"], exact: true }).first().click();
+      await page.getByRole("menu").first().waitFor({ state: "visible" });
+      await settle();
+      await checkParts("dock", palette, { "panel menu": "[role=menu]" });
+      await page.keyboard.press("Escape");
+      await page.getByRole("menu").first().waitFor({ state: "hidden" });
+      await page.evaluate(() => {
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+      });
+      await page.getByRole("tooltip").first().waitFor({ state: "hidden" });
+    },
+  );
+
+  await openAppearanceSettings();
+  await eachTheme("settings", {
+    "settings content": ".settings-page-content",
+    "settings navigation": ".settings-page-nav",
+  });
+  await closeSettings();
+
+  await projectList().waitFor();
+  await page.getByRole("button", { name: en["project.new"], exact: true }).first().click();
+  await page.getByRole("dialog").first().waitFor({ state: "visible", timeout: WAIT_MS });
+  await eachTheme("dialog", { dialog: "[role=dialog]" });
+  await page.keyboard.press("Escape");
+  await page.getByRole("dialog").first().waitFor({ state: "hidden", timeout: WAIT_MS });
 
   const temporary = `${customFile}.tmp`;
   writeFileSync(
@@ -231,17 +733,13 @@ try {
   record("The custom palette accent is the editor keyword colour", shown.editorKeyword === CUSTOM_COLORS.accent);
   await shot("settings-custom");
   await closeSettings();
-  await shot("chat-custom");
-
-  await setTheme({ appearance: "dark", palette: null });
-  await waitForScheme("dark", "#1a1a1a");
-  await openAppearanceSettings();
-  await shot("settings-dark");
-  await closeSettings();
   completed = true;
+} catch (error) {
+  failure = error instanceof Error ? (error.stack ?? error.message) : String(error);
 } finally {
   rmSync(customFile, { force: true });
   rmSync(`${customFile}.tmp`, { force: true });
+  await viewport.send("Emulation.clearDeviceMetricsOverride").catch(() => undefined);
   await page.emulateMedia({ colorScheme: null }).catch(() => undefined);
   const { appearance, transparentWindow, palette } = original;
   await page
@@ -251,8 +749,22 @@ try {
       palette,
     })
     .catch(() => undefined);
+  await page
+    .evaluate(async () => {
+      for (const tab of await window.codebot.browser.listTabs()) await window.codebot.browser.close(tab.id);
+    })
+    .catch(() => undefined);
+  server.close();
   const passed = completed && checks.length > 0 && checks.every((check) => check.passed);
-  writeFileSync(join(OUT, "report.json"), `${JSON.stringify({ passed, checks }, null, 2)}\n`);
+  writeFileSync(
+    join(OUT, "report.json"),
+    `${JSON.stringify({ passed, failure, checks, measured, screenshots }, null, 2)}\n`,
+  );
   await session.close();
+}
+const failed = checks.filter((check) => !check.passed).length;
+if (failure !== undefined || failed > 0) {
+  logger.error(`Theme test failed: ${failed} checks. ${failure ?? ""} Report: ${join(OUT, "report.json")}.`);
+  process.exit(1);
 }
 logger.info(`Passed ${checks.length} theme checks. Wrote ${join(OUT, "report.json")}.`);

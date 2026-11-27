@@ -375,7 +375,7 @@
 
 :root .ui-bubble.message-bubble-colored.message-bubble-solid {
   --message-bubble-tint-amount: 100%;
-  --message-solid-text: var(--codebot-text-on-accent);
+  --message-solid-text: var(--codebot-text-on-solid);
   --message-plain-text-primary: var(--codebot-text-primary);
   --message-plain-text-secondary: var(--codebot-text-secondary);
   --message-plain-text-muted: var(--codebot-text-muted);
@@ -2068,4 +2068,19 @@ button.chat-action-target:active,
 
 .media-stage-details .image-generation-spec:nth-child(2)::before {
   content: none;
+}
+
+/* Theme palettes: solid bubbles take the text colour with the higher contrast. */
+:root[data-codebot-palette]:not([data-codebot-palette="codebot-high-contrast"])
+.ui-bubble.message-bubble-colored.message-bubble-solid.message-bubble-solid-themed-dark-text {
+  --message-solid-text: var(--codebot-paper-text);
+}
+
+:root[data-codebot-palette="codebot-high-contrast"] .ui-bubble.message-bubble-colored.message-bubble-solid {
+  --message-bubble-tint-amount: 0%;
+  --message-solid-text: var(--codebot-text-primary);
+}
+
+:root[data-codebot-palette="codebot-high-contrast"] .ui-bubble.message-bubble-colored > .ui-bubble-content {
+  box-shadow: inset 0 0 0 2px var(--message-chat-color);
 }

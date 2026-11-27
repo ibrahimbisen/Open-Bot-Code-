@@ -53,6 +53,19 @@ function readable(color: string, background: string): string {
   return adjusted;
 }
 
+export function mixHex(color: string, other: string, percentOther: number): string {
+  return mix(color, other, percentOther);
+}
+
+export function readableOnAll(color: string, backgrounds: readonly string[], minimum = MIN_SYNTAX_CONTRAST): string {
+  const average = backgrounds.reduce((sum, item) => sum + luminance(item), 0) / Math.max(1, backgrounds.length);
+  const target = average > 0.4 ? "#000000" : "#ffffff";
+  const passes = (value: string) => backgrounds.every((item) => contrastRatio(value, item) >= minimum);
+  let adjusted = color;
+  for (let step = 1; step <= 50 && !passes(adjusted); step += 1) adjusted = mix(color, target, step * 2);
+  return adjusted;
+}
+
 function alpha(color: string, percent: number): string {
   return `${color.slice(0, 7)}${channel((percent / 100) * 255)}`;
 }
@@ -108,8 +121,8 @@ export function editorTokens({ colors }: AppThemePalette): EditorTokens {
     syntaxKeyword: code(colors.accent),
     syntaxString: code(colors.success),
     syntaxNumber: code(colors.warning),
-    syntaxType: code(mix(colors.warning, colors.text, 30)),
-    syntaxFunction: code(mix(colors.accent, colors.text, 30)),
+    syntaxType: code(mix(colors.success, colors.accent, 50)),
+    syntaxFunction: code(mix(colors.accent, colors.danger, 40)),
     syntaxVariable: code(colors.text),
     syntaxOperator: code(mix(colors.text, colors.textMuted, 40)),
     syntaxRegexp: code(mix(colors.danger, colors.text, 20)),
@@ -170,6 +183,12 @@ export function monacoThemeData(palette: AppThemePalette): EditorThemeData {
       { token: "string", foreground: bare(t.syntaxString) },
       { token: "number", foreground: bare(t.syntaxNumber) },
       { token: "type", foreground: bare(t.syntaxType) },
+      { token: "type.identifier", foreground: bare(t.syntaxType) },
+      { token: "tag", foreground: bare(t.syntaxKeyword) },
+      { token: "attribute.name", foreground: bare(t.syntaxType) },
+      { token: "attribute.value", foreground: bare(t.syntaxString) },
+      { token: "string.key.json", foreground: bare(t.syntaxFunction) },
+      { token: "variable.predefined", foreground: bare(t.syntaxFunction) },
       { token: "function", foreground: bare(t.syntaxFunction) },
       { token: "variable", foreground: bare(t.syntaxVariable) },
       { token: "operator", foreground: bare(t.syntaxOperator) },
@@ -198,6 +217,13 @@ export function monacoThemeData(palette: AppThemePalette): EditorThemeData {
       "editorError.foreground": t.error,
       "editorWarning.foreground": t.warning,
       "minimap.background": t.background,
+      "editorBracketHighlight.foreground1": t.syntaxFunction,
+      "editorBracketHighlight.foreground2": t.syntaxType,
+      "editorBracketHighlight.foreground3": t.syntaxKeyword,
+      "editorBracketHighlight.foreground4": t.syntaxFunction,
+      "editorBracketHighlight.foreground5": t.syntaxType,
+      "editorBracketHighlight.foreground6": t.syntaxKeyword,
+      "editorBracketHighlight.unexpectedBracket.foreground": t.error,
     },
   };
 }

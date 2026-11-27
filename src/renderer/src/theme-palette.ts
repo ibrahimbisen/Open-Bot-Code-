@@ -1,4 +1,5 @@
 import type { AppThemePalette } from "@codebot/contracts/app-appearance";
+import { mixHex, readableOnAll } from "./editor-theme";
 
 function clear(color: string, percent: number): string {
   return `color-mix(in srgb, ${color} ${percent}%, transparent)`;
@@ -11,6 +12,23 @@ function mix(color: string, other: string, percent: number): string {
 function paletteTokens({ scheme, colors }: AppThemePalette): Record<string, string> {
   const raised = scheme === "light" ? mix(colors.canvas, "#ffffff", 70) : colors.surface;
   const tabsBar = scheme === "light" ? mix(colors.canvas, colors.surface, 30) : colors.surface;
+  const raisedHex = scheme === "light" ? mixHex(colors.canvas, "#ffffff", 70) : colors.surface;
+  // Text must stay readable on the plain surfaces and on selected rows and accent-tinted cards.
+  const backgrounds = [
+    colors.canvas,
+    colors.frame,
+    colors.sidebar,
+    colors.surface,
+    raisedHex,
+    mixHex(raisedHex, colors.text, 10),
+    mixHex(raisedHex, colors.accent, 18),
+  ];
+  const readable = (color: string) => readableOnAll(color, backgrounds);
+  const muted = readable(colors.textMuted);
+  const accentText = readable(colors.accent);
+  const successText = readable(colors.success);
+  const warningText = readable(colors.warning);
+  const dangerText = readable(colors.danger);
   return {
     "--codebot-bg-canvas": colors.canvas,
     "--codebot-bg-canvas-clear": clear(colors.canvas, 0),
@@ -40,13 +58,13 @@ function paletteTokens({ scheme, colors }: AppThemePalette): Record<string, stri
     "--codebot-hover": clear(colors.text, 5),
 
     "--codebot-text-primary": colors.text,
-    "--codebot-text-secondary": mix(colors.text, colors.textMuted, 25),
-    "--codebot-text-muted": colors.textMuted,
-    "--codebot-text-dim": mix(colors.textMuted, colors.canvas, 30),
-    "--codebot-text-placeholder": colors.textMuted,
-    "--codebot-text-readable": colors.textMuted,
-    "--codebot-text-grouped-secondary": colors.textMuted,
-    "--codebot-settings-text-muted": colors.textMuted,
+    "--codebot-text-secondary": mix(colors.text, muted, 25),
+    "--codebot-text-muted": muted,
+    "--codebot-text-dim": readable(mixHex(colors.textMuted, colors.canvas, 15)),
+    "--codebot-text-placeholder": muted,
+    "--codebot-text-readable": muted,
+    "--codebot-text-grouped-secondary": muted,
+    "--codebot-settings-text-muted": muted,
 
     "--codebot-surface-light": colors.text,
     "--codebot-text-on-light": colors.canvas,
@@ -56,25 +74,28 @@ function paletteTokens({ scheme, colors }: AppThemePalette): Record<string, stri
 
     "--codebot-accent": colors.accent,
     "--codebot-accent-hover": mix(colors.accent, colors.text, 15),
-    "--codebot-accent-text": colors.accent,
+    "--codebot-accent-text": accentText,
     "--codebot-accent-soft": clear(colors.accent, 16),
     "--codebot-accent-strong": clear(colors.accent, 34),
     "--codebot-text-on-accent": colors.accentForeground,
 
     "--codebot-success": colors.success,
-    "--codebot-success-text": colors.success,
+    "--codebot-success-text": successText,
     "--codebot-success-soft": clear(colors.success, 14),
     "--codebot-success-wash": clear(colors.success, 6),
     "--codebot-warning": colors.warning,
-    "--codebot-warning-text": colors.warning,
+    "--codebot-warning-text": warningText,
     "--codebot-warning-soft": clear(colors.warning, 14),
     "--codebot-danger": colors.danger,
     "--codebot-danger-hover": mix(colors.danger, colors.text, 15),
-    "--codebot-danger-text": colors.danger,
+    "--codebot-danger-text": dangerText,
     "--codebot-danger-soft": clear(colors.danger, 14),
     "--codebot-danger-soft-hover": clear(colors.danger, 22),
     "--codebot-danger-focus": clear(colors.danger, 36),
     "--codebot-danger-border": clear(colors.danger, 45),
+    "--codebot-code-string": successText,
+    "--codebot-code-number": warningText,
+    "--codebot-code-error": dangerText,
   };
 }
 
@@ -84,7 +105,11 @@ export function applyThemePalette(palette: AppThemePalette | null): void {
   const style = document.documentElement.style;
   for (const name of applied) style.removeProperty(name);
   applied = [];
-  if (palette === null) return;
+  if (palette === null) {
+    delete document.documentElement.dataset.codebotPalette;
+    return;
+  }
+  document.documentElement.dataset.codebotPalette = palette.id;
   for (const [name, value] of Object.entries(paletteTokens(palette))) {
     style.setProperty(name, value);
     applied.push(name);

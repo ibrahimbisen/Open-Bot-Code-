@@ -924,13 +924,13 @@
 
 [data-code-token="str"],
 [data-code-token="insert"] {
-  color: var(--codebot-success);
+  color: var(--codebot-code-string, var(--codebot-success));
 }
 
 [data-code-token="num"],
 [data-code-token="bool"],
 [data-code-token="class"] {
-  color: var(--codebot-warning);
+  color: var(--codebot-code-number, var(--codebot-warning));
 }
 
 [data-code-token="func"],
@@ -945,7 +945,7 @@
 
 [data-code-token="err"],
 [data-code-token="deleted"] {
-  color: var(--codebot-danger);
+  color: var(--codebot-code-error, var(--codebot-danger));
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -68,7 +68,7 @@ export function AppearanceSelect(props: AppearanceSelectProps): JSX.Element {
 
   return (
     <Select<AppearanceSelectValue>
-      class="settings-modal-select"
+      class="settings-modal-select settings-modal-theme-select"
       options={options()}
       value={props.value}
       onChange={(value) => value && value !== props.value && props.onChange(value)}

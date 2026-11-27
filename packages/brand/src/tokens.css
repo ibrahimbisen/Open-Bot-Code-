@@ -125,6 +125,7 @@
   --codebot-download-card-focus: rgba(242, 242, 242, 0.86);
   --codebot-text-placeholder: #bfbfbf;
   --codebot-text-on-accent: #ffffff;
+  --codebot-text-on-solid: #ffffff;
   --codebot-text-on-status: #07130c;
 
   --codebot-accent: #007cf7;
